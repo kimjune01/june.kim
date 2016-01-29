@@ -1,13 +1,7 @@
-JIT Development
-
-What JIT is
-
-Old Way
-
-New Way
-
-Extends to working with other people
-
+---
+layout: post
+title: JIT Development
+---
 
 
 Just in Time, JIT for short, is a manufacturing principle that enables more output/time with a given set of resources. It was developed by Toyoda in the 70s and you can read all about it here.

@@ -1,4 +1,7 @@
-Coming up with new ideas - Recombination
+---
+layout: post
+title: Recombination
+---
 
 
 Being creative means coming up with many useful ideas. This ability can be considered a natural trait that someone has, and an outsider could say, "I am not that creative", or "I will never be able to come up with those kinds of ideas". I argue that creativity at an individual level can be learned and grown. You don't need job experience to say that you've had creative experience, nor a job can magically make you more creative. 

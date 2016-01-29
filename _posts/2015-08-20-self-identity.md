@@ -1,4 +1,7 @@
-Self identity
+---
+layout: post
+title: Self identity
+---
 
 
 Becoming a better person requires that you have a general idea of the kind of person want to become. There is more than one definition of self, such as the belief that your mind exists separately from your body. Even people who are not religious believe in the duality of the body and soul. This belief has a huge impact on the way we perceive, and therefore act, on ourselves. In order to discover our own future, we must first ask the question: Who are we? 

@@ -1,4 +1,7 @@
-2015-07-30 Making Stuff
+---
+layout: post
+title: Making Stuff
+---
 
 
 There is great pleasure that I cannot describe in using the things I've made. Maybe it's because I am witnessing the history and evidence of my past self, and how considerate I was of my future self. Maybe it's because I'm interacting actively, not passively with my environment. Or maybe using the things I've made confirms my past belief about what I will do, and thus it gives me the confidence to see myself in who I will become.

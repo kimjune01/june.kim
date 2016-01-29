@@ -1,4 +1,8 @@
-2015-08-04-problem-solving
+
+---
+layout: post
+title: Problem Solving 2
+---
 
 
 Problem solving is a skill that is often shrouded in mystery. Those who aren't so good at solving problems look at others that are better, and say that they are simply gifted with an innate ability. But much like sports, it's a skill that can be improved and not born with. And like driving, you only need so much to get around. If you are determined to become a better problem solver, I would like to share some wisdom I picked up along the way. 

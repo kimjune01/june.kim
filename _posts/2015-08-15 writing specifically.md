@@ -1,4 +1,8 @@
-Writing Specifically
+---
+layout: post
+title: Writing Specifically
+---
+
 
 If I write more specifically, I will be able to demonstrate each idea more clearly.
 

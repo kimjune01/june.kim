@@ -1,4 +1,9 @@
-Why I write in the morning
+---
+layout: post
+title: Why I write in the morning
+---
+
+
 
 
 When Alyssa asked me to do a collab post, I said YES! It didn't matter what the topic was. It made me feel like an actual writer and not just some guy that writes fluffies into his diary. That was Saturday. So I waited until now, Monday morning 8 a.m., 20 minutes after I wake up. Why do I express my thoughts in written words in the morning?

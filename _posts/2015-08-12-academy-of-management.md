@@ -1,4 +1,9 @@
-Academy Of Management
+---
+layout: post
+title: Academy Of Management 
+---
+
+
 
 For the last two days I was at a conference of 11,000 academics. They were talking about the contributions they've made to the science of management since the last time they've met. For the 75th annaul year, Academy Of Management with its many divisions flew in from universities all around the world. For five days, these scholars spent their hours in and around Vancouver Convention Center. Running out of room at the convention center, they booked the five largest hotels' conference rooms. Their program plan was a 500-page thick reference manual for the 1,500 sessions that hosted up to 4 papers each, with each paper having 2 to 3 contributors each globally. The sessions were listed by division such as Human Resources, Career, Information Systems, Instruction, Technology & Innovation, Entrepreneurship, Organization Theory, and many others. Then the sessions were listed again by schedule in a large Gantt chart, then listed again in detail by reference number. It was by far the largest event that I have ever attended. It was like a giant rave, but for ideas and suits instead of music and flesh.
 

@@ -1,5 +1,8 @@
+---
+layout: post
+title: Problem Solving
+---
 
-2015-08-02-problem-solving
 
 
 purpose

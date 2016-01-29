@@ -1,4 +1,8 @@
-Unpopular
+---
+layout: post
+title: Unpopular
+---
+
 
 Earlier this week, it hit me: I'm never invited twice. Whenever there's a social outing with a group of friends or a catch-up session, or a date. People don't want to talk to me after we share a conversation. Why? They were friendly and polite when we finished our last conversation. They said, "Definitely hang out again". But when I message them again, there is no reply. Nobody wants to hang out with me. You'd think that as an unemployed person, I'd be going out often; I'm often home and very few answer when I message them. Why?
 

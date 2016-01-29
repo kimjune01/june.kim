@@ -1,4 +1,8 @@
-Break hard, break early.
+---
+layout: post
+title: Break hard, break early.
+---
+
 
 
 
