@@ -1,9 +1,9 @@
 ---
-type:post
+layout:post
 title: Xcode .gitignore
 ---
 
-# Xcode
+\# Xcode
 .DS_Store
 build/
 *.pbxuser
@@ -21,5 +21,5 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-# Pods - for those of you who use CocoaPods
+\# Pods - for those of you who use CocoaPods
 Pods
