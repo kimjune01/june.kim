@@ -1,7 +1,8 @@
 ---
-layout:post
+layout: post
 title: Xcode .gitignore
 ---
+
 
 \# Xcode
 
