@@ -1,0 +1,62 @@
+NAME
+Break hard and early
+Also known as: Andon
+
+
+Picture
+https://www.wikiwand.com/en/Stack_light
+
+
+
+Summary
+
+This pattern defines the default procedure for bringing blockages to light in continuous development workflow streams(!?). It helps to reduce cycle time(!?) for each work unit by guaranteeing that the hacker in the room (!?) notices the blockage as soon as possible, before it causes other blockages in the stream.
+
+Problem definition
+
+Blockages in development cause the whole project to delay for as long as that it's un-blocked. Often, they to unnoticed and the time spent debugging alone causes other work units to accumulate. Unless the blockages are addressed quickly, each additional minute delayed compounds.
+
+
+Everyone seemed to be working really hard in the room full of developers, and the project manager is afraid to disturb this peaceful stretch of coding. In the case that someone in the stream is hung up on one particular feature or bug, it can get stressful to receive other wishes from upstream. What the developer is working on might take hours or days to complete. If other developers are depending on this new feature or bugfix for further progress, then there is an imbalance of workload among the stream members. One developer is out of work, and the other is stuck. 
+
+Usually, such events are detected late and delays are blamed on the slow developer. However, variances are a part of the nature of software development, and nasty bugs don't just come from bad development practices. It may come from legacy code, the framework, or other external factors. The blame game is the worst of possible responses.
+
+Or, if the developer is humble enough to admit that they are working on a problem that they do not yet know the solution to, then they might signal softly that they are working on it. Typical responses to prodding may be:
+
+"I'm working really hard on finding the root of this nasty bug"
+"This codebase is pure crap, I'm gonna work around it becaus I've already spent too long on it"
+"Can you put that wish on the big list of $#!+ to do, so I can get back to it"
+
+Such delayed or soft responses to blockages are invisible. Things seem like they are going according to schedule, but they are actually on the critical path to a release or demo. This is especially harmful when developers work in their own silos.
+
+//
+
+Therefore:
+
+As soon as all the usual suspects for a bug have been tried, the co-pilot already tried to fix it, and are still out of a satisfactory solution, notify the whole stream about the blockage, immediately. Do not use the Big list of $#!+ to do. Pair programming or googling with cooperation to solve the problem will address the problem. If all the members of the stream are unable to address it, then a decision can be made on the floor with a two-minute meeting, about whether to work around the problem, break it down, or plow through. 
+
+Break hard and early, so that the blockage may be addressed before it causes more delays. Even if it takes more resources per problem, it saves idling time later on. It also boosts camaraderie. Quality of code will have a chance to increase, when other members have a natural peek into the code. 
+
+One effective way to ensure that everyone notices a problem is to make it visible and clear. Dance, sing, put on a funny YouTube video on loop; whatever gets peoples' attention. Q: What is the fastest way to fix a broken entrance door lock in an apartment building? A: Break all the other entrances' locks in the apartment.
+
+Reference to other patterns:
+
+
+Big list of $#!+ to do
+"I'm working!"
+Programmers take pride in their problem solving abilities, and do not like to get into the detail when asked. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

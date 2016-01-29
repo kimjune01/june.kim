@@ -1,0 +1,58 @@
+What's your dream job?
+
+My dream job is a teacher teacher. I want to teach human teachers and computer teachers. I only want to teach those that want to learn. Teachers happen to be in the equation because computers are not good at it yet. Computers will be better at teaching than humans soon. I want to be a part of that. Teaching takes a lot of work. 
+
+I need to grow a lot to get to doing just that. But growing is fun, though. It's like playing cookie clicker. Reading writing studying talking working out, click click click! 
+
+I'll be back in school soon.
+
+
+//
+
+Marrying your first idea
+
+When I was working at a fitness startup, I was never invited to their design meetings. The ideas were passed to me one at a time, for me to implement. Then I started going to the design meetings. The designer would talk about a need for users to see a list of exercises, and the ideas would flow through the room. One idea would come up, about a way to display a list of exercises. It got the job done, and we were onto the next problem. 
+
+The cofounders and the designer believed that the solution that they came up with was the only and best solution because it was the first idea for a solution they had for the given problem. After implementing that solution, the designer changed his mind without a meeting, and the code was scrapped.
+
+Because this was a fitness app, one feature that the cofounders thought about was a calendar function, where they can look at which exercises they need to do on which day. The frustration was that they weren't able to see what exercises they have to do in the future and thus wasn't able to customize today's workout to be compatible with those exercises. They could not see future workouts, so the problem became that there was no calendar. To solve that problem, I would have to build a calendar and show each workout for all future workouts. I built it, worked flawlessly, got a congratulatory pat on the back, and it took about a week of coding. 
+
+The cofounders and the designer believed that the problem that they came up with was the only and best solution because it was the first idea for a solution they had for the given frustration. That feature was never shipped. 
+
+This is a common problem. It arises from a couple of flawed thought patterns. 
+
+People come up with an internal list of ideas of what might work, do some thought experiments on those ideas on what works best, and presents the best out of their mental notebook. Because they don't know what other ideas might exist outside their mental capacity, they assume that the list they have in their minds are exhaustive and conclude that the best out of those ideas are the best possible. 
+
+Another approach that one might take is to have an initial "Eureka!" idea. They get excited about this idea and sleep on it. They fantasize how much better the world would be with this idea. The steps to making it happen is already so clear! The what-ifs to this mental plan are carefully considered. Then the next morning, they see other ideas and perceive them to be inferior. The other ideas don't have an awesome plan like the idea that they had yesterday. They don't even have what-ifs! Clearly, the initial idea that got them excited is clearly better. This is the vision. They write a business plan with revenue projections and justify costs against those revenue projections. They get to work right away, with no procrastination.
+
+//
+
+Let me use an analogy from nature. This is what half of startups do:
+
+A would-be farmer is given a bag of seeds. He likes a seed that looks like rice. He likes rice. He ignores the other seeds in the bag, and the weather, and the price of rice. He asks others if they like rice. Others say that they like rice. They had rice before. But this farmer says this rice will be different, better. It will have his special sauce on it. Others get mildly excited about his enthusiasm for rice and his rice with special sauce. He concludes that people will love his rice. He is not yet a farmer but he wants to plant his seed of rice. He goes to a field nearby and asks whether he can plant his seed of rice. The owner of the other field are friends with this farmer. He says yes. Excited, the farmer imagines a whole field of rice, and how he will use his initial harvest to grow more rice. He thinks about his special sauce that will go on the rice, but doesn't do anything to make it because he needs his rice first. It must be his rice. He plants his rice.
+
+He does not yet know how to water rice. He reads about how much water rice needs. He follows instructions carefully. He goes to a farmer's gathering and they talk about fertilizers. He concludes that he needs fertilizers and considers buying some. But the whole bag is too much, so he gets a little samples from the local fertilizer store to use for his rice. He and his rice are happy. It is growing. 
+
+He believes that his rice field will soon need tractors and pesticides so while the one rice is growing, he reads on tractors and considers whether he should use an all-natural pesticide so that he can market his rice as organic. A few weeks pass, but the rice isn't producing anything. He gets frustrated, and others tell him to be patient. He gets out his ruler by its stem and celebrates every time it's taller than the day before in daily scrum stand-up meetings.
+
+If you have a bag of seeds, you plant as many as you can given the resources you have. Seeds are cheap. Land is expensive. Which ones you end up raising depends on more than your special sauce. Nobody cares about your special sauce. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

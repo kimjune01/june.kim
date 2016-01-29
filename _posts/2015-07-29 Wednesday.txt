@@ -1,0 +1,54 @@
+Break hard, break early.
+
+
+
+In programming, we have a heuristic, a rule of thumb when it comes to writing classes and methods. It arises from a frustration where a bug is somewhere in the code, but hard to find. 
+
+When code doesn't work, it's never the computer's fault. It's always a human error. If I am configuring a View Controller in iOS, and a button doesn't work, it's my fault - I didn't hook it up properly. So I go into the instructions that I gave to the computer, and try to find where the issue is. A user's touch on a view controller can be one of a few things, and I know what those few things are. And I go through a mental checklist of those few things and voila, there it is — the bug. All I have to do at that point is to maybe change one line of code, or maybe two, and it works as intended. It took me a few minutes to look for the source of the problem, and a mere few seconds to fix it.
+
+A real life example would be an internal combustion engine. Whether it's a car, motorcycle, or boat, an engine operates on the same principle. It combines fuel and air, give it a little spark, and it makes little explosions. Any mechanic that understands this principle, when debugging an engine, checks for these three components if the engine is not running: fuel, air, and spark. But modern cars have a better way. They have what's called error codes when a computer is hooked up the car. It makes the mechanic's job a lot more convenient. All that's gotta be done is to address the issues that the car is complaining about. Imagine how much longer it would take for a mechanic to debug "my car doesn't start".
+
+Do you see the pattern? It takes a long time to find where it's going wrong, but not so for the actual doing. But if the issue is silent, then it takes a long time to find it. If an issue is raised close to the source, solving it becomes much easier and faster.
+
+It's worth repeating. If an issue is raised close to the source, solving it becomes much easier and faster.
+
+
+Let me describe a typical request at work. The designer notices that users are having trouble understanding how to use the app. It's difficult to use, and the designer quickly comes up with a solution to fix it. The designer sends out a message to the developer, and says 
+
+"The users are having trouble understanding how to use the app. Please implement these changes." 
+
+But the developer is busy working on a new feature that the project manager wanted ASAP. So he ignores the message from the designer. The designer does not pay him developer wages. A few work-hours pass. Two days later, the designer asks the developer: 
+
+"Have you gotten those changes done yet? Our users are frustrated." 
+
+The developer responds with a "I am working on this cool new feature that the PM has been talking about. I need it done by the end of this sprint, so I didn't have any time to work on it. I'll get to it when I have extra time."
+
+And he never does. The designer, with his fancy Photoshop graphic of this new feature, is frustrated. He brings up the issue with the project manager and the issue is now on the back log of the features that need to be completed. No more work can be added to this sprint, he says - as a proud Scrum Master. 
+
+The designer needs this change to be implemented ASAP, so he messages the two other developers in the team about this serious issue. 
+
+One of the developers says, with great enthusiasm, "I'm on it as soon as I'm finished this task!"
+
+Another one of the developers says nothing. He quietly starts working on it. It gets done in ten minutes.
+
+So there is a meeting that comes up every two weeks that discusses what work needs to be done for the next two weeks. The designer has his turn. He presents the issue as clearly as he possibly could, as consisely as he could, and proposes a potential solution with the fancy Photoshop graphic makes him look great in front of the whole team. The whole team agrees. The task that needs to be done makes it to the next sprint, as a medium priority item. It's out of the designer's hands now.
+
+Anxious about this new change, the designer checks Trello to see this change being implemented. It took five minutes (initial request) + five minutes (bringing it up with the project manager) + five minutes (Biweekly meeting) * 5 project members + five minutes (checking that it got done) of communication and about two weeks in between. The developer makes the change in ten minutes. The designer got his idea into the app, the developer gets his scrum points, and the project manager hears that the team is making great progress in daily stand-ups. Everyone is happy.
+
+Consider an alternative scenario: 
+
+
+
+TO BE CONTINUED
+
+
+
+bullet points/pseudowrite!
+
+
+
+
+
+
+
+
