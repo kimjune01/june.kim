@@ -1,14 +1,5 @@
-<header class="site-header px2 px-responsive">
-  <div class="mt2 wrap">
-    <div class="measure">
-      <a href="{{ site.url }}" class="site-title">{{ site.title }}</a>
-      <nav class="site-nav">
-        {% include navigation.html %}
-      </nav>
-      <div class="clearfix"></div>
-      {% if site.show_social_icons %}
-        {% include social_links.html %}
-      {% endif %}
-    </div>
-  </div>
+<header role="banner">
+    <a href="/" id="banner" title="{{ site.title }}">
+        <h1>{{ site.title }}</h1>
+    </a>
 </header>

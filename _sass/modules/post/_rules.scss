@@ -1,0 +1,222 @@
+@import "modules/post/variables";
+@mixin galileo-post {
+    .post::after {
+        @include retina-background-image($img-separator);
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-color: transparent;
+        content: "";
+        width: 100%;
+        max-width: 596px;
+        height: 42px;
+        display: block;
+        margin: 20px auto 50px;
+
+        // Force background size to remain constant and not scale down
+        background-size: 596px !important;
+
+        // The breakpoint here was entirely guessed and tested by eye-balling the results
+        // ie. feel free to choose something more sensible
+        @include min-breakpoint(645px) {
+            margin-top: 5px;
+        }
+    }
+
+    .post-title {
+        font-family: $title-font-family;
+        display: block;
+        font-weight: 700;
+        font-size: $post-title-min-font-size;
+        text-align: center;
+        line-height: 1.4;
+
+        // Force default text colour [as post-header is wrapped by a link]
+        color: $text-color;
+
+        @include min-breakpoint($post-title-medium-breakpoint) {
+            font-size: $post-title-medium-font-size;
+        }
+
+        @include min-breakpoint($desktop-breakpoint) {
+            font-size: $post-title-max-font-size;
+        }
+    }
+
+    .post-date {
+        display: block;
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        text-align: center;
+        color: $legal-text-color;
+        margin: 15px 0 25px;
+        font-variant: small-caps;
+        letter-spacing: 0.06em;
+
+        // Fix typekit line-height with excess top padding
+        padding: 23px 0 13px;
+    }
+
+    @include typekit-fallback {
+        .post-date {
+            // Reset a reasonable top padding in absence of abnormally tall typekit font line-height
+            padding-top: 18px;
+        }
+    }
+
+    .post-body {
+        p {
+            text-align: justify;
+            line-height: $post-line-height;
+            margin-bottom: 25px;
+        }
+    }
+
+    .post-body-location,
+    .post-body-location-divider {
+        float: left;
+    }
+
+    .post-body-location {
+        font-family: $caption-font-family;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-right: 5px;
+
+        // A line-height of 1.2 makes our font (Bodoni) align well horizontally with
+        // the paragraph font (Caslon) however we need to ensure that the location
+        // text displays nicely if wrapped across multiple lines. To solve this,
+        // we increase the line-height while offsetting its position upwards slightly.
+        // This will keep the alignment between Bodoni & Caslon AND wrap nicely.
+        line-height: 1.4;
+        position: relative;
+        top: -2px;
+    }
+
+    .post-body-location-divider {
+        margin-right: 6px;
+        line-height: 1.4;
+    }
+
+    .post-image {
+        margin-bottom: 25px;
+        margin-top: 30px;
+
+        // Prevent any whitespace positioning issues
+        font-size: 0;
+
+        img,
+        video{
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+
+        & + .post-image {
+            margin-top: -5px;
+        }
+
+        & + p {
+            margin-top: 35px;
+        }
+    }
+
+    .post-image--split {
+        @include min-breakpoint($image-splitting-breakpoint) {
+            margin-right: -1 * $post-image-split-gutter;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+            margin-bottom: $post-image-split-gutter;
+
+            @include min-breakpoint($image-splitting-breakpoint) {
+                width: $post-image-split-width;
+                margin-right: $post-image-split-gutter;
+                display: initial;
+                margin-bottom: 0;
+            }
+
+            @include min-breakpoint($desktop-breakpoint) {
+                max-width: $post-image-split-max-width;
+            }
+        }
+
+        .post-image-caption {
+            @include min-breakpoint($image-splitting-breakpoint) {
+                margin-right: $post-image-split-gutter;
+            }
+        }
+    }
+
+    .post-image-caption {
+        margin-top: 25px;
+        color: $caption-text-color;
+        font-family: $caption-font-family;
+        line-height: $post-image-caption-line-height;
+        padding: 0 20px;
+
+        // Re-set the font size as parent is set to zero
+        font-size: $base-font-size;
+
+        // Override properties meant for article content paragraphs
+        margin-bottom: 0 !important;
+        text-align: center !important;
+
+        &::after {
+            display: block;
+            content: "";
+            width: 185px;
+            margin: 23px auto 30px;
+            border-bottom: 3px double $border-color;
+        }
+    }
+
+    @include typekit-fallback {
+        .post-image-caption {
+            // Our fallback font is much larger, so we need to reduce the font-size and increase the line-height
+            font-size: 15px;
+            line-height: 1.8 !important;
+
+            &::after {
+                // Reset a reasonable top margin in absence of the abnormally tall typekit font line-height
+                margin-top: 25px;
+            }
+        }
+    }
+
+    .post-footer {
+        @include min-breakpoint($desktop-breakpoint) {
+            // Child is floated, so use a clearfix on the parent
+            @include clearfix;
+        }
+    }
+
+    .post-footer-location {
+        display: none;
+
+        @include min-breakpoint($desktop-breakpoint) {
+            @include retina-background-image($img-location);
+            display: block;
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-color: transparent;
+            background-size: 44px;
+            min-height: 21px;
+            padding-right: 55px;
+            float: right;
+
+            // The font used (Adobe Caslon Pro) has a peculiar line-height. This
+            // adjusts the position of the text in relation to the icon without
+            // adjusting the line-height property itself
+            margin-top: -9px;
+            padding-top: 9px;
+
+            // Force legal text colour [as it is a link]
+            color: $legal-text-color;
+
+            // However let the normal hover colour apply
+            &:hover { color: $hover-color; }
+        }
+    }
+}
