@@ -5,7 +5,7 @@
 # Site settings
 title: June Kim
 email: kimjune01@gmail.com
-description: Musings on software, life, and everything
+description: 
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: kimjune01
@@ -23,12 +23,12 @@ avatar: https://s.gravatar.com/avatar/a162fa4928ebc00907f6cc47727cbb6c?s=80
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email:
-  facebook:
+  email: kimjune01@gmail.com
+  facebook: kimjune
   flickr:
   github: barryclark/jekyll-now
-  instagram:
-  linkedin:
+  instagram: kimjune01
+  linkedin: kimjune01
   pinterest:
   rss: # just type anything here for a working RSS icon
   twitter: jekyllrb
@@ -46,7 +46,7 @@ google_analytics:
 
 # Your website URL (e.g. http://barryclark.github.io or http://www.barryclark.co)
 # Used for Sitemap.xml and your RSS feed
-url:
+url: kimjune01.github.io
 
 # If you're hosting your site at a Project repository on GitHub pages
 # (http://yourusername.github.io/repository-name)
