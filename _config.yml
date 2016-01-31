@@ -1,40 +1,55 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+# Site Info
+title:              "June Kim"
+description:        "Thoughts on software, life, and everything"
+google_verify:       # Put your Google Verification here
+google_analytics:    # Put your Google Analytics code
 
-# Site settings
-title: June Kim
-author: June Kim
-author_link: kimjune01.github.io
-author_description: Some words to describe things
-email: your-email@domain.com
-description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
+# Author Info
+author_name:        "June Kim"
+author_email:       kimjune01@gmail.com
+author_gravatar:    a162fa4928ebc00907f6cc47727cbb6c # Gravatar md5 hash
+twitter_username:   
 
-# Picturefill
-# A responsive image polyfill: http://scottjehl.github.io/picturefill/
-picturefill: false
+# Site Settings
+baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
+permalink:          /:title # Post permalink
+timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-# Typography
-# To use, publish a kit and enter the ID here. If you do not wish to use Typekit,
-# leave this ID blank
-typekit_kit_id: kwf5dox
-
-# Build settings
-gems: [jekyll-paginate]
-markdown: kramdown
-permalink: pretty
-
-# Pagination
-paginate: 5
-
-# Sass
+# Site Build
+highlighter:        pygments
+#markdown:           redcarpet
+#redcarpet:
+#    extensions:     ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data", "highlight", "footnotes"]
+markdown:           kramdown
+kramdown:
+    input:          GFM
 sass:
-    style: :compressed
+    style:          :compressed
+
+# Other Params
+include:            [ "robots.txt" ]
+exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile" ]
+gems:
+  - jekyll-sitemap
+
+compress_html:
+    clippings:      all
+    ingore:
+        envs:       [ "test" ]
+
+defaults:
+  -
+    scope:
+      path:         ""
+    values:
+      layout:       "null"
+  -
+    scope:
+      type:         "pages"
+    values:
+      layout:       "page"
+  -
+    scope:
+      type:         "posts"
+    values:
+      layout:       "post"

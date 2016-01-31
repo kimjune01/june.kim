@@ -2,11 +2,21 @@
 layout: default
 ---
 
-<!-- This loops through the paginated posts -->
-{% for post in paginator.posts %}
-  {% include post.html post=post content=post.content %}
-{% endfor %}
+<section>
+	<ul>
 
-{% if paginator.total_pages > 1 %}
-    {% include pagination.html maxPages=5 %}
-{% endif %}
+		{% for post in site.posts %}
+
+		<li>
+			<div class="post-date">
+				<span>{{ post.date | date: "%b %d, %Y" }}</span>
+			</div>
+			<div class="title">
+				<a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+			</div>
+		</li>
+
+		{% endfor %}
+
+	</ul>
+</section>
