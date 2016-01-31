@@ -8,7 +8,12 @@ google_analytics:    # Put your Google Analytics code
 author_name:        "June Kim"
 author_email:       kimjune01@gmail.com
 author_gravatar:    a162fa4928ebc00907f6cc47727cbb6c # Gravatar md5 hash
-twitter_username:   kimjune01
+
+social:
+  facebook: kimjune
+  github: kimjune01
+  linkedin: kimjune01
+  instagram: kimjune01
 
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
@@ -25,6 +30,10 @@ kramdown:
     input:          GFM
 sass:
     style:          :compressed
+
+#
+tag_page_layout: tag_page
+tag_page_dir: tag
 
 # Other Params
 include:            [ "robots.txt" ]
