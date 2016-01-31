@@ -108,14 +108,8 @@ span[data-note] {
   }
 }
 .logo {
-  margin: 0 auto 35px;
+  margin: 0 auto 1px;
   text-align: center;
-  animation-duration: 0.7s;
-  animation-fill-mode: both;
-  animation-name: bounce;
-  -webkit-animation-duration: 0.7s;
-  -webkit-animation-fill-mode: both;
-  -webkit-animation-name: bounce;
   a {
     background: #fff url("gravatar_wrapper.png");
     color: #fff;
@@ -365,11 +359,11 @@ section {
 }
 
 .header-nav li {
-  font-size: 1.05em;
+  font-size: .65em;
   line-height: 40px;
   height: 35px;
   display: inline-block;
-  margin-right: 15px;
+  margin: 10px;
 }
 
 .header-nav a {
