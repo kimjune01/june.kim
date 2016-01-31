@@ -155,12 +155,12 @@ span[data-note] {
     display: none;
     vertical-align: middle;
     padding: 1px;
-    border-radius: 1px;
-    background: #FFF;
-    background: rgba(0,0,0,.5);
+    border-radius: 0px;
+    background: #000;
+    background: rgba(0,0,0,0);
     margin-left: 15px;
-    color: #fff;
-    font-size: 0.8235em;
+    color: #000;
+    font-size: 0.75em;
     text-align: center;
     line-height: 1.2;
     top: 50%;
@@ -169,7 +169,7 @@ span[data-note] {
       content: "";
       border-width: 1px 1px 1px 0;
       border-style: solid;
-      border-color: transparent #FFF;
+      border-color: transparent #000;
       border-color: transparent rgba(0,0,0,.5);
       position: absolute;
       top: 50%;

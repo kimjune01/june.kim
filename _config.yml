@@ -8,7 +8,7 @@ google_analytics:    # Put your Google Analytics code
 author_name:        "June Kim"
 author_email:       kimjune01@gmail.com
 author_gravatar:    a162fa4928ebc00907f6cc47727cbb6c # Gravatar md5 hash
-twitter_username:   
+twitter_username:   kimjune01
 
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
