@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Xcode .gitignore
+tags: coding
 ---
 
 

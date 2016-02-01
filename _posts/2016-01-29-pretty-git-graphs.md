@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Pretty Git Graphs
+tags: coding
 ---
 
 vim ~/.gitconfig

@@ -1,8 +1,7 @@
 ---
 layout: post
 title: iTerm + Zsh
-tags:
-- code
+tags: coding
 ---
 
 [gist](http://gist.io/8568070)
