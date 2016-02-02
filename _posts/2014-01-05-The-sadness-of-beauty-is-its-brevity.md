@@ -1,5 +1,5 @@
 ---
-layout: poem
+layout: poetry
 title: The sadness of beauty is its brevity
 tags: poetry
 ---
