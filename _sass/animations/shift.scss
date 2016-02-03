@@ -1,0 +1,26 @@
+@-webkit-keyframes shift { 
+  from { transform: translate(0, 50px); } 
+  to { transform: translate(0, 0px); } }
+@-moz-keyframes shift { 
+  from { transform: translate(0, 50px); } 
+  to { transform: translate(0, 0px); } }
+@keyframes easeIn { 
+  from { transform: translate(0, 50px); } 
+  to { transform: translate(0, 0px); } }
+
+.shift {
+   /* make things start from below */
+   transform: translate(0, 50px);
+
+  -webkit-animation:shift ease-out 1;  
+  -moz-animation:shift ease-out 1;
+  animation:shift ease-out 1;
+
+  -webkit-animation-fill-mode:forwards;  
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:0.15s;
+  -moz-animation-duration:0.15s;
+  animation-duration:0.15s;
+}
