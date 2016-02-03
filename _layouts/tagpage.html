@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<section>
+<section class="center">
 	<h1>{{ page.tag }}</h1>
 
 	<ul>
@@ -15,7 +15,6 @@ layout: default
 				<a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
 			</div>
 		</li>
-
 	{% endfor %}
 	</ul>
 

@@ -22,10 +22,6 @@ timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_da
 
 # Site Build
 highlighter:        pygments
-#markdown:           redcarpet
-#redcarpet:
-#    extensions:     ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data", "highlight", "footnotes"]
-markdown:           kramdown
 kramdown:
     input:          GFM
 sass:
@@ -38,8 +34,6 @@ tag_page_dir: tag
 # Other Params
 include:            [ "robots.txt" ]
 exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile" ]
-gems:
-  - jekyll-sitemap
 
 compress_html:
     clippings:      all
