@@ -110,6 +110,12 @@ span[data-note] {
 .logo {
   margin: 0 auto 5px;
   text-align: center;
+   animation-duration: 0.7s;
+  animation-fill-mode: both;
+  animation-name: bounce;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-fill-mode: both;
+  -webkit-animation-name: bounce;
   a {
     background: #fff url("gravatar_wrapper.png");
     color: #fff;
@@ -172,6 +178,17 @@ span[data-note] {
     }
   }
 }
+   @keyframes bounce {
+     100% {
+       transform: none;
+     }
+   }
+   @-webkit-keyframes bounce {
+     100% {
+       -webkit-transform: none;
+     }
+   }
+
 iframe {
   margin: 45px 0 !important;
 }
