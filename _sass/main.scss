@@ -1,11 +1,12 @@
 
-@import "partials/content";
-@import "partials/data-note";
-@import "partials/article";
-@import "partials/section";
-@import "partials/note";
-@import "partials/logo";
-@import "partials/header-nav";
+@import "base/content";
+@import "base/section";
+
+@import "modules/data-note";
+@import "modules/article";
+@import "modules/note";
+@import "modules/logo";
+@import "modules/header-nav";
 
 @import "animations/fade-shift";
 
