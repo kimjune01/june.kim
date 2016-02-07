@@ -6,7 +6,7 @@ tags: coding
 
 
 1. Close your eyes and make a wish
-2. Write pseudocode to grant that wish
+2. Write some pseudocode that will grant the wish
 3. Turn the pseudocode into method names
 4. Run, and watch as the empty method does nothing
 5. Stare at the method name and sprout method
@@ -40,18 +40,18 @@ Turn the pseudocode into unambiguous method calls
 override func viewDidLoad(animated: Bool) {
   super.viewDidLoad(animated)
   makeSomeViews()
-  fetchDataFromIceCreamServer()
+  fetchDataFromIcecreamServer()
   //TODO: then fill out the views with that data
 }
 {% endhighlight %}
 
-Notice that the methods do not yet exist. Also, we lack the data from the server to grant the third wish. We'll leave that one as psudocode for now. Mark it as a TODO: so that we can search and come back to it later quickly.
+Notice that the methods do not yet exist. Also, we lack the data from the server to grant the third wish. We'll leave that one as psudocode for now. Mark it as a TODO: so that we can quickly search and come back to it later.
 
 {% highlight swift %}
 override func viewDidLoad(animated: Bool) {
   super.viewDidLoad(animated)
   makeSomeViews()
-  fetchDataFromIceCreamServer()
+  fetchDataFromIcecreamServer()
   //TODO: then fill out the views with that data
 }
 
@@ -59,7 +59,7 @@ func makeSomeViews() {
   //TODO:
 }
 
-func fetchDataFromIceCreamServer() {
+func fetchDataFromIcecreamServer() {
   //TODO:
 }
 
@@ -115,7 +115,7 @@ func makeLabel(contentString: String) -> UILabel {
 
 {% endhighlight %}
 
-We also notice that there is common behavior among the three view elements.
+We notice also that there is common behavior among the three view elements.
 
 {% highlight swift %}
 func makeSomeViews() {
@@ -180,7 +180,7 @@ Let's now make the method for the networking.
 
 {% highlight swift %}
 
-func fetchDataFromIceCreamServer() {
+func fetchDataFromIcecreamServer() {
   //I wish a server proxy should GET from the server, on whether I should eat ice cream.
   //Upon completion, the views should update to display whether I should eat ice cream.
 }
@@ -189,23 +189,31 @@ func fetchDataFromIceCreamServer() {
 
 {% highlight swift %}
 
-func fetchDataFromIceCreamServer() {
+func fetchDataFromIcecreamServer() {
   serverProxy.getShouldEatIcecream() {
     shouldEatIcecream:Bool -> Void in
     self.updateViewOnWhetherI(shouldEatIcecream)
 	}
 }
+
+func updateViewOnWhetherI(shouldEatIcecream: Bool) {
+  if shouldEatIceCream {
+    //TODO:
+  } else {
+    //TODO:
+  }
+}
 {% endhighlight %}
 
 serverProxy is a global singleton variable that does not yet exist. updateViewOnWhetherI(Bool) is a method that does not yet exist yet, either. To enable its function, those methods need to be filled out. Like a tree, the method keeps on sprouting until the behavior is added completely. 
 
-====
+***
 
 Sprout method encourages human-readable, self-documenting code really easily. Because the code chunks are so short and parameters present themselves naturally, code re-use is natural and little refactoring is required after passing the tests. 
 
 An additional benefit to sprout method for adding behavior is that you become immune to interruptions. By putting //TODO: heads where you're not finished, you can recontextualize really quickly after being interrupted by your boss or coworker. No grand plan survives a lengthy discussion in human memory.
 
 
-See also: YAGNI, JIT, self-documenting code, refactoring: good to great
+See also: [YAGNI](http://www.wikiwand.com/en/You_aren't_gonna_need_it), [JIT](http://www.wikiwand.com/en/Just-in-time_manufacturing), [self-documenting code](https://www.wikiwand.com/en/Self-documenting_code), [refactoring: good to great](https://www.youtube.com/watch?v=DC-pQPq0acs), [Tell, don't ask](https://pragprog.com/articles/tell-dont-ask)
 
-Reference: Legacy Code
+Reference to the name "Sprout Method": [Legacy Code](http://www.amazon.com/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052) 
