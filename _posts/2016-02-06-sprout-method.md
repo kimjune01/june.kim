@@ -205,7 +205,7 @@ func updateViewOnWhetherI(shouldEatIcecream: Bool) {
 }
 {% endhighlight %}
 
-serverProxy is a global singleton variable that does not yet exist. updateViewOnWhetherI(Bool) is a method that does not yet exist yet, either. To enable its function, those methods need to be filled out. Like a tree, the method keeps on sprouting until the behavior is added completely. 
+serverProxy is a global singleton that does not yet exist. updateViewOnWhetherI(Bool) is empty. To enable its function, those methods need to be filled out. Like a tree, the method keeps on sprouting until the behavior is added completely. 
 
 ***
 
