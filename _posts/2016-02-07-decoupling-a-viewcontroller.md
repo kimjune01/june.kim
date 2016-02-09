@@ -90,10 +90,8 @@ Let's take an example from a view controller that has a product, a user type, an
 Our old code might look something like this:
 
 {% highlight swift %}
-Main.storyboard
-//has dozens of screens
+Main.storyboard //has dozens of screens
 {% endhighlight %}
-
 
 {% highlight swift %}
 class ProductListViewController: UITableViewController {

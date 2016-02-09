@@ -216,4 +216,4 @@ An additional benefit to sprout method for adding behavior is that you become im
 
 See also: [YAGNI](http://www.wikiwand.com/en/You_aren't_gonna_need_it), [JIT](http://www.wikiwand.com/en/Just-in-time_manufacturing), [self-documenting code](https://www.wikiwand.com/en/Self-documenting_code), [refactoring: good to great](https://www.youtube.com/watch?v=DC-pQPq0acs), [Tell, don't ask](https://pragprog.com/articles/tell-dont-ask)
 
-Reference to the name "Sprout Method": [Legacy Code](http://www.amazon.com/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052) 
+Reference to the name "Sprout Method": [Working Effectively with Legacy Code](/legacy-code) 
