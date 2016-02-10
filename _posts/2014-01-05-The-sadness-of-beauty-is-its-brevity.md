@@ -1,6 +1,6 @@
 ---
 layout: poetry
-title: The sadness of beauty is its brevity
+title: The Sadness of Beauty is its Brevity
 tags: poetry
 ---
 
