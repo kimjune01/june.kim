@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A Menu of View Controllers
+title: Menu of View Controllers
 tags: coding
 ---
 
