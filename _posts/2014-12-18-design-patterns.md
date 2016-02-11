@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Design Patterns – Elements of Reusable Object-Oriented Software 
+title: Design Patterns
 tags: reading
 ---
 

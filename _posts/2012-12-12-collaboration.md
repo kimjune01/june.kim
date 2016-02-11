@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Collaboration – How Leaders Avoid the Traps, Build Common Ground, and Reap Big Results
+title: Collaboration
 tags: reading
 ---
 
@@ -11,3 +11,4 @@ tags: reading
 [Summary](https://summaries.com/Platinum/Collaboration.pdf)
 
 [Jim Collins](http://www.jimcollins.com/about-jim.html)
+

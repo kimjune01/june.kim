@@ -1,8 +1,9 @@
 article {
-  max-width: 550px;
+
+  max-width: 500px;
   margin: 0 auto;
   .title {
-    line-height: 1.4em;
+    line-height: 1.35em;
     text-align: center;
   }
   .divider {
@@ -17,15 +18,28 @@ article {
     text-align: center;
     margin: 0 auto;
   }
+  blockquote {
+    p{
+      font-size: 0.95em;
+      line-height: 1.35em;
+    }
+  }
+
   hr {
     border: 0;
     border-bottom: 1px solid #000;
     margin: 30px 0;
   }
   p {
-    font-size: 15px;
-    line-height: 1.9em;
+    font-family: Lora;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.4;
     word-wrap: break-word;
+    a {
+      font-family: Avenir;
+      font-size: 0.85em;
+    }
   }
   .footnote {
     border: 0;

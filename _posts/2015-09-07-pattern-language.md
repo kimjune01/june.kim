@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A Pattern Language – Towns, Buildings, Construction
+title: A Pattern Language
 tags: reading
 ---
 

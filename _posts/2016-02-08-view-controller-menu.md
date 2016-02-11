@@ -4,7 +4,7 @@ title: A Menu of View Controllers
 tags: coding
 ---
 
-When requesting a change for a screen, designers or product owners often describe them with ways to navigate to their context. One such reference might be like:
+When requesting a change for a screen, designers or product owners often describe them with ways to navigate to their context. One such reference might be:
 
 > That screen where you tap on the list and the picture shows up before you buy
 
@@ -16,7 +16,7 @@ Then they say
 
 > Wat
 
-Or a change request through the kanban pipeline might look like:
+Or a change request through the kanban pipeline might look:
 
 > To reproduce this issue, log in as an upgraded user, click on the settings button from the side bar, scroll down to the upgrade button, and remove the upgrade button, and replace the button with a label that tells the upgraded user when their subscription expires. Priority: very important.
 
@@ -138,7 +138,7 @@ func viewControllerFromMainStoryboard(vcName name:String) -> UIViewController {
 }
 {% endhighlight %}
 
-If your view controller needs instances of objects from server, try using [fake objects](https://www.wikiwand.com/en/Mock_object) with [decoupling viewController](/decoupling-a-viewcontroller)
+If your view controller needs instances of objects from server, try using [fake objects](https://www.wikiwand.com/en/Mock_object) with [Decoupling ViewController](/decoupling-a-viewcontroller)
 
 ***
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Peopleware – Productive Projects and Teams
+title: Peopleware
 tags: reading
 ---
 
