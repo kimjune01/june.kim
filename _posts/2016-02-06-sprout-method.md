@@ -193,7 +193,7 @@ func fetchDataFromIcecreamServer() {
   serverProxy.getShouldEatIcecream() {
     shouldEatIcecream:Bool -> Void in
     self.updateViewOnWhetherI(shouldEatIcecream)
-	}
+  }
 }
 
 func updateViewOnWhetherI(shouldEatIcecream: Bool) {

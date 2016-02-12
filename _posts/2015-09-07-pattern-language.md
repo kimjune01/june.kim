@@ -4,7 +4,7 @@ title: A Pattern Language
 tags: reading
 ---
 
-![](/assets/pattern-language.jpg)
+![pattern language](/assets/pattern-language.jpg)
 
 [PDF](library.uniteddiversity.coop/Ecological.../A_Pattern_Language.pdf)
 
