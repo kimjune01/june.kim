@@ -1,6 +1,6 @@
 ---
 layout: post
-title: LeatherTripod Chair
+title: Leather Tripod Chair
 tags: crafting
 ---
 

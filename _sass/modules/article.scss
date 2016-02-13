@@ -40,9 +40,16 @@ article {
     line-height: 1.4;
     word-wrap: break-word;
     a {
-      font-family: Avenir;
       font-size: 0.85em;
+      font-weight: 500;
     }
+  }
+  ul {
+    font-family: Lora;
+
+  }
+  a {
+      font-family: Avenir !important;
   }
   .footnote {
     border: 0;
