@@ -1,7 +1,7 @@
 body {
   font-family: 'Avenir', sans-serif;
   padding: 20px;
-  margin: 0;
+  margin: 0px;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
@@ -14,6 +14,9 @@ h2, h3, h4, h5 {
 }
 img {
   max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
 }
 a {
   color: inherit;
@@ -77,7 +80,7 @@ pre {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  line-height: 1.35;
+  line-height: 1.25;
   white-space: pre;
   overflow-x: auto;
   background-color: #f9f9f9;
@@ -105,4 +108,7 @@ table {
   td {
     padding: 4px 0;
   }
+}
+figure {
+  width: 90%;
 }

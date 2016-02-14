@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Server Singleton
+title: Server API Clarifier
 tags: coding
 ---
 
-In a client-server application, there needs to be a way to communicate effectively between the client application and the server application. Similarly, there also needs to be a way to communicate between the front-end developers and the back-end developers. The client sends and requests data from the server, and the server dutifully serves that data. Similarly, the front-end developers and the back-end developers share information about how that data transfer is to be done. 
+In a client-server application, communication between the client application and the server application must be clear. Similarly, communication between the front-end developers and the back-end developers must be clear. The client sends and requests data from the server, and the server dutifully serves that data. Similarly, the front-end developers and the back-end developers share information about how that data transfer is to be done. Wouldn't it be nice if both machine and human communication was streamlined?
 
 Using the REST protocol, there is going to be a back-end that serves JSON from an endpoint that looks like:
 
@@ -12,9 +12,9 @@ Using the REST protocol, there is going to be a back-end that serves JSON from a
 https://staging.server.io/api/v1/some-stuff
 {% endhighlight %}
 
-There's a lot going on under the hood. The front-end team is looking at this and dividing it into two or three components, to be able to compose dynamically. The back-end team is making JSON representations of model objects, possibly using [JBuilder](https://github.com/rails/jbuilder). Each JSON representation might have properties such as `imageURL` among `title`, `description`, `price`, `epoch`, etc. 
+There's a lot going on under the hood here. The front-end team is looking at this and dividing it into two or three components, to be able to compose dynamically. The back-end team is making JSON representations of model objects, possibly using [JBuilder](https://github.com/rails/jbuilder). Each JSON representation might have properties such as `imageURL` among `title`, `description`, `price`, `epoch`, etc. 
 
-Then there are view controllers that need to interpret this data into user interfaces. That's us. We are the view controllers. 
+Then there are view controllers that need to interpret this data into user interfaces. That's us, the front-end iOS developers. We are the view controllers. 
 
 ## A Communication Problem
 
@@ -75,7 +75,7 @@ What can we do to address these issues? How do we make it super fast to change w
 
 Let's refactor the ugly code shown previously into something that's more modular, better encapsulated, and easier to read. Furthermore, if the code is self-documenting and in sync with the server, then the human latency between the two sides can be shortened, as well. Before we comtinue, you may want to review some of these design patterns, to get a better understanding of what we're doing.
 
-- [Singleton](https://sourcemaking.com/design_patterns/singleton)
+- [Optimize for Readability](http://va.lent.in/optimize-for-readability-first/)
 - [Decorator](https://sourcemaking.com/design_patterns/decorator)
 - [Sprout Method](/sprout-method)
 - [Static Method](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Methods.html)
@@ -160,7 +160,7 @@ func getBeersList(completion: ([Beer] -> ())) {
 }
 {% endhighlight %}
 
-I want to continue, but the endpoint is shared across all my API endpoints. And sometimes I need to switch between develop, staging, and production endpoints. We can either make the endpoint a global variable or encapsulate it into a singleton, where we're also allowed to keep behavior without contaminating the global namespace. Let's make a wish.
+I want to continue, but the endpoint is shared across all my API endpoints. And sometimes I need to switch between develop, staging, and production endpoints. We can either make the endpoint a global variable or a static variable, where we're also allowed to keep behavior without contaminating the global namespace. Let's make a wish.
 
 ### Sprout Method
 
@@ -202,7 +202,7 @@ We're getting closer. But before we continue, let's conceptualize what we are tr
     Internet [shape=star style=filled color=gold ]
     user -> ViewController [label="\ \ tap"]
     ViewController -> serverSingleton [label="\ \ getBeersList()"]
-    serverSingleton -> Alamofire [label="\ \ request(GET, serverURL)"]
+    serverSingleton -> Alamofire [label="\ \ request(.GET)"]
     Alamofire -> Internet [label="\ \ JSON Request"]
   }
 "MVCS call out")
@@ -226,7 +226,7 @@ The user is accessing the database on the Internet through the user interface. I
   }[fontName = "Helvetica"]
 "MVCS listen in")
 
-The stream of data comes back full circle from the server. Let's continue refactoring.
+The stream of data comes back full circle from the server. Let's continue refactoring. We'll name the new class `BeverageServer` to reflect its role in its context (See [How to Name Things](/how-to-name-things)). 
 
 {% highlight swift %}
 class BeverageServer {
@@ -259,11 +259,21 @@ class BeverageServer {
 I copy pasted the code from earlier into the new method body. But there's a compiler error! Referring to an unexisting self is not allowed in a static method. By leaning on the compiler, we can see exactly what we need to work on. The priority of work is arranged for us already.
 
 {% highlight swift %}
-var beers = [Beer]()
 //..
+  case .Success(let JSON):
+    var beers = [Beer]()
+    let jsonBeers = JSON as! [NSDictionary]
+    for eachBeer in jsonBeers {
+      //let eachBeer = Beer()
+      //eachBeer.name = eachJsonBeer["name"] as! String
+      //eachBeer.size = eachJsonBeer["size"] as! Int
+      //eachBeer.description = eachJsonBeer["description"] as! String
+      //eachBeer.price = eachJsonBeer["price"] as! Double
       beers.append(eachBeer)
     }
     completion(beers)
+  case .Failure(let error):
+      //self.showErrorMessage(error);
 //..
 {% endhighlight %}
 
@@ -354,6 +364,10 @@ class Beer {
     }
     return beers
   }
+
+  static func toJSON:(beer:Beer) -> NSDictionary {
+    //TODO:
+  }
 //..
 }
 {% endhighlight %}
@@ -375,9 +389,12 @@ class Beer {
 }
 {% endhighlight %}
 
-It's starting to look closer to JBuilder. Try to see if you can match the variable names to the JSON strings. That way, there will be no confusion between developers when referring to the variables. 
+It's starting to look closer to JBuilder. Try to see if you can match the variable names to the JSON strings that the server guys are using. That way, there will be no confusion between developers when referring to the variables. Streamline human communication. 
+
+Time == money.
 
 {% highlight ruby %}
+#somewhere on the server...
 json.beers @beers do |beer|
   json.name beer.name
   json.size beer.size
@@ -386,9 +403,11 @@ json.beers @beers do |beer|
 end
 {% endhighlight %}
 
-The code is the documentation. It never goes out of date.
+Just like JBuilder, the code is the documentation. It never goes out of date.
 
-Once the code compiles, we run it and see if it behaves as expected. This might be a good time to write a fake beer list using the same constructor, to test some UI. 
+Once the code compiles, we run it and see if it behaves as expected. This would be a good time to write a fake beer list using the same constructor, to test some UI. 
+
+Now, there's more than one way to do networking in an app, and there will be more responsibilities introduced later on especially with caching and persistence. But with this setup, new server calls can be set up simply by mimicking the existing pattern. Code is DRY, and when things don't work, you'll know exactly where to look.
 
 ***
 
