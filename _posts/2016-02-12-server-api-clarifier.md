@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Server API Clarifier
+title: Clarifying the Server API
 tags: coding
 ---
 
