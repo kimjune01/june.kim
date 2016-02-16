@@ -76,7 +76,7 @@ What can we do to address these issues? How do we make it super fast to change w
 Let's refactor the ugly code shown previously into something that's more modular, better encapsulated, and easier to read. Furthermore, if the code is self-documenting and in sync with the server, then the human latency between the two sides can be shortened, as well. Before we comtinue, you may want to review some of these design patterns, to get a better understanding of what we're doing.
 
 - [Optimize for Readability](http://va.lent.in/optimize-for-readability-first/)
-- [Decorator](https://sourcemaking.com/design_patterns/decorator)
+- [Facade](https://sourcemaking.com/design_patterns/facade)
 - [Sprout Method](/sprout-method)
 - [Static Method](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Methods.html)
 - [Single Responsibility Principle](http://www.oodesign.com/single-responsibility-principle.html)
