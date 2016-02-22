@@ -214,6 +214,6 @@ Sprout method encourages human-readable, self-documenting code really easily. Be
 An additional benefit to sprout method for adding behavior is that you become immune to interruptions. By putting //TODO: heads where you're not finished, you can recontextualize really quickly after being interrupted by your boss or coworker. No grand plan survives a lengthy discussion in human memory.
 
 
-See also: [YAGNI](http://www.wikiwand.com/en/You_aren't_gonna_need_it), [JIT](http://www.wikiwand.com/en/Just-in-time_manufacturing), [self-documenting code](https://www.wikiwand.com/en/Self-documenting_code), [refactoring: good to great](https://www.youtube.com/watch?v=DC-pQPq0acs), [Tell, don't ask](https://pragprog.com/articles/tell-dont-ask)
+See also: [YAGNI](http://www.wikiwand.com/en/You_aren't_gonna_need_it), [JIT](http://www.wikiwand.com/en/Just-in-time_manufacturing), [self-documenting code](https://www.wikiwand.com/en/Self-documenting_code), [refactoring: good to great](https://www.youtube.com/watch?v=DC-pQPq0acs), [Tell, don't ask](https://robots.thoughtbot.com/tell-dont-ask)
 
 Reference to the name "Sprout Method": [Working Effectively with Legacy Code](/legacy-code) 
