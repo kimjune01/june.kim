@@ -1,7 +1,9 @@
 ---
 layout: poetry
 title: The Giving Tree
-tags: reading, poetry
+tags:
+ - reading
+ - poetry
 ---
 
 ![The Giving Tree](/assets/giving-tree.jpg)

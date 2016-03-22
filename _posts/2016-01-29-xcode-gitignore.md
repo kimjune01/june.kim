@@ -4,8 +4,9 @@ title: Xcode .gitignore
 tags: coding
 ---
 
+```
 
-\# Xcode
+# Xcode
 .DS_Store
 build/
 *.pbxuser
@@ -23,8 +24,9 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-\# Pods - for those of you who use CocoaPods
+# Pods - for those of you who use CocoaPods
 Pods
 
+```
 
 [source](http://stackoverflow.com/questions/18939421/what-should-xcode-6-gitignore-file-include)
