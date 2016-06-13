@@ -17,6 +17,7 @@ social:
 
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
+asseturl:           https://raw.githubusercontent.com/kimjune01/kimjune01.github.io/master/assets/
 permalink:          /:title # Post permalink
 timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
