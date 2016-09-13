@@ -8,4 +8,4 @@ As I'm sitting in the middle of the bus, I am looking back towards the rear of t
 
 Whatever it is that you are listening to through your earbuds, I don't know. But if I were to imagine, it would be as if you're watching a movie; the flow of life on the streets passing by you. 
 
-Too bad that this movie cannot show how beautiful you are, staring out the window.
+Too bad that this movie cannot show you how beautiful you are, staring out the window.
