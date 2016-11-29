@@ -1,4 +1,5 @@
 .logo {
+  position: relative;
   margin: 0 auto 5px;
   text-align: center;
    animation-duration: 0.7s;
@@ -11,7 +12,6 @@
     background: #fff url("gravatar_wrapper.png");
     color: #fff;
     text-decoration: none;
-    font-weight: 700;
     height: 90px;
     width: 90px;
     font-size: 1.5em;
@@ -27,13 +27,13 @@
     }
     &:hover + .logo-prompt,
     &:focus + .logo-prompt {
-      display: inline-block !important;
+      display: inline-block;
     }
     .gravatar {
       margin-top: 5px;
-      -webkit-border-radius: 50%;
-      -moz-border-radius: 50%;
-      border-radius: 50%;
+      -webkit-border-radius: 45%;
+      -moz-border-radius: 45%;
+      border-radius: 45%;
     }
     @media (max-width : 480px) {&:hover + .logo-prompt,
       &:focus + .logo-prompt {
