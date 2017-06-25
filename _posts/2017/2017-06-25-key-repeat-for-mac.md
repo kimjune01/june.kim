@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Increase keyboard key repeat rate on OS X
 tags: coding
 ---
