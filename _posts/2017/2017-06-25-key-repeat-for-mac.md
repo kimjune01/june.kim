@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Increase keyboard key repeat rate on OS X
+title: Increase keyboard key repeat rate on MacOS
 tags: coding
 ---
 
