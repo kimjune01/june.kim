@@ -27,5 +27,12 @@ layout: compress
 		{% endif %}
 
 	</body>
+  
+  <footer class="edit-footer">
+    {% assign prefix = 'https://github.com/kimjune01/kimjune01.github.io/blob/master/' %}
+    {% assign urlstring = prefix | append: page.path %}
+    <a href= {{ urlstring }} > edit </a>
+    
+  </footer>
 
 </html>
