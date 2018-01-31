@@ -75,7 +75,11 @@ I already have the skills, and there are plenty of people that need it. Will I a
 
 It's a marketing problem. Only if there was a market for top talent...
 
-[Toptal](toptal.com) is like tinder, but for experts/companies. Instead of expecting full-commitment based on a couple hours of talking, experts like me can 'hook up' with companies that need work done. Compensation is based on the work done, not hours spent. I'll be motivated to do my best work. 
+[Toptal](toptal.com) is like tinder, but for experts/companies. Instead of expecting full-commitment based on a couple hours of talking, experts like me can 'hook up' with companies that need work done. Compensation is based on the work done, not hours spent. I'll be motivated to do my best work.
+
+I'm joining the [iOS app development experts Community](https://www.toptal.com/ios-app-development) so that I can help those that need my iOS skills and cut through the hiring BS. 
+
+### Will I miss employment?
 
 I won't have a steady stream like I would with a full-time job, but I don't need to get paid every other week because I don't have a mortage.
 
