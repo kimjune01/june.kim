@@ -13,7 +13,7 @@ Getting a full-time job starts with an updated resume. I went to workshops to be
 
 Sometimes a recruiter would approach me for a full-time opportunity. I went to meet some of them, but they were useless. All they cared about was the number of months of iOS development experience I had. Their algorithm was simple:
 
-```
+```swift
 let candidates = linkedInSearch('ios developer', near: 'vancouver')
 
 for eachCandidate in candidates {
