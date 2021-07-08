@@ -36,12 +36,15 @@ Well, obviously during a pandemic where people can't be at the office, Colocated
 |:--:| 
 | *A typical zoom meeting* |
 
-A natural response to losing the ability to physically be together is to just teleconference. A zoom meeting is kind of like being together, where each participant can give their thoughts and receive feedback. There are several problems that arise:
+A natural response to losing the ability to physically be together is to just teleconference. A zoom meeting is kind of like being together, where each participant can give their thoughts and receive feedback. But there's some things that make it quite not like a real get-together:
 
 - Should I schedule meetings? How long does it take to schedule that meeting? Is this a meeting that could have been an email?
 - Is this person paying attention to what I'm saying? I see that their eyes are pointing forward, but if I could be watching Youtube during the last presentation, this person could be too, for all I know!
 - If it's a meeting, should I prepare an agenda and take some notes? I don't wanna waste anybody's time.
 - I have a quick question, but I expect a back-and-forth. If I message them, should I expect a response right away? 
+- Did they hear what I just said? Should I expect them to acknowledge my point by repeating it?
+
+Is there was a way to keep communications open, such that the scheduling and connectivity dance be avoided?
 
 A wise man *(Lachlan heasman)* once told me that the best way to do remote work is to simulate the collocation. Like a portal through space, as much signal from the remote desk should be tunneled through to the on-site desk. This is especially important if there are some people working onsite and some remote. The remote worker gets left out of casual work conversation. 
 
