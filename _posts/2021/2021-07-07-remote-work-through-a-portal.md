@@ -6,7 +6,7 @@ tags: reflecting
 
 ![portalception](assets/portalception.png)
 
-During the strange times that began in 2020, remote work became necessary and normalized. In software development, working remotely is common; and for some, there is no going back. Whether it's good or not isn't straightforward to answer. When I worked at a megacorp, the only difference was that I didn't get free food, and I can skip more meetings. At an agile startup team, the demand for quantity and quality of interaction more than compensates for its faults. So is remote work the future default? 
+During the strange times that began in 2020, remote work became necessary and normalized. In software development, working remotely is common; and for some, there is no going back. Whether it's good or not isn't straightforward to answer. When I worked at a megacorp, the only difference was that I didn't get free food, and I can skip more meetings. At an agile startup team, the demand for quantity and quality of interaction far outweighs its benefits. So is remote work the inevitable default? 
 
 I asked around for some perspectives. One mentor mentioned that during the dot-com boom, there was a lot of hype for remote work. Rumors were going around that the office will no longer be needed for software people. But looking at what happened to the bay area since tells a more complete story. 
 
