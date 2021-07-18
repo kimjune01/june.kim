@@ -4,6 +4,8 @@ title: The Sea Retains Such Images
 tags: poetry
 ---
 
+![sea-retains](assets/sea-retains.jpg)
+
 The sea retains such images
 
 in her ever-changing waves;
