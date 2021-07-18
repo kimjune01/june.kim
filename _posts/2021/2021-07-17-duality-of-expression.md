@@ -26,7 +26,7 @@ Knowing him, he made no attempt at deteriorating our relationship. It was a smal
 
 Suppose that you are a realist; your world view is neutral. Half your thoughts would be positive and the other half, negative. If each of your thoughts were expressed without a positive filter, then half the things you say will sound negative. And that makes you an asshole to everyone else. Who'd want to talk to you, if it was a fifty fifty between feeling good and feeling bad?
 
-Anything can be said positively. It can be charged positively without compromising its integrity. A classic example to illustrate duality of expression is glass half-full vs. half-empty. It's the same reality described in opposite ways. Even in math, an equivalent expression can stated in both ways of addition and subtraction.
+Anything can be said positively without compromising its integrity. A classic example to illustrate duality of expression is glass half-full vs. half-empty. It's the same reality described in opposite ways. Even in math, an equivalent expression can stated in both ways of addition and subtraction.
 
 _b_ is the negative of _a_:
 
