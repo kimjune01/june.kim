@@ -4,6 +4,9 @@ title: The Sadness of Beauty is its Brevity
 tags: poetry
 ---
 
+
+![Sadness Of Beauty](assets/sadness-of-beauty.JPG)
+
 The sadness of beauty is its brevity
 
 Chromatic dances through the Milky Way
@@ -37,3 +40,5 @@ Then time becomes a one-way decomposition.
 But Mists are clouds for rain and eggs will spawn
 
 Morning shower, keys in pocket, time to carry on.
+
+
