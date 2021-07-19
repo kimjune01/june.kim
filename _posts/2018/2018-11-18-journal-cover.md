@@ -21,5 +21,3 @@ tags: crafting
 ![Journal8](assets/journal8.jpg)
 
 ![Journal9](assets/journal9.jpg)
-
-![test](https://github.com/labnol/files/blob/master/trex.jpg?raw=true)
