@@ -5,7 +5,7 @@ tags: poetry
 ---
 
 
-![Sadness Of Beauty](assets/sadness-of-beauty.JPG)
+![Sadness Of Beauty](assets/sadness-of-beauty.jpg)
 
 The sadness of beauty is its brevity
 

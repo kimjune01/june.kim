@@ -4,4 +4,4 @@ title: What I Should Have Said
 tags: poetry
 ---
 
-![Should Have Said](assets/should-have-said.JPG)
+![Should Have Said](assets/should-have-said.jpg)

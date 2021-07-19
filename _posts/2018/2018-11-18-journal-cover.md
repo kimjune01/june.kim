@@ -4,22 +4,22 @@ title: Journal Cover
 tags: crafting
 ---
 
-![Journal1](assets/journal1.JPG)
+![Journal1](assets/journal1.jpg)
 
-![Journal2](assets/journal2.JPG)
+![Journal2](assets/journal2.jpg)
 
-![Journal3](assets/journal3.JPG)
+![Journal3](assets/journal3.jpg)
 
-![Journal4](assets/journal4.JPG)
+![Journal4](assets/journal4.jpg)
 
-![Journal5](assets/journal5.JPG)
+![Journal5](assets/journal5.jpg)
 
-![Journal6](assets/journal6.JPG)
+![Journal6](assets/journal6.jpg)
 
-![Journal7](assets/journal7.JPG)
+![Journal7](assets/journal7.jpg)
 
-![Journal8](assets/journal8.JPG)
+![Journal8](assets/journal8.jpg)
 
-![Journal9](assets/journal9.JPG)
+![Journal9](assets/journal9.jpg)
 
 ![test](https://github.com/labnol/files/blob/master/trex.jpg?raw=true)

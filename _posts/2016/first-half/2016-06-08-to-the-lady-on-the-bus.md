@@ -4,4 +4,4 @@ title: To the lady on the bus
 tags: poetry
 ---
 
-![lady-bus](assets/lady-bus.JPG)
+![lady-bus](assets/lady-bus.jpg)
