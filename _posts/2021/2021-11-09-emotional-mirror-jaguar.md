@@ -3,4 +3,4 @@ layout: post
 title: Emotional Mirror Jaguar
 tags: reflecting
 ---
-![jaguar](assets/jaguar.png)
+![jaguar](assets/jaguar_50.jpeg)
