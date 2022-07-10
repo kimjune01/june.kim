@@ -30,3 +30,12 @@ Pods
 ```
 
 [source](http://stackoverflow.com/questions/18939421/what-should-xcode-6-gitignore-file-include)
+
+
+```
+git rm -r --cached .
+git add .
+git commit -m "Drop files from .gitignore"
+```
+
+[source]https://stackoverflow.com/questions/13541615/how-to-remove-files-that-are-listed-in-the-gitignore-but-still-on-the-repositor)
