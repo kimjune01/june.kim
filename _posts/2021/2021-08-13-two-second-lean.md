@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 2 second lean
+title: 2 Second Lean
 tags: reading
 ---
 
