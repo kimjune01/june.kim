@@ -5,9 +5,10 @@ tags: coding
 ---
 
 
-![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.webp)
+| ![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.webp)| 
+|:--:| 
+| *Literally me, interviewing at Google, circa 2017* |
 
-> Literally me, interviewing at Google, circa 2017
 
 Five years ago, I had just finished my computer science degree at university. I wanted to work in California to double my income compared to working in Canada, and the biggest hurdle to reach that goal was to pass a series of interviews; several of which was the dreaded technical interview. I had disdain towards it and any company that employed it to assess candidates. But it became obvious that if I wanted to get into these companies, it was up to me to jump the hoops, because they wouldn't lower it for me.
 
