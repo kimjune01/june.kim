@@ -5,7 +5,7 @@ tags: coding
 ---
 
 
-![flaming-motorcycle-jump](flaming-motorcycle-jump.webp)
+![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.webp)
 
 > Literally me, interviewing at Google, circa 2017
 
@@ -63,7 +63,7 @@ The easiest way to prevent backtracking is to ask simple questions to the interv
 
 Let’s walk through each of the stages of the interview, and what to ensure before moving onto the next stage.
 
-### 🙋Introduction & smalltalk
+### 🙋 Introduction & smalltalk
 
 The first couple minutes is to get comfortable in the interview. Here, you can build rapport with the conductor. They might ask some variation of the “Tell me about yourself” question, where you will briefly talk about your proudest work. 
 
@@ -82,7 +82,7 @@ Ask the interviewer if executing your plan would satisfy their expectations.
 
 > Would you be convinced that I’ve solved the problem if it passes the tests with edge cases I’m about to provide?
 
-### ❓Understand the problem
+### ❓ Understand the problem
 
 Ask clarifying questions to get a grasp of question scope, as it might not be clear when the interviewer establishes it. 
 
@@ -96,7 +96,7 @@ if these tests would be sufficient. If not, then here is an opportunity to ask f
 
 > The code I am going to write will cover general test cases, however, here are few edge cases that might not run. It would take a lot of time to figure those out, should my solution aim for those given the time limit?
 
-### 🗣️Solve the problem via pseudocode 
+### 🗣️ Solve the problem via pseudocode 
 
 If the code runs, use it to your advantage by running it frequently with failing tests. 
 
@@ -117,7 +117,7 @@ Get confirmation from the conductor with each test expectation.
 Ask for test cases that you may have missed
 If you fail any tests, iterate on your solution.
 
-### ⚒️Code your solution
+### ⚒️ Code your solution
 
 Ask if syntax matters. If it does, then write one line at a time so that you don't backtrack. 
 Break down your solution into named functions For clarity, see [Sprout Method](https://www.june.kim/sprout-method)
@@ -129,7 +129,7 @@ Write quick tests for your components and comment invariants if helpful
 If runtime available, just run your test suite.
 If not, then go through each of the positive and negative test cases manually. It can feel tedious, but go through each line of code as if you were the computer.
 
-### ↔️Confirm solution with conductor
+### ↔️ Confirm solution with conductor
 
 Ask the conductor if the written code is satisfactory. Also ask if performance is important. If so, address performance issues for space and complexity, with varying runtime/memory tradeoffs if relevant. 
 
