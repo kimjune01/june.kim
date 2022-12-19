@@ -103,7 +103,7 @@ If the code runs, use it to your advantage by running it frequently with failing
 If the code doesn’t run, then be the compiler and run the pseudocode manually, talking out loud. 
 
 E.g.
-```
+```swift
 For each emoji pair, 
 ….check the input text if the emoji is in it 
 ….if so, check if it passes the whitespace/newline/boundary conditions
