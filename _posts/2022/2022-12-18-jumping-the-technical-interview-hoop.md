@@ -34,10 +34,10 @@ When you fail the interview, you will not get feedback on your performance. You'
 
 ### Solution
 
-> Understand the the interview rubric
-> Gain mastery of the process that would check all the boxes in that rubric
-> Practice with direct actionable feedback
-> Learn lessons from each failure for the next iteration
+> - Understand the the interview rubric
+> - Gain mastery of the process that would check all the boxes in that rubric
+> - Practice with direct actionable feedback
+> - Learn lessons from each failure for the next iteration
 
 
 ## The process
