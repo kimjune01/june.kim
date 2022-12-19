@@ -5,7 +5,7 @@ tags: coding
 ---
 
 
-| ![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.webp)| 
+| ![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.jpeg)| 
 |:--:| 
 | *Literally me, interviewing at Google, circa 2017* |
 
