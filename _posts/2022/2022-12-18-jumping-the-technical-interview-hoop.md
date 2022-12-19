@@ -15,7 +15,7 @@ Further reading: [Your Job Shaped Code](https://kennethbruskiewicz.substack.com/
 
 Today, technical whiteboard-style interviews are still the norm. For remote jobs, the whiteboard is replaced by a soullesss text editor shared in real-time. The hoop remains the same shape, and the income difference between those who can jump it and those who cannot, are still roughly double. The typical advice from [/r/cscareeradvice](https://www.reddit.com/r/cscareeradvice/) is still to grind leetcode and hope for a question previously seen. However, having been on the other side of the table, the problem-solving part ios only one of four rubric points assessed by the conductor. It's not enough to have solved the problem.
 
-What else is on that rubric? The interviewer doesn't actually care about you getting a job, or your personality, or what you ate for breakfast that day. They only assess your performance as objectively as they can. The dimensions assessed are: 
+What else is on that rubric? The interviewer doesn't actually care about you getting a job, or your personality, or what your GPA was in school. They only assess your performance as objectively as they can. The dimensions assessed are: 
 - Coding
 - Data Structures & Slgorithms
 - Design (rate only if assessed)
