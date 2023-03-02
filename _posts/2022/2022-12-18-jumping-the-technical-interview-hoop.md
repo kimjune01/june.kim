@@ -14,7 +14,7 @@ Five years ago, I had just finished my computer science degree at university. I 
 
 Further reading: [Your Job Shaped Code](https://kennethbruskiewicz.substack.com/p/your-job-shaped-code) by [Kenneth](https://www.linkedin.com/in/kenneth-bruskiewicz-98569256/)
 
-Today, technical whiteboard-style interviews are still the norm. For remote jobs, the whiteboard is replaced by a soullesss text editor shared in real-time. The hoop remains the same shape, and the income difference between those who can jump it and those who cannot, are still roughly double. The typical advice from [/r/cscareeradvice](https://www.reddit.com/r/cscareeradvice/) is still to grind leetcode and hope for a question previously seen. However, having been on the other side of the table, the problem-solving part ios only one of four rubric points assessed by the conductor. It's not enough to have solved the problem.
+Today, technical whiteboard-style interviews are still the norm. For remote jobs, the whiteboard is replaced by a soullesss text editor shared in real-time. The hoop remains the same shape, and the income difference between those who can jump it and those who cannot, are still roughly double. The typical advice from [/r/cscareerquestions](https://www.reddit.com/r/cscareerquestions/) is still to grind leetcode and hope for a question previously seen. However, having been on the other side of the table, the problem-solving part ios only one of four rubric points assessed by the conductor. It's not enough to have solved the problem.
 
 What else is on that rubric? The interviewer doesn't actually care about you getting a job, or your personality, or what your GPA was in school. They only assess your performance as objectively as they can. The dimensions assessed are: 
 - Coding
@@ -58,9 +58,9 @@ Understanding the problem must not be overlooked. The most common pitfall for be
 
 See more about the why and how to pseudocode [here](https://builtin.com/data-science/pseudocode)
 
-> Pseudocode helps you reqlize possible problems or design flaws in the algorithm earlier in the development stage, which saves you more time and effort on fixing bugs and avoiding errors down the road.
+> Pseudocode helps you realize possible problems or design flaws in the algorithm earlier in the development stage, which saves you more time and effort on fixing bugs and avoiding errors down the road.
 
-The easiest way to prevent backtracking is to ask simple questions to the interviewer about your work. Each stage of effort you exert should be demarcated by a series of checkpoints. In other words, each stage is a mini while-loop with the checkpoint as the invariant, (lookup what a variant is: https://en.wikipedia.org/wiki/Loop_variant). Keep your iteration cycles tight and you will never fall into the rabbit hole of doom.
+The easiest way to prevent backtracking is to ask simple questions to the interviewer about your work. Each stage of effort you exert should be demarcated by a series of checkpoints. In other words, each stage is a mini while-loop with the checkpoint as the invariant, (look up what a [loop invariant is on Wikipedia](https://en.wikipedia.org/wiki/Loop_invariant)). Keep your iteration cycles tight and you will never fall into the rabbit hole of doom.
 
 Let’s walk through each of the stages of the interview, and what to ensure before moving onto the next stage.
 
