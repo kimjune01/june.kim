@@ -27,7 +27,7 @@ Of shipping and maintenance, only shipping is celebrated and rewarded for its vi
 
 ### Project Management
 
-Managers see the situation, and conclude that the its resolution must be getting more stuff done with project management. Project management is a fantastic tool for accountability and exercising control over processes. Their responsibility must lie in breaking down what technical work needs to be done, and distribute the tasks among the engineers who can code up the solution. 
+Managers see the situation, and conclude that the its resolution must be getting more stuff done with project management. Project management is a fantastic tool for accountability and exercising control over processes. Their responsibility is breaking down what technical work needs to be done, and distribute the tasks among the engineers who can code up the solution. 
 
 ![project-management](assets/work-together/project-management.png)
 
@@ -38,7 +38,7 @@ At first glance, anything can be achieved this way. Tech debt? Make up a project
 - At each time increment, check the status of each task and task list
 - If the tasks aren't done fast enough, add or replace engineer
 
-This results in the human equivalent of the infra world's microservices architecture: each engineer instance being a self-contained docker module. If at first too slow, scale horizontally by adding more modules.
+This results in the human equivalent of the infra world's microservices architecture: each engineer instance being a self-contained docker nodes. If at first too slow, scale horizontally by adding more nodes.
 
 But what if the requirements are unknown ahead of time? What if the feature can never be done? Does it make sense to apply the same problem-solving technique suited to solving complicated problems, to solving complex problems?
 
@@ -71,7 +71,7 @@ When a ticket with my name on it is priority, then any help for others must wait
 
 Work assignments are determined by who can get it done the fastest, usually the one with most context who last worked on its adjacent component. For the sake of task completion, it is most efficient. It then serves to further secure their place in their trench of service to the corporation. 
 
-In a silo'd configuration, any ambiguity requires solo input if I were to prevent its dreadful delay. What is the expected quality of a decision made solo vs. together? What are the costs of a bad architecture pattern hidden behind a ticket's checkbox in the done column?
+In a silo'd configuration, any ambiguity requires solo input if I were to prevent its dreadful delay. What is the expected quality of a decision made solo vs. made together? What are the costs of a bad architecture pattern hidden behind a ticket's checkbox in the done column?
 
 ![reality-silos](assets/work-together/reality-silos.png)
 
@@ -103,7 +103,7 @@ An engineer is one who serves the service. Unlike baking cookies, the work we pr
 
 ### Working on the right things is more effective than doing more things
 
-Unlike cookies, the value of product increments is variable. The cost of product increments is also variable. Estimates are guesses that are always wrong. But because of the giant differences between the most valuable and the next-most valuable is so huge, the precision required of the estimates only need to be enough to prioritize deliverables from one to the next. If the benefits of the product increments are also estimated wildly, then factoring both will yield the correct prioritization about half the time. Amazingly, this is an improvement over no prioritization at all.
+Unlike cookies, the value of product increments is variable. The cost of product increments is also variable. Estimates are guesses that are always wrong. But because of the giant differences between the most valuable and the next-most valuable is so huge, the precision required of the estimates only need to be enough to prioritize deliverables from one to the next. If the benefits of the product increments are also estimated wildly, then factoring both will yield the correct prioritization about half the time. Amazingly, this is an improvement over no estimation at all.
 
 If two people work on the most important thing and get it done sooner, then it will provide more benefit over the same time period compared to them working on two most important things.
 
@@ -120,7 +120,7 @@ A team's performance depends on the collective knowledge and skill of its member
 
 ### It's not that simple
 
-If it was that easy, we'd already be doing it. If you're in a culture where working alone is the norm, then there will be several roadblocks to collaboration. Your project manager's reputation and value is at stake if this works well. Politics will be involved, and you may be reprimanded. It may even mean that you have to go into an office and meet people in flesh. It may be that your place is elsewhere.
+If it was that easy, we'd already be doing it. If you're in a culture where working alone is the norm, then there will be several roadblocks to collaboration. Your project manager's reputation and promotion opportunity is at stake if this works well. Politics will be involved, and you may be reprimanded. It may even mean that you have to quit your job and join a company that works at an office and meet people in flesh. 
 
 If work is important to you, if what you do for half the time you're awake is an essential part of who you are, then I hope what you read today will have been a glimpse into what is possible. I personally experienced working together, shoulder-to-shoulder early in my career. It was my first paid gig as a programmer. I've been chasing that high ever since.
 
