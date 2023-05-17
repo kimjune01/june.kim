@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Why Work Together
-tags: reflecting
+tags: coding
 ---
 
 | ![children-playing](assets/work-together/children-playing.jpg)| 
