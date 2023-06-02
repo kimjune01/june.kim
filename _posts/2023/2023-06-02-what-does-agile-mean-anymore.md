@@ -4,6 +4,8 @@ title: What does 'Agile' mean anymore?
 tags: reflecting
 ---
 
+![is-this-agile](assets/agile/is-this-agile.png)
+
 Since its debut via the [Agile Manifesto](https://agilemanifesto.org/), many interpretations of what 'Agile' means have come and gone. Is it following rules according to the [Scrum Guide](https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-US.pdf#zoom=100)? Is it following a methodology like Kanban, XP or similar? Maybe. 
 
 If you have been a part of an 'Agile' team that performs the rituals and ceremonies without knowing why, then you've been following the Agile as a religion. If you do something but don't know why, you don't know that thing — you believe that thing. Much like [Cargo Cult Science](https://calteches.library.caltech.edu/51/2/CargoCult.htm), merely copying the actions will not yield the desired result. 
