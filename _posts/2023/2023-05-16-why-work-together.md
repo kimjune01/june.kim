@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Why Work Together
-tags: coding
+tags: reflecting
 ---
 
 | ![children-playing](assets/work-together/children-playing.jpg)| 
@@ -43,6 +43,8 @@ This results in the human equivalent of the infra world's microservices architec
 But what if the requirements are unknown ahead of time? What if the feature can never be done? Does it make sense to apply the same problem-solving technique suited to solving complicated problems, to solving complex problems?
 
 [Complicated vs. Complex engineering systems](https://www.youtube.com/watch?v=gQkEPhKfIhw)
+
+Further learning: [The difference between Complicated and Complex](https://www.youtube.com/watch?v=puyeyYZXl0U)
 
 ### Unknown unknowns
 
