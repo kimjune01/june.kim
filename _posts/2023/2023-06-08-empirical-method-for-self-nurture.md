@@ -31,9 +31,11 @@ If the mistake was simple, then so, too – must be its solution? Now me is rati
 
 Now all that is left is to follow the plan. Problem solved, right? Only if this works. Then all of us could have six packs in six weeks.
 
+![new-year](/assets/self-nurture/new-year.jpg)
+
 When it comes time to obey the orders of our past selves, should you expect yourself to comply to a lesser version of you in the past, who is powerless to travel to the future present to coerce you into action? If resisting the cookie didn't work last time given the same circumstance, why is it OK to expect different results next time?
 
-At least for me, personally, I can say what doesn't work: 
+This doesn't work: 
 `To reform the deciding self, shame the past self and conceive a vision of a better future self.` Then what's the alternative? To employ more willpower? To be more motivated towards my goal with rewards? A different way to think about it?
 
 ## Self Nurture
