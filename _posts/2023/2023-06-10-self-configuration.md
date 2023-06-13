@@ -66,9 +66,11 @@ These improvements may seem small, but they add up. The biggest improvements you
 
 ### Automation?
 
+See @BryanJohnson's [Self Aided Destructive Behavior](https://www.youtube.com/shorts/j38LGkPGq6E)
+
 For self-improvement efforts to make a meaningful impact, regressing should be harder than maintaining such that the improvements are sustained. Humans tend to regress easier than a robot. If you have irregular sleeping habits, then getting one good night's sleep won't be enough. It shouldn't feel like effort once you set it up. Ideally, it should be automatic. But unlike robots, our bodies can't be programmed. However we can approximate automation with configuration. 
 
-Inspired by [Levels of driving automation](https://en.wikipedia.org/wiki/Self-driving_car#:~:text=80%5D%5B81%5D-,Levels%20of%20driving%20automation,-%5Bedit%5D), there are many ways to stop ourselves from [Self Aided Destruction](https://www.youtube.com/shorts/j38LGkPGq6E)
+Inspired by [Levels of driving automation](https://en.wikipedia.org/wiki/Self-driving_car#:~:text=80%5D%5B81%5D-,Levels%20of%20driving%20automation,-%5Bedit%5D), there are many ways to stop ourselves from Self-aided destruction.
 
 | Automation level / effort | Example |
 | 0 / Trying really hard | [Trying hard not to eat those cookies](https://www.youtube.com/shorts/2wkDm3VMbuU) |
