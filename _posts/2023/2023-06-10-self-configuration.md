@@ -14,7 +14,7 @@ _spending most of my time maintaining financial, social, physical, and mental st
 
 ![dark-office](/assets/configuration/dark-office.avif)
 
-_wile I work in a dark room with terrible posture in exchange for money..._
+_while I work in a dark room with terrible posture in exchange for money..._
 
 ![budget](/assets/configuration/budget.png)
 
@@ -28,9 +28,9 @@ _What little attention I have left is bombarded with stimuli from all directions
 
 _leaving no room for the people I encounter in real life, becoming apathetic to their otherwise genuine presence..._
 
-![sleep-cake](/assets/configuration/sleep-cake.png)
+![sleep-cake](/assets/configuration/sleep-cookie.png)
 
-_And when I finally put down the phone to sleep, I reflect on the decision to eat that slice of cake._
+_And when I finally put down the phone to sleep, I reflect on the decision to have eaten that cookie._
 
 ---
 
