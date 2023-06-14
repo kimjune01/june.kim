@@ -49,3 +49,9 @@ I can take the blue pill, while trascending the mundane. My worldly observations
 I can take the red pill, choosing to escape it. I can go Into The Wild or subscribe to [Anarcho-primitivism](https://en.wikipedia.org/wiki/Anarcho-primitivism) to join the Fight Club between Man and Society.
 
 The alternative not shown in the movie is to gradually repair the relationship between Self and the world that surrounds it. The [stoic](https://en.wikipedia.org/wiki/Stoicism) surrenders judgement outside of one's own [Circle of Influence](https://www.youtube.com/watch?v=uj8dmSgQa1c). [The Timeless Way of Building](https://en.wikipedia.org/wiki/The_Timeless_Way_of_Building) prescribes using "quality without a name" to identify what can be repaired. Seeing that the problem is [complex](https://www.youtube.com/watch?v=puyeyYZXl0U), [Set-Based Design](http://scrumbook.org.datasenter.no/value-stream/set-based-design.html) highlights the order of repair operations. 
+
+### Improvement
+
+It may seem impossible to escape a cycle with no room to breathe. But what may first seem impossible without violent force can be done with the aid of mechanical advantage. In the case of [splitting rocks](https://www.youtube-nocookie.com/embed/yOjcPY8NpX4), repeated momentum from a sledge hammer is combined with a series of wedges. It also helps to follow proven techniques employed by others. The same is in escaping the [rat race](https://youtu.be/e9dZQelULDk). 
+
+
