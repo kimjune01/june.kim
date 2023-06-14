@@ -41,3 +41,5 @@ tags: reflecting
 - How would you incentivize each bot to maximize their performance?
 - What's the internal data structure of each bot?
 - Is it possible to combine the positive attributes of both?
+- Can they work together effectively? 
+- What would be the optimal interface between each class of bots for working together?
