@@ -45,7 +45,7 @@ As I'm writing at the cafe, I smell delicious pastries. Yet, I am not inclined t
 
 Seeing myself as a linear combination of individual voices allows me to limit the scope of my nurture experiments to one roommate at a time. [Self configuration](/self-configuration) is now a matter of asking one roommate at a time if they're awake and how they're feeling. Seeing others as such helps me empathize by invoking which parts of themselves are dominant at the time. 
 
-What are your regretful moments? Which part of you was in charge at the time? When are they asleep? If a similar situation came up again, how would you prepare yourself?
+What are your regretful moments? Which part of you was in charge at the time? What's their name? When do they go to sleep? If a similar situation came up again, how would you prepare yourself?
 
 ### More reading
 
