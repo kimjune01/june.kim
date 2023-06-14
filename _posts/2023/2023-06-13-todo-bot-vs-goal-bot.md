@@ -11,6 +11,7 @@ tags: reflecting
 ### The Todo-bot
 - Does what you tell it to do, compliant with any request
 - Takes a list and does them in order
+- You set its task in priority order
 - Tells you when it's doing somthing or when it's stuck
 - Maintain itself, when told to do so
 - Respects your authority at all times
@@ -20,17 +21,17 @@ tags: reflecting
 ![goal-bot](assets/bots/goal-bot.png)
 
 ### The Goal-bot
-- Does not always do what's told, sometimes refuses requests
+- Does not take orders on what to do
 - Needs description on how the world will change by its actions
-- Can only focus on one goal at a time; can't process goal lists
+- Can only focus on one goal at a time: can't process goal lists
 - Autonomously seeks tasks towards the goal 
 - Can't tell you exactly what it will do, or when it will do it
 - Maintains itself if it helps achieve the goal
-- When multiple tasks are available, it chooses ones to progress the goal
-- Always tries to achieve the goal, but there's no progress bar
+- Prioritizes own tasks
+- There's no progress bar
 - Needs rewards for doing the right thing
 
-### Exercise left for the reaader
+### Exercise for the reaader
 
 - Which bot would you rather hire?
 - What would an assembly of each class of bots look like?
@@ -41,5 +42,4 @@ tags: reflecting
 - How would you incentivize each bot to maximize their performance?
 - What's the internal data structure of each bot?
 - Is it possible to combine the positive attributes of both?
-- Can they work together effectively? 
-- What would be the optimal interface between each class of bots for working together?
+- Can they work together effectively?
