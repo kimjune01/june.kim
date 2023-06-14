@@ -18,7 +18,7 @@ tags: reading
 
 [Book](http://www.amazon.com/Emotion-Machine-Commonsense-Artificial-Intelligence/dp/0743276647/ref=sr_1_2?ie=UTF8&qid=1454997397&sr=8-2&keywords=society+of+mind)
 
-[Video Lectures](http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-868j-the-society-of-mind-fall-2011/video-lectures/)
+[Video Lectures](https://ocw.mit.edu/courses/6-868j-the-society-of-mind-fall-2011/video_galleries/video-lectures/)
 
 ![Minsky](/assets/minsky.png)
 
