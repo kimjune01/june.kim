@@ -18,8 +18,6 @@ Just like making wood furniture, a blog post can be as simple as a utilitarian b
 
 ### Order of writing operations
 
-![journal](assets/journal9.jpg)
-
 #### Step 0: Start with Why 
 _When a reader engages with the article, they are not sure if the presented solution is relevant to their problem. Therefore, present the problem first, the solution second, and the implementation last._
 
@@ -33,8 +31,11 @@ How
 
 This is the basic skeletal structure to insert your ideas as they arrive to the front of your mind. It constrains my thoughts to the needs of the reader.
 
-
 #### Step 1: Dump ideas into the idea tree 
+
+| ![journal](assets/formula/notes.png) |
+|:--:| 
+| _Notes in my journal, ready to get allocated into the idea tree_ |
 
 Once I put those three words down in my text editor, I fill in the blanks. It forms a tree. For this article, it looked something like this:
 
