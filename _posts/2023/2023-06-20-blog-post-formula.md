@@ -61,7 +61,7 @@ Now that I laid out my ideas in order, I can clear out my short-term memory of t
 
 #### Step 2: Turn ideas into paragraphs
 
-This post is a continuation of how the points were turned into paragraphs. It's amazing how fast I can put the sentences together if I don't have to think about anything else. This step only took me about one focused hour.
+This post is a continuation of how the points were turned into paragraphs. It's amazing how fast I can put the sentences together if I don't have to think about anything else. __This step only took me about one focused hour. The other steps took another hour.__
 
 #### Step 3: Check the 5 Winston Star boxes
 
