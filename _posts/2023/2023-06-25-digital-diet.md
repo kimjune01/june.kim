@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Digital Diet
-tags: reflecting
+tags: improving
 ---
 
 _Warning: reading this post will rouse guilt whenever you consume mindless media._

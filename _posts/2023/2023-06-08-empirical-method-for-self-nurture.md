@@ -1,7 +1,7 @@
 ---
 layout: post
 title: An Empirical Method for Self Nurture
-tags: reflecting
+tags: improving
 ---
 
 ## Mistake
