@@ -32,7 +32,7 @@ _If you value focus, attention, and clarity of thought; if you find more meaning
 
 ![nfe](assets/digital-diet/nfe.png)
 
-It's a [Chrome extension](https://chrome.google.com/webstore/detail/news-feed-eradicator/fjcldmjmjhkklehbacihaiopjklihlgg) that blocks out the recommendations portion of Youtube. I can still use the search feature, though the recommendation engine still inserts a shelf below the fold.
+It's a [Chrome extension](https://chrome.google.com/webstore/detail/news-feed-eradicator/fjcldmjmjhkklehbacihaiopjklihlgg) that blocks out the recommendations portion of Youtube. I can still use the search feature.
 
 ![nfe2](assets/digital-diet/nfe2.png)
 
@@ -47,6 +47,10 @@ It works for many popular sites. I don't use it for Reddit because I only block 
 ![adblock1](assets/digital-diet/adblock1.png)
 
 Adblock can be used to block more than ads. I use it to block the Shorts button that appears beside my subscription button. This way, I can still subscribe to media that bring me joy or learning without the temptation of shorts.
+
+![adblock3](assets/digital-diet/adblock3.png)
+
+I can even use it to block recommendations from my Youtube search results.
 
 ![adblock2](assets/digital-diet/adblock2.png)
 
