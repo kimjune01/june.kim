@@ -14,3 +14,7 @@ tags: reading
 
 [James talking about it video](https://www.youtube.com/watch?v=U_nzqnXWvSo)
 
+1. Cue: Make it obvious.
+2. Craving: Make it attractive.
+3. Response: Make it easy.
+4. Reward: Make it satisfying.
