@@ -14,7 +14,7 @@ Five years ago, I had just finished my computer science degree at university. I 
 
 Further reading: [Your Job Shaped Code](https://kennethbruskiewicz.substack.com/p/your-job-shaped-code) by [Kenneth](https://www.linkedin.com/in/kenneth-bruskiewicz-98569256/)
 
-Today, technical whiteboard-style interviews are still the norm. For remote jobs, the whiteboard is replaced by a soullesss text editor shared in real-time. The hoop remains the same shape, and the income difference between those who can jump it and those who cannot, are still roughly double. The typical advice from [/r/cscareerquestions](https://www.reddit.com/r/cscareerquestions/) is still to grind leetcode and hope for a question previously seen. However, having been on the other side of the table, the problem-solving part ios only one of four rubric points assessed by the conductor. It's not enough to have solved the problem.
+Today, technical whiteboard-style interviews are still the norm. For remote jobs, the whiteboard is replaced by a soullesss text editor shared in real-time. The hoop remains the same shape, and the income difference between those who can jump it and those who cannot, are still roughly double. The typical advice from [/r/cscareerquestions](https://www.reddit.com/r/cscareerquestions/) is still to grind leetcode and hope for a question previously seen. However, having been on the other side of the table, the problem-solving part is only one of four rubric points assessed by the conductor. It's not enough to have solved the problem.
 
 What else is on that rubric? The interviewer doesn't actually care about you getting a job, or your personality, or what your GPA was in school. They only assess your performance as objectively as they can. The dimensions assessed are: 
 - Coding
@@ -25,7 +25,7 @@ What else is on that rubric? The interviewer doesn't actually care about you get
 - Tests Code (optional)
 - Systems Design (optional)
 
-When you fail the interview, you will not get feedback on your performance. You'll just get an email from HR saying that you're 'not a good fit' for the team. On the flipside, once you apply again the following year, the interviewer will not know how many times you have failed. Unlike a university application, you get more than one shot at it. And with each failure, lessons can be learned to be applied in the next application.
+When you fail the interview, you will not get feedback on your performance. Instead, you'll just get an email from HR saying that you're 'not a good fit' for the team. On the flipside, once you apply again the following year, the interviewer will not know how many times you have failed. Unlike a university application, you get more than one shot at it. And with each failure, lessons can be learned to be applied in the next application.
 
 
 ### Problem
