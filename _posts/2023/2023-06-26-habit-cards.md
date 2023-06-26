@@ -4,16 +4,17 @@ title: Habit Cards
 tags: improving
 ---
 
-_If you can't point to something you have, do you have it at all?_
+| ![salesman](assets/habit-cards/salesman.png) |
+|:--:| 
+| _If you can't point to something you have, do you have it at all?_ |
 
-After reading [Atomic Habits](/atomic-habits), I felt a bit empty. I had all the motivation to build habits and a bag of tricks to reinforce them, but I had no plan of action. But if I have a starting place and a vision of who I wanted to become through habits, then I can trailblaze my way there. 
+After reading [Atomic Habits](/atomic-habits), I felt a bit empty. I had all the motivation to build habits and a bag of tricks to reinforce them, but I had no plan of action. 
 
 As I've been talking to people about habits recently, one of the biggest obstacles to making a new habit is the fear of regressing from them. This makes sense, as committing to habits haphazardly will inevitably lead to disappointment. It's an inability to coordinate oneself across time. It's debilitating.
 
 So how do you minimize the chance for regression? This can be reframed as its dual problem: the dual problem to habit regression minimization is habit stickiness maximization.
 
 _To minimize disappointment from quitting good habits, use as many techniques you know about human behavior to influence your future self._
-
 
 ### Cognitive Bias
 
