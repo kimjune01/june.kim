@@ -2,6 +2,7 @@
 layout: post
 title: Habit Cards
 tags: improving
+image: assets/habit-cards/salesman.png
 ---
 
 | ![salesman](assets/habit-cards/salesman.png) |

@@ -4,8 +4,21 @@
 
 {% if page.title %}
 	<title>{{ page.title }}</title>
+	<meta property="og:title" content="{{ page.title }}" />
 {% else %}
 	<title>{{ site.title }}</title>
+{% endif %}
+
+<meta property="og:type" content="website" />
+
+{% if page.url %}
+	<meta property="og:url" content="{{ site.weburl }}{{ page.url }}" />
+{% endif %}
+
+{% if page.image %}
+	<meta property="og:image" content="{{ site.weburl }}/{{ page.image }}" />
+{% else %}
+	<meta property="og:image" content="{{ site.weburl }}/assets/default-icon.png" />
 {% endif %}
 
 <meta name="twitter:card" content="summary" />
