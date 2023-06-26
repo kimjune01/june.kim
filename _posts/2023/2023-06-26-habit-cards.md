@@ -12,14 +12,30 @@ As I've been talking to people about habits recently, one of the biggest obstacl
 
 So how do you minimize the chance for regression? This can be reframed as its dual problem: the dual problem to habit regression minimization is habit stickiness maximization.
 
-
-| ![dual](assets/habit-cards/dual.png) |
-|:--:| 
-| _For every LP minimization problem, there exists a dual maximization problem. [Duality in Wikipedia](https://en.wikipedia.org/wiki/Duality_(optimization))_ |
-
-
-
 _To minimize disappointment from quitting good habits, use as many techniques you know about human behavior to influence your future self._
+
+
+### Cognitive Bias
+
+The instinctive response to cognitive bias is to avoid them. It's easy to see them as obstacles to rational thought. However, we also know that we can't get rid of them. Why not use them to our advantage? 
+
+#### Loss Aversion & Sunk Cost
+
+If you have 'invested' into your habits already by writing them down, then it's easier to fear the loss of something you have. By having something tangible that has effort imbued onto it, we can appeal to both loss aversion bias and sunk cost fallacy.
+
+#### Social Proof
+
+If you see that I am using habit cards to great effect, then it may work well for you!
+
+#### Confirmation & Recency
+
+You wrote it down, so it must be true. You're reading it, so it must be true. Also, reading it when you're just about to forget makes it easeir to recall.
+
+#### Consideration 
+
+If you considered both why & why nots of your habit, then it must be true that the decision to perform the act must be fairly deduced.
+
+### The Card
 
 Writing down your habits has the same reasons as writing down your goals. You aspire to become a kind of person that does these habits. But what exactly do you write?
 
