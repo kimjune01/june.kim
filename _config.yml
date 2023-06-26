@@ -6,7 +6,7 @@ google_analytics:    # Put your Google Analytics code
 
 # Author Info
 author_name:        "June Kim"
-author_email:       kimjune01@gmail.com
+author_email:       june@june.kim
 author_gravatar:    a162fa4928ebc00907f6cc47727cbb6c # Gravatar md5 hash
 
 social:
@@ -14,6 +14,9 @@ social:
   github: kimjune01
   linkedin: kimjune01
   instagram: kimjune01
+
+plugins:
+  - jekyll-feed
 
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
