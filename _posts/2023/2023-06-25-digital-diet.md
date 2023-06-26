@@ -26,7 +26,13 @@ Youtube, Tiktok, and Instagram no better for us than TV. It is more customized t
 
 ### [No More Circuses](https://www.youtube.com/watch?v=fD1OQtXYEFE)
 
-_If you value focus, attention, and clarity of thought; if you find more meaning in producing than in consuming; but you're easily distracted by clickbait and scrolling; then you should remove the cues for meaningless media from your screens._
+_If you value focus, attention, and clarity of thought;_
+
+_if you find more meaning in producing than in consuming;_
+
+_but you're easily distracted by clickbait and scrolling;_
+
+_then remove the cues for junk media from your screens._
 
 [Atomic Habits](/atomic-habits) suggests that making cues invisible will reduce the likeliness of triggering bad habits. I recall one recovering alcoholic refusing to go camping because it is a cue to start drinking. I understand the sentiment, but I'm not suggesting that you block the entirety of the Internet or Youtube to distance yourself from junk media. We have the technology to block the cues selectively.
 
