@@ -30,7 +30,7 @@ _If you value focus, attention, and clarity of thought;_
 
 _if you find more meaning in producing than in consuming;_
 
-_but you're easily distracted by clickbait and scrolling;_
+_but you find yourself distracted by clickbait and scrolling;_
 
 _then remove the cues for junk media from your screens._
 
