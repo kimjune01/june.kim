@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Motivation for Configuration
+title: Motivation for Improvement
 tags: improving
 ---
 
