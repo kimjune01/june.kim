@@ -47,11 +47,11 @@ Your commitment should be to the reasons for your activities, not the activities
 
 I don't actually read the list of things to do each morning; that's too much work. Instead, I glance at them once in a while to refresh my memory. One of the most common reasons that I stopped good habits in the past is because I relied entirely on 'muscle memory'. But we have the technology to preserve such information through time.
 
+[The Timeless Way of Building](https://www.june.kim/timeless-way-of-building) habits is to try one thing at a time. New habits also don't exist in a vacuum, so they should be contextual. A new habit should be appended to an existing habit stack. 
+
 #### Context
 
 ![3](assets/habit-cards/3.jpeg)
-
-[The Timeless Way of Building](https://www.june.kim/timeless-way-of-building) habits is to try one thing at a time. New habits also don't exist in a vacuum, so they should be contextual. A new habit should be appended to an existing habit stack. 
 
 Putting reminders of your habits where you perform them will better contextualize them. That's what the purple tape is for. This habit lives on my bathroom mirror, visible to me each time I perform the habit. I intend to cherish it as I would a piece of furniture. The longer it stays with me, the more provenance and wabi-sabi it will gain.
 
