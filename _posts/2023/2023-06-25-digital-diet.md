@@ -74,7 +74,7 @@ I like to upload videos as a creative outlet and to stay connected to people tha
 
 ### Fill in the void
 
-Much like how physical fitness involves removing junk food, mental fitness involves removing junk media. As would replacing empty calories with healthy ones, removing junk media will leave a void in your life. If you've always wanted to read more, here's your chance. Or, you could get on a hyproductivity curve as described in Lex Fridman's interview with Marc Andreessen: [Advice for young people](https://youtu.be/-hxeDjAxvJ8?t=10802).
+Much like how physical fitness involves removing junk food, mental fitness involves removing junk media. As you would replace empty calories with healthy ones, you'd also swap out mindless media with mindful ones. If you've always wanted to read more, here's your chance. Or, you could get on a hyproductivity curve as described in Lex Fridman's interview with Marc Andreessen: [Advice for young people](https://youtu.be/-hxeDjAxvJ8?t=10802).
 
-
+If you found this to be helpful, I would love to know. Please email me.
 
