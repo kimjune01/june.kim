@@ -14,6 +14,8 @@ You are what you watch. It's easier now than ever to be endlessly distracted. Wh
 
 [Stuart McMillen's comic: Town Without Television](https://www.stuartmcmillen.com/comic/town-without-television-1-notel/) presents what life was like before and after TV. It highlights the shocking findings of Tannis MacBeth's research on the effects that TV had on a small town in the 70s. To summarize, individuals who watched TV demonstrated reduced problem-solving ability, shorter attention spans, more physical/verbal aggression, less literacy, and lower creativity. They were more passive just as TV trained them to become, shrinking their agency onto the world. If you haven't read the comic, please read it before continuing to read the rest of this post. 
 
+__Watching TV affects you even when you're not watching__
+
 It's clear what the culprit is to our reduced attention span: regularly watching passive media. Whether the screen is in the living room across the couch or in our hands under our chin, its long-term effects are clearly against our aspirations to become the best versions of ourselves.
 
 | ![texting-neck](/assets/digital-diet/texting-neck.png) |
