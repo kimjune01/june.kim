@@ -121,7 +121,7 @@ If you fail any tests, iterate on your solution.
 ### ⚒️ Code your solution
 
 Ask if syntax matters. If it does, then write one line at a time so that you don't backtrack. 
-Break down your solution into named functions For clarity, see [Sprout Method](https://www.june.kim/sprout-method)
+Break down your solution into named functions For clarity, see [Sprout Method](/sprout-method)
 Write quick tests for your components and comment invariants if helpful
 
 

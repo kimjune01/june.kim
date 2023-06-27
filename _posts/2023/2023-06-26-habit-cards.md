@@ -65,7 +65,7 @@ Your commitment should be to the reasons for your activities, not the activities
 
 I don't actually read the list of things to do each morning; that's too much work. Instead, I glance at them once in a while to refresh my memory. One of the most common reasons that I stopped good habits in the past is because I relied entirely on 'muscle memory'. But we have the technology to preserve such information through time.
 
-[The Timeless Way of Building](https://www.june.kim/timeless-way-of-building) habits is to try one thing at a time. New habits also don't exist in a vacuum, so they should be contextual. A new habit should be appended to an existing habit stack. 
+[The Timeless Way of Building](timeless-way-of-building) habits is to try one thing at a time. New habits also don't exist in a vacuum, so they should be contextual. A new habit should be appended to an existing habit stack. 
 
 #### Context
 
