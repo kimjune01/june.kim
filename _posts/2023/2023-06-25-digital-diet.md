@@ -64,6 +64,26 @@ I can even use it to block recommendations from my Youtube search results.
 
 Here's how Reddit's top bar looks like for me using adblock to remove `all` and `popular` tabs. You can do this to any static layout on any website.
 
+#### Adblock filters
+
+```
+! 2023-06-07 https://www.reddit.com
+www.reddit.com##a.subbarlink
+
+! 2023-06-26 https://www.youtube.com
+www.youtube.com##ytd-guide-entry-renderer.ytd-guide-section-renderer.style-scope:nth-of-type(2)
+www.youtube.com##ytd-reel-shelf-renderer.ytd-item-section-renderer.style-scope:nth-of-type(2)
+www.youtube.com##ytd-reel-shelf-renderer.ytd-item-section-renderer.style-scope
+
+! 2023-06-30 https://www.reddit.com
+www.reddit.com##.tabmenu > li > .choice
+
+! 2023-07-01 https://www.youtube.com
+www.youtube.com##ytd-shelf-renderer.ytd-item-section-renderer.style-scope:nth-of-type(2)
+www.youtube.com##.ytd-rich-section-renderer.style-scope > .ytd-rich-shelf-renderer.style-scope
+www.youtube.com##.ytp-endscreen-content
+```
+
 #### Junk Media Folder
 
 The same tactics that Chrome extensions allow can't be used for apps on my iPhone. But instead of deleting the apps, I can make it harder for me to reach it. To get to junk media, I have to swipe to the third page of apps and go into the `Junk Media` folder to access these apps. 
@@ -76,5 +96,4 @@ I like to upload videos as a creative outlet and to stay connected to people tha
 
 Much like how physical fitness involves removing junk food, mental fitness involves removing junk media. As you would replace empty calories with healthy ones, you'd also swap out mindless media with mindful ones. If you've always wanted to read more, here's your chance. Or, you could get on a hyproductivity curve as described in Lex Fridman's interview with Marc Andreessen: [Advice for young people](https://youtu.be/-hxeDjAxvJ8?t=10802).
 
-If you found this to be helpful, I would love to know. Please email me.
 
