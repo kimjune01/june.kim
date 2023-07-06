@@ -58,7 +58,7 @@ Adblock can be used to block more than ads. I use it to block the Shorts button 
 
 ![adblock3](assets/digital-diet/adblock3.png)
 
-I can even use it to block recommendations from my Youtube search results.
+I can even use it to block recommendations from my Youtube search results. This trick also works for endscreen content.
 
 ![adblock2](assets/digital-diet/adblock2.png)
 
