@@ -5,6 +5,8 @@ tags: reflecting
 image: assets/habit-cards/salesman.png
 ---
 
+| What if there was a way to feel awesome about what we can accomplish at work? |
+
 A product organization exists to allow workers like myself to achieve big things that we cannot as individuals. We rally around a vision to work together. As we build the product, we face an combinatorially large number of ways to turn the vision into smaller increments([See Granularity Gradient](http://scrumbook.org.datasenter.no/value-stream/product-backlog/granularity-gradient.html)). But to realize the vision, we need to choose a sequence of goals and actions. We call this planning. Intuitively, goals become actionable as they divide into tasks that each individual can handle. Naively, we put those tasks on a list and ask others to get it done. We call this Project Management.
 
 But what is it about checking off tasks from a list that makes us feel like cogs in a machine? More precisely, why doesn't it jive with our neurochemistry? Where is the meaning in checkboxes? What's the point in doing more than the bare minimum? I don't find motivation in getting paid a bit more or not getting fired. I find meaning in the big picture, yet I'm not enjoying moving a ticket to the 'Done' column. Is there a way to make development work fun and intrinsically rewarding?
@@ -52,9 +54,9 @@ In the work context, describing goals is more difficult than describing tasks. W
 | _"My mind to your mind, my thoughts to your thoughts."_ |
 | In Star Trek, __[Mind meld](https://en.wikipedia.org/wiki/Vulcan_(Star_Trek)#Mind_melds)__ is a technique for sharing thoughts, experiences, memories, and knowledge with another individual. |
 
-But we can get close. Through dialogue, we can create expectations about users' needs being met; or support engineers being more capable; or making sales becoming frictionless. Pictures and emojis can anchor the visual aspect of the goal, and words in tracking software can serve as references to the goal. But a PRD or a ticket cannot encapsulate the essence of a goal. 
+But we can get close. Through dialogue, we can create expectations about users' needs being met; or support engineers being more capable; or making sales becoming frictionless. Pictures and emojis can anchor the visual aspect of the goal, and words in tracking software can serve as references to the goal. But a PRD or a ticket can never encapsulate the essence of a goal. 
 
-__The essence of a goal is the expectation of an experience achieved through effort.__
+__A goal's essence is the expectation of an experience achieved through effort.__
 
 The formulation of a goal creates excitement. If the developers aren't excited, then it means they didn't internalize the goal. Goals can't be told, they can only be presented.
 
