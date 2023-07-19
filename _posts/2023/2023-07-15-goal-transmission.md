@@ -2,7 +2,6 @@
 layout: post
 title: Goal Transmission
 tags: reflecting
-image: assets/habit-cards/salesman.png
 ---
 
 | What if there was a way to feel awesome about what we can accomplish at work? |
