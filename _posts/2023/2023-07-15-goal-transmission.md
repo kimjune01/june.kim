@@ -57,6 +57,6 @@ But we can get close. Through dialogue, we can create expectations about users' 
 
 __A goal's essence is the expectation of an experience achieved through effort.__
 
-The formulation of a goal creates excitement. If the developers aren't excited, then it means they didn't internalize the goal. Goals can't be told, they can only be presented.
+The formulation of a goal creates excitement. If the developers aren't excited, then it means they didn't internalize the goal. Goals can't be told, they can only be requested. Their acceptance must be voluntary.
 
 If the goal is time-boxed, then not achieving it will create disappointment. An [antifragile](https://en.wikipedia.org/wiki/Antifragility) team will take this opportunity to learn and adapt to try again. Error and repetition is required for learning ([ask Huberman AI](https://dexa.ai/huberman?q=is%20error%20and%20repetition%20required%20for%20learning)).
