@@ -2,6 +2,7 @@
 layout: post
 title: Of Teams and Perf
 tags: reflecting
+image: assets/perf/basketball-scores.png
 ---
 
 
