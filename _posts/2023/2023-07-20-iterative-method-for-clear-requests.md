@@ -14,7 +14,7 @@ It's tempting to bloat the spec with increasing amounts of detail to cover your 
 
 ![cat-drawing](/assets/cat-drawing.png)
 
-> Requirements are a communication artifact between the user's needs and the engineer's implementation. Therefore, requirement documents should only be as detailed as is needed to understand what the user needs, and why they need them.
+> Requirements are a communication artifact between the user's needs and the engineer's implementation. Therefore, requirement documents should only be as detailed as is needed to understand what the user needs, and why.
 
 ### Trust, but verify
 

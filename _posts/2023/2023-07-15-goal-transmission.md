@@ -55,7 +55,7 @@ In the work context, describing goals is more difficult than describing tasks. W
 
 But we can get close. Through dialogue, we can create expectations about users' needs being met; or support engineers being more capable; or making sales becoming frictionless. Pictures and emojis can anchor the visual aspect of the goal, and words in tracking software can serve as references to the goal. But a PRD or a ticket can never encapsulate the essence of a goal. 
 
-__A goal's essence is the expectation of an experience achieved through effort.__
+__The essence of a goal is the expectation of an experience achieved through effort.__
 
 The formulation of a goal creates excitement. If the developers aren't excited, then it means they didn't internalize the goal. Goals can't be told, they can only be requested. Their acceptance must be voluntary.
 
