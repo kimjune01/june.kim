@@ -19,5 +19,5 @@ An individual contributor gets paid to perform to the company's goals. Each cont
 
 Helping a teammate boosts their perf, not one's own. Writing a thoughtful feedback message comes at the expense of writing one's own perf package. And why share lessons learned with those who you compare scores with?
 
-Are we really surprised that nobody passes the ball?
+Are we really surprised when nobody passes the ball?
 
