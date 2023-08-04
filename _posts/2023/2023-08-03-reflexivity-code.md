@@ -9,7 +9,7 @@ Instead of using human language full of metaphors, I wanted to express my though
 States are a reduction of all that we can observe. States can be compared.
 ```swift
 protocol State {
-	static func compare(_ left: State, _ right: State) -> Progress
+   static func compare(_ left: State, _ right: State) -> Progress
 }
 ```
 
@@ -22,67 +22,67 @@ typealias Result: State
 Reflexivity is the act of modifying an activity.
 ```swift
 protocol Reflexive {
-	func reflex(_ activity: Activity) -> Activity 
+   func reflex(_ activity: Activity) -> Activity 
 }
 ```
 
 Timeboxes can be used to allocate attention wholly to each phase of the PDCA cycle.
 ```swift
 protocol Timeboxed {
-	var phase: Phase
-	async func updatePhase()
+   var phase: Phase
+   async func updatePhase()
 }
 ```
 
 An activity is an effort to yield results. Its goal and initial conditions are mutable.
 ```swift
 protocol Activity {
-	var goal: Goal
-	var start: State
-	func act() -> Result
+   var goal: Goal
+   var start: State
+   func act() -> Result
 }
 ```
 
-Scrum is a reflexive timeboxed activity that hosts another activity. 
+Scrum is a reflexive timeboxed activity that hosts a core activity. 
 ```swift
 class Scrum: Reflexive, Timeboxed, Activity {
-	var coreActivity: Activity
+   var coreActivity: Activity
 
-	var previousState: State?
-	var currentState: State
+   var previousState: State?
+   var currentState: State
 
-	var goal: Goal
+   var goal: Goal
 
-	var phase: Phase
-	var improvements: [Improvement]
+   var phase: Phase
+   var improvements: [Improvement]
 
-	// Apply improvements and set goals based on progress
-	func reflex(_ activity: Activity) -> Activity {
-		guard let previousState else { return activity }
-		var nextActivity = copy(activity)
-		let progress = State.compare(previousState, currentState)
-		if let improvement = improvements.pop() {
-			nextActivity.state = currentState + improvements.pop()
-		}
-		nextActivity.goal = currentState + progress
-		return nextActivity
-	}
+   // Apply improvements and set goals based on progress
+   func reflex(_ activity: Activity) -> Activity {
+      guard let previousState else { return activity }
+      var nextActivity = copy(activity)
+      let progress = State.compare(previousState, currentState)
+      if let improvement = improvements.pop() {
+         nextActivity.state = currentState + improvements.pop()
+      }
+      nextActivity.goal = currentState + progress
+      return nextActivity
+   }
 
-	func act() -> Result {
-		// Review
-		previousState = currentState
-		// Planning
-		goal = plan(coreActivity)
-		// Sprint
-		while (phase == .sprint) {
-			currentState = coreActivity.act()
-		}
-		// Retrospective
-		coreActivity = reflex(coreActivity)
-		return currentState
-	}
+   func act() -> Result {
+      // Review
+      previousState = currentState
+      // Planning
+      goal = plan(coreActivity)
+      // Sprint
+      while (phase == .sprint) {
+         currentState = coreActivity.act()
+      }
+      // Retrospective
+      coreActivity = reflex(coreActivity)
+      return currentState
+   }
 
-	async func updatePhase() { ... }
+   async func updatePhase() { ... }
 }
 
 ```
@@ -90,9 +90,9 @@ class Scrum: Reflexive, Timeboxed, Activity {
 Thus, it can reflex on itself; and it should. See [Scrumming the Scrum](http://scrumbook.org.datasenter.no/retrospective-pattern-language/scrumming-the-scrum.html)
 
 ```swift
-class MetaScrum: Reflexive, Activity  {
-	var coreActivity: Scrum
-	...
+class MetaScrum: Reflexive, Activity   {
+   var coreActivity: Scrum
+   ...
 }
 ````
 
@@ -100,32 +100,32 @@ Mastery is also a reflexive activity, but it fixates on scope instead of time.
 
 ```swift
 class Mastery: Reflexive, Activity {
-	var coreActivity: Activity
-	var goal: Goal
-	var start: State
-	var results: [Result]
+   var coreActivity: Activity
+   var goal: Goal
+   var start: State
+   var results: [Result]
 
-	var improvements: [Improvement]
+   var improvements: [Improvement]
 
-	// Apply improvements if any
-	func reflex(_ activity: Activity) -> Activity {
-		var nextActivity = copy(activity)
-		if let improvement = improvements.pop() {
-			nextActivity.start = activity.start + improvements.pop()
-		}
-		return nextActivity
-	}
+   // Apply improvements if any
+   func reflex(_ activity: Activity) -> Activity {
+      var nextActivity = copy(activity)
+      if let improvement = improvements.pop() {
+         nextActivity.start = activity.start + improvements.pop()
+      }
+      return nextActivity
+   }
 
-	// Acquire repeated instances of satisfactory results, however long it takes.
-	func act() -> Result {
-		while (isSatisfactory(results, goal)) {
-			do {
-				results.append(coreActivity.act())
-				coreActivity = reflex(coreActivity)
-			} while (results.last <= coreActivity.goal)
-		}
-		return results.last
-	}
+   // Acquire repeated instances of satisfactory results, however long it takes.
+   func act() -> Result {
+      while (isSatisfactory(results, goal)) {
+         do {
+            results.append(coreActivity.act())
+            coreActivity = reflex(coreActivity)
+         } while (results.last <= coreActivity.goal)
+      }
+      return results.last
+   }
 }
 ```
 
