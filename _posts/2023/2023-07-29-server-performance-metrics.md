@@ -18,7 +18,7 @@ Humans are needed to process unstructured requests for modifying the product. A 
 
 Server performance is reported once every second. Organization performance is reported once each quarter. 
 
-Admins can point to a metric and refer to a checklist on how to manage it. But mnagers can only point to an individual's perf and influence them.
+Admins can point to a metric and refer to a checklist on how to manage it. But managers can only point to an individual's perf and influence them.
 
 When a server's latency spikes up, it's an emergency. When an organization is slow to respond, it's not even measured.
 
