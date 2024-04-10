@@ -51,7 +51,7 @@ Mewing has been a social media sensation for some time, so there are plenty of r
 
 ![maxmilla](/assets/maxmilla.jpeg)
 
-By developing the facial muscles, the maxmilla will naturally grow outwards. This will increase the volume of the nasal cavity, enabling better sleep, exercise, and cognitive function. It also develops a more square, attractive face with pronounced cheekbones. It's more than just straight teeth.
+By developing the facial muscles, the maxmilla will naturally grow outwards. This will increase the volume of the nasal cavity, enabling better sleep, exercise, and cognitive function. It develops a more square, attractive face with pronounced cheekbones. It enables perfect posture. It's more than just straight teeth.
 
 I hope that this introduction to the subject will get you started on your own research towards raising your kids to be healthier, smarter, and more beautiful.
 
