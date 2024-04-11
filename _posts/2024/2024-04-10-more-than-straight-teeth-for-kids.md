@@ -14,7 +14,7 @@ What's the main cause of crowded teeth inside a small jaw that affects most of u
 
 Studying old skulls before the modern diet demonstrates that it could be an underdevelopment of the jaw.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/yEe7PrUlYSA?si=GU1hG8Xt47VrqoMa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/li1kO3hg4iE?si=HxBSDOiN8YvFLPXB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 It's not just diets, it's how you breathe and position the tongue and lips. The facial muscles affect the bones over time.
 
