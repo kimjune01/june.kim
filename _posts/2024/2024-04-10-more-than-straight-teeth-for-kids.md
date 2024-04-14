@@ -4,7 +4,7 @@ title: More than straight teeth for kids
 tags: reflecting
 ---
 
-Dar friends with children,
+Dear friends with children,
 
 Do you plan to get braces for your kids? Will they get 4 teeth extracted? Are they going to have their wisdom teeth removed? There is an alternative. Myofunction and orthotropics is an alternative to orthodontics that emphasizes prevention over the cure. It's cheaper, healthier, and makes your kids' faces more beautiful. 
 
