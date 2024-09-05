@@ -2,6 +2,7 @@
 layout: post
 title: Left-handed Cursor on MacOS
 tags: improving
+image: assets/pointing-right.png
 ---
 
 Have you ever been annoyed that mouse cursors are made only for right-handed people?
