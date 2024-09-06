@@ -1,0 +1,100 @@
+---
+layout: default
+---
+
+<div class="collection-container">
+  <h1 class="collection-title">{{ page.title }}</h1>
+  
+  <div class="card-grid">
+    {% for post in site.tags[page.tag] %}
+      <div class="card">
+        {% if post.image %}
+          <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" class="card-image">
+        {% endif %}
+        <div class="card-content">
+          <h2 class="card-title">
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+          <p class="card-date">{{ post.date | date: "%B %d, %Y" }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .collection-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .collection-title {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .card {
+    flex: 1 1 calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card-date {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  @media (min-width: 600px) {
+    .card {
+      flex: 1 1 calc(50% - 2rem);
+      max-width: calc(50% - 2rem);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .card {
+      flex: 1 1 calc(33.333% - 2rem);
+      max-width: calc(33.333% - 2rem);
+    }
+  }
+</style>
