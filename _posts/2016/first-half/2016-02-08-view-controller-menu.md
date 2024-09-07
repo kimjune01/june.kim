@@ -2,8 +2,8 @@
 layout: post
 title: Menu of View Controllers
 tags: coding
+image: "/assets/vcmenu.png"
 ---
-
 When requesting a change for a screen, designers or product owners often describe them with ways to navigate to their context. One such reference might be:
 
 > That screen where you tap on the list and the picture shows up before you buy

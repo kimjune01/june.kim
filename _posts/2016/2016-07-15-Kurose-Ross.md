@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Computer Networking: A Top-Down Approach "
+title: 'Computer Networking: A Top-Down Approach '
 tags: reading
+image: https://images-na.ssl-images-amazon.com/images/I/51xfeAQU6dL.jpg
 ---
-
 ![Kurose Ross](https://images-na.ssl-images-amazon.com/images/I/51xfeAQU6dL.jpg)
 
 

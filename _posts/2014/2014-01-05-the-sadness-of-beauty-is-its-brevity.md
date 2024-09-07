@@ -2,9 +2,8 @@
 layout: poetry
 title: The Sadness of Beauty is its Brevity
 tags: poetry
+image: assets/sadness-of-beauty.jpg
 ---
-
-
 ![Sadness Of Beauty](assets/sadness-of-beauty.jpg)
 
 The sadness of beauty is its brevity

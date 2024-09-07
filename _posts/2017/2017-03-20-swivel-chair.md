@@ -2,6 +2,7 @@
 layout: post
 title: Swivel Chair
 tags: crafting
+image: assets/swivel-chair1.jpg
 ---
 
 

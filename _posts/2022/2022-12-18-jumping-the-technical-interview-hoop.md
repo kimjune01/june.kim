@@ -2,9 +2,8 @@
 layout: post
 title: Jumping the Technical Interview Hoop
 tags: coding
+image: assets/flaming-motorcycle-jump.jpeg
 ---
-
-
 | ![flaming-motorcycle-jump](assets/flaming-motorcycle-jump.jpeg)| 
 |:--:| 
 | *Literally me, interviewing at Google, circa 2017* |

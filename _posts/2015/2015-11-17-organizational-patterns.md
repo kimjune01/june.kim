@@ -2,8 +2,8 @@
 layout: post
 title: Organizational Patterns of Agile Software Development
 tags: reading
+image: "/assets/orgpatterns.jpeg"
 ---
-
 ![orgpatterns](/assets/orgpatterns.jpeg)
 
 [Wiki](http://orgpatterns.wikispaces.com/)

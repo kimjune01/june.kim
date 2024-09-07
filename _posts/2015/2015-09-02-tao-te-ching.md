@@ -2,8 +2,8 @@
 layout: post
 title: Tao Te Ching
 tags: reading
+image: "/assets/tao-te-ching.jpg"
 ---
-
 ![Tao Te Ching](/assets/tao-te-ching.jpg)
 
 [PDF](http://www.with.org/tao_te_ching_en.pdf)

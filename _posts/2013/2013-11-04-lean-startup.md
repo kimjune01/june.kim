@@ -2,8 +2,8 @@
 layout: post
 title: The Lean Startup
 tags: reading
+image: "/assets/lean-startup.jpg"
 ---
-
 ![lean startup](/assets/lean-startup.jpg)
 
 [PDF](http://www.stpia.ir/files/The%20Lean%20Startup%20.pdf)

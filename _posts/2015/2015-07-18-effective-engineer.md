@@ -2,8 +2,8 @@
 layout: post
 title: The Effective Engineer
 tags: reading
+image: "{{ site.url }}/assets/effective-engineer.jpg"
 ---
-
 ![]({{ site.url }}/assets/effective-engineer.jpg)
 
 [website](http://www.theeffectiveengineer.com/)

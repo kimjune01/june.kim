@@ -2,8 +2,8 @@
 layout: post
 title: An Empirical Method for Self Nurture
 tags: improving
+image: https://upload.wikimedia.org/wikipedia/commons/d/d0/Chocolate-chip-cookie-crumbs-on-plate.png
 ---
-
 ## Mistake
 
 > 'I won't eat the cookie', he told himself. He ate one yesterday; but he wasn't supposed to. 

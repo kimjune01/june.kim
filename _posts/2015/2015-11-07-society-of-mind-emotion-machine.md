@@ -2,8 +2,8 @@
 layout: post
 title: The Society of Mind & The Emotion Machine
 tags: reading
+image: "/assets/society-of-mind.png"
 ---
-
 ![Society of Mind cover](/assets/society-of-mind.png)
 
 [HTML](http://aurellem.org/society-of-mind/)

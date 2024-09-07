@@ -2,8 +2,8 @@
 layout: post
 title: Blog Post Formula
 tags: reflecting
+image: assets/formula/bench.png
 ---
-
 > _You can only start writing when you stop worrying about writing_
 
 Since I stopped working full-time at my last software job, I've been writing more than usual. Writing is a way to think, and I feel great about reflecting on my foundational self. 

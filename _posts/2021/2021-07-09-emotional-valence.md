@@ -2,8 +2,8 @@
 layout: post
 title: Emotional Valence
 tags: reflecting
+image: assets/full-calendar.png
 ---
-
 | ![full-calendar](assets/full-calendar.png) | 
 |:--:| 
 | *Time spent at work with coworkers. Do you spend that much time with your loved ones?* |

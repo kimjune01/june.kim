@@ -2,8 +2,8 @@
 layout: post
 title: Why Work Together
 tags: reflecting
+image: assets/work-together/children-playing.jpg
 ---
-
 | ![children-playing](assets/work-together/children-playing.jpg)| 
 |:--:| 
 | *Are these children playing together just because they're close to each another?* |

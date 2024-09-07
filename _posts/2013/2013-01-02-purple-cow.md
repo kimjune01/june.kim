@@ -2,8 +2,8 @@
 layout: post
 title: Purple Cow
 tags: reading
+image: "/assets/purple-cow.jpg"
 ---
-
 ![Purple Cow](/assets/purple-cow.jpg)
 
 [PDF](http://www.thegeniusworks.com/wp-content/uploads/2016/01/Purple-Cow-Transform-Your-Business-by-Being-Remarkable-2003.pdf)

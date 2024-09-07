@@ -2,8 +2,8 @@
 layout: poetry
 title: The Sea Retains Such Images
 tags: poetry
+image: assets/sea-retains.jpg
 ---
-
 ![sea-retains](assets/sea-retains.jpg)
 
 The sea retains such images

@@ -2,8 +2,8 @@
 layout: post
 title: Working Effectively With Legacy Code
 tags: reading
+image: "/assets/legacy-code.jpg"
 ---
-
 ![Legacy Code](/assets/legacy-code.jpg)
 
 [Sample](http://ptgmedia.pearsoncmg.com/images/9780131177055/samplepages/0131177052.pdf)

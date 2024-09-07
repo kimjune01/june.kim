@@ -2,8 +2,8 @@
 layout: post
 title: Motivation for Improvement
 tags: improving
+image: "/assets/configuration/weeks.png"
 ---
-
 <iframe src="https://www.youtube.com/embed/8co11-KGfW4?autoplay=1&rel=0&fs=0&controls=0&mute=1" width="560" height="315" title="Sisyphus Automata" frameborder="0"></iframe> 
 
 _My life often feel repetitive, mundane, and even futile..._

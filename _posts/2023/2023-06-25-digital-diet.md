@@ -2,8 +2,8 @@
 layout: post
 title: Digital Diet
 tags: improving
+image: "/assets/digital-diet/notel-screenshot.png"
 ---
-
 _Warning: reading this post will rouse guilt whenever you consume mindless media._
 
 You are what you watch. It's easier now than ever to be endlessly distracted. Whenever we expect to be bored, we habitually open social media apps to fill the nooks and crannies of our attention. On the bus, while waiting for coffee, before sleep, upon wake – we bombard ourselves with stimuli, leaving no room for points of reflection. What effect does the media have on our lives? Can you fathom what life would be like without gazing at the screen?

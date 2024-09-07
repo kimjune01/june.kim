@@ -2,6 +2,7 @@
 layout: post
 title: Journal Cover
 tags: crafting
+image: assets/journal1.jpg
 ---
 
 ![Journal1](assets/journal1.jpg)

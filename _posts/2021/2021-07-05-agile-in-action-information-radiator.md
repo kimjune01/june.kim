@@ -2,9 +2,8 @@
 layout: post
 title: Agile in action – Information Radiator using Notion
 tags: reflecting
+image: "/assets/collabTakeOne.gif"
 ---
-
-
 When I was interviewing at startups for work, I had a strict requirement that the work itself had to be interesting. Leaving a megacorp meant that I was likely to take a pay cut, and I wouldn't do it for work that's not challenging. I was looking for growth. When it was time for me to ask the questions in the interview, I was probing into how I could get that growth. For me, I saw growth in two orthogonal directions: technical and organizational. 
 
 The questions I would always ask are: What kind of improvements are you looking to make in your development process? If you could change one thing about the way you worked, what would that be? I could then ask follow-up questions about how long it has been since they addressed their pain. If that pain has been around forever, then it's a signal that they aren't into improvements. If they can't name any potential improvements, it shows stagnation and complacenty, much like a megacorp. 

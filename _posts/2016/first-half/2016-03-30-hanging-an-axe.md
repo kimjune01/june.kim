@@ -2,9 +2,8 @@
 layout: post
 title: Hanging an axe
 tags: crafting
+image: assets/hung-axe1.jpg
 ---
-
-
 ![Hung Axe1](assets/hung-axe1.jpg)
 
 ![Hung Axe2](assets/hung-axe2.jpg)

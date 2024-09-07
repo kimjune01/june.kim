@@ -2,8 +2,8 @@
 layout: post
 title: Agile Software Development as a Cooperative Game
 tags: reading
+image: "/assets/cooperative-game.jpg"
 ---
-
 ![Cooperative Game](/assets/cooperative-game.jpg)
 
 [Slides](http://uxhh.de/roundtable/archiv/_media/HO08-21_CockburnAlistairASD.pdf)

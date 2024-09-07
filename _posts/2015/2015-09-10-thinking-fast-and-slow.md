@@ -2,8 +2,8 @@
 layout: post
 title: Thinking, Fast and Slow
 tags: reading
+image: "/assets/thinking-fast-and-slow.jpg"
 ---
-
 ![thinking](/assets/thinking-fast-and-slow.jpg)
 
 [PDF](https://vk.com/doc23267904_175119602)

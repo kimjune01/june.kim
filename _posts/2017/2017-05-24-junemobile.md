@@ -2,6 +2,7 @@
 layout: post
 title: Junemobile
 tags: crafting
+image: assets/jm29.jpg
 ---
 
 ![Jm1](assets/jm1.jpg)

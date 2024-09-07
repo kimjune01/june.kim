@@ -2,10 +2,10 @@
 layout: poetry
 title: The Giving Tree
 tags:
- - reading
- - poetry
+- reading
+- poetry
+image: "/assets/giving-tree.jpg"
 ---
-
 ![The Giving Tree](/assets/giving-tree.jpg)
 
 Once there was a tree....

@@ -2,8 +2,8 @@
 layout: post
 title: Iterative Method for Clear Requests
 tags: coding
+image: "/assets/cat-drawing.png"
 ---
-
 When asking an engineer to incrementally improve a product, the request will certainly be ambiguous because the product increment does not yet exist. A Product Requirement Document(PRD) or a detailed ticket can be handed off to the engineer, but it leaves room for interpretation.
 
 Where the cost of building the increment can often be 100x the cost to describe it, it's worth taking the time up front to ensure that the engineer fully understands the goal to be achieved. A great job done on the wrong thing is worse than nothing done at all. It's worth the insurance. 

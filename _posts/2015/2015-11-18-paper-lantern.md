@@ -2,6 +2,7 @@
 layout: post
 title: Paper Lantern
 tags: crafting
+image: assets/paper-lantern.jpg
 ---
 
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/zRwYi"><a href="//imgur.com/a/zRwYi">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>

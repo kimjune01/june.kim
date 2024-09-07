@@ -2,9 +2,8 @@
 layout: post
 title: Scrum Board using Notion
 tags: reflecting
+image: assets/scrum-board-2.gif
 ---
-
-
 | ![Scrum board impediments](assets/scrum-board-2.gif) | 
 |:--:| 
 | *Tasks getting checked off the task list on the scrum board* |

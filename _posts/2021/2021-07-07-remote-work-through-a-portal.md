@@ -2,8 +2,8 @@
 layout: post
 title: Remote work through a portal
 tags: reflecting
+image: assets/portalception.png
 ---
-
 ![portalception](assets/portalception.png)
 
 During the strange times that began in 2020, remote work became necessary and normalized. In software development, working remotely is common; and for some, there is no going back. Whether it's good or not isn't straightforward to answer. When I worked at a megacorp, the only difference was that I didn't get free food, and I can skip more meetings. At an agile startup team, the demand for quantity and quality of interaction far outweighs its benefits. So is remote work the inevitable default? 

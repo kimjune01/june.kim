@@ -2,8 +2,8 @@
 layout: post
 title: The Mythical Man-Month
 tags: reading
+image: "/assets/man-month.jpg"
 ---
-
 ![man-month](/assets/man-month.jpg)
 
 [PDF](https://umich.instructure.com/files/884126/download?download_frd=1)

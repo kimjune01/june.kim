@@ -2,8 +2,8 @@
 layout: post
 title: Goal Transmission
 tags: reflecting
+image: assets/goal-transmission/tps.png
 ---
-
 | What if there was a way to feel awesome about what we can accomplish at work? |
 
 A product organization exists to allow workers like myself to achieve big things that we cannot as individuals. We rally around a vision to work together. As we build the product, we face an combinatorially large number of ways to turn the vision into smaller increments([See Granularity Gradient](http://scrumbook.org.datasenter.no/value-stream/product-backlog/granularity-gradient.html)). But to realize the vision, we need to choose a sequence of goals and actions. We call this planning. Intuitively, goals become actionable as they divide into tasks that each individual can handle. Naively, we put those tasks on a list and ask others to get it done. We call this Project Management.

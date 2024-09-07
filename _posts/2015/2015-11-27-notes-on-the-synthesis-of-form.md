@@ -2,8 +2,8 @@
 layout: post
 title: Notes on the Synthesis of Form
 tags: reading
+image: "/assets/notes-on-the-synthesis-of-form.png"
 ---
-
 ![Notes on the Synthesis of Form cover](/assets/notes-on-the-synthesis-of-form.png)
 
 [PDF](http://monoskop.org/images/f/ff/Alexander_Christopher_Notes_on_the_Synthesis_of_Form.pdf)

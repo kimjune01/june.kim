@@ -2,8 +2,8 @@
 layout: post
 title: The Progress Principle
 tags: reading
+image: "/assets/progress-principle.jpg"
 ---
-
 ![progress principle](/assets/progress-principle.jpg)
 
 [Summary](http://progressprinciple.com/documents/Progress_Principle_Tips.pdf)

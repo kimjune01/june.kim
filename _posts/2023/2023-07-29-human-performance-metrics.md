@@ -2,8 +2,8 @@
 layout: post
 title: Human Performance Metrics
 tags: reflecting
+image: assets/metrics/web-app.png
 ---
-
 ![web-app](assets/metrics/web-app.png)
 
 Whenever you use a web app, a server somewhere had to serve the software product through the network. We measure the performance of such servers with many metrics; such as throughput, latency, reliability, utilization are all monitored in real-time. Using multiple metrics gives its system administrators more clues about what's wrong with the service and how to improve them. If they were to flatten it to just one number, they would be left in the dark.

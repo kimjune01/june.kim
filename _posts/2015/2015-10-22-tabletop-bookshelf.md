@@ -2,8 +2,8 @@
 layout: post
 title: Tabletop Bookshelf
 tags: crafting
+image: http://i.imgur.com/BRjlFEg.jpg
 ---
-
 ![small one](http://i.imgur.com/BRjlFEg.jpg)
 
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/6J25t"><a href="//imgur.com/a/6J25t">Tabletop Bookshelf</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>

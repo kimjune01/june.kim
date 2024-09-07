@@ -2,8 +2,8 @@
 layout: poetry
 title: The Paradox of the Bottle
 tags: poetry
+image: http://imgur.com/pdFO1pa.jpg
 ---
-
 ![bottle full](http://imgur.com/pdFO1pa.jpg)
 
 A bottle's purpose is to contain some liquid. Without the bottle, the liquid it's supposed to hold has no other means to reach places. 

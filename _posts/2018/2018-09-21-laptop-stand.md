@@ -2,6 +2,7 @@
 layout: post
 title: Laptop Stand
 tags: crafting
+image: assets/laptop-stand16.jpg
 ---
 
 ![Laptop Stand1](assets/laptop-stand1.jpg)

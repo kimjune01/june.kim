@@ -2,10 +2,8 @@
 layout: post
 title: Surely You're Joking, Mr. Feynman
 tags: reading
+image: "/assets/feynman.jpg"
 ---
-
-
-
 [PDF](http://www.chem.fsu.edu/chemlab/isc3523c/feyn_surely.pdf)
 
 [Book](http://www.amazon.ca/gp/product/0393316041?psc=1&redirect=true&ref_=oh_aui_detailpage_o08_s00)

@@ -2,8 +2,8 @@
 layout: post
 title: Peopleware
 tags: reading
+image: "/assets/peopleware.png"
 ---
-
 ![Peopleware](/assets/peopleware.png)
 
 [Sample chapter](http://ptgmedia.pearsoncmg.com/images/9780321934116/samplepages/0321934113.pdf)

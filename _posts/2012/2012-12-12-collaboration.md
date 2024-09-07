@@ -2,8 +2,8 @@
 layout: post
 title: Collaboration
 tags: reading
+image: "/assets/collab.png"
 ---
-
 ![collaboration](/assets/collab.png)
 
 [Book](http://www.amazon.com/Collaboration-Leaders-Common-Ground-Results/dp/1422115151/ref=sr_1_1)

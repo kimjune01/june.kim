@@ -2,8 +2,8 @@
 layout: post
 title: Duality of Expression
 tags: reflecting
+image: "../../assets/frown-down.png"
 ---
-
 ![Frown Down](../../assets/frown-down.png)
 
 > It's not what you said, it's just the way you said it

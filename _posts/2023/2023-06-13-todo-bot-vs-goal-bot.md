@@ -2,8 +2,8 @@
 layout: post
 title: Todo-bot vs. Goal-bot
 tags: reflecting
+image: assets/bots/bots.png
 ---
-
 ![bots](assets/bots/bots.png)
 
 ![todo-bot](assets/bots/todo-bot.png)

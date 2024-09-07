@@ -1,10 +1,11 @@
 ---
 layout: post
-title: >
-      iOS Programming: The Big Nerd Ranch Guide
-tags: reading
----
+title: 'iOS Programming: The Big Nerd Ranch Guide
 
+  '
+tags: reading
+image: "/assets/ios-cover.jpg"
+---
 ![ios-cover](/assets/ios-cover.jpg)
 
 [PDF](https://www.bignerdranch.com/documents/objective-c-prereading-assignment.pdf)

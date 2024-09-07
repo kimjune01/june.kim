@@ -2,8 +2,8 @@
 layout: post
 title: The Timeless Way of Building
 tags: reading
+image: "/assets/The_Timeless_Way_of_Building.jpg"
 ---
-
 ![The timeless way of building](/assets/The_Timeless_Way_of_Building.jpg)
 
 [PDF](http://library.uniteddiversity.coop/Ecological_Building/The_Timeless_Way_of_Building_Complete.pdf)

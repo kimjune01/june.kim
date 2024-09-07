@@ -2,6 +2,7 @@
 layout: post
 title: Wooden Ring
 tags: crafting
+image: assets/wooden-ring3.jpg
 ---
 
 ![Wooden Ring1](assets/wooden-ring1.jpg)

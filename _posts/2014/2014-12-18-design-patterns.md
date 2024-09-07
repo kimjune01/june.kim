@@ -2,8 +2,8 @@
 layout: post
 title: Design Patterns
 tags: reading
+image: "/assets/design-patterns.png"
 ---
-
 ![design patterns](/assets/design-patterns.png)
 
 AKA "Gang of Four"
