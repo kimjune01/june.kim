@@ -18,6 +18,19 @@ social:
 plugins:
   - jekyll-feed
 
+# Github Pages
+# https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll
+lsi: false
+safe: true
+source: "/"
+incremental: false
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+  input: GFM
+
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
 weburl:             https://www.june.kim
@@ -27,8 +40,6 @@ timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_da
 
 # Site Build
 highlighter:       rouge 
-kramdown:
-    input:          GFM
 sass:
     style:          :compressed
 
