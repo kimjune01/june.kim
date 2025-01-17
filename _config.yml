@@ -22,7 +22,7 @@ plugins:
 # https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll
 lsi: false
 safe: true
-source: "/"
+source: .
 incremental: false
 gist:
   noscript: false
@@ -49,7 +49,7 @@ tag_page_dir: tag
 
 # Other Params
 include:            [ "robots.txt" ]
-exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile" ]
+exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile"]
 
 compress_html:
     clippings:      all
