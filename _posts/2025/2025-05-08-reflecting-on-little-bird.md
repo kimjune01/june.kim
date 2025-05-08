@@ -9,7 +9,7 @@ image: "/assets/little-bird.png"
 
 Little Bird (LB) is a startup and a chat client product aimed at professionals. By listening in on your desktop and browser activity, it retains memory of your activities throughout the day and acts as a second brain — an executive assistant backed by the near-limitless intelligent capabilities of frontier LLM models. 
 
-I joined LB just a few short months ago in late 2024 as a software generalist who happens to love using Swift. A contract-to-hire, I delivered on the requests from leadership on what I believed to be a clear path to product market fit (PMF). 
+I joined LB just a few short months ago in late 2024 as a software generalist who happens to love using Swift. A contract-to-hire, I delivered on the requests from leadership on what I believed to be a clear path to product market fit (PMF). I'm now laid off, as with most other members I met at the time I joined.
 
 ### Timing Growth
 
