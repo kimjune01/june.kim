@@ -1,13 +1,14 @@
 
-@use "base/content";
-@use "base/section";
+@import "base/content";
+@import "base/section";
 
-@use "modules/data-note";
-@use "modules/article";
-@use "modules/note";
-@use "modules/logo";
-@use "modules/header-nav";
+@import "modules/data-note";
+@import "modules/article";
+@import "modules/note";
+@import "modules/logo";
+@import "modules/header-nav";
 
-@use "animations/fade-shift";
+@import "animations/fade-shift";
 
-@use "syntax"
+@import "syntax"
+
