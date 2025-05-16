@@ -1,6 +1,6 @@
 ---
 layout: post
-title: MCP Linkedin Scraper
+title: Linkedin Scraper
 tags: coding
 ---
 
@@ -33,6 +33,8 @@ Native messaging allows any text up to 1MB at a time to be sent over a preauthen
 
 The native host then saves the web content (in this case, linkedin profiles) to the filesystem. Then, the mcp server that originally launched the request polls for the existence of this file every second. Once detected, the data is ingested back to the mcp client, ready for the user to consume.
 
+![linky-data-flow](/assets/linky-data-flow.png)
+
 The real magic in this whole thing is how the MCP client is able to orchestrate the tool calls without explicit instruction. The MCP server only exposes the tools to the client, such as search, list, query. Any comparison operation related to natural language is handled by the client. So if I ask for people with both Python and .NET experience in Vancouver, it will come up with the search query and filter the profiles for me. 
 
 In a traditional application, such workflows would have been hard-coded and the number of workflows would have been limited by the developers' comprehension of the use cases. Analytics and user stories would have to be concocted to close the loop.
@@ -43,8 +45,6 @@ This fundamentally shifts the role of the developer, and even the PDE organizati
 
 I imagine that a collective repository of web data gathered from a large number of users will cause a network effect. The engineering challenge there would be setting up a robust vector store for fast retrieval. 
 
-
-![linky-data-flow](/assets/linky-data-flow.png)
 
 [Linky MCP server on Github](https://github.com/kimjune01/linky)
 
