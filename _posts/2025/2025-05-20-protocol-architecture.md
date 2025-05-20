@@ -33,6 +33,22 @@ If any interface to an SDK or tools are available via calling via natural langua
 
 ![cable-guy](/assets/cable-guy.jpg)
 
+### Transitional Present
+
+LLMS can't yet generate UI as good as the handcrafted ones yet. So a typical app architecture in the present still RESTs on top of APIs like this:
+
+![api-dataflow](/assets/api-dataflow.png)
+
+Where the client has to coordinate with the server, a schema is defined, possibly versioned. A request is made from the client requesting for a specific shape of data so that it can be presented in the UI layer. We're used to this – this works.
+
+But as the development organization grows, and technical specializations solidify, the human coordination required becomes more work than the actual coding itself. Changes to the schema have to be coordinated between multiple release cadences.
+
+But with MCP servers, the schema is no longer needed. LLMs are so good at massaging data shapes, that converting from one form to another only requires one example to be shown. Migrations are instant. Modules, isolated. Backend requests are now MCP tools. Frontend updates are now MCP tools. Human coordination be gone. As long as the data required for the job arrives, it doesn't matter if it's in a box or a basket, JSON or XML. 
+
+![mcp-dataflow](/assets/mcp-dataflow.png)
+
+With LLM performance reaching levels comparable to server uptime, The only downside is an extra bit of latency introduced by the LLM. And those things are only getting faster.
+
 ### Agentic Future
 
 So what's different now? If we can configure the use case at runtime, capabilities only need to be engineered to enable user stories. The users write their own user stories. 
@@ -57,5 +73,6 @@ The chatbots today are the excel sheets of the pre-SaaS computing days. Workflow
 - Analytics (What's the context in which my server is used?)
 - Bidirectional concurrent connections
 - Tool routing scheme
+- Generative UI to interact with tools
 
 MCP will certainly not the only protocol to conform to in the future. There will be other protocols that facilitate realtime data, with some of the limitations addressed. Conformance and publishing will still be a job for nerds who don't mind being the last humans to be left in the loop.
