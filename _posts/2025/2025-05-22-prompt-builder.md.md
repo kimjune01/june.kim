@@ -4,6 +4,8 @@ title: Prompt Builder
 tags: coding
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VudzO-BPFNE?si=S4p_FUZCHFr6vSJa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 Forms are everywhere. `POST` is a kind of form, and prompts are a kind of form, too. When you go apply for a loan? Form. Intersect map features? Form. Order pizza? Form. But forms in a GUI can be bad UX. When you have dozens or hundreds to choose from, having a dropdown or a cascading list of options is overwhelming. Psychologically, the paradox of choice can even reduce the perceived value of the outcome. 
 
 ![pizza-options](/assets/pizza-options.jpeg)
