@@ -10,7 +10,7 @@ Forms are everywhere. `POST` is a kind of form, and prompts are a kind of form, 
 
 ![pizza-options](/assets/pizza-options.jpeg)
 
-Most of the time, when ordering pizza, you already have a good idea of what kind of pizza you want. Imagine calling up a pizza shop and and they list every topping option they have — that's not happening. When my wife wants pizza, she always wants the large thin-crust ham and pineapple. Why can't ordering pizza be as simple as saying it? It's one of those times where a chatbot interface is better than a GUI. 
+Most of the time, when ordering pizza, you already have a good idea of what kind of pizza you want. Imagine calling up a pizza shop and and they list every topping option they have — that's not happening. When my wife wants pizza, she always wants the large thin-crust ham and pineapple. Why can't we order pizza as simply as saying it? It's one of those times where a natural language interface is better than a GUI. 
 
 ![prompt-builder](/assets/prompt-builder.png)
 
@@ -43,7 +43,16 @@ In our example, we achieve this by breaking down the operation into two main par
 }
 ```
 
-We could have combined the steps of detecting ambiguities and generating responses for them, but the interception between the two steps gives us a quality gate. That means we can attribute bugs and make changes easier. 
+We could have combined the steps of detecting ambiguities and generating responses for them, but the interception between the two steps gives us a quality gate. That means we can attribute bugs and make changes easier. This allows our agent to answer to produce have this conversation:
+
+> User: I want a pizza with thin crust
+>
+> Assistant: A cheese pizza with thin crust. What size? 
+>
+> User: Large, extra cheese.
+>
+> Assistant: A large extra-cheese pizza, with thin crust. Coming right up!
+
 
 ### Testing segue
 
