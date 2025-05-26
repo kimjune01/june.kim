@@ -2,6 +2,7 @@
 layout: post
 title: Then the code writes itself
 tags: coding
+image: "/assets/implement.png"
 ---
 
 _Prerequisite to getting value out of this: you've experienced Claude Code_
