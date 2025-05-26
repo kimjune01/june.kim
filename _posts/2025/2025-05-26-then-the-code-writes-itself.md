@@ -5,8 +5,6 @@ tags: coding
 image: "/assets/implement.png"
 ---
 
-_Prerequisite to getting value out of this: you've experienced Claude Code_
-
 | ![implement](/assets/implement.png) |
 |:--:|
 | _Talking to Claude Code_ |
@@ -20,7 +18,7 @@ If you've lived your life in the mid-2010s on Reddit like me, you'll remember th
 First I start with a thinking session outside - IRL outside, where I touch grass. This is when I gather inspiration about what I want the inputs and outputs to be. If you don't know what those are, no computer can help you. The input could be a user interaction, a structured data format, or natural language. The output can be anything within the laws of physics (it's usually some kind of data, though). I also put in the context where the application will live. 
 
 ```
-i want you to pay close attention to mcp_round_trip.py - I am looking to extract a reusable component called mcp-ghost where instead of a cli interface,   │
+|   i want you to pay close attention to mcp_round_trip.py - I am looking to extract a reusable component called mcp-ghost where instead of a cli interface,   │
 │   it takes inputs from python directly. This component should be copy-pastable with the dependencies inside mcp_round_trip only, with the exception of       │
 │   mcp-cli not being a dependency. functions imported from mcp-cli should be rewritten. There are several parameters into mcp-ghost: the mcp server config    │
 │   json, a natural language system prompt that provides additional context for the llm on how to use the tools, provider, api key for the provider, and user  │
@@ -37,5 +35,7 @@ Next up is the requirements doc. I only write like 10-20 lines of README before 
 Once I'm confident that the requirements are aligned with what I'm looking to achieve, I ask it to write some basic failing tests, a practice from TDD. I also ask it to write interfaces with stub implementations, so that the tests can fail its expectations. This is when Claude sets up the testing suite. Without testing, code that Claude writes is just a wish upon a star. 
 
 Claude doesn't know exactly what you mean by tests, so you'll need to specify between unit tests, module tests, integration tests, and the level of sophistication you require. I always write the minimal number of tests to get the code started. Testing edge cases and input validations can wait until later.
+
+![golden-test-viewer](/assets/golden-test-viewer.png)
 
 I then ask it to provide a GUI to make it easier for me to be in the loop. Here is my last chance to catch mistakes before it works its magic. If I'm happy with the tests, I simply ask it to `implement`. Actually, I found that I need to ask it to implement multiple times because it likes to take frequent breaks between passing tests incrementally.
