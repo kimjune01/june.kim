@@ -39,6 +39,8 @@ Once a request is validated, it is translated into action via a series of MCP ca
 
 This step is for the human administrator. Verification should allow humans to inspect the performance of the agent. This could be another MCP tool call, but the execution step does not guarantee that it will be invoked every time. The executioner may time out or break, so an independent agent is needed to watch out for those errors. 
 
+--------
+
 Notice that the developer of this agent should _not_ be involved with the workflow itself. The workflow should be configurable by the user, and should be optimized with use. Guardrails should also be configurable by the user in a settings menu, such as which MCP servers to allow, and the scope of what makes a valid request.
 
 There is no messing around with what shape of data is passed between the components. It's smart enough to send a mix of structured and unstructured data to one another.
