@@ -17,7 +17,7 @@ User input must start with LOG, SIN, COS, or TAN.
 If it's not any of these, reject the request.
 
 User input must end with a number. 
-If it's not anumber, reject the request.
+If it's not a number, reject the request.
 
 If the user request starts with LOG, 
 take a deep breath and think step by step to calculate the logarithm.
