@@ -32,7 +32,7 @@ How about the time when we started using power saws?
 
 Fast forward to the agentic AI revolution we are experiencing in 2025. This is what the interviewer sounds like when they say they don't allow AI to be used during the interview process. Yes, there are times when the engineer has to get in the code and debug manually. Yes, sometimes LLMs make mistakes and we have to go fix it. But that's not most of the job. The job has changed. Programmer used to be a job, just like calculator used to be. 
 
-If the job candidate can commandeer 5 instances of Claude Code, wouldn't you rather see that demonstrated rather than seeing them compete with one? It's not about how well can a human program; it's about how well can the human use agentic programmers to achieve business goals. Writing lines of code is no longer the bottleneck to developing products, or doing analytics. When I say business, I'm talking about money to be made. 
+If the job candidate can commandeer 5 instances of Claude Code, wouldn't you rather see that demonstrated rather than seeing them compete with one? It's not about how well a human can program; it's about how well the human can use agentic programmers to achieve business goals. Writing lines of code is no longer the bottleneck to developing products, or doing analytics. When I say business, I'm talking about money to be made. 
 
 So how _do_ you assess candidates for the job? The answer is obvious and simple, but far from easy or safe: simulate the work they will perform.
 
