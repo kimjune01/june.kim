@@ -13,7 +13,7 @@ Force push, no tests; ship now, fix later. It's every day at startups, desperate
 
 Recently, unit tests and smoke tests I wrote got ignored in CI and commented out, for a migration to land. Its consequences weren't noticed at first — because if it works, who cares? This was the attitude shared by the CTO of this startup. Honestly, I'd be ok with it too, if restoring the tests was queued up for tomorrow. It never happened.
 
-I joined another company, and it happened again. This time, I had my entire testing and documentation suite get force-pushed over instead of resolving a code formatting merge conflict.
+I joined another company, and it happened again. This time, I had my entire testing and documentation suite get force-pushed over instead of resolving a code formatting merge conflict. I quit the next day.
 
 ![surprise](/assets/surprise.png)
 
