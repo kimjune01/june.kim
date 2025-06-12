@@ -4,6 +4,8 @@ title: Elicitation
 tags: coding
 ---
 
+> When a human requests fuzzily, all parts of the request should be acknowledged.
+
 In a previous post [Prompt Builder](/prompt-builder), I presented a strategy to turn fuzzy human input into a structured one. Although it would have been effective for resolving ambiguities, it wasn't a complete model to handle all possible cases.
 
 If you were to order a pizza with sweet potato on it, you'd need to acknowledge and reject the topping instead of ignoring it. An agent who does otherwise would be rude.
@@ -30,6 +32,8 @@ If you got a half-baked ridiculous order like above, the agent should elicit a v
 
 There's an invisible form to fill, whose partials are returned by either chat or GUI. By classifying the specifications of natural language input into the form, we get a partial. We also ask the validation step to produce rejected and ambiguous inputs, for active listening.
 
+> Classify and acknowledge all parts of a user request into oneof four: match, rejected, missing, ambiguous.
+
 ![elicitation-2](/assets/elicitation-2.png)
 
 This gets translated into a question directed back at the user, either one question at a time or all at once.
@@ -37,7 +41,5 @@ This gets translated into a question directed back at the user, either one quest
 ![elicitation-3](/assets/elicitation-3.png)
 
 The session state can either be saved on the client or server side. Once a complete pizza is ready to order, the user can be prompted for up-sells like extra cheese or another pizza. 
-
-In case it's not clear, the key takeaway from this post is to classify and acknowledge all parts of a user request into oneof four: match, rejected, missing, ambiguous.
 
 See this classification in action: [Langgraph implementation on Github](https://github.com/kimjune01/elicitation)
