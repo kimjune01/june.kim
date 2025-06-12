@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Quality Standards
-tags: coding
+tags: reflecting
 image: "/assets/the-bar.png"
 ---
 
