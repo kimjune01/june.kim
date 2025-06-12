@@ -15,6 +15,8 @@ Recently, unit tests and smoke tests I wrote got ignored in CI and commented out
 
 I joined another company, and it happened again. This time, I had my entire testing and documentation suite get force-pushed over instead of resolving a code formatting merge conflict.
 
+![surprise](/assets/surprise.png)
+
 This led to a bleak realization that no matter how hard I engineer, how obvious I make the quality standards, lack of leadership will inevitably degrade quality to nonexistence. Yes, it was my responsibility to bring up the topic of quality standards. But should I have taken it further by making it a hill to die on? No. Life is too short to work under apathetic leadership.
 
 If you're not convinced that quality comes from management, let's run a thought experiment. What would you get if you took the leadership from high-quality manufacturing to low-quality employees? This was actually demonstrated by the NUMMI plant. See [How Toyota Turned Around GM’s Worst Factory](https://www.youtube.com/watch?v=ZjxZ2Eh9GrA). It's a famous business case study.
