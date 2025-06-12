@@ -26,9 +26,9 @@ How about the time when we started using power saws?
 
 > Interviewer: Hey can you show me how straight and fast you can cut a piece of wood with a hand saw?
 >
-> Candidate: Why? How is that relevant? We have power tools for that.
+> Candidate: Why? We have power tools for that.
 > 
-> Interviewer: This is how we always did it. I didn't design this interview.
+> Interviewer: This is how we always did it. I didn't design this interview process.
 
 Fast forward to the agentic AI revolution we are experiencing in 2025. This is what the interviewer sounds like when they say they don't allow AI to be used during the interview process. Yes, there are times when the engineer has to get in the code and debug manually. Yes, sometimes LLMs make mistakes and we have to go fix it. But that's not most of the job. The job has changed. Programmer used to be a job, just like calculator used to be. 
 
