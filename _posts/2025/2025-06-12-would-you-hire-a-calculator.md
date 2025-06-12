@@ -2,6 +2,7 @@
 layout: post
 title: Would you hire a calculator?
 tags: reflecting
+image: "/assets/calculator.png"
 ---
 
 The term ["computer" used to be a job title for a person](https://en.wikipedia.org/wiki/Computer_(occupation)). Before the time of electronics, a pile of calculations were sent to a person, who would solve them, and return them. 
