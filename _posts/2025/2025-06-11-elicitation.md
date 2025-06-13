@@ -4,6 +4,8 @@ title: Elicitation
 tags: coding
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3g7-uZhp-uo?si=FYQtsV3cUkjJbBET" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 > When a human requests fuzzily, all parts of the request should be acknowledged.
 
 In a previous post [Prompt Builder](/prompt-builder), I presented a strategy to turn fuzzy human input into a structured one. Although it would have been effective for resolving ambiguities, it wasn't a complete model to handle all possible cases.
@@ -42,4 +44,4 @@ This gets translated into a question directed back at the user, either one quest
 
 The session state can either be saved on the client or server side. Once a complete pizza is ready to order, the user can be prompted for up-sells like extra cheese or another pizza. 
 
-See this classification in action: [Langgraph implementation on Github](https://github.com/kimjune01/elicitation)
+See the code here: [Langgraph implementation on Github](https://github.com/kimjune01/elicitation)
