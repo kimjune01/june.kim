@@ -44,4 +44,6 @@ This gets translated into a question directed back at the user, either one quest
 
 The session state can either be saved on the client or server side. Once a complete pizza is ready to order, the user can be prompted for up-sells like extra cheese or another pizza. 
 
+![elicitation-graph](/assets/elicitation-graph.png)
+
 See the code here: [Langgraph implementation on Github](https://github.com/kimjune01/elicitation)
