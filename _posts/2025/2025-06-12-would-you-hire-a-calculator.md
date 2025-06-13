@@ -37,7 +37,7 @@ If the job candidate can commandeer 5 instances of Claude Code, wouldn't you rat
 
 So how _do_ you assess candidates for the job? The answer is obvious and simple, but far from easy or safe: simulate the work they will perform.
 
-With `data structure & algorithms` questions, there is a right answer. With basically no training, any engineer can be trained to measure how far the candidate got to the answer. The rubric is a dartboard, and each candidate's shot is directly comparable with another. It's like running unit tests on agentic systems. It doesn't work anymore.
+With `data structure & algorithms` questions, there is a right answer. With basically no training, any engineer can measure how far the candidate got to the answer. The rubric is a dartboard, and each candidate's shot is directly comparable with another. It's like running unit tests on agentic systems. It doesn't work anymore.
 
 | ![art-school-admission](/assets/art-school-admission.jpg) |
 |:--:|
