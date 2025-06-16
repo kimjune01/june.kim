@@ -24,7 +24,7 @@ In a way, software development is an extension of people development. If tests a
 
 > Without guidance or control from leadership, quality standards will degrade to the lowest one of the bunch.
 
-Holding quality standards doesn't mean being pedantic about rule-based systems full of red tape. It can be a set of principles or guidelines. It can be goals or be cultural. Ideally, it comes from engineering leadership (formal or not) that takes responsibility:
+Holding quality standards doesn't mean being pedantic about rule-based systems full of red tape. It can be a set of principles or guidelines. It can be shared goals or cultural values. Ideally, it comes from engineering leadership (formal or not) that takes responsibility:
 
 - Veto poor behavior
 - Reward good behavior
