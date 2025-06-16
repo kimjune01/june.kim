@@ -7,7 +7,7 @@ image: "/assets/mark-14-torpedo-.jpg"
 
 It's easy to attribute a production bug or a regression to lines of code, but it's never the root cause. Poor software quality is a symptom of a development environment that allowed it to occur in the first place. Even with agentic coding, software doesn't write itself; the root cause is always human.
 
-In retrospect, it's obvious that lack of testing yields poor quality. Consider the tragedy of [Mark 14 torpedo in WW2](https://en.wikipedia.org/wiki/Mark_14_torpedo#:~:text=The%20Mark%2014%20torpedo%20had%20four%20major%20flaws.,failed%20to%20detonate%20the%20warhead.). The Navy never live-fire tested the toepedoes before being deployed to the submarines of the Pacific theater for _not wanting to expend $10,000 per torpedo_. It was an unfortunate case of _trust me bro_ that caused approximately ~5000 misfires during the first two years of its deployment. Had they been made to be reliable, the Imperial Japanese would have been crippled much sooner. 
+In retrospect, it's obvious that lack of testing yields poor quality. Consider the tragedy of [Mark 14 torpedo in WW2](https://en.wikipedia.org/wiki/Mark_14_torpedo#:~:text=The%20Mark%2014%20torpedo%20had%20four%20major%20flaws.,failed%20to%20detonate%20the%20warhead.). The Navy never live-fire tested the toepedoes before being deployed to the submarines of the Pacific theater for _not wanting to expend $10,000 per torpedo_. It was an unfortunate case of _trust me bro_ that caused approximately ~5000 misfires during the first two years of its deployment. Had they been reliable, the Imperial Japanese would have been crippled much sooner. 
 
 | ![mark-14-torpedo](/assets/mark-14-torpedo.jpg) |
 |:--:|
