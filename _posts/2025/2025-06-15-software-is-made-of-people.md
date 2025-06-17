@@ -20,7 +20,7 @@ But the engineers and the leaders in charge of those torpedoes weren't stupid. I
 
 Ultimately, those torpedoes failed because the leaders tolerated bad engineering practices. Likewise, poor-quality software is because of poor-engineer behavior; poor-engineer behavior happens because it's allowed to manifest during development.
 
-In a way, software development is an extension of people development. If tests are allowed to be skipped regularly, no more will be written. If engineers are allowed to push to prod without tests, comms, review or documentation; then knowledge will be silo'd and he'll be the hero to fix the bugs (that he caused) down the line. 
+In a way, software development is an extension of people development. If tests and evals are allowed to be skipped regularly, no more will be written. If engineers are allowed to push to prod without tests, comms, review or documentation; then knowledge will be silo'd and he'll be the hero to fix the bugs (that he caused) down the line. 
 
 > Without guidance or control from leadership, quality standards will degrade to the lowest one of the bunch.
 
