@@ -2,9 +2,14 @@
 layout: post
 title: Close the loop
 tags: coding
+image: "/assets/bdd-loop.png"
 ---
 
-I've been racking up more experience with Claude Code, making an app with it thru to deployment. You can check it out [here](https://bountiful-wholeness-production-eedc.up.railway.app/). One common question is What's the difference between Claude and Cursor? It feeds the errors back into the LLM automatically. When I was coding with cursor, I found myself copy-pasting errors all the friggin' time. But with Claude Code, I had to do it much less frequently. It's able to close the loop on the feedback it gets from failures. 
+I've been racking up more experience with Claude Code [here](https://bountiful-wholeness-production-eedc.up.railway.app/). 
+
+![cc-usage](/assets/cc-usage.png)
+
+What's the difference between Claude and Cursor? Claude Code feeds the errors back into the LLM automatically. When I was coding with cursor, I found myself copy-pasting errors all the friggin' time. But with Claude Code, I had to do it much less frequently. Why? Because it's able to close the loop on the feedback it gets from failures. 
 
 | ![cc-loop](/assets/cc-loop.png) |
 |:--:|
@@ -16,11 +21,11 @@ This works for code snippets that fit within a small context window, and the cod
 |:--:|
 | _Tests are automations_ |
 
-This is why I prompt it to write tests first. Whatever opinion you have about TDD needs reevaluation in the era of agentic coding. By allowing Claude Code to know what to expect, it can get feedback in the terminal, where it can see what's wrong. At this point, code quality doesn't matter as long as it's not a significant hit on performance. If the tests pass, I'm happy. Claude Code is happy. 
+This is why I prompt it to write tests first. Whatever opinion you have about TDD, throw it out the window. It needs reevaluation in the era of agentic coding. By allowing Claude Code to know what to expect, it can get feedback in the terminal, where it can see what's wrong. At this point, code quality doesn't matter as long as it's not a significant hit on performance. If the tests pass, users are happy. I'm happy. Claude Code is happy.
 
 But what if the tests are wrong? It happens all the time, especially with changing requirements. Dependencies change, interfaces shift. What then? 
 
-Tests are not a reliable source of truth, if it has a symbolic relationship with the code. If it truly doesn't matter if it's written in React or Svelte or jQuery, then those tests are subject to change with the implementation. What we need is an implementation-agnostic specification. 
+Tests are not a reliable source of truth if it has a symbolic relationship with the code. Users don't care if it's written in React or Svelte or jQuery, and neither should I. Tests are subject to change with implementation. What we need is an implementation-agnostic specification. 
 
 | ![bdd-loop](/assets/bdd-loop.png) |
 |:--:|
@@ -34,7 +39,7 @@ I wouldn't go as far as to set up little agents that do estimations and move tic
 |:--:|
 | _Elicitation_ |
 
-But it _can_ ask you questions. I used to try to describe the whole thing at once, but that was too hard. The better way to write specs is to give a loose description of a vision or goal, and get it to ask questions to fill in the blank. I like to iteratively plan for two kinds of documents: features and work plan. I'm happy that Claude has little room to guess what I want, and Claude is happy that it knows it's doing a good job. 
+But it _can_ ask you questions. I used to try to describe the whole thing at once, but it was never enough. The better way to write specs is to give a loose description of a vision or goal, and get it to ask questions to fill in the gaps. I like to iteratively plan for two kinds of documents: `.features` and `work_plan.md`. These act as guardrails, giving Claude no room to guess what I want. 
 
 | ![cc-octopus](/assets/cc-octopus.png) |
 |:--:|
@@ -44,7 +49,7 @@ The abstraction of closing the loop goes beyond tests. Just this week, I used Ra
 
 > If you find yourself copy-pasting errors, ask yourself - how do I feed it back into Claude Code?
 
-Stop looking for magic prompts that can one-shot an app in two hours. No such thing exists, and even if it did, the output would be too fragile for any meaningful modification. With a concrete description of your expectations, it can steer itself to the finish line, and ground itself in your truth.
+Stop looking for magic prompts that can one-shot an app in two hours. No such thing exists, and even if it did, the output would be too fragile for modification. With a concrete description of your expectations, it can steer itself to the finish line, and ground itself in truth.
 
 See the arficacts on the [Github repo: Vectorspace](https://github.com/kimjune01/vectorspace)
 
