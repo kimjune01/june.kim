@@ -44,4 +44,4 @@ What's the most natural interface for applying an LLM assistant for a dashboard 
 
 ![reverie-ux-2](/assets/reverie-ux-2.png)
 
-Whether LLM interfaces are a good idea for current year may be up to debate, but the trend is clear. Coders are enjoying the benefit, and it's only a matter of time that these interfaces are turned to requirements. B2B SaaS dashboards providing insights to the customers' data are cooked, but SaaS's who own the data will have to pivot to becoming data brokers. In a few years, it will be in the form of MCP servers, but until then, Cursor for Dashboards are the transitional UX. 
+Whether LLM interfaces are a good idea for current year may be up to debate, but the trend is clear. Coders are enjoying the benefit, and it's only a matter of time that these interfaces are turned to requirements. B2B SaaS dashboards providing insights to the customers' own data are cooked, but SaaS's who provide specialized data sets will have to pivot to becoming data brokers. In a few years, it will be in the form of MCP servers, but until then, Cursor for Dashboards are the transitional UX. 
