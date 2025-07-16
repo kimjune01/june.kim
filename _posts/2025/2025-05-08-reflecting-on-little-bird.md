@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Reflecting on [REDACTED]
+title: Reflecting on Little Bird
 tags: reflecting
 image: "/assets/redacted.png"
 ---
@@ -9,15 +9,15 @@ __The company is still in stealth, so I redacted the name__
 
 ![redacted](/assets/redacted.png)
 
-[REDACTED] (RD) is a startup and a chat client product aimed at professionals. By listening in on your desktop and browser activity, it retains memory of your activities throughout the day and acts as a second brain — an executive assistant backed by the near-limitless intelligent capabilities of frontier LLM models. 
+Little Bird (LB) is a startup and a chat client product aimed at professionals. By listening in on your desktop and browser activity, it retains memory of your activities throughout the day and acts as a second brain — an executive assistant backed by the near-limitless intelligent capabilities of frontier LLM models. 
 
-I joined RD just a few short months ago in late 2024 as a software generalist who happens to love using Swift. A contract-to-hire, I delivered on the requests from leadership on what I believed to be a clear path to product market fit (PMF). I'm now laid off, as with most other members I met at the time I joined.
+I joined LB just a few short months ago in late 2024 as a software generalist who happens to love using Swift. A contract-to-hire, I delivered on the requests from leadership on what I believed to be a clear path to product market fit (PMF). I'm now laid off, as with most other members I met at the time I joined.
 
 ### Timing Growth
 
 As any successful startup would aspire, growth happened. I wish we got the kind of growth that indicated a tighter product market fit, but we grew in other ways; we grew in employee count. I witnessed this happen at Fast one-click pay ([Blog post](https://newsletter.pragmaticengineer.com/i/51799618/warning-signs-within-the-company)).
 
-At the time of my leave, RD had two designers, three PhD scientists working the AI side, ~20 engineers, one marketing, one growth, all before we had revenue. From what little I know of startups, sales revenue is the ultimate validation. 
+At the time of my leave, LB had two designers, three PhD scientists working the AI side, ~20 engineers, one marketing, one growth, all before we had revenue. From what little I know of startups, sales revenue is the ultimate validation. 
 
 If capital efficiency was the only concern, then it would have been the founders' and finance's problem, but engineering doesn't grow linearly with more people. From my experience, having more people actually slowed us down. In anticipating merge conflicts and heated discussions about code architecture, I often yielded my opinions to those who were willing to put in more work. Because we worked remote async, the window of time to hash out our disagreements were limited to only half the work day. 
 
