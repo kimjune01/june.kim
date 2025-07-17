@@ -9,7 +9,9 @@ image: "/assets/fs-memory.png"
 
 [Context engineering](https://www.philschmid.de/context-engineering) is what they call it these days. Instead of thinking of system prompts as the main driver of LLM performance, we're expanding the consideration to everything else involved in next-token generation. This includes peripheral knowledge around the task, including long-term memory. 
 
-![context-rot](/assets/context-rot.png)
+| ![context-rot](/assets/context-rot.png) |
+|:--:|
+| Context rot degrades performance |
 
 The default approach to memory was RAG databases up until million-token context windows made that obsolete a few weeks ago. If everything can fit into the context window, why bother with all that extra complexity? But that approach is not without baggage. [Context Rot](https://research.trychroma.com/context-rot) degrades task performance when too much junk is passed into context. To learn more, I recommend [Chroma's Youtube video about it](https://www.youtube.com/watch?v=TUjQuC4ugak).
 
@@ -35,7 +37,7 @@ To support procedural memory such as prompts, new text files or whole directorie
 
 | ![finder-ui](/assets/finder-ui.png) |
 |:--:|
-| Its biggest perk is that you don't need to build a custom UI for context ingestion. The user can provide the context via Finder. |
+| Its biggest perk is that you don't need to build a custom UI for context ingestion. The user can provide the files via Finder. |
 
 One limitation is if the file is larger than can fit in a single context, then a more sophisticated retrieval method would have to be incorporated. 
 
