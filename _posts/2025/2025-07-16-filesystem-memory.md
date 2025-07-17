@@ -31,7 +31,7 @@ But instead of loading all the files into every context, the files can be loaded
 
 ![two-phase](/assets/two-phase.png)
 
-The index is a markdown file that contains the summaries of each document in the directory of interest. The summaries are generated at document insertion time, and removed when the file disappears. Summarization is an easy task, so the cheap and fast model (such as Flash) can be used. 
+The index is a markdown file that contains the summaries of each document in the directory of interest. The summaries are generated at document insertion time, and removed when the file disappears. Summarization is an easy task, so the cheap and fast model (such as Flash) can be used. Retrieval is also powered via LLM.
 
 To support procedural memory such as prompts, new text files or whole directories can be generated at runtime. Tha comes at the expense of additional phases, but it expands the possibility of being able to remember _anything_ as long as it can be saved as a file. 
 
