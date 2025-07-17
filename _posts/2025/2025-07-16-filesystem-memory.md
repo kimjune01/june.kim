@@ -33,6 +33,10 @@ The index is a markdown file that contains the summaries of each document in the
 
 To support procedural memory such as prompts, new text files or whole directories can be generated at runtime. Tha comes at the expense of additional phases, but it expands the possibility of being able to remember _anything_ as long as it can be saved as a file. 
 
+| ![finder-ui](/assets/finder-ui.png) |
+|:--:|
+| Its biggest perk is that you don't need to build a custom UI for context ingestion. The user can provide the context via Finder. |
+
 One limitation is if the file is larger than can fit in a single context, then a more sophisticated retrieval method would have to be incorporated. 
 
 If the index grows to be larger than a reasonable context window, then a RAG can take its place, storing summaries and references to files as metadata.
