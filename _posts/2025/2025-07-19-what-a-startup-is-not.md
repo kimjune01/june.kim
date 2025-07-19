@@ -2,6 +2,7 @@
 layout: post
 title: What a Startup is not
 tags: reflecting
+image: "/assets/vs-startup.png"
 ---
 
 When a startup makes the news, the headlines point to metrics like funding, user count, or revenue. It's easy to think that those are goals to aspire to, but those metrics tell a growth story after having found their Product-Market-Fit (PMF). It doesn't tell the story of how they found it. It's a rear-view-mirror view of their growth. But if not growth, what is a startup, pre-PMF?
