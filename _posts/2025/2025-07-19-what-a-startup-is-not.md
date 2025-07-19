@@ -41,4 +41,4 @@ This is a total re-frame from a layman's view of what makes a startup effective.
 
 Notice that the shift in goals completely flips the nature of work. Worrying about yields, costs, and size of the operation will direct efforts towards incremental improvements in measurable ways. But in a startup, _bugs and unit costs are noise_, not problems. Nobody cares about bugs in bland apples. And it doesn't matter how many total apples were sold; it matters _a lot more_ how likely a cidery is willing to buy your apples. 
 
-So if your pre-PMF startup is emulating the success of established companies by using the same tools, processes, and metrics, it's going to actively resist failures and dilute the signal needed to move on to the next experiment. Expect failures, embrace lessons, and prepare to pivot.
+So if your pre-PMF startup is emulating the success of established companies by using the same tools, processes, and metrics, it's counterproductive to proving a business. It's actively resisting failures, by diluting and delaying the signal needed to move on to the next experiment. Expect failures, embrace lessons, and prepare to pivot.
