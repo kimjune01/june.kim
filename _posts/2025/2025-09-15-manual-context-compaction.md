@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Manual Context Compaction
-tags: reflecting
+tags: coding
 image: "/assets/bad-puzzle.png"
 ---
 
