@@ -17,7 +17,9 @@ LLMs are incredibly quick to generate code that makes it work. Sometimes it take
 
 It's tempting to believe Claude Code when it says it's `production ready` and `ready for human review`, but don't be fooled. 
 
-![absolutely-right](/assets/absolutely-right.png)
+| ![absolutely-right](/assets/absolutely-right.png) |
+|:--:|
+| Sycophant and optimist. |
 
 
 Here's the trick that I use to trim down my PRs to its essence:
