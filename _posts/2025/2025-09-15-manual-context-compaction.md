@@ -23,7 +23,7 @@ If everything in the session context is relevant to your upcoming task, then run
 >
 > `Turn this discussion into a spec file for an MVP`
 
-Then, `/clear` context, and ask it to `take a look at the auth architecture docs` to recall memory. Now, you have a super compact, reusable context that can be committed into the codebase. 
+Then, `/clear` context, and ask it to `take a look at the auth architecture docs` to recall memory as to prime it. Now, you have a super compact, reusable context that can be committed into the codebase. 
 
 | ![good-puzzle](/assets/good-puzzle.png) |
 |:--:|
