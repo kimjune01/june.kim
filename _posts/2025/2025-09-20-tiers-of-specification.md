@@ -2,6 +2,7 @@
 layout: post
 title: Tiers of Specification
 tags: coding
+image: "/assets/spec-tiers.png"
 ---
 
 > Using AI to code is like using a jackhammer to carve a Michelangelo
