@@ -31,7 +31,7 @@ image: assets/bots/bots.png
 - There's no progress bar
 - Needs rewards for doing the right thing
 
-### Exercise for the reaader
+### Exercise for the reader
 
 - Which bot would you rather hire?
 - What would an assembly of each class of bots look like?
