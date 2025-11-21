@@ -4,8 +4,6 @@ title: Token Efficiency
 tags: coding
 ---
 
-I'm a fan of what MCP enables, but it's got issues, and all those issues are about token efficiency. MCP takes up valuable space at the beginning of the context window, and the results from each tool call are added onto the next, compounding the expense. When the context window fills up with tokens irrelevant to the task at hand, the quality of results suffer, context rot.
-
 Thinking about tokens is a lot like thinking about RAM and stack memory. Now that we have skills, MCP, and subagents to be able to delegate tasks, it's the human's job (for now), to figure out when to use which.
 
 Let's visualize how contexst accumulates. Each row of bars represents a context window.
