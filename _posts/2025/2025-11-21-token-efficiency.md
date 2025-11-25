@@ -2,6 +2,7 @@
 layout: post
 title: Token Efficiency
 tags: coding
+image: "/assets/token-compaction-convo.png"
 ---
 
 Thinking about tokens is a lot like thinking about RAM and stack memory. Now that we have skills, MCP, and subagents to be able to delegate tasks, it's the human's job (for now), to figure out when to use which.
