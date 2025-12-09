@@ -2,7 +2,7 @@
 layout: post
 title: Quality Fortress
 tags: coding
-image: "/assets/fortress.webp"
+image: "/assets/defense-layers.png"
 ---
 
 No amount of care or effort is enough to ship bug-free software, but you can always get closer. Then the question becomes how much effort to allocate to prevention vs. mitigation. Fight Club explains this well:
