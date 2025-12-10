@@ -26,3 +26,8 @@ With Claude and agents, we can automate parts that were relegated to human code 
 As the cost of defense goes down, we should ramp up the layers of defense and their intensity.
 
 ![defense-layers](/assets/defense-layers.png)
+
+
+```
+$ Hey Claude, take a look at git history since last year and find hotfixes and mistakes we made. I want to prevent those mistakes from happening again. Can you suggest CLAUDE.md updates, skills, pre-commit hooks, pre-push hooks, and tests in CI? See also if you can make agents run conditionally on parts of our codebase that cannot be deterministically checked for such mistakes. Verify each suggestion by simulating the mistakes and making sure that the checks catch those. Implement ones that are obvious improvements, make a PR with a clear motivation.
+```
