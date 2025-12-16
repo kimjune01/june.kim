@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Habitualization
-tags: improving
+tags: reflecting
 image: assets/habit/scale.png
 ---
 _I promise that reading this will give you the power to build habits that last for the rest of your life._

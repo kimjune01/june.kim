@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Atomic Habits
-tags: reading, improving
+tags: reading, reflecting
 image: https://jamesclear.com/wp-content/uploads/2023/05/retina-atomic-habits-dots.png
 ---
 ![atomic habits png](https://jamesclear.com/wp-content/uploads/2023/05/retina-atomic-habits-dots.png)

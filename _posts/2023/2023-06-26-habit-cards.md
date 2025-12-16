@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Habit Cards
-tags: improving
+tags: reflecting
 image: assets/habit-cards/salesman.png
 ---
 

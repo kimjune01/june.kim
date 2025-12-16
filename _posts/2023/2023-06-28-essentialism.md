@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Essentialism
-tags: reading, improving
+tags: reading, reflecting
 image: https://gregmckeown.com/wp-content/uploads/2011/08/book.jpg
 ---
 ![cover](https://gregmckeown.com/wp-content/uploads/2011/08/book.jpg)
