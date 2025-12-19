@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Left-handed Cursor on MacOS
-tags: reflecting
+tags: improving
 image: assets/pointing-right.png
 ---
 

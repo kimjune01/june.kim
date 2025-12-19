@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Digital Diet
-tags: reflecting
+tags: improving
 image: "/assets/digital-diet/notel-screenshot.png"
 ---
 _Warning: reading this post will rouse guilt whenever you consume mindless media._

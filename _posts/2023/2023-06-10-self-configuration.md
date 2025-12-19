@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Self Configuration
-tags: reflecting
+tags: improving
 ---
 
 ### Improvement

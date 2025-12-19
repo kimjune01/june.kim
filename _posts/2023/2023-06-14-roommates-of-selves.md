@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Roommates of Selves
-tags: reflecting
+tags: improving
 image: assets/selves/why.png
 ---
 _By the end of reading this blog post, you will understand why you did your most regretful deeds._
