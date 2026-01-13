@@ -13,7 +13,7 @@ As an AI Engineer at BuildBetter, I worked on integrations, sync infrastructure,
 | Area | Summary |
 |------|---------|
 | **Integrations** | Built 4 third-party integrations (Circle, Notion, Front, Attio) + fixes for existing ones |
-| **AI Features** | Built draft iteration of Custom AI Agents feature |
+| **AI Features** | Built draft iteration of Custom AI Agents feature, AI-powered field classification for imports |
 | **Developer Tooling** | Created Claude Code skills and slash commands for the engineering team |
 | **CI/CD & Testing** | Automated code review checks, E2E testing infrastructure, quality gates |
 | **Infrastructure** | Queue reliability improvements, monitoring, database migration work |
@@ -77,6 +77,22 @@ Built CRM sync for importing contacts and companies.
 ### Custom AI Agents (Draft Iteration)
 
 Built an early draft iteration of the Custom AI Agents feature, which enables AI-powered conversations for analyzing customer signals. This exploratory work helped inform the direction of the feature before it was rebuilt by another engineer.
+
+### AI-Powered Field Classification
+
+Built an LLM-powered system for automatically classifying and mapping fields during data imports.
+
+**Features:**
+- Analyzes column names and sample data to determine field types
+- Matches against existing organization fields for consistent naming
+- Returns confidence scores for each classification
+- Fallback UX for edge cases where AI classification is uncertain
+- Auto-accept for high-confidence mappings
+
+**UI/UX work:**
+- Column name truncation for long headers
+- Sample row preview
+- Persisted user mappings through async processing
 
 ---
 
