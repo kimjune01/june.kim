@@ -8,6 +8,16 @@ As an AI Engineer at BuildBetter, I worked on integrations, sync infrastructure,
 
 ---
 
+## Impact
+
+- **Expanded data connectivity** by building 4 third-party integrations, enabling customers to import data from additional platforms
+- **Reduced manual work** for data imports with AI-powered field classification that automatically maps columns
+- **Improved engineering velocity** through Claude Code skills and slash commands used daily by the team
+- **Increased CI reliability** by enabling previously-skipped E2E tests and adding automated code review checks
+- **Established integration standards** with documentation and checklists that streamlined future integration development
+
+---
+
 ## Areas of Contribution
 
 | Area | Summary |
