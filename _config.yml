@@ -41,7 +41,10 @@ timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_da
 # Site Build
 highlighter:       rouge 
 sass:
-    style:          :compressed
+  style: compressed
+  quiet_deps: true
+  silence_deprecations:
+    - import
 
 #
 tag_page_layout: tag_page
