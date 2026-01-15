@@ -19,6 +19,10 @@ Obviously, in a life-critical application such as [administering doses of X-ray 
 
 Even the most successful products allow bugs in production. Cursor, Anthropic, and OpenAI's new features are often buggy and full of slop. But because they're fixed quickly, few notice nor care.
 
+After the bugs are fixed, [remediation](/remediation) such as tests or CI improvements should be enacted to bolster your [quality-fortress](/quality-fortress), to reduce the likelihood of the same bugs being shipped in the future. For routine additions, planning docs and verification docs should be updated. 
+
+Craft code feels good but it doesn't scale. [Close the loop](/close-the-loop) on the development cycle, then unleash the artificial intelligence at max speed.
+
 | ![fix-fast](/assets/fix-fast.png) |
 |:--:|
 | With less verification effort, things break more often. In exchange for volatility, you ship more product. |
