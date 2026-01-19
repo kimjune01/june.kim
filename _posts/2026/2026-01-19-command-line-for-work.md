@@ -2,6 +2,7 @@
 layout: post
 title: Command Line for Work
 tags: coding
+image: "/assets/cowork-recruit.png"
 ---
 
 | ![dev-pdca](/assets/dev-pdca.png) |
