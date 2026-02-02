@@ -8,7 +8,7 @@ This weekend, I came to a painful realization that application building for B2B 
 
 B2B SaaS apps are adding chat-with-your-app features. But users often demand that their data cross app borders in agentic workflows, skipping the manual copy-paste across multiple tabs altogether. So what if instead of chatting with one app, you can chat with _all_ your apps? That's the idea behind [Rube MCP](https://rube.app/). 
 
-![rube](/assets/rube.ico)
+![rube-plus-claude](/assets/rube-plus-claude.png)
 
 I admitted defeat for Skillomatic, taking lessons that I can from building a unified MCP/Auth layer with skills. Rube calls them recipes. 
 
