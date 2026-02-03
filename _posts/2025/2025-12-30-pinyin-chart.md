@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Pinyin Chart
-tags: coding
+tags: projects
 ---
 
 
