@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Lessons from Building Skillomatic
-tags: coding
+tags: coding, projects
 ---
 
 > This post was written by Claude Opus 4.5. I prompted it to find patterns in the [Skillomatic](https://skillomatic.technology/) codebase, then validated each one against existing literature to filter out the common stuff. What remains are ideas I haven't seen documented elsewhere.
