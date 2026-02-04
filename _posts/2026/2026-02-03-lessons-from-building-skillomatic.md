@@ -55,6 +55,9 @@ This is more work than auto-generation. But the benefits compound:
 - **Security**: Explicit allowlist means dangerous operations never register
 - **UX**: Hand-written descriptions help Claude understand nuances
 - **Portability**: Skills work across providers because tools are described consistently
+- **Reliability**: Each operation has an explicit access level, enabling predictable runtime behavior
+
+That last point matters more than it sounds. Because each manifest operation declares its required access level, you can filter at registration time—not call time. If Claude sees a tool, it will work. No "permission denied" errors mid-conversation. The tool list IS the capability list.
 
 The MCP security literature talks about tool poisoning and supply chain attacks. But it doesn't talk much about the architectural choice to curate rather than generate. That's the lesson here.
 
