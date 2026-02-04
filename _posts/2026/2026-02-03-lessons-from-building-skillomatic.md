@@ -89,7 +89,9 @@ The server becomes a coordinator. It doesn't know what data you're accessing. It
 
 The obvious approach to MCP authorization: register all tools, validate permissions at call time, return errors for unauthorized requests.
 
-But there's a subtler approach. Don't register tools the user can't call.
+[Composio](https://docs.composio.dev/docs/fetching-tools) takes a better approach—filter tools by permission level before the LLM sees them. Their SDK supports `permissions=["read"]` to limit to read-only operations.
+
+Skillomatic does the same thing, powered by the curated manifests:
 
 ```typescript
 const tools = manifest.operations
@@ -97,9 +99,7 @@ const tools = manifest.operations
   .map(op => generateTool(op));
 ```
 
-This filtering happens at MCP startup, not at call time. Read-only users don't see `delete_contact`. Claude can't suggest an operation that doesn't exist in the session.
-
-The MCP security guidance focuses on OAuth scopes and runtime authorization. "Security through absence"—making unauthorized operations invisible rather than forbidden—is a different mental model. You can still misuse the tools that exist, but you can't misuse the ones that don't.
+This is becoming a best practice for MCP authorization. Make unauthorized operations invisible rather than forbidden. You can still misuse the tools that exist, but you can't misuse the ones that don't.
 
 ---
 
