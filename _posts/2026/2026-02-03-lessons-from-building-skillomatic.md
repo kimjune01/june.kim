@@ -32,33 +32,6 @@ The validation rules live in a markdown file in the database. No code changes ne
 
 ---
 
-### Three-Way Permission Intersection
-
-Most permission systems are binary: allowed or not allowed. Skillomatic uses three independent dimensions:
-
-1. **Admin allows** (org-level: read-write, read-only, disabled)
-2. **Integration connected** (user has authorized the provider)
-3. **User's personal choice** (user can self-restrict)
-
-Access requires all three. If the integration isn't connected, no access. If connected, effective access = `min(admin_level, user_level)`.
-
-```typescript
-if (!isConnected) return 'none';
-// Admin sets read-only, user sets read-write → read-only
-return Math.min(adminLevel, userLevel);
-```
-
-This solves a real tension: orgs want control, users want autonomy. With this model:
-- Admin can lock down a CRM to read-only for safety
-- Users can further restrict themselves
-- If either party disables it, access is blocked
-
-The "min of access levels" rule means you can't accidentally grant more access by layering permissions. It's always the most restrictive. No role explosion. No permission matrix to maintain.
-
-The multi-tenant authorization literature covers RBAC, ABAC, and ReBAC. But intersecting independent dimensions with a minimum function? That's not in the playbook.
-
----
-
 ### Curated Manifests vs OpenAPI Generation
 
 The lazy approach to MCP tools is to auto-generate them from OpenAPI specs. Point at a spec, get tools. But this creates security nightmares.
@@ -89,15 +62,13 @@ The MCP security literature talks about tool poisoning and supply chain attacks.
 
 ### Ephemeral Architecture
 
-Most SaaS platforms store everything. User data, API responses, logs with full request bodies. This creates compliance headaches. GDPR, DPA, SOC 2—all require policies around stored PII.
+Most SaaS platforms store everything. User data, API responses, logs with full request bodies. This creates compliance headaches.
 
-Skillomatic inverts this. PII flows through but never persists:
+[Composio](https://composio.dev/blog/secure-ai-agent-infrastructure-guide) calls this pattern "Brokered Credentials"—the LLM never sees tokens, a secure service makes API calls on its behalf. Skillomatic takes a similar approach but pushes it further:
 
-- OAuth tokens are fetched fresh at render time, not stored
-- LLM calls happen client-side with keys embedded in responses
+- OAuth tokens fetched fresh from Nango at render time, not stored locally
+- LLM calls happen client-side—the server never sees the conversation
 - The API proxy forwards requests without logging bodies
-
-The server becomes a coordinator for auth and credential distribution. It doesn't know what data you're accessing. It can't leak what it doesn't have.
 
 ```
 Server: "Here's a fresh token"  -->  Client  -->  LLM
@@ -107,9 +78,7 @@ Server: "Here's a fresh token"  -->  Client  -->  LLM
 (token store)                    (proxied, not logged)
 ```
 
-The trade-off is latency—one extra HTTP call to Nango per skill render. But you eliminate token refresh complexity, cache invalidation, and the entire category of "what if our database leaks" risk.
-
-Privacy-by-design is a known concept. But most implementations focus on pseudonymization or isolated PII storage. The specific pattern of "credentials rendered fresh per-request, data flows through but never persists" is underexplored.
+The server becomes a coordinator. It doesn't know what data you're accessing. It can't leak what it doesn't have.
 
 ---
 
