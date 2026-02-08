@@ -48,7 +48,9 @@ Three things that worked cleanly with keywords now break:
 
 ## The Geometric Solution: Power Diagrams
 
-Here's the insight that makes this tractable: if you model each advertiser's value for an impression as a function of distance in embedding space, the optimal allocation has a known geometric structure called a **power diagram**.
+Here's the end-to-end picture. An advertiser says: *"I want budget-conscious marathon beginners."* The platform embeds that description into the same continuous space as user conversations — it becomes a point (center) with a radius (reach). A bid determines how much territory that point commands. The power diagram partitions the entire embedding space into advertiser territories, and VCG payments tell each advertiser what their territory costs. Natural language in, price out, geometry in the middle. No keywords. No categories.
+
+The math that makes this work: if you model each advertiser's value for an impression as a function of distance in embedding space, the optimal allocation has a known geometric structure called a **power diagram**.
 
 Imagine a 2D map representing a slice of embedding space — say, "topic" on one axis and "intent" on the other. Each advertiser sits at a point on this map (their ideal customer) with a bid that determines how far their influence extends.
 
