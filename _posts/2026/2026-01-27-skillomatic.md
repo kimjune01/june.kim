@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Skillomatic
-tags: coding
+tags: projects
 ---
 
 https://skillomatic.technology/
