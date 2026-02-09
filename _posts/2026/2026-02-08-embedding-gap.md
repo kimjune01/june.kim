@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The $200 Billion Bottleneck: Why LLM Advertising Is Stuck in Keyword Space"
+title: The $200 Billion Bottleneck
 tags: coding
 ---
 
@@ -10,53 +10,49 @@ tags: coding
 
 ---
 
-There are now at least half a dozen startups racing to become the DoubleClick of AI advertising. I've been tracking this space since writing about power diagrams as an auction mechanism for continuous embedding space, and after surveying the landscape, I'm struck by something: nobody is actually building what they need to build.
+After writing about power diagrams for ad auctions, I started tracking the companies actually building in this space. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: nobody is building what they need to build.
 
-Every company in this space — the startups, the incumbents, the LLM platforms themselves — is working around the same bottleneck. They all know that LLM conversations encode richer intent signals than keywords ever did. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, every single one of them collapses the continuous, high-dimensional embedding space down to discrete categories and runs a standard auction. The richness gets thrown away at the exact moment it matters most.
-
-This post is about the specific technical gap, who's doing what, and what it would actually take to close it.
+Every company — startups, incumbents, LLM platforms — is working around the same bottleneck. They all know LLM conversations encode richer intent signals than keywords. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, every single one collapses the continuous embedding space down to discrete categories and runs a standard auction. The richness gets thrown away at the exact moment it matters most.
 
 ## The Players
 
-### Startups Building Ad Networks for AI
+### Startups
 
-**Kontext** ($10M seed, M13/Torch Capital) is the furthest along. Founded in 2023 by Andrej Kiska, they generate ads in real-time using the host app's own LLM to analyze conversation context. They're integrated with PubMatic, an SSP, which means their inventory is accessible through standard programmatic pipes. Their investor Torch Capital explicitly describes them as building "the AppLovin / TradeDesk / DoubleClick of the GenAI era." Publishers include DeepAI, Pixel Chat, Liner. Advertisers include Amazon, Uber, Canva. They report 3-5% CTR at $2-4 CPMs.
+**Kontext** ($10M seed, M13/Torch Capital) is furthest along. Founded 2023 by Andrej Kiska, they generate ads in real-time using the host app's LLM to analyze conversation context. Integrated with PubMatic for programmatic. Their investors call them "the AppLovin / TradeDesk / DoubleClick of the GenAI era." Publishers include DeepAI, Pixel Chat, Liner. Advertisers include Amazon, Uber, Canva. 3-5% CTR at $2-4 CPMs.
 
-**ZeroClick** ($55M, same investors who backed Honey to its $4B PayPal exit) takes a different approach. Founded by Ryan Hudson, the name is literally a nod to DoubleClick. They call themselves a "reasoning-time ad network" — advertiser context gets injected into the LLM's reasoning process *before* the answer is generated, not appended afterward. The ad becomes part of the answer. They claim 10,000+ advertisers including Walmart, Amazon, Target.
+**ZeroClick** ($55M, same investors who backed Honey to its $4B PayPal exit). Ryan Hudson's "reasoning-time ad network" — advertiser context gets injected into the LLM's reasoning *before* the answer is generated, not appended after. The ad becomes part of the answer. 10,000+ advertisers including Walmart, Amazon, Target.
 
-**Koah Labs** ($5M seed, Forerunner) targets the long tail of AI apps — the Luzias and DeepAIs of the world, especially in markets where subscription models don't work. Already live in several apps, claiming 7.5% CTR. Their pitch: we're the AdMob for AI chatbots.
+**Koah Labs** ($5M seed, Forerunner) targets the long tail of AI apps — the Luzias and DeepAIs, especially markets where subscriptions don't work. 7.5% CTR. Their pitch: we're AdMob for AI chatbots.
 
-### Incumbents Extending Existing Infrastructure
+### Incumbents
 
-**PubMatic** routes AI chatbot inventory through its existing exchange via its partnership with Kontext. Their EVP explicitly said he doesn't see the channel as "very different from the general programmatic benefits." This is the incumbent mental model: AI chat is just another supply source in existing pipes.
+**PubMatic** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." That tells you everything about the incumbent mental model.
 
-**Criteo** is repositioning its massive commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM product recommendations. They've built an MCP server so LLMs can query Criteo's product data during response generation. The business model is still undefined.
+**Criteo** is repositioning its commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM recommendations. They built an MCP server so LLMs can query their product data during response generation. Business model still undefined.
 
-**Seedtag** is the most technically interesting incumbent. They've been doing embedding-based contextual advertising on the open web for years, using what they call "neuro-contextual" targeting. Their AI uses embeddings to model interest, emotion, and intent. They claim 3.5x higher neural engagement versus non-contextual ads. They have the closest thing to actual embedding-space infrastructure, but they're applying it to display and CTV on the open web, not to ads inside LLM conversations.
+**Seedtag** is the most interesting technically. They've been doing embedding-based contextual advertising on the open web for years — "neuro-contextual" targeting that models interest, emotion, and intent. 3.5x higher engagement versus non-contextual. They have the closest thing to actual embedding-space infrastructure, but they're applying it to display and CTV, not LLM conversations.
 
-### LLM Platforms Building Walled Gardens
+### Walled Gardens
 
-**OpenAI** is testing ads in ChatGPT for free/Go tier users. Internal documents show $1B in "free user monetization" targets for 2026, growing to $25B by 2029. They hired Fidji Simo (ex-Instacart CEO, who scaled that company's ad business) to run applications. Built-in checkout with Shopify, Etsy, Walmart. This will almost certainly be a closed system.
+**OpenAI** is testing ads in ChatGPT for free/Go tier users. Internal targets: $1B in "free user monetization" for 2026, $25B by 2029. Hired Fidji Simo (scaled Instacart's ad business) to run applications. Built-in checkout with Shopify, Etsy, Walmart. Almost certainly a closed system.
 
-**Google** already has ads in AI Overviews and AI Mode. They have the infrastructure and won't need a third party.
+**Google** already has ads in AI Overviews and AI Mode. They don't need a third party.
 
-**Perplexity** tried ads in November 2024, paused accepting new advertisers by October 2025. They generated $20,000 in ad revenue out of $34M total in 2024. The ad sales head departed. They've essentially admitted the ad model doesn't work yet at their scale.
+**Perplexity** tried ads November 2024, paused new advertisers by October 2025. $20,000 in ad revenue out of $34M total in 2024. Ad sales head departed. The ad model doesn't work yet at their scale.
 
-## What Everyone Is Actually Doing
+## Everyone Falls Back to Categories
 
-Here's the thing that ties all of these together: **at the moment an auction needs to clear, every single one of them falls back to categorical targeting.**
+Here's what ties all of these together: **at the moment an auction needs to clear, every one falls back to categorical targeting.**
 
-When PubMatic says they're routing Kontext's AI chatbot inventory through programmatic pipes, what they mean concretely is: someone analyzes the conversation, classifies it into IAB content taxonomy categories (roughly 700 discrete labels like "Sports > Basketball" or "Technology > Computing"), stuffs those categories into an OpenRTB bid request, and sends it to DSPs who bid on categories the same way they've bid on categories for fifteen years.
+"Routing AI chatbot inventory through programmatic pipes" concretely means: analyze the conversation, classify it into ~700 IAB taxonomy labels like "Sports > Basketball" or "Technology > Computing," stuff those into an OpenRTB bid request, send to DSPs who bid on categories the same way they've been bidding for fifteen years.
 
-The continuous embedding — the thing that captures the gradations between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before it enters the auction. The entire signal advantage of embedding-based understanding gets destroyed at the protocol boundary.
+The continuous embedding — the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before entering the auction. The entire signal advantage gets destroyed at the protocol boundary.
 
-## The Protocol Bottleneck
+## The Protocol Problem
 
-The root cause is OpenRTB, the protocol that the $200B+ programmatic advertising market runs on.
+The root cause is OpenRTB, the protocol the $200B+ programmatic market runs on.
 
-OpenRTB is maintained by the IAB Tech Lab. It defines the bid request format — the JSON object that an exchange sends to DSPs when an impression becomes available. The content targeting lives in categorical fields. There is literally no field for an embedding vector. You cannot express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." You cannot express an advertiser's value function as a region in that space. The protocol cannot represent the thing that makes LLM conversations valuable for targeting.
-
-The bid request looks like this:
+The IAB Tech Lab maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't represent the thing that makes LLM conversations valuable.
 
 ```json
 {
@@ -68,23 +64,21 @@ The bid request looks like this:
 }
 ```
 
-That `cat` field — a handful of category labels from a fixed taxonomy — is the totality of what the protocol can express about what the conversation is about.
+That `cat` field is everything the protocol can say about what the conversation is about.
 
-Will OpenRTB be updated? Probably not, for structural reasons. The IAB is a trade body whose members are the existing adtech companies. The spec evolves by committee consensus. Adding an embedding field is technically trivial — it's just a new array in the JSON. But it would break the entire downstream ecosystem. Every DSP has campaign management built around categorical targeting. Every reporting system aggregates by category. Every brand safety tool classifies by category. And the incumbents on the committee would be voting to destroy their own competitive advantage — their optimization moats are built on categorical signals.
+Will OpenRTB get updated? Probably not. The IAB is a trade body whose members are the existing adtech companies. Adding an embedding field is technically trivial — just a new array in the JSON. But it would break every DSP's campaign management, every reporting system, every brand safety tool. The incumbents on the committee would be voting to destroy their own optimization moats.
 
-What's more likely is one of three outcomes:
+Three likely outcomes:
 
-1. **Extension**: The IAB adds an optional `embedding` field as a supplementary signal alongside categories. DSPs ignore it if they want. Embeddings become just another feature in existing optimization, not a new auction paradigm. The power diagram geometry never happens.
+1. **Extension**: Optional `embedding` field alongside categories. DSPs ignore it if they want. Embeddings become just another feature, not a new paradigm.
 
-2. **Parallel spec**: Someone writes a new protocol specifically for AI conversation inventory, coexisting with OpenRTB.
+2. **Parallel spec**: Someone writes a new protocol for AI conversation inventory.
 
-3. **De facto standard**: A dominant player builds an embedding-based system, everyone conforms to their implementation, and the IAB eventually standardizes what already exists.
+3. **De facto standard**: A dominant player builds an embedding-based system, everyone conforms, the IAB eventually standardizes what already exists.
 
-History suggests option 3. Google didn't wait for the IAB to standardize programmatic — they built DoubleClick Ad Exchange and everyone conformed. Header bidding was standardized by Prebid.js after publishers had already adopted it. The protocol follows market power, not the other way around.
+History says option 3. Google didn't wait for the IAB — they built DoubleClick Ad Exchange and everyone conformed. Prebid.js standardized header bidding after publishers had already adopted it. Protocol follows market power, not the other way around.
 
 ## What the Replacement Looks Like
-
-The embedding-based bid request would carry a dense vector alongside standard metadata:
 
 ```json
 {
@@ -97,31 +91,29 @@ The embedding-based bid request would carry a dense vector alongside standard me
 }
 ```
 
-Everything outside the embedding field is basically OpenRTB as-is. Geo, device, time, language — these stay as structured metadata fields. The embedding represents only the semantic content and intent of the conversation. This is the right separation: the embedding captures *what the conversation is about*, the metadata captures *context about the user and session*. Different kinds of information, no reason to force them into the same representation.
+Everything outside the embedding field is basically OpenRTB as-is. The embedding captures *what the conversation is about*. The metadata captures *context about user and session*. Different information, no reason to force it into the same representation.
 
-The actual hard problems in the protocol are:
+The hard problems:
 
-**Embedding alignment.** Different LLM platforms produce different embedding spaces. The protocol needs to define a common space, or a standard mapping between platform-specific spaces. Without this, an advertiser's value function means different things on different platforms, and the cross-platform exchange concept collapses.
+**Embedding alignment.** Different platforms produce different embedding spaces. The protocol needs a common space, or standard mappings between them. Without this, an advertiser's value function means different things on different platforms and cross-platform exchange collapses.
 
-**Value function representation.** How advertisers express what they want. Instead of bidding on categories, they'd specify a center point, a spread, and optionally directional preferences — essentially defining a region they value in embedding space. The simplest version: an isotropic Gaussian `v(x) = b · exp(-||x - c||² / σ²)`. More expressive: anisotropic Gaussians or Gaussian mixtures. The protocol needs to standardize a vocabulary of allowed function shapes.
+**Value functions.** Instead of bidding on categories, advertisers specify a center, spread, and directional preferences — a region in embedding space. Simplest version: isotropic Gaussian `v(x) = b · exp(-||x - c||² / σ²)`. More expressive: anisotropic or mixtures. The protocol needs to standardize what shapes are allowed.
 
-**Auction mechanism.** Winner determination changes from "highest bid on this category" to "evaluate overlapping value functions at this point in embedding space." When value functions are isotropic Gaussians with shared spread, the resulting partition of space is a power diagram — a well-studied geometric structure with clean properties. (I wrote about this in detail in the [previous post](/power-diagrams-ad-auctions).)
+**Auction clearing.** "Highest bid on this category" becomes "evaluate overlapping value functions at this point." For isotropic Gaussians, the result is a [power diagram](/power-diagrams-ad-auctions) with clean properties.
 
-**Latency.** Can you clear a geometric auction in the ~100ms window that programmatic requires? For the isotropic case with spatial indexing, yes — O(log N) winner determination. For mixture-of-Gaussian value functions, the computational cost scales with the number of mixture components, but precomputation helps.
+**Latency.** Can you clear a geometric auction in ~100ms? Isotropic case with spatial indexing: yes, O(log N). Mixtures scale with components, but precomputation helps.
 
 ## What Happens Next
 
-The most likely near-term path:
-
-1. OpenAI launches ads with a proprietary system, probably keyword/category-based initially because that's what their hired adtech people know how to build.
-2. Kontext and ZeroClick continue growing as ad networks for the long tail, each with bespoke publisher integrations.
-3. Someone — possibly Seedtag leveraging their existing embedding infrastructure, possibly a new entrant, possibly one of the startups pivoting — builds the first embedding-native exchange.
-4. That exchange demonstrates a measurable performance advantage (higher CTR, better conversion, lower waste) over categorical targeting in AI conversations.
+1. OpenAI launches ads with a proprietary system, probably keyword/category-based initially because that's what their adtech hires know how to build.
+2. Kontext and ZeroClick keep growing as ad networks for the long tail, each with bespoke integrations.
+3. Someone — possibly Seedtag leveraging existing embedding infrastructure, possibly a new entrant — builds the first embedding-native exchange.
+4. That exchange shows a measurable performance advantage over categorical targeting in AI conversations.
 5. The performance delta pulls in advertiser demand.
-6. The IAB eventually standardizes whatever the winning implementation looks like.
+6. The IAB eventually standardizes whatever won.
 
 The race isn't to build the biggest ad network. It's to define the coordinate system.
 
 ---
 
-*I write about the intersection of mechanism design and AI systems. Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions). If you're working on this problem, I'd like to hear from you — june@june.kim.*
+*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions). If you're working on this problem, I'd like to hear from you — june@june.kim.*
