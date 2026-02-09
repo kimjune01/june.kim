@@ -10,9 +10,9 @@ tags: coding
 
 ---
 
-After writing about power diagrams for ad auctions, I started tracking the companies actually building in this space. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: nobody is building what they need to build.
+After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: nobody is running auctions in embedding space.
 
-Every company — startups, incumbents, LLM platforms — is working around the same bottleneck. They all know LLM conversations encode richer intent signals than keywords. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, every single one collapses the continuous embedding space down to discrete categories and runs a standard auction. The richness gets thrown away at the exact moment it matters most.
+Every company — startups, incumbents, LLM platforms — knows that embeddings encode richer intent signals than keywords ever did. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, every single one collapses the continuous embedding down to discrete categories and runs a standard keyword-style auction. The richness gets thrown away at the exact moment it matters most.
 
 ## The Players
 
@@ -26,7 +26,7 @@ Every company — startups, incumbents, LLM platforms — is working around the 
 
 ### Incumbents
 
-**PubMatic** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." That tells you everything about the incumbent mental model.
+**PubMatic** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." To them, AI chat is just another ad slot — not a fundamentally different kind of inventory.
 
 **Criteo** is repositioning its commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM recommendations. They built an MCP server so LLMs can query their product data during response generation. Business model still undefined.
 
@@ -46,13 +46,13 @@ Here's what ties all of these together: **at the moment an auction needs to clea
 
 "Routing AI chatbot inventory through programmatic pipes" concretely means: analyze the conversation, classify it into ~700 IAB taxonomy labels like "Sports > Basketball" or "Technology > Computing," stuff those into an OpenRTB bid request, send to DSPs who bid on categories the same way they've been bidding for fifteen years.
 
-The continuous embedding — the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before entering the auction. The entire signal advantage gets destroyed at the protocol boundary.
+The continuous embedding — the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before entering the auction. The entire embedding — intent level, specificity, price sensitivity — gets destroyed at the protocol boundary.
 
 ## The Protocol Problem
 
 The root cause is OpenRTB, the protocol the $200B+ programmatic market runs on.
 
-The IAB Tech Lab maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't represent the thing that makes LLM conversations valuable.
+The IAB Tech Lab maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't carry an embedding vector — the thing that actually makes LLM conversation targeting better than keywords.
 
 ```json
 {
