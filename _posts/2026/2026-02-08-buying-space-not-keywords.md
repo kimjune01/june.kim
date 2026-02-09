@@ -10,7 +10,7 @@ In keyword advertising, you buy words. You pick "running shoes" from a list, set
 
 Embedding-based systems don't work this way. Modern language models map every piece of text — every query, every conversation, every page — into a continuous vector space with hundreds or thousands of dimensions. OpenAI's text-embedding-3-large uses 3,072 dimensions. Cohere's embed-v4 uses 1,536. Google's gemini-embedding-001 uses 768. In this space, "best running shoes for flat feet" and "marathon training plan" aren't separate items in a catalog — they're nearby points in a continuous manifold, separated by a measurable distance that captures their semantic similarity.
 
-If you're running an ad auction in this space — using [power diagrams](/power-diagrams-for-ads/) to allocate territory, where each advertiser's score at a point is `log(bid) - distance^2 / reach^2` and the highest score wins — then the advertiser's job is to specify a *region* of this space. Not a keyword. Not a list. A region. And that raises a UX problem that has no analog in the keyword world.
+If you're running an ad auction in this space — using [power diagrams](/power-diagrams-ad-auctions) to allocate territory, where each advertiser's score at a point is `log(bid) - distance^2 / reach^2` and the highest score wins — then the advertiser's job is to specify a *region* of this space. Not a keyword. Not a list. A region. And that raises a UX problem that has no analog in the keyword world.
 
 ## The Dimensionality Wall
 
