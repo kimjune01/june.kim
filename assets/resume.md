@@ -33,7 +33,7 @@ Applied AI Engineer specializing in RAG pipelines, agentic workflows, and LLM-po
 ### YouTube / Google — Software Engineer
 **Jun 2019 — Mar 2022**
 
-- Re-architected the YouTube iOS app's rendering layer (C++ / TypeScript), reducing UI deployment cycles from months to days.
+- Independently contributed to front-end features promoting YouTube Premium subscriptions, using C++ and Objective-C.
 - Directed the launch of a high-visibility Premium sign-up framework, resulting in a 2% lift in conversion rates impacting 50M+ users.
 - Conducted dozens of technical interviews for L3/L4 engineering candidates, helping scale the Music & Premium organization.
 
