@@ -1,8 +1,6 @@
----
-layout: null
----
+User-agent: *
+Allow: /
+Sitemap: https://www.june.kim/sitemap.xml
 
-sitemap: {{ site.baseurl | replace: 'https', 'http' | append: '/sitemap.xml' }}
-
-user-agent: EmailCollector
-disallow: /
+User-agent: EmailCollector
+Disallow: /

@@ -3,33 +3,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 {% if page.title %}
-	<title>{{ page.title }}</title>
-	<meta property="og:title" content="{{ page.title }}" />
+	<title>{{ page.title }} | {{ site.title }}</title>
 {% else %}
 	<title>{{ site.title }}</title>
 {% endif %}
 
-<meta property="og:type" content="website" />
+<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
-{% if page.url %}
-	<meta property="og:url" content="{{ site.weburl }}{{ page.url }}" />
+<link rel="canonical" href="{{ site.weburl }}{{ page.url }}">
+
+{% if page.path contains '_posts' %}
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
+<meta property="article:author" content="{{ site.author_name }}" />
+{% for tag in page.tags %}
+<meta property="article:tag" content="{{ tag }}" />
+{% endfor %}
+{% else %}
+<meta property="og:type" content="website" />
 {% endif %}
+
+<meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
+<meta property="og:url" content="{{ site.weburl }}{{ page.url }}" />
+<meta property="og:site_name" content="{{ site.title }}" />
+<meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}" />
 
 {% if page.image %}
 	<meta property="og:image" content="{{ site.weburl }}/{{ page.image }}" />
+	<meta name="twitter:card" content="summary_large_image" />
 {% else %}
 	<meta property="og:image" content="{{ site.weburl }}/assets/default-icon.png" />
+	<meta name="twitter:card" content="summary" />
 {% endif %}
 
-<meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@{{ site.twitter_username }}" />
 <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
 
-<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
-
 {% if site.google_verify %}
 	<meta name="google-site-verification" content="{{ site.google_verify }}">
+{% endif %}
+
+{% if page.path contains '_posts' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.excerpt | strip_html | strip_newlines | truncate: 200 | jsonify }},
+  "url": "{{ site.weburl }}{{ page.url }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.date | date_to_xmlschema }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.author_name }}",
+    "url": "{{ site.weburl }}"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "{{ site.author_name }}",
+    "url": "{{ site.weburl }}"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ site.weburl }}{{ page.url }}"
+  }{% if page.image %},
+  "image": "{{ site.weburl }}/{{ page.image }}"{% endif %}{% if page.tags.size > 0 %},
+  "keywords": {{ page.tags | join: ', ' | jsonify }}{% endif %}
+}
+</script>
 {% endif %}
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8688229960293614" crossorigin="anonymous"></script>
@@ -41,7 +83,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="//code.cdn.mozilla.net/fonts/fira.css">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/core.css">
-<link rel="canonical" href="{{ page.url | prepend: site.baseurl }}">
 <link rel="alternate" type="application/rss+xml" href="{{ site.weburl }}/feed.xml">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 {% if jekyll.environment == 'production' %}
@@ -59,4 +100,3 @@
 {% endif %}
 
 <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="44344d36-d395-4737-8eec-720a5bc86c4d";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-

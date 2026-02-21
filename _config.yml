@@ -1,6 +1,7 @@
 # Site Info
 title:              "June Kim"
 description:        "Thoughts on software, life, and everything"
+url:                https://www.june.kim
 google_verify:       # Put your Google Verification here
 google_analytics:    # Put your Google Analytics code
 
@@ -8,6 +9,7 @@ google_analytics:    # Put your Google Analytics code
 author_name:        "June Kim"
 author_email:       june@june.kim
 author_gravatar:    a162fa4928ebc00907f6cc47727cbb6c # Gravatar md5 hash
+twitter_username:    kimjune01
 
 social:
   facebook: kimjune
@@ -17,6 +19,7 @@ social:
 
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 # Github Pages
 # https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll
