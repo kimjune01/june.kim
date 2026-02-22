@@ -21,6 +21,20 @@
     line-height: 100px;
     border: 2px solid #fff;
     box-sizing: border-box;
+    position: relative;
+    overflow: visible;
+    .open-to-work-ring {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      overflow: visible;
+      animation: fadeInRing 0.7s both;
+      -webkit-animation: fadeInRing 0.7s both;
+    }
     &:hover,
     &:focus {
       background: #fff;
@@ -69,6 +83,23 @@
     }
   }
 }
+
+@keyframes fadeInRing {
+     0% {
+       opacity: 0;
+     }
+     100% {
+       opacity: 1;
+     }
+   }
+   @-webkit-keyframes fadeInRing {
+     0% {
+       opacity: 0;
+     }
+     100% {
+       opacity: 1;
+     }
+   }
 
 @keyframes bounce {
      100% {
