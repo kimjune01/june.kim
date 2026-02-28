@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Adtech: It Costs Money to Move"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude worked through the mechanism design and drafted prose.*
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 
@@ -126,4 +126,4 @@ The mechanism is: VCG for pricing, power diagrams for allocation, relocation fee
 
 ---
 
-*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles). If you're working on this problem, I'd like to hear from you — june@june.kim.*
+*Part of the [adtech](/adtech) series. june@june.kim*

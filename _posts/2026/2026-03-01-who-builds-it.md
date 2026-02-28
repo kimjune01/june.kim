@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Adtech: Who Builds It?"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and sourced the evidence; Claude verified claims and drafted prose.*
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees) · [An Open Letter to CloudX](/letter-to-cloudx) · [The Convergence](/the-convergence) · [The Keyword Tax](/keyword-tax) · [The Relocation Fee Dividend](/relocation-fee-dividend) · Who Builds It?*
+*Part of the [adtech](/adtech) series.*
 
 ---
 

@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Adtech: An Open Letter to CloudX"
-tags: coding
+tags: adtech
 ---
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 
@@ -97,4 +97,4 @@ If this is wrong — if the extension breaks something I'm not seeing, or the ma
 
 ---
 
-*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees). Written with help from Claude Opus 4.6.*
+*Part of the [adtech](/adtech) series. Written with help from Claude Opus 4.6.*

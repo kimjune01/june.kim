@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Adtech: The Relocation Fee Dividend"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees) · [An Open Letter to CloudX](/letter-to-cloudx)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 

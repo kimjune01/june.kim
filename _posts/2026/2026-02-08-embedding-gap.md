@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Adtech: The $200 Billion Bottleneck"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude surveyed the landscape, analyzed the protocol gap, and drafted prose.*
 
-*A follow-up to [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 
@@ -116,4 +116,4 @@ The race isn't to build the biggest ad network. It's to define the coordinate sy
 
 ---
 
-*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions). If you're working on this problem, I'd like to hear from you — june@june.kim.*
+*Part of the [adtech](/adtech) series. june@june.kim*

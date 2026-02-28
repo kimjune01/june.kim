@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Adtech: The Convergence"
-tags: coding
+tags: adtech
 ---
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees) · [An Open Letter to CloudX](/letter-to-cloudx)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 
@@ -95,4 +95,4 @@ Someone needs to assemble the pieces. The [open letter](/letter-to-cloudx) makes
 
 ---
 
-*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees) · [An Open Letter to CloudX](/letter-to-cloudx). Written with help from Claude Opus 4.6.*
+*Part of the [adtech](/adtech) series. Written with help from Claude Opus 4.6.*

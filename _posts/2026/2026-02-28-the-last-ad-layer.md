@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Last Ad Layer"
-tags: coding
+tags: adtech
 ---
 
 The deal was simple. Free access to the world's information in exchange for your attention. You'd see ads. The ads would be relevant. Publishers would get paid. Everyone wins.
@@ -118,4 +118,4 @@ If you're building an ad exchange, a chatbot platform, or setting standards for 
 
 ---
 
-*The technical argument: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap) · [Keywords Are Tiny Circles](/keywords-are-tiny-circles) · [It Costs Money to Move](/relocation-fees) · [The Relocation Fee Dividend](/relocation-fee-dividend) · [An Open Letter to CloudX](/letter-to-cloudx) · [The Convergence](/the-convergence) · [The Keyword Tax](/keyword-tax) · [Who Builds It?](/who-builds-it). Written with help from Claude Opus 4.6.*
+*Part of the [adtech](/adtech) series. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/main/cmd/simulate). Written with help from Claude Opus 4.6.*

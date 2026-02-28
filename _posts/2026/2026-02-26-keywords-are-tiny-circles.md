@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Adtech: Keywords Are Tiny Circles"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose and worked through the mechanics.*
 
-*Part of a series: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap)*
+*Part of the [adtech](/adtech) series.*
 
 ---
 
@@ -127,4 +127,4 @@ Keywords are tiny circles. The system that runs tiny circles already runs big ci
 
 ---
 
-*Previously: [Power Diagrams for Ad Auctions](/power-diagrams-ad-auctions) · [Buying Space, Not Keywords](/buying-space-not-keywords) · [The $200 Billion Bottleneck](/embedding-gap). If you're working on this problem, I'd like to hear from you — june@june.kim.*
+*Part of the [adtech](/adtech) series. june@june.kim*

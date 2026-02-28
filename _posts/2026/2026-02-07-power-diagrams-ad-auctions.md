@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Adtech: Power Diagrams for Ad Auctions"
-tags: coding
+tags: adtech
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude wrote proofs, ran experiments, built the prototype, and drafted prose. Idea to finished deliverables: one afternoon.*
