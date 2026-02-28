@@ -34,33 +34,25 @@ The infrastructure to make this work is an auction that can operate at embedding
 
 The case I want to make is narrow: your existing auction infrastructure can support embedding-space targeting with a few optional parameters and zero regressions for existing participants.
 
-Today a bid has a keyword (or category) and a price. The extension adds one required parameter and two optional fields. A keyword bid adds only `sigma`:
+Today a bid has a keyword (or category) and a price. The extension adds three optional fields:
 
 ```json
 {
   "keywords": ["running shoes"],
   "cat": ["IAB17-18"],
-  "sigma": 0.0
-}
-```
-
-A vector bid adds `embedding` and `embedding_model` for DSPs that want to target concepts without keywords:
-
-```json
-{
+  "sigma": 0.0,
   "embedding": [0.23, -0.41, 0.87, ...],
-  "embedding_model": "nomic/nomic-embed-text-v1.5",
-  "sigma": 0.15
+  "embedding_model": "nomic/nomic-embed-text-v1.5"
 }
 ```
+
+All three are optional. A bid that omits all of them behaves identically to today — keyword match, σ = 0.
 
 **`sigma`** controls how far a bid's influence extends from its center point. At σ = 0, the bid wins only at exact match — identical to a keyword bid. The scoring function is `log(bid) - distance² / σ²`. Every existing keyword bid is a bid with σ = 0. No regression. The [math guarantees it](/keywords-are-tiny-circles) — tight-radius bids dominate at their center point because the σ² denominator concentrates all competitive power there.
 
-For keyword bids, the exchange embeds the keywords into coordinates using an open-weight model. Because the weights are public, any participant can verify the embedding independently — the exchange doesn't need to run it inside the enclave. The auction is what needs attestation.
+**`embedding`** and **`embedding_model`** let DSPs specify a position directly for concepts that aren't keywords. A vector in one model's space means something different in another's, so the model field is required when a vector is present. If omitted, the exchange embeds the keywords into coordinates using an open-weight model. Because the weights are public, any participant can verify the embedding independently — the exchange doesn't need to run it inside the enclave. The auction is what needs attestation.
 
-For vector bids, **`embedding_model`** declares which coordinate system the vector lives in — a vector in one model's space means something different in another's.
-
-DSPs that don't understand embeddings keep bidding on `keywords` and `cat` with no `sigma`. The exchange defaults σ = 0 and embeds the keywords. DSPs that understand the geometry bid on regions — via keywords with σ > 0, or via raw vectors. Both enter one auction. One code path. Meta's existing campaigns see identical behavior. New embedding-aware demand is purely additive.
+DSPs that don't understand embeddings keep bidding on `keywords` and `cat`. Nothing changes for them. DSPs that understand the geometry add `sigma`, or `embedding` and `embedding_model`, or both. All enter one auction. One code path. Meta's existing campaigns see identical behavior. New embedding-aware demand is purely additive.
 
 ## Why This Is Different in Your Exchange
 
