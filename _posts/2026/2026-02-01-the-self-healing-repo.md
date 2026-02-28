@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Self-healing Repo
+title: Self-healing Repo
 tags: coding
 ---
 
