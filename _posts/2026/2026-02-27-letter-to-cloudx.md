@@ -36,12 +36,11 @@ The case I want to make is narrow: your existing auction infrastructure can supp
 
 Today a bid has a keyword (or category) and a price. The extension adds three optional fields:
 
-```json
+```js
 {
-  "keywords": ["running shoes"],
+  "keywords": [],
   "cat": ["IAB17-18"],
-  "sigma": 0.0,
-  "embedding": [0.23, -0.41, 0.87, ...],
+  "embedding": [0.23, -0.41, 0.87, ...], // "flat-footed runner training for first half-marathon"
   "embedding_model": "nomic/nomic-embed-text-v1.5"
 }
 ```
