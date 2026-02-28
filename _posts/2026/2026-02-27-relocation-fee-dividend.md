@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: The Relocation Fee Dividend"
+title: "Relocation Fee Dividend"
 tags: adtech
 ---
 

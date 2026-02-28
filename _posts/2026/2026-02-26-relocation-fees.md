@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: It Costs Money to Move"
+title: "It Costs Money to Move"
 tags: adtech
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: The Convergence"
+title: "Convergence"
 tags: adtech
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: You Were Right to Kill Ads"
+title: "You Were Right to Kill Ads"
 tags: adtech
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: Who Builds It?"
+title: "Who Builds It?"
 tags: adtech
 ---
 

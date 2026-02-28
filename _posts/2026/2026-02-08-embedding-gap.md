@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: The $200 Billion Bottleneck"
+title: "$200 Billion Bottleneck"
 tags: adtech
 ---
 

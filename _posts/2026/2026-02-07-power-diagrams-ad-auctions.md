@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: Power Diagrams for Ad Auctions"
+title: "Power Diagrams for Ad Auctions"
 tags: adtech
 ---
 

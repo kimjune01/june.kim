@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: An Open Letter to CloudX"
+title: "An Open Letter to CloudX"
 tags: adtech
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: Keywords Are Tiny Circles"
+title: "Keywords Are Tiny Circles"
 tags: adtech
 ---
 

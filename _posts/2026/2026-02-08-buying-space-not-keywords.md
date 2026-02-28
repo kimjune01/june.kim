@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: Buying Space, Not Keywords"
+title: "Buying Space, Not Keywords"
 tags: adtech
 ---
 

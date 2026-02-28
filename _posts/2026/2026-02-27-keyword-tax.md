@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adtech: The Keyword Tax"
+title: "Keyword Tax"
 tags: adtech
 ---
 
