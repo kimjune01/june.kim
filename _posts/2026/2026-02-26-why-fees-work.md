@@ -30,7 +30,7 @@ Irmen and Thisse answered this in 1998 with the definitive n-dimensional result.
 
 This maps directly onto embedding space. A 384-dimensional embedding has perhaps 10-50 effective dimensions — the rest are redundant. Advertisers differentiate on the single dimension that matters most for their niche — "climbing" vs "pelvic floor" — and crowd together on everything else. The theory predicts partial collapse, not total separation.
 
-There's a deeper problem. Beyer et al. (1999) proved that in high-dimensional spaces, all pairwise distances converge — the ratio of farthest to nearest distance approaches 1. In 384 dimensions, the distance between any two points becomes nearly the same. The entire distance range in our simulation compresses into a narrow band: dist² from 0.29 to 1.32 across 900 advertiser-query pairs.
+There's a deeper problem. Beyer et al. (1999) proved that in high-dimensional spaces, all pairwise distances converge — the ratio of farthest to nearest distance approaches 1. In 384 dimensions, the distance between any two points becomes nearly the same. The entire distance range in our simulation compresses into a narrow band: dist² from 0.13 to 1.29 across all advertiser-query pairs.
 
 When distances concentrate, the gradient that drives differentiation weakens. An advertiser can't gain much local monopoly power by moving to an empty region because no region is meaningfully farther from competitors than any other. The centripetal pull toward demand density dominates because it's the only gradient with a clear signal.
 
@@ -38,7 +38,7 @@ The embeddings still encode meaningful differences — BGE-small distinguishes "
 
 ## The Simulation: Drift Is Universal
 
-We tested this with 25 advertisers across 5 clusters at controlled tightness levels, competing for 55 queries in 384-dimensional BGE-small-en-v1.5 embedding space. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/76923f3/cmd/simulate).
+We tested this with 25 advertisers across 5 clusters at controlled tightness levels, competing for 55 queries in 384-dimensional BGE-small-en-v1.5 embedding space. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/v3.5.1/cmd/simulate).
 
 Five tightness levels, from nearly identical to completely unrelated:
 
@@ -60,15 +60,29 @@ Without fees (Cell C, λ=0), centripetal fraction is positive everywhere:
 
 | Cluster | Density | Centripetal fraction |
 |---|---|---|
-| Very tight | 0.974 | 0.281 |
+| Very tight | 0.974 | 0.283 |
 | Tight | 0.895 | 0.569 |
-| Medium | 0.830 | 0.550 |
-| Loose | 0.616 | 0.801 |
-| Very loose | 0.527 | 0.736 |
+| Medium | 0.830 | 0.548 |
+| Loose | 0.616 | 0.802 |
+| Very loose | 0.527 | 0.735 |
 
 Every cluster shows Hotelling drift. Advertisers move toward their competitors, not away. The direction is centripetal regardless of how tight or loose the cluster is. This is the strongest result across all versions of the simulation.
 
-The loose clusters show the highest centripetal fraction (0.80) despite having the lowest density. This isn't paradoxical — loose-cluster advertisers start far from the centroid, so the demand center exerts a stronger pull. In tight clusters, everyone is already near the center, and the directional signal is noisier. The drift magnitude is similar across clusters (0.47–0.60 in L2 distance). The direction is consistently centripetal.
+The loose clusters show the highest centripetal fraction (0.80) despite having the lowest density. This isn't paradoxical — loose-cluster advertisers start far from the centroid, so the demand center exerts a stronger pull. In tight clusters, everyone is already near the center, and the directional signal is noisier. The drift magnitude is similar across clusters (0.48–0.58 in L2 distance). The direction is consistently centripetal.
+
+### Choosing λ
+
+We swept λ across four orders of magnitude to find the value that maximizes value efficiency:
+
+| λ | Value efficiency | Avg drift | Converged |
+|---|---|---|---|
+| 500 | 0.673 | 0.394 | 41/50 |
+| 1000 | 0.676 | 0.236 | 39/50 |
+| 2500 | 0.683 | 0.088 | 41/50 |
+| 5000 | 0.683 | 0.044 | 42/50 |
+| 10000 | 0.682 | 0.021 | 41/50 |
+
+Value efficiency plateaus at λ=5000. Higher fees suppress drift further but don't improve match quality — the remaining drift at λ=5000 is noise, not strategic repositioning.
 
 ### Fees prevent drift and improve surplus
 
@@ -76,33 +90,32 @@ Four conditions: Cell A (keywords), Cell C (embeddings, no fees), Cell D (embedd
 
 | Metric | Cell A (kw) | Cell C (emb, λ=0) | Cell D (λ=5k) | Cell E (adaptive) |
 |---|---|---|---|---|
-| Value efficiency | 0.746 | 0.683 | 0.696 | 0.696 |
-| Avg surplus/round/adv | 0.888 | 1.299 | 1.481 | 1.487 |
-| Avg drift | 0.000 | 0.549 | 0.023 | 0.023 |
+| Value efficiency | 0.747 | 0.669 | 0.683 | 0.681 |
+| Avg surplus/round/adv | 1.501 | 2.155 | 2.416 | 2.418 |
 
-*50 trials per cell. Welch's t-test: A↔C p<0.001, C↔D p<0.001, D↔E ns.*
+*50 trials per cell, 300 rounds. Welch's t-test: A↔C p<0.001, A↔D p<0.001, C↔D p<0.001, D↔E ns.*
 
-Embeddings without fees already beat keywords on surplus (1.299 vs 0.888, p<0.001). Adding fees widens the gap (1.481 vs 0.888, p<0.001). The fee reduces drift from 0.549 to 0.023 — advertisers stay near their committed positions.
+Embeddings without fees already beat keywords on surplus (2.155 vs 1.501, p<0.001). Adding fees widens the gap (2.416 vs 1.501, p<0.001).
 
-Keywords score higher on value efficiency (0.746 vs 0.696) — but this is survivorship bias. The metric measures match quality among whoever can afford to compete. In keyword bins, specialists who can't outbid the generalist on "physical therapy" are already priced out. The auction looks efficient because the losers are invisible. Embedding auctions include more competitors per query, which lowers the metric but raises the number of specialists who can participate at all. The surplus numbers — where embeddings win by 67% — capture what value efficiency misses: the market is larger when specialists can afford to be in it.
+Keywords score higher on value efficiency (0.747 vs 0.683) — but this is survivorship bias. The metric measures match quality among whoever can afford to compete. In keyword bins, specialists who can't outbid the generalist on "physical therapy" are already priced out. The auction looks efficient because the losers are invisible. Embedding auctions include more competitors per query, which lowers the metric but raises the number of specialists who can participate at all. The surplus numbers — where embeddings with fees beat keywords by 61% — capture what value efficiency misses: the market is larger when specialists can afford to be in it.
 
 ### The density story doesn't hold up
 
-In an earlier version (v3.5) with only 3 clusters, we found a striking correlation: tighter clusters benefited more from fees (Pearson r=0.87). The story was elegant — fees are a Pigouvian tax on Hotelling drift, and their value scales with competitive density.
+In an earlier version with only 3 clusters, we found a striking correlation: tighter clusters benefited more from fees (Pearson r=0.87). The story was elegant — fees are a Pigouvian tax on Hotelling drift, and their value scales with competitive density.
 
 It was wrong. At 5 clusters, the correlation collapses to r=0.13.
 
 | Cluster | Density | Surplus gain from fees (D-C) |
 |---|---|---|
 | Very tight | 0.974 | -0.031 |
-| Tight | 0.895 | +0.527 |
-| Medium | 0.830 | +0.153 |
-| Loose | 0.616 | +0.147 |
-| Very loose | 0.527 | +0.112 |
+| Tight | 0.895 | +0.777 |
+| Medium | 0.830 | +0.179 |
+| Loose | 0.616 | +0.203 |
+| Very loose | 0.527 | +0.178 |
 
-The very tight cluster (yoga studios, cos 0.974) shows *negative* surplus from fees. The tight cluster benefits most. There's no monotonic relationship. The r=0.87 at n=3 was overfitting noise.
+The very tight cluster (yoga studios, cos 0.974) shows *negative* surplus from fees. The tight cluster benefits most (+0.777). There's no monotonic relationship. The r=0.87 at n=3 was overfitting noise.
 
-Fees improve surplus uniformly, not proportionally to density. The mechanism is blunter than the theory suggested. This means a flat fee works — and density-adaptive fees (Cell E) provide zero measurable benefit over uniform fees (all D↔E comparisons p > 0.88).
+Fees improve surplus uniformly, not proportionally to density. The mechanism is blunter than the theory suggested. This means a flat fee works — and density-adaptive fees (Cell E) provide zero measurable benefit over uniform fees (all D↔E comparisons p > 0.82).
 
 ## Why This Matters: The Convergence Trap
 
@@ -115,9 +128,9 @@ The simulation demonstrates a specific failure mode. Without fees:
 
 This is the convergence trap. The embedding space has the *capacity* for differentiation — it can tell the climbing PT from the sports PT. But the competitive dynamics on top of that space erase the differentiation over time. You end up with coordinates instead of keywords and the same crowded auction.
 
-The v3.4 results make this concrete. In keywords, specialists lose 3.5x more per round than generalists (-0.807 vs -0.233). That's the [keyword tax](/keyword-tax) — the climbing PT paying to compete on "pelvic floor exercises after C-section." Embeddings without fees improve this directionally, but without fees, specialist surplus doesn't reach significance.
+The per-cluster data makes this concrete. Without fees, the medium-density cluster (fitness coaches, cos 0.830) earns surplus of just 0.156 per round — keywords beat it at 0.758. The loose cluster is worse: 0.241 vs 1.930 for keywords. Embeddings without fees can actually *lose* to keywords in clusters where the demand gradient is strong enough to pull everyone toward the same queries. That's the [keyword tax](/keyword-tax) in reverse — the embedding space has the capacity for differentiation but the dynamics erase it.
 
-With fees, specialist surplus goes from **-0.695 to +0.021** (p<0.001). That sign change is the whole story. Specialists go from losing money every round to breaking even. The climbing PT stops subsidizing auctions she can't win and starts earning on the queries where she's the best match. Win diversity climbs to 0.876. The embedding space preserves the differentiation it was designed to provide — but only because the fee makes drifting toward competitors more expensive than staying put.
+With fees, every cluster improves. The tight cluster goes from 4.512 to 5.289. The medium from 0.156 to 0.335. The loose from 0.241 to 0.443. Fees don't just prevent drift — they make embedding auctions worth running in clusters where the no-fee version was worse than keywords. The embedding space preserves the differentiation it was designed to provide — but only because the fee makes drifting toward competitors more expensive than staying put.
 
 ## The Reinforcement Mechanism
 
@@ -151,7 +164,7 @@ Without these penalties, every app would optimize its metadata for the same popu
 
 The simulation tested whether fees should scale with local competitive density — higher fees in crowded niches, lower fees in sparse ones. The answer is no.
 
-Density-adaptive fees (Cell E) provided zero measurable benefit over uniform fees (Cell D) across all 5 clusters (all p > 0.88). The fee works because it prevents drift everywhere, not because it fine-tunes how much drift to allow per market. A single λ works equally well whether the cluster is yoga studios at cosine 0.97 or unrelated tradespeople at cosine 0.53.
+Density-adaptive fees (Cell E) provided zero measurable benefit over uniform fees (Cell D) across all 5 clusters (all p > 0.82). The fee works because it prevents drift everywhere, not because it fine-tunes how much drift to allow per market. A single λ works equally well whether the cluster is yoga studios at cosine 0.97 or unrelated tradespeople at cosine 0.53.
 
 This simplifies the design. The exchange doesn't need to measure competitive density, classify market structure, or calibrate per-niche fee schedules. One parameter. One fee. Applied uniformly. Enforced in the [TEE-attested auction code](/relocation-fees) where no exchange can waive it for preferred partners or inflate it to suppress competitors.
 
@@ -171,7 +184,7 @@ This is the business model for an embedding-space exchange. Not take rates on cl
 
 ## What Holds Up
 
-Across five simulation versions, two findings are robust:
+Across six simulation versions, two findings are robust:
 
 1. **Hotelling drift is universal.** Centripetal fraction is positive in every cluster tested, at every density level, in every version. Advertisers in embedding space drift toward competitors. The direction is always centripetal. The mechanism is the same one Hotelling described in 1929, operating in a space he couldn't have imagined.
 
