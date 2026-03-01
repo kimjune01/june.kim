@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "What Makes It Work"
+title: "Synthetic Friction"
 tags: adtech
 ---
 
