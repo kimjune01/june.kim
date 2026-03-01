@@ -104,7 +104,7 @@ The platforms that move first define the architecture. The platforms that wait a
 
 An open, attested exchange is the alternative to both. But it only works if a chatbot platform provides the supply. The exchange can't auction inventory it doesn't have.
 
-The mechanism is [described](/power-diagrams-ad-auctions). The trust infrastructure [exists](https://github.com/cloudx-io/openauction). The [simulation](/keyword-tax) shows the economics work. The sealed auction architecture preserves user trust.
+The mechanism is [described](/power-diagrams-ad-auctions). The trust infrastructure [exists](https://github.com/cloudx-io/openauction). The [simulation](/keyword-tax) shows the economics work. The sealed auction architecture preserves user trust. And if the user [asks first](/ask-first), nobody sees an ad they didn't request.
 
 Someone has to plug in first.
 
