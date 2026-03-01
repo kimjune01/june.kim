@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "You Were Right to Kill Ads"
+title: "Perplexity Was Right to Kill Ads"
 tags: adtech
 ---
 
