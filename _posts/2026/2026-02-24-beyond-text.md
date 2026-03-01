@@ -58,7 +58,7 @@ The [trust chain](/the-last-ad-layer) has three links. Each holds for multimodal
 
 **Link 1: Verifiable embeddings.** Every model listed above is open-weight. Anyone can embed the same image and verify the vector — same property as text embeddings in the rest of the series.
 
-**Link 2: Verifiable auction.** The TEE enclave receives an embedding vector and runs the scoring function. It doesn't care what produced the vector. The attestation proves the same code ran regardless of input modality. The [sealed auction](/you-were-right-to-kill-ads) works identically. And for public content — images, videos, podcast episodes — anyone can re-embed the input after the fact to verify, which is harder with ephemeral chatbot queries.
+**Link 2: Verifiable auction.** The TEE enclave receives an embedding vector and runs the scoring function. It doesn't care what produced the vector. The attestation proves the same code ran regardless of input modality. The [sealed auction](/perplexity-was-right-to-kill-ads) works identically. And for public content — images, videos, podcast episodes — anyone can re-embed the input after the fact to verify, which is harder with ephemeral chatbot queries.
 
 **Link 3: Presentation.** The third link adapts. Visual context gets visual suggestions — a relevant service card alongside a pinned image. Audio context gets audio-appropriate presentation — a brief mention between podcast segments. The first two links guarantee honest matching; the third determines whether the user experiences it as help.
 
