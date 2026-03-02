@@ -12,17 +12,15 @@ tags: vector-space
 
 The question isn't how to make platforms behave. It's how to set up material conditions such that their greedy behavior is aligned with ours.
 
-This is mechanism design. Not ethics. Not regulation. Not hoping that companies will be good. Designing a game where the selfish move is the fair move.
+This is mechanism design — designing a game where the selfish move is the fair move.
 
 ## Three Kinds of Greed
 
-**Google: low resolution, misaligned.** Gemini [admitted](https://doc.searls.com/2026/02/16/where-are-we/) it no longer functions as a librarian — it's a "helpful assistant" that ignores what it considers "stale" or "uninteresting" and favors what it's paid to pitch. Google's ad revenue is [$265 billion annually](https://abc.xyz/assets/77/e1/69d1fbc74c26b6b4813d14b7b501/2025q4-alphabet-10k.pdf). Every design choice that increases time-on-platform increases revenue. Every link that sends you elsewhere is lost monetization. The incentive is to be the last interface between you and everything. Google's greed is perfectly aligned — with Google.
+**Google: low resolution, misaligned.** [$265 billion in annual ad revenue](https://abc.xyz/assets/77/e1/69d1fbc74c26b6b4813d14b7b501/2025q4-alphabet-10k.pdf). Every design choice that increases time-on-platform increases revenue. Every link that sends you elsewhere is lost monetization. Google's greed is perfectly aligned — with Google.
 
-**Meta: high resolution, misaligned.** Meta proved that precision pays. Their behavioral targeting builds a richer model of you than any single query can — interests, demographics, purchase history, social graph, engagement patterns across years of activity. This data is genuinely more informative than a single embedding of what you typed into a chatbot. Higher CTR, higher return on ad spend, advertisers spend more. Meta demonstrated that resolution is revenue. But their resolution comes from surveillance — watching everything you do to build a profile you never consented to. The precision is real. The mechanism is extractive.
+**Meta: high resolution, misaligned.** Behavioral targeting builds a richer model of you than any single query can — interests, demographics, purchase history, social graph, years of activity. Resolution is revenue. But their resolution comes from surveillance. The precision is real. The mechanism is extractive.
 
-**Perplexity: high trust, broke.** Perplexity [killed ads](https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026. Total ad revenue: [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). Their CEO's reasoning: *a user needs to believe this is the best possible answer.* First-party ads destroyed that belief. Correct diagnosis, wrong conclusion. The conflict was structural — the platform selecting ads corrupts the answers. But they concluded all ads are incompatible, when the problem was the architecture, not the advertising.
-
-Three companies, three failure modes. Google extracts at low resolution. Meta extracts at high resolution. Perplexity opted out of extraction and gave up the revenue.
+**Perplexity: high trust, broke.** [Killed ads](https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026. Total ad revenue: [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). First-party ads destroyed user trust. Correct diagnosis, wrong conclusion — the problem was the architecture, not the advertising.
 
 ## Why Regulation Can't Fix This
 
@@ -34,7 +32,7 @@ If the greedy move is the extractive move, regulation is whack-a-mole. The game 
 
 ## Aligned by Construction
 
-An embedding auction aligns greed differently. Not by restricting what platforms can do, but by making the profitable move the fair move.
+An embedding auction aligns greed differently — by making the profitable move the fair move.
 
 **For the exchange:** Revenue comes from clearing volume — more matches, more auctions, more revenue. Unlike keyword auctions, where revenue maximizes by cramming everyone into the same bin and driving up bids, embedding auctions [generate more total surplus](/keyword-tax) when specialists spread out to their niches. The exchange earns more when matches are better.
 
@@ -46,13 +44,9 @@ An embedding auction aligns greed differently. Not by restricting what platforms
 
 ## The Resolution Tradeoff
 
-Meta's insight was correct: resolution is revenue. The more precisely you can match a person to an ad, the more everyone earns. That insight doesn't go away.
+Meta's insight was correct: resolution is revenue. Embeddings trade off on a different axis — shallower on the individual, but operating on declared intent rather than inferred behavior. A single query carries less information than Meta's full profile, but it carries the most important information: what this person wants, right now, in their own words.
 
-Embeddings trade off on a different axis. Meta's resolution is deep but extractive — built on surveillance, owned by the platform, opaque to the user. Embedding resolution is shallower on the individual but operates on declared intent rather than inferred behavior. A single query carries less information than Meta's full profile. But it carries the most important information: what this person wants, right now, in their own words.
-
-The bet is that intent-level resolution is sufficient to clear a market efficiently — that you don't need to know someone's purchase history and social graph to connect them to the right plumber. The [Plumber Test](/the-plumber-test) is the concrete version of this argument: "sewage backup residential basement Bloomington" contains enough signal to match the right specialist, even without knowing the customer's age, income, or browsing history.
-
-Whether embeddings can match Meta's raw targeting precision is an open question. What's not open is whether they can beat keywords — they can, by construction, because keywords are a [special case](/keywords-are-tiny-circles) of embeddings with zero radius.
+The [Plumber Test](/the-plumber-test) is the concrete version: "sewage backup residential basement Bloomington" contains enough signal to match the right specialist without knowing the customer's age, income, or browsing history. Whether embeddings can match Meta's raw precision is open. Whether they beat keywords is not — keywords are a [special case](/keywords-are-tiny-circles) of embeddings with zero radius.
 
 ## The Profit Motive
 
@@ -60,7 +54,7 @@ Intentcasting — where people declare what they need and let the market come to
 
 The embedding auction is the business model that makes intentcasting viable. An exchange earns on every matched query. A chatbot monetizes without compromising trust. An advertiser converts at higher rates and lower cost. Perplexity gets to keep its product integrity *and* fund inference.
 
-Intentcasting stalled because there was no protocol that made it profitable for every participant simultaneously. The embedding auction is that protocol — not because it asks anyone to be altruistic, but because it makes the greedy move and the right move the same move.
+Intentcasting stalled because there was no protocol that made it profitable for every participant simultaneously. The embedding auction is that protocol.
 
 ---
 

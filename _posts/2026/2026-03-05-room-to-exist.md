@@ -10,11 +10,7 @@ tags: vector-space
 
 ---
 
-Keywords are a bottleneck. Not metaphorically — structurally. Every advertiser who does a version of the same thing competes in the same bin. A dozen auto shops bid on "mechanic near me." The auction can't distinguish the BMW transmission specialist from the classic car restorer from the hybrid battery shop. They all pay the same inflated price for the same undifferentiated slot.
-
-The result is predictable. The biggest bidder wins. The [keyword tax](/keyword-tax) showed this quantitatively: specialists lose 3.5x more per round than generalists in keyword auctions (-0.807 vs -0.233). Small shops with narrow expertise subsidize the auction with money they'll never earn back, because the bin forces them to compete on queries they'll never convert.
-
-This is how market power concentrates through ad infrastructure — not through conspiracy, but through compression.
+Keywords are a bottleneck — structurally. A dozen auto shops bid on "mechanic near me." The auction can't distinguish the BMW transmission specialist from the classic car restorer from the hybrid battery shop. The [keyword tax](/keyword-tax) showed this quantitatively: specialists lose 3.5x more per round than generalists (-0.807 vs -0.233). Small shops subsidize the auction with money they'll never earn back, competing on queries they'll never convert.
 
 ## The Bottleneck
 
@@ -30,7 +26,7 @@ This isn't a failure of Google's implementation. It's a property of discrete cat
 
 Embedding space is continuous. There are no bins. The vintage Porsche specialist positions at the point in high-dimensional space that represents exactly what he does. The hybrid battery shop positions somewhere else entirely. They don't compete because they aren't close.
 
-When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the engine sounds like it's knocking at high RPM," that query lands in embedding space near the air-cooled Porsche specialist — not near the hybrid shop, not near Midas. The [scoring function](/power-diagrams-ad-auctions) is `score = log(bid) - distance² / σ²`. Proximity dominates. The specialist wins not by outbidding, but by being closer to the problem he actually solves.
+When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the engine sounds like it's knocking at high RPM," that query lands in embedding space near the air-cooled Porsche specialist — not near the hybrid shop, not near Midas. The [scoring function](/power-diagrams-ad-auctions) is `score = log(bid) - distance² / σ²`. Proximity dominates. The specialist wins by being closer to the problem he actually solves.
 
 The [simulation](/keyword-tax) measured this directly. With embedding auctions and [relocation fees](/synthetic-friction), specialist surplus goes from -0.807 (losing money every round) to +0.021 (profitable). Win diversity rises from 0.809 to 0.876 — different specialists win different queries instead of one dominant bidder sweeping the bin.
 

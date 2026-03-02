@@ -56,7 +56,7 @@ The channels that small businesses use to find customers are failing simultaneou
 
 SEO is collapsing under AI Overviews. A [Seer Interactive study](https://www.dataslayer.ai/blog/google-ai-overviews-the-end-of-traditional-ctr-and-how-to-adapt-in-2025) of 3,119 queries across 42 organizations found that organic CTR dropped 65% on queries where AI Overviews appeared — from 1.76% to 0.61%. Paid CTR fell 68%. Zero-click searches — where the user gets their answer without clicking any result — now account for [roughly 60% of queries](https://www.semrush.com/blog/ai-search-seo-traffic-study/). Individual publishers [report losses ranging from 25% to 90%](https://digiday.com/media/google-ai-overviews-linked-to-25-drop-in-publisher-referral-traffic-new-data-shows/) depending on their topic.
 
-Social media selects for spectacle over expertise. A physical therapist who specializes in climbers' finger injuries — a real service that real people need — spends her evenings filming TikTok hooks instead of studying biomechanics. The content grind rewards click-through rates and average-percentage-viewed, not domain knowledge. Cory Doctorow's [enshittification thesis](https://doctorow.medium.com/big-techs-attention-rents-fe97ba3fad90) describes the structural dynamic: platforms first serve users, then exploit users for advertisers, then exploit advertisers to extract all remaining value. The [attention economy](https://www.promarket.org/2025/12/05/everything-enshittified-all-at-once/) produces platforms that optimize for engagement rather than connection.
+Social media selects for spectacle over expertise. The content grind rewards click-through rates and average-percentage-viewed, not domain knowledge. The [attention economy](https://www.promarket.org/2025/12/05/everything-enshittified-all-at-once/) produces platforms that optimize for engagement rather than connection.
 
 Ben Thompson argued in [*Google, Nvidia, and OpenAI*](https://stratechery.com/2025/google-nvidia-and-openai/) (December 2025) that "ChatGPT should obviously have an advertising model" — not just for revenue, but because "advertising would make ChatGPT a better product" by capturing purchase signals that create a richer understanding of individual users. He called OpenAI's refusal to launch an ads product three years after ChatGPT's debut "a dereliction of business duty." Thompson's Aggregator Theory framework predicts that the company with the most unique users, monetized through advertising, commoditizes its suppliers and wins.
 
@@ -75,23 +75,11 @@ Each group has a piece:
 - **One exchange** has TEE attestation for auction transparency (CloudX)
 - **Open-weight model maintainers** have verifiable embedding infrastructure (Nomic, BGE, GTE)
 
-Nobody has assembled the complete architecture. No published system combines TEE-attested auctions + embedding-space allocation + open-weight model verification + mechanism design that handles the geometric properties of continuous space. The academic papers assume a trusted auctioneer. The industry infrastructure assumes categorical targeting at the protocol boundary. The TEE work focuses on privacy rather than auction transparency. The platform companies are building walled gardens.
+Nobody has assembled the complete architecture. The academic papers assume a trusted auctioneer. The industry infrastructure assumes categorical targeting at the protocol boundary. The TEE work focuses on privacy rather than auction transparency. The platform companies are building walled gardens.
 
-And nobody is framing high-resolution targeting as infrastructure for human connection.
+Publishers need revenue as SEO collapses. Advertisers want higher-resolution targeting. Exchanges want new inventory categories. Small businesses need discoverability channels that don't require content grinds. The only participants whose incentives *don't* align are the platform companies that benefit from opaque, proprietary ad systems.
 
-The niche businesses described in the [open letter](/letter-to-cloudx) — the physical therapist for climbers, the financial planner for freelance translators, the ADHD math tutor — can't exist at keyword resolution. Their audience is too small and too specific to win a broad auction. At embedding resolution, they can [plant a flag](/buying-space-not-keywords) at exactly their niche and reach exactly the people who need them. That's not advertising as interruption. That's advertising as introduction — a direct line between one person's problem and another person's expertise.
-
-The discoverability collapse is the forcing function. When SEO dies, social media selects for spectacle, and the chatbot becomes the primary internet interface, the question isn't whether LLM conversations will carry ads. They already do. The question is whether the ad layer operates at keyword resolution — reproducing the same low-resolution targeting in a new medium — or at embedding resolution, where the geometry can actually match a person's need to another person's expertise.
-
-## What Comes Next
-
-The convergence is happening whether anyone coordinates it or not. The academic mechanisms will improve. The infrastructure will scale. The standards will eventually follow the market. The question is whether the result is another walled garden — OpenAI's closed ad system, opaque and unverifiable — or an open, auditable system where every participant can verify the scoring function, the embeddings, and the allocation.
-
-The technical pieces exist. Embedding-space auctions have been demonstrated in peer-reviewed work. Two-tower architectures serve billions of ad requests daily. TEE attestation runs in production. Open-weight embedding models produce verifiable coordinates. [Relocation fees](/relocation-fees) solve the stability problem that frictionless continuous auctions create. [Keywords coexist as a special case](/keywords-are-tiny-circles) — zero regression for existing demand.
-
-Publishers need revenue as SEO collapses. Advertisers want higher-resolution targeting. Exchanges want new inventory categories. Small businesses need discoverability channels that don't require content grinds. The only participants whose incentives *don't* align are the platform companies that benefit from opaque, proprietary ad systems — the ones building walled gardens.
-
-Someone needs to assemble the pieces. The [open letter](/letter-to-cloudx) makes the concrete case for who and how.
+The [open letter](/letter-to-cloudx) makes the concrete case for who assembles the pieces and how.
 
 ---
 
