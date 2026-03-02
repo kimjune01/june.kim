@@ -40,6 +40,7 @@ Word of mouth. Doc Searls had [sewage in his basement](/the-plumber-test). He as
 |---|---|---|---|
 | Backlink from MIT | Years of credible research | $5 on Fiverr | Dead |
 | Amazon review | Buy product, use it, write honestly | $0.50 per review from a farm | Dead |
+| Phone call | Pick up a device, demand real-time attention | Robocaller, fractions of a penny | Dead |
 | Personal message | Think about recipient, write specifically | GPT + scraper, zero marginal cost | Dying |
 | Keyword ad position | Budget to outbid competitors | Budget to outbid competitors | Signal of spending, not quality |
 | Word of mouth | Real relationship, real experience | Infiltrate a social network | Alive, doesn't scale |
