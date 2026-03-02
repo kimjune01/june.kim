@@ -20,6 +20,8 @@ Every signal on the internet is dying the same death. The cost of faking it drop
 
 **Organic social** was a signal of genuine interest. A share or a like meant a person chose to amplify your content. Engagement bots, follow-for-follow networks, and algorithmic feeds turned the channel into pay-to-play. The signal died when platforms optimized for engagement over authenticity — and then AI-generated content made the floor of production quality indistinguishable from the ceiling.
 
+**Phone calls** were a signal of urgency. Someone picked up a device and demanded your real-time attention. Americans got [55 billion robocalls in 2023](https://www.robokiller.com/robocall-insights). The rational response to an unknown number is to not answer. An entire communication channel — real-time voice between humans — is dead for strangers.
+
 **Direct messages** were a signal of personal attention. Someone sat down and wrote you a message. AI-generated cold outreach now produces personalized emails and DMs at zero marginal cost — your name, your company, a reference to your latest blog post, a plausible ask. Indistinguishable from a real message. The rational response to anything from a stranger is to assume it's automated. LinkedIn is already there. Email is close. Twitter DMs are next.
 
 **Keyword ad position** was a signal of budget — a weak proxy for legitimacy. The [plumber with the biggest overhead](/the-plumber-test) wins, not the one who fixes your problem.
