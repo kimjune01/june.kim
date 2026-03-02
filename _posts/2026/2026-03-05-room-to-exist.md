@@ -14,7 +14,7 @@ Keywords are a bottleneck. Not metaphorically — structurally. Every advertiser
 
 The result is predictable. The biggest bidder wins. The [keyword tax](/keyword-tax) showed this quantitatively: specialists lose 3.5x more per round than generalists in keyword auctions (-0.807 vs -0.233). Small shops with narrow expertise subsidize the auction with money they'll never earn back, because the bin forces them to compete on queries they'll never convert.
 
-This is how market power concentrates through ad infrastructure. Not through conspiracy. Through compression.
+This is how market power concentrates through ad infrastructure — not through conspiracy, but through compression.
 
 ## The Bottleneck
 
@@ -34,7 +34,7 @@ When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the 
 
 The [simulation](/keyword-tax) measured this directly. With embedding auctions and [relocation fees](/synthetic-friction), specialist surplus goes from -0.807 (losing money every round) to +0.021 (profitable). Win diversity rises from 0.809 to 0.876 — different specialists win different queries instead of one dominant bidder sweeping the bin.
 
-More winners. More viable businesses. Not because the mechanism redistributes anything, but because it stops compressing the space.
+The mechanism doesn't redistribute anything. It stops compressing the space, and more businesses survive as a result.
 
 ## Why Chatbots Change the Math
 
@@ -42,7 +42,7 @@ The strongest objection is that most queries are generic. People search "mechani
 
 But chatbot queries aren't search queries. The [Ask First](/ask-first) UX shows why: each conversational turn produces a new embedding. "My car is making a knocking sound" → "it's a 1987 Porsche 911" → "the oil pressure drops at high RPM" → "I think it might need an engine rebuild." Four turns, four positions in embedding space, each more specific than any keyword. The interface *elicits* specificity. People talk to chatbots the way they talk to a friend — in detail, with context, with follow-up.
 
-This is the variable that changes everything. The keyword bottleneck persists partly because search boxes train users to compress their intent into two or three words. Chatbots undo that compression. When the input is a paragraph instead of a phrase, the embedding carries enough signal to distinguish thirty types of auto shop. The bottleneck dissolves because the queries are finally as specific as the expertise.
+The keyword bottleneck persists partly because search boxes train users to compress their intent into two or three words. Chatbots undo that compression. When the input is a paragraph instead of a phrase, the embedding carries enough signal to match the right shop. The bottleneck dissolves because the queries are finally as specific as the expertise.
 
 ## Why the Space Stays Open
 
@@ -60,11 +60,7 @@ The economics of niche-squatting don't work when each occupied position requires
 
 ## What This Means
 
-In keyword markets, the number of viable competitors is bounded by the number of bins and the depth of your budget. In embedding markets, the number of viable competitors is bounded by the diversity of real expertise.
-
-A city with thirty distinct types of auto shop can support thirty distinct advertisers — each profitable on their own niche queries, none needing to outbid a chain on a generic keyword. The independent specialist who rebuilds air-cooled Porsche engines can reach the exact customers who need him, at a price that reflects his proximity to the query, not his ability to outspend Midas.
-
-This isn't a utopian claim about ending market concentration. Chains will still exist. Capital advantages don't disappear. But the advertising layer — the mechanism that connects demand to supply — stops being the bottleneck that forces consolidation. When the marketplace has room for thirty competitors instead of four, more businesses survive. When more businesses survive, more people build them. The value created by thirty specialists serving thirty niches is greater than the value extracted by four generalists fighting over one bin.
+Chains will still exist. Capital advantages don't disappear. But the advertising layer — the mechanism that connects demand to supply — stops being the bottleneck that forces consolidation. The air-cooled Porsche specialist reaches the customers who need him, at a price that reflects his proximity to the query, not his ability to outspend Midas.
 
 The mechanism doesn't redistribute wealth. It creates room for more of it to exist.[^1]
 
