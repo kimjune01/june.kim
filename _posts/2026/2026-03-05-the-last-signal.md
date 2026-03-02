@@ -36,15 +36,6 @@ Same pattern every time. A signal carries real information. The cost of faking i
 
 Word of mouth. Doc Searls had [sewage in his basement](/the-plumber-test). He asked his neighbors. They sent him the guys with the truck. The match was perfect because faking it would require infiltrating his social network and planting a recommendation. That doesn't scale — but it's the only signal that has never been killed, because it's the only one that's expensive to counterfeit.
 
-| Signal | Real cost | Fake cost | Status |
-|---|---|---|---|
-| Backlink from MIT | Years of credible research | $5 on Fiverr | Dead |
-| Amazon review | Buy product, use it, write honestly | $0.50 per review from a farm | Dead |
-| Phone call | Pick up a device, demand real-time attention | Robocaller, fractions of a penny | Dead |
-| Personal message | Think about recipient, write specifically | GPT + scraper, zero marginal cost | Dying |
-| Keyword ad position | Budget to outbid competitors | Budget to outbid competitors | Signal of spending, not quality |
-| Word of mouth | Real relationship, real experience | Infiltrate a social network | Alive, doesn't scale |
-
 ## Position as Signal
 
 An advertiser's position in embedding space is a different kind of signal: *this company declared that it does this specific thing, and has held that position at a cost.*
