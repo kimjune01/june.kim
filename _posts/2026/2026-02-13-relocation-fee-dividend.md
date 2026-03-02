@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Relocation Fee Dividend"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 

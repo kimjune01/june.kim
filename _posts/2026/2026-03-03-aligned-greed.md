@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Aligned Greed"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -64,4 +64,4 @@ Intentcasting stalled because there was no protocol that made it profitable for 
 
 ---
 
-*Part of the [adtech](/adtech) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

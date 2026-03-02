@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Last Ad Layer"
-tags: adtech
+tags: vector-space
 ---
 
 The deal was simple. Free access to the world's information in exchange for your attention. You'd see ads. The ads would be relevant. Publishers would get paid. Everyone wins.
@@ -118,4 +118,4 @@ If you're building an ad exchange, a chatbot platform, or setting standards for 
 
 ---
 
-*Part of the [adtech](/adtech) series. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/main/cmd/simulate). Written with help from Claude Opus 4.6.*
+*Part of the [Vector Space](/vector-space) series. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/main/cmd/simulate). Written with help from Claude Opus 4.6.*

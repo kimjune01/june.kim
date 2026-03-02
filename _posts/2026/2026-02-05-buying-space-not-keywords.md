@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Buying Space, Not Keywords"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the design; Claude built the prototype, generated diagrams, and drafted prose.*

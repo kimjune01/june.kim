@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Beyond Text"
-tags: adtech
+tags: vector-space
 ---
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -84,4 +84,4 @@ The protocol extension is one field: `embedding_model` specifies a multimodal mo
 
 ---
 
-*Part of the [adtech](/adtech) series. Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art, drafted prose, and called out its own overclaims.*
+*Part of the [Vector Space](/vector-space) series. Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art, drafted prose, and called out its own overclaims.*

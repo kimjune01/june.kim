@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Who Builds It?"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and sourced the evidence; Claude verified claims and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 

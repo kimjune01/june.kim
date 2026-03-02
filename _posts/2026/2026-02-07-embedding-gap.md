@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "The $200 Billion Bottleneck"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude surveyed the landscape, analyzed the protocol gap, and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -116,4 +116,4 @@ The race isn't to build the biggest ad network. It's to define the coordinate sy
 
 ---
 
-*Part of the [adtech](/adtech) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

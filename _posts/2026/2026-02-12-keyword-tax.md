@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Keyword Tax"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -135,4 +135,4 @@ The marketplace wedge doesn't require the simulation's exact numbers. It require
 
 ---
 
-*Part of the [adtech](/adtech) series. Written with help from Claude Opus 4.6.*
+*Part of the [Vector Space](/vector-space) series. Written with help from Claude Opus 4.6.*

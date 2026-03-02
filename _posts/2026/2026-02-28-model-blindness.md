@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Model Blindness"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -36,25 +36,25 @@ The conversation model runs in its own enclave. The ad system runs in a separate
 
 The only data flow: conversation → embedding → ad system → UI. One-directional. The chatbot is downstream of nothing commercial.
 
-This is a stronger claim than "our answers are independent of advertising." It's: our answers *can't* be dependent on advertising because the model has no access to the ad system. Architectural impossibility, not a promise.
-
 Perplexity killed ads because first-party selection destroyed trust. OpenAI kept ads and ate the trust damage. Model blindness is the third option: run ads and preserve trust, because the model generating your answer provably doesn't know the ads exist.
+
+This requires the ad system to be operated by a third party — not Perplexity, not the chatbot provider. If the same company runs the conversation and the auction, the separation is a policy again, not a constraint. A third-party exchange inside a TEE enclave is the only arrangement where no single entity controls both the answers and the ads.
 
 ## The Infrastructure Exists
 
 The components for this are in production. The integrated system is not.
 
-**TEE-attested auctions.** [CloudX](https://github.com/cloudx-io/openauction) runs ad auctions inside AWS Nitro Enclaves with open-source clearing code. Their three-zone architecture — untrusted host, trust boundary, and sealed enclave — enforces that even if the host is fully compromised, encrypted bids can't be decrypted and auction state can't be manipulated. PCR measurements prove the exact code running inside the enclave. This is the template for how you'd run an ad auction that no one — not the platform, not the exchange operator, not the cloud provider — can tamper with.
+**TEE-attested auctions.** [CloudX](https://github.com/cloudx-io/openauction) runs ad auctions inside AWS Nitro Enclaves with open-source clearing code. PCR measurements prove the exact code running inside the enclave. No one — not the platform, not the exchange operator, not the cloud provider — can tamper with the auction.
 
-**GPU-isolated inference.** The [NVIDIA H100](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/) supports confidential computing with a hardware TEE. Data transfers between CPU and GPU are encrypted through bounce buffers. In TEE mode, the GPU operates in full isolation. Performance overhead for typical LLM queries is below 5%. You can run model inference inside a sealed enclave at production speed.
+**GPU-isolated inference.** The [NVIDIA H100](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/) supports confidential computing with a hardware TEE. Performance overhead is below 5%. Model inference inside a sealed enclave runs at production speed.
 
-**Confidential inferencing platforms.** [Azure confidential inferencing](https://techcommunity.microsoft.com/blog/azureconfidentialcomputingblog/azure-ai-confidential-inferencing-technical-deep-dive/4253150) provides end-to-end prompt protection with AMD SEV-SNP enclaves. Containers run in sandboxed environments with read-only filesystems and limited outbound communication. Prompts are encrypted and can only be decrypted within the inferencing TEE. The model developer, service operator, and cloud provider are all excluded from accessing sensitive data.
+**Confidential inferencing platforms.** [Azure confidential inferencing](https://techcommunity.microsoft.com/blog/azureconfidentialcomputingblog/azure-ai-confidential-inferencing-technical-deep-dive/4253150) provides end-to-end prompt protection with AMD SEV-SNP enclaves. The model developer, service operator, and cloud provider are all excluded from accessing prompts.
 
-**Browser-side TEE auctions.** Google's [Protected Audience API](https://github.com/privacysandbox/protected-auction-services-docs/blob/main/trusted_services_overview.md) runs ad auctions inside TEEs at scale — bidding and auction services in Nitro Enclaves and GCP Confidential Space, with open-source binaries that external parties can verify. This is the closest production analogue: an ad system that runs alongside content generation without the content-generation system seeing bid data or selection logic.
+**Browser-side TEE auctions.** Google's [Protected Audience API](https://github.com/privacysandbox/protected-auction-services-docs/blob/main/trusted_services_overview.md) already runs ad auctions inside TEEs at scale with open-source, externally verifiable binaries.
 
-**Information flow control.** Academic work on [information flow control for ML pipelines](https://arxiv.org/abs/2311.15792) provides the theoretical framework: treat ad content as a restricted information class, enforce one-directional flow at the architecture level, and use retrieval boundaries to ensure the model only surfaces information it's authorized to access. The separation isn't ad hoc — it follows established principles for controlling data flow in multi-component systems.
+**[Information flow control](https://arxiv.org/abs/2311.15792)** for ML pipelines provides the theoretical framework: treat ad content as a restricted information class and enforce one-directional flow at the architecture level.
 
-The conversation enclave runs the model. The ad enclave runs the auction. Attestation proves they share no state. Each component exists in production individually. Assembling them is engineering, not research.
+Each component exists in production individually. Assembling them is engineering, not research.
 
 ## The Trust Chain
 
@@ -67,6 +67,8 @@ Four links. Every one verifiable.
 
 Break any link and you're back to the same extractive ad layer wearing a new interface. Hold all four and you have advertising that the chatbot can honestly ignore, the user can honestly consent to, and the advertiser can honestly pay for.
 
+Nothing in this architecture is specific to chatbots. If the embedding is computed on-device and the proximity check runs against a cached advertiser index, the same indicator could work in any conversation — including between humans. A user who opts into the recommender gets the dot in their messaging app. The conversation never leaves the device for ad purposes. The person on the other end doesn't know it's on. This is the strongest version of "ask first": you asked before any conversation even started.
+
 ---
 
-*Part of the [adtech](/adtech) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

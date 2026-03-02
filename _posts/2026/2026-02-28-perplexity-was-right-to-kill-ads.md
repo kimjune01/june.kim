@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Perplexity Was Right to Kill Ads"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -68,4 +68,4 @@ The question isn't whether to run ads. It's who selects them, and whether you ca
 
 ---
 
-*Part of the [adtech](/adtech) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

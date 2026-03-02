@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "It Costs Money to Move"
-tags: adtech
+tags: vector-space
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude worked through the mechanism design and drafted prose.*
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -126,4 +126,4 @@ The mechanism is: VCG for pricing, power diagrams for allocation, relocation fee
 
 ---
 
-*Part of the [adtech](/adtech) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

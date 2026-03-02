@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "An Open Letter to CloudX"
-tags: adtech
+tags: vector-space
 ---
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -97,4 +97,4 @@ If this is wrong — if the extension breaks something I'm not seeing, or the ma
 
 ---
 
-*Part of the [adtech](/adtech) series. Written with help from Claude Opus 4.6.*
+*Part of the [Vector Space](/vector-space) series. Written with help from Claude Opus 4.6.*

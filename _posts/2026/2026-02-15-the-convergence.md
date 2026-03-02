@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Convergence"
-tags: adtech
+tags: vector-space
 ---
 
-*Part of the [adtech](/adtech) series.*
+*Part of the [Vector Space](/vector-space) series.*
 
 ---
 
@@ -95,4 +95,4 @@ Someone needs to assemble the pieces. The [open letter](/letter-to-cloudx) makes
 
 ---
 
-*Part of the [adtech](/adtech) series. Written with help from Claude Opus 4.6.*
+*Part of the [Vector Space](/vector-space) series. Written with help from Claude Opus 4.6.*
