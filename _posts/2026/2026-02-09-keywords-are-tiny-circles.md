@@ -2,6 +2,7 @@
 layout: post
 title: "Keywords Are Tiny Circles"
 tags: vector-space
+image: "/assets/09_keywords_are_tiny_circles.jpg"
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose and worked through the mechanics.*

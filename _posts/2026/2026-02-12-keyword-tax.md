@@ -2,6 +2,7 @@
 layout: post
 title: "Keyword Tax"
 tags: vector-space
+image: "/assets/11_egalitarian_auction.png"
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*

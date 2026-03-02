@@ -2,6 +2,7 @@
 layout: post
 title: "Buying Space, Not Keywords"
 tags: vector-space
+image: "/assets/07_hill_climbing_sequence.png"
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the design; Claude built the prototype, generated diagrams, and drafted prose.*

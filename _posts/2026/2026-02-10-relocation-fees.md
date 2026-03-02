@@ -2,6 +2,7 @@
 layout: post
 title: "It Costs Money to Move"
 tags: vector-space
+image: "/assets/10_relocation_fees.jpg"
 ---
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude worked through the mechanism design and drafted prose.*
