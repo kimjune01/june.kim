@@ -60,7 +60,7 @@ Doc's plumber test has three criteria:
 2. **Cost to the customer.** The match doesn't route through a company whose overhead inflates the price.
 3. **Cost to the provider.** The small operator can afford to be found without an ad budget that eats their margins.
 
-Keyword auctions fail all three. An embedding auction addresses all three — not by favoring small businesses, but by scoring on proximity. The math doesn't care about company size. It cares about distance between what someone needs and what someone does.
+Keyword auctions fail all three. An embedding auction addresses all three — not by favoring small businesses, but by scoring on proximity. The math compresses budget advantages logarithmically — a 10x bigger bid adds only ~2.3 to the score, which a closer specialist can overcome. What matters most is distance between what someone needs and what someone does.
 
 The guys with the truck weren't invisible because they're bad at marketing. They were invisible because the auction had no resolution. It saw bins, not problems.
 

@@ -10,9 +10,9 @@ tags: vector-space
 
 ---
 
-After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: nobody is running auctions in embedding space.
+After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: no production ad exchange is running auctions in embedding space.
 
-Every company — startups, incumbents, LLM platforms — knows that embeddings encode richer intent signals than keywords ever did. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, every single one collapses the continuous embedding down to discrete categories and runs a standard keyword-style auction. The richness gets thrown away at the exact moment it matters most.
+Every company — startups, incumbents, LLM platforms — knows that embeddings encode richer intent signals than keywords ever did. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, nearly all collapse the continuous embedding down to discrete categories and run a standard keyword-style auction. The richness gets thrown away at the exact moment it matters most.
 
 ## The Players
 

@@ -95,7 +95,7 @@ Specialists gain +0.828 per round — from losing money to making money. That's 
 
 But advertisers go where the users are. No queries, no auction.
 
-Google pays Apple [$20 billion a year](https://www.theverge.com/2023/10/26/23933206/google-apple-search-deal-safari-18-billion) to be the default search engine on Safari. Queries flow to keyword auctions because users flow to Google, and users flow to Google because of a default payment that costs more per year than most companies are worth.
+Google pays Apple [over $18 billion a year](https://www.theverge.com/2023/10/26/23933206/google-apple-search-deal-safari-18-billion) to be the default search engine on Safari. Queries flow to keyword auctions because users flow to Google, and users flow to Google because of a default payment that costs more per year than most companies are worth.
 
 The keyword equilibrium is stable not because it's optimal, but because the moat is expensive to cross.
 

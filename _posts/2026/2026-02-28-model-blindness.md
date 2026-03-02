@@ -54,7 +54,7 @@ The components for this are in production. The integrated system is not.
 
 **[Information flow control](https://arxiv.org/abs/2311.15792)** for ML pipelines provides the theoretical framework: treat ad content as a restricted information class and enforce one-directional flow at the architecture level.
 
-Each component exists in production individually. Assembling them is engineering, not research.
+Each component exists in production individually. Assembling the trust layer is integration work — though the auction mechanism itself still has open research questions around [equilibrium convergence](/power-diagrams-ad-auctions) and [parameter calibration](/synthetic-friction).
 
 ## The Trust Chain
 
