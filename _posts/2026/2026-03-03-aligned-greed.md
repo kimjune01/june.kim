@@ -56,7 +56,7 @@ Whether embeddings can match Meta's raw targeting precision is an open question.
 
 ## The Profit Motive
 
-Doc Searls has been writing about [personal AI](https://doc.searls.com/personal-ai/) and user agency for years. The vision is right: people should control their own data, declare their own intentions, and engage with markets on their own terms. But it takes a profit motive to get anything done. If there's a business model to be exploited, there should be a startup pursuing it. The world is still waiting for a MyTerms startup.
+Intentcasting — where people declare what they need and let the market come to them — has been talked about for years. The vision is right. But vision without a profit motive is a blog post, not a business.
 
 The embedding auction is the business model that makes intentcasting viable. An exchange earns on every matched query. A chatbot monetizes without compromising trust. An advertiser converts at higher rates and lower cost. Perplexity gets to keep its product integrity *and* fund inference.
 
