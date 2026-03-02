@@ -34,7 +34,7 @@ Same pattern every time. A signal carries real information. The cost of faking i
 
 ## What Survives
 
-Word of mouth. Doc Searls had [sewage in his basement](/the-plumber-test). He asked his neighbors. They sent him the guys with the truck. The match was perfect because faking it would require infiltrating his social network and planting a recommendation. That doesn't scale — but it's the only signal that has never been killed, because it's the only one that's expensive to counterfeit.
+Word of mouth. Your neighbor recommends a plumber because he fixed her pipes last winter. The signal is perfect because faking it would require infiltrating her social network and planting a recommendation. That doesn't scale — but it's the only signal that has never been killed, because it's the only one that's expensive to counterfeit.
 
 ## Position as Signal
 
