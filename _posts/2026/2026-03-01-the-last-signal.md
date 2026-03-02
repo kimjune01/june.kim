@@ -4,12 +4,6 @@ title: "The Last Signal"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 In 1993, the New Yorker ran a cartoon: "On the Internet, nobody knows you're a dog." It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
 
 Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property — no identity verification — went from enabling authentic connection to enabling infinite noise. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the lemons problem. It's now the operating condition of every channel online.
@@ -63,5 +57,7 @@ The [model can't see the ads](/model-blindness). The conversation isn't steered.
 Positioned honestly, held at a cost, verified by hardware, silent until asked. The last signal is the one where faking is expensive by construction.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

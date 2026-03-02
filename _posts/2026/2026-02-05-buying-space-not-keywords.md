@@ -5,8 +5,6 @@ tags: vector-space
 image: "/assets/07_hill_climbing_sequence.png"
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the design; Claude built the prototype, generated diagrams, and drafted prose.*
-
 In keyword advertising, you buy words. Pick "running shoes" from a list, set a bid, wait. Each keyword is an independent auction. Your targeting decisions are checkbox selections from a finite menu.
 
 Embedding space doesn't work like this. Language models map every piece of text into a continuous vector space — 3,072 dimensions for OpenAI's text-embedding-3-large, 1,536 for Cohere's embed-v4, 768 for Google's gemini-embedding-001. In this space, "best running shoes for flat feet" and "marathon training plan" aren't separate catalog items. They're nearby points, separated by a measurable distance that captures semantic similarity.
@@ -80,3 +78,9 @@ The core interaction — hill-climbing through language, examples, and prices �
 The hard UX problems: how do you pick which suggestions to show when the neighborhood is 3,072-dimensional? How do you generate examples that faithfully represent a high-dimensional region? How do you explain that two nearby-looking points on the 2D projection might be far apart in full space?
 
 These are UX problems, not math problems. The auction mechanism works regardless of dimensionality. The question is building an interface that lets humans make good decisions in a space they can't see. Try the [interactive prototype](/vectorspace-ads/) and see for yourself.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the design; Claude built the prototype, generated diagrams, and drafted prose.*
+
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

@@ -4,12 +4,6 @@ title: "Room to Exist"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 Keywords are a bottleneck — structurally. A dozen auto shops bid on "mechanic near me." The auction can't distinguish the BMW transmission specialist from the classic car restorer from the hybrid battery shop. The [keyword tax](/keyword-tax) showed this quantitatively: specialists lose 3.5x more per round than generalists (-0.807 vs -0.233). Small shops subsidize the auction with money they'll never earn back, competing on queries they'll never convert.
 
 ## The Bottleneck
@@ -63,5 +57,7 @@ The mechanism doesn't redistribute wealth. It creates room for more of it to exi
 [^1]: Socialists correctly diagnose that wealth concentrates. Their fix is redistribution — which requires authority to decide who gets what, enforced by compulsion. The embedding auction reaches the same destination through voluntary exchange: specialists position accurately because it's profitable, users tap because it's useful, exchanges enforce fees because it attracts better inventory. Nobody is compelled. The outcome is broader because the mechanism is better, not because anyone was forced.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

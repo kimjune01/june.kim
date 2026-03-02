@@ -4,10 +4,6 @@ title: "An Open Letter to CloudX"
 tags: vector-space
 ---
 
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 I've spent the past few weeks writing about [vector-space ad auctions](/power-diagrams-ad-auctions) — how embedding geometry can replace keyword matching for LLM conversation inventory. The series kept circling back to an enforcement problem: the auction math only works if every participant can verify the exchange is running the published scoring function unmodified.
 
 You've already built that. [openauction](https://github.com/cloudx-io/openauction) is the only live ad exchange where the auction code is public and the hardware proves it runs unmodified. Meta joined because attestation means they don't have to trust you — the cold start problem most ad tech startups spend years on, solved architecturally on day one.

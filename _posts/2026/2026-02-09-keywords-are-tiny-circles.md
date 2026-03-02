@@ -5,12 +5,6 @@ tags: vector-space
 image: "/assets/09_keywords_are_tiny_circles.jpg"
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose and worked through the mechanics.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 The previous posts in this series have a problem. They describe a mathematically elegant system — [power diagrams](/power-diagrams-ad-auctions) partitioning embedding space, [hill-climbing UX](/buying-space-not-keywords) for navigating it, a [new protocol](/embedding-gap) to carry embedding vectors. And they implicitly ask the market to throw away keywords and adopt continuous geometry instead.
 
 The market will not do this. Not because the math is wrong. Because the migration path demands a regression.
@@ -127,5 +121,7 @@ The business case isn't replacing keyword revenue. It's the 80% of LLM conversat
 Keywords are tiny circles. The system that runs tiny circles already runs big circles. The rest is adoption.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose and worked through the mechanics.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

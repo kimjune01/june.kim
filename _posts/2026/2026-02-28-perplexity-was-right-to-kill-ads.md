@@ -4,12 +4,6 @@ title: "Perplexity Was Right to Kill Ads"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 Perplexity [killed ads](https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026. Total ad revenue: [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). The ad sales head left.
 
 Their CEO's reasoning was simple: *a user needs to believe this is the best possible answer.* The moment a chatbot shows an ad it selected, that belief is gone. Did it recommend that product because it's best, or because someone paid?
@@ -67,5 +61,7 @@ Perplexity killed revenue when it should have killed the architecture. A sealed 
 The question isn't whether to run ads. It's who selects them, and whether you can prove it.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

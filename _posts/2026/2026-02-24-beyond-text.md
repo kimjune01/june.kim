@@ -4,10 +4,6 @@ title: "Beyond Text"
 tags: vector-space
 ---
 
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 This series assumed text. The math never did. The scoring function `log(bid) - distance² / σ²` operates on distance in a vector space — it doesn't know or care whether the vector came from a sentence, a photograph, or an audio clip.
 
 People don't only discover products and services by typing. They search by image. They watch videos. They listen to podcasts. As new AI platforms handle these modalities, they'll face the same revenue question chatbots face now. The auction mechanism is already ready for them.

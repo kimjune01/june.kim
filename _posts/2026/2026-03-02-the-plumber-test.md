@@ -4,12 +4,6 @@ title: "The Plumber Test"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument from a reader's challenge; Claude drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 Doc Searls — the guy who wrote [*The Intention Economy*](https://doc.searls.com/2024/12/30/the-real-intention-economy/) — read [The Last Ad Layer](/the-last-ad-layer) and asked the question that matters:
 
 > Sewage backed up into my basement in Bloomington, Indiana. I searched Google. Got Peterman Brothers — large plumbing outfit, diagnosed the problem, wanted $3,000. Checked with neighbors. Got local guys in a truck who knew their shit and fixed it for just hundreds. Would your system have made a better match?
@@ -65,5 +59,7 @@ Keyword auctions fail all three. An embedding auction addresses all three — no
 The guys with the truck weren't invisible because they're bad at marketing. They were invisible because the auction had no resolution. It saw bins, not problems.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument from a reader's challenge; Claude drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

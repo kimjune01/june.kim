@@ -4,12 +4,6 @@ title: "Who Builds It?"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and sourced the evidence; Claude verified claims and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 The [Keyword Tax](/keyword-tax) showed the switching incentive: embedding auctions redistribute surplus from publishers to the specialists who actually serve niche queries. But who builds the embedding auction? Not one visionary. An equilibrium is emerging from five independent forces — investors, SSPs, regulators, standards bodies, and analysts — each moving for their own reasons toward the same gap.
 
 ## The Money
@@ -99,3 +93,9 @@ The question isn't whether it gets built. It's whether it's open or proprietary.
 - **PubMatic is best-positioned incumbent** — NVIDIA partnership for latency, Kontext partnership for chatbot inventory, AgenticOS for agentic execution, AdCP co-founding for protocol access. But they've never built auction mechanism design from scratch.
 
 The pieces are on the board. Someone assembles them.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and sourced the evidence; Claude verified claims and drafted prose.*
+
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

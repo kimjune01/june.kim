@@ -4,12 +4,6 @@ title: "Model Blindness"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 [Ask First](/ask-first) described what the user experiences: a two-phase model where suggestions appear outside the conversation, the chatbot doesn't generate them, and no ad fires until the user opts in. This post describes why the UX isn't lying — the architecture that makes model independence provable, not promised.
 
 ## The Industry Is Going the Other Direction
@@ -70,5 +64,7 @@ Break any link and you're back to the same extractive ad layer wearing a new int
 Nothing in this architecture is specific to chatbots. If the embedding is computed on-device and the proximity check runs against a cached advertiser index, the same indicator could work in any conversation — including between humans. A user who opts into the recommender gets the dot in their messaging app. The conversation never leaves the device for ad purposes. The person on the other end doesn't know it's on. This is the strongest version of "ask first": you asked before any conversation even started.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

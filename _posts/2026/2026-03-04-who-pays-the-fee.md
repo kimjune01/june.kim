@@ -4,12 +4,6 @@ title: "Stay or Pay"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 Every stable market has switching costs. The FCC charges spectrum license fees. ICANN charges domain renewal fees. Landlords charge lease termination fees. Insurance companies reward claim-free years with progressive discounts. These aren't frictions to be eliminated. They're structural features that prevent the market from collapsing into a land grab.
 
 [Synthetic Friction](/synthetic-friction) proved that embedding-space auctions need the same thing — a relocation fee that prevents Hotelling drift. [It Costs Money to Move](/relocation-fees) showed the TEE-enforced mechanism. This post assembles the enforcement stack around it: identity binding, entry bonds, and tenure discounts. Every component has decades of prior art. Every one has been proven net-positive for all participants — not just the platform, but the advertisers who pay the fees.
@@ -141,5 +135,7 @@ Embedding space is the same commons. The switching costs are the same solution. 
 - **Cramton, P. (2002).** "Spectrum Auctions." In *Handbook of Telecommunications Economics*. Upfront deposits, activity rules, and forfeiture mechanisms in the FCC's auction design.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

@@ -5,12 +5,6 @@ tags: vector-space
 image: "/assets/10_relocation_fees.jpg"
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude worked through the mechanism design and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 The first post in this series flagged an [open problem](/power-diagrams-ad-auctions): advertisers in a power diagram auction have an incentive to lie about where they belong.
 
 VCG payments make truthful bidding dominant — you can't profit by lying about what an impression is *worth*. But advertisers don't just choose a bid. They choose *where to plant their flag*. VCG does nothing to prevent a sneaker company from declaring its center at the densest traffic point in the space instead of at "running shoes" where it actually belongs.
@@ -126,5 +120,7 @@ The [first post](/power-diagrams-ad-auctions) compared embedding space to real e
 The mechanism is: VCG for pricing, power diagrams for allocation, relocation fees for stability, TEE attestation for enforcement. Each layer solves one problem and doesn't pretend to solve the others.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude worked through the mechanism design and drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

@@ -4,12 +4,6 @@ title: "The $200 Billion Bottleneck"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude surveyed the landscape, analyzed the protocol gap, and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: no production ad exchange is running auctions in embedding space.
 
 Every company — startups, incumbents, LLM platforms — knows that embeddings encode richer intent signals than keywords ever did. They all talk about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, nearly all collapse the continuous embedding down to discrete categories and run a standard keyword-style auction. The richness gets thrown away at the exact moment it matters most.
@@ -115,5 +109,7 @@ The hard problems:
 The race isn't to build the biggest ad network. It's to define the coordinate system.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude surveyed the landscape, analyzed the protocol gap, and drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

@@ -5,12 +5,6 @@ tags: vector-space
 image: "/assets/11_egalitarian_auction.png"
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 ![The keyword tax — specialists crammed into one auction](/assets/11_egalitarian_auction.png)
 
 Keywords herd traffic into a narrow, dense auction. Five physical therapists — a climbing specialist, a pelvic floor specialist, a pediatric specialist, a sports rehab specialist, and a generalist — all bid on "physical therapy." The auction can't tell them apart. Each bin has 4–5 bidders fighting over every query. Dense competition, high clearing prices, maximum revenue extraction. This is what the publisher wants.

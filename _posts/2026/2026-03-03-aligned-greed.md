@@ -4,12 +4,6 @@ title: "Aligned Greed"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 The question isn't how to make platforms behave. It's how to set up material conditions such that their greedy behavior is aligned with ours.
 
 This is mechanism design — designing a game where the selfish move is the fair move.
@@ -57,5 +51,7 @@ The embedding auction is the business model that makes intentcasting viable. An 
 Intentcasting stalled because there was no protocol that made it profitable for every participant simultaneously. The embedding auction is that protocol.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

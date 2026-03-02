@@ -4,12 +4,6 @@ title: "Synthetic Friction"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation, researched prior art, and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 Embedding-space auctions give every advertiser a precise position in high-dimensional space. A climbing PT plants her flag at "rock climbing finger pulley rehabilitation." A pelvic floor PT plants his at "postpartum pelvic floor therapy." They stop competing for the same keyword. The auction scores by proximity, and each specialist wins the queries they're best at.
 
 That's the pitch. Here's the problem: it doesn't hold on its own.
@@ -207,5 +201,7 @@ The embedding space can distinguish the climbing PT from the sports PT. The fee 
 - **Loertscher, S. & Muir, E.V. (2024).** "Optimal Hotelling Auctions." Working paper, MIT Sloan. Combines spatial differentiation with mechanism design. Key finding: auctions need a structural element beyond pricing to maintain differentiation.
 
 ---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation, researched prior art, and drafted prose.*
 
 *Part of the [Vector Space](/vector-space) series. june@june.kim*

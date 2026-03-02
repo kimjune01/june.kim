@@ -4,12 +4,6 @@ title: "Relocation Fee Dividend"
 tags: vector-space
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
-
-*Part of the [Vector Space](/vector-space) series.*
-
----
-
 The [relocation fees post](/relocation-fees) argued that charging advertisers to move in embedding space — `λ · ‖c_new - c_old‖²` — prevents Hotelling collapse and stabilizes the market. The argument was theoretical. This post tests it with a multi-agent simulation and finds something the theory didn't predict: relocation fees aren't just stabilizing. They're a new revenue category that makes every participant better off — including the advertisers who pay them.
 
 The simulation code is [open source](https://github.com/kimjune01/openauction/tree/master/cmd/simulate).
@@ -175,3 +169,9 @@ The exchange that "competes on price" by cutting fees is actually offering an in
 This is the same dynamic as building codes. Builders who compete by cutting corners on foundations aren't offering a better deal — they're offering a worse building. The inspection fee that prevents corner-cutting isn't a cost. It's what makes the building habitable.
 
 Relocation fees are the building code for embedding-space auctions.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
+
+*Part of the [Vector Space](/vector-space) series. june@june.kim*

@@ -5,8 +5,6 @@ tags: vector-space
 image: "/assets/01_keywords_vs_embeddings.png"
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude wrote proofs, ran experiments, built the prototype, and drafted prose. Idea to finished deliverables: one afternoon.*
-
 ChatGPT launched ads in January 2026. 800 million users, $20 billion in annualized revenue, all sitting in continuous embedding space. No keywords, no categories, no auction machinery that fits.
 
 Everyone's treating this as a product problem — ad formats, placement, user experience. But underneath is an unsolved math problem: how do you run an auction when the thing being sold isn't a keyword, but a region of continuous, high-dimensional space?
@@ -200,4 +198,8 @@ The ChatGPT ad market alone could be $10B+ annually within five years. The compa
 
 ---
 
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the research; Claude wrote proofs, ran experiments, built the prototype, and drafted prose. Idea to finished deliverables: one afternoon.*
+
 *The game theory in this post is speculative — mapping the problem space, not claiming settled conclusions.*
+
+*Part of the [Vector Space](/vector-space) series. june@june.kim*
