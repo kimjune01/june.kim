@@ -10,7 +10,9 @@ tags: vector-space
 
 ---
 
-Every signal on the internet is dying the same death. The cost of faking it dropped below the cost of producing the real thing. Once that happens, the signal is worthless — not because it was bad, but because you can't tell the real from the fake. The market for quality collapses. Akerlof called this the lemons problem in 1970. It's now the operating condition of every channel on the internet.
+In 1993, the New Yorker ran a cartoon: "On the Internet, nobody knows you're a dog." It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
+
+Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property — no identity verification — went from enabling authentic connection to enabling infinite noise. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the lemons problem. It's now the operating condition of every channel online.
 
 ## The Kill List
 
