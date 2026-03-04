@@ -2,7 +2,10 @@
 layout: post
 title: "The Price of Relevance"
 tags: vector-space
+image: "/assets/price_of_relevance.jpg"
 ---
+
+![The relevance dial](/assets/price_of_relevance.jpg)
 
 Every ad auction has to decide how much to weight relevance versus price. Weight relevance too little and users see irrelevant ads. Weight it too much and the platform loses revenue. In keyword auctions, this tradeoff is controlled by a single number — the squashing parameter `s` — and twenty years of research has gone into understanding it.
 

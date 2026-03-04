@@ -21,7 +21,7 @@ Google's keyword auction is one of the most elegant market mechanisms ever deplo
 
 "Mesothelioma lawyer" costs ~$200 per click. That price exists because the mechanics are clean. A keyword is a discrete, atomic unit. You bid on it or you don't. No ambiguity.
 
-Second-price auctions clear efficiently. The winner pays the second-highest bid plus a penny. Truthful bidding is the dominant strategy — bid exactly what a click is worth to you. No game theory PhD required.
+Second-price auctions clear efficiently. The winner pays the second-highest bid plus a penny. [Edelman, Ostrovsky & Schwarz (2007)](https://www.aeaweb.org/articles?id=10.1257/aer.97.1.242) showed that the resulting equilibria in Google's Generalized Second-Price auction are efficient and generate revenue at least as high as VCG — explaining why the mechanism survived at scale. Truthful bidding is approximately dominant. No game theory PhD required.
 
 Budget forecasting is tractable: count searches, multiply by win rate, multiply by bid. Predict next month's spend within 10-15%.
 
@@ -79,6 +79,10 @@ The key properties:
 ![Bid Change](/assets/03_bid_change.png)
 
 When Nike doubles its bid from $5 to $10, its territory expands from 30% to nearly 50% of the space — eating into every competitor's region. This is the continuous analog of outbidding someone on a keyword, except it happens along a *frontier*, not at a single point.
+
+## [Two Phases: Relevance, Then Revenue](/2026/03/04/tau-and-log-b)
+
+The scoring function has two terms serving different masters — the bid and the distance. They should be [split into separate phases, controlled by different parties](/2026/03/04/tau-and-log-b).
 
 ## Why It Gets Hard
 

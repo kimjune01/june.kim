@@ -2,7 +2,10 @@
 layout: post
 title: "Stay or Pay"
 tags: vector-space
+image: "/assets/who_pays_the_fee.jpg"
 ---
+
+![Differentiated storefronts](/assets/who_pays_the_fee.jpg)
 
 Every stable market has switching costs. The FCC charges spectrum license fees. ICANN charges domain renewal fees. Landlords charge lease termination fees. Insurance companies reward claim-free years with progressive discounts. These aren't frictions to be eliminated. They're structural features that prevent the market from collapsing into a land grab.
 
@@ -66,7 +69,7 @@ The protocol field:
 }
 ```
 
-The bond amount is a protocol parameter, like λ. Too low and it doesn't deter resets. Too high and it suppresses new entrants. The FCC calibrates upfront deposits to roughly 2-5% of expected total spend. That's a reasonable starting point — enough to hurt a casual gamer, not enough to block a legitimate small business.
+The bond amount is a protocol parameter, like λ. Too low and it doesn't deter resets. Too high and it suppresses new entrants. The FCC calibrates upfront deposits to roughly 2-5% of expected total spend. That's a reasonable starting point — enough to deter a serial resetter, not enough to block a legitimate small business.
 
 ## Tenure Discount
 
@@ -80,11 +83,11 @@ effective_fee = base_fee × tenure_discount × λ · ‖move‖²
 
 Where `tenure_discount` decays from 1.0 (new) toward a floor (say 0.3) over time. The discount applies to the base fee multiplier, not the distance component — a long-tenured advertiser who makes a large move still pays proportionally for distance, but the rate is lower.
 
-This creates the asset the user described: a stay-put discount that makes switching relatively expensive. An advertiser with 200 rounds of tenure at position P has accumulated a 70% fee discount. Resetting to a new account means restarting at 0% discount. Even if the identity binding is imperfect — even if they successfully create a new identity — they lose the financial asset they built.
+This creates a financial asset: a stay-put discount that makes switching relatively expensive. An advertiser with 200 rounds of tenure at position P has accumulated a 70% fee discount. Resetting to a new account means restarting at 0% discount. Even if the identity binding is imperfect — even if they successfully create a new identity — they lose the financial asset they built.
 
 Google's Quality Score works this way implicitly. Accounts with long keyword history accumulate CTR data that improves Quality Scores, which lowers CPCs. A new account starts cold — same keywords, higher costs. The switching cost isn't a posted fee. It's embedded in the scoring function. Advertisers stay because leaving is expensive, not because a rule says they must.
 
-The bonus-malus framing has one advantage over implicit stickiness: it's transparent. The advertiser knows the discount schedule. They can calculate the cost of resetting. The decision is explicit, not buried in an opaque quality score. Transparency is the theme of the [entire architecture](/model-blindness) — attested code, published scoring functions, verifiable embeddings. The tenure discount should be as visible as the relocation fee.
+The bonus-malus framing has one advantage over implicit stickiness: it's transparent. The advertiser knows the discount schedule. They can calculate the cost of resetting. The decision is explicit, not buried in an opaque quality score. The [entire architecture](/model-blindness) runs on attested code, published scoring functions, verifiable embeddings. The tenure discount should be as visible as the relocation fee.
 
 ## Why Exchanges Adopt
 
@@ -106,7 +109,7 @@ The cautionary tale is OpenRTB 3.0, released in 2020 and still not adopted becau
 
 ## The Stack
 
-Five mechanisms, each with decades of deployment, each proven net-positive for participants.
+Five mechanisms, each with decades of deployment.
 
 | Attack | Defense | Prior Art | Net Effect |
 |---|---|---|---|
@@ -118,9 +121,9 @@ Five mechanisms, each with decades of deployment, each proven net-positive for p
 
 The mechanisms interact. A tenure discount that's too steep makes the entry bond redundant — the discount *is* the bond, accumulated over time. An entry bond that's too high makes the tenure discount unnecessary. The right calibration is empirical — the [simulation](https://github.com/kimjune01/openauction) can test parameter combinations the way it tested λ values for the relocation fee.
 
-But the direction is clear. Every industry that has introduced switching costs into a frictionless market has seen the same result: participants differentiate, match quality improves, and total surplus increases. The FCC's spectrum auctions raised $44.9 billion because positional commitment made licenses valuable. Insurance bonus-malus systems reduced accident rates because tenure discounts made safe driving financially rational. The London congestion charge cut inner-city traffic 20% because the fee internalized an externality that was destroying the commons.
+Every industry that has introduced switching costs into a frictionless market has seen the same result: participants differentiate, match quality improves, and total surplus increases. The FCC's spectrum auctions raised $44.9 billion because positional commitment made licenses valuable. Insurance bonus-malus systems reduced accident rates because tenure discounts made safe driving financially rational. The London congestion charge cut inner-city traffic 20% because the fee internalized an externality that was destroying the commons.
 
-Embedding space is the same commons. The switching costs are the same solution. The prior art says it works — not in theory, but in markets that clear billions of dollars annually.
+Embedding space is the same commons. The switching costs are the same solution. These markets clear billions of dollars annually.
 
 ## References
 
