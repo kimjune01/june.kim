@@ -5,6 +5,8 @@ layout: default
 <section>
 	<h1>{{ page.title | default: page.tag }}</h1>
 
+	{{ content }}
+
 	<ul>
 	{% for post in site.tags[page.tag] %}
 		<li>
