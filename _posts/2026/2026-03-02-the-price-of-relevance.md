@@ -136,9 +136,9 @@ Recommended ranges:
 
 **Does the optimal `b` depend on market density?** With 25 advertisers across 5 clusters, the tradeoff is clean. With 250 advertisers — or 5 — the shape of the curve might change. More competitors could shift the efficient frontier, making higher `b` less costly in revenue terms.
 
-**How does `b` interact with σ adaptation?** In our simulation, σ values are fixed. In a live market, advertisers learn their optimal σ — and the optimal σ depends on `b`. At high `b`, a narrower σ is more valuable because proximity matters more. This creates a feedback loop: `b` shapes σ, which shapes clearing prices, which shifts the revenue-quality curve.
+**How does `b` interact with σ adaptation?** In our simulation, σ values are fixed. In a live market, advertisers learn their optimal σ — and the optimal σ depends on `b`. At high `b`, a narrower σ is more valuable because proximity matters more. This creates a feedback loop: `b` shapes σ, which shapes clearing prices, which shifts the revenue-quality curve. [Balcan, Sandholm & Vitercik (2016)](https://arxiv.org/abs/1606.04145) showed that the sample complexity of learning optimal auction parameters scales linearly with the parameter dimension — suggesting that learning the joint (b, σ) surface is tractable with enough bid data.
 
-**Is there a dynamic `b` that adjusts per query?** A query with 12 qualified advertisers could use lower `b` (more price competition). A query with 2 could use higher `b` (protect the closer match). Variable `b` would complicate the mechanism's transparency — the [attested auction](/perplexity-was-right-to-kill-ads) would need to commit to the adjustment rule, not just the scoring formula.
+**Is there a dynamic `b` that adjusts per query?** A query with 12 qualified advertisers could use lower `b` (more price competition). A query with 2 could use higher `b` (protect the closer match). [Syrgkanis et al. (2017)](https://arxiv.org/abs/1611.01688) showed that oracle-efficient online learning can tune auction parameters like reserves from live data, even against adversarial bidders — the same approach could adapt `b` per-query using bidder context as features. Variable `b` would complicate the mechanism's transparency — the [attested auction](/perplexity-was-right-to-kill-ads) would need to commit to the adjustment rule, not just the scoring formula.
 
 **The log form gives diminishing returns on price.** Going from $1 to $10 has the same effect as $10 to $100. No major platform uses explicit `log(price)` — they use multiplicative quality scores that achieve a similar compression. Whether the log form is an advantage (prevents runaway bidding) or a limitation (suppresses price signal) depends on market structure.
 
@@ -155,6 +155,10 @@ Recommended ranges:
 - **Vorobeychik, Y. (2009).** "Simulation-Based Analysis of Keyword Auctions." *SIGecom Exchanges*, 8(1). When value-quality correlation is weak, `s < 1` can dominate `s = 1` on welfare.
 
 - **Gomes, R. (2014).** "Optimal Auction Design in Two-Sided Markets." *RAND Journal of Economics*, 45(2), 248-272. User participation elasticity pushes the platform's optimal quality weight above the pure revenue-maximizer's choice.
+
+- **Syrgkanis, V., Dudik, M., Haghtalab, N., Luo, H., Schapire, R.E. & Vaughan, J.W. (2017).** "Oracle-Efficient Online Learning and Auction Design." *FOCS'17*. Oracle-efficient algorithms for learning optimal reserves and pricing from live data, even against adversarial bidders.
+
+- **Balcan, M.-F., Sandholm, T. & Vitercik, E. (2016).** "Sample Complexity of Automated Mechanism Design." *NeurIPS 2016*. Pseudo-dimension of auction parameter classes is linear in the number of parameters, so learned mechanisms generalize with O(d/ε²) samples.
 
 - **Simulation source:** [openauction v3.5.1](https://github.com/kimjune01/openauction/tree/v3.5.1/cmd/simulate)
 

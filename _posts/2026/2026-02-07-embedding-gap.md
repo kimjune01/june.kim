@@ -40,7 +40,7 @@ Here's what ties all of these together: **at the moment an auction needs to clea
 
 "Routing AI chatbot inventory through programmatic pipes" concretely means: analyze the conversation, classify it into ~700 IAB taxonomy labels like "Sports > Basketball" or "Technology > Computing," stuff those into an OpenRTB bid request, send to DSPs who bid on categories the same way they've been bidding for fifteen years.
 
-The continuous embedding — the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before entering the auction. The entire embedding — intent level, specificity, price sensitivity — gets destroyed at the protocol boundary.
+The continuous embedding — the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt" — gets collapsed into a single label before entering the auction. The entire embedding — intent level, specificity, price sensitivity — gets destroyed at the protocol boundary. This isn't just an efficiency loss. [Sahni & Nair (2020)](https://academic.oup.com/restud/article-abstract/87/3/1529/5583745) showed experimentally that when ads are well-matched, disclosing "this is a paid ad" *increased* engagement by 77% — consumers treat a precise match as a quality signal. [Sahni & Zhang (2024)](https://link.springer.com/article/10.1007/s11129-023-09270-z) found that reducing ad prominence actually decreased overall search usage, because relevant ads fill information gaps the organic algorithm can't. The signal that categories destroy is the signal that makes ads useful rather than annoying.
 
 ## The Protocol Problem
 

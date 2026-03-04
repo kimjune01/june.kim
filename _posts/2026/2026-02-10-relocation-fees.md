@@ -25,7 +25,7 @@ Three downstream effects:
 
 3. **Unstable budgets.** Spend depends on geometry, geometry depends on everyone's position, everyone's position is in flux. Budget forecasting breaks down.
 
-VCG keeps bids honest. Nothing keeps positions honest. That's the gap.
+VCG keeps bids honest. Nothing keeps positions honest. That's the gap. [Jagadeesan, Segal & Tordjman (2025)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5231187) formalized a related limit: when bidders can coordinate before the auction, no mechanism extracts more than a posted price — establishing a ceiling on what any anti-gaming mechanism can achieve. The relocation fee doesn't try to eliminate strategic positioning entirely. It makes the marginal cost of gaming exceed the marginal benefit.
 
 ![Hotelling drift vs. relocation fees](/assets/10_relocation_fees.jpg)
 

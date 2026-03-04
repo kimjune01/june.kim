@@ -73,7 +73,7 @@ Each group has a piece:
 
 Nobody has assembled the complete architecture. The academic papers assume a trusted auctioneer. The industry infrastructure assumes categorical targeting at the protocol boundary. The TEE work focuses on privacy rather than auction transparency. The platform companies are building walled gardens.
 
-Publishers need revenue as SEO collapses. Advertisers want higher-resolution targeting. Exchanges want new inventory categories. Small businesses need discoverability channels that don't require content grinds. The only participants whose incentives *don't* align are the platform companies that benefit from opaque, proprietary ad systems.
+Publishers need revenue as SEO collapses. Advertisers want higher-resolution targeting. Exchanges want new inventory categories. Small businesses need discoverability channels that don't require content grinds. The only participants whose incentives *don't* align are the platform companies that benefit from opaque, proprietary ad systems. The cost of that opacity is now quantified: in *United States v. Google LLC*, [Weintraub's expert analysis](https://www.adexchanger.com/antitrust/doj-vs-google-day-four-behind-the-scenes-on-the-fraught-rollout-of-unified-pricing-rules/) of Google's own A/B test data showed that practices like "Last Look" and "Project Poirot" diverted hundreds of millions annually from competing exchanges. The [court ruled](https://www.justice.gov/opa/pr/department-justice-prevails-landmark-antitrust-case-against-google) Google illegally monopolized the publisher ad server and exchange markets.
 
 The [open letter](/letter-to-cloudx) makes the concrete case for who assembles the pieces and how.
 
