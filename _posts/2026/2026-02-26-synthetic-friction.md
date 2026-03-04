@@ -2,7 +2,10 @@
 layout: post
 title: "Synthetic Friction"
 tags: vector-space
+image: "/assets/synthetic_friction.png"
 ---
+
+![Drift toward center](/assets/synthetic_friction.png)
 
 Embedding-space auctions give every advertiser a precise position in high-dimensional space. A climbing PT plants her flag at "rock climbing finger pulley rehabilitation." A pelvic floor PT plants his at "postpartum pelvic floor therapy." They stop competing for the same keyword. The auction scores by proximity, and each specialist wins the queries they're best at.
 

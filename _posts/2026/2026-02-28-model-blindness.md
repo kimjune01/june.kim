@@ -2,7 +2,10 @@
 layout: post
 title: "Model Blindness"
 tags: vector-space
+image: "/assets/model_blindness.png"
 ---
+
+![Frosted glass separation](/assets/model_blindness.png)
 
 [Ask First](/ask-first) described what the user experiences: a two-phase model where suggestions appear outside the conversation, the chatbot doesn't generate them, and no ad fires until the user opts in. This post describes why the UX isn't lying — the architecture that makes model independence provable, not promised.
 

@@ -2,7 +2,10 @@
 layout: post
 title: "The $200 Billion Bottleneck"
 tags: vector-space
+image: "/assets/embedding_gap.jpg"
 ---
+
+![The bottleneck](/assets/embedding_gap.jpg)
 
 After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: no production ad exchange is running auctions in embedding space.
 

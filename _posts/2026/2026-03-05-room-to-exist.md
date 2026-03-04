@@ -2,7 +2,10 @@
 layout: post
 title: "Room to Exist"
 tags: vector-space
+image: "/assets/room_to_exist.png"
 ---
+
+![Room to exist](/assets/room_to_exist.png)
 
 Keywords are a bottleneck — structurally. A dozen auto shops bid on "mechanic near me." The auction can't distinguish the BMW transmission specialist from the classic car restorer from the hybrid battery shop. The [keyword tax](/keyword-tax) showed this quantitatively: specialists lose 3.5x more per round than generalists (-0.807 vs -0.233). Small shops subsidize the auction with money they'll never earn back, competing on queries they'll never convert.
 

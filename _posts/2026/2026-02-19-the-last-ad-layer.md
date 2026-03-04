@@ -2,7 +2,10 @@
 layout: post
 title: "The Last Ad Layer"
 tags: vector-space
+image: "/assets/last_ad_layer.png"
 ---
+
+![The broken road](/assets/last_ad_layer.png)
 
 The ad-supported web promised free access in exchange for attention. What it delivered was surveillance, manipulation, and a content ecosystem that rewards spectacle over expertise. A specialist who solves real problems spends her evenings filming TikTok hooks instead of doing her actual work. The people who need her can't find her.
 

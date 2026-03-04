@@ -2,7 +2,10 @@
 layout: post
 title: "Who Builds It?"
 tags: vector-space
+image: "/assets/who_builds_it.png"
 ---
+
+![Converging rivers](/assets/who_builds_it.png)
 
 The [Keyword Tax](/keyword-tax) showed the switching incentive: embedding auctions redistribute surplus from publishers to the specialists who actually serve niche queries. But who builds the embedding auction? Not one visionary. An equilibrium is emerging from five independent forces — investors, SSPs, regulators, standards bodies, and analysts — each moving for their own reasons toward the same gap.
 

@@ -2,7 +2,10 @@
 layout: post
 title: "Aligned Greed"
 tags: vector-space
+image: "/assets/aligned_greed.png"
 ---
+
+![Aligned forces](/assets/aligned_greed.png)
 
 The question isn't how to make platforms behave. It's how to set up material conditions such that their greedy behavior is aligned with ours.
 

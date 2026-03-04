@@ -2,7 +2,10 @@
 layout: post
 title: "The Last Signal"
 tags: vector-space
+image: "/assets/last_signal.png"
 ---
+
+![Dying signals](/assets/last_signal.png)
 
 In 1993, the New Yorker ran a cartoon: "On the Internet, nobody knows you're a dog." It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
 
