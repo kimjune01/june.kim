@@ -80,9 +80,9 @@ The key properties:
 
 When Nike doubles its bid from $5 to $10, its territory expands from 30% to nearly 50% of the space — eating into every competitor's region. This is the continuous analog of outbidding someone on a keyword, except it happens along a *frontier*, not at a single point.
 
-## [Two Phases: Relevance, Then Revenue](/2026/03/04/tau-and-log-b)
+## [Three Levers, Three Players](/2026/03/04/three-levers)
 
-The scoring function has two terms serving different masters — the bid and the distance. They should be [split into separate phases, controlled by different parties](/2026/03/04/tau-and-log-b).
+The scoring function has three parameters — σ, τ, and log(b). Each belongs to [a different player and protects against a different failure](/2026/03/04/three-levers).
 
 ## Why It Gets Hard
 
