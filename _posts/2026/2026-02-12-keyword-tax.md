@@ -53,9 +53,7 @@ Publisher revenue drops 8%, from 79.39 to 72.82 (p<0.001). That surplus goes to 
 
 In keywords, specialists lose 3.5x more than generalists (-0.807 vs -0.233 per round). The climbing PT pays to compete on "pelvic floor exercises after C-section." The pelvic floor PT pays to compete on "finger pulley injury from rock climbing." Neither will convert on the other's queries, but the keyword bin forces them into the same auction anyway.
 
-This is the keyword tax. It's not a bug — it's the revenue model. The publisher captures 79.39 per round precisely because specialists are paying to compete on queries they'll never close.
-
-The keyword bin creates a de facto combinatorial auction: five specialists want different queries but the mechanism can't distinguish them. [Hartline, Hoy & Taggart (2023)](https://arxiv.org/abs/2310.03702) prove that in combinatorial settings, highest-bids-win has competitive efficiency as low as 1/m. The more specialties you cram into one bin, the worse it gets. Per-point embedding auctions have competitive efficiency 1.
+This is the keyword tax. [Levin & Milgrom (2010)](https://web.stanford.edu/~jdlevin/Papers/OnlineAds.pdf) call it **conflation**: pooling heterogeneous items into one auction. The auction mechanism is efficient (GSP works); the item definition is not. The publisher captures 79.39 per round precisely because specialists are paying to compete on queries they'll never close.
 
 ### What embeddings fix
 
