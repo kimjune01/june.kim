@@ -31,6 +31,8 @@ Before bids are considered, the publisher applies a relevance threshold τ. Only
 
 τ doesn't require a value function. It's a knob. Tighten it if users are bouncing. Loosen it if fill rates are too low. Directional feedback.
 
+[Hartline, Hoy & Taggart (2023)](https://arxiv.org/abs/2310.03702) prove that competitive efficiency is closed under reserve pricing. τ has zero auction cost.
+
 τ is zoning. The publisher decides what's allowed in the neighborhood.
 
 ## log(b) Is the Platform's Lever

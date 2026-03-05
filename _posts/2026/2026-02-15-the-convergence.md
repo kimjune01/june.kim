@@ -2,10 +2,7 @@
 layout: post
 title: "Convergence"
 tags: vector-space
-image: "/assets/convergence.png"
 ---
-
-![Separate puzzles](/assets/convergence.png)
 
 The pieces of embedding-space advertising are being built independently by groups that don't talk to each other. Academics publish auction mechanisms for LLM-native ads. Industry labs deploy embedding infrastructure at scale. Standards bodies draft TEE specifications. Platform companies launch walled-garden ad products. Each group is solving a piece of the same problem without referencing the others' work.
 

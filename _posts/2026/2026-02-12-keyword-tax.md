@@ -55,6 +55,8 @@ In keywords, specialists lose 3.5x more than generalists (-0.807 vs -0.233 per r
 
 This is the keyword tax. It's not a bug — it's the revenue model. The publisher captures 79.39 per round precisely because specialists are paying to compete on queries they'll never close.
 
+The keyword bin creates a de facto combinatorial auction: five specialists want different queries but the mechanism can't distinguish them. [Hartline, Hoy & Taggart (2023)](https://arxiv.org/abs/2310.03702) prove that in combinatorial settings, highest-bids-win has competitive efficiency as low as 1/m. The more specialties you cram into one bin, the worse it gets. Per-point embedding auctions have competitive efficiency 1.
+
 ### What embeddings fix
 
 ![Keywords collapse everyone to gray — embeddings let each specialist find their color](/assets/11_egalitarian_auction_dots.png)

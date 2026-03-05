@@ -62,7 +62,9 @@ The keyword advertiser wins by a mile. σ² in the denominator concentrates all 
 
 Move slightly away — toward "asbestos exposure health risks" — and the keyword score collapses while the vector score barely changes. The vector bidder picks up adjacent territory that keywords can't reach.
 
-No regression for keyword buyers. No wasted impressions for vector buyers. They coexist at different scales. The migration is a gradient: every advertiser enters at σ ≈ 0 and expands at their own pace. Or never expands at all. Keywords keep working forever. They're just very small circles.
+No regression for keyword buyers. No wasted impressions for vector buyers. They coexist at different scales.
+
+The migration is a gradient: every advertiser enters at σ ≈ 0 and expands at their own pace. Or never expands at all. Keywords keep working forever. They're just very small circles.
 
 ## What Each Layer Ships
 

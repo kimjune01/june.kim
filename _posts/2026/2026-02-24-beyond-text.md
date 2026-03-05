@@ -2,10 +2,7 @@
 layout: post
 title: "Beyond Text"
 tags: vector-space
-image: "/assets/beyond_text.png"
 ---
-
-![Modalities converge](/assets/beyond_text.png)
 
 This series assumed text. The math never did. The scoring function `log(bid) - distance² / σ²` operates on distance in a vector space — it doesn't know or care whether the vector came from a sentence, a photograph, or an audio clip.
 
