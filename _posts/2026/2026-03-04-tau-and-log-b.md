@@ -80,7 +80,7 @@ For LLM platforms, the answer is competition. Switching from ChatGPT to Claude t
 
 Perplexity already demonstrated this — total ad revenue came in at $20,000 against $34 million in subscriptions. They killed the ad program. The market revealed that for their users, ad-free was worth paying for, and ads weren't worth the churn risk.
 
-The platform's own relevance threshold is a proxy for user preferences. Not because the platform is altruistic, but because getting it wrong is fatal. The platform that isn't trustworthy dies.
+The platform's own relevance threshold is a proxy for user preferences. Getting it wrong is fatal: the platform that shows irrelevant ads loses users to one that doesn't.
 
 This is a stronger guarantee than regulation. It means the two-phase structure doesn't require anyone to audit the platform's τ. Competitive pressure keeps it honest.
 

@@ -11,7 +11,7 @@ In 1993, the New Yorker ran a cartoon: "On the Internet, nobody knows you're a d
 
 Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property — no identity verification — went from enabling authentic connection to enabling infinite noise. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the lemons problem. It's now the operating condition of every channel online.
 
-## The Kill List
+## What's Already Dead
 
 **PageRank** was a signal of peer endorsement. A link from MIT to your research page meant something — a human at a credible institution decided your work was worth citing. SEO farms industrialized link production. By 2025, the first page of Google for most commercial queries is content written to rank, not content written to inform. The signal died when the cost of producing a backlink dropped below the cost of earning one.
 
@@ -41,23 +41,21 @@ Without [relocation fees](/relocation-fees), position is free to declare and fre
 
 With fees, position becomes a credible commitment. The climbing PT at "rock climbing finger pulley rehabilitation" has put capital behind that claim. Moving to generic "physical therapy" would cost her the relocation fee, the accumulated [tenure discount](/stay-or-pay), and the bond she posted on entry. The cost of faking scales with the distance between where you claim to be and where you belong.
 
-Every dead signal relied on external enforcement — moderation, detection algorithms, spam filters — to keep faking expensive. The enforcement always loses because fakers iterate faster than filters. Embedding position doesn't rely on detection. The [entry bond](/stay-or-pay) prices the option to create a fake identity. The tenure discount creates an asset destroyed by repositioning. The relocation fee charges for every unit of drift. The cost is the mechanism.
+Every dead signal relied on external enforcement (moderation, detection algorithms, spam filters) to keep faking expensive. The enforcement always loses because fakers iterate faster than filters. Embedding position works differently. The [entry bond](/stay-or-pay) prices the option to create a fake identity. The tenure discount creates a financial asset that repositioning destroys. The relocation fee charges for every unit of drift. Instead of trying to detect fakes, the mechanism makes faking progressively more expensive.
 
-## Not a Filter. A Price.
+## Pricing Instead of Filtering
 
-The relocation fee isn't a filter. It's a price. You don't detect drift and punish it. You charge for it — λ · d² for every move. Prices don't need to distinguish real from fake. They make both pay. The honest advertiser pays a small fee for a small adjustment. The gaming advertiser pays a large fee for a large misrepresentation. The mechanism is indifferent to intent. It charges by distance.
+The relocation fee doesn't detect drift and punish it. It charges for it: λ · d² for every move. The honest advertiser pays a small fee for a small adjustment. The gaming advertiser pays a large fee for a large misrepresentation. The mechanism doesn't need to distinguish real from fake, because both pay proportionally to how far they move.
 
-Carbon taxes don't detect which emissions are wasteful. They charge for all of them. Honest positioning is cheap. Dishonest positioning is expensive. No classifier needed.
+This is the same logic as a carbon tax. You don't detect which emissions are wasteful. You charge for all of them, and the price gradient does the sorting. Honest positioning is cheap. Dishonest positioning is expensive.
 
 ## The Quiet Ad
 
-Every signal death made the internet louder. SEO slop fills search results. Fake reviews crowd out real ones. AI cold emails flood inboxes. Engagement bots inflate metrics. The noise is the product of zero-cost faking.
+Every signal death made the internet louder. SEO slop fills search results. Fake reviews crowd out real ones. AI cold emails flood inboxes. Engagement bots inflate metrics. All of this noise comes from the same source: faking became free.
 
-An embedding-space ad is quiet. It doesn't appear unless you're nearby. It doesn't appear at all unless [you ask](/ask-first). The scoring function is `log(bid) - distance²/σ²` — the log compresses bid differences while distance dominates. A 10x bid overcomes very little distance. The closest expertise wins, not the loudest voice.
+An embedding-space ad is quiet. It doesn't appear unless you're nearby. It doesn't appear at all unless [you ask](/ask-first). The scoring function `log(bid) - distance²/σ²` compresses bid differences while distance dominates, so a 10x bid overcomes very little distance. The closest expertise wins.
 
-The [model can't see the ads](/model-blindness). The conversation isn't steered. The indicator brightens as you approach a region of expertise, and dims as you leave.
-
-Positioned honestly, held at a cost, verified by hardware, silent until asked. The last signal is the one where faking is expensive by construction.
+The [model can't see the ads](/model-blindness). The conversation isn't steered. The indicator brightens as you approach a region of expertise, and dims as you leave. The signal works because faking it is expensive: holding a position costs money, the auction runs in attested hardware, and the embeddings are independently verifiable.
 
 ---
 

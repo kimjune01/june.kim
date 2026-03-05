@@ -13,7 +13,7 @@ Keywords are a bottleneck — structurally. A dozen auto shops bid on "mechanic 
 
 Consider auto repair in a mid-sized city. There might be thirty shops: transmission, European imports, Japanese imports, classic restoration, hybrid/EV, diesel, body work, performance tuning, fleet maintenance, off-road, marine engines, motorcycle, alignment, paint correction, audio installation. Thirty distinct services. Car owners have specific problems. The market *should* have room for all of them.
 
-Google Ads offers them maybe four keyword bins: "auto repair," "mechanic near me," "car shop," "body shop." Thirty shops, four bins. The auction is dense by construction. CPCs rise until only the best-capitalized shops — usually national chains like Midas, Jiffy Lube, or Caliber Collision — can afford to stay. In a [recent industry poll](https://searchengineland.com/small-businesses-compete-google-ads-462009), more than 50% of respondents said small businesses have been priced out of Google Ads entirely.
+Google Ads offers them maybe four keyword bins: "auto repair," "mechanic near me," "car shop," "body shop." Thirty shops, four bins. The auction is dense because the categories are coarse. CPCs rise until only the best-capitalized shops (usually national chains like Midas, Jiffy Lube, or Caliber Collision) can afford to stay. In a [recent industry poll](https://searchengineland.com/small-businesses-compete-google-ads-462009), more than 50% of respondents said small businesses have been priced out of Google Ads entirely.
 
 The independent shop that specializes in vintage Porsche air-cooled engine rebuilds has no keyword that describes what he does. He bids on "auto repair" and loses to Midas. He bids on "Porsche repair" — a smaller bin, but still shared with dealerships, general European shops, and parts retailers. The bin is always too coarse. The specialist always overpays.
 
@@ -27,7 +27,7 @@ When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the 
 
 The [simulation](/keyword-tax) measured this directly. With embedding auctions and [relocation fees](/synthetic-friction), specialist surplus goes from -0.807 (losing money every round) to +0.021 (profitable). Win diversity rises from 0.809 to 0.876 — different specialists win different queries instead of one dominant bidder sweeping the bin.
 
-The mechanism doesn't redistribute anything. It stops compressing the space, and more businesses survive as a result.
+The mechanism doesn't redistribute anything. It removes the bottleneck that was compressing thirty distinct services into four keyword bins, and more businesses survive as a result.
 
 ## Why Chatbots Change the Math
 
@@ -41,23 +41,17 @@ The keyword bottleneck persists partly because search boxes train users to compr
 
 A continuous space with better differentiation is worth nothing if large players can just occupy all the niches. What stops Midas from creating thirty embedding positions and capturing every niche query?
 
-[Stay or Pay](/who-pays-the-fee) addresses this with three mechanisms, each borrowed from markets that already work:
-
-**Identity binding.** Position history follows a hashed payment credential across exchanges. You can't spin up shell accounts without separate verified business identities, separate payment credentials, and separate bonds.
-
-**Entry bonds.** Refundable deposits that make each new identity expensive. One bond for one shop is temporary cost. Thirty bonds for thirty fake identities is permanent capital drain — and triggers correlation penalties.
-
-**Correlation penalties.** Borrowed from Ethereum's proof-of-stake slashing: coordinated resets by related accounts cost quadratically. Five simultaneous resets don't cost 5x. They cost 25x.
+[Stay or Pay](/stay-or-pay) addresses this with mechanisms borrowed from markets that already work. Position history follows a hashed payment credential across exchanges, so you can't spin up shell accounts without separate verified business identities, separate payment credentials, and separate bonds. Refundable entry deposits make each new identity expensive: one bond for one shop is temporary cost, but thirty bonds for thirty fake identities is permanent capital drain. And coordinated resets by related accounts cost quadratically (borrowed from Ethereum's proof-of-stake slashing), so five simultaneous resets cost 25x, not 5x.
 
 The economics of niche-squatting don't work when each occupied position requires a verified identity, a locked bond, and tenure to earn fee discounts. A chain could legitimately operate thirty locations with thirty specialties — and if each location genuinely serves that niche, the mechanism is working as designed. What it prevents is occupying positions you don't actually serve, which is the keyword-era strategy of bidding on everything and converting on nothing.
 
 ## What This Means
 
-Chains will still exist. Capital advantages don't disappear. But the advertising layer — the mechanism that connects demand to supply — stops being the bottleneck that forces consolidation. The air-cooled Porsche specialist reaches the customers who need him, at a price that reflects his proximity to the query, not his ability to outspend Midas.
+Chains will still exist. Capital advantages don't disappear. But the advertising layer (the mechanism that connects demand to supply) stops being the bottleneck that forces consolidation. The air-cooled Porsche specialist reaches the customers who need him, at a price that reflects his proximity to the query rather than his ability to outspend Midas.
 
-The mechanism doesn't redistribute wealth. It creates room for more of it to exist.[^1]
+Whether this actually produces a more diverse market is an empirical question. The [simulation data](/keyword-tax) suggests yes: specialist surplus goes positive, win diversity increases, and different specialists win different queries. But a simulation with 25 advertisers isn't a market with thousands of participants. The mechanism creates room. Whether businesses fill it depends on factors the auction can't control.[^1]
 
-[^1]: Socialists correctly diagnose that wealth concentrates. Their fix is redistribution — which requires authority to decide who gets what, enforced by compulsion. The embedding auction reaches the same destination through voluntary exchange: specialists position accurately because it's profitable, users tap because it's useful, exchanges enforce fees because it attracts better inventory. Nobody is compelled. The outcome is broader because the mechanism is better, not because anyone was forced.
+[^1]: Socialists correctly diagnose that wealth concentrates. Their fix is redistribution, which requires authority to decide who gets what. The embedding auction reaches a similar destination through voluntary exchange: specialists position accurately because it's profitable, users tap because it's useful, exchanges enforce fees because it attracts better inventory. The outcome is broader because the mechanism is better, not because anyone was forced.
 
 ---
 

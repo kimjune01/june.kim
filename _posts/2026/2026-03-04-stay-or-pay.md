@@ -13,17 +13,13 @@ Every stable market has switching costs. The FCC charges spectrum license fees. 
 
 The pattern is the same everywhere it appears. Introduce switching costs. Participants differentiate instead of clustering. Match quality improves. Surplus increases. The market with friction outperforms the market without it — and the friction pays for itself.
 
-## Three Attack Surfaces
+## How Relocation Fees Get Circumvented
 
-The relocation fee creates value. That value creates incentives to circumvent it.
+The relocation fee creates value. That value creates incentives to circumvent it, and there are three obvious ways.
 
-**Account resets.** An advertiser accumulates drift history, owes a large relocation fee, and creates a new account. Fresh account, no history, no fee. The position commitment chain starts at zero.
+An advertiser accumulates drift history, owes a large relocation fee, and creates a new account. Fresh account, no history, no fee. The position commitment chain starts at zero. Alternatively, Exchange A enforces relocation fees while Exchange B launches with "zero fees, same inventory." Advertisers optimize positions on B for free, then bid on A with their discovered vectors. The fee evaporates across exchange boundaries. And new advertisers need to enter the market somehow. A system that treats every new entrant as a suspected resetter will suppress legitimate demand. The enforcement has to distinguish a PT opening her first practice from Nike's seventeenth shell account.
 
-**Exchange defection.** Exchange A enforces relocation fees. Exchange B launches with "zero fees, same inventory." Advertisers optimize positions on B for free, then bid on A with their discovered vectors.
-
-**Bootstrapping friction.** New advertisers need to enter the market. A system that treats every new entrant as a suspected resetter will suppress legitimate demand. The enforcement has to distinguish a PT opening her first practice from Nike's seventeenth shell account.
-
-Each attack has a known defense. The defenses come from spectrum auctions, insurance markets, payment networks, and platform identity systems. None of this is new. The pieces just haven't been assembled for continuous embedding space.
+Each of these attacks has a known defense. The defenses come from spectrum auctions, insurance markets, payment networks, and platform identity systems. The pieces haven't been assembled for continuous embedding space, but none of them are new.
 
 ## Identity Binding
 
@@ -107,7 +103,7 @@ This is the OpenRTB adoption pattern. OpenRTB succeeded because it reduced integ
 
 The cautionary tale is OpenRTB 3.0, released in 2020 and still not adopted because migration cost exceeded the benefit. The fee protocol has to be incrementally adoptable. An exchange that already runs TEE-attested auctions adds relocation fees as one more line in the clearing code. An exchange that doesn't run TEEs has a larger migration — but that migration is justified independently by the [demand-side preference for verifiable auctions](/keywords-are-tiny-circles), not by the fee protocol alone.
 
-## The Stack
+## How the Pieces Fit Together
 
 Five mechanisms, each with decades of deployment.
 
@@ -121,9 +117,9 @@ Five mechanisms, each with decades of deployment.
 
 The mechanisms interact. A tenure discount that's too steep makes the entry bond redundant — the discount *is* the bond, accumulated over time. An entry bond that's too high makes the tenure discount unnecessary. The right calibration is empirical — the [simulation](https://github.com/kimjune01/openauction) can test parameter combinations the way it tested λ values for the relocation fee.
 
-Every industry that has introduced switching costs into a frictionless market has seen the same result: participants differentiate, match quality improves, and total surplus increases. The FCC's spectrum auctions raised $44.9 billion because positional commitment made licenses valuable. Insurance bonus-malus systems reduced accident rates because tenure discounts made safe driving financially rational. The London congestion charge cut inner-city traffic 20% because the fee internalized an externality that was destroying the commons.
+The pattern across industries is consistent. The FCC's spectrum auctions raised $44.9 billion because positional commitment made licenses valuable. Insurance bonus-malus systems reduced accident rates because tenure discounts made safe driving financially rational. The London congestion charge cut inner-city traffic 20% because the fee internalized an externality that was destroying the commons. In each case, introducing switching costs into a frictionless market led to differentiation, better match quality, and higher total surplus.
 
-Embedding space is the same commons. The switching costs are the same solution. These markets clear billions of dollars annually.
+Whether the same pattern holds in embedding space is the bet this architecture makes. The prior art is encouraging, and the [simulation data](/synthetic-friction) supports the direction, but a production market with thousands of advertisers will surface dynamics the simulation doesn't capture.
 
 ## References
 
