@@ -2,11 +2,14 @@
 layout: post
 title: "How to Trust Advertisers"
 tags: vector-space
+image: "/assets/how_to_trust_advertisers.jpg"
 ---
+
+![Trust signals](/assets/how_to_trust_advertisers.jpg)
 
 A scammer reads this series and sees opportunity. The auction is open. No gatekeeper approves advertisers. So they spin up an account, position themselves near "rash that won't go away," and sell snake oil to people who need a dermatologist.
 
-The snake oil costs pennies. Lard and menthol, package design for $5 on Fiverr. The real dermatologist has malpractice insurance, a lease, staff, years of training. The scammer has more money left over for ads. In any auction, the scammer has a [built-in cost advantage](https://blog.zgp.org/when-can-deceptive-sellers-outbid-honest-sellers-for-ad-impressions/). The [keyword tax](/keyword-tax) that legitimate specialists pay is the snake oil seller's profit margin.
+The snake oil costs pennies. Lard and menthol, package design from Nano Banana Pro. The real dermatologist has malpractice insurance, a lease, staff, years of training. The scammer has more money left over for ads. In any auction, the scammer has a [built-in cost advantage](https://blog.zgp.org/when-can-deceptive-sellers-outbid-honest-sellers-for-ad-impressions/). The [keyword tax](/keyword-tax) that legitimate specialists pay is the snake oil seller's profit margin.
 
 This is the obvious objection to an open ad protocol. And it's the right objection.
 
@@ -44,7 +47,9 @@ Changing the underlying data structure from keywords to embeddings doesn't chang
 
 HTTP doesn't prevent phishing. TCP doesn't prevent malware. SMTP didn't prevent spam. None of them solved fraud at the protocol layer. The solutions came from other layers: SPF/DKIM/DMARC, browser padlock icons, search engine reputation scoring. The protocol stayed open. Trust was layered on top, competitively, with no single authority.
 
-The ad auction protocol should follow the same pattern. The [scoring function](/power-diagrams-ad-auctions) `log(bid) - distance² / σ²` runs inside a [TEE](/perplexity-was-right-to-kill-ads). It matches by meaning. It has no opinion about legitimacy. Fraud prevention happens at other layers. The [trust chain](/the-last-ad-layer) verifies that the auction ran honestly. This post is about what happens before the auction: who gets to participate.
+The ad auction protocol should follow the same pattern. The [scoring function](/power-diagrams-ad-auctions) `log(bid) - distance² / σ²` runs inside a [TEE](/perplexity-was-right-to-kill-ads). It matches by meaning. It has no opinion about legitimacy. Fraud prevention happens at other layers. The [trust chain](/the-last-ad-layer) verifies that the auction ran honestly.
+
+> The protocol is open, the auction is honest, and nobody reviews advertisers before they enter. How do you keep the snake oil seller from winning the auction?
 
 ## Piggybacking on Payments
 
@@ -52,7 +57,7 @@ The exchange can't observe outcomes. But payment networks can.
 
 When the snake oil doesn't work, the buyer disputes the charge. Visa sees the chargeback. The merchant's chargeback rate goes up. The payment processor flags or drops them. The enforcement comes from the person who was actually harmed.
 
-The mechanic: an advertiser connects their payment processor as part of onboarding (Plaid, Stripe, Square, Clover). Merchant account age, transaction volume, chargeback rate. These are graduated trust signals that no gatekeeper grants. They accumulate from real commerce. A business with three years of clean payment history and a 0.1% chargeback rate is almost certainly legitimate. Thousands of customers paid and didn't complain. That's a stronger signal than any approval process.
+The mechanic: an advertiser connects their payment processor as part of onboarding (Plaid, Stripe, Square, Clover). Merchant account age, transaction volume, chargeback rate. These are graduated trust signals that no gatekeeper grants. They accumulate from real commerce. A business with three years of clean payment history and a 0.1% chargeback rate is almost certainly legitimate. Thousands of customers paid and didn't complain. That's a stronger signal than any approval process, and the hard work of verification already happened at the payment network. The ad exchange doesn't need to build a trust infrastructure from scratch. It piggybacks on one that Visa, Stripe, and Square have been refining for decades.
 
 KYC through payment auth is friction. But it's more open than whatever Google's internal reviews are offering. The traditional healer with no PT license but 30 years of clean payment history has a stronger trust signal than any credential.
 
@@ -97,4 +102,4 @@ Enrons and Bankman-Frieds will have their moments. That's the cost of living in 
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art, drafted prose, and pushed back on its own proposals until they stopped being gatekeeping in disguise.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*
