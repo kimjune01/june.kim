@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "No One Sees the Data"
+title: "Monetizing the Untouchable"
 tags: vector-space
 image: "/assets/ftc.jpg"
 ---
 
 Health publishers can't run ads. The FTC fined [GoodRx](https://www.ftc.gov/news-events/news/press-releases/2023/02/ftc-enforcement-action-bar-goodrx-sharing-consumers-sensitive-health-info-advertising) $1.5 million, fined [BetterHelp](https://www.ftc.gov/news-events/news/press-releases/2023/03/ftc-ban-betterhelp-revealing-consumers-data-including-sensitive-mental-health-information-facebook) $7.8 million, and [banned Cerebral](https://www.ftc.gov/news-events/news/press-releases/2024/04/ftc-order-bans-online-mental-health-company-cerebral-using-or-disclosing-sensitive-data-advertising) from using health data for advertising entirely. Any publisher sitting on health-adjacent conversations treats that inventory as untouchable. The compliance risk is existential. The revenue stays at zero.
 
-![No one sees the data](/assets/ftc.jpg)
+![Monetizing the untouchable](/assets/ftc.jpg)
 
 The data never leaves a sealed enclave, so no third party ever acquires it, so the FTC's enforcement framework has nothing to trigger on. And the signal is better than anything keywords can produce: a user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) gets matched to a sports rehab PT who specializes in keeping athletes in training. Google would have matched "knee pain running" to the highest bidder.
 
