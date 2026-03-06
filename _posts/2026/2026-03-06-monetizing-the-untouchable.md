@@ -9,7 +9,7 @@ Health publishers can't run ads. The FTC fined [GoodRx](https://www.ftc.gov/news
 
 ![Monetizing the untouchable](/assets/ftc.jpg)
 
-The data never leaves a sealed enclave, so no third party ever acquires it, so the FTC's enforcement framework has nothing to trigger on. And the signal is better than anything keywords can produce: a user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) gets matched to a sports rehab PT who specializes in keeping athletes in training. Google would have matched "knee pain running" to the highest bidder.
+The data never leaves a sealed enclave, so no third party ever acquires it, so the FTC's enforcement framework, as written and as applied in every case to date, has nothing to trigger on. And the signal is better than anything keywords can produce: a user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) gets matched to a sports rehab PT who specializes in keeping athletes in training. Google would have matched "knee pain running" to the highest bidder.
 
 ## Why Acquisition Is the Line
 
@@ -47,9 +47,11 @@ The HBNR itself recognizes this distinction. The rule covers "unsecured" PHR ide
 
 The HBNR was designed to punish companies that let health data leak. Data cryptographically sealed inside an enclave has not leaked.
 
-The FTC could also bypass the HBNR entirely and bring a Section 5 unfairness claim, as it did on seven of eight counts against GoodRx. But Section 5 unfairness requires "substantial injury consumers cannot reasonably avoid." When the user opted in, no data was exposed to any party, and no profiling or retargeting occurred, there is no injury to point to.
+The FTC could also bypass the HBNR entirely and bring a Section 5 unfairness claim, as it did on seven of eight counts against GoodRx. Section 5 unfairness requires "substantial injury consumers cannot reasonably avoid." When the user opted in, no data was exposed to any party, no profiling or retargeting occurred, and the enclave's intermediate state was destroyed after execution, the injury theory is thin. The FTC could argue that the mere risk of enclave compromise constitutes potential harm, but that standard would also indict HTTPS, end-to-end encrypted messaging, and every other system that processes sensitive data inside infrastructure the user doesn't control.
 
 There's a simpler way to see this. Google serves pharmaceutical ads against "depression symptoms" and PT ads against "knee pain running" every day. The system uses health-related queries to select health-related ads. The FTC has never pursued this, because serving a relevant ad against a voluntarily submitted query is just search working correctly. Intent casting does the same thing. The user disclosed voluntarily, the match is relevant, and the data handling is actually more private than Google's, because nobody retains the query afterward.
+
+This analysis covers the federal framework. State health privacy laws, including Washington's My Health My Data Act and the CCPA, define "sale" and "sharing" differently than the HBNR defines "acquisition." A full state-by-state analysis is separate work, but the core property is the same: no party outside the enclave gains access to the data.
 
 ## Consent That Holds Up
 

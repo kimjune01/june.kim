@@ -5,11 +5,11 @@ tags: vector-space
 image: "/assets/how_to_trust_advertisers.jpg"
 ---
 
-![Trust signals](/assets/how_to_trust_advertisers.jpg)
-
 A scammer reads this series and sees opportunity. The auction is open. No gatekeeper approves advertisers. So they spin up an account, position themselves near "rash that won't go away," and sell snake oil to people who need a dermatologist.
 
 The snake oil costs pennies. Lard and menthol, package design from Nano Banana Pro. The real dermatologist has malpractice insurance, a lease, staff, years of training. The scammer has more money left over for ads. In any auction, the scammer has a [built-in cost advantage](https://blog.zgp.org/when-can-deceptive-sellers-outbid-honest-sellers-for-ad-impressions/). The [keyword tax](/keyword-tax) that legitimate specialists pay is the snake oil seller's profit margin.
+
+![Trust signals](/assets/how_to_trust_advertisers.jpg)
 
 This is the obvious objection to an open ad protocol. And it's the right objection.
 
