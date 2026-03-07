@@ -41,9 +41,9 @@ I emailed a Google Research scientist who designs RAG auctions. He replied to ta
 
 ## That's Exactly Why It Has to Be Open
 
-The mechanism design, the scoring function, and the simulation are all public. Google can build their version, but so can Meta, PubMatic, The Trade Desk, anyone. The government built the wall with FTC enforcement and compliance costs that only incumbents can afford. The compliance gate has a direct path to the castle in the blueprint: [TEE attestation](/monetizing-the-untouchable) satisfies the government's own rules. A two-person chatbot startup gets the same privacy guarantees as Google, because the user's privates stay private without needing promises.
+The mechanism design, the scoring function, and the simulation are all public. Google can build their version, but so can Meta, PubMatic, The Trade Desk, anyone. The government built the wall with FTC enforcement and compliance costs that only incumbents can afford. The compliance gate has a direct path to the castle: [TEE attestation](/monetizing-the-untouchable) satisfies the government's own rules. A two-person chatbot startup gets the same privacy guarantees as Google, because the user's privates stay private without needing promises.
 
-If the embedding layer lives inside any single company's stack, whoever has leverage over that company has leverage over the matching. An open protocol has no single point of pressure.
+If the embedding layer lives inside any single company's stack, whoever has leverage over that company has leverage over the matching. An open protocol has no single point of pressure. And because it's all published, the mechanism is prior art. Nobody can patent it.
 
 The IAB has seen the [scrollytelling](/advertising-journey). Thirty researchers across mechanism design and auction theory have the papers in their inbox. The ideas are already distributed. In a few days, this page will be on archive.org. Nobody can redact them.
 
