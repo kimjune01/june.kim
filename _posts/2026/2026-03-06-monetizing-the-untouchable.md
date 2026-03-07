@@ -9,7 +9,7 @@ Health publishers can't run ads. The FTC fined [GoodRx](https://www.ftc.gov/news
 
 ![Monetizing the untouchable](/assets/ftc.jpg)
 
-The conversation never leaves the publisher. The embedding derived from it enters a sealed enclave, encrypted in transit, where no party can read it. The FTC's enforcement framework, as written and as applied in every case to date, has nothing to trigger on. And the signal is better than anything keywords can produce: a user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) gets matched to a sports rehab PT who specializes in keeping athletes in training. Google would have matched "knee pain running" to the highest bidder.
+The conversation never leaves the publisher. The embedding enters a TEE, encrypted in transit. The FTC's enforcement framework, as written and as applied in every case to date, has nothing to trigger on. And the signal is better than anything keywords can produce: a user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) gets matched to a sports rehab PT who specializes in keeping athletes in training. Google would have matched "knee pain running" to the highest bidder.
 
 ## Why Acquisition Is the Line
 
@@ -25,7 +25,7 @@ The publisher keeps the conversation. When a user describes lateral knee pain on
 
 Advertiser embeddings are public. An advertiser's position in embedding space is a claim of expertise: "sports injury rehab for competitive athletes who need to keep training." The exchange publishes the full catalog, and the publisher caches a local copy. Phase one of the [two-phase model](/ask-first) runs entirely on the publisher's servers: cosine distance between the conversation embedding and cached advertiser positions, rendered as a proximity indicator. No data moves. No auction runs.
 
-If the user taps, the embedding enters a [TEE enclave](/model-blindness) running on [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/). The publisher encrypts the embedding with the enclave's public key, verified through [remote attestation](https://docs.aws.amazon.com/enclaves/latest/user/verify-root.html). The exchange operator's infrastructure routes the ciphertext but cannot decrypt it. Inside the enclave, the TEE computes distances against all advertiser positions, combines them with each advertiser's dynamic bids, budgets, and pacing rules, runs the full auction with `log(bid) - distance² / σ²`, and returns a winner ID and price. The embedding is destroyed after execution.
+If the user taps, the embedding enters a [TEE](/model-blindness) running on [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/). The publisher encrypts the embedding with the enclave's public key, verified through [remote attestation](https://docs.aws.amazon.com/enclaves/latest/user/verify-root.html). The exchange operator's infrastructure routes the ciphertext but cannot decrypt it. Inside the enclave, the TEE computes distances against all advertiser positions, combines them with each advertiser's dynamic bids, budgets, and pacing rules, runs the full auction with `log(bid) - distance² / σ²`, and returns a winner ID and price. The embedding is destroyed after execution.
 
 **Publisher**: keeps the raw conversation. Sends only an encrypted embedding that the exchange operator cannot read.
 
@@ -41,11 +41,11 @@ The FTC published a [blog post on data clean rooms](https://www.ftc.gov/policy/a
 
 But DCRs fail because the data still moves. The operator receives it, promises not to look, and sometimes looks anyway. GoodRx had confidentiality provisions with Facebook. The FTC was unimpressed.
 
-Intent casting is different in kind. The conversation stays with the publisher. The embedding enters sealed hardware, encrypted in transit, unreadable to the exchange operator. The HBNR covers "unsecured" PHR identifiable health information, defined as data not "rendered unusable, unreadable, or indecipherable" through specified technologies. An embedding encrypted in transit and processed inside hardware the operator cannot access meets that standard. The FTC has [never tested this safe harbor](https://fpf.org/resource/confidential-computing-and-privacy-policy-implications-of-trusted-execution-environments/) in an enforcement context involving confidential computing. But the statutory language supports it.
+Intent casting eliminates the transfer entirely. The HBNR covers "unsecured" PHR identifiable health information, defined as data not "rendered unusable, unreadable, or indecipherable" through specified technologies. An embedding encrypted in transit and processed inside hardware the operator cannot access meets that standard. The FTC has [never tested this safe harbor](https://fpf.org/resource/confidential-computing-and-privacy-policy-implications-of-trusted-execution-environments/) in an enforcement context involving confidential computing. But the statutory language supports it.
 
 State health privacy laws like Washington's [My Health My Data Act](https://app.leg.wa.gov/billsummary?BillNumber=1155&Year=2023&Initiative=false) regulate collection, sharing, and sale of health data. The exchange operator receives ciphertext it cannot read, processed inside hardware it cannot inspect, destroyed after execution. If routing encrypted data to a TEE constitutes "collection," then every HTTPS request to a cloud-hosted health app is collection by the CDN. That standard would break the internet.
 
-Google serves pharmaceutical ads against "depression symptoms" and PT ads against "knee pain running" every day. The FTC has never pursued this, because matching a relevant ad to a voluntarily submitted query is search working correctly. Intent casting does the same thing with stronger privacy: the conversation stays with the publisher, the embedding is encrypted in transit, and nobody retains it afterward.
+Google serves pharmaceutical ads against "depression symptoms" and PT ads against "knee pain running" every day. The FTC has never pursued this, because matching a relevant ad to a voluntarily submitted query is search working correctly. Intent casting does the same thing with stronger privacy.
 
 ## Consent That Holds Up
 
@@ -67,13 +67,13 @@ Health-adjacent inventory is some of the highest-intent traffic on the internet.
 
 Intent casting resolves the tradeoff. The [scoring function](/2026/03/04/three-levers) rewards proximity between the user's need and the advertiser's expertise. A sports rehab PT who positions accurately wins the runner's query at a price that reflects genuine relevance. The publisher earns revenue on inventory that was previously dead, and the advertiser reaches a user they couldn't reach through keywords, because the signal is richer than anything a two-word search query could carry.
 
-The compliance constraint and the revenue incentive point the same direction. Better privacy architecture produces better matching, which produces better CPMs, which makes the privacy architecture worth building.
+The compliance constraint and the revenue incentive point the same direction.
 
 ## Where This Stands
 
-Google retains health-intent search queries indefinitely and matches them against pharmaceutical advertisers. The data doesn't leave the building because Google is the building. Meta [proposed using chatbot conversations for ad targeting](https://about.fb.com/news/2024/09/how-meta-ai-is-becoming-more-personally-useful/) with no opt-in. Incumbents comply by being the only party in the room.
+Google retains health-intent search queries indefinitely and matches them against pharmaceutical advertisers; the data doesn't leave the building because Google is the building. Meta [proposed using chatbot conversations for ad targeting](https://about.fb.com/news/2024/09/how-meta-ai-is-becoming-more-personally-useful/) with no opt-in. Both comply by being the only party in the room.
 
-Intent casting complies differently. The publisher keeps the conversation. The embedding enters sealed hardware, encrypted in transit, destroyed after execution. No party acquires readable health information. That's the whole argument. Not "trust us." We prove it.
+Intent casting complies differently. No party acquires readable health information. The architecture proves it.
 
 ---
 
