@@ -26,7 +26,7 @@ So I call a treatment provider and say: here's a channel where every lead alread
 
 The scoring function is [published](/power-diagrams-ad-auctions). The [simulation is open-source](https://github.com/kimjune01/openauction). PubMatic already has the [NVIDIA partnership](https://pubmatic.com/news/pubmatic-delivers-5x-faster-smarter-advertising-decisions-with-nvidia/) for sub-millisecond inference. Anyone can reimplement this in weeks. First mover advantage is thin when the protocol is a commodity.
 
-So Google walks into my office and says: nice proof of concept. Here's an acqui-hire. I have to accept because there's no moat and they have way more liquidity. If I don't build fast enough to clear real ad traffic, Google will hit me with a job offer I can't refuse. It's way cheaper for them to hire one person than to acquire a company with live revenue. The protocol survives either way.
+So Google walks into my office and says: nice proof of concept. Here's an acqui-hire. I have to accept because there's no moat and they have way more liquidity. If I don't build fast enough to clear real ad traffic, Google will hit me with a job offer I can't refuse. It's way cheaper for them to hire one person than to acquire a company with live revenue. The offer isn't a gag order. It's a sedative. The protocol survives either way.
 
 But that's the whole point. Consumers get conversations that stay private by design. Advertisers reach the right people on their own terms instead of bidding on keywords they share with everyone else. Chatbot publishers can monetize independently and survive without selling to a larger player or [bending to a single large customer](/unredactable). Free and open competition is the force for good.
 
