@@ -83,4 +83,4 @@ These are UX problems, not math problems. The auction mechanism works regardless
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the design; Claude built the prototype, generated diagrams, and drafted prose.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

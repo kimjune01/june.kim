@@ -206,4 +206,4 @@ The ChatGPT ad market alone could be $10B+ annually within five years. The compa
 
 *The game theory in this post is speculative — mapping the problem space, not claiming settled conclusions.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

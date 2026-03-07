@@ -174,4 +174,4 @@ Relocation fees are the building code for embedding-space auctions.
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and designed the experiments; Claude built the simulation and drafted prose.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

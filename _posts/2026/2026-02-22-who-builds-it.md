@@ -101,4 +101,4 @@ The pieces are on the board. Someone assembles them.
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument and sourced the evidence; Claude verified claims and drafted prose.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

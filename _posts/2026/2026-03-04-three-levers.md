@@ -76,4 +76,4 @@ Getting τ wrong is fatal: the platform that shows irrelevant ads loses users to
 
 ---
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

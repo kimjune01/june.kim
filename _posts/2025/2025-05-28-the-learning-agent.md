@@ -33,4 +33,4 @@ This might sound really complicated, but it's actually well-studied. it's called
 
 So I wrote an implementation of PRewrite, complete with UI for your curiosity. [Check out LoopLearner on Github](https://github.com/kimjune01/LoopLearner). Of course it's coauthored by Claude Code.
 
-I hope this post helps you think critically about what it means to allow agents to learn and adapt to the user's needs. If you found this interesting, email me! june@june.kim let's geek out about this stuff.
+I hope this post helps you think critically about what it means to allow agents to learn and adapt to the user's needs. If you found this interesting, let's geek out about this stuff.

@@ -62,4 +62,4 @@ The guys with the truck weren't invisible because they're bad at marketing. They
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument from a reader's challenge; Claude drafted prose.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

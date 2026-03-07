@@ -15,7 +15,7 @@ So why would I publish the full mechanism design as a blog series? [Scrollytelli
 
 ## The Alternatives
 
-I could have kept it to myself. Built a company, raised funding, tried to be the next celebrity tech founder. But the only way it works is if the auction code is public for all to see. It runs in a [TEE](/monetizing-the-untouchable), which means it has to be verifiable by design. Anyone can clone it in a second. There is no proprietary version of a transparent auction. The "secret sauce" would have been copied the moment the first auction cleared.
+I could have kept it to myself. Built a company, raised funding, tried to be the next celebrity tech founder. But the only way the mechanism works is if the auction code is public for all to see. It runs in a [TEE](/monetizing-the-untouchable), which means it has to be verifiable by design. Anyone can clone it in a second. There is no proprietary version of a transparent auction. The "secret sauce" would have been copied the moment the first auction cleared.
 
 Or I could have kept it quiet to land a job. Walk into Google Research, whiteboard the scoring function, explain why TEE attestation makes the auction verifiable. They learn everything they need whether they hire me or not. The interview IS the knowledge transfer. The difference is that behind an NDA, nobody else gets it. Google captures the entire chat surface and we get another 20 years of monopoly.
 
@@ -53,4 +53,4 @@ The scrollytelling can't be unscrollytold. But I can disappear. The moment I joi
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

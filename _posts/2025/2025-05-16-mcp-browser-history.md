@@ -35,4 +35,4 @@ If you are interested in seeing some code and the many optimizations that make i
 
 [Customized Chroma mcp server](https://github.com/kimjune01/chroma-mcp)
 
-If you are working on something similar, or want to work with me, shoot me over an email june@june.kim
+If you are working on something similar, or want to work with me, shoot me over an email.

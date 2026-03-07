@@ -90,8 +90,8 @@ None of these steps requires a breakthrough. Each requires someone to go first.
 
 ---
 
-If you're building an ad exchange, a chatbot platform, or setting standards for AI-era monetization: the [mechanism is described](/power-diagrams-ad-auctions), the [simulation is open source](https://github.com/kimjune01/openauction/tree/main/cmd/simulate), and the [infrastructure exists](https://github.com/cloudx-io/openauction). I want to hear from you: [june@june.kim](mailto:june@june.kim).
+If you're building an ad exchange, a chatbot platform, or setting standards for AI-era monetization: the [mechanism is described](/power-diagrams-ad-auctions), the [simulation is open source](https://github.com/kimjune01/openauction/tree/main/cmd/simulate), and the [infrastructure exists](https://github.com/cloudx-io/openauction). I want to hear from you.
 
 ---
 
-*Part of the [Vector Space](/vector-space) series. june@june.kim*
+*Part of the [Vector Space](/vector-space) series.*

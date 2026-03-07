@@ -146,7 +146,7 @@ During the interview, optimize for signal and clarity. If you communicate effect
 - [Technical Interview Cheat Sheet](https://github.com/tsiege/Tech-Interview-Cheat-Sheet)
 - Ask me for the Google rubric
 - Your friends that are also pursing the same goals
-- If you don't have friends, ask me to find you a peer. june@june.kim
+- If you don't have friends, ask me to find you a peer.
 
 ### Get Involved
 
