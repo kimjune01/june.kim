@@ -69,7 +69,7 @@ Adding relocation fees changes the picture. Specialist surplus goes from -0.695 
 
 Dense keyword auctions extract more rent. The publisher's optimal auction is `α = 0`: no distance weighting, everyone competes everywhere. That's keywords.
 
-This is already visible in practice: Google keeps expanding broad match and deprecating exact match, making keyword bins vaguer and auctions denser. [Athey & Gans (2010)](https://www.aeaweb.org/articles?id=10.1257/aer.100.2.608) showed theoretically why: better targeting disproportionately benefits large general-audience platforms, which can segment audiences to match what niche publishers offer naturally. The dominant platform's rational move is to keep targeting coarse enough that its breadth advantage holds. In a [recent industry poll](https://searchengineland.com/small-businesses-compete-google-ads-462009), more than 50% of respondents said small businesses have been priced out of Google Ads entirely.
+This is already visible in practice: Google keeps expanding broad match and deprecating exact match, making keyword bins vaguer and auctions denser. [Athey & Gans (2010)](https://www.aeaweb.org/articles?id=10.1257/aer.100.2.608) showed theoretically why: better targeting disproportionately benefits large general-audience platforms, which can segment audiences to match what niche publishers offer naturally. The dominant platform's rational move is to keep targeting coarse enough that its breadth advantage holds. In a [recent industry poll](https://web.archive.org/web/20250918041138/https://searchengineland.com/small-businesses-compete-google-ads-462009), more than 50% of respondents said small businesses have been priced out of Google Ads entirely.
 
 A monopolist publisher would not adopt embedding auctions. Specialists have no outside option: they either pay the keyword tax or don't advertise.
 
@@ -90,7 +90,7 @@ Specialists gain +0.828 per round, from losing money to making money. That's the
 
 But advertisers go where the users are. No queries, no auction.
 
-Google pays Apple [over $18 billion a year](https://www.theverge.com/2023/10/26/23933206/google-apple-search-deal-safari-18-billion) to be the default search engine on Safari. Queries flow to keyword auctions because users flow to Google, and users flow to Google because of a default payment that costs more per year than most companies are worth.
+Google pays Apple [over $18 billion a year](https://web.archive.org/web/20260219183446/https://www.theverge.com/2023/10/26/23933206/google-apple-search-deal-safari-18-billion) to be the default search engine on Safari. Queries flow to keyword auctions because users flow to Google, and users flow to Google because of a default payment that costs more per year than most companies are worth.
 
 The keyword equilibrium is stable because the moat is expensive to cross.
 

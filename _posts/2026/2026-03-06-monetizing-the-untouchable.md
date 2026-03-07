@@ -57,13 +57,13 @@ GoodRx said it protected user privacy. Its tracking pixels said otherwise. Every
 
 The [trust chain](/the-last-ad-layer) makes this gap impossible. [Open-weight embedding models](/the-convergence) with published hashes, so anyone can reproduce the embedding. [Published auction source code](https://github.com/cloudx-io/openauction) running inside an attested TEE, so anyone can verify the auction ran honestly. The publisher's matching is reproducible: same model, same advertiser catalog, same distances. The claim and the implementation are the same artifact.
 
-Compare this to the status quo. Google's Quality Score is proprietary; no advertiser or regulator can verify how it works. OpenAI's "Answer Independence Principle" is a policy claim with [no attestation](https://simonwillison.net/2026/Jan/16/chatgpt-ads/).
+Compare this to the status quo. Google's Quality Score is proprietary; no advertiser or regulator can verify how it works. OpenAI's "Answer Independence Principle" is a policy claim with [no attestation](https://web.archive.org/web/20260118051512/https://simonwillison.net/2026/Jan/16/chatgpt-ads/).
 
 ## Where This Stands
 
 The [scoring function](/2026/03/04/three-levers) rewards proximity between the user's need and the advertiser's expertise. A sports rehab PT who positions accurately wins the runner's query at a price that reflects genuine relevance. The publisher earns revenue on inventory that was previously dead, and the advertiser reaches a user they couldn't reach through keywords. The compliance constraint and the revenue incentive point the same direction.
 
-Google retains health-intent search queries indefinitely and matches them against pharmaceutical advertisers; the data doesn't leave the building because Google is the building. Meta [proposed using chatbot conversations for ad targeting](https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/) with no opt-in. Both comply by being the only party in the room.
+Google retains health-intent search queries indefinitely and matches them against pharmaceutical advertisers; the data doesn't leave the building because Google is the building. Meta [proposed using chatbot conversations for ad targeting](https://web.archive.org/web/20260210190903/https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/) with no opt-in. Both comply by being the only party in the room.
 
 Intent casting complies differently. No party acquires readable health information. The architecture proves it.
 

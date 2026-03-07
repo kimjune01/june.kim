@@ -4,7 +4,7 @@ title: "Perplexity Was Right to Kill Ads"
 tags: vector-space
 ---
 
-Perplexity [killed ads](https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026. Total ad revenue: [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). The ad sales head left.
+Perplexity [killed ads](https://web.archive.org/web/20260307185249/https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026. Total ad revenue: [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). The ad sales head left.
 
 Their CEO's reasoning was simple: *a user needs to believe this is the best possible answer.* The moment a chatbot shows an ad it selected, that belief is gone. Did it recommend that product because it's best, or because someone paid?
 
@@ -14,7 +14,7 @@ He was right. But the real problem ran deeper than he thought.
 
 Perplexity *selected* the ads. When the chatbot platform runs its own ad system, it becomes both the user's agent and the advertiser's agent. That dual role is a structural conflict. No amount of labeling or visual separation fixes it.
 
-OpenAI is demonstrating this in real time. [Ads at $60 CPM](https://www.cnbc.com/2026/02/04/anthropic-no-ads-claude-chatbot-openai-chatgpt.html), $200K minimum buy, targeting logic closed. No one outside OpenAI can verify how ads are selected or whether ad revenue influences answers. The gap between their inference costs ([$14 billion projected](https://finance.yahoo.com/news/openais-own-forecast-predicts-14-150445813.html)) and ad revenue guarantees increasing pressure to extract more from every query. First-party ads start polite and get worse — that's [enshittification](https://doctorow.medium.com/big-techs-attention-rents-fe97ba3fad90) applied to a new medium.
+OpenAI is demonstrating this in real time. [Ads at $60 CPM](https://web.archive.org/web/20260217041818/https://www.cnbc.com/2026/02/04/anthropic-no-ads-claude-chatbot-openai-chatgpt.html), $200K minimum buy, targeting logic closed. No one outside OpenAI can verify how ads are selected or whether ad revenue influences answers. The gap between their inference costs ([$14 billion projected](https://web.archive.org/web/20260227151900/https://finance.yahoo.com/news/openais-own-forecast-predicts-14-150445813.html)) and ad revenue guarantees increasing pressure to extract more from every query. First-party ads start polite and get worse — that's [enshittification](https://web.archive.org/web/20251011164132/https://doctorow.medium.com/big-techs-attention-rents-fe97ba3fad90) applied to a new medium.
 
 Perplexity saw the trajectory and pulled the plug. Correct.
 

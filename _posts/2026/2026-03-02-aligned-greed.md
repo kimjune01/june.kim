@@ -15,7 +15,7 @@ Google's [revenue](https://abc.xyz/assets/77/e1/69d1fbc74c26b6b4813d14b7b501/202
 
 Meta built a richer model of you than any single query can capture: interests, demographics, purchase history, social graph, years of activity. The precision is real, built on surveillance. Resolution is revenue, and their resolution comes from collecting everything you do across the web.
 
-Perplexity [killed ads](https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026 after total ad revenue of [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). First-party ads destroyed user trust. They diagnosed the problem correctly (ads feel intrusive) but drew the wrong conclusion (stop advertising). The architecture was broken.
+Perplexity [killed ads](https://web.archive.org/web/20260307185249/https://www.macrumors.com/2026/02/18/perplexity-abandons-ai-advertising/) in February 2026 after total ad revenue of [$20,000](https://digiday.com/media/perplexitys-ad-business-hasnt-exactly-been-a-hit/). First-party ads destroyed user trust. They diagnosed the problem correctly (ads feel intrusive) but drew the wrong conclusion (stop advertising). The architecture was broken.
 
 ## The Limits of Regulation
 
