@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Entry Bondage"
+title: "Bondage and Tenure"
 tags: vector-space
 image: "/assets/who_pays_the_fee.jpg"
 ---
