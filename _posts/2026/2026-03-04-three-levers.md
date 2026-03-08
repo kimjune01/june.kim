@@ -7,7 +7,7 @@ image: "/assets/tau_and_log_b.jpg"
 
 ![L2 sphere and L-infinity cube](/assets/tau_and_log_b.jpg)
 
-The [scoring function](/2026/02/04/power-diagrams-ad-auctions) has three parameters:
+The [scoring function](/power-diagrams-ad-auctions) has three parameters:
 
 ```
 score_i(x) = log(b_i) - ||x - c_i||² / σ_i²
@@ -17,7 +17,7 @@ score_i(x) = log(b_i) - ||x - c_i||² / σ_i²
 |-------|--------|-------------|-----------------|
 | σ | Advertiser | Controls reach vs precision | Wasting budget on irrelevant impressions |
 | τ | Publisher | Sets relevance floor | Showing bad ads to users |
-| log(b) | Platform | Compresses bid advantage | Publishers who skip τ and just maximize revenue |
+| log(b) | Platform? | Compresses bid advantage | Publishers who skip τ and just maximize revenue |
 
 ## σ Is the Advertiser's Lever
 
@@ -35,9 +35,9 @@ Before bids are considered, the publisher applies a relevance threshold τ. Only
 
 τ is zoning. The publisher decides what's allowed in the neighborhood.
 
-## log(b) Is the Platform's Lever
+## Is log(b) the Platform's Lever?
 
-Why compress bids logarithmically instead of using raw price?
+There's a third term in the scoring function. What does it do?
 
 Consider a publisher who sets τ = ∞. No relevance gate at all. Without log compression, the auction becomes highest-bidder-wins. A $100 bid stomps a $7 bid regardless of fit.
 
@@ -48,7 +48,7 @@ Log compression caps that. With log scoring:
 
 The $100 bidder gets a 2.66-unit head start over the $7 bidder. The distance term `||x − c||² / σ²` easily swings by 3–5 units between a well-matched ad and a mediocre one. Distance still decides most auctions, even with no τ.
 
-Each lever reshapes the [power diagram](/2026/02/04/power-diagrams-ad-auctions) differently: σ stretches individual cells, τ clips them at a radius, log(b) shifts boundaries with diminishing returns. Three levers, three players, clean separation of concerns.
+Each lever reshapes the [power diagram](/power-diagrams-ad-auctions) differently: σ stretches individual cells, τ clips them at a radius, log(b) shifts boundaries with diminishing returns. Two levers and a candidate.
 
 ## Information Asymmetry
 
