@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Bidding"
+title: "One-Shot Bidding"
 tags: vector-space
 ---
 
@@ -92,7 +92,7 @@ That's the whole job. The publisher sets a [relevance threshold τ](/three-lever
 
 Conversion rate times revenue per conversion. If 3% of clicks become customers worth $200 each, bid $6. You'll always pay less anyway.
 
-Bidding should be boring. Report your value and let the mechanism do the rest. If your auction requires a PhD in game theory to bid optimally, the auction is the bug.
+One-shot bidding. Report your value and let the mechanism do the rest. If your auction requires a PhD in game theory to bid optimally, the auction is the bug.
 
 ---
 
