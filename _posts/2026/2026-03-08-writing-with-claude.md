@@ -55,7 +55,7 @@ This skill breaks a post into beats and checks the structure. Each beat is the s
 
 The skill has a dampener: only flag issues where the fix is clearly better than what's there. If it's a coin flip, leave it alone. A second pass should find little or nothing.
 
-## Skills, Not Plugins
+## Just Text Files
 
 These are text files you can read in thirty seconds, change, and run on any agent that reads markdown. They're skills in the same sense as the [Skills over SDKs](/skills-over-sdks) post: instructions that run on the recipient's LLM.
 
