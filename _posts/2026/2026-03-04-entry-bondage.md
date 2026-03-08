@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Skin in the Game"
+title: "Entry Bondage"
 tags: vector-space
 image: "/assets/who_pays_the_fee.jpg"
 ---

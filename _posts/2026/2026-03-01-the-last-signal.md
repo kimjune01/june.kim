@@ -39,9 +39,9 @@ An advertiser's position in embedding space is a different kind of signal: *this
 
 Without [relocation fees](/relocation-fees), position is free to declare and free to change. Every advertiser clusters at the densest traffic point, and the signal carries no information. That's [Hotelling drift](/synthetic-friction).
 
-With fees, position becomes a credible commitment. The climbing PT at "rock climbing finger pulley rehabilitation" has put capital behind that claim. Moving to generic "physical therapy" would cost her the relocation fee, the accumulated [tenure discount](/skin-in-the-game), and the bond she posted on entry. The cost of faking scales with the distance between where you claim to be and where you belong.
+With fees, position becomes a credible commitment. The climbing PT at "rock climbing finger pulley rehabilitation" has put capital behind that claim. Moving to generic "physical therapy" would cost her the relocation fee, the accumulated [tenure discount](/entry-bondage), and the bond she posted on entry. The cost of faking scales with the distance between where you claim to be and where you belong.
 
-Every dead signal relied on external enforcement (moderation, detection algorithms, spam filters) to keep faking expensive. The enforcement always loses because fakers iterate faster than filters. Embedding position works differently. The [entry bond](/skin-in-the-game) prices the option to create a fake identity. The tenure discount creates a financial asset that repositioning destroys. The relocation fee charges for every unit of drift. Instead of trying to detect fakes, the mechanism makes faking progressively more expensive.
+Every dead signal relied on external enforcement (moderation, detection algorithms, spam filters) to keep faking expensive. The enforcement always loses because fakers iterate faster than filters. Embedding position works differently. The [entry bond](/entry-bondage) prices the option to create a fake identity. The tenure discount creates a financial asset that repositioning destroys. The relocation fee charges for every unit of drift. Instead of trying to detect fakes, the mechanism makes faking progressively more expensive.
 
 ## Pricing Instead of Filtering
 
