@@ -26,8 +26,6 @@ Smart Bidding is the fake solution to the fake problem. Google dug the pothole a
 
 Clarke (1971) and Groves (1973) generalized this to multiple items: the VCG mechanism. Each winner pays the externality they impose on everyone else. Total value is maximized, truthful reporting is dominant, and the whole thing resolves in one pass.
 
-It turns out, the allocation problem is a [linear program](https://en.wikipedia.org/wiki/Linear_programming). The LP dual gives the prices. [Lahaie & Lubin (2025)](https://arxiv.org/abs/2507.03252) show that even multi-item heterogeneous auctions with complex preferences reduce to iterative LP solves that converge to welfare-maximizing outcomes.
-
 Contrast the cost:
 
 | | VCG/LP | Autobidding |
@@ -40,9 +38,9 @@ Contrast the cost:
 
 The computational waste is fixing a strategic complexity that nobody asked for.
 
-## The Man Who Proved It
+## Already Solved
 
-Sebastien Lahaie works at Google Research. His [2025 paper](https://arxiv.org/abs/2507.03252) with Benjamin Lubin proves that VCG outcomes can be computed via linear programming. Truthful multi-item auctions are tractable at scale. Google didn't use it.
+Academia has known this for decades. Vickrey got the Nobel in 1996. Milgrom and Wilson got it in 2020 for practical auction design. [Lahaie & Lubin (2025)](https://arxiv.org/abs/2507.03252) closed the last gap: the allocation problem is a [linear program](https://en.wikipedia.org/wiki/Linear_programming), the LP dual gives the prices, and VCG is computable even for multi-item auctions. Lahaie works at Google Research. Google didn't use it.
 
 ## Three Numbers
 
