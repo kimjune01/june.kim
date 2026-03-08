@@ -7,7 +7,7 @@ image: "/assets/07_hill_climbing_sequence.png"
 
 In keyword advertising, you buy words. Pick "running shoes" from a list, set a bid, wait. Each keyword is an independent auction.
 
-Embedding space doesn't work like this. Language models map every piece of text into a continuous vector space: 3,072 dimensions for OpenAI's text-embedding-3-large, 1,536 for Cohere's embed-v4, 768 for Google's gemini-embedding-001. In this space, "best running shoes for flat feet" and "marathon training plan" aren't separate catalog items. They're nearby points, separated by a measurable distance that captures semantic similarity.
+Embedding space doesn't work like this. Language models map every piece of text into a continuous vector space: 3,072 dimensions for OpenAI's text-embedding-3-large, 1,536 for Cohere's embed-v4, 768 for Google's gemini-embedding-001. In this space, "best running shoes for flat feet" and "marathon training plan" are nearby points, separated by a measurable distance.
 
 If you're running an ad auction here (using [power diagrams](/power-diagrams-ad-auctions) to allocate territory, where each advertiser's score is `log(bid) - distance^2 / reach^2` and highest score wins), then the advertiser's job is to specify a *region*. That's a UX problem with no analog in the keyword world.
 
@@ -23,7 +23,7 @@ You need an interface that lets advertisers navigate embedding space without tou
 
 **Start with a guess.** Type a natural-language description of your target: "high-intent fitness shoppers." The system embeds that phrase and places your targeting locus at that position.
 
-**See where you are.** The system shows what your position means — *example queries* from this region:
+**See where you are.** The system shows *example queries* from this region:
 
 > You're targeting: **running shoe comparison shoppers**
 >
@@ -47,15 +47,25 @@ At any point, type a free-text refinement instead. "More focused on nutrition." 
 
 ![Hill-climbing sequence: three steps through embedding space](/assets/07_hill_climbing_sequence.png)
 
-After a few rounds, you've navigated to a region that matches your intent, verified by reading examples and prices.
+## Reach: The Parameter That Changes Everything
+
+Once you've found your center, the second decision is σ: how broadly you compete around it.
+
+Center is *what you do*. Bid is *what it's worth*. σ is *how far your influence extends*, with decaying strength as distance grows. Keywords have no equivalent.
+
+The scoring function is `log(bid) - distance²/σ²`. Doubling σ cuts the distance penalty by 4x at any given point. Your territory grows, but your competitive strength at any single point drops.
+
+A climbing PT sets tight σ. She wins every query near "sports injury rehab for athletes" and ignores the rest. A general practice PT sets wide σ. She competes for everything in physical therapy but wins at her center only when nobody more specialized is bidding there. In keyword auctions, this tradeoff is hidden behind match types and quality scores. Here, you see your territory on the map.
+
+For the special case when σ approaches zero, the territory collapses to a single point and the auction becomes a [keyword auction](/keywords-are-tiny-circles).
 
 ## What You're Actually Buying
 
-Once you lock in position, the platform shows the competitive landscape.
+Once you lock in position and reach, the platform shows the competitive landscape.
 
-Your territory is where your power diagram score is highest. Computed from three things: your bid, your position, and your reach (how aggressively your score decays with distance). The platform renders this with impression density overlaid — you see not just *where* you own space, but *how much traffic* flows through it.
+Your territory is where your power diagram score is highest. The platform renders this with impression density overlaid: where you own space, and how much traffic flows through it.
 
-In keyword auctions, competition is invisible. Bid $2, someone bids $2.50, you lose. Here, competition is spatial and legible. Nike owns the running-shoe region. GNC is encroaching from the nutrition side. There's an underserved gap in home fitness where nobody planted a flag — move into it, or shape your reach to be narrow on topic and broad on intent, capturing high-intent users across subtopics.
+In keyword auctions, competition is invisible. Bid $2, someone bids $2.50, you lose. Here, competition is spatial and legible. Nike owns the running-shoe region. GNC is encroaching from the nutrition side. There's an underserved gap in home fitness where nobody is competing. Move into it, or shape your reach to be narrow on topic and broad on intent, capturing high-intent users across subtopics.
 
 Each direction card's price reflects both traffic density and competitive pressure. An uncrowded region with decent traffic is a deal; a crowded region near a high bidder is expensive. You see this *before* committing.
 
