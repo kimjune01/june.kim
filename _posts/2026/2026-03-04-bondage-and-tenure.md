@@ -2,10 +2,10 @@
 layout: post
 title: "Bondage and Tenure"
 tags: vector-space
-image: "/assets/who_pays_the_fee.jpg"
+image: "/assets/bondage_and_tenure.jpg"
 ---
 
-![Differentiated storefronts](/assets/who_pays_the_fee.jpg)
+![Bondage and tenure](/assets/bondage_and_tenure.jpg)
 
 [How to Trust Advertisers](/how-to-trust-advertisers) solved entry. Payment history, reviews, business registration: a composite signal that's expensive to fake. A plumber with three years of clean Stripe history and 200 Google reviews can enter the auction and plant his flag at "emergency pipe repair." No gatekeeper approved him. His commercial identity is the pledge.
 
