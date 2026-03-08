@@ -48,7 +48,7 @@ The architecture:
 
 The user's query stays on the chatbot's infrastructure. The exchange provides demand without accessing supply. The chatbot gets ad revenue without a conflict of interest. The user gets a cryptographic guarantee instead of a promise.
 
-This is not hypothetical. [CloudX](https://github.com/cloudx-io/openauction) runs TEE-attested auctions today in AWS Nitro Enclaves with open-sourced clearing code. They auction mobile app installs on keywords. The [extension](/letter-to-cloudx) to embedding-space scoring is three optional fields: `embedding`, `embedding_model`, `sigma`.
+This is not hypothetical. [CloudX](https://github.com/cloudx-io/openauction) runs TEE-attested auctions today in AWS Nitro Enclaves with open-sourced clearing code. They auction mobile app installs on keywords. The [extension](/letter-to-cloudx) to embedding-space scoring is two optional fields in the bid request: `embedding` and `embedding_model`. Sigma is the advertiser's signal, carried with the bid.
 
 ## What Perplexity Got Wrong
 
