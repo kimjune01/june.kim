@@ -9,9 +9,9 @@ image: "/assets/11_egalitarian_auction.png"
 
 Keywords herd traffic into a narrow, dense auction. Five physical therapists — a climbing specialist, a pelvic floor specialist, a pediatric specialist, a sports rehab specialist, and a generalist — all bid on "physical therapy." The auction can't tell them apart. Each bin has 4–5 bidders fighting over every query, pushing clearing prices up and extracting maximum revenue. This is what the publisher wants.
 
-Embedding auctions decompress. Each advertiser plants a flag at a point in high-dimensional space that represents what they actually sell. The climbing PT positions at "physical therapy rehabilitation specializing in rock climbing finger pulley injuries." The pelvic floor PT positions at "pelvic floor postpartum." They stop competing with each other because the auction scores by proximity. Each query has 2–3 effective competitors instead of 5, clearing prices drop, and more surplus stays with advertisers.
+[Levin & Milgrom (2010)](https://web.stanford.edu/~jdlevin/Papers/OnlineAds.pdf) call this **conflation**: pooling heterogeneous items into one auction. The auction mechanism is efficient (GSP works); the item definition is not. The climbing PT pays to compete on "pelvic floor exercises after C-section." The pelvic floor PT pays to compete on "finger pulley injury from rock climbing." Neither will convert on the other's queries, but the keyword bin forces them into the same auction anyway. That's the keyword tax.
 
-Do embedding auctions let niche advertisers compete profitably on the queries they're best at, or do keywords already do that well enough? We built a keyword auction and an embedding auction and ran 50 randomized trials of each.
+Can embedding auctions fix it? We built both auction types and ran 50 randomized trials.
 
 ## The Simulation
 
@@ -49,11 +49,9 @@ What happens if a single publisher replaces their keyword auction with an embedd
 
 Publisher revenue drops 8%, from 79.39 to 72.82 (p<0.001). That surplus goes to the advertisers. Generalists benefit most, going from -0.233 to nearly break-even at -0.022. Specialist surplus improves directionally (-0.807 to -0.695) but doesn't reach significance; more on that below.
 
-### The keyword tax
+### The keyword tax, measured
 
-In keywords, specialists lose 3.5x more than generalists (-0.807 vs -0.233 per round). The climbing PT pays to compete on "pelvic floor exercises after C-section." The pelvic floor PT pays to compete on "finger pulley injury from rock climbing." Neither will convert on the other's queries, but the keyword bin forces them into the same auction anyway.
-
-This is the keyword tax. [Levin & Milgrom (2010)](https://web.stanford.edu/~jdlevin/Papers/OnlineAds.pdf) call it **conflation**: pooling heterogeneous items into one auction. The auction mechanism is efficient (GSP works); the item definition is not.
+Specialists lose 3.5x more than generalists (-0.807 vs -0.233 per round). The conflation penalty is visible in the data: specialists pay to compete on queries they can't convert.
 
 ### What embeddings fix
 
