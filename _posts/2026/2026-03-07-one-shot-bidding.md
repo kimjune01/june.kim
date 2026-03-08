@@ -94,4 +94,6 @@ One-shot bidding. Report your value and let the mechanism do the rest. If your a
 
 ---
 
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude researched prior art and drafted prose.*
+
 *Part of the [Vector Space](/vector-space) series.*
