@@ -82,7 +82,9 @@ In a [power-diagram auction](/power-diagrams-ad-auctions) with VCG payments, an 
 </svg>
 </noscript>
 
-Drag the query dot. The Climbing PT's max bid is $8, but she never pays that. The price is always what the runner-up was worth. Move the query to the left, and see the price drop. This reflects how much less likely the customers there will convert. Move it toward the Sports PT and they take over. The customer is worth more to them in their turf. The demo is one-dimensional for visual clarity. The scoring function uses Euclidean distance, which works in any number of dimensions, and VCG truthfulness doesn't depend on geometry at all — the [simulation](/keyword-tax) tests it empirically in 384.
+Drag the query dot. The Climbing PT's max bid is $8, but she never pays that. The price is always what the runner-up was worth. Move the query to the left, and see the price drop. This reflects how much less likely the customers there will convert. Move it toward the Sports PT and they take over. The customer is worth more to them in their turf.
+
+The demo is one-dimensional for visual clarity. The scoring function uses Euclidean distance, which works in any number of dimensions, and VCG truthfulness doesn't depend on geometry at all — the [simulation](/keyword-tax) tests it empirically in 384.
 
 That's the whole job. The publisher sets a [relevance threshold τ](/three-levers) to filter bad matches. The [scoring function](/power-diagrams-ad-auctions) picks the winner. VCG sets the price. No optimizer. No consultant. The advertiser just answers three business questions and the auction handles the rest. The [simulation](/keyword-tax) shows what happens when it does: specialists win the queries they're best at, generalists stop overpaying, and the keyword tax disappears.
 
