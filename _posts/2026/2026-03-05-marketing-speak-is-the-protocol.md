@@ -66,9 +66,9 @@ The user never said "physical therapist." The user never said "sports injury reh
 
 ## What Didn't Need to Be Invented
 
-The advertiser submitted a positioning statement. A prompt rewrote user language into advertiser language. The [scoring function](/2026/03/04/three-levers) compared the two and picked a winner.
+The advertiser submitted a positioning statement. A prompt rewrote user language into advertiser language. The [scoring function](/three-levers) compared the two and picked a winner.
 
-No new taxonomy. No category tree (IAB has 698 categories; nobody uses them correctly). No negative keyword lists to maintain. The only genuinely new concept is [σ](/2026/02/09/keywords-are-tiny-circles), the reach parameter that controls how broadly an advertiser matches around their positioning.
+No new taxonomy. No category tree (IAB has 698 categories; nobody uses them correctly). No negative keyword lists to maintain. The only genuinely new concept is [σ](/keywords-are-tiny-circles), the reach parameter that controls how broadly an advertiser matches around their positioning.
 
 Compare to the keyword setup flow: research keywords with a planning tool, organize into ad groups, write ads per keyword cluster, set match types per keyword, add negative keywords, adjust bids per keyword, review search term reports weekly. All of that overhead exists because keywords are an impoverished representation of what the advertiser actually means. When the representation is a natural-language positioning statement, most of the overhead disappears.
 

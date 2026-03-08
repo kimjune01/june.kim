@@ -9,7 +9,7 @@ Health publishers can't run ads. The FTC fined [GoodRx](https://www.ftc.gov/news
 
 ![Monetizing the untouchable](/assets/ftc.jpg)
 
-That inventory is some of the highest-intent traffic on the internet. A user describing symptoms to a chatbot is further down the funnel than someone typing two words into a search box. A user who describes [lateral knee pain on long runs with a race eight weeks out](/2026/03/05/marketing-speak-is-the-protocol) should get matched to a sports rehab PT who specializes in keeping athletes in training. Google would match "knee pain running" to the highest bidder. The signal exists. The question is whether ad matching can work without the data ever crossing a boundary.
+That inventory is some of the highest-intent traffic on the internet. A user describing symptoms to a chatbot is further down the funnel than someone typing two words into a search box. A user who describes [lateral knee pain on long runs with a race eight weeks out](/marketing-speak-is-the-protocol) should get matched to a sports rehab PT who specializes in keeping athletes in training. Google would match "knee pain running" to the highest bidder. The signal exists. The question is whether ad matching can work without the data ever crossing a boundary.
 
 ## What Triggers Enforcement
 
@@ -61,7 +61,7 @@ Compare this to the status quo. Google's Quality Score is proprietary; no advert
 
 ## Where This Stands
 
-The [scoring function](/2026/03/04/three-levers) rewards proximity between the user's need and the advertiser's expertise. A sports rehab PT who positions accurately wins the runner's query at a price that reflects genuine relevance. The publisher earns revenue on inventory that was previously dead, and the advertiser reaches a user they couldn't reach through keywords. The compliance constraint and the revenue incentive point the same direction.
+The [scoring function](/three-levers) rewards proximity between the user's need and the advertiser's expertise. A sports rehab PT who positions accurately wins the runner's query at a price that reflects genuine relevance. The publisher earns revenue on inventory that was previously dead, and the advertiser reaches a user they couldn't reach through keywords. The compliance constraint and the revenue incentive point the same direction.
 
 Google retains health-intent search queries indefinitely and matches them against pharmaceutical advertisers; the data doesn't leave the building because Google is the building. Meta [proposed using chatbot conversations for ad targeting](https://web.archive.org/web/20260210190903/https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/) with no opt-in. Both comply by being the only party in the room.
 
