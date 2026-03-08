@@ -28,7 +28,7 @@ Clarke (1971) and Groves (1973) generalized this to multiple items: the VCG mech
 
 It turns out, the allocation problem is a [linear program](https://en.wikipedia.org/wiki/Linear_programming). The LP dual gives the prices. [Lahaie & Lubin (2025)](https://arxiv.org/abs/2507.03252) show that even multi-item heterogeneous auctions with complex preferences reduce to iterative LP solves that converge to welfare-maximizing outcomes.
 
-Contrast the computational cost:
+Contrast the cost:
 
 | | VCG/LP | Autobidding |
 |---|---|---|
