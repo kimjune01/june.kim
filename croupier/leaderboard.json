@@ -1,0 +1,14 @@
+[
+  { "publisher": "DevTools Weekly", "vertical": "DevTools", "conversionRate": 14.2, "impressions": 3800 },
+  { "publisher": "Niche Podcast Network", "vertical": "SaaS", "conversionRate": 12.4, "impressions": 5200 },
+  { "publisher": "Indie Finance Digest", "vertical": "Finance", "conversionRate": 9.8, "impressions": 8400 },
+  { "publisher": "HomeFixPro", "vertical": "Home Services", "conversionRate": 8.1, "impressions": 12000 },
+  { "publisher": "CloudOps Insider", "vertical": "DevTools", "conversionRate": 7.3, "impressions": 15600 },
+  { "publisher": "Plumber's Marketplace", "vertical": "Home Services", "conversionRate": 6.5, "impressions": 9200 },
+  { "publisher": "HealthTech Review", "vertical": "Health", "conversionRate": 5.2, "impressions": 22000 },
+  { "publisher": "Small Biz Toolkit", "vertical": "SaaS", "conversionRate": 4.1, "impressions": 45000 },
+  { "publisher": "Lifestyle Roundup", "vertical": "General", "conversionRate": 1.2, "impressions": 340000 },
+  { "publisher": "ClickStream Daily", "vertical": "General", "conversionRate": 0.08, "impressions": 2800000 },
+  { "publisher": "Viral Content Hub", "vertical": "General", "conversionRate": 0.03, "impressions": 7500000 },
+  { "publisher": "Content Farm Aggregator", "vertical": "General", "conversionRate": 0.01, "impressions": 10400000 }
+]
