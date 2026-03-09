@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "honey-scandal-why-cookie-attribution-is-broken",
+    "title": "The Honey Scandal Proves Cookie Attribution Is Broken",
+    "date": "2026-02-03",
+    "summary": "MegaLag exposed PayPal\u2019s Honey overwriting affiliate cookies at checkout. 25+ lawsuits followed. Here\u2019s what it means for attribution."
+  },
+  {
+    "slug": "why-your-ad-attribution-is-wrong",
+    "title": "Why Your Ad Attribution Numbers Are Wrong",
+    "date": "2026-02-07",
+    "summary": "Platform-reported metrics inflate conversions by 30\u201350%. Here\u2019s why the numbers don\u2019t add up and what independent measurement looks like."
+  },
+  {
+    "slug": "what-is-cryptographic-ad-attribution",
+    "title": "What Is Cryptographic Ad Attribution?",
+    "date": "2026-02-12",
+    "summary": "Signed tokens instead of cookies. The advertiser issues, the customer carries, the advertiser verifies. No platform dashboard needed."
+  },
+  {
+    "slug": "cookie-hijacking-what-advertisers-should-know",
+    "title": "Cookie Hijacking: What Advertisers and Publishers Should Know",
+    "date": "2026-02-17",
+    "summary": "Honey wasn\u2019t alone. Capital One Shopping and Rakuten did the same thing. The cookie is the vulnerability, not the extension."
+  },
+  {
+    "slug": "forbes-mfa-scandal-and-programmatic-waste",
+    "title": "The Forbes MFA Scandal and the $770M Programmatic Waste Problem",
+    "date": "2026-02-21",
+    "summary": "Forbes ran a secret subdomain as a content farm. $770M per quarter goes to MFA sites. Coupons that need real customers expose the fakes."
+  },
+  {
+    "slug": "how-publishers-prove-their-inventory-converts",
+    "title": "How Publishers Can Prove Their Inventory Converts",
+    "date": "2026-02-26",
+    "summary": "A niche podcast at 12% conversion beats a content farm at 0.01%. Cryptographic coupons give publishers the receipts to prove it."
+  },
+  {
+    "slug": "meta-three-billion-scam-ad-problem",
+    "title": "Meta\u2019s $3 Billion Scam Ad Problem",
+    "date": "2026-03-03",
+    "summary": "Internal docs show 19% of Meta\u2019s China ad revenue came from scams. They had an anti-fraud team. They disbanded it."
+  },
+  {
+    "slug": "creators-are-organizing-attribution-is-why",
+    "title": "Creators Are Organizing. Attribution Is Why.",
+    "date": "2026-03-05",
+    "summary": "Creator ad spend hit $37B but 57% of marketers can\u2019t track ROI. SAG-AFTRA is organizing creators. The real issue is provability."
+  },
+  {
+    "slug": "google-ad-monopoly-what-changes-for-advertisers",
+    "title": "Google\u2019s Ad Monopoly Ruling: What Changes for Advertisers",
+    "date": "2026-03-06",
+    "summary": "Google lost its second antitrust case. Divestiture of AdX and DFP may follow. What this means for measurement independence."
+  },
+  {
+    "slug": "ad-verification-companies-missed-the-bots",
+    "title": "The Ad Verification Industry Missed the Bots",
+    "date": "2026-03-07",
+    "summary": "DoubleVerify missed 21% of bots. IAS labeled bot traffic as human 77% of the time. Verification asks the wrong question."
+  },
+  {
+    "slug": "after-third-party-cookies",
+    "title": "After Third-Party Cookies: Attribution Without Tracking",
+    "date": "2026-03-09",
+    "summary": "Every cookie replacement recreates the same problems. Bearer attribution never depended on cookies in the first place."
+  }
+]
