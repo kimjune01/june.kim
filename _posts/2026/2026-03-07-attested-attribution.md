@@ -53,6 +53,8 @@ Today, a publisher tells the exchange "I showed your ad" and the exchange tells 
 
 Every fraud case above exploited the same structural weakness: the entity reporting the measurement was the entity with the incentive to inflate it. Nobody in adtech is fixing this. Fuzzy attribution is rent. Every middleman claims credit, and the advertiser can't prove otherwise.
 
+This chain proves the click was real. Proving it led to a sale is the next problem.
+
 The [ad exchange running inside a TEE](/the-last-ad-layer) already proves the auction was fair. Extending attestation to the full attribution chain is the same architecture applied to every link.
 
 One exchange has to do it first. Once one does, the plumber's next question to Google changes. Instead of "which clicks were real?" it becomes "why can't you prove it like they can?"
