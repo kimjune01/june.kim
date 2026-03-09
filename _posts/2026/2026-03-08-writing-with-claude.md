@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Writing with Claude"
-tags: coding
+tags: coding, reflecting
 ---
 
 It was impressive that I could write. AI showed up and it was impressive that AI could write. Then it was impressive that I could write better than AI. Better models showed up and it was impressive that they could write better than me. Then it was impressive that I could prompt better AI writing than normies. Now it's impressive that we can work better together than one of us alone.
