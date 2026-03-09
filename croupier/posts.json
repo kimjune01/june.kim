@@ -6,10 +6,28 @@
     "summary": "MegaLag exposed PayPal\u2019s Honey overwriting affiliate cookies at checkout. 25+ lawsuits followed. Here\u2019s what it means for attribution."
   },
   {
+    "slug": "5-ways-cookie-hijacking-is-destroying-your-roi",
+    "title": "5 Ways Cookie Hijacking Is Destroying Your ROI",
+    "date": "2026-02-05",
+    "summary": "Browser extensions and affiliates silently overwrite tracking cookies, misattributing conversions at scale."
+  },
+  {
     "slug": "why-your-ad-attribution-is-wrong",
     "title": "Why Your Ad Attribution Numbers Are Wrong",
     "date": "2026-02-07",
     "summary": "Platform-reported metrics inflate conversions by 30\u201350%. Here\u2019s why the numbers don\u2019t add up and what independent measurement looks like."
+  },
+  {
+    "slug": "croupier-vs-utm-tracking",
+    "title": "Croupier vs UTM Tracking: Why Signed Tokens Beat Plain-Text Parameters",
+    "date": "2026-02-08",
+    "summary": "UTM parameters are unsigned plain-text strings anyone can forge; Croupier replaces them with cryptographically signed tokens."
+  },
+  {
+    "slug": "croupier-vs-appsflyer",
+    "title": "Croupier vs AppsFlyer: Why Mobile Attribution Still Trusts the Wrong Party",
+    "date": "2026-02-10",
+    "summary": "AppsFlyer depends on self-reported data from the ad networks it is supposed to measure."
   },
   {
     "slug": "what-is-cryptographic-ad-attribution",
@@ -18,10 +36,34 @@
     "summary": "Signed tokens instead of cookies. The advertiser issues, the customer carries, the advertiser verifies. No platform dashboard needed."
   },
   {
+    "slug": "croupier-vs-doubleverify",
+    "title": "Croupier vs DoubleVerify: Verification Is Not Attribution",
+    "date": "2026-02-14",
+    "summary": "DoubleVerify checks viewability and bot traffic but cannot tell you which impression caused a conversion."
+  },
+  {
+    "slug": "7-signs-your-ad-attribution-is-lying-to-you",
+    "title": "7 Signs Your Ad Attribution Is Lying to You",
+    "date": "2026-02-15",
+    "summary": "Platform-reported conversions routinely exceed actual sales because every platform claims credit for the same event."
+  },
+  {
+    "slug": "croupier-vs-google-privacy-sandbox",
+    "title": "Croupier vs Google Privacy Sandbox: Why the Browser Shouldn\u2019t Own Attribution",
+    "date": "2026-02-16",
+    "summary": "Privacy Sandbox gave attribution control to the browser vendor that is also the largest ad platform."
+  },
+  {
     "slug": "cookie-hijacking-what-advertisers-should-know",
     "title": "Cookie Hijacking: What Advertisers and Publishers Should Know",
     "date": "2026-02-17",
     "summary": "Honey wasn\u2019t alone. Capital One Shopping and Rakuten did the same thing. The cookie is the vulnerability, not the extension."
+  },
+  {
+    "slug": "croupier-vs-northbeam",
+    "title": "Croupier vs Northbeam: ML Models vs Mathematical Proof",
+    "date": "2026-02-19",
+    "summary": "Northbeam uses black-box ML to assign fractional credit; Croupier provides cryptographic proof of each touchpoint."
   },
   {
     "slug": "forbes-mfa-scandal-and-programmatic-waste",
@@ -30,16 +72,34 @@
     "summary": "Forbes ran a secret subdomain as a content farm. $770M per quarter goes to MFA sites. Coupons that need real customers expose the fakes."
   },
   {
+    "slug": "croupier-vs-triple-whale",
+    "title": "Croupier vs Triple Whale: First-Party Pixels vs Cryptographic Proof",
+    "date": "2026-02-24",
+    "summary": "Triple Whale relies on forgeable UTM parameters and modeled attribution; Croupier proves what actually happened."
+  },
+  {
     "slug": "how-publishers-prove-their-inventory-converts",
     "title": "How Publishers Can Prove Their Inventory Converts",
     "date": "2026-02-26",
     "summary": "A niche podcast at 12% conversion beats a content farm at 0.01%. Cryptographic coupons give publishers the receipts to prove it."
   },
   {
+    "slug": "the-ultimate-guide-to-ad-attribution-in-2026",
+    "title": "The Ultimate Guide to Ad Attribution in 2026",
+    "date": "2026-02-28",
+    "summary": "A comprehensive overview of attribution models, what broke in 2026, and where the industry is heading."
+  },
+  {
     "slug": "meta-three-billion-scam-ad-problem",
     "title": "Meta\u2019s $3 Billion Scam Ad Problem",
     "date": "2026-03-03",
     "summary": "Internal docs show 19% of Meta\u2019s China ad revenue came from scams. They had an anti-fraud team. They disbanded it."
+  },
+  {
+    "slug": "top-10-reasons-to-stop-trusting-your-ad-platform",
+    "title": "Top 10 Reasons to Stop Trusting Your Ad Platform",
+    "date": "2026-03-04",
+    "summary": "From Google\u2019s monopoly ruling to phantom conversions, ten evidence-backed reasons platform self-reporting cannot be trusted."
   },
   {
     "slug": "creators-are-organizing-attribution-is-why",
