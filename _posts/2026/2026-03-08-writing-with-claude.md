@@ -48,8 +48,8 @@ I decide which findings to fix. Usually most of them, but sometimes the em dash 
 
 This skill breaks a post into beats and checks the structure. Each beat is the smallest unit of argument that stands alone. For each one, it labels what the beat does: claim, example, mechanism, transition. Then it checks:
 
-- **Pledge / Turn / Prestige.** Does the post have a three-act structure? The pledge shows something ordinary. The turn makes it extraordinary. The prestige shows the world is different now. Does each act land?
-- **Transitions.** Every beat-to-beat transition should be "therefore" (this follows) or "but" (this contradicts). "And then" is a list, not an argument.
+- **Pledge / Turn / Prestige.** From [Nolan's *The Prestige*](https://en.wikipedia.org/wiki/The_Prestige_(film)): does the post have a three-act structure? The pledge shows something ordinary. The turn makes it extraordinary. The prestige shows the world is different now. Does each act land?
+- **Transitions.** From [Trey Parker and Matt Stone](https://www.youtube.com/watch?v=j9fC4TD07KE): every beat-to-beat transition should be "therefore" (this follows) or "but" (this contradicts). "And then" is a list, not an argument.
 - **Gaps.** Any logical jump where the reader has to fill in an unstated assumption.
 - **Repetition.** Same idea in two beats. Is it reinforcement or padding?
 
