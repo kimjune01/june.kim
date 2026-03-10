@@ -6,9 +6,9 @@ tags: vector-space
 
 In a [power-diagram auction](/power-diagrams-ad-auctions), advertisers declare [three numbers](/one-shot-bidding): center, sigma, and bid. The bid is the hard part. Guessing `margin × P(conversion)` requires knowing your conversion rate, which requires running ads, which requires a bid. Circular.
 
-With verified conversions ([cryptographic coupons](/croupier)), the bid collapses to margin. The advertiser states what a conversion is worth. The exchange handles the rest.
+With verified conversions ([cryptographic coupons](/croupier)), the bid collapses to margin. The advertiser states what a conversion is worth.
 
-But it does something else: it makes sigma tunable from data.
+But verified conversions do something else: they make sigma tunable from data.
 
 ## The Guessing Game
 
