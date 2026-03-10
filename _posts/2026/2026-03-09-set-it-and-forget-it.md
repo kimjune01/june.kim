@@ -37,7 +37,7 @@ Overshoot, correct, settle.
 
 ## The Upsell
 
-The exchange offers to tune sigma for a fee. The algorithm is public, the inputs (distance histograms, conversion counts) are on the [public ledger](/croupier), and the output is deterministic. Anyone can replay the computation. The exchange can't widen sigma beyond what the data justifies without contradicting the ledger.
+The exchange offers to tune sigma for a fee. The [algorithm is open source](https://github.com/kimjune01/sigma-controller), the inputs (distance histograms, conversion counts) are on the [public ledger](/croupier), and the output is deterministic. Anyone can replay the computation. The exchange can't widen sigma beyond what the data justifies without contradicting the ledger.
 
 The advertiser who wants control keeps it. The advertiser who wants convenience pays for it and audits anytime. [Aligned greed](/aligned-greed).
 
