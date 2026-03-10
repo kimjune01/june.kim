@@ -1,8 +1,11 @@
 ---
 layout: post
 title: "Set It and Forget It"
+image: "/assets/set-it-and-forget-it.jpg"
 tags: vector-space
 ---
+
+![Set It and Forget It](/assets/set-it-and-forget-it.jpg)
 
 In a [power-diagram auction](/power-diagrams-ad-auctions), advertisers declare [three numbers](/one-shot-bidding): center, sigma, and bid. The bid is the hard part. Guessing `margin × P(conversion)` requires knowing your conversion rate, which requires running ads, which requires a bid. Circular.
 
