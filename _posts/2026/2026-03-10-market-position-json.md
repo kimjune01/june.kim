@@ -2,6 +2,7 @@
 layout: post
 title: "market-position.json"
 tags: vector-space
+description: "v0.1.0"
 ---
 
 [`robots.txt`](https://datatracker.ietf.org/doc/html/rfc9309) told crawlers what to index. [`ads.txt`](https://iabtechlab.com/ads-txt/) told exchanges who could sell inventory. `market-position.json` tells exchanges what the advertiser sells and who they serve.
