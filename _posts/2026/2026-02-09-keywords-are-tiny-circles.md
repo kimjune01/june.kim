@@ -5,7 +5,7 @@ tags: vector-space
 image: "/assets/09_keywords_are_tiny_circles.jpg"
 ---
 
-The previous posts in this series have a problem. They describe a mathematically elegant system: [power diagrams](/power-diagrams-ad-auctions) partitioning embedding space, [hill-climbing UX](/buying-space-not-keywords) for navigating it, a [new protocol](/embedding-gap) to carry embedding vectors. And they implicitly ask the market to throw away keywords and adopt continuous geometry instead.
+The previous posts in this series have a problem. They describe a mathematically elegant system: [power diagrams](/power-diagrams-ad-auctions#power-diagrams) partitioning embedding space, [hill-climbing UX](/buying-space-not-keywords) for navigating it, a [new protocol](/embedding-gap) to carry embedding vectors. And they implicitly ask the market to throw away keywords and adopt continuous geometry instead.
 
 The market will not do this. The migration path demands a regression.
 
@@ -17,7 +17,7 @@ I kept looking at this problem and realized: keywords and embeddings already hav
 
 ## A Keyword Is a Point with a Very Small Radius
 
-Take "mesothelioma lawyer." Embed it. You get a point in 3,072-dimensional space. Now set the reach parameter σ to something tiny, σ → 0. The [power diagram](/power-diagrams-ad-auctions) score function:
+Take "mesothelioma lawyer." Embed it. You get a point in 3,072-dimensional space. Now set the reach parameter σ to something tiny, σ → 0. The [power diagram](/power-diagrams-ad-auctions#power-diagrams) score function:
 
 ```
 score(x) = log(bid) - ||x - center||² / σ²

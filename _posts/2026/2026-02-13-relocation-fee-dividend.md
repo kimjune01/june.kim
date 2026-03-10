@@ -22,7 +22,7 @@ The publisher generates 50 impressions per round from six query clusters (runnin
 Each round:
 1. Publisher draws 50 query points from the impression distribution
 2. For each query, all solvent advertisers submit bids with their position and σ
-3. The auction clears using the [embedding-space scoring function](/power-diagrams-ad-auctions): `score = log(price) - distance² / σ²`
+3. The auction clears using the [embedding-space scoring function](/power-diagrams-ad-auctions#power-diagrams): `score = log(price) - distance² / σ²`
 4. Winner pays second price (runner-up's price)
 5. Advertisers adapt their parameters based on ROI, then optionally reposition, paying the cumulative drift fee
 

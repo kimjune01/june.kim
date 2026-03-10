@@ -37,7 +37,7 @@ Word of mouth. Your neighbor recommends a [plumber](/the-plumber-test) because h
 
 An advertiser's position in embedding space is a different kind of signal: *this company declared that it does this specific thing, and has held that position at a cost.*
 
-Without [relocation fees](/relocation-fees), position is free to declare and free to change. Every advertiser clusters at the densest traffic point, and the signal carries no information. That's [Hotelling drift](/synthetic-friction).
+Without [relocation fees](/relocation-fees#the-gap-vcg-leaves), position is free to declare and free to change. Every advertiser clusters at the densest traffic point, and the signal carries no information. That's [Hotelling drift](/synthetic-friction).
 
 With fees, position becomes a credible commitment. The climbing PT at "rock climbing finger pulley rehabilitation" has put capital behind that claim. Moving to generic "physical therapy" would cost her the relocation fee, the accumulated [tenure discount](/bondage-and-tenure), and the bond she posted on entry. The cost of faking scales with the distance between where you claim to be and where you belong.
 

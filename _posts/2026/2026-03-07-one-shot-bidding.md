@@ -44,7 +44,7 @@ Academia has known this for decades. Vickrey got the Nobel in 1996. Milgrom and 
 
 ## Three Numbers
 
-In a [power-diagram auction](/power-diagrams-ad-auctions) with VCG payments, an advertiser declares three things:
+In a [power-diagram auction](/power-diagrams-ad-auctions#power-diagrams) with VCG payments, an advertiser declares three things:
 
 1. **Center**: an embedding of who their customer is
 2. **Sigma**: how broad or narrow their reach should be

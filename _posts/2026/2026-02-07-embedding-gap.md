@@ -96,7 +96,7 @@ The hard problems:
 
 **Value functions.** Instead of bidding on categories, advertisers specify a region in embedding space: a center point with spread, optionally stretched along preferred directions. Simplest version: isotropic Gaussian `v(x) = b · exp(-||x - c||² / σ²)`. More expressive: anisotropic or mixtures. The protocol needs to standardize what shapes are allowed.
 
-**Auction clearing.** "Highest bid on this category" becomes "evaluate overlapping value functions at this point." For isotropic Gaussians, the result is a [power diagram](/power-diagrams-ad-auctions) with clean properties.
+**Auction clearing.** "Highest bid on this category" becomes "evaluate overlapping value functions at this point." For isotropic Gaussians, the result is a [power diagram](/power-diagrams-ad-auctions#power-diagrams) with clean properties.
 
 **Latency.** Can you clear a geometric auction in ~100ms? Isotropic case with spatial indexing: yes, O(log N). Mixtures scale with components, but precomputation helps.
 

@@ -38,7 +38,7 @@ Attribution security works the same way. Stack layers until fraud costs more tha
 
 [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy) tells browsers which sources are authorized to load scripts and resources. Anything not on the allowlist gets blocked.
 
-So issuance policy does the same for coupons. When an advertiser creates a campaign on the [croupier](/croupier), they declare which publishers are authorized to distribute their coupon books. The relay only releases books to publishers on the list. A junk site not on Nike's allowlist never receives the coupons. No coupons, no stamps, no claim. The attack dies at step 2.
+So issuance policy does the same for coupons. When an advertiser creates a campaign on the [croupier](/croupier#the-deal), they declare which publishers are authorized to distribute their coupon books. The relay only releases books to publishers on the list. A junk site not on Nike's allowlist never receives the coupons. No coupons, no stamps, no claim. The attack dies at step 2.
 
 **Blocks:** unauthorized distribution. A junk site can't claim coupons it never received.
 

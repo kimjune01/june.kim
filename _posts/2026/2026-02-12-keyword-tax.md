@@ -27,7 +27,7 @@ Eleven are specialists; four are generalists who compete broadly. Specialists ha
 Two auction mechanisms:
 
 - **Keywords.** Queries binned by cluster. Only advertisers in the matching cluster compete, on price alone. Today's market.
-- **Embeddings.** Full `log(price) - dist²/σ²` scoring. Agents optimize bid, position, and σ. Tested with and without [relocation fees](/relocation-fees) penalizing drift from committed position.
+- **Embeddings.** Full `log(price) - dist²/σ²` scoring. Agents optimize bid, position, and σ. Tested with and without [relocation fees](/relocation-fees#the-protocol-layer) penalizing drift from committed position.
 
 The simulation code is [open source](https://github.com/kimjune01/openauction/tree/v3.4/cmd/simulate).
 
@@ -59,7 +59,7 @@ Specialists lose 3.5x more than generalists (-0.807 vs -0.233 per round). The co
 
 Embeddings move surplus from the publisher to the advertisers. Win diversity improves from 0.809 to 0.833 (p<0.01), so the consumer who searches "finger pulley injury from rock climbing" finds the climbing PT, not whoever bid highest on "physical therapy."
 
-Specialist surplus improves directionally (-0.807 to -0.695, ns) but specialists are still losing money. Without [relocation fees](/relocation-fees), advertisers drift toward popular queries and the niche advantage erodes.
+Specialist surplus improves directionally (-0.807 to -0.695, ns) but specialists are still losing money. Without [relocation fees](/relocation-fees#the-gap-vcg-leaves), advertisers drift toward popular queries and the niche advantage erodes.
 
 Adding relocation fees changes the picture. Specialist surplus goes from -0.695 to +0.021 (p<0.001). Specialists make money. Fees pin them at their niche, and their conversion advantage translates into winning their best queries at prices that leave positive surplus. Win diversity climbs further to 0.876. Value efficiency recovers to 0.834, within 2.4pp of keywords.
 
