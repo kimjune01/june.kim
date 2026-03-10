@@ -76,6 +76,10 @@ Properties:
 - **Boundaries are where bid-adjusted distances equal.** The border between Nike and Peloton is where Nike's bid advantage exactly offsets Peloton's proximity advantage. These boundaries are hyperplanes (straight lines in 2D).
 - **The math is well-studied.** Power diagrams have been around since the 1980s. Algorithms for constructing, querying, and integrating over them are known and efficient.
 
+The `d²/σ²` penalty is a conversion model. [Gaussian decay](https://en.wikipedia.org/wiki/Radial_basis_function_kernel): `P(convert) = exp(-d²/2σ²)`. Conversion probability is highest at center and drops with distance. If the bid is the advertiser's margin, the scoring function ranks by expected value: `margin × P(conversion)`.
+
+Why Gaussian? If you know two things about a conversion curve (where it peaks and how wide it is), the Gaussian is the [maximum entropy](https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution) distribution: the least biased guess you can make. Anything else imports assumptions you don't have evidence for.
+
 ![Bid Change](/assets/03_bid_change.png)
 
 When Nike doubles its bid from $5 to $10, its territory expands from 30% to nearly 50% of the space — eating into every competitor's region. This is the continuous analog of outbidding someone on a keyword, except it happens along a *frontier*, not at a single point.

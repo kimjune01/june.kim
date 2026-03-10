@@ -88,6 +88,8 @@ Drag the query dot. The Climbing PT's max bid is $8, but she never pays that. Th
 
 That's the whole job. The publisher sets a [relevance threshold τ](/three-levers) to filter bad matches. The [scoring function](/power-diagrams-ad-auctions) picks the winner. VCG sets the price. No optimizer. No consultant. The advertiser just answers three business questions and the auction handles the rest. The [simulation](/keyword-tax) shows what happens when it does: specialists win the queries they're best at, generalists stop overpaying, and the keyword tax disappears.
 
+With verified conversions, three numbers [becomes two](/set-it-and-forget-it). The exchange learns sigma from conversion data. The advertiser just describes what they do and says what it's worth.
+
 ## How do I set my bid?
 
 Conversion rate times revenue per conversion. If 3% of clicks become customers worth $200 each, bid $6. You'll always pay less anyway.
