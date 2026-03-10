@@ -47,7 +47,7 @@ That's the advertiser's side. The publisher has the same problem in reverse.
 
 The advertiser's dial is sigma. The publisher's is [τ](/three-levers).
 
-The publisher doesn't set τ directly. They set a percentage: "10% of conversations should include a recommendation." Their server adjusts τ to hit that target. This loop runs on the publisher's own infrastructure.
+The publisher doesn't set τ directly. They set a percentage: "10% of conversations should include a recommendation." Their server adjusts τ to hit that target. The [controller is open source](https://github.com/kimjune01/tau-controller). This loop runs on the publisher's own infrastructure.
 
 The unit matters. A conversation is a series of turns, not a single exchange. The publisher's target is per-conversation, not per-turn. Twelve turns, one suggestion. That's the difference between a helpful nudge and a spam cannon.
 
