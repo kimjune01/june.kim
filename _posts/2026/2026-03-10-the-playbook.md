@@ -38,7 +38,7 @@ Advertisers don't sign up. They get signed up. The qualification is simple: they
 
 4. **Send real traffic.** The traffic is real. The publisher signs [serve receipts](/attested-attribution). The advertiser can verify every impression with cryptographic proof.
 
-5. **Reply with the report.** Same thread, one reply: an attested attribution report and a suggested price. The suggested price is 10% of what they're already paying Google for equivalent traffic. Treatment providers paying [$75 per click](https://sagapixel.com/ppc/ppc-for-addiction-services-a-google-ads-guide/) on "addiction treatment" keywords see ~$7.50. Saying no to that is almost irrational.
+5. **Reply with the report.** Same thread, one reply: an attested attribution report and a suggested price. The suggested price is 10% of what they're already paying Google for equivalent traffic. Treatment providers paying [$75 per click](https://sagapixel.com/ppc/ppc-for-addiction-services-a-google-ads-guide/) on "addiction treatment" keywords see ~$7.50. Once there's enough volume, [VCG auctions](/one-shot-bidding) set the real price through competition. The fixed rate is scaffolding.
 
 6. **Cut traffic immediately.** The report goes out, the traffic stops. Ball's in their court. If they pay, traffic resumes. If they don't, nothing changes for them. They got free leads and a clean exit.
 
