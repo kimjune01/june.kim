@@ -9,7 +9,7 @@ tags: vector-space
 
 "What if a publisher games the coupons?"
 
-Fair question. [Don Marti](https://blog.zgp.org/ad-supported-piracy/) raised the specific version: a fraudulent publisher uses surveillance data to identify a high-intent buyer, routes them through a junk site, stamps a coupon, and claims credit for a conversion that was going to happen anyway. The coupon is real but the attribution is stolen. This is the same attack [cookies already suffer from](/adtech-from-1887), except cookies are worse because anyone can overwrite the tracking parameter at any point, invisibly. Coupons at least make the issuance auditable.
+Fair question. [Don Marti](https://blog.zgp.org/why-turn-off-firefox-ad-tracking/) raised the specific version: a fraudulent publisher uses surveillance data to identify a high-intent buyer, routes them through a junk site, stamps a coupon, and claims credit for a conversion that was going to happen anyway. The coupon is real but the attribution is stolen. This is the same attack [cookies already suffer from](/adtech-from-1887), except cookies are worse because anyone can overwrite the tracking parameter at any point, invisibly. Coupons at least make the issuance auditable.
 
 A valid attack. The cryptographic coupon protocol is sound, but a side channel remains unmitigated. Web security solved this problem class twenty years ago.
 
