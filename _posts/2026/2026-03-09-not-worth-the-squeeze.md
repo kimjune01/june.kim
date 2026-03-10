@@ -68,7 +68,13 @@ Each layer is individually imperfect. Together, they multiply the cost.
 | Device Binding | Compromise the user's device key |
 | Single Attribution | Beat a legitimate publisher's engagement signal |
 
-All three have [production precedent](https://developer.apple.com/documentation/AdAttributionKit) today. To run the original attack, a fraudster must defeat all three simultaneously: get allowlisted by the advertiser, compromise the user's device, and outperform a legitimate publisher's engagement signal. At that point they've done everything a legitimate publisher does. The attack has collapsed into honest behavior.
+All three have [production precedent](https://developer.apple.com/documentation/AdAttributionKit) today. To run the original attack, a fraudster must defeat all three simultaneously. That means:
+
+- Convince a real brand you're a legitimate publisher to get allowlisted
+- Steal a cryptographic key from the user's device
+- Generate engagement so convincing it beats the publisher who actually earned the click
+
+For a coupon worth a few dollars. Or you could just run a [click farm](#click-farms) for pennies per tap. The sophisticated attack is more expensive than the dumb one, and the dumb one is already the cheapest fraud left standing. The attack has collapsed into honest behavior.
 
 ## Open Questions
 
@@ -80,7 +86,7 @@ Three more layers would strengthen the stack, but each has unsolved engineering 
 
 **Engagement Proofs** ([ZK proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof) for viewability) would let a browser prove the user actually saw and interacted with the ad without revealing who they are. But ZK proof generation on every impression costs battery and latency. And once you publish what counts as "engagement," that definition becomes the new attack surface.
 
-**Click farms.** Real humans on real devices, tapping through ads for pennies. Every deployable layer checks out: the coupon was issued to an authorized publisher, the device key matches, and the engagement signal is real. The interaction happened. It just wasn't genuine interest. No cryptographic layer can catch this because the signals are real.
+**<a id="click-farms"></a>Click farms.** Real humans on real devices, tapping through ads for pennies. Every deployable layer checks out: the coupon was issued to an authorized publisher, the device key matches, and the engagement signal is real. The interaction happened. It just wasn't genuine interest. No cryptographic layer can catch this because the signals are real.
 
 If you make it expensive enough for them to cheat, they won't. But "expensive enough" still has open engineering.
 
