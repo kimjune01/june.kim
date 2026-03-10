@@ -55,7 +55,7 @@ Advertiser positions are public. Any new exchange can bootstrap by importing the
 
 If declarations are portable, why would each exchange maintain its own copy? Every duplicate is friction. Every sync protocol is overhead. Exchanges competing on reducing friction converge on a single source of truth for every entity's center and σ. The advertiser updates their position once and every exchange resolves it. The registry does not live inside an exchange. It's a phonebook.
 
-Every legitimate commercial entity already has a domain. The spec writes itself: `example.com/marketing-position.json`. Center, σ, geolocation if applicable.
+Every legitimate commercial entity already has a domain. The spec writes itself: `example.com/market-position.json`. Center, σ, geolocation if applicable.
 Keywords were never portable. A Google Ads campaign does not translate to Meta or Amazon. An embedding and σ are platform-agnostic.
 
 ## Market Expansion

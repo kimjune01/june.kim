@@ -32,7 +32,7 @@ Advertisers don't sign up. They get signed up. The qualification is simple: they
 
 1. **Scrape and embed.** Scrape the advertiser's homepage, about page, and service descriptions. Embed the marketing copy. The center lands wherever their language puts it in the vector space. Sigma is estimated from how narrow or broad their positioning is. A climbing PT's site talks about one thing. A general practice talks about everything.
 
-2. **Resolve positions.** If the advertiser has a `marketing-position.json`, use it. If not, the scraped position works on its own.
+2. **Resolve positions.** If the advertiser has a `market-position.json`, use it. If not, the scraped position works on its own.
 
 3. **Email them.** Before any traffic flows, send the advertiser an email: here's your position in the vector space, here's how the exchange works, here's what's about to happen. They can ignore it, reply, or adjust their position. The email establishes the relationship. Everything after it is a reply in the same thread.
 
@@ -62,7 +62,7 @@ The default works without any action from the advertiser. Their scraped marketin
 
 But if they want to refine:
 
-- **`marketing-position.json`.** Override the scraped default with an explicit center and sigma. Declare exactly what you sell and how broadly you want to match.
+- **`market-position.json`.** Override the scraped default with an explicit center and sigma. Declare exactly what you sell and how broadly you want to match.
 - **Sigma adjustment.** Narrow sigma to match only highly specific queries. Widen it to match more broadly. The [sigma-controller](https://github.com/kimjune01/sigma-controller) can automate this.
 - **Service area.** Declare a geographic service area. The publisher caches this from a public database and filters locally before the vector leaves their server. The exchange never sees the user's location.
 - **Budget caps.** Set a daily or weekly spend limit. The exchange respects it.
