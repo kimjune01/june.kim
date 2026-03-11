@@ -21,9 +21,9 @@ The pot doesn't recruit. It just sits there, bubbling. Each ingredient is someth
 
 *The privacy analyst.* The theorist sends them the proof. They show up because [users' privates keep getting sold](/transparency-is-irreversible) and they're tired of yelling about it.
 
-*The first publisher.* Adds real users. They show up because the [kitchen stays safe and clean](/monetizing-the-untouchable).
+*The first publisher.* Brings a crowd. They show up because the [kitchen stays safe and clean](/monetizing-the-untouchable).
 
-*The first advertiser.* Adds real money. They show up because the [recipe](/the-playbook) calls for the freshest leads.
+*The first advertiser.* Brings the dough. They show up because the [recipe](/the-playbook) calls for the freshest leads.
 
 *The attribution report.* [Proves](/attested-attribution) the soup is actually tasty.
 
