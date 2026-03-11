@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Salience Is Not a Queue"
+title: "Learn to Forget"
 tags: coding
 ---
 
