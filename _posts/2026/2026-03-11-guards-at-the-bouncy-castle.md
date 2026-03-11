@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Armed Guards at the Bouncy Castle"
+title: "Guards at the Bouncy Castle"
 tags: reflecting
 ---
 
@@ -42,7 +42,7 @@ Direct observation removes it. Open source contributions, public repos, and week
 
 Stanford, Google, YC, Thiel Fellow. These are [pooling equilibria](https://doi.org/10.2307/1885326). Everyone in the bucket looks the same. The signal tells you "probably capable" but not which kind or how. Direct observation collapses the pool. What replaces it is separation by revealed ability: what you built, how you built it, whether you'd be good to build with again.
 
-People are wondering how to evaluate candidates now that AI writes the take-home and aces the interview. That's the wrong question. Evaluation was solving for a firm boundary that no longer holds. It's armed guards at the bouncy castle.
+People are wondering how to evaluate candidates now that AI writes the take-home and aces the interview. That's the wrong question. Evaluation was solving for a firm boundary that no longer holds. It's guards at the bouncy castle.
 
 ## The Banquet
 

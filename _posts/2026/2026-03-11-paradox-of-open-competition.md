@@ -22,16 +22,16 @@ Hiding your code fails to protect you. Worse, it refuses to consider the possibi
 
 When the code is hidden, the customer's evaluation criteria are fuzzy. Whose UI looks more polished? Whose servers respond faster? Whose compliance checklists are tighter? Who's better funded and more likely to survive? Who's more popular on Twitter and HN so I'll get more approval for picking the obvious choice? These are proxies. They're the best signals available when the real signal, who actually built the better system, is locked behind a login.
 
-Now consider the matrix:
+Now consider the matrix. You're a customer choosing between two products:
 
 |  | **Innovator** | **Follower** |
 |--|--|--|
-| **Closed source** | Signals: funding, polish, popularity | Signals: funding, polish, popularity |
-| **Open source** | Signal: commit timestamps | Signal: fork timestamps |
+| **Closed source** | ✓ Pitch deck<br>✓ Product demo<br>✓ Funding announced<br>✓ Popular on HN | ✓ Pitch deck<br>✓ Product demo<br>✓ Funding announced<br>✓ Popular on HN |
+| **Open source** | ✓ Original commits<br>✓ Ships first<br>✓ Sets direction<br>✓ Community contributes | ✗ Fork, not origin<br>✗ Ships second<br>✗ Follows direction<br>✗ Community smaller |
 
-When the source is closed, the customer chooses between two black boxes using the same fuzzy signals. The follower can plausibly claim to be the innovator. Marketing budgets decide.
+When the source is closed, both columns look identical. The follower can plausibly claim to be the innovator. Marketing budgets decide.
 
-When the source is open, the customer chooses between the original repo and the fork. Every other signal collapses. The commit history is the proof. The timestamp of who came first is more trustworthy than any pitch deck.
+When the source is open, the choice is obvious. The commit history is the proof. The timestamp of who came first is more trustworthy than any pitch deck.
 
 For as long as the innovator is credibly innovating at a predictable rate, it's fair to assume the follower will never catch up. The customer receives a more innovative product by choosing the original. Open source makes the innovator's advantage *legible*.
 
@@ -69,7 +69,7 @@ No amount of AI will replicate the trust that comes from being the person who bu
 
 The more you share, the harder you are to replace. The more you hide, the easier you are to clone.
 
-If that's true, it changes more than competitive strategy. It changes what a company even [is](/armed-guards-at-the-bouncy-castle).
+If that's true, it changes more than competitive strategy. It changes what a company even [is](/guards-at-the-bouncy-castle).
 
 ---
 
