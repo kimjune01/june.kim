@@ -61,7 +61,15 @@ Tighten, loosen, settle.
 
 The publisher who wants 5% sets 5%. The publisher who wants 20% sets 20%. τ finds the distance threshold that delivers it.
 
-Each side gets one dial. Each dial tunes itself. Set it and forget it.
+Each side gets one dial. Each dial tunes itself.
+
+## Closer to Equilibrium
+
+In game theory, an [ε-Nash equilibrium](https://en.wikipedia.org/wiki/Epsilon-equilibrium) means every player is within ε of their best response. ε is the size of the mistake. In a typical auction, ε is large because participants guess: guess how far their relevance extends, guess how many ads to show, guess their conversion rate. Every guess is a gap between what they're doing and what they should be doing. Advertisers still guess at margin. But two fewer guesses is two fewer gaps.
+
+Auto-tuning closes those gaps. Sigma converges on the true relevance boundary from conversion data. τ converges on the publisher's declared preference from conversation counts. Neither side needs to anticipate the other's adjustments — the controllers handle that reactively. Each player's declared strategy (margin, percentage) approaches a true best response.
+
+ε shrinks toward zero. Not in theory. Mechanically. Set it and forget it.
 
 ---
 
