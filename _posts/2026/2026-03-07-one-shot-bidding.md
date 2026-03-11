@@ -24,7 +24,7 @@ Smart Bidding is the fake solution to the fake problem. Google dug the pothole a
 
 [Vickrey (1961)](https://doi.org/10.2307/2977633) solved this sixty-five years ago. In a second-price sealed-bid auction, the dominant strategy is to bid your true value. You never overpay because you pay the second-highest bid. You never underbid because shading can only lose you auctions you would have won profitably. Honesty is optimal.
 
-Clarke (1971) and Groves (1973) generalized this to multiple items: the VCG mechanism. Each winner pays the externality they impose on everyone else. Total value is maximized, truthful reporting is dominant, and the whole thing resolves in one pass.
+[Clarke (1971)](https://link.springer.com/article/10.1007/BF01726210) and [Groves (1973)](https://www.econometricsociety.org/publications/econometrica/1973/07/01/incentives-teams) generalized this to multiple items: the VCG mechanism. Each winner pays the externality they impose on everyone else. Total value is maximized, truthful reporting is dominant, and the whole thing resolves in one pass.
 
 Contrast the cost:
 
@@ -40,7 +40,7 @@ The computational waste is fixing a strategic complexity that nobody asked for.
 
 ## Already Solved
 
-Academia has known this for decades. Vickrey got the Nobel in 1996. Milgrom and Wilson got it in 2020 for practical auction design. [Lahaie & Lubin (2025)](https://arxiv.org/abs/2507.03252) closed the last gap: the allocation problem is a [linear program](https://en.wikipedia.org/wiki/Linear_programming), the LP dual gives the prices, and VCG is computable even for multi-item auctions. Lahaie works at Google Research. Google didn't use it.
+Academia has known this for decades. [Vickrey got the Nobel in 1996](https://www.nobelprize.org/prizes/economic-sciences/1996/vickrey/facts/). [Milgrom and Wilson got it in 2020](https://www.nobelprize.org/prizes/economic-sciences/2020/press-release/) for practical auction design. [Lahaie & Lubin (2025)](https://arxiv.org/abs/2507.03252) closed the last gap: the allocation problem is a [linear program](https://en.wikipedia.org/wiki/Linear_programming), the LP dual gives the prices, and VCG is computable even for multi-item auctions. Lahaie works at Google Research. Google didn't use it.
 
 ## Three Numbers
 

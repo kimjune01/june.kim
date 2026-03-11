@@ -7,7 +7,7 @@ image: "/assets/aligned_greed.png"
 
 ![Aligned forces](/assets/aligned_greed.png)
 
-Google makes $265 billion a year in ad revenue. They aren't going to stop being greedy. Neither is Meta, neither is OpenAI. The interesting question is whether a system exists where their greed produces good outcomes. Mechanism design is the field that studies this: how to build games where the selfish move is the fair move.
+Google makes $265 billion a year in ad revenue. They aren't going to stop being greedy. Neither is Meta, neither is OpenAI. The interesting question is whether a system exists where their greed produces good outcomes. [Mechanism design](https://en.wikipedia.org/wiki/Mechanism_design) is the field that studies this: how to build games where the selfish move is the fair move.
 
 ## What Greed Looks Like Now
 
@@ -43,7 +43,7 @@ The [Plumber Test](/the-plumber-test) is the concrete version: "sewage backup re
 
 ## The Profit Motive
 
-Intentcasting (where people declare what they need and let the market come to them) has been talked about for years. Doc Searls proposed it in 2006. The vision is right. The reason it stalled is that nobody built a protocol that made it profitable for every participant simultaneously.
+Intentcasting (where people declare what they need and let the market come to them) has been talked about for years. [Doc Searls](https://en.wikipedia.org/wiki/The_Intention_Economy) proposed it in 2006. The vision is right. The reason it stalled is that nobody built a protocol that made it profitable for every participant simultaneously.
 
 The embedding auction might be that protocol. The exchange earns on every matched query, the chatbot monetizes without compromising trust, and the advertiser converts at higher rates and lower cost. Whether this is enough to bootstrap a market is an open question. But the alignment is structural: every participant's greedy move produces the outcome the other participants want.
 

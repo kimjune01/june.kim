@@ -50,7 +50,7 @@ This is exactly how real DSP bid optimization works. A campaign manager sets tar
 
 ## What's Deliberately Simplified
 
-**Fifteen agents instead of thousands.** Real programmatic markets have thousands of bidders. But the Hotelling problem requires only two; the original 1929 paper used two ice cream vendors. Fifteen agents with three distinct strategies are sufficient to demonstrate convergence dynamics. More agents would make the collapse more dramatic (more competitors chasing the same peak).
+**Fifteen agents instead of thousands.** Real programmatic markets have thousands of bidders. But the [Hotelling problem](https://en.wikipedia.org/wiki/Hotelling%27s_law) requires only two; the original 1929 paper used two ice cream vendors. Fifteen agents with three distinct strategies are sufficient to demonstrate convergence dynamics. More agents would make the collapse more dramatic (more competitors chasing the same peak).
 
 **Stationary impression distribution.** Real publisher traffic shifts over time: trending topics, seasonal patterns, breaking news. The simulation holds the distribution fixed to isolate the effect of relocation fees from the effect of distribution drift. A shifting distribution would make relocation fees *more* important, not less, because it would create constantly updating incentives to chase new density peaks.
 

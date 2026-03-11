@@ -13,21 +13,21 @@ That's the pitch. Here's the problem: it doesn't hold on its own.
 
 Without an external force, every advertiser drifts toward the center of demand. The embedding space that was supposed to preserve differentiation collapses back into keyword crowding: the same five PTs fighting over the same queries, this time at coordinates instead of keywords. The geometry changes. The economics don't.
 
-Harold Hotelling described this in 1929 with two ice cream vendors on a beach. Both move toward the center because that's where the customers are. In one dimension, the result is obvious. In 384 dimensions, it's the same problem.
+[Harold Hotelling](https://en.wikipedia.org/wiki/Hotelling%27s_law) described this in 1929 with two ice cream vendors on a beach. Both move toward the center because that's where the customers are. In one dimension, the result is obvious. In 384 dimensions, it's the same problem.
 
 Hotelling drift is universal in embedding-space auctions, and a flat relocation fee is sufficient to prevent it. The fee is a structural requirement, the same class of mechanism that prevents collapse in spectrum markets, domain registries, and urban real estate.
 
 ## The Theory: Almost Right in Every Dimension
 
-Hotelling's original claim, that competitors converge to the center, was wrong in its own model. d'Aspremont, Gabszewicz, and Thisse showed in 1979 that with quadratic transportation costs, the equilibrium is *maximum* differentiation. Firms run to opposite ends.
+Hotelling's original claim, that competitors converge to the center, was wrong in its own model. [d'Aspremont, Gabszewicz, and Thisse](https://www.econometricsociety.org/publications/econometrica/browse/1979/09/01/hotellings-stability-competition) showed in 1979 that with quadratic transportation costs, the equilibrium is *maximum* differentiation. Firms run to opposite ends.
 
 But that result is for two firms on a line. What happens in higher dimensions?
 
-Irmen and Thisse answered this in 1998 with the definitive n-dimensional result. In a product space with n characteristics, firms maximally differentiate on exactly one dimension (the most salient one) and minimally differentiate on all the rest. They called it the Max-Min-...-Min principle. "Hotelling was almost right": minimum differentiation holds for (n-1) out of n dimensions.
+[Irmen and Thisse](https://www.sciencedirect.com/science/article/abs/pii/S0022053197923486) answered this in 1998 with the definitive n-dimensional result. In a product space with n characteristics, firms maximally differentiate on exactly one dimension (the most salient one) and minimally differentiate on all the rest. They called it the Max-Min-...-Min principle. "Hotelling was almost right": minimum differentiation holds for (n-1) out of n dimensions.
 
 This maps directly onto embedding space. A 384-dimensional embedding has perhaps 10-50 effective dimensions; the rest are redundant. Advertisers differentiate on the single dimension that matters most for their niche ("climbing" vs "pelvic floor") and crowd together on everything else. The theory predicts partial collapse.
 
-There's a deeper problem. Beyer et al. (1999) proved that in high-dimensional spaces, all pairwise distances converge. The ratio of farthest to nearest distance approaches 1. In 384 dimensions, the distance between any two points becomes nearly the same. The entire distance range in our simulation compresses into a narrow band: dist² from 0.13 to 1.29 across all advertiser-query pairs.
+There's a deeper problem. [Beyer et al. (1999)](https://link.springer.com/chapter/10.1007/3-540-49257-7_15) proved that in high-dimensional spaces, all pairwise distances converge. The ratio of farthest to nearest distance approaches 1. In 384 dimensions, the distance between any two points becomes nearly the same. The entire distance range in our simulation compresses into a narrow band: dist² from 0.13 to 1.29 across all advertiser-query pairs.
 
 When distances concentrate, the gradient that drives differentiation weakens. An advertiser can't gain much local monopoly power by moving to an empty region because no region is meaningfully farther from competitors than any other. The centripetal pull toward demand density dominates because it's the only gradient with a clear signal.
 
@@ -135,13 +135,13 @@ Relocation fees are the embedding-space instance of a pattern that appears where
 
 ### Spectrum licenses
 
-Radio spectrum is a continuous resource, like embedding space. Without usage restrictions, every broadcaster would crowd the most popular frequencies. Maximum audience, maximum interference, minimum value for everyone. The FCC allocates spectrum through auctions with geographic and usage commitments. A broadcaster who wins a license for the 700 MHz band in Dallas can't unilaterally shift to the 600 MHz band in New York. The license binds position. The 2015 AWS-3 auction raised $44.9 billion precisely because the commitments made the positions valuable: exclusive access to a defined territory, protected from crowding.
+Radio spectrum is a continuous resource, like embedding space. Without usage restrictions, every broadcaster would crowd the most popular frequencies. Maximum audience, maximum interference, minimum value for everyone. The FCC allocates spectrum through auctions with geographic and usage commitments. A broadcaster who wins a license for the 700 MHz band in Dallas can't unilaterally shift to the 600 MHz band in New York. The license binds position. The 2015 [AWS-3 auction](https://en.wikipedia.org/wiki/AWS-3_auction) raised $44.9 billion precisely because the commitments made the positions valuable: exclusive access to a defined territory, protected from crowding.
 
 The parallel to embedding space: without positional commitment, every advertiser crowds the densest impression region. Relocation fees are the license condition that makes a position worth holding.
 
 ### Domain names
 
-ICANN charges annual renewal fees for domain registrations. Without them, speculators would register every plausible domain and sit on it. The namespace would collapse into a land grab with no relationship between registrants and value. The renewal fee creates ongoing cost for holding a position, which pushes registrants toward positions they actually intend to use. Domain squatting still exists, but the fee limits its scale.
+[ICANN](https://en.wikipedia.org/wiki/ICANN) charges annual renewal fees for domain registrations. Without them, speculators would register every plausible domain and sit on it. The namespace would collapse into a land grab with no relationship between registrants and value. The renewal fee creates ongoing cost for holding a position, which pushes registrants toward positions they actually intend to use. Domain squatting still exists, but the fee limits its scale.
 
 In embedding space, the analogous problem is position squatting: declaring a center at the highest-traffic point regardless of what you actually sell. The relocation fee allows free initial positioning but prevents the incremental drift that accomplishes the same thing over time.
 
@@ -175,7 +175,7 @@ Every industry example above works the same way. The FCC doesn't build new spect
 
 And unlike a tax that extracts value from the market, this fee *creates* value. The simulation shows it: advertisers earn higher surplus in the market with fees than the market without them. The exchange collects the fee and the advertisers are still better off. The fee funds the exchange by capturing a fraction of the surplus it generates.
 
-This is a Pigouvian tax that pays for itself. A carbon tax makes polluters pay for the damage they cause, but the government has to spend the revenue on something useful for the tax to be net positive. Here, the damage prevented (Hotelling collapse) is worth more to advertisers than the fee costs them. The exchange collects revenue. The advertisers earn more. The fee unlocks surplus that didn't exist without it.
+This is a [Pigouvian tax](https://en.wikipedia.org/wiki/Pigouvian_tax) that pays for itself. A carbon tax makes polluters pay for the damage they cause, but the government has to spend the revenue on something useful for the tax to be net positive. Here, the damage prevented (Hotelling collapse) is worth more to advertisers than the fee costs them. The exchange collects revenue. The advertisers earn more. The fee unlocks surplus that didn't exist without it.
 
 This is the business model for an embedding-space exchange: a Pigouvian fee on drift that costs nothing to enforce, prevents a market failure that would destroy the product, and generates pure-margin revenue as a side effect. The fees make the market worth participating in.
 
@@ -188,20 +188,6 @@ Across six simulation versions, two findings are robust:
 2. **A flat fee is sufficient.** Uniform relocation fees significantly improve surplus, reduce drift, and preserve the differentiation that embedding space makes possible. No density scaling needed. No adaptive scheduling. One fee, applied everywhere, enforced by attested code.
 
 The embedding space can distinguish the climbing PT from the sports PT. The fee is what keeps them apart.
-
-## References
-
-- **Hotelling, H. (1929).** "Stability in Competition." *Economic Journal*, 39(153), 41-57. The original minimum differentiation claim: two firms on a line converge to the center.
-
-- **d'Aspremont, C., Gabszewicz, J.J., & Thisse, J.-F. (1979).** "On Hotelling's 'Stability in Competition'." *Econometrica*, 47(5), 1145-1150. Corrected Hotelling: with quadratic transportation costs, the equilibrium is maximum differentiation.
-
-- **Irmen, A. & Thisse, J.-F. (1998).** "Competition in Multi-Characteristics Spaces: Hotelling Was Almost Right." *Journal of Economic Theory*, 78(1), 76-102. The n-dimensional result: Max-Min-...-Min. Firms maximally differentiate on one dimension and minimally on all others.
-
-- **Beyer, K. et al. (1999).** "When Is 'Nearest Neighbor' Meaningful?" *ICDT'99*, LNCS 1540, 217-235. Distance concentration in high dimensions. All pairwise distances converge, making nearest-neighbor distinctions meaningless in the ambient space.
-
-- **Han, S. et al. (2021).** "Shapes as Product Differentiation: Neural Network Embedding in the Analysis of Markets for Fonts." [arXiv:2107.02739](https://arxiv.org/abs/2107.02739). Hotelling competition operationalized in CNN embedding space. Analyzed a merger of 28,000+ fonts and found competitive effects invisible to structured-data measures.
-
-- **Loertscher, S. & Muir, E.V. (2024).** "Optimal Hotelling Auctions." Working paper, MIT Sloan. Combines spatial differentiation with mechanism design. Key finding: auctions need a structural element beyond pricing to maintain differentiation.
 
 ---
 

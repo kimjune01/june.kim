@@ -36,7 +36,7 @@ First-party ads create a conflict of interest. Externalized ads create a privacy
 
 The solution is to run the external auction on the chatbot's own infrastructure, in a sealed enclave.
 
-A trusted execution environment is a hardware enclave that proves what code is running inside it. AWS Nitro Enclaves, Intel SGX, AMD SEV. The key property: even the machine's operator can't see what's happening inside, and anyone can verify what code executed.
+A trusted execution environment is a hardware enclave that proves what code is running inside it. [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/), [Intel SGX](https://en.wikipedia.org/wiki/Software_Guard_Extensions), [AMD SEV](https://www.amd.com/en/developer/sev.html). The key property: even the machine's operator can't see what's happening inside, and anyone can verify what code executed.
 
 The architecture:
 

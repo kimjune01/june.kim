@@ -15,23 +15,23 @@ Every company on this list talks about "contextual targeting" and "understanding
 
 ### Startups
 
-**Kontext** ($10M seed, M13/Torch Capital) is furthest along. Founded 2023 by Andrej Kiska, they generate ads in real-time using the host app's LLM to analyze conversation context. Integrated with PubMatic for programmatic. Their investors call them "the AppLovin / TradeDesk / DoubleClick of the GenAI era." Publishers include DeepAI, Pixel Chat, Liner. Advertisers include Amazon, Uber, Canva. 3-5% CTR at $2-4 CPMs.
+**[Kontext](https://www.adweek.com/programmatic/pitch-deck-kontext-raises-10-million-funding-ads-in-ai-chatbots/)** ($10M seed, M13/Torch Capital) is furthest along. Founded 2023 by Andrej Kiska, they generate ads in real-time using the host app's LLM to analyze conversation context. Integrated with PubMatic for programmatic. Their investors call them "the AppLovin / TradeDesk / DoubleClick of the GenAI era." Publishers include DeepAI, Pixel Chat, Liner. Advertisers include Amazon, Uber, Canva. 3-5% CTR at $2-4 CPMs.
 
-**ZeroClick** ($55M, same investors who backed Honey to its $4B PayPal exit). Ryan Hudson's "reasoning-time ad network": advertiser context gets injected into the LLM's reasoning *before* the answer is generated, not appended after. The ad becomes part of the answer. 10,000+ advertisers including Walmart, Amazon, Target.
+**[ZeroClick](https://www.adexchanger.com/commerce/honey-co-founder-ryan-hudson-has-a-new-plan-for-an-ai-ad-network/)** ($55M, same investors who backed [Honey](https://en.wikipedia.org/wiki/PayPal_Honey) to its $4B PayPal exit). Ryan Hudson's "reasoning-time ad network": advertiser context gets injected into the LLM's reasoning *before* the answer is generated, not appended after. The ad becomes part of the answer. 10,000+ advertisers including Walmart, Amazon, Target.
 
 **Koah Labs** ($5M seed, Forerunner) targets the long tail of AI apps, the Luzias and DeepAIs, especially markets where subscriptions don't work. 7.5% CTR. Their pitch: we're AdMob for AI chatbots.
 
 ### Incumbents
 
-**PubMatic** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." To them, AI chat is just another ad slot, not a fundamentally different kind of inventory.
+**[PubMatic](https://en.wikipedia.org/wiki/Pubmatic)** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." To them, AI chat is just another ad slot, not a fundamentally different kind of inventory.
 
-**Criteo** is repositioning its commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM recommendations. They built an MCP server so LLMs can query their product data during response generation. Business model still undefined.
+**[Criteo](https://en.wikipedia.org/wiki/Criteo)** is repositioning its commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM recommendations. They built an MCP server so LLMs can query their product data during response generation. Business model still undefined.
 
 **Seedtag** is the most interesting technically. They've been doing embedding-based contextual advertising on the open web for years, with "neuro-contextual" targeting that models interest, emotion, and intent. 3.5x higher engagement versus non-contextual. They have the closest thing to actual embedding-space infrastructure, but they're applying it to display and CTV, not LLM conversations.
 
 ### Walled Gardens
 
-**OpenAI** is testing ads in ChatGPT for free/Go tier users. Internal targets: $1B in "free user monetization" for 2026, $25B by 2029. Hired Fidji Simo (scaled Instacart's ad business) to run applications. Built-in checkout with Shopify, Etsy, Walmart. Almost certainly a closed system.
+**OpenAI** is testing ads in ChatGPT for free/Go tier users. Internal targets: $1B in "free user monetization" for 2026, $25B by 2029. Hired [Fidji Simo](https://en.wikipedia.org/wiki/Fidji_Simo) (scaled Instacart's ad business) to run applications. Built-in checkout with Shopify, Etsy, Walmart. Almost certainly a closed system.
 
 **Google** already has ads in AI Overviews and AI Mode. They don't need a third party.
 
@@ -47,9 +47,9 @@ The continuous embedding (the thing that captures the difference between "I'm va
 
 ## The Protocol Problem
 
-The root cause is OpenRTB, the protocol the $200B+ programmatic market runs on.
+The root cause is [OpenRTB](https://github.com/InteractiveAdvertisingBureau/openrtb), the protocol the $200B+ programmatic market runs on.
 
-The IAB Tech Lab maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't carry an embedding vector — the thing that actually makes LLM conversation targeting better than keywords.
+The [IAB Tech Lab](https://iabtechlab.com/) maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't carry an embedding vector — the thing that actually makes LLM conversation targeting better than keywords.
 
 ```json
 {
@@ -73,7 +73,7 @@ Three likely outcomes:
 
 3. **De facto standard**: A dominant player builds an embedding-based system, everyone conforms, the IAB eventually standardizes what already exists.
 
-History says option 3. Google didn't wait for the IAB. They built DoubleClick Ad Exchange and everyone conformed. Prebid.js standardized header bidding after publishers had already adopted it. Protocol follows market power, not the other way around.
+History says option 3. Google didn't wait for the IAB. They built [DoubleClick Ad Exchange](https://www.adexchanger.com/ad-exchange-news/it-wasnt-a-job-it-was-a-cult-the-definitive-oral-history-of-doubleclick/) and everyone conformed. [Prebid.js](https://docs.prebid.org/overview/intro-to-header-bidding.html) standardized header bidding after publishers had already adopted it. Protocol follows market power, not the other way around.
 
 ## What the Replacement Looks Like
 

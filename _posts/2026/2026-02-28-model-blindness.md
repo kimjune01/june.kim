@@ -42,7 +42,7 @@ The components for this are already in production individually.
 
 **GPU-isolated inference.** The [NVIDIA H100](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/) supports confidential computing with a hardware TEE at under 5% performance overhead.
 
-**Confidential inferencing platforms.** [Azure confidential inferencing](https://techcommunity.microsoft.com/blog/azureconfidentialcomputingblog/azure-ai-confidential-inferencing-technical-deep-dive/4253150) provides end-to-end prompt protection with AMD SEV-SNP enclaves. Neither the service operator nor the cloud provider can access prompts.
+**Confidential inferencing platforms.** [Azure confidential inferencing](https://techcommunity.microsoft.com/blog/azureconfidentialcomputingblog/azure-ai-confidential-inferencing-technical-deep-dive/4253150) provides end-to-end prompt protection with [AMD SEV-SNP](https://www.amd.com/en/developer/sev.html) enclaves. Neither the service operator nor the cloud provider can access prompts.
 
 **Browser-side TEE auctions.** Google's [Protected Audience API](https://github.com/privacysandbox/protected-auction-services-docs/blob/main/trusted_services_overview.md) already runs ad auctions inside TEEs at scale with open-source, externally verifiable binaries.
 

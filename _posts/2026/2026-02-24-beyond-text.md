@@ -12,9 +12,9 @@ People don't only discover products and services by typing. They search by image
 
 Image and video advertising today follows a familiar pattern: sophisticated understanding in, crude categories out.
 
-**Seedtag** (Madrid, $250M+ raised) calls it "neuro-contextual" advertising. Their system analyzes page content using computer vision and NLP, producing 11,000+ contextual categories from 600+ recognized objects. They expanded to CTV with video content analysis and report 3.5x higher engagement versus non-contextual targeting. At the auction boundary, all that visual understanding gets flattened into category labels.
+**[Seedtag](https://techcrunch.com/2022/07/27/seedtag-the-ex-googler-founded-cookie-free-ai-based-adtech-startup-taps-250m-in-funding/)** (Madrid, $250M+ raised) calls it "neuro-contextual" advertising. Their system analyzes page content using computer vision and NLP, producing 11,000+ contextual categories from 600+ recognized objects. They expanded to CTV with video content analysis and report 3.5x higher engagement versus non-contextual targeting. At the auction boundary, all that visual understanding gets flattened into category labels.
 
-**GumGum's ContextIQ** (now Verve Group) does the same thing for video. Their computer vision system understands video content at the scene level: objects, actions, sentiment, brand safety. Then it collapses that understanding into categorical output for the programmatic auction.
+**[GumGum's ContextIQ](https://gumgum.com/)** (now Verve Group) does the same thing for video. Their computer vision system understands video content at the scene level: objects, actions, sentiment, brand safety. Then it collapses that understanding into categorical output for the programmatic auction.
 
 **Pinterest** has native visual search. Users tap the camera icon and search by image, not text. 553 million monthly active users. The platform already matches by visual content. It knows that a photo of a campus board is about rock climbing without anyone tagging it. But ad targeting routes through interest labels.
 

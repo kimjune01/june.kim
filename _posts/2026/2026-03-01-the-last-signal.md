@@ -7,13 +7,13 @@ image: "/assets/last_signal.png"
 
 ![Dying signals](/assets/last_signal.png)
 
-In 1993, the New Yorker ran a cartoon: "On the Internet, nobody knows you're a dog." It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
+In 1993, the New Yorker ran a cartoon: ["On the Internet, nobody knows you're a dog."](https://en.wikipedia.org/wiki/On_the_Internet,_nobody_knows_you%27re_a_dog) It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
 
-Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property that enabled authentic connection now enables infinite noise: no identity verification. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the lemons problem. It's now the operating condition of every channel online.
+Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property that enabled authentic connection now enables infinite noise: no identity verification. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the [lemons problem](https://en.wikipedia.org/wiki/The_Market_for_Lemons). It's now the operating condition of every channel online.
 
 ## What's Already Dead
 
-**PageRank** was a signal of peer endorsement. A link from MIT to your research page meant a human at a credible institution decided your work was worth citing. SEO farms industrialized link production. By 2025, the first page of Google for most commercial queries is content written to rank, not content written to inform. Producing a backlink became cheaper than earning one, and the signal collapsed.
+**[PageRank](https://en.wikipedia.org/wiki/PageRank)** was a signal of peer endorsement. A link from MIT to your research page meant a human at a credible institution decided your work was worth citing. SEO farms industrialized link production. By 2025, the first page of Google for most commercial queries is content written to rank, not content written to inform. Producing a backlink became cheaper than earning one, and the signal collapsed.
 
 **Reviews** were a signal of customer experience. A five-star review on Amazon meant someone bought the product and liked it. Fake review farms [produce thousands per day](https://www.ftc.gov/news-events/news/press-releases/2023/06/ftc-proposes-new-rule-combat-fake-reviews-testimonials) at pennies each. The FTC fined companies for it. The reviews kept coming. Amazon deletes millions annually and the problem grows faster than the enforcement. You can't trust a stranger's review because you can't tell if the stranger exists.
 
@@ -25,7 +25,7 @@ Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold em
 
 **Keyword ad position** was a signal of budget, a weak proxy for legitimacy. The [plumber with the biggest overhead](/the-plumber-test) wins, not the one who fixes your problem.
 
-**Behavioral targeting** was a signal of *who you are*, assembled from surveillance. Don Marti [argued](https://blog.zgp.org/perfectly-targeted-advertising-would-be-perfectly-worthless/) that this signal is perfectly worthless. A retargeted ad tells you "this company knows you visited their website." That carries zero information about their quality, trustworthiness, or fit. And the surveillance infrastructure that produces it is increasingly restricted: Apple's ATT, cookie deprecation, GDPR enforcement.
+**Behavioral targeting** was a signal of *who you are*, assembled from surveillance. Don Marti [argued](https://blog.zgp.org/perfectly-targeted-advertising-would-be-perfectly-worthless/) that this signal is perfectly worthless. A retargeted ad tells you "this company knows you visited their website." That carries zero information about their quality, trustworthiness, or fit. And the surveillance infrastructure that produces it is increasingly restricted: Apple's [ATT](https://developer.apple.com/documentation/apptrackingtransparency), cookie deprecation, GDPR enforcement.
 
 Same pattern every time. A signal carries real information. The cost of faking it drops below the cost of producing the real thing. The channel floods with noise and dies.
 

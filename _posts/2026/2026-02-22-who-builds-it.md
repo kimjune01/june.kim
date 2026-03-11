@@ -37,7 +37,7 @@ An embedding auction with an open scoring function, `score = log(bid) - distance
 
 ## The Standards
 
-The [Ad Context Protocol](https://adcontextprotocol.org/) launched in October 2025, founded by 20+ companies including Yahoo, PubMatic, and Magnite. AdCP is an [advertising-specific wrapper](https://docs.adcontextprotocol.org/docs/intro) on Anthropic's Model Context Protocol. Any MCP-compatible LLM can execute ad campaigns through standardized tasks. The [GitHub repo](https://github.com/adcontextprotocol/adcp) shows real infrastructure: v2.0 to v3.0-beta in four months.
+The [Ad Context Protocol](https://adcontextprotocol.org/) launched in October 2025, founded by 20+ companies including Yahoo, PubMatic, and Magnite. AdCP is an [advertising-specific wrapper](https://docs.adcontextprotocol.org/docs/intro) on Anthropic's [Model Context Protocol](https://modelcontextprotocol.io/). Any MCP-compatible LLM can execute ad campaigns through standardized tasks. The [GitHub repo](https://github.com/adcontextprotocol/adcp) shows real infrastructure: v2.0 to v3.0-beta in four months.
 
 The **IAB Tech Lab** published an [agentic roadmap](https://iabtechlab.com/press-releases/iab-tech-lab-unveils-agentic-roadmap-for-digital-advertising/) in January 2026: extending OpenRTB for agentic execution, open-source reference implementations, and a neutral MCP reference server for advertising. The **IAB CoMP** working group invited OpenAI, Anthropic, Google, Meta, and Perplexity, though [Digiday reported](https://digiday.com/media/the-coalition-of-the-willing-and-unable-publishers-rally-to-wall-off-ais-free-ride/) that only Google and Meta actually participated in initial workshops. The AI companies at the center of the problem did not show up.
 

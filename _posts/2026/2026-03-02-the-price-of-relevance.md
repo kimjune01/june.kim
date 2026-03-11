@@ -11,7 +11,7 @@ Every ad auction has to decide how much to weight relevance versus price. Weight
 
 [Embedding auctions](/power-diagrams-ad-auctions) have the same tradeoff, but it's been hiding in the formula. The scoring rule `score = log_b(price) - dist²/σ²` ranks advertisers by a combination of price and proximity, where `dist` is the distance to the query, `σ` is the advertiser's targeting radius, and `b` is the log base. That log base is the squashing parameter: `s = ln(b)`. Change `b` from `e` to `10` and an advertiser needs 10× the price to overcome one unit of distance penalty instead of 2.72×. Change it to `50` and proximity is everything.
 
-Lahaie and Pennock (2007) formalized the keyword version as `score = bid × relevance^s` and showed that tuning `s` matters more than setting reserve prices. The mapping `s = ln(b)` means every finding about `s` in keyword auctions transfers directly to embedding auctions. We swept it from `s = 0` (pure rank-by-bid) to `s = 3.91` (near-Voronoi) across 50 trials.
+[Lahaie and Pennock (2007)](https://users.cms.caltech.edu/~adamw/courses/241/lectures/search3.pdf) formalized the keyword version as `score = bid × relevance^s` and showed that tuning `s` matters more than setting reserve prices. The mapping `s = ln(b)` means every finding about `s` in keyword auctions transfers directly to embedding auctions. We swept it from `s = 0` (pure rank-by-bid) to `s = 3.91` (near-Voronoi) across 50 trials.
 
 ## The Derivation
 
@@ -32,7 +32,7 @@ At `b = 1`, distance is completely ignored; the auction ranks purely by price. H
 
 ## What the Log Base Controls
 
-Che (1993) showed that in multidimensional auctions, under-rewarding quality maximizes short-term revenue while over-rewarding it maximizes buyer surplus. For chatbot platforms, higher `b` is the natural direction, since retention depends on answer quality, not ad revenue per query. The question is how much higher.
+[Che (1993)](https://blogs.cuit.columbia.edu/yc2271/files/2017/05/Scoring-auctions.pdf) showed that in multidimensional auctions, under-rewarding quality maximizes short-term revenue while over-rewarding it maximizes buyer surplus. For chatbot platforms, higher `b` is the natural direction, since retention depends on answer quality, not ad revenue per query. The question is how much higher.
 
 To overcome one unit of `dist²/σ²`:
 
@@ -56,7 +56,7 @@ Assumptions:
 - **Value decays with distance.** An advertiser's value for a query is `max(0, MaxVal × (cos_sim - threshold))`. No advertiser bids on queries they can't convert on. This is the soft relevance gate that turns out to matter more than the hard one.
 - **Positions are locked.** [Relocation fees](/synthetic-friction) (λ=5000) prevent drift. This experiment isolates the scoring rule by holding positions fixed.
 - **VCG payments, not GSP.** Winners pay the externality they impose, the incentive-compatible mechanism. Lahaie and Pennock analyzed GSP in symmetric equilibrium; our results use VCG in dominant strategy. Revenue levels aren't directly comparable, but the directional tradeoffs should hold across both mechanisms.
-- **Positive value-relevance correlation.** Specialists have both higher values and higher cosine similarity to their niche queries. This assumption matters: Vorobeychik (2009) found that when value-quality correlation is weak, lower `s` can dominate higher `s` on welfare. The monotonic tradeoff in our results depends on specialists being genuinely better at what they're close to. We sweep the full range from `b = 1` (s=0, pure rank-by-bid) through `b = 50` (s=3.91), the same parameter space Lahaie and Pennock explored in keyword auctions.
+- **Positive value-relevance correlation.** Specialists have both higher values and higher cosine similarity to their niche queries. This assumption matters: [Vorobeychik (2009)](http://www.sigecom.org/exchanges/volume_8/1/vorobeychik.pdf) found that when value-quality correlation is weak, lower `s` can dominate higher `s` on welfare. The monotonic tradeoff in our results depends on specialists being genuinely better at what they're close to. We sweep the full range from `b = 1` (s=0, pure rank-by-bid) through `b = 50` (s=3.91), the same parameter space Lahaie and Pennock explored in keyword auctions.
 
 Scoring: `log_b(price) - dist²/σ²`, implemented via sigma scaling (`σ/√ln(b)`) so the core auction library stays untouched. At `b = 1`, embeddings are removed entirely; the auction ranks by `log(price)` only. 300 rounds per trial, 50 trials per condition.
 
@@ -119,11 +119,11 @@ Revenue doubles at τ=0.7 despite fewer competitors. Fewer bidders should mean l
 
 ## The Tradeoff
 
-`b` (continuous weight) is the primary lever; `τ` (hard gate) is redundant until extreme values. This matches Asker and Cantillon's (2008) theoretical result that scoring auctions dominate mechanisms that combine price-only ranking with minimum quality thresholds.
+`b` (continuous weight) is the primary lever; `τ` (hard gate) is redundant until extreme values. This matches [Asker and Cantillon's (2008)](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1756-2171.2008.00004.x) theoretical result that scoring auctions dominate mechanisms that combine price-only ranking with minimum quality thresholds.
 
 The discovery threshold matters only if the platform is willing to accept 22% no-shows. That's a product decision, not a scoring decision. For most chatbot deployments, showing no ad is acceptable; it's a conversation, not a search results page. That argues for high `τ` as a quality floor. But the scoring formula with high `b` already achieves most of this effect without the binary cutoff.
 
-A revenue-maximizing platform would set `b` as low as possible, but a chatbot that shows irrelevant ads loses users to one that shows relevant ads. Gomes (2014) formalized this: in two-sided markets, user participation elasticity pushes the platform's optimal quality weight above the pure revenue-maximizer's choice. The floor on `b` comes from the `b` of the next-best alternative.
+A revenue-maximizing platform would set `b` as low as possible, but a chatbot that shows irrelevant ads loses users to one that shows relevant ads. [Gomes (2014)](https://ideas.repec.org/a/bla/randje/v45y2014i2p248-272.html) formalized this: in two-sided markets, user participation elasticity pushes the platform's optimal quality weight above the pure revenue-maximizer's choice. The floor on `b` comes from the `b` of the next-best alternative.
 
 Recommended ranges:
 - **Balanced:** `b = 5`, `τ = 0`. Best quality-per-revenue-dollar on the curve.
@@ -132,7 +132,7 @@ Recommended ranges:
 
 ## What's Still Open
 
-**Should noisy relevance estimates push `b` lower?** Lahaie and McAfee (2011) showed that when quality estimates are noisy, `s < 1` can improve welfare by reducing weight on unreliable signals. Cosine similarity in embedding space is a noisy proxy for true relevance; an advertiser at cosine 0.85 isn't reliably better than one at 0.82. Our simulation assumes perfect cosine-to-value mapping. With noisy estimates, the optimal `b` might be lower than what the clean tradeoff curve suggests.
+**Should noisy relevance estimates push `b` lower?** [Lahaie and McAfee (2011)](https://link.springer.com/chapter/10.1007/978-3-642-25510-6_22) showed that when quality estimates are noisy, `s < 1` can improve welfare by reducing weight on unreliable signals. Cosine similarity in embedding space is a noisy proxy for true relevance; an advertiser at cosine 0.85 isn't reliably better than one at 0.82. Our simulation assumes perfect cosine-to-value mapping. With noisy estimates, the optimal `b` might be lower than what the clean tradeoff curve suggests.
 
 **Does the optimal `b` depend on market density?** With 25 advertisers across 5 clusters, the tradeoff is clean. With 250 advertisers, or 5, the shape of the curve might change. More competitors could shift the efficient frontier, making higher `b` less costly in revenue terms.
 
@@ -141,26 +141,6 @@ Recommended ranges:
 **Is there a dynamic `b` that adjusts per query?** A query with 12 qualified advertisers could use lower `b` (more price competition). A query with 2 could use higher `b` (protect the closer match). [Syrgkanis et al. (2017)](https://arxiv.org/abs/1611.01688) showed that oracle-efficient online learning can tune auction parameters like reserves from live data, even against adversarial bidders. The same approach could adapt `b` per-query using bidder context as features. Variable `b` would complicate the mechanism's transparency, since the [attested auction](/perplexity-was-right-to-kill-ads) would need to commit to the adjustment rule, not just the scoring formula.
 
 **The log form gives diminishing returns on price.** Going from $1 to $10 has the same effect as $10 to $100. No major platform uses explicit `log(price)`; they use multiplicative quality scores that achieve a similar compression. Whether the log form is an advantage (prevents runaway bidding) or a limitation (suppresses price signal) depends on market structure.
-
-## References
-
-- **Lahaie, S. & Pennock, D.M. (2007).** "Revenue Analysis of a Family of Ranking Rules for Keyword Auctions." *EC'07*, 50-56. Parameterized ranking rules as `score = bid × relevance^s`, showed the revenue-optimal `s` depends on value-relevance correlation.
-
-- **Lahaie, S. & McAfee, R.P. (2011).** "Efficient Ranking in Sponsored Search." *WINE'11*, LNCS 7090, 227-238. When quality estimates are noisy, `s < 1` improves expected welfare by reducing weight on unreliable signals.
-
-- **Che, Y.-K. (1993).** "Design Competition through Multidimensional Auctions." *RAND Journal of Economics*, 24(4), 668-680. Optimal scoring rule depends on buyer's objectives: under-rewarding quality maximizes revenue, over-rewarding maximizes surplus.
-
-- **Asker, J. & Cantillon, E. (2008).** "Properties of Scoring Auctions." *RAND Journal of Economics*, 39(1), 69-85. Scoring auctions dominate price-only auctions with minimum quality thresholds.
-
-- **Vorobeychik, Y. (2009).** "Simulation-Based Analysis of Keyword Auctions." *SIGecom Exchanges*, 8(1). When value-quality correlation is weak, `s < 1` can dominate `s = 1` on welfare.
-
-- **Gomes, R. (2014).** "Optimal Auction Design in Two-Sided Markets." *RAND Journal of Economics*, 45(2), 248-272. User participation elasticity pushes the platform's optimal quality weight above the pure revenue-maximizer's choice.
-
-- **Syrgkanis, V., Dudik, M., Haghtalab, N., Luo, H., Schapire, R.E. & Vaughan, J.W. (2017).** "Oracle-Efficient Online Learning and Auction Design." *FOCS'17*. Oracle-efficient algorithms for learning optimal reserves and pricing from live data, even against adversarial bidders.
-
-- **Balcan, M.-F., Sandholm, T. & Vitercik, E. (2016).** "Sample Complexity of Automated Mechanism Design." *NeurIPS 2016*. Pseudo-dimension of auction parameter classes is linear in the number of parameters, so learned mechanisms generalize with O(d/ε²) samples.
-
-- **Simulation source:** [openauction v3.5.1](https://github.com/kimjune01/openauction/tree/v3.5.1/cmd/simulate)
 
 ---
 

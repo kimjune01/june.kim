@@ -45,7 +45,7 @@ Three things that worked with keywords now break:
 
 ## Power Diagrams
 
-Here's the end-to-end picture. An advertiser says: *"I want budget-conscious marathon beginners."* The platform embeds that into the same space as user conversations. It becomes a point (center) with a radius (reach). A bid determines how much territory that point commands. The power diagram partitions the entire embedding space into advertiser territories, and VCG payments tell each advertiser what their territory costs.
+Here's the end-to-end picture. An advertiser says: *"I want budget-conscious marathon beginners."* The platform embeds that into the same space as user conversations. It becomes a point (center) with a radius (reach). A bid determines how much territory that point commands. The power diagram partitions the entire embedding space into advertiser territories, and [VCG](https://en.wikipedia.org/wiki/Vickrey%E2%80%93Clarke%E2%80%93Groves_mechanism) payments tell each advertiser what their territory costs.
 
 Natural language in, price out, geometry in the middle. No keywords. No categories.
 
@@ -61,7 +61,7 @@ At any point, the winner is the advertiser with the highest *bid-adjusted proxim
 score_i(x) = log(b_i) - ||x - c_i||² / σ_i²
 ```
 
-Highest score wins. This creates a **power diagram**, a generalization of Voronoi diagrams where weights (bids) shift the boundaries.
+Highest score wins. This creates a **[power diagram](https://www.jasondavies.com/power-diagram/)**, a generalization of [Voronoi diagrams](https://alexbeutel.com/webgl/voronoi.html) where weights (bids) shift the boundaries.
 
 **Concrete example.** Nike at center (0.6, 0.3) with bid $5.00 and reach σ=0.3. Peloton at (0.5, 0.5) with bid $4.00 and σ=0.2. At point x=(0.45, 0.35):
 
@@ -129,7 +129,7 @@ The current approach: **discretize it**.
 
 The IAB maintains 698 content taxonomy categories. Every conversation gets classified into buckets, advertisers bid on them, and standard RTB auctions clear each one.
 
-It works. It's fast, compatible with existing infrastructure, and advertisers understand categories. Companies like Seedtag and GumGum use embeddings internally (GumGum targets <10ms end-to-end) but still output IAB categories for the auction layer.
+It works. It's fast, compatible with existing infrastructure, and advertisers understand categories. Companies like [Seedtag](https://techcrunch.com/2022/07/27/seedtag-the-ex-googler-founded-cookie-free-ai-based-adtech-startup-taps-250m-in-funding/) and [GumGum](https://adage.com/article/gumgum/contextual-advertising/315390/) use embeddings internally (GumGum targets <10ms end-to-end) but still output IAB categories for the auction layer.
 
 But the value of embedding-based targeting is precisely the nuance that discretization throws away. Consider:
 
@@ -150,7 +150,7 @@ This is a framework, not a solution. Deploying it requires solving several hard 
 
 **Budget pacing.** In keyword auctions, you know your win rate per keyword, you can predict spend. In power diagram auctions, your spend depends on the geometry of *all* competitors. Nike raises their bid, Peloton's territory shrinks, Peloton's budget drains slower, Peloton bids higher, Nike shrinks back. Reliable forecasting in this setting is hard.
 
-**Speed.** Isotropic case admits fast spatial indexing (kd-trees, ball trees). General case requires approximation schemes, such as quantizing anisotropic preferences into multiple isotropic "virtual advertisers," trading fidelity for speed.
+**Speed.** Isotropic case admits fast spatial indexing ([kd-trees](https://en.wikipedia.org/wiki/K-d_tree), [ball trees](https://en.wikipedia.org/wiki/Ball_tree)). General case requires approximation schemes, such as quantizing anisotropic preferences into multiple isotropic "virtual advertisers," trading fidelity for speed.
 
 **Equilibrium.** Keyword auctions converge quickly because the strategy space is simple. In continuous space, the strategy space is infinite-dimensional. Do power diagram auctions even converge?
 
@@ -164,7 +164,7 @@ VCG-like payments make truthful bidding dominant: you can't gain by lying about 
 
 An advertiser can profitably misreport their center. If impression density peaks at (0.5, 0.4) and Nike's true center is (0.6, 0.3), Nike gains by declaring (0.55, 0.35), shifting toward the traffic. VCG payments penalize this somewhat, but imperfectly.
 
-The Hotelling model predicts what convergence looks like: advertisers spread out along the most valuable dimension (probably purchase intent) and cluster on secondary ones. Like a commercial strip where every store is on the same street at different addresses.
+The [Hotelling model](https://mindyourdecisions.com/blog/2008/03/25/game-theory-tuesdays-hotelling%E2%80%99s-game-or-why-gas-stations-have-competitors-nearby/) predicts what convergence looks like: advertisers spread out along the most valuable dimension (probably purchase intent) and cluster on secondary ones. Like a commercial strip where every store is on the same street at different addresses.
 
 ### Platform vs. Advertisers
 
@@ -192,7 +192,7 @@ Long run, three forces make it fragile:
 
 **Content steering.** If users notice free-tier answers are subtly biased toward advertisable topics, trust collapses overnight. The platform has to tie its own hands, and it's not clear what enforcement mechanism exists beyond reputation.
 
-Nobody knows if a stable equilibrium exists here. VCG for truthful bidding, Myerson for revenue optimization, Hotelling for spatial competition. They don't compose cleanly when you combine continuous space, generative content, and multi-sided platform dynamics. Real estate markets don't have clean equilibria either. They have cycles, bubbles, regulation, and path dependence.
+Nobody knows if a stable equilibrium exists here. VCG for truthful bidding, [Myerson](https://en.wikipedia.org/wiki/Bayesian-optimal_mechanism) for revenue optimization, Hotelling for spatial competition. They don't compose cleanly when you combine continuous space, generative content, and multi-sided platform dynamics. Real estate markets don't have clean equilibria either. They have cycles, bubbles, regulation, and path dependence.
 
 The most important open question: does the game converge to something stable, or is embedding-space advertising inherently turbulent?
 
