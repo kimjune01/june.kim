@@ -36,7 +36,7 @@ Intent extraction runs on the publisher's own LLM. The [install skill](https://g
 
 Claude, GPT, Llama, a fine-tuned model. Whatever already powers the chatbot can extract intent. The prompt is model-agnostic.
 
-The prompt ships as a [skill, not an SDK](/skills-over-sdks). The publisher's coding agent reads the install document and writes it into their existing code. No package to import. One prompt turns a user's conversation into a point in the same space where advertisers already live.
+The prompt ships as a [skill, not an SDK](/skills-over-sdks). The publisher's coding agent reads the [install document](https://github.com/kimjune01/vectorspace-skills/blob/main/install.md) and writes it into their existing code. No package to import. One prompt turns a user's conversation into a point in the same space where advertisers already live.
 
 ---
 
