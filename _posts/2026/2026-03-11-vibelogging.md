@@ -26,7 +26,7 @@ Don't take my word for it. Run the experiment yourself.
 2. Point it at [june.kim/vector-space](/vector-space).
 3. Say "build this."
 
-The posts contain everything the agent needs: the scoring function, the encryption scheme, the API surface, the infrastructure layout, the UX spec. What used to require a 200-page PRD, a Figma file, and six months of engineering meetings is a blog a machine can read in seconds. The whole thing is [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — copyleft. Build on it, but keep it open.
+The posts contain everything the agent needs: the scoring function, the encryption scheme, the API surface, the infrastructure layout, the UX spec. What used to require a 200-page PRD, a Figma file, and six months of engineering meetings is a blog a machine can read in seconds. The whole thing is [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — copyleft. Build on it, and keep it open.
 
 If the agent can build a working ad exchange from the blog alone, the blog is source code. If it can't, I have more writing to do.
 
