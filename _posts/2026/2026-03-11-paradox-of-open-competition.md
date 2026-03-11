@@ -47,6 +47,8 @@ The market is acting on it. [Twenty](https://techcrunch.com/2024/11/18/twenty-is
 
 Closing what was open backfires spectacularly. In August 2023, [HashiCorp switched Terraform from MPL to BSL](https://spacelift.io/blog/terraform-license-change), a source-available license that restricts commercial use. Within two weeks, the [OpenTofu manifesto](https://opentofu.org/manifesto/) had 33,000 GitHub stars and 140 companies pledging support. The Linux Foundation accepted the fork. AWS, Google Cloud, and Oracle backed it. HashiCorp sent a cease-and-desist. It became a PR disaster. The same pattern played out with [MongoDB](https://en.wikipedia.org/wiki/Server_Side_Public_License) (2018), [Elasticsearch](https://devclass.com/2021/01/18/elastic-changes-licensing/) (2021, AWS forked it into OpenSearch), and [Redis](https://www.infoq.com/news/2024/03/redis-license-open-source/) (2024, Linux Foundation forked it into Valkey). Redis eventually [reversed course](https://kuray.dev/blog/backend-development/rediss-u-turn-abandoning-sspl-and-returning-to-open-source-202505) and went back to open source. [No clear link](https://redmonk.com/rstephens/2024/08/26/software-licensing-changes-and-their-impact-on-financial-outcomes/) between any of these license changes and improved revenue.
 
+Even staying open isn't enough if the infrastructure is centralized. WordPress is GPL — fully copyleft, anyone can use it. In 2024, [Matt Mullenweg blocked WP Engine](https://techcrunch.com/2025/01/12/wordpress-vs-wp-engine-drama-explained/) from accessing the WordPress.org plugin directory because they profited without contributing back. Open code, closed power. The court [ordered access restored](https://wpengine.com/blog/ensuring-stability-and-security/), but the damage was done: one person controlled the update servers, the plugin repos, the developer accounts. The license was open. The infrastructure wasn't.
+
 Greed points open now. In the past, open source people were the idealists and closed source people were the pragmatists. Now the pragmatists are going open because it's the dominant strategy. The principles go out the window when being open is the profitable option. Nobody needs to invoke [Stallman's ethics](https://www.youtube.com/watch?v=9sJUDx7iEJw&list=RD9sJUDx7iEJw) to justify a strategy that produces 7.6x better IPO valuations.
 
 ## Why Small Beats Big
@@ -68,6 +70,8 @@ Small. Agile. Open. Trustworthy. Easy to help.
 No amount of AI will replicate the trust that comes from being the person who built the thing, in public, with receipts. The commit history is the resume. The repo is the pitch deck. Those moats get *stronger* the more you open up.
 
 The more you share, the harder you are to replace. The more you hide, the easier you are to clone.
+
+But open code alone isn't a moat — WordPress proved that. Three things together are: transparency makes the operator accountable, [copyleft](/free-as-in-fire) makes the spec irrevocable, and portability makes leaving free. All three or it doesn't work. WordPress had two. Wasn't enough.
 
 If that's true, it changes more than competitive strategy. It changes what a company even [is](/guards-at-the-bouncy-castle).
 
