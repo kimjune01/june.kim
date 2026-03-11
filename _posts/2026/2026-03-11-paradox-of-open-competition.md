@@ -26,14 +26,14 @@ Now consider the matrix. You're a customer choosing between two products:
 
 |  | **Innovator** | **Follower** |
 |--|--|--|
-| **Closed source** | ✓ Pitch deck<br>✓ Product demo<br>✓ Funding announced<br>✓ Popular on HN | ✓ Pitch deck<br>✓ Product demo<br>✓ Funding announced<br>✓ Popular on HN |
-| **Open source** | ✓ Original commits<br>✓ Ships first<br>✓ Sets direction<br>✓ Community contributes | ✗ Fork, not origin<br>✗ Ships second<br>✗ Follows direction<br>✗ Community smaller |
+| **Closed source** | ✓ Product demo<br>✓ Popular on HN<br>? Less buggy<br>? Better docs | ✓ Logo slide<br>✓ Investor names<br>? Better UI<br>? Higher uptime |
+| **Open source** | ✓ Open source<br>✓ Instant bugfixes<br>✓ AI features<br>✓ Original commits | ✓ Open source<br>✓ Instant bugfixes<br>✓ AI features<br>✗ Fork, not origin |
 
-When the source is closed, both columns look identical. The follower can plausibly claim to be the innovator. Marketing budgets decide.
+When the source is closed, both columns look credible for different reasons. The customer can't tell who built the better system. Marketing budgets decide.
 
-When the source is open, the choice is obvious. The commit history is the proof. The timestamp of who came first is more trustworthy than any pitch deck.
+When the source is open, both columns look the same. Same code, same features, same bugfixes. The only difference is origin. The person who wrote it understands why each decision was made. The person who forked it only sees what was decided. When the customer hits a problem that isn't covered yet, they trust the one who built it from their needs. No cocktail parties, no networking events, no hackathons. The commit history is the trust signal.
 
-For as long as the innovator is credibly innovating at a predictable rate, it's fair to assume the follower will never catch up. The customer receives a more innovative product by choosing the original. Open source makes the innovator's advantage *legible*.
+When headcount is irrelevant to product quality, the social proof signal collapses with it. Open source makes the innovator's advantage *legible*.
 
 ## Open Source Is the Greedy Choice
 
