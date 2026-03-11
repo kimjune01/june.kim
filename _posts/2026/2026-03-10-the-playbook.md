@@ -6,11 +6,11 @@ tags: vector-space
 
 [The Easiest Sale](/the-easiest-sale) was the pitch. This is the playbook.
 
-An ad exchange is a [two-sided market](https://doi.org/10.1111/j.1430-9134.2003.00580.x). The conventional wisdom says you need both sides before either side shows up. The conventional wisdom is wrong. You need a sequence.
+An ad exchange is a [two-sided market](https://doi.org/10.1111/j.1430-9134.2003.00580.x). Rochet and Tirole showed why one side must be subsidized for platform adoption: the side whose participation creates more value for the other side gets the subsidy. For an ad exchange, that's publishers. They bring the users. Without queries, there's nothing to sell.
 
 ## Step 1: Pay Publishers to Join
 
-Publishers have the users. Without queries flowing through the exchange, there's nothing to sell. So publishers come first, and they get paid to show up.
+So publishers come first, and they get paid to show up.
 
 Here's the offer:
 
