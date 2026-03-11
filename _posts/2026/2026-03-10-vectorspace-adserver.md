@@ -4,7 +4,7 @@ title: "Vectorspace Adserver"
 tags: vector-space
 ---
 
-The [Vector Space](/vector-space) series is the spec. The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact — generated from those posts with a coding agent. This post covers the engineering decisions that didn't warrant their own post — the ones you'd only find by reading the code.
+The [Vector Space](/vector-space) series is the spec. The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact, [live at vectorspace.exchange](https://vectorspace.exchange/) — generated from those posts with a coding agent. This post covers the engineering decisions that didn't warrant their own post — the ones you'd only find by reading the code.
 
 Decisions that didn't warrant their own post but would feel wrong if missing:
 
