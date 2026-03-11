@@ -4,11 +4,11 @@ title: "Vibelogging"
 tags: coding
 ---
 
-A blog specifies an entire ad exchange: the [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding), the [publisher UX](/publisher-ux), the [go-to-market sequence](/the-playbook). The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact, generated from those posts with Claude Code. Blog posts as source. GitHub repos as artifact.
+A blog specifies an entire ad exchange: the [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding), the [publisher UX](/publisher-ux), the [go-to-market sequence](/the-playbook). The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact, generated from those posts with Claude Code. Prose as source. Repos as artifact.
 
-Andrej Karpathy [coined "vibe coding"](https://x.com/kaborsky/status/1894093141153653180) in February 2025: describe what you want in natural language, let an agent produce the code. By March 2026, CNBC reporters with zero coding experience were [rebuilding Monday.com](https://www.cnbc.com/2026/02/05/how-exposed-are-software-stocks-to-ai-tools-we-tested-vibe-coding.html) in under an hour. The [Vector Space](/vector-space) series is that idea applied to technical writing. I'm calling it vibelogging — vibe blogging.
+Andrej Karpathy [coined "vibe coding"](https://x.com/kaborsky/status/1894093141153653180) in February 2025: describe what you want in natural language, let an agent produce the code. By March 2026, CNBC reporters with zero coding experience were [rebuilding Monday.com](https://www.cnbc.com/2026/02/05/how-exposed-are-software-stocks-to-ai-tools-we-tested-vibe-coding.html) in under an hour. The [Vector Space](/vector-space) series is that idea applied to technical writing. I'm calling it vibelogging, short for vibe blogging.
 
-## The Layer Above Code
+## Prose All the Way Down
 
 [Skills over SDKs](/skills-over-sdks) argued that instructions are the new executable. A skill is a text file that a coding agent reads and turns into working code. The vector-space series is that idea taken to its conclusion: the blog *is* the skill. Every post is a specification document written for two audiences simultaneously. A human reads it as an argument. An agent reads it as a build instruction.
 
@@ -18,7 +18,7 @@ This is the first full layer of abstraction over code that I've witnessed.
 
 I'll update this post the moment I find prior art. If you know of someone who published a blog series that an agent can build from end to end before this one, tell me. I want to credit them.
 
-## The Proof
+## Build This
 
 Don't take my word for it. Run the experiment yourself.
 
@@ -30,7 +30,7 @@ The posts contain everything the agent needs: the scoring function, the encrypti
 
 If the agent can build a working ad exchange from the blog alone, the blog is source code. If it can't, I have more writing to do.
 
-## What Makes It Work
+## Specificity, Rigor, Readability
 
 Not every blog post is a build instruction. Most aren't. The difference is specificity. A blog post about "why privacy matters in ad tech" is an opinion. A blog post that specifies [which embedding model to use, how the ciphertext passes through the server, and what HTTP status code to return when plaintext is rejected](/vectorspace-adserver) is a spec.
 
@@ -46,7 +46,7 @@ That's why this works better than a traditional spec. A PRD is written once, mai
 
 Programmers already know that code should be optimized for readability over cleverness. A well-written essay is that principle at its ceiling. The same reasons you name variables clearly, extract functions, and delete dead code apply to prose: say what you mean, structure it so the next reader can follow, cut everything that doesn't serve the argument. Every post in the series went through [two quality gates](/writing-with-claude): /humanize strips AI writing tics, /arc-check verifies the argument structure. The result is prose that's readable by humans and parseable by agents. Not because I optimized for both. Because clear writing *is* both.
 
-## The Economics
+## Write First, Ship Second
 
 A traditional startup writes code first, then writes about what they built. The writing is marketing.
 
@@ -70,7 +70,7 @@ The entire vector-space series is at [june.kim/vector-space](/vector-space). The
 
 If it builds, the blog is the source. If it doesn't, I'll keep writing until it does.
 
-Now write yours. Pick the thing you know better than anyone. Blog it at spec depth. Point your agent at it. See if it compiles. If you can build a working system from a blog you wrote, you're a vibelogger.
+Now write yours. Pick the thing you know better than anyone. Blog it at spec depth. Point your agent at it. See if it compiles. If you can build a working system from a blog you wrote, you're a vibelogger. Send it to me at [june@june.kim](mailto:june@june.kim); I want to see what compiles.
 
 ---
 
