@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibelogging"
-tags: coding
+tags: coding cognition
 ---
 
 A blog specifies an entire ad exchange: the [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding), the [publisher UX](/publisher-ux), the [go-to-market sequence](/the-playbook). The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact, generated from those posts with Claude Code. Prose as source. Repos as artifact.

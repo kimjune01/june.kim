@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learn to Forget"
-tags: coding
+tags: coding cognition
 ---
 
 I built a recorder and a coordinator. [Caret Recorder](/caret-recorder) captures what's on screen, structures it through accessibility-tree parsing, and logs it semantically. [Cord](/cord) decomposes goals into parallel agent trees with filtered context. I thought connecting them was a data structure problem.

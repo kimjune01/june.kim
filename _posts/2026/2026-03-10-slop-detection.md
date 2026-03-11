@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Can You Detect AI Slop? A Story of Surprises"
-tags: coding
+tags: coding cognition
 ---
 
 I wanted to know if AI slop leaves a structural fingerprint even after you strip the obvious tells — the em dashes, the "It's worth noting," the stock transitions. A [humanizer](/writing-with-claude) can swap those out. But can it fix the argument graph underneath?

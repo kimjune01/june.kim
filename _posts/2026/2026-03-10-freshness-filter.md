@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Freshness Filter"
-tags: coding
+tags: coding cognition
 ---
 
 I just [built and broke a series of AI slop detectors](/slop-detection). Rubrics, adversarial humanizers, structural scoring. Every formalized detector got gamed. The thing that worked was five lines:
