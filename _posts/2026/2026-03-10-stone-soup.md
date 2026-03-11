@@ -5,7 +5,7 @@ tags: vector-space
 image: "/assets/stone.jpg"
 ---
 
-A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making stone soup. A villager brings carrots. Another brings potatoes. Someone else adds salt. By evening, the whole village is feasting.
+A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making stone soup. A villager brings carrots. Another brings potatoes. Someone else adds meat. By evening, the whole village is feasting.
 
 ![A dark stone on an unfolded handkerchief in a cobblestone village square](/assets/stone.jpg)
 
