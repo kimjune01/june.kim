@@ -6,7 +6,7 @@ tags: vector-space
 
 [The Easiest Sale](/the-easiest-sale) was the pitch. This is the playbook.
 
-An ad exchange is a two-sided marketplace. The conventional wisdom says you need both sides before either side shows up. The conventional wisdom is wrong. You need a sequence.
+An ad exchange is a [two-sided market](https://doi.org/10.1111/j.1430-9134.2003.00580.x). The conventional wisdom says you need both sides before either side shows up. The conventional wisdom is wrong. You need a sequence.
 
 ## Step 1: Pay Publishers to Join
 
