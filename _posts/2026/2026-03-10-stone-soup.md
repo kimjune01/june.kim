@@ -5,7 +5,7 @@ tags: vector-space
 image: "/assets/stone.jpg"
 ---
 
-A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making stone soup. A villager brings carrots. Another brings potatoes. Someone else adds salt. By evening, the whole village is eating a feast. The stone was the reason there was a pot on a fire in the middle of the square.
+A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making stone soup. A villager brings carrots. Another brings potatoes. Someone else adds salt. By evening, the whole village is feasting.
 
 ![A dark stone on an unfolded handkerchief in a cobblestone village square](/assets/stone.jpg)
 
@@ -19,21 +19,21 @@ The pot doesn't recruit. It just sits there, bubbling. Each ingredient is someth
 
 *The auction theorist.* Says "[the math checks out](/power-diagrams-ad-auctions)." They show up because an open protocol with novel scoring is a paper waiting to happen.
 
-*The privacy analyst.* Says "[it can't leak](/monetizing-the-untouchable)." They show up because [users' private data keeps getting sold](/transparency-is-irreversible) and they're tired of writing angry blog posts about it.
+*The privacy analyst.* The theorist sends them the proof. They show up because [users' privates keep getting sold](/transparency-is-irreversible) and they're tired of yelling about it.
 
-*The first publisher.* Adds real users. The pot goes from water to broth. They show up because they [get paid to try](/the-easiest-sale).
+*The first publisher.* Adds real users. They show up because the [kitchen stays safe and clean](/monetizing-the-untouchable).
 
-*The first advertiser.* Adds real money. Broth becomes soup. They show up because they get [free leads](/the-playbook).
+*The first advertiser.* Adds real money. They show up because the [recipe](/the-playbook) calls for the freshest leads.
 
-*The attribution report.* The taste test. [Proves](/attested-attribution) the soup is actually soup.
+*The attribution report.* [Proves](/attested-attribution) the soup is actually tasty.
 
 One ingredient added at a time; the fuller the pot, the farther the smell carries.
 
-While a company recruits employees and investors, the open protocol recruits contributors by putting a stone in the pot. Those who show up are converts who looked and found it stirring.
+While a company recruits employees and investors, the open protocol recruits by putting a stone in the pot. Those who show up are converts who found it stirring.
 
 ## The Feast
 
-The traveler didn't cook the soup; the village did. The traveler just put a stone in a pot and said "this will be enough to serve everyone."
+The traveler didn't cook the soup; the village did. The traveler just put the stone in the pot and said "this will serve everyone."
 
 ---
 
