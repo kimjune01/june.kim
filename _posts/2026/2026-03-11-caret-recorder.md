@@ -12,4 +12,14 @@ Caret Recorder captures screen and system audio continuously in the background w
 
 It lives in the macOS menu bar as a colored dot. Gray for idle, red for recording, green when publishing to a room over LiveKit. No dock icon, no visible window, no friction.
 
+### What's next
+
+The recorder produces a firehose—a11y snapshots on every app switch, every tab change, every modal. Capturing is the easy half. The hard half is making any of it retrievable without storing everything forever.
+
+The plan is a companion agent that clears noise in layers before anything touches a model. First, structural dedup—a [bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) variant checks whether an incoming a11y snapshot has been seen before and drops near-duplicates without storing the full history. Then diffing: if only the scroll position moved or a cursor blinked, collapse it. By the time a snapshot reaches inference, most of the firehose is already gone.
+
+What survives goes to a cheap model (Gemini Flash) for triage. Each snapshot gets a quick ruling: novel enough to stash, or mundane? The model maintains a rolling context window—always warm, never full—with periodic partial compaction that merges related entries, demotes stale ones, and drops what no longer matters.
+
+The key idea is modeling human forgetfulness. Recency, salience, emotional weight—things that broke, things that were surprising, things tied to open tasks persist longer. Routine fades. Summarization naturally compresses the mundane and preserves the unusual. The result is a memory you can query that feels like your own: imperfect, biased toward what mattered, and useful exactly because it forgot the rest.
+
 [GitHub](https://github.com/kimjune01/caret-recorder)
