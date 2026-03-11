@@ -32,7 +32,9 @@ If the agent can build a working ad exchange from the blog alone, the blog is so
 
 ## Specificity, Rigor, Readability
 
-Not every blog post is a build instruction. Most aren't. The difference is specificity. A blog post about "why privacy matters in ad tech" is an opinion. A blog post that specifies [which embedding model to use, how the ciphertext passes through the server, and what HTTP status code to return when plaintext is rejected](/vectorspace-adserver) is a spec.
+Not every blog post is a build instruction. Most aren't. Half the vector-space posts are problem statements, market analysis, threat models, arguments for why a design decision is constrained the way it is. They don't tell the agent what to build. They tell it why. When the spec is ambiguous and two implementations both satisfy the literal instructions, the agent needs the reasoning to pick the one that's actually aligned with the system's intent. The problem-statement posts aren't preamble. They're the part that teaches judgment.
+
+The other half are specs. A blog post that specifies [which embedding model to use, how the ciphertext passes through the server, and what HTTP status code to return when plaintext is rejected](/vectorspace-adserver) is a build instruction. Both halves compile. The why and the how.
 
 The vector-space posts work as source because they're written at the level of detail where a competent engineer (or agent) can implement without guessing. Every design decision is a post. Every post is a decision.
 
