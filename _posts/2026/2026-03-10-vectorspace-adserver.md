@@ -4,7 +4,7 @@ title: "Vectorspace Adserver"
 tags: vector-space
 ---
 
-The [Vector Space](/vector-space) series covers the theory: auction mechanism, protocol design, game theory, attribution. This post tours the engineering. The decisions you'd only discover by reading the [source code](https://github.com/kimjune01/vectorspace-adserver).
+The [Vector Space](/vector-space) series is the spec. The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact — generated from those posts with a coding agent. This post covers the engineering decisions that didn't warrant their own post — the ones you'd only find by reading the code.
 
 ## Privacy by Architecture
 
@@ -70,8 +70,20 @@ See [Receipts, Please](/receipts-please) for why this matters.
 
 The SDK caches advertiser embeddings locally and needs to know when they change. The server computes a SHA-256 hash of all positions and returns it as an `ETag`. The SDK sends `If-None-Match` on subsequent requests and gets `304 Not Modified` if nothing changed. Any position mutation invalidates the hash. The SDK polls with negligible cost.
 
+## Everything Else
+
+Decisions that don't need their own section but would feel wrong if missing:
+
+- **Pulumi in Go** for infrastructure. EC2 + Docker Compose + EBS for SQLite persistence + S3/CloudFront for the landing page + Route 53 + ACM cert. One command to stand up the whole stack.
+- **Embedding service** as a separate container wrapping BGE-small-en-v1.5, or Hugging Face Inference API if you set `HF_TOKEN`. Swap the model without touching the auction server.
+- **Multi-stage Docker builds**. Go server and Node portal compile in build stages, ship on Alpine. Sidecar pre-downloads the model at build time so cold starts don't hit a model registry.
+- **Makefile** with `make dev`, `make test`, `make deploy`. Clone, one command, auctions running.
+- **Frozen lockfiles** everywhere. `go.sum`, `pnpm-lock.yaml`, `uv.lock`. Builds are reproducible or they don't ship.
+- **Caddy** for TLS termination and reverse proxy. Auto-renews certificates. Zero config beyond a Caddyfile.
+- **Frequency capping**. 3 impressions per advertiser per user per 60-minute window. SDK gets 429 when capped.
+
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I outlined the architecture; Claude toured the repo.*
+*The blog series is the spec. The repo was built from it with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code).*
 
 *Part of the [Vector Space](/vector-space) series.*
