@@ -66,4 +66,4 @@ The open question is whether "having actually done the thing" leaves a trace dis
 
 For a human reader with domain knowledge, the originals still win. My unredactable post includes FTC citations, a scoring-function equation, and a trust-chain architecture that GPT-5.4 can't invent on demand. But a classifier without domain expertise can't rely on missing facts if the adversary can mimic the dependency structure surrounding them. The implication for anyone building a slop detector: the more precisely you explain the mechanism, the shorter its shelf life. So can a humanizer fix the argument graph? No. But after two iterations, it doesn't need to.
 
-*Drafted by Claude Opus 4.6. Superhumanized by GPT-5.4. De-superhumanized by Claude Opus 4.6. I directed the [experiment](https://github.com/kimjune01/reasoning-filter) and told Claude where it stopped sounding like me.*
+*Drafted by Claude Opus 4.6. Superhumanized by GPT-5.4. De-superhumanized by Claude Opus 4.6. I directed the [experiment](https://github.com/kimjune01/reasoning-filter) and told Claude where it stopped sounding like me. I did not manually edit any of the prose.*

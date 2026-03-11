@@ -30,11 +30,20 @@ This is the same pattern that killed the rubric in the [detection experiment](/s
 
 ## How to use it
 
-**Email.** Score incoming messages. Anything above 85% is either AI-generated or saying nothing you couldn't find yourself. If you use Claude Code with the Gmail MCP server, you can ask it to score your unread mail in one shot. Set it up as a cron job and you have a freshness filter running on autopilot.
+Score any text and get back a percentage. Lower means more novel. How you use the number depends on what you're optimizing for:
 
-**Content curation.** Rank by reconstructability. A piece at 65% contains ideas the model hasn't seen. A piece at 90% is a summary of things you could have prompted for.
+**Surfacing novel ideas.** Sort your inbox ascending and read the lowest scores first. Most email is admin that scores 90%+. The rare message with a genuinely new idea will sit near the bottom of the scale. If you use Claude Code with the Gmail MCP server, you can score your unread mail in one shot. Set it up as a cron job and novel ideas float to the top automatically.
 
-**Your own writing.** Run your drafts through it. Above 80% means you haven't said anything new yet. The number won't tell you what's missing, but it'll tell you that something is.
+**Filtering slop.** Think of it like sorting your mailbox:
+
+| Score | Snail mail equivalent | Action |
+|:---:|---|---|
+| 95% | Grocery flyer | Recycle |
+| 85% | Offer for gutter cleaning | Glance, toss |
+| 75% | Letter from your bank | Open it |
+| 60% | Handwritten envelope from someone you don't recognize | Read it now |
+
+**Checking your own writing.** Above 80% means you haven't said anything new yet. The number won't tell you what's missing, but it'll tell you that something is.
 
 ## The catch
 
