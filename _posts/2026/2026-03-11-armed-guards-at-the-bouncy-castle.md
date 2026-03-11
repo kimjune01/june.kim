@@ -4,7 +4,7 @@ title: "Armed Guards at the Bouncy Castle"
 tags: reflecting
 ---
 
-Suppose you're convinced that [open sourcing everything](/the-paradox-of-open-competition) means no moat. And no moat means the business is uninvestable. So be it.
+Suppose you're convinced that [open sourcing everything](/paradox-of-open-competition) means no moat. And no moat means the business is uninvestable. So be it.
 
 ## Why Firms Exist
 

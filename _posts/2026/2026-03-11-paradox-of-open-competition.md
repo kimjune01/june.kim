@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Paradox of Open Competition"
+title: "Paradox of Open Competition"
 tags: reflecting
 ---
 

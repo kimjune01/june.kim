@@ -56,7 +56,7 @@ Vibelogging inverts this. The writing is the product; the code is a side effect.
 
 ## "But Now Anyone Can Build It"
 
-Yes. That's the point. [The Paradox of Open Competition](/the-paradox-of-open-competition) explains why publishing the spec is the strongest competitive position, not the weakest. If your moat is "they can't see the code," you're already dead: Claude can infer a working replica from a product's UI without ever reading the source. Hiding the spec protects nothing that isn't already inferrable.
+Yes. That's the point. [Paradox of Open Competition](/paradox-of-open-competition) explains why publishing the spec is the strongest competitive position, not the weakest. If your moat is "they can't see the code," you're already dead: Claude can infer a working replica from a product's UI without ever reading the source. Hiding the spec protects nothing that isn't already inferrable.
 
 Publishing it does something hiding never can. The commit timestamps prove who designed the system, in what order, and when. A competitor who forks the repo is visible as a fork. A competitor who reads the blog and rebuilds from scratch still arrives second, with receipts showing exactly how second. The blog is the chain of custody for every decision.
 
