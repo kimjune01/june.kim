@@ -25,17 +25,15 @@ The GPL propagates copyleft through code. CC BY-SA does the same thing for prose
 
 This is the [HashiCorp lesson](/paradox-of-open-competition). Terraform was open until it wasn't. The community forked it within two weeks. [Redis went closed and came back](https://kuray.dev/blog/backend-development/rediss-u-turn-abandoning-sspl-and-returning-to-open-source-202505). Every company that tried to enclose an open spec lost. CC BY-SA makes that move structurally impossible. There's no relicensing decision to make because the decision is already made, permanently. Zeus can chain you to a rock, but the fire is already out.
 
-## The Code Layer Stays Free
+## The Code Layer
 
-Here's the genuinely unresolved question: someone points an agent at the blog, generates a working ad exchange. Is that code a derivative work of the CC BY-SA posts?
+Here's the question: someone points an agent at the blog, generates a working ad exchange. Is that code a derivative work of the CC BY-SA posts?
 
-Probably not. Copyright covers expression, not ideas. The spec describes the system. The code implements it. Different expression.
+The conventional answer is no. Copyright covers expression, not ideas. The spec describes the system. The code implements it. Different expression.
 
-Copyleft protects the knowledge layer but likely doesn't reach the implementation layer. Someone can build a proprietary ad exchange from the open spec.
+That distinction assumed the spec and the implementation were separable. These posts aren't a description of a system. They're precise enough that an agent produces working code without guessing. The prose is the program. The agent is the compiler. Compiled output inherits the license of its source. If the source is CC BY-SA prose, the output carries the obligation. Copyright law hasn't tested this yet. But Prometheus didn't hand humanity a description of fire. He handed them fire. What compiles from fire is still fire.
 
-And that's the right outcome. Open commons, competitive market. That's the [whole thesis](/paradox-of-open-competition).
-
-Prometheus gave fire, not instructions on what to build with it. *What you forge is yours.* The fire stays common.
+Open commons, competitive market. That's the [whole thesis](/paradox-of-open-competition). The spec stays open. Implementations compete. The difference is that competing now means building from compilable copyleft prose, and that carries an obligation.
 
 ## An Open Standard
 

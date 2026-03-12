@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Can You Detect AI Slop? A Story of Surprises"
+title: "Can You Detect AI Slop?"
 tags: coding cognition
 ---
 
