@@ -12,9 +12,9 @@ Now ask him to reach a mathematician working on the same problems. Social media 
 
 Now take Hardy's side. He's stuck on a problem in partition theory, so he searches for new approaches and gets his own papers back. When he asks a chatbot about it, it summarizes what he published last year. Somewhere out there, a blog post with the answer exists. Even if the model were trained yesterday, Ramanujan's posts would be buried; [Language Modeling Is Compression](https://arxiv.org/abs/2309.10668), and compression favors the majority. One noble voice drowned out under a million. Hardy would give anything to find Ramanujan, but he can't. Not even in 2026.
 
-Ideas can't find other ideas. AI was supposed to be the next miracle, but it made it worse — flooding every channel with noise, compressing the signal into consensus, and siloing each conversation into a private chat. It may soon be harder for minds to find each other than the year Ramanujan sent his letter to Hardy. It may be exaggerated, but the trend is clear.
+Ideas can't find other ideas. AI was supposed to be the next miracle, but it made it worse: flooding every channel with noise, compressing the signal into consensus, and siloing each conversation into a private chat. It may soon be harder for minds to find each other than the year Ramanujan sent his letter to Hardy. It may be exaggerated, but the trend is clear.
 
-But what if they could?
+But what if they could be found?
 
 Two people describing the same problem in different vocabularies end up in the same space. Ramanujan's notation wouldn't match Hardy's keywords, but the meaning would.
 
@@ -26,13 +26,13 @@ How do you know what's good? Let the contributors decide. When someone links to 
 
 The technology exists.
 
-The distance between ideas is measurable — [embeddings](https://en.wikipedia.org/wiki/Word_embedding). The filter is a license — [copyleft](https://creativecommons.org/licenses/by-sa/4.0/). The ranking is a citation graph — [PageRank](https://patents.google.com/patent/US6285999B1). The patent expired in 2019.
+The distance between ideas is measurable: [embeddings](https://en.wikipedia.org/wiki/Word_embedding). The signal, filter, and protection are one license: [copyleft](https://creativecommons.org/licenses/by-sa/4.0/). The ranking is a citation graph: [PageRank](https://patents.google.com/patent/US6285999B1). The patent expired in 2019.
 
-Ramanujan's theorems wouldn't have needed Hardy's luck. Indexed by meaning, filtered by intent, ranked by peers — they find mathematicians willing to share the same problems.
+Ramanujan's theorems wouldn't have needed Hardy's luck. Indexed by meaning, filtered by intent, ranked by peers: they find mathematicians willing to share the same problems.
 
 No more PhD required to talk shop. No grant. No paywall. No [begging for peer review](/unredactable). Someone publishes an idea and the nearest minds find it before the week is over. The intellectual conversation moves where the ideas are, not where the institutions gatekeep.
 
-Ideas want to find each other. They always have. Copyleft frees them to flourish beyond the author. We carry them to life. Ramanujan's notation and Hardy's partition theory were reaching for the same truth from opposite ends of the world. Ads drowned them, AI buried them. But now they're alive — connected, united, expansive.
+Ideas want to find each other; they always have. Copyleft frees them to flourish beyond the author. We carry them to life. Ramanujan's notation and Hardy's theory were reaching for the same truth from opposite ends of the world. Ads drowned them, AI buried them. But now, they are alive. Connected, united, expansive.
 
 ---
 
