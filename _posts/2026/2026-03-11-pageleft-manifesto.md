@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "PageLeft"
+title: "PageLeft Manifesto"
 tags: pageleft
 ---
 
