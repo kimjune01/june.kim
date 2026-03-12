@@ -14,7 +14,7 @@ Claude 4.5 can look at a product's UI, infer its behavior, and produce a working
 
 Investors call it the [SaaSpocalypse](https://techcrunch.com/2026/03/01/saas-in-saas-out-heres-whats-driving-the-saaspocalypse/). Between January and February 2026, [$2 trillion](https://www.cnbc.com/2026/02/06/ai-anthropic-tools-saas-software-stocks-selloff.html) in software market cap evaporated. Atlassian dropped 35%. Salesforce dropped 28%. The S&P 500 Software Index fell 30%, erasing all gains since ChatGPT's launch. Builders are practicing what investors fear: [Klarna ditched Salesforce](https://techcrunch.com/2025/03/04/klarna-ceo-doubts-that-other-companies-will-replace-salesforce-with-ai/) and built their own AI replacement, saving $2 million. [Pieter Levels](https://www.fast-saas.com/blog/pieter-levels-success-story/) runs multiple SaaS products generating $3 million a year with zero employees.
 
-So if your moat is "they can't see the code," you're protecting something that doesn't need seeing. The blog post is the prompt. The product demo is the blueprint. Hiding the source code from a world where the source code is trivially inferrable is a fool's errand.
+So if your moat is "they can't see the code," you're protecting something that doesn't need seeing. The blog post is the prompt. The product demo is the blueprint. *The secret is that there is no secret.*
 
 ## What Hiding Actually Costs You
 
