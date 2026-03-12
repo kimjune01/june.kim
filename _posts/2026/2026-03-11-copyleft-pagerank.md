@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "PageLeft"
-tags: coding
+tags: pageleft
 ---
 
 [Ramanujan](https://en.wikipedia.org/wiki/Srinivasa_Ramanujan) wrote to three Cambridge professors. The first two returned his papers without comment, but the third, [Hardy](https://www.privatdozent.co/p/ramanujans-first-letter-to-gh-hardy-1d9), recognized the genius. If Hardy had been busy that day, one of the greatest mathematical collaborations of the 20th century wouldn't have happened.
@@ -35,5 +35,7 @@ No more PhD required to talk shop. No grant. No paywall. No [begging for peer re
 Ideas want to find each other; they always have. Copyleft frees them to flourish beyond the author. We carry them to life. Ramanujan's notation and Hardy's theory were reaching for the same truth from opposite ends of the world. Ads drowned them, AI buried them. But now, they are alive. Connected, united, expansive.
 
 ---
+
+[Source code on GitHub.](https://github.com/kimjune01/pageleft)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
