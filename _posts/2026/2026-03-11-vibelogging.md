@@ -4,6 +4,8 @@ title: "Vibelogging"
 tags: coding cognition
 ---
 
+*Part of the [cognition](/cognition) series.*
+
 A blog specifies an entire ad exchange: the [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding), the [publisher UX](/publisher-ux), the [go-to-market sequence](/the-playbook). The [source code](https://github.com/kimjune01/vectorspace-adserver) is the artifact, generated from those posts with Claude Code. Prose as source. Repos as artifact.
 
 Andrej Karpathy [coined "vibe coding"](https://x.com/kaborsky/status/1894093141153653180) in February 2025: describe what you want in natural language, let an agent produce the code. By March 2026, CNBC reporters with zero coding experience were [rebuilding Monday.com](https://www.cnbc.com/2026/02/05/how-exposed-are-software-stocks-to-ai-tools-we-tested-vibe-coding.html) in under an hour. The [Vector Space](/vector-space) series is that idea applied to technical writing. I'm calling it vibelogging, short for vibe blogging.

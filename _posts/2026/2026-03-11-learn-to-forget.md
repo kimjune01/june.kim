@@ -4,6 +4,8 @@ title: "Learn to Forget"
 tags: coding cognition
 ---
 
+*Part of the [cognition](/cognition) series.*
+
 I built a recorder and a coordinator. [Caret Recorder](/caret-recorder) captures what's on screen, structures it through accessibility-tree parsing, and logs it semantically. [Cord](/cord) decomposes goals into parallel agent trees with filtered context. I thought connecting them was a data structure problem.
 
 I asked Claude to check my guess against the neuroscience. My guess was wrong, and the correction opened up something I haven't built yet.

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; padding: 16px; }
+  canvas { border-radius: 8px; cursor: crosshair; touch-action: none; }
+  .controls { display: flex; gap: 12px; margin-top: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  button { padding: 8px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  button.active { transform: scale(1.05); }
+  .btn-knn { background: #e74c3c; color: white; }
+  .btn-knn.active { background: #ff6b5b; box-shadow: 0 0 12px rgba(231,76,60,0.5); }
+  .btn-dpp { background: #2ecc71; color: white; }
+  .btn-dpp.active { background: #4ade80; box-shadow: 0 0 12px rgba(46,204,113,0.5); }
+  .btn-reset { background: #555; color: white; }
+  .btn-reset:hover { background: #777; }
+  .label { font-size: 13px; color: #999; }
+  .k-control { display: flex; align-items: center; gap: 6px; }
+  .k-control button { padding: 4px 10px; font-size: 13px; background: #444; color: white; }
+  .k-control span { font-size: 14px; min-width: 20px; text-align: center; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="controls">
+  <button class="btn-knn active" id="btnKnn">kNN (top-k)</button>
+  <button class="btn-dpp" id="btnDpp">DPP (max-volume-k)</button>
+  <div class="k-control">
+    <span class="label">k=</span>
+    <button id="kMinus">−</button>
+    <span id="kVal">3</span>
+    <button id="kPlus">+</button>
+  </div>
+  <button class="btn-reset" id="btnReset">shuffle</button>
+</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const W = Math.min(480, window.innerWidth - 32);
+const H = W;
+canvas.width = W * 2; canvas.height = H * 2;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+ctx.scale(2, 2);
+
+let mode = 'knn';
+let k = 3;
+let query = { x: W / 2, y: H / 2 };
+let points = [];
+let radius = W * 0.38;
+let dragging = false;
+
+function rand(lo, hi) { return lo + Math.random() * (hi - lo); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+function generatePoints() {
+  points = [];
+  // cluster 1: top-left area
+  for (let i = 0; i < 5; i++) points.push({ x: rand(W*0.15, W*0.35), y: rand(H*0.15, H*0.35) });
+  // cluster 2: center-right
+  for (let i = 0; i < 6; i++) points.push({ x: rand(W*0.55, W*0.75), y: rand(H*0.35, H*0.55) });
+  // cluster 3: bottom
+  for (let i = 0; i < 4; i++) points.push({ x: rand(W*0.3, W*0.5), y: rand(H*0.65, H*0.85) });
+  // scattered
+  for (let i = 0; i < 5; i++) points.push({ x: rand(W*0.1, W*0.9), y: rand(H*0.1, H*0.9) });
+}
+
+function getKnn() {
+  const inRadius = points.filter(p => dist(p, query) <= radius);
+  inRadius.sort((a, b) => dist(a, query) - dist(b, query));
+  return inRadius.slice(0, k);
+}
+
+function getDpp() {
+  const inRadius = points.filter(p => dist(p, query) <= radius);
+  if (inRadius.length <= k) return inRadius;
+
+  // greedy DPP approximation: pick highest quality, then iteratively pick
+  // the point that maximizes quality × min-distance-to-already-selected
+  const selected = [];
+  const remaining = [...inRadius];
+
+  // quality = 1 - (distance to query / radius), so closer = higher quality
+  const quality = (p) => Math.max(0, 1 - dist(p, query) / radius);
+
+  // first pick: highest quality
+  remaining.sort((a, b) => quality(b) - quality(a));
+  selected.push(remaining.shift());
+
+  while (selected.length < k && remaining.length > 0) {
+    let bestIdx = 0;
+    let bestScore = -1;
+    for (let i = 0; i < remaining.length; i++) {
+      const p = remaining[i];
+      const q = quality(p);
+      const minDist = Math.min(...selected.map(s => dist(p, s)));
+      const score = q * (minDist / radius);
+      if (score > bestScore) { bestScore = score; bestIdx = i; }
+    }
+    selected.push(remaining.splice(bestIdx, 1)[0]);
+  }
+  return selected;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // background
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, W, H);
+
+  // radius circle
+  ctx.beginPath();
+  ctx.arc(query.x, query.y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  const selected = mode === 'knn' ? getKnn() : getDpp();
+  const selectedSet = new Set(selected);
+
+  // draw polygon between selected points
+  if (selected.length >= 3) {
+    // sort by angle from centroid for polygon
+    const cx = selected.reduce((s, p) => s + p.x, 0) / selected.length;
+    const cy = selected.reduce((s, p) => s + p.y, 0) / selected.length;
+    const sorted = [...selected].sort((a, b) =>
+      Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx)
+    );
+    ctx.beginPath();
+    ctx.moveTo(sorted[0].x, sorted[0].y);
+    for (let i = 1; i < sorted.length; i++) ctx.lineTo(sorted[i].x, sorted[i].y);
+    ctx.closePath();
+    const color = mode === 'knn' ? 'rgba(231,76,60,0.12)' : 'rgba(46,204,113,0.12)';
+    ctx.fillStyle = color;
+    ctx.fill();
+    const strokeColor = mode === 'knn' ? 'rgba(231,76,60,0.4)' : 'rgba(46,204,113,0.4)';
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // draw all points
+  for (const p of points) {
+    const inR = dist(p, query) <= radius;
+    const isSel = selectedSet.has(p);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, isSel ? 6 : 4, 0, Math.PI * 2);
+    if (isSel) {
+      ctx.fillStyle = mode === 'knn' ? '#e74c3c' : '#2ecc71';
+    } else if (inR) {
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    }
+    ctx.fill();
+  }
+
+  // query point
+  ctx.beginPath();
+  ctx.arc(query.x, query.y, 8, 0, Math.PI * 2);
+  ctx.fillStyle = '#f1c40f';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(241,196,15,0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(query.x, query.y, 12, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // label
+  ctx.font = '12px -apple-system, sans-serif';
+  ctx.fillStyle = '#999';
+  ctx.textAlign = 'left';
+  const label = mode === 'knn'
+    ? `kNN: ${selected.length} nearest points`
+    : `DPP: ${selected.length} max-volume points`;
+  ctx.fillText(label, 10, H - 10);
+
+  // area label
+  if (selected.length >= 3) {
+    const area = polygonArea(selected);
+    const maxArea = Math.PI * radius * radius;
+    const pct = ((area / maxArea) * 100).toFixed(1);
+    ctx.textAlign = 'right';
+    ctx.fillText(`polygon area: ${pct}% of circle`, W - 10, H - 10);
+  }
+}
+
+function polygonArea(pts) {
+  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+  const sorted = [...pts].sort((a, b) =>
+    Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx)
+  );
+  let area = 0;
+  for (let i = 0; i < sorted.length; i++) {
+    const j = (i + 1) % sorted.length;
+    area += sorted[i].x * sorted[j].y;
+    area -= sorted[j].x * sorted[i].y;
+  }
+  return Math.abs(area) / 2;
+}
+
+// interaction
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  if (e.touches) e = e.touches[0];
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+}
+
+canvas.addEventListener('mousedown', (e) => { dragging = true; query = getPos(e); draw(); });
+canvas.addEventListener('mousemove', (e) => { if (dragging) { query = getPos(e); draw(); } });
+canvas.addEventListener('mouseup', () => { dragging = false; });
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); dragging = true; query = getPos(e); draw(); });
+canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (dragging) { query = getPos(e); draw(); } });
+canvas.addEventListener('touchend', () => { dragging = false; });
+
+document.getElementById('btnKnn').addEventListener('click', () => {
+  mode = 'knn';
+  document.getElementById('btnKnn').classList.add('active');
+  document.getElementById('btnDpp').classList.remove('active');
+  draw();
+});
+document.getElementById('btnDpp').addEventListener('click', () => {
+  mode = 'dpp';
+  document.getElementById('btnDpp').classList.add('active');
+  document.getElementById('btnKnn').classList.remove('active');
+  draw();
+});
+document.getElementById('kMinus').addEventListener('click', () => { k = Math.max(1, k - 1); document.getElementById('kVal').textContent = k; draw(); });
+document.getElementById('kPlus').addEventListener('click', () => { k = Math.min(10, k + 1); document.getElementById('kVal').textContent = k; draw(); });
+document.getElementById('btnReset').addEventListener('click', () => { generatePoints(); draw(); });
+
+generatePoints();
+draw();
+</script>
+</body>
+</html>

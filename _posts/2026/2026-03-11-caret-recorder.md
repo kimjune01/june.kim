@@ -1,8 +1,10 @@
 ---
 layout: post
 title: Caret Recorder
-tags: projects
+tags: projects cognition
 ---
+
+*Part of the [cognition](/cognition) series.*
 
 You saw something on your screen an hour ago—a link, a snippet, a decision someone made in a call—and now you can't find it. You know it happened. You just don't know which of your thirty open apps it was in.
 

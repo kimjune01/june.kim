@@ -4,6 +4,8 @@ title: "Freshness Filter"
 tags: coding cognition
 ---
 
+*Part of the [cognition](/cognition) series.*
+
 I just [built and broke a series of AI slop detectors](/slop-detection). Rubrics, adversarial humanizers, structural scoring. Every formalized detector got gamed. The thing that worked was five lines:
 
 > What percentage of this text's intellectual substance could you reconstruct from your training data alone, given only the topic and a request to write about it?

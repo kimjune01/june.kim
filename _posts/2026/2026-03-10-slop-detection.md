@@ -4,6 +4,8 @@ title: "Can You Detect AI Slop? A Story of Surprises"
 tags: coding cognition
 ---
 
+*Part of the [cognition](/cognition) series.*
+
 I wanted to know if AI slop leaves a structural fingerprint even after you strip the obvious tells — the em dashes, the "It's worth noting," the stock transitions. A [humanizer](/writing-with-claude) can swap those out. But can it fix the argument graph underneath?
 
 To find out, I built a [scoring prompt](https://github.com/kimjune01/reasoning-filter/blob/master/experiment/scoring_prompt.md) as part of a [detection experiment](https://github.com/kimjune01/reasoning-filter) around six dimensions: falsifiable claim density, novel concept introduction, argument dependency chain, specificity ratio, interchangeability index, and hedging frequency. I ran it through GPT-5.4 via Codex CLI so Claude wouldn't be judging text optimized for Claude. That setup isolated structure, but it also created a problem I didn't see coming: any explicit rubric might teach an adversary exactly what to optimize against.
