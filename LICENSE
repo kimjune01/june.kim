@@ -1,10 +1,30 @@
-Code License (MIT)
-===================
+Code License (AGPL-3.0)
+========================
 
-The site code and templates are licensed under the MIT License.
+The site code and templates are licensed under the GNU Affero General
+Public License v3.0 (AGPL-3.0).
+
+Copyright (c) 2025 June Kim
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+Full license text: https://www.gnu.org/licenses/agpl-3.0.html
+
+
+Original Theme (MIT)
+=====================
+
+The site theme is derived from work by Heiswayi Nrird, licensed under MIT.
 
 Copyright (c) 2015 Heiswayi Nrird
-Copyright (c) 2025 June Kim
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
