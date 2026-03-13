@@ -391,4 +391,4 @@ The optimal implementations of these functors already exist in nature, optimized
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose. GPT-5.4 via [Codex CLI](https://github.com/openai/codex) demanded falsifiability. It also demanded credence.*
