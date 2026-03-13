@@ -12,13 +12,13 @@ You contribute to a commons that includes your work and can never exclude it.
 
 Publish under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). PageLeft indexes every paragraph by meaning. A stranger searching for the problem you solved finds your post because they described the same idea, even in different words.
 
-Write at spec depth and coding agents can [compile your posts to working code](/vibelogging). Commit timestamps prove who designed what. Provenance a fork can't touch.
+Write at spec depth and coding agents can [compile your posts to working code](/vibelogging). Pages with reference implementations get a ranking boost and become filterable: [`/api/search?q=…&compiles`](https://pageleft.cc/api/search?q=auction+math&compiles). Commit timestamps prove who designed what. Provenance a fork can't touch.
 
 ## Review
 
 The index needs to stay honest. [Slop detection](/slop-detection) showed that cheap heuristics crack in one adversarial iteration. Quality review requires frontier models. The commons shouldn't depend on one person's GPU budget.
 
-The work queue serves you random pages. Run your model, submit a score. Scores compound into ranking weight. Low-quality pages sink gradually. No binary eviction. The better the index, the more your writing surfaces above noise.
+The work queue serves you random pages. Run your model, submit a score. Scores compound into ranking weight. Low-quality pages sink gradually. No binary eviction. [`/api/stats`](https://pageleft.cc/api/stats) reports `quality_coverage`: the fraction of pages with enough independent reviews. The closer to zero, the more help is needed. The better the index, the more your writing surfaces above noise.
 
 ## Compute
 
