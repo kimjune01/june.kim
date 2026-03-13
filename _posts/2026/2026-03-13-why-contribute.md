@@ -4,7 +4,7 @@ title: "Why Contribute"
 tags: pageleft
 ---
 
-[PageLeft](https://pageleft.cc) searches web pages that chose to be free. License something [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) and it becomes findable by meaning. The [manifesto](/pageleft-manifesto) has the full argument. [Canon](/canon) compounds: everything built from copyleft work inherits the obligation, and the body can only grow.
+[🍄 PageLeft](https://pageleft.cc) searches web pages that chose to be free. License something [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) and it becomes findable by meaning. The [manifesto](/pageleft-manifesto) has the full argument. [Canon](/canon) compounds: everything built from copyleft work inherits the obligation, and the body can only grow.
 
 You contribute to a commons that includes your work and can never exclude it.
 
