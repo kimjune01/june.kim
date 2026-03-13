@@ -42,6 +42,6 @@ Ideas want to find each other; they always have. Copyleft frees them to flourish
 
 ---
 
-[All PageLeft posts](/pageleft) | [pageleft.cc](https://pageleft.cc) | [Source code on GitHub](https://github.com/kimjune01/pageleft)
+[All PageLeft posts](/pageleft/) | [pageleft.cc](https://pageleft.cc) | [Source code on GitHub](https://github.com/kimjune01/pageleft)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
