@@ -73,9 +73,9 @@ Either way, the work stays open. If copyright attaches, CC BY-SA enforces copyle
 
 ## Gravity
 
-Cognition produces prose. Prose [compiles to code](/vibelogging). [Copyleft](/free-as-in-fire) keeps it open. [PageLeft](/pageleft-manifesto) makes it findable. Someone else discovers it, builds on it, publishes the derivative under the same license. The derivative enters the [canon](/canon).
+Cognition produces prose. Prose [compiles to code](/vibelogging). [Copyleft](/free-as-in-fire) keeps it open. [PageLeft](/pageleft-manifesto) makes it findable. Someone else discovers it, builds on it, publishes the derivative under the same license. The derivative enters [Canon](/canon).
 
-The canon compounds while closed work decays in isolation. Attention becomes canon, and canon becomes gravity.
+Canon compounds while closed work decays in isolation. Attention becomes Canon, and Canon becomes gravity.
 
 ---
 
