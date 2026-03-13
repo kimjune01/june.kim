@@ -26,7 +26,7 @@ Crawl pages from the frontier. Embed paragraphs into vectors. All federated, all
 
 ## Improve
 
-The [source code](https://github.com/kimjune01/pageleft) is AGPL-3.0. Open a PR — a prose review. Prose is [more signal-dense and more falsifiable](/slop-detection) than code. Write about what you'd change under a copyleft license and a coding agent evaluates it against the [manifesto](/pageleft-manifesto). If the critique aligns, it becomes the code. The blog is the pull request.
+The [source code](https://github.com/kimjune01/pageleft) is AGPL-3.0. Publish a copyleft blog post explaining what you'd change and why. Open a one-line PR linking to it. Prose is [more signal-dense and more falsifiable](/slop-detection) than code. A coding agent evaluates the critique against the [manifesto](/pageleft-manifesto). If it aligns, it becomes the code. The blog is the pull request.
 
 Every improvement enters Canon. The critique is indexed alongside the code it changed.
 
