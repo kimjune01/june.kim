@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibelogging"
-tags: coding cognition
+tags: cognition pageleft
 ---
 
 *Part of the [cognition](/cognition) series.*
@@ -74,7 +74,7 @@ The entire vector-space series is at [june.kim/vector-space](/vector-space). The
 
 If it builds, the blog is the source. If it doesn't, I'll keep writing until it does.
 
-Now write yours. Pick the thing you know better than anyone. Blog it at spec depth. Point your agent at it. See if it compiles. If you can build a working system from a blog you wrote, you're a vibelogger. Send it to me at [june@june.kim](mailto:june@june.kim); I want to see what compiles.
+Now write yours. Pick the thing you know better than anyone. Blog it at spec depth. Point your agent at it. See if it compiles. If you can build a working system from a blog you wrote, you're a vibelogger. Post it to [PageLeft](https://pageleft.cc); I want to see what compiles.
 
 ---
 
