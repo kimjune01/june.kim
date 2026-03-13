@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Learn to Forget"
+title: "Perception Pipe"
 tags: coding cognition
 ---
 

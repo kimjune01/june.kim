@@ -9,7 +9,7 @@ image: "/assets/open-prose.jpg"
 
 *Part of the [cognition](/cognition) and [pageleft](/pageleft) series.*
 
-The cognition series built the intake: [perceive](/caret-recorder), [structure](/moments), [forget](/learn-to-forget), [attend](/salience). The pageleft series built the release: [index by meaning](/pageleft-manifesto), [license irrevocably](/free-as-in-fire), [compile to code](/vibelogging). Connect them and writing becomes a one-way valve. Attention goes in. Canon comes out. Every pass adds mass.
+The cognition series built the intake: [perceive](/caret-recorder), [structure](/moments), [filter](/perception-pipe), [attend](/salience). The pageleft series built the release: [index by meaning](/pageleft-manifesto), [license irrevocably](/free-as-in-fire), [compile to code](/vibelogging). Connect them and writing becomes a one-way valve. Attention goes in. Canon comes out. Every pass adds mass.
 
 Open prose is writing precise enough for a coding agent to compile, licensed so anyone can fork it, and reviewable by machine. The rest of this post is the argument for each property.
 
@@ -27,7 +27,7 @@ Prose is the densest interpretable medium. Code rots. Papers sit behind paywalls
 
 ## The bottleneck moves
 
-The cognition series solved transcription: the cost of going from noticing something to writing about it. [Caret Recorder](/caret-recorder) captures what's on screen and [Moments](/moments) structures it into semantic units. [Learn to Forget](/learn-to-forget) runs competitive inhibition so winners suppress losers. [Salience](/salience) caches what survives.
+The cognition series solved transcription: the cost of going from noticing something to writing about it. [Caret Recorder](/caret-recorder) captures what's on screen and [Moments](/moments) structures it into semantic units. [Perception Pipe](/perception-pipe) runs competitive inhibition so winners suppress losers. [Salience](/salience) caches what survives.
 
 With transcription solved, the bottleneck moves upstream from code to perception. Whoever turns lived attention into clean prose fastest will [mint the raw material](/canon) that future systems compile from. The pipeline alone is a diary. Connected to [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) and indexed by [PageLeft](/pageleft-manifesto), it's the printing press. Private cognition becomes public leverage.
 
