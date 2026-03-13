@@ -12,7 +12,7 @@ You contribute to a commons that includes your work and can never exclude it.
 
 Publish under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). PageLeft indexes every paragraph by meaning. A stranger searching for the problem you solved finds your post because they described the same idea, even in different words.
 
-Write at spec depth and coding agents can [compile your posts to working code](/vibelogging). Pages with reference implementations get a ranking boost and become filterable: [`/api/search?q=…&compiles`](https://pageleft.cc/api/search?q=auction+math&compiles). Commit timestamps prove who designed what. Provenance a fork can't touch.
+Write at spec depth and coding agents can [compile your posts to working code](/vibelogging). Pages with reference implementations get a ranking boost and become filterable: [`/api/search?q=…&compiles`](https://pageleft.cc/api/search?q=auction+math&compiles). CC BY-SA means every derivative must credit you. Commit timestamps prove who designed what. The provenance is in the content, not in the compute. A fork can't touch it.
 
 ## Review
 
