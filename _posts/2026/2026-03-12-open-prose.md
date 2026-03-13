@@ -69,7 +69,7 @@ If a court ever rules that operating a cognition pipeline doesn't constitute aut
 
 The honest position: under current doctrine, the human needs to shape expression at the level of the output, not just the input. Directing the argument and editing sentences clears that bar today. A fully automated pipeline probably doesn't yet. But the doctrine was written for a world where cameras were mechanical and writing was manual. That world is already gone. The question is when the law notices.
 
-Either way, the work stays open. If copyright attaches, CC BY-SA enforces copyleft and derivatives must stay open. If copyright doesn't attach, the output is not protected by copyright and free to copy and reuse by default. Lack of authorship is not a threat to openness. It only changes the mechanism.
+Either way, the work stays open. If copyright attaches, CC BY-SA enforces copyleft and derivatives must stay open. If copyright doesn't attach, the output is not protected by copyright and free to copy and reuse by default. Lack of authorship is not a threat to openness. It only changes the mechanism. Viva copyleft.
 
 ## Gravity
 
