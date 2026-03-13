@@ -23,7 +23,7 @@ If prose is reviewable, it gets the same workflow as code: draft, review, revise
 
 If prose passes structural review, it can be trusted as build input. [Vibelogging](/vibelogging) showed that blog posts are build instructions. The vector-space series compiled to a [working ad exchange](https://github.com/kimjune01/vectorspace-adserver): auction math, privacy architecture, billing model, publisher UX. [Canon](/canon) argues the legal case: each step from prose to plan to spec to code to binary is a derivative without creative human intervention.
 
-Code rots. Papers sit behind paywalls. Model weights are opaque. Point the next decade's coding agent at these posts and the code rebuilds. The spec outlasts every artifact it produces.
+Prose is the densest interpretable medium. Code rots. Papers sit behind paywalls. Model weights are opaque. Point the next decade's coding agent at these posts and the code rebuilds. The spec outlasts every artifact it produces.
 
 ## The bottleneck moves
 
