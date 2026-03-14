@@ -34,7 +34,9 @@ find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
 done
 
 echo "==> Syncing to S3"
-aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md"
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
+  --content-type "text/plain; charset=utf-8" --no-guess-mime-type
 
 echo "==> Invalidating CloudFront cache"
 aws cloudfront create-invalidation \
