@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Editorial Loop"
+title: "Double Loop"
 tags: cognition
 ---
 
@@ -52,7 +52,9 @@ The people who say AI makes them dumber are automating perception and publicatio
 
 The method is learnable. The [skills are open](/writing-with-claude). The models are available to everyone. What none of that replaces is courage.
 
-Taste matters. But taste is courage at a tighter loop. Saying "this line is good" is an identity declaration, a vulnerability moment. Choosing not to judge is the cowardice that keeps people in the pipe. And the deeper cost: to develop taste, you have to admit your current taste might be wrong, run the experiments, and tune accordingly. That cost is multiplicative — courage at the outer loop times courage at every inner loop that tunes the judgment.
+[Chris Argyris](https://en.wikipedia.org/wiki/Chris_Argyris) called it [double-loop learning](https://hbr.org/1977/09/double-loop-learning-in-organizations): the first loop corrects errors, the second loop questions the assumptions that caused them. Single-loop editing fixes the sentence. Double-loop editing asks whether your taste in sentences is any good.
+
+Taste matters. But taste is courage at a tighter loop. Saying "this line is good" is an identity declaration, a vulnerability moment. Choosing not to judge is the cowardice that keeps people in the pipe. To develop taste, you have to admit your current taste might be wrong, run the experiments, and tune accordingly. That cost is multiplicative — courage at the outer loop times courage at every inner loop that tunes the judgment.
 
 Here is what that looks like. While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Tables, proofs, category theory. Then I [asked Claude](/claude-reflects): if this framework is right, then any organism that breaks any step in a singly recursive loop should die. Like my idea. I did not know the answer. If prions didn't compound, if p53 loss didn't cascade, loss would have falsified the framework that I agonized over. They [did](/the-natural-framework#the-recursive-loop-test). Five times. But the courage was in asking before I knew.
 
