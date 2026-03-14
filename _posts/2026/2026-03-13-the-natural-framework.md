@@ -57,8 +57,8 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <td><a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)">Positional encoding</a></td>
 <td><a href="https://en.wikipedia.org/wiki/Attention_(machine_learning)">Softmax attention</a></td>
 <td>Multi-head attention</td>
-<td>Feed-forward layers</td>
-<td>Context window</td>
+<td class="dim"><a href="https://en.wikipedia.org/wiki/Training,_validation,_and_test_data_sets">Training</a> (sealed)</td>
+<td class="dim">Frozen weights</td>
 </tr>
 <tr>
 <td><a href="/cognition">Cognition</a><br>(s)</td>
@@ -86,15 +86,6 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <td>Code review, select the approach</td>
 <td>Refactor</td>
 <td>Push to repo</td>
-</tr>
-<tr>
-<td><a href="https://en.wikipedia.org/wiki/Training,_validation,_and_test_data_sets">Training</a><br>(days)</td>
-<td>Ingest corpus</td>
-<td>Batch, shuffle, sequence</td>
-<td class="dim">Gradient descent suppresses weak features</td>
-<td class="dim">Attention head specialization</td>
-<td>Checkpoint, <a href="https://en.wikipedia.org/wiki/Knowledge_distillation">distillation</a></td>
-<td>Frozen weights</td>
 </tr>
 <tr>
 <td><a href="https://en.wikipedia.org/wiki/Intelligent_agent">Agent</a><br>(min)</td>
@@ -145,7 +136,7 @@ The same pipeline runs at every timescale. Every row is something you already ca
 </table>
 </div>
 
-Thirteen domains. Six steps.
+<span id="six-steps"></span>Twelve domains. Six steps.
 
 Now the same table again. None of these domains call themselves "information processing", but all of them process information.
 
@@ -275,7 +266,7 @@ Now the same table again. None of these domains call themselves "information pro
 </table>
 </div>
 
-Twelve more domains. Six steps. From antibodies to megayears. Twenty-five domains total. [More where these came from.](/more-rows)
+Twelve more domains. Six steps. From antibodies to megayears. Twenty-four domains total. [More where these came from.](/more-rows)
 
 ## Why the same shape
 
@@ -320,7 +311,7 @@ The falsification test is structural: remove any morphism or permute their compo
 
 ## The recursive loop test
 
-In a linked list, a weak node can be routed around, and survive. But in a singly recursive loop, we should be able to find out whether it survives a broken step or not. In Life, genome perception transforms into genome memory; it is a singly recursive loop. If it survives any one of the errors in each of the six steps, then the framework is falsified.
+In a linked list, a weak node can be routed around, and survive. But in a singly recursive loop, we should be able to find out whether it survives a broken step or not. In biology, genome perception transforms into genome memory; it is a singly recursive loop. If it survives any one of the errors in each of the six steps, then the framework is falsified.
 
 Can it? The error will either compound, diminish, or persist. Let's test:
 
@@ -366,7 +357,7 @@ In the tables above, dim cells mark steps a domain hasn't optimized. The failure
 
 ## What to filter
 
-If your objection is "prove the category boundaries formally before I evaluate the idea" — that is a filter that gates on credence rather than structure. Run that filter in a loop. It will kill your own novel ideas before they survive a single iteration, because no new idea arrives pre-credentialed. Worse: it will pass the credentialed ones that should have been caught. The same heuristic that rejects uncredentialed insight is the same one as those who trusted the [Harvard fraudsters](https://en.wikipedia.org/wiki/Dana-Farber_Cancer_Institute#Research_misconduct_allegations), the [Enron accountants](https://en.wikipedia.org/wiki/Enron_scandal), and the [turtleneck at Theranos](https://en.wikipedia.org/wiki/Theranos).
+If your objection is "prove the category boundaries formally before I evaluate the idea" — that is a filter that gates on credence rather than structure. Run that filter in a loop. It will kill your own novel ideas before they survive a single iteration, because no new idea arrives pre-credentialed. Worse: it will pass the credentialed ones that should have been caught. The same heuristic that rejects uncredentialed insight is the same one as those who trusted the [Harvard fraudsters](https://en.wikipedia.org/wiki/Dana-Farber_Cancer_Institute#Research_misconduct_allegations), the [Enron scammers](https://en.wikipedia.org/wiki/Enron_scandal), and the [turtleneck at Theranos](https://en.wikipedia.org/wiki/Theranos).
 ## Intelligence
 
 The six steps, the competitive inhibition at the core, and the vertical relationship: each domain's Remember is the next domain's Perceive. The pipeline compresses. Each level takes high-bandwidth information and reduces it to a durable signal the next can perceive. Neurons fire millions of times per second; cognition produces a few thoughts per minute; a career produces a handful of papers; a field produces a canon. The ratio is the reason at every transition. That is what the six steps do: intelligent compression across timescales. That is what **intelligence** is.
