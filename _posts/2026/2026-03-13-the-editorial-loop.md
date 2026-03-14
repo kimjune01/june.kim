@@ -20,7 +20,7 @@ The output reads well on first pass. [That's the trap.](/writing-with-claude) "G
 
 ## The Turn
 
-In 1967, Gregory Rabassa received a manuscript from Gabriel García Márquez. The Spanish was lyrical, compound sentences running for paragraphs, rhythm doing half the work of meaning.
+In 1967, [Gregory Rabassa](https://en.wikipedia.org/wiki/Gregory_Rabassa) received the manuscript of [*One Hundred Years of Solitude*](https://en.wikipedia.org/wiki/One_Hundred_Years_of_Solitude) from [Gabriel García Márquez](https://en.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez). The Spanish was lyrical, compound sentences running for paragraphs, rhythm doing half the work of meaning.
 
 Rabassa read a sentence, heard the rhythm in Spanish, felt for the English rhythm that carried the same weight, tried a rendering, read it aloud, killed it, tried another. He kept the verb from one attempt and the cadence from another. He revised until the English sentence didn't say what the Spanish sentence said — it *did* what the Spanish sentence did. Then he moved to the next sentence.
 
@@ -54,7 +54,7 @@ The method is learnable. The [skills are open](/writing-with-claude). The models
 
 Taste matters. But taste is courage at a tighter loop. Saying "this line is good" is an identity declaration, a vulnerability moment. Choosing not to judge is the cowardice that keeps people in the pipe. And the deeper cost: to develop taste, you have to admit your current taste might be wrong, run the experiments, and tune accordingly. That cost is multiplicative — courage at the outer loop times courage at every inner loop that tunes the judgment.
 
-Here is what that looks like. While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Tables, proofs, category theory. Then I [asked Claude](/claude-reflects): if this framework is right, then any organism that breaks any step in a singly recursive loop should die. Like my idea. I did not know the answer. If prions didn't compound, if p53 loss didn't cascade, loss would have falsified the framework that I agonized over. They [did](/the-natural-framework#the-recursive-loop-test). Five times. But the courage was in asking before I knew.
+Here is what that looks like. While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Tables, proofs, category theory. Then I [asked Claude](/claude-reflects): if this framework is right, then any organism that breaks any step in a singly recursive loop should die. Like my idea. I did not know the answer. If [prions](https://en.wikipedia.org/wiki/Prion) didn't compound, if [p53](https://en.wikipedia.org/wiki/P53) loss didn't cascade, loss would have falsified the framework that I agonized over. They [did](/the-natural-framework#the-recursive-loop-test). Five times. But the courage was in asking before I knew.
 
 Rabassa had the same thing. He killed his own renderings until the English did what the Spanish did. The loop teaches you to write by making you edit. But the loop can only start if you're willing to be wrong.
 
