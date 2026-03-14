@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="system-ui, sans-serif" font-size="14">
+  <style>
+    .label { font-weight: 600; font-size: 16px; text-anchor: middle; }
+    .step { fill: #fff; stroke: #999; stroke-width: 1; rx: 5; }
+    .step-sealed { fill: #fff; stroke: #c62828; stroke-width: 1.5; rx: 5; stroke-dasharray: 5,3; }
+    .step-name { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 14px; }
+    .step-sub { text-anchor: middle; font-size: 12px; fill: #555; }
+    .step-sealed-sub { text-anchor: middle; font-size: 12px; fill: #c62828; font-style: italic; }
+    .step-nil { text-anchor: middle; font-size: 12px; fill: #bbb; font-style: italic; }
+    .arrow { stroke: #999; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .connector { stroke: #666; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .group { stroke: #ccc; stroke-width: 1; rx: 8; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Inference -->
+  <text class="label" x="600" y="20">Inference</text>
+  <rect class="group" x="20" y="28" width="1130" height="62" fill="#bbdefb"/>
+  <rect class="step" x="30" y="36" width="150" height="48"/><text class="step-name" x="105" y="53">Perceive</text><text class="step-sub" x="105" y="73">Embed</text>
+  <line class="arrow" x1="180" y1="60" x2="210" y2="60"/>
+  <rect class="step" x="210" y="36" width="150" height="48"/><text class="step-name" x="285" y="53">Cache</text><text class="step-sub" x="285" y="73">Positional encoding</text>
+  <line class="arrow" x1="360" y1="60" x2="390" y2="60"/>
+  <rect class="step" x="390" y="36" width="150" height="48"/><text class="step-name" x="465" y="53">Filter</text><text class="step-sub" x="465" y="73">Softmax</text>
+  <line class="arrow" x1="540" y1="60" x2="570" y2="60"/>
+  <rect class="step" x="570" y="36" width="150" height="48"/><text class="step-name" x="645" y="53">Attend</text><text class="step-sub" x="645" y="73">Multi-head attention</text>
+  <line class="arrow" x1="720" y1="60" x2="750" y2="60"/>
+  <rect class="step-sealed" x="750" y="36" width="170" height="48"/><text class="step-name" x="835" y="53">Consolidate</text><text class="step-sealed-sub" x="835" y="73">Training (sealed)</text>
+  <line class="arrow" x1="920" y1="60" x2="950" y2="60"/>
+  <rect class="step-sealed" x="950" y="36" width="170" height="48"/><text class="step-name" x="1035" y="53">Remember</text><text class="step-sealed-sub" x="1035" y="73">Weights (read-only)</text>
+
+  <!-- Inference → Chatbot -->
+  <path class="connector" d="M1035,84 L1035,112 L105,112 L105,156"/>
+  <text x="570" y="124" text-anchor="middle" font-size="11" fill="#666">tokens</text>
+
+  <!-- Chatbot -->
+  <text class="label" x="600" y="148">Chatbot</text>
+  <rect class="group" x="20" y="156" width="1130" height="62" fill="#e1bee7"/>
+  <rect class="step" x="30" y="164" width="150" height="48"/><text class="step-name" x="105" y="181">Perceive</text><text class="step-sub" x="105" y="201">Tokens</text>
+  <line class="arrow" x1="180" y1="188" x2="210" y2="188"/>
+  <rect class="step" x="210" y="164" width="150" height="48"/><text class="step-name" x="285" y="181">Cache</text><text class="step-sub" x="285" y="201">Token context</text>
+  <line class="arrow" x1="360" y1="188" x2="390" y2="188"/>
+  <rect class="step" x="390" y="164" width="150" height="48"/><text class="step-name" x="465" y="181">Filter</text><text class="step-nil" x="465" y="201">nil</text>
+  <line class="arrow" x1="540" y1="188" x2="570" y2="188"/>
+  <rect class="step" x="570" y="164" width="150" height="48"/><text class="step-name" x="645" y="181">Attend</text><text class="step-nil" x="645" y="201">nil</text>
+  <line class="arrow" x1="720" y1="188" x2="750" y2="188"/>
+  <rect class="step" x="750" y="164" width="170" height="48"/><text class="step-name" x="835" y="181">Consolidate</text><text class="step-nil" x="835" y="201">nil</text>
+  <line class="arrow" x1="920" y1="188" x2="950" y2="188"/>
+  <rect class="step" x="950" y="164" width="170" height="48"/><text class="step-name" x="1035" y="181">Remember</text><text class="step-nil" x="1035" y="201">nil</text>
+
+  <!-- Chatbot → Agent -->
+  <path class="connector" d="M1035,212 L1035,240 L105,240 L105,284"/>
+  <text x="570" y="252" text-anchor="middle" font-size="11" fill="#666">messages</text>
+
+  <!-- Agent -->
+  <text class="label" x="600" y="276">Agent</text>
+  <rect class="group" x="20" y="284" width="1130" height="62" fill="#ffe0b2"/>
+  <rect class="step" x="30" y="292" width="150" height="48"/><text class="step-name" x="105" y="309">Perceive</text><text class="step-sub" x="105" y="329">Prompts</text>
+  <line class="arrow" x1="180" y1="316" x2="210" y2="316"/>
+  <rect class="step" x="210" y="292" width="150" height="48"/><text class="step-name" x="285" y="309">Cache</text><text class="step-sub" x="285" y="329">Context window</text>
+  <line class="arrow" x1="360" y1="316" x2="390" y2="316"/>
+  <rect class="step" x="390" y="292" width="150" height="48"/><text class="step-name" x="465" y="309">Filter</text><text class="step-sub" x="465" y="329">Triage</text>
+  <line class="arrow" x1="540" y1="316" x2="570" y2="316"/>
+  <rect class="step" x="570" y="292" width="150" height="48"/><text class="step-name" x="645" y="309">Attend</text><text class="step-sub" x="645" y="329">Reactive</text>
+  <line class="arrow" x1="720" y1="316" x2="750" y2="316"/>
+  <rect class="step" x="750" y="292" width="170" height="48"/><text class="step-name" x="835" y="309">Consolidate</text><text class="step-nil" x="835" y="329">nil</text>
+  <line class="arrow" x1="920" y1="316" x2="950" y2="316"/>
+  <rect class="step" x="950" y="292" width="170" height="48"/><text class="step-name" x="1035" y="309">Remember</text><text class="step-sub" x="1035" y="329">Filesystem</text>
+
+</svg>
