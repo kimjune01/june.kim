@@ -6,7 +6,7 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series.*
 
-Every magic trick has three acts. [The pledge](https://en.wikipedia.org/wiki/The_Prestige_(film)), where you show something ordinary. The turn, where you make it extraordinary. The prestige, where you bring it back — changed.
+Every magic trick has three acts. The pledge, where you show something ordinary. The turn, where you make it extraordinary. [The prestige](https://en.wikipedia.org/wiki/The_Prestige_(film)), where you bring it back — changed.
 
 ## The Pledge
 
