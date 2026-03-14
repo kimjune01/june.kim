@@ -64,7 +64,15 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 
 *Assessment.* The agent cannot decide how much of itself to impose on the user's workflow. It's not lack of capability — it's lack of certainty. It's not given the tools to derive certainty from user input. There is no dataset to aid decision support. There is no procedure to obtain an alternative dataset. The entire scientific process is missing to enable confident mutations on procedural memory. It does not have access to a repository of heuristics, procedures, or experiments to quickly reference. Previous chatbots were able to generate A/B test data, but that data went straight up to inference — not for personalized procedural memory. The agent is unable to adapt to the engineer.
 
-*Plan.* Build the epistemic infrastructure. Log user edits, rejections, and approvals. A/B test skill variants against that log. Track which variant the engineer keeps. Update the skill, or delete it. Route the feedback to personalized procedural memory, not to inference training. Ship a repository of heuristics, procedures, and experiment templates the agent can reference before deciding to write. Let it red-team against itself in the background — generate variants, score them, keep the winner. Two iterations of [scored feedback](/slop-detection#surprise-5-two-iterations-to-convergence) were enough to converge. Give the agent access to the same process.
+*Plan.* Build the epistemic infrastructure. Six components:
+1. **Event logger** — perceive user edits, rejections, and approvals.
+2. **Decision log** — cache structured records of each user decision.
+3. **A/B test harness** — filter skill variants against the log, reject losers.
+4. **Red-team scorer** — attend by running adversarial scoring in the background, pick the winner.
+5. **Skill mutator** — consolidate by writing CRUD operations to procedural memory.
+6. **Skill repository** — remember heuristics, procedures, and experiment templates the agent references before deciding to write.
+
+Two iterations of [scored feedback](/slop-detection#surprise-5-two-iterations-to-convergence) were enough to converge. Route the output to personalized procedural memory, not to inference training.
 
 ### 2. Agent attend
 
@@ -74,7 +82,13 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 
 *Assessment.* The developer is responsible for prompting and directing in a text combinatorial space that is near infinite. The developer processes output text and produces input text in the same semantic space, using words. The developer often forgets to provoke elicitation out of the agent. The agent is passive in elicitation — perhaps afraid of asking too much, for fear of pushback. This pushback can be measured and tuned with a [PID controller](https://en.wikipedia.org/wiki/Proportional%E2%80%93integral%E2%80%93derivative_controller).
 
-*Plan.* Make the agent active in elicitation. Measure pushback rate — how often the developer dismisses or ignores questions. Tune question frequency with a PID: too many dismissals, back off; too few questions, the developer is navigating blind. Start with sensible defaults. Let the developer set their own threshold. The agent should ask more when uncertainty is high and less when the pattern is clear — not wait to be told to ask. If a more expensive attention loop can be afforded: use a cheap LLM to compare semantic similarity between context presented and what the developer actually prompts. Use this as a dataset to build recommendations with [DPP](/salience)-ranked alternatives — diverse suggestions the developer didn't think to ask for.
+*Plan.* Make the agent active in elicitation. Six components:
+1. **Pushback tracker** — perceive dismissals, ignores, and acceptances per question.
+2. **Interaction log** — cache developer prompt history and context presented.
+3. **[PID controller](https://en.wikipedia.org/wiki/Proportional%E2%80%93integral%E2%80%93derivative_controller)** — filter question frequency: too many dismissals, back off; too few questions, the developer navigates blind.
+4. **Semantic comparator** — attend by using a cheap LLM to compare context presented vs what the developer actually prompts.
+5. **[DPP](/salience) recommender** — consolidate the comparator output into diverse ranked alternatives the developer didn't think to ask for.
+6. **Developer preference model** — remember learned thresholds and patterns across sessions.
 
 ### 3. Agent filter
 
@@ -84,7 +98,13 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 
 *Assessment.* It delegates too much to the developer. It does not exercise judgment on which messages, or which parts of messages, to reject. Did the developer actually need to see 1000 lines of code being changed if the tests pass? If the tests failed, shouldn't the agent predict where the human will scroll to? These are all heuristics — rule-based, configurable with sensible defaults.
 
-*Plan.* Ship sensible defaults for output filtering. Collapse passing diffs. Surface failing lines first. Predict scroll targets on failure. Make every rule configurable. Let the developer override — but start with the agent exercising judgment, not abdicating it. Optimize on developer fatigue per unit of text removed: every line the agent hides should reduce cognitive load more than the trust it costs to hide it.
+*Plan.* Ship sensible defaults for output filtering. Six components:
+1. **Message classifier** — perceive each message as thinking, subprocess, or own.
+2. **Output buffer** — cache all messages before display.
+3. **Diff collapser** — filter by collapsing passing diffs, surfacing failures.
+4. **Scroll predictor** — attend by predicting where the developer will look on failure.
+5. **Fatigue optimizer** — consolidate on developer fatigue per unit of text removed: every line hidden should reduce cognitive load more than the trust it costs to hide it.
+6. **Rule store** — remember configurable heuristics with sensible defaults. Let the developer override.
 
 ---
 
