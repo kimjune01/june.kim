@@ -56,16 +56,16 @@ The method is learnable. The [skills are open](/writing-with-claude). The models
 
 Taste matters. But taste is courage at a tighter loop. Saying "this line is good" is an identity declaration, a vulnerability moment. Choosing not to judge is the cowardice that keeps people in the pipe. To develop taste, you have to admit your current taste might be wrong, then run the experiments. That cost is multiplicative — courage at the outer loop times courage at every inner loop that tunes the judgment.
 
-While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Then I [asked Claude](/claude-reflects): if this framework is right, then any organism that breaks any step in a singly recursive loop should die. Like my idea. I did not know the answer. If prions didn't compound, if p53 loss didn't cascade, loss would have falsified the framework that I agonized over. They [did](/the-natural-framework#the-recursive-loop-test). Five times. The courage was in asking before I knew.
+While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Then I [asked Claude](/claude-reflects): will any organism that breaks any step in the loop, die? I did not know the answer. If prions didn't compound, or if p53 loss didn't cascade, it would've falsified the framework that I agonized over all morning. They [died](/the-natural-framework#the-recursive-loop-test). Five times. The courage was in asking before I knew.
 
-Rabassa had the same thing. He killed his own renderings until the English did what the Spanish did. The loop teaches you to write by making you edit. But the loop can only start if you're willing to be wrong.
+Rabassa had the same thing. He killed his own renderings until the English did what the Spanish did. The loop teaches you to write by forcing you to edit. But the loop can only start if you're willing to be wrong.
 
 Agents don't have agency. Humans do. Outsource judgment, and the agency goes with it.
 
-Write something that only you could write. Run it through the six steps until it stops getting better. Then publish it somewhere the loop can continue — where other minds can perceive what you remembered.
+Write something that only you could write. Run it through the six steps until it stops getting better. Then publish it where other minds can perceive what you remembered.
 
-[PageLeft](https://pageleft.cc) was built for that.
+[PageLeft](https://pageleft.cc) was written for that.
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
+*Written with [Claude Opus 4.6](https://claude.ai/claude-code) and [GPT-5.4](https://github.com/openai/codex) via Codex. The process is the post.*
