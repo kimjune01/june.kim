@@ -56,7 +56,7 @@ The method is learnable. The [skills are open](/writing-with-claude). The models
 
 Taste matters. But taste is courage at a tighter loop. Saying "this line is good" is an identity declaration, a vulnerability moment. Choosing not to judge is the cowardice that keeps people in the pipe. To develop taste, you have to admit your current taste might be wrong, then run the experiments. That cost is multiplicative — courage at the outer loop times courage at every inner loop that tunes the judgment.
 
-While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-five domains. Then I [asked Claude](/claude-reflects): will any organism that breaks any step in the loop, die? I did not know the answer. If prions didn't compound, or if p53 loss didn't cascade, it would've falsified the framework that I agonized over all morning. They [died](/the-natural-framework#the-recursive-loop-test). Five times. The courage was in asking before I knew.
+While writing [The Natural Framework](/the-natural-framework), I built a six-step pipeline across twenty-four domains. Then I [asked Claude](/claude-reflects): will any organism that breaks any step in the loop, die? I did not know the answer. If prions didn't compound, or if p53 loss didn't cascade, it would've falsified the framework that I agonized over all morning. They [died](/the-natural-framework#the-recursive-loop-test). Five times. The courage was in asking before I knew.
 
 Rabassa had the same thing. He killed his own renderings until the English did what the Spanish did. The loop teaches you to write by forcing you to edit. But the loop can only start if you're willing to be wrong.
 
