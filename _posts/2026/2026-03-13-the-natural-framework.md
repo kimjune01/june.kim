@@ -39,7 +39,7 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <td>Parse, deserialize</td>
 <td><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies">Cache eviction</a> (LRU vs LFU)</td>
 <td class="dim">Scheduler dispatch</td>
-<td><a href="https://en.wikipedia.org/wiki/Log-structured_merge-tree">LSM compaction</a>, defrag</td>
+<td class="dim"><a href="https://en.wikipedia.org/wiki/Log-structured_merge-tree">LSM compaction</a>, defrag</td>
 <td>fsync, <a href="https://en.wikipedia.org/wiki/Write-ahead_logging">write-ahead log</a></td>
 </tr>
 <tr>
@@ -270,7 +270,7 @@ Twelve more domains. Six steps. From antibodies to megayears. Twenty-four domain
 
 ## Why the same shape
 
-Each domain faces the same problem: too much input, finite capacity, select a subset that's both high-quality and diverse. Within each domain, the same data type flows through every step. Neurons process spikes. Databases process rows. Cognition processes moments. The type doesn't change — only which items survive. Filter is rule-based: a threshold, a WHERE clause, a linter. No judgment. Attend is where judgment enters.
+Each domain faces the same problem: too much input, finite capacity, select a subset that's both high-quality and diverse. Within each domain, the same data type flows through every step. Neurons process spikes. Databases process rows. Cognition processes moments. The type doesn't change — only which items survive. Filter is rule-based: a threshold, a WHERE clause, a linter. No judgment. Attend is where judgment enters. Consolidate is lossy compression that changes future processing — not [compaction](https://en.wikipedia.org/wiki/Log-structured_merge-tree), which reorganizes the cache without changing the system.
 
 ## The categorical proof
 
@@ -321,7 +321,7 @@ Can it? The error will either compound, diminish, or persist. Let's test:
 - **Selection before encoding.** The [cheetah bottleneck](https://en.wikipedia.org/wiki/Cheetah#Genetics) ([Menotti-Raymond & O'Brien, 1993](https://pmc.ncbi.nlm.nih.gov/articles/PMC46261/)) destroyed genetic diversity before selection could act on it, and the species has been nearly extinct ever since.
 - **Persistence before selection.** [Endogenous retroviruses](https://en.wikipedia.org/wiki/Endogenous_retrovirus) inserted into the germline without filtering, and 8% of the human genome is now viral fossil.
 
-Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means.
+Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means. In category theory, a composable chain of endomorphisms that recurses into itself is a [monad](https://en.wikipedia.org/wiki/Monad_(category_theory)).
 
 ## Beyond biology
 
