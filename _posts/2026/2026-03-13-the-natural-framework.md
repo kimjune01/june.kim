@@ -272,6 +272,14 @@ Twelve more domains. Six steps. From antibodies to megayears. Twenty-four domain
 
 Each domain faces the same problem: too much input, finite capacity, select a subset that's both high-quality and diverse. Within each domain, the same data type flows through every step. Neurons process spikes. Databases process rows. Cognition processes moments. The type doesn't change — only which items survive. Filter is rule-based: a threshold, a WHERE clause, a linter. No judgment. Attend is where judgment enters. Consolidate is lossy compression that changes future processing — not [compaction](https://en.wikipedia.org/wiki/Log-structured_merge-tree), which reorganizes the cache without changing the system.
 
+## Inhibition across domains
+
+[Desimone and Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) described biased competition in neurons: visual objects compete simultaneously, winners suppress losers through mutual inhibition. Peer review works the same way. The winning papers make it harder for similar papers to get published. That's inhibition.
+
+The immune system is the cleanest non-neural domain. Antigens compete for T-cell binding. Clonal competition selects the best B cells. Affinity maturation consolidates winners into better antibodies. Memory B/T cells persist for decades. No central coordinator. The body lets pathogens compete.
+
+Natural selection is the slowest domain but the most obvious. The [competitive exclusion principle](https://en.wikipedia.org/wiki/Competitive_exclusion_principle) ([Gause](https://en.wikipedia.org/wiki/Georgy_Gause), 1934) says two species competing for identical resources cannot coexist. Niche differentiation is DPP at evolutionary timescale. Repulsion between similar items — what [Salience](/salience) uses to prevent redundant retrieval — is what prevents redundant species.
+
 ## The categorical proof
 
 Each step is a [morphism](https://en.wikipedia.org/wiki/Morphism) — a structure-preserving map between information states. Chained, the six compose into a single transformation: high-bandwidth input to durable signal. That is [category theory](https://en.wikipedia.org/wiki/Category_theory). The information states are the objects. Each step is a morphism with a [postcondition](/the-handshake#morphisms-with-guarantees-vs-arbitrary-self-maps) — a structural guarantee on its output. The pipeline is their composition. When one domain's Remember feeds the next domain's Perceive, the mapping preserves all six morphisms and their composition order. That is a [functor](https://en.wikipedia.org/wiki/Functor) between categories.
@@ -329,6 +337,18 @@ But the functor itself is also a thing in nature. It occupies space, consumes en
 
 The falsification test is structural: remove any morphism or permute their composition order, and the pipeline ceases to function. The dim cells are the evidence. Skip filter, and attention drowns in redundancy. That is Google's row. Skip attend, and consolidation amplifies the wrong winners. That is Science's row. Every dim cell in the tables is a system that dropped or misordered a morphism and broke downstream.
 
+## Categorial Error
+
+In the tables above, dim cells mark steps a domain hasn't optimized. The failures cascade: one broken step dims the rest downstream.
+
+**Google** filters spam but does not filter for redundancy. Every page that clears the quality threshold enters the index regardless of what's already there. Attend compensates with keyword match, top-k by PageRank. Top-k is not inhibition. Ten results from the same content farm survive because nothing suppressed them on the way in. Consolidate becomes mechanical re-crawling. One underoptimized step dims the whole row.
+
+**Adtech** filters by willingness to pay, not relevance. Highest bidder wins every impression. Consolidate patches with frequency caps, a bandage on a filter that never ran. Remember was borrowed from the browser and is now being deprecated. I spent a month [dismantling this pipeline](/open-auction). One broken step, three dim cells downstream.
+
+**Science** is the most consequential. Citation metrics are `GET *` for academia: top-k by popularity, no diversity enforcement. [Merton (1968)](https://doi.org/10.1126/science.159.3810.56) called it the [Matthew effect](https://en.wikipedia.org/wiki/Matthew_effect) — the cited get more cited. You search for "schema consolidation" and get ten papers that cite each other saying the same thing. A DPP would return one from that cluster and five from adjacent regions you didn't know to search for. [JSTOR, PubMed, Nature](/memory): same bug as Google, different coat. Fix attend, and consolidate sharpens.
+
+**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. Life is self-recursive. That's what makes it beautiful.
+
 ## The recursive loop test
 
 In a linked list, a weak node can be routed around, and survive. But in a singly recursive loop, we should be able to find out whether it survives a broken step or not. In biology, genome perception transforms into genome memory; it is a singly recursive loop. If it survives any one of the errors in each of the six steps, then the framework is falsified.
@@ -355,32 +375,13 @@ The same test works beyond biology. The loops are messier, but the compounding i
 
 Every one broke a step and fed the error back into the next cycle. Every one ended in collapse.
 
-## Inhibition across domains
-
-[Desimone and Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) described biased competition in neurons: visual objects compete simultaneously, winners suppress losers through mutual inhibition. Peer review works the same way. The winning papers make it harder for similar papers to get published. That's inhibition.
-
-The immune system is the cleanest non-neural domain. Antigens compete for T-cell binding. Clonal competition selects the best B cells. Affinity maturation consolidates winners into better antibodies. Memory B/T cells persist for decades. No central coordinator. The body lets pathogens compete.
-
-Natural selection is the slowest domain but the most obvious. The [competitive exclusion principle](https://en.wikipedia.org/wiki/Competitive_exclusion_principle) ([Gause](https://en.wikipedia.org/wiki/Georgy_Gause), 1934) says two species competing for identical resources cannot coexist. Niche differentiation is DPP at evolutionary timescale. Repulsion between similar items — what [Salience](/salience) uses to prevent redundant retrieval — is what prevents redundant species.
-
-## Categorial Error
-
-In the tables above, dim cells mark steps a domain hasn't optimized. The failures cascade: one broken step dims the rest downstream.
-
-**Google** filters spam but does not filter for redundancy. Every page that clears the quality threshold enters the index regardless of what's already there. Attend compensates with keyword match, top-k by PageRank. Top-k is not inhibition. Ten results from the same content farm survive because nothing suppressed them on the way in. Consolidate becomes mechanical re-crawling. One underoptimized step dims the whole row.
-
-**Adtech** filters by willingness to pay, not relevance. Highest bidder wins every impression. Consolidate patches with frequency caps, a bandage on a filter that never ran. Remember was borrowed from the browser and is now being deprecated. I spent a month [dismantling this pipeline](/open-auction). One broken step, three dim cells downstream.
-
-**Science** is the most consequential. Citation metrics are `GET *` for academia: top-k by popularity, no diversity enforcement. [Merton (1968)](https://doi.org/10.1126/science.159.3810.56) called it the [Matthew effect](https://en.wikipedia.org/wiki/Matthew_effect) — the cited get more cited. You search for "schema consolidation" and get ten papers that cite each other saying the same thing. A DPP would return one from that cluster and five from adjacent regions you didn't know to search for. [JSTOR, PubMed, Nature](/memory): same bug as Google, different coat. Fix attend, and consolidate sharpens.
-
-**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. Life is self-recursive. That's what makes it beautiful.
-
 ## What to filter
 
 If your objection is "prove the category boundaries formally before I evaluate the idea" — that is a filter that gates on credence rather than structure. Run that filter in a loop. It will kill your own novel ideas before they survive a single iteration, because no new idea arrives pre-credentialed. Worse: it will pass the credentialed ones that should have been caught. The same heuristic that rejects uncredentialed insight is the same one as those who trusted the [Harvard fraudsters](https://en.wikipedia.org/wiki/Dana-Farber_Cancer_Institute#Research_misconduct_allegations), the [Enron scammers](https://en.wikipedia.org/wiki/Enron_scandal), and the [turtleneck at Theranos](https://en.wikipedia.org/wiki/Theranos).
-## Intelligence
 
-The six steps, the competitive inhibition at the core, and the vertical relationship: each domain's Remember is the next domain's Perceive. The pipeline compresses. Each level takes high-bandwidth information and reduces it to a durable signal the next can perceive. Neurons fire millions of times per second; cognition produces a few thoughts per minute; a career produces a handful of papers; a field produces a canon. The ratio is the reason at every transition. That is what the six steps do: intelligent compression across timescales. That is what **intelligence** is.
+## What remains
+
+The six steps, the competitive inhibition at the core, and the vertical relationship: each domain's Remember is the next domain's Perceive. The pipeline compresses. Each level takes high-bandwidth information and reduces it to a durable signal the next can perceive. Neurons fire millions of times per second; cognition produces a few thoughts per minute; a career produces a handful of papers; a field produces a canon. The ratio is the reason at every transition. The word we have for that is **intelligence**.
 
 Follow the output:
 
