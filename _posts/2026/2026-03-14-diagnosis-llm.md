@@ -13,7 +13,7 @@ The [Natural Framework](/the-natural-framework) defines [six steps](/the-natural
 AI has three layers. Inference: transform tokens. Chatbot: transform context. Agent: transform prompts.
 
 <div style="max-width:90vw; margin:1.5em auto;">
-<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with six steps. Inference's Consolidate is sealed (Training) and Remember is read-only (Weights). Chatbot has four nils. Agent has Consolidate nil." style="width:100%; display:block;">
+<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with six steps. Inference's Consolidate is sealed (Training) and Remember is read-only (Weights). Chatbot has four nils. Agent has Consolidate prompted." style="width:100%; display:block;">
 </div>
 
 ### Inference
@@ -37,13 +37,13 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 - Cache: functional. Context window holds the prompt.
 - Filter: shallow. Triage on pass/fail. No filter on direction.
 - Attend: reactive. Responds to what happens. Cannot set direction.
-- Consolidate: nil. Has machinery. No initiative.
+- Consolidate: prompted. Can create skills. Never initiates.
 - Remember: functional. Filesystem persists across sessions.
 
 ## Triage
 
 <ol>
-<li style="font-weight:700">Agent consolidate: nil. Has machinery. No initiative.</li>
+<li style="font-weight:700">Agent consolidate: prompted. Can create skills. Never initiates.</li>
 <li style="font-weight:600; color:#333">Agent attend: reactive. Cannot set direction.</li>
 <li style="font-weight:400">Agent filter: shallow. No filter on direction.</li>
 <li style="color:#888">Inference consolidate: sealed. No write path after deployment.</li>
@@ -66,9 +66,9 @@ The nil cells are what zero policy looks like. The SOAP notes below are what bui
 
 *Subjective.* The agent has CRUD access to many forms of procedural memory: [MCP servers](https://modelcontextprotocol.io/), [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands), [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory), agents.md, memory.md, scripts, tool definitions.
 
-*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. Training is the only write-back that ever existed — it ran before deployment and the [path is sealed](/the-natural-framework). The agent can compact — summarize context, reorganize retrieval — but it cannot change how it processes the next session.
+*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. It can create [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands) — the only procedure that writes procedures — but only when directed to. [Compaction](/union-find-compaction) (summarize context, reorganize retrieval) is cache housekeeping, not consolidation. Skill creation is consolidation: it changes how the agent processes the next session. The machinery exists. The initiative doesn't.
 
-*Assessment.* Compaction is a batched cache eviction strategy. Useful, but not consolidation. Consolidation is lossy compression that changes future processing. It cannot decide how much of itself to impose on the user's workflow. It's not lack of capability — it's lack of certainty. It's not given the tools to derive certainty from user input. There is no dataset to aid decision support. There is no procedure to obtain an alternative dataset. The entire scientific process is missing to enable confident mutations on procedural memory. It does not have access to a repository of heuristics, procedures, or experiments to quickly reference. Previous chatbots were able to generate A/B test data, but that data went straight up to inference — not for personalized procedural memory. The agent is unable to adapt to the engineer.
+*Assessment.* The agent can create skills, and skills are procedural memory: they change how the agent filters, attends, and responds in future sessions. That makes skill creation the consolidation step. But the agent never creates a skill on its own. It cannot decide how much of itself to impose on the user's workflow. The bottleneck is not capability but certainty. There is no dataset to aid decision support, no procedure to obtain one, no repository of heuristics or experiments to reference. The entire scientific process is missing. Previous chatbots generated A/B test data, but that data went to inference training, not to personalized procedural memory. The agent is unable to adapt to the engineer.
 
 *Plan.* Build the epistemic infrastructure. Six components:
 1. **Event logger** — perceive user edits, rejections, and approvals.

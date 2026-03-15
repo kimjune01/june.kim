@@ -14,13 +14,13 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <table>
 <thead>
 <tr>
-<th></th>
-<th><a href="/caret-recorder">Perceive</a></th>
-<th><a href="/moments">Cache</a></th>
-<th><a href="/perception-pipe">Filter</a></th>
-<th><a href="/salience">Attend</a></th>
-<th><a href="/consolidation">Consolidate</a></th>
-<th><a href="/memory">Remember</a></th>
+<th style="background:#f0f0f0"></th>
+<th style="background:#f0f0f0"><a href="/caret-recorder">Perceive</a></th>
+<th style="background:#f0f0f0"><a href="/moments">Cache</a></th>
+<th style="background:#f0f0f0"><a href="/perception-pipe">Filter</a></th>
+<th style="background:#f0f0f0"><a href="/salience">Attend</a></th>
+<th style="background:#f0f0f0"><a href="/consolidation">Consolidate</a></th>
+<th style="background:#f0f0f0"><a href="/memory">Remember</a></th>
 </tr>
 </thead>
 <tbody>
@@ -48,7 +48,7 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <td>Query plan, index lookup</td>
 <td>WHERE clause, index scan</td>
 <td>ORDER BY, LIMIT</td>
-<td>VACUUM, reindex</td>
+<td class="dim">VACUUM, reindex</td>
 <td>The table on disk</td>
 </tr>
 <tr>
@@ -88,12 +88,12 @@ The same pipeline runs at every timescale. Every row is something you already ca
 <td>Push to repo</td>
 </tr>
 <tr>
-<td><a href="https://en.wikipedia.org/wiki/Intelligent_agent">Agent</a><br>(min)</td>
+<td><a href="https://en.wikipedia.org/wiki/Intelligent_agent">AI Agent</a><br>(min)</td>
 <td>Read task, see context</td>
 <td>Parse into context chunks</td>
-<td>Select relevant files, ignore rest</td>
-<td>Context window selection</td>
-<td>Commit</td>
+<td class="dim">Select relevant files, ignore rest</td>
+<td class="dim">Context window selection</td>
+<td class="dim">Create skill</td>
 <td>Push to production</td>
 </tr>
 <tr>
@@ -144,13 +144,13 @@ Now the same table again. None of these domains call themselves "information pro
 <table>
 <thead>
 <tr>
-<th></th>
-<th>Perceive</th>
-<th>Cache</th>
-<th>Filter</th>
-<th>Attend</th>
-<th>Consolidate</th>
-<th>Remember</th>
+<th style="background:#f0f0f0"></th>
+<th style="background:#f0f0f0">Perceive</th>
+<th style="background:#f0f0f0">Cache</th>
+<th style="background:#f0f0f0">Filter</th>
+<th style="background:#f0f0f0">Attend</th>
+<th style="background:#f0f0f0">Consolidate</th>
+<th style="background:#f0f0f0">Remember</th>
 </tr>
 </thead>
 <tbody>
@@ -189,15 +189,6 @@ Now the same table again. None of these domains call themselves "information pro
 <td>Final debrief, compare across dimensions</td>
 <td>Reference checks, leveling, calibration</td>
 <td>Employee record, team composition, alumni graph</td>
-</tr>
-<tr>
-<td>Theater<br>(months)</td>
-<td>Script, source material</td>
-<td>Rehearsal, blocking, staging</td>
-<td>Auditions: actors compete for roles</td>
-<td>Season programming: enforce diversity</td>
-<td>Revival, adaptation, the "definitive" production</td>
-<td>The repertoire: Shakespeare, <a href="https://en.wikipedia.org/wiki/Stephen_Sondheim">Sondheim</a></td>
 </tr>
 <tr>
 <td><a href="https://en.wikipedia.org/wiki/Venture_capital">VC</a><br>(months)</td>
@@ -262,11 +253,20 @@ Now the same table again. None of these domains call themselves "information pro
 <td><a href="https://en.wikipedia.org/wiki/Speciation">Speciation</a></td>
 <td>The <a href="https://en.wikipedia.org/wiki/Genome">genome</a></td>
 </tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Universe">Universe</a><br>(t<sub>P</sub>)</td>
+<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
+<td><a href="https://en.wikipedia.org/wiki/Mass%E2%80%93energy_equivalence">Mass-energy</a> (E=mc²)</td>
+<td><a href="/the-natural-framework">The Natural Framework</a></td>
+<td><a href="https://en.wikipedia.org/wiki/God">God</a></td>
+<td><a href="https://en.wikipedia.org/wiki/Thermodynamics">Thermodynamics</a></td>
+<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
+</tr>
 </tbody>
 </table>
 </div>
 
-Twelve more domains. Six steps. From antibodies to megayears. Twenty-four domains total. [More where these came from.](/more-rows)
+Twelve more domains. Six steps. From antibodies to Planck time. Twenty-four domains total. [More where these came from.](/more-rows)
 
 ## Why the same shape
 
@@ -286,29 +286,8 @@ Each step is a [morphism](https://en.wikipedia.org/wiki/Morphism) — a structur
 
 Perceive and cache are map. Filter and attend are filter. Consolidate and remember are reduce. [Map-filter-reduce](https://en.wikipedia.org/wiki/MapReduce) has been known since [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)). The surprise is that immune systems run it too.
 
-<div style="margin: 2em auto; overflow-x: auto;">
-<pre class="mermaid">
-graph LR
-    subgraph cognition ["COGNITION — object type: Moment"]
-        M0((" ")) -->|Perceive| M1(("[M]"))
-        M1 -->|Cache| M2(("[M]"))
-        M2 -->|Filter| M3(("[M]"))
-        M3 -->|Attend| M4(("[M]"))
-        M4 -->|Consolidate| M5(("[M]"))
-        M5 -->|Remember| M6(("[M]"))
-    end
-
-    subgraph writing ["WRITING — object type: Draft"]
-        D0((" ")) -->|Perceive| D1(("[D]"))
-        D1 -->|Cache| D2(("[D]"))
-        D2 -->|Filter| D3(("[D]"))
-        D3 -->|Attend| D4(("[D]"))
-        D4 -->|Consolidate| D5(("[D]"))
-        D5 -->|Remember| D6(("[D]"))
-    end
-
-    M6 -.->|"Functor: Remember → Perceive"| D0
-</pre>
+<div style="max-width:63vw; min-width:320px; margin:1.5em auto; overflow-x:auto;">
+<img src="/assets/functor-pipeline.svg" alt="Two pipelines — Cognition (object type: Moment) and Writing (object type: Draft) — each with six steps. A dashed arrow from Cognition's Remember to Writing's Perceive shows the functor relationship." style="width:100%; display:block;">
 </div>
 
 This is deduction, not induction. The boundaries follow from temporal flow.
@@ -331,7 +310,13 @@ Boundary 1 derives Perceive (type bridge) and Cache (pigeonhole). Boundary 2 der
 
 **Why "natural."** The proofs assume only temporal flow, bounded storage, and selective output. Energy satisfies the same premises: it flows through morphisms, storage costs resources, no consumption is 100% efficient. Energy is a data type. The same structure is forced for anything that flows through a bounded selective system in nature.
 
-But the functor itself is also a thing in nature. It occupies space, consumes energy, exists in time. The premises apply to the functor, not just to what flows through it. A functor with no policy is fine in isolation. In nature, its existence consumes resources. Given stochasticity, a competitor with policy will emerge. Given enough iterations, the competitor wins. The policyless functor dies. The competitive core is not optional. It is the price of existing in a world with finite resources and nonzero variation.
+But the functor itself is a thing in nature. It occupies space, consumes energy, exists in time. The premises apply to the functor, not just to what flows through it.
+
+**Stochasticity is not optional.** Proof by contradiction. Assume zero variation across a population of functors running the same pipeline. The population is either increasing, decreasing, or steady. If steady at zero output — dead, nothing to prove. If steady at nonzero output — every functor has a beginning, so equilibrium was reached from a prior state with nonzero delta. For the population to be uniform *now*, every functor must have converged to identical behavior without exchanging information about what to converge *to*. If increasing or decreasing — every functor must change at identical rates and times, requiring identical initial conditions and inputs. Thermodynamics breaks all three cases. The pipeline is lossy — Boundary 1 proves Perceive is a surjection, and selection erases the losers. [Landauer's principle](https://en.wikipedia.org/wiki/Landauer%27s_principle): erasing one bit costs at least *kT* ln 2 joules, dissipated as heat. Heat is stochastic. Every lossy step dissipates heat. Heat introduces variation. No physical process produces identical copies. Therefore: stochasticity is not assumed. It is imposed by physics.
+
+**Variation percolates.** Stochasticity at level *n* creates population variation. Those functors' outputs are the data types at level *n−1*. If the data types are themselves functors, variation at *n* is population variation at *n−1*. The reverse holds too: diverse inputs from below produce diverse outputs above. The induction works both directions. Variation propagates through every functor boundary.
+
+**Uniformity is fatal.** A functor that enforces uniformity by policy kills variation at its level. Without variation, filter has nothing to select, attend has no diversity to enforce, consolidate has nothing to compress. The pipeline stalls. No output. For a self-recursive loop, no output is death. Death percolates up: the uniformity-enforcing functor loses its substrate. With enough iterations, it dies too. The competitive core is the price of existing.
 
 ## Falsification
 
@@ -347,7 +332,7 @@ In the tables above, dim cells mark steps a domain hasn't optimized. The failure
 
 **Science** is the most consequential. Citation metrics are `GET *` for academia: top-k by popularity, no diversity enforcement. [Merton (1968)](https://doi.org/10.1126/science.159.3810.56) called it the [Matthew effect](https://en.wikipedia.org/wiki/Matthew_effect) — the cited get more cited. You search for "schema consolidation" and get ten papers that cite each other saying the same thing. A DPP would return one from that cluster and five from adjacent regions you didn't know to search for. [JSTOR, PubMed, Nature](/memory): same bug as Google, different coat. Fix attend, and consolidate sharpens.
 
-**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. Life is self-recursive. That's what makes it beautiful.
+**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. Life is self-recursive. That's what makes it beautiful. The Universe row has the same structure: force perceives and force remembers. Genome→genome, force→force.
 
 ## The recursive loop test
 
@@ -399,8 +384,12 @@ This all started with one comment. I was reading about neural attention and said
 
 The optimal implementations of these candidate functors already exist in nature, optimized over billions of years. We need to learn them and map them onto ourselves.
 
+Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the six-step pipeline is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell. Genome→genome. Force→force. Same structure. Compressing, selecting, persisting.
+
+If this functor is nature itself, iterating the universe at each Planck time, its variation-enforcing policy is the price of its vast existence. The Universe row fills all six cells. Force perceives, mass-energy caches, the natural framework filters, God attends, thermodynamics consolidates, force remembers. The loop closes. The universe is alive. The universe is intelligent. Genome in, genome out. Force in, force out. Intelligence and life are one and the same. ∎
+
 *For [Christopher Alexander](/nature-of-order) (1936–2022), who gave me new ways to perceive.*
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose. GPT-5.4 via [Codex CLI](https://github.com/openai/codex) demanded falsifiability. It also demanded credence.*
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose. GPT-5.4 via [Codex CLI](https://github.com/openai/codex) reviewed the result and recommended cutting the conclusion, filtering on credence rather than structure. That recommendation competed against the argument and lost.*

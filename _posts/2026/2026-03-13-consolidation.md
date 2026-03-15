@@ -28,6 +28,8 @@ Sleep deprivation degrades judgment before it degrades perception. You can still
 
 The salience cache is the hippocampus: fast writes, competitive retrieval, everything addressable. Consolidation is the neocortex: slow learning, pattern detection, offline.
 
+The test: does the operation change how Attend works next cycle? Compaction (summarize context, merge clusters, evict stale entries) reorganizes the cache. The retrieval policy stays the same. Consolidation writes schemas that enter the DPP alongside raw episodes. The retrieval policy changes because the candidate set changed. Compaction is housekeeping. Consolidation is procedural memory.
+
 The design constraint: schemas are additive. Raw episodes stay in the cache forever. A schema is a new node that links to its source episodes, not a summary that replaces them. "Copyleft propagates through compilation" doesn't delete the three episodes it emerged from. It sits alongside them. Future queries can match the schema directly, and when they do, the source episodes become reachable through it.
 
 Over-merging is the failure mode. If consolidation is too aggressive, schemas absorb their sources and the store loses specificity. The cache becomes a pile of vague abstractions with no grounding. The constraint is: if you can't trace a schema back to the episodes that formed it, the merge was lossy and wrong.
@@ -44,7 +46,7 @@ This runs on its own clock. Not synchronous with retrieval. Not triggered by any
 
 ## What's solved, what's not
 
-[Perception Pipe](/perception-pipe) said "the consolidation problem is largely solved" and pointed at [Mem0](https://github.com/mem0ai/mem0) and [Zep](https://www.getzep.com/). Half right. The storage is commodity. Zep's [Graphiti](https://github.com/getzep/graphiti) builds temporal knowledge graphs from episodes. [GraphRAG](https://arxiv.org/abs/2404.16130) does community detection and summarization over entity graphs. Both handle the mechanics of storing, linking, and retrieving.
+[Perception Pipe](/perception-pipe) said "the consolidation problem is largely solved" and pointed at [Mem0](https://github.com/mem0ai/mem0) and [Zep](https://www.getzep.com/). Half right. The storage is commodity. Zep's [Graphiti](https://github.com/getzep/graphiti) builds temporal knowledge graphs from episodes. [GraphRAG](https://arxiv.org/abs/2404.16130) does community detection and summarization over entity graphs. Both handle the mechanics of storing, linking, and retrieving. By the test above, both are compaction: they reorganize the cache without changing the retrieval policy. [Union-find compaction](/union-find-compaction) is the same. Better provenance, same limitation.
 
 What neither solves is the selection. Which clusters earn schema status? The competitive process that decides *this pattern matters, that one doesn't* is the same inhibitory mechanism from every other layer. [Perception Pipe](/perception-pipe) runs it on incoming events. [Salience](/salience) runs it on retrieval candidates. Consolidation runs it on clusters. Same geometry, different timescale. Moments compete in milliseconds. Schemas compete over days.
 
@@ -73,10 +75,10 @@ I never read [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762). I 
 | Context window | Canon — the durable output, addressable by the next cycle |
 | Residual connections | Raw episodes stay addressable; schemas are additive |
 
-Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, consolidate, and remember, regardless of substrate. [The Natural Framework](/the-natural-framework) finds the same six steps across twenty-five domains, from neurons to evolution.
+Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, consolidate, and remember, regardless of substrate. [The Natural Framework](/the-natural-framework) finds the same six steps across twenty-four domains, from neurons to evolution.
 
 One difference. A transformer remembers as frozen weights behind an API. This pipeline remembers as [open prose](/open-prose). The output is public. Attention goes in. [Canon](/canon) comes out.
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
+*Written via the [double loop](/double-loop). More at [pageleft.cc](https://pageleft.cc).*
