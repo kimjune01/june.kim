@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 310" font-family="system-ui, sans-serif">
+  <style>
+    .box-ok { fill: #e8f5e9; stroke: #999; stroke-width: 1; rx: 4; }
+    .box-nil { fill: #ffebee; stroke: #c62828; stroke-width: 1.5; rx: 4; stroke-dasharray: 5,3; }
+    .box-fix { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1.5; rx: 4; }
+    .box-dead { fill: #f5f5f5; stroke: #ccc; stroke-width: 1; rx: 4; }
+    .name { text-anchor: middle; dominant-baseline: central; font-weight: 600; font-size: 13px; }
+    .sub { text-anchor: middle; font-size: 11px; fill: #555; }
+    .sub-nil { text-anchor: middle; font-size: 11px; fill: #c62828; font-style: italic; }
+    .sub-fix { text-anchor: middle; font-size: 11px; fill: #1565c0; }
+    .sub-dead { text-anchor: middle; font-size: 11px; fill: #bbb; }
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .arr-break { stroke: #c62828; stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+    .arr-fix { stroke: #1565c0; stroke-width: 1.5; fill: none; marker-end: url(#b); }
+    .label { font-weight: 700; font-size: 14px; fill: #333; }
+    .note { font-size: 11px; fill: #888; text-anchor: middle; }
+    .note-red { font-size: 11px; fill: #c62828; text-anchor: middle; font-style: italic; }
+    .note-blue { font-size: 11px; fill: #1565c0; text-anchor: middle; }
+    .group-bg { fill: #fafafa; stroke: #e0e0e0; stroke-width: 1; rx: 8; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+    <marker id="b" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#1565c0"/></marker>
+    <marker id="c" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#c62828"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="label" x="550" y="22" text-anchor="middle" font-size="15">Chatbot layer — from Diagnosis LLM</text>
+
+  <!-- Row 1: Current chatbot pipeline (flat summarization) -->
+  <rect class="group-bg" x="10" y="34" width="1080" height="100"/>
+  <text class="label" x="50" y="56" font-size="12">Today</text>
+
+  <rect class="box-ok" x="30" y="64" width="130" height="44"/>
+  <text class="name" x="95" y="80">Perceive</text>
+  <text class="sub" x="95" y="97">Tokens</text>
+  <line class="arr" x1="160" y1="86" x2="188" y2="86"/>
+
+  <rect class="box-dead" x="188" y="64" width="200" height="44"/>
+  <text class="name" x="288" y="80" fill="#999">Cache</text>
+  <text class="sub-dead" x="288" y="97">Token context + flat summary</text>
+  <line class="arr-break" x1="388" y1="86" x2="426" y2="86" marker-end="url(#c)"/>
+
+  <rect class="box-nil" x="426" y="64" width="130" height="44"/>
+  <text class="name" x="491" y="80">Filter</text>
+  <text class="sub-nil" x="491" y="97">nil</text>
+  <line class="arr-break" x1="556" y1="86" x2="584" y2="86" marker-end="url(#c)"/>
+
+  <rect class="box-nil" x="584" y="64" width="130" height="44"/>
+  <text class="name" x="649" y="80">Attend</text>
+  <text class="sub-nil" x="649" y="97">nil</text>
+  <line class="arr-break" x1="714" y1="86" x2="742" y2="86" marker-end="url(#c)"/>
+
+  <rect class="box-nil" x="742" y="64" width="150" height="44"/>
+  <text class="name" x="817" y="80">Consolidate</text>
+  <text class="sub-nil" x="817" y="97">nil</text>
+  <line class="arr-break" x1="892" y1="86" x2="920" y2="86" marker-end="url(#c)"/>
+
+  <rect class="box-nil" x="920" y="64" width="150" height="44"/>
+  <text class="name" x="995" y="80">Remember</text>
+  <text class="sub-nil" x="995" y="97">nil</text>
+
+
+  <!-- Row 2: Union-find compaction pipeline -->
+  <rect class="group-bg" x="10" y="148" width="1080" height="100"/>
+  <text class="label" x="50" y="170" font-size="12" fill="#1565c0">Union-find</text>
+
+  <rect class="box-ok" x="30" y="178" width="130" height="44"/>
+  <text class="name" x="95" y="194">Perceive</text>
+  <text class="sub" x="95" y="211">Tokens</text>
+  <line class="arr-fix" x1="160" y1="200" x2="188" y2="200"/>
+
+  <rect class="box-fix" x="188" y="178" width="200" height="44"/>
+  <text class="name" x="288" y="194" fill="#1565c0">Cache</text>
+  <text class="sub-fix" x="288" y="211">Hot window + UF forest</text>
+  <line class="arr" x1="388" y1="200" x2="426" y2="200"/>
+
+  <rect class="box-nil" x="426" y="178" width="130" height="44"/>
+  <text class="name" x="491" y="194">Filter</text>
+  <text class="sub-nil" x="491" y="211">nil</text>
+  <line class="arr" x1="556" y1="200" x2="584" y2="200"/>
+
+  <rect class="box-nil" x="584" y="178" width="130" height="44"/>
+  <text class="name" x="649" y="194">Attend</text>
+  <text class="sub-nil" x="649" y="211">nil</text>
+  <line class="arr" x1="714" y1="200" x2="742" y2="200"/>
+
+  <rect class="box-nil" x="742" y="178" width="150" height="44"/>
+  <text class="name" x="817" y="194">Consolidate</text>
+  <text class="sub-nil" x="817" y="211">nil</text>
+  <line class="arr" x1="892" y1="200" x2="920" y2="200"/>
+
+  <rect class="box-fix" x="920" y="178" width="150" height="44"/>
+  <text class="name" x="995" y="194" fill="#1565c0">Remember</text>
+  <text class="sub-fix" x="995" y="211">Forest persists</text>
+
+  <!-- Annotation -->
+  <text class="note-blue" x="288" y="236">provenance preserved — precondition for downstream</text>
+
+
+</svg>
