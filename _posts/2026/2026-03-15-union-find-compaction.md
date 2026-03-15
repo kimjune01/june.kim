@@ -2,6 +2,7 @@
 layout: post-wide
 title: "Union-Find Compaction"
 tags: cognition
+image: /assets/union-find-compaction.png
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [The Natural Framework](/the-natural-framework), [General Intelligence](/general-intelligence), and [The Handshake](/the-handshake).*
