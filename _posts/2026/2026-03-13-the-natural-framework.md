@@ -274,7 +274,7 @@ Each domain faces the same problem: too much input, finite capacity, select a su
 
 ## The categorical proof
 
-Each step is an [endomorphism](https://en.wikipedia.org/wiki/Endomorphism) — same type in, same type out. Chained, the six compose into a single transformation: high-bandwidth input to durable signal. That is [category theory](https://en.wikipedia.org/wiki/Category_theory). The data type is the object. Each step is a morphism. The pipeline is their composition. When one domain's Remember feeds the next domain's Perceive, the mapping preserves all six morphisms and their composition order. That is a [functor](https://en.wikipedia.org/wiki/Functor) between categories.
+Each step is a [morphism](https://en.wikipedia.org/wiki/Morphism) — a structure-preserving map between information states. Chained, the six compose into a single transformation: high-bandwidth input to durable signal. That is [category theory](https://en.wikipedia.org/wiki/Category_theory). The information states are the objects. Each step is a morphism with a [postcondition](/the-handshake#morphisms-with-guarantees-vs-arbitrary-self-maps) — a structural guarantee on its output. The pipeline is their composition. When one domain's Remember feeds the next domain's Perceive, the mapping preserves all six morphisms and their composition order. That is a [functor](https://en.wikipedia.org/wiki/Functor) between categories.
 
 Perceive and cache are map. Filter and attend are filter. Consolidate and remember are reduce. [Map-filter-reduce](https://en.wikipedia.org/wiki/MapReduce) has been known since [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)). The surprise is that immune systems run it too.
 
@@ -303,7 +303,21 @@ graph LR
 </pre>
 </div>
 
-This is deduction, not induction. If the same type is observable at both ends and the output is a compressed subset of the input, intermediate morphisms that select and reduce must exist. The deduction derives three boundaries: encoding must precede selection, selection must precede persistence. You cannot filter what you have not cached, attend to what you have not filtered, consolidate what you have not attended to. How many morphisms sit within each phase is an implementation detail. The [cognition series](/cognition) found two per phase, but the math only requires the boundaries. The tables are instances. The structure follows from the same premise.
+This is deduction, not induction. The boundaries follow from temporal flow.
+
+**Boundary 1: encoding before selection.** The six steps are temporal morphisms: input at time *t*, output at time *t+δ*, where *δ* > 0. Perceive receives multiple inputs (environment and Remember's feedback). Consolidate and Remember emit at most one output at a time. Inputs arrive faster than outputs drain. By the pigeonhole principle, something must hold them. That is a data structure. A data structure for multiple items requires a write interface (storage) and a read interface (retrieval). Those are Cache's two operations. Cache must exist. You cannot select from what you have not stored. Encoding before selection.
+
+**Boundary 2: selection before persistence.** Consolidate is lossy; Remember is lossless. If you persist before selecting, you persist everything, and the store grows without bound. Bounded storage forces selection before persistence.
+
+**Corollary 1: the competitive core exists.** If output follows input with delay *δ* > 0, a policy decides when to release. *δ* = 0 is passthrough. *δ* = ∞ is suppression. Any system where outputs are a proper subset of inputs over time exhibits *δ* = some: a selection policy exists. That policy is Filter. The competitive core is not a design choice. It is forced by selective output.
+
+**Corollary 2: control separates from data.** Fork a morphism's output to two different consumers. If the selection is identical, the policy cannot depend on what is downstream. It is intrinsic to the morphism. If the policy produces the same selection regardless of what input data flows through, the policy parameters (criteria, thresholds, bias signals) must be stored independently of the data being processed. The contract is a property of the morphism, not the composition.
+
+**Corollary 3: Consolidate and Attend exist.** The policy store from Corollary 2 is independent of the data store. Storage is not free in nature. The policy store cannot grow without bound any more than the data store can. It needs a write interface and a read interface. Consolidate is the write interface: it compresses and updates policy. Attend is the read interface: it applies policy to data. Cache stores data. The policy store stores criteria. Different stores, different morphisms, both forced by bounded resources.
+
+The boundaries derive two steps (Perceive, Remember). The corollaries derive four more (Cache, Filter, Attend, Consolidate). The derivation forces roles of this shape: a buffer, a gate, a policy reader, a policy writer. The [cognition series](/cognition) found these specific six across twenty-four domains. Two independent lines of evidence converge on the same structure.
+
+**Why "natural."** The proofs assume only temporal flow, bounded storage, and selective output. Energy satisfies the same premises: it flows through morphisms, storage costs resources, no consumption is 100% efficient. Energy is a data type. The same structure is forced for anything that flows through a bounded selective system in nature. A functor with no policy is fine in isolation. In nature, its existence consumes resources. Given stochasticity, a competitor with policy will emerge. Given enough iterations, the competitor wins. The policyless functor dies. The competitive core is not optional. It is the price of existing in a world with finite resources and nonzero variation.
 
 ## Falsification
 
@@ -321,7 +335,7 @@ Can it? The error will either compound, diminish, or persist. Let's test:
 - **Selection before encoding.** The [cheetah bottleneck](https://en.wikipedia.org/wiki/Cheetah#Genetics) ([Menotti-Raymond & O'Brien, 1993](https://pmc.ncbi.nlm.nih.gov/articles/PMC46261/)) destroyed genetic diversity before selection could act on it, and the species has been nearly extinct ever since.
 - **Persistence before selection.** [Endogenous retroviruses](https://en.wikipedia.org/wiki/Endogenous_retrovirus) inserted into the germline without filtering, and 8% of the human genome is now viral fossil.
 
-Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means. In category theory, a composable chain of endomorphisms that recurses into itself is a [monad](https://en.wikipedia.org/wiki/Monad_(category_theory)).
+Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means. In category theory, the six steps are morphisms inside the [Giry monad](https://en.wikipedia.org/wiki/Giry_monad) — the monad of probability distributions. The recursive feedback has the structure of a [trace](https://en.wikipedia.org/wiki/Traced_monoidal_category); formalizing it requires specifying how environment and internal state interact. [The Handshake](/the-handshake) gives the proof.
 
 ## Beyond biology
 
@@ -376,7 +390,7 @@ Nobody looks at Google Search and says "the filter step has no redundancy inhibi
 
 This all started with one comment. I was reading about neural attention and said, "this looks like a cache to me." The data structure was identical: indexed items competing for limited slots. All inside my head. That observation won the competition against priority queue, against heap. It survived [consolidation](/consolidation). It became a schema. That schema generated [Salience](/salience), which generated DPP, which generated the [Transformer mapping](/consolidation), which generated these tables.
 
-The optimal implementations of these functors already exist in nature, optimized over billions of years. We need to learn them and map them onto ourselves.
+The optimal implementations of these candidate functors already exist in nature, optimized over billions of years. We need to learn them and map them onto ourselves.
 
 *For [Christopher Alexander](/nature-of-order) (1936–2022), who gave me new ways to perceive.*
 

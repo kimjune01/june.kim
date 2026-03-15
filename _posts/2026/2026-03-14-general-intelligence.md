@@ -95,7 +95,7 @@ But does it?
 
 If it bends, it has an inflection point, where acceleration peaks before the ceiling constrains it. The mutable slots are human: filter, attend, consolidate. Improving them increases the rate. [Metacognition](https://en.wikipedia.org/wiki/Metacognition). Without it, the curve stays linear. With it, it bends.
 
-The composition is a type check: if the output type of one pipeline's Remember matches the input type of the other's Perceive, they compose. This is a [functor](https://en.wikipedia.org/wiki/Functor) between categories, known since [Eilenberg and Mac Lane (1945)](https://en.wikipedia.org/wiki/Natural_transformation#History).
+The composition is a type check: if the output type of one pipeline's Remember matches the input type of the other's Perceive, they compose. This is a candidate [functor](https://en.wikipedia.org/wiki/Functor) between categories — the type match is necessary, but composition preservation must be verified. The vocabulary is due to [Eilenberg and Mac Lane (1945)](https://en.wikipedia.org/wiki/Natural_transformation#History); [The Handshake](/the-handshake) gives the proof.
 
 > AI ∞ HI ∈ **GI**.
 

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 170" width="350" font-family="system-ui, sans-serif">
+  <style>
+    .bar { rx: 2; }
+    .lossless { fill: #bbdefb; }
+    .lossy { fill: #ffcdd2; }
+    .label { text-anchor: middle; font-size: 11px; font-weight: 500; }
+    .delta { text-anchor: middle; font-size: 10px; }
+    .plus { fill: #1565c0; }
+    .minus { fill: #c62828; }
+    .zero { fill: #999; }
+    .axis { stroke: #ccc; stroke-width: 1; }
+  </style>
+
+  <!-- Baseline -->
+  <line class="axis" x1="25" y1="128" x2="675" y2="128"/>
+
+  <!-- Step labels -->
+  <text class="label" x="70" y="152">Perceive</text>
+  <text class="label" x="175" y="152">Cache</text>
+  <text class="label" x="280" y="152">Filter</text>
+  <text class="label" x="385" y="152">Attend</text>
+  <text class="label" x="498" y="152">Consolidate</text>
+  <text class="label" x="620" y="152">Remember</text>
+
+  <!-- Bars (bottom at y=128, heights vary) -->
+  <!-- Perceive: 90px tall (injects bits) -->
+  <rect class="bar lossless" x="30" y="38" width="80" height="90"/>
+  <text class="delta plus" x="70" y="28">+bits</text>
+
+  <!-- Cache: 90px (lossless) -->
+  <rect class="bar lossless" x="135" y="38" width="80" height="90"/>
+  <text class="delta zero" x="175" y="28">=</text>
+
+  <!-- Filter: 62px (lossy) -->
+  <rect class="bar lossy" x="240" y="66" width="80" height="62"/>
+  <text class="delta minus" x="280" y="56">−bits</text>
+
+  <!-- Attend: 44px (lossy) -->
+  <rect class="bar lossy" x="345" y="84" width="80" height="44"/>
+  <text class="delta minus" x="385" y="74">−bits</text>
+
+  <!-- Consolidate: 32px (lossy) -->
+  <rect class="bar lossy" x="455" y="96" width="80" height="32"/>
+  <text class="delta minus" x="498" y="86">−bits</text>
+
+  <!-- Remember: 32px (lossless) -->
+  <rect class="bar lossless" x="580" y="96" width="80" height="32"/>
+  <text class="delta zero" x="620" y="86">=</text>
+
+  <!-- Annotation -->
+  <text x="350" y="12" text-anchor="middle" font-size="10" fill="#888">information retained per cycle</text>
+</svg>

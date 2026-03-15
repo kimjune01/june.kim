@@ -54,6 +54,12 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 <li style="color:#aaa">Chatbot remember: nil. No memory.</li>
 </ol>
 
+## Why the chatbot is passthrough
+
+The chatbot's four nil cells are not just engineering gaps. They are the degenerate case predicted by [The Natural Framework](/the-natural-framework)'s existence proofs. The proof says: if outputs are a proper subset of inputs over time, a policy store must exist, and Attend and Consolidate must exist to read and write it. The chatbot has no policy store. No policy means no selection delay. Token in, token out, same rate. That is passthrough, and passthrough cannot accumulate judgment.
+
+The nil cells are what zero policy looks like. The SOAP notes below are what building the policy looks like.
+
 ## SOAP Notes
 
 ### 1. Agent consolidate
