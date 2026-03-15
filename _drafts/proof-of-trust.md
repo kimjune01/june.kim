@@ -6,7 +6,9 @@ tags: vector-space
 
 *Part of the [Vector Space](/vector-space) series.*
 
-[How to Trust Advertisers](/how-to-trust-advertisers) described the composite signal: payment history, reviews, semantic consistency, DNS records. Independently verifiable, no gatekeeper. But each signal is isolated. A clean Stripe history doesn't know about a Yelp rating. A domain age doesn't know about a QuickBooks P&L. The signals sit in silos. The advertiser knows they're trustworthy. The evidence exists. Nobody can see the whole picture without scraping every source independently.
+[How to Trust Advertisers](/how-to-trust-advertisers) described the composite signal: payment history, reviews, semantic consistency, DNS records. Independently verifiable, no single gatekeeper. But each signal is isolated. A clean Stripe history doesn't know about a Yelp rating. A domain age doesn't know about a QuickBooks P&L.
+
+A plumber who's served the same neighborhood for twenty years has the evidence: Stripe transactions, customer reviews, a business license, supplier relationships. When she buys an ad, the platform treats her the same as a dropshipper who registered yesterday. The signals exist. They just don't talk to each other.
 
 Proof of trust is a data structure that connects the signals into a graph.
 
@@ -20,27 +22,31 @@ An advertiser publishes a signed declaration of their trust relationships:
 - **Licensing**: "I hold this license in this jurisdiction. Here is the registry link."
 - **Platform history**: "My Shopify store has this rating. Here is the verifiable export."
 
-Each relationship is bilateral. The advertiser claims it; the counterparty confirms it. The confirmation is cryptographic — a signed payload that anyone can verify without asking either party. Not a review. Not a testimonial. A proof.
+Each relationship is bilateral. The advertiser claims it; the counterparty confirms it. The confirmation is cryptographic: a signed payload anyone can verify without asking either party.
 
-The mechanism doesn't need a blockchain. It needs what email already has: signed declarations that third parties can verify. DKIM proves a mail server sent a message. The same pattern proves Stripe processed a merchant's payments. An OAuth-like handshake where both parties confirm the relationship, producing a signed artifact that anyone can scrape and verify.
+This runs on signed declarations, not a blockchain. DKIM proves a mail server sent a message. The same pattern proves Stripe processed a merchant's payments. Both parties confirm the relationship through an OAuth-like handshake, producing a signed artifact anyone can scrape and verify.
+
+Why would Stripe participate? Because [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
+
+The declarations are coarse by design. "This merchant has processed payments for three years," not the transaction log. "This customer attests to the relationship," not the invoice. Enough to verify topology, not enough to reconstruct private activity.
 
 ## The exchange layer
 
-Ad exchanges scrape and index the trust declarations. The exchange doesn't evaluate trust. It aggregates. The trust graph is a public data structure: nodes are businesses, edges are attested relationships, edge weights are the strength of the signal (duration, volume, consistency).
+Ad exchanges scrape and index the trust declarations into a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
-The exchange sees: this advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements, and semantic consistency between their declared [market position](/market-position-json) and their public footprint. The exchange doesn't decide whether that's enough. It exposes the data.
+One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements, semantic consistency between their declared [market position](/market-position-json) and their public footprint. Another has a week-old domain and a self-reported Shopify rating. The exchange exposes both. Curators decide what qualifies.
 
 ## The curation layer
 
-Curators interpret the graph. A curator is an independent party that publishes an allowlist — a set of advertisers that meet the curator's trust criteria. Different curators, different standards:
+Curators interpret the graph. A curator is an independent party that publishes an allowlist: a set of advertisers that meet the curator's trust criteria. Different curators, different standards:
 
 - A conservative health curator might require: licensed practitioner + clean payment history + minimum 20 patient attestations
 - A general commerce curator might require: 6 months payment history + business registration + semantic consistency
 - A community curator might require: 3 mutual endorsements from other businesses in the same locality
 
-Curators stake their reputation on their lists. A curator whose allowlist lets through scammers loses subscribers. A curator whose allowlist is too restrictive loses relevance. The competition between curators produces trust standards the same way competition between credit rating agencies produces credit standards — imperfectly, but better than a monopoly.
+Curators stake their reputation on their lists. A curator whose allowlist lets through scammers loses subscribers. A curator whose allowlist is too restrictive loses relevance. The competition between curators produces trust standards, imperfectly, but better than a monopoly. The design inverts credit rating agencies: curators are paid by subscribers (publishers), not by the entities they evaluate. The incentive points toward accuracy, not accommodation.
 
-No single curator has veto power. No single curator is required. The curation layer is a market.
+The curation layer is a market.
 
 ## The publisher layer
 
@@ -61,19 +67,7 @@ Union the allowlists. Subtract the denylists. What remains is the set of adverti
 
 A health vibelogger subscribes to a strict health curator and a local business curator. A general tech blogger subscribes to a general commerce curator. Each publisher takes responsibility for what their audience sees. The trust policy is as public as the content.
 
-This is how email works. Mail servers subscribe to blocklists (Spamhaus, Barracuda, SpamCop). Each server chooses which lists to trust. No single list controls the ecosystem. The competitive pressure between lists keeps them honest. Twenty years of email infrastructure proves the pattern scales.
-
-## The topology is the credential
-
-The trust graph doesn't score businesses. It exposes their topology. A business with deep, reciprocal, long-standing relationships occupies a different position in the graph than a business with thin, one-directional, recent claims.
-
-Healthy relationships? Trustworthy. Sketchy relationships? Caution. No authority makes the call. The shape speaks.
-
-The cost of faking a rich trust topology approaches the cost of actually being trustworthy. You need real payment processing, real customers willing to attest, real vendors willing to reciprocate, real platform history. You can't forge the graph without forging the relationships, and forging the relationships IS being a real business.
-
-This is proof of trust. Not social credit — no authority assigns the score. Not reputation — no platform owns the data. A verifiable, decentralized, composable trust graph where the topology is the credential and the cost of deception approaches the cost of legitimacy.
-
-New businesses aren't excluded. They start with fewer attestations, qualify for fewer curators' allowlists, and earn their way in. New domains start in the spam folder. New advertisers start in the conservative tier. The path from zero to trusted is open. It just takes time and real relationships. That's the point.
+Email's curation layer works the same way. Mail servers subscribe to blocklists (Spamhaus, Barracuda, SpamCop). Each server chooses which lists to trust. No single list controls the ecosystem. The competitive pressure between lists keeps them honest. Twenty years of decentralized policy composition suggests the pattern scales. Imperfectly, with concentration and false positives, but better than any centralized alternative.
 
 ## The stack
 
@@ -85,17 +79,29 @@ New businesses aren't excluded. They start with fewer attestations, qualify for 
 | Publisher | Composes trust policy from curators | Mail server spam policy |
 | Audience | Sees filtered, trust-scored results | Inbox |
 
-Five layers. No single point of control. Each layer is competitive, replaceable, and independently auditable. The protocol is open. Trust is layered on top.
+Five layers. No single point of control. The protocol is open.
+
+## The topology is the credential
+
+The trust graph exposes topology. A business with deep, reciprocal, long-standing relationships occupies a different position in the graph than a business with thin, one-directional, recent claims. The shape speaks.
+
+Faking a rich trust topology gets expensive when the counterparties issuing attestations are themselves costly to compromise. A scammer can buy an old domain. Buying three years of clean Stripe processing, 47 customers willing to sign attestations, and two vendors willing to reciprocate is a different proposition. The graph is only as strong as the weakest attestor, which is why curation matters: curators decide which attestation types they require and which they discount.
+
+You can't forge the graph without forging the relationships. But you can outspend it. A well-funded actor with real relationships can try to dominate legitimately. That's what federation solves. No single curator's allowlist is the index.
+
+New businesses start with fewer attestations, qualify for fewer curators' allowlists, and earn their way in. New domains start in the spam folder. New advertisers start in the conservative tier. The path from zero to trusted is open. It just takes time and real relationships. That's the point.
 
 ## Every node is all three
 
-When [firm size collapses to one](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x), every person is advertiser, publisher, and consumer simultaneously. The same node in the trust graph. Your vibelog is your résumé. Your ad is your business card. Your trust topology is your credential.
+Everything above assumes distinct advertisers, publishers, and audiences. As [transaction costs drop toward zero](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x), those roles converge. Every person is advertiser, publisher, and consumer simultaneously. The same node in the trust graph. Your vibelog is your résumé. Your ad is your business card. Your topology is your credential.
 
-The roles aren't firewalled. They share a reputation. Burn trust as an advertiser — revoked attestation, thinning topology — and your publishing credibility drops too. The graph doesn't know which hat you were wearing when you defaulted. It just sees a weaker node.
+The roles share a reputation. Burn trust as an advertiser (revoked attestation, thinning topology) and your publishing credibility drops too. The graph doesn't know which hat you were wearing when you defaulted. It just sees a weaker node.
 
 Defaulting is a topological reset. Not punishment — geometry. Your edges thin. Your ads rank lower. Your publishing reaches fewer people. The path back is the same as the path in: earn real relationships, accumulate real attestations, rebuild one edge at a time. New domains start in the spam folder. Reset nodes start there too.
 
-This is the enforcement mechanism. No court, no regulator, no gatekeeper. The cost of defection is losing your place in the graph. And your place in the graph is your livelihood across all three roles. The topology self-enforces because the cost of burning edges exceeds the benefit of any single default.
+The cost of defection is losing your place in the graph, across all three roles. The topology self-corrects: burning edges tends to cost more than any single default is worth.
+
+The plumber's signals finally talk to each other.
 
 ---
 

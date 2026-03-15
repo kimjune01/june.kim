@@ -8,13 +8,15 @@ tags: cognition
 
 ### Claim
 
-The six steps are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six steps from temporal flow and bounded storage: two phase boundaries by existence proof, four internal steps by corollary. The derivation narrows the space; twenty-four domains fill it. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
+The six steps are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six steps from temporal flow and bounded storage: three steps by existence proof at the boundaries, three more by corollary. The derivation narrows the space; domains across disciplines fill it. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
 
 ### Category
 
 Objects are measurable spaces (information states). Morphisms are Markov kernels (stochastic maps). This is the Kleisli category of the Giry monad, the category **Stoch** ([Fritz 2020](https://arxiv.org/abs/1908.07021)).
 
-The Giry monad G is the endofunctor. It maps measurable spaces to spaces of probability distributions. η (unit) is the Dirac delta: a deterministic state is a special case of a probabilistic one. μ (join) is integration: averaging over uncertainty about uncertainty yields uncertainty. The six steps compose as morphisms inside this monad. The individual steps don't need to be endofunctors. They need to be structure-preserving morphisms.
+The Giry monad G is the endofunctor. It maps measurable spaces to spaces of probability distributions. η (unit) is the Dirac delta: a deterministic state is a special case of a probabilistic one. μ (join) is integration: averaging over uncertainty about uncertainty yields uncertainty.
+
+The six steps compose as morphisms inside this monad. The individual steps don't need to be endofunctors. They need to be structure-preserving morphisms.
 
 ### Contracts
 
@@ -35,7 +37,9 @@ Not all morphisms are equal. Each step in the pipeline carries a postcondition, 
 <img src="/assets/handshake-pipeline.svg" alt="Six-step pipeline: Perceive → Cache → Filter → Attend → Consolidate → Remember, with interface types at each handshake point and a feedback trace from Remember to Perceive." style="width:100%; display:block;">
 </div>
 
-A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream. Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
+A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream.
+
+Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
 Three claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now.
@@ -54,13 +58,15 @@ The typed interfaces force the order. Roles with typed interfaces in a fixed ord
 
 ### Data processing inequality
 
-The constraint: for a Markov chain X → Y → Z, mutual information satisfies I(X;Z) ≤ I(X;Y). Each intermediate step can only decrease what downstream knows about the original input. The pipeline is a cascade of such maps. The lossy steps (Filter, Attend, Consolidate) each reduce what the output retains about the raw input. Cache and Remember can be lossless; the pipeline's net loss comes from the competitive core.
+The order is fixed. The question is whether the ordered pipeline survives iteration. The constraint: for a Markov chain X → Y → Z, mutual information satisfies I(X;Z) ≤ I(X;Y). Each intermediate step can only decrease what downstream knows about the original input. The pipeline is a cascade of such maps.
+
+The lossy steps (Filter, Attend, Consolidate) each reduce what the output retains about the raw input. Cache and Remember can be lossless; the pipeline's net loss comes from the competitive core.
 
 <div style="max-width:875px; margin:1.5em auto;">
 <img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each step. Perceive and Cache are lossless (blue), Filter, Attend, and Consolidate are lossy (red), Remember is lossless (blue)." style="width:100%; display:block;">
 </div>
 
-The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. This is the intuition behind "endomorphisms die": not a free theorem from DPI, but the named constraint that makes the budget visible.
+The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies. That is the named constraint that makes the budget visible.
 
 A step that fails its contract leaks information faster than Perceive can replenish it. This deficit compounds; the loop degrades. A step that preserves its contract retains signal through each pass. The budget balances; the loop survives.
 
@@ -72,9 +78,13 @@ Rate-distortion theory provides the analogy: each morphism has a distortion cost
 
 ### Biased competition is a morphism
 
-[Desimone & Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) described biased competition: stimuli compete for neural representation, top-down bias resolves the competition. [The Natural Framework](/the-natural-framework) derives the same separation: control must be independent of data (Corollary 2), stored separately (Corollary 3), and applied through a read interface (Attend). Desimone & Duncan observed it in neurons. The derivation shows it must exist in any bounded selective system. The formalization came later, piecewise. [Reynolds & Heeger (2009)](https://doi.org/10.1016/j.neuron.2009.01.002) gave a normalization model, [Boerlin & Bhatt (2011)](https://arxiv.org/abs/1108.1277) gave a spike-coding model. Nobody placed biased competition inside a category.
+The budget gets spent in the competitive core: Filter, Attend, Consolidate. The mechanism inside that core has a name. [Desimone & Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) described biased competition: stimuli compete for neural representation, top-down bias resolves the competition. [The Natural Framework](/the-natural-framework) derives the same separation: control must be independent of data (Corollary 2), stored separately (Corollary 3), and applied through a read interface (Attend). Desimone & Duncan observed it in neurons. The derivation shows it must exist in any bounded selective system.
 
-Filter and Attend are the morphisms that implement biased competition. Filter suppresses losers (guarantee: output strictly smaller). Attend ranks survivors with lateral inhibition (guarantee: winners are dissimilar). One candidate model for the diversity guarantee is the [Determinantal Point Process](https://arxiv.org/abs/1207.6083), a probability distribution over subsets that assigns higher weight to diverse selections. DPPs are well-defined probability measures on subsets. The proposed formalization: define Filter → Attend as a Markov kernel whose output distribution is a DPP over the selected subset. The DPP handles diversity. Ordering and boundedness are additional structure.
+The formalization came later, piecewise. [Reynolds & Heeger (2009)](https://doi.org/10.1016/j.neuron.2009.01.002) gave a normalization model, [Boerlin & Bhatt (2011)](https://arxiv.org/abs/1108.1277) gave a spike-coding model. Nobody placed biased competition inside a category.
+
+Filter and Attend are the morphisms that implement biased competition. Filter suppresses losers (guarantee: output strictly smaller). Attend ranks survivors with lateral inhibition (guarantee: winners are dissimilar). One candidate model for the diversity guarantee is the [Determinantal Point Process](https://arxiv.org/abs/1207.6083), a probability distribution over subsets that assigns higher weight to diverse selections. DPPs are well-defined probability measures on subsets.
+
+The proposed formalization: define Filter → Attend as a Markov kernel whose output distribution is a DPP over the selected subset. The DPP handles diversity. Ordering and boundedness are additional structure.
 
 Three directions:
 1. **Biased competition as categorical morphism.** Formalize Desimone & Duncan's mechanism as a Markov kernel inside Stoch. Define the kernel, the output space, the conditioning variables.
@@ -83,10 +93,13 @@ Three directions:
 
 ### Trace
 
-Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Remember → Perceive) has the structure of a categorical trace: output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch. 
-In the simpler view: ignore the environment boundary, and the six-step composition is an endomorphism in Stoch, a Markov chain on information states. But bare Markov chains never worked for cognition: n-grams plateau, PageRank has no taste. What was missing is attention: a diversity-enforcing morphism that selects and repels. Whether the iterated chain converges, cycles, or diverges depends on conditions (irreducibility, aperiodicity, contractivity) that must be verified per domain. These are the right questions.
+Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Remember → Perceive) has the structure of a categorical trace: output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
 
-Cogito ergo sum: a closed loop with zero new input. A lossy endomorphism iterated without fresh bits from the environment compounds information loss per cycle. The man in the box goes insane, then dies. It illustrates the framework by failing: the loop structure is intact but the budget is negative.
+In the simpler view: ignore the environment boundary, and the six-step composition is a self-map in Stoch, a Markov chain on information states. But bare Markov chains never worked for cognition: n-grams plateau, PageRank has no taste.
+
+What was missing is attention: a diversity-enforcing morphism that selects and repels. Whether the iterated chain converges, cycles, or diverges depends on conditions (irreducibility, aperiodicity, contractivity) that must be verified per domain. These are the right questions.
+
+Cogito ergo sum: a closed loop with zero new input. A lossy self-map iterated without fresh bits from the environment compounds information loss per cycle. The man in the box goes insane, then dies. It illustrates the framework by failing: the loop structure is intact but the budget is negative.
 
 ### Falsification test
 
@@ -114,7 +127,7 @@ The information budget constrains all three: the budget must balance, the credit
 
 ### Type check
 
-Eilenberg & Mac Lane (1945): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six morphisms with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
+The death conditions apply within a single domain. The next question is whether the structure translates across domains. Eilenberg & Mac Lane (1945): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six morphisms with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
 
 Prior art:
 - Phillips & Wilson (2010) — categorical cognition, representations not flow
@@ -131,27 +144,37 @@ The gap we see: the sequential processing pipeline as morphisms in a Markov cate
 
 Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics (Giry 1982).
 
-The six steps are morphisms inside the Giry monad's Kleisli category. The composition argument is by induction. Base case: one cycle. Six contract-preserving morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them, because contract preservation is a property of each morphism, not of the cycle count. The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The induction shows that if they compose once, they compose forever. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
+The six steps are morphisms inside the Giry monad's Kleisli category. The composition argument is by induction. Base case: one cycle. Six contract-preserving morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input.
+
+Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them, because contract preservation is a property of each morphism, not of the cycle count. The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The induction shows that if they compose once, they compose forever. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
 
 ### Objections
 
 **"These are just state transformers, not categorical morphisms."**
-State transformers with no contract are arbitrary self-maps. The distinction between a morphism that preserves postconditions and one that doesn't is the distinction between a loop that lives and one that dies. Stoch provides the ambient category: measurable spaces and Markov kernels. The contracts (parseable, retrievable, diverse, etc.) are semantic predicates imposed on top, not structure that Stoch itself encodes. Formalizing them requires further refinement: a subcategory, a fibration, or a logical relation. The vocabulary is precise enough to diagnose. The existence proofs and induction proof are complete. Formalizing the contracts as categorical structure is the remaining work.
+State transformers with no contract are arbitrary self-maps. The distinction between a morphism that preserves postconditions and one that doesn't is the distinction between a loop that lives and one that dies.
+
+Stoch provides the ambient category: measurable spaces and Markov kernels. The contracts (parseable, retrievable, diverse, etc.) are semantic predicates imposed on top, not structure that Stoch itself encodes. Formalizing them requires further refinement: a subcategory, a fibration, or a logical relation. The vocabulary is precise enough to diagnose. The existence proofs and induction proof are complete. Formalizing the contracts as categorical structure is the remaining work.
 
 **"Survival does not prove the monad laws."**
 Correct. The monad laws hold for the Giry monad independently (Giry 1982). Survival is evidence that the six steps compose well within the monad: the information budget balances. The monad is the container; the steps are the contents.
 
 **"The biology/society examples are cherry-picked."**
-The framework predicts: a singly recursive loop with a broken step is more likely to compound than self-correct, because the broken postcondition feeds a broken precondition on the next cycle. Every historical failure is multi-causal. The prediction is falsifiable: find a singly recursive loop where a broken contract self-corrects without external repair. The theory was induced from a decade of [reflecting](/reflecting) posts: observations about teams, organizations, and systems that broke the same way. The math came after, not before.
+The framework predicts: a singly recursive loop with a broken step is more likely to compound than self-correct, because the broken postcondition feeds a broken precondition on the next cycle.
+
+Every historical failure is multi-causal. The prediction is falsifiable: find a singly recursive loop where a broken contract self-corrects without external repair. The theory was induced from a decade of [reflecting](/reflecting) posts: observations about teams, organizations, and systems that broke the same way. The math came after, not before.
 
 **"Real systems persist first, then compact later. Logs, databases, brains."**
-Those systems are stacked pipes operating on different types. A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
+Those systems are stacked pipes operating on different types.
+
+A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
 
 **"Consolidate is lossy; Remember is lossless. But persistence is never truly lossless."**
 Lossless means lossless relative to the compressed representation. Consolidate changes the representation (lossy). Remember persists whatever Consolidate outputs without further transformation (lossless relative to its input). The contract is not "perfect fidelity." The contract is "no additional loss at this step."
 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
+
+Every interface in the pipeline is a handshake. The postcondition of one step is the precondition of the next. What remains is to fill the slots.
 
 *Continued in [The Parts Bin](/the-parts-bin).*
 

@@ -8,23 +8,31 @@ tags: cognition
 
 ### Near-misses
 
-[The Handshake](/the-handshake) defines six contracts — each step has a precondition and a postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
+[The Natural Framework](/the-natural-framework) derives six steps from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
 
-PageRank is the first specimen. Its postcondition says "ranked by authority" but the Attend contract requires diversity and a bound. It made a lot of money regardless. A broken step doesn't kill instantly; it compounds. Google bolted on re-ranking, topic diversity, and freshness signals over two decades: incremental upgrades toward a contract-preserving morphism, one patch at a time.
+PageRank is the first specimen. Its postcondition says "ranked by authority" but the Attend contract requires diversity and a bound. It made a lot of money regardless. A broken step doesn't kill instantly; it compounds.
 
-Quicksort is the second specimen. It satisfies order — the most visible guarantee. But the Attend contract also requires diversity (survivors are dissimilar) and boundedness (output is finite top-k, not a total order). Quicksort is the default because order is the only guarantee most systems measure.
+Google bolted on re-ranking, topic diversity, and freshness signals over two decades: incremental upgrades toward a contract-preserving morphism, one patch at a time.
+
+Quicksort is the second specimen. It satisfies order, the most visible guarantee. But the Attend contract also requires diversity (survivors are dissimilar) and boundedness (output is finite top-k, not a total order). Quicksort is the default because order is the only guarantee most systems measure.
 
 Most familiar algorithms are near-misses. They satisfy some guarantees but not all. Noticing which guarantee is missing. That's the diagnostic power.
 
+Degenerate cases are the other edge. A chatbot has no policy store: nil Filter, nil Attend, nil Consolidate, nil Remember. Token in, token out, same rate. That is passthrough, predicted by the [existence proofs](/the-natural-framework#six-steps) when policy is zero.
+
+Union-find has no selection: every element is kept, partitions only merge, the structure grows monotonically. No competitive core, no lossy step, no compression. Both are useful. Neither learns.
+
 ### Diagnostic resolution
 
-The monad is the container — it doesn't break. What breaks is a morphism's postcondition. What cascades is the composition. Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition is a correct algorithm that produces garbage.
+The monad is the container — it doesn't break. What breaks is a morphism's postcondition. What cascades is the composition. The contracts are not arbitrary: the derivation forces roles of this shape, and the [induction proof](/the-handshake#hard-question-answered) shows they compose forever if they compose once.
+
+Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition is a correct algorithm that produces garbage.
 
 Governance operates at zero resolution. It can't see the interface, so it replaces the whole composition: fire everyone, rewrite from scratch, new system. Expensive. The framework increases resolution: instead of "the system is broken," the diagnosis is "Attend's diversity guarantee is missing." The parts bin increases it further: instead of "Attend is broken," the prescription is "this is a top-k sort where you need MMR re-ranking." Swap one operation, same slot, contract restored.
 
 The most efficient fix requires the most precise name. The most feared enemy is one who cannot be named. The handshake is a naming system.
 
-[Diagnosis LLM](/diagnosis-llm) took a couple of hours. Three layers, six steps each, SOAP notes with six-component plans. That precision came from the framework — not domain expertise in ML. Before germ theory: "the patient has bad air." After: "*streptococcus*, here's penicillin." The framework is the microscope. The handshake is why the microscope works.
+[Diagnosis LLM](/diagnosis-llm) took a couple of hours. Three layers, six steps each, SOAP notes with six-component plans. That precision came from the framework, not domain expertise in ML. Before germ theory: "the patient has bad air." After: "*streptococcus*, here's penicillin." The framework is the microscope. The handshake is why the microscope works.
 
 ### Agent
 
@@ -38,11 +46,11 @@ The framework is the diagnostic manual. The parts bin, once ordered, is the phar
 
 **Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. If not, it flags the interface mismatch before you build it.
 
-The doctor doesn't need to understand category theory. They need to read the contracts — precondition, postcondition, fidelity. The handshake is the pharmacology. The taxonomy is the PDR. The agent is the resident who can look things up fast.
+The doctor doesn't need to understand category theory. They need to read the contracts: precondition, postcondition, fidelity. The handshake is the pharmacology. The taxonomy is the PDR. The agent is the resident who can look things up fast.
 
 ### Catalog
 
-The full catalog follows. Each entry is an operation — input in, output out — not a data structure. If the precondition and postcondition match the contract, the operation fits the slot. Filter decides per-item admissibility: does this item pass the criterion? Attend decides how admitted items relate to each other: order, diversity, and bound are slate-level properties.
+The full catalog follows. Each entry is an operation: input in, output out. If the precondition and postcondition match the contract, the operation fits the slot. Filter decides per-item admissibility: does this item pass the criterion? Attend decides how admitted items relate to each other: order, diversity, and bound are slate-level properties.
 
 **Perceive** (raw → encoded) — the column every system gets right, because nothing else works until it does.
 
@@ -65,7 +73,7 @@ The full catalog follows. Each entry is an operation — input in, output out �
 | LSM-tree flush | Sorted runs in memory | Persistent key-value index, retrievable after compaction |
 | Skip-list indexing | Ordered entries | Probabilistic index, O(log n) retrieval |
 
-**Filter** (indexed → selected, strictly smaller) — the column where most systems use exact predicates and nothing else.
+**Filter** (indexed → selected, strictly smaller) — gates the data store, where most systems use exact predicates. The [derivation](/the-natural-framework#six-steps) proves a gate must exist whenever outputs are a proper subset of inputs.
 
 | Operation | Precondition | Postcondition |
 |---|---|---|
@@ -76,7 +84,7 @@ The full catalog follows. Each entry is an operation — input in, output out �
 | k-NN radius pruning | Metric index + query + radius r | Subset within radius, strictly smaller |
 | Pareto filtering | Candidates with objective vectors | Non-dominated subset, strictly smaller |
 
-**Attend** (selected → ranked, diverse, bounded) — the column CS almost never fills correctly. Most ranking algorithms satisfy order but miss diversity and bound.
+**Attend** (selected → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
 
 | Operation | Precondition | Postcondition |
 |---|---|---|
@@ -87,11 +95,13 @@ The full catalog follows. Each entry is an operation — input in, output out �
 | Diversified beam search | Stepwise expansions + diversity penalty | Top-b retained, non-redundant alternatives, bounded |
 
 Near-misses (diagnostic counterexamples):
-- *Quicksort / Mergesort*: order only — no diversity, no bound.
-- *Top-k selection*: bounded — but no diversity.
-- *PageRank*: ranking — but no diversity, no bound.
+- *Quicksort / Mergesort*: order only. No diversity, no bound.
+- *Top-k selection*: bounded, no diversity.
+- *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (ranked → compressed, changes future processing) — [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
+**Consolidate** (ranked → compressed, changes future processing) — the write interface to the policy store. Compaction reorganizes a cache; consolidation changes how the system processes the next cycle.
+
+[I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
 | Operation | Precondition | Postcondition |
 |---|---|---|
@@ -102,7 +112,9 @@ Near-misses (diagnostic counterexamples):
 | Decision tree induction | Ranked labeled examples | Compact rule set, future classification altered |
 | Prototype condensation | Ranked candidates + compression budget | Small exemplar set, lossy approximation for future matching |
 
-**Remember** (compressed → persisted) — the strongest column. The discipline is to list write operations, not storage systems.
+**Remember** (compressed → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+
+If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline is to list write operations, not storage systems.
 
 | Operation | Precondition | Postcondition |
 |---|---|---|
@@ -115,9 +127,9 @@ Near-misses (diagnostic counterexamples):
 
 ### Grid
 
-The catalog is a list. A list lets you browse. Browsing doesn't scale — you need an index. The index needs axes.
+The catalog is a list. A list lets you browse. Browsing doesn't scale. You need an index. The index needs axes.
 
-Take **Filter**. Lay operations on two axes — selection semantics vs. error guarantee:
+Take **Filter**. Two axes, selection semantics vs. error guarantee:
 
 |  | Exact | Bounded approximation | Probabilistic |
 |---|---|---|---|
@@ -135,13 +147,15 @@ Take **Attend**. Lay operations on output form vs. redundancy control:
 | **Single best** | argmax | Tournament selection | *?* |
 | **Path/tree** | Dijkstra, A* | MCTS | *?* |
 
-The right column is sparse. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after. The gap predicts: concurrent stochastic tree search. Spawn threads with different random seeds; stochasticity encourages divergence. Budget kills at deadline; the final selection picks the best from a diverse pool. Portfolio SAT solvers do this. Biological evolution does this with mutation rate as the stochastic dial.
+The right column is sparse. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after.
+
+The gap predicts: concurrent stochastic tree search. Spawn threads with different random seeds; stochasticity encourages divergence. Budget kills at deadline; the final selection picks the best from a diverse pool. Portfolio SAT solvers do this. Biological evolution does this with mutation rate as the stochastic dial.
 
 The grid narrows the search space enough that a dart throw produces a plausible candidate. Mendeleev didn't synthesize germanium. He drew the grid, pointed at the gap, and said "something goes here with these properties."
 
 ### Future work
 
-The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum — ordered by guarantee strength, cost, determinism, scale. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
+The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum ordered by guarantee strength, cost, determinism, scale. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
 
 - **Order the parts bin.** Identify the minimal orthogonal dimensions (fidelity, cost, determinism, scale, reversibility) and order each column. Find the gaps. Predict the missing operations.
 - **Build the diagnostic agent.** Describe → Diagnose → Prescribe → Validate, backed by the ordered taxonomy.
@@ -149,6 +163,8 @@ The parts bin has order we haven't discovered yet. Within each column, operation
 - String diagrams: visualize the pipeline in Stoch using the Markov category graphical calculus ([Cho & Jacobs 2019](https://arxiv.org/abs/1709.00322))
 - Enrichment: track bits per step using Bradley's enriched category framework ([Bradley 2021](https://arxiv.org/abs/2106.07890))
 - Operads (Spivak 2013): extend from linear pipelines to fan-in/fan-out agent architectures
+
+Every gap in the bin is an *almost* that hasn't been named yet.
 
 ---
 
