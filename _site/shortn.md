@@ -1,0 +1,3 @@
+![shortn-app-icon](../../assets/shortn-app-icon.png)
+
+Download on [app store](https://apps.apple.com/us/app/shortn/id1593706800)

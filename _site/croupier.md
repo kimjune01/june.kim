@@ -1,0 +1,119 @@
+![Croupier](/assets/croupier.jpg)
+
+A [croupier](https://en.wikipedia.org/wiki/Croupier) handles cards, chips, and bets but never plays. They see the backs of the cards, not the fronts. They count what moves across the table without knowing what's in anyone's hand.
+
+That's the service. An exchange that moves sealed coupon books between advertisers and publishers, runs the [auction](/power-diagrams-ad-auctions), and counts what converts. It sees batch sizes, envelope counts, and conversion rates. It never sees coupon values, customer identities, or what anyone bought. The [cryptographic coupon protocol](/adtech-from-1887) exists. This is the infrastructure to run it.
+
+## What It Sees
+
+The exchange sees the backs of the cards: batch sizes, which publisher distributed which batch, how many coupons came back redeemed. It counts envelopes in both directions.
+
+It never sees the fronts: coupon values, offer terms, customer identities, what was purchased, or the advertiser's margin. [Blind signatures](https://en.wikipedia.org/wiki/Blind_signature) make coupon contents unreadable. No [TEE](https://en.wikipedia.org/wiki/Trusted_execution_environment) required. The protocol doesn't need to trust the exchange with data it never receives.
+
+## Bring Your Own Key
+
+Advertisers generate their own signing keys. The service never sees them.
+
+For convenience, the service can host an encrypted copy of the key. The advertiser encrypts it client-side before upload. When they return, they decrypt it in the browser. Like a safety deposit box: the bank stores it, the customer opens it.
+
+If the advertiser loses their key, the service can't help. A system that can recover your key can also impersonate you.
+
+## The Deal
+
+1. **Advertiser issues.** Deposits a batch of signed coupons for a campaign.
+2. **Exchange stamps.** Counter-signs the batch manifest — a hash of the sealed coupon book plus match metadata. The exchange never sees coupon values. It sees a sealed book and [stamps the envelope](https://www.rfc-editor.org/rfc/rfc5652#section-11.4). It builds a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) over the batch so each coupon can later prove it belongs.
+3. **Publisher pulls.** Fetches the book from the exchange. Embeds one coupon per impression in the ad tag, along with the batch signature and Merkle inclusion proof.
+4. **Customer carries.** The coupon rides with the ad. At conversion, the customer's device presents the coupon, the batch signature, and the inclusion proof.
+5. **Advertiser verifies.** Checks their own signature (authenticity), the exchange's batch signature (facilitation), and the Merkle proof (inclusion). Publisher A converts at 8%. Publisher B at 0.1%. The numbers are the advertiser's.
+
+The exchange touches steps 1-3 and never sees 4 or 5. The coupons are [blind-signed](/adtech-from-1887) — after the customer unblinds, the advertiser can verify the signature but can't link it back to which blinded token it was. The exchange built the Merkle tree from opaque blobs in its own ordering. Blind signatures handle unlinkability. The Merkle tree handles inclusion. Different layers, no conflict. Unclaimed coupons expire.
+
+## Dealt In
+
+The protocol fits into existing ad infrastructure without rearchitecting anything.
+
+**Publisher side:** a plugin that pulls coupon books from the relay and injects them into ad tags. The coupon is a signed blob in a query parameter, same shape as a UTM tag.
+
+**Advertiser side:** a snippet at the conversion endpoint that checks the signature. If valid, log the redemption. If not, discard.
+
+For platforms that use [AI assistants to serve ads](/skills-over-sdks), the coupon embeds in the ad payload the same way. The skill that serves the suggestion carries the coupon. The skill that handles the conversion verifies it.
+
+A UTM replacement that actually proves something.
+
+## Table Stakes
+
+The advertiser's keys and coupons are theirs. An advertiser and publisher who already trust each other can pass signed coupons directly, no relay needed. The croupier adds value when trust is missing: many-to-many matching, neutral counting, public ledger. If the exchange overcharges, the advertiser takes their keys to a competing exchange. [Switching cost](/transparency-is-irreversible) is near zero.
+
+The exchange earns its keep at many-to-many: running the [auction](/power-diagrams-ad-auctions) across hundreds of advertisers and publishers, aggregating [distance histograms](/set-it-and-forget-it), maintaining the [public ledger](#keeping-score), hosting both leaderboards. The batch signature is its claim to a cut. Every stamped batch is a metered facilitation event. The exchange retains customers by running better auctions, not by locking in data.
+
+## Two Leaderboards
+
+The exchange sees envelope counts in both directions: how many coupons each publisher distributed, how many each advertiser redeemed. It never sees what's inside, but it can count. That's enough to run two leaderboards.
+
+### Publisher leaderboard
+
+Publishers opt into a public leaderboard showing aggregated conversion rates by vertical. Publisher A converts at 6% for SaaS advertisers. Publisher B at 0.3%. The batch is the anonymity set.
+
+The [lemons](/receipts-please) become obvious. A niche podcast with 5,000 listeners that converts at 12% ranks above a content farm with 10 million pageviews at 0.01%. Advertisers browse before buying. Instead of trusting a media kit, they see verified conversion rates. Restaurant reviews, but for ad inventory.
+
+### Advertiser leaderboard
+
+The [auction](/power-diagrams-ad-auctions) allocates advertisers to publishers, but a publisher setting a high [τ threshold](/three-levers) filters out low-quality advertisers. A publisher whose slots fill with products nobody buys is wasting user trust.
+
+Advertisers opt into a leaderboard showing:
+
+- **Redemption rate** — what % of issued coupons convert? Low rate means the product or the landing page is the problem, not the publisher.
+- **Settlement reliability** — does the advertiser pay on verified redemption?
+- **Volume** — campaign size. A publisher wants advertisers with enough coupons to fill their inventory.
+
+All countable from envelopes. None of it requires seeing conversion value. The advertiser's margins stay opaque — the publisher sees that coupons convert, not what they're worth.
+
+The exchange runs both leaderboards because it sees batch counts from both sides. That's the matchmaker's real product: the signal that helps both sides find each other.
+
+## Keeping Score
+
+The leaderboards show conversion rates. A public ledger proves they're honest.
+
+Per-batch counts are independently verifiable. The advertiser knows how many coupons they signed and how many they redeemed. The exchange committed the batch size in the Merkle tree. But the aggregation could be opaque: the exchange combines batches across publishers and time windows using its own logic, and neither side can verify the weighting. That's a trust surface.
+
+The fix is a per-batch ledger. Not per-impression (that's a [scaling problem](/not-worth-the-squeeze): [CT](https://certificate.transparency.dev/) handles 10 billion certificates; programmatic does hundreds of billions of impressions). Per-batch. An advertiser running 10 batches a month across 5 publishers produces 50 ledger entries. Each entry: batch ID, Merkle root, batch size, redemption count at settlement. Conversion rate = redemptions / batch sizes over the last K entries, where K is published. Deterministic formula, public inputs, anyone can replay. The exchange can't fudge the numbers without contradicting the ledger.
+
+The croupier is blind at the relay layer. The ledger makes it transparent at the counting layer. Two incorruptibility mechanisms for two trust surfaces.
+
+This only works if it ships with the first exchange. [Transparency is irreversible](/transparency-is-irreversible): once users expect attestable counting, every competitor either matches it or explains why they won't. If the first exchange launches opaque, opacity becomes the norm. The ledger is a design choice and a land grab.
+
+## The Ante
+
+The [protocol exists](/adtech-from-1887). The [proof of concept](https://github.com/kimjune01/cryptographic-coupons) works in 250 lines of TypeScript. [Privacy Pass](https://www.rfc-editor.org/rfc/rfc9578.html) standardized the token format. [Blind signatures](https://en.wikipedia.org/wiki/Blind_signature) have been production-grade since Chaum's 1983 paper.
+
+The missing piece is the exchange. A service that makes it trivial to issue coupon books, match them to publishers, and count what converts. The [relay implementation](https://github.com/kimjune01/croupier) proves the core works: deposit books, pull books, count envelopes.
+
+Go to market is one advertiser and one publisher. The advertiser issues a coupon book. The publisher embeds it. Conversions get counted. If it works for one pair, it works for a thousand.
+
+The first customers are already visible. Everyone burned by cookie hijacking already understands why cryptographic attribution matters:
+
+| Who | What happened | Source |
+|---|---|---|
+| Linus Media Group | Ended Honey partnership after ~160 sponsored segments (194M views) once they discovered commission diversion | [Baron News](https://baronnews.com/2025/01/22/honey-faces-class-action-lawsuit-allegedly-steals-revenue-from-content-creators/) |
+| 146,000 stores | Appeared on Honey's database without consent or affiliate agreements | [EcomScout](https://ecomscout.com/reports/paypal-honey-dataset) |
+| Class action plaintiffs | Three firms including LegalEagle's, representing creators and affiliate marketers | [Cohen Milstein](https://www.cohenmilstein.com/case-study/in-re-paypal-honey-browser-extension-litigation/) |
+| Affiliate industry | Digiday called the scandal a "wake-up call" for cookie-based attribution | [Digiday](https://digiday.com/marketing/the-honey-scandal-is-a-wake-up-call-for-the-creator-industrys-affiliate-partnerships/) |
+
+These people felt the hijack. They're looking for proof that can't be overwritten.
+
+The infrastructure to run a croupier already exists inside companies that have reasons to:
+
+| Who | Why | What they already have |
+|---|---|---|
+| [Block](https://block.xyz/) (Jack Dorsey) | Open protocol pattern: Bluesky for social, TBD for finance. Square serves millions of SMBs who can't verify ad spend. | Payment rails that see the conversion event |
+| [Brave](https://brave.com/brave-ads/) | Ships [Privacy Pass tokens](https://github.com/brave/brave-browser/wiki/Security-and-privacy-model-for-ad-confirmations) for anonymous ad confirmations. Brendan Eich has been vocal about fixing attribution. | A privacy-first ad network with blind signatures in production |
+| [Shopify](https://www.shopify.com/audiences) | 4M+ merchants spending on ads they can't verify. | The conversion endpoint (checkout) where coupons get redeemed |
+| [Cloudflare](https://blog.cloudflare.com/privacy-pass-standard/) | Runs Privacy Pass infrastructure at scale. A relay company by nature. | Global edge network built for passing things blindly |
+
+Anyone can run a croupier.
+
+The croupier sees the backs of the cards. That's enough to run a fair game.
+
+---
+
+*Part of the [Vector Space](/vector-space) series.*

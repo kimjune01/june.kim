@@ -1,0 +1,4 @@
+![anotato-icon](assets/anotato-icon.png)
+
+Download on [app store](https://apps.apple.com/us/app/anotato/id1599661299)
+

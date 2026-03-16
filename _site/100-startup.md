@@ -1,0 +1,5 @@
+![100 startup](/assets/100-startup.jpg)
+
+[Book](http://www.amazon.com/The-100-Startup-Reinvent-Living-ebook/dp/B0067TGSOK)
+
+[PDF](http://www.pdf-archive.com/2014/01/27/100-startup-pdf/100-startup-pdf.pdf)

@@ -1,0 +1,77 @@
+![Adtech from 1887](/assets/adtech-from-1887.jpg)
+
+In 1887, [Asa Candler](https://en.wikipedia.org/wiki/Asa_Griggs_Candler) started [printing coupons](https://www.history.com/articles/coupons-united-states-great-depression) for free glasses of Coca-Cola in newspapers and magazines. Customers tore them out, walked to the pharmacy, and handed them over. Coca-Cola counted which publications drove redemptions. They built ad attribution.
+
+My mom did the same thing when I was a kid. She taught a class, and when kids did well, she handed them numbered coupons for the corner store. No cash changing hands. She counted the coupons at the end of each day and topped up her deposit. Issuance, redemption, settlement.
+
+## Digital Broke It
+
+Online advertising replaced the coupon with the cookie. Instead of the customer carrying proof, a server writes a tracking identifier into the browser. The publisher reports impressions, the exchange reports clicks, and the advertiser's pixel fires on the conversion page. Three systems, each reporting its own numbers, each with the incentive to inflate.
+
+And cookies can be overwritten. PayPal's Honey extension [did exactly this](https://fortune.com/2024/12/23/honey-extension-scam-drama/): at checkout, Honey silently overwrites the affiliate's cookie with its own. The creator drove the sale; Honey took the commission. Whoever touches the cookie last gets paid.
+
+A physical coupon can't be hijacked at the register, but a cookie can. The medium lost its anti-fraud property.
+
+## The Cost of Not Knowing
+
+The publisher claims a thousand impressions. The advertiser can't verify how many were real. So the contract stays crude: CPM, pay per thousand, skip the audit. CPC, pay per click, regardless of whether the click was real. The advertiser pays a fixed rate because verifying the actual outcome costs too much.
+
+Robert Townsend called this [costly state verification](https://en.wikipedia.org/wiki/Costly_state_verification). When one party can't cheaply check what the other claims, contracts look like debt: fixed payment, no audit. What if verification becomes cheap? The advertiser opts for the verifiable metric and starts paying per conversion, because they can finally prove it.
+
+## Bring Back the Coupon
+
+But what if the coupons were cryptographically signed?
+
+The advertiser signs a batch of numbered coupons and hands them to the publisher. The publisher places one in each ad. The customer claims it. At conversion, the customer presents the coupon and the advertiser verifies the signature. Publisher A converts at 8%, Publisher B at 0.1%. Count the redemptions.
+
+| | Coupon (1887) | Cryptographic coupon |
+|---|---|---|
+| Issued by | Advertiser | Advertiser |
+| Distributed through | Publisher's medium | Publisher's ad slot |
+| Carried by | Customer | Customer's device |
+| Redeemed at | Point of sale | Conversion event |
+| Anti-forgery | Physical printing | Cryptographic signature |
+
+The direction matters. A tracking pixel flows from publisher to advertiser: "trust us, they saw it." A coupon flows from advertiser through publisher to customer: "here's my signed offer, bring it back." The advertiser is the issuer, the customer is the bearer, and the publisher is the channel. Same roles as 1887.
+
+The coupon is a bearer instrument. Whoever holds it redeems it. The coupon itself is the join between the impression and the conversion. Unclaimed coupons cost nothing.
+
+This is public-key cryptography. A signed message that proves who issued it.
+
+## Privacy by Math
+
+Physical coupons were all-or-nothing. The pharmacist saw the coupon, the customer, and the redemption. Tracking pixels are all-or-nothing the other way: the server sees everything. Cryptographic coupons are neither.
+
+Selective disclosure lets each party see only what they need:
+
+- **The publisher** verifies "this is a real offer from a real advertiser" without seeing the offer value.
+- **The advertiser** verifies "this was redeemed via Publisher A" without identifying the customer.
+- **The customer** claims a discount without exposing which publisher they came from.
+
+The batch is the anonymity set. The advertiser signs a thousand coupons and hands them to a publisher. Eighty come back redeemed. The channel converted at 8%, and the advertiser can't tell which individual redeemed which coupon. Privacy enforced by the math, not by a policy that the enforcer can waive.
+
+## The Pieces Already Exist
+
+[David Chaum](https://en.wikipedia.org/wiki/David_Chaum) invented [blind signatures](https://en.wikipedia.org/wiki/Blind_signature) in 1983: a way to sign a token so the issuer can't link it to the redemption event. [DigiCash](https://en.wikipedia.org/wiki/DigiCash) built digital cash on this, but it was never applied to advertising.
+
+Since then, the IETF standardized [Privacy Pass](https://www.rfc-editor.org/rfc/rfc9578.html) (RFC 9578) for issuing and redeeming anonymous tokens. Apple uses blind signatures for [Private Click Measurement](https://webkit.org/blog/11940/pcm-click-fraud-prevention-and-attribution-sent-to-advertiser/) in Safari, and Brave uses [Privacy Pass tokens](https://github.com/brave/brave-browser/wiki/Security-and-privacy-model-for-ad-confirmations) for anonymous ad confirmations. Academic researchers designed [privacy-preserving e-coupon protocols](https://link.springer.com/article/10.1023/B:ELEC.0000045976.24984.48) with selective disclosure as early as 2002.
+
+Every building block exists, but nobody has assembled them into an advertiser-issued cryptographic coupon that flows through a channel, is carried by the customer, and provides attribution with selective disclosure at redemption. The cryptographers who could build it don't work in adtech, and the adtech people who need it don't know these primitives exist. A [proof-of-concept](https://github.com/kimjune01/cryptographic-coupons) shows it works in about 250 lines of TypeScript.
+
+## What Shifts
+
+Whoever controls measurement controls the market. Oliver Hart's [incomplete contracts theory](https://scholar.harvard.edu/hart) explains why: whoever holds the measurement asset holds the residual power. Google owns the pixel, the attribution model, and the dashboard. Google decides.
+
+Cheap verification redistributes that power. The advertiser holds their own coupons. The publisher proves their inventory converts with [verified redemptions](/croupier#keeping-score). Yoram Barzel [showed](https://chicagounbound.uchicago.edu/jle/vol25/iss1/3/) that markets reorganize around whoever can measure quality at lowest cost. When the advertiser becomes that measurer, the middleman loses the rent. The [receipts](/receipts-please) finally exist.
+
+In practice, generating signing keys and deploying a verification snippet is setup that only sophisticated advertisers will do themselves. The plumber doesn't care about blind signatures. He cares that the numbers are honest. The exchange handles the cryptography and gives him [attested results](/attested-attribution). Advertisers who want to hold their own keys can. Everyone else trusts the exchange to run the protocol on their behalf.
+
+This can only work as an open protocol. Even though it may start as a race against incumbents with entrenched network effects, a protocol that fits into existing ad server plumbing lowers switching costs to near zero.
+
+Turns out Coca-Cola was an adtech company 138 years ago. Frank Robinson chose the name because ["the two Cs would look well in advertising."](https://www.coca-colacompany.com/about-us/history/the-birth-of-a-refreshing-idea) They fixed attribution by issuing coupons. The [infrastructure to run it at scale](/croupier) is the missing piece. Digital advertising broke the mechanism by making the coupon forgeable. Cryptography makes it unforgeable again, and selective disclosure makes it private for the first time.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I had the insight; Claude found the economists, the cryptographers, and the prior art.*
+
+*Part of the [Vector Space](/vector-space) series.*

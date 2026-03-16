@@ -1,0 +1,6 @@
+![Grimaldi](https://images-na.ssl-images-amazon.com/images/I/5101lUV-muL._SX258_BO1,204,203,200_.jpg)
+
+
+[Book](https://www.amazon.com/Discrete-Combinatorial-Mathematics-Applied-Introduction/dp/0201726343)
+
+[pdf](http://ceiucaweb.com.ar/documentos/6-informatica/3er-anio-2do-cuatri/estructura-de-datos/apunte/Discrete_and_Combinatorial_Mathematics_5th_ed_-_R._Grimaldi.pdf)

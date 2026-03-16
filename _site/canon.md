@@ -1,0 +1,54 @@
+[PageLeft](/pageleft-manifesto) indexes my writing. All of it. I search it and get my own posts back. A copyleft search engine with one author is a diary with a ranking algorithm.
+
+The architecture works. Embeddings find meaning across vocabulary. The copyleft filter keeps the index honest. PageRank surfaces what peers value. But peers require more than one person. The search engine needs a body of work that doesn't exist yet.
+
+I deployed it today. Canon is empty because it's new.
+
+## Prose compiles, copyleft propagates
+
+A coding agent helped me write a blog post. The blog post got published under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Then the agent read the post and [built the thing](https://github.com/kimjune01/pageleft). The blog post compiled to code. The [reference implementation](https://github.com/kimjune01/pageleft) drew from [another copyleft codebase](/vector-space) for its embedding pipeline and sidecar pattern. Code derived from AGPL code is AGPL.
+
+The chain:
+
+1. PageLeft returns copyleft prose.
+2. That prose [compiled](/vibelogging) to AGPL reference implementations.
+3. A coding agent either:
+   - (a) compiles directly from the prose, or
+   - (b) builds from those AGPL implementations.
+4. Code derived from AGPL code is AGPL.
+
+Path 3b is clear: derive from AGPL, produce AGPL. But 3a is the more likely scenario, and the more interesting one.
+
+1. Code → binary. The binary is a derivative of the code.
+2. API spec → code. The code is a derivative of the spec.
+3. Prose → plan → API spec → code → binary.
+
+At every step, the output is a derivative of the input without creative human intervention. A compiler doesn't add ideas. Neither does a coding agent executing a spec precise enough to produce working code without guessing. Nobody disputes 1 or 2. The only reason anyone disputes 3 is that prose is written in English. The compiler doesn't care what language the source is in.
+
+The case law, in order:
+
+- **[Idea-expression dichotomy](https://en.wikipedia.org/wiki/Idea%E2%80%93expression_distinction):** Ideas are not copyrightable. Expression is. The question is which side compilable prose falls on.
+- **[Merger doctrine](https://en.wikipedia.org/wiki/Merger_doctrine):** When there's only one way to express an idea, the expression is uncopyrightable. A single function might merge. Compilable prose isn't a single function.
+- **[*Feist*](https://supreme.justia.com/cases/federal/us/499/340/):** Originality can exist in how unprotectable elements are selected and arranged. Nobody was forced to combine power-diagram auctions with TEE attestation with one-shot billing with that specific publisher UX. The individual components may not be copyrightable. The combination is.
+- **[*Lotus v. Borland*](https://law.justia.com/cases/federal/appellate-courts/F3/73/355/557138/) (counterargument):** Courts have excluded software structures as "methods of operation" under §102(b), even when alternative designs existed.
+- **[*Altai*](https://law.justia.com/cases/federal/appellate-courts/F2/982/693/137252/) (counterargument):** Courts should filter out elements dictated by efficiency, standards, and conventions before asking what protectable expression remains. After filtration, the residue may be thin.
+
+The prose is the program. The agent is the compiler. Whether the compiled output carries enough of the prose's selection and arrangement to constitute a derivative work is the question no court has answered yet. But the argument is on the record, and the technology isn't waiting.
+
+Two data points already exist. The [vector-space series](/vector-space) was maximalist: auction parameters, privacy constraints, and billing rules specified precisely enough that a coding agent produced a [working ad exchange](https://github.com/kimjune01/vectorspace-adserver) in a weekend. The [PageLeft manifesto](/pageleft-manifesto) was the opposite: a vision, an architectural sketch, a set of constraints. It too produced working code. The point is not that every sentence in such prose is protectable. It is that prose can now supply enough expressive structure to function as software source material. Once that is true, the old intuition that "it's just writing" no longer cleanly separates text from implementation.
+
+Fill Canon with compilable copyleft prose, and copyleft becomes the path of least resistance whether the agent touches the reference implementation or not.
+
+## What happens next
+
+Copyleft is irrevocable. Derivatives inherit the obligation. It cannot shrink.
+
+PageLeft needs links. Nobody links to each other yet. But every new post derived from Canon links back to what it built on, and that's another edge in the knowledge graph. It can only grow.
+
+Even for commercial projects, [publishing the spec is a stronger competitive position than keeping it secret](/paradox-of-open-competition). Timestamps prove provenance, originality, innovation. A blog post in an afternoon stakes a claim to novelty, stamps a CC BY-SA license, and invites open collaboration while a coding agent [compiles prose to code](/vibelogging).
+
+Then there will be a tipping point. Once Canon is large enough, building from copyleft reference implementations will cost less than building from scratch. Past that point, the rational choice will be to use Canon, inherit the obligation, and ship the idea. Canon pulls everything in. Viva copyleft.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*

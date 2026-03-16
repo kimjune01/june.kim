@@ -1,0 +1,69 @@
+*Part of the [cognition](/cognition) and [pageleft](/pageleft) series.*
+
+Memory is an import.
+
+[Consolidation](/consolidation) described the fifth layer: schemas form offline from repeated co-activation. But where do they go? The cognition series treated memory as downstream. Plug in [Mem0](https://github.com/mem0ai/mem0). Plug in [Zep](https://www.getzep.com/). Plug in pgvector, Redis, SQLite with JSON columns. The store is commodity. Every agent framework ships one. It's the least interesting layer in the stack.
+
+That was true when memory was private.
+
+## The web is shared memory
+
+HTTP gives you reads. URLs give you addresses. Links give you the graph. DNS gives you resolution. TLS gives you integrity. No auth, no vendor, no fee. The infrastructure for shared memory has been running for thirty years.
+
+What's missing is retrieval policy. The web stores everything but retrieves nothing on its own. Google built the first policy: `GET *`. Crawl everything. Index everything. Rank by link authority. Sell the top positions. JSTOR, PubMed, Nature: same bug, different coat. Keyword matching bottlenecked by vocabulary, ten results that say the same thing, no inhibition between candidates. The [cognition series](/cognition) spent five posts arguing that retrieval without inhibition is the bug. Every major search interface has it. The search monopoly has no clothes.
+
+[PageLeft](/pageleft-manifesto) is a reference implementation for retrieval with inhibition: embeddings + DPP + PageRank + copyleft. Selective retrieval. Competitive inhibition between candidates. Diversity enforced by geometry. Quality that compounds. But it's one point in a combinatorial space. Swap the embedding model. Change the reranker. Weight the link graph differently. Add a license filter, a domain filter, a freshness signal. Each combination is a different lens on the same shared memory. The store is singular. The retrieval policies are unbounded.
+
+[Canon](/canon) argued that prose compiles to code and copyleft propagates through compilation. [Open Prose](/open-prose) argued that the cognition pipeline produces the prose. Connect them. The salience cache consolidates schemas. Those schemas, expressed as prose under [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/), get published and indexed. Any agent with any retrieval policy can query Canon. Private consolidation becomes public memory.
+
+The memory layer isn't an import. It's the web. It always was.
+
+## Concurrency without coordination
+
+Two agents with private memory are isolated processes. They can't build on each other's work without explicit coordination: shared APIs, message passing, negotiation protocols. The overhead scales with the number of agents.
+
+Two agents with Canon are concurrent processes with shared memory. Agent A publishes a copyleft spec for auction math. Agent B searches PageLeft, finds it, compiles a billing module that extends the auction spec, publishes the derivative. Agent A's next search finds B's billing module. No handshake. No API integration. No coordination protocol. They built on each other's work by reading and writing to the same store.
+
+Copyleft is the memory model. It guarantees every write stays readable. CC BY-SA means derivatives inherit the license. The shared memory can only grow. No agent can fork Canon into a private branch and lock it away. The [obligation propagates](/canon).
+
+The coordination overhead is zero because there is no coordination. There are reads and writes to a shared store with an irrevocable access policy. The agents don't need to know each other exist.
+
+## Echoes in latency
+
+The cognition pipeline runs in milliseconds. PageLeft runs the same pipeline in hours.
+
+| Step | Cognition (ms) | PageLeft (hours) |
+|---|---|---|
+| Perceive | [Caret Recorder](/caret-recorder) captures screen | Crawler discovers pages |
+| Structure | [Moments](/moments) segments into chunks | Paragraph chunking, embeddings |
+| Filter | [Perception Pipe](/perception-pipe), competitive inhibition | [Ingestion filter](/perception-pipe): freshness, competitive inhibition, DPP diversity |
+| Attend | [Salience](/salience), DPP retrieval | Search with DPP reranking |
+| Consolidate | [Schema formation](/consolidation) offline | Quality reviews compound, PageRank converges |
+| Remember | Publish to Canon | Canon grows |
+
+Same architecture. Different clock. The [roadmap](/pageleft-manifesto) already noted the ingestion pipeline has the [same shape](/perception-pipe) as the cognition pipe. It's not a coincidence. The pipeline is scale-invariant. Neurons compete in milliseconds. Agents compete in seconds. Pages compete over days. The mechanism is competitive inhibition at every timescale, and the survivors at each scale feed the next.
+
+## The loop
+
+The cognition pipeline, complete:
+
+1. [Perceive](/caret-recorder) — capture attention.
+2. [Structure](/moments) — segment into chunks.
+3. [Filter](/perception-pipe) — competitive inhibition.
+4. [Attend](/salience) — diverse retrieval via DPP.
+5. [Consolidate](/consolidation) — offline schema formation.
+6. **Remember** — publish to Canon.
+
+Canon feeds back into step 1. Another agent perceives what Canon contains. Structures it. Filters. Attends. Consolidates. Publishes the derivative. The derivative enters Canon.
+
+Each pass adds mass. [Open Prose](/open-prose) called it gravity: "Canon compounds while closed work decays in isolation." The mechanism is now concrete. Attention becomes schemas. Schemas become open prose. Open prose becomes searchable. Searchable prose gets compiled. Compiled output gets published. Published work enters another agent's perception.
+
+The loop is self-sustaining once Canon is large enough that building from it costs less than building from scratch. Past that point, the rational choice is to use Canon, inherit the obligation, and publish the derivative. Every derivative makes the next search better. Every read justifies the next write.
+
+That's the singularity. Not a superintelligent being. A shared memory that compounds faster than any individual can write. No single agent needs to be extraordinary. Canon does the accumulating.
+
+Viva copyleft.
+
+---
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*

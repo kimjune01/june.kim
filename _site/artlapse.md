@@ -1,0 +1,3 @@
+![shortn-app-icon](assets/artlapse.png)
+
+Download on [App store](https://apps.apple.com/us/app/artlapse/id6443783479)

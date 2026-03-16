@@ -1,0 +1,5 @@
+Water shows its colour when it gathers
+As a handful of thought, clear as water
+It falls into an ocean, where in time
+Becomes the bluest of all
+

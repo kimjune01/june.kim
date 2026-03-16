@@ -1,0 +1,104 @@
+*Part of the [cognition](/cognition) series.*
+
+Moments go in. Moments come out. Same shape.
+
+[Perception Pipe](/perception-pipe) called for competitive inhibition between perception and coordination. [Moments](/moments) defined the input. I started thinking about how to build the competition. Then I looked at the interface and realized what it already was.
+
+## It's a cache
+
+The salience layer receives moments from the [pipeline](/moments), stores them, and serves the most relevant ones to [coordination](/cord) when queried. Write on arrival, read on demand. That's a cache.
+
+The competitive inhibition framework from neuroscience maps onto cache mechanics:
+
+| Neuroscience | Cache |
+|---|---|
+| Perception event | Query |
+| Salience scoring | Retrieval ranking |
+| Working memory (~4 chunks) | Context window of the consumer |
+| Retrieval-induced forgetting | Selecting one suppresses similar candidates |
+| Long-term store | The full vector store |
+
+Neuroscience spent 150 years studying retrieval policies. [Cowan (2001)](https://doi.org/10.1017/S0140525X01003922) measured working memory at about four chunks. [Baddeley (1974)](https://doi.org/10.1016/S0079-7421(08)60452-1) argued the store was separate from main memory. None of them called it a cache. But the interface is identical: a store that holds everything, a query that retrieves some of it, and a capacity limit on how much the consumer can process at once.
+
+The store holds everything; the retrieval is selective. Privately, the store may compact old clusters or drop stale moments, but that's housekeeping, not policy. The open question is the retrieval policy.
+
+## The retrieval policy is an election
+
+A standard cache uses LRU or LFU. Retrieve item A, and the least-recently-used item falls off the list. But [retrieval-induced forgetting](https://doi.org/10.1037/0278-7393.20.5.1063) says something different: accessing "banana" makes it harder to recall "orange" but doesn't affect "bicycle." The suppression is local. Recalling one memory suppresses *similar* memories during retrieval, not just the oldest one.
+
+That's not a queue. It's an election. Candidates don't suppress everyone. They suppress the ones running for the same seat. Moments that are similar to each other share a constituency. When perception casts its vote and one moment wins, it pushes down the others in its district, not the whole store.
+
+The algorithm:
+
+1. Coordination needs context. Election called.
+2. Every moment gets scored by similarity to current perception. Votes.
+3. Among moments in the same constituency (high mutual similarity), the strongest suppresses the rest.
+4. The context window is the number of seats. k moments get returned.
+
+Nothing is deleted. Moments that lose this round are still in the store for the next query. "Forgetting" is not being selected, not being erased.
+
+But constituencies aren't discrete. A moment about deploying a Python service is somewhat similar to writing Python code, somewhat similar to deploying a Go service, and barely similar to reading email. Competition intensity is a smooth function of distance in embedding space. The constituency isn't a boundary. It's a kernel.
+
+## The geometry
+
+Each moment is chunk-sized. Each chunk gets one embedding. One point in high-dimensional space.
+
+The formal object is a [determinantal point process](https://arxiv.org/abs/1207.6083) (DPP). Macchi introduced DPPs in [1975](https://doi.org/10.1016/0001-8708(75)90038-0) to describe fermion distributions in quantum mechanics. Two fermions can't occupy the same quantum state. The closer two states are, the less likely both are occupied. Competitive inhibition as a law of physics.
+
+[Frankland and Cohen (2020)](https://cogsci.mindmodeling.org/2020/papers/0652/index.html) made the connection to memory: DPPs provide a formal objective for orthogonal coding in the hippocampus, favoring selection of volume-maximizing combinations that promote efficient retrieval. The math that describes fermion repulsion also describes how the brain avoids redundant recall.
+
+Kulesza and Taskar [brought DPPs into machine learning](https://arxiv.org/abs/1207.6083) in 2012 for the general problem: select a diverse, high-quality subset from a set of candidates. The kernel matrix:
+
+```
+L_ij = quality_i × similarity(i, j) × quality_j
+```
+
+Quality is similarity to the current perception. Similarity is the kernel between moments. The probability of selecting a subset S is proportional to det(L_S): the volume of the parallelepiped spanned by the selected items' embedding vectors. If two moments are nearly parallel (redundant), the volume collapses toward zero. Redundancy doesn't vanish, but the geometry makes the selection pay for it. The word *salience* comes from Latin *salire*, to leap. The moments that survive are the ones that leap out from each other.
+
+## RAG is top-k. Salience is max-volume-k.
+
+The interface is a vector store:
+
+- **put(moment)**: embed, append.
+- **get(perception, k)**: DPP-select k moments.
+- **subscribe(callback)**: notify when new moments are available.
+
+The cognition engine runs on its own clock. It doesn't poll the store. When new moments arrive that are sufficiently different from what's already there, the store signals that fresh context is available to query.
+
+Storage, retrieval, and notification run on independent clocks.
+
+The infrastructure is commodity. Chroma, Qdrant, pgvector. The entire contribution is what happens inside `get`.
+
+RAG retrieves the k nearest neighbors by cosine similarity. If your ten most recent moments are code edits to the same file, RAG returns all ten. They're the closest points to the query. But they're nearly the same point.
+
+The salience cache retrieves the k points that span the most volume near the query. The DPP returns one code edit, plus the terminal output that prompted it, plus the article you were reading before you started writing. Same interface, different geometry inside `get`. Top-k returns a cluster. Max-volume-k returns a basis.
+
+<iframe src="/assets/salience-demo.html" width="100%" height="560" style="border:none; border-radius:8px;" loading="lazy"></iframe>
+<figcaption style="text-align:center; font-size:0.85em; color:#999; margin-top:4px;">Drag the yellow query point. Toggle between kNN and DPP. Watch the polygon area.</figcaption>
+
+[Generative Agents](https://doi.org/10.1145/3586183.3606763) scores by recency, importance, and relevance, then ranks. [MemGPT](https://arxiv.org/abs/2310.08560) pages context in and out by rank. RAG does the same with cosine similarity. All three score per-item. No item's score depends on what else was selected. [Lee et al. (2025)](https://arxiv.org/abs/2507.06838) named this explicitly: existing approaches "rerank top-k passages based on their individual relevance, often failing to meet the information needs of complex queries." The independence assumption is the bug.
+
+[MMR](https://doi.org/10.1145/290941.291025) (Carbonell & Goldstein, 1998) was the first fix: greedily pick the next item that balances relevance against similarity to what's already selected. DPP selection generalizes the idea. The score of a subset depends on all its members jointly. Selecting one item changes the probability of selecting every other item, proportional to their similarity. That's the competitive inhibition that [Perception Pipe](/perception-pipe) called for, expressed as a determinant.
+
+The risk is over-diversification. Sometimes the agent needs three recent edits to the same file because all three are causally relevant. A DPP suppresses exactly that local density. The quality term in the kernel is what saves it: if three moments are all highly relevant to the current perception, their quality scores can outweigh the volume penalty. The geometry discourages redundancy; it doesn't forbid it.
+
+## What this inherits
+
+The interface inherits decades of vector store infrastructure. The retrieval policy inherits forty years of math, from [quantum mechanics](https://doi.org/10.1016/0001-8708(75)90038-0) to [cognitive neuroscience](https://cogsci.mindmodeling.org/2020/papers/0652/index.html) to [machine learning](https://arxiv.org/abs/1207.6083). The pipeline upstream, [Caret Recorder](/caret-recorder) to [Moments](/moments), produces the chunks. The consumer downstream, [Cord](/cord), doesn't need to know the geometry. It asks for k moments and gets them.
+
+This is also the same geometry I described in [Power Diagrams](/power-diagrams-ad-auctions) for ad auctions. Each winner owns a region of embedding space. Perception lands in one region, that moment gets surfaced. The [cognition](/cognition) series and the [Vector Space](/vector-space) series land on the same math.
+
+| Ad auction | Salience cache |
+|---|---|
+| Advertisers | Moments |
+| User query | Current perception |
+| Bid | Salience score |
+| Power cell | Region of relevance |
+| Auction winner | Surfaced to coordination |
+| No impressions | Not selected this round |
+
+The open question is empirical. Does max-volume-k surface better context than top-k for a downstream coordination agent? The [dataset](https://github.com/kimjune01/caret-recorder) is public. Both retrieval strategies can run on the same moments with the same embeddings. The only difference is the `get`. Build both. Measure which one helps the agent do its job. Same shape in, same shape out. The geometry either earns its keep or it doesn't.
+
+---
+
+*Written via the [double loop](/double-loop). More at [pageleft.cc](https://pageleft.cc).*

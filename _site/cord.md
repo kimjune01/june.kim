@@ -1,0 +1,130 @@
+AI agents are good at doing one thing at a time. Give Claude a focused task and it performs. But real work isn't one task. It's a tree of tasks with dependencies, parallelism, and context that needs to flow between them.
+
+The multi-agent frameworks are multiplying. They're all solving the wrong problem.
+
+## What's out there
+
+**LangGraph** models coordination as a state machine. You define nodes and edges in Python. The developer decides upfront how agents hand off work. It's powerful for fixed workflows, but the graph is static. If an agent realizes mid-task that the work should be split differently, tough luck. The developer has to anticipate every decomposition pattern in advance.
+
+**CrewAI** is role-based. You define agents with personas — "researcher," "analyst," "writer" — and assign them tasks. Intuitive, but the roles are decided by the developer, not discovered by the agents. A crew of three can't decide it actually needs five people, or that "researcher" should be split into two parallel tracks.
+
+**AutoGen** puts agents in a group chat. They coordinate by talking to each other. Flexible, but there's no structure. No dependency tracking, no authority scoping, no typed results. Coordination emerges from conversation, which means it's unpredictable and hard to inspect.
+
+**OpenAI Swarm** is the most minimal — lightweight handoffs between agents. Agent A decides it's time for Agent B and transfers control. Simple, but linear. No parallelism, no tree structure, no way for an agent to spawn three subtasks and wait for all of them.
+
+**Claude's tool-use loops** — Anthropic's own pattern — put a single agent in a loop with tools. Handles sequential complexity well but runs into context window limits on large tasks and can't parallelize. One agent, one thread, one context.
+
+The common thread: every framework requires the developer to predefine the coordination structure. *You* decide the workflow graph, the agent roles, the handoff pattern. The agents execute within your boundaries.
+
+This made sense when agents were unreliable. You'd never let GPT-3 decide how to decompose a project. But current models are good at planning. They break problems into subproblems naturally. They understand dependencies. They know when a task is too big for one pass.
+
+So why are we still hardcoding the decomposition?
+
+## Let the agent build the tree
+
+I built [Cord](https://github.com/kimjune01/cord). You give it a goal:
+
+```
+cord run "Should we migrate our API from REST to GraphQL? Evaluate and recommend."
+```
+
+One agent launches. It reads the goal, decides it needs research before it can answer, and creates subtasks:
+
+```
+● #1 [active] GOAL Should we migrate our API from REST to GraphQL?
+  ● #2 [active] SPAWN Audit current REST API surface
+  ● #3 [active] SPAWN Research GraphQL trade-offs for our stack
+  ○ #4 [pending] ASK How many concurrent users do you serve?
+    blocked-by: #2
+  ○ #5 [pending] FORK Comparative analysis
+    blocked-by: #3, #4
+  ○ #6 [pending] SPAWN Write migration recommendation
+    blocked-by: #5
+```
+
+No workflow was hardcoded. The agent decided this structure at runtime.
+
+It parallelized the API audit (#2) and the GraphQL research (#3). It created an `ask` node (#4) — a question for the human — because it realized the recommendation depends on scale, something it can't research on its own. It blocked #4 on #2 because the question makes more sense with the audit results as context. It made #5 a `fork` so the analysis inherits everything learned so far. And it sequenced the final recommendation after the analysis.
+
+Then you watch it run:
+
+```
+✓ #2 [complete] SPAWN Audit current REST API surface
+  result: 47 endpoints. 12 heavily nested resources...
+✓ #3 [complete] SPAWN Research GraphQL trade-offs
+  result: Key advantages: reduced over-fetching...
+
+? How many concurrent users do you serve?
+  Options: <1K, 1K-10K, 10K-100K, >100K
+> 10K-100K
+
+● #5 [active] FORK Comparative analysis
+  blocked-by: #3, #4
+```
+
+The research runs in parallel. When both finish and you answer the question, the analysis launches with all three results in its context. It produces a recommendation tailored to your actual scale and API surface — not a generic blog post about GraphQL.
+
+## Spawn vs fork
+
+This is the one idea I think is genuinely new: the distinction between `spawn` and `fork` as a context-flow primitive.
+
+A **spawned** agent gets a clean slate. Just its prompt and the results of nodes it explicitly depends on. Like hiring a contractor — here's the spec, go. Cheap to restart, easy to reason about.
+
+A **forked** agent gets all completed sibling results injected into its context. Like briefing a team member — they know everything the team has learned so far. More expensive, but necessary for analysis that builds on prior work.
+
+This isn't about concurrency. Both can run in parallel or sequentially. It's about *what the child knows*. In the example above, the agent chose `spawn` for the independent research tasks and `fork` for the analysis that needs everything. It made this choice correctly — because the tool descriptions explain the distinction clearly. That's the point: the protocol is learnable from its interface alone.
+
+The natural next step is making context flow a first-class primitive — a `context_query` parameter on spawn/fork that takes a natural language instruction like `"summary"`, `"relevant details from a web designer's perspective"`, or `"bullet points about error handling"`. A compaction subagent would read the parent's full context, distill it according to the query, and pass only the result to the child. This has to be built into the client itself — an isolated MCP tool can't access the parent's context without serializing the whole thing as a tool input, which defeats the purpose.
+
+## Under the hood
+
+Each agent is a Claude Code CLI process with MCP tools backed by a shared SQLite database:
+
+- `spawn(goal, prompt, blocked_by)` — create a child task
+- `fork(goal, prompt, blocked_by)` — create a context-inheriting child
+- `ask(question, options)` — ask the human a question
+- `complete(result)` — mark yourself done
+- `read_tree()` — see the full coordination tree
+
+Agents know they're a node in a coordination tree — the system prompt tells them — but they don't manage it. They see tools and use them as needed. The protocol — dependency resolution, authority scoping, result injection — is enforced by the MCP server.
+
+When an `ask` node becomes ready, the engine pauses to prompt the human in the terminal. The answer is stored as a result, and downstream nodes unblock. The human is a participant in the tree, not an observer.
+
+~500 lines of Python. SQLite + MCP.
+
+## Behavioral testing as design validation
+
+Before writing the runtime, I needed to know if the protocol was learnable from its interface alone. So I built a throwaway MCP server with the five tools, pointed Claude Code at it, and ran 15 tests. No runtime, no engine — just Claude, the tools, and a task.
+
+The interesting results weren't the correct tool calls. They were the emergent behaviors. An agent asked to decompose a project called `read_tree()` before acting and again after to verify — read, act, verify, unprompted. An agent that got rejected for trying to stop a sibling escalated through `ask parent` — the correct pattern, but one I'd never described. An agent that hit an error stopped the failing child and respawned a new one with an adjusted prompt.
+
+15/15 passed. The passing rate wasn't the insight — it was that clear tool descriptions plus dependency semantics were sufficient for correct use. That told me the runtime was worth building.
+
+## What this is not
+
+This implementation uses Claude Code CLI and SQLite. But the protocol — five primitives, dependency resolution, authority scoping, two-phase lifecycle — is independent of all that.
+
+You could implement Cord over Postgres for multi-machine coordination. Over the Claude API directly, without the CLI overhead. With multiple LLM providers — GPT for cheap tasks, Claude for complex ones. With human workers for some nodes.
+
+The protocol is the contribution. This repo is a proof of concept.
+
+## Try it
+
+```bash
+git clone https://github.com/kimjune01/cord.git
+cd cord
+uv sync
+cord run "your goal here" --budget 2.0
+```
+
+You can also point it at a planning doc:
+
+```bash
+cord run plan.md --budget 5.0
+```
+
+The root agent reads the markdown and decomposes it into a coordination tree. Write your plan however you want — bullet points, sections, prose — and the agent figures out the task structure, dependencies, and parallelism.
+
+Requires [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) and a subscription that includes it.
+
+[GitHub](https://github.com/kimjune01/cord) &#124; [RFC](https://github.com/kimjune01/cord/blob/master/RFC.md) &#124; [HN Discussion](https://news.ycombinator.com/item?id=47096466)

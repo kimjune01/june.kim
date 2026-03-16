@@ -1,0 +1,8 @@
+![walden](/assets/walden.jpg)
+
+[PDF](http://www.eldritchpress.org/walden5.pdf)
+
+[HTML](http://thoreau.eserver.org/walden00.html#toc)
+
+[Book](http://www.amazon.com/Walden-Civil-Disobedience-Henry-Thoreau/dp/0451532163/ref=sr_1_1?ie=UTF8&qid=1454434386&sr=8-1&keywords=walden)
+
