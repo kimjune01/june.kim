@@ -103,7 +103,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** ((policy, ranked) → policy′) — the write interface to the policy store. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — policy is not the data type of Perceive. It can only notice that Attend's behavior changed.
+**Consolidate** ((policy, ranked) → policy′) — the write interface to the policy store. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — policy is not the data type of Perceive. It can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
