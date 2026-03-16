@@ -45,5 +45,22 @@ aws cloudfront create-invalidation \
   --no-cli-pager
 echo "    Invalidation created for distribution $CF_DIST_ID"
 
+# ─── index on PageLeft ─────────────────────────────────────────────────────
+
+echo "==> Indexing posts on PageLeft"
+for post in "$SITE_DIR"/**/*.html; do
+  # Extract the URL path from the file path (strip _site prefix and .html suffix)
+  path="${post#$SITE_DIR}"
+  path="${path%.html}"
+  # Skip non-post pages
+  [[ "$path" == */index ]] && continue
+  [[ "$path" != /20* ]] && [[ "$path" != /*-* ]] && continue
+  url="https://$DOMAIN_WWW$path"
+  curl -s -o /dev/null -w "  %{http_code} $url\n" \
+    -X POST https://pageleft.cc/api/contribute/page \
+    -H "Content-Type: application/json" \
+    -d "{\"url\":\"$url\"}"
+done
+
 echo ""
 echo "Deploy complete! Site is live at https://$DOMAIN_WWW"
