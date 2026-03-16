@@ -35,10 +35,13 @@ A morphism that preserves its contract through composition is *contract-preservi
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
-Three claims follow from the contracts:
+The contracts encode a second axis: which store. Perceive, Cache, and Filter operate on the data stream. Attend reads a separate policy store ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes it. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
+
+Four claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now.
 2. **If any contract is broken, the loop will die.** Necessary condition. By induction on cycle count.
 3. **If all contracts are satisfied with sufficient fidelity, the loop survives.** Sufficient condition. That is the budget.
+4. **If an operation degrades its postcondition under iteration, it is a near-miss.** The instability argument from Corollary 2 generalizes: any morphism whose postcondition fails under self-composition will break the loop. Iteration stability is the test.
 
 ### Why this order
 
@@ -67,6 +70,8 @@ A step that fails its contract leaks information faster than Perceive can replen
 ### Iteration-fidelity trade-off
 
 The budget can balance in different ways. Few steps with high retention, or many steps with low retention. The heuristic: step count × per-step fidelity must clear the survival threshold. Diffusion models: a thousand cheap denoising steps, each with a weak guarantee. Human cognition: a few expensive passes. Sleep consolidation is one cycle, deeply lossy, deeply structural.
+
+Fidelity measures retention per pass. Iteration stability is whether the postcondition survives re-application. They are distinct. Top-k retains most bits but converges to a fixed point: same winners every cycle, diversity dead by cycle two. An iteration-stable operation preserves its postcondition under re-application: sort a sorted list — still sorted. MMR a diverse slate — still diverse. [The Parts Bin](/the-parts-bin) uses this as the formal test for near-misses.
 
 Rate-distortion theory provides the analogy: each morphism has a distortion cost (bits leaked) and a rate (bits retained). Baez, Fritz, & Leinster (2011) formalized entropy in categorical terms. Connecting it to iterated pipelines is the next step. The framework diagnoses which step is broken. The prescription: strengthen fidelity, or add iterations. Two knobs, one budget.
 

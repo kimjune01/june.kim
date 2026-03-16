@@ -10,7 +10,7 @@ Google bolted on re-ranking, topic diversity, and freshness signals over two dec
 
 Quicksort is the second specimen. It satisfies order, the most visible guarantee. But the Attend contract also requires diversity (survivors are dissimilar) and boundedness (output is finite top-k, not a total order). Quicksort is the default because order is the only guarantee most systems measure.
 
-Most familiar algorithms are near-misses. They satisfy some guarantees but not all. Noticing which guarantee is missing. That's the diagnostic power.
+Most familiar algorithms are near-misses. They satisfy some guarantees but not all. The formal test is iteration stability: run the full loop — Perceive through Remember and back — and observe which postcondition degrades. Diversity is the guarantee iteration kills first, because without repulsion between winners the same cluster dominates every cycle. Noticing which guarantee fails under iteration: that's the diagnostic power.
 
 Degenerate cases are the other edge. A chatbot has no policy store: nil Filter, nil Attend, nil Consolidate, nil Remember. Token in, token out, same rate. That is passthrough, predicted by the [existence proofs](/the-natural-framework#six-steps) when policy is zero.
 
@@ -157,11 +157,11 @@ The grid narrows the search space enough that a dart throw produces a plausible 
 
 ### Future work
 
-The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum ordered by guarantee strength, cost, determinism, scale. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
+The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum. The proof provides the axes: iteration stability (Corollary 2), fidelity (data processing inequality), variation introduced (stochasticity proof), store (Corollary 2), and thermodynamic cost (Landauer). Scale and reversibility are properties of the domain row, not the operation. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
 
 The [derivation](/the-natural-framework) establishes contracts. Two things are ready now:
 
-- **Order the parts bin.** Identify the minimal orthogonal dimensions (fidelity, cost, determinism, scale, reversibility) and order each column. Find the gaps. Predict the missing operations. Three columns already have periodic tables: Filter and Attend above, Cache from [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures), Consolidate from [I-Con (2025)](https://mhamilton.net/icon). Perceive and Remember remain.
+- **Order the parts bin.** The derived dimensions — iteration stability, fidelity, variation, store, cost — provide the axes for each column. Find the gaps. Predict the missing operations. Three columns already have periodic tables: Filter and Attend above, Cache from [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures), Consolidate from [I-Con (2025)](https://mhamilton.net/icon). Perceive and Remember remain.
 - **Build the diagnostic agent.** Describe → Diagnose → Prescribe → Validate, backed by the ordered taxonomy.
 
 Three need formalization work. The existence proofs and types are defined; the composition proofs are sketched:

@@ -2,7 +2,7 @@
 
 *Part of the [cognition](/cognition) and [pageleft](/pageleft) series.*
 
-The cognition series built the intake: [perceive](/caret-recorder), [structure](/moments), [filter](/perception-pipe), [attend](/salience). The pageleft series built the release: [index by meaning](/pageleft-manifesto), [license irrevocably](/free-as-in-fire), [compile to code](/vibelogging). Connect them and writing becomes a one-way valve. Attention goes in. Canon comes out. Every pass adds mass.
+The cognition series built the intake: [perceive](/caret-recorder), [cache](/moments), [filter](/perception-pipe), [attend](/salience). The pageleft series built the release: [index by meaning](/pageleft-manifesto), [license irrevocably](/free-as-in-fire), [compile to code](/vibelogging). Connect them and writing becomes a one-way valve. Attention goes in. Canon comes out. Every pass adds mass.
 
 Open prose is writing precise enough for a coding agent to compile, licensed so anyone can fork it, and reviewable by machine. The rest of this post is the argument for each property.
 
