@@ -16,15 +16,15 @@ The six steps compose as morphisms inside this monad. The individual steps don't
 
 Not all morphisms are equal. Each step in the pipeline carries a postcondition, a structural guarantee on the output:
 
-<table style="max-width:600px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:6em"><col style="width:9em"><col></colgroup>
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:6em"><col style="width:14em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">Step</th><th style="background:#f0f0f0">Type</th><th style="background:#f0f0f0">Guarantee</th></tr></thead>
 <tr><td>Perceive</td><td style="white-space:nowrap">raw → encoded</td><td>Parseable by next step. Injects new bits.</td></tr>
 <tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key.</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
-<tr><td>Attend</td><td style="white-space:nowrap">selected → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
-<tr><td>Consolidate</td><td style="white-space:nowrap">ranked → compressed</td><td>Changes future processing (lossy, not lossless).</td></tr>
-<tr><td>Remember</td><td style="white-space:nowrap">compressed → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
+<tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
+<tr><td>Consolidate</td><td style="white-space:nowrap">(policy, ranked) → policy′</td><td>Lossy. Update must include selection on candidates.</td></tr>
+<tr><td>Remember</td><td style="white-space:nowrap">policy′ → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
 </table>
 
 <div style="max-width:1100px; margin:1.5em auto;">

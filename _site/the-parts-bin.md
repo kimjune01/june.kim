@@ -81,7 +81,7 @@ The full catalog follows. Each entry is an operation: input in, output out. If t
 <tr><td>Pareto filtering</td><td>Candidates with objective vectors</td><td>Non-dominated subset, strictly smaller</td></tr>
 </table>
 
-**Attend** (selected → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
+**Attend** ((policy, selected) → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Policy is a function; it routes data. Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
@@ -97,7 +97,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (ranked → compressed, changes future processing) — the write interface to the policy store. Compaction reorganizes a cache; consolidation changes how the system processes the next cycle.
+**Consolidate** ((policy, ranked) → policy′) — the write interface to the policy store. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — policy is not the data type of Perceive. It can only notice that Attend's behavior changed.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
@@ -111,7 +111,7 @@ Near-misses (diagnostic counterexamples):
 <tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
 </table>
 
-**Remember** (compressed → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+**Remember** (policy′ → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
 
 If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
 

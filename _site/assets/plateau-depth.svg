@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 276" font-family="system-ui, sans-serif">
+  <style>
+    .box { fill: #fff; stroke: #999; stroke-width: 1; rx: 4; }
+    .con { fill: #f8f8f8; stroke: #999; stroke-width: 1; rx: 6; }
+    .con1 { fill: #f4f4f4; stroke: #aaa; stroke-width: 1; rx: 6; }
+    .name { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 13px; }
+    .sub { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 11px; }
+    .dim { fill: #aaa; }
+    .clabel { font-size: 11px; fill: #999; font-weight: 500; }
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .pass { fill: none; stroke: #ccc; stroke-width: 1; stroke-dasharray: 4,3; rx: 4; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+  </defs>
+
+  <!-- Level 0: Perceive → Filter → Attend, then down -->
+  <rect class="box" x="30" y="8" width="82" height="32"/>
+  <text class="name" x="71" y="24">Perceive</text>
+  <line class="arr" x1="112" y1="24" x2="128" y2="24"/>
+
+  <rect class="box" x="128" y="8" width="68" height="32"/>
+  <text class="name" x="162" y="24">Filter</text>
+  <line class="arr" x1="196" y1="24" x2="212" y2="24"/>
+
+  <rect class="box" x="212" y="8" width="72" height="32"/>
+  <text class="name" x="248" y="24">Attend</text>
+  <line class="arr" x1="248" y1="40" x2="248" y2="58"/>
+
+  <!-- Consolidate₀ container -->
+  <rect class="con" x="16" y="60" width="306" height="208"/>
+  <text class="clabel" x="30" y="76">Consolidate</text>
+
+  <!-- Level 1: echoes Level 0, indented -->
+  <rect class="box" x="36" y="90" width="74" height="28"/>
+  <text class="sub" x="73" y="104">Perceive₁</text>
+  <line class="arr" x1="110" y1="104" x2="124" y2="104"/>
+
+  <rect class="box" x="124" y="90" width="60" height="28"/>
+  <text class="sub" x="154" y="104">Filter₁</text>
+  <line class="arr" x1="184" y1="104" x2="198" y2="104"/>
+
+  <rect class="box" x="198" y="90" width="64" height="28"/>
+  <text class="sub" x="230" y="104">Attend₁</text>
+  <line class="arr" x1="230" y1="118" x2="230" y2="136"/>
+
+  <!-- Consolidate₁ container (inside Consolidate₀) -->
+  <rect class="con1" x="36" y="138" width="270" height="118"/>
+  <text class="clabel" x="50" y="154">Consolidate₁</text>
+
+  <!-- Level 2: echoes again, dimmed -->
+  <rect class="box" x="54" y="168" width="66" height="24"/>
+  <text class="sub dim" x="87" y="180">Perceive₂</text>
+  <line class="arr" x1="120" y1="180" x2="134" y2="180"/>
+
+  <rect class="box" x="134" y="168" width="54" height="24"/>
+  <text class="sub dim" x="161" y="180">Filter₂</text>
+  <line class="arr" x1="188" y1="180" x2="202" y2="180"/>
+
+  <rect class="box" x="202" y="168" width="58" height="24"/>
+  <text class="sub dim" x="231" y="180">Attend₂</text>
+  <line class="arr" x1="231" y1="192" x2="231" y2="210"/>
+
+  <!-- Passthrough (bottom, dashed) -->
+  <rect class="pass" x="178" y="212" width="106" height="24"/>
+  <text class="sub dim" x="231" y="224">passthrough</text>
+</svg>
