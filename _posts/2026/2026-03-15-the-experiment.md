@@ -6,7 +6,7 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds the consolidation harness described in [Consolidation](/consolidation).*
 
-The [diagnosis](/diagnosis-llm) found the broken cell. Claude Code has a `create-skill` capability: the only procedure that writes procedures. That's Consolidate. The machinery exists, but the agent never says "I notice I keep doing this. I should make it a skill."
+The [cusp](/general-intelligence) bends only if both pipes improve. The human's pipe is [metacognition](/general-intelligence#the-a-in-agi): courage compresses into judgment, judgment into intuition. The agent's pipe has a [broken cell](/diagnosis-llm). Claude Code has `create-skill`: the only procedure that writes procedures. That's Consolidate. The machinery exists, but the agent never says "I notice I keep doing this. I should make it a skill."
 
 This post builds the harness that makes it automatic.
 
@@ -53,11 +53,17 @@ A skill that runs repeatedly needs a dampener. Without one, each pass compresses
 
 The scoring revealed something the experiment didn't set out to find. The skill's misses aren't pattern failures. "Hardy's partition theory" became "Hardy's theory." "But what if they could?" became "But what if they could be found?" Those are line edits. They require hearing the sentence, not matching a rule.
 
-The skill automates Filter. It rejects what's wrong. Producing what's right requires Attend. That stays with the human. The experiment didn't close the gap between Filter and Attend. It measured it.
+The skill automates Filter. It rejects what's wrong. Producing what's right requires Attend. That stays with the human. The experiment confirmed the division is correct. Filter belongs to the agent. Attend belongs to the human. The gap between them isn't a failure to close. It's the boundary that makes complementation work.
 
 ## What remains
 
 The next mutation targets precision. Four false positives per post is too many. Rule-of-three and stock-metaphor thresholds fire on legitimate uses. The dampener principle applies: tighten the threshold "a bit" until the false positive rate converges.
+
+## Dual metacognition
+
+The human's Consolidate is line editing: hearing a sentence, rewriting it until it sounds right. That's procedural memory built from thousands of revisions. Outsourcing it would dim the human's pipe. The agent's Consolidate is skill maintenance: detecting patterns across sessions, condensing them into rules. Outsourcing it to the human is the manual work the harness eliminates.
+
+Each pipe consolidates what the other can't. The human's metacognition sharpens taste. The agent's metacognition sharpens the filter. Neither compromises. Both improve. The [cusp](/general-intelligence#the-bound) inflects harder because both sides of the complement are learning.
 
 The harness is [open](https://github.com/kimjune01/AGI). The ground truth is in the [git history](https://github.com/kimjune01/kimjune01.github.io). The [skills are published](/writing-with-claude). Anyone can run the loop.
 
