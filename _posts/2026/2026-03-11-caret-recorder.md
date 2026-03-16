@@ -22,6 +22,6 @@ The plan is a companion agent that clears noise in layers before anything touche
 
 What survives goes to a cheap model (Gemini Flash) for triage. Each snapshot gets a quick ruling: novel enough to stash, or mundane? The model maintains a rolling context window—always warm, never full—with periodic partial compaction that merges related entries, demotes stale ones, and drops what no longer matters.
 
-The key idea is modeling human forgetfulness. Recency, salience, emotional weight—things that broke, things that were surprising, things tied to open tasks persist longer. Routine fades. Summarization naturally compresses the mundane and preserves the unusual. The result is a memory you can query that feels like your own: imperfect, biased toward what mattered, and useful exactly because it forgot the rest.
+The key idea is approximating human forgetfulness. Recency, salience, emotional weight—things that broke, things that were surprising, things tied to open tasks persist longer. Routine fades. Compaction compresses the mundane and preserves the unusual. The result is a cache you can query that approximates your own memory: imperfect, biased toward what mattered, and useful exactly because it forgot the rest.
 
 [GitHub](https://github.com/kimjune01/caret-recorder)
