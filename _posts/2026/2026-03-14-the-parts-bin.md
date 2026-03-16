@@ -16,7 +16,7 @@ Google bolted on re-ranking, topic diversity, and freshness signals over two dec
 
 Quicksort is the second specimen. It satisfies order, the most visible guarantee. But the Attend contract also requires diversity (survivors are dissimilar) and boundedness (output is finite top-k, not a total order). Quicksort is the default because order is the only guarantee most systems measure.
 
-Most familiar algorithms are near-misses. They satisfy some guarantees but not all. Noticing which guarantee is missing. That's the diagnostic power.
+Most familiar algorithms are near-misses. They satisfy some guarantees but not all. The formal test is iteration stability: run the full loop — Perceive through Remember and back — and observe which postcondition degrades. Diversity is the guarantee iteration kills first, because without repulsion between winners the same cluster dominates every cycle. Noticing which guarantee fails under iteration: that's the diagnostic power.
 
 Degenerate cases are the other edge. A chatbot has no policy store: nil Filter, nil Attend, nil Consolidate, nil Remember. Token in, token out, same rate. That is passthrough, predicted by the [existence proofs](/the-natural-framework#six-steps) when policy is zero.
 
@@ -87,7 +87,7 @@ The full catalog follows. Each entry is an operation: input in, output out. If t
 <tr><td>Pareto filtering</td><td>Candidates with objective vectors</td><td>Non-dominated subset, strictly smaller</td></tr>
 </table>
 
-**Attend** (selected → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
+**Attend** ((policy, selected) → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Policy is a function; it routes data. Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
@@ -103,7 +103,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (ranked → compressed, changes future processing) — the write interface to the policy store. Compaction reorganizes a cache; consolidation changes how the system processes the next cycle.
+**Consolidate** ((policy, ranked) → policy′) — the write interface to the policy store. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — policy is not the data type of Perceive. It can only notice that Attend's behavior changed.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
@@ -117,7 +117,7 @@ Near-misses (diagnostic counterexamples):
 <tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
 </table>
 
-**Remember** (compressed → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+**Remember** (policy′ → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." Remember is not a separate store. It is the historically shaped substrate — the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
 
 If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
 
@@ -163,11 +163,11 @@ The grid narrows the search space enough that a dart throw produces a plausible 
 
 ### Future work
 
-The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum ordered by guarantee strength, cost, determinism, scale. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
+The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum. The proof provides the axes: iteration stability (Corollary 2), fidelity (data processing inequality), variation introduced (stochasticity proof), store (Corollary 2), and thermodynamic cost (Landauer). Scale and reversibility are properties of the domain row, not the operation. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
 
 The [derivation](/the-natural-framework) establishes contracts. Two things are ready now:
 
-- **Order the parts bin.** Identify the minimal orthogonal dimensions (fidelity, cost, determinism, scale, reversibility) and order each column. Find the gaps. Predict the missing operations. Three columns already have periodic tables: Filter and Attend above, Cache from [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures), Consolidate from [I-Con (2025)](https://mhamilton.net/icon). Perceive and Remember remain.
+- **Order the parts bin.** The derived dimensions — iteration stability, fidelity, variation, store, cost — provide the axes for each column. Find the gaps. Predict the missing operations. Three columns already have periodic tables: Filter and Attend above, Cache from [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures), Consolidate from [I-Con (2025)](https://mhamilton.net/icon). Perceive and Remember remain.
 - **Build the diagnostic agent.** Describe → Diagnose → Prescribe → Validate, backed by the ordered taxonomy.
 
 Three need formalization work. The existence proofs and types are defined; the composition proofs are sketched:

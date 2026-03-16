@@ -22,15 +22,15 @@ The six steps compose as morphisms inside this monad. The individual steps don't
 
 Not all morphisms are equal. Each step in the pipeline carries a postcondition, a structural guarantee on the output:
 
-<table style="max-width:600px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:6em"><col style="width:9em"><col></colgroup>
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:6em"><col style="width:14em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">Step</th><th style="background:#f0f0f0">Type</th><th style="background:#f0f0f0">Guarantee</th></tr></thead>
 <tr><td>Perceive</td><td style="white-space:nowrap">raw → encoded</td><td>Parseable by next step. Injects new bits.</td></tr>
 <tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key.</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
-<tr><td>Attend</td><td style="white-space:nowrap">selected → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
-<tr><td>Consolidate</td><td style="white-space:nowrap">ranked → compressed</td><td>Changes future processing (lossy, not lossless).</td></tr>
-<tr><td>Remember</td><td style="white-space:nowrap">compressed → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
+<tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
+<tr><td>Consolidate</td><td style="white-space:nowrap">(policy, ranked) → policy′</td><td>Lossy. Update must include selection on candidates.</td></tr>
+<tr><td>Remember</td><td style="white-space:nowrap">policy′ → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
 </table>
 
 <div style="max-width:1100px; margin:1.5em auto;">
@@ -41,10 +41,13 @@ A morphism that preserves its contract through composition is *contract-preservi
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
-Three claims follow from the contracts:
+The contracts encode a second axis: which store. Perceive, Cache, and Filter operate on the data stream. Attend reads a separate policy store ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes it. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
+
+Four claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now.
 2. **If any contract is broken, the loop will die.** Necessary condition. By induction on cycle count.
 3. **If all contracts are satisfied with sufficient fidelity, the loop survives.** Sufficient condition. That is the budget.
+4. **If an operation degrades its postcondition under iteration, it is a near-miss.** The instability argument from Corollary 2 generalizes: any morphism whose postcondition fails under self-composition will break the loop. Iteration stability is the test.
 
 ### Why this order
 
@@ -73,6 +76,8 @@ A step that fails its contract leaks information faster than Perceive can replen
 ### Iteration-fidelity trade-off
 
 The budget can balance in different ways. Few steps with high retention, or many steps with low retention. The heuristic: step count × per-step fidelity must clear the survival threshold. Diffusion models: a thousand cheap denoising steps, each with a weak guarantee. Human cognition: a few expensive passes. Sleep consolidation is one cycle, deeply lossy, deeply structural.
+
+Fidelity measures retention per pass. Iteration stability is whether the postcondition survives re-application. They are distinct. Top-k retains most bits but converges to a fixed point: same winners every cycle, diversity dead by cycle two. An iteration-stable operation preserves its postcondition under re-application: sort a sorted list — still sorted. MMR a diverse slate — still diverse. [The Parts Bin](/the-parts-bin) uses this as the formal test for near-misses.
 
 Rate-distortion theory provides the analogy: each morphism has a distortion cost (bits leaked) and a rate (bits retained). Baez, Fritz, & Leinster (2011) formalized entropy in categorical terms. Connecting it to iterated pipelines is the next step. The framework diagnoses which step is broken. The prescription: strengthen fidelity, or add iterations. Two knobs, one budget.
 
@@ -169,7 +174,7 @@ Those systems are stacked pipes operating on different types.
 A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
 
 **"Consolidate is lossy; Remember is lossless. But persistence is never truly lossless."**
-Lossless means lossless relative to the compressed representation. Consolidate changes the representation (lossy). Remember persists whatever Consolidate outputs without further transformation (lossless relative to its input). The contract is not "perfect fidelity." The contract is "no additional loss at this step."
+Lossless means lossless relative to the compressed representation. Consolidate changes the representation (lossy). Remember persists whatever Consolidate outputs without further transformation (lossless relative to its input). The contract is not "perfect fidelity." The contract is "no additional loss at this step." Remember is not a separate store — it is the historically shaped substrate, the part of the medium that carries the system's past forward. DNA, the connectome, the published archive. Still an endomorphism, still same type in and out, but with the longest time constant. Timescale is the diagnostic; the contract is the definition.
 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
