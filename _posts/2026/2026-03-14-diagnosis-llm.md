@@ -6,14 +6,14 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series.*
 
-The [Natural Framework](/the-natural-framework) defines [six steps](/the-natural-framework#six-steps): perceive, cache, filter, attend, consolidate, remember. Every learning system runs some subset. The question is which steps are dysfunctional.
+The [Natural Framework](/the-natural-framework) defines [six roles](/the-natural-framework#six-steps): perceive, cache, filter, attend, remember (forward stages), and consolidate (reads from Remember, writes to the substrate). Every learning system runs some subset. The question is which roles are dysfunctional.
 
 ## Observations
 
 AI has three layers. Inference: transform tokens. Chatbot: transform context. Agent: transform prompts.
 
 <div style="max-width:90vw; margin:1.5em auto;">
-<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with six steps. Inference's Consolidate is sealed (Training) and Remember is read-only (Weights). Chatbot has four nils. Agent has Consolidate prompted." style="width:100%; display:block;">
+<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with six roles. Inference's Consolidate is sealed (Training) and Remember is read-only (Weights). Chatbot has four nils. Agent has Consolidate prompted." style="width:100%; display:block;">
 </div>
 
 ### Inference
@@ -21,29 +21,29 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 - Cache: functional. Positional encoding indexes by position.
 - Filter: functional. Softmax scores and suppresses.
 - Attend: functional. Multi-head attention selects across subspaces.
-- Consolidate: sealed. Training ran before deployment. No write path after.
 - Remember: read-only. Weights loaded every pass, never updated.
+- Consolidate: sealed. Training ran before deployment. No write path after.
 
 ### Chatbot
 - Perceive: functional. Receives tokens from inference.
 - Cache: functional. Token context accumulates in the window.
 - Filter: nil. Leans on inference softmax.
 - Attend: nil. Leans on inference multi-head attention.
-- Consolidate: nil. Session ends. Nothing persists.
 - Remember: nil. Every conversation starts from the same weights.
+- Consolidate: nil. Session ends. Nothing persists.
 
 ### Agent
 - Perceive: functional. Tool calls, build errors, test output.
 - Cache: functional. Context window holds the prompt.
 - Filter: shallow. Triage on pass/fail. No filter on direction.
 - Attend: reactive. Responds to what happens. Cannot set direction.
-- Consolidate: prompted. Can create skills. Never initiates.
-- Remember: functional. Filesystem persists across sessions.
+- Remember: functional. Filesystem persists across sessions. The cache for Consolidate exists.
+- Consolidate: no backward pass. Can create skills when prompted. No trigger, no schedule, no async loop that reads from Remember.
 
 ## Triage
 
 <ol>
-<li style="font-weight:700">Agent consolidate: prompted. Can create skills. Never initiates.</li>
+<li style="font-weight:700">Agent consolidate: no backward pass. Remember caches experiences; nothing reads them back.</li>
 <li style="font-weight:600; color:#333">Agent attend: reactive. Cannot set direction.</li>
 <li style="font-weight:400">Agent filter: shallow. No filter on direction.</li>
 <li style="color:#888">Inference consolidate: sealed. No write path after deployment.</li>
@@ -66,17 +66,17 @@ The nil cells are what zero policy looks like. The SOAP notes below are what bui
 
 *Subjective.* The agent has CRUD access to many forms of procedural memory: [MCP servers](https://modelcontextprotocol.io/), [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands), [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory), agents.md, memory.md, scripts, tool definitions.
 
-*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. It can create [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands) — the only procedure that writes procedures — but only when directed to. [Compaction](/union-find-compaction) (summarize context, reorganize retrieval) is cache housekeeping, not consolidation. Skill creation is consolidation: it changes how the agent processes the next session. The machinery exists. The initiative doesn't.
+*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. It can create [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands) — the only procedure that writes procedures — but only when directed to. [Compaction](/union-find-compaction) (summarize context, reorganize retrieval) is cache housekeeping, not consolidation. Skill creation is consolidation: it changes how the agent processes the next session. The forward pass works. Experiences persist in the filesystem (Remember). But no backward pass reads from that store to update the substrate. The agent never sleeps; always tires.
 
-*Assessment.* The agent can create skills, and skills are procedural memory: they change how the agent filters, attends, and responds in future sessions. That makes skill creation the consolidation step. But the agent never creates a skill on its own. It cannot decide how much of itself to impose on the user's workflow. The bottleneck is not capability but certainty. There is no dataset to aid decision support, no procedure to obtain one, no repository of heuristics or experiments to reference. The entire scientific process is missing. Previous chatbots generated A/B test data, but that data went to inference training, not to personalized procedural memory. The agent is unable to adapt to the engineer.
+*Assessment.* The agent can create skills, and skills are procedural memory: they change how the agent filters, attends, and responds in future sessions. That makes skill creation the backward pass. But the agent has no async loop. Neural networks fire backprop after every forward pass. Sleep fires consolidation on a biological clock. The agent fires Consolidate only when the user says "please make a skill now." The bottleneck is not capability but the missing trigger. There is no dataset to aid decision support, no procedure to obtain one, no repository of heuristics or experiments to reference. The entire scientific process is missing. Previous chatbots generated A/B test data, but that data went to inference training, not to personalized procedural memory. The agent is unable to adapt to the engineer.
 
-*Plan.* Build the epistemic infrastructure. Six components:
+*Plan.* Build the async backward pass. Six components:
 1. **Event logger** — perceive user edits, rejections, and approvals.
-2. **Decision log** — cache structured records of each user decision.
+2. **Decision log** — cache structured records of each user decision in Remember.
 3. **A/B test harness** — filter skill variants against the log, reject losers.
 4. **Red-team scorer** — attend by running adversarial scoring in the background, pick the winner.
-5. **Skill mutator** — consolidate by writing CRUD operations to procedural memory.
-6. **Skill repository** — remember heuristics, procedures, and experiment templates the agent references before deciding to write.
+5. **Skill mutator** — the backward pass: read from the decision log, write CRUD operations to procedural memory.
+6. **Trigger** — schedule or event that fires the backward pass. End-of-session review, threshold of accumulated decisions, or idle time. The equivalent of sleep.
 
 Two iterations of [scored feedback](/slop-detection#surprise-5-two-iterations-to-convergence) were enough to converge. Route the output to personalized procedural memory, not to inference training.
 

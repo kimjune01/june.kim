@@ -8,7 +8,7 @@ tags: cognition
 
 ### Near-misses
 
-[The Natural Framework](/the-natural-framework) derives six steps from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
+[The Natural Framework](/the-natural-framework) derives six roles from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
 
 PageRank is the first specimen. Its postcondition says "ranked by authority" but the Attend contract requires diversity and a bound. It made a lot of money regardless. A broken step doesn't kill instantly; it compounds.
 
@@ -103,7 +103,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** ((policy, ranked) → policy′) — the write interface to the policy store. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — policy is not the data type of Perceive. It can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
+**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — it can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
@@ -117,7 +117,7 @@ Near-misses (diagnostic counterexamples):
 <tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
 </table>
 
-**Remember** (policy′ → persisted) — the strongest column. Lossless relative to its input: no additional loss at this step. Remember is not a separate store. It is the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+**Remember** (ranked → persisted) — the last forward stage. Lossless relative to its input: no additional loss at this step. Remember also serves as the cache for Consolidate: ranked outcomes are stored here, and Consolidate reads from them asynchronously. Remember is not a separate store. It is the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
 
 If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
 
@@ -144,7 +144,7 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 <tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
 </table>
 
-The grid predicted its own contents. Probabilistic predicate filtering: the [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter), a randomized membership test with a known false-positive rate — the most deployed probabilistic data structure in computing. Bounded dominance: [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance), which relaxes Pareto by requiring a margin of ε before declaring dominance — standard in multi-objective optimization. Probabilistic dominance: [stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) from decision theory, where distribution A dominates B if preferred under all risk-averse utilities.
+Every cell fills with a known algorithm. [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) at predicate × probabilistic — the most deployed probabilistic data structure in computing. [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance) at dominance × bounded — standard in multi-objective optimization. [Stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) at dominance × probabilistic — decision theory since the 1960s. A clean partition with no awkward fits validates the axes, but a 3×3 where every cell fills on sight is a confirmation, not a prediction.
 
 Take **Attend**. Lay operations on output form vs. redundancy control:
 
@@ -157,16 +157,14 @@ Take **Attend**. Lay operations on output form vs. redundancy control:
 
 The right column filled late. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after. Simulated annealing and CMA-ES find single optima by explicitly diversifying the search: temperature schedules force basin-hopping, covariance matrices enforce spread. Portfolio solvers spawn threads with different random seeds; stochasticity encourages divergence, budget kills at deadline, final selection picks the best from a diverse pool. Biological evolution does this with mutation rate as the stochastic dial.
 
-The grid narrows the search space enough that a dart throw produces a plausible candidate. Mendeleev didn't synthesize germanium. He drew the grid, pointed at the gap, and said "something goes here with these properties."
+The grids organize the catalog. The axes partition the design space cleanly enough to prescribe: given a broken slot, name the coordinates, look up the candidate. Whether finer grids can do more — find blank cells, predict operations that haven't been composed yet — is [the next question](/the-missing-parts).
 
 ### Future work
 
-The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum. The proof provides the axes: iteration stability (Corollary 2), fidelity (data processing inequality), variation introduced (stochasticity proof), store (Corollary 2), and thermodynamic cost (Landauer). Scale and reversibility are properties of the domain row, not the operation. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
+The [derivation](/the-natural-framework) establishes contracts. The catalog and grids give the pharmacy. Two things are ready now:
 
-The [derivation](/the-natural-framework) establishes contracts. Two things are ready now:
-
-- **Order the parts bin.** The derived dimensions — iteration stability, fidelity, variation, store, cost — provide the axes for each column. Find the gaps. Predict the missing operations. Three columns already have periodic tables: Filter and Attend above, Cache from [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures), Consolidate from [I-Con (2025)](https://mhamilton.net/icon). Perceive and Remember remain.
 - **Build the diagnostic agent.** Describe → Diagnose → Prescribe → Validate, backed by the ordered taxonomy.
+- **[Find the missing parts.](/the-missing-parts)** The 3×3 grids confirm the axes but don't predict. Finer grids with more rows surface genuine blanks — operations that should exist but haven't been composed yet.
 
 Three need formalization work. The existence proofs and types are defined; the composition proofs are sketched:
 

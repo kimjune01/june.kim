@@ -12,14 +12,14 @@ Warren Buffett calls the functional loop a "moat." The framework names its six w
 
 ## The six cells of a company
 
-| Step | Contract | Healthy | Dying |
+| Role | Contract | Healthy | Dying |
 |---|---|---|---|
 | Perceive | Reads environment accurately | Customer research, market signals, competitive intelligence flow in | Ignores signals, falsifies internal data, executive bubble |
 | Cache | Stores and retrieves institutional knowledge | Knowledge survives turnover, systems of record work | Knowledge walks out the door with employees |
 | Filter | Rejects what doesn't matter | Says no to most projects, kills bad bets early | Tries everything, no focus, no kills |
 | Attend | Ranks priorities with diversity guarantee | Multiple revenue streams that repel each other | One product, one market, one bet |
-| Consolidate | Updates procedures from experience | Post-mortems change process, playbook evolves | Runs the playbook from ten years ago |
 | Remember | Persists durable output for next cycle | Brand, patents, culture, ecosystem compound | Each quarter starts from zero |
+| *Consolidate* | *Updates procedures from experience* | *Post-mortems change process, playbook evolves* | *Runs the playbook from ten years ago* |
 
 The dim cell test: count the cells that exist but don't meet their contract. More dim cells, shorter time horizon before the loop degrades.
 
@@ -47,7 +47,7 @@ Same structure as [Diagnosis LLM](/diagnosis-llm). A company may run multiple st
 
 **Objective.** What the filings show. Revenue concentration (Attend), R&D allocation (Consolidate), employee turnover (Cache), market share trajectory (compounding or decaying).
 
-**Assessment.** Which cells are functional, shallow, dim, stale, or broken. Whether Consolidate can self-correct. The [death conditions](/the-handshake#three-death-conditions): broken step, closed loop, or decaying input.
+**Assessment.** Which cells are functional, shallow, dim, stale, or broken. Whether Consolidate can self-correct. The [death conditions](/the-handshake#three-death-conditions): broken role, closed loop, or decaying input.
 
 **Plan.** Which cell to strengthen. Whether the fix requires internal initiative or external intervention.
 

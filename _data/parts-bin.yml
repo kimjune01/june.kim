@@ -1,0 +1,378 @@
+# The Parts Bin — structured taxonomy
+# Derived from The Natural Framework proof.
+# Axes per operation: iteration_stability, fidelity, variation, store, cost.
+# Scale and reversibility are domain-row properties, not operation properties.
+#
+# Jekyll: {{ site.data.parts-bin.columns }}
+# Agent:  load YAML, query by step/store/grid coordinates.
+
+types:
+  raw:        "Unprocessed environmental input"
+  encoded:    "Parseable by downstream"
+  indexed:    "Retrievable by key"
+  selected:   "Strictly smaller subset"
+  ranked:     "Ordered, diverse, bounded"
+  policy:     "Routing function: maps data to rankings"
+  persisted:  "Retrievable on next cycle"
+
+columns:
+
+  # ── Perceive ──────────────────────────────────────────────
+  - name: perceive
+    input_type: raw
+    output_type: encoded
+    store: data
+    contract: "Parseable by next step. Injects new bits."
+    grid_axes: null  # periodic table not yet built
+    operations:
+      - name: Lexical analysis
+        precondition: Raw byte stream
+        postcondition: Token sequence, parseable
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: "Parsing (LL/LR)"
+        precondition: Token stream, conforms to grammar
+        postcondition: AST with explicit structure, traversable
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: JSON parsing
+        precondition: Raw string, well-formed
+        postcondition: Structured object, addressable by key
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: A/D conversion
+        precondition: Continuous analog signal
+        postcondition: Discrete samples, quantized
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n)"
+      - name: SIFT descriptor extraction
+        precondition: Raw pixel grid
+        postcondition: Keypoint descriptors, matchable
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n log n)"
+        ref: "https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf"
+
+  # ── Cache ─────────────────────────────────────────────────
+  - name: cache
+    input_type: encoded
+    output_type: indexed
+    store: data
+    contract: "Retrievable by key."
+    grid_axes:
+      - "Idreos (2018) periodic table: five design primitives"
+    ref: "https://stratos.seas.harvard.edu/publications/periodic-table-data-structures"
+    operations:
+      - name: Hash indexing
+        precondition: Records with stable keys
+        postcondition: Keyed index, exact retrieval by key
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) amortized"
+      - name: B-tree index construction
+        precondition: Records with ordered keys
+        postcondition: Balanced index, retrieval + range queries
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n log n)"
+      - name: Trie insertion
+        precondition: String keys over finite alphabet
+        postcondition: Prefix-indexed, retrieval by string or prefix
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n * k)"
+      - name: Inverted index construction
+        precondition: Tokenized corpus with document IDs
+        postcondition: Posting lists, retrieval by term
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: LSM-tree flush
+        precondition: Sorted runs in memory
+        postcondition: Persistent key-value index, retrievable after compaction
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n log n)"
+      - name: Skip-list indexing
+        precondition: Ordered entries
+        postcondition: Probabilistic index, O(log n) retrieval
+        iteration_stable: true
+        fidelity: lossless
+        variation: structural  # random level assignment
+        cost: "O(n log n)"
+
+  # ── Filter ────────────────────────────────────────────────
+  - name: filter
+    input_type: indexed
+    output_type: selected
+    store: data
+    contract: "Strictly smaller. Losers suppressed, winners forwarded."
+    grid_axes:
+      rows: [predicate, similarity, dominance]
+      cols: [exact, bounded_approximation, probabilistic]
+    grid:
+      - row: predicate
+        exact: "WHERE, range query"
+        bounded_approximation: "Threshold filtering (soft margin)"
+        probabilistic: null  # prediction: randomized classifier gate
+      - row: similarity
+        exact: "Exact NN pruning"
+        bounded_approximation: "k-NN radius pruning"
+        probabilistic: "LSH filtering"
+      - row: dominance
+        exact: "Pareto filtering"
+        bounded_approximation: null  # prediction: approximate Pareto in high dim
+        probabilistic: null  # prediction
+    operations:
+      - name: "Predicate selection (WHERE)"
+        precondition: Indexed relation + boolean predicate
+        postcondition: Subset matching predicate, strictly smaller
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless  # no false negatives
+        variation: none
+        cost: "O(n)"
+      - name: Range query
+        precondition: Ordered index + interval bounds
+        postcondition: Subset within interval, strictly smaller
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(log n + k)"
+      - name: Threshold filtering
+        precondition: Scored items + threshold t
+        postcondition: Subset meeting threshold, strictly smaller
+        grid_position: [predicate, bounded_approximation]
+        iteration_stable: true
+        fidelity: lossy  # threshold may exclude near-boundary items
+        variation: none
+        cost: "O(n)"
+      - name: Regex extraction
+        precondition: String corpus + pattern
+        postcondition: Matching spans retained, non-matches discarded
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: k-NN radius pruning
+        precondition: Metric index + query + radius r
+        postcondition: Subset within radius, strictly smaller
+        grid_position: [similarity, bounded_approximation]
+        iteration_stable: true
+        fidelity: lossy  # radius is approximate boundary
+        variation: none
+        cost: "O(n) or O(log n) with index"
+      - name: LSH filtering
+        precondition: High-dimensional vectors + hash family
+        postcondition: Candidate set, probabilistic recall
+        grid_position: [similarity, probabilistic]
+        iteration_stable: true
+        fidelity: lossy  # false negatives by design
+        variation: structural  # hash collisions are stochastic
+        cost: "O(n^rho) sublinear"
+        ref: "https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/"
+      - name: Pareto filtering
+        precondition: Candidates with objective vectors
+        postcondition: Non-dominated subset, strictly smaller
+        grid_position: [dominance, exact]
+        iteration_stable: true  # Pareto front of a Pareto front is itself
+        fidelity: lossless
+        variation: none
+        cost: "O(n log n) for 2D, O(n^(d-1)) general"
+
+  # ── Attend ────────────────────────────────────────────────
+  - name: attend
+    input_type: [policy, selected]  # policy routes data
+    output_type: ranked
+    store: policy  # reads from policy store
+    contract: "Ordered, diverse, bounded. Survivors are dissimilar."
+    grid_axes:
+      rows: [top_k_slate, single_best, path_tree]
+      cols: [none, implicit, explicit]
+    grid:
+      - row: top_k_slate
+        none: "Heap top-k"
+        implicit: "Beam search"
+        explicit: "MMR, DPP top-k, xQuAD"
+      - row: single_best
+        none: "argmax"
+        implicit: "Tournament selection"
+        explicit: null  # prediction
+      - row: path_tree
+        none: "Dijkstra, A*"
+        implicit: "MCTS"
+        explicit: null  # prediction: concurrent stochastic tree search
+    near_misses:
+      - name: "Quicksort / Mergesort"
+        diagnosis: "Order only. No diversity, no bound."
+        iteration_stable: true  # on order; unstable on diversity
+      - name: "Top-k selection"
+        diagnosis: "Bounded, no diversity."
+        iteration_stable: false  # same winners every cycle
+      - name: "PageRank"
+        diagnosis: "Ranking, no diversity, no bound."
+        iteration_stable: false  # rich get richer
+    operations:
+      - name: MMR re-ranking
+        precondition: Candidates + relevance scores + similarity measure
+        postcondition: Top-k ordered, diversity penalized, bounded
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: none  # deterministic given scores
+        cost: "O(k * n)"
+        ref: "https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf"
+      - name: DPP top-k selection
+        precondition: Candidates + relevance weights + similarity kernel
+        postcondition: Top-k ranked, mutually dissimilar, bounded
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: sampling  # DPP is a probability distribution over subsets
+        cost: "O(n * k^2)"
+        ref: "https://arxiv.org/abs/1207.6083"
+      - name: xQuAD re-ranking
+        precondition: Candidates + relevance + subtopic coverage
+        postcondition: Top-k ordered, aspect coverage explicit, bounded
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(k * n * |subtopics|)"
+        ref: "https://link.springer.com/chapter/10.1007/978-3-642-12275-0_11"
+      - name: Submodular maximization
+        precondition: Candidates + submodular utility (relevance + coverage)
+        postcondition: Top-k greedy-ranked, diminishing-return diversity, bounded
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(k * n)"
+      - name: Diversified beam search
+        precondition: Stepwise expansions + diversity penalty
+        postcondition: Top-b retained, non-redundant alternatives, bounded
+        grid_position: [top_k_slate, implicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(b * n * steps)"
+
+  # ── Consolidate ───────────────────────────────────────────
+  - name: consolidate
+    input_type: persisted  # reads from Remember (which caches ranked output)
+    output_type: policy  # updated routing function
+    store: policy  # writes to policy store (backward pass inside substrate)
+    contract: "Lossy. Backward pass: reads persisted ranked outcomes, reshapes how each stage processes."
+    grid_axes:
+      - "I-Con (2025) periodic table"
+    ref: "https://mhamilton.net/icon"
+    operations:
+      - name: Gradient descent update
+        precondition: Loss contributions + current weights
+        postcondition: Weights updated, future predictions altered
+        iteration_stable: true  # convergence is the design goal
+        fidelity: lossy
+        variation: stochastic  # SGD noise
+        cost: "O(n * d)"
+      - name: Bayesian posterior update
+        precondition: Prior parameters + weighted observations
+        postcondition: Posterior compressed, future inference altered
+        iteration_stable: true
+        fidelity: lossy
+        variation: none  # exact update is deterministic
+        cost: "varies"
+      - name: K-means update
+        precondition: Weighted points + codebook size k
+        postcondition: k prototypes replacing many points, lossy
+        iteration_stable: true  # converges to local optimum
+        fidelity: lossy
+        variation: initialization  # random seed matters
+        cost: "O(n * k * d)"
+      - name: Incremental PCA
+        precondition: Observations in high dimension
+        postcondition: Low-rank basis, future projection altered
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n * d * k)"
+      - name: Decision tree induction
+        precondition: Ranked labeled examples
+        postcondition: Compact rule set, future classification altered
+        iteration_stable: true
+        fidelity: lossy
+        variation: none  # deterministic given data
+        cost: "O(n * d * log n)"
+      - name: Prototype condensation
+        precondition: Ranked candidates + compression budget
+        postcondition: Small exemplar set, lossy approximation for future matching
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n * k)"
+
+  # ── Remember ──────────────────────────────────────────────
+  - name: remember
+    input_type: ranked  # persists ranked output from Attend
+    output_type: persisted
+    store: data  # lossless persistence; also serves as cache for Consolidate
+    contract: "Retrievable on next cycle's Perceive and by Consolidate. No additional loss."
+    grid_axes: null  # periodic table not yet built
+    operations:
+      - name: WAL append + fsync
+        precondition: Serialized state record
+        postcondition: Durable on crash, recoverable next cycle
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1)"
+      - name: Transaction commit
+        precondition: Validated write set
+        postcondition: Persisted, visible for future reads
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1)"
+      - name: Git object write + commit
+        precondition: Content-addressed objects + manifest
+        postcondition: Durable commit graph, retrievable by hash
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: Checkpoint serialization
+        precondition: In-memory model/state
+        postcondition: Persisted checkpoint, loadable on next run
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+      - name: Copy-on-write snapshot commit
+        precondition: Consistent compressed state image
+        postcondition: Persistent snapshot, addressable by version
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) amortized"
+      - name: SSTable flush
+        precondition: Immutable key-value run in memory
+        postcondition: Durable on-disk run, retrievable by key
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
