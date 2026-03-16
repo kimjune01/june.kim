@@ -6,41 +6,52 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds on [The Flicker](/the-flicker) and [The Handshake](/the-handshake).*
 
-[The Handshake](/the-handshake) gives Consolidate its type: `(policy, [ranked]) → policy′`. Policy routes data through the competitive core. If it routes, it's a function. If Consolidate updates it, Consolidate is a higher-order function: it takes a function and evidence and returns a new function. That's the type-level distinction from compaction. Compaction reorganizes data. Consolidation rewrites the router.
+Why does learning plateau?
 
-But a function that rewrites functions must select among candidates. Which candidate policy is better? That question requires Filter and Attend. Those require a policy store. That store requires its own Consolidate. The inner loop contains itself.
+Consolidate is the step that determines whether you get smarter. [The Handshake](/the-handshake) gives it its type:
 
-Minsky called the first level B-brain: the agent that watches the A-brain work. He stopped at one level because he had no formal reason to go further. The types give that reason. Consolidate contains an inner loop. The inner loop contains its own Consolidate. The recursion is structural, not contingent.
+> `(policy, [ranked]) → policy′`
 
-The data processing inequality says it converges. Each recursive level gets its bits from the level above. Level 0 operates on data. Level 1 operates on policy, compressed from ranked data by Consolidate₀. Level 2 operates on meta-policy, compressed from ranked policies by Consolidate₁. A decreasing sequence bounded below by zero. It converges to passthrough: at the deepest effective level, there aren't enough bits for the competitive core to function. Selection without candidates is identity. The tower has a top floor. Three or four levels before noise overwhelms signal.
+A function and evidence in, a better function out. [Consolidation](/consolidation) rewrites the router. If any step deserves more resources, it's this one.
 
-### The equilibrium
+To improve Consolidate, you need to select among candidate policies: habits, heuristics, taste. Which one is better? Answering that question is itself a pipe. Consolidate contains its own Perceive, Filter, and Attend. And that inner pipe has its own Consolidate.
 
-Policy leaks. Landauer guarantees it: bits encoded in physical substrate degrade. So Consolidate has two jobs. Maintain: repair leaked policy. Improve: compress new evidence into better policy. Both draw from the same evidence budget, the ranked data arriving from the pipeline.
+<img src="/assets/plateau-depth.svg" alt="Consolidate's recursive depth: Level 0 has Filter, Attend, Consolidate. Each Consolidate contains its own Filter, Attend, Consolidate at the next level. Levels dim as bits decrease. Level 3 is passthrough." style="width:100%; max-width:620px; display:block; margin:1.5em auto;"> Minsky called the first level B-brain. He stopped at one level because he had no formal reason to go further. The types give that reason. The recursion is structural.
 
-At steady Perceive throughput *T*:
+Each inner pipe's Remember is the policy passed back to the level above. That's how Consolidate returns `policy′`: the inner pipe runs, and its output becomes the outer pipe's update.
+
+## Inner life
+
+The human body is a pipe. The brain is its Consolidate: the organ that rewrites policy from evidence. [Dreams](https://www.nature.com/articles/nrn2762-c1) are the brain's Consolidate: the inner pipe that reorganizes policy while Perceive is shut. Evolution found it more efficient to shut down the whole body for several hours each day than to run consolidation in the background. That's how important this step is. And we can't remember dreams because the inner pipe's data type doesn't match the outer pipe's Perceive. Policy representations aren't sensory encodings. Type mismatch at the interface.
+
+
+Each inner pipe gets its bits from the pipe above. The body operates on sensory data; the brain on compressed representations; dreams on compressed representations of representations. Each level has strictly less to work with. The [data processing inequality](/the-handshake#data-processing-inequality) guarantees it: information only decreases through processing. Eventually there aren't enough bits for selection to function: passthrough. The tower has a top floor, and Consolidate is a slow dial with a hard ceiling.
+
+## At rest
+
+Policy leaks, too. Landauer guarantees it: bits in physical substrate degrade. So Consolidate has two jobs. Maintain: repair leaked policy. Improve: compress new evidence into better policy. Both draw from the same evidence budget. At steady Perceive throughput *T*:
 
 > dPolicy/dt = consolidation\_rate − leak\_rate
 
-Plateau when the two rates balance. The ceiling is set by Perceive's throughput, not Consolidate's quality. More input, higher plateau. Less input, lower plateau. Decaying input, the plateau drops and maintenance can't keep up.
+Plateau when the two rates balance. "Use it or lose it" is this equation. Evidence stops flowing, the leak rate wins, policy decays to the level the current throughput can sustain. Netflix keeps the corporate drone alive: enough novel perception to maintain, never enough to challenge. Saturated at floor. Nothing improves.
 
-"Use it or lose it" is this equation. Not folk wisdom. The leak rate exceeds the consolidation rate when evidence stops flowing. Policy decays to the level the current throughput can sustain.
+But look at the equation again. The ceiling is set by Perceive's throughput, not Consolidate's quality. The lever isn't the step you'd expect. It's the input.
 
-The digital variant swaps the bottleneck. Model weights don't leak. Bit-perfect storage, zero thermodynamic degradation. But consolidation rate is a function of *novelty*, not volume. Another pass over the same data is redundant evidence, already compressed into the weights. The model plateaus when Perceive runs out of new bits. Same equation, different term goes to zero.
+A monk meditates twelve hours a day. Maximum Consolidate: the inner pipe running at full power, Perceive shut, all resources dedicated to policy refinement. The framework predicts a plateau, not transcendence. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found exactly that: meditation benefits plateau even in the most dedicated practitioners. Attention sharpens, but domain knowledge doesn't grow. Novel evidence stopped arriving. The dial is cranked, but the ceiling is set by what comes in, not by how hard you think. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same for deliberate practice: it only works when it includes new information and external feedback. Pure repetition is consolidation without Perceive.
 
-Netflix keeps the corporate drone alive. The professional pipe starved long ago: same meetings, same reports, no new evidence. Policy leaks. But entertainment provides just enough novel perception to keep the system above the maintenance threshold. Both rates near zero. All six steps present. None broken. Saturated at floor. The loop runs, the contracts hold, and nothing improves because the evidence stream maintains but never challenges the current policy. Not dead. Not broken. Flat.
+No surprise.
 
-### Prose
+## rate × density
 
-Prose is post-Remember. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Remembered. What you read is the output of someone else's competitive core. The losers are already dead. Every sentence is a survivor.
+Prose is post-Remember. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Remembered. What you read is the output of someone else's competitive core. The losers are already dead. Every sentence is a survivor. Prose maximizes both terms of the ceiling. *Novel*: only survivors, pre-compressed by the writer's pipeline. *Per unit time*: language encodes more structure per second than any sensory channel. Reading is faster than listening, denser than watching. The densest interpretable medium because the math demands it.
 
-Prose maximizes both terms of the ceiling. *Novel*: post-competitive-core, only survivors, pre-compressed by the writer's full pipeline. *Per unit time*: language encodes more structure per second than any sensory channel — reading is faster than listening, denser than watching.
+Read more, better, faster, and the plateau rises. Stop reading and it falls. The equation works both ways.
 
-A derivation, not a preference for books over video. The framework says learning plateaus at the Perceive rate. Prose is the channel where Perceive rate times novelty density is highest. The densest interpretable medium because the math demands it.
+The same holds for the agent. An LLM does in-context learning; the context window is its Perceive. Dense prose in context means high novelty per token. Boilerplate code is repetitive structure, low novelty, high redundancy. The same model thinks sharper when its window carries prose than when it carries boilerplate. A repo full of consolidated prose is a persistent Perceive channel: every session starts with prior loops already loaded. Early sessions fumble. Later sessions are sharp from the first message. The repo learned. The agent returns the favor — its filtered output is the human's Perceive. The [double loop](/double-loop) feeds both pipes their densest input.
 
-The same holds for the agent. An LLM does in-context learning; the context window is its Perceive. Dense prose in context means high novelty per token. Boilerplate code is repetitive structure, low novelty, high redundancy. The same model is a sharper thinker when its window carries prose than when it carries boilerplate. A repo full of consolidated prose is a persistent Perceive channel: every new session starts with prior loops already loaded. Early sessions fumble. Later sessions are sharp from the first message. The repo learned. And the agent returns the favor — its filtered output is the human's Perceive. The [double loop](/double-loop) feeds both pipes their densest input.
+The digital variant swaps the bottleneck, not the equation. Model weights don't leak. But consolidation rate is a function of *novelty*, not volume. Another pass over the same data is redundant evidence. The model plateaus when Perceive runs out of new bits. Same equation, different term goes to zero. Same plateau, regardless of substrate.
 
-The fastest readers have the highest ceilings. The equilibrium bounds learning by input rate. Prose is where the plateau lives.
+If the equation holds for neurons and for weights, then varying context density should measurably change agent performance. That's a prediction.
 
 ---
 
