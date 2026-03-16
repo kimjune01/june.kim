@@ -6,7 +6,7 @@ tags: coding cognition vector-space
 
 *Part of the [cognition](/cognition) series.*
 
-The [cognition series](/cognition) built a six-step pipeline: [perceive](/caret-recorder), [cache](/moments), [filter](/perception-pipe), [attend](/salience), [consolidate](/consolidation), [remember](/memory). The competitive core is filter, attend, consolidate: winners suppress losers, diversity is enforced, schemas form offline. Encoding precedes it; persistence follows.
+The [cognition series](/cognition) found six roles in information processing: [perceive](/caret-recorder), [cache](/moments), [filter](/perception-pipe), [attend](/salience), [consolidate](/consolidation), [remember](/memory). Five run forward as stages: perceive, cache, filter, attend, remember. Consolidate runs backward inside the substrate, reshaping how each stage processes on the next cycle. The competitive core is filter and attend: winners suppress losers, diversity is enforced. Consolidate is how the substrate learns.
 
 The same pipeline runs at every timescale. Every row is something you already call "information processing." Dimmed cells are steps the domain hasn't yet optimized.
 
@@ -136,7 +136,7 @@ The same pipeline runs at every timescale. Every row is something you already ca
 </table>
 </div>
 
-<span id="six-steps"></span>Twelve domains. Six steps.
+<span id="six-steps"></span>Twelve domains. Six roles.
 
 Now the same table again. None of these domains call themselves "information processing", but all of them process information.
 
@@ -266,11 +266,11 @@ Now the same table again. None of these domains call themselves "information pro
 </table>
 </div>
 
-Twelve more domains. Six steps. From antibodies to Planck time. Twenty-four domains total. [More where these came from.](/more-rows)
+Twelve more domains. Six roles. From antibodies to Planck time. Twenty-four domains total. [More where these came from.](/more-rows)
 
 ## Why the same shape
 
-Each domain faces the same problem: too much input, finite capacity, select a subset that's both high-quality and diverse. Within each domain, the same data type flows through every step. Neurons process spikes. Databases process rows. Cognition processes moments. The type doesn't change — only which items survive. Filter is rule-based: a threshold, a WHERE clause, a linter. No judgment. Attend is where judgment enters. Consolidate is lossy compression that changes future processing — not [compaction](https://en.wikipedia.org/wiki/Log-structured_merge-tree), which reorganizes the cache without changing the system.
+Each domain faces the same problem: too much input, finite capacity, select a subset that's both high-quality and diverse. Within each domain, the same data type flows through every step. Neurons process spikes. Databases process rows. Cognition processes moments. The type doesn't change — only which items survive. Filter is rule-based: a threshold, a WHERE clause, a linter. No judgment. Attend is where judgment enters. Consolidate runs inside the substrate: lossy compression that reshapes how each stage processes on the next cycle, propagating backward from outcome to cause. [Compaction](https://en.wikipedia.org/wiki/Log-structured_merge-tree) reorganizes the cache without changing the system.
 
 ## Inhibition across domains
 
@@ -282,12 +282,12 @@ Natural selection is the slowest domain but the most obvious. The [competitive e
 
 ## The categorical proof
 
-Each step is a [morphism](https://en.wikipedia.org/wiki/Morphism) — a structure-preserving map between information states. Chained, the six compose into a single transformation: high-bandwidth input to durable signal. That is [category theory](https://en.wikipedia.org/wiki/Category_theory). The information states are the objects. Each step is a morphism with a [postcondition](/the-handshake#morphisms-with-guarantees-vs-arbitrary-self-maps) — a structural guarantee on its output. The pipeline is their composition. When one domain's Remember feeds the next domain's Perceive, the mapping preserves all six morphisms and their composition order. That is a [functor](https://en.wikipedia.org/wiki/Functor) between categories.
+Each role is a [morphism](https://en.wikipedia.org/wiki/Morphism) — a structure-preserving map between information states. Five compose forward into a single transformation: high-bandwidth input to durable signal. The sixth, Consolidate, flows backward through the substrate, reshaping parameters from outcome to cause. That is [category theory](https://en.wikipedia.org/wiki/Category_theory). The information states are the objects. Each role is a morphism with a [postcondition](/the-handshake#morphisms-with-guarantees-vs-arbitrary-self-maps) — a structural guarantee on its output. The forward pipeline is their composition. When one domain's Remember feeds the next domain's Perceive, the mapping preserves all six morphisms and their composition order. That is a [functor](https://en.wikipedia.org/wiki/Functor) between categories.
 
-Perceive and cache are map. Filter and attend are filter. Consolidate and remember are reduce. [Map-filter-reduce](https://en.wikipedia.org/wiki/MapReduce) has been known since [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)). The surprise is that immune systems run it too.
+Perceive and Cache are map. Filter and Attend are filter. Remember is reduce. Consolidate is the gradient — the backward pass that reshapes the map. [Map-filter-reduce](https://en.wikipedia.org/wiki/MapReduce) has been known since [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)). The surprise is that immune systems run it too.
 
 <div style="max-width:63vw; min-width:320px; margin:1.5em auto; overflow-x:auto;">
-<img src="/assets/functor-pipeline.svg" alt="Two pipelines — Cognition (object type: Moment) and Writing (object type: Draft) — each with six steps. A dashed arrow from Cognition's Remember to Writing's Perceive shows the functor relationship." style="width:100%; display:block;">
+<img src="/assets/functor-pipeline.svg" alt="Two pipelines — Cognition (object type: Moment) and Writing (object type: Draft) — each with six roles. A dashed arrow from Cognition's Remember to Writing's Perceive shows the functor relationship." style="width:100%; display:block;">
 </div>
 
 This is deduction, not induction. The boundaries follow from temporal flow.
@@ -296,7 +296,7 @@ This is deduction, not induction. The boundaries follow from temporal flow.
 
 That loss is not free. [Landauer's principle](https://en.wikipedia.org/wiki/Landauer%27s_principle): erasing one bit costs at least *kT* ln 2 joules. Lossy encoding erases bits, so it has a thermodynamic floor. You cannot encode everything. You must choose what to encode — but choosing is selection, and selection requires encoding first. Circular dependency. The only resolution is temporal: encode first with a cheap, fixed, lossy projection (the retina, the tokenizer, the microphone), then select from the encoded set. Perceive is always cheap because it cannot afford to be expensive: you have not selected yet, so you do not know what is worth spending energy on.
 
-Now: the six steps are temporal morphisms, input at time *t*, output at time *t+δ*, where *δ* > 0. Perceive receives multiple inputs (environment and Remember's feedback). Consolidate and Remember emit at most one output at a time. Inputs arrive faster than outputs drain. By the pigeonhole principle, something must hold them. That is a data structure. A data structure for multiple items requires a write interface (storage) and a read interface (retrieval). Those are Cache's two operations. Cache must exist. You cannot select from what you have not stored. Encoding before selection.
+Now: the six roles are temporal morphisms, input at time *t*, output at time *t+δ*, where *δ* > 0. Perceive receives multiple inputs (environment and Remember's feedback). Remember emits at most one output at a time. Inputs arrive faster than outputs drain. By the pigeonhole principle, something must hold them. That is a data structure. A data structure for multiple items requires a write interface (storage) and a read interface (retrieval). Those are Cache's two operations. Cache must exist. You cannot select from what you have not stored. Encoding before selection.
 
 **Boundary 2: selection before persistence.** If the loop feeds back, the last step's output must persist across the cycle boundary. That persistence morphism is Remember. Consolidate is lossy; Remember is lossless. If you persist before selecting, you persist everything, and the store grows without bound. Bounded storage forces selection before persistence.
 
@@ -306,9 +306,9 @@ Remember is not a separate storage module. It is the historically shaped substra
 
 **Corollary 2: control separates from data.** Nothing prevents policy from being encoded as data in principle. But data has variance (proven above). If policy shares a pool with data, the competitive process cannot distinguish them — it amplifies what matches current perception and suppresses the rest. One iteration and the policy is corrupted by the process it governs. Self-encoding is a fixed point that variance makes unstable. Even sharing a store is fatal: bounded storage forces eviction, and high-volume data evicts low-volume policy. Therefore policy and data must be different types. The contract is a property of the morphism, not the data flowing through it.
 
-**Corollary 3: Consolidate and Attend exist.** The policy store from Corollary 2 is independent of the data store. Storage is not free in nature. The policy store cannot grow without bound any more than the data store can. It needs a write interface and a read interface. Consolidate is the write interface: it compresses and updates policy. Attend is the read interface: it applies policy to data. Cache stores data. The policy store stores criteria. Different stores, different morphisms, both forced by bounded resources.
+**Corollary 3: Consolidate and Attend exist.** The policy store from Corollary 2 is independent of the data store. It needs a write interface and a read interface. Attend is the read interface: it reads policy from the substrate and applies it to data in the forward pass. Consolidate is the write interface: it compresses ranked outcomes into policy updates. Consolidate lives inside the substrate (Remember), running as the backward pass — propagating parameter changes from outcome to cause through every stage. The forward data path has five stages. The backward path is Consolidate.
 
-Boundary 1 derives Perceive (type bridge) and Cache (pigeonhole). Boundary 2 derives Remember (loop closure). The corollaries derive Filter, Attend, and Consolidate. The derivation forces roles of this shape: a buffer, a gate, a policy reader, a policy writer. The [cognition series](/cognition) found these specific six across every domain it examined. Two independent lines of evidence converge on the same structure.
+Boundary 1 derives Perceive (type bridge) and Cache (pigeonhole). Boundary 2 derives Remember (loop closure). The corollaries derive Filter, Attend, and Consolidate. Five roles compose as forward stages. The sixth, Consolidate, runs inside the substrate as the backward pass. The derivation forces roles of this shape: a buffer, a gate, a policy reader, a policy writer. The [cognition series](/cognition) found these six across every domain it examined. Two independent lines of evidence converge on the same structure.
 
 **Why "natural."** The proofs assume only temporal flow, bounded storage, and selective output. Energy satisfies the same premises: it flows through morphisms, storage costs resources, no consumption is 100% efficient. Energy is a data type. The same structure is forced for anything that flows through a bounded selective system in nature.
 
@@ -334,11 +334,11 @@ In the tables above, dim cells mark steps a domain hasn't optimized. The failure
 
 **Science** is the most consequential. Citation metrics are `GET *` for academia: top-k by popularity, no diversity enforcement. [Merton (1968)](https://doi.org/10.1126/science.159.3810.56) called it the [Matthew effect](https://en.wikipedia.org/wiki/Matthew_effect) — the cited get more cited. You search for "schema consolidation" and get ten papers that cite each other saying the same thing. A DPP would return one from that cluster and five from adjacent regions you didn't know to search for. [JSTOR, PubMed, Nature](/memory): same bug as Google, different coat. Fix attend, and consolidate sharpens.
 
-**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. The genome is not a record stored inside the organism; it *is* the historically shaped substrate, every cycle that kept on happening persisting as the constraint on the next. Life is self-recursive because the substrate is the memory. The Universe row has the same structure: force perceives and force remembers. Genome→genome, force→force.
+**Evolution** has no dim cells. The genome perceives, generation caches, natural selection filters, niche differentiation attends, speciation consolidates, and the genome remembers. Perceive and Remember are the same cell. Consolidate lives inside that cell: speciation is the genome reshaping its own selection parameters. The genome is not a record stored inside the organism; it *is* the historically shaped substrate, every cycle that kept on happening persisting as the constraint on the next. Life is self-recursive because the substrate is the memory. The Universe row has the same structure: force perceives and force remembers. Genome→genome, force→force.
 
 ## The recursive loop test
 
-In a linked list, a weak node can be routed around, and survive. But in a singly recursive loop, we should be able to find out whether it survives a broken step or not. In biology, genome perception transforms into genome memory; it is a singly recursive loop. If it survives any one of the errors in each of the six steps, then the framework is falsified.
+In a linked list, a weak node can be routed around, and survive. But in a singly recursive loop, we should be able to find out whether it survives a broken step or not. In biology, genome perception transforms into genome memory; it is a singly recursive loop. If it survives any one of the errors in each of the six roles, then the framework is falsified.
 
 Can it? The error will either compound, diminish, or persist. Let's test:
 
@@ -348,7 +348,7 @@ Can it? The error will either compound, diminish, or persist. Let's test:
 - **Selection before encoding.** The [cheetah bottleneck](https://en.wikipedia.org/wiki/Cheetah#Genetics) ([Menotti-Raymond & O'Brien, 1993](https://pmc.ncbi.nlm.nih.gov/articles/PMC46261/)) destroyed genetic diversity before selection could act on it, and the species has been nearly extinct ever since.
 - **Persistence before selection.** [Endogenous retroviruses](https://en.wikipedia.org/wiki/Endogenous_retrovirus) inserted into the germline without filtering, and 8% of the human genome is now viral fossil.
 
-Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means. In category theory, the six steps are morphisms inside the [Giry monad](https://en.wikipedia.org/wiki/Giry_monad) — the monad of probability distributions. The recursive feedback has the structure of a [trace](https://en.wikipedia.org/wiki/Traced_monoidal_category); formalizing it requires specifying how environment and internal state interact. [The Handshake](/the-handshake) gives the proof.
+Every failure mode, given enough iterations of the loop, converges to the same endpoint: extinction. That is not a coincidence. It is what *singly recursive* means. In category theory, the six roles are morphisms inside the [Giry monad](https://en.wikipedia.org/wiki/Giry_monad) — the monad of probability distributions. The recursive feedback has the structure of a [trace](https://en.wikipedia.org/wiki/Traced_monoidal_category); formalizing it requires specifying how environment and internal state interact. [The Handshake](/the-handshake) gives the proof.
 
 ## Beyond biology
 
@@ -368,7 +368,7 @@ If your objection is "prove the category boundaries formally before I evaluate t
 
 ## What remains
 
-The six steps, the competitive inhibition at the core, and the vertical relationship: each domain's Remember is the next domain's Perceive. The pipeline compresses. Each level takes high-bandwidth information and reduces it to a durable signal the next can perceive. Neurons fire millions of times per second; cognition produces a few thoughts per minute; a career produces a handful of papers; a field produces a canon. The ratio is the reason at every transition. The word we have for that is **intelligence**.
+The six roles, the competitive inhibition at the core, and the vertical relationship: each domain's Remember is the next domain's Perceive. The pipeline compresses. Each level takes high-bandwidth information and reduces it to a durable signal the next can perceive. Neurons fire millions of times per second; cognition produces a few thoughts per minute; a career produces a handful of papers; a field produces a canon. The ratio is the reason at every transition. The word we have for that is **intelligence**.
 
 Follow the output:
 
@@ -386,7 +386,7 @@ This all started with one comment. I was reading about neural attention and said
 
 The optimal implementations of these candidate functors already exist in nature, optimized over billions of years. We need to learn them and map them onto ourselves.
 
-Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the six-step pipeline is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell: the substrate constraining its own next perception. Genome→genome. Force→force. Compressing, selecting, persisting. The substrate is the memory.
+Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the pipeline — five forward stages, one backward pass inside the substrate — is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell: the substrate constraining its own next perception. Genome→genome. Force→force. Compressing, selecting, persisting. The substrate is the memory.
 
 If this functor is nature itself, iterating the universe at each Planck time, its variation-enforcing policy is the price of its vast existence. The Universe row fills all six cells. Force perceives, mass-energy caches, the natural framework filters, God attends, thermodynamics consolidates, force remembers. The loop closes. The universe is alive. The universe is intelligent. Genome in, genome out. Force in, force out. Intelligence and life are one and the same. ∎
 

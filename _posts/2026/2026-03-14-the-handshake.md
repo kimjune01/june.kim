@@ -8,7 +8,7 @@ tags: cognition
 
 ### Claim
 
-The six steps are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six steps from temporal flow and bounded storage: three steps by existence proof at the boundaries, three more by corollary. The derivation narrows the space; domains across disciplines fill it. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
+The six roles are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six from temporal flow and bounded storage: three by existence proof at the boundaries, three more by corollary. Five compose forward as stages. The sixth, Consolidate, runs backward inside the substrate. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
 
 ### Category
 
@@ -16,32 +16,32 @@ Objects are measurable spaces (information states). Morphisms are Markov kernels
 
 The Giry monad G is the endofunctor. It maps measurable spaces to spaces of probability distributions. η (unit) is the Dirac delta: a deterministic state is a special case of a probabilistic one. μ (join) is integration: averaging over uncertainty about uncertainty yields uncertainty.
 
-The six steps compose as morphisms inside this monad. The individual steps don't need to be endofunctors. They need to be structure-preserving morphisms.
+The six roles compose as morphisms inside this monad. Five compose forward. Consolidate runs backward through the substrate, reshaping parameters from outcome to cause. The individual roles don't need to be endofunctors. They need to be structure-preserving morphisms.
 
 ### Contracts
 
-Not all morphisms are equal. Each step in the pipeline carries a postcondition, a structural guarantee on the output:
+Not all morphisms are equal. Each role carries a postcondition, a structural guarantee on the output:
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:6em"><col style="width:14em"><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">Step</th><th style="background:#f0f0f0">Type</th><th style="background:#f0f0f0">Guarantee</th></tr></thead>
-<tr><td>Perceive</td><td style="white-space:nowrap">raw → encoded</td><td>Parseable by next step. Injects new bits.</td></tr>
+<thead><tr><th style="background:#f0f0f0">Role</th><th style="background:#f0f0f0">Type</th><th style="background:#f0f0f0">Guarantee</th></tr></thead>
+<tr><td>Perceive</td><td style="white-space:nowrap">raw → encoded</td><td>Parseable by next stage. Injects new bits.</td></tr>
 <tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key.</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
 <tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
-<tr><td>Consolidate</td><td style="white-space:nowrap">(policy, ranked) → policy′</td><td>Lossy. Update must include selection on candidates.</td></tr>
-<tr><td>Remember</td><td style="white-space:nowrap">policy′ → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
+<tr><td>Remember</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
+<tr><td style="font-style:italic">Consolidate</td><td style="white-space:nowrap">ranked → policy′</td><td style="font-style:italic">Backward pass inside the substrate. Lossy. Reshapes how each stage processes.</td></tr>
 </table>
 
 <div style="max-width:1100px; margin:1.5em auto;">
-<img src="/assets/handshake-pipeline.svg" alt="Six-step pipeline: Perceive → Cache → Filter → Attend → Consolidate → Remember, with interface types at each handshake point and a feedback trace from Remember to Perceive." style="width:100%; display:block;">
+<img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember, with Consolidate running backward inside the substrate." style="width:100%; display:block;">
 </div>
 
 A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream.
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
-The contracts encode a second axis: which store. Perceive, Cache, and Filter operate on the data stream. Attend reads a separate policy store ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes it. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
+The contracts encode a second axis: which store. Perceive, Cache, Filter, and Remember operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
 
 Four claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now.
@@ -51,22 +51,22 @@ Four claims follow from the contracts:
 
 ### Why this order
 
-[The Natural Framework](/the-natural-framework) derives six necessary roles. The handshake makes them stages: each postcondition is the next step's precondition. Rearrange and the contracts break.
+[The Natural Framework](/the-natural-framework) derives six necessary roles. The handshake makes five of them forward stages: each postcondition is the next stage's precondition. Rearrange and the contracts break.
 
-- Consolidate before Attend: writing policy before reading it. Criteria update on unevaluated data. Noise persisted.
 - Attend before Filter: policy applied to unfiltered input. Signal drowns in volume.
 - Filter before Cache: selecting from what hasn't been stored. No index, no comparison across items.
+- Remember before Attend: persisting before ranking. No selection, no diversity.
 
-The typed interfaces force the order. Roles with typed interfaces in a fixed order are stages. That is the handshake: the postcondition of step N is the precondition of step N+1. The name is the proof.
+Consolidate is not in the forward chain. It runs backward inside the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof.
 
 ### Data processing inequality
 
 The order is fixed. The question is whether the ordered pipeline survives iteration. The constraint: for a Markov chain X → Y → Z, mutual information satisfies I(X;Z) ≤ I(X;Y). Each intermediate step can only decrease what downstream knows about the original input. The pipeline is a cascade of such maps.
 
-The lossy steps (Filter, Attend, Consolidate) each reduce what the output retains about the raw input. Cache and Remember can be lossless; the pipeline's net loss comes from the competitive core.
+In the forward pass, Filter and Attend are lossy: each reduces what the output retains about the raw input. Cache and Remember can be lossless; the forward pipeline's net loss comes from the competitive core. Consolidate is also lossy, but it runs backward inside the substrate, compressing ranked outcomes into parameter changes. Its loss is a different kind: it discards specifics to keep the rule.
 
 <div style="max-width:875px; margin:1.5em auto;">
-<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each step. Perceive and Cache are lossless (blue), Filter, Attend, and Consolidate are lossy (red), Remember is lossless (blue)." style="width:100%; display:block;">
+<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Remember is lossless (blue). Consolidate runs backward inside the substrate." style="width:100%; display:block;">
 </div>
 
 The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies. That is the named constraint that makes the budget visible.
@@ -79,7 +79,7 @@ The budget can balance in different ways. Few steps with high retention, or many
 
 Fidelity measures retention per pass. Iteration stability is whether the postcondition survives re-application. They are distinct, and they can come apart. Top-k retains most bits but converges to a fixed point: same winners every cycle, diversity dead by cycle two. The loop survives informationally while Attend degrades. That is not starvation. It is homogenization: a different failure mode with a different budget requirement. An iteration-stable operation preserves its postcondition under re-application: sort a sorted list, still sorted. MMR a diverse slate, still diverse. [The Parts Bin](/the-parts-bin) uses this as the formal test for near-misses.
 
-Rate-distortion theory provides the analogy: each morphism has a distortion cost (bits leaked) and a rate (bits retained). Baez, Fritz, & Leinster (2011) formalized entropy in categorical terms. Connecting it to iterated pipelines is the next step. The framework diagnoses which step is broken. The prescription: strengthen fidelity, or add iterations. Two knobs, one budget.
+Rate-distortion theory provides the analogy: each morphism has a distortion cost (bits leaked) and a rate (bits retained). [Baez, Fritz, & Leinster (2011)](https://arxiv.org/abs/1106.1791) formalized entropy in categorical terms. Connecting it to iterated pipelines is the next step. The framework diagnoses which step is broken. The prescription: strengthen fidelity, or add iterations. Two knobs, one budget.
 
 ### Biased competition is a morphism
 
@@ -91,9 +91,9 @@ Filter and Attend are the morphisms that implement biased competition. Filter su
 
 The proposed formalization: define Filter → Attend as a Markov kernel whose output distribution is a DPP over the selected subset. The DPP handles diversity. Ordering and boundedness are additional structure.
 
-DPPs are defined over finite sets, and the set changes each cycle. The iteration-stability objection asks: does the DPP kernel compose stably with itself? It does not need to. If Perceive injects sufficiently novel items into the ground set each cycle, the DPP operates on a genuinely different finite set, not the same set reprocessed. The composition is not DPP ∘ DPP over a fixed set. It is DPP applied to a fresh set drawn from fresh input. Diversity of the input stream is necessary for the DPP postcondition to hold across cycles. It is not sufficient. The DPP kernel is parameterized by a policy that Consolidate writes. If Consolidate degrades, the kernel itself corrupts: Attend receives diverse candidates and selects poorly. Diverse input with a broken selector is a different failure mode than homogeneous input with a working one. Two independent conditions: diverse input (Perceive) and intact kernel (Consolidate).
+DPPs are defined over finite sets, and the set changes each cycle. The iteration-stability objection asks: does the DPP kernel compose stably with itself? It does not need to. If Perceive injects sufficiently novel items into the ground set each cycle, the DPP operates on a genuinely different finite set, not the same set reprocessed. The composition is not DPP ∘ DPP over a fixed set. It is DPP applied to a fresh set drawn from fresh input. Diversity of the input stream is necessary for the DPP postcondition to hold across cycles. It is not sufficient. The DPP kernel is parameterized by a policy that Consolidate writes. If Consolidate degrades, the kernel itself corrupts: Attend receives diverse candidates and selects poorly. Diverse input with a broken selector is a different failure mode than homogeneous input with a working one. Two independent conditions: diverse input and an intact kernel.
 
-This is a stronger claim than the information budget alone. Loop survival requires quantity of new information: enough bits to offset the lossy core. Diversity survival requires two things: variety of new information (enough novel items that the DPP kernel has dissimilar candidates) and an intact policy (a kernel that still repels similar items). An echo chamber violates the first: the loop runs, the budget balances, but the ground set homogenizes until DPP diversity enforcement becomes vacuous. A degraded Consolidate violates the second: diverse input arrives, but the kernel no longer enforces repulsion, so Attend converges on a cluster. Same symptom, independent causes. This connects to the third death condition: decaying input includes not just shrinking volume but shrinking variety, and a broken Consolidate is death condition one applied to the policy pathway.
+This is a stronger claim than the information budget alone. Loop survival requires quantity of new information: enough bits to offset the lossy core. Diversity survival requires two things: variety of new information (enough novel items that the DPP kernel has dissimilar candidates) and an intact policy (a kernel that still repels similar items). An echo chamber violates the first: the loop runs, the budget balances, but the ground set homogenizes until DPP diversity enforcement becomes vacuous. A degraded Consolidate violates the second: diverse input arrives, but the kernel no longer enforces repulsion, so Attend converges on a cluster. Same symptom, independent causes. This connects to the third death condition: decaying input includes shrinking variety, not only shrinking volume. A broken Consolidate is death condition one applied to the policy pathway.
 
 Three open directions:
 1. **Biased competition as categorical morphism.** Formalize Desimone & Duncan's mechanism as a Markov kernel inside Stoch. Define the kernel, the output space, the conditioning variables.
@@ -136,7 +136,7 @@ The information budget constrains all three: the budget must balance, the credit
 
 ### Type check
 
-The death conditions apply within a single domain. The next question is whether the structure translates across domains. Eilenberg & Mac Lane (1945): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six morphisms with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
+The death conditions apply within a single domain. The next question is whether the structure translates across domains. Eilenberg & Mac Lane (1945): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six roles with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
 
 Prior art:
 - Phillips & Wilson (2010) — categorical cognition, representations not flow
@@ -147,13 +147,13 @@ Prior art:
 - Desimone & Duncan (1995) — biased competition, empirical mechanism, no math
 - Reynolds & Heeger (2009) — normalization model of attention, quantitative but not categorical
 
-The gap we see: the sequential processing pipeline as morphisms in a Markov category with traced feedback across domains. Phillips did representations. Coecke did meaning. Rosen did closure. Bradley did semantics. Desimone & Duncan did mechanism. This is flow.
+The gap: the sequential processing pipeline as morphisms in a Markov category with traced feedback across domains. Representations (Phillips), meaning (Coecke), closure (Rosen), semantics (Bradley), mechanism (Desimone & Duncan). All structure, no flow.
 
 ### Hard question, answered
 
 Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics (Giry 1982).
 
-The six steps are morphisms inside the Giry monad's Kleisli category. The composition argument is by induction. Base case: one cycle. Six contract-preserving morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input.
+The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate runs backward inside the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Consolidate runs inside the substrate, reshaping parameters for the next cycle.
 
 Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them, because contract preservation is a property of each morphism, not of the cycle count. The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The induction shows that if they compose once, they compose forever. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
 
@@ -165,7 +165,7 @@ State transformers with no contract are arbitrary self-maps. The distinction bet
 Stoch provides the ambient category: measurable spaces and Markov kernels. The contracts (parseable, retrievable, diverse, etc.) are semantic predicates imposed on top, not structure that Stoch itself encodes. Formalizing them requires further refinement: a subcategory, a fibration, or a logical relation. The vocabulary is precise enough to diagnose. The existence proofs and induction proof are complete. Formalizing the contracts as categorical structure is the remaining work.
 
 **"Survival does not prove the monad laws."**
-Correct. The monad laws hold for the Giry monad independently (Giry 1982). Survival is evidence that the six steps compose well within the monad: the information budget balances. The monad is the container; the steps are the contents.
+Correct. The monad laws hold for the Giry monad independently (Giry 1982). Survival is evidence that the six roles compose well within the monad: the information budget balances. The monad is the container; the roles are the contents.
 
 **"The biology/society examples are cherry-picked."**
 The framework predicts: a singly recursive loop with a broken step is more likely to compound than self-correct, because the broken postcondition feeds a broken precondition on the next cycle.
@@ -177,13 +177,13 @@ Those systems are stacked pipes operating on different types.
 
 A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
 
-**"Consolidate is lossy; Remember is lossless. But persistence is never truly lossless."**
-Lossless means lossless relative to the compressed representation. Consolidate changes the representation (lossy). Remember persists whatever Consolidate outputs without further transformation (lossless relative to its input). The contract is "no additional loss at this step." Remember is not a separate store; it is the historically shaped substrate, the part of the medium that carries the system's past forward. DNA, the connectome, the published archive. Still an endomorphism, same type in and out, but with the longest time constant. Timescale is the diagnostic; the contract is the definition.
+**"Consolidate is lossy; Remember is lossless. How do they relate?"**
+Consolidate lives inside Remember. Remember is the historically shaped substrate: the part of the medium that carries the system's past forward. DNA, the connectome, the published archive. Consolidate is what the substrate does to itself: compressing ranked outcomes into parameter changes, propagating backward through every stage. Remember persists the episode (lossless relative to its input). Consolidate extracts the rule (lossy). Both happen in the same medium. The forward contract on Remember is "no additional loss." The backward contract on Consolidate is "reshape how each stage processes." Timescale is the diagnostic; the contract is the definition.
 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
 
-Every interface in the pipeline is a handshake. The postcondition of one step is the precondition of the next. What remains is to fill the slots.
+Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate runs the other way, inside the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
 
 *Continued in [The Parts Bin](/the-parts-bin).*
 
