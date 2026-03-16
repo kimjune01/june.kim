@@ -151,13 +151,11 @@ Take **Attend**. Lay operations on output form vs. redundancy control:
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">None</th><th style="background:#f0f0f0">Implicit</th><th style="background:#f0f0f0">Explicit</th></tr></thead>
 <tr><td><strong>Top-k slate</strong></td><td>Heap top-k</td><td>Beam search</td><td>MMR, DPP top-k, xQuAD</td></tr>
-<tr><td><strong>Single best</strong></td><td>argmax</td><td>Tournament selection</td><td style="opacity:0.7"><strong>??</strong></td></tr>
-<tr><td><strong>Path/tree</strong></td><td>Dijkstra, A*</td><td>MCTS</td><td style="opacity:0.7"><strong>??</strong></td></tr>
+<tr><td><strong>Single best</strong></td><td>argmax</td><td>Tournament selection</td><td>Simulated annealing, CMA-ES</td></tr>
+<tr><td><strong>Path/tree</strong></td><td>Dijkstra, A*</td><td>MCTS</td><td><a href="https://arxiv.org/abs/1111.2249">Portfolio solvers</a></td></tr>
 </table>
 
-The right column is sparse. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after.
-
-The gap predicts: concurrent stochastic tree search. Spawn threads with different random seeds; stochasticity encourages divergence. Budget kills at deadline; the final selection picks the best from a diverse pool. [Portfolio SAT solvers](https://arxiv.org/abs/1111.2249) do this. Biological evolution does this with mutation rate as the stochastic dial.
+The right column filled late. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after. Simulated annealing and CMA-ES find single optima by explicitly diversifying the search: temperature schedules force basin-hopping, covariance matrices enforce spread. Portfolio solvers spawn threads with different random seeds; stochasticity encourages divergence, budget kills at deadline, final selection picks the best from a diverse pool. Biological evolution does this with mutation rate as the stochastic dial.
 
 The grid narrows the search space enough that a dart throw produces a plausible candidate. Mendeleev didn't synthesize germanium. He drew the grid, pointed at the gap, and said "something goes here with these properties."
 
