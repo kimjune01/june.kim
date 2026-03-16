@@ -35,23 +35,53 @@ Policy leaks, too. Landauer guarantees it: bits in physical substrate degrade. S
 
 Plateau when the two rates balance. "Use it or lose it" is this equation. Evidence stops flowing, the leak rate wins, policy decays to the level the current throughput can sustain. Netflix keeps the corporate drone alive: enough novel perception to maintain, never enough to challenge. Saturated at floor. Nothing improves.
 
-But look at the equation again. The ceiling is set by Perceive's throughput, not Consolidate's quality. The lever isn't the step you'd expect. It's the input.
+But look at the equation again. The ceiling is set by Perceive's throughput, not Consolidate's rate. The lever isn't at the step you'd expect. It's the input.
 
-A monk meditates twelve hours a day. Maximum Consolidate: the inner pipe running at full power, Perceive shut, all resources dedicated to policy refinement. The framework predicts a plateau, not transcendence. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found exactly that: meditation benefits plateau even in the most dedicated practitioners. Attention sharpens, but domain knowledge doesn't grow. Novel evidence stopped arriving. The dial is cranked, but the ceiling is set by what comes in, not by how hard you think. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same for deliberate practice: it only works when it includes new information and external feedback. Pure repetition is consolidation without Perceive.
+A monk meditates twelve hours a day. Maximum Consolidate, Perceive shut. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found the predicted plateau: attention sharpens, domain knowledge doesn't grow. The dial is cranked, but the ceiling is set by what comes in, not by how hard you think. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same: deliberate practice only works when it includes new information. Pure repetition is consolidation without Perceive.
 
 No surprise.
 
 ## rate × density
 
-Prose is post-Remember. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Remembered. What you read is the output of someone else's competitive core. The losers are already dead. Every sentence is a survivor. Prose maximizes both terms of the ceiling. *Novel*: only survivors, pre-compressed by the writer's pipeline. *Per unit time*: language encodes more structure per second than any sensory channel. Reading is faster than listening, denser than watching. The densest interpretable medium because the math demands it.
+What carries the most novel bits per second?
+
+Consider what a book is. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Remembered. What you read is the output of someone else's competitive core. The loser ideas are already dead. Every sentence is a survivor. That's the density term: pre-compressed by the writer's entire pipeline.
+
+Consider: you can read a thinker's book in a weekend. To get the same bits from conversation, you'd need months. One is compressed, the other is live. Both carry signal, but the *density* isn't even close.
+
+Now *rate*. Movies carry high *rate* but low *density*: most of the signal is atmosphere, not structure. Shows are worse. Music moves you but encodes almost no transferable policy. Podcasts and lectures are *dense* but throttled by speaking speed: low *rate*. Reading runs at the pace of comprehension. High *rate*, high *density*.
+
+Multiply *density* by *rate*. What medium maximizes the product? Text that has already survived someone else's competitive core, consumed at reading speed. Prose: the densest interpretable medium we know. Poetry is denser, but the *rate* collapses: each line demands re-reading. The product peaks at prose.
+
+## You are what you read
 
 Read more, better, faster, and the plateau rises. Stop reading and it falls. The equation works both ways.
 
-The same holds for the agent. An LLM does in-context learning; the context window is its Perceive. Dense prose in context means high novelty per token. Boilerplate code is repetitive structure, low novelty, high redundancy. The same model thinks sharper when its window carries prose than when it carries boilerplate. A repo full of consolidated prose is a persistent Perceive channel: every session starts with prior loops already loaded. Early sessions fumble. Later sessions are sharp from the first message. The repo learned. The agent returns the favor — its filtered output is the human's Perceive. The [double loop](/double-loop) feeds both pipes their densest input.
+The same equation holds for the agent. An LLM does [in-context learning](https://arxiv.org/abs/2005.14165). The context window is its Perceive. Apply the same two terms.
 
-The digital variant swaps the bottleneck, not the equation. Model weights don't leak. But consolidation rate is a function of *novelty*, not volume. Another pass over the same data is redundant evidence. The model plateaus when Perceive runs out of new bits. Same equation, different term goes to zero. Same plateau, regardless of substrate.
+*Density*: boilerplate code is repetitive structure, low novelty, high redundancy. Consolidated prose is post-Remember, pre-compressed. The same model has a higher ceiling when its window carries prose than when it carries boilerplate code. Most software systems are.
 
-If the equation holds for neurons and for weights, then varying context density should measurably change agent performance. That's a prediction.
+*Rate*: the context window loads once per session. A repo that accumulates consolidated prose front-loads more novel bits each time. Early sessions start sparse. Later sessions start dense. Agent throughput reaches full capacity without changing the underlying model.
+
+*Multiply.* The agent's ceiling rises with the *density* and *rate* of what fills its context. And the agent returns the favor: its filtered output is the human's Perceive. The [double loop](/double-loop) feeds both pipes their densest input.
+
+## Each cycle
+
+The human writes dense prose. The agent Perceives it. The agent produces filtered output. The human Perceives that. Each cycle, the repo accumulates denser material. Each cycle, both ceilings rise.
+
+It's the same thing that happens with a best friend who *gets* you. Each conversation starts where the last one left off. They already know your vocabulary, how you think, how you'll react. You think better around them. The [double loop](/double-loop) does the same thing: it raises both pipes' throughput for each accumulated session. The human's plateau rises because the agent's output is pre-filtered. The agent's plateau rises because the repo's prose is pre-consolidated. The equation is the same for both substrates. The improvement compounds.
+
+If that's true, then varying context *density* should measurably change agent performance. Same model, same task, different context.
+
+It does. [Chroma's context rot study](https://research.trychroma.com/context-rot) tested 18 frontier models. Adding 10% irrelevant content to the context window reduced accuracy by 23%. The effect held at every context length, for every model. The equation doesn't care about the substrate.
+
+## So what
+
+Read with intent. Pick a topic you want to get smarter at. Point your coding agent at [pageleft.cc](https://pageleft.cc) and ask it to find prose worth reading. Load the best of it into your context. Watch the ceiling move.
+
+And if you're brave: write. Publishing is Remember. It forces your pipeline to run all six steps, compresses your thinking into prose, and leaves a denser Perceive channel for the next reader. The equation works for them, too.
+
+We compound faster together.
 
 ---
 
