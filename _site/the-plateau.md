@@ -67,7 +67,9 @@ It's the same thing that happens with a best friend who *gets* you. Each convers
 
 If that's true, then varying context *density* should measurably change agent performance. Same model, same task, different context.
 
-It does. [Chroma's context rot study](https://research.trychroma.com/context-rot) tested 18 frontier models. Adding 10% irrelevant content to the context window reduced accuracy by 23%. The effect held at every context length, for every model. The equation doesn't care about the substrate.
+Half of it does. [Chroma's context rot study](https://research.trychroma.com/context-rot) tested 18 frontier models. Adding 10% irrelevant content to the context window reduced accuracy by 23%. The effect held at every context length, for every model. The equation doesn't care about the substrate.
+
+That's the downside. Nobody has run it in the other direction. Same setup, same benchmarks, but fill the context with *relevant* prose instead of padding. Does accuracy climb above baseline? The [data is public](https://github.com/chroma-core/context-rot). The experiment is waiting.
 
 ## So what
 

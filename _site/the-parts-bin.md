@@ -111,7 +111,7 @@ Near-misses (diagnostic counterexamples):
 <tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
 </table>
 
-**Remember** (policy′ → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+**Remember** (policy′ → persisted) — the strongest column. Lossless relative to its input: the contract is "no additional loss at this step." Remember is not a separate store. It is the historically shaped substrate — the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
 
 If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
 
