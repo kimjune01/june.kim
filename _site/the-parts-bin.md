@@ -138,7 +138,7 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 <tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
 </table>
 
-The grid predicted its own contents. Probabilistic predicate filtering: the [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter), a randomized membership test with a known false-positive rate — the most deployed probabilistic data structure in computing. Bounded dominance: [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance), which relaxes Pareto by requiring a margin of ε before declaring dominance — standard in multi-objective optimization. Probabilistic dominance: [stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) from decision theory, where distribution A dominates B if preferred under all risk-averse utilities.
+Every cell fills with a known algorithm. [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) at predicate × probabilistic — the most deployed probabilistic data structure in computing. [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance) at dominance × bounded — standard in multi-objective optimization. [Stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) at dominance × probabilistic — decision theory since the 1960s. A clean partition with no awkward fits validates the axes, but a 3×3 where every cell fills on sight is a confirmation, not a prediction.
 
 Take **Attend**. Lay operations on output form vs. redundancy control:
 
@@ -151,11 +151,11 @@ Take **Attend**. Lay operations on output form vs. redundancy control:
 
 The right column filled late. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after. Simulated annealing and CMA-ES find single optima by explicitly diversifying the search: temperature schedules force basin-hopping, covariance matrices enforce spread. Portfolio solvers spawn threads with different random seeds; stochasticity encourages divergence, budget kills at deadline, final selection picks the best from a diverse pool. Biological evolution does this with mutation rate as the stochastic dial.
 
-The grid narrows the search space enough that a dart throw produces a plausible candidate. Mendeleev didn't synthesize germanium. He drew the grid, pointed at the gap, and said "something goes here with these properties."
+Mendeleev's power was the blank cell, not the filled one. [I-Con (2025)](https://mhamilton.net/icon) demonstrated this for Consolidate: their periodic table had a gap, the gap predicted a new algorithm, the algorithm beat the state of the art. These 3×3s haven't reached that resolution. Every cell fills too easily. The diagnostic value stands — name the slot, prescribe the swap — but prediction requires finer grain.
 
 ### Future work
 
-The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum. The proof provides the axes: iteration stability (Corollary 2), fidelity (data processing inequality), variation introduced (stochasticity proof), store (Corollary 2), and thermodynamic cost (Landauer). Scale and reversibility are properties of the domain row, not the operation. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. These gaps will predict operations that should exist but haven't been built yet. The periodic table didn't just organize chemistry. It created it.
+The parts bin has order we haven't discovered yet. Within each column, operations form a spectrum. The proof provides the axes: iteration stability (Corollary 2), fidelity (data processing inequality), variation introduced (stochasticity proof), store (Corollary 2), and thermodynamic cost (Landauer). Scale and reversibility are properties of the domain row, not the operation. Like genes classified by observable function rather than nucleotide sequence, morphisms are classified by their contracts rather than their implementation. The 3×3 grids are too coarse to predict — but they show the method. Finer grids, more rows, and the gaps will name operations that should exist but haven't been composed yet.
 
 The [derivation](/the-natural-framework) establishes contracts. Two things are ready now:
 

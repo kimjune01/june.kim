@@ -71,7 +71,7 @@ A step that fails its contract leaks information faster than Perceive can replen
 
 The budget can balance in different ways. Few steps with high retention, or many steps with low retention. The heuristic: step count × per-step fidelity must clear the survival threshold. Diffusion models: a thousand cheap denoising steps, each with a weak guarantee. Human cognition: a few expensive passes. Sleep consolidation is one cycle, deeply lossy, deeply structural.
 
-Fidelity measures retention per pass. Iteration stability is whether the postcondition survives re-application. They are distinct. Top-k retains most bits but converges to a fixed point: same winners every cycle, diversity dead by cycle two. An iteration-stable operation preserves its postcondition under re-application: sort a sorted list — still sorted. MMR a diverse slate — still diverse. [The Parts Bin](/the-parts-bin) uses this as the formal test for near-misses.
+Fidelity measures retention per pass. Iteration stability is whether the postcondition survives re-application. They are distinct, and they can come apart. Top-k retains most bits but converges to a fixed point: same winners every cycle, diversity dead by cycle two. The loop survives informationally while Attend degrades. That is not starvation. It is homogenization: a different failure mode with a different budget requirement. An iteration-stable operation preserves its postcondition under re-application: sort a sorted list, still sorted. MMR a diverse slate, still diverse. [The Parts Bin](/the-parts-bin) uses this as the formal test for near-misses.
 
 Rate-distortion theory provides the analogy: each morphism has a distortion cost (bits leaked) and a rate (bits retained). Baez, Fritz, & Leinster (2011) formalized entropy in categorical terms. Connecting it to iterated pipelines is the next step. The framework diagnoses which step is broken. The prescription: strengthen fidelity, or add iterations. Two knobs, one budget.
 
@@ -85,7 +85,11 @@ Filter and Attend are the morphisms that implement biased competition. Filter su
 
 The proposed formalization: define Filter → Attend as a Markov kernel whose output distribution is a DPP over the selected subset. The DPP handles diversity. Ordering and boundedness are additional structure.
 
-Three directions:
+DPPs are defined over finite sets, and the set changes each cycle. The iteration-stability objection asks: does the DPP kernel compose stably with itself? It does not need to. If Perceive injects sufficiently novel items into the ground set each cycle, the DPP operates on a genuinely different finite set, not the same set reprocessed. The composition is not DPP ∘ DPP over a fixed set. It is DPP applied to a fresh set drawn from fresh input. The iteration-stability of the *diversity guarantee* reduces to the diversity of the *input stream*.
+
+This is a stronger claim than the information budget alone. Loop survival requires quantity of new information: enough bits to offset the lossy core. Diversity survival requires variety of new information: enough novel items in the ground set that the DPP kernel has dissimilar candidates to select from. An echo chamber satisfies the first and violates the second. The loop runs, the budget balances, but the ground set homogenizes until DPP diversity enforcement becomes vacuous. Same winners every cycle, by a different mechanism than top-k convergence. This connects to the third death condition: decaying input includes not just shrinking volume but shrinking variety.
+
+Three open directions:
 1. **Biased competition as categorical morphism.** Formalize Desimone & Duncan's mechanism as a Markov kernel inside Stoch. Define the kernel, the output space, the conditioning variables.
 2. **DPP as contract.** DPPs have been applied to recommendation, summarization, and sampling. Using them as the *postcondition* of a morphism in a cognitive pipeline, the contract that a step preserves diversity through composition, is a new application.
 3. **Information accounting of competition.** Every suppressed loser costs bits. Defining which mutual information, under what coupling, and why subtraction is the right operation. That is the problem.
