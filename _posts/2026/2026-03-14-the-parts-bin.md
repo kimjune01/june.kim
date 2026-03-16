@@ -139,12 +139,12 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Exact</th><th style="background:#f0f0f0">Bounded approximation</th><th style="background:#f0f0f0">Probabilistic</th></tr></thead>
-<tr><td><strong>Predicate</strong></td><td>WHERE, range query</td><td>Threshold filtering (soft margin)</td><td style="opacity:0.7"><strong>??</strong></td></tr>
+<tr><td><strong>Predicate</strong></td><td>WHERE, range query</td><td>Threshold filtering (soft margin)</td><td><a href="https://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a></td></tr>
 <tr><td><strong>Similarity</strong></td><td>Exact NN pruning</td><td>k-NN radius pruning</td><td><a href="https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/">LSH filtering</a></td></tr>
-<tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td style="opacity:0.7"><strong>??</strong></td><td style="opacity:0.7"><strong>??</strong></td></tr>
+<tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
 </table>
 
-The empty cells are predictions. Probabilistic predicate filtering: a randomized classifier used as a gate, with a known false-positive rate. Bounded dominance: approximate Pareto filtering that trades exactness for speed in high dimensions. Each empty cell is a typed interface with known neighbors.
+The grid predicted its own contents. Probabilistic predicate filtering: the [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter), a randomized membership test with a known false-positive rate — the most deployed probabilistic data structure in computing. Bounded dominance: [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance), which relaxes Pareto by requiring a margin of ε before declaring dominance — standard in multi-objective optimization. Probabilistic dominance: [stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) from decision theory, where distribution A dominates B if preferred under all risk-averse utilities.
 
 Take **Attend**. Lay operations on output form vs. redundancy control:
 
