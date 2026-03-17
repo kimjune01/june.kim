@@ -4,7 +4,7 @@ title: "The Handshake"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Natural Framework](/the-natural-framework) and [General Intelligence](/general-intelligence). This post is the formal backbone of the series. It's dense by design. [The Parts Bin](/the-parts-bin) is where the formalism becomes practical.*
+*Part of the [cognition](/cognition) series. Builds on [The Natural Framework](/the-natural-framework) and [General Intelligence](/general-intelligence). This post is the formal backbone of the series. It's dense by design. [The Parts Bin](/the-parts-bin) is where the formalism becomes practical. The formalism has a companion [Lean 4 proof](https://github.com/kimjune01/natural-framework).*
 
 ### Claim
 
@@ -37,17 +37,17 @@ Not all morphisms are equal. Each role carries a postcondition, a structural gua
 <img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember. Consolidate reads from Remember and writes to the substrate." style="width:100%; display:block;">
 </div>
 
-A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream.
+A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream. (In the proof: `Contract`, `ContractPreserving`, `IterationStable`.)
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
 The contracts encode a second axis: which store. Perceive, Cache, Filter, and Remember operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
 
 Four claims follow from the contracts:
-1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now.
-2. **If any contract is broken, the loop will die.** Necessary condition. By induction on cycle count.
+1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now. (`swappable`)
+2. **If any contract is broken, the loop will die.** Necessary condition. By induction on cycle count. (`ContractBroken`, `broken_propagates`)
 3. **If all contracts are satisfied with sufficient fidelity, the loop survives.** Sufficient condition. That is the budget.
-4. **If an operation degrades its postcondition under iteration, it is a near-miss.** The instability argument from Corollary 2 generalizes: any morphism whose postcondition fails under self-composition will break the loop. Iteration stability is the test.
+4. **If an operation degrades its postcondition under iteration, it is a near-miss.** The instability argument from Corollary 2 generalizes: any morphism whose postcondition fails under self-composition will break the loop. Iteration stability is the test. (`NearMiss`, `stable_not_near_miss`)
 
 ### Why this order
 
@@ -57,7 +57,7 @@ Four claims follow from the contracts:
 - Filter before Cache: selecting from what hasn't been stored. No index, no comparison across items.
 - Remember before Attend: persisting before ranking. No selection, no diversity.
 
-Consolidate is not in the forward chain. It reads from Remember and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof.
+Consolidate is not in the forward chain. It reads from Remember and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof. The ordering is provably unique: `forward_ordering_unique` shows the type chain forces each position, and `consolidate_has_no_slot` shows Consolidate cannot occupy any forward position. The only configuration whose types compose is five canonical forward stages plus one backward pass.
 
 ### Data processing inequality
 
@@ -69,7 +69,7 @@ In the forward pass, Filter and Attend are lossy: each reduces what the output r
 <img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Remember is lossless (blue). Consolidate reads from Remember, writes to substrate." style="width:100%; display:block;">
 </div>
 
-The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies. That is the named constraint that makes the budget visible.
+The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies (`closed_loop_budget_negative`). That is the named constraint that makes the budget visible. (In the proof: `NonExpanding`, `StrictlyLossy`, `non_expanding_compose`, `InformationBudget`.)
 
 A step that fails its contract leaks information faster than Perceive can replenish it. This deficit compounds; the loop degrades. A step that preserves its contract retains signal through each pass. The budget balances; the loop survives.
 
@@ -93,7 +93,7 @@ The proposed formalization: define Filter → Attend as a Markov kernel whose ou
 
 DPPs are defined over finite sets, and the set changes each cycle. The iteration-stability objection asks: does the DPP kernel compose stably with itself? It does not need to. If Perceive injects sufficiently novel items into the ground set each cycle, the DPP operates on a genuinely different finite set, not the same set reprocessed. The composition is not DPP ∘ DPP over a fixed set. It is DPP applied to a fresh set drawn from fresh input. Diversity of the input stream is necessary for the DPP postcondition to hold across cycles. It is not sufficient. The DPP kernel is parameterized by a policy that Consolidate writes. If Consolidate degrades, the kernel itself corrupts: Attend receives diverse candidates and selects poorly. Diverse input with a broken selector is a different failure mode than homogeneous input with a working one. Two independent conditions: diverse input and an intact kernel.
 
-This is a stronger claim than the information budget alone. Loop survival requires quantity of new information: enough bits to offset the lossy core. Diversity survival requires two things: variety of new information (enough novel items that the DPP kernel has dissimilar candidates) and an intact policy (a kernel that still repels similar items). An echo chamber violates the first: the loop runs, the budget balances, but the ground set homogenizes until DPP diversity enforcement becomes vacuous. A degraded Consolidate violates the second: diverse input arrives, but the kernel no longer enforces repulsion, so Attend converges on a cluster. Same symptom, independent causes. This connects to the third death condition: decaying input includes shrinking variety, not only shrinking volume. A broken Consolidate is death condition one applied to the policy pathway.
+This is a stronger claim than the information budget alone. Loop survival requires quantity of new information: enough bits to offset the lossy core. Diversity survival requires two things: variety of new information (enough novel items that the DPP kernel has dissimilar candidates) and an intact policy (a kernel that still repels similar items). An echo chamber violates the first: the loop runs, the budget balances, but the ground set homogenizes until DPP diversity enforcement becomes vacuous. A degraded Consolidate violates the second: diverse input arrives, but the kernel no longer enforces repulsion, so Attend converges on a cluster. Same symptom, independent causes (`DiversityBudget`, `diversity_failures_compatible`). This connects to the third death condition: decaying input includes shrinking variety, not only shrinking volume. A broken Consolidate is death condition one applied to the policy pathway.
 
 Three open directions:
 1. **Biased competition as categorical morphism.** Formalize Desimone & Duncan's mechanism as a Markov kernel inside Stoch. Define the kernel, the output space, the conditioning variables.
@@ -102,7 +102,7 @@ Three open directions:
 
 ### Trace
 
-Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Remember → Perceive) has the structure of a categorical trace: output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
+Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Remember → Perceive) has the structure of a categorical trace (`TracedPipeline`): output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
 
 In the simpler view: ignore the environment boundary, and the six-step composition is a self-map in Stoch, a Markov chain on information states. But bare Markov chains never worked for cognition: n-grams plateau, PageRank has no taste.
 
@@ -112,7 +112,7 @@ Cogito ergo sum: a closed loop with zero new input. A lossy self-map iterated wi
 
 ### Falsification test
 
-The trace predicts the closed loop. The falsification test predicts the broken step. Take a known-alive system. Identify a step whose contract was lost. Observe.
+The trace predicts the closed loop. The falsification test predicts the broken step (`removal_tests`). Take a known-alive system. Identify a step whose contract was lost. Observe.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0">Role replaced</th><th style="background:#f0f0f0">Self-map substituted</th><th style="background:#f0f0f0">System</th><th style="background:#f0f0f0">Outcome</th></tr></thead>
@@ -128,11 +128,11 @@ Every case is multi-causal. But in each, a contract was lost, and the loss compo
 
 ### Three death conditions
 
-1. **Broken step.** A morphism loses its contract. Signal leaks faster than Perceive replenishes. (Prion, cancer, TerraUSD.)
-2. **Closed loop.** Perceive is sealed. Zero credits. (Cogito, frozen weights.)
-3. **Decaying input.** Perceive is open but the environment degrades. Credits shrink per cycle. The loop structure is intact, every step preserves its contract, but the source dries up. The system doesn't break; it starves. (Sensory deprivation, dying ecosystem, echo chamber, agent trained on stale data.)
+1. **Broken step.** A morphism loses its contract. Signal leaks faster than Perceive replenishes. (Prion, cancer, TerraUSD.) (`broken_step_death`)
+2. **Closed loop.** Perceive is sealed. Zero credits. (Cogito, frozen weights.) (`closed_loop_zero_input`)
+3. **Decaying input.** Perceive is open but the environment degrades. Credits shrink per cycle. The loop structure is intact, every step preserves its contract, but the source dries up. The system doesn't break; it starves. (Sensory deprivation, dying ecosystem, echo chamber, agent trained on stale data.) (`decaying_input_death`)
 
-The information budget constrains all three: the budget must balance, the credits must exist, and the credits must not decay. The deficit is the diagnosis.
+The information budget constrains all three: the budget must balance, the credits must exist, and the credits must not decay. The deficit is the diagnosis. The contrapositive — all contracts satisfied and input sustained implies survival — is `survival_induction`.
 
 ### Type check
 
@@ -159,9 +159,15 @@ Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them
 
 > If Consolidate preserves its contract at cycle *n* (persisted → policy′ reshapes processing without corrupting the diversity guarantee), then Attend's precondition is satisfied at cycle *n+1*.
 
-This is the open piece. The forward contracts are stated per-role and verified by composition. The coupling between Consolidate and Attend is cross-cycle and cross-direction: backward output at *n* feeds forward input at *n+1*. The lemma is where the framework would make its most specific falsifiable claim: what exactly does Consolidate guarantee that Attend requires? The contracts name the policy store but don't yet specify the interface formally.
+This is closed. `cycle_preserves_policy` proves that if Consolidate preserves its postcondition at cycle *k*, Attend's precondition holds at *k+1*. The coupling between Consolidate and Attend is cross-cycle and cross-direction: backward output at *n* feeds forward input at *n+1*. The hypothesis `hcon` — that Consolidate preserves its postcondition — is not a free assumption. The fractal tower derives it.
 
-Without the lemma, the induction has a gap. With it, the framework predicts a specific failure mode: degraded Consolidate corrupts Attend's kernel even when diverse input arrives ([see above](#biased-competition-is-a-morphism)). That prediction is already stated informally in the biased competition section. Formalizing the coupling is the remaining work.
+### The fractal tower
+
+Consolidate contains its own pipeline. It reads persisted outcomes, selects which ones to compress into policy updates, and ranks them by relevance. Inner Perceive reads outcomes. Inner Filter selects updates. Inner Attend ranks by relevance. The same six roles, one level down.
+
+The data processing inequality guarantees termination. Filter is strictly lossy: each level costs at least one bit. The bit budget decreases at every depth. At zero bits remaining, Consolidate cannot select — it reduces to passthrough (identity on policy). Passthrough trivially preserves any postcondition.
+
+`tower_satisfies_hcon`: by induction on depth, the tower preserves the cross-cycle postcondition at every level. Base case: passthrough at depth zero. Inductive step: if the inner tower preserves at depth *d*, the outer pipeline preserves at depth *d+1*. This turns `hcon` from assumption into consequence. The coupling lemma is closed, the induction has no gap, and the framework predicts a specific failure mode: degraded Consolidate corrupts Attend's kernel even when diverse input arrives ([see above](#biased-competition-is-a-morphism)).
 
 The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
 
@@ -193,8 +199,12 @@ They operate on different stores. Filter gates the data stream: does this item p
 
 Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate reads from Remember and writes to the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
 
+### Proof status
+
+The [Lean 4 proof](https://github.com/kimjune01/natural-framework) compiles with zero `sorry` and no Mathlib dependency. Pigeonhole is proved from scratch via element removal. The formalization uses Lean's stdlib `LawfulMonad` with a possibilistic `Support` class that tracks reachability, not probability mass. Morphisms are monadic kernels in a Kleisli category — not measure-theoretic Stoch. The conceptual argument above lives in Stoch (measurable spaces, Markov kernels, the Giry monad). The machine-checked spec lives one level of abstraction higher: any lawful monad whose support satisfies the axioms. The spec checks that the pipeline is internally consistent. The physics and the probability live here, not there.
+
 *Continued in [The Parts Bin](/the-parts-bin).*
 
 ---
 
-*Written via the [double loop](/double-loop).*
+*Written via the [double loop](/double-loop). [Lean 4 proof](https://github.com/kimjune01/natural-framework) (AGPL-3.0).*
