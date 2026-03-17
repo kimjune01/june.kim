@@ -7,7 +7,7 @@ The [Natural Framework](/the-natural-framework) defines [six roles](/the-natural
 AI has three layers. Inference: transform tokens. Chatbot: transform context. Agent: transform prompts. But the chatbot isn't a separate pipeline. It's the agent's Cache and part of Perceive.
 
 <div style="max-width:90vw; margin:1.5em auto;">
-<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with six roles. Inference's Consolidate is sealed (Training) and Remember is read-only (Weights). Chatbot has four nils. Agent has Consolidate prompted." style="width:100%; display:block;">
+<img src="/assets/agi-loop.svg" alt="Three layers — Inference, Chatbot, Agent — each with five forward roles and Consolidate as backward pass. Inference's Consolidate is sealed (Training). Chatbot has four nils. Agent has Consolidate prompted." style="width:100%; display:block;">
 </div>
 
 ### Inference

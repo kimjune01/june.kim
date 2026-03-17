@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 276" font-family="system-ui, -apple-system, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" font-family="system-ui, -apple-system, sans-serif">
   <style>
     .title { font-weight: 700; font-size: 15px; text-anchor: middle; letter-spacing: 0.02em; }
     .node { stroke: #555; stroke-width: 1.5; fill: #fff; }
@@ -8,6 +8,8 @@
     .step-label { text-anchor: middle; font-size: 12px; fill: #333; font-weight: 600; }
     .functor { stroke: #555; stroke-width: 1.5; fill: none; stroke-dasharray: 7,5; marker-end: url(#ahf); }
     .functor-label { text-anchor: middle; font-size: 12px; fill: #555; font-style: italic; font-weight: 500; }
+    .backward { stroke: #999; stroke-width: 1.2; fill: none; stroke-dasharray: 5,3; marker-end: url(#ahb); }
+    .backward-label { text-anchor: middle; font-size: 11px; fill: #999; font-style: italic; }
     .group { stroke: none; rx: 12; }
   </style>
   <defs>
@@ -17,81 +19,78 @@
     <marker id="ahf" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
       <path d="M0,0 L7,2.5 L0,5" fill="#555"/>
     </marker>
+    <marker id="ahb" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <path d="M0,0 L7,2.5 L0,5" fill="#999"/>
+    </marker>
   </defs>
 
   <!-- COGNITION row -->
-  <text class="title" x="480" y="18">COGNITION — object type: Moment</text>
-  <rect class="group" x="20" y="28" width="840" height="68" fill="#d4e4f7"/>
+  <text class="title" x="440" y="18">COGNITION — object type: Moment</text>
+  <rect class="group" x="20" y="28" width="810" height="68" fill="#d4e4f7"/>
 
   <circle class="node-start" cx="55" cy="62" r="11"/>
-  <line class="arrow" x1="66" y1="62" x2="152" y2="62"/>
-  <text class="step-label" x="109" y="50">Perceive</text>
+  <line class="arrow" x1="66" y1="62" x2="182" y2="62"/>
+  <text class="step-label" x="124" y="50">Perceive</text>
 
-  <circle class="node" cx="170" cy="62" r="18"/>
-  <text class="node-text" x="170" y="62">M</text>
-  <line class="arrow" x1="188" y1="62" x2="282" y2="62"/>
-  <text class="step-label" x="235" y="50">Cache</text>
+  <circle class="node" cx="200" cy="62" r="18"/>
+  <text class="node-text" x="200" y="62">M</text>
+  <line class="arrow" x1="218" y1="62" x2="332" y2="62"/>
+  <text class="step-label" x="275" y="50">Cache</text>
 
-  <circle class="node" cx="300" cy="62" r="18"/>
-  <text class="node-text" x="300" y="62">M</text>
-  <line class="arrow" x1="318" y1="62" x2="412" y2="62"/>
-  <text class="step-label" x="365" y="50">Filter</text>
+  <circle class="node" cx="350" cy="62" r="18"/>
+  <text class="node-text" x="350" y="62">M</text>
+  <line class="arrow" x1="368" y1="62" x2="482" y2="62"/>
+  <text class="step-label" x="425" y="50">Filter</text>
 
-  <circle class="node" cx="430" cy="62" r="18"/>
-  <text class="node-text" x="430" y="62">M</text>
-  <line class="arrow" x1="448" y1="62" x2="542" y2="62"/>
-  <text class="step-label" x="495" y="50">Attend</text>
+  <circle class="node" cx="500" cy="62" r="18"/>
+  <text class="node-text" x="500" y="62">M</text>
+  <line class="arrow" x1="518" y1="62" x2="632" y2="62"/>
+  <text class="step-label" x="575" y="50">Attend</text>
 
-  <circle class="node" cx="560" cy="62" r="18"/>
-  <text class="node-text" x="560" y="62">M</text>
-  <line class="arrow" x1="578" y1="62" x2="672" y2="62"/>
-  <text class="step-label" x="625" y="50">Consolidate</text>
+  <circle class="node" cx="650" cy="62" r="18"/>
+  <text class="node-text" x="650" y="62">M</text>
+  <line class="arrow" x1="668" y1="62" x2="782" y2="62"/>
+  <text class="step-label" x="725" y="50">Remember</text>
 
-  <circle class="node" cx="690" cy="62" r="18"/>
-  <text class="node-text" x="690" y="62">M</text>
-  <line class="arrow" x1="708" y1="62" x2="802" y2="62"/>
-  <text class="step-label" x="755" y="50">Remember</text>
+  <circle class="node" cx="800" cy="62" r="18"/>
+  <text class="node-text" x="800" y="62">M</text>
 
-  <circle class="node" cx="820" cy="62" r="18"/>
-  <text class="node-text" x="820" y="62">M</text>
+  <!-- Consolidate backward pass (below row, dashed arrow pointing left) -->
+  <path class="backward" d="M800,80 L800,106 L120,106"/>
+  <text class="backward-label" x="460" y="100">Consolidate (backward pass)</text>
 
-  <!-- Functor connector (right-angle path) -->
-  <path class="functor" d="M820,80 L820,134 L55,134 L55,193"/>
-  <text class="functor-label" x="438" y="126">Functor: Remember → Perceive</text>
+  <!-- Functor connector (routes right of group, then down and across) -->
+  <path class="functor" d="M818,62 L850,62 L850,152 L55,152 L55,202"/>
+  <text class="functor-label" x="428" y="145">Functor: Remember → Perceive</text>
 
   <!-- WRITING row -->
-  <text class="title" x="480" y="172">WRITING — object type: Draft</text>
-  <rect class="group" x="20" y="182" width="840" height="68" fill="#d4edd4"/>
+  <text class="title" x="440" y="190">WRITING — object type: Draft</text>
+  <rect class="group" x="20" y="200" width="810" height="68" fill="#d4edd4"/>
 
-  <circle class="node-start" cx="55" cy="216" r="11"/>
-  <line class="arrow" x1="66" y1="216" x2="152" y2="216"/>
-  <text class="step-label" x="109" y="204">Perceive</text>
+  <circle class="node-start" cx="55" cy="234" r="11"/>
+  <line class="arrow" x1="66" y1="234" x2="182" y2="234"/>
+  <text class="step-label" x="124" y="222">Perceive</text>
 
-  <circle class="node" cx="170" cy="216" r="18"/>
-  <text class="node-text" x="170" y="216">D</text>
-  <line class="arrow" x1="188" y1="216" x2="282" y2="216"/>
-  <text class="step-label" x="235" y="204">Cache</text>
+  <circle class="node" cx="200" cy="234" r="18"/>
+  <text class="node-text" x="200" y="234">D</text>
+  <line class="arrow" x1="218" y1="234" x2="332" y2="234"/>
+  <text class="step-label" x="275" y="222">Cache</text>
 
-  <circle class="node" cx="300" cy="216" r="18"/>
-  <text class="node-text" x="300" y="216">D</text>
-  <line class="arrow" x1="318" y1="216" x2="412" y2="216"/>
-  <text class="step-label" x="365" y="204">Filter</text>
+  <circle class="node" cx="350" cy="234" r="18"/>
+  <text class="node-text" x="350" y="234">D</text>
+  <line class="arrow" x1="368" y1="234" x2="482" y2="234"/>
+  <text class="step-label" x="425" y="222">Filter</text>
 
-  <circle class="node" cx="430" cy="216" r="18"/>
-  <text class="node-text" x="430" y="216">D</text>
-  <line class="arrow" x1="448" y1="216" x2="542" y2="216"/>
-  <text class="step-label" x="495" y="204">Attend</text>
+  <circle class="node" cx="500" cy="234" r="18"/>
+  <text class="node-text" x="500" y="234">D</text>
+  <line class="arrow" x1="518" y1="234" x2="632" y2="234"/>
+  <text class="step-label" x="575" y="222">Attend</text>
 
-  <circle class="node" cx="560" cy="216" r="18"/>
-  <text class="node-text" x="560" y="216">D</text>
-  <line class="arrow" x1="578" y1="216" x2="672" y2="216"/>
-  <text class="step-label" x="625" y="204">Consolidate</text>
+  <circle class="node" cx="650" cy="234" r="18"/>
+  <text class="node-text" x="650" y="234">D</text>
+  <line class="arrow" x1="668" y1="234" x2="782" y2="234"/>
+  <text class="step-label" x="725" y="222">Remember</text>
 
-  <circle class="node" cx="690" cy="216" r="18"/>
-  <text class="node-text" x="690" y="216">D</text>
-  <line class="arrow" x1="708" y1="216" x2="802" y2="216"/>
-  <text class="step-label" x="755" y="204">Remember</text>
-
-  <circle class="node" cx="820" cy="216" r="18"/>
-  <text class="node-text" x="820" y="216">D</text>
+  <circle class="node" cx="800" cy="234" r="18"/>
+  <text class="node-text" x="800" y="234">D</text>
 </svg>
