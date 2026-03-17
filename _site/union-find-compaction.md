@@ -10,7 +10,7 @@ Compression is coarse. The summary replaces every source, so it can't trace a cl
 <img src="/assets/union-find-compaction.svg" alt="Chatbot layer from Diagnosis LLM: today's flat summary in Cache destroys provenance, four nil cells downstream. Union-find fixes Cache and Remember." style="width:100%; display:block;">
 </div>
 
-*Chatbot layer from [Diagnosis LLM](/diagnosis-llm). Full diagnostic: six steps, three layers, nine dysfunction cells.*
+*Chatbot layer from [Diagnosis LLM](/diagnosis-llm). Full diagnostic: six roles, three layers, nine dysfunction cells.*
 
 
 ## A convenient fix
@@ -82,7 +82,7 @@ The statistical case matters less than the architectural one.
 
 ## Unlock
 
-Flat summarization is a shredder. Union-find compaction is a filing system. The shredder is intermittent, intrusive, and slow. The filing system runs continuously and remembers where things came from.
+Flat summarization is a shredder. Union-find compaction is `VACUUM` with provenance. Both reorganize the store. Neither changes how the system processes next time. That's the [distinction](/consolidation): compaction is ops, consolidation is learning. This post is ops. The cron job that reads from the store and writes new retrieval procedures is a [different problem](/diagnosis-llm).
 
 The forest serializes as parent pointers — just integers. Save it, load it next session, clusters intact. Three things follow:
 

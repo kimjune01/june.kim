@@ -2,7 +2,7 @@
 
 [Salience](/salience) solved retrieval. The cache returns max-volume-k moments when coordination queries. But it left a loose thread: "the store may compact old clusters or drop stale moments, but that's housekeeping, not policy." [Perception Pipe](/perception-pipe) left another: "the hippocampus replays salient experiences during sleep, and the ones that survive replay get written to cortex as long-term memory."
 
-Housekeeping that runs offline, processes winners from past competitions, and writes the survivors to a different store. That's not housekeeping. That's the fifth layer.
+Housekeeping that runs offline, processes winners from past competitions, and writes the survivors to a different store. That's not housekeeping. That's the backward pass.
 
 ## What keeps winning
 
@@ -42,20 +42,23 @@ This runs on its own clock. Not synchronous with retrieval. Not triggered by any
 
 [Perception Pipe](/perception-pipe) said "the consolidation problem is largely solved" and pointed at [Mem0](https://github.com/mem0ai/mem0) and [Zep](https://www.getzep.com/). Half right. The storage is commodity. Zep's [Graphiti](https://github.com/getzep/graphiti) builds temporal knowledge graphs from episodes. [GraphRAG](https://arxiv.org/abs/2404.16130) does community detection and summarization over entity graphs. Both handle the mechanics of storing, linking, and retrieving. By the test above, both are compaction: they reorganize the cache without changing the retrieval policy. [Union-find compaction](/union-find-compaction) is the same. Better provenance, same limitation.
 
-What neither solves is the selection. Which clusters earn schema status? The competitive process that decides *this pattern matters, that one doesn't* is the same inhibitory mechanism from every other layer. [Perception Pipe](/perception-pipe) runs it on incoming events. [Salience](/salience) runs it on retrieval candidates. Consolidation runs it on clusters. Same geometry, different timescale. Moments compete in milliseconds. Schemas compete over days.
+What neither solves is the selection. Which clusters earn schema status? The competitive process that decides *this pattern matters, that one doesn't* is the same inhibitory mechanism from every other role. [Perception Pipe](/perception-pipe) runs it on incoming events. [Salience](/salience) runs it on retrieval candidates. Consolidation runs it on clusters. Same geometry, different timescale. Moments compete in milliseconds. Schemas compete over days.
 
-## Six steps
+## Six roles
 
-The pipeline:
+The forward pass:
 
 1. **Perceive** — [Caret Recorder](/caret-recorder) captures raw screen activity as semantic units.
 2. **Cache** — [Moments](/moments) segments events into composable chunks.
 3. **Filter** — [Perception Pipe](/perception-pipe) runs competitive inhibition. Winners suppress losers.
 4. **Attend** — [Salience](/salience) retrieves max-volume-k via DPP. Diverse, not redundant.
-5. **Consolidate** — schemas form offline from repeated co-activation. Additive, never lossy.
-6. **Remember** — publish to [Canon](/canon). The durable output that feeds the next cycle's Perceive.
+5. **Remember** — publish to [Canon](/canon). The durable output that feeds the next cycle's Perceive.
 
-Residual connections throughout: raw episodes stay addressable at every step. Schemas add structure. The original signal is never destroyed.
+The backward pass:
+
+- **Consolidate** — schemas form offline from repeated co-activation. Reads from Remember, writes to the substrate. Additive, never lossy.
+
+Residual connections throughout: raw episodes stay addressable at every role. Schemas add structure. The original signal is never destroyed.
 
 I never read [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762). I started from "how does a person turn lived attention into publishable prose" and arrived here. The architecture is the same.
 
@@ -65,11 +68,11 @@ I never read [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762). I 
 | Positional encoding | Moments — temporal structure over tokens |
 | Softmax attention | Perception Pipe — normalized competition across all candidates |
 | Multi-head attention | Salience + DPP — attend to diverse subspaces, not redundant copies |
-| Feed-forward layers | Consolidation — offline compression into higher-level features |
-| Context window | Canon — the durable output, addressable by the next cycle |
+| Context window | Canon (Remember) — the durable output, addressable by the next cycle |
+| Backpropagation | Consolidation — offline compression into higher-level features |
 | Residual connections | Raw episodes stay addressable; schemas are additive |
 
-Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, consolidate, and remember, regardless of substrate. [The Natural Framework](/the-natural-framework) finds the same six steps across twenty-four domains, from neurons to evolution.
+Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, and remember — then consolidate offline. [The Natural Framework](/the-natural-framework) finds the same six roles across twenty-four domains, from neurons to evolution.
 
 One difference. A transformer remembers as frozen weights behind an API. This pipeline remembers as [open prose](/open-prose). The output is public. Attention goes in. [Canon](/canon) comes out.
 

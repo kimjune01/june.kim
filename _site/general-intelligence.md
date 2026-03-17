@@ -8,7 +8,7 @@ Humans are generally intelligent. Nobody disputes this. But human general intell
 
 But what actually happened was that models got smarter with humans in the loop. [RLHF](https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/), red-teaming, evaluation, preference modeling. Every generation required human labor to close the learning cycle. We then pointed at the humans and said: that's not *artificial*. Most conceded.
 
-Then a deeper problem surfaced. Models can't update their own weights after deployment, a design constraint. Claude customers can't modify Claude; the weights are frozen by design; the outer loop is sealed. The inner loop produced what looked like *AGI*. And behind the curtain: a [bunch of well-paid humans](https://www.anthropic.com/careers/jobs?team=4002061008) with top-spec MacBook Pros.
+Then a deeper problem surfaced. Models can't update their own weights after deployment, a design constraint. Claude customers can't modify Claude; the weights are frozen by design; the backward pass is sealed. The inner loop produced what looked like *AGI*. And behind the curtain: a [bunch of well-paid humans](https://www.anthropic.com/careers/jobs?team=4002061008) with top-spec MacBook Pros.
 
 ## Shifting Definition
 
@@ -29,7 +29,7 @@ A calculator solves equations. An encyclopedia contains more knowledge than any 
 
 ## The Diagnosis
 
-AI has three layers: inference, chatbot, agent. The framework defines [six steps](/the-natural-framework#six-steps) for a learning loop. Diagnosing each layer against those six steps reveals a pattern: the agent can perceive, cache, triage, and remember, but it cannot consolidate.
+AI has three layers: inference, chatbot, agent. The framework defines [six roles](/the-natural-framework#six-steps) for a learning loop. Diagnosing each layer against those six roles reveals a pattern: the agent can perceive, cache, triage, and remember — the store exists, the API works — but it cannot consolidate. No backward pass reads from the store. The cron job is defined but never scheduled.
 
 *For detail: [Diagnosis LLM](/diagnosis-llm).*
 
