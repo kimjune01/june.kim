@@ -115,7 +115,7 @@ Cogito ergo sum: a closed loop with zero new input. A lossy self-map iterated wi
 The trace predicts the closed loop. The falsification test predicts the broken step. Take a known-alive system. Identify a step whose contract was lost. Observe.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Step replaced</th><th style="background:#f0f0f0">Self-map substituted</th><th style="background:#f0f0f0">System</th><th style="background:#f0f0f0">Outcome</th></tr></thead>
+<thead><tr><th style="background:#f0f0f0">Role replaced</th><th style="background:#f0f0f0">Self-map substituted</th><th style="background:#f0f0f0">System</th><th style="background:#f0f0f0">Outcome</th></tr></thead>
 <tr><td>Perceive</td><td>Prion — no guarantee on protein encoding</td><td>Biology</td><td>Death</td></tr>
 <tr><td>Filter</td><td>p53 loss — no guarantee on which cells survive</td><td>Biology</td><td>Cancer</td></tr>
 <tr><td>Remember</td><td>Immunosenescence — no guarantee on memory fidelity</td><td>Biology</td><td>Decay</td></tr>
@@ -155,7 +155,15 @@ Research asks: "construct η and μ explicitly and prove the monad laws." The Gi
 
 The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate reads from Remember and writes to the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Consolidate reads persisted outcomes and reshapes parameters for the next cycle.
 
-Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them, because contract preservation is a property of each morphism, not of the cycle count. The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The induction shows that if they compose once, they compose forever. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
+Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them. The forward contracts are stateless: Filter's guarantee depends on the input, not on which cycle it is. But Attend reads from the policy store, and Consolidate writes to it. The forward chain at cycle *n+1* depends on what the backward pass did at cycle *n*. The induction requires a coupling lemma:
+
+> If Consolidate preserves its contract at cycle *n* (persisted → policy′ reshapes processing without corrupting the diversity guarantee), then Attend's precondition is satisfied at cycle *n+1*.
+
+This is the open piece. The forward contracts are stated per-role and verified by composition. The coupling between Consolidate and Attend is cross-cycle and cross-direction: backward output at *n* feeds forward input at *n+1*. The lemma is where the framework would make its most specific falsifiable claim: what exactly does Consolidate guarantee that Attend requires? The contracts name the policy store but don't yet specify the interface formally.
+
+Without the lemma, the induction has a gap. With it, the framework predicts a specific failure mode: degraded Consolidate corrupts Attend's kernel even when diverse input arrives ([see above](#biased-competition-is-a-morphism)). That prediction is already stated informally in the biased competition section. Formalizing the coupling is the remaining work.
+
+The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
 
 ### Objections
 
@@ -168,7 +176,7 @@ Stoch provides the ambient category: measurable spaces and Markov kernels. The c
 Correct. The monad laws hold for the Giry monad independently (Giry 1982). Survival is evidence that the six roles compose well within the monad: the information budget balances. The monad is the container; the roles are the contents.
 
 **"The biology/society examples are cherry-picked."**
-The framework predicts: a singly recursive loop with a broken step is more likely to compound than self-correct, because the broken postcondition feeds a broken precondition on the next cycle.
+The framework predicts: a singly recursive loop with a broken role is more likely to compound than self-correct, because the broken postcondition feeds a broken precondition on the next cycle.
 
 Every historical failure is multi-causal. The prediction is falsifiable: find a singly recursive loop where a broken contract self-corrects without external repair. The theory was induced from a decade of [reflecting](/reflecting) posts: observations about teams, organizations, and systems that broke the same way. The math came after, not before.
 
@@ -178,7 +186,7 @@ Those systems are stacked pipes operating on different types.
 A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
 
 **"Consolidate is lossy; Remember is lossless. How do they relate?"**
-Consolidate lives inside Remember. Remember is the historically shaped substrate: the part of the medium that carries the system's past forward. DNA, the connectome, the published archive. Consolidate is what the substrate does to itself: compressing ranked outcomes into parameter changes, propagating backward through every stage. Remember persists the episode (lossless relative to its input). Consolidate extracts the rule (lossy). Both happen in the same medium. The forward contract on Remember is "no additional loss." The backward contract on Consolidate is "reshape how each stage processes." Timescale is the diagnostic; the contract is the definition.
+Remember is the last forward stage: it persists ranked output for the next cycle's Perceive. Consolidate is the backward pass: it reads from Remember and writes to the substrate, reshaping how each stage processes. Remember persists the episode (lossless relative to its input). Consolidate extracts the rule (lossy). Remember also serves as the cache for Consolidate: ranked outcomes accumulate there, and Consolidate reads them asynchronously. The forward contract on Remember is "no additional loss." The backward contract on Consolidate is "reshape how each stage processes." Timescale is the diagnostic; the contract is the definition.
 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.

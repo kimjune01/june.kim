@@ -86,7 +86,7 @@ Assessment: five of six cells functional. Consolidate is the watch cell. Operati
 1. Read the 10-K. Score each cell: functional, shallow, dim, stale, broken.
 2. Check Attend diversity. Revenue concentration by segment. Do the segments repel or cluster?
 3. Check Consolidate activity. Has strategy changed in the last five years? In response to evidence (functional) or crisis (shallow)?
-4. Check for the death conditions. Broken step: which cell? Can it self-correct? Closed loop: is the company ignoring its market? Decaying input: is the market itself shrinking?
+4. Check for the death conditions. Broken role: which cell? Can it self-correct? Closed loop: is the company ignoring its market? Decaying input: is the market itself shrinking?
 5. The dim cell count is the diagnosis. Zero dim cells: compounder. One or two: watch list. Three or more: the loop is decaying. If Consolidate is one of the dim cells: the company cannot self-correct. That's a structural position.
 
 Count the dim cells. The loop either compounds or decays.
