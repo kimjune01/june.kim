@@ -97,7 +97,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (ranked → policy′) — the backward pass inside the substrate. It reshapes how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — it can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
+**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — it can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
@@ -111,7 +111,7 @@ Near-misses (diagnostic counterexamples):
 <tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
 </table>
 
-**Remember** (ranked → persisted) — the last forward stage. Lossless relative to its input: no additional loss at this step. Remember is not a separate store. It is the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
+**Remember** (ranked → persisted) — the last forward stage. Lossless relative to its input: no additional loss at this step. Remember also serves as the cache for Consolidate: ranked outcomes are stored here, and Consolidate reads from them asynchronously. Remember is not a separate store. It is the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
 
 If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
 

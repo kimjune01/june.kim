@@ -2,7 +2,7 @@
 
 ### Claim
 
-The six roles are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six from temporal flow and bounded storage: three by existence proof at the boundaries, three more by corollary. Five compose forward as stages. The sixth, Consolidate, runs backward inside the substrate. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
+The six roles are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six from temporal flow and bounded storage: three by existence proof at the boundaries, three more by corollary. Five compose forward as stages. The sixth, Consolidate, reads from Remember and writes to the substrate. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
 
 ### Category
 
@@ -23,12 +23,12 @@ Not all morphisms are equal. Each role carries a postcondition, a structural gua
 <tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key.</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
 <tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
-<tr><td>Remember</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive.</td></tr>
-<tr><td style="font-style:italic">Consolidate</td><td style="white-space:nowrap">ranked → policy′</td><td style="font-style:italic">Backward pass inside the substrate. Lossy. Reshapes how each stage processes.</td></tr>
+<tr><td>Remember</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive. Also caches ranked output for Consolidate.</td></tr>
+<tr><td style="font-style:italic">Consolidate</td><td style="white-space:nowrap">persisted → policy′</td><td style="font-style:italic">Backward pass. Reads from Remember asynchronously, writes to the substrate. Lossy. Reshapes how each stage processes.</td></tr>
 </table>
 
 <div style="max-width:1100px; margin:1.5em auto;">
-<img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember, with Consolidate running backward inside the substrate." style="width:100%; display:block;">
+<img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember. Consolidate reads from Remember and writes to the substrate." style="width:100%; display:block;">
 </div>
 
 A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream.
@@ -51,16 +51,16 @@ Four claims follow from the contracts:
 - Filter before Cache: selecting from what hasn't been stored. No index, no comparison across items.
 - Remember before Attend: persisting before ranking. No selection, no diversity.
 
-Consolidate is not in the forward chain. It runs backward inside the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof.
+Consolidate is not in the forward chain. It reads from Remember and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof.
 
 ### Data processing inequality
 
 The order is fixed. The question is whether the ordered pipeline survives iteration. The constraint: for a Markov chain X → Y → Z, mutual information satisfies I(X;Z) ≤ I(X;Y). Each intermediate step can only decrease what downstream knows about the original input. The pipeline is a cascade of such maps.
 
-In the forward pass, Filter and Attend are lossy: each reduces what the output retains about the raw input. Cache and Remember can be lossless; the forward pipeline's net loss comes from the competitive core. Consolidate is also lossy, but it runs backward inside the substrate, compressing ranked outcomes into parameter changes. Its loss is a different kind: it discards specifics to keep the rule.
+In the forward pass, Filter and Attend are lossy: each reduces what the output retains about the raw input. Cache and Remember can be lossless; the forward pipeline's net loss comes from the competitive core. Consolidate is also lossy, but it reads from Remember and compresses persisted outcomes into parameter changes. Its loss is a different kind: it discards specifics to keep the rule.
 
 <div style="max-width:875px; margin:1.5em auto;">
-<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Remember is lossless (blue). Consolidate runs backward inside the substrate." style="width:100%; display:block;">
+<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Remember is lossless (blue). Consolidate reads from Remember, writes to substrate." style="width:100%; display:block;">
 </div>
 
 The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies. That is the named constraint that makes the budget visible.
@@ -147,7 +147,7 @@ The gap: the sequential processing pipeline as morphisms in a Markov category wi
 
 Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics (Giry 1982).
 
-The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate runs backward inside the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Consolidate runs inside the substrate, reshaping parameters for the next cycle.
+The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate reads from Remember and writes to the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Consolidate reads persisted outcomes and reshapes parameters for the next cycle.
 
 Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them, because contract preservation is a property of each morphism, not of the cycle count. The derivation in [The Natural Framework](/the-natural-framework) provides the base case: roles of this shape must exist. The induction shows that if they compose once, they compose forever. The data processing inequality provides the constraint. The falsification test is the contrapositive: replace one contract, observe death.
 
@@ -177,7 +177,7 @@ Consolidate lives inside Remember. Remember is the historically shaped substrate
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
 
-Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate runs the other way, inside the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
+Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate reads from Remember and writes to the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
 
 *Continued in [The Parts Bin](/the-parts-bin).*
 
