@@ -8,36 +8,36 @@ tags: cognition
 
 Why does learning plateau?
 
-Consolidate is the step that determines whether you get smarter. [The Handshake](/the-handshake) gives it its type:
+Consolidate is the backward pass. [The Handshake](/the-handshake) gives it its type:
 
-> `(policy, [ranked]) → policy′`
+> `persisted → policy′`
 
-A function and evidence in, a better function out. [Consolidation](/consolidation) rewrites the router. If any step deserves more resources, it's this one.
+Evidence in, better policy out. [Consolidation](/consolidation) rewrites the router. If any role deserves more resources, it's this one.
 
-To improve Consolidate, you need to select among candidate policies: habits, heuristics, taste. Which one is better? Answering that question is itself a pipe. Consolidate contains its own Perceive, Filter, and Attend. And that inner pipe has its own Consolidate.
+To improve Consolidate, you need to select among candidate policies: habits, heuristics, taste. Which one is better? Answering that question is itself a pipe. The backward pass contains its own Perceive, Filter, and Attend. And that inner pipe has its own backward pass.
 
-<img src="/assets/plateau-depth.svg" alt="Consolidate's recursive depth: Level 0 has Filter, Attend, Consolidate. Each Consolidate contains its own Filter, Attend, Consolidate at the next level. Levels dim as bits decrease. Level 3 is passthrough." style="width:100%; max-width:620px; display:block; margin:1.5em auto;"> Minsky called the first level B-brain. He stopped at one level because he had no formal reason to go further. The types give that reason. The recursion is structural.
+<img src="/assets/plateau-depth.svg" alt="Consolidate's recursive depth: Level 0 has Filter, Attend, Consolidate. Each Consolidate contains its own Filter, Attend, Consolidate at the next level. Levels dim as bits decrease. Level 3 is passthrough." style="width:100%; max-width:620px; display:block; margin:1.5em auto;"> [Minsky](https://en.wikipedia.org/wiki/Society_of_Mind) called the first level B-brain. He stopped at one level because he had no formal reason to go further. The types give that reason. The recursion is structural. It has the same shape as depth in a neural network.
 
 Each inner pipe's Remember is the policy passed back to the level above. That's how Consolidate returns `policy′`: the inner pipe runs, and its output becomes the outer pipe's update.
 
 ## Inner life
 
-The human body is a pipe. The brain is its Consolidate: the organ that rewrites policy from evidence. [Dreams](https://www.nature.com/articles/nrn2762-c1) are the brain's Consolidate: the inner pipe that reorganizes policy while Perceive is shut. Evolution found it more efficient to shut down the whole body for several hours each day than to run consolidation in the background. That's how important this step is. And we can't remember dreams because the inner pipe's data type doesn't match the outer pipe's Perceive. Policy representations aren't sensory encodings. Type mismatch at the interface.
+The human body is a pipe. The brain is its Consolidate: the organ that rewrites policy from evidence. [Dreams](https://www.nature.com/articles/nrn2762-c1) are the brain's Consolidate: the inner pipe that reorganizes policy while Perceive is shut. Evolution found it more efficient to shut down the whole body for several hours each day than to run consolidation in the background. That's how important the backward pass is. And we can't remember dreams because the inner pipe's data type doesn't match the outer pipe's Perceive. Policy representations aren't sensory encodings. Type mismatch at the interface.
 
 
-Each inner pipe gets its bits from the pipe above. The body operates on sensory data; the brain on compressed representations; dreams on compressed representations of representations. Each level has strictly less to work with. The [data processing inequality](/the-handshake#data-processing-inequality) guarantees it: information only decreases through processing. Eventually there aren't enough bits for selection to function: passthrough. The tower has a top floor, and Consolidate is a slow dial with a hard ceiling.
+Each inner pipe gets its bits from the pipe above. The body operates on sensory data; the brain on compressed representations; dreams on compressed representations of representations. Each level has strictly less to work with. The [data processing inequality](/the-handshake#data-processing-inequality) guarantees it: information only decreases through processing. Neural networks call this [vanishing gradients](https://www.bioinf.jku.at/publications/older/2304.pdf). The backward pass attenuates through depth. Eventually there aren't enough bits for selection to function: passthrough. The tower has a top floor.
 
 ## At rest
 
-Policy leaks, too. Landauer guarantees it: bits in physical substrate degrade. So Consolidate has two jobs. Maintain: repair leaked policy. Improve: compress new evidence into better policy. Both draw from the same evidence budget. At steady Perceive throughput *T*:
+Policy leaks, too. [Landauer](https://en.wikipedia.org/wiki/Landauer%27s_principle) guarantees it: bits in physical substrate degrade. So the backward pass has two jobs. Maintain: repair leaked policy. Improve: compress new evidence into better policy. Both draw from the same evidence budget. At steady Perceive throughput *T*:
 
 > dPolicy/dt = consolidation\_rate − leak\_rate
 
-Plateau when the two rates balance. "Use it or lose it" is this equation. Evidence stops flowing, the leak rate wins, policy decays to the level the current throughput can sustain. Netflix keeps the corporate drone alive: enough novel perception to maintain, never enough to challenge. Saturated at floor. Nothing improves.
+Neural networks call this [weight decay](https://proceedings.neurips.cc/paper/1991/hash/8eefcfdf5990e441f0fb6f3fad709e21-Abstract.html): `Δw = gradient − λw`. Plateau when the two rates balance. "Use it or lose it" is this equation. Evidence stops flowing, the leak rate wins, policy decays to the level the current throughput can sustain. Netflix keeps the corporate drone alive: enough novel perception to maintain, never enough to challenge. Saturated at floor. Nothing improves.
 
-But look at the equation again. The ceiling is set by Perceive's throughput, not Consolidate's rate. The lever isn't at the step you'd expect. It's the input.
+But look at the equation again. The ceiling is set by Perceive's throughput, not the backward pass rate. You can't learn what you haven't seen. The lever isn't at the role you'd expect. It's the input.
 
-A monk meditates twelve hours a day. Maximum Consolidate, Perceive shut. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found the predicted plateau: attention sharpens, domain knowledge doesn't grow. The dial is cranked, but the ceiling is set by what comes in, not by how hard you think. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same: deliberate practice only works when it includes new information. Pure repetition is consolidation without Perceive.
+A monk meditates twelve hours a day. Maximum backward pass, Perceive shut. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found the predicted plateau: attention sharpens, domain knowledge doesn't grow. It's overfitting. Remember holds the same evidence; the backward pass extracts every bit and has nothing left. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same: deliberate practice only works when it includes new information. Pure repetition is the backward pass without new forward passes.
 
 No surprise.
 
@@ -73,7 +73,9 @@ It's the same thing that happens with a best friend who *gets* you. Each convers
 
 If that's true, then varying context *density* should measurably change agent performance. Same model, same task, different context.
 
-It does. [Chroma's context rot study](https://research.trychroma.com/context-rot) tested 18 frontier models. Adding 10% irrelevant content to the context window reduced accuracy by 23%. The effect held at every context length, for every model. The equation doesn't care about the substrate.
+Half of it does. [Chroma's context rot study](https://research.trychroma.com/context-rot) tested 18 frontier models. Adding 10% irrelevant content to the context window reduced accuracy by 23%. The effect held at every context length, for every model. The equation doesn't care about the substrate.
+
+That's the downside. Nobody has run it in the other direction. Same setup, same benchmarks, but fill the context with *relevant* prose instead of padding. Does accuracy climb above baseline? The [data is public](https://github.com/chroma-core/context-rot). The experiment is waiting.
 
 ## So what
 
