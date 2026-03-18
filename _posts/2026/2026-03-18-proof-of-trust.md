@@ -32,9 +32,15 @@ An advertiser publishes a signed declaration of their trust relationships:
 - **Licensing**: "I hold this license in this jurisdiction. Here is the registry link."
 - **Platform history**: "My Shopify store has this rating. Here is the verifiable export."
 
-Each relationship is bilateral. The advertiser claims it; the counterparty confirms it. The confirmation is cryptographic: a signed payload anyone can verify without asking either party.
+Attestations come in two forms: bilateral (mutual relationships) and unilateral (observations).
 
-The declarations are coarse by design. "This merchant has processed payments for three years," not the transaction log. "This customer attests to the relationship," not the invoice. Enough to verify topology, not enough to reconstruct private activity.
+**Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. These represent relationships: payment processing, vendor partnerships, customer endorsements.
+
+**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. These represent observations: ratings, licenses, public records.
+
+The confirmation is cryptographic: a DKIM-signed payload anyone can verify without asking either party. Bilateral edges prove mutual agreement. Unilateral edges prove the platform's claim about their own data.
+
+The declarations are coarse by design. "This merchant has processed payments for three years," not the transaction log. "This restaurant has 4.5 stars from 247 reviews," not the review contents. Enough to verify topology, not enough to reconstruct private activity.
 
 ## The exchange layer
 
@@ -68,9 +74,27 @@ Subject: Payment Processing Attestation
 }
 ```
 
-Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided claims don't count.
+Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided relationship claims don't count.
 
-The exchange builds a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
+**Unilateral attestations work differently.** Google forwards an attestation about a restaurant's reviews directly to the exchange:
+
+```
+From: attestations@google.com
+DKIM-Signature: [cryptographic signature]
+
+{
+  "attestation_type": "platform_rating",
+  "business_id": "restaurant@example.com",
+  "rating": 4.5,
+  "review_count": 247,
+  "platform": "Google Reviews",
+  "timestamp": "2026-03-18"
+}
+```
+
+The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. The restaurant can't block unfavorable reviews (that's the point of reviews), but platforms stake their reputation on accurate attestations. If Google claims reviews that don't exist on their platform, anyone can verify and call them out.
+
+The exchange builds a public graph: nodes are businesses, edges are attested relationships (bilateral) or observations (unilateral), edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
 One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
 
