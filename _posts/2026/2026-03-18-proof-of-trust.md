@@ -24,17 +24,77 @@ An advertiser publishes a signed declaration of their trust relationships:
 
 Each relationship is bilateral. The advertiser claims it; the counterparty confirms it. The confirmation is cryptographic: a signed payload anyone can verify without asking either party.
 
-This runs on signed declarations, not a blockchain. DKIM proves a mail server sent a message. The same pattern proves Stripe processed a merchant's payments. Both parties confirm the relationship through an OAuth-like handshake, producing a signed artifact anyone can scrape and verify.
+This runs on DKIM-signed emails, not a blockchain. DKIM already proves a mail server sent a message. The same mechanism proves Stripe sent an attestation. Both parties confirm the relationship by forwarding DKIM-signed emails to the exchange. No new protocol—just email.
 
 Why would Stripe participate? Because [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
 
+And Stripe already sends DKIM-signed emails. The only new behavior is: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
+
 The declarations are coarse by design. "This merchant has processed payments for three years," not the transaction log. "This customer attests to the relationship," not the invoice. Enough to verify topology, not enough to reconstruct private activity.
+
+## Revocation
+
+Either party can unlink at any time by sending a revocation email:
+
+```
+From: attestations@stripe.com
+To: merchant@example.com
+DKIM-Signature: [cryptographic signature]
+Subject: Attestation Revocation
+
+{
+  "action": "revoke",
+  "original_attestation_id": "merchant123_stripe_2023",
+  "reason": "account_closed",
+  "timestamp": "2026-03-18T16:00:00Z"
+}
+```
+
+The merchant forwards it to the exchange. The exchange removes the edge from the graph. Unilateral—you don't need the other party's permission to unlink.
+
+If Stripe detects fraud, they revoke the attestation. The merchant's payment processor edge disappears. Curators see a thinner topology. The merchant drops from allowlists. Their ads stop appearing.
+
+If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims. New businesses start with fewer edges and earn their way in. Businesses that burn relationships start over. The path back is the same as the path in: accumulate real attestations, rebuild one edge at a time.
+
+The cost of defection is losing your place in the graph. You can't force anyone to stay connected. The graph is maintained by consent, updated by email, reset by defection.
 
 ## The exchange layer
 
-Ad exchanges scrape and index the trust declarations into a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
+An exchange is a specialized mail server that receives, verifies, and indexes attestation emails.
 
-One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements, semantic consistency between their declared [market position](/market-position-json) and their public footprint. Another has a week-old domain and a self-reported Shopify rating. The exchange exposes both. Curators decide what qualifies.
+**How it works:**
+
+1. Stripe sends merchant a DKIM-signed email: "We attest to 3 years of payment processing for merchant@example.com"
+2. Merchant forwards the email to `attestations@exchange.com`
+3. Exchange receives email, verifies DKIM signature, indexes the relationship
+4. Merchant sends Stripe: "I confirm this relationship"
+5. Stripe forwards to `attestations@exchange.com`
+6. Exchange indexes: merchant ←→ Stripe (bilateral confirmation complete)
+
+The exchange is just SMTP (receives emails) + DKIM verification (proves authenticity) + a graph database (indexes relationships) + a query API (exposes to curators).
+
+Attestation emails contain structured data:
+
+```
+From: attestations@stripe.com
+To: merchant@example.com
+DKIM-Signature: [cryptographic signature]
+Subject: Payment Processing Attestation
+
+{
+  "attestation_type": "payment_processor",
+  "merchant_id": "merchant@example.com",
+  "duration_years": 3,
+  "status": "good_standing",
+  "timestamp": "2026-03-18T15:00:00Z"
+}
+```
+
+Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided claims don't count.
+
+The exchange builds a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
+
+One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
 
 ## The curation layer
 
@@ -71,15 +131,15 @@ Email's curation layer works the same way. Mail servers subscribe to blocklists 
 
 ## The stack
 
-| Layer | Role | Analogy |
-|-------|------|---------|
-| Advertiser | Declares trust relationships, signed | SPF/DKIM sender declaration |
-| Exchange | Scrapes, indexes, exposes the graph | Mail exchange routing |
+| Layer | Role | Email equivalent |
+|-------|------|------------------|
+| Advertiser | Declares trust relationships, signed | DKIM sender |
+| Exchange | Receives attestation emails, verifies DKIM, indexes graph | Mail server (SMTP + database) |
 | Curator | Publishes allowlists based on graph criteria | Blocklist operators (Spamhaus) |
 | Publisher | Composes trust policy from curators | Mail server spam policy |
 | Audience | Sees filtered, trust-scored results | Inbox |
 
-Five layers. No single point of control. The protocol is open.
+Five layers. No single point of control. The protocol is email.
 
 ## The topology is the credential
 

@@ -1,0 +1,24 @@
+Have you ever had your coding agents fill up with context then it stalls? and after, it gets semi-amnesic, as if it's hung over? well, that's because it's using compaction. Compaction is summarization, batched and lossy. it doesn't remember what you said half an hour ago and you have to explain yourself again, or manually tell it to write files.
+
+Well, no more! Union-find compaction is here and it will fix this problem for all chatbots forever.
+
+Union-find has been around for 50 years and every undergrad CS student has heard about it as this wonderful algorithm. It gets asked in whiteboard questions as a trick. it's how i got into Google.
+
+If you want to learn more about the algorithm, you can find the deets in wikipedia but to spare you the click, it has ackermann-time recall which is basically O(1), sub-log(n) performance. Space complexity O(n) because it has to store stuff to restore it in full resolution.
+
+Using it means context rot is solved. the hot zone in the context serves as a cache, and the union-find sparse tree acts as a compound cache and storage. You can tune it to use up to 30% of context and never run into context rot issues. Even if you were to apply the same test for needle-in-a-haystack, it would perform no worse than summarization.
+
+You'd also get these bonus features:
+
+    find any message across all sessions
+    cheaper summarizarion LLM
+    no interruptions with compaction happening mid-session, breaking flow
+
+
+So architecturally it's better, but does it perform? I got Claude Code to do the science and came back with a pretty clean result. Over 7 sessions, with different versions of the implementation, union-find did no worse and sometimes better, than compaction. The final trial was using a Haiku summarizer on 200 Sonnet conversation talking about shop about some corporate IT. Moderately better recall. It's on my github but I can't share the link here because I'm a new poster.
+
+So what does this mean? That means you can just keep the session going on and on and on and it'll still remember the stuff that you said yesterday or. last week. With a custom data type, it can even hold file pointers and git hashes, so that it can retrieve what it threw away on storage.
+
+It also gives you for almost free: multiplayer and branching/forking past conversations.
+
+I have the blog post too, but again I can't share it because new poster. Happy vibing!
