@@ -69,7 +69,7 @@ Each cycle takes less time than the last. The human edits faster because the fil
 
 The human side converges. Biology sets the ceiling: reading speed, working memory, lifespan. The machine side? This experiment starts with writing skills because that's where the ground truth exists. But the harness doesn't know it's working on prose. Once it consolidates one class of skill, who knows what classes follow. The human's plateau is known. The machine's is not.
 
-The harness is [open](https://github.com/kimjune01/AGI). The ground truth is in the [git history](https://github.com/kimjune01/kimjune01.github.io). The [skills are published](/writing-with-claude). Anyone can run the loop.
+The harness is [open](https://github.com/kimjune01/AGI). The ground truth is in the [git history](https://github.com/kimjune01/june.kim). The [skills are published](/writing-with-claude). Anyone can run the loop.
 
 The backward pass fired once, by hand. One gradient update. The difference between one update and training is a trigger: a schedule that fires without being asked. The [diagnosis](/diagnosis-llm) calls it the missing component. The cell is still dim. But it flickers.
 
