@@ -28,9 +28,9 @@ An advertiser publishes a signed declaration of their trust relationships:
 
 Attestations come in two forms: bilateral (mutual relationships) and unilateral (observations).
 
-**Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. These represent relationships: payment processing, vendor partnerships, customer endorsements.
+**Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. Relationships: payment processing, vendor partnerships, customer endorsements.
 
-**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. These represent observations: ratings, licenses, public records.
+**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
 
 The confirmation is cryptographic: a DKIM-signed payload anyone can verify without asking either party. Bilateral edges prove mutual agreement. Unilateral edges prove the platform's claim about their own data.
 
@@ -96,11 +96,9 @@ The graph is public. Anyone can query it. That's how trust works. Private attest
 
 ## The curation layer
 
-Curators interpret the graph. A curator is an independent party that publishes an allowlist: a set of advertisers that meet the curator's trust criteria. Different curators, different standards:
+Curators interpret the graph. A curator is an independent party that publishes an allowlist: a set of advertisers that meet the curator's trust criteria. Different curators, different standards.
 
-- A conservative health curator might require: licensed practitioner + clean payment history + minimum 20 patient attestations
-- A general commerce curator might require: 6 months payment history + business registration + semantic consistency
-- A community curator might require: 3 mutual endorsements from other businesses in the same locality
+A conservative health curator might require: licensed practitioner + clean payment history + minimum 20 patient attestations. A general commerce curator might require: 6 months payment history + business registration + semantic consistency. A community curator might require: 3 mutual endorsements from other businesses in the same locality.
 
 Curators stake their reputation on their lists. A curator whose allowlist lets through scammers loses subscribers. A curator whose allowlist is too restrictive loses relevance. The competition between curators produces trust standards, imperfectly, but better than a monopoly. The design inverts credit rating agencies: curators are paid by subscribers (publishers), not by the entities they evaluate. The incentive points toward accuracy, not accommodation.
 
@@ -155,7 +153,7 @@ Everything above assumes distinct advertisers, publishers, and audiences. As [tr
 
 The roles share a reputation. Burn trust as an advertiser (revoked attestation, thinning topology) and your publishing credibility drops too. The graph doesn't know which hat you were wearing when you defaulted. It just sees a weaker node.
 
-Defaulting is a topological reset. Not punishment — geometry. Your edges thin. Your ads rank lower. Your publishing reaches fewer people. The path back is the same as the path in: earn real relationships, accumulate real attestations, rebuild one edge at a time. New domains start in the spam folder. Reset nodes start there too.
+Defaulting is a topological reset. Your edges thin. Your ads rank lower. Your publishing reaches fewer people. The path back is the same as the path in: earn real relationships, accumulate real attestations, rebuild one edge at a time. New domains start in the spam folder. Reset nodes start there too.
 
 The cost of defection is losing your place in the graph, across all three roles. The topology self-corrects: burning edges tends to cost more than any single default is worth.
 
