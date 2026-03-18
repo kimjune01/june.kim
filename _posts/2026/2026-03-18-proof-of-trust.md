@@ -145,13 +145,9 @@ Five layers. No single point of control. The protocol is email.
 
 ## The topology is the credential
 
-The trust graph exposes topology. A business with deep, reciprocal, long-standing relationships occupies a different position in the graph than a business with thin, one-directional, recent claims. The shape speaks.
-
-Faking a rich trust topology gets expensive when the counterparties issuing attestations are themselves costly to compromise. A scammer can buy an old domain. Buying three years of clean Stripe processing, 47 customers willing to sign attestations, and two vendors willing to reciprocate is a different proposition. The graph is only as strong as the weakest attestor, which is why curation matters: curators decide which attestation types they require and which they discount.
+The trust graph exposes topology. A business with deep, reciprocal, long-standing relationships occupies a different position than one with thin, one-directional, recent claims. The shape speaks.
 
 You can't forge the graph without forging the relationships. But you can outspend it. A well-funded actor with real relationships can try to dominate legitimately. That's what federation solves. No single curator's allowlist is the index.
-
-New businesses start with fewer attestations and earn their way in. New domains start in the spam folder, new advertisers in the conservative tier. The path from zero to trusted is open. It just takes time and real relationships.
 
 ## Every node is all three
 
@@ -187,13 +183,11 @@ Subject: Attestation Revocation
 }
 ```
 
-The merchant forwards it to the exchange. The exchange removes the edge from the graph. Unilateral—you don't need the other party's permission to unlink.
+The merchant forwards it to the exchange. The exchange removes the edge. Unilateral—you don't need the other party's permission.
 
-If Stripe detects fraud, they revoke the attestation. The merchant's payment processor edge disappears. Curators see a thinner topology. The merchant drops from allowlists. Their ads stop appearing.
+If Stripe detects fraud, they revoke. The merchant's payment processor edge disappears, curators see a thinner topology, the merchant drops from allowlists.
 
-If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims. New businesses start with fewer edges and earn their way in. Businesses that burn relationships start over. The path back is the same as the path in: accumulate real attestations, rebuild one edge at a time.
-
-The cost of defection is losing your place in the graph. You can't force anyone to stay connected. The graph is maintained by consent, updated by email, reset by defection.
+If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims.
 
 ### Extensible schemas
 
@@ -229,11 +223,9 @@ The merchant opts in to publish specific fields:
 }
 ```
 
-The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal; the merchant controls what to reveal.
+The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes.
 
-Each attestor defines their own fields. The exchange doesn't need to know all possible schemas in advance—it just stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
-
-A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes ("we're big enough to have something to lose") and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
+Each attestor defines their own fields. The exchange stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
 
 Every edge is timestamped. The exchange records when attestations arrive, when they're confirmed, when they're revoked. Curators can weight recent attestations more heavily than old ones, or require minimum relationship duration. The timestamps make relationship age verifiable without trusting self-reported claims.
 
