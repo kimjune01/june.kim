@@ -92,6 +92,48 @@ Subject: Payment Processing Attestation
 
 Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided claims don't count.
 
+## Extensible schemas
+
+Attestors can optionally declare additional fields. Merchants choose which fields to publish:
+
+```json
+{
+  "attestation_type": "payment_processor",
+  "merchant_id": "merchant@example.com",
+
+  "standard_fields": {
+    "duration_years": 3,
+    "status": "good_standing",
+    "timestamp": "2026-03-18T15:00:00Z"
+  },
+
+  "optional_fields": {
+    "transaction_count": 14250,
+    "average_monthly_volume": 48000,
+    "dispute_rate": 0.002,
+    "chargeback_rate": 0.001,
+    "on_time_settlement": true
+  }
+}
+```
+
+The merchant opts in to publish specific fields:
+
+```json
+{
+  "publish": ["duration_years", "status", "dispute_rate"],
+  "redact": ["transaction_count", "average_monthly_volume"]
+}
+```
+
+The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal, but the merchant controls what to reveal.
+
+Each attestor defines their own fields. The exchange doesn't need to know all possible schemas in advance—it just stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
+
+A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes, signaling "we're big enough to have something to lose," and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
+
+Every edge is timestamped. The exchange records when attestations arrive, when they're confirmed, when they're revoked. Curators can weight recent attestations more heavily than old ones, or require minimum relationship duration. The timestamps make relationship age verifiable without trusting self-reported claims.
+
 The exchange builds a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
 One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
