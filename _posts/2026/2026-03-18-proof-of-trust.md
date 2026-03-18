@@ -6,11 +6,21 @@ tags: vector-space
 
 *Part of the [Vector Space](/vector-space) series.*
 
+Email is decentralized. No single company runs it. Billions of messages route through competing servers every day. Spam filters work without a central authority deciding what's legitimate. How does it work? And why can't trust work the same way?
+
 [How to Trust Advertisers](/how-to-trust-advertisers) described the composite signal: payment history, reviews, semantic consistency, DNS records. Independently verifiable, no single gatekeeper. But each signal is isolated. A clean Stripe history doesn't know about a Yelp rating. A domain age doesn't know about a QuickBooks P&L.
 
 A plumber who's served the same neighborhood for twenty years has the evidence: Stripe transactions, customer reviews, a business license, supplier relationships. When she buys an ad, the platform treats her the same as a dropshipper who registered yesterday. The signals exist. They just don't talk to each other.
 
-Proof of trust is a data structure that connects the signals into a graph.
+Proof of trust is a data structure that connects the signals into a graph. And it runs on email.
+
+## The mechanism
+
+This runs on DKIM-signed emails, not a blockchain. DKIM already proves a mail server sent a message. The same mechanism proves Stripe sent an attestation. Both parties confirm the relationship by forwarding DKIM-signed emails to the exchange. No new protocol—just email.
+
+Why would Stripe participate? Because [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
+
+And Stripe already sends DKIM-signed emails. The only new behavior is: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
 
 ## The declaration
 
@@ -24,39 +34,7 @@ An advertiser publishes a signed declaration of their trust relationships:
 
 Each relationship is bilateral. The advertiser claims it; the counterparty confirms it. The confirmation is cryptographic: a signed payload anyone can verify without asking either party.
 
-This runs on DKIM-signed emails, not a blockchain. DKIM already proves a mail server sent a message. The same mechanism proves Stripe sent an attestation. Both parties confirm the relationship by forwarding DKIM-signed emails to the exchange. No new protocol—just email.
-
-Why would Stripe participate? Because [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
-
-And Stripe already sends DKIM-signed emails. The only new behavior is: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
-
 The declarations are coarse by design. "This merchant has processed payments for three years," not the transaction log. "This customer attests to the relationship," not the invoice. Enough to verify topology, not enough to reconstruct private activity.
-
-## Revocation
-
-Either party can unlink at any time by sending a revocation email:
-
-```
-From: attestations@stripe.com
-To: merchant@example.com
-DKIM-Signature: [cryptographic signature]
-Subject: Attestation Revocation
-
-{
-  "action": "revoke",
-  "original_attestation_id": "merchant123_stripe_2023",
-  "reason": "account_closed",
-  "timestamp": "2026-03-18T16:00:00Z"
-}
-```
-
-The merchant forwards it to the exchange. The exchange removes the edge from the graph. Unilateral—you don't need the other party's permission to unlink.
-
-If Stripe detects fraud, they revoke the attestation. The merchant's payment processor edge disappears. Curators see a thinner topology. The merchant drops from allowlists. Their ads stop appearing.
-
-If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims. New businesses start with fewer edges and earn their way in. Businesses that burn relationships start over. The path back is the same as the path in: accumulate real attestations, rebuild one edge at a time.
-
-The cost of defection is losing your place in the graph. You can't force anyone to stay connected. The graph is maintained by consent, updated by email, reset by defection.
 
 ## The exchange layer
 
@@ -91,48 +69,6 @@ Subject: Payment Processing Attestation
 ```
 
 Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided claims don't count.
-
-## Extensible schemas
-
-Attestors can optionally declare additional fields. Merchants choose which fields to publish:
-
-```json
-{
-  "attestation_type": "payment_processor",
-  "merchant_id": "merchant@example.com",
-
-  "standard_fields": {
-    "duration_years": 3,
-    "status": "good_standing",
-    "timestamp": "2026-03-18T15:00:00Z"
-  },
-
-  "optional_fields": {
-    "transaction_count": 14250,
-    "average_monthly_volume": 48000,
-    "dispute_rate": 0.002,
-    "chargeback_rate": 0.001,
-    "on_time_settlement": true
-  }
-}
-```
-
-The merchant opts in to publish specific fields:
-
-```json
-{
-  "publish": ["duration_years", "status", "dispute_rate"],
-  "redact": ["transaction_count", "average_monthly_volume"]
-}
-```
-
-The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal, but the merchant controls what to reveal.
-
-Each attestor defines their own fields. The exchange doesn't need to know all possible schemas in advance—it just stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
-
-A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes, signaling "we're big enough to have something to lose," and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
-
-Every edge is timestamped. The exchange records when attestations arrive, when they're confirmed, when they're revoked. Curators can weight recent attestations more heavily than old ones, or require minimum relationship duration. The timestamps make relationship age verifiable without trusting self-reported claims.
 
 The exchange builds a public graph: nodes are businesses, edges are attested relationships, edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
@@ -204,6 +140,78 @@ Defaulting is a topological reset. Not punishment — geometry. Your edges thin.
 The cost of defection is losing your place in the graph, across all three roles. The topology self-corrects: burning edges tends to cost more than any single default is worth.
 
 The plumber's signals finally talk to each other.
+
+---
+
+## Appendix
+
+### Revocation
+
+Either party can unlink at any time by sending a revocation email:
+
+```
+From: attestations@stripe.com
+To: merchant@example.com
+DKIM-Signature: [cryptographic signature]
+Subject: Attestation Revocation
+
+{
+  "action": "revoke",
+  "original_attestation_id": "merchant123_stripe_2023",
+  "reason": "account_closed",
+  "timestamp": "2026-03-18T16:00:00Z"
+}
+```
+
+The merchant forwards it to the exchange. The exchange removes the edge from the graph. Unilateral—you don't need the other party's permission to unlink.
+
+If Stripe detects fraud, they revoke the attestation. The merchant's payment processor edge disappears. Curators see a thinner topology. The merchant drops from allowlists. Their ads stop appearing.
+
+If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims. New businesses start with fewer edges and earn their way in. Businesses that burn relationships start over. The path back is the same as the path in: accumulate real attestations, rebuild one edge at a time.
+
+The cost of defection is losing your place in the graph. You can't force anyone to stay connected. The graph is maintained by consent, updated by email, reset by defection.
+
+### Extensible schemas
+
+Attestors can optionally declare additional fields. Merchants choose which fields to publish:
+
+```json
+{
+  "attestation_type": "payment_processor",
+  "merchant_id": "merchant@example.com",
+
+  "standard_fields": {
+    "duration_years": 3,
+    "status": "good_standing",
+    "timestamp": "2026-03-18T15:00:00Z"
+  },
+
+  "optional_fields": {
+    "transaction_count": 14250,
+    "average_monthly_volume": 48000,
+    "dispute_rate": 0.002,
+    "chargeback_rate": 0.001,
+    "on_time_settlement": true
+  }
+}
+```
+
+The merchant opts in to publish specific fields:
+
+```json
+{
+  "publish": ["duration_years", "status", "dispute_rate"],
+  "redact": ["transaction_count", "average_monthly_volume"]
+}
+```
+
+The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal, but the merchant controls what to reveal.
+
+Each attestor defines their own fields. The exchange doesn't need to know all possible schemas in advance—it just stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
+
+A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes, signaling "we're big enough to have something to lose," and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
+
+Every edge is timestamped. The exchange records when attestations arrive, when they're confirmed, when they're revoked. Curators can weight recent attestations more heavily than old ones, or require minimum relationship duration. The timestamps make relationship age verifiable without trusting self-reported claims.
 
 ---
 
