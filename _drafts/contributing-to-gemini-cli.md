@@ -6,11 +6,24 @@ tags: coding
 
 *Builds on [Union-Find Compaction](/union-find-compaction). Implementation: [gemini-cli fork](https://github.com/kimjune01/gemini-cli/tree/feat/union-find-compaction). Spec and experiment: [union-find-compaction-for-gemini-cli](https://github.com/kimjune01/union-find-compaction-for-gemini-cli).*
 
-> I implemented union-find compaction in Gemini CLI. It produced a cheaper, lower-latency architecture with a positive recall signal. It did not produce a clean win.
+Ninety minutes into a session. The agent has your codebase in context, your test failures explained, your refactor halfway done. You've been trading messages for an hour and the work is good. Then you glance at the status bar.
 
-Gemini CLI compresses conversations by summarizing the oldest 70% into a single snapshot. Two LLM calls, a 20-30 second spinner, and then your conversation history is a paragraph. It works. It also forces all older context through one bottleneck summary, which drops whatever the summarizer didn't think was important.
+![Context left until auto-compact: 0%](/assets/auto-compact-0.png)
 
-The [prototype](/union-find-compaction) established that hierarchical compaction could preserve more detail in isolation. Instead of one flat summary, messages cluster by topic, each cluster keeps its own summary, and retrieval pulls relevant clusters rather than the whole blob. The question was whether the idea survived contact with a real codebase: real API costs, real latency constraints, and implementation complexity.
+Twenty seconds of spinner. Two LLM calls. Your conversation history becomes a paragraph. The summarizer keeps what it thinks matters and drops the rest. When you ask about the refactor you were just discussing, the agent apologizes. It doesn't remember. You write a bootstrap prompt, start a new session, and spend ten minutes re-explaining what the last session already knew.
+
+This is flat compression. Gemini CLI summarizes the oldest 70% of your conversation into a single snapshot. It works. It also forces all older context through one bottleneck, which drops whatever the summarizer didn't prioritize.
+
+I'd been circling this problem for months. The stack:
+
+1. [Manual Context Compaction](/manual-context-compaction) — the pain. Dump context to markdown before the window fills.
+2. [Context Synthesis is Quadratic](/context-synthesis-is-quadratic) — the theory. Long contexts degrade faster than linear because synthesis is pairwise.
+3. [The Natural Framework](/the-natural-framework) — a cognition model. How memory, retrieval, and compression relate.
+4. [Diagnosis LLM](/diagnosis-llm) — the diagnostic. Flat summary destroys provenance, expandability, and selective retrieval.
+5. [The Parts Bin](/the-parts-bin) — union-find as a candidate fix sitting in the parts bin.
+6. [Union-Find Compaction](/union-find-compaction) — the prototype. Clusters by topic, each with its own summary.
+
+The prototype preserved more detail in isolation. The question was whether the idea survived contact with a real codebase. Real API costs, real latency constraints, and real implementation complexity.
 
 ## v1: wrong on every count
 
@@ -28,17 +41,22 @@ The fix was to stop summarizing during merges entirely.
 
 A concrete example: messages 1-20 form three clusters. Message 21 arrives, gets embedded locally, and joins the nearest cluster by similarity. The cluster is marked dirty. No summarizer call. Later, in the background, `resolveDirty()` takes the cluster's old summary plus message 21's raw text and produces a new summary in one LLM call.
 
-Three operations, three latency profiles:
+Side by side:
 
 ```
-append(msg)       <1ms    Synchronous. Embed locally, push to hot zone, graduate if needed.
-render()          <0.1ms  Synchronous. Return cached summaries + hot zone verbatim.
-resolveDirty()    ~4s     Async. Batch-summarize dirty clusters in background.
+Flat (current):
+  [All old messages] → LLM summarize → LLM verify → single snapshot + recent 30%
+  Blocking: 20-30s spinner. Two LLM calls per compression event.
+
+Union-find (v2):
+  append(msg)       <1ms    Embed locally, push to hot zone, graduate if needed.
+  render()          <0.1ms  Return cached summaries + hot zone verbatim.
+  resolveDirty()    ~4s     Batch-summarize dirty clusters in background.
 ```
 
-The overlap window makes this work. Two thresholds: `graduateAt=26` and `evictAt=30`. When a message graduates into the forest, it stays in the hot zone for another ~4 messages. By the time it evicts, `resolveDirty()` has already run in the background during the main LLM call. Under this design, the user doesn't wait and the summaries stay current.
+Flat discards original messages after compression. Union-find keeps them. Every cluster links back to its sources through parent pointers. If a summary drops a detail, you can expand the cluster and recover the original text.
 
-If this held up, CLI agents could keep longer working memory without adding latency or cost.
+The overlap window makes this work in practice. Two thresholds: `graduateAt=26` and `evictAt=30`. When a message graduates into the forest, it stays in the hot zone for another ~4 messages. By the time it evicts, `resolveDirty()` has already run in the background during the main LLM call. The user doesn't wait and the summaries stay current.
 
 ## The experiment
 
@@ -75,7 +93,9 @@ The [issue](https://github.com/google-gemini/gemini-cli/issues/22877) has a resu
 
 It's a large change. Three new files, three modified files. That goes against the small-incremental-PR norm. But you can't ship the forest without the embedder, or the context window without the forest. It's one feature with tightly coupled components. The feature flag makes it dormant by default.
 
-The issue sat in triage with zero comments. Google projects have internal roadmaps. External contributions of this scope get deprioritized. A reviewer can reasonably say "it's cheaper and faster but you haven't proven it remembers more."
+A prototype blog post doesn't get someone's attention. [Ideas can't find other ideas](/pageleft-manifesto). To have a shot, it had to be a full implementation: feature-flagged, tested, experimentally validated, ready to merge. I used to work at Google. I know the level of rigor they expect before looking at a change this size.
+
+Even then, the issue sat in triage with zero comments. Google projects have internal roadmaps. External contributions of this scope get deprioritized. A reviewer can reasonably say "it's cheaper and faster but you haven't proven it remembers more."
 
 ## What I'd tell someone attempting this
 
@@ -88,6 +108,12 @@ Feature-flag everything. It turns "please merge my alternative architecture" int
 Build the experiment harness before you need it. When v1 failed, I could rerun the same 12 conversations on v2 within 6 minutes. The harness cost an afternoon. It saved me from arguing with feelings about whether v2 was actually better.
 
 ## Honest accounting
+
+The methodology has its own stack:
+
+1. [General Intelligence](/general-intelligence) — models can't update their own weights. The human closes the learning loop.
+2. [Double Loop](/double-loop) — quality control. Write, generate, evaluate, rewrite.
+3. [Vibelogging](/vibelogging) — prose as specification. The blog posts are build instructions for an LLM.
 
 All artifacts were produced with LLM assistance. The code, the prose, the experiment harness, this post. The human contribution is the architecture decisions, the preregistration discipline, the willingness to throw out v1 and start over. The LLM wrote the code. I decided what code to write.
 
@@ -113,9 +139,9 @@ GEMINI_API_KEY=... npx tsx experiment/v2/run-v2-experiment.ts
 
 The next session read this, picked up exactly where the previous one left off, and ran the experiment within minutes. The work log accumulates these handoffs. Each session extends it; the next session reads it back.
 
-The feature might never ship. The issue might never get triaged. But the work stands on its own: a reproducible demonstration that union-find compaction is cheaper and faster than flat summarization, with a positive recall signal that needs a bigger sample to confirm. Anyone can fork the repo, rerun the experiment, and verify.
+The feature might never ship. The issue might never get triaged.
 
-If union-find compaction ships, I'll never have to write a bootstrap prompt again.
+If it does, I'll never have to write a bootstrap prompt again.
 
 ---
 
