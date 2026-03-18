@@ -566,3 +566,5 @@ The claim: **the framework is a diagnostic lens, not a coding aid. You load it, 
 ---
 
 *Experiment designed collaboratively with GPT-5.4 (via Codex CLI) and Claude Opus 4.6 (via Claude Code). Decision tree pre-registered before Phase 0 execution.*
+
+**Repository:** [github.com/kimjune01/metacognition](https://github.com/kimjune01/metacognition) — Full experiment code, artifacts, and results.
