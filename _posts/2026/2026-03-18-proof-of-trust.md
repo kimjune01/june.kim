@@ -74,6 +74,8 @@ The exchange builds a public graph: nodes are businesses, edges are attested rel
 
 One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
 
+The graph is public. Anyone can query it. That's how trust works. Private attestations are just claims. Public attestations are verifiable topology. Curators read the graph to publish allowlists. Publishers verify curator criteria. Competitors audit each other's relationships. The transparency makes the graph unforgeable—you can't fake edges when anyone can see them. Like business licenses, domain WHOIS, court records: trust infrastructure is public by design. Merchants control field-level disclosure (transaction volumes are opt-in), but the edges themselves—who attests to whom—are visible to everyone.
+
 ## The curation layer
 
 Curators interpret the graph. A curator is an independent party that publishes an allowlist: a set of advertisers that meet the curator's trust criteria. Different curators, different standards:
