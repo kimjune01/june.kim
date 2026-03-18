@@ -6,15 +6,31 @@ Email is decentralized. No single company runs it. Billions of messages route th
 
 A plumber who's served the same neighborhood for twenty years has the evidence: Stripe transactions, customer reviews, a business license, supplier relationships. When she buys an ad, the platform treats her the same as a dropshipper who registered yesterday. The signals exist. They just don't talk to each other.
 
-Proof of trust is a data structure that connects the signals into a graph. And it runs on email.
+## What you'd need
 
-## The mechanism
+To connect these signals into a trust graph, you'd need:
 
-This runs on [DKIM](https://datatracker.ietf.org/doc/html/rfc6376)-signed emails, not a blockchain. DKIM already proves a mail server sent a message. The same mechanism proves Stripe sent an attestation. Both parties confirm the relationship by forwarding DKIM-signed emails to the exchange. No new protocol—just email.
+**Cryptographic proof.** Relationships need verification without asking either party. A signed attestation anyone can check.
 
-Why would Stripe participate? [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
+**Decentralized routing.** No single company controls the exchange. Attestations need to reach multiple competing indices without a gatekeeper.
 
-Stripe already sends DKIM-signed emails. The only new behavior: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
+**Universal adoption.** The infrastructure needs to already exist. Nobody installs new software. No wallets, no blockchain nodes, no key management.
+
+**Federated curation.** No single authority decides what counts as trust. Competing curators publish standards, publishers choose which to follow.
+
+Blockchain tried this. PGP tried this. Both failed. Blockchain requires nodes, wallets, transaction fees, and consensus—too much infrastructure for incremental adoption. PGP requires key management, manual verification, and technical expertise—too complex for businesses. LinkedIn has endorsements but they're locked in a closed platform. Certificate authorities have attestations but they're only for domains, not business relationships.
+
+Every attempt required building new infrastructure or adding complexity to existing workflows. The adoption barrier killed them.
+
+## Email. Email already has this.
+
+[DKIM](https://datatracker.ietf.org/doc/html/rfc6376) provides cryptographic signatures. Every mail server checks them. [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) routes messages between competing servers without a central authority. 95% of email uses DKIM. Stripe already sends DKIM-signed emails. So does every payment processor, review platform, and business service.
+
+The infrastructure exists. It's been running for twenty years. We just format attestations as JSON in email bodies and forward them to an exchange. The exchange is a mail server with a graph database. Curators query the graph and publish allowlists. Publishers compose trust policies from multiple curators.
+
+The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop). Each server chooses which lists to trust. No single list controls the ecosystem. Twenty years of federated curation, proven at scale.
+
+[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. The only new behavior here: format attestation data as JSON in the email body, forward to an exchange. Lower barrier than ads.txt, which required new DNS infrastructure.
 
 ## The declaration
 
