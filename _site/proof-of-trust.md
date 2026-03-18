@@ -18,19 +18,21 @@ To connect these signals into a trust graph, you'd need:
 
 **Federated curation.** No single authority decides what counts as trust. Competing curators publish standards, publishers choose which to follow.
 
-Blockchain tried this. PGP tried this. Both failed. Blockchain requires nodes, wallets, transaction fees, and consensus—too much infrastructure for incremental adoption. PGP requires key management, manual verification, and technical expertise—too complex for businesses. LinkedIn has endorsements but they're locked in a closed platform. Certificate authorities have attestations but they're only for domains, not business relationships.
+Blockchain tried this. PGP tried this. Both failed. Blockchain requires nodes, wallets, transaction fees, and consensus: too much infrastructure for incremental adoption. PGP requires key management, manual verification, and technical expertise: too complex for businesses. LinkedIn has endorsements but they're locked in a closed platform. Certificate authorities have attestations but they're only for domains, not business relationships.
 
 Every attempt required building new infrastructure or adding complexity to existing workflows. The adoption barrier killed them.
 
-## Email. Email already has this.
+## Email. Email is the protocol.
 
-[DKIM](https://datatracker.ietf.org/doc/html/rfc6376) provides cryptographic signatures. Every mail server checks them. [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) routes messages between competing servers without a central authority. 95% of email uses DKIM. Stripe already sends DKIM-signed emails. So does every payment processor, review platform, and business service.
+[DKIM](https://datatracker.ietf.org/doc/html/rfc6376) provides cryptographic signatures. Every mail server checks them. [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) routes between competing servers without a central authority. Most business email uses DKIM. Stripe sends DKIM-signed emails. So does every payment processor, review platform, and business service.
 
-The infrastructure exists. It's been running for twenty years. We just format attestations as JSON in email bodies and forward them to an exchange. The exchange is a mail server with a graph database. Curators query the graph and publish allowlists. Publishers compose trust policies from multiple curators.
+DKIM proves origin, not truth. A DKIM signature proves Stripe's mail server sent the email; it doesn't prove the relationship claim inside is accurate. That gap closes through structure: bilateral confirmation requires both parties to forward emails (mutual acknowledgement), the exchange publishes the graph publicly (anyone can audit), and curators decide what the topology means (reputation interpretation). The cryptography proves "this came from stripe.com." The bilateral flow proves "both parties agree." The public graph proves "anyone can verify." Curators decide "this pattern indicates trust."
 
-The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop). Each server chooses which lists to trust. No single list controls the ecosystem. Twenty years of federated curation, proven at scale.
+The infrastructure has been running for twenty years. We just format attestations as JSON in email bodies and forward them to an exchange. The exchange is a mail server with a graph database. Curators query the graph and publish allowlists. Publishers compose trust policies from multiple curators.
 
-[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. The only new behavior here: format attestation data as JSON in the email body, forward to an exchange. Lower barrier than ads.txt, which required new DNS infrastructure.
+The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop), each choosing which lists to trust. No single list controls the ecosystem. Federated curation has worked for twenty years.
+
+[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. The only new behavior: format attestation data as JSON in the email body, forward to an exchange. Lower barrier than ads.txt: no new hosting infrastructure, just email formatting.
 
 ## The declaration
 
@@ -46,7 +48,7 @@ Attestations come in two forms: bilateral (mutual relationships) and unilateral 
 
 **Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. Relationships: payment processing, vendor partnerships, customer endorsements.
 
-**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
+**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm; Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
 
 The confirmation is cryptographic: a DKIM-signed payload anyone can verify without asking either party. Bilateral edges prove mutual agreement. Unilateral edges prove the platform's claim about their own data.
 
@@ -102,13 +104,13 @@ DKIM-Signature: [cryptographic signature]
 }
 ```
 
-The restaurant doesn't confirm—Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. The restaurant can't block unfavorable reviews (that's the point), but platforms stake their reputation on accuracy. If Google claims reviews that don't exist on their platform, anyone can verify and call them out.
+The restaurant doesn't confirm; Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. The restaurant can't block unfavorable reviews (that's the point), but platforms stake their reputation on accuracy. If Google claims reviews that don't exist on their platform, anyone can verify and call them out.
 
 The exchange builds a public graph: nodes are businesses, edges are attested relationships (bilateral) or observations (unilateral), edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
 One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
 
-The graph is public. Anyone can query it. That's how trust works. Private attestations are just claims. Public attestations are verifiable topology. Curators read the graph to publish allowlists. Publishers verify curator criteria. Competitors audit each other's relationships. The transparency makes the graph unforgeable—you can't fake edges when anyone can see them. Like business licenses, domain [WHOIS](https://en.wikipedia.org/wiki/WHOIS), court records: trust infrastructure is public by design. Merchants control field-level disclosure (transaction volumes are opt-in), but the edges themselves—who attests to whom—are visible to everyone.
+The graph is public. Anyone can query it. That's how trust works. Private attestations are just claims. Public attestations are verifiable topology. Curators read the graph to publish allowlists. Publishers verify curator criteria. Competitors audit each other's relationships. The transparency makes forgery expensive: faking edges requires compromising multiple parties who each have reputations to lose. Like business licenses, domain [WHOIS](https://en.wikipedia.org/wiki/WHOIS), court records: trust infrastructure is public by design. Merchants control field-level disclosure (transaction volumes are opt-in), but the edges themselves (who attests to whom) are visible to everyone.
 
 ## The curation layer
 
@@ -159,16 +161,6 @@ The trust graph exposes topology. A business with deep, reciprocal, long-standin
 
 You can't forge the graph without forging the relationships. But you can outspend it. A well-funded actor with real relationships can try to dominate legitimately. That's what federation solves. No single curator's allowlist is the index.
 
-## Every node is all three
-
-Everything above assumes distinct advertisers, publishers, and audiences. As [transaction costs drop toward zero](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x), those roles converge. Every person is advertiser, publisher, and consumer simultaneously—the same node in the trust graph. Your vibelog is your résumé. Your ad is your business card. Your topology is your credential.
-
-The roles share a reputation. Burn trust as an advertiser (revoked attestation, thinning topology) and your publishing credibility drops too. The graph doesn't know which hat you were wearing when you defaulted. It just sees a weaker node.
-
-Defaulting is a topological reset. Your edges thin. Your ads rank lower. Your publishing reaches fewer people. The path back is the same as the path in: earn real relationships, accumulate real attestations, rebuild one edge at a time. New domains start in the spam folder. Reset nodes start there too.
-
-The cost of defection is losing your place in the graph, across all three roles. The topology self-corrects: burning edges tends to cost more than any single default is worth.
-
 The plumber's signals finally talk to each other.
 
 ---
@@ -193,7 +185,7 @@ Subject: Attestation Revocation
 }
 ```
 
-The merchant forwards it to the exchange. The exchange removes the edge. Unilateral—you don't need the other party's permission.
+The merchant forwards it to the exchange. The exchange removes the edge. Unilateral: you don't need the other party's permission.
 
 If Stripe detects fraud, they revoke. The merchant's payment processor edge disappears, curators see a thinner topology, the merchant drops from allowlists.
 
@@ -246,7 +238,7 @@ Every edge is timestamped. The exchange records when attestations arrive, when t
 | Privacy: How much must I disclose? | Extensible schemas with opt-in field publishing. Edges are public (who attests to whom), field values are optional (transaction volumes, dispute rates). |
 | Forgery: Can someone fake relationships? | DKIM cryptographic signatures + bilateral confirmation + public topology. Faking requires compromising both parties and withstanding public audit. |
 | Revocation: What if a relationship ends badly? | Either party can unlink via email. No permission needed. Graph reflects current state, not historical claims. |
-| New businesses: How do newcomers start? | Start with fewer edges, earn incrementally. Path from zero to trusted is open—just slower than established businesses. |
+| New businesses: How do newcomers start? | Start with fewer edges, earn incrementally. Path from zero to trusted is open, just slower than established businesses. |
 | Centralization: Who controls this? | Federated curators compete. Publishers compose from multiple curators. Exchanges compete. No single gatekeeper. |
 | Verification: How do I know claims are real? | DKIM proves mail server origin. Public graph enables audit. Anyone can verify signatures and query topology. |
 | Cost: What does participation cost? | Email infrastructure only. No blockchain fees, no token purchases, no transaction costs beyond sending mail. |
