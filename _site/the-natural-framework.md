@@ -296,7 +296,9 @@ Now: the six roles are temporal morphisms, input at time *t*, output at time *t+
 
 **Boundary 2: selection before persistence.** If the loop feeds back, the last step's output must persist across the cycle boundary. That persistence morphism is Remember. Consolidate is lossy; Remember is lossless. If you persist before selecting, you persist everything, and the store grows without bound. Bounded storage forces selection before persistence.
 
-Remember is not a separate storage module. It is the historically shaped substrate: the part of the medium that carries the system's past forward. DNA is not stored in the cell; DNA *is* the cell's Remember. The connectome is not stored in the brain; the connectome *is* Remember. The claim is inductive between iterations only: if the substrate constrains the next cycle's Perceive durably enough that the loop runs again, the composition holds. Remove it and the loop has nothing to perceive against. Remember is still an endomorphism, same type in and out, but with the longest time constant: persistent constraints must outlast the cycle they regulate. Timescale is the diagnostic. The contract is the definition: outputs that constrain future processing across cycles. A rock is slow but carries no system history. A genome is slow and carries every cycle that kept on happening.
+Remember is the morphism that writes processed data to the store. The store is the substrate itself: the part of the medium that carries the system's past forward. DNA *is* the substrate. The connectome *is* the substrate. Destroying the substrate ends the medium all six roles run on. A meteor does not break a pipeline stage; it vaporizes the substrate. The pipeline was working until there was nothing left to run it.
+
+The claim is inductive between iterations only: if the substrate constrains the next cycle's Perceive durably enough that the loop runs again, the composition holds. Remove it and the loop has nothing to perceive against. Remember is still an endomorphism, same type in and out, but with the longest time constant: persistent constraints must outlast the cycle they regulate. Timescale is the diagnostic. The contract is the definition: outputs that constrain future processing across cycles. A rock is slow but carries no system history. A genome is slow and carries every cycle that kept on happening.
 
 **Corollary 1: the competitive core exists.** If output follows input with delay *δ* > 0, a policy decides when to release. *δ* = 0 is passthrough. *δ* = ∞ is suppression. Any system where outputs are a proper subset of inputs over time exhibits *δ* = some: a selection policy exists. That policy is Filter. The competitive core is not a design choice. It is forced by selective output.
 
@@ -318,7 +320,9 @@ But the functor itself is a thing in nature. It occupies space, consumes energy,
 
 ## Falsification
 
-The falsification test is structural: remove any morphism or permute their composition order, and the pipeline ceases to function. The dim cells are the evidence. Skip filter, and attention drowns in redundancy. That is Google's row. Skip attend, and consolidation amplifies the wrong winners. That is Science's row. Every dim cell in the tables is a system that dropped or misordered a morphism and broke downstream.
+The falsification test is structural: remove any morphism or permute their composition order, and the pipeline ceases to function. Three death conditions cover the internal failures: a broken step (a role fails), a closed loop (no new input), or decaying input (the source degrades). The dim cells are the evidence. Skip filter, and attention drowns in redundancy. That is Google's row. Skip attend, and consolidation amplifies the wrong winners. That is Science's row. Every dim cell in the tables is a system that dropped or misordered a morphism and broke downstream.
+
+The three death conditions are exhaustive for pipeline failures, but substrate destruction is a precondition failure. The asteroid that killed the dinosaurs did not break a pipeline stage; every role was firing until impact. What ended was the substrate that carried the genome forward. The framework diagnoses how systems kill themselves. Substrate destruction is how systems get killed.
 
 ## Categorial Error
 
