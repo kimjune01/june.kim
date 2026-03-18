@@ -12,9 +12,9 @@ Proof of trust is a data structure that connects the signals into a graph. And i
 
 This runs on DKIM-signed emails, not a blockchain. DKIM already proves a mail server sent a message. The same mechanism proves Stripe sent an attestation. Both parties confirm the relationship by forwarding DKIM-signed emails to the exchange. No new protocol—just email.
 
-Why would Stripe participate? Because [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
+Why would Stripe participate? [ads.txt](https://iabtechlab.com/ads-txt/) already proved they will. The IAB got publishers, exchanges, and platforms to publish machine-readable seller declarations voluntarily. The incentive is fraud reduction: platforms that issue attestations attract advertisers who want to prove legitimacy. The ones that don't become the gap in the résumé.
 
-And Stripe already sends DKIM-signed emails. The only new behavior is: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
+Stripe already sends DKIM-signed emails. The only new behavior: format attestation data as JSON in the email body, merchant forwards it to an exchange. Lower adoption barrier than ads.txt, which required new infrastructure.
 
 ## The declaration
 
@@ -30,7 +30,7 @@ Attestations come in two forms: bilateral (mutual relationships) and unilateral 
 
 **Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. Relationships: payment processing, vendor partnerships, customer endorsements.
 
-**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
+**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm—Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
 
 The confirmation is cryptographic: a DKIM-signed payload anyone can verify without asking either party. Bilateral edges prove mutual agreement. Unilateral edges prove the platform's claim about their own data.
 
@@ -86,7 +86,7 @@ DKIM-Signature: [cryptographic signature]
 }
 ```
 
-The restaurant doesn't confirm—Google is attesting to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. The restaurant can't block unfavorable reviews (that's the point of reviews), but platforms stake their reputation on accurate attestations. If Google claims reviews that don't exist on their platform, anyone can verify and call them out.
+The restaurant doesn't confirm—Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. The restaurant can't block unfavorable reviews (that's the point), but platforms stake their reputation on accuracy. If Google claims reviews that don't exist on their platform, anyone can verify and call them out.
 
 The exchange builds a public graph: nodes are businesses, edges are attested relationships (bilateral) or observations (unilateral), edge weights are reported signal strength (duration, volume, consistency). The exchange passes through what attestors claim. Curators interpret what it means.
 
@@ -96,7 +96,7 @@ The graph is public. Anyone can query it. That's how trust works. Private attest
 
 ## The curation layer
 
-Curators interpret the graph. A curator is an independent party that publishes an allowlist: a set of advertisers that meet the curator's trust criteria. Different curators, different standards.
+Curators interpret the graph. A curator publishes an allowlist: advertisers that meet their trust criteria. Different curators, different standards.
 
 A conservative health curator might require: licensed practitioner + clean payment history + minimum 20 patient attestations. A general commerce curator might require: 6 months payment history + business registration + semantic consistency. A community curator might require: 3 mutual endorsements from other businesses in the same locality.
 
@@ -145,11 +145,11 @@ Faking a rich trust topology gets expensive when the counterparties issuing atte
 
 You can't forge the graph without forging the relationships. But you can outspend it. A well-funded actor with real relationships can try to dominate legitimately. That's what federation solves. No single curator's allowlist is the index.
 
-New businesses start with fewer attestations, qualify for fewer curators' allowlists, and earn their way in. New domains start in the spam folder. New advertisers start in the conservative tier. The path from zero to trusted is open. It just takes time and real relationships. That's the point.
+New businesses start with fewer attestations and earn their way in. New domains start in the spam folder, new advertisers in the conservative tier. The path from zero to trusted is open. It just takes time and real relationships.
 
 ## Every node is all three
 
-Everything above assumes distinct advertisers, publishers, and audiences. As [transaction costs drop toward zero](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x), those roles converge. Every person is advertiser, publisher, and consumer simultaneously. The same node in the trust graph. Your vibelog is your résumé. Your ad is your business card. Your topology is your credential.
+Everything above assumes distinct advertisers, publishers, and audiences. As [transaction costs drop toward zero](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x), those roles converge. Every person is advertiser, publisher, and consumer simultaneously—the same node in the trust graph. Your vibelog is your résumé. Your ad is your business card. Your topology is your credential.
 
 The roles share a reputation. Burn trust as an advertiser (revoked attestation, thinning topology) and your publishing credibility drops too. The graph doesn't know which hat you were wearing when you defaulted. It just sees a weaker node.
 
@@ -223,11 +223,11 @@ The merchant opts in to publish specific fields:
 }
 ```
 
-The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal, but the merchant controls what to reveal.
+The exchange receives the full attestation but only publishes opted-in fields. Curators see "3 years, good standing, 0.2% disputes" but not transaction volumes. More disclosure produces a stronger signal; the merchant controls what to reveal.
 
 Each attestor defines their own fields. The exchange doesn't need to know all possible schemas in advance—it just stores what's declared and publishes what's opted in. Curators query whatever fields matter for their criteria.
 
-A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes, signaling "we're big enough to have something to lose," and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
+A merchant with minimal trust publishes "Stripe, 1 year, good standing" and qualifies for general commerce curators. Three years later, they add dispute rates and on-time settlement, qualifying for stricter verticals. Five years in, they publish transaction volumes ("we're big enough to have something to lose") and qualify for premium allowlists. The privacy gradient lets businesses control their disclosure as they grow.
 
 Every edge is timestamped. The exchange records when attestations arrive, when they're confirmed, when they're revoked. Curators can weight recent attestations more heavily than old ones, or require minimum relationship duration. The timestamps make relationship age verifiable without trusting self-reported claims.
 
