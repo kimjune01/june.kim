@@ -9,7 +9,17 @@ categories: cognition
 
 We tested whether loading the Natural Framework into an LLM's context improves diagnostic quality on partially-working information systems. Two problems, five conditions, Bayesian adaptive stopping with dual-model judging.
 
-The answer: **it depends on the problem**. Framework helps on data-processing tasks, doesn't help on algorithmic tasks. But when it helps, the theoretical grounding is what provides value—you can't just extract the checklist and ship it.
+The answer: **it depends on the problem**. Framework helps on data-processing tasks, doesn't help on algorithmic tasks. But when it helps, the theoretical grounding is what carries the weight. You can't just extract the checklist and ship it.
+
+---
+
+## Background: Why Round 3
+
+Rounds 1 and 2 (preregistered, negative results, not published) tested whether LLMs could use the Natural Framework to write better code. They couldn't. Framework hurt on algorithmic tasks and constraint satisfaction (Round 2: framework 0.30 vs bare 0.76). Models went looking for "pipeline stages" where they didn't belong.
+
+But building PageLeft (March 2026) showed something different. Loading the framework helped identify what was *missing* from a working system—not how to implement functions, but what architectural gaps existed. Git history: before framework, just data pipeline. After framework, quality gates, filters, validation, leaderboards.
+
+Rounds 1-2 tested the wrong question. The claim was never "framework helps write algorithms." Round 3 tests the actual claim: framework helps diagnose gaps in partially-working information systems.
 
 ---
 
@@ -57,7 +67,7 @@ Each diagnostic report scored on gap coverage by blind judges (GPT-5.4 and Claud
 | Compressed > Bare | ~0.50 | Compressed is pure noise |
 | Framework > Compressed | ~0.96 | **Theory is load-bearing** |
 
-**Result:** Framework provides diagnostic value on data-processing tasks. Compressed checklist provides zero value. Theory is what makes diagnostic content work.
+**Result:** Framework has diagnostic value on data-processing tasks. Compressed checklist has zero value. Theory is what makes diagnostic content work.
 
 Posterior has converged at 15 batches—P(fw>filler) oscillates 0.90-0.97 but won't stabilize above 0.95 confirmation threshold. Effect is real but moderate.
 
@@ -73,7 +83,7 @@ Posterior has converged at 15 batches—P(fw>filler) oscillates 0.90-0.97 but wo
 
 Adding Wikipedia articles about plate tectonics and maritime history beat having no extra context at all. This held across both problems.
 
-**Why?** Best guess: having something to read primes careful analysis mode. Zero condition is bare code + directive—maybe too sparse, model jumps to pattern matching. Adding context forces deliberation.
+**Why?** Best guess: having something to read primes careful analysis mode. Zero condition is bare code + directive, maybe too sparse. Model jumps to pattern matching. Adding context forces deliberation.
 
 But honestly: we don't know. The data says noise helps and we don't have a strong mechanistic story. That's what experiments are for—finding things you don't expect.
 
@@ -85,7 +95,7 @@ But honestly: we don't know. The data says noise helps and we don't have a stron
 - Hearthstone: P = 0.03 (actively harmful)
 - RSS: P = 0.50 (completely useless)
 
-The checklist is 16× smaller than the framework. By prompt-engineering logic, it should be better—less cruft, just the essential diagnostic questions.
+The checklist is 16× smaller than the framework. By prompt-engineering logic, it should be better: less cruft, just the essential diagnostic questions.
 
 Instead it's worse than random noise. Worse than nothing. Worse than Wikipedia.
 
@@ -99,7 +109,7 @@ The full framework provides theory: here's why these stages emerge, here's the t
 
 **Actual:** P = 0.93-0.98 (both problems, decisive).
 
-When diagnostic content provides any value at all, it's because of the theoretical grounding, not despite it. The extra 7,800 tokens of theory aren't noise—they're anti-noise. They're what make the 500-token checklist actually applicable.
+When diagnostic content provides any value at all, it's because of the theoretical grounding, not despite it. The extra 7,800 tokens of theory are anti-noise. They make the 500-token checklist actually applicable.
 
 This changes how we think about prompts. Not just instructions ("do this task"), but conceptual frameworks that change how the model processes information.
 
@@ -107,7 +117,7 @@ This changes how we think about prompts. Not just instructions ("do this task"),
 
 ## Task-Structure Dependence
 
-The framework isn't a general diagnostic tool. It's domain-specific, working on information-processing systems but having clear boundaries.
+The framework is domain-specific. It works on information-processing systems but has clear boundaries.
 
 **Hearthstone** (binary parsing):
 - Framework doesn't help (P = 0.39)
@@ -119,30 +129,31 @@ The framework isn't a general diagnostic tool. It's domain-specific, working on 
 - Compressed is useless (P ≈ 0.50)
 - Framework vocabulary maps naturally (validation, error handling, production readiness)
 
-**Sign reversal from Round 2:**
-- Round 2 (implementation): Framework hurt (0.30 vs 0.76 on constraint satisfaction)
-- Round 3 (diagnosis): Framework helps on some problems, not others
+**Sign reversal across rounds:**
+- Round 1 (algorithm writing): Framework hurt
+- Round 2 (constraint satisfaction): Framework hurt (0.30 vs 0.76)
+- Round 3 (diagnosis): Framework helps on data-processing, hurts on algorithmic
 
-Metacognitive scaffolds are task-structure dependent. Framework primes wrong abstractions for implementation but can surface architectural gaps in diagnosis—when the problem type matches.
+Metacognitive scaffolds are task-structure dependent. Framework primes wrong abstractions for implementation but can surface architectural gaps in diagnosis, when the problem type matches.
 
 ---
 
 ## What This Means
 
 **For practitioners:**
-- Don't use the compressed checklist—worthless or harmful
+- Don't use the compressed checklist (worthless or harmful)
 - Framework might help on production-readiness diagnostics for data systems
 - Framework won't help on algorithmic/parsing tasks
 - Even irrelevant context beats no context (surprisingly)
 
 **For theory:**
-- The "why" is load-bearing—you can't extract just the vocabulary
+- The "why" is load-bearing (you can't extract just the vocabulary)
 - Task structure matters more than we thought
 - Conventional wisdom about prompt length is wrong for diagnostic tasks
-- Theory isn't noise; it's what makes diagnostic questions applicable
+- Theory makes diagnostic questions applicable
 
 **For methodology:**
-- Pre-registration works—kept us honest when results contradicted predictions
+- Pre-registration kept us honest when results contradicted predictions
 - Double-blind source selection prevented cherry-picking
 - Dual-model judging caught no systematic bias
 - Need futility stopping rules next time (learned at batch 15)
@@ -152,32 +163,23 @@ Metacognitive scaffolds are task-structure dependent. Framework primes wrong abs
 ## Honest Accounting
 
 **What we got right:**
-- Experimental design (pre-registration, blinding, adaptive stopping)
-- Asking a falsifiable question
-- Reporting negative results
-- Learning from Round 2's failure
+Experimental design (pre-registration, blinding, adaptive stopping). Asking a falsifiable question. Reporting negative results. Learning from Round 2's failure.
 
 **What we got wrong:**
-- No futility stopping rule (experiment will run to 30 batches even though posteriors converged at 15)
-- Predicted noise would hurt (got the sign backwards)
-- Expected compressed to help a bit (it's worthless or harmful)
-- Prior on theory was too skeptical (P = 0.45 predicted, P ≈ 0.95 actual)
+No futility stopping rule (experiment will run to 30 batches even though posteriors converged at 15). Predicted noise would hurt (got the sign backwards). Expected compressed to help a bit (worthless or harmful). Prior on theory was too skeptical (P = 0.45 predicted, P ≈ 0.95 actual).
 
 **What surprised us:**
-- How stark the problem-specific effects are
-- How decisive the theory signal is
-- That noise helps at all
-- How useless the compressed checklist is
+The stark problem-specific effects. The decisive theory signal. That noise helps at all. How useless the compressed checklist is.
 
 ---
 
 ## Implications
 
-The Natural Framework is not a general-purpose diagnostic tool. It's a lens for understanding information-processing systems that works when the problem maps to pipeline/validation/production-readiness gaps.
+The Natural Framework is a lens for understanding information-processing systems. It works when the problem maps to pipeline/validation/production-readiness gaps.
 
-You can't shortcut it. The compressed checklist—just the six stages, stripped of theory—provides zero value. The theoretical grounding is what makes the diagnostic questions applicable. The 16× token overhead is worth paying when the framework applies.
+You can't shortcut it. The compressed checklist (just the six stages, stripped of theory) is worthless. The theoretical grounding makes the diagnostic questions applicable. The 16× token overhead is worth paying when the framework applies.
 
-**Task-structure dependence is the key finding.** Framework helps on RSS (data processing), hurts on Hearthstone (binary parsing). The question isn't "does the framework help?" but "what problem types benefit from this conceptual lens?"
+Task-structure dependence is the finding. Framework helps on RSS (data processing), hurts on Hearthstone (binary parsing). The question isn't "does the framework help?" but "what problem types benefit from this conceptual lens?"
 
 Round 4 should test problem-type clustering explicitly. Pre-register categories (data processing, algorithmic, hybrid), test multiple problems per category, see if the pattern holds.
 
@@ -196,6 +198,8 @@ The methodology worked. Pre-registration kept us honest. Double-blind selection 
 The results are in the repo. The artifacts are append-only. The stopping log shows the posterior evolution. Anyone can verify the work.
 
 That's how experiments should be run: lock in predictions, follow the protocol, report what you find, learn from surprises.
+
+Theory is load-bearing. Whether to load it depends on the problem.
 
 ---
 
