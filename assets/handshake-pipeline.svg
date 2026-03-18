@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 185" width="1760" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 200" width="1760" font-family="system-ui, sans-serif">
   <style>
     .box { fill: #fff; stroke: #999; stroke-width: 1; rx: 4; }
     .name { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 13px; }
@@ -6,6 +6,8 @@
     .guar { text-anchor: middle; font-size: 9.5px; fill: #888; }
     .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
     .fb { stroke: #999; stroke-width: 1; fill: none; marker-end: url(#b); stroke-dasharray: 4,3; }
+    .bk { stroke: #999; stroke-width: 1; fill: none; marker-end: url(#b); stroke-dasharray: 5,3; }
+    .bk-label { text-anchor: middle; font-size: 10px; fill: #999; font-style: italic; }
     .dot { fill: #1565c0; }
     .env { stroke: #888; stroke-width: 1; fill: none; marker-end: url(#c); }
   </style>
@@ -16,60 +18,56 @@
   </defs>
 
   <!-- Environment input -->
-  <text x="68" y="14" text-anchor="middle" font-size="10" fill="#888">environment</text>
-  <line class="env" x1="68" y1="20" x2="68" y2="52"/>
+  <text x="75" y="14" text-anchor="middle" font-size="10" fill="#888">environment</text>
+  <line class="env" x1="75" y1="20" x2="75" y2="52"/>
 
   <!-- Perceive -->
-  <rect class="box" x="15" y="54" width="106" height="40"/>
-  <text class="name" x="68" y="74">Perceive</text>
-  <text class="guar" x="68" y="108">parseable</text>
+  <rect class="box" x="15" y="54" width="120" height="40"/>
+  <text class="name" x="75" y="74">Perceive</text>
+  <text class="guar" x="75" y="108">parseable</text>
 
-  <circle class="dot" cx="143" cy="74" r="3"/>
-  <text class="itype" x="143" y="48">encoded</text>
-  <line class="arr" x1="121" y1="74" x2="158" y2="74"/>
+  <circle class="dot" cx="157" cy="74" r="3"/>
+  <text class="itype" x="157" y="48">encoded</text>
+  <line class="arr" x1="135" y1="74" x2="172" y2="74"/>
 
   <!-- Cache -->
-  <rect class="box" x="158" y="54" width="106" height="40"/>
-  <text class="name" x="211" y="74">Cache</text>
-  <text class="guar" x="211" y="108">retrievable</text>
+  <rect class="box" x="172" y="54" width="120" height="40"/>
+  <text class="name" x="232" y="74">Cache</text>
+  <text class="guar" x="232" y="108">retrievable</text>
 
-  <circle class="dot" cx="286" cy="74" r="3"/>
-  <text class="itype" x="286" y="48">indexed</text>
-  <line class="arr" x1="264" y1="74" x2="301" y2="74"/>
+  <circle class="dot" cx="314" cy="74" r="3"/>
+  <text class="itype" x="314" y="48">indexed</text>
+  <line class="arr" x1="292" y1="74" x2="329" y2="74"/>
 
   <!-- Filter -->
-  <rect class="box" x="301" y="54" width="106" height="40"/>
-  <text class="name" x="354" y="74">Filter</text>
-  <text class="guar" x="354" y="108">strictly smaller</text>
+  <rect class="box" x="329" y="54" width="120" height="40"/>
+  <text class="name" x="389" y="74">Filter</text>
+  <text class="guar" x="389" y="108">strictly smaller</text>
 
-  <circle class="dot" cx="429" cy="74" r="3"/>
-  <text class="itype" x="429" y="48">selected</text>
-  <line class="arr" x1="407" y1="74" x2="444" y2="74"/>
+  <circle class="dot" cx="471" cy="74" r="3"/>
+  <text class="itype" x="471" y="48">selected</text>
+  <line class="arr" x1="449" y1="74" x2="486" y2="74"/>
 
   <!-- Attend -->
-  <rect class="box" x="444" y="54" width="106" height="40"/>
-  <text class="name" x="497" y="74">Attend</text>
-  <text class="guar" x="497" y="108">diverse, bounded</text>
+  <rect class="box" x="486" y="54" width="120" height="40"/>
+  <text class="name" x="546" y="74">Attend</text>
+  <text class="guar" x="546" y="108">diverse, bounded</text>
 
-  <circle class="dot" cx="572" cy="74" r="3"/>
-  <text class="itype" x="572" y="48">ranked</text>
-  <line class="arr" x1="550" y1="74" x2="587" y2="74"/>
-
-  <!-- Consolidate -->
-  <rect class="box" x="587" y="54" width="116" height="40"/>
-  <text class="name" x="645" y="74">Consolidate</text>
-  <text class="guar" x="645" y="108">changes future</text>
-
-  <circle class="dot" cx="725" cy="74" r="3"/>
-  <text class="itype" x="725" y="48">compressed</text>
-  <line class="arr" x1="703" y1="74" x2="740" y2="74"/>
+  <circle class="dot" cx="628" cy="74" r="3"/>
+  <text class="itype" x="628" y="48">ranked</text>
+  <line class="arr" x1="606" y1="74" x2="643" y2="74"/>
 
   <!-- Remember -->
-  <rect class="box" x="740" y="54" width="106" height="40"/>
-  <text class="name" x="793" y="74">Remember</text>
-  <text class="guar" x="793" y="108">persisted</text>
+  <rect class="box" x="643" y="54" width="120" height="40"/>
+  <text class="name" x="703" y="74">Remember</text>
+  <text class="guar" x="703" y="108">persisted</text>
 
-  <!-- Feedback loop -->
-  <path class="fb" d="M793,94 L793,148 L68,148 L68,94"/>
-  <text x="430" y="164" text-anchor="middle" font-size="10" fill="#999">trace</text>
+  <!-- Consolidate backward pass -->
+  <path class="bk" d="M703,94 L703,138 L160,138"/>
+  <text class="bk-label" x="432" y="132">Consolidate (backward pass): persisted → policy′</text>
+  <text class="guar" x="432" y="152">reads from store async, writes to substrate</text>
+
+  <!-- Feedback loop: Remember → Perceive -->
+  <path class="fb" d="M703,138 L703,178 L75,178 L75,94"/>
+  <text x="389" y="192" text-anchor="middle" font-size="10" fill="#999">trace</text>
 </svg>

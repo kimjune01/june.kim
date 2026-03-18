@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" font-family="system-ui, sans-serif">
+  <style>
+    .axis { stroke: #999; stroke-width: 1; fill: none; }
+    .tick { stroke: #999; stroke-width: 1; }
+    .gold { stroke: #333; stroke-width: 2.2; fill: none; stroke-linejoin: round; }
+    .proxy { stroke: #aaa; stroke-width: 1.5; fill: none; stroke-dasharray: 6,4; }
+    .dstar { stroke: #ccc; stroke-width: 1; stroke-dasharray: 4,3; }
+    .label { font-size: 13px; fill: #333; font-weight: 500; }
+    .sub { font-size: 11px; fill: #999; }
+    .formula { font-size: 11px; fill: #666; font-family: ui-monospace, "SF Mono", monospace; }
+  </style>
+
+  <!-- Axes -->
+  <line class="axis" x1="60" y1="218" x2="440" y2="218"/>
+  <line class="axis" x1="60" y1="40" x2="60" y2="218"/>
+
+  <!-- Axis labels -->
+  <text class="sub" x="250" y="258" text-anchor="middle">optimization distance d = &#x221A;D&#x2096;&#x2097;</text>
+  <text class="sub" x="15" y="130" text-anchor="middle" transform="rotate(-90,15,130)">true reward</text>
+
+  <!-- Origin -->
+  <text class="sub" x="52" y="232">0</text>
+
+  <!-- Gold curve: gold(d) = 2d - d&#xB2; -->
+  <polyline class="gold" points="
+    60,218 77,190 95,165 112,142 129,123
+    146,107 164,93 181,83 198,76 215,71
+    233,70 250,71 267,76 285,83 302,93
+    319,107 336,123 354,142 371,165 388,190 406,218
+  "/>
+
+  <!-- Proxy reward (dashed, keeps climbing) -->
+  <line class="proxy" x1="60" y1="218" x2="440" y2="22"/>
+
+  <!-- d* vertical dashed line -->
+  <line class="dstar" x1="233" y1="65" x2="233" y2="218"/>
+
+  <!-- d* tick and labels -->
+  <line class="tick" x1="233" y1="218" x2="233" y2="222"/>
+  <text class="label" x="233" y="237" text-anchor="middle">d*</text>
+  <text class="formula" x="233" y="250" text-anchor="middle">&#x3B1;/(2&#x3B2;)</text>
+
+  <!-- Peak dot -->
+  <circle cx="233" cy="70" r="3.5" fill="#333"/>
+
+  <!-- Curve labels -->
+  <text class="label" x="105" y="100">gold</text>
+  <text class="sub" x="420" y="42">proxy</text>
+</svg>
