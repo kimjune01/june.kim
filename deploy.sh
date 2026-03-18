@@ -53,9 +53,9 @@ echo "    $NCHANGED changed, $NDELETED deleted"
 
 if [[ $((NCHANGED + NDELETED)) -gt 50 ]]; then
   echo "==> Bulk sync to S3 (many files changed)"
-  aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md"
+  aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --size-only
   aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
-    --content-type "text/plain; charset=utf-8" --no-guess-mime-type
+    --content-type "text/plain; charset=utf-8" --no-guess-mime-type --size-only
 else
   echo "==> Uploading changed files"
   while IFS= read -r file; do
