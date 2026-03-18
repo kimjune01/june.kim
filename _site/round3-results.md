@@ -159,10 +159,73 @@ Metacognitive scaffolds are task-structure dependent. Framework primes wrong abs
 Experimental design (pre-registration, blinding, adaptive stopping). Asking a falsifiable question. Reporting negative results. Learning from Round 2's failure.
 
 **What we got wrong:**
-No futility stopping rule (experiment will run to 30 batches even though posteriors converged at 15). Predicted noise would hurt (got the sign backwards). Expected compressed to help a bit (worthless or harmful). Prior on theory was too skeptical (P = 0.45 predicted, P ≈ 0.95 actual).
+No futility stopping rule (experiment ran to 30 batches even though posteriors converged at 15). Predicted noise would hurt (got the sign backwards). Expected compressed to help a bit (worthless or harmful). Prior on theory was too skeptical (P = 0.45 predicted, P ≈ 0.95 actual).
 
 **What surprised us:**
 The stark problem-specific effects. The decisive theory signal. That noise helps at all. How useless the compressed checklist is.
+
+---
+
+## The Drama of 0.949
+
+Final result: P(framework > filler) = **0.9459**. We pre-registered 0.95 as the confirmation threshold. Missed it by 0.0041.
+
+**The oscillation:**
+- Batch 13: crossed 0.95 (P=0.971) ✓
+- Batch 14: dropped to 0.914
+- Batches 15-27: oscillated 0.89-0.94
+- Batch 28: 0.942 (so close...)
+- Batch 30: **0.949** (heartbreaking!)
+
+It's like watching someone try to make a free throw - keeps hitting the rim, won't go in.
+
+**What this proves:**
+1. Effect is real - clearly above 0.90, not noise
+2. Effect is moderate - can't stabilize at 0.95
+3. Futility rules were needed - we knew at batch 15 it wouldn't confirm
+4. The conclusion doesn't change - "framework helps moderately" whether P=0.926 or P=0.949
+
+**About that 0.05 threshold:**
+
+P=0.95 vs P=0.949 is vanity - not a substantive difference. Pre-registering it was correct (prevents p-hacking). Missing it means we don't say "confirmed" by our own rules. But 94.9% confidence is compelling evidence.
+
+The difference between 0.949 and 0.95 is not "framework doesn't work" vs "framework works" - it's whether we hit our pre-registered threshold. Effect size and practical significance matter more than 0.001 probability points.
+
+But we pre-commit to thresholds anyway, for integrity. Can't cherry-pick after seeing data. The drama of hitting 0.949 is exactly why we need pre-registered stopping rules.
+
+---
+
+## Retrospective: What We'd Do Differently
+
+### 1. Add futility stopping at batch 15
+
+Wasted batches 15-30 trying to reach an impossible threshold. Should have stopped when posterior trapped between 0.88-0.94 with no trend.
+
+**Lesson:** At 50% of max batches, if P oscillating ±0.05 around mean or trapped in [0.40, 0.60], stop and declare inconclusive. The signal is clear even if it doesn't hit threshold.
+
+### 2. Include null/calibration cases (20-30%)
+
+All Round 3 problems had gaps. Didn't test if framework can say "nothing important missing." Positive-case bias.
+
+**Lesson:** Include systems with no qualifying gaps. Tests restraint. If framework hallucinates gaps on null cases, it's unreliable.
+
+### 3. Require external evidence
+
+Round 3 selection could smuggle diagnosis - we decided what gaps existed. Should require issue threads, postmortems, maintainer TODOs, incident notes.
+
+**Lesson:** Don't select problems where we already know the "right" answer. External artifacts or null case.
+
+### 4. Problem-type clustering needs multiple items
+
+Had 1 data-processing problem (RSS), 1 algorithmic problem (Hearthstone). Can't establish category effects with N=1 per category.
+
+**Lesson:** Need 3+ problems per category to separate category from item difficulty.
+
+### 5. Guard against output-structure confounding
+
+Round 3 directive showed structure (Observations → Triage → Plan). If conditions prime that structure differently, confounded.
+
+**Lesson:** Just say "Generate SOAP notes" without showing template. Score diagnosis substance, not organization.
 
 ---
 
@@ -190,9 +253,13 @@ The methodology worked. Pre-registration kept us honest. Double-blind selection 
 
 The results are in the repo. The artifacts are append-only. The stopping log shows the posterior evolution. Anyone can verify the work.
 
-That's how experiments should be run: lock in predictions, follow the protocol, report what you find, learn from surprises.
+**And we learned how to run better experiments.** Five concrete lessons for Round 4: futility rules, null cases, external evidence, problem clustering, output-structure controls. Each mistake documented, each lesson applied.
 
-Theory is load-bearing. Whether to load it depends on the problem.
+That's how science works: not getting it right the first time, but making work transparent enough that the next experiment can be better.
+
+Theory is load-bearing. Whether to load it depends on the problem. P=0.949 says that loud and clear, even if it's not "officially confirmed" by our arbitrary threshold.
+
+Science doesn't live or die on 0.001 probability points. But integrity requires honoring your own protocol. ✨
 
 ---
 

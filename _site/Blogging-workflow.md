@@ -52,7 +52,7 @@ Yay! this is a post! So meta. Much deep. Wow.
 
 {% endhighlight %}
 
-[blog source on github](https://github.com/kimjune01/kimjune01.github.io)
+[blog source on github](https://github.com/kimjune01/june.kim)
 
 
 
