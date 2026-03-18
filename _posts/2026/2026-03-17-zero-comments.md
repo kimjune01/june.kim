@@ -50,11 +50,9 @@ Every merge re-summarized an ever-growing cluster from scratch. Message 90 re-re
 
 ## v2: lazy summarization
 
-The fix was to stop summarizing during merges entirely.
+I didn't fix the code. I fixed the spec. That is how compilers work: you fix the source, not the binary.
 
-`union()` becomes structural: update parent pointers, merge children lists, recompute centroids. No LLM call. A dirty map tracks what changed: for each cluster root, the texts that need summarizing together.
-
-Messages 1-20 form three clusters. Message 21 arrives, gets embedded locally, joins the nearest cluster. Marked dirty. Later, `resolveDirty()` takes the cluster's old summary plus message 21's raw text and produces a new summary in one LLM call.
+I pointed out the architectural fix. The LLM edited the spec: added warnings describing what went wrong, rewrote eight sections of the prose. Then a fresh session read the updated spec and produced v2. I didn't even have to look at the code.
 
 | | Flat | Union-find v2 |
 |---|---|---|
@@ -62,10 +60,7 @@ Messages 1-20 form three clusters. Message 21 arrives, gets embedded locally, jo
 | Render | N/A | <0.1ms |
 | Compress | 20-30s | ~4s |
 | LLM calls | 2 per event | 1 per cluster |
-
-Flat discards original messages after compression. Union-find keeps them. Every cluster links back to its sources, so if a summary drops a detail, you expand the cluster and recover the original text.
-
-The overlap window makes this work. Two thresholds: `graduateAt=26` and `evictAt=30`. When a message graduates into the forest, it stays in the hot zone for ~4 more messages. By the time it evicts, `resolveDirty()` has already run in the background. The user doesn't wait.
+| Originals | Discarded | Kept |
 
 ## The experiment
 
@@ -112,7 +107,7 @@ The methodology has its own stack:
 2. [Double Loop](/double-loop) — quality control. Write, generate, evaluate, rewrite.
 3. [Vibelogging](/vibelogging) — prose as specification. The blog posts are build instructions for an LLM.
 
-Without this methodology, I couldn't have shipped a feature this size. The spec repo, the implementation, the experiment, and the submission took about five and a half hours start to finish. All artifacts were produced with LLM assistance: the code, the prose, the experiment harness, this post. The LLM wrote the code. I decided what code to write.
+Without this methodology, I couldn't have shipped a feature this size. The spec repo, the implementation, the experiment, and the submission took about five and a half hours start to finish. All artifacts were produced with LLM assistance: the code, the prose, the experiment harness, this post. The LLM wrote the code. I decided what code to write. Code is disposable. The prose is what accumulates.
 
 The [work log](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/master/WORK_LOG.md) made multi-session work possible. LLMs lose context between sessions. The work log is how the next session catches up: why v1 failed, what the overlap window is, why `_dirtyInputs` exists. Without it, every new conversation starts from scratch. With it, the LLM picks up in minutes.
 
