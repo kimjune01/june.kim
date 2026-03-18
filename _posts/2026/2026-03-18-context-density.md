@@ -40,7 +40,9 @@ The interesting experiment, compressing 114K tokens to 57K, wasn't feasible. Fla
 
 The stopping rule worked as designed: Step 1 clearly supported H₀, so I stopped.
 
-## The deeper question
+The experiment measured density in tokens. But the insight came from a table.
+
+## What the table showed
 
 While writing [Caches All the Way Down](/caches-all-the-way-down), I put two tables side by side: the computing stack and the biology stack. Same columns, same six roles. The moment both tables were on screen, the contrast jumped out: biology's tower is shorter but brighter (fewer dim cells). Computing's tower is taller but dimmer.
 
@@ -75,6 +77,16 @@ The recommendation: for each section of a document, pick the format that matches
 We write for two audiences now. An LLM reads everything as tokens. Multimodal models can process images, but slowly and expensively compared to a human glancing at a table. The format advantage is overwhelmingly human. So every document has two readers with different optimal formats: the human who benefits from mixed format, and the model that just wants dense tokens.
 
 This experiment tested prose → prose compression, which is the LLM's perspective. Four decades of cognitive psychology already tested the human perspective. The null pointed somewhere useful: density isn't just about fewer tokens. It's about the right tokens in the right format for the right processor.
+
+## The cusp
+
+Format selection is a [Filter](/perception-pipe) decision: which processor should this information route to? A comparison routed to the language processor wastes sequential attention on work the visual cortex does for free. A proof routed to a diagram wastes spatial bandwidth on work that needs symbolic manipulation.
+
+When I write with [skills](/double-loop), they automate Filter-level work — cut filler, flag restated points, check the arc. Format matching is the same kind of work: reject the wrong medium before the reader has to. A tighten pass catches redundant words. A format pass catches redundant *processing* — information forced through a channel that can't handle it efficiently.
+
+Better format matching makes prose writing faster, because you stop writing prose where a table belongs. It makes attention easier, because each section arrives through the channel that processes it cheapest. And it fills one more cell in the [framework](/the-natural-framework): the Filter role applied not to content but to presentation.
+
+Every dim cell filled is a step toward [general intelligence](/general-intelligence). Most of those cells are in Consolidate. This one is in Filter. Small, but real.
 
 ---
 
