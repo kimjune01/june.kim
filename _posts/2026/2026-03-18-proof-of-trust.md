@@ -38,7 +38,7 @@ The infrastructure has been running for twenty years. We just format attestation
 
 The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop), each choosing which lists to trust. No single list controls the ecosystem. Federated curation has worked for twenty years.
 
-[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. New requirements: attestors emit structured JSON, exchanges parse and index, parties adopt forwarding workflows. Lower barrier than ads.txt: builds on email infrastructure already deployed, no new hosting needed.
+[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. New requirements: attestors emit structured JSON, exchanges parse and index, parties adopt forwarding workflows. Lower barrier than ads.txt: builds on email infrastructure already deployed, no new hosting needed. Bootstrap follows the [stone soup](/stone-soup) pattern: early exchanges publish graphs, early curators publish standards, and each participant shows up for their own fraud-reduction advantage.
 
 ## The declaration
 
