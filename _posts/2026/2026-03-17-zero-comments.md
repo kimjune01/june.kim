@@ -23,7 +23,7 @@ I'd been circling this problem for months. The stack:
 5. [The Parts Bin](/the-parts-bin) — union-find as a candidate fix sitting in the parts bin.
 6. [Union-Find Compaction](/union-find-compaction) — the prototype. Clusters by topic, each with its own summary.
 
-The prototype preserved more detail in isolation. The question was whether it survived a real codebase: real API costs, real latency, real implementation complexity.
+The [prototype](/union-find-compaction) proved that compaction UX and permanent erasure can be fixed while preserving just as much detail. The question was whether it survived a real codebase: real API costs, real latency, real implementation complexity. I built it, tested it, and submitted it to Google.
 
 ## v1: wrong on every count
 
@@ -79,9 +79,9 @@ I preregistered three hypotheses before running anything. Written down, committe
 .results-table th { background: #f0f0f0 !important; }
 </style>
 
-35 summarizer calls across 12 conversations. v1 would have made 960. Flat made 24. The O(n) architecture works.
+35 summarizer calls across 12 conversations. v1 would have made 960. Flat made 24.
 
-The recall signal is there but underpowered. 96 questions, p=0.136. Union-find won 8 conversations, tied 2, lost 2. One conversation went 50% union-find vs 0% flat; another went the other way. A larger study would tell us whether this is real.
+The recall signal is there but underpowered. 96 questions, p=0.136. Union-find won 8 conversations, tied 2, lost 2. The evidence is consistent with a moderate recall gain or noise; not strong enough to claim improvement.
 
 The questions are LLM-generated and the judge is an LLM. The test domain is GitHub issue threads only, and the summarizer was Flash Lite, not the production model. These results motivate investigation, not a ship decision.
 
@@ -109,7 +109,9 @@ Without this methodology, I couldn't have shipped a feature this size. The spec 
 
 One artifact worth calling out: the [work log](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/master/WORK_LOG.md). LLMs lose context between sessions. The work log is how the next session catches up: why v1 failed, what the overlap window is, why `_dirtyInputs` exists. Without it, every new conversation starts from scratch. With it, the LLM picks up in minutes.
 
-A trick that pairs with this: before context runs out, ask the LLM to write the prompt that starts the next session. It still has full context. The bootstrap prompt it generates is better than anything you'd write from memory because it has access to context you've already forgotten. Here's the one from the session that ran the v2 experiment:
+A trick that pairs with this: before context runs out, ask the LLM to write the prompt that starts the next session. It still has full context, so the bootstrap prompt it generates is better than anything you'd write from memory.
+
+<details><summary>The actual bootstrap prompt from the session that ran the v2 experiment</summary>
 
 ```
 This session is being continued from a previous conversation that
@@ -128,6 +130,8 @@ GEMINI_API_KEY=... npx tsx experiment/v2/run-v2-experiment.ts
 ```
 
 The next session read this, picked up where the previous one left off, and ran the experiment within minutes.
+
+</details>
 
 The feature might never ship. The issue might never get triaged.
 
