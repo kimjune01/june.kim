@@ -93,7 +93,9 @@ The prototype encodes decisions the prose left abstract: merge thresholds, simil
 
 The authority rule collapses ambiguity. One sentence that says what wins when the inputs conflict. Leave it out and the LLM asks you to resolve every decision upfront. Or worse, guesses.
 
-And two models instead of one? Different training, different blind spots. They fail on different sides of the same boundary. You can't get that from running the same model twice.
+And two models instead of one? [AlphaCode](https://arxiv.org/abs/2203.07814) showed that generating many candidates and filtering beats generating one good one. [Self-consistency](https://arxiv.org/abs/2203.11171) showed that sampling diverse reasoning paths and voting beats single-shot. [Branch-Solve-Merge](https://arxiv.org/abs/2310.15123) showed that parallel decomposition and fusion beats sequential. All of them sample from the same model with different random seeds. The diversity is stochastic.
+
+Here, the diversity is structural. Different training, different blind spots. In the [parts bin](/the-parts-bin), this is an [Attend](/the-parts-bin#attend) operation with explicit redundancy control: like a [portfolio solver](https://arxiv.org/abs/1111.2249) that spawns threads with different seeds, except the threads are different models, and the output is a merge rather than a selection. You can't get that from running the same model twice.
 
 ---
 
