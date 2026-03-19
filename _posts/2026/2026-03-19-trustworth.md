@@ -7,7 +7,7 @@ image: "/assets/trustworth.jpg"
 
 *Part of the [Vector Space](/vector-space) series.*
 
-Digital advertising has a [$63 billion](https://www.mediapost.com/publications/article/412156/ad-spend-wasted-on-invalid-traffic-reached-63b-in.html) fraud problem. For every ad dollar a merchant spends, [most of it](https://www.fraudlogix.com/stats/ad-fraud-statistics-2026) never reaches a real consumer. The open market is a [lemons pool](https://en.wikipedia.org/wiki/The_Market_for_%22Lemons%22). A publisher running ads can't tell the difference between a pet food brand sourcing from a USDA-inspected facility with ten years of retailer relationships and one that white-labels products of unknown origin and launched last month. Neither can the buyer. You can't taste dog food. Your dog can't leave a review. The packaging looks the same. The only signal is the ad.
+Digital advertising has a [$63 billion](https://www.mediapost.com/publications/article/412156/ad-spend-wasted-on-invalid-traffic-reached-63b-in.html) fraud problem. For every ad dollar a merchant spends, [most of it](https://www.fraudlogix.com/stats/ad-fraud-statistics-2026) never reaches a real consumer. The open market is a [lemons pool](https://en.wikipedia.org/wiki/The_Market_for_%22Lemons%22). A publisher running ads can't tell the difference between a pet food brand sourcing from a FDA-inspected facility with ten years of retailer relationships and one that white-labels products of unknown origin and launched last month. Neither can the buyer. You can't taste dog food. Your dog can't leave a review. The packaging looks the same. The only signal is the ad.
 
 ![Trustworth](/assets/trustworth.jpg)
 
@@ -69,7 +69,7 @@ Why not proprietary scores instead of open attestations? A score locked inside S
 
 One holdout. Everyone else is ready.
 
-## Who let the dogs out
+## [Who let the dogs out](https://www.youtube.com/watch?v=Qkuu0Lwb5EM)
 
 Milgrom's [unraveling](https://www.semanticscholar.org/paper/Good-News-and-Bad-News:-Representation-Theorems-and-Milgrom/be34ed573a272e1a78a056ec29a1932fe6915ad2): the firm with the most favorable information discloses first. The audience infers that anyone staying silent must have worse information. So the next-best firm discloses. Then the next. The cascade continues until silence is an admission.
 
@@ -85,7 +85,7 @@ Bark & Bond stays on Stripe. It just asks: *why can't I get attestations like my
 
 ## Two emails make a handshake
 
-SSL Certificate Transparency followed the same arc. Let's Encrypt baked transparency in from day one, and when it became a requirement, it exposed 30,000 improperly issued Symantec certificates. Symantec sold their CA business. What made CT irreversible was that the protocol was open. No gatekeeper to lobby, no API to shut down.
+[SSL Certificate Transparency](https://en.wikipedia.org/wiki/Certificate_Transparency) followed the same arc. [Let's Encrypt](https://en.wikipedia.org/wiki/Let%27s_Encrypt) baked transparency in from day one, and when it became a requirement, it exposed 30,000 improperly issued Symantec certificates. [Symantec sold their CA business](https://www.csoonline.com/article/562511/symantec-sells-its-problem-ssl-unit-to-digicert-for-1b.html). What made CT irreversible was that the protocol was open. No gatekeeper to lobby, no API to shut down.
 
 The attestation graph works the same way. The protocol is [SMTP and DKIM](/proof-of-trust), infrastructure that's been running for twenty years. Exchanges index attestation emails, curators pull the graph and publish allowlists, and publishers compose trust policies from competing curators.
 
