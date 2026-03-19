@@ -24,17 +24,14 @@ That was not a pipe. That was a loop: read, parse, try, reject, try again, keep.
 
 Here are the same six operations [any editor already performs](/the-natural-framework), whether they name them or not: perceive, cache, filter, attend, consolidate, remember. Either party can perform each one. One usually leads.
 
-**Perceive.** You see what nobody else sees. The connection spanning three disciplines, the lived experience that no training corpus encodes. You bring the raw insight.
-
-**Cache.** The AI organizes it. A million tokens of context, perfect recall, no ego about the outline. It will find an order you wouldn't have.
-
-**Filter.** You [kill what doesn't belong.](https://www.themarginalian.org/2014/10/03/arthur-quiller-couch-art-of-writing/) The AI will give you five paragraphs where two would do. Delete the three. The AI can't do this. It doesn't know which line is yours and which is filler.
-
-**Attend.** The AI surfaces what you missed. It reads every word with equal attention, no attachment to the clever phrase you spent ten minutes on. Let it question your filter. Have the courage to hear it.
-
-**Consolidate.** You tighten. Each pass compresses. The AI can compress too — say "make this half as long" and it will — but you decide what it lost. Sometimes the thing it cut was the point, and now you know what the point was.
-
-**Remember.** The AI preserves what the loop learned — the decisions, the failed attempts, the editorial memory that makes the next pass smarter. A draft in your notes is a thought you had. A published piece is a thought that exists in the world.
+| Role | Who leads | What happens |
+|---|---|---|
+| **Perceive** | You | The connection spanning three disciplines, the lived experience no training corpus encodes |
+| **Cache** | AI | A million tokens of context, perfect recall, no ego about the outline |
+| **Filter** | AI | [Kill what doesn't belong](https://www.themarginalian.org/2014/10/03/arthur-quiller-couch-art-of-writing/) — skills automate rejection: tighten, humanize, arc-check |
+| **Attend** | You | Rank what survives, decide what stays and where — judgment the skills can't automate |
+| **Consolidate** | You | Each pass compresses — you decide what it lost |
+| **Remember** | AI | Preserves what the loop learned: decisions, failed attempts, editorial memory |
 
 Then run it again. The published piece becomes the next cycle's input. You perceive it fresh, notice what's weak, and the loop continues.
 

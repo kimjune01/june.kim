@@ -20,6 +20,8 @@ Sleep deprivation degrades judgment before it degrades perception. You can still
 
 ## The architecture
 
+<img src="/assets/plateau-depth.svg" alt="Consolidate's recursive depth: Level 0 has Filter, Attend, Consolidate. Each Consolidate contains its own Filter, Attend, Consolidate at the next level. Levels dim as bits decrease. Level 3 is passthrough." style="width:100%; max-width:620px; display:block; margin:1.5em auto;">
+
 The salience cache is the hippocampus: fast writes, competitive retrieval, everything addressable. Consolidation is the neocortex: slow learning, pattern detection, offline.
 
 The test: does the operation change how Attend works next cycle? Compaction (summarize context, merge clusters, evict stale entries) reorganizes the cache. The retrieval policy stays the same. Consolidation writes schemas that enter the DPP alongside raw episodes. The retrieval policy changes because the candidate set changed. Compaction is housekeeping. Consolidation is procedural memory.
