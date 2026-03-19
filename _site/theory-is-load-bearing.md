@@ -52,17 +52,17 @@ Each diagnostic report scored on gap coverage by blind judges (GPT-5.4 and Claud
 
 **Result:** Framework doesn't help on binary parsing. Compressed checklist actively misleads. Even Wikipedia improved diagnostics over no context.
 
-### Problem 2: RSS Feed Reader (In Progress)
+### Problem 2: RSS Feed Reader
 
 | Comparison | P(A > B) | Interpretation |
 |------------|----------|----------------|
-| Framework > Filler | ~0.91 | Framework helps moderately |
-| Compressed > Bare | ~0.50 | Compressed is pure noise |
-| Framework > Compressed | ~0.96 | **Theory is load-bearing** |
+| Framework > Filler | 0.949 | Framework helps moderately |
+| Compressed > Bare | 0.50 | Compressed is pure noise |
+| Framework > Compressed | 0.96 | **Theory is load-bearing** |
 
 **Result:** Framework has diagnostic value on data-processing tasks. Compressed checklist has zero value. Theory is what makes diagnostic content work.
 
-Posterior has converged at 15 batches—P(fw>filler) oscillates 0.90-0.97 but won't stabilize above 0.95 confirmation threshold. Effect is real but moderate.
+Final posterior at batch 30: P(fw>filler) = **0.949**. Missed the pre-registered 0.95 threshold by 0.001. Effect is real but moderate.
 
 ---
 
@@ -118,7 +118,7 @@ The framework is domain-specific. It works on information-processing systems but
 - Framework vocabulary doesn't map (no "quality gate" in a base64 decoder)
 
 **RSS** (data processing):
-- Framework helps moderately (P ≈ 0.91)
+- Framework helps moderately (P = 0.949)
 - Compressed is useless (P ≈ 0.50)
 - Framework vocabulary maps naturally (validation, error handling, production readiness)
 
