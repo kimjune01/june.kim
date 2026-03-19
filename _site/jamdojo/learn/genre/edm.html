@@ -1,0 +1,721 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.1.9"><link rel="alternate" type="application/rss+xml" title="RSS Feed for strudel.cc" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/jamdojo/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/jamdojo/favicon.ico"><link rel="apple-touch-icon" href="/jamdojo/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/jamdojo/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/jamdojo/make-scrollable-code-focusable.js"></script><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_0_lang.BS_sy5Gw.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/jamdojo/manifest.webmanifest"><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_1_lang.-EECfF37.js"></script><title>Electronic Dance Music - JamDojo</title><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css">
+<style>@font-face{font-family:PressStart;src:url(/jamdojo/fonts/PressStart2P/PressStart2P-Regular.ttf);size-adjust:65%}@font-face{font-family:BigBlueTerminal;src:url(/jamdojo/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/jamdojo/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/jamdojo/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:CutiePi;src:url(/jamdojo/fonts/CutiePi/Cute_Aurora_demo.ttf);size-adjust:120%}@font-face{font-family:JetBrains;src:url(/jamdojo/fonts/JetBrains/JetBrainsMono.woff2)}@font-face{font-family:Monocraft;src:url(/jamdojo/fonts/Monocraft/Monocraft.ttf);size-adjust:90%}@font-face{font-family:Hack;src:url(/jamdojo/fonts/Hack/Hack-Regular.ttf)}@font-face{font-family:we-come-in-peace;src:url(/jamdojo/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/jamdojo/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/jamdojo/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/jamdojo/fonts/teletext/EuropeanTeletext.ttf);size-adjust:90%}@font-face{font-family:tic80;src:url(/jamdojo/fonts/tic80/tic-80-wide-font.otf);size-adjust:60%}@font-face{font-family:mode7;src:url(/jamdojo/fonts/mode7/MODE7GX3.TTF);size-adjust:82%}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh;--app-width: 100vw}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+.prose h1:before,.prose h2:before,.prose h3:before,.prose h4:before,.prose h5:before,.prose h6:before{display:block;content:" ";margin-top:-70px;height:70px;visibility:hidden;pointer-events:none}.icon.icon-link{visibility:hidden}.prose h1:hover .icon.icon-link,.prose h2:hover .icon.icon-link,.prose h3:hover .icon.icon-link,.prose h4:hover .icon.icon-link,.prose h5:hover .icon.icon-link,.prose h6:hover .icon.icon-link{visibility:visible}.prose h1>a,.prose h2>a,.prose h3>a,.prose h4>a,.prose h5>a,.prose h6>a{text-decoration:none!important}.icon.icon-link:after{content:"#";margin-left:8px;font-size:.9em;opacity:50%}
+:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:#000;opacity:.5}#code .cm-scroller{padding-top:10px!important;height:100%;font-family:inherit}#code .cm-content{padding-bottom:50vh}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}#code .cm-matchingBracket{-webkit-text-decoration:underline .18rem;text-decoration:underline .18rem;text-underline-offset:.22rem}.cm-tooltip.cm-completionInfo{padding:0!important;border:1px solid var(--foreground)!important;border-radius:4px!important;box-shadow:0 4px 12px #0000004d!important;max-width:500px!important;min-width:300px!important;max-height:400px!important;background-color:var(--lineHighlight)!important;overflow:auto;background:var(--background)!important}.autocomplete-info-container{padding:12px!important;border-radius:4px!important;color:var(--foreground);font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:var(--font-size, 13px);line-height:1.4;max-width:600px;height:100%;min-width:400px;white-space:normal!important;overflow-y:auto!important}.autocomplete-info-tooltip{overflow-y:auto!important}.autocomplete-info-function-description{white-space:pre-wrap!important}.autocomplete-info-function-name{font-size:15px;font-weight:600;color:var(--foreground);margin:0 0 8px}.autocomplete-info-function-synonyms,.autocomplete-info-function-description{margin:0 0 12px;color:var(--foreground);line-height:1.5;opacity:.8}.autocomplete-info-section-title{font-size:12px;font-weight:600;color:var(--foreground);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}.autocomplete-info-section-title:first-child{margin-top:0}.autocomplete-info-params-section{margin-top:12px}.autocomplete-info-params-list{list-style:none;margin:0;padding:0}.autocomplete-info-param-item{margin-bottom:8px;padding:8px;background-color:var(--lineBackground);border-radius:3px;border-left:2px solid var(--foreground, #555)}.autocomplete-info-param-item:last-child{margin-bottom:0}.autocomplete-info-param-name{font-weight:600;color:var(--variable, var(--foreground));margin-right:8px}.autocomplete-info-param-type{color:var(--comment);font-size:12px;background-color:var(--gutterForeground);padding:1px 4px;border-radius:2px}.autocomplete-info-param-desc{color:var(--foreground);font-size:10px;margin-top:4px;line-height:1.4;opacity:.7}.autocomplete-info-examples-section{margin-top:12px}.autocomplete-info-example-code{background:var(--lineBackground);color:var(--foreground);padding:8px;border-radius:3px;font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:12px;line-height:1.5;margin:4px 0;overflow-x:auto;white-space:pre;border:1px solid var(--foreground, #3a3a3a)}.autocomplete-info-tooltip::-webkit-scrollbar{width:4px}.autocomplete-info-tooltip::-webkit-scrollbar-thumb{border-radius:2px}
+</style></head> <body class="min-h-screen m-0 text-gray-50 bg-background"> <div class="flex min-h-screen"> <!-- Sidebar --> <aside class="w-56 bg-gray-900 border-r border-gray-800 p-4 hidden md:block fixed h-full"> <nav class="flex flex-col gap-1 h-full overflow-y-auto"> <a href="/jamdojo/" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors mb-2"> <span>←</span> <span>JamDojo</span> </a> <div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-0"> <div class="flex items-center gap-2"> <span>🎮</span> <span class="font-medium">Interactive Tools</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-0" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/interactive-tools/playground/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">💻</span> <span>Playground</span> </a><a href="/jamdojo/learn/interactive-tools/piano/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎹</span> <span>Piano</span> </a><a href="/jamdojo/learn/interactive-tools/guitar/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎸</span> <span>Guitar</span> </a><a href="/jamdojo/learn/interactive-tools/pitch-detector/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Pitch Detector</span> </a><a href="/jamdojo/learn/interactive-tools/sample-explorer/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Sample Explorer</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-1"> <div class="flex items-center gap-2"> <span>🎯</span> <span class="font-medium">Quizzes</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-1" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/quizzes/sample-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎯</span> <span>Sample Quiz</span> </a><a href="/jamdojo/learn/quizzes/waveform-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">〰</span> <span>Waveform Quiz</span> </a><a href="/jamdojo/learn/quizzes/effect-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛</span> <span>Effect Quiz</span> </a><a href="/jamdojo/learn/quizzes/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space Quiz</span> </a><a href="/jamdojo/learn/quizzes/ear-training/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👂</span> <span>Ear Training</span> </a><a href="/jamdojo/learn/quizzes/pitch-simon/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Pitch Simon</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-2"> <div class="flex items-center gap-2"> <span>🎵</span> <span class="font-medium">Music Theory</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-2" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/harmony/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎶</span> <span>Harmony</span> </a><a href="/jamdojo/learn/theory/chord-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Chord Composition</span> </a><a href="/jamdojo/learn/theory/classical-terminology/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎻</span> <span>Classical Terminology</span> </a><a href="/jamdojo/learn/theory/euclidean-rhythms/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🥁</span> <span>Euclidean Rhythms</span> </a><a href="/jamdojo/learn/theory/sound-design/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Sound Design &amp; Timbre</span> </a><a href="/jamdojo/learn/theory/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space</span> </a><a href="/jamdojo/learn/theory/sampling-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Sampling Composition</span> </a><a href="/jamdojo/learn/theory/arranging/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎬</span> <span>Arranging Patterns</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-3"> <div class="flex items-center gap-2"> <span>💻</span> <span class="font-medium">Programming</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-3" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/strudel-programming/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔧</span> <span>Strudel Programming</span> </a><a href="/jamdojo/learn/theory/why-functions/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⚡</span> <span>Why Functions</span> </a><a href="/jamdojo/learn/theory/why-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📦</span> <span>Why Containers</span> </a><a href="/jamdojo/learn/theory/patterns-as-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Patterns as Containers</span> </a><a href="/jamdojo/learn/theory/transforming-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔄</span> <span>Transforming Patterns</span> </a><a href="/jamdojo/learn/theory/combining-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔗</span> <span>Combining Patterns</span> </a><a href="/jamdojo/learn/theory/patterns-of-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎁</span> <span>Patterns of Patterns</span> </a><a href="/jamdojo/learn/theory/building-with-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏗️</span> <span>Building with Patterns</span> </a><a href="/jamdojo/learn/theory/combining-events/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⊕</span> <span>Combining Events</span> </a><a href="/jamdojo/learn/theory/choice-and-selection/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔀</span> <span>Choice and Selection</span> </a><a href="/jamdojo/learn/theory/context-aware-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Context-Aware Patterns</span> </a><a href="/jamdojo/learn/theory/flipping-structure/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔃</span> <span>Flipping Structure</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="true" aria-controls="activity-section-4"> <div class="flex items-center gap-2"> <span>🎸</span> <span class="font-medium">Genre Studies</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style="transform: rotate(90deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-4" class="activity-accordion-content pl-4" style> <a href="/jamdojo/learn/genre/rock-pop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Rock &amp; Pop</span> </a><a href="/jamdojo/learn/genre/hip-hop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Hip-Hop</span> </a><a href="/jamdojo/learn/genre/edm/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm bg-cyan-600 text-white"> <span class="text-lg">🎧</span> <span>Electronic Dance Music</span> </a><a href="/jamdojo/learn/genre/metal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🤘</span> <span>Metal</span> </a><a href="/jamdojo/learn/genre/demoscene/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🖥️</span> <span>Demoscene</span> </a><a href="/jamdojo/learn/genre/classical/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Classical Music</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-5"> <div class="flex items-center gap-2"> <span>📚</span> <span class="font-medium">Workshop</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-5" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/workshop-content/getting-started/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🚀</span> <span>Getting Started</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-6"> <div class="flex items-center gap-2"> <span>📖</span> <span class="font-medium">Reference</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-6" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/samples/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📀</span> <span>Samples</span> </a><a href="/jamdojo/learn/reference/synths/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Synths</span> </a><a href="/jamdojo/learn/reference/effects/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Audio Effects</span> </a><a href="/jamdojo/learn/reference/notes/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Notes</span> </a><a href="/jamdojo/learn/reference/tonal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Tonal Functions</span> </a><a href="/jamdojo/learn/reference/mini-notation/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">✏️</span> <span>Mini-Notation</span> </a><a href="/jamdojo/learn/reference/signals/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📈</span> <span>Signals</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-7"> <div class="flex items-center gap-2"> <span>⚡</span> <span class="font-medium">Pattern Functions</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-7" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/factories/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏭</span> <span>Creating Patterns</span> </a><a href="/jamdojo/learn/workshop-content/time-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⏱️</span> <span>Time Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/random-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎲</span> <span>Random Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/conditional-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">❓</span> <span>Conditional Modifiers</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-8"> <div class="flex items-center gap-2"> <span>🚀</span> <span class="font-medium">Advanced</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-8" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/advanced/visual-feedback/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Visual Feedback</span> </a><a href="/jamdojo/learn/advanced/hydra/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🌊</span> <span>Hydra Visuals</span> </a><a href="/jamdojo/learn/advanced/input-output/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔌</span> <span>MIDI &amp; OSC</span> </a><a href="/jamdojo/learn/advanced/csound/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Csound</span> </a><a href="/jamdojo/learn/advanced/pwa/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📱</span> <span>PWA</span> </a> </div> </div> <div class="mt-auto pt-4 border-t border-gray-800 text-xs text-gray-500 space-y-1"> <a href="https://github.com/kimjune01/jamdojo" target="_blank" rel="noopener" class="block hover:text-cyan-400">JamDojo Source</a> <a href="https://github.com/tidalcycles/strudel" target="_blank" rel="noopener" class="block hover:text-cyan-400">Strudel (AGPL-3.0)</a> </div> </nav> <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.activity-accordion-header');
+    accordionHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.activity-accordion-icon');
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          content.style.display = 'none';
+          header.setAttribute('aria-expanded', 'false');
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.display = 'block';
+          header.setAttribute('aria-expanded', 'true');
+          icon.style.transform = 'rotate(90deg)';
+        }
+      });
+    });
+  });
+</script> </aside> <!-- Mobile header --> <div class="md:hidden fixed top-0 left-0 right-0 bg-gray-900 border-b border-gray-800 p-3 z-50"> <div class="flex items-center justify-between"> <a href="/jamdojo/" class="text-gray-400 hover:text-white">← JamDojo</a> <span class="font-bold">Electronic Dance Music</span> </div> </div> <!-- Main content --> <main class="flex-1 md:ml-56 p-6 pt-16 md:pt-6"> <div class="max-w-4xl mx-auto"> <h1 class="text-3xl font-bold mb-6">Electronic Dance Music</h1> <div class="prose dark:prose-invert max-w-full"> <p>Electronic Dance Music (EDM) encompasses a vast range of styles, from four-on-the-floor house to breakbeat-heavy drum &amp; bass. This guide covers the essential techniques, sound design, and genre-specific patterns with references to classic tracks that defined each genre.</p>
+<h2 id="the-foundation-four-on-the-floor">The Foundation: Four-on-the-Floor<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#the-foundation-four-on-the-floor"><span class="icon icon-link"></span></a></h2>
+<p>Most EDM genres share a common foundation—the kick drum on every beat. This pattern originated in disco and became the heartbeat of house, techno, and trance:</p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var l=(n,t)=>{let i=async()=>{await(await n())()},e=typeof t.value=="object"?t.value:void 0,s={timeout:e==null?void 0:e.timeout};"requestIdleCallback"in window?window.requestIdleCallback(i,s):setTimeout(i,s.timeout||200)};(self.Astro||(self.Astro={})).idle=l;window.dispatchEvent(new Event("astro:idle"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="S9pBu" prefix="r0" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;bd bd bd bd\&quot;).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;bd bd bd bd&quot;).cpm(31)</pre><!--astro:end--></astro-island>
+<h2 id="the-roland-tr-909-the-sound-of-dance-music">The Roland TR-909: The Sound of Dance Music<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#the-roland-tr-909-the-sound-of-dance-music"><span class="icon icon-link"></span></a></h2>
+<p>The Roland TR-909 drum machine, released in 1983, became the defining sound of house and techno. Its punchy kick, crisp snare, and metallic hi-hats appear on countless classic tracks:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=rFQZndywOR4"><strong>“Strings of Life”</strong></a> by Derrick May (1987) — a Detroit techno anthem</li>
+<li><a href="https://www.youtube.com/watch?v=GuJQSAiODqI"><strong>“Vogue”</strong></a> by Madonna (1990) — brought the 909 to mainstream pop</li>
+<li><a href="https://www.youtube.com/watch?v=Ps2Jc28tQrw"><strong>“Show Me Love”</strong></a> by Robin S (1990) — helped bring house to the mainstream</li>
+<li><a href="https://www.youtube.com/watch?v=uURB-vo9rZ4"><strong>“Revolution 909”</strong></a> by Daft Punk (1997) — a tribute to the machine itself</li>
+</ul>
+<astro-island uid="wfUsU" prefix="r1" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4).cpm(31)</pre><!--astro:end--></astro-island>
+<h2 id="building-a-basic-beat">Building a Basic Beat<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#building-a-basic-beat"><span class="icon icon-link"></span></a></h2>
+<h3 id="step-1-kick-on-every-beat">Step 1: Kick on Every Beat<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#step-1-kick-on-every-beat"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="wfUsU" prefix="r2" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4).cpm(31)</pre><!--astro:end--></astro-island>
+<h3 id="step-2-add-off-beat-hi-hats">Step 2: Add Off-beat Hi-hats<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#step-2-add-off-beat-hi-hats"><span class="icon icon-link"></span></a></h3>
+<p>The off-beat hi-hat creates forward momentum—essential to house music:</p>
+<astro-island uid="ZUDWzN" prefix="r3" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4).late(0.125)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4).late(0.125)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<h3 id="step-3-claps-on-2-and-4">Step 3: Claps on 2 and 4<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#step-3-claps-on-2-and-4"><span class="icon icon-link"></span></a></h3>
+<p>The backbeat drives the groove:</p>
+<astro-island uid="ggSV4" prefix="r4" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<h3 id="step-4-open-hi-hats-for-lift">Step 4: Open Hi-hats for Lift<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#step-4-open-hi-hats-for-lift"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z1fm9Tx" prefix="r5" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="sound-design-essentials">Sound Design Essentials<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#sound-design-essentials"><span class="icon icon-link"></span></a></h2>
+<h3 id="bass-sounds">Bass Sounds<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#bass-sounds"><span class="icon icon-link"></span></a></h3>
+<p><strong>Sub Bass</strong> — Pure low-end foundation used in deep house and UK garage:</p>
+<astro-island uid="1KgC4U" prefix="r6" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c1 c1 c1 eb1\&quot;)\n.s(\&quot;sine\&quot;)\n.lpf(200)\n.gain(0.8)\n.cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c1 c1 c1 eb1&quot;)
+.s(&quot;sine&quot;)
+.lpf(200)
+.gain(0.8)
+.cpm(31)</pre><!--astro:end--></astro-island>
+<p><strong>Saw Bass</strong> — Gritty and present, common in techno and electro:</p>
+<astro-island uid="bJBrB" prefix="r7" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2 c2 eb2 c2\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(800)\n.lpq(3)\n.attack(0.01)\n.decay(0.2)\n.sustain(0.4)\n.cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2 c2 eb2 c2&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(800)
+.lpq(3)
+.attack(0.01)
+.decay(0.2)
+.sustain(0.4)
+.cpm(31)</pre><!--astro:end--></astro-island>
+<p><strong>Reese Bass</strong> — The signature neurofunk/D&amp;B sound. Created by layering two slightly detuned sawtooth waves, causing phase cancellation that creates a swirling, animated texture:</p>
+<astro-island uid="Z157vla" prefix="r8" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2 c2 eb2 c2\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.superimpose(add(.02))\n.lpf(sine.range(400, 1200).fast(2))\n.lpq(4)\n.distort(1.5)\n.gain(0.5)\n.cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2 c2 eb2 c2&quot;)
+.s(&quot;sawtooth&quot;)
+.superimpose(add(.02))
+.lpf(sine.range(400, 1200).fast(2))
+.lpq(4)
+.distort(1.5)
+.gain(0.5)
+.cpm(44)</pre><!--astro:end--></astro-island>
+<p><strong>Wobble Bass</strong> — Made famous by Skrillex and dubstep. The “wobble” comes from modulating a low-pass filter with an LFO. Add distortion and high resonance for aggressive sounds:</p>
+<astro-island uid="26O3YG" prefix="r9" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(200, 2000).fast(4))\n.lpq(8)\n.distort(2)\n.gain(0.6)\n.cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(sine.range(200, 2000).fast(4))
+.lpq(8)
+.distort(2)
+.gain(0.6)
+.cpm(35)</pre><!--astro:end--></astro-island>
+<p><strong>Growl Bass</strong> — Brostep’s aggressive mid-range sound. Uses FM synthesis and heavy distortion:</p>
+<astro-island uid="o2W2z" prefix="r10" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.fm(sine.range(1, 8).fast(6))\n.fmh(2)\n.lpf(sine.range(300, 2500).fast(8))\n.lpq(10)\n.distort(3)\n.gain(0.5)\n.cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2&quot;)
+.s(&quot;sawtooth&quot;)
+.fm(sine.range(1, 8).fast(6))
+.fmh(2)
+.lpf(sine.range(300, 2500).fast(8))
+.lpq(10)
+.distort(3)
+.gain(0.5)
+.cpm(35)</pre><!--astro:end--></astro-island>
+<h3 id="lead-sounds">Lead Sounds<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#lead-sounds"><span class="icon icon-link"></span></a></h3>
+<p><strong>Supersaw Lead</strong> — Multiple detuned sawtooth waves, the signature sound of trance and future bass. Pioneered in the 1990s with the Roland JP-8000:</p>
+<astro-island uid="Z26a38Y" prefix="r11" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c4 eb4 g4 c5\&quot;)\n.s(\&quot;supersaw\&quot;)\n.attack(0.01)\n.release(0.3)\n.room(0.3)\n.cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c4 eb4 g4 c5&quot;)
+.s(&quot;supersaw&quot;)
+.attack(0.01)
+.release(0.3)
+.room(0.3)
+.cpm(35)</pre><!--astro:end--></astro-island>
+<p><strong>Pluck Lead</strong> — Short, percussive sounds:</p>
+<astro-island uid="lcuaO" prefix="r12" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c5 eb5 g5 bb5\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(3000)\n.attack(0.001)\n.decay(0.15)\n.sustain(0)\n.room(0.2)\n.cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c5 eb5 g5 bb5&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(3000)
+.attack(0.001)
+.decay(0.15)
+.sustain(0)
+.room(0.2)
+.cpm(31)</pre><!--astro:end--></astro-island>
+<p><strong>Trance Arp</strong> — Rapid arpeggiated patterns with delay, heard in tracks like Tiësto’s <a href="https://www.youtube.com/watch?v=8tIgN7eICn4">“Adagio for Strings”</a> and Paul van Dyk’s <a href="https://www.youtube.com/watch?v=--3eIRSg2RY">“For An Angel”</a>:</p>
+<astro-island uid="ZM1WsQ" prefix="r13" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c4 eb4 g4 c5 g4 eb4\&quot;.fast(2))\n.s(\&quot;sawtooth\&quot;)\n.lpf(2000)\n.attack(0.001)\n.decay(0.1)\n.sustain(0.2)\n.delay(0.3)\n.delaytime(0.166)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c4 eb4 g4 c5 g4 eb4&quot;.fast(2))
+.s(&quot;sawtooth&quot;)
+.lpf(2000)
+.attack(0.001)
+.decay(0.1)
+.sustain(0.2)
+.delay(0.3)
+.delaytime(0.166)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="effects-for-edm">Effects for EDM<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#effects-for-edm"><span class="icon icon-link"></span></a></h2>
+<h3 id="sidechain-compression">Sidechain Compression<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#sidechain-compression"><span class="icon icon-link"></span></a></h3>
+<p>The pumping effect that makes EDM breathe—the bass ducks when the kick hits. Heard prominently in Daft Punk’s <a href="https://www.youtube.com/watch?v=FGBhQbmPwH8">“One More Time”</a>:</p>
+<astro-island uid="15fe9F" prefix="r14" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nnote(\&quot;c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(600)\n  .gain(perlin.range(0.2, 0.8).fast(4))\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+note(&quot;c2&quot;).s(&quot;sawtooth&quot;).lpf(600)
+  .gain(perlin.range(0.2, 0.8).fast(4))
+).cpm(31)</pre><!--astro:end--></astro-island>
+<h3 id="filter-sweeps">Filter Sweeps<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#filter-sweeps"><span class="icon icon-link"></span></a></h3>
+<p>Build tension with filter sweeps—essential for buildups and drops:</p>
+<astro-island uid="26hqMs" prefix="r15" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(200, 8000).slow(4))\n.lpq(8)\n.room(0.3)\n.gain(0.5)\n.cpm(15)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(sine.range(200, 8000).slow(4))
+.lpq(8)
+.room(0.3)
+.gain(0.5)
+.cpm(15)</pre><!--astro:end--></astro-island>
+<h3 id="delay-for-rhythm">Delay for Rhythm<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#delay-for-rhythm"><span class="icon icon-link"></span></a></h3>
+<p>Synced delay adds rhythmic interest:</p>
+<astro-island uid="ZFANKL" prefix="r16" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c5 ~ eb5 ~\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(3000)\n.decay(0.1)\n.sustain(0)\n.delay(0.5)\n.delaytime(0.25)\n.delayfeedback(0.4)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c5 ~ eb5 ~&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(3000)
+.decay(0.1)
+.sustain(0)
+.delay(0.5)
+.delaytime(0.25)
+.delayfeedback(0.4)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="genre-deep-dives">Genre Deep Dives<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#genre-deep-dives"><span class="icon icon-link"></span></a></h2>
+<h3 id="house-120-130-bpm">House (120-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#house-120-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>House music originated in Chicago in the mid-1980s, pioneered by DJs like Frankie Knuckles and producers like Marshall Jefferson. It combines four-on-the-floor beats with soul and disco influences.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=tFuujExs03A">“Can You Feel It”</a> by Mr. Fingers (Larry Heard, 1986) — one of the first house records</li>
+<li><a href="https://www.youtube.com/watch?v=QAR8cq5Bl94">“Move Your Body”</a> by Marshall Jefferson (1986) — “the house music anthem”</li>
+<li><a href="https://www.youtube.com/watch?v=Gr-zG-IXDyo">“Big Fun”</a> by Inner City (Kevin Saunderson, 1988)</li>
+</ul>
+<p><strong>Classic House:</strong></p>
+<astro-island uid="Z1toUW3" prefix="r17" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8).gain(0.6),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2).gain(0.5),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8).gain(0.6),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2).gain(0.5),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="deep-house-118-125-bpm">Deep House (118-125 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#deep-house-118-125-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Deep house emerged from Chicago, pioneered by Larry Heard (Mr. Fingers) and Marshall Jefferson. It features jazzy seventh and ninth chords, soulful vocals, and a more laid-back feel than mainroom house.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Z9o2v3SA1Co">“Mystery of Love”</a> by Mr. Fingers (1985)</li>
+<li><a href="https://www.youtube.com/watch?v=2VD_uWNLJCg">“Someday”</a> by CeCe Rogers (1987) — one of the greatest dance records of all time</li>
+<li><a href="https://www.youtube.com/watch?v=nKvLB9P1ZoA">“In The Trees”</a> by Faze Action (1997)</li>
+</ul>
+<p><strong>Characteristics:</strong> Rhodes piano, lush pads with long attack/release, warm bass, 110-125 BPM</p>
+<astro-island uid="1uPqv6" prefix="r18" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8).gain(0.5),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2).gain(0.6),\nnote(\&quot;&lt;c3,eb3,g3,bb3&gt; &lt;f3,ab3,c4,eb4&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(800)\n  .attack(0.05)\n  .decay(0.3)\n  .sustain(0.3)\n  .gain(0.4)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8).gain(0.5),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2).gain(0.6),
+note(&quot;&lt;c3,eb3,g3,bb3&gt; &lt;f3,ab3,c4,eb4&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(800)
+  .attack(0.05)
+  .decay(0.3)
+  .sustain(0.3)
+  .gain(0.4)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="tech-house-122-130-bpm">Tech House (122-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#tech-house-122-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Tech house emerged in the 1990s as a fusion of house grooves with techno’s rugged basslines and steely beats. It’s warm, funky, and hypnotic.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=3pHOtm_eM2M">“Percolator”</a> by Cajmere/Green Velvet (1992)</li>
+<li><a href="https://www.youtube.com/watch?v=VaQXQdh3698">“Body Language”</a> by M.A.N.D.Y. vs Booka Shade (2005)</li>
+<li><a href="https://www.youtube.com/watch?v=u31thuMehjM">“Losing It”</a> by Fisher (2018) — brought tech house to mainstream EDM</li>
+<li><a href="https://www.youtube.com/watch?v=qke-jOUqSXU">“Cola”</a> by CamelPhat &amp; Elderbrook (2017)</li>
+</ul>
+<astro-island uid="Z1JfNYz" prefix="r19" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(12, 16).gain(0.5),\nsound(\&quot;rim\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(3, 16, 2).gain(0.6),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 4)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(12, 16).gain(0.5),
+sound(&quot;rim&quot;).bank(&quot;RolandTR909&quot;).euclidRot(3, 16, 2).gain(0.6),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 4)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="acid-house-120-130-bpm">Acid House (120-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#acid-house-120-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Acid house was born in Chicago around 1986 when Phuture (DJ Pierre, Spanky, Herb J) accidentally discovered the squelchy sound of the Roland TB-303 bass synthesizer. The 303 was originally designed to simulate bass guitars but became a dance music icon.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=igNBeo3QSqc">“Acid Tracks”</a> by Phuture (1987) — the first acid house track</li>
+<li><a href="https://www.youtube.com/watch?v=j7vxHOCeiQ4">“Voodoo Ray”</a> by A Guy Called Gerald (1988) — Manchester acid anthem</li>
+<li><a href="https://www.youtube.com/watch?v=mmi60Bd4jSs">“Da Funk”</a> by Daft Punk (1995) — distorted 303</li>
+</ul>
+<p><strong>Characteristics:</strong> Resonant filter sweeps (high lpq), squelchy bass, repetitive patterns. The TB-303’s “accent” function boosts both volume and filter resonance for spiky peaks.</p>
+<astro-island uid="eHiiS" prefix="r20" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2).gain(0.4),\nnote(\&quot;c2 c2 c3 c2 eb2 c2 c3 g1\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(300, 4000).fast(2))\n  .lpq(18)\n  .attack(0.001)\n  .decay(0.08)\n  .sustain(0.1)\n  .gain(\&quot;0.7 0.5 0.8 0.5 0.6 0.5 0.9 0.5\&quot;)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2).gain(0.4),
+note(&quot;c2 c2 c3 c2 eb2 c2 c3 g1&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(300, 4000).fast(2))
+  .lpq(18)
+  .attack(0.001)
+  .decay(0.08)
+  .sustain(0.1)
+  .gain(&quot;0.7 0.5 0.8 0.5 0.6 0.5 0.9 0.5&quot;)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="techno-130-150-bpm">Techno (130-150 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#techno-130-150-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Techno originated in Detroit in the mid-1980s, created by the “Belleville Three”: Juan Atkins, Derrick May, and Kevin Saunderson. Derrick May described it as “George Clinton and Kraftwerk caught in an elevator.”</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=rFQZndywOR4">“Strings of Life”</a> by Derrick May (1987) — raised techno’s profile in Europe</li>
+<li><a href="https://www.youtube.com/watch?v=KNz01ty-kTQ">“No UFOs”</a> by Juan Atkins (1985)</li>
+<li><a href="https://www.youtube.com/watch?v=Gr-zG-IXDyo">“Big Fun”</a> by Inner City (Kevin Saunderson, 1988)</li>
+</ul>
+<p><strong>Detroit Techno:</strong></p>
+<astro-island uid="Zgsu0B" prefix="r21" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(16, 16).gain(0.4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(4, 16, 2).gain(0.4),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 4)\n).cpm(34)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(16, 16).gain(0.4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(4, 16, 2).gain(0.4),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 4)
+).cpm(34)</pre><!--astro:end--></astro-island>
+<p><strong>Minimal Techno</strong> — Stripped down, hypnotic:</p>
+<astro-island uid="1WFFNp" prefix="r22" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(5, 16, 0).gain(0.4),\nsound(\&quot;rim\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(3, 16, 4).gain(0.5)\n).cpm(32)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(5, 16, 0).gain(0.4),
+sound(&quot;rim&quot;).bank(&quot;RolandTR909&quot;).euclidRot(3, 16, 4).gain(0.5)
+).cpm(32)</pre><!--astro:end--></astro-island>
+<p><strong>Industrial Techno</strong> — Harder, distorted, darker:</p>
+<astro-island uid="U8JWa" prefix="r23" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4).distort(1.5),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(16, 16).gain(0.4),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(3, 8, 2).distort(2),\nnote(\&quot;c1*4\&quot;).s(\&quot;sawtooth\&quot;).lpf(400).distort(3).gain(0.4)\n).cpm(36)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4).distort(1.5),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(16, 16).gain(0.4),
+sound(&quot;sd&quot;).bank(&quot;RolandTR909&quot;).euclidRot(3, 8, 2).distort(2),
+note(&quot;c1*4&quot;).s(&quot;sawtooth&quot;).lpf(400).distort(3).gain(0.4)
+).cpm(36)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="trance-138-150-bpm">Trance (138-150 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#trance-138-150-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Trance emerged in Germany in the early 1990s, characterized by euphoric melodies, soaring synths, and emotional buildups. The tempo typically ranges from 128-142 BPM, with uplifting trance specifically at 138-142 BPM.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=--3eIRSg2RY">“For An Angel”</a> by Paul van Dyk (1994)</li>
+<li><a href="https://www.youtube.com/watch?v=CC5ca6Hsb2Q">“Children”</a> by Robert Miles (1995)</li>
+<li><a href="https://www.youtube.com/watch?v=8tIgN7eICn4">“Adagio for Strings”</a> by Tiësto (2005)</li>
+<li><a href="https://www.youtube.com/watch?v=yyvp_nCM15Q">“Café Del Mar”</a> by Energy 52 (1993)</li>
+</ul>
+<p><strong>Uplifting Trance (138 BPM):</strong></p>
+<astro-island uid="1WAa6y" prefix="r24" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2).gain(0.4),\nnote(\&quot;&lt;c4,eb4,g4&gt; &lt;eb4,g4,bb4&gt; &lt;f4,ab4,c5&gt; &lt;g4,bb4,d5&gt;\&quot;)\n  .s(\&quot;supersaw\&quot;)\n  .lpf(4000)\n  .attack(0.1)\n  .release(0.4)\n  .room(0.4)\n  .gain(0.3)\n).cpm(34.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2).gain(0.4),
+note(&quot;&lt;c4,eb4,g4&gt; &lt;eb4,g4,bb4&gt; &lt;f4,ab4,c5&gt; &lt;g4,bb4,d5&gt;&quot;)
+  .s(&quot;supersaw&quot;)
+  .lpf(4000)
+  .attack(0.1)
+  .release(0.4)
+  .room(0.4)
+  .gain(0.3)
+).cpm(34.5)</pre><!--astro:end--></astro-island>
+<p><strong>Trance with Arp:</strong></p>
+<astro-island uid="ZVeiAG" prefix="r25" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8).gain(0.4),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2).gain(0.6),\nnote(\&quot;c4 eb4 g4 c5 g4 eb4 c4 eb4\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(3000)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.1)\n  .delay(0.3)\n  .delaytime(0.109)\n  .gain(0.4)\n).cpm(34.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8).gain(0.4),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2).gain(0.6),
+note(&quot;c4 eb4 g4 c5 g4 eb4 c4 eb4&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .lpf(3000)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.1)
+  .delay(0.3)
+  .delaytime(0.109)
+  .gain(0.4)
+).cpm(34.5)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="psytrance-140-150-bpm">Psytrance (140-150 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#psytrance-140-150-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Psytrance (psychedelic trance) emerged from the Goa trance scene in India. It features driving basslines, complex layered synths, and hypnotic, trippy textures.</p>
+<p><strong>Classic Artists:</strong></p>
+<ul>
+<li>Infected Mushroom — Israeli duo known for innovative sound design</li>
+<li>Astrix — progressive psytrance with euphoric melodies</li>
+<li>Shpongle — psychedelic downtempo/psytrance fusion</li>
+</ul>
+<p><strong>Characteristics:</strong> 140-150 BPM, rolling 16th-note bassline, acid-style filter modulation, complex percussion, trippy FX</p>
+<astro-island uid="Z1dSpEu" prefix="r26" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nnote(\&quot;c2*16\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(300, 2500).fast(4))\n  .lpq(12)\n  .phaser(sine.range(0.5, 4).slow(4))\n  .gain(\&quot;1 0.5 0.7 0.5\&quot;.fast(4))\n  .gain(0.5)\n).cpm(36)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+note(&quot;c2*16&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(300, 2500).fast(4))
+  .lpq(12)
+  .phaser(sine.range(0.5, 4).slow(4))
+  .gain(&quot;1 0.5 0.7 0.5&quot;.fast(4))
+  .gain(0.5)
+).cpm(36)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="drum--bass-170-180-bpm">Drum &amp; Bass (170-180 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#drum--bass-170-180-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Drum &amp; bass emerged from the UK jungle scene in the early 1990s. It features fast breakbeats (170-180 BPM) and heavy basslines.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Jm_t3g4RhpY">“Inner City Life”</a> by Goldie (1994) — one of the genre’s most iconic tracks</li>
+<li><a href="https://www.youtube.com/watch?v=eAF40bMD_v4">“Timeless”</a> album by Goldie (1995) — brought D&amp;B to mainstream attention</li>
+<li><a href="https://www.youtube.com/watch?v=EFUZ5xe3HCk">“Demon’s Theme”</a> by LTJ Bukem (1992) — one of the first recognizable D&amp;B tracks</li>
+</ul>
+<p><strong>Basic D&amp;B:</strong></p>
+<astro-island uid="AF7yN" prefix="r27" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(3, 16, 0),\nsound(\&quot;sd\&quot;).euclidRot(2, 16, 8),\nsound(\&quot;hh\&quot;).euclid(14, 16).gain(0.5)\n).cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(3, 16, 0),
+sound(&quot;sd&quot;).euclidRot(2, 16, 8),
+sound(&quot;hh&quot;).euclid(14, 16).gain(0.5)
+).cpm(44)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="liquid-drum--bass-170-175-bpm">Liquid Drum &amp; Bass (170-175 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#liquid-drum--bass-170-175-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Liquid D&amp;B is a smoother, more musical subgenre with jazz and soul influences. Hospital Records is a key label.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=j_hzoTof0E8">“Even If”</a> by Calibre — considered the pinnacle of liquid D&amp;B</li>
+<li><a href="https://www.youtube.com/watch?v=omJuxrA5NhM">“Horizons”</a> by LTJ Bukem</li>
+<li><a href="https://www.youtube.com/watch?v=F1mUD1ouvHc">“Moving With You”</a> by Netsky (2010)</li>
+</ul>
+<p><strong>Characteristics:</strong> Jazzy chords, soulful vocals, rolling basslines, atmospheric textures</p>
+<astro-island uid="c9UBV" prefix="r28" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(3, 16, 0),\nsound(\&quot;sd\&quot;).euclidRot(2, 16, 8),\nsound(\&quot;hh\&quot;).euclid(12, 16).gain(0.4),\nnote(\&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1500)\n  .attack(0.1)\n  .release(0.3)\n  .room(0.3)\n  .gain(0.3)\n).cpm(43)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(3, 16, 0),
+sound(&quot;sd&quot;).euclidRot(2, 16, 8),
+sound(&quot;hh&quot;).euclid(12, 16).gain(0.4),
+note(&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1500)
+  .attack(0.1)
+  .release(0.3)
+  .room(0.3)
+  .gain(0.3)
+).cpm(43)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="neurofunk-175-180-bpm">Neurofunk (175-180 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#neurofunk-175-180-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Neurofunk is a dark, technical D&amp;B subgenre that emerged around 1997-1998. It features complex “neuro” basslines (variations on the “reese bass”), robotic sound effects, and a dystopian/sci-fi mood.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=37T-FE5ehgk">“Wormhole”</a> album by Ed Rush &amp; Optical — credited with creating neurofunk</li>
+<li><a href="https://www.youtube.com/watch?v=8UAUDbWrVhA">“Messiah”</a> by Konflict — a neurofunk anthem</li>
+<li><a href="https://www.youtube.com/watch?v=xtppf3xkby4">“Stigma”</a> by Noisia — Dutch trio known for pristine production</li>
+</ul>
+<astro-island uid="Z53HBn" prefix="r29" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(5, 16, 0),\nsound(\&quot;sd\&quot;).euclidRot(3, 16, 4),\nsound(\&quot;hh\&quot;).euclid(14, 16).gain(0.4),\nnote(\&quot;c2*8\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .superimpose(add(.015))\n  .lpf(sine.range(200, 1800).fast(8))\n  .lpq(6)\n  .distort(2.5)\n  .gain(0.4)\n).cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(5, 16, 0),
+sound(&quot;sd&quot;).euclidRot(3, 16, 4),
+sound(&quot;hh&quot;).euclid(14, 16).gain(0.4),
+note(&quot;c2*8&quot;)
+  .s(&quot;sawtooth&quot;)
+  .superimpose(add(.015))
+  .lpf(sine.range(200, 1800).fast(8))
+  .lpq(6)
+  .distort(2.5)
+  .gain(0.4)
+).cpm(44)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="dubstep-140-bpm-half-time">Dubstep (140 BPM, half-time)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#dubstep-140-bpm-half-time"><span class="icon icon-link"></span></a></h3>
+<p>Dubstep emerged from London’s underground in the early 2000s, characterized by sparse rhythms, heavy sub-bass, and the snare on beat 3 (half-time feel).</p>
+<p><strong>UK Dubstep Classic:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=D6pTSGvp7T8">“Midnight Request Line”</a> by Skream (2005) — a genre-defining track</li>
+</ul>
+<p><strong>Characteristics:</strong> 140 BPM, half-time feel, emphasis on sub-bass, sparse arrangement</p>
+<astro-island uid="drRrR" prefix="r30" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(2, 8, 0),\nsound(\&quot;sd\&quot;).euclidRot(1, 4, 2),\nsound(\&quot;hh\&quot;).euclid(8, 8).gain(0.4)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(2, 8, 0),
+sound(&quot;sd&quot;).euclidRot(1, 4, 2),
+sound(&quot;hh&quot;).euclid(8, 8).gain(0.4)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<p><strong>Dubstep with Wobble:</strong></p>
+<astro-island uid="1ELx0k" prefix="r31" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(2, 8, 0),\nsound(\&quot;sd\&quot;).euclidRot(1, 4, 2),\nnote(\&quot;c2 ~ c2 ~\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(150, 1800).fast(4))\n  .lpq(12)\n  .distort(1.5)\n  .gain(0.6)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(2, 8, 0),
+sound(&quot;sd&quot;).euclidRot(1, 4, 2),
+note(&quot;c2 ~ c2 ~&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(150, 1800).fast(4))
+  .lpq(12)
+  .distort(1.5)
+  .gain(0.6)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="brostep-140-150-bpm">Brostep (140-150 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#brostep-140-150-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Brostep is an aggressive American dubstep variant that emphasizes mid-range frequencies over sub-bass. It features metallic sounds and high-energy drops.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=WSeNSzJ2-Jw">“Scary Monsters and Nice Sprites”</a> by Skrillex (2010) — Grammy-winning track that defined the sound</li>
+<li><a href="https://www.youtube.com/watch?v=Ua0KpfJsxKo">“Cinema” (Skrillex Remix)</a> by Benny Benassi</li>
+<li><a href="https://www.youtube.com/watch?v=wxNT8ONn-To">“X-Rated”</a> album by Excision (2012)</li>
+</ul>
+<p><strong>Characteristics:</strong> Aggressive mid-range “growl” bass, metal-influenced, robotic sounds, complex fills. Uses FM synthesis for metallic textures.</p>
+<astro-island uid="16tksn" prefix="r32" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(3, 8, 0),\nsound(\&quot;sd\&quot;).euclidRot(1, 4, 2),\nnote(\&quot;c2 c2 c2 c2\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .fm(sine.range(2, 10).fast(8))\n  .fmh(3)\n  .lpf(sine.range(300, 3000).fast(8))\n  .lpq(10)\n  .distort(3)\n  .gain(0.5)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(3, 8, 0),
+sound(&quot;sd&quot;).euclidRot(1, 4, 2),
+note(&quot;c2 c2 c2 c2&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .fm(sine.range(2, 10).fast(8))
+  .fmh(3)
+  .lpf(sine.range(300, 3000).fast(8))
+  .lpq(10)
+  .distort(3)
+  .gain(0.5)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="riddim-140-150-bpm">Riddim (140-150 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#riddim-140-150-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Riddim is a minimalist dubstep subgenre featuring repetitive, hypnotic bass patterns. Unlike brostep’s varied sound design, riddim uses simple patterns that “respond to one another.”</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=AzXv2hTZGto">“German Engineering”</a> EP by Virtual Riot (2018)</li>
+</ul>
+<p><strong>Characteristics:</strong> Minimalist, repetitive triplet patterns, heavy snare and kick</p>
+<astro-island uid="XDEE1" prefix="r33" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ ~ bd ~ ~ ~\&quot;),\nsound(\&quot;~ ~ ~ ~ sd ~ ~ ~\&quot;),\nnote(\&quot;c2 ~ c2 c2 ~ c2 c2 ~\&quot;)\n  .s(\&quot;square\&quot;)\n  .lpf(500)\n  .distort(3)\n  .gain(0.6)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ ~ bd ~ ~ ~&quot;),
+sound(&quot;~ ~ ~ ~ sd ~ ~ ~&quot;),
+note(&quot;c2 ~ c2 c2 ~ c2 c2 ~&quot;)
+  .s(&quot;square&quot;)
+  .lpf(500)
+  .distort(3)
+  .gain(0.6)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="future-bass-140-160-bpm">Future Bass (140-160 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#future-bass-140-160-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Future bass emerged in the early 2010s, combining elements of trap and dubstep with pop appeal. It features bright supersaw chords, vocal chops, and wobbly synths.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=OUkkaqSNduU">“You &amp; Me” (Flume Remix)</a> by Disclosure (2013) — first mainstream future bass hit</li>
+<li><a href="https://www.youtube.com/watch?v=Ly7uj0JwgKg">“Never Be Like You”</a> by Flume (2016)</li>
+<li><a href="https://www.youtube.com/watch?v=ULHeRdgeT54">“Light”</a> by San Holo (2016)</li>
+<li><a href="https://www.youtube.com/watch?v=FyASdjZE0R0">“Roses”</a> by The Chainsmokers (2015)</li>
+</ul>
+<p><strong>Characteristics:</strong> Supersaw chords with filter modulation (the “wobbly” effect), 808 drums, vocal chops, emotional melodies. Sidechain compression creates the pumping chord sound.</p>
+<astro-island uid="28VNs7" prefix="r34" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclidRot(3, 8, 0),\nsound(\&quot;sd\&quot;).euclidRot(1, 4, 2),\nnote(\&quot;&lt;c4,eb4,g4,bb4&gt; &lt;f4,ab4,c5,eb5&gt;\&quot;)\n  .s(\&quot;supersaw\&quot;)\n  .lpf(sine.range(800, 5000).fast(0.5))\n  .vib(4)\n  .vibmod(0.02)\n  .attack(0.02)\n  .release(0.4)\n  .room(0.4)\n  .gain(perlin.range(0.2, 0.5).fast(4))\n).cpm(18)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclidRot(3, 8, 0),
+sound(&quot;sd&quot;).euclidRot(1, 4, 2),
+note(&quot;&lt;c4,eb4,g4,bb4&gt; &lt;f4,ab4,c5,eb5&gt;&quot;)
+  .s(&quot;supersaw&quot;)
+  .lpf(sine.range(800, 5000).fast(0.5))
+  .vib(4)
+  .vibmod(0.02)
+  .attack(0.02)
+  .release(0.4)
+  .room(0.4)
+  .gain(perlin.range(0.2, 0.5).fast(4))
+).cpm(18)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="edm-trap-140-bpm-half-time">EDM Trap (140 BPM, half-time)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#edm-trap-140-bpm-half-time"><span class="icon icon-link"></span></a></h3>
+<p>EDM trap fuses hip-hop trap production with electronic dance music elements. It emerged around 2012 with releases from TNGHT, Flosstradamus, and RL Grime.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Pv9akZKzR0o">“Original Don” (Flosstradamus Remix)</a> by Major Lazer (2012) — helped define the genre</li>
+<li><a href="https://www.youtube.com/watch?v=04ufimjXEbA">“Core”</a> by RL Grime (2014)</li>
+<li><a href="https://www.youtube.com/watch?v=HMUDVMiITOU">“Turn Down for What”</a> by DJ Snake &amp; Lil Jon (2013)</li>
+</ul>
+<p><strong>Characteristics:</strong> TR-808 drums, booming 808 bass, fast hi-hat rolls, syncopated rhythms</p>
+<p><strong>Basic Trap:</strong></p>
+<astro-island uid="Z2pFi7O" prefix="r35" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 16, 0),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(14, 16).gain(0.5)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 16, 0),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).euclid(14, 16).gain(0.5)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<p><strong>Trap with 808 Bass:</strong></p>
+<astro-island uid="Z1KmylR" prefix="r36" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 16, 0),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(14, 16).gain(0.4),\nnote(\&quot;c1 ~ ~ ~ c1 ~ c1 ~\&quot;)\n  .s(\&quot;sine\&quot;)\n  .decay(0.5)\n  .sustain(0.3)\n  .gain(0.8)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 16, 0),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).euclid(14, 16).gain(0.4),
+note(&quot;c1 ~ ~ ~ c1 ~ c1 ~&quot;)
+  .s(&quot;sine&quot;)
+  .decay(0.5)
+  .sustain(0.3)
+  .gain(0.8)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<p><strong>Hi-hat Rolls</strong> — A signature trap technique:</p>
+<astro-island uid="3v7Mx" prefix="r37" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 16, 0),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).fast(\&quot;&lt;1 1 1 4&gt;\&quot;).gain(0.5)\n).cpm(17.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 16, 0),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).fast(&quot;&lt;1 1 1 4&gt;&quot;).gain(0.5)
+).cpm(17.5)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="complete-tracks-by-genre">Complete Tracks by Genre<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#complete-tracks-by-genre"><span class="icon icon-link"></span></a></h2>
+<h3 id="house-track">House Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#house-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="o2eOT" prefix="r38" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8).gain(0.5),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2).gain(0.4),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2).gain(0.7),\n\n// Bass\nnote(\&quot;c2 c2 eb2 c2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(700)\n  .attack(0.01)\n  .decay(0.2)\n  .sustain(0.4)\n  .gain(0.5),\n\n// Chords\nnote(\&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1200)\n  .attack(0.05)\n  .decay(0.2)\n  .sustain(0.3)\n  .room(0.2)\n  .gain(0.25)\n).cpm(31)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8).gain(0.5),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2).gain(0.4),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2).gain(0.7),
+
+// Bass
+note(&quot;c2 c2 eb2 c2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(700)
+  .attack(0.01)
+  .decay(0.2)
+  .sustain(0.4)
+  .gain(0.5),
+
+// Chords
+note(&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1200)
+  .attack(0.05)
+  .decay(0.2)
+  .sustain(0.3)
+  .room(0.2)
+  .gain(0.25)
+).cpm(31)</pre><!--astro:end--></astro-island>
+<h3 id="techno-track">Techno Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#techno-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="1NQpzD" prefix="r39" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4).gain(1.1),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(16, 16).gain(0.4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(4, 16, 2).gain(0.35),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 4).gain(0.6),\nsound(\&quot;rim\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(5, 16, 1).gain(0.4),\n\n// Bass\nnote(\&quot;c2*8\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(300, 800).fast(2))\n  .lpq(5)\n  .gain(0.4)\n).cpm(34)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4).gain(1.1),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(16, 16).gain(0.4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(4, 16, 2).gain(0.35),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 4).gain(0.6),
+sound(&quot;rim&quot;).bank(&quot;RolandTR909&quot;).euclidRot(5, 16, 1).gain(0.4),
+
+// Bass
+note(&quot;c2*8&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(300, 800).fast(2))
+  .lpq(5)
+  .gain(0.4)
+).cpm(34)</pre><!--astro:end--></astro-island>
+<h3 id="trance-track">Trance Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#trance-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z2fBAFi" prefix="r40" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(4, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR909\&quot;).euclid(8, 8).gain(0.4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 8, 2).gain(0.35),\nsound(\&quot;cp\&quot;).bank(\&quot;RolandTR909\&quot;).euclidRot(2, 4, 2).gain(0.6),\n\n// Arp\nnote(\&quot;c4 eb4 g4 c5 g4 eb4\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(3000)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.1)\n  .delay(0.3)\n  .delaytime(0.108)\n  .gain(0.3),\n\n// Pad\nnote(\&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;\&quot;)\n  .s(\&quot;supersaw\&quot;)\n  .lpf(2000)\n  .attack(0.3)\n  .release(0.5)\n  .room(0.4)\n  .gain(0.2)\n).cpm(34.5)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd&quot;).bank(&quot;RolandTR909&quot;).euclid(4, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR909&quot;).euclid(8, 8).gain(0.4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 8, 2).gain(0.35),
+sound(&quot;cp&quot;).bank(&quot;RolandTR909&quot;).euclidRot(2, 4, 2).gain(0.6),
+
+// Arp
+note(&quot;c4 eb4 g4 c5 g4 eb4&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .lpf(3000)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.1)
+  .delay(0.3)
+  .delaytime(0.108)
+  .gain(0.3),
+
+// Pad
+note(&quot;&lt;c3,eb3,g3&gt; &lt;f3,ab3,c4&gt;&quot;)
+  .s(&quot;supersaw&quot;)
+  .lpf(2000)
+  .attack(0.3)
+  .release(0.5)
+  .room(0.4)
+  .gain(0.2)
+).cpm(34.5)</pre><!--astro:end--></astro-island>
+<h3 id="db-track">D&amp;B Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#db-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z1QdxCx" prefix="r41" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd\&quot;).euclidRot(4, 16, 0),\nsound(\&quot;sd\&quot;).euclidRot(2, 16, 8),\nsound(\&quot;hh\&quot;).euclid(14, 16).gain(0.4),\nsound(\&quot;oh\&quot;).euclidRot(2, 16, 4).gain(0.3),\n\n// Bass\nnote(\&quot;c2 ~ c2 c2 ~ c2 ~ c2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(400, 1200).fast(4))\n  .lpq(5)\n  .gain(0.5),\n\n// Pad\nnote(\&quot;&lt;c4,eb4,g4&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1500)\n  .attack(0.1)\n  .release(0.3)\n  .room(0.3)\n  .gain(0.2)\n).cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd&quot;).euclidRot(4, 16, 0),
+sound(&quot;sd&quot;).euclidRot(2, 16, 8),
+sound(&quot;hh&quot;).euclid(14, 16).gain(0.4),
+sound(&quot;oh&quot;).euclidRot(2, 16, 4).gain(0.3),
+
+// Bass
+note(&quot;c2 ~ c2 c2 ~ c2 ~ c2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(400, 1200).fast(4))
+  .lpq(5)
+  .gain(0.5),
+
+// Pad
+note(&quot;&lt;c4,eb4,g4&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1500)
+  .attack(0.1)
+  .release(0.3)
+  .room(0.3)
+  .gain(0.2)
+).cpm(44)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="edm-quick-reference">EDM Quick Reference<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#edm-quick-reference"><span class="icon icon-link"></span></a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Genre</th><th>BPM</th><th>Feel</th><th>Key Elements</th></tr></thead><tbody><tr><td>House</td><td>120-130</td><td>4/4</td><td>Off-beat hats, claps on 2&amp;4</td></tr><tr><td>Deep House</td><td>118-125</td><td>4/4</td><td>Jazzy 7th chords, sub bass</td></tr><tr><td>Tech House</td><td>122-130</td><td>4/4</td><td>Minimal, hypnotic loops</td></tr><tr><td>Acid House</td><td>120-130</td><td>4/4</td><td>TB-303 squelch, high resonance</td></tr><tr><td>Techno</td><td>130-150</td><td>4/4</td><td>Industrial, dark, driving</td></tr><tr><td>Trance</td><td>138-150</td><td>4/4</td><td>Arps, supersaws, euphoric</td></tr><tr><td>Psytrance</td><td>140-150</td><td>4/4</td><td>Rolling bass, trippy FX</td></tr><tr><td>D&amp;B</td><td>170-180</td><td>Breakbeat</td><td>Fast breaks, heavy bass</td></tr><tr><td>Liquid D&amp;B</td><td>170-175</td><td>Breakbeat</td><td>Jazzy, soulful, smooth</td></tr><tr><td>Neurofunk</td><td>175-180</td><td>Breakbeat</td><td>Dark, technical, reese bass</td></tr><tr><td>Dubstep</td><td>140</td><td>Half-time</td><td>Sub bass, sparse</td></tr><tr><td>Brostep</td><td>140-150</td><td>Half-time</td><td>Mid-range growl, aggressive</td></tr><tr><td>Riddim</td><td>140-150</td><td>Half-time</td><td>Minimal, repetitive</td></tr><tr><td>Future Bass</td><td>140-160</td><td>Half-time</td><td>Supersaw chords, wobbly</td></tr><tr><td>Trap</td><td>140</td><td>Half-time</td><td>808s, hi-hat rolls</td></tr></tbody></table>
+<h2 id="what-you-learned">What You Learned<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/edm/#what-you-learned"><span class="icon icon-link"></span></a></h2>
+<ul>
+<li>The TR-909 defined house and techno sounds</li>
+<li>The TB-303 created acid house’s squelchy bass (high <code>.lpq()</code> resonance, accent patterns)</li>
+<li>Four-on-the-floor vs half-time feel differentiates genres</li>
+<li><code>.lpf()</code> with <code>sine.range().fast()</code> creates filter sweeps and wobbles</li>
+<li><code>.lpq()</code> (resonance) at high values (12-18) creates acid sounds</li>
+<li><code>.superimpose(add(.02))</code> creates detuned reese bass for neurofunk</li>
+<li><code>.fm()</code> and <code>.fmh()</code> add metallic/growl textures for brostep</li>
+<li><code>.vib()</code> and <code>.vibmod()</code> add movement to supersaws</li>
+<li><code>.phaser()</code> creates trippy psytrance textures</li>
+<li><code>.distort()</code> adds grit and aggression to bass sounds</li>
+<li>Supersaw is essential for trance and future bass</li>
+<li>D&amp;B uses breakbeats at 170-180 BPM</li>
+<li>Dubstep/trap use half-time feel at 140 BPM</li>
+<li>Each genre has specific BPM ranges and sonic characteristics</li>
+</ul> </div> </div> </main> </div> </body></html>
