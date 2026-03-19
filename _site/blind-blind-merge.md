@@ -81,7 +81,7 @@ This methodology gets you closer to the finish line faster. The last mile is sti
 
 ## Why does it work?
 
-The prose spec carries the *why*. Code tells you what the system does, never what it should do. Without the spec, the LLM guesses intent. It guesses wrong.
+The prose spec carries the *why*. [Theory is load-bearing](/theory-is-load-bearing): code tells you what the system does, never what it should do. Without the spec, the LLM guesses intent. It guesses wrong.
 
 The prototype encodes decisions the prose left abstract: merge thresholds, similarity functions, lifecycle details. This could be a standalone implementation or an [experiment](https://github.com/kimjune01/union-find-compaction/blob/master/EXPERIMENT.md). Ours was ~300 lines of Python.
 
