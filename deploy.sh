@@ -115,11 +115,6 @@ while IFS= read -r p; do
   fi
 done <<< "$CHANGED"
 
-# ─── commit _site/ ──────────────────────────────────────────────────────────
-
-echo "==> Committing _site/"
-git add "$SITE_DIR/"
-git diff --cached --quiet -- "$SITE_DIR/" || git commit -m "Deploy _site" --no-verify -- "$SITE_DIR/"
 
 echo ""
 echo "Deploy complete! Site is live at https://$DOMAIN_WWW"
