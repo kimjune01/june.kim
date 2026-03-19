@@ -1,0 +1,1124 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.1.9"><link rel="alternate" type="application/rss+xml" title="RSS Feed for strudel.cc" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/jamdojo/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/jamdojo/favicon.ico"><link rel="apple-touch-icon" href="/jamdojo/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/jamdojo/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/jamdojo/make-scrollable-code-focusable.js"></script><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_0_lang.BS_sy5Gw.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/jamdojo/manifest.webmanifest"><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_1_lang.-EECfF37.js"></script><title>Classical Music - JamDojo</title><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css">
+<style>@font-face{font-family:PressStart;src:url(/jamdojo/fonts/PressStart2P/PressStart2P-Regular.ttf);size-adjust:65%}@font-face{font-family:BigBlueTerminal;src:url(/jamdojo/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/jamdojo/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/jamdojo/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:CutiePi;src:url(/jamdojo/fonts/CutiePi/Cute_Aurora_demo.ttf);size-adjust:120%}@font-face{font-family:JetBrains;src:url(/jamdojo/fonts/JetBrains/JetBrainsMono.woff2)}@font-face{font-family:Monocraft;src:url(/jamdojo/fonts/Monocraft/Monocraft.ttf);size-adjust:90%}@font-face{font-family:Hack;src:url(/jamdojo/fonts/Hack/Hack-Regular.ttf)}@font-face{font-family:we-come-in-peace;src:url(/jamdojo/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/jamdojo/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/jamdojo/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/jamdojo/fonts/teletext/EuropeanTeletext.ttf);size-adjust:90%}@font-face{font-family:tic80;src:url(/jamdojo/fonts/tic80/tic-80-wide-font.otf);size-adjust:60%}@font-face{font-family:mode7;src:url(/jamdojo/fonts/mode7/MODE7GX3.TTF);size-adjust:82%}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh;--app-width: 100vw}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+.prose h1:before,.prose h2:before,.prose h3:before,.prose h4:before,.prose h5:before,.prose h6:before{display:block;content:" ";margin-top:-70px;height:70px;visibility:hidden;pointer-events:none}.icon.icon-link{visibility:hidden}.prose h1:hover .icon.icon-link,.prose h2:hover .icon.icon-link,.prose h3:hover .icon.icon-link,.prose h4:hover .icon.icon-link,.prose h5:hover .icon.icon-link,.prose h6:hover .icon.icon-link{visibility:visible}.prose h1>a,.prose h2>a,.prose h3>a,.prose h4>a,.prose h5>a,.prose h6>a{text-decoration:none!important}.icon.icon-link:after{content:"#";margin-left:8px;font-size:.9em;opacity:50%}
+:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:#000;opacity:.5}#code .cm-scroller{padding-top:10px!important;height:100%;font-family:inherit}#code .cm-content{padding-bottom:50vh}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}#code .cm-matchingBracket{-webkit-text-decoration:underline .18rem;text-decoration:underline .18rem;text-underline-offset:.22rem}.cm-tooltip.cm-completionInfo{padding:0!important;border:1px solid var(--foreground)!important;border-radius:4px!important;box-shadow:0 4px 12px #0000004d!important;max-width:500px!important;min-width:300px!important;max-height:400px!important;background-color:var(--lineHighlight)!important;overflow:auto;background:var(--background)!important}.autocomplete-info-container{padding:12px!important;border-radius:4px!important;color:var(--foreground);font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:var(--font-size, 13px);line-height:1.4;max-width:600px;height:100%;min-width:400px;white-space:normal!important;overflow-y:auto!important}.autocomplete-info-tooltip{overflow-y:auto!important}.autocomplete-info-function-description{white-space:pre-wrap!important}.autocomplete-info-function-name{font-size:15px;font-weight:600;color:var(--foreground);margin:0 0 8px}.autocomplete-info-function-synonyms,.autocomplete-info-function-description{margin:0 0 12px;color:var(--foreground);line-height:1.5;opacity:.8}.autocomplete-info-section-title{font-size:12px;font-weight:600;color:var(--foreground);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}.autocomplete-info-section-title:first-child{margin-top:0}.autocomplete-info-params-section{margin-top:12px}.autocomplete-info-params-list{list-style:none;margin:0;padding:0}.autocomplete-info-param-item{margin-bottom:8px;padding:8px;background-color:var(--lineBackground);border-radius:3px;border-left:2px solid var(--foreground, #555)}.autocomplete-info-param-item:last-child{margin-bottom:0}.autocomplete-info-param-name{font-weight:600;color:var(--variable, var(--foreground));margin-right:8px}.autocomplete-info-param-type{color:var(--comment);font-size:12px;background-color:var(--gutterForeground);padding:1px 4px;border-radius:2px}.autocomplete-info-param-desc{color:var(--foreground);font-size:10px;margin-top:4px;line-height:1.4;opacity:.7}.autocomplete-info-examples-section{margin-top:12px}.autocomplete-info-example-code{background:var(--lineBackground);color:var(--foreground);padding:8px;border-radius:3px;font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:12px;line-height:1.5;margin:4px 0;overflow-x:auto;white-space:pre;border:1px solid var(--foreground, #3a3a3a)}.autocomplete-info-tooltip::-webkit-scrollbar{width:4px}.autocomplete-info-tooltip::-webkit-scrollbar-thumb{border-radius:2px}
+</style></head> <body class="min-h-screen m-0 text-gray-50 bg-background"> <div class="flex min-h-screen"> <!-- Sidebar --> <aside class="w-56 bg-gray-900 border-r border-gray-800 p-4 hidden md:block fixed h-full"> <nav class="flex flex-col gap-1 h-full overflow-y-auto"> <a href="/jamdojo/" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors mb-2"> <span>←</span> <span>JamDojo</span> </a> <div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-0"> <div class="flex items-center gap-2"> <span>🎮</span> <span class="font-medium">Interactive Tools</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-0" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/interactive-tools/playground/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">💻</span> <span>Playground</span> </a><a href="/jamdojo/learn/interactive-tools/piano/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎹</span> <span>Piano</span> </a><a href="/jamdojo/learn/interactive-tools/guitar/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎸</span> <span>Guitar</span> </a><a href="/jamdojo/learn/interactive-tools/pitch-detector/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Pitch Detector</span> </a><a href="/jamdojo/learn/interactive-tools/sample-explorer/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Sample Explorer</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-1"> <div class="flex items-center gap-2"> <span>🎯</span> <span class="font-medium">Quizzes</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-1" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/quizzes/sample-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎯</span> <span>Sample Quiz</span> </a><a href="/jamdojo/learn/quizzes/waveform-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">〰</span> <span>Waveform Quiz</span> </a><a href="/jamdojo/learn/quizzes/effect-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛</span> <span>Effect Quiz</span> </a><a href="/jamdojo/learn/quizzes/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space Quiz</span> </a><a href="/jamdojo/learn/quizzes/ear-training/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👂</span> <span>Ear Training</span> </a><a href="/jamdojo/learn/quizzes/pitch-simon/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Pitch Simon</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-2"> <div class="flex items-center gap-2"> <span>🎵</span> <span class="font-medium">Music Theory</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-2" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/harmony/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎶</span> <span>Harmony</span> </a><a href="/jamdojo/learn/theory/chord-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Chord Composition</span> </a><a href="/jamdojo/learn/theory/classical-terminology/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎻</span> <span>Classical Terminology</span> </a><a href="/jamdojo/learn/theory/euclidean-rhythms/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🥁</span> <span>Euclidean Rhythms</span> </a><a href="/jamdojo/learn/theory/sound-design/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Sound Design &amp; Timbre</span> </a><a href="/jamdojo/learn/theory/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space</span> </a><a href="/jamdojo/learn/theory/sampling-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Sampling Composition</span> </a><a href="/jamdojo/learn/theory/arranging/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎬</span> <span>Arranging Patterns</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-3"> <div class="flex items-center gap-2"> <span>💻</span> <span class="font-medium">Programming</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-3" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/strudel-programming/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔧</span> <span>Strudel Programming</span> </a><a href="/jamdojo/learn/theory/why-functions/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⚡</span> <span>Why Functions</span> </a><a href="/jamdojo/learn/theory/why-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📦</span> <span>Why Containers</span> </a><a href="/jamdojo/learn/theory/patterns-as-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Patterns as Containers</span> </a><a href="/jamdojo/learn/theory/transforming-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔄</span> <span>Transforming Patterns</span> </a><a href="/jamdojo/learn/theory/combining-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔗</span> <span>Combining Patterns</span> </a><a href="/jamdojo/learn/theory/patterns-of-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎁</span> <span>Patterns of Patterns</span> </a><a href="/jamdojo/learn/theory/building-with-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏗️</span> <span>Building with Patterns</span> </a><a href="/jamdojo/learn/theory/combining-events/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⊕</span> <span>Combining Events</span> </a><a href="/jamdojo/learn/theory/choice-and-selection/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔀</span> <span>Choice and Selection</span> </a><a href="/jamdojo/learn/theory/context-aware-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Context-Aware Patterns</span> </a><a href="/jamdojo/learn/theory/flipping-structure/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔃</span> <span>Flipping Structure</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="true" aria-controls="activity-section-4"> <div class="flex items-center gap-2"> <span>🎸</span> <span class="font-medium">Genre Studies</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style="transform: rotate(90deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-4" class="activity-accordion-content pl-4" style> <a href="/jamdojo/learn/genre/rock-pop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Rock &amp; Pop</span> </a><a href="/jamdojo/learn/genre/hip-hop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Hip-Hop</span> </a><a href="/jamdojo/learn/genre/edm/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎧</span> <span>Electronic Dance Music</span> </a><a href="/jamdojo/learn/genre/metal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🤘</span> <span>Metal</span> </a><a href="/jamdojo/learn/genre/demoscene/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🖥️</span> <span>Demoscene</span> </a><a href="/jamdojo/learn/genre/classical/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm bg-cyan-600 text-white"> <span class="text-lg">🎼</span> <span>Classical Music</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-5"> <div class="flex items-center gap-2"> <span>📚</span> <span class="font-medium">Workshop</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-5" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/workshop-content/getting-started/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🚀</span> <span>Getting Started</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-6"> <div class="flex items-center gap-2"> <span>📖</span> <span class="font-medium">Reference</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-6" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/samples/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📀</span> <span>Samples</span> </a><a href="/jamdojo/learn/reference/synths/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Synths</span> </a><a href="/jamdojo/learn/reference/effects/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Audio Effects</span> </a><a href="/jamdojo/learn/reference/notes/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Notes</span> </a><a href="/jamdojo/learn/reference/tonal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Tonal Functions</span> </a><a href="/jamdojo/learn/reference/mini-notation/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">✏️</span> <span>Mini-Notation</span> </a><a href="/jamdojo/learn/reference/signals/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📈</span> <span>Signals</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-7"> <div class="flex items-center gap-2"> <span>⚡</span> <span class="font-medium">Pattern Functions</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-7" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/factories/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏭</span> <span>Creating Patterns</span> </a><a href="/jamdojo/learn/workshop-content/time-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⏱️</span> <span>Time Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/random-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎲</span> <span>Random Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/conditional-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">❓</span> <span>Conditional Modifiers</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-8"> <div class="flex items-center gap-2"> <span>🚀</span> <span class="font-medium">Advanced</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-8" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/advanced/visual-feedback/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Visual Feedback</span> </a><a href="/jamdojo/learn/advanced/hydra/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🌊</span> <span>Hydra Visuals</span> </a><a href="/jamdojo/learn/advanced/input-output/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔌</span> <span>MIDI &amp; OSC</span> </a><a href="/jamdojo/learn/advanced/csound/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Csound</span> </a><a href="/jamdojo/learn/advanced/pwa/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📱</span> <span>PWA</span> </a> </div> </div> <div class="mt-auto pt-4 border-t border-gray-800 text-xs text-gray-500 space-y-1"> <a href="https://github.com/kimjune01/jamdojo" target="_blank" rel="noopener" class="block hover:text-cyan-400">JamDojo Source</a> <a href="https://github.com/tidalcycles/strudel" target="_blank" rel="noopener" class="block hover:text-cyan-400">Strudel (AGPL-3.0)</a> </div> </nav> <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.activity-accordion-header');
+    accordionHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.activity-accordion-icon');
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          content.style.display = 'none';
+          header.setAttribute('aria-expanded', 'false');
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.display = 'block';
+          header.setAttribute('aria-expanded', 'true');
+          icon.style.transform = 'rotate(90deg)';
+        }
+      });
+    });
+  });
+</script> </aside> <!-- Mobile header --> <div class="md:hidden fixed top-0 left-0 right-0 bg-gray-900 border-b border-gray-800 p-3 z-50"> <div class="flex items-center justify-between"> <a href="/jamdojo/" class="text-gray-400 hover:text-white">← JamDojo</a> <span class="font-bold">Classical Music</span> </div> </div> <!-- Main content --> <main class="flex-1 md:ml-56 p-6 pt-16 md:pt-6"> <div class="max-w-4xl mx-auto"> <h1 class="text-3xl font-bold mb-6">Classical Music</h1> <div class="prose dark:prose-invert max-w-full"> <p>Classical music is built on a foundation of <strong>development through layering</strong>—taking simple musical ideas and transforming them through canon, variation, and fugue. This guide teaches you how to use Strudel’s layering capabilities to explore the compositional techniques that shaped centuries of Western music.</p>
+<p>While Strudel doesn’t have orchestral samples, we can use synthesizers creatively to demonstrate classical compositional techniques. The focus here is on <em>how</em> classical composers developed musical ideas through layering, not on authentic period sound.</p>
+<hr/>
+<h2 id="part-1-creating-a-strong-theme">Part 1: Creating a Strong Theme<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-1-creating-a-strong-theme"><span class="icon icon-link"></span></a></h2>
+<p>Classical composition starts with a theme—a simple, memorable musical idea that can be developed and transformed. Before we can explore canon, variation, or fugue, we need a good theme to work with.</p>
+<h3 id="what-makes-a-good-theme">What Makes a Good Theme?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#what-makes-a-good-theme"><span class="icon icon-link"></span></a></h3>
+<p>A good theme for classical development has these characteristics:</p>
+<p><strong>1. Memorable</strong> — You should be able to remember it after hearing it once</p>
+<p><strong>2. Simple</strong> — Usually 4-8 bars with a clear melodic contour</p>
+<p><strong>3. Distinctive rhythm</strong> — A rhythm pattern that stands out</p>
+<p><strong>4. Limited range</strong> — Fits within an octave</p>
+<p><strong>5. Developable</strong> — Works well when transposed, inverted, or varied</p>
+<p>Mozart’s themes were elegantly simple—a few notes that stick in your memory. Bach’s themes were efficient—every note contributing to both melody and harmony.</p>
+<p><strong>Here’s the famous theme from Pachelbel’s Canon in D:</strong></p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var a=(s,i,o)=>{let r=async()=>{await(await s())()},t=typeof i.value=="object"?i.value:void 0,c={rootMargin:t==null?void 0:t.rootMargin},n=new IntersectionObserver(e=>{for(let l of e)if(l.isIntersecting){n.disconnect(),r();break}},c);for(let e of o.children)n.observe(e)};(self.Astro||(self.Astro={})).visible=a;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="fYmGE" prefix="r0" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This theme from Pachelbel’s Canon (c. 1680) is one of the most recognizable melodies in classical music. It’s elegant, memorable, and perfect for demonstrating classical development techniques.</p>
+<blockquote>
+<p><strong>Note:</strong> The <code>note()</code> function wraps plain note names (like <code>&quot;fs4&quot;</code>) into labeled note parameters that Strudel can interpret. Without <code>.note()</code>, Strudel wouldn’t know these are pitches. You can also chain it: <code>&quot;fs4 e4&quot;.note()</code> is equivalent to <code>note(&quot;fs4 e4&quot;)</code>.</p>
+</blockquote>
+<hr/>
+<h3 id="testing-your-theme">Testing Your Theme<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#testing-your-theme"><span class="icon icon-link"></span></a></h3>
+<p>A good theme should work in different contexts. Let’s test this theme:</p>
+<p><strong>Does it loop well?</strong></p>
+<astro-island uid="fYmGE" prefix="r1" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Yes—the theme ends on C# which leads beautifully back to the F#, allowing seamless looping.</p>
+<p><strong>Does it transpose well?</strong></p>
+<astro-island uid="1wVx8f" prefix="r2" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).transpose(\&quot;&lt;0 5 7 0&gt;\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).transpose(&quot;&lt;0 5 7 0&gt;&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>It works in different keys! This means we can use it for modulation and sequences later.</p>
+<p><strong>Can it be inverted (flipped)?</strong></p>
+<astro-island uid="2iTia" prefix="r3" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 g4 a4 b4 cs5 d5 cs5 b4\&quot;).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 g4 a4 b4 cs5 d5 cs5 b4&quot;).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The original descends then ascends. The inversion mirrors these intervals upward. Both work harmonically—this theme is highly developable!</p>
+<hr/>
+<h3 id="adding-harmonic-support">Adding Harmonic Support<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#adding-harmonic-support"><span class="icon icon-link"></span></a></h3>
+<p>Classical music combines melody with harmony. Let’s add the famous Pachelbel chord progression underneath using <code>chord().voicing()</code>:</p>
+<p><strong>Theme with the iconic Pachelbel progression:</strong></p>
+<astro-island uid="2vEJpp" prefix="r4" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The chord progression (D → A → Bm → F#m → G → D → G → A) is one of the most famous in music history, providing rich harmonic movement.</p>
+<p><strong>Adding a bass line:</strong></p>
+<astro-island uid="ZqcsrS" prefix="r5" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).rootNotes(2).note().s(&#39;sawtooth&#39;).lpf(600).gain(0.7)  // .note() wraps plain root note values\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).rootNotes(2).note().s(&#x27;sawtooth&#x27;).lpf(600).gain(0.7)  // .note() wraps plain root note values
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Now we have the complete Pachelbel Canon texture: the famous melody, legendary chord progression, and walking bass line. This is our foundation—let’s develop it!</p>
+<hr/>
+<h3 id="bachs-prelude-in-c-major-simple-pattern-endless-elaboration">Bach’s Prelude in C Major: Simple Pattern, Endless Elaboration<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#bachs-prelude-in-c-major-simple-pattern-endless-elaboration"><span class="icon icon-link"></span></a></h3>
+<p>Another masterpiece of classical development is Bach’s Prelude in C Major (from Well-Tempered Clavier Book I, 1722). Unlike Pachelbel’s melodic theme, Bach uses a single <strong>arpeggiated pattern</strong> repeated throughout the piece—it’s the harmony underneath that creates the development.</p>
+<p><strong>The basic pattern:</strong></p>
+<astro-island uid="ZSde1n" prefix="r6" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 c4 e4 g3 c4 e4\&quot;).s(&#39;piano&#39;).cpm(40)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 c4 e4 g3 c4 e4&quot;).s(&#x27;piano&#x27;).cpm(40)</pre><!--astro:end--></astro-island>
+<p>This is the famous opening: an ascending arpeggio of a C major chord. Eight notes per bar, continuously flowing. That’s the entire “theme”—but listen to how it transforms when we change the underlying harmony:</p>
+<p><strong>Pattern with changing harmonies:</strong></p>
+<astro-island uid="kfFBJ" prefix="r7" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// The constant arpeggiated pattern\nnote(\&quot;c3 e3 g3 c4 e4 g3 c4 e4\&quot;).s(&#39;piano&#39;),\n// Changing bass notes creating harmonic movement\nnote(\&quot;&lt;c2 d2 g2 c2&gt;\&quot;).s(&#39;sawtooth&#39;).lpf(400).sustain(2).gain(0.7)\n).cpm(40)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// The constant arpeggiated pattern
+note(&quot;c3 e3 g3 c4 e4 g3 c4 e4&quot;).s(&#x27;piano&#x27;),
+// Changing bass notes creating harmonic movement
+note(&quot;&lt;c2 d2 g2 c2&gt;&quot;).s(&#x27;sawtooth&#x27;).lpf(400).sustain(2).gain(0.7)
+).cpm(40)</pre><!--astro:end--></astro-island>
+<p>The pattern stays the same, but the bass note changes: C → D → G → C. This creates harmonic progression while maintaining the rhythmic continuity.</p>
+<p><strong>Full elaboration with chord progression:</strong></p>
+<astro-island uid="prWjk" prefix="r8" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Arpeggiated pattern adapting to each chord\nchord(\&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;\&quot;).mode(0).arp(\&quot;0 2 4 0 2 4 0 2\&quot;).s(&#39;piano&#39;).octave(3),\n// Bass line\nchord(\&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;\&quot;).rootNotes(2).note().s(&#39;sawtooth&#39;).lpf(400).sustain(2).gain(0.7)\n).cpm(40)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Arpeggiated pattern adapting to each chord
+chord(&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;&quot;).mode(0).arp(&quot;0 2 4 0 2 4 0 2&quot;).s(&#x27;piano&#x27;).octave(3),
+// Bass line
+chord(&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;&quot;).rootNotes(2).note().s(&#x27;sawtooth&#x27;).lpf(400).sustain(2).gain(0.7)
+).cpm(40)</pre><!--astro:end--></astro-island>
+<p>Now the arpeggiated pattern follows the chord changes (C → Dm7 → G7 → C → Am → Dm → G7 → C), creating Bach’s characteristic flowing texture. The pattern never stops, but the harmony constantly evolves.</p>
+<p><strong>Adding rhythmic variation:</strong></p>
+<astro-island uid="1BYKoP" prefix="r9" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Varied rhythm: some notes held longer\nchord(\&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;\&quot;).mode(0).arp(\&quot;0 2 4@2 0 2 4 0@2 2\&quot;).s(&#39;piano&#39;).octave(3).decay(0.3),\nchord(\&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;\&quot;).rootNotes(2).note().s(&#39;sawtooth&#39;).lpf(400).sustain(2).gain(0.7)\n).cpm(40)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Varied rhythm: some notes held longer
+chord(&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;&quot;).mode(0).arp(&quot;0 2 4@2 0 2 4 0@2 2&quot;).s(&#x27;piano&#x27;).octave(3).decay(0.3),
+chord(&quot;&lt;C Dm7 G7 C Am Dm G7 C&gt;&quot;).rootNotes(2).note().s(&#x27;sawtooth&#x27;).lpf(400).sustain(2).gain(0.7)
+).cpm(40)</pre><!--astro:end--></astro-island>
+<p>Using <code>@2</code> makes certain notes last twice as long, creating rhythmic interest within the constant flow.</p>
+<p><strong>Bach’s approach:</strong> Take one simple pattern (ascending arpeggio) and elaborate it through <strong>harmonic progression</strong> rather than melodic variation. The pattern remains constant—the development happens underneath. This technique influenced centuries of keyboard music, from Chopin’s études to modern minimalism.</p>
+<p><strong>Try it:</strong> Modify the theme by changing the notes. Keep it simple and within an octave. Test if your theme loops well and transposes well before moving on.</p>
+<hr/>
+<h2 id="part-2-immediate-development--variation-techniques">Part 2: Immediate Development — Variation Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-2-immediate-development--variation-techniques"><span class="icon icon-link"></span></a></h2>
+<p>Theme and variation is one of the most fundamental classical techniques. You take one theme and transform it in multiple ways while preserving its identity. This section explores the different types of variations you can create.</p>
+<h3 id="what-is-theme--variation">What is Theme &amp; Variation?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#what-is-theme--variation"><span class="icon icon-link"></span></a></h3>
+<p>Theme and variation form means presenting a theme, then creating a series of variations that transform it. You can vary:</p>
+<ul>
+<li><strong>Rhythm</strong> — Faster, slower, dotted, syncopated</li>
+<li><strong>Melody</strong> — Ornamentation, octave changes, arpeggiation</li>
+<li><strong>Harmony</strong> — Major to minor, reharmonization, chromatic chords</li>
+<li><strong>Texture</strong> — Solo, chordal, contrapuntal</li>
+</ul>
+<p>Mozart’s variations on “Ah! vous dirai-je, Maman” (Twinkle Twinkle) explore these exact transformations. Beethoven’s Diabelli Variations take a simple waltz theme through 33 transformations, from simple to wildly complex.</p>
+<p><strong>Our theme (for reference):</strong></p>
+<script>(()=>{var l=(n,t)=>{let i=async()=>{await(await n())()},e=typeof t.value=="object"?t.value:void 0,s={timeout:e==null?void 0:e.timeout};"requestIdleCallback"in window?window.requestIdleCallback(i,s):setTimeout(i,s.timeout||200)};(self.Astro||(self.Astro={})).idle=l;window.dispatchEvent(new Event("astro:idle"));})();</script><astro-island uid="2vEJpp" prefix="r10" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Now let’s vary it!</p>
+<hr/>
+<h3 id="rhythmic-variations">Rhythmic Variations<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#rhythmic-variations"><span class="icon icon-link"></span></a></h3>
+<p>Rhythmic variation changes the timing without changing the notes.</p>
+<p><strong>Variation 1: Augmentation (slower)</strong></p>
+<p>Playing the theme at half speed using <code>.slow(2)</code>:</p>
+<astro-island uid="18pMxR" prefix="r11" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).slow(2).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).slow(2).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).slow(2).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).slow(2).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The theme feels more majestic and spacious.</p>
+<p><strong>Variation 2: Diminution (faster)</strong></p>
+<p>Playing the theme at double speed using <code>.fast(2)</code>:</p>
+<astro-island uid="Z84Xw7" prefix="r12" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).fast(2).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).fast(2).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Now it feels more energetic and playful.</p>
+<p><strong>Variation 3: Dotted Rhythms</strong></p>
+<p>Using <code>.struct()</code> to create long-short patterns:</p>
+<astro-island uid="Z1pAHvH" prefix="r13" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;&lt;c4 d4 e4 f4 e4 d4 c4 ~&gt;\&quot;).struct(\&quot;x@3 x\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;&lt;c4 d4 e4 f4 e4 d4 c4 ~&gt;&quot;).struct(&quot;x@3 x&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The <code>@3</code> makes each note last 3 beats followed by one quick beat—creating a Baroque-style dotted rhythm. Baroque composers loved this rhythm (think of the French Overture style).</p>
+<p><strong>Variation 4: Syncopation</strong></p>
+<p>Shifting the theme to off-beats:</p>
+<astro-island uid="Z1DXF8S" prefix="r14" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.125).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.125).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Using <code>.late(0.125)</code> shifts the melody slightly, creating rhythmic tension.</p>
+<p><strong>Variation 5: Triplets</strong></p>
+<p>Creating triplet groups within the beats:</p>
+<astro-island uid="36QfA" prefix="r15" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 [e4 d4 cs4] b3 [a3 b3 cs4]\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 [e4 d4 cs4] b3 [a3 b3 cs4]&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The brackets <code>[e4 d4 cs4]</code> create triplet groups—three notes in the space of one beat. Triplets add a flowing, lilting quality. Classical composers preferred even subdivision, while Romantic composers loved triplet figures.</p>
+<hr/>
+<h3 id="melodic-variations">Melodic Variations<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#melodic-variations"><span class="icon icon-link"></span></a></h3>
+<p>Melodic variation transforms the notes while keeping the harmonic structure.</p>
+<p><strong>Variation 6: Ornamentation</strong></p>
+<p>Adding neighboring tones and grace notes:</p>
+<astro-island uid="1tU3lo" prefix="r16" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 [g4 fs4 g4] e4 [fs4 e4 fs4] d4 cs4 d4\&quot;).s(&#39;piano&#39;).decay(0.2),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 [g4 fs4 g4] e4 [fs4 e4 fs4] d4 cs4 d4&quot;).s(&#x27;piano&#x27;).decay(0.2),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The brackets <code>[g4 fs4 g4]</code> create quick ornamental figures around the main notes—similar to trills and turns in classical music.</p>
+<p><strong>Variation 7: Octave Displacement</strong></p>
+<p>Moving notes up or down by octaves:</p>
+<astro-island uid="BhYwc" prefix="r17" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs5 e4 d5 cs4 b3 a5 fs4 e4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs5 e4 d5 cs4 b3 a5 fs4 e4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The melody jumps between octaves, creating a more dramatic contour.</p>
+<p><strong>Variation 8: Arpeggiation</strong></p>
+<p>Breaking the melody into arpeggiated patterns using chords:</p>
+<astro-island uid="Z2iCHff" prefix="r18" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nchord(\&quot;&lt;D Em F#m G F#m Em D&gt;\&quot;).voicing().arp(\&quot;0 1 2 1\&quot;).s(&#39;piano&#39;).octave(4),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+chord(&quot;&lt;D Em F#m G F#m Em D&gt;&quot;).voicing().arp(&quot;0 1 2 1&quot;).s(&#x27;piano&#x27;).octave(4),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Instead of single notes, we’re now arpeggiating chords built on the theme notes.</p>
+<p><strong>Variation 9: Sequence</strong></p>
+<p>Repeating a melodic fragment at different pitch levels within the key:</p>
+<astro-island uid="Z1iFMHx" prefix="r19" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ncat(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;g4 fs4 e4 d4 cs4 b3 cs4 d4\&quot;).s(&#39;piano&#39;)\n),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+cat(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;g4 fs4 e4 d4 cs4 b3 cs4 d4&quot;).s(&#x27;piano&#x27;)
+),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The Pachelbel melody repeats one step higher (D→E). Baroque composers, especially Vivaldi, used sequences extensively in concertos.</p>
+<p><strong>Variation 10: Inversion</strong></p>
+<p>Flipping the melodic intervals (up becomes down):</p>
+<astro-island uid="ZgMXT4" prefix="r20" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;a3 b3 d4 e4 fs4 g4 fs4 e4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;a3 b3 d4 e4 fs4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Where the Pachelbel melody descends, the inversion ascends—a mirror image within the D major scale.</p>
+<hr/>
+<h3 id="harmonic-variations">Harmonic Variations<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#harmonic-variations"><span class="icon icon-link"></span></a></h3>
+<p>Harmonic variation changes the chords while keeping the melody mostly intact.</p>
+<p><strong>Variation 11: Major to Minor</strong></p>
+<p>Changing the mode from major to minor:</p>
+<astro-island uid="2x0zmu" prefix="r21" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 a3\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;Bm F#m A Bm&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 a3&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;Bm F#m A Bm&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>In D minor, we modify the theme to fit the new mode. The theme takes on a darker, more melancholic character.</p>
+<p><strong>Variation 12: Reharmonization</strong></p>
+<p>Using different chords under the same melody:</p>
+<astro-island uid="ATfAe" prefix="r22" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D Bm Em A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D Bm Em A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Instead of the original Pachelbel progression, we use D → Bm → Em → A. The melody is the same, but the harmonic color is different.</p>
+<p><strong>Variation 13: Chromatic Harmony</strong></p>
+<p>Adding chromatic (outside-the-key) chords:</p>
+<astro-island uid="nAwxQ" prefix="r23" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D F#7 Bm E7 A7 D&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D F#7 Bm E7 A7 D&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The F#7, E7, and A7 are chromatic chords (secondary dominants) that add harmonic color. Romantic composers explored chromatic harmony extensively.</p>
+<p><strong>Variation 14: Pedal Point</strong></p>
+<p>Sustaining the bass note while harmony changes above:</p>
+<astro-island uid="1C7Q24" prefix="r24" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6),\nnote(\&quot;d2\&quot;).s(&#39;sawtooth&#39;).lpf(400).sustain(2)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6),
+note(&quot;d2&quot;).s(&#x27;sawtooth&#x27;).lpf(400).sustain(2)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The low D sustains throughout while chords change above—creating harmonic tension and release, especially when non-tonic chords sound over the tonic pedal.</p>
+<hr/>
+<h3 id="textural-variations">Textural Variations<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#textural-variations"><span class="icon icon-link"></span></a></h3>
+<p>Textural variation changes how many voices are sounding and how they relate.</p>
+<p><strong>Variation 15: Solo Melody</strong></p>
+<p>Just the melody, no accompaniment:</p>
+<astro-island uid="fYmGE" prefix="r25" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Sparse and intimate—letting the melody speak for itself.</p>
+<p><strong>Variation 16: Chordal/Homophonic</strong></p>
+<p>The theme as block chords:</p>
+<astro-island uid="Z6TBlN" prefix="r26" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;chord(\&quot;&lt;D Em F#m G F#m Em D&gt;\&quot;).voicing().struct(\&quot;x\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>chord(&quot;&lt;D Em F#m G F#m Em D&gt;&quot;).voicing().struct(&quot;x&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>All notes sound together in harmony—typical of Classical period homophonic texture.</p>
+<p><strong>Variation 17: Contrapuntal Preview</strong></p>
+<p>Adding an independent counter-melody:</p>
+<astro-island uid="Z1ovi08" prefix="r27" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;d3 a3 g3 fs3 d3 a3 fs3 e3\&quot;).s(&#39;piano&#39;).gain(0.7),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.5)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;d3 a3 g3 fs3 d3 a3 fs3 e3&quot;).s(&#x27;piano&#x27;).gain(0.7),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.5)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The second voice moves independently while harmonizing with the first—a preview of counterpoint. Baroque composers favored this contrapuntal texture.</p>
+<hr/>
+<h3 id="complete-variation-set">Complete Variation Set<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#complete-variation-set"><span class="icon icon-link"></span></a></h3>
+<p>Let’s put together a complete variation set with contrasting variations:</p>
+<p><strong>Theme + 5 Variations:</strong></p>
+<astro-island uid="1571gU" prefix="r28" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Theme (bars 1-2)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Variation 1: Fast (bars 3-4)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).fast(2).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Variation 2: Minor mode (bars 5-6)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 a3\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;Bm F#m A Bm Bm F#m A Bm&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Variation 3: Arpeggiated (bars 7-8)\nstack(\n  chord(\&quot;&lt;D Em F#m G F#m Em D D&gt;\&quot;).voicing().arp(\&quot;0 1 2 1\&quot;).s(&#39;piano&#39;).octave(4),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Variation 4: Contrapuntal (bars 9-10)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d3 a3 g3 fs3 d3 a3 fs3 e3\&quot;).s(&#39;piano&#39;).gain(0.7),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.5)\n).fast(8),\n// Variation 5: Return to simple (bars 11-12)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8)\n).slow(8).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Theme (bars 1-2)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Variation 1: Fast (bars 3-4)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).fast(2).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Variation 2: Minor mode (bars 5-6)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 a3&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;Bm F#m A Bm Bm F#m A Bm&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Variation 3: Arpeggiated (bars 7-8)
+stack(
+  chord(&quot;&lt;D Em F#m G F#m Em D D&gt;&quot;).voicing().arp(&quot;0 1 2 1&quot;).s(&#x27;piano&#x27;).octave(4),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Variation 4: Contrapuntal (bars 9-10)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d3 a3 g3 fs3 d3 a3 fs3 e3&quot;).s(&#x27;piano&#x27;).gain(0.7),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.5)
+).fast(8),
+// Variation 5: Return to simple (bars 11-12)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8)
+).slow(8).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This creates a dramatic arc: <strong>simple → energetic → dark → elaborate → contrapuntal → simple</strong>. This is how Bach, Mozart, and Brahms structured variation sets—building complexity then returning to clarity.</p>
+<p><strong>Try it:</strong> Create your own variation. Take the theme and change just one aspect (rhythm, harmony, or texture). What transformation creates the most interesting contrast?</p>
+<hr/>
+<h2 id="part-3-canonic-imitation--voices-in-conversation">Part 3: Canonic Imitation — Voices in Conversation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-3-canonic-imitation--voices-in-conversation"><span class="icon icon-link"></span></a></h2>
+<p>Canon is the art of one melody imitating itself at a time delay. Unlike variation (where the theme changes), in canon the theme stays the same but enters at different times and pitches. This creates independent voices that are unified by the same musical material.</p>
+<h3 id="what-is-canon">What is Canon?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#what-is-canon"><span class="icon icon-link"></span></a></h3>
+<p>A canon is a compositional technique where one voice imitates another voice at a fixed time interval. The most famous example is “Row, Row, Row Your Boat”—everyone sings the same melody, but starting at different times.</p>
+<p>Pachelbel’s Canon in D (1680) uses three violins following a ground bass at 2-bar intervals—each violin plays the same melody, just delayed. We can recreate this structure in Strudel using <code>stack()</code> and <code>.late()</code>.</p>
+<p><strong>Simple 2-voice canon at the unison:</strong></p>
+<astro-island uid="Z12Xl9x" prefix="r29" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.5).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.5).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 2 enters halfway through the cycle (<code>.late(0.5)</code>), creating a canonic texture. Both voices play the same melody at the same pitch, but offset in time.</p>
+<hr/>
+<h3 id="canon-techniques">Canon Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#canon-techniques"><span class="icon icon-link"></span></a></h3>
+<p>Let’s explore different types of canons, from simple two-voice to complex multi-voice structures.</p>
+<p><strong>Canon at Different Intervals</strong></p>
+<p>Canon at the octave—second voice transposed up:</p>
+<astro-island uid="Z1fTvcN" prefix="r30" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).transpose(12).late(0.5).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).transpose(12).late(0.5).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Canon at the fifth—more harmonic interest:</p>
+<astro-island uid="ZY60eV" prefix="r31" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).transpose(7).late(0.5).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).transpose(7).late(0.5).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>Tempo Canon (Mensuration Canon)</strong></p>
+<p>Voices at different speeds:</p>
+<astro-island uid="2wmlMq" prefix="r32" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).slow(2).transpose(12).s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).slow(2).transpose(12).s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 2 plays at half speed, creating a slower moving counterpoint. Bach explored this in his Musical Offering canons.</p>
+<p><strong>Retrograde Canon (Crab Canon)</strong></p>
+<p>One voice plays forward, the other backward:</p>
+<astro-island uid="CqK0v" prefix="r33" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4 g3\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4 g3\&quot;).rev().transpose(12).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4 g3&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4 g3&quot;).rev().transpose(12).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>Three-Voice Canon</strong></p>
+<astro-island uid="Z1oD9pJ" prefix="r34" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.333).transpose(12).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.666).transpose(-12).s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.333).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.666).transpose(-12).s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Three voices enter at evenly spaced intervals (0, 1/3, 2/3 of a cycle). Voice 2 is an octave higher, Voice 3 is an octave lower—creating clear register separation.</p>
+<p><strong>Four-Voice Canon (SATB texture)</strong></p>
+<astro-island uid="ZqLj4V" prefix="r35" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;).gain(0.8),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.25).transpose(7).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.5).transpose(-5).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.75).transpose(-12).s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;).gain(0.8),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.25).transpose(7).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.5).transpose(-5).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.75).transpose(-12).s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Four voices entering at quarter-cycle intervals create a full harmonic texture similar to SATB (Soprano, Alto, Tenor, Bass) choral writing.</p>
+<p><strong>Infinite Canon (Round)</strong></p>
+<p>A round is a canon where the melody loops seamlessly with itself:</p>
+<astro-island uid="WS5jr" prefix="r36" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;d4 fs4 a4 d5 a4 fs4 d4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;d4 fs4 a4 d5 a4 fs4 d4\&quot;).late(0.5).transpose(12).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;d4 fs4 a4 d5 a4 fs4 d4&quot;).s(&#x27;piano&#x27;),
+note(&quot;d4 fs4 a4 d5 a4 fs4 d4&quot;).late(0.5).transpose(12).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The melody ends on D and begins on D, allowing seamless looping. “Frère Jacques” uses this structure.</p>
+<p><strong>Stretto (Tight Overlapping)</strong></p>
+<p>Voices entering very close together create intensity:</p>
+<astro-island uid="237IgJ" prefix="r37" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.125).transpose(12).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.25).transpose(7).s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.125).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.25).transpose(7).s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voices enter every 1/8 of a cycle—very tight! Bach used stretto at the climax of fugues to create maximum density.</p>
+<hr/>
+<h3 id="complete-canon-example">Complete Canon Example<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#complete-canon-example"><span class="icon icon-link"></span></a></h3>
+<p>Let’s create the complete Pachelbel Canon in D with building melodic variations:</p>
+<astro-island uid="Z2vO3O2" prefix="r38" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Pachelbel - Canon in D\nsetcps(10/60/2)\n\n// The famous ground bass (repeats throughout)\nlet bass = note(\&quot;d2 a2 b2 fs2 g2 d2 g2 a2\&quot;)\n.s(\&quot;sawtooth\&quot;).lpf(400).gain(0.7)\n\nlet progression = \&quot;[D A Bm F#m G D G A]\&quot;\n\n// Chord progression: I - V - vi - iii - IV - I - IV - V\nlet chords = chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;)\n.voicing().s(\&quot;piano\&quot;).gain(0.5)\n\n// Melody variations using arp patterns\nlet melody0 = chord(progression).voicing().arp(\&quot;[2]*8\&quot;).add(note(12)).s(\&quot;piano\&quot;)\nlet melody1 = chord(progression).voicing().arp(\&quot;[4 3]*8\&quot;).add(note(12)).s(\&quot;piano\&quot;)\nlet melody2 = chord(progression).voicing().arp(\&quot;[4 3 2 1]*8\&quot;).add(note(12)).s(\&quot;piano\&quot;)\nlet melody3 = chord(progression).voicing().arp(\&quot;[0 1 2 3 4 3 2 1]*8\&quot;).add(note(12)).s(\&quot;piano\&quot;)\n\n// Full arrangement - layers build over time\nstack(\nbass,\nchords,\ncat(\n  melody0,\n  melody1,\n  melody2,\n  melody3,\n  melody3\n)\n).room(0.3)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Pachelbel - Canon in D
+setcps(10/60/2)
+
+// The famous ground bass (repeats throughout)
+let bass = note(&quot;d2 a2 b2 fs2 g2 d2 g2 a2&quot;)
+.s(&quot;sawtooth&quot;).lpf(400).gain(0.7)
+
+let progression = &quot;[D A Bm F#m G D G A]&quot;
+
+// Chord progression: I - V - vi - iii - IV - I - IV - V
+let chords = chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;)
+.voicing().s(&quot;piano&quot;).gain(0.5)
+
+// Melody variations using arp patterns
+let melody0 = chord(progression).voicing().arp(&quot;[2]*8&quot;).add(note(12)).s(&quot;piano&quot;)
+let melody1 = chord(progression).voicing().arp(&quot;[4 3]*8&quot;).add(note(12)).s(&quot;piano&quot;)
+let melody2 = chord(progression).voicing().arp(&quot;[4 3 2 1]*8&quot;).add(note(12)).s(&quot;piano&quot;)
+let melody3 = chord(progression).voicing().arp(&quot;[0 1 2 3 4 3 2 1]*8&quot;).add(note(12)).s(&quot;piano&quot;)
+
+// Full arrangement - layers build over time
+stack(
+bass,
+chords,
+cat(
+  melody0,
+  melody1,
+  melody2,
+  melody3,
+  melody3
+)
+).room(0.3)</pre><!--astro:end--></astro-island>
+<p>This combines:</p>
+<ul>
+<li><strong>Ground bass</strong> — The repeating <code>D A B F# G D G A</code> bass line</li>
+<li><strong>Chord progression</strong> — The famous I-V-vi-iii-IV-I-IV-V progression</li>
+<li><strong>Building variations</strong> — Each melody variation adds more notes per chord using <code>.arp()</code> patterns</li>
+<li><strong>Idiomatic Strudel</strong> — Uses <code>chord().voicing().arp()</code> to derive melodies from harmony</li>
+</ul>
+<p>Baroque masters like Bach used canon extensively in complex polyphonic works. Classical composers used it more sparingly as a special effect. The technique never went out of style—it’s a fundamental tool of musical development.</p>
+<p><strong>Try it:</strong> Create a canon with your own melody. Start with 2 voices, then try adding a third. Experiment with different <code>.late()</code> values to find what sounds best.</p>
+<hr/>
+<h2 id="part-4-harmonic-development--reharmonization--modulation">Part 4: Harmonic Development — Reharmonization &amp; Modulation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-4-harmonic-development--reharmonization--modulation"><span class="icon icon-link"></span></a></h2>
+<p>One of the most powerful ways to develop a theme is to change its harmonic context. The same melody can evoke completely different feelings depending on the chords underneath. This section explores reharmonization, modulation, and sequences.</p>
+<h3 id="reharmonization">Reharmonization<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#reharmonization"><span class="icon icon-link"></span></a></h3>
+<p>Reharmonization means using different chords under the same melody.</p>
+<p><strong>Original harmonization (Pachelbel progression):</strong></p>
+<astro-island uid="2vEJpp" prefix="r39" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This uses Pachelbel’s famous progression: D (I) → A (V) → Bm (vi) → F#m (iii) → G (IV) → D (I) → G (IV) → A (V).</p>
+<p><strong>Reharmonization 1 (vi-ii-V-I):</strong></p>
+<astro-island uid="17T9o0" prefix="r40" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;Bm Em A D&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;Bm Em A D&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Same melody, but using Bm (vi) → Em (ii) → A (V) → D (I). This is a more “sophisticated” progression with smoother voice leading.</p>
+<p><strong>Reharmonization 2 (ii-V-I jazz style):</strong></p>
+<astro-island uid="Z2t781D" prefix="r41" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;Em7 A7 D^7&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;Em7 A7 D^7&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Using seventh chords (Em7 → A7 → D^7) adds harmonic color—influenced by jazz harmony.</p>
+<p><strong>Reharmonization 3 (Chromatic):</strong></p>
+<astro-island uid="nAwxQ" prefix="r42" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\nchord(\&quot;&lt;D F#7 Bm E7 A7 D&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D F#7 Bm E7 A7 D&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Adding chromatic chords (F#7, E7, A7) creates harmonic tension and color. Romantic composers explored this extensively—reharmonizing simple themes with rich, chromatic harmony.</p>
+<hr/>
+<h3 id="modulation">Modulation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#modulation"><span class="icon icon-link"></span></a></h3>
+<p>Modulation means changing keys. Classical music uses modulation to create long-term harmonic structure.</p>
+<p><strong>Modulation to the Dominant (D → A)</strong></p>
+<p>Moving from D major to A major (the dominant key):</p>
+<astro-island uid="ZELFfI" prefix="r43" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Theme in D major (bars 1-2)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Theme in A major (bars 3-4)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).transpose(7).s(&#39;piano&#39;),\n  chord(\&quot;&lt;A D E A A D E A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8)\n).slow(8).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Theme in D major (bars 1-2)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Theme in A major (bars 3-4)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).transpose(7).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;A D E A A D E A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8)
+).slow(8).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The theme transposes up 7 semitones (perfect fifth) to A major. Classical composers modulated to the dominant in sonata form expositions.</p>
+<p><strong>Modulation to the Relative Minor (D → Bm)</strong></p>
+<astro-island uid="Z1J8eIn" prefix="r44" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Theme in D major\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// Theme in B minor (relative minor)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 a3\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;Bm Em F#m Bm Bm Em F#m Bm&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8)\n).slow(8).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Theme in D major
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// Theme in B minor (relative minor)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 a3&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;Bm Em F#m Bm Bm Em F#m Bm&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8)
+).slow(8).cpm(30)</pre><!--astro:end--></astro-island>
+<p>B minor is the relative minor of D major (shares the same key signature). The theme takes on a darker character. Classical composers modulated to closely-related keys; Romantic composers explored distant keys.</p>
+<hr/>
+<h3 id="sequences">Sequences<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#sequences"><span class="icon icon-link"></span></a></h3>
+<p>A sequence is a musical pattern repeated at different pitch levels—a fundamental technique for development and modulation.</p>
+<p><strong>Ascending Sequence</strong></p>
+<p>Repeating a phrase, moving up by step:</p>
+<astro-island uid="OBL5h" prefix="r45" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ncat(\n  note(\&quot;d4 e4 fs4 g4\&quot;),\n  note(\&quot;e4 fs4 g4 a4\&quot;),\n  note(\&quot;fs4 g4 a4 b4\&quot;)\n).s(&#39;piano&#39;),\nchord(\&quot;&lt;D G Em A F#m Bm&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+cat(
+  note(&quot;d4 e4 fs4 g4&quot;),
+  note(&quot;e4 fs4 g4 a4&quot;),
+  note(&quot;fs4 g4 a4 b4&quot;)
+).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D G Em A F#m Bm&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The same melodic shape (ascending stepwise) repeats at D, E, and F#—climbing higher each time.</p>
+<p><strong>Descending Sequence</strong></p>
+<astro-island uid="Z1aTRjc" prefix="r46" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ncat(\n  note(\&quot;d5 cs5 b4 a4\&quot;),\n  note(\&quot;cs5 b4 a4 g4\&quot;),\n  note(\&quot;b4 a4 g4 fs4\&quot;)\n).s(&#39;piano&#39;),\nchord(\&quot;&lt;D G C F Bm Em&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+cat(
+  note(&quot;d5 cs5 b4 a4&quot;),
+  note(&quot;cs5 b4 a4 g4&quot;),
+  note(&quot;b4 a4 g4 fs4&quot;)
+).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D G C F Bm Em&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The pattern descends, creating a sense of falling or winding down.</p>
+<p><strong>Sequential Modulation</strong></p>
+<p>Using sequences to move to a new key:</p>
+<astro-island uid="1eBb7o" prefix="r47" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ncat(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;),\n  note(\&quot;g4 fs4 e4 d4 cs4 b3 cs4 d4\&quot;),\n  note(\&quot;a4 g4 fs4 e4 d4 cs4 d4 e4\&quot;)\n).s(&#39;piano&#39;),\nchord(\&quot;&lt;D G A D E A B E F# B C# F#&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+cat(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;),
+  note(&quot;g4 fs4 e4 d4 cs4 b3 cs4 d4&quot;),
+  note(&quot;a4 g4 fs4 e4 d4 cs4 d4 e4&quot;)
+).s(&#x27;piano&#x27;),
+chord(&quot;&lt;D G A D E A B E F# B C# F#&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The Pachelbel theme sequences up by step (D → E → F#), with harmony following the modulation. Vivaldi’s concertos use sequences extensively for harmonic drama. Bach’s fugue episodes often feature sequential development.</p>
+<p><strong>Try it:</strong> Take the theme and create your own sequence. Try moving up or down by different intervals (thirds, fourths, fifths) and see how it changes the effect.</p>
+<hr/>
+<h2 id="part-5-fugal-development--complex-imitation">Part 5: Fugal Development — Complex Imitation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-5-fugal-development--complex-imitation"><span class="icon icon-link"></span></a></h2>
+<p>A fugue is the pinnacle of imitative counterpoint—multiple independent voices entering with a subject (main theme), developing it through episodes, and building to a climactic conclusion. This section breaks down fugue structure and shows how to build one in Strudel.</p>
+<h3 id="what-is-fugue">What is Fugue?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#what-is-fugue"><span class="icon icon-link"></span></a></h3>
+<p>A fugue is a compositional form built on imitation. It has a clear structure:</p>
+<ol>
+<li><strong>Exposition</strong> — Voices enter one by one with the subject</li>
+<li><strong>Episodes</strong> — Developmental sections using subject fragments</li>
+<li><strong>Middle Entries</strong> — Subject returns in new keys</li>
+<li><strong>Stretto</strong> — Overlapping subject entries (climax)</li>
+<li><strong>Coda</strong> — Final resolution</li>
+</ol>
+<p>Bach’s Well-Tempered Clavier contains 48 fugues demonstrating every aspect of fugal technique. The Art of Fugue explores every possible transformation of a single subject—a masterclass in development.</p>
+<p><strong>Fugue vs Canon:</strong></p>
+<ul>
+<li>Canon: All voices play the complete melody</li>
+<li>Fugue: Voices enter with the subject, then move to free counterpoint</li>
+</ul>
+<p><strong>Simple 2-voice fugue exposition:</strong></p>
+<astro-island uid="ZJN88P" prefix="r48" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\n// Entry 1: Subject alone\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n// Entry 2: Subject + Answer overlapping\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+// Entry 1: Subject alone
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+// Entry 2: Subject + Answer overlapping
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 1 presents the subject in D major. Voice 2 enters with the “answer” (subject transposed to the dominant, A).</p>
+<hr/>
+<h3 id="the-subject">The Subject<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#the-subject"><span class="icon icon-link"></span></a></h3>
+<p>The subject is the main theme of a fugue. A good fugue subject has:</p>
+<p><strong>1. Distinctive rhythm</strong> — Easy to recognize when it returns
+<strong>2. Clear tonal center</strong> — Outlines the home key
+<strong>3. Moderate length</strong> — Usually 4-8 notes
+<strong>4. Developmental potential</strong> — Works well fragmented and sequenced</p>
+<p><strong>Example fugue subject in D major:</strong></p>
+<astro-island uid="ZMUYsH" prefix="r49" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This subject:</p>
+<ul>
+<li>Outlines a D major triad (D-F#-A)</li>
+<li>Has a clear rhythmic pattern inspired by Pachelbel</li>
+<li>Is 8 notes long (moderate)</li>
+<li>Can be easily fragmented (D-F#-E-G could be a motif)</li>
+</ul>
+<hr/>
+<h3 id="the-answer">The Answer<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#the-answer"><span class="icon icon-link"></span></a></h3>
+<p>The answer is the subject transposed to the dominant (usually a perfect fifth higher, or 7 semitones).</p>
+<p><strong>Real Answer</strong> — Exact transposition:</p>
+<astro-island uid="3hrDP" prefix="r50" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).transpose(7).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).transpose(7).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The answer is exactly 7 semitones higher (D → A). This is called a “real answer.”</p>
+<p><strong>Tonal Answer</strong> — Adjusted for tonal integrity:</p>
+<p>Sometimes a real answer doesn’t fit the key perfectly, so composers adjust it slightly (tonal answer). For simplicity, we’ll use real answers in our examples.</p>
+<p><strong>Two-Voice Exposition:</strong></p>
+<astro-island uid="1iWaQK" prefix="r51" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\n// Voice 1: Subject alone\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n// Voice 2: Subject + Answer together\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).transpose(7).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+// Voice 1: Subject alone
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+// Voice 2: Subject + Answer together
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).transpose(7).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This is a complete 2-voice fugue exposition: subject in D major, then answer in A major.</p>
+<hr/>
+<h3 id="counter-subject">Counter-Subject<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#counter-subject"><span class="icon icon-link"></span></a></h3>
+<p>The counter-subject is a melody that plays against the subject/answer. It must:</p>
+<p><strong>1. Harmonize with the subject</strong>
+<strong>2. Have contrasting rhythm</strong> (if subject is fast, counter-subject is slow)
+<strong>3. Work in multiple voices</strong> (it will recur throughout)</p>
+<p><strong>Adding a counter-subject:</strong></p>
+<astro-island uid="kMmR4" prefix="r52" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Voice 1: Subject, then counter-subject\ncat(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;),\n  note(\&quot;d3 d3 e3 e3 fs3 fs3 g3 g3\&quot;)\n),\n// Voice 2: Rest, then answer\ncat(\n  note(\&quot;~ ~ ~ ~ ~ ~ ~ ~\&quot;),\n  note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;)\n)\n).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Voice 1: Subject, then counter-subject
+cat(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;),
+  note(&quot;d3 d3 e3 e3 fs3 fs3 g3 g3&quot;)
+),
+// Voice 2: Rest, then answer
+cat(
+  note(&quot;~ ~ ~ ~ ~ ~ ~ ~&quot;),
+  note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;)
+)
+).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 1 plays the subject, then the counter-subject. Voice 2 rests, then plays the answer while Voice 1 plays the counter-subject underneath.</p>
+<p><strong>Three-voice fugue exposition with counter-subject:</strong></p>
+<astro-island uid="ZCjd7i" prefix="r53" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Voice 1: Subject → counter-subject → free counterpoint\ncat(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;),\n  note(\&quot;d3 d3 e3 e3 fs3 fs3 g3 g3\&quot;),\n  note(\&quot;fs3 g3 a3 b3 a3 g3 fs3 e3\&quot;)\n),\n// Voice 2: Rest → answer → counter-subject\ncat(\n  note(\&quot;~ ~ ~ ~ ~ ~ ~ ~\&quot;),\n  note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;),\n  note(\&quot;a2 a2 b2 b2 cs3 cs3 d3 d3\&quot;)\n),\n// Voice 3: Rest → rest → subject\ncat(\n  note(\&quot;~ ~ ~ ~ ~ ~ ~ ~\&quot;),\n  note(\&quot;~ ~ ~ ~ ~ ~ ~ ~\&quot;),\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;)\n)\n).s(&#39;piano&#39;).gain(0.7).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Voice 1: Subject → counter-subject → free counterpoint
+cat(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;),
+  note(&quot;d3 d3 e3 e3 fs3 fs3 g3 g3&quot;),
+  note(&quot;fs3 g3 a3 b3 a3 g3 fs3 e3&quot;)
+),
+// Voice 2: Rest → answer → counter-subject
+cat(
+  note(&quot;~ ~ ~ ~ ~ ~ ~ ~&quot;),
+  note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;),
+  note(&quot;a2 a2 b2 b2 cs3 cs3 d3 d3&quot;)
+),
+// Voice 3: Rest → rest → subject
+cat(
+  note(&quot;~ ~ ~ ~ ~ ~ ~ ~&quot;),
+  note(&quot;~ ~ ~ ~ ~ ~ ~ ~&quot;),
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;)
+)
+).s(&#x27;piano&#x27;).gain(0.7).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This is a complete 3-voice exposition: Subject → Answer → Subject, with counter-subjects interwoven.</p>
+<hr/>
+<h3 id="episodes">Episodes<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#episodes"><span class="icon icon-link"></span></a></h3>
+<p>Episodes are developmental sections between subject entries. They use fragments of the subject in sequences, inversions, or free development.</p>
+<p><strong>Episode using subject fragmentation:</strong></p>
+<astro-island uid="Z6rOoK" prefix="r54" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\n// Fragment 1: D-F#-E-G\nstack(\n  note(\&quot;d4 fs4 e4 g4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;~ ~ d3 fs3\&quot;).s(&#39;piano&#39;).gain(0.7)\n),\n// Fragment 2: E-G-F#-A\nstack(\n  note(\&quot;e4 g4 fs4 a4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;e3 g3 ~ ~\&quot;).s(&#39;piano&#39;).gain(0.7)\n),\n// Fragment 3: F#-A-G-B\nstack(\n  note(\&quot;fs4 a4 g4 b4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;fs3 a3 ~ ~\&quot;).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+// Fragment 1: D-F#-E-G
+stack(
+  note(&quot;d4 fs4 e4 g4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;~ ~ d3 fs3&quot;).s(&#x27;piano&#x27;).gain(0.7)
+),
+// Fragment 2: E-G-F#-A
+stack(
+  note(&quot;e4 g4 fs4 a4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;e3 g3 ~ ~&quot;).s(&#x27;piano&#x27;).gain(0.7)
+),
+// Fragment 3: F#-A-G-B
+stack(
+  note(&quot;fs4 a4 g4 b4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;fs3 a3 ~ ~&quot;).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The first 4 notes of the subject (D-F#-E-G) repeat as a sequence, moving up by step. Each fragment has both voices entering together, creating imitative counterpoint. This is typical of fugue episodes—taking a recognizable fragment and developing it.</p>
+<p><strong>Episode with inversion:</strong></p>
+<astro-island uid="Z1DPyeA" prefix="r55" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d4 b3 cs4 a3 b3 g3 a3 b3\&quot;).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d4 b3 cs4 a3 b3 g3 a3 b3&quot;).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 2 plays an inverted version of the subject (intervals flipped)—up becomes down.</p>
+<hr/>
+<h3 id="stretto">Stretto<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#stretto"><span class="icon icon-link"></span></a></h3>
+<p>Stretto occurs when subject entries overlap before the previous entry finishes. It creates maximum density and is often used for the climax.</p>
+<p><strong>Stretto with 3 voices:</strong></p>
+<astro-island uid="8IOAD" prefix="r56" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.25).transpose(12).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.5).transpose(7).s(&#39;piano&#39;).gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.25).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.5).transpose(7).s(&#x27;piano&#x27;).gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voices enter every quarter-cycle—very tight! This creates intensity and demonstrates mastery—the subject must be designed so it harmonizes with itself at multiple delays.</p>
+<hr/>
+<h3 id="complete-fugue-example">Complete Fugue Example<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#complete-fugue-example"><span class="icon icon-link"></span></a></h3>
+<p>Let’s build a complete mini-fugue with all the elements:</p>
+<astro-island uid="1SXKl" prefix="r57" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Section 1: Exposition (voices enter sequentially)\ncat(\n  // Voice 1 enters\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  // Voice 2 enters (Voice 1 continues)\n  stack(\n    note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n    note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;).s(&#39;piano&#39;).gain(0.7)\n  ),\n  // Voice 3 enters (all voices play)\n  stack(\n    note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n    note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;).s(&#39;piano&#39;).gain(0.7),\n    note(\&quot;d5 fs5 e5 g5 fs5 a5 g5 fs5\&quot;).s(&#39;piano&#39;).gain(0.6)\n  )\n),\n// Section 2: Episode (sequences)\nstack(\n  note(\&quot;d4 fs4 e4 g4 e4 g4 fs4 a4 fs4 a4 g4 b4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d3 fs3 e3 g3 e3 g3 fs3 a3 fs3 a3 g3 b3\&quot;).s(&#39;piano&#39;).gain(0.7)\n),\n// Section 3: Stretto (climax - tight overlapping)\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.25).transpose(12).s(&#39;piano&#39;).gain(0.7),\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.5).transpose(7).s(&#39;piano&#39;).gain(0.6)\n),\n// Section 4: Coda (resolution)\nstack(\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).rootNotes(2).note().s(&#39;sawtooth&#39;).lpf(600).gain(0.7)  // .note() wraps plain root note values\n).fast(8)\n).slow(8).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Section 1: Exposition (voices enter sequentially)
+cat(
+  // Voice 1 enters
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  // Voice 2 enters (Voice 1 continues)
+  stack(
+    note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+    note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;).s(&#x27;piano&#x27;).gain(0.7)
+  ),
+  // Voice 3 enters (all voices play)
+  stack(
+    note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+    note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;).s(&#x27;piano&#x27;).gain(0.7),
+    note(&quot;d5 fs5 e5 g5 fs5 a5 g5 fs5&quot;).s(&#x27;piano&#x27;).gain(0.6)
+  )
+),
+// Section 2: Episode (sequences)
+stack(
+  note(&quot;d4 fs4 e4 g4 e4 g4 fs4 a4 fs4 a4 g4 b4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d3 fs3 e3 g3 e3 g3 fs3 a3 fs3 a3 g3 b3&quot;).s(&#x27;piano&#x27;).gain(0.7)
+),
+// Section 3: Stretto (climax - tight overlapping)
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.25).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.5).transpose(7).s(&#x27;piano&#x27;).gain(0.6)
+),
+// Section 4: Coda (resolution)
+stack(
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).rootNotes(2).note().s(&#x27;sawtooth&#x27;).lpf(600).gain(0.7)  // .note() wraps plain root note values
+).fast(8)
+).slow(8).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This complete fugue has:</p>
+<ol>
+<li><strong>Exposition</strong> — 3 voices enter with subject/answer</li>
+<li><strong>Episode</strong> — Sequential development</li>
+<li><strong>Stretto</strong> — Tight overlapping entries (climax)</li>
+<li><strong>Coda</strong> — Harmonic resolution</li>
+</ol>
+<hr/>
+<h3 id="fugue-analysis-checklist">Fugue Analysis Checklist<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#fugue-analysis-checklist"><span class="icon icon-link"></span></a></h3>
+<p>When writing your own fugue, check these elements:</p>
+<p><strong>Subject Quality:</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled/> Is it 4-8 notes long?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Does it outline the tonic key clearly?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Does it have a distinctive rhythm?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Can it be fragmented into recognizable motifs?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Does it transpose well to the dominant?</li>
+</ul>
+<p><strong>Counterpoint:</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled/> Does the counter-subject harmonize with the subject?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Does it have contrasting rhythm?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Can it work in multiple voices?</li>
+</ul>
+<p><strong>Structure:</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled/> Exposition: Do all voices enter clearly?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Episodes: Do they develop subject material?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Middle entries: Do they explore new keys?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Stretto: Do overlapping entries work harmonically?</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Coda: Does it provide satisfying resolution?</li>
+</ul>
+<hr/>
+<h3 id="simpler-alternatives">Simpler Alternatives<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#simpler-alternatives"><span class="icon icon-link"></span></a></h3>
+<p>If fugue seems too complex, try these simpler imitative forms:</p>
+<p><strong>Invention (2-voice imitative piece)</strong></p>
+<p>Simpler than fugue—just two voices in dialogue:</p>
+<astro-island uid="TkpkJ" prefix="r58" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ncat(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;),\n  note(\&quot;e4 g4 fs4 a4 g4 b4 a4 g4\&quot;)\n).s(&#39;piano&#39;),\ncat(\n  note(\&quot;~ ~ ~ ~ a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;),\n  note(\&quot;b3 d4 cs4 e4 d4 fs4 e4 d4\&quot;)\n).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+cat(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;),
+  note(&quot;e4 g4 fs4 a4 g4 b4 a4 g4&quot;)
+).s(&#x27;piano&#x27;),
+cat(
+  note(&quot;~ ~ ~ ~ a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;),
+  note(&quot;b3 d4 cs4 e4 d4 fs4 e4 d4&quot;)
+).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Bach wrote 15 two-part Inventions as teaching pieces—perfect models for learning imitative counterpoint.</p>
+<p><strong>Fughetta (short fugue)</strong></p>
+<p>A mini-fugue with 2-3 voices and simpler structure:</p>
+<astro-island uid="2qdy5R" prefix="r59" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;d4 fs4 e4 g4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;a3 cs4 b3 d4\&quot;).late(0.5).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;d4 fs4 e4 g4&quot;).s(&#x27;piano&#x27;),
+note(&quot;a3 cs4 b3 d4&quot;).late(0.5).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Just an exposition—subject and answer—without episodes or stretto. A complete little piece!</p>
+<p><strong>Try it:</strong> Write your own simple fugue subject (4-6 notes). Test if it works when transposed by 7 semitones. Try creating a 2-voice exposition with your subject.</p>
+<hr/>
+<h3 id="pedal-point-in-fugues">Pedal Point in Fugues<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#pedal-point-in-fugues"><span class="icon icon-link"></span></a></h3>
+<p>A pedal point is a sustained bass note while harmony changes above—often used before the final entry or coda:</p>
+<p><strong>Dominant Pedal (sustaining A):</strong></p>
+<astro-island uid="y58x3" prefix="r60" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Upper voices with subject fragments\nnote(\&quot;d4 fs4 e4 g4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;a4 cs5 b4 d5\&quot;).late(0.25).s(&#39;piano&#39;).gain(0.7),\n// Pedal point on A (dominant)\nnote(\&quot;a2\&quot;).s(&#39;sawtooth&#39;).lpf(400).sustain(2).gain(0.8)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Upper voices with subject fragments
+note(&quot;d4 fs4 e4 g4&quot;).s(&#x27;piano&#x27;),
+note(&quot;a4 cs5 b4 d5&quot;).late(0.25).s(&#x27;piano&#x27;).gain(0.7),
+// Pedal point on A (dominant)
+note(&quot;a2&quot;).s(&#x27;sawtooth&#x27;).lpf(400).sustain(2).gain(0.8)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The low A sustains while voices move above, creating tension that resolves to D.</p>
+<p><strong>Tonic Pedal with Final Stretto:</strong></p>
+<astro-island uid="Z2egOna" prefix="r61" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Stretto entries\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.25).transpose(12).s(&#39;piano&#39;).gain(0.7),\nnote(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).late(0.5).transpose(7).s(&#39;piano&#39;).gain(0.6),\n// Tonic pedal point\nnote(\&quot;d2\&quot;).s(&#39;sawtooth&#39;).lpf(400).sustain(2).gain(0.8)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Stretto entries
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.25).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).late(0.5).transpose(7).s(&#x27;piano&#x27;).gain(0.6),
+// Tonic pedal point
+note(&quot;d2&quot;).s(&#x27;sawtooth&#x27;).lpf(400).sustain(2).gain(0.8)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>A sustained D under the final stretto creates stability and grandeur—often used in fugue codas.</p>
+<hr/>
+<h3 id="double-fugue">Double Fugue<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#double-fugue"><span class="icon icon-link"></span></a></h3>
+<p>A double fugue has two subjects that can work together:</p>
+<p><strong>Subject 1 (stepwise):</strong></p>
+<astro-island uid="ZKfJ21" prefix="r62" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;d4 e4 fs4 g4 a4 g4 fs4 e4\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;d4 e4 fs4 g4 a4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>Subject 2 (rhythmic, contrasting):</strong></p>
+<astro-island uid="ZEuwzu" prefix="r63" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;d4 ~ fs4 ~ a4 ~ d5 ~\&quot;).s(&#39;piano&#39;).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;d4 ~ fs4 ~ a4 ~ d5 ~&quot;).s(&#x27;piano&#x27;).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>Both subjects combined:</strong></p>
+<astro-island uid="V8a5n" prefix="r64" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Subject 1\nnote(\&quot;d4 e4 fs4 g4 a4 g4 fs4 e4\&quot;).s(&#39;piano&#39;),\n// Subject 2 (works harmonically with Subject 1)\nnote(\&quot;d3 ~ fs3 ~ a3 ~ d4 ~\&quot;).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Subject 1
+note(&quot;d4 e4 fs4 g4 a4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;),
+// Subject 2 (works harmonically with Subject 1)
+note(&quot;d3 ~ fs3 ~ a3 ~ d4 ~&quot;).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>In a double fugue, each subject gets its own exposition, then they combine. Bach’s Fugue in E-flat (WTC Book I) is a famous triple fugue with three subjects!</p>
+<p><strong>Double fugue exposition pattern:</strong></p>
+<astro-island uid="Z1FYajC" prefix="r65" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Exposition of Subject 1\ncat(\n  note(\&quot;d4 e4 fs4 g4 a4 g4 fs4 e4\&quot;).s(&#39;piano&#39;),\n  stack(\n    note(\&quot;d4 e4 fs4 g4 a4 g4 fs4 e4\&quot;).s(&#39;piano&#39;),\n    note(\&quot;a3 b3 cs4 d4 e4 d4 cs4 b3\&quot;).s(&#39;piano&#39;).gain(0.7)\n  )\n),\n// Exposition of Subject 2\ncat(\n  note(\&quot;d4 ~ fs4 ~ a4 ~ d5 ~\&quot;).s(&#39;piano&#39;),\n  stack(\n    note(\&quot;d4 ~ fs4 ~ a4 ~ d5 ~\&quot;).s(&#39;piano&#39;),\n    note(\&quot;a3 ~ cs4 ~ e4 ~ a4 ~\&quot;).s(&#39;piano&#39;).gain(0.7)\n  )\n),\n// Both subjects combined\nstack(\n  note(\&quot;d4 e4 fs4 g4 a4 g4 fs4 e4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;d3 ~ fs3 ~ a3 ~ d4 ~\&quot;).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Exposition of Subject 1
+cat(
+  note(&quot;d4 e4 fs4 g4 a4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;),
+  stack(
+    note(&quot;d4 e4 fs4 g4 a4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;),
+    note(&quot;a3 b3 cs4 d4 e4 d4 cs4 b3&quot;).s(&#x27;piano&#x27;).gain(0.7)
+  )
+),
+// Exposition of Subject 2
+cat(
+  note(&quot;d4 ~ fs4 ~ a4 ~ d5 ~&quot;).s(&#x27;piano&#x27;),
+  stack(
+    note(&quot;d4 ~ fs4 ~ a4 ~ d5 ~&quot;).s(&#x27;piano&#x27;),
+    note(&quot;a3 ~ cs4 ~ e4 ~ a4 ~&quot;).s(&#x27;piano&#x27;).gain(0.7)
+  )
+),
+// Both subjects combined
+stack(
+  note(&quot;d4 e4 fs4 g4 a4 g4 fs4 e4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;d3 ~ fs3 ~ a3 ~ d4 ~&quot;).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="part-6-complete-classical-piece--integration">Part 6: Complete Classical Piece — Integration<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-6-complete-classical-piece--integration"><span class="icon icon-link"></span></a></h2>
+<p>Now let’s combine everything we’ve learned—variation, canon, harmonic development, and fugue—into complete multi-movement works.</p>
+<h3 id="combining-techniques">Combining Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#combining-techniques"><span class="icon icon-link"></span></a></h3>
+<p>Classical composers used multiple techniques within single pieces.</p>
+<p><strong>Canon with Variation</strong></p>
+<p>A canon where each voice plays a variation:</p>
+<astro-island uid="1lfHqN" prefix="r66" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Voice 1: Original theme\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n// Voice 2: Rhythmic variation (faster)\nnote(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).fast(2).late(0.5).transpose(12).s(&#39;piano&#39;).gain(0.7)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Voice 1: Original theme
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+// Voice 2: Rhythmic variation (faster)
+note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).fast(2).late(0.5).transpose(12).s(&#x27;piano&#x27;).gain(0.7)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Voice 1 plays the original, Voice 2 plays a faster variation in canon—combining two techniques!</p>
+<p><strong>Fugue with Variation Episodes</strong></p>
+<p>Using variation techniques in fugue episodes:</p>
+<astro-island uid="Z259EKT" prefix="r67" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// Exposition\ncat(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n  stack(\n    note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).s(&#39;piano&#39;),\n    note(\&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4\&quot;).s(&#39;piano&#39;).gain(0.7)\n  )\n),\n// Episode: Subject in augmentation (slower)\nstack(\n  note(\&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4\&quot;).slow(2).s(&#39;piano&#39;),\n  note(\&quot;fs3 g3 a3 b3 a3 g3 fs3 e3\&quot;).s(&#39;piano&#39;).gain(0.7)\n)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// Exposition
+cat(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+  stack(
+    note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).s(&#x27;piano&#x27;),
+    note(&quot;a3 cs4 b3 d4 cs4 e4 d4 cs4&quot;).s(&#x27;piano&#x27;).gain(0.7)
+  )
+),
+// Episode: Subject in augmentation (slower)
+stack(
+  note(&quot;d4 fs4 e4 g4 fs4 a4 g4 fs4&quot;).slow(2).s(&#x27;piano&#x27;),
+  note(&quot;fs3 g3 a3 b3 a3 g3 fs3 e3&quot;).s(&#x27;piano&#x27;).gain(0.7)
+)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>The episode uses the subject in augmentation (slower)—a variation technique within fugal structure.</p>
+<hr/>
+<h3 id="form-planning">Form Planning<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#form-planning"><span class="icon icon-link"></span></a></h3>
+<p>Classical forms provide structure for longer pieces:</p>
+<p><strong>Theme &amp; Variations Form</strong></p>
+<ul>
+<li>Theme</li>
+<li>Variation 1 (rhythmic)</li>
+<li>Variation 2 (harmonic - minor mode)</li>
+<li>Variation 3 (textural - contrapuntal)</li>
+<li>Variation 4 (climax)</li>
+<li>Variation 5 (return to simple)</li>
+</ul>
+<p><strong>ABA (Ternary) Form</strong></p>
+<ul>
+<li>A section: Theme in D major</li>
+<li>B section: Contrasting material (canon, fugue, or new theme)</li>
+<li>A section: Theme returns</li>
+</ul>
+<p><strong>Rondo Form (ABACA)</strong></p>
+<ul>
+<li>A: Main theme (refrain)</li>
+<li>B: Contrasting episode</li>
+<li>A: Refrain returns</li>
+<li>C: New contrasting episode</li>
+<li>A: Final refrain</li>
+</ul>
+<p>Baroque composers used suite forms (Allemande, Courante, Sarabande, Gigue). Classical composers preferred sonata form. Romantic composers favored character pieces and song forms.</p>
+<hr/>
+<h3 id="complete-multi-movement-work">Complete Multi-Movement Work<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#complete-multi-movement-work"><span class="icon icon-link"></span></a></h3>
+<p>Let’s create a complete 4-movement piece using our theme from Part 1:</p>
+<astro-island uid="VY2t6" prefix="r68" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;slowcat(\n// MOVEMENT 1: Theme (simple presentation)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// MOVEMENT 2: Variation - Fast &amp; Minor\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 a3\&quot;).fast(2).s(&#39;piano&#39;),\n  chord(\&quot;&lt;Bm F#m A Bm Bm F#m A Bm&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.6)\n).fast(8),\n// MOVEMENT 3: Canon (3 voices)\nstack(\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.25).transpose(12).s(&#39;piano&#39;).gain(0.7),\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.5).transpose(-12).s(&#39;piano&#39;).gain(0.6),\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.5)\n).fast(8),\n// MOVEMENT 4: Fugal Finale\nstack(\n  // Subject\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).s(&#39;piano&#39;),\n  // Answer\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).transpose(7).late(0.5).s(&#39;piano&#39;).gain(0.7),\n  // Stretto\n  note(\&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4\&quot;).late(0.25).transpose(12).s(&#39;piano&#39;).gain(0.6),\n  // Harmonic support\n  chord(\&quot;&lt;D A Bm F#m G D G A&gt;\&quot;).voicing().s(&#39;piano&#39;).gain(0.5)\n).fast(8)\n).slow(8).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>slowcat(
+// MOVEMENT 1: Theme (simple presentation)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// MOVEMENT 2: Variation - Fast &amp; Minor
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 a3&quot;).fast(2).s(&#x27;piano&#x27;),
+  chord(&quot;&lt;Bm F#m A Bm Bm F#m A Bm&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.6)
+).fast(8),
+// MOVEMENT 3: Canon (3 voices)
+stack(
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.25).transpose(12).s(&#x27;piano&#x27;).gain(0.7),
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.5).transpose(-12).s(&#x27;piano&#x27;).gain(0.6),
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.5)
+).fast(8),
+// MOVEMENT 4: Fugal Finale
+stack(
+  // Subject
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).s(&#x27;piano&#x27;),
+  // Answer
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).transpose(7).late(0.5).s(&#x27;piano&#x27;).gain(0.7),
+  // Stretto
+  note(&quot;fs4 e4 d4 cs4 b3 a3 b3 cs4&quot;).late(0.25).transpose(12).s(&#x27;piano&#x27;).gain(0.6),
+  // Harmonic support
+  chord(&quot;&lt;D A Bm F#m G D G A&gt;&quot;).voicing().s(&#x27;piano&#x27;).gain(0.5)
+).fast(8)
+).slow(8).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This complete work demonstrates:</p>
+<ul>
+<li><strong>Movement 1</strong>: Simple thematic presentation</li>
+<li><strong>Movement 2</strong>: Variation (fast, minor mode)</li>
+<li><strong>Movement 3</strong>: Canon (3 voices)</li>
+<li><strong>Movement 4</strong>: Fugue (subject, answer, stretto)</li>
+</ul>
+<p>Total duration: ~2 minutes. This shows how one simple theme can be developed through all classical techniques!</p>
+<hr/>
+<h3 id="practice-challenges">Practice Challenges<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#practice-challenges"><span class="icon icon-link"></span></a></h3>
+<p>Try these exercises to develop your skills:</p>
+<p><strong>Challenge 1: Simple 2-Voice Canon</strong></p>
+<p>Write a simple melody (4-8 notes) and create a canon at the octave with <code>.late(0.5)</code>.</p>
+<p><strong>Challenge 2: Three Variations</strong></p>
+<p>Take any simple melody and create:</p>
+<ul>
+<li>Rhythmic variation (use <code>.fast()</code> or <code>.slow()</code>)</li>
+<li>Harmonic variation (change the chords)</li>
+<li>Melodic variation (add ornamentation or octave displacement)</li>
+</ul>
+<p><strong>Challenge 3: Two-Voice Invention</strong></p>
+<p>Write a short subject (4-6 notes) and create a 2-voice imitative piece with:</p>
+<ul>
+<li>Voice 1: Subject</li>
+<li>Voice 2: Answer (transposed by 7 semitones, entering with <code>.late()</code>)</li>
+</ul>
+<p><strong>Challenge 4: Canon Variation Set</strong></p>
+<p>Create a theme that works as both a variation and a canon:</p>
+<ul>
+<li>Present theme simply</li>
+<li>Variation 1: Theme in canon with itself</li>
+<li>Variation 2: Theme in 3-voice canon</li>
+</ul>
+<p><strong>Challenge 5: Mini Theme &amp; Variations</strong></p>
+<p>Create a complete variation set:</p>
+<ul>
+<li>Theme (8-16 bars)</li>
+<li>Variation 1 (rhythmic)</li>
+<li>Variation 2 (harmonic)</li>
+<li>Variation 3 (contrapuntal with <code>stack()</code>)</li>
+<li>Variation 4 (return to simplicity)</li>
+</ul>
+<hr/>
+<h2 id="part-7-conclusion--next-steps">Part 7: Conclusion &amp; Next Steps<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#part-7-conclusion--next-steps"><span class="icon icon-link"></span></a></h2>
+<p>You’ve learned how classical composers developed musical ideas through layering—the same techniques that shaped centuries of Western music.</p>
+<h3 id="what-youve-learned">What You’ve Learned<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#what-youve-learned"><span class="icon icon-link"></span></a></h3>
+<p><strong>Canon Techniques:</strong></p>
+<ul>
+<li>Canon at the unison, octave, and fifth</li>
+<li>Multi-voice canons (3-4 voices)</li>
+<li>Stretto (tight overlapping)</li>
+<li>Retrograde and tempo canons</li>
+</ul>
+<p><strong>Variation Techniques:</strong></p>
+<ul>
+<li>Rhythmic variation (augmentation, diminution, dotted rhythms)</li>
+<li>Melodic variation (ornamentation, octave displacement, arpeggiation, sequences)</li>
+<li>Harmonic variation (major/minor, reharmonization, chromatic harmony)</li>
+<li>Textural variation (solo, chordal, contrapuntal)</li>
+</ul>
+<p><strong>Fugal Techniques:</strong></p>
+<ul>
+<li>Subject and answer structure</li>
+<li>Counter-subject</li>
+<li>Episodes (sequences, fragmentation)</li>
+<li>Stretto (climactic overlapping)</li>
+<li>Simpler forms (invention, fughetta)</li>
+</ul>
+<p><strong>Integration:</strong></p>
+<ul>
+<li>Combining techniques (canon + variation, fugue + variation)</li>
+<li>Classical forms (theme &amp; variations, ABA, rondo)</li>
+<li>Multi-movement works</li>
+</ul>
+<hr/>
+<h3 id="classical-composers--listening">Classical Composers &amp; Listening<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#classical-composers--listening"><span class="icon icon-link"></span></a></h3>
+<p>To deepen your understanding, listen to these masters:</p>
+<p><strong>Baroque Period (1600-1750):</strong></p>
+<ul>
+<li><strong>J.S. Bach</strong> — Fugues (Well-Tempered Clavier), Inventions, Goldberg Variations (canons)</li>
+<li><strong>Vivaldi</strong> — Concertos (sequences and development)</li>
+<li><strong>Handel</strong> — Variations, ground bass techniques</li>
+</ul>
+<p><strong>Classical Period (1750-1820):</strong></p>
+<ul>
+<li><strong>Mozart</strong> — Variations (K. 265 “Twinkle Twinkle”), clarity in development</li>
+<li><strong>Haydn</strong> — Symphonies (thematic development, humor)</li>
+</ul>
+<p><strong>Romantic Period (1820-1900):</strong></p>
+<ul>
+<li><strong>Brahms</strong> — Variations on a Theme by Haydn, Handel Variations</li>
+<li><strong>Schumann</strong> — Character pieces, thematic transformation</li>
+</ul>
+<p><strong>Recommended Listening:</strong></p>
+<ol>
+<li>Bach — <a href="https://www.youtube.com/watch?v=iHNxdOTFt7c">Invention No. 1 in C major</a> (simple 2-voice imitation)</li>
+<li>Bach — <a href="https://www.youtube.com/watch?v=g1TSYDqmfuY">Fugue in C major (WTC Book I)</a> (clear fugue structure)</li>
+<li>Mozart — <a href="https://www.youtube.com/watch?v=NO-ecxHEPqI">Variations on “Ah! vous dirai-je, Maman”</a> (theme &amp; variations)</li>
+<li>Pachelbel — <a href="https://www.youtube.com/watch?v=JvNQLJ1_HQ0">Canon in D</a> (ground bass with canon)</li>
+<li>Beethoven — <a href="https://www.youtube.com/watch?v=pAI4-9yc6kA">Diabelli Variations</a> (variation form mastery)</li>
+</ol>
+<hr/>
+<h3 id="where-to-go-next">Where to Go Next<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#where-to-go-next"><span class="icon icon-link"></span></a></h3>
+<p><strong>Learn More Strudel Techniques:</strong></p>
+<ul>
+<li><a href="/jamdojo/learn/theory/harmony/">Harmony</a> — Understanding chord theory, voicings, and progressions</li>
+<li><a href="/jamdojo/learn/theory/chord-composition/">Chord Composition</a> — Advanced harmonic techniques and composition workflow</li>
+<li><a href="/jamdojo/learn/reference/tonal/">Tonal Functions</a> — API reference for chords, scales, and harmony</li>
+</ul>
+<p><strong>Practice Recommendations:</strong></p>
+<ol>
+<li>
+<p><strong>Start with Canon</strong> (easiest)</p>
+<ul>
+<li>Write simple 2-voice canons</li>
+<li>Experiment with different <code>.late()</code> values</li>
+<li>Try canon at different intervals</li>
+</ul>
+</li>
+<li>
+<p><strong>Then Variation</strong> (medium difficulty)</p>
+<ul>
+<li>Take a simple theme and create 3 variations</li>
+<li>Focus on one type of variation at a time (rhythm, then harmony, then melody)</li>
+<li>Build to a complete variation set</li>
+</ul>
+</li>
+<li>
+<p><strong>Finally Fugue</strong> (most complex)</p>
+<ul>
+<li>Start with 2-voice inventions</li>
+<li>Write subjects that transpose well</li>
+<li>Build up to 3-voice expositions</li>
+<li>Add episodes once you’re comfortable</li>
+</ul>
+</li>
+</ol>
+<p><strong>Remember:</strong></p>
+<ul>
+<li>All these techniques are still used today (not just historical!)</li>
+<li>Start simple—classical masters spent years developing these skills</li>
+<li>Listen to classical music with new ears—you can now hear the techniques in action</li>
+<li>Experiment freely—Strudel lets you try ideas faster than any classical composer could</li>
+</ul>
+<hr/>
+<h3 id="quick-reference">Quick Reference<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#quick-reference"><span class="icon icon-link"></span></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Technique</th><th>Strudel Function</th><th>Use Case</th></tr></thead><tbody><tr><td>Canon delay</td><td><code>.late(n)</code></td><td>Voice imitation across time</td></tr><tr><td>Transposition</td><td><code>.transpose(n)</code></td><td>Fugue answer, sequences, modulation</td></tr><tr><td>Augmentation</td><td><code>.slow(n)</code></td><td>Slower variation, tempo canon</td></tr><tr><td>Diminution</td><td><code>.fast(n)</code></td><td>Faster variation, tempo canon</td></tr><tr><td>Independent voices</td><td><code>stack()</code></td><td>Canon, fugue, counterpoint</td></tr><tr><td>Variations</td><td><code>layer()</code></td><td>Multiple versions of same material</td></tr><tr><td>Reverse</td><td><code>.rev()</code></td><td>Retrograde canon</td></tr><tr><td>Rhythmic patterns</td><td><code>.struct()</code></td><td>Dotted rhythms, syncopation</td></tr><tr><td>Harmony</td><td><code>chord().voicing()</code></td><td>Harmonic support, reharmonization</td></tr><tr><td>Bass lines</td><td><code>.rootNotes(n).note()</code></td><td>Ground bass, harmonic foundation</td></tr><tr><td>Arpeggiation</td><td><code>.arp()</code></td><td>Melodic variation, texture</td></tr><tr><td>Voice leading</td><td><code>.anchor()</code>, <code>.mode()</code></td><td>Smooth chord progressions</td></tr></tbody></table>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/classical/#troubleshooting"><span class="icon icon-link"></span></a></h2>
+<p>Having issues with pattern timing, compression, or voice alignment? Check the <strong><a href="./CLASSICAL-TROUBLESHOOTING.md">Classical Music Troubleshooting Guide</a></strong> for solutions to common problems with <code>stack()</code>, <code>cat()</code>, and <code>slowcat()</code>.</p>
+<hr/>
+<p><strong>Congratulations!</strong> You now have the tools to compose in classical style using Strudel. The techniques you’ve learned—canon, variation, fugue—are the foundation of Western musical development. Use them to create your own compositions, and explore how these timeless techniques can combine with modern electronic music production.</p>
+<p>Now go create something beautiful!</p> </div> </div> </main> </div> </body></html>

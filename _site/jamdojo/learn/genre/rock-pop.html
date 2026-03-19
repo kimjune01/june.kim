@@ -1,0 +1,707 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.1.9"><link rel="alternate" type="application/rss+xml" title="RSS Feed for strudel.cc" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/jamdojo/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/jamdojo/favicon.ico"><link rel="apple-touch-icon" href="/jamdojo/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/jamdojo/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/jamdojo/make-scrollable-code-focusable.js"></script><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_0_lang.BS_sy5Gw.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/jamdojo/manifest.webmanifest"><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_1_lang.-EECfF37.js"></script><title>Rock &amp; Pop - JamDojo</title><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css">
+<style>@font-face{font-family:PressStart;src:url(/jamdojo/fonts/PressStart2P/PressStart2P-Regular.ttf);size-adjust:65%}@font-face{font-family:BigBlueTerminal;src:url(/jamdojo/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/jamdojo/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/jamdojo/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:CutiePi;src:url(/jamdojo/fonts/CutiePi/Cute_Aurora_demo.ttf);size-adjust:120%}@font-face{font-family:JetBrains;src:url(/jamdojo/fonts/JetBrains/JetBrainsMono.woff2)}@font-face{font-family:Monocraft;src:url(/jamdojo/fonts/Monocraft/Monocraft.ttf);size-adjust:90%}@font-face{font-family:Hack;src:url(/jamdojo/fonts/Hack/Hack-Regular.ttf)}@font-face{font-family:we-come-in-peace;src:url(/jamdojo/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/jamdojo/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/jamdojo/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/jamdojo/fonts/teletext/EuropeanTeletext.ttf);size-adjust:90%}@font-face{font-family:tic80;src:url(/jamdojo/fonts/tic80/tic-80-wide-font.otf);size-adjust:60%}@font-face{font-family:mode7;src:url(/jamdojo/fonts/mode7/MODE7GX3.TTF);size-adjust:82%}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh;--app-width: 100vw}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+.prose h1:before,.prose h2:before,.prose h3:before,.prose h4:before,.prose h5:before,.prose h6:before{display:block;content:" ";margin-top:-70px;height:70px;visibility:hidden;pointer-events:none}.icon.icon-link{visibility:hidden}.prose h1:hover .icon.icon-link,.prose h2:hover .icon.icon-link,.prose h3:hover .icon.icon-link,.prose h4:hover .icon.icon-link,.prose h5:hover .icon.icon-link,.prose h6:hover .icon.icon-link{visibility:visible}.prose h1>a,.prose h2>a,.prose h3>a,.prose h4>a,.prose h5>a,.prose h6>a{text-decoration:none!important}.icon.icon-link:after{content:"#";margin-left:8px;font-size:.9em;opacity:50%}
+:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:#000;opacity:.5}#code .cm-scroller{padding-top:10px!important;height:100%;font-family:inherit}#code .cm-content{padding-bottom:50vh}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}#code .cm-matchingBracket{-webkit-text-decoration:underline .18rem;text-decoration:underline .18rem;text-underline-offset:.22rem}.cm-tooltip.cm-completionInfo{padding:0!important;border:1px solid var(--foreground)!important;border-radius:4px!important;box-shadow:0 4px 12px #0000004d!important;max-width:500px!important;min-width:300px!important;max-height:400px!important;background-color:var(--lineHighlight)!important;overflow:auto;background:var(--background)!important}.autocomplete-info-container{padding:12px!important;border-radius:4px!important;color:var(--foreground);font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:var(--font-size, 13px);line-height:1.4;max-width:600px;height:100%;min-width:400px;white-space:normal!important;overflow-y:auto!important}.autocomplete-info-tooltip{overflow-y:auto!important}.autocomplete-info-function-description{white-space:pre-wrap!important}.autocomplete-info-function-name{font-size:15px;font-weight:600;color:var(--foreground);margin:0 0 8px}.autocomplete-info-function-synonyms,.autocomplete-info-function-description{margin:0 0 12px;color:var(--foreground);line-height:1.5;opacity:.8}.autocomplete-info-section-title{font-size:12px;font-weight:600;color:var(--foreground);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}.autocomplete-info-section-title:first-child{margin-top:0}.autocomplete-info-params-section{margin-top:12px}.autocomplete-info-params-list{list-style:none;margin:0;padding:0}.autocomplete-info-param-item{margin-bottom:8px;padding:8px;background-color:var(--lineBackground);border-radius:3px;border-left:2px solid var(--foreground, #555)}.autocomplete-info-param-item:last-child{margin-bottom:0}.autocomplete-info-param-name{font-weight:600;color:var(--variable, var(--foreground));margin-right:8px}.autocomplete-info-param-type{color:var(--comment);font-size:12px;background-color:var(--gutterForeground);padding:1px 4px;border-radius:2px}.autocomplete-info-param-desc{color:var(--foreground);font-size:10px;margin-top:4px;line-height:1.4;opacity:.7}.autocomplete-info-examples-section{margin-top:12px}.autocomplete-info-example-code{background:var(--lineBackground);color:var(--foreground);padding:8px;border-radius:3px;font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:12px;line-height:1.5;margin:4px 0;overflow-x:auto;white-space:pre;border:1px solid var(--foreground, #3a3a3a)}.autocomplete-info-tooltip::-webkit-scrollbar{width:4px}.autocomplete-info-tooltip::-webkit-scrollbar-thumb{border-radius:2px}
+</style></head> <body class="min-h-screen m-0 text-gray-50 bg-background"> <div class="flex min-h-screen"> <!-- Sidebar --> <aside class="w-56 bg-gray-900 border-r border-gray-800 p-4 hidden md:block fixed h-full"> <nav class="flex flex-col gap-1 h-full overflow-y-auto"> <a href="/jamdojo/" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors mb-2"> <span>←</span> <span>JamDojo</span> </a> <div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-0"> <div class="flex items-center gap-2"> <span>🎮</span> <span class="font-medium">Interactive Tools</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-0" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/interactive-tools/playground/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">💻</span> <span>Playground</span> </a><a href="/jamdojo/learn/interactive-tools/piano/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎹</span> <span>Piano</span> </a><a href="/jamdojo/learn/interactive-tools/guitar/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎸</span> <span>Guitar</span> </a><a href="/jamdojo/learn/interactive-tools/pitch-detector/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Pitch Detector</span> </a><a href="/jamdojo/learn/interactive-tools/sample-explorer/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Sample Explorer</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-1"> <div class="flex items-center gap-2"> <span>🎯</span> <span class="font-medium">Quizzes</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-1" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/quizzes/sample-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎯</span> <span>Sample Quiz</span> </a><a href="/jamdojo/learn/quizzes/waveform-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">〰</span> <span>Waveform Quiz</span> </a><a href="/jamdojo/learn/quizzes/effect-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛</span> <span>Effect Quiz</span> </a><a href="/jamdojo/learn/quizzes/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space Quiz</span> </a><a href="/jamdojo/learn/quizzes/ear-training/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👂</span> <span>Ear Training</span> </a><a href="/jamdojo/learn/quizzes/pitch-simon/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Pitch Simon</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-2"> <div class="flex items-center gap-2"> <span>🎵</span> <span class="font-medium">Music Theory</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-2" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/harmony/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎶</span> <span>Harmony</span> </a><a href="/jamdojo/learn/theory/chord-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Chord Composition</span> </a><a href="/jamdojo/learn/theory/classical-terminology/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎻</span> <span>Classical Terminology</span> </a><a href="/jamdojo/learn/theory/euclidean-rhythms/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🥁</span> <span>Euclidean Rhythms</span> </a><a href="/jamdojo/learn/theory/sound-design/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Sound Design &amp; Timbre</span> </a><a href="/jamdojo/learn/theory/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space</span> </a><a href="/jamdojo/learn/theory/sampling-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Sampling Composition</span> </a><a href="/jamdojo/learn/theory/arranging/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎬</span> <span>Arranging Patterns</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-3"> <div class="flex items-center gap-2"> <span>💻</span> <span class="font-medium">Programming</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-3" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/strudel-programming/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔧</span> <span>Strudel Programming</span> </a><a href="/jamdojo/learn/theory/why-functions/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⚡</span> <span>Why Functions</span> </a><a href="/jamdojo/learn/theory/why-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📦</span> <span>Why Containers</span> </a><a href="/jamdojo/learn/theory/patterns-as-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Patterns as Containers</span> </a><a href="/jamdojo/learn/theory/transforming-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔄</span> <span>Transforming Patterns</span> </a><a href="/jamdojo/learn/theory/combining-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔗</span> <span>Combining Patterns</span> </a><a href="/jamdojo/learn/theory/patterns-of-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎁</span> <span>Patterns of Patterns</span> </a><a href="/jamdojo/learn/theory/building-with-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏗️</span> <span>Building with Patterns</span> </a><a href="/jamdojo/learn/theory/combining-events/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⊕</span> <span>Combining Events</span> </a><a href="/jamdojo/learn/theory/choice-and-selection/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔀</span> <span>Choice and Selection</span> </a><a href="/jamdojo/learn/theory/context-aware-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Context-Aware Patterns</span> </a><a href="/jamdojo/learn/theory/flipping-structure/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔃</span> <span>Flipping Structure</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="true" aria-controls="activity-section-4"> <div class="flex items-center gap-2"> <span>🎸</span> <span class="font-medium">Genre Studies</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style="transform: rotate(90deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-4" class="activity-accordion-content pl-4" style> <a href="/jamdojo/learn/genre/rock-pop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm bg-cyan-600 text-white"> <span class="text-lg">🎤</span> <span>Rock &amp; Pop</span> </a><a href="/jamdojo/learn/genre/hip-hop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Hip-Hop</span> </a><a href="/jamdojo/learn/genre/edm/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎧</span> <span>Electronic Dance Music</span> </a><a href="/jamdojo/learn/genre/metal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🤘</span> <span>Metal</span> </a><a href="/jamdojo/learn/genre/demoscene/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🖥️</span> <span>Demoscene</span> </a><a href="/jamdojo/learn/genre/classical/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Classical Music</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-5"> <div class="flex items-center gap-2"> <span>📚</span> <span class="font-medium">Workshop</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-5" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/workshop-content/getting-started/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🚀</span> <span>Getting Started</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-6"> <div class="flex items-center gap-2"> <span>📖</span> <span class="font-medium">Reference</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-6" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/samples/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📀</span> <span>Samples</span> </a><a href="/jamdojo/learn/reference/synths/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Synths</span> </a><a href="/jamdojo/learn/reference/effects/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Audio Effects</span> </a><a href="/jamdojo/learn/reference/notes/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Notes</span> </a><a href="/jamdojo/learn/reference/tonal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Tonal Functions</span> </a><a href="/jamdojo/learn/reference/mini-notation/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">✏️</span> <span>Mini-Notation</span> </a><a href="/jamdojo/learn/reference/signals/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📈</span> <span>Signals</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-7"> <div class="flex items-center gap-2"> <span>⚡</span> <span class="font-medium">Pattern Functions</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-7" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/factories/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏭</span> <span>Creating Patterns</span> </a><a href="/jamdojo/learn/workshop-content/time-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⏱️</span> <span>Time Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/random-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎲</span> <span>Random Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/conditional-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">❓</span> <span>Conditional Modifiers</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-8"> <div class="flex items-center gap-2"> <span>🚀</span> <span class="font-medium">Advanced</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-8" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/advanced/visual-feedback/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Visual Feedback</span> </a><a href="/jamdojo/learn/advanced/hydra/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🌊</span> <span>Hydra Visuals</span> </a><a href="/jamdojo/learn/advanced/input-output/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔌</span> <span>MIDI &amp; OSC</span> </a><a href="/jamdojo/learn/advanced/csound/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Csound</span> </a><a href="/jamdojo/learn/advanced/pwa/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📱</span> <span>PWA</span> </a> </div> </div> <div class="mt-auto pt-4 border-t border-gray-800 text-xs text-gray-500 space-y-1"> <a href="https://github.com/kimjune01/jamdojo" target="_blank" rel="noopener" class="block hover:text-cyan-400">JamDojo Source</a> <a href="https://github.com/tidalcycles/strudel" target="_blank" rel="noopener" class="block hover:text-cyan-400">Strudel (AGPL-3.0)</a> </div> </nav> <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.activity-accordion-header');
+    accordionHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.activity-accordion-icon');
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          content.style.display = 'none';
+          header.setAttribute('aria-expanded', 'false');
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.display = 'block';
+          header.setAttribute('aria-expanded', 'true');
+          icon.style.transform = 'rotate(90deg)';
+        }
+      });
+    });
+  });
+</script> </aside> <!-- Mobile header --> <div class="md:hidden fixed top-0 left-0 right-0 bg-gray-900 border-b border-gray-800 p-3 z-50"> <div class="flex items-center justify-between"> <a href="/jamdojo/" class="text-gray-400 hover:text-white">← JamDojo</a> <span class="font-bold">Rock &amp; Pop</span> </div> </div> <!-- Main content --> <main class="flex-1 md:ml-56 p-6 pt-16 md:pt-6"> <div class="max-w-4xl mx-auto"> <h1 class="text-3xl font-bold mb-6">Rock &amp; Pop</h1> <div class="prose dark:prose-invert max-w-full"> <p>Rock and pop music have shaped modern culture for over 60 years. From the guitar-driven power of classic rock to the polished production of modern pop, this guide covers essential techniques, sounds, and patterns across subgenres.</p>
+<h2 id="the-rock-foundation">The Rock Foundation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#the-rock-foundation"><span class="icon icon-link"></span></a></h2>
+<p>Rock’s foundation is the backbeat—snare on beats 2 and 4, kick emphasizing 1 and 3, with steady eighth-note hi-hats:</p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var l=(n,t)=>{let i=async()=>{await(await n())()},e=typeof t.value=="object"?t.value:void 0,s={timeout:e==null?void 0:e.timeout};"requestIdleCallback"in window?window.requestIdleCallback(i,s):setTimeout(i,s.timeout||200)};(self.Astro||(self.Astro={})).idle=l;window.dispatchEvent(new Event("astro:idle"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1oLoof" prefix="r0" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ ~ bd ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ ~ bd ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>This pattern forms the basis of rock from the 1950s to today.</p>
+<h2 id="guitar-sounds">Guitar Sounds<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#guitar-sounds"><span class="icon icon-link"></span></a></h2>
+<h3 id="clean-guitar">Clean Guitar<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#clean-guitar"><span class="icon icon-link"></span></a></h3>
+<p>Bright, chimey tone for arpeggios and chord work:</p>
+<astro-island uid="Z65oyo" prefix="r1" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;&lt;c3,e3,g3&gt; &lt;a2,c3,e3&gt; &lt;f2,a2,c3&gt; &lt;g2,b2,d3&gt;\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(3000)\n.attack(0.01)\n.decay(0.3)\n.sustain(0.5)\n.room(0.3)\n.gain(0.4)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;&lt;c3,e3,g3&gt; &lt;a2,c3,e3&gt; &lt;f2,a2,c3&gt; &lt;g2,b2,d3&gt;&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(3000)
+.attack(0.01)
+.decay(0.3)
+.sustain(0.5)
+.room(0.3)
+.gain(0.4)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="crunchy-overdrive">Crunchy Overdrive<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#crunchy-overdrive"><span class="icon icon-link"></span></a></h3>
+<p>Classic rock tone with warm distortion:</p>
+<astro-island uid="ZAtQs8" prefix="r2" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;e3 e3 g3 a3 g3 e3 d3 e3\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.distort(2)\n.lpf(2500)\n.attack(0.01)\n.decay(0.2)\n.sustain(0.6)\n.gain(0.5)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;e3 e3 g3 a3 g3 e3 d3 e3&quot;)
+.s(&quot;sawtooth&quot;)
+.distort(2)
+.lpf(2500)
+.attack(0.01)
+.decay(0.2)
+.sustain(0.6)
+.gain(0.5)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="power-chords">Power Chords<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#power-chords"><span class="icon icon-link"></span></a></h3>
+<p>Root + fifth, the foundation of rock rhythm guitar:</p>
+<astro-island uid="2jkFIl" prefix="r3" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;e2 e2 a2 a2 d3 d3 a2 a2\&quot;),\nnote(\&quot;b2 b2 e3 e3 a3 a3 e3 e3\&quot;)\n).s(\&quot;sawtooth\&quot;)\n.distort(2.5)\n.lpf(2000)\n.attack(0.01)\n.decay(0.15)\n.sustain(0.7)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;e2 e2 a2 a2 d3 d3 a2 a2&quot;),
+note(&quot;b2 b2 e3 e3 a3 a3 e3 e3&quot;)
+).s(&quot;sawtooth&quot;)
+.distort(2.5)
+.lpf(2000)
+.attack(0.01)
+.decay(0.15)
+.sustain(0.7)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="fuzz-guitar">Fuzz Guitar<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#fuzz-guitar"><span class="icon icon-link"></span></a></h3>
+<p>60s/70s psychedelic tone with heavy saturation:</p>
+<astro-island uid="ZQj9P" prefix="r4" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;e3 g3 a3 g3\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.distort(4)\n.lpf(1800)\n.lpq(3)\n.room(0.2)\n.gain(0.4)\n.cpm(28)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;e3 g3 a3 g3&quot;)
+.s(&quot;sawtooth&quot;)
+.distort(4)
+.lpf(1800)
+.lpq(3)
+.room(0.2)
+.gain(0.4)
+.cpm(28)</pre><!--astro:end--></astro-island>
+<h2 id="bass-sounds">Bass Sounds<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#bass-sounds"><span class="icon icon-link"></span></a></h2>
+<h3 id="rock-bass">Rock Bass<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#rock-bass"><span class="icon icon-link"></span></a></h3>
+<p>Punchy, fundamental tone:</p>
+<astro-island uid="Fu0pH" prefix="r5" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;e1 e1 g1 a1 e1 e1 d1 e1\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(800)\n.attack(0.01)\n.decay(0.2)\n.sustain(0.6)\n.gain(0.7)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;e1 e1 g1 a1 e1 e1 d1 e1&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(800)
+.attack(0.01)
+.decay(0.2)
+.sustain(0.6)
+.gain(0.7)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="post-punk-melodic-bass">Post-Punk Melodic Bass<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#post-punk-melodic-bass"><span class="icon icon-link"></span></a></h3>
+<p>High-register bass carrying the melody (Joy Division style):</p>
+<astro-island uid="1HbPuB" prefix="r6" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;e3 b3 g3 e3 d3 e3 g3 b3\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(1500)\n.attack(0.01)\n.decay(0.3)\n.sustain(0.4)\n.room(0.3)\n.gain(0.6)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;e3 b3 g3 e3 d3 e3 g3 b3&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(1500)
+.attack(0.01)
+.decay(0.3)
+.sustain(0.4)
+.room(0.3)
+.gain(0.6)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="synth-bass-80s-pop">Synth Bass (80s Pop)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#synth-bass-80s-pop"><span class="icon icon-link"></span></a></h3>
+<p>Minimoog-style bass for synth-pop:</p>
+<astro-island uid="Z1IS30t" prefix="r7" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2 c2 c2 c3 eb2 eb2 f2 g2\&quot;)\n.s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(400, 1200).fast(0.5))\n.lpq(5)\n.attack(0.001)\n.decay(0.15)\n.sustain(0.3)\n.gain(0.6)\n.cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2 c2 c2 c3 eb2 eb2 f2 g2&quot;)
+.s(&quot;sawtooth&quot;)
+.lpf(sine.range(400, 1200).fast(0.5))
+.lpq(5)
+.attack(0.001)
+.decay(0.15)
+.sustain(0.3)
+.gain(0.6)
+.cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="genre-deep-dives">Genre Deep Dives<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#genre-deep-dives"><span class="icon icon-link"></span></a></h2>
+<h3 id="classic-rock-120-140-bpm">Classic Rock (120-140 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#classic-rock-120-140-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Classic rock draws from blues with swinging grooves, pentatonic riffs, and powerful backbeats. Drum sounds are often large and roomy.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=pAgnJDJN4VA">“Back in Black”</a> by AC/DC — steady backbeat with offbeat hi-hat accents</li>
+<li><a href="https://www.youtube.com/watch?v=lncr2g9XJHU">“Rock and Roll”</a> by Led Zeppelin — Bonham’s powerful drumming</li>
+<li><a href="https://www.youtube.com/watch?v=nrIPxlFzDi0">“(I Can’t Get No) Satisfaction”</a> by The Rolling Stones — syncopated guitar riff</li>
+</ul>
+<p><strong>Characteristics:</strong> Pentatonic scales, blues influences, powerful drums, guitar-driven</p>
+<astro-island uid="Znae6g" prefix="r8" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd ~ bd ~ bd bd\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\nnote(\&quot;e2 e2 g2 a2 e2 e2 d2 e2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(2)\n  .lpf(2000)\n  .gain(0.5)\n).cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd ~ bd ~ bd bd&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+note(&quot;e2 e2 g2 a2 e2 e2 d2 e2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(2)
+  .lpf(2000)
+  .gain(0.5)
+).cpm(35)</pre><!--astro:end--></astro-island>
+<p><strong>With Lead Guitar:</strong></p>
+<astro-island uid="Zr6fyD" prefix="r9" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd ~ bd ~ bd bd\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.4),\nnote(\&quot;e2*4\&quot;).s(\&quot;sawtooth\&quot;).distort(2).lpf(1500).gain(0.4),\nnote(\&quot;e4 g4 a4 b4 a4 g4 e4 d4\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(1.5)\n  .lpf(3000)\n  .room(0.2)\n  .gain(0.4)\n).cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd ~ bd ~ bd bd&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.4),
+note(&quot;e2*4&quot;).s(&quot;sawtooth&quot;).distort(2).lpf(1500).gain(0.4),
+note(&quot;e4 g4 a4 b4 a4 g4 e4 d4&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(1.5)
+  .lpf(3000)
+  .room(0.2)
+  .gain(0.4)
+).cpm(35)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="punk-rock-150-180-bpm">Punk Rock (150-180 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#punk-rock-150-180-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Punk emerged in the mid-70s as a raw, aggressive reaction to progressive rock excess. Fast tempos, power chords, and relentless downstrokes define the sound.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=skdE0KAFCEA">“Blitzkrieg Bop”</a> by Ramones (~175 BPM) — “Hey! Ho! Let’s Go!”</li>
+<li><a href="https://www.youtube.com/watch?v=cBojbjoMttI">“Anarchy in the U.K.”</a> by Sex Pistols (~150 BPM)</li>
+<li><a href="https://www.youtube.com/watch?v=EfK-WX2pa8c">“London Calling”</a> by The Clash</li>
+</ul>
+<p><strong>Characteristics:</strong> Fast tempo, power chords, downstroke strumming, simple structures, raw energy</p>
+<astro-island uid="ZycPYg" prefix="r10" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclid(4, 4),\nsound(\&quot;sd\&quot;).euclidRot(2, 4, 2),\nsound(\&quot;hh\&quot;).euclid(8, 8).gain(0.5),\nnote(\&quot;e2*8\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(3)\n  .lpf(1500)\n  .attack(0.001)\n  .decay(0.08)\n  .sustain(0.3)\n  .gain(0.6)\n).cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclid(4, 4),
+sound(&quot;sd&quot;).euclidRot(2, 4, 2),
+sound(&quot;hh&quot;).euclid(8, 8).gain(0.5),
+note(&quot;e2*8&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(3)
+  .lpf(1500)
+  .attack(0.001)
+  .decay(0.08)
+  .sustain(0.3)
+  .gain(0.6)
+).cpm(44)</pre><!--astro:end--></astro-island>
+<p><strong>With Chord Changes:</strong></p>
+<astro-island uid="Z1t7UdP" prefix="r11" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclid(4, 4),\nsound(\&quot;sd\&quot;).euclidRot(2, 4, 2),\nsound(\&quot;hh\&quot;).euclid(8, 8).gain(0.5),\nstack(\n  note(\&quot;&lt;e2!4 a2!2 b2!2&gt;*2\&quot;),\n  note(\&quot;&lt;b2!4 e3!2 f#3!2&gt;*2\&quot;)\n).s(\&quot;sawtooth\&quot;)\n  .distort(3)\n  .lpf(1500)\n  .attack(0.001)\n  .decay(0.08)\n  .sustain(0.3)\n  .gain(0.5)\n).cpm(44)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclid(4, 4),
+sound(&quot;sd&quot;).euclidRot(2, 4, 2),
+sound(&quot;hh&quot;).euclid(8, 8).gain(0.5),
+stack(
+  note(&quot;&lt;e2!4 a2!2 b2!2&gt;*2&quot;),
+  note(&quot;&lt;b2!4 e3!2 f#3!2&gt;*2&quot;)
+).s(&quot;sawtooth&quot;)
+  .distort(3)
+  .lpf(1500)
+  .attack(0.001)
+  .decay(0.08)
+  .sustain(0.3)
+  .gain(0.5)
+).cpm(44)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="post-punk-120-140-bpm">Post-Punk (120-140 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#post-punk-120-140-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Post-punk emerged in the late 70s with bands like Joy Division, Siouxsie and the Banshees, and The Cure. Bass carries the melody, guitars are sparse and atmospheric, drums are mechanical.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=zuuObGsB0No">“Love Will Tear Us Apart”</a> by Joy Division — Peter Hook’s melodic bass</li>
+<li><a href="https://www.youtube.com/watch?v=xik-y0xlpZ0">“A Forest”</a> by The Cure — atmospheric and hypnotic</li>
+<li><a href="https://www.youtube.com/watch?v=s4prQ11orEM">“She’s Lost Control”</a> by Joy Division — driving bass, sparse guitar</li>
+</ul>
+<p><strong>Characteristics:</strong> Bass-driven melodies, reverb-drenched guitars, angular rhythms, dark atmosphere</p>
+<astro-island uid="ZdztU4" prefix="r12" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ bd ~ ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.3),\nnote(\&quot;e3 b3 g3 e3 d3 e3 g3 a3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1800)\n  .attack(0.01)\n  .decay(0.3)\n  .sustain(0.4)\n  .room(0.4)\n  .gain(0.6)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ bd ~ ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.3),
+note(&quot;e3 b3 g3 e3 d3 e3 g3 a3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1800)
+  .attack(0.01)
+  .decay(0.3)
+  .sustain(0.4)
+  .room(0.4)
+  .gain(0.6)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<p><strong>With Sparse Guitar:</strong></p>
+<astro-island uid="Z2kPlFo" prefix="r13" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ bd ~ ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.3),\nnote(\&quot;e3 b3 g3 e3 d3 e3 g3 a3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1800)\n  .room(0.4)\n  .gain(0.5),\nnote(\&quot;~ e5 ~ ~ ~ b4 ~ ~\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(2500)\n  .room(0.6)\n  .delay(0.4)\n  .delaytime(0.375)\n  .delayfeedback(0.4)\n  .gain(0.3)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ bd ~ ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.3),
+note(&quot;e3 b3 g3 e3 d3 e3 g3 a3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1800)
+  .room(0.4)
+  .gain(0.5),
+note(&quot;~ e5 ~ ~ ~ b4 ~ ~&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(2500)
+  .room(0.6)
+  .delay(0.4)
+  .delaytime(0.375)
+  .delayfeedback(0.4)
+  .gain(0.3)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="new-wave--synth-pop-110-130-bpm">New Wave / Synth-Pop (110-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#new-wave--synth-pop-110-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Synth-pop brought electronic instruments to the forefront—synthesizers replaced guitars, drum machines replaced drummers. The sound is polished, melodic, and often melancholic.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=FYH8DsU2WCk">“Blue Monday”</a> by New Order — TR-808 drums, sequenced synths</li>
+<li><a href="https://www.youtube.com/watch?v=aGSKrC7dGcY">“Enjoy the Silence”</a> by Depeche Mode — atmospheric and textured</li>
+<li><a href="https://www.youtube.com/watch?v=djV11Xbc914">“Take On Me”</a> by a-ha — bright synths, iconic hook</li>
+</ul>
+<p><strong>Equipment:</strong> Roland TR-808/909, Minimoog, Juno-106, DX7</p>
+<p><strong>Characteristics:</strong> Drum machines, synth bass, arpeggiated synths, polished production</p>
+<astro-island uid="Z2ruGrx" prefix="r14" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(4, 8),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(8, 8).gain(0.4),\nnote(\&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(600)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.3)\n  .gain(0.6)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclid(4, 8),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).euclid(8, 8).gain(0.4),
+note(&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(600)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.3)
+  .gain(0.6)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>With Synth Arp:</strong></p>
+<astro-island uid="Z3PhVf" prefix="r15" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(4, 8),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(8, 8).gain(0.4),\nnote(\&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(600)\n  .gain(0.5),\nnote(\&quot;c4 eb4 g4 c5 g4 eb4\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(2500)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.1)\n  .delay(0.3)\n  .delaytime(0.125)\n  .gain(0.35)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclid(4, 8),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).euclid(8, 8).gain(0.4),
+note(&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(600)
+  .gain(0.5),
+note(&quot;c4 eb4 g4 c5 g4 eb4&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .lpf(2500)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.1)
+  .delay(0.3)
+  .delaytime(0.125)
+  .gain(0.35)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="80s-pop-110-130-bpm">80s Pop (110-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#80s-pop-110-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>80s pop is defined by gated reverb drums, synthesizers, and polished production. The LinnDrum and DX7 are signature sounds.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Zi_XLOBDo_Y">“Billie Jean”</a> by Michael Jackson — iconic drum pattern, Minimoog bass</li>
+<li><a href="https://www.youtube.com/watch?v=52iW3lcpK5M">“Into the Groove”</a> by Madonna — Oberheim DMX drums, Juno-106 chords</li>
+<li><a href="https://www.youtube.com/watch?v=djV11Xbc914">“Take On Me”</a> by a-ha — bright synths, huge drums</li>
+</ul>
+<p><strong>Equipment:</strong> LinnDrum, Oberheim DMX, Yamaha DX7, Minimoog</p>
+<astro-island uid="Z4GMOj" prefix="r16" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;LinnDrum\&quot;).euclid(4, 8),\nsound(\&quot;sd\&quot;).bank(\&quot;LinnDrum\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;LinnDrum\&quot;).euclid(8, 8).gain(0.5),\nsound(\&quot;cp\&quot;).bank(\&quot;LinnDrum\&quot;).euclidRot(2, 16, 8).gain(0.4)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;LinnDrum&quot;).euclid(4, 8),
+sound(&quot;sd&quot;).bank(&quot;LinnDrum&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;LinnDrum&quot;).euclid(8, 8).gain(0.5),
+sound(&quot;cp&quot;).bank(&quot;LinnDrum&quot;).euclidRot(2, 16, 8).gain(0.4)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p><strong>Billie Jean Style:</strong></p>
+<astro-island uid="Z2tACPD" prefix="r17" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).bank(\&quot;LinnDrum\&quot;).euclid(4, 8),\nsound(\&quot;sd\&quot;).bank(\&quot;LinnDrum\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;LinnDrum\&quot;).euclid(8, 8).gain(0.4),\nnote(\&quot;f#2 f#2 f#2 f#3 f#2 f#2 e2 f#2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(800)\n  .lpq(3)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.2)\n  .gain(0.6)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).bank(&quot;LinnDrum&quot;).euclid(4, 8),
+sound(&quot;sd&quot;).bank(&quot;LinnDrum&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;LinnDrum&quot;).euclid(8, 8).gain(0.4),
+note(&quot;f#2 f#2 f#2 f#3 f#2 f#2 e2 f#2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(800)
+  .lpq(3)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.2)
+  .gain(0.6)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="grunge-100-130-bpm">Grunge (100-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#grunge-100-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Grunge emerged from Seattle in the late 80s/early 90s as a fusion of punk attitude and heavy metal power. Drop-D tuning, heavy distortion, and dynamic shifts between quiet verses and loud choruses.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=hTWKbfoikeg">“Smells Like Teen Spirit”</a> by Nirvana (~117 BPM) — quiet-loud dynamics</li>
+<li><a href="https://www.youtube.com/watch?v=qM0zINtulhM">“Alive”</a> by Pearl Jam — blues-influenced solos</li>
+<li><a href="https://www.youtube.com/watch?v=3mbBbFH9fAg">“Black Hole Sun”</a> by Soundgarden — heavy, psychedelic</li>
+</ul>
+<p><strong>Characteristics:</strong> Drop-D tuning, heavy distortion, dynamic contrast, angst-filled vocals</p>
+<astro-island uid="6Pdza" prefix="r18" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ bd ~ bd ~ ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.4),\nstack(\n  note(\&quot;d2 d2 d2 d3 d2 d2 c2 d2\&quot;),\n  note(\&quot;a2 a2 a2 a3 a2 a2 g2 a2\&quot;)\n).s(\&quot;sawtooth\&quot;)\n  .distort(3.5)\n  .lpf(1500)\n  .attack(0.01)\n  .decay(0.2)\n  .sustain(0.6)\n  .gain(0.5)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ bd ~ bd ~ ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.4),
+stack(
+  note(&quot;d2 d2 d2 d3 d2 d2 c2 d2&quot;),
+  note(&quot;a2 a2 a2 a3 a2 a2 g2 a2&quot;)
+).s(&quot;sawtooth&quot;)
+  .distort(3.5)
+  .lpf(1500)
+  .attack(0.01)
+  .decay(0.2)
+  .sustain(0.6)
+  .gain(0.5)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<p><strong>Quiet Verse:</strong></p>
+<astro-island uid="1VfiDt" prefix="r19" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ ~ bd ~ ~ ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ ~ ~\&quot;),\nnote(\&quot;d2 ~ a2 ~ d2 ~ g2 ~\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(800)\n  .attack(0.01)\n  .decay(0.3)\n  .sustain(0.3)\n  .room(0.2)\n  .gain(0.4)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ ~ bd ~ ~ ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ ~ ~&quot;),
+note(&quot;d2 ~ a2 ~ d2 ~ g2 ~&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(800)
+  .attack(0.01)
+  .decay(0.3)
+  .sustain(0.3)
+  .room(0.2)
+  .gain(0.4)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<p><strong>Loud Chorus:</strong></p>
+<astro-island uid="ZfUKF7" prefix="r20" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd bd ~ bd bd ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd sd\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\nstack(\n  note(\&quot;d2*8\&quot;),\n  note(\&quot;a2*8\&quot;)\n).s(\&quot;sawtooth\&quot;)\n  .distort(4)\n  .lpf(1800)\n  .gain(0.6)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd bd ~ bd bd ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd sd&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+stack(
+  note(&quot;d2*8&quot;),
+  note(&quot;a2*8&quot;)
+).s(&quot;sawtooth&quot;)
+  .distort(4)
+  .lpf(1800)
+  .gain(0.6)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="britpop-110-130-bpm">Britpop (110-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#britpop-110-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Britpop emerged in the mid-90s as a reaction to American grunge, drawing on 60s British pop influences like The Beatles and The Kinks. Catchy melodies, jangly guitars, and witty lyrics.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=bx1Bh8ZvH84">“Wonderwall”</a> by Oasis — anthemic, acoustic-driven</li>
+<li><a href="https://www.youtube.com/watch?v=SSbBvKaM6sk">“Song 2”</a> by Blur — “Woo-hoo!” distorted energy</li>
+<li><a href="https://www.youtube.com/watch?v=yuTMWgOduFM">“Common People”</a> by Pulp — synth-rock storytelling</li>
+</ul>
+<p><strong>Characteristics:</strong> British influences (Beatles, Kinks), catchy melodies, guitar-pop, swagger</p>
+<p><strong>Oasis Style (Anthemic):</strong></p>
+<astro-island uid="1cDGOj" prefix="r21" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd ~ bd ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.4),\nnote(\&quot;&lt;e3,g#3,b3&gt; &lt;a2,c#3,e3&gt; &lt;c#3,e3,g#3&gt; &lt;d3,f#3,a3&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(1.5)\n  .lpf(2500)\n  .attack(0.02)\n  .decay(0.3)\n  .sustain(0.5)\n  .room(0.3)\n  .gain(0.4)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd ~ bd ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.4),
+note(&quot;&lt;e3,g#3,b3&gt; &lt;a2,c#3,e3&gt; &lt;c#3,e3,g#3&gt; &lt;d3,f#3,a3&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(1.5)
+  .lpf(2500)
+  .attack(0.02)
+  .decay(0.3)
+  .sustain(0.5)
+  .room(0.3)
+  .gain(0.4)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<p><strong>Blur Style (Punchy):</strong></p>
+<astro-island uid="Z16xbnH" prefix="r22" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd bd ~ ~ bd bd ~ ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\nnote(\&quot;f2 f2 ~ f2 ~ f2 f2 ~\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(3)\n  .lpf(1500)\n  .attack(0.001)\n  .decay(0.08)\n  .sustain(0.2)\n  .gain(0.6)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd bd ~ ~ bd bd ~ ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+note(&quot;f2 f2 ~ f2 ~ f2 f2 ~&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(3)
+  .lpf(1500)
+  .attack(0.001)
+  .decay(0.08)
+  .sustain(0.2)
+  .gain(0.6)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="indie-rock-110-140-bpm">Indie Rock (110-140 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#indie-rock-110-140-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Modern indie rock blends influences from post-punk revival, garage rock, and art rock. Often features angular guitar riffs, driving rhythms, and effects-laden tones.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=TOypSnKFHrE">“Last Nite”</a> by The Strokes — garage rock simplicity</li>
+<li><a href="https://www.youtube.com/watch?v=pK7egZaT3hs">“I Bet You Look Good on the Dancefloor”</a> by Arctic Monkeys — driving energy</li>
+<li><a href="https://www.youtube.com/watch?v=Ijk4j-r7qPA">“Take Me Out”</a> by Franz Ferdinand — angular, danceable</li>
+</ul>
+<p><strong>Characteristics:</strong> Garage rock influence, angular guitars, fuzz/overdrive, post-punk revival energy</p>
+<p><strong>Strokes Style:</strong></p>
+<astro-island uid="1fizBB" prefix="r23" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd ~ bd ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\nnote(\&quot;d3 d3 f3 d3 a3 f3 d3 c3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(1.5)\n  .lpf(3000)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.3)\n  .gain(0.5)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd ~ bd ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+note(&quot;d3 d3 f3 d3 a3 f3 d3 c3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(1.5)
+  .lpf(3000)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.3)
+  .gain(0.5)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<p><strong>Arctic Monkeys Style:</strong></p>
+<astro-island uid="Z1T1Hu9" prefix="r24" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd bd ~ bd bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.4),\nnote(\&quot;e3 e3 g3 e3 b3 g3 e3 d3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(2.5)\n  .lpf(2500)\n  .lpq(2)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.3)\n  .gain(0.5)\n).cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd bd ~ bd bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.4),
+note(&quot;e3 e3 g3 e3 b3 g3 e3 d3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(2.5)
+  .lpf(2500)
+  .lpq(2)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.3)
+  .gain(0.5)
+).cpm(35)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="modern-pop-100-130-bpm">Modern Pop (100-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#modern-pop-100-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Modern pop is heavily influenced by EDM, hip-hop, and R&amp;B. Characterized by polished production, electronic drums, auto-tuned vocals, and catchy hooks.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=DyDfgMOUjCI">“Bad Guy”</a> by Billie Eilish — minimal, bass-heavy</li>
+<li><a href="https://www.youtube.com/watch?v=4NRXx6U8ABQ">“Blinding Lights”</a> by The Weeknd — 80s synth revival</li>
+<li><a href="https://www.youtube.com/watch?v=JGwWNGJdvx8">“Shape of You”</a> by Ed Sheeran — tropical house influence</li>
+</ul>
+<p><strong>Characteristics:</strong> Electronic production, compressed vocals, drop-based structure, EDM influences</p>
+<p><strong>Minimal Pop (Billie Eilish style):</strong></p>
+<astro-island uid="Z16irSj" prefix="r25" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ ~ bd ~ ~ ~\&quot;),\nsound(\&quot;~ ~ ~ ~ sd ~ ~ ~\&quot;),\nnote(\&quot;c2 ~ ~ c2 ~ ~ eb2 ~\&quot;)\n  .s(\&quot;sine\&quot;)\n  .lpf(300)\n  .gain(0.8),\nsound(\&quot;hh ~ hh ~\&quot;).gain(0.3)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ ~ bd ~ ~ ~&quot;),
+sound(&quot;~ ~ ~ ~ sd ~ ~ ~&quot;),
+note(&quot;c2 ~ ~ c2 ~ ~ eb2 ~&quot;)
+  .s(&quot;sine&quot;)
+  .lpf(300)
+  .gain(0.8),
+sound(&quot;hh ~ hh ~&quot;).gain(0.3)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<p><strong>80s Revival (Blinding Lights style):</strong></p>
+<astro-island uid="jUp4x" prefix="r26" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd\&quot;).euclid(4, 4),\nsound(\&quot;sd\&quot;).euclidRot(2, 4, 2),\nsound(\&quot;hh*8\&quot;).gain(0.4),\nnote(\&quot;f3 f3 a3 f3 c4 a3 f3 eb3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(2000)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.2)\n  .gain(0.5),\nnote(\&quot;&lt;f2,a2,c3&gt; &lt;eb2,g2,bb2&gt;\&quot;)\n  .s(\&quot;supersaw\&quot;)\n  .lpf(3000)\n  .attack(0.1)\n  .release(0.3)\n  .room(0.3)\n  .gain(0.3)\n).cpm(29)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd&quot;).euclid(4, 4),
+sound(&quot;sd&quot;).euclidRot(2, 4, 2),
+sound(&quot;hh*8&quot;).gain(0.4),
+note(&quot;f3 f3 a3 f3 c4 a3 f3 eb3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(2000)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.2)
+  .gain(0.5),
+note(&quot;&lt;f2,a2,c3&gt; &lt;eb2,g2,bb2&gt;&quot;)
+  .s(&quot;supersaw&quot;)
+  .lpf(3000)
+  .attack(0.1)
+  .release(0.3)
+  .room(0.3)
+  .gain(0.3)
+).cpm(29)</pre><!--astro:end--></astro-island>
+<p><strong>Tropical Pop (Ed Sheeran style):</strong></p>
+<astro-island uid="ZRexWF" prefix="r27" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ bd ~\&quot;),\nsound(\&quot;~ sd ~ sd\&quot;),\nsound(\&quot;rim\&quot;).euclidRot(3, 8, 2).gain(0.5),\nnote(\&quot;c#2 ~ g#2 ~ c#2 ~ b1 c#2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(600)\n  .gain(0.5),\nnote(\&quot;&lt;c#3,e3,g#3&gt; &lt;a2,c#3,e3&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1500)\n  .attack(0.01)\n  .decay(0.2)\n  .sustain(0.3)\n  .room(0.2)\n  .gain(0.3)\n).cpm(24)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ bd ~&quot;),
+sound(&quot;~ sd ~ sd&quot;),
+sound(&quot;rim&quot;).euclidRot(3, 8, 2).gain(0.5),
+note(&quot;c#2 ~ g#2 ~ c#2 ~ b1 c#2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(600)
+  .gain(0.5),
+note(&quot;&lt;c#3,e3,g#3&gt; &lt;a2,c#3,e3&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1500)
+  .attack(0.01)
+  .decay(0.2)
+  .sustain(0.3)
+  .room(0.2)
+  .gain(0.3)
+).cpm(24)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="alternative-rock-100-130-bpm">Alternative Rock (100-130 BPM)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#alternative-rock-100-130-bpm"><span class="icon icon-link"></span></a></h3>
+<p>Alternative rock is a broad category encompassing indie, grunge, and experimental approaches. R.E.M. and Radiohead pushed the genre in different directions.</p>
+<p><strong>Classic Tracks:</strong></p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=xwtdhWltSIg">“Losing My Religion”</a> by R.E.M. — mandolin-driven, jangly</li>
+<li><a href="https://www.youtube.com/watch?v=XFkzRNyygfk">“Creep”</a> by Radiohead — dynamic, emotional</li>
+<li><a href="https://www.youtube.com/watch?v=fHiGbolFFGw">“Paranoid Android”</a> by Radiohead — prog-influenced sections</li>
+</ul>
+<p><strong>Characteristics:</strong> Diverse influences, experimental production, dynamic range, introspective lyrics</p>
+<p><strong>R.E.M. Jangle Style:</strong></p>
+<astro-island uid="Z1Nhcx1" prefix="r28" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ bd ~ bd ~ ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.3),\nnote(\&quot;e4 b3 g3 e3 b3 e4 g4 b4\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(4000)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.2)\n  .room(0.3)\n  .gain(0.4)\n).cpm(32)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ bd ~ bd ~ ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.3),
+note(&quot;e4 b3 g3 e3 b3 e4 g4 b4&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .lpf(4000)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.3)
+  .gain(0.4)
+).cpm(32)</pre><!--astro:end--></astro-island>
+<p><strong>Radiohead Style (Building):</strong></p>
+<astro-island uid="1WhuwN" prefix="r29" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ ~ bd ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.3),\nnote(\&quot;&lt;g2,b2,d3&gt; &lt;a2,c3,e3&gt; &lt;e2,g2,b2&gt; &lt;c3,e3,g3&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(sine.range(800, 2500).slow(4))\n  .distort(1.5)\n  .attack(0.05)\n  .decay(0.3)\n  .sustain(0.5)\n  .room(0.4)\n  .gain(0.4)\n).cpm(28)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ ~ bd ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.3),
+note(&quot;&lt;g2,b2,d3&gt; &lt;a2,c3,e3&gt; &lt;e2,g2,b2&gt; &lt;c3,e3,g3&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(sine.range(800, 2500).slow(4))
+  .distort(1.5)
+  .attack(0.05)
+  .decay(0.3)
+  .sustain(0.5)
+  .room(0.4)
+  .gain(0.4)
+).cpm(28)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="complete-tracks">Complete Tracks<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#complete-tracks"><span class="icon icon-link"></span></a></h2>
+<h3 id="classic-rock-track">Classic Rock Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#classic-rock-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="ZnbGIH" prefix="r30" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd ~ bd ~ bd ~ bd bd\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\n\n// Bass\nnote(\&quot;e1 e1 g1 a1 e1 e1 d1 e1\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(600)\n  .gain(0.5),\n\n// Rhythm Guitar\nstack(\n  note(\&quot;e2*4 a2*2 d3*2\&quot;),\n  note(\&quot;b2*4 e3*2 a3*2\&quot;)\n).s(\&quot;sawtooth\&quot;)\n  .distort(2)\n  .lpf(2000)\n  .gain(0.4)\n).cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd ~ bd ~ bd ~ bd bd&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+
+// Bass
+note(&quot;e1 e1 g1 a1 e1 e1 d1 e1&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(600)
+  .gain(0.5),
+
+// Rhythm Guitar
+stack(
+  note(&quot;e2*4 a2*2 d3*2&quot;),
+  note(&quot;b2*4 e3*2 a3*2&quot;)
+).s(&quot;sawtooth&quot;)
+  .distort(2)
+  .lpf(2000)
+  .gain(0.4)
+).cpm(35)</pre><!--astro:end--></astro-island>
+<h3 id="post-punk-track">Post-Punk Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#post-punk-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="34UlL" prefix="r31" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd ~ ~ bd ~ ~ bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.3),\n\n// Melodic Bass\nnote(\&quot;e3 b3 g3 e3 d3 e3 g3 a3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1500)\n  .room(0.3)\n  .gain(0.5),\n\n// Sparse Guitar\nnote(\&quot;~ e5 ~ ~ ~ b4 ~ ~\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(2500)\n  .room(0.5)\n  .delay(0.4)\n  .delaytime(0.375)\n  .delayfeedback(0.5)\n  .gain(0.3)\n).cpm(33)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd ~ ~ bd ~ ~ bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.3),
+
+// Melodic Bass
+note(&quot;e3 b3 g3 e3 d3 e3 g3 a3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1500)
+  .room(0.3)
+  .gain(0.5),
+
+// Sparse Guitar
+note(&quot;~ e5 ~ ~ ~ b4 ~ ~&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(2500)
+  .room(0.5)
+  .delay(0.4)
+  .delaytime(0.375)
+  .delayfeedback(0.5)
+  .gain(0.3)
+).cpm(33)</pre><!--astro:end--></astro-island>
+<h3 id="synth-pop-track">Synth-Pop Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#synth-pop-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="1cnyJ" prefix="r32" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(4, 8),\nsound(\&quot;sd\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 4),\nsound(\&quot;hh\&quot;).bank(\&quot;RolandTR808\&quot;).euclid(8, 8).gain(0.4),\nsound(\&quot;oh\&quot;).bank(\&quot;RolandTR808\&quot;).euclidRot(2, 8, 2).gain(0.3),\n\n// Bass\nnote(\&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(700)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.2)\n  .gain(0.5),\n\n// Synth Arp\nnote(\&quot;c4 eb4 g4 c5 g4 eb4\&quot;.fast(2))\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(3000)\n  .attack(0.001)\n  .decay(0.1)\n  .sustain(0.1)\n  .delay(0.3)\n  .delaytime(0.166)\n  .gain(0.35),\n\n// Pad\nnote(\&quot;&lt;c3,eb3,g3&gt; &lt;eb3,g3,bb3&gt;\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(1500)\n  .attack(0.3)\n  .release(0.5)\n  .room(0.4)\n  .gain(0.2)\n).cpm(30)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd&quot;).bank(&quot;RolandTR808&quot;).euclid(4, 8),
+sound(&quot;sd&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 4),
+sound(&quot;hh&quot;).bank(&quot;RolandTR808&quot;).euclid(8, 8).gain(0.4),
+sound(&quot;oh&quot;).bank(&quot;RolandTR808&quot;).euclidRot(2, 8, 2).gain(0.3),
+
+// Bass
+note(&quot;c2 c2 g2 c2 eb2 eb2 g2 eb2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(700)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.2)
+  .gain(0.5),
+
+// Synth Arp
+note(&quot;c4 eb4 g4 c5 g4 eb4&quot;.fast(2))
+  .s(&quot;sawtooth&quot;)
+  .lpf(3000)
+  .attack(0.001)
+  .decay(0.1)
+  .sustain(0.1)
+  .delay(0.3)
+  .delaytime(0.166)
+  .gain(0.35),
+
+// Pad
+note(&quot;&lt;c3,eb3,g3&gt; &lt;eb3,g3,bb3&gt;&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(1500)
+  .attack(0.3)
+  .release(0.5)
+  .room(0.4)
+  .gain(0.2)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<h3 id="indie-rock-track">Indie Rock Track<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#indie-rock-track"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="8orLX" prefix="r33" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Drums\nsound(\&quot;bd ~ bd bd ~ bd bd ~\&quot;),\nsound(\&quot;~ ~ sd ~ ~ ~ sd ~\&quot;),\nsound(\&quot;hh*8\&quot;).gain(0.5),\n\n// Bass\nnote(\&quot;e2 e2 g2 e2 a2 g2 e2 d2\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .lpf(800)\n  .gain(0.5),\n\n// Guitar\nnote(\&quot;e3 e3 g3 e3 b3 g3 e3 d3\&quot;)\n  .s(\&quot;sawtooth\&quot;)\n  .distort(2)\n  .lpf(2800)\n  .attack(0.001)\n  .decay(0.15)\n  .sustain(0.3)\n  .gain(0.45)\n).cpm(35)&quot;],&quot;punchcard&quot;:[0,true],&quot;punchcardLabels&quot;:[0,false]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Drums
+sound(&quot;bd ~ bd bd ~ bd bd ~&quot;),
+sound(&quot;~ ~ sd ~ ~ ~ sd ~&quot;),
+sound(&quot;hh*8&quot;).gain(0.5),
+
+// Bass
+note(&quot;e2 e2 g2 e2 a2 g2 e2 d2&quot;)
+  .s(&quot;sawtooth&quot;)
+  .lpf(800)
+  .gain(0.5),
+
+// Guitar
+note(&quot;e3 e3 g3 e3 b3 g3 e3 d3&quot;)
+  .s(&quot;sawtooth&quot;)
+  .distort(2)
+  .lpf(2800)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.3)
+  .gain(0.45)
+).cpm(35)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="rock--pop-quick-reference">Rock &amp; Pop Quick Reference<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#rock--pop-quick-reference"><span class="icon icon-link"></span></a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Genre</th><th>BPM</th><th>Key Elements</th></tr></thead><tbody><tr><td>Classic Rock</td><td>120-140</td><td>Blues influence, pentatonic, backbeat</td></tr><tr><td>Punk</td><td>150-180</td><td>Fast, power chords, downstrokes</td></tr><tr><td>Post-Punk</td><td>120-140</td><td>Melodic bass, sparse guitar, reverb</td></tr><tr><td>New Wave</td><td>110-130</td><td>Synths, drum machines, arpeggios</td></tr><tr><td>80s Pop</td><td>110-130</td><td>LinnDrum, DX7, gated reverb</td></tr><tr><td>Grunge</td><td>100-130</td><td>Drop-D, heavy distortion, dynamics</td></tr><tr><td>Britpop</td><td>110-130</td><td>British 60s influence, catchy hooks</td></tr><tr><td>Indie Rock</td><td>110-140</td><td>Angular guitars, post-punk revival</td></tr><tr><td>Modern Pop</td><td>100-130</td><td>EDM influence, electronic production</td></tr><tr><td>Alternative</td><td>100-130</td><td>Diverse, experimental, dynamic</td></tr></tbody></table>
+<h2 id="what-you-learned">What You Learned<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/genre/rock-pop/#what-you-learned"><span class="icon icon-link"></span></a></h2>
+<ul>
+<li>Rock backbeat: snare on 2 and 4, kick on 1 and 3</li>
+<li>Power chords: root + fifth, foundation of rock guitar</li>
+<li><code>.distort()</code> values: 1.5-2 for crunch, 3-4 for heavy</li>
+<li>Post-punk: bass carries melody, guitar is sparse with delay/reverb</li>
+<li>Synth-pop: drum machines (TR-808/909), synth bass, arpeggios</li>
+<li>Grunge: drop-D tuning, quiet-loud dynamics</li>
+<li>Modern pop borrows from EDM and hip-hop production</li>
+<li>Different eras have distinct drum sounds (acoustic vs. electronic)</li>
+</ul> </div> </div> </main> </div> </body></html>
