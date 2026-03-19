@@ -99,4 +99,4 @@ Here, the diversity is structural. Different training, different blind spots. In
 
 ---
 
-*Written via the [double loop](/double-loop). For more, see [work log](/work-log). Evidence: [Codex implementation](https://github.com/kimjune01/gemini-cli-codex), [Claude implementation](https://github.com/kimjune01/gemini-cli-claude), [prototype](https://github.com/kimjune01/union-find-compaction), [spec](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/main/transformation-design.md).*
+*Written via the [double loop](/double-loop). For more, see [work log](/work-log). Evidence: [synthesis](https://github.com/kimjune01/gemini-cli/tree/feat/union-find-compaction-v2), [Codex blind](https://github.com/kimjune01/gemini-cli-codex), [Claude blind](https://github.com/kimjune01/gemini-cli-claude), [prototype](https://github.com/kimjune01/union-find-compaction), [spec](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/main/transformation-design.md).*
