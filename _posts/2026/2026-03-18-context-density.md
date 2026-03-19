@@ -80,6 +80,16 @@ We write for two audiences now: the human who benefits from mixed format, and th
 
 This experiment tested prose → prose compression, which is the LLM's perspective. Four decades of cognitive psychology already tested the human perspective.
 
+## Prose as spec
+
+I wrote a [prose spec](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/main/transformation-design.md) for a union-find context compaction system: architecture, data flow, file structure. An LLM implemented it in one shot. Then a [code review](/proof-of-trust) found ten bugs: race conditions, dimension mismatches, corpus contamination on query.
+
+None of them were spec failures. The spec didn't try to pin down function signatures or concurrency guards. It specified the forest; the bugs lived in the trees. A prose spec that tried to nail every interface contract would be worse prose *and* worse than code at the job.
+
+But the spec didn't survive intact either. The code review found bugs, the fixes taught us things, and the spec got rewritten twenty times to match. The implementation wasn't downstream of the prose. It was in dialogue with it. The spec said "zero blocking." The code said "not unless you guard against in-flight merges." The spec absorbed the correction.
+
+[Open Prose](/open-prose) claims the spec outlasts every artifact it produces. What actually happened: the architecture survived, but the spec is only as good as the last implementation that stress-tested it. Code is disposable *after* the spec absorbs what it taught. During development, it's load-bearing. The double loop isn't prose → code. It's prose ↔ code, and the arrow runs both ways.
+
 ## The cusp
 
 Format selection is a [Filter](/perception-pipe) decision: which processor should this information route to? Route a comparison to the language processor and you waste sequential attention on work the visual cortex does for free. Route a proof to a diagram and you waste spatial bandwidth on work that needs symbolic manipulation.
