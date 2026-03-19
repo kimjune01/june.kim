@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: post-wide
 title: "Proof of Trust"
 tags: vector-space
 ---

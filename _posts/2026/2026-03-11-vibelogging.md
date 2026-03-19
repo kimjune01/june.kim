@@ -76,7 +76,7 @@ If it builds, the blog is the source. If it doesn't, I'll keep writing until it 
 
 Now write yours. Pick the thing you know better than anyone. Blog it at spec depth. Point your agent at it. See if it compiles. If you can build a working system from a blog you wrote, you're a vibelogger. Post it to [PageLeft](https://pageleft.cc); I want to see what compiles.
 
-**Update (March 2026):** This worked for a greenfield project where I owned the entire design space. When I tried the same approach [contributing to an existing codebase](/context-density#prose-as-spec), the spec couldn't carry the constraints that mattered: type contracts, concurrency guards, dimension safety. The code review found ten bugs the prose never could have specified. The architecture held, but the implementation corrected the spec twenty times. Prose ↔ code, not prose → code.
+**Update (March 2026):** This worked for greenfield. When I tried the same approach [contributing to an existing codebase](/the-spec-is-a-hypothesis), the spec couldn't carry the constraints that mattered: type contracts, concurrency guards, dimension safety. The code review found ten bugs the prose never could have specified. The architecture held, but the implementation corrected the spec twenty times. [The spec is a hypothesis](/the-spec-is-a-hypothesis). The implementation is the experiment.
 
 ---
 
