@@ -54,7 +54,11 @@ CHANGED=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --dryrun
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
 
-NCHANGED=$(echo "$CHANGED" | grep -c . 2>/dev/null || echo 0)
+if [[ -z "$CHANGED" ]]; then
+  NCHANGED=0
+else
+  NCHANGED=$(echo "$CHANGED" | wc -l | tr -d ' ')
+fi
 echo "    $NCHANGED files synced"
 
 if [[ "$NCHANGED" -eq 0 ]]; then
