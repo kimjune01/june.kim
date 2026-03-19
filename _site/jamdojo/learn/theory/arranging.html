@@ -1,0 +1,656 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.1.9"><link rel="alternate" type="application/rss+xml" title="RSS Feed for strudel.cc" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/jamdojo/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/jamdojo/favicon.ico"><link rel="apple-touch-icon" href="/jamdojo/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/jamdojo/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/jamdojo/make-scrollable-code-focusable.js"></script><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_0_lang.BS_sy5Gw.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/jamdojo/manifest.webmanifest"><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_1_lang.-EECfF37.js"></script><title>Arranging Patterns - JamDojo</title><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css">
+<style>@font-face{font-family:PressStart;src:url(/jamdojo/fonts/PressStart2P/PressStart2P-Regular.ttf);size-adjust:65%}@font-face{font-family:BigBlueTerminal;src:url(/jamdojo/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/jamdojo/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/jamdojo/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:CutiePi;src:url(/jamdojo/fonts/CutiePi/Cute_Aurora_demo.ttf);size-adjust:120%}@font-face{font-family:JetBrains;src:url(/jamdojo/fonts/JetBrains/JetBrainsMono.woff2)}@font-face{font-family:Monocraft;src:url(/jamdojo/fonts/Monocraft/Monocraft.ttf);size-adjust:90%}@font-face{font-family:Hack;src:url(/jamdojo/fonts/Hack/Hack-Regular.ttf)}@font-face{font-family:we-come-in-peace;src:url(/jamdojo/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/jamdojo/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/jamdojo/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/jamdojo/fonts/teletext/EuropeanTeletext.ttf);size-adjust:90%}@font-face{font-family:tic80;src:url(/jamdojo/fonts/tic80/tic-80-wide-font.otf);size-adjust:60%}@font-face{font-family:mode7;src:url(/jamdojo/fonts/mode7/MODE7GX3.TTF);size-adjust:82%}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh;--app-width: 100vw}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+.prose h1:before,.prose h2:before,.prose h3:before,.prose h4:before,.prose h5:before,.prose h6:before{display:block;content:" ";margin-top:-70px;height:70px;visibility:hidden;pointer-events:none}.icon.icon-link{visibility:hidden}.prose h1:hover .icon.icon-link,.prose h2:hover .icon.icon-link,.prose h3:hover .icon.icon-link,.prose h4:hover .icon.icon-link,.prose h5:hover .icon.icon-link,.prose h6:hover .icon.icon-link{visibility:visible}.prose h1>a,.prose h2>a,.prose h3>a,.prose h4>a,.prose h5>a,.prose h6>a{text-decoration:none!important}.icon.icon-link:after{content:"#";margin-left:8px;font-size:.9em;opacity:50%}
+:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:#000;opacity:.5}#code .cm-scroller{padding-top:10px!important;height:100%;font-family:inherit}#code .cm-content{padding-bottom:50vh}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}#code .cm-matchingBracket{-webkit-text-decoration:underline .18rem;text-decoration:underline .18rem;text-underline-offset:.22rem}.cm-tooltip.cm-completionInfo{padding:0!important;border:1px solid var(--foreground)!important;border-radius:4px!important;box-shadow:0 4px 12px #0000004d!important;max-width:500px!important;min-width:300px!important;max-height:400px!important;background-color:var(--lineHighlight)!important;overflow:auto;background:var(--background)!important}.autocomplete-info-container{padding:12px!important;border-radius:4px!important;color:var(--foreground);font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:var(--font-size, 13px);line-height:1.4;max-width:600px;height:100%;min-width:400px;white-space:normal!important;overflow-y:auto!important}.autocomplete-info-tooltip{overflow-y:auto!important}.autocomplete-info-function-description{white-space:pre-wrap!important}.autocomplete-info-function-name{font-size:15px;font-weight:600;color:var(--foreground);margin:0 0 8px}.autocomplete-info-function-synonyms,.autocomplete-info-function-description{margin:0 0 12px;color:var(--foreground);line-height:1.5;opacity:.8}.autocomplete-info-section-title{font-size:12px;font-weight:600;color:var(--foreground);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}.autocomplete-info-section-title:first-child{margin-top:0}.autocomplete-info-params-section{margin-top:12px}.autocomplete-info-params-list{list-style:none;margin:0;padding:0}.autocomplete-info-param-item{margin-bottom:8px;padding:8px;background-color:var(--lineBackground);border-radius:3px;border-left:2px solid var(--foreground, #555)}.autocomplete-info-param-item:last-child{margin-bottom:0}.autocomplete-info-param-name{font-weight:600;color:var(--variable, var(--foreground));margin-right:8px}.autocomplete-info-param-type{color:var(--comment);font-size:12px;background-color:var(--gutterForeground);padding:1px 4px;border-radius:2px}.autocomplete-info-param-desc{color:var(--foreground);font-size:10px;margin-top:4px;line-height:1.4;opacity:.7}.autocomplete-info-examples-section{margin-top:12px}.autocomplete-info-example-code{background:var(--lineBackground);color:var(--foreground);padding:8px;border-radius:3px;font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:12px;line-height:1.5;margin:4px 0;overflow-x:auto;white-space:pre;border:1px solid var(--foreground, #3a3a3a)}.autocomplete-info-tooltip::-webkit-scrollbar{width:4px}.autocomplete-info-tooltip::-webkit-scrollbar-thumb{border-radius:2px}
+</style></head> <body class="min-h-screen m-0 text-gray-50 bg-background"> <div class="flex min-h-screen"> <!-- Sidebar --> <aside class="w-56 bg-gray-900 border-r border-gray-800 p-4 hidden md:block fixed h-full"> <nav class="flex flex-col gap-1 h-full overflow-y-auto"> <a href="/jamdojo/" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors mb-2"> <span>←</span> <span>JamDojo</span> </a> <div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-0"> <div class="flex items-center gap-2"> <span>🎮</span> <span class="font-medium">Interactive Tools</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-0" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/interactive-tools/playground/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">💻</span> <span>Playground</span> </a><a href="/jamdojo/learn/interactive-tools/piano/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎹</span> <span>Piano</span> </a><a href="/jamdojo/learn/interactive-tools/guitar/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎸</span> <span>Guitar</span> </a><a href="/jamdojo/learn/interactive-tools/pitch-detector/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Pitch Detector</span> </a><a href="/jamdojo/learn/interactive-tools/sample-explorer/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Sample Explorer</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-1"> <div class="flex items-center gap-2"> <span>🎯</span> <span class="font-medium">Quizzes</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-1" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/quizzes/sample-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎯</span> <span>Sample Quiz</span> </a><a href="/jamdojo/learn/quizzes/waveform-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">〰</span> <span>Waveform Quiz</span> </a><a href="/jamdojo/learn/quizzes/effect-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛</span> <span>Effect Quiz</span> </a><a href="/jamdojo/learn/quizzes/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space Quiz</span> </a><a href="/jamdojo/learn/quizzes/ear-training/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👂</span> <span>Ear Training</span> </a><a href="/jamdojo/learn/quizzes/pitch-simon/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Pitch Simon</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="true" aria-controls="activity-section-2"> <div class="flex items-center gap-2"> <span>🎵</span> <span class="font-medium">Music Theory</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style="transform: rotate(90deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-2" class="activity-accordion-content pl-4" style> <a href="/jamdojo/learn/theory/harmony/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎶</span> <span>Harmony</span> </a><a href="/jamdojo/learn/theory/chord-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Chord Composition</span> </a><a href="/jamdojo/learn/theory/classical-terminology/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎻</span> <span>Classical Terminology</span> </a><a href="/jamdojo/learn/theory/euclidean-rhythms/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🥁</span> <span>Euclidean Rhythms</span> </a><a href="/jamdojo/learn/theory/sound-design/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Sound Design &amp; Timbre</span> </a><a href="/jamdojo/learn/theory/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space</span> </a><a href="/jamdojo/learn/theory/sampling-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Sampling Composition</span> </a><a href="/jamdojo/learn/theory/arranging/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm bg-cyan-600 text-white"> <span class="text-lg">🎬</span> <span>Arranging Patterns</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-3"> <div class="flex items-center gap-2"> <span>💻</span> <span class="font-medium">Programming</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-3" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/strudel-programming/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔧</span> <span>Strudel Programming</span> </a><a href="/jamdojo/learn/theory/why-functions/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⚡</span> <span>Why Functions</span> </a><a href="/jamdojo/learn/theory/why-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📦</span> <span>Why Containers</span> </a><a href="/jamdojo/learn/theory/patterns-as-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Patterns as Containers</span> </a><a href="/jamdojo/learn/theory/transforming-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔄</span> <span>Transforming Patterns</span> </a><a href="/jamdojo/learn/theory/combining-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔗</span> <span>Combining Patterns</span> </a><a href="/jamdojo/learn/theory/patterns-of-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎁</span> <span>Patterns of Patterns</span> </a><a href="/jamdojo/learn/theory/building-with-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏗️</span> <span>Building with Patterns</span> </a><a href="/jamdojo/learn/theory/combining-events/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⊕</span> <span>Combining Events</span> </a><a href="/jamdojo/learn/theory/choice-and-selection/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔀</span> <span>Choice and Selection</span> </a><a href="/jamdojo/learn/theory/context-aware-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Context-Aware Patterns</span> </a><a href="/jamdojo/learn/theory/flipping-structure/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔃</span> <span>Flipping Structure</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-4"> <div class="flex items-center gap-2"> <span>🎸</span> <span class="font-medium">Genre Studies</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-4" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/genre/rock-pop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Rock &amp; Pop</span> </a><a href="/jamdojo/learn/genre/hip-hop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Hip-Hop</span> </a><a href="/jamdojo/learn/genre/edm/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎧</span> <span>Electronic Dance Music</span> </a><a href="/jamdojo/learn/genre/metal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🤘</span> <span>Metal</span> </a><a href="/jamdojo/learn/genre/demoscene/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🖥️</span> <span>Demoscene</span> </a><a href="/jamdojo/learn/genre/classical/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Classical Music</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-5"> <div class="flex items-center gap-2"> <span>📚</span> <span class="font-medium">Workshop</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-5" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/workshop-content/getting-started/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🚀</span> <span>Getting Started</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-6"> <div class="flex items-center gap-2"> <span>📖</span> <span class="font-medium">Reference</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-6" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/samples/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📀</span> <span>Samples</span> </a><a href="/jamdojo/learn/reference/synths/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Synths</span> </a><a href="/jamdojo/learn/reference/effects/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Audio Effects</span> </a><a href="/jamdojo/learn/reference/notes/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Notes</span> </a><a href="/jamdojo/learn/reference/tonal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Tonal Functions</span> </a><a href="/jamdojo/learn/reference/mini-notation/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">✏️</span> <span>Mini-Notation</span> </a><a href="/jamdojo/learn/reference/signals/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📈</span> <span>Signals</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-7"> <div class="flex items-center gap-2"> <span>⚡</span> <span class="font-medium">Pattern Functions</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-7" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/factories/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏭</span> <span>Creating Patterns</span> </a><a href="/jamdojo/learn/workshop-content/time-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⏱️</span> <span>Time Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/random-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎲</span> <span>Random Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/conditional-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">❓</span> <span>Conditional Modifiers</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-8"> <div class="flex items-center gap-2"> <span>🚀</span> <span class="font-medium">Advanced</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-8" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/advanced/visual-feedback/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Visual Feedback</span> </a><a href="/jamdojo/learn/advanced/hydra/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🌊</span> <span>Hydra Visuals</span> </a><a href="/jamdojo/learn/advanced/input-output/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔌</span> <span>MIDI &amp; OSC</span> </a><a href="/jamdojo/learn/advanced/csound/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Csound</span> </a><a href="/jamdojo/learn/advanced/pwa/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📱</span> <span>PWA</span> </a> </div> </div> <div class="mt-auto pt-4 border-t border-gray-800 text-xs text-gray-500 space-y-1"> <a href="https://github.com/kimjune01/jamdojo" target="_blank" rel="noopener" class="block hover:text-cyan-400">JamDojo Source</a> <a href="https://github.com/tidalcycles/strudel" target="_blank" rel="noopener" class="block hover:text-cyan-400">Strudel (AGPL-3.0)</a> </div> </nav> <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.activity-accordion-header');
+    accordionHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.activity-accordion-icon');
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          content.style.display = 'none';
+          header.setAttribute('aria-expanded', 'false');
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.display = 'block';
+          header.setAttribute('aria-expanded', 'true');
+          icon.style.transform = 'rotate(90deg)';
+        }
+      });
+    });
+  });
+</script> </aside> <!-- Mobile header --> <div class="md:hidden fixed top-0 left-0 right-0 bg-gray-900 border-b border-gray-800 p-3 z-50"> <div class="flex items-center justify-between"> <a href="/jamdojo/" class="text-gray-400 hover:text-white">← JamDojo</a> <span class="font-bold">Arranging Patterns</span> </div> </div> <!-- Main content --> <main class="flex-1 md:ml-56 p-6 pt-16 md:pt-6"> <div class="max-w-4xl mx-auto"> <h1 class="text-3xl font-bold mb-6">Arranging Patterns</h1> <div class="prose dark:prose-invert max-w-full"> <p>Arranging is how you organize musical patterns over time and space. While individual patterns create rhythms and melodies, arranging combines them into complete pieces of music. This guide covers Strudel’s powerful tools for sequencing, layering, and structuring your compositions.</p>
+<h2 id="what-is-arranging">What is Arranging?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#what-is-arranging"><span class="icon icon-link"></span></a></h2>
+<p>In traditional music production, arranging means deciding what plays when—which instruments enter in the intro, how the verse differs from the chorus, when the drums drop out for a breakdown. In Strudel, we have functions that give you precise control over these decisions.</p>
+<p>There are two fundamental dimensions to arranging:</p>
+<ul>
+<li><strong>Time</strong> — What plays in sequence (one after another)</li>
+<li><strong>Space</strong> — What plays simultaneously (layered together)</li>
+</ul>
+<p>Let’s explore both.</p>
+<hr/>
+<h2 id="functions-vs-mini-notation-the-rosetta-stone">Functions vs Mini Notation: The Rosetta Stone<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#functions-vs-mini-notation-the-rosetta-stone"><span class="icon icon-link"></span></a></h2>
+<p>Before diving in, here’s the key insight: <strong>every arranging function has a mini notation equivalent</strong>. You can write the same patterns either way:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>What you want</th><th>Function</th><th>Mini Notation</th><th>Symbol</th></tr></thead><tbody><tr><td>One per cycle (slow)</td><td><code>cat(a, b, c)</code></td><td><code>&quot;&lt;a b c&gt;&quot;</code></td><td><code>&lt; &gt;</code> angle brackets</td></tr><tr><td>All in one cycle (fast)</td><td><code>seq(a, b, c)</code></td><td><code>&quot;a b c&quot;</code></td><td><code> </code> space</td></tr><tr><td>Play together (layer)</td><td><code>stack(a, b, c)</code></td><td><code>&quot;a,b,c&quot;</code></td><td><code>,</code> comma</td></tr><tr><td>Different lengths</td><td><code>polymeter([a,b,c],[x,y])</code></td><td><code>&quot;{a b c, x y}&quot;</code></td><td><code>{ }</code> curly braces</td></tr></tbody></table>
+<p><strong>Side-by-side examples:</strong></p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var l=(n,t)=>{let i=async()=>{await(await n())()},e=typeof t.value=="object"?t.value:void 0,s={timeout:e==null?void 0:e.timeout};"requestIdleCallback"in window?window.requestIdleCallback(i,s):setTimeout(i,s.timeout||200)};(self.Astro||(self.Astro={})).idle=l;window.dispatchEvent(new Event("astro:idle"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="cIkV2" prefix="r0" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Function: cat - one per cycle\ncat(s(\&quot;bd\&quot;), s(\&quot;sd\&quot;), s(\&quot;hh\&quot;))&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Function: cat - one per cycle
+cat(s(&quot;bd&quot;), s(&quot;sd&quot;), s(&quot;hh&quot;))</pre><!--astro:end--></astro-island>
+<astro-island uid="1aOc1F" prefix="r1" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Mini notation: &lt;&gt; - one per cycle\ns(\&quot;&lt;bd sd hh&gt;\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Mini notation: &lt;&gt; - one per cycle
+s(&quot;&lt;bd sd hh&gt;&quot;)</pre><!--astro:end--></astro-island>
+<astro-island uid="ZXyOeY" prefix="r2" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Function: seq - all in one cycle\nseq(s(\&quot;bd\&quot;), s(\&quot;sd\&quot;), s(\&quot;hh\&quot;), s(\&quot;cp\&quot;))&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Function: seq - all in one cycle
+seq(s(&quot;bd&quot;), s(&quot;sd&quot;), s(&quot;hh&quot;), s(&quot;cp&quot;))</pre><!--astro:end--></astro-island>
+<astro-island uid="Z2as490" prefix="r3" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Mini notation: space - all in one cycle\ns(\&quot;bd sd hh cp\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Mini notation: space - all in one cycle
+s(&quot;bd sd hh cp&quot;)</pre><!--astro:end--></astro-island>
+<astro-island uid="ZLv3ll" prefix="r4" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Function: stack - play together\nstack(s(\&quot;bd ~ bd ~\&quot;), s(\&quot;~ sd ~ sd\&quot;), s(\&quot;hh*4\&quot;))&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Function: stack - play together
+stack(s(&quot;bd ~ bd ~&quot;), s(&quot;~ sd ~ sd&quot;), s(&quot;hh*4&quot;))</pre><!--astro:end--></astro-island>
+<astro-island uid="DoyBz" prefix="r5" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Mini notation: comma - play together\ns(\&quot;bd ~ bd ~, ~ sd ~ sd, hh*4\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Mini notation: comma - play together
+s(&quot;bd ~ bd ~, ~ sd ~ sd, hh*4&quot;)</pre><!--astro:end--></astro-island>
+<p>Understanding these equivalencies lets you choose the style that fits your workflow. Functions are great for complex structures and variables; mini notation is concise for inline patterns.</p>
+<hr/>
+<h2 id="sequential-patterns-cat-and-fastcat">Sequential Patterns: cat and fastcat<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#sequential-patterns-cat-and-fastcat"><span class="icon icon-link"></span></a></h2>
+<p>The simplest way to arrange patterns over time is with <code>cat</code> (short for “concatenate”).</p>
+<h3 id="cat--slowcat----angle-brackets">cat / slowcat = <code>&lt; &gt;</code> angle brackets<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#cat--slowcat----angle-brackets"><span class="icon icon-link"></span></a></h3>
+<p><code>cat</code> plays each pattern for one complete cycle, then moves to the next.</p>
+<blockquote>
+<p><strong>Mini notation:</strong> <code>&quot;&lt;x y z&gt;&quot;</code> = <code>cat(x, y, z)</code></p>
+</blockquote>
+<p><strong>Using the function:</strong></p>
+<astro-island uid="1vqzFV" prefix="r6" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;cat(\ns(\&quot;bd sd bd sd\&quot;),\ns(\&quot;hh hh hh hh\&quot;),\ns(\&quot;cp ~ cp ~\&quot;)\n)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>cat(
+s(&quot;bd sd bd sd&quot;),
+s(&quot;hh hh hh hh&quot;),
+s(&quot;cp ~ cp ~&quot;)
+)</pre><!--astro:end--></astro-island>
+<p><strong>Same thing in mini notation:</strong></p>
+<astro-island uid="2koTyp" prefix="r7" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;&lt;[bd sd bd sd] [hh hh hh hh] [cp ~ cp ~]&gt;\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;&lt;[bd sd bd sd] [hh hh hh hh] [cp ~ cp ~]&gt;&quot;)</pre><!--astro:end--></astro-island>
+<p>Each pattern gets a full cycle. After all patterns play, it loops back to the beginning.</p>
+<hr/>
+<h3 id="fastcat--seq--space-between-elements">fastcat / seq = <code>space</code> between elements<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#fastcat--seq--space-between-elements"><span class="icon icon-link"></span></a></h3>
+<p><code>fastcat</code> (or its alias <code>seq</code>) squeezes all patterns into a single cycle.</p>
+<blockquote>
+<p><strong>Mini notation:</strong> <code>&quot;x y z&quot;</code> = <code>seq(x, y, z)</code> = <code>fastcat(x, y, z)</code></p>
+</blockquote>
+<p><strong>Using the function:</strong></p>
+<astro-island uid="2h3UFQ" prefix="r8" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;fastcat(\ns(\&quot;bd\&quot;),\ns(\&quot;sd\&quot;),\ns(\&quot;hh\&quot;),\ns(\&quot;cp\&quot;)\n)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>fastcat(
+s(&quot;bd&quot;),
+s(&quot;sd&quot;),
+s(&quot;hh&quot;),
+s(&quot;cp&quot;)
+)</pre><!--astro:end--></astro-island>
+<p><strong>Same thing in mini notation (just spaces):</strong></p>
+<astro-island uid="1xd2nN" prefix="r9" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd hh cp\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;bd sd hh cp&quot;)</pre><!--astro:end--></astro-island>
+<p>All four sounds play within one cycle, each taking 1/4 of the time.</p>
+<hr/>
+<h3 id="comparing---vs-space">Comparing <code>&lt; &gt;</code> vs <code>space</code><a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#comparing---vs-space"><span class="icon icon-link"></span></a></h3>
+<p>The difference becomes clear when you compare the same content:</p>
+<p><strong><code>&lt; &gt;</code> angle brackets</strong> — Each pattern takes one full cycle:</p>
+<astro-island uid="vuXE1" prefix="r10" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// cat = &lt;&gt;\nnote(\&quot;&lt;[c4 e4] [g4 b4]&gt;\&quot;).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// cat = &lt;&gt;
+note(&quot;&lt;[c4 e4] [g4 b4]&gt;&quot;).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p><strong><code>space</code></strong> — Both patterns fit in one cycle:</p>
+<astro-island uid="1KUYkc" prefix="r11" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// seq = space\nnote(\&quot;[c4 e4] [g4 b4]\&quot;).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// seq = space
+note(&quot;[c4 e4] [g4 b4]&quot;).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>Use <code>&lt; &gt;</code> (cat) when you want patterns to take their time. Use spaces (seq) when building phrases within a single cycle.</p>
+<hr/>
+<h2 id="layering-patterns-stack---comma">Layering Patterns: stack = <code>,</code> comma<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#layering-patterns-stack---comma"><span class="icon icon-link"></span></a></h2>
+<p>While <code>cat</code> arranges patterns in time, <code>stack</code> arranges them in space—playing multiple patterns simultaneously.</p>
+<blockquote>
+<p><strong>Mini notation:</strong> <code>&quot;x,y,z&quot;</code> = <code>stack(x, y, z)</code></p>
+</blockquote>
+<h3 id="basic-layering">Basic Layering<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#basic-layering"><span class="icon icon-link"></span></a></h3>
+<p><strong>Using the function:</strong></p>
+<astro-island uid="Z2lt5VB" prefix="r12" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ns(\&quot;bd ~ bd ~\&quot;),\ns(\&quot;~ hh ~ hh\&quot;),\ns(\&quot;~ ~ cp ~\&quot;)\n).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+s(&quot;bd ~ bd ~&quot;),
+s(&quot;~ hh ~ hh&quot;),
+s(&quot;~ ~ cp ~&quot;)
+).room(.3)</pre><!--astro:end--></astro-island>
+<p><strong>Same thing in mini notation (commas):</strong></p>
+<astro-island uid="Z2g7qsk" prefix="r13" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd ~ bd ~, ~ hh ~ hh, ~ ~ cp ~\&quot;).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;bd ~ bd ~, ~ hh ~ hh, ~ ~ cp ~&quot;).room(.3)</pre><!--astro:end--></astro-island>
+<p>All three patterns play at once, creating a basic drum beat.</p>
+<hr/>
+<h3 id="building-full-beats">Building Full Beats<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#building-full-beats"><span class="icon icon-link"></span></a></h3>
+<p>Stack is perfect for layering drums, bass, and melody:</p>
+<astro-island uid="Z1Bi2D3" prefix="r14" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ns(\&quot;bd ~ bd ~\&quot;),\ns(\&quot;~ sd ~ sd\&quot;),\ns(\&quot;hh*8\&quot;),\nnote(\&quot;&lt;c2 g2&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(400)\n).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+s(&quot;bd ~ bd ~&quot;),
+s(&quot;~ sd ~ sd&quot;),
+s(&quot;hh*8&quot;),
+note(&quot;&lt;c2 g2&gt;&quot;).s(&quot;sawtooth&quot;).lpf(400)
+).room(.3)</pre><!--astro:end--></astro-island>
+<p>Each layer maintains its own pattern while playing together.</p>
+<hr/>
+<h3 id="combining-symbols-nesting----and-spaces">Combining Symbols: Nesting <code>&lt; &gt;</code>, <code>,</code>, and spaces<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#combining-symbols-nesting----and-spaces"><span class="icon icon-link"></span></a></h3>
+<p>You can nest these symbols freely. Use <code>cat</code> inside <code>stack</code> to create evolving layers:</p>
+<p><strong>Using functions:</strong></p>
+<astro-island uid="Z6VpXU" prefix="r15" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ns(\&quot;bd ~ bd ~\&quot;),\ncat(\n  s(\&quot;~ sd ~ sd\&quot;),\n  s(\&quot;~ sd ~ [sd sd]\&quot;)\n),\ns(\&quot;hh*8\&quot;)\n).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+s(&quot;bd ~ bd ~&quot;),
+cat(
+  s(&quot;~ sd ~ sd&quot;),
+  s(&quot;~ sd ~ [sd sd]&quot;)
+),
+s(&quot;hh*8&quot;)
+).room(.3)</pre><!--astro:end--></astro-island>
+<p><strong>Same thing in pure mini notation:</strong></p>
+<astro-island uid="ZOT94K" prefix="r16" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd ~ bd ~, &lt;[~ sd ~ sd] [~ sd ~ [sd sd]]&gt;, hh*8\&quot;).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;bd ~ bd ~, &lt;[~ sd ~ sd] [~ sd ~ [sd sd]]&gt;, hh*8&quot;).room(.3)</pre><!--astro:end--></astro-island>
+<p>The snare pattern (inside <code>&lt; &gt;</code>) alternates each cycle while other layers (separated by <code>,</code>) stay constant.</p>
+<p>Here’s how the symbols nest:</p>
+<ul>
+<li><code>,</code> separates simultaneous layers (stack)</li>
+<li><code>&lt; &gt;</code> creates one-per-cycle alternation within a layer (cat)</li>
+<li><code>space</code> creates subdivisions within each element (seq)</li>
+</ul>
+<hr/>
+<h2 id="rhythmic-structure-struct">Rhythmic Structure: struct<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#rhythmic-structure-struct"><span class="icon icon-link"></span></a></h2>
+<p>While <code>stack</code> layers complete patterns, <code>struct</code> applies a rhythmic template to any pattern. It’s one of Strudel’s most powerful tools for creating rhythmic variations.</p>
+<h3 id="what-is-struct">What is struct?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#what-is-struct"><span class="icon icon-link"></span></a></h3>
+<p><code>struct</code> takes a boolean pattern (using <code>x</code> for on and <code>~</code> for off) and applies it as a rhythmic mask to another pattern:</p>
+<astro-island uid="j5DE2" prefix="r17" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(\&quot;x ~ x ~\&quot;)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(&quot;x ~ x ~&quot;)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>The notes <code>c3 e3 g3 b3</code> are filtered through the rhythm <code>x ~ x ~</code>, so only notes on beats 1 and 3 play.</p>
+<h3 id="struct-vs-other-approaches">struct vs Other Approaches<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#struct-vs-other-approaches"><span class="icon icon-link"></span></a></h3>
+<p>There are multiple ways to create rhythmic patterns in Strudel. Here’s when to use each:</p>
+<p><strong>Direct mini-notation</strong> — When you know exactly what plays when:</p>
+<astro-island uid="ZlQLtG" prefix="r18" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 ~ e3 ~\&quot;).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 ~ e3 ~&quot;).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>struct</strong> — When you want to apply a rhythm to an existing pattern:</p>
+<astro-island uid="j5DE2" prefix="r19" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(\&quot;x ~ x ~\&quot;)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(&quot;x ~ x ~&quot;)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>Both produce the same result, but <code>struct</code> separates <strong>what</strong> (the notes) from <strong>when</strong> (the rhythm).</p>
+<h3 id="the-equivalence-table">The Equivalence Table<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#the-equivalence-table"><span class="icon icon-link"></span></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>What you want</th><th>Using struct</th><th>Direct equivalent</th></tr></thead><tbody><tr><td>Play on beats 1 &amp; 3</td><td><code>.struct(&quot;x ~ x ~&quot;)</code></td><td><code>&quot;c3 ~ e3 ~&quot;</code></td></tr><tr><td>Every other beat</td><td><code>.struct(&quot;x ~&quot;)</code></td><td><code>&quot;c3 ~&quot;</code> (repeats)</td></tr><tr><td>Syncopated</td><td><code>.struct(&quot;~ x ~ x&quot;)</code></td><td><code>&quot;~ c3 ~ e3&quot;</code></td></tr><tr><td>Euclidean 3 of 8</td><td><code>.struct(&quot;x ~ ~ x ~ ~ x ~&quot;)</code></td><td><code>.euclid(3,8)</code></td></tr><tr><td>Complex rhythm</td><td><code>.struct(&quot;x ~ [x x] ~&quot;)</code></td><td><code>&quot;c3 ~ [e3 g3] ~&quot;</code></td></tr></tbody></table>
+<h3 id="why-use-struct">Why Use struct?<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#why-use-struct"><span class="icon icon-link"></span></a></h3>
+<p><strong>1. Separate melody from rhythm:</strong></p>
+<astro-island uid="Z2oj0h9" prefix="r20" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Define notes and rhythm separately\nlet melody = note(\&quot;c4 d4 e4 f4 g4 a4 b4 c5\&quot;)\nlet rhythm = \&quot;x ~ x ~ x ~ x x\&quot;\n\nmelody.struct(rhythm).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Define notes and rhythm separately
+let melody = note(&quot;c4 d4 e4 f4 g4 a4 b4 c5&quot;)
+let rhythm = &quot;x ~ x ~ x ~ x x&quot;
+
+melody.struct(rhythm).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>Now you can change the rhythm without touching the melody:</p>
+<astro-island uid="N3q5A" prefix="r21" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let melody = note(\&quot;c4 d4 e4 f4 g4 a4 b4 c5\&quot;)\nlet rhythm = \&quot;x x ~ x ~ x x ~\&quot;  // different rhythm\n\nmelody.struct(rhythm).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let melody = note(&quot;c4 d4 e4 f4 g4 a4 b4 c5&quot;)
+let rhythm = &quot;x x ~ x ~ x x ~&quot;  // different rhythm
+
+melody.struct(rhythm).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>2. Apply the same rhythm to multiple parts:</strong></p>
+<astro-island uid="Z2oBWWk" prefix="r22" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let groove = \&quot;x ~ [x ~] x ~ x [~ x] ~\&quot;\n\nstack(\nnote(\&quot;c2 c2 c2 c2 g1 g1 a1 b1\&quot;).struct(groove).s(\&quot;sawtooth\&quot;).lpf(400),\nnote(\&quot;c4 e4 g4 c5 e4 g4 c5 e5\&quot;).struct(groove).s(\&quot;piano\&quot;).gain(0.6)\n).room(0.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let groove = &quot;x ~ [x ~] x ~ x [~ x] ~&quot;
+
+stack(
+note(&quot;c2 c2 c2 c2 g1 g1 a1 b1&quot;).struct(groove).s(&quot;sawtooth&quot;).lpf(400),
+note(&quot;c4 e4 g4 c5 e4 g4 c5 e5&quot;).struct(groove).s(&quot;piano&quot;).gain(0.6)
+).room(0.3)</pre><!--astro:end--></astro-island>
+<p>Both bass and piano share the same rhythmic feel.</p>
+<p><strong>3. Create variations by changing only the structure:</strong></p>
+<astro-island uid="1mbtDz" prefix="r23" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let bassNotes = note(\&quot;c2 eb2 g2 bb2\&quot;)\n\ncat(\nbassNotes.struct(\&quot;x x x x\&quot;),      // straight\nbassNotes.struct(\&quot;x ~ x ~\&quot;),      // half time\nbassNotes.struct(\&quot;x ~ x [~ x]\&quot;),  // syncopated\nbassNotes.struct(\&quot;x x ~ x\&quot;)       // displaced\n).s(\&quot;sawtooth\&quot;).lpf(600)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let bassNotes = note(&quot;c2 eb2 g2 bb2&quot;)
+
+cat(
+bassNotes.struct(&quot;x x x x&quot;),      // straight
+bassNotes.struct(&quot;x ~ x ~&quot;),      // half time
+bassNotes.struct(&quot;x ~ x [~ x]&quot;),  // syncopated
+bassNotes.struct(&quot;x x ~ x&quot;)       // displaced
+).s(&quot;sawtooth&quot;).lpf(600)</pre><!--astro:end--></astro-island>
+<p>Same notes, four different rhythmic feels.</p>
+<h3 id="struct-with-samples">struct with Samples<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#struct-with-samples"><span class="icon icon-link"></span></a></h3>
+<p><code>struct</code> works with any pattern, including samples:</p>
+<astro-island uid="L5qtk" prefix="r24" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd hh cp\&quot;)\n.struct(\&quot;x ~ x ~ x ~ x x\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;bd sd hh cp&quot;)
+.struct(&quot;x ~ x ~ x ~ x x&quot;)</pre><!--astro:end--></astro-island>
+<p>The samples cycle through in order, but only play when the struct pattern has <code>x</code>.</p>
+<p><strong>Genre connection:</strong> This is how many house and techno producers think—a kit of sounds rotating through a rhythmic grid.</p>
+<h3 id="struct-vs-euclid">struct vs euclid<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#struct-vs-euclid"><span class="icon icon-link"></span></a></h3>
+<p>Both create rhythmic patterns, but work differently:</p>
+<p><strong>euclid</strong> — Generates mathematically even distributions:</p>
+<astro-island uid="Z1Mgr7C" prefix="r25" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.euclid(3, 8)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.euclid(3, 8)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>struct</strong> — You define the exact rhythm:</p>
+<astro-island uid="ZHRlJ5" prefix="r26" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(\&quot;x ~ ~ x ~ ~ x ~\&quot;)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(&quot;x ~ ~ x ~ ~ x ~&quot;)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>Use <code>euclid</code> when you want mathematically distributed rhythms. Use <code>struct</code> when you have a specific rhythm in mind.</p>
+<h3 id="struct-with-alternating-patterns">struct with Alternating Patterns<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#struct-with-alternating-patterns"><span class="icon icon-link"></span></a></h3>
+<p>The structure pattern can alternate using <code>&lt; &gt;</code>:</p>
+<astro-island uid="Zssgxz" prefix="r27" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(\&quot;&lt;[x x x x] [x ~ x ~] [x ~ ~ x]&gt;\&quot;)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(&quot;&lt;[x x x x] [x ~ x ~] [x ~ ~ x]&gt;&quot;)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p>Each cycle uses a different rhythm from the pattern.</p>
+<h3 id="struct-for-drum-programming">struct for Drum Programming<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#struct-for-drum-programming"><span class="icon icon-link"></span></a></h3>
+<p><code>struct</code> is particularly powerful for drums—define your kit, then program different patterns:</p>
+<astro-island uid="Z26l2Se" prefix="r28" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let kit = s(\&quot;bd sd hh cp\&quot;)\n\ncat(\nkit.struct(\&quot;x ~ ~ ~ x ~ ~ ~\&quot;),  // sparse intro\nkit.struct(\&quot;x ~ x ~ x ~ x ~\&quot;),  // building\nkit.struct(\&quot;x x x x x x x x\&quot;),  // full\nkit.struct(\&quot;x ~ x ~ ~ ~ x ~\&quot;)   // breakdown\n).bank(\&quot;RolandTR909\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let kit = s(&quot;bd sd hh cp&quot;)
+
+cat(
+kit.struct(&quot;x ~ ~ ~ x ~ ~ ~&quot;),  // sparse intro
+kit.struct(&quot;x ~ x ~ x ~ x ~&quot;),  // building
+kit.struct(&quot;x x x x x x x x&quot;),  // full
+kit.struct(&quot;x ~ x ~ ~ ~ x ~&quot;)   // breakdown
+).bank(&quot;RolandTR909&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>Think of struct as a step sequencer</strong> — your sounds are loaded in slots, and the struct pattern determines which steps trigger.</p>
+<h3 id="combining-struct-with-other-functions">Combining struct with Other Functions<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#combining-struct-with-other-functions"><span class="icon icon-link"></span></a></h3>
+<p><strong>struct + fast/slow:</strong></p>
+<astro-island uid="2qeL57" prefix="r29" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(\&quot;x ~ x ~\&quot;)\n.fast(2)\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(&quot;x ~ x ~&quot;)
+.fast(2)
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>struct + stack:</strong></p>
+<astro-island uid="2oukU9" prefix="r30" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\ns(\&quot;bd\&quot;).struct(\&quot;x ~ x ~\&quot;),\ns(\&quot;sd\&quot;).struct(\&quot;~ x ~ x\&quot;),\ns(\&quot;hh\&quot;).struct(\&quot;x x x x\&quot;)\n).bank(\&quot;RolandTR909\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+s(&quot;bd&quot;).struct(&quot;x ~ x ~&quot;),
+s(&quot;sd&quot;).struct(&quot;~ x ~ x&quot;),
+s(&quot;hh&quot;).struct(&quot;x x x x&quot;)
+).bank(&quot;RolandTR909&quot;)</pre><!--astro:end--></astro-island>
+<p><strong>struct + cat:</strong></p>
+<astro-island uid="Z2062kz" prefix="r31" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3 e3 g3 b3\&quot;)\n.struct(cat(\&quot;x x x x\&quot;, \&quot;x ~ x ~\&quot;, \&quot;x ~ ~ x\&quot;))\n.s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3 e3 g3 b3&quot;)
+.struct(cat(&quot;x x x x&quot;, &quot;x ~ x ~&quot;, &quot;x ~ ~ x&quot;))
+.s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<hr/>
+<h2 id="timed-arrangements-timecat-and-arrange">Timed Arrangements: timeCat and arrange<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#timed-arrangements-timecat-and-arrange"><span class="icon icon-link"></span></a></h2>
+<p>Sometimes you need more control over how long each section plays.</p>
+<h3 id="timecat--stepcat---for-duration">timeCat / stepcat = <code>@</code> for duration<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#timecat--stepcat---for-duration"><span class="icon icon-link"></span></a></h3>
+<p><code>timeCat</code> lets you specify relative durations for each pattern.</p>
+<blockquote>
+<p><strong>Mini notation:</strong> <code>&quot;x@3 y&quot;</code> = element x takes 3 steps, y takes 1 step</p>
+</blockquote>
+<astro-island uid="Z1GUtiP" prefix="r32" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;timeCat(\n[3, s(\&quot;bd sd bd\&quot;)],\n[1, s(\&quot;cp\&quot;)]\n).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>timeCat(
+[3, s(&quot;bd sd bd&quot;)],
+[1, s(&quot;cp&quot;)]
+).room(.3)</pre><!--astro:end--></astro-island>
+<p>The first pattern takes 3/4 of the cycle, the second takes 1/4.</p>
+<p><strong>In mini notation, use <code>@</code> with brackets for sub-patterns:</strong></p>
+<astro-island uid="3rY7" prefix="r33" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;[bd sd bd]@3 cp\&quot;).room(.3)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;[bd sd bd]@3 cp&quot;).room(.3)</pre><!--astro:end--></astro-island>
+<p>For single elements, <code>@</code> is simpler:</p>
+<astro-island uid="2w5TBG" prefix="r34" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd@3 cp\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>s(&quot;bd@3 cp&quot;)</pre><!--astro:end--></astro-island>
+<p>This holds “bd” for 3 steps before “cp” plays.</p>
+<p><strong>Useful for uneven phrase lengths:</strong></p>
+<astro-island uid="1Ghm0p" prefix="r35" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;timeCat(\n[7, note(\&quot;c4 d4 e4 f4 g4 a4 b4\&quot;)],\n[1, note(\&quot;c5\&quot;)]\n).s(\&quot;piano\&quot;)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>timeCat(
+[7, note(&quot;c4 d4 e4 f4 g4 a4 b4&quot;)],
+[1, note(&quot;c5&quot;)]
+).s(&quot;piano&quot;)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="arrange--multi-cycle-song-structures">arrange — Multi-Cycle Song Structures<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#arrange--multi-cycle-song-structures"><span class="icon icon-link"></span></a></h3>
+<p><code>arrange</code> is the most powerful tool for building complete songs. It lets you specify how many cycles each section should play:</p>
+<astro-island uid="qGpG6" prefix="r36" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;arrange(\n[4, s(\&quot;hh*8\&quot;).room(.2)],\n[4, stack(s(\&quot;bd ~ bd ~\&quot;), s(\&quot;hh*8\&quot;)).room(.2)],\n[2, s(\&quot;cp*4\&quot;).room(.5)]\n)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>arrange(
+[4, s(&quot;hh*8&quot;).room(.2)],
+[4, stack(s(&quot;bd ~ bd ~&quot;), s(&quot;hh*8&quot;)).room(.2)],
+[2, s(&quot;cp*4&quot;).room(.5)]
+)</pre><!--astro:end--></astro-island>
+<ul>
+<li>First section: 4 cycles of hi-hats only</li>
+<li>Second section: 4 cycles of kick + hi-hats</li>
+<li>Third section: 2 cycles of claps</li>
+</ul>
+<p>The pattern loops after all sections complete (10 cycles total).</p>
+<hr/>
+<h2 id="advanced-layering-polymeter----curly-braces">Advanced Layering: polymeter = <code>{ }</code> curly braces<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#advanced-layering-polymeter----curly-braces"><span class="icon icon-link"></span></a></h2>
+<h3 id="polyrhythmic-patterns">Polyrhythmic Patterns<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#polyrhythmic-patterns"><span class="icon icon-link"></span></a></h3>
+<p><code>polymeter</code> creates layers that cycle at different rates, creating complex polyrhythms.</p>
+<blockquote>
+<p><strong>Mini notation:</strong> <code>&quot;{a b c, x y}&quot;</code> = <code>polymeter([a,b,c], [x,y])</code></p>
+</blockquote>
+<p><strong>Using the function:</strong></p>
+<astro-island uid="2nHqLm" prefix="r37" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;polymeter(\n[\&quot;c4\&quot;, \&quot;e4\&quot;, \&quot;g4\&quot;],\n[\&quot;c5\&quot;, \&quot;d5\&quot;]\n).note().s(\&quot;piano\&quot;).room(.4)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>polymeter(
+[&quot;c4&quot;, &quot;e4&quot;, &quot;g4&quot;],
+[&quot;c5&quot;, &quot;d5&quot;]
+).note().s(&quot;piano&quot;).room(.4)</pre><!--astro:end--></astro-island>
+<p><strong>Same thing in mini notation (curly braces):</strong></p>
+<astro-island uid="Z1DoiDC" prefix="r38" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;{c4 e4 g4, c5 d5}\&quot;).s(\&quot;piano\&quot;).room(.4)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;{c4 e4 g4, c5 d5}&quot;).s(&quot;piano&quot;).room(.4)</pre><!--astro:end--></astro-island>
+<p>The first layer has 3 notes, the second has 2. They cycle independently, creating shifting relationships. The curly braces <code>{ }</code> tell Strudel to keep each layer’s step count independent.</p>
+<hr/>
+<h2 id="genre-specific-arranging-techniques">Genre-Specific Arranging Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#genre-specific-arranging-techniques"><span class="icon icon-link"></span></a></h2>
+<p>Different genres have characteristic arrangement patterns. Here’s how to create them in Strudel.</p>
+<hr/>
+<h3 id="poprock-verse-chorus-structure">Pop/Rock: Verse-Chorus Structure<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#poprock-verse-chorus-structure"><span class="icon icon-link"></span></a></h3>
+<p>Pop songs reuse sections. Define your parts as variables, then arrange them:</p>
+<astro-island uid="1naclY" prefix="r39" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let verse = stack(\ns(\&quot;bd ~ bd ~\&quot;),\ns(\&quot;~ sd ~ sd\&quot;),\nnote(\&quot;&lt;c3 g3&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(600)\n)\n\nlet chorus = stack(\ns(\&quot;bd sd bd sd\&quot;),\ns(\&quot;hh*8\&quot;),\nnote(\&quot;&lt;c3 e3 g3 c4&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(1200)\n)\n\narrange(\n[4, verse],\n[4, chorus],\n[4, verse],\n[4, chorus]\n).room(.3).cpm(70)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let verse = stack(
+s(&quot;bd ~ bd ~&quot;),
+s(&quot;~ sd ~ sd&quot;),
+note(&quot;&lt;c3 g3&gt;&quot;).s(&quot;sawtooth&quot;).lpf(600)
+)
+
+let chorus = stack(
+s(&quot;bd sd bd sd&quot;),
+s(&quot;hh*8&quot;),
+note(&quot;&lt;c3 e3 g3 c4&gt;&quot;).s(&quot;sawtooth&quot;).lpf(1200)
+)
+
+arrange(
+[4, verse],
+[4, chorus],
+[4, verse],
+[4, chorus]
+).room(.3).cpm(70)</pre><!--astro:end--></astro-island>
+<p>The verse is sparse, the chorus is fuller. This contrast creates the typical pop dynamic.</p>
+<p><strong>Adding a bridge:</strong></p>
+<astro-island uid="ZXsmqR" prefix="r40" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let verse = stack(\ns(\&quot;bd ~ bd ~\&quot;),\ns(\&quot;~ sd ~ sd\&quot;),\nnote(\&quot;&lt;c3 g3&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(600)\n)\n\nlet chorus = stack(\ns(\&quot;bd sd bd sd\&quot;),\ns(\&quot;hh*8\&quot;),\nnote(\&quot;&lt;c3 e3 g3 c4&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(1200)\n)\n\nlet bridge = stack(\ns(\&quot;~ ~ bd ~\&quot;),\nnote(\&quot;&lt;a2 f2&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(400)\n)\n\narrange(\n[4, verse],\n[4, chorus],\n[4, verse],\n[4, chorus],\n[4, bridge],\n[4, chorus]\n).room(.3).cpm(70)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let verse = stack(
+s(&quot;bd ~ bd ~&quot;),
+s(&quot;~ sd ~ sd&quot;),
+note(&quot;&lt;c3 g3&gt;&quot;).s(&quot;sawtooth&quot;).lpf(600)
+)
+
+let chorus = stack(
+s(&quot;bd sd bd sd&quot;),
+s(&quot;hh*8&quot;),
+note(&quot;&lt;c3 e3 g3 c4&gt;&quot;).s(&quot;sawtooth&quot;).lpf(1200)
+)
+
+let bridge = stack(
+s(&quot;~ ~ bd ~&quot;),
+note(&quot;&lt;a2 f2&gt;&quot;).s(&quot;sawtooth&quot;).lpf(400)
+)
+
+arrange(
+[4, verse],
+[4, chorus],
+[4, verse],
+[4, chorus],
+[4, bridge],
+[4, chorus]
+).room(.3).cpm(70)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="edm-loop-based-with-buildups">EDM: Loop-Based with Buildups<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#edm-loop-based-with-buildups"><span class="icon icon-link"></span></a></h3>
+<p>EDM arranges loops with gradual additions and filter sweeps:</p>
+<astro-island uid="lns9F" prefix="r41" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let intro = s(\&quot;hh*8\&quot;).lpf(800)\n\nlet buildup = stack(\ns(\&quot;hh*16\&quot;),\ns(\&quot;bd\&quot;).fast(\&quot;&lt;1 2 4 8&gt;\&quot;)\n).lpf(sine.range(400, 8000).slow(4))\n\nlet drop = stack(\ns(\&quot;bd ~ [~ bd] ~\&quot;),\ns(\&quot;~ cp ~ cp\&quot;),\ns(\&quot;hh*8\&quot;),\nnote(\&quot;c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(200)\n)\n\narrange(\n[4, intro],\n[4, buildup],\n[8, drop]\n).room(.2).cpm(70)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let intro = s(&quot;hh*8&quot;).lpf(800)
+
+let buildup = stack(
+s(&quot;hh*16&quot;),
+s(&quot;bd&quot;).fast(&quot;&lt;1 2 4 8&gt;&quot;)
+).lpf(sine.range(400, 8000).slow(4))
+
+let drop = stack(
+s(&quot;bd ~ [~ bd] ~&quot;),
+s(&quot;~ cp ~ cp&quot;),
+s(&quot;hh*8&quot;),
+note(&quot;c2&quot;).s(&quot;sawtooth&quot;).lpf(200)
+)
+
+arrange(
+[4, intro],
+[4, buildup],
+[8, drop]
+).room(.2).cpm(70)</pre><!--astro:end--></astro-island>
+<p>The buildup uses a filter sweep (<code>lpf(sine.range(...))</code>) to create tension before the drop.</p>
+<p><strong>Adding a breakdown:</strong></p>
+<astro-island uid="ZfxTX4" prefix="r42" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let drop = stack(\ns(\&quot;bd ~ [~ bd] ~\&quot;),\ns(\&quot;~ cp ~ cp\&quot;),\ns(\&quot;hh*8\&quot;),\nnote(\&quot;c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(200)\n)\n\nlet breakdown = s(\&quot;~ ~ ~ ~\&quot;).room(.5)\n\nlet buildup = stack(\ns(\&quot;hh*16\&quot;),\ns(\&quot;bd\&quot;).fast(\&quot;&lt;1 2 4 8&gt;\&quot;)\n).lpf(sine.range(400, 8000).slow(4))\n\narrange(\n[8, drop],\n[2, breakdown],\n[4, buildup],\n[8, drop]\n).room(.2).cpm(70)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let drop = stack(
+s(&quot;bd ~ [~ bd] ~&quot;),
+s(&quot;~ cp ~ cp&quot;),
+s(&quot;hh*8&quot;),
+note(&quot;c2&quot;).s(&quot;sawtooth&quot;).lpf(200)
+)
+
+let breakdown = s(&quot;~ ~ ~ ~&quot;).room(.5)
+
+let buildup = stack(
+s(&quot;hh*16&quot;),
+s(&quot;bd&quot;).fast(&quot;&lt;1 2 4 8&gt;&quot;)
+).lpf(sine.range(400, 8000).slow(4))
+
+arrange(
+[8, drop],
+[2, breakdown],
+[4, buildup],
+[8, drop]
+).room(.2).cpm(70)</pre><!--astro:end--></astro-island>
+<hr/>
+<h3 id="classical-theme-and-variation">Classical: Theme and Variation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#classical-theme-and-variation"><span class="icon icon-link"></span></a></h3>
+<p>Classical music develops themes through transformation. Use <code>cat</code> to present variations:</p>
+<astro-island uid="2n3TaC" prefix="r43" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let theme = note(\&quot;c4 d4 e4 g4\&quot;)\n\ncat(\ntheme,\ntheme.rev(),\ntheme.add(note(5)),\ntheme.fast(2)\n).s(\&quot;piano\&quot;).room(.4)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let theme = note(&quot;c4 d4 e4 g4&quot;)
+
+cat(
+theme,
+theme.rev(),
+theme.add(note(5)),
+theme.fast(2)
+).s(&quot;piano&quot;).room(.4)</pre><!--astro:end--></astro-island>
+<p>Each cycle presents:</p>
+<ol>
+<li>Original theme</li>
+<li>Retrograde (reversed)</li>
+<li>Transposed up a fourth</li>
+<li>Diminution (twice as fast)</li>
+</ol>
+<p><strong>More elaborate variations:</strong></p>
+<astro-island uid="hvdH2" prefix="r44" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let theme = note(\&quot;c4 d4 e4 g4\&quot;)\n\ncat(\ntheme,\ntheme.rev(),\ntheme.add(note(7)),\nstack(theme, theme.add(note(4))),\ntheme.slow(2),\ntheme.add(note(\&quot;&lt;0 12&gt;\&quot;))\n).s(\&quot;piano\&quot;).room(.4).cpm(40)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let theme = note(&quot;c4 d4 e4 g4&quot;)
+
+cat(
+theme,
+theme.rev(),
+theme.add(note(7)),
+stack(theme, theme.add(note(4))),
+theme.slow(2),
+theme.add(note(&quot;&lt;0 12&gt;&quot;))
+).s(&quot;piano&quot;).room(.4).cpm(40)</pre><!--astro:end--></astro-island>
+<p>This adds:</p>
+<ul>
+<li>Harmonized (thirds added)</li>
+<li>Augmentation (twice as slow)</li>
+<li>Octave displacement</li>
+</ul>
+<p><strong>Bach Prelude in C Major (BWV 846):</strong></p>
+<p>Bach’s famous prelude demonstrates how to build complex pieces from simple arpeggiated patterns. The entire piece uses the same rhythmic figure—an 8-note arpeggio pattern—applied to different chord voicings:</p>
+<astro-island uid="Z1EkxDW" prefix="r45" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Bach - Prelude in C Major BWV 846 (first 10 measures)\ncat(\n\&quot;[c4,e4,g4,c5,e5]!2\&quot;,\n\&quot;[c4,d4,a4,d5,f5]!2\&quot;,\n\&quot;[b3,d4,g4,d5,f5]!2\&quot;,\n\&quot;[c4,e4,g4,c5,e5]!2\&quot;,\n\&quot;[c4,e4,a4,e5,a5]!2\&quot;,\n\&quot;[c4,d4,fs4,a4,d5]!2\&quot;,\n\&quot;[b3,d4,g4,d5,g5]!2\&quot;,\n\&quot;[b3,c4,e4,g4,c5]!2\&quot;,\n\&quot;[a3,c4,e4,g4,c5]!2\&quot;,\n\&quot;[d3,a3,d4,fs4,c5]!2\&quot;\n).note()\n.arp(\&quot;0 1 2 3 4 2 3 4\&quot;)\n.s(\&quot;piano\&quot;)\n.sustain(0.5)\n.cpm(70)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Bach - Prelude in C Major BWV 846 (first 10 measures)
+cat(
+&quot;[c4,e4,g4,c5,e5]!2&quot;,
+&quot;[c4,d4,a4,d5,f5]!2&quot;,
+&quot;[b3,d4,g4,d5,f5]!2&quot;,
+&quot;[c4,e4,g4,c5,e5]!2&quot;,
+&quot;[c4,e4,a4,e5,a5]!2&quot;,
+&quot;[c4,d4,fs4,a4,d5]!2&quot;,
+&quot;[b3,d4,g4,d5,g5]!2&quot;,
+&quot;[b3,c4,e4,g4,c5]!2&quot;,
+&quot;[a3,c4,e4,g4,c5]!2&quot;,
+&quot;[d3,a3,d4,fs4,c5]!2&quot;
+).note()
+.arp(&quot;0 1 2 3 4 2 3 4&quot;)
+.s(&quot;piano&quot;)
+.sustain(0.5)
+.cpm(70)</pre><!--astro:end--></astro-island>
+<p>Key techniques used:</p>
+<ul>
+<li><strong>Chord voicings as stacked notes</strong> — <code>[c4,e4,g4,c5,e5]</code> defines the exact notes of each chord</li>
+<li><strong><code>!2</code> repetition</strong> — Each chord plays twice (one full measure in the original)</li>
+<li><strong><code>cat()</code> for sequencing</strong> — Chords flow one after another</li>
+<li><strong><code>.arp()</code> pattern</strong> — The signature <code>&quot;0 1 2 3 4 2 3 4&quot;</code> arpeggio figure (root, 2nd, 3rd, 4th, 5th, 3rd, 4th, 5th)</li>
+</ul>
+<p>This approach separates harmony (the chord voicings) from rhythm (the arpeggio pattern), making it easy to modify either independently.</p>
+<hr/>
+<h3 id="hip-hop-sample-loops-with-layers">Hip-Hop: Sample Loops with Layers<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#hip-hop-sample-loops-with-layers"><span class="icon icon-link"></span></a></h3>
+<p>Hip-hop builds on a core loop, adding and removing elements for sections:</p>
+<astro-island uid="Z1Fzcfs" prefix="r46" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let drums = stack(\ns(\&quot;bd ~ bd ~\&quot;),\ns(\&quot;~ sd ~ sd\&quot;)\n)\n\nlet hats = s(\&quot;hh*8\&quot;).gain(.6)\n\nlet bass = note(\&quot;&lt;c2 c2 g1 g1&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(300)\n\narrange(\n[4, drums],\n[4, stack(drums, bass)],\n[8, stack(drums, bass, hats)],\n[4, stack(drums, bass)]\n).room(.2).cpm(90)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let drums = stack(
+s(&quot;bd ~ bd ~&quot;),
+s(&quot;~ sd ~ sd&quot;)
+)
+
+let hats = s(&quot;hh*8&quot;).gain(.6)
+
+let bass = note(&quot;&lt;c2 c2 g1 g1&gt;&quot;).s(&quot;sawtooth&quot;).lpf(300)
+
+arrange(
+[4, drums],
+[4, stack(drums, bass)],
+[8, stack(drums, bass, hats)],
+[4, stack(drums, bass)]
+).room(.2).cpm(90)</pre><!--astro:end--></astro-island>
+<p>Elements are introduced gradually:</p>
+<ol>
+<li>Drums only (intro)</li>
+<li>Drums + bass (verse starts)</li>
+<li>Full beat with hats (chorus)</li>
+<li>Drop the hats (back to verse)</li>
+</ol>
+<hr/>
+<h3 id="ambient-evolving-textures">Ambient: Evolving Textures<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#ambient-evolving-textures"><span class="icon icon-link"></span></a></h3>
+<p>Ambient music uses slow evolution and layered drones:</p>
+<astro-island uid="Z1Ih7F7" prefix="r47" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nnote(\&quot;c3\&quot;).s(\&quot;sawtooth\&quot;).lpf(sine.range(200, 800).slow(16)),\nnote(\&quot;g3\&quot;).s(\&quot;sine\&quot;).gain(.5).slow(2),\ncat(\n  note(\&quot;c5 e5 g5 ~\&quot;),\n  note(\&quot;d5 f5 a5 ~\&quot;),\n  note(\&quot;e5 g5 b5 ~\&quot;),\n  note(\&quot;c5 e5 g5 ~\&quot;)\n).s(\&quot;sine\&quot;).gain(.3).slow(4)\n).room(.8).delay(.5).cpm(20)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+note(&quot;c3&quot;).s(&quot;sawtooth&quot;).lpf(sine.range(200, 800).slow(16)),
+note(&quot;g3&quot;).s(&quot;sine&quot;).gain(.5).slow(2),
+cat(
+  note(&quot;c5 e5 g5 ~&quot;),
+  note(&quot;d5 f5 a5 ~&quot;),
+  note(&quot;e5 g5 b5 ~&quot;),
+  note(&quot;c5 e5 g5 ~&quot;)
+).s(&quot;sine&quot;).gain(.3).slow(4)
+).room(.8).delay(.5).cpm(20)</pre><!--astro:end--></astro-island>
+<p>Long cycles with subtle changes create an evolving soundscape.</p>
+<hr/>
+<h2 id="combining-techniques">Combining Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#combining-techniques"><span class="icon icon-link"></span></a></h2>
+<p>Real arrangements often nest these functions. Here’s a more complete example:</p>
+<astro-island uid="1mnoYb" prefix="r48" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;let kick = s(\&quot;bd ~ [~ bd] ~\&quot;)\nlet snare = s(\&quot;~ sd ~ sd\&quot;)\nlet hats = s(\&quot;hh*8\&quot;).gain(.7)\n\nlet verse_drums = stack(kick, snare)\nlet chorus_drums = stack(kick, snare, hats)\n\nlet verse_bass = note(\&quot;&lt;c2 c2 g1 a1&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(400)\nlet chorus_bass = note(\&quot;&lt;c2 e2 g2 c3&gt;\&quot;).s(\&quot;sawtooth\&quot;).lpf(800)\n\nlet verse = stack(verse_drums, verse_bass)\nlet chorus = stack(chorus_drums, chorus_bass)\n\narrange(\n[4, verse_drums],\n[8, verse],\n[8, chorus],\n[8, verse],\n[8, chorus],\n[4, chorus_drums]\n).room(.3).cpm(85)&quot;]}" ssr client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>let kick = s(&quot;bd ~ [~ bd] ~&quot;)
+let snare = s(&quot;~ sd ~ sd&quot;)
+let hats = s(&quot;hh*8&quot;).gain(.7)
+
+let verse_drums = stack(kick, snare)
+let chorus_drums = stack(kick, snare, hats)
+
+let verse_bass = note(&quot;&lt;c2 c2 g1 a1&gt;&quot;).s(&quot;sawtooth&quot;).lpf(400)
+let chorus_bass = note(&quot;&lt;c2 e2 g2 c3&gt;&quot;).s(&quot;sawtooth&quot;).lpf(800)
+
+let verse = stack(verse_drums, verse_bass)
+let chorus = stack(chorus_drums, chorus_bass)
+
+arrange(
+[4, verse_drums],
+[8, verse],
+[8, chorus],
+[8, verse],
+[8, chorus],
+[4, chorus_drums]
+).room(.3).cpm(85)</pre><!--astro:end--></astro-island>
+<p>This creates a complete song structure:</p>
+<ol>
+<li>Drums intro (4 cycles)</li>
+<li>Verse with bass (8 cycles)</li>
+<li>Chorus with fuller arrangement (8 cycles)</li>
+<li>Repeat verse and chorus</li>
+<li>Drums outro (4 cycles)</li>
+</ol>
+<hr/>
+<h2 id="quick-reference">Quick Reference<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#quick-reference"><span class="icon icon-link"></span></a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Function</th><th>Mini Notation</th><th>Description</th></tr></thead><tbody><tr><td><code>cat(x,y)</code></td><td><code>&quot;&lt;x y&gt;&quot;</code></td><td>One pattern per cycle, sequential</td></tr><tr><td><code>seq(x,y)</code> / <code>fastcat</code></td><td><code>&quot;x y&quot;</code></td><td>All patterns in one cycle</td></tr><tr><td><code>stack(x,y)</code></td><td><code>&quot;x,y&quot;</code></td><td>Patterns play simultaneously</td></tr><tr><td><code>.struct(&quot;x ~ x ~&quot;)</code></td><td>—</td><td>Apply rhythmic template to pattern</td></tr><tr><td><code>timeCat([3,x],[1,y])</code></td><td><code>&quot;x@3 y&quot;</code></td><td>Proportional timing within cycle</td></tr><tr><td><code>arrange([4,x],[8,y])</code></td><td>—</td><td>Multi-cycle song sections</td></tr><tr><td><code>polymeter([a,b,c],[x,y])</code></td><td><code>&quot;{a b c, x y}&quot;</code></td><td>Polyrhythmic layering</td></tr><tr><td><code>.euclid(3,8)</code></td><td><code>&quot;x(3,8)&quot;</code></td><td>Euclidean rhythm distribution</td></tr></tbody></table>
+<hr/>
+<h2 id="tips-for-effective-arranging">Tips for Effective Arranging<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/arranging/#tips-for-effective-arranging"><span class="icon icon-link"></span></a></h2>
+<ol>
+<li><strong>Start simple</strong> — Begin with a basic loop, then add complexity</li>
+<li><strong>Use variables</strong> — Name your sections for easy reuse</li>
+<li><strong>Create contrast</strong> — Sections should sound different (sparse vs. full, low vs. high energy)</li>
+<li><strong>Think in powers of 2</strong> — 4, 8, 16 cycle sections feel natural</li>
+<li><strong>Leave space</strong> — Silence and breakdowns make the full sections hit harder</li>
+<li><strong>Layer strategically</strong> — Each layer should have its own frequency range</li>
+</ol>
+<p>Try combining these techniques to build your own complete tracks!</p> </div> </div> </main> </div> </body></html>
