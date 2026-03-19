@@ -1,2 +1,0 @@
-https://skillomatic.technology/
-

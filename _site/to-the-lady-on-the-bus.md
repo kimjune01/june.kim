@@ -1,1 +1,0 @@
-![lady-bus](assets/lady-bus.jpg)

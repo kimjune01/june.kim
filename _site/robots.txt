@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://www.june.kim/sitemap.xml
-
-User-agent: EmailCollector
-Disallow: /

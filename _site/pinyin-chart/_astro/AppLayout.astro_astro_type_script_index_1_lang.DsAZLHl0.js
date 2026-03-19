@@ -1,1 +1,0 @@
-import{_ as i}from"./preload-helper.Cx_vh1kx.js";"serviceWorker"in navigator&&window.addEventListener("load",async()=>{try{const{registerServiceWorker:r}=await i(async()=>{const{registerServiceWorker:e}=await import("./registerSW.DrQaWdvm.js");return{registerServiceWorker:e}},[]);await r()}catch(r){console.error("Failed to register service worker:",r)}});
