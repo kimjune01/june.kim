@@ -41,52 +41,24 @@ find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
   cp "$f" "$dir.html"
 done
 
-# ─── diff-only sync ─────────────────────────────────────────────────────────
+# ─── size-only sync ──────────────────────────────────────────────────────────
 
-echo "==> Staging _site/ for diff"
-git add "$SITE_DIR/"
+echo "==> Syncing to S3 (size-only, skip unchanged)"
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --size-only
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
+  --content-type "text/plain; charset=utf-8" --no-guess-mime-type --size-only
 
-CHANGED=$(git diff --cached --name-only --diff-filter=ACMR -- "$SITE_DIR/")
-DELETED=$(git diff --cached --name-only --diff-filter=D -- "$SITE_DIR/")
+# Collect what actually changed for CloudFront invalidation
+CHANGED=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --dryrun 2>&1 \
+  | grep -E "^(upload|delete):" \
+  | sed 's|.*s3://[^/]*/|/|' \
+  || true)
 
-if [[ -z "$CHANGED" && -z "$DELETED" ]]; then
-  echo "Nothing to deploy."
-  git reset HEAD -- "$SITE_DIR/" >/dev/null 2>&1
-  exit 0
-fi
+NCHANGED=$(echo "$CHANGED" | grep -c . 2>/dev/null || echo 0)
+echo "    $NCHANGED files synced"
 
-NCHANGED=$(echo "$CHANGED" | grep -c . || true)
-NDELETED=$(echo "$DELETED" | grep -c . || true)
-echo "    $NCHANGED changed, $NDELETED deleted"
-
-if [[ $((NCHANGED + NDELETED)) -gt 50 ]]; then
-  echo "==> Bulk sync to S3 (many files changed)"
-  aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --size-only
-  aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
-    --content-type "text/plain; charset=utf-8" --no-guess-mime-type --size-only
-else
-  echo "==> Uploading changed files"
-  while IFS= read -r file; do
-    [[ -z "$file" ]] && continue
-    s3key="${file#$SITE_DIR/}"
-    if [[ "$file" == *.md ]]; then
-      aws s3 cp "$file" "s3://$BUCKET/$s3key" \
-        --content-type "text/plain; charset=utf-8" --no-guess-mime-type --quiet
-    else
-      aws s3 cp "$file" "s3://$BUCKET/$s3key" --quiet
-    fi
-    echo "  + $s3key"
-  done <<< "$CHANGED"
-
-  if [[ -n "$DELETED" ]]; then
-    echo "==> Deleting removed files"
-    while IFS= read -r file; do
-      [[ -z "$file" ]] && continue
-      s3key="${file#$SITE_DIR/}"
-      aws s3 rm "s3://$BUCKET/$s3key" --quiet
-      echo "  - $s3key"
-    done <<< "$DELETED"
-  fi
+if [[ "$NCHANGED" -eq 0 ]]; then
+  echo "Nothing changed on S3."
 fi
 
 # Always upload feed.xml (gitignored but needed on S3)
@@ -97,18 +69,14 @@ echo "    feed.xml synced"
 
 echo "==> Invalidating CloudFront cache"
 PATHS=()
-while IFS= read -r file; do
-  [[ -z "$file" ]] && continue
-  p="/${file#$SITE_DIR/}"
+while IFS= read -r p; do
+  [[ -z "$p" ]] && continue
   PATHS+=("${p// /%20}")
 done <<< "$CHANGED"
-while IFS= read -r file; do
-  [[ -z "$file" ]] && continue
-  p="/${file#$SITE_DIR/}"
-  PATHS+=("${p// /%20}")
-done <<< "$DELETED"
 
-if [[ ${#PATHS[@]} -gt 50 ]]; then
+if [[ ${#PATHS[@]} -eq 0 ]]; then
+  echo "    No paths to invalidate"
+elif [[ ${#PATHS[@]} -gt 50 ]]; then
   aws cloudfront create-invalidation \
     --distribution-id "$CF_DIST_ID" \
     --paths "/*" \
@@ -125,13 +93,13 @@ fi
 # ─── index on PageLeft ─────────────────────────────────────────────────────
 
 echo "==> Indexing changed posts on PageLeft"
-while IFS= read -r file; do
-  [[ -z "$file" ]] && continue
-  [[ "$file" != *.html ]] && continue
+while IFS= read -r p; do
+  [[ -z "$p" ]] && continue
+  [[ "$p" != *.html ]] && continue
   # Only root-level .html files that have a matching .md (i.e. posts)
-  [[ "$file" == */* && "${file#$SITE_DIR/}" == */* ]] && continue
-  slug="${file#$SITE_DIR/}"
+  slug="${p#/}"
   slug="${slug%.html}"
+  [[ "$slug" == */* ]] && continue
   [[ -d "$SITE_DIR/$slug" ]] && continue
   [[ ! -f "$SITE_DIR/$slug.md" ]] && continue
   url="https://$DOMAIN_WWW/$slug"
@@ -150,7 +118,8 @@ done <<< "$CHANGED"
 # ─── commit _site/ ──────────────────────────────────────────────────────────
 
 echo "==> Committing _site/"
-git commit -m "Deploy _site" --no-verify -- "$SITE_DIR"
+git add "$SITE_DIR/"
+git diff --cached --quiet -- "$SITE_DIR/" || git commit -m "Deploy _site" --no-verify -- "$SITE_DIR/"
 
 echo ""
 echo "Deploy complete! Site is live at https://$DOMAIN_WWW"
