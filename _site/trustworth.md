@@ -84,7 +84,7 @@ The attestation graph works the same way. The protocol is [SMTP and DKIM](/proof
 
 That's what makes the unraveling permanent. Once merchants like Bark & Bond discover that transparency gets them better ad rates, the demand is structural. No single exchange owns it. The protocol spreads the way ads.txt [spread](https://pubmatic.com/blog/ads-txt-rise-ad-tech/), because non-participation became expensive. The cost of joining is two emails.
 
-You still can't taste dog food. But you can read the graph of who made it, who inspected it, and who's been buying it for ten years. That's what trustworth means.
+You still can't taste dog food. But you can read the graph of who made it, who inspected it, and who's been buying it for ten years. Trustworth.
 
 ---
 
