@@ -6,7 +6,7 @@ tags: methodology coding
 
 *Builds on [The Spec Is a Hypothesis](/the-spec-is-a-hypothesis).*
 
-The spec-is-a-hypothesis workflow had a gap. The blog post identified the boundary -- prose carries architecture, code carries constraints -- but didn't say what to do when they conflict. Ten bugs in code review. Twenty spec revisions. Fifteen design decisions written before implementation. The human was doing the LLM's job.
+The spec-is-a-hypothesis workflow had a gap. The blog post identified the boundary -- prose carries architecture, code carries constraints -- and stopped there. Ten bugs in code review. Twenty spec revisions. Fifteen design decisions written before implementation. The human was doing the LLM's job.
 
 ## The experiment
 
@@ -53,7 +53,7 @@ The fourth implementation absorbed the best of both: Codex's architecture with C
 3. **Claude (blind)** -- good patterns, broken plumbing
 4. **Codex (blind)** -- good architecture, broken integration
 
-The review loop between implementations is where the value lived. Not in any single pass.
+The value lived in the loop between implementations.
 
 ## The methodology
 
@@ -64,21 +64,21 @@ The review loop between implementations is where the value lived. Not in any sin
 5. **Cross-review.** Show each implementation the other. Surface contradictions, not preferences.
 6. **Synthesize.** Absorb the best parts. One more review pass to verify.
 
-The authority rule does the work of a design decisions document. The cross-review does the work of code review. The synthesis does the work of the spec revision cycle. The human decides what to build and what wins when things conflict. The LLMs figure out the rest.
+The human decides what to build and what wins when things conflict. The LLMs figure out the rest.
 
 ## What it costs
 
 Three implementations and two review passes for one feature. That sounds expensive until you compare it to the alternative: one implementation, ten bugs, twenty spec revisions, fifteen design decisions, and a code review cycle that taught the spec things it didn't know.
 
-The synthesis loop front-loads the cost. The original pipeline back-loads it. Same total work. Different distribution.
+The synthesis loop front-loads the cost. The original pipeline back-loads it.
 
 ## What it doesn't fix
 
 The bug class didn't change across any implementation. Serialization loss. Concurrency guards. Lifecycle management. Every implementation hit bugs at boundaries the spec didn't define. The authority rule reduced the surface area. The synthesis loop caught more instances. But the failure mode is structural: prose can't carry type contracts, and no amount of process eliminates that boundary.
 
-The contradiction-finding pass was valuable not for the decisions it surfaced, but for forcing deep reading before writing code. Every risk it catalogued, it later hit a specific instance of. It knew where to look. It still didn't see the specific failure.
+The contradiction-finding pass was valuable for forcing deep reading before writing code. Every risk it catalogued, it later hit a specific instance of. It knew where to look.
 
-The honest summary: this methodology gets you closer to the finish line faster. It doesn't get you across it. The last mile is still code review by someone who understands both the architecture and the type system.
+This methodology gets you closer to the finish line faster. The last mile is still code review by someone who understands both the architecture and the type system. Blind, blind, merge -- then a human looks at what's left.
 
 ---
 
