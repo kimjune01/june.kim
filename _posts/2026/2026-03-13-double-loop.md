@@ -30,14 +30,14 @@ That was not a pipe. That was a loop: read, parse, try, reject, try again, keep.
 
 Here are the same six operations [any editor already performs](/the-natural-framework), whether they name them or not: perceive, cache, filter, attend, consolidate, remember. Either party can perform each one. One usually leads.
 
-| Role | Who leads | What happens |
+| Role | Human | AI |
 |---|---|---|
-| **Perceive** | You | The connection spanning three disciplines, the lived experience no training corpus encodes |
-| **Cache** | AI | A million tokens of context, perfect recall, no ego about the outline |
-| **Filter** | AI | [Kill what doesn't belong](https://www.themarginalian.org/2014/10/03/arthur-quiller-couch-art-of-writing/) — skills automate rejection: tighten, humanize, arc-check |
-| **Attend** | You | Rank what survives, decide what stays and where — judgment the skills can't automate |
-| **Consolidate** | You | Each pass compresses — you decide what it lost |
-| **Remember** | AI | Preserves what the loop learned: decisions, failed attempts, editorial memory |
+| **Perceive** | The connection spanning three disciplines, the lived experience no training corpus encodes | <span style="opacity:0.35">Receives the prompt</span> |
+| **Cache** | <span style="opacity:0.35">Remembers the gist</span> | A million tokens of context, perfect recall, no ego about the outline |
+| **Filter** | <span style="opacity:0.35">Gut-checks the draft</span> | [Kill what doesn't belong](https://www.themarginalian.org/2014/10/03/arthur-quiller-couch-art-of-writing/) — skills automate rejection: tighten, humanize, arc-check |
+| **Attend** | Rank what survives, decide what stays and where — judgment the skills can't automate | <span style="opacity:0.35">Follows instructions</span> |
+| **Consolidate** | Each pass compresses — you decide what it lost | <span style="opacity:0.35">Summarizes on request</span> |
+| **Remember** | <span style="opacity:0.35">Forgets the details</span> | Preserves what the loop learned: decisions, failed attempts, editorial memory |
 
 Then run it again. The published piece becomes the next cycle's input. You perceive it fresh, notice what's weak, and the loop continues.
 
