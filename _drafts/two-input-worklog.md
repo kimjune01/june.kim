@@ -319,3 +319,18 @@ Fresh codex instance ranked all four implementations:
 **Key finding:** The synthesis loop (implement → cross-review → absorb → re-judge) moved D from 2nd to 1st place. One round of cross-pollination between two blind implementations produced the best result. Neither implementation alone was shippable; the combination was closest.
 
 **The double loop in action:** B had the right architecture (persistence, config, rich ingestion) but wrong integration (flatten-to-user). C had the right defensive patterns (error retry, timestamp preservation, Content preservation) but wrong plumbing (broken ingestion, wrong key). D got both by reading both.
+
+---
+
+## Step 12: Absorbing the original implementation
+
+Fed codex the original pipeline's implementation (from `kimjune01/gemini-cli:feat/union-find-compaction`) and asked it to cherry-pick improvements into the synthesized version.
+
+**Three improvements absorbed:**
+1. ClusterSummarizer: try/catch around `generateContent()`, falls back to joined raw messages instead of bubbling failures into compaction
+2. contentToContextString: returns `''` for empty Content, ingestion skips those entries (prevents placeholder strings from contaminating embeddings)
+3. Render query path: tolerates empty derived query
+
+53 tests passing after absorption. The original pipeline's strength (defensive error handling, edge case coverage) continues to complement the synthesis's strength (architecture, persistence, config).
+
+**Final state:** The synthesized implementation has now absorbed improvements from all three sources: codex's architecture, Claude subagent's defensive patterns, and the original pipeline's error handling. Three passes of cross-pollination.

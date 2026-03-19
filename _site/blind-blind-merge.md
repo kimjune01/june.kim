@@ -1,9 +1,3 @@
----
-layout: post-wide
-title: "Blind, Blind, Merge"
-tags: methodology coding
----
-
 *Builds on [The Spec Is a Hypothesis](/the-spec-is-a-hypothesis).*
 
 Spec, code, iterate. Everyone knows the third step is where the time goes. Ten bugs in code review. Twenty spec revisions. Fifteen design decisions before the LLM could even start. The [previous post](/the-spec-is-a-hypothesis) identified the boundary -- prose carries architecture, code carries constraints. It stopped there.
