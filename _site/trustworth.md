@@ -22,15 +22,15 @@ Bark & Bond has the evidence to prove it's real, but nobody can read their signa
 
 ## What if it worked
 
-Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out. Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy the trust signals. Bark & Bond's ad rates drop because its trust score is high, and Sunny Paws's rates climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. The lemons pool drains. Trustworthiness becomes measurable. Trustworth.
+Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out. Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy the trust signals. Bark & Bond's advertising costs drop because its trust score is high, and Sunny Paws's climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. Trustworthiness becomes measurable.
 
-But why would Stripe publish Bark & Bond's attestations to a graph that Square can read? They wouldn't. Not voluntarily. Not first.
+But why would Stripe publish Bark & Bond's attestations to a graph that Square can read? They wouldn't.
 
 ## Who starts
 
-Exchanges already price risk and route demand. One that builds a trust graph gets higher CPMs because trust-scored inventory means better advertisers and better publisher relationships. A curated marketplace commands a premium over a lemons pool.
+Exchanges already price risk and route demand. One that builds a trust graph gets higher CPMs because trust-scored inventory means better advertisers and better publisher relationships. A curated marketplace commands a premium.
 
-The exchange just needs enough demand-side liquidity that merchants care about being in its graph. Bark & Bond attests and gets better placement; Sunny Paws doesn't and gets the lemons rate. The exchange publishes the graph; curators interpret it; publishers compose trust policies. Each layer has its own incentive.
+The exchange just needs enough demand-side liquidity that merchants care about being in its graph. Bark & Bond attests and gets better placement; Sunny Paws doesn't, and gets lumped in with the shady merchants. The exchange publishes the graph; curators interpret it; publishers compose trust policies. Each layer has its own incentive.
 
 ## Who follows
 
@@ -71,7 +71,7 @@ Once Bark & Bond attests through the entrant, every pet food brand on a non-atte
 Bark & Bond stays on Stripe. It just asks: *why can't I get attestations like my competitor on that other processor?* Enough merchants asking that question, and Stripe attests. For retention.
 
 1. *An exchange builds the trust graph.* Higher CPMs pay for the infrastructure.
-2. *Bark & Bond attests.* It gets out of the lemons pool. Its ad rates improve. The ROI is immediate.
+2. *Bark & Bond attests.* It stops getting lumped in with the shady merchants. Its ad rates improve. The ROI is immediate.
 3. *An entrant payment processor attests on Bark & Bond's behalf.* It's a growth lever — "your merchants get trust-scored ad placement" writes itself.
 4. *Stripe resists.* Until merchant churn forces their hand. The question changes from "why would Stripe attest?" to "how long can Stripe afford not to?"
 5. *The graph reaches critical mass.* Merchants self-select into transparency because the alternative is paying a fraud tax on every ad dollar.
