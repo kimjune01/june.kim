@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BUCKET="www.june.kim"
-DOMAIN_WWW="www.june.kim"
+DOMAIN_WWW="june.kim"
 SITE_DIR="_site"
 CF_DIST_ID="E1G9R7V0YY4VV1"
 
@@ -26,6 +26,14 @@ bundle install
 
 echo "==> Building site"
 JEKYLL_ENV=production bundle exec jekyll build
+
+# Copy static app builds into _site (excluded from Jekyll to preserve _astro dirs)
+for app in pinyin-chart jamdojo; do
+  if [[ -d "$app" ]]; then
+    cp -r "$app" "$SITE_DIR/$app"
+    echo "==> Copied $app into $SITE_DIR"
+  fi
+done
 
 echo "==> Creating .html aliases for directory index pages"
 find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do

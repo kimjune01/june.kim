@@ -1,0 +1,66 @@
+*Part of the [methodology](/methodology) series. Builds on [Double Loop](/double-loop) and [Consolidation](/consolidation).*
+
+> "I wasted 25 percent of my time in useless meetings." — [Dilbert](https://dilbert.com/search_results?terms=Useless+Meetings)
+
+We meet to coordinate, to learn what everyone's doing, to catch mistakes before they compound. We hate it because the bandwidth is terrible. A standup gives each person two minutes. A retro captures what people remember, not what happened. Code review shows the *what*, rarely the *why not*. An hour for ten minutes of signal.
+
+The coordination matters. The learning matters. The format doesn't.
+
+## What if the sync happened without you?
+
+A 50-minute meeting with five engineers [costs ~$500](https://www.parabol.co/blog/meeting-cost-calculation/) and produces maybe 1,000 words of shared context. An LLM synthesizing ten work logs costs $1.50 and takes 30 seconds. So:
+
+A work log. A live, append-only transcript of decisions and their reasons, written by the agent *during* the work. Timestamped. Structured. Machine-readable.
+
+The agent writes it as a byproduct of working. It's a snapshot of the thinking between loops: what was tried, what worked, what didn't, what's next. Reproducing the work might be a side benefit, but the point is sharing decisions and methodologies async.
+
+## Diagnosis over diffs
+
+Each entry records what happened and why.
+
+"Fixed the bug" is a commit message. "The control-loop bug happened because graduation triggers on message count while summarization triggers on tokens — two thresholds on different axes that never align." That's a work log entry. The fix is in the code. The diagnosis is nowhere else.
+
+Failures go in. Especially failures. "Sonnet flagged 8 issues, applied fixes, broke the embedder. Reverted." No commit message carries that, and no retro would surface it. By next Friday, nobody remembers.
+
+## Ten logs, one synthesis
+
+If everyone's agent produces a work log, catching up to each other becomes a reading problem. And machines are better at reading than humans are at meeting.
+
+An agent reads ten work logs overnight and extracts:
+
+- What patterns keep failing across the team
+- What each person learned that others haven't encountered yet
+- Where two people solved the same problem differently
+- Which decisions were made under assumptions that later proved wrong
+
+[Consolidation](/consolidation) across minds, before your coffee is ready.
+
+## Receipts
+
+The [union-find compaction](https://github.com/kimjune01/union-find-compaction-for-aider) project: 21 steps across sessions. A control-loop bug that passed all unit tests but never triggered in production, caught after seven review rounds. Without the log, each session would have rebuilt context from git history. With it, each started at the current step.
+
+The [metacognition](https://github.com/kimjune01/metacognition) experiment: 4 rounds. A deduplication bug that invalidated an entire run, a $10 data loss from missing persistence, a search strategy that improved pass rates from 1% to 14%. Each lesson carried forward because the log held the diagnosis.
+
+## Monday morning
+
+An agent read all ten work logs over the weekend. It extracted *methodology*.
+
+One log: "Unit tests passed but the feature never triggered in production. Test mocks bypassed the real tokenizer, so the control loop never fired. Lesson: integration tests must use real tokenizers."
+
+Another: "Piped experiment output to `head`, which sent [SIGPIPE](https://en.wikipedia.org/wiki/Signal_(IPC)) and killed the process early. Made this mistake three times. Lesson: never pipe long-running experiments."
+
+A third: "Ran two blind implementations of the same feature, one with Codex, one with Claude. Codex built better architecture. Claude built better defensive patterns. Neither shipped alone. Lesson: [run two blind LLMs and cross-review](/authority-rule). They make complementary mistakes."
+
+Three lessons about *how to work*, each bought with hours. Without the log, each fades to a vague "be careful with mocks" in a retro. With it, everybody gets smarter.
+
+Boring coordination happens while everyone sleeps. The agenda writes itself. The meeting becomes something different: sharing methods, not status. "Three of you hit this pattern. Here's what worked."
+
+The obvious objection: who wants to be that transparent at work? Every dead end visible, every wrong turn recorded. It feels exposed.
+
+I do. A work log is a paper trail of productivity. Every decision documented, every contribution traceable. The person with the work log doesn't need to self-promote in a performance review. The log already did it — hour-by-hour resolution, machine-readable, no more "what did you do this week?" And if a teammate sees it and wants the same advantage, good. They're free to copy and overtake me. That's the whole point.
+
+The work log is a communication channel that doesn't need Slack pings or [TPS reports](https://www.youtube.com/watch?v=Fy3rjQGc6lA). It just needs the agent to keep writing while you keep working.
+
+---
+
+*Written via the [double loop](/double-loop).*

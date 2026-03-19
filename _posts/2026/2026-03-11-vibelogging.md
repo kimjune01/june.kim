@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibelogging"
-tags: cognition pageleft
+tags: cognition pageleft methodology
 ---
 
 *Part of the [cognition](/cognition) series.*

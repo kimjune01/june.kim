@@ -7,29 +7,30 @@ image: "/assets/trustworth.jpg"
 
 *Part of the [Vector Space](/vector-space) series.*
 
-Digital advertising has a [$63 billion](https://www.mediapost.com/publications/article/412156/ad-spend-wasted-on-invalid-traffic-reached-63b-in.html) fraud problem. For every ad dollar a merchant spends, [most of it](https://www.fraudlogix.com/stats/ad-fraud-statistics-2026) never reaches a real consumer. The open market is a [lemons pool](https://en.wikipedia.org/wiki/The_Market_for_%22Lemons%22). A publisher running ads can't tell the difference between a pet food brand sourcing from a FDA-inspected facility with ten years of retailer relationships and one that white-labels products of unknown origin and launched last month. Neither can the buyer. You can't taste dog food. Your dog can't leave a review. The packaging looks the same. The only signal is the ad.
+Digital advertising has a [$63 billion](https://www.mediapost.com/publications/article/412156/ad-spend-wasted-on-invalid-traffic-reached-63b-in.html) fraud problem. For every ad dollar a merchant spends, [most](https://www.fraudlogix.com/stats/ad-fraud-statistics-2026) never reaches a real consumer. The open market is a [lemons pool](https://en.wikipedia.org/wiki/The_Market_for_%22Lemons%22). A publisher can't tell a pet food brand with ten years of retailer relationships from a dropshipper that launched last month. Neither can the buyer. You can't taste dog food; your dog can't leave a review; so the only signal left is the ad.
 
 ![Trustworth](/assets/trustworth.jpg)
 
 ## Which kibble?
 
-| | Bark & Bond (legit) | Sunny Paws (shady) |
-|---|---|---|
-| Track record | Decade of clean payments | Launched last month |
-| Endorsements | Hundreds of retailers | Stock photo of a golden retriever |
-| Supply chain | Direct relationships with inspected facilities | White-labeled, origin unknown |
-| Ad strategy | Bids conservatively — fraud dilutes ROI | Bids aggressively — repeat customers don't matter |
-| Growth | Word of mouth | Facebook ad budget |
+<table>
+<thead><tr><th></th><th>Bark &amp; Bond (legit)</th><th>Sunny Paws (shady)</th></tr></thead>
+<tr><td>Track record</td><td>Decade of clean payments</td><td style="opacity:0.35">Launched last month</td></tr>
+<tr><td>Endorsements</td><td>Hundreds of retailers</td><td style="opacity:0.35">Stock photo of a golden retriever</td></tr>
+<tr><td>Supply chain</td><td>Direct relationships with inspected facilities</td><td style="opacity:0.35">White-labeled, origin unknown</td></tr>
+<tr><td>Ad strategy</td><td>Bids conservatively — fraud dilutes ROI</td><td style="opacity:0.35">Bids aggressively — repeat customers don't matter</td></tr>
+<tr><td>Growth</td><td>Word of mouth</td><td style="opacity:0.35">Facebook ad budget</td></tr>
+</table>
 
 The publisher gets worse advertisers, the audience gets worse ads, and Bark & Bond competes through reputation instead of reach. Everyone loses except the fraudsters.
 
 Bark & Bond has the evidence to prove it's real, but nobody can read their signals.
 
-[Proof of Trust](/proof-of-trust) described a protocol that could read them: attestation emails, DKIM signatures, federated curators, a public trust graph. But nobody uses it, because nobody uses it. The exchange doesn't exist. Classic cold start.
+[Proof of Trust](/proof-of-trust) described a protocol that could read them: attestation emails, DKIM signatures, federated curators, a public trust graph. But nobody uses it, because nobody uses it. The exchange never takes off. Classic cold start.
 
 ## What if it worked
 
-Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out. Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy the trust signals. Bark & Bond's advertising costs drop because its trust score is high, and Sunny Paws's climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. Trustworthiness becomes measurable.
+Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out. Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy trust signals. Bark & Bond's advertising costs drop because its trust score is high, and Sunny Paws's climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. Trustworthiness becomes measurable.
 
 But why would Stripe publish Bark & Bond's attestations to a graph that Square can read? They wouldn't.
 

@@ -2,6 +2,7 @@
 layout: post
 title: "Does Loading the Framework Help Diagnose Missing Parts?"
 date: 2026-03-17
+tags: cognition methodology
 categories: cognition
 ---
 

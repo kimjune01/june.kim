@@ -87,4 +87,4 @@ Tool sequences are the **implementation** of intellectual work. Skills should co
 
 - MEMORY.md: "Division of intellect, not labor. Labor is Cache. Intellect is Attend."
 - MEMORY.md: "Skills should automate Filter-level work (reject what's wrong). Producing what's right requires Attend — that stays with the human."
-- round3-results.md: Theory is load-bearing (P≈0.95), can't compress to checklist without losing effectiveness
+- theory-is-load-bearing.md: Theory is load-bearing (P≈0.95), can't compress to checklist without losing effectiveness

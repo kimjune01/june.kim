@@ -1,7 +1,7 @@
 ---
 layout: post-wide
 title: "Union-Find Compaction"
-tags: cognition
+tags: cognition methodology
 image: /assets/union-find-compaction.png
 ---
 

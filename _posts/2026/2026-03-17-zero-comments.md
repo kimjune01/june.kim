@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Zero Comments"
-tags: coding
+tags: coding methodology
 ---
 
 *Builds on [Union-Find Compaction](/union-find-compaction). Implementation: [gemini-cli fork](https://github.com/kimjune01/gemini-cli/tree/feat/union-find-compaction). Spec and experiment: [union-find-compaction-for-gemini-cli](https://github.com/kimjune01/union-find-compaction-for-gemini-cli).*

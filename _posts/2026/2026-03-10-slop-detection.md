@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Can You Detect AI Slop?"
-tags: coding cognition
+tags: coding cognition methodology
 ---
 
 *Part of the [cognition](/cognition) series.*

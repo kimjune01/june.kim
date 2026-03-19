@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Spec Is a Hypothesis"
-tags: cognition coding
+tags: cognition coding methodology
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [Vibelogging](/vibelogging) and [Zero Comments](/zero-comments).*

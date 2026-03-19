@@ -1,7 +1,7 @@
 # Site Info
 title:              "June Kim"
 description:        "Thoughts on software, life, and everything"
-url:                https://www.june.kim
+url:                https://june.kim
 google_verify:       KI4yEdescuJGYOwKudJNOWvsQzH5x2MZ05-CdCH_nm8
 google_analytics:    # Put your Google Analytics code
 
@@ -36,7 +36,7 @@ kramdown:
 
 # Site Settings
 baseurl:            "" # Base URL must end WITHOUT a slash, default: ""
-weburl:             https://www.june.kim
+weburl:             https://june.kim
 asseturl:           https://raw.githubusercontent.com/kimjune01/june.kim/master/assets
 permalink:          /:title # Post permalink
 timezone:           Canada/Pacific # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
@@ -55,7 +55,7 @@ tag_page_dir: tag
 
 # Other Params
 include:            [ "robots.txt" ]
-exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile", "deploy.sh"]
+exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile", "deploy.sh", "pinyin-chart", "jamdojo" ]
 
 compress_html:
     clippings:      all

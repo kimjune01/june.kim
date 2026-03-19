@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Context Density"
-tags: cognition coding
+tags: cognition coding methodology
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [The Plateau](/the-plateau).*

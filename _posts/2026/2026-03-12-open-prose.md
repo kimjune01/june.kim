@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Open Prose"
-tags: cognition pageleft
+tags: cognition pageleft methodology
 image: "/assets/open-prose.jpg"
 ---
 
