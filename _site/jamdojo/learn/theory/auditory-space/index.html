@@ -1,0 +1,590 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.1.9"><link rel="alternate" type="application/rss+xml" title="RSS Feed for strudel.cc" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/jamdojo/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/jamdojo/favicon.ico"><link rel="apple-touch-icon" href="/jamdojo/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/jamdojo/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/jamdojo/make-scrollable-code-focusable.js"></script><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_0_lang.BS_sy5Gw.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/jamdojo/manifest.webmanifest"><script type="module" src="/jamdojo/_astro/HeadCommon.astro_astro_type_script_index_1_lang.-EECfF37.js"></script><title>Auditory Space - JamDojo</title><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css">
+<style>@font-face{font-family:PressStart;src:url(/jamdojo/fonts/PressStart2P/PressStart2P-Regular.ttf);size-adjust:65%}@font-face{font-family:BigBlueTerminal;src:url(/jamdojo/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/jamdojo/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/jamdojo/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:CutiePi;src:url(/jamdojo/fonts/CutiePi/Cute_Aurora_demo.ttf);size-adjust:120%}@font-face{font-family:JetBrains;src:url(/jamdojo/fonts/JetBrains/JetBrainsMono.woff2)}@font-face{font-family:Monocraft;src:url(/jamdojo/fonts/Monocraft/Monocraft.ttf);size-adjust:90%}@font-face{font-family:Hack;src:url(/jamdojo/fonts/Hack/Hack-Regular.ttf)}@font-face{font-family:we-come-in-peace;src:url(/jamdojo/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/jamdojo/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/jamdojo/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/jamdojo/fonts/teletext/EuropeanTeletext.ttf);size-adjust:90%}@font-face{font-family:tic80;src:url(/jamdojo/fonts/tic80/tic-80-wide-font.otf);size-adjust:60%}@font-face{font-family:mode7;src:url(/jamdojo/fonts/mode7/MODE7GX3.TTF);size-adjust:82%}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh;--app-width: 100vw}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+.prose h1:before,.prose h2:before,.prose h3:before,.prose h4:before,.prose h5:before,.prose h6:before{display:block;content:" ";margin-top:-70px;height:70px;visibility:hidden;pointer-events:none}.icon.icon-link{visibility:hidden}.prose h1:hover .icon.icon-link,.prose h2:hover .icon.icon-link,.prose h3:hover .icon.icon-link,.prose h4:hover .icon.icon-link,.prose h5:hover .icon.icon-link,.prose h6:hover .icon.icon-link{visibility:visible}.prose h1>a,.prose h2>a,.prose h3>a,.prose h4>a,.prose h5>a,.prose h6>a{text-decoration:none!important}.icon.icon-link:after{content:"#";margin-left:8px;font-size:.9em;opacity:50%}
+:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:#000;opacity:.5}#code .cm-scroller{padding-top:10px!important;height:100%;font-family:inherit}#code .cm-content{padding-bottom:50vh}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}#code .cm-matchingBracket{-webkit-text-decoration:underline .18rem;text-decoration:underline .18rem;text-underline-offset:.22rem}.cm-tooltip.cm-completionInfo{padding:0!important;border:1px solid var(--foreground)!important;border-radius:4px!important;box-shadow:0 4px 12px #0000004d!important;max-width:500px!important;min-width:300px!important;max-height:400px!important;background-color:var(--lineHighlight)!important;overflow:auto;background:var(--background)!important}.autocomplete-info-container{padding:12px!important;border-radius:4px!important;color:var(--foreground);font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:var(--font-size, 13px);line-height:1.4;max-width:600px;height:100%;min-width:400px;white-space:normal!important;overflow-y:auto!important}.autocomplete-info-tooltip{overflow-y:auto!important}.autocomplete-info-function-description{white-space:pre-wrap!important}.autocomplete-info-function-name{font-size:15px;font-weight:600;color:var(--foreground);margin:0 0 8px}.autocomplete-info-function-synonyms,.autocomplete-info-function-description{margin:0 0 12px;color:var(--foreground);line-height:1.5;opacity:.8}.autocomplete-info-section-title{font-size:12px;font-weight:600;color:var(--foreground);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}.autocomplete-info-section-title:first-child{margin-top:0}.autocomplete-info-params-section{margin-top:12px}.autocomplete-info-params-list{list-style:none;margin:0;padding:0}.autocomplete-info-param-item{margin-bottom:8px;padding:8px;background-color:var(--lineBackground);border-radius:3px;border-left:2px solid var(--foreground, #555)}.autocomplete-info-param-item:last-child{margin-bottom:0}.autocomplete-info-param-name{font-weight:600;color:var(--variable, var(--foreground));margin-right:8px}.autocomplete-info-param-type{color:var(--comment);font-size:12px;background-color:var(--gutterForeground);padding:1px 4px;border-radius:2px}.autocomplete-info-param-desc{color:var(--foreground);font-size:10px;margin-top:4px;line-height:1.4;opacity:.7}.autocomplete-info-examples-section{margin-top:12px}.autocomplete-info-example-code{background:var(--lineBackground);color:var(--foreground);padding:8px;border-radius:3px;font-family:var(--font-family, "SF Mono", "Monaco", monospace);font-size:12px;line-height:1.5;margin:4px 0;overflow-x:auto;white-space:pre;border:1px solid var(--foreground, #3a3a3a)}.autocomplete-info-tooltip::-webkit-scrollbar{width:4px}.autocomplete-info-tooltip::-webkit-scrollbar-thumb{border-radius:2px}
+</style></head> <body class="min-h-screen m-0 text-gray-50 bg-background"> <div class="flex min-h-screen"> <!-- Sidebar --> <aside class="w-56 bg-gray-900 border-r border-gray-800 p-4 hidden md:block fixed h-full"> <nav class="flex flex-col gap-1 h-full overflow-y-auto"> <a href="/jamdojo/" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors mb-2"> <span>←</span> <span>JamDojo</span> </a> <div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-0"> <div class="flex items-center gap-2"> <span>🎮</span> <span class="font-medium">Interactive Tools</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-0" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/interactive-tools/playground/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">💻</span> <span>Playground</span> </a><a href="/jamdojo/learn/interactive-tools/piano/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎹</span> <span>Piano</span> </a><a href="/jamdojo/learn/interactive-tools/guitar/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎸</span> <span>Guitar</span> </a><a href="/jamdojo/learn/interactive-tools/pitch-detector/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Pitch Detector</span> </a><a href="/jamdojo/learn/interactive-tools/sample-explorer/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Sample Explorer</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-1"> <div class="flex items-center gap-2"> <span>🎯</span> <span class="font-medium">Quizzes</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-1" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/quizzes/sample-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎯</span> <span>Sample Quiz</span> </a><a href="/jamdojo/learn/quizzes/waveform-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">〰</span> <span>Waveform Quiz</span> </a><a href="/jamdojo/learn/quizzes/effect-guessing/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛</span> <span>Effect Quiz</span> </a><a href="/jamdojo/learn/quizzes/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔊</span> <span>Auditory Space Quiz</span> </a><a href="/jamdojo/learn/quizzes/ear-training/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👂</span> <span>Ear Training</span> </a><a href="/jamdojo/learn/quizzes/pitch-simon/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Pitch Simon</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="true" aria-controls="activity-section-2"> <div class="flex items-center gap-2"> <span>🎵</span> <span class="font-medium">Music Theory</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style="transform: rotate(90deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-2" class="activity-accordion-content pl-4" style> <a href="/jamdojo/learn/theory/harmony/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎶</span> <span>Harmony</span> </a><a href="/jamdojo/learn/theory/chord-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Chord Composition</span> </a><a href="/jamdojo/learn/theory/classical-terminology/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎻</span> <span>Classical Terminology</span> </a><a href="/jamdojo/learn/theory/euclidean-rhythms/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🥁</span> <span>Euclidean Rhythms</span> </a><a href="/jamdojo/learn/theory/sound-design/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Sound Design &amp; Timbre</span> </a><a href="/jamdojo/learn/theory/auditory-space/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm bg-cyan-600 text-white"> <span class="text-lg">🔊</span> <span>Auditory Space</span> </a><a href="/jamdojo/learn/theory/sampling-composition/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Sampling Composition</span> </a><a href="/jamdojo/learn/theory/arranging/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎬</span> <span>Arranging Patterns</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-3"> <div class="flex items-center gap-2"> <span>💻</span> <span class="font-medium">Programming</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-3" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/theory/strudel-programming/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔧</span> <span>Strudel Programming</span> </a><a href="/jamdojo/learn/theory/why-functions/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⚡</span> <span>Why Functions</span> </a><a href="/jamdojo/learn/theory/why-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📦</span> <span>Why Containers</span> </a><a href="/jamdojo/learn/theory/patterns-as-containers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Patterns as Containers</span> </a><a href="/jamdojo/learn/theory/transforming-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔄</span> <span>Transforming Patterns</span> </a><a href="/jamdojo/learn/theory/combining-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔗</span> <span>Combining Patterns</span> </a><a href="/jamdojo/learn/theory/patterns-of-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎁</span> <span>Patterns of Patterns</span> </a><a href="/jamdojo/learn/theory/building-with-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏗️</span> <span>Building with Patterns</span> </a><a href="/jamdojo/learn/theory/combining-events/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⊕</span> <span>Combining Events</span> </a><a href="/jamdojo/learn/theory/choice-and-selection/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔀</span> <span>Choice and Selection</span> </a><a href="/jamdojo/learn/theory/context-aware-patterns/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Context-Aware Patterns</span> </a><a href="/jamdojo/learn/theory/flipping-structure/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔃</span> <span>Flipping Structure</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-4"> <div class="flex items-center gap-2"> <span>🎸</span> <span class="font-medium">Genre Studies</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-4" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/genre/rock-pop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Rock &amp; Pop</span> </a><a href="/jamdojo/learn/genre/hip-hop/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎤</span> <span>Hip-Hop</span> </a><a href="/jamdojo/learn/genre/edm/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎧</span> <span>Electronic Dance Music</span> </a><a href="/jamdojo/learn/genre/metal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🤘</span> <span>Metal</span> </a><a href="/jamdojo/learn/genre/demoscene/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🖥️</span> <span>Demoscene</span> </a><a href="/jamdojo/learn/genre/classical/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Classical Music</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-5"> <div class="flex items-center gap-2"> <span>📚</span> <span class="font-medium">Workshop</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-5" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/workshop-content/getting-started/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🚀</span> <span>Getting Started</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-6"> <div class="flex items-center gap-2"> <span>📖</span> <span class="font-medium">Reference</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-6" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/samples/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📀</span> <span>Samples</span> </a><a href="/jamdojo/learn/reference/synths/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎛️</span> <span>Synths</span> </a><a href="/jamdojo/learn/reference/effects/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Audio Effects</span> </a><a href="/jamdojo/learn/reference/notes/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎼</span> <span>Notes</span> </a><a href="/jamdojo/learn/reference/tonal/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎵</span> <span>Tonal Functions</span> </a><a href="/jamdojo/learn/reference/mini-notation/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">✏️</span> <span>Mini-Notation</span> </a><a href="/jamdojo/learn/reference/signals/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📈</span> <span>Signals</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-7"> <div class="flex items-center gap-2"> <span>⚡</span> <span class="font-medium">Pattern Functions</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-7" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/reference/factories/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🏭</span> <span>Creating Patterns</span> </a><a href="/jamdojo/learn/workshop-content/time-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">⏱️</span> <span>Time Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/random-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎲</span> <span>Random Modifiers</span> </a><a href="/jamdojo/learn/workshop-content/conditional-modifiers/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">❓</span> <span>Conditional Modifiers</span> </a> </div> </div><div class="mb-1"> <button class="activity-accordion-header w-full text-left px-3 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between text-sm text-gray-400" aria-expanded="false" aria-controls="activity-section-8"> <div class="flex items-center gap-2"> <span>🚀</span> <span class="font-medium">Advanced</span> </div> <svg class="activity-accordion-icon w-4 h-4 transition-transform" style fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </button> <div id="activity-section-8" class="activity-accordion-content pl-4" style="display: none;"> <a href="/jamdojo/learn/advanced/visual-feedback/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">👁️</span> <span>Visual Feedback</span> </a><a href="/jamdojo/learn/advanced/hydra/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🌊</span> <span>Hydra Visuals</span> </a><a href="/jamdojo/learn/advanced/input-output/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🔌</span> <span>MIDI &amp; OSC</span> </a><a href="/jamdojo/learn/advanced/csound/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">🎚️</span> <span>Csound</span> </a><a href="/jamdojo/learn/advanced/pwa/" class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm text-gray-300 hover:bg-gray-800 hover:text-white"> <span class="text-lg">📱</span> <span>PWA</span> </a> </div> </div> <div class="mt-auto pt-4 border-t border-gray-800 text-xs text-gray-500 space-y-1"> <a href="https://github.com/kimjune01/jamdojo" target="_blank" rel="noopener" class="block hover:text-cyan-400">JamDojo Source</a> <a href="https://github.com/tidalcycles/strudel" target="_blank" rel="noopener" class="block hover:text-cyan-400">Strudel (AGPL-3.0)</a> </div> </nav> <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.activity-accordion-header');
+    accordionHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.activity-accordion-icon');
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          content.style.display = 'none';
+          header.setAttribute('aria-expanded', 'false');
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.display = 'block';
+          header.setAttribute('aria-expanded', 'true');
+          icon.style.transform = 'rotate(90deg)';
+        }
+      });
+    });
+  });
+</script> </aside> <!-- Mobile header --> <div class="md:hidden fixed top-0 left-0 right-0 bg-gray-900 border-b border-gray-800 p-3 z-50"> <div class="flex items-center justify-between"> <a href="/jamdojo/" class="text-gray-400 hover:text-white">← JamDojo</a> <span class="font-bold">Auditory Space</span> </div> </div> <!-- Main content --> <main class="flex-1 md:ml-56 p-6 pt-16 md:pt-6"> <div class="max-w-4xl mx-auto"> <h1 class="text-3xl font-bold mb-6">Auditory Space</h1> <div class="prose dark:prose-invert max-w-full"> <p>Put on headphones. Press play. Close your eyes.</p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var a=(s,i,o)=>{let r=async()=>{await(await s())()},t=typeof i.value=="object"?i.value:void 0,c={rootMargin:t==null?void 0:t.rootMargin},n=new IntersectionObserver(e=>{for(let l of e)if(l.isIntersecting){n.disconnect(),r();break}},c);for(let e of o.children)n.observe(e)};(self.Astro||(self.Astro={})).visible=a;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z9qEW0" prefix="r11" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;cp\&quot;).pan(sine.slow(2)).room(0.3)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;cp&quot;).pan(sine.slow(2)).room(0.3)</pre><!--astro:end--></astro-island>
+<p>The sound is moving. Where is it going?</p>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p>Try changing <code>.slow(2)</code> to <code>.slow(8)</code>. What happens to the movement?</p><p>Now try <code>.pan(rand)</code> instead of <code>.pan(sine.slow(2))</code>. How does it feel different?</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<p>What you just experienced is <strong>auditory space</strong> - the three-dimensional perceptual stage where sounds exist in your mind. Every sound you hear occupies a position in this invisible architecture: left or right, near or far, bright or dark.</p>
+<p>Professional audio engineers and electronic music producers think in these spatial terms constantly. When they talk about a mix sounding “wide” or “deep” or “muddy,” they’re describing how sounds occupy complementary spaces - or fail to.</p>
+<p>This page will train your ears to perceive these dimensions and give you the tools to sculpt your own sonic landscapes.</p>
+<hr/>
+<h1 id="dimension-one-width-the-stereo-field">Dimension One: Width (The Stereo Field)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dimension-one-width-the-stereo-field"><span class="icon icon-link"></span></a></h1>
+<p>The stereo field is the horizontal plane between your left and right ears. It’s the first dimension of auditory space, and the most immediately perceptible.</p>
+<h2 id="the-pan-experience">The Pan Experience<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#the-pan-experience"><span class="icon icon-link"></span></a></h2>
+<p>Listen to this pattern:</p>
+<astro-island uid="ZmXdQf" prefix="r12" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;$: sound(\&quot;bd sd bd sd\&quot;)\n$: sound(\&quot;hh*8\&quot;)\n$: note(\&quot;c4 eb4 g4\&quot;).s(\&quot;sawtooth\&quot;).lpf(1200)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>$: sound(&quot;bd sd bd sd&quot;)
+$: sound(&quot;hh*8&quot;)
+$: note(&quot;c4 eb4 g4&quot;).s(&quot;sawtooth&quot;).lpf(1200)</pre><!--astro:end--></astro-island>
+<p>Everything is stacked in the center. Now listen to this:</p>
+<astro-island uid="Z6IqtM" prefix="r13" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;$: sound(\&quot;bd sd bd sd\&quot;).pan(0.5)\n$: sound(\&quot;hh*8\&quot;).pan(0.7)\n$: note(\&quot;c4 eb4 g4\&quot;).s(\&quot;sawtooth\&quot;).lpf(1200).pan(0.3)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>$: sound(&quot;bd sd bd sd&quot;).pan(0.5)
+$: sound(&quot;hh*8&quot;).pan(0.7)
+$: note(&quot;c4 eb4 g4&quot;).s(&quot;sawtooth&quot;).lpf(1200).pan(0.3)</pre><!--astro:end--></astro-island>
+<p>The sounds now occupy different positions in the stereo field. This is <strong>panning</strong> - placing sounds on the left-right axis.</p>
+<p><strong>Try it yourself</strong> - use sliders to position each element:</p>
+<astro-island uid="Z21x344" prefix="r14" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const kickPan = slider(0.5, 0, 1)\nconst hatPan = slider(0.7, 0, 1)\nconst synthPan = slider(0.3, 0, 1)\n\n$: sound(\&quot;bd sd bd sd\&quot;).pan(kickPan)\n$: sound(\&quot;hh*8\&quot;).pan(hatPan).gain(0.5)\n$: note(\&quot;c4 eb4 g4\&quot;).s(\&quot;sawtooth\&quot;).lpf(1200).pan(synthPan)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const kickPan = slider(0.5, 0, 1)
+const hatPan = slider(0.7, 0, 1)
+const synthPan = slider(0.3, 0, 1)
+
+$: sound(&quot;bd sd bd sd&quot;).pan(kickPan)
+$: sound(&quot;hh*8&quot;).pan(hatPan).gain(0.5)
+$: note(&quot;c4 eb4 g4&quot;).s(&quot;sawtooth&quot;).lpf(1200).pan(synthPan)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Pan values:</strong></p><ul>
+<li><code>0</code> = hard left</li>
+<li><code>0.5</code> = center</li>
+<li><code>1</code> = hard right</li>
+</ul><p>The kick stays centered (<code>.pan(0.5)</code>) because low frequencies carry the most energy and typically anchor the mix in the middle.</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="dynamic-panning">Dynamic Panning<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dynamic-panning"><span class="icon icon-link"></span></a></h2>
+<p>Static panning places sounds. Dynamic panning moves them through space.</p>
+<astro-island uid="Z2oJFWX" prefix="r15" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;hh*16\&quot;).pan(sine.range(0.2, 0.8).slow(2))&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;hh*16&quot;).pan(sine.range(0.2, 0.8).slow(2))</pre><!--astro:end--></astro-island>
+<p>The hi-hats glide smoothly from left to right and back. This creates movement and interest - the ear follows the sound across the stereo field. Watch the scope - you can see the amplitude shift between channels.</p>
+<p><strong>Control the movement range and speed:</strong></p>
+<astro-island uid="Z22yeBC" prefix="r16" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const leftLimit = slider(0.2, 0, 0.5)\nconst rightLimit = slider(0.8, 0.5, 1)\nconst speed = slider(2, 0.5, 8)\n\nsound(\&quot;hh*16\&quot;)\n.pan(sine.range(leftLimit, rightLimit).slow(speed))\n.gain(0.5)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const leftLimit = slider(0.2, 0, 0.5)
+const rightLimit = slider(0.8, 0.5, 1)
+const speed = slider(2, 0.5, 8)
+
+sound(&quot;hh*16&quot;)
+.pan(sine.range(leftLimit, rightLimit).slow(speed))
+.gain(0.5)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Experiment with different signals:</strong></p><ul>
+<li><code>saw</code> - linear sweep, abrupt reset</li>
+<li><code>tri</code> - smooth back-and-forth (like <code>sine</code> but linear)</li>
+<li><code>rand</code> - random jumps each hit</li>
+<li><code>perlin</code> - organic, unpredictable drift</li>
+</ul><p>Try: <code>sound(&quot;hh*16&quot;).pan(perlin.range(0.2, 0.8))</code></p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="instant-width-with-jux">Instant Width with jux<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#instant-width-with-jux"><span class="icon icon-link"></span></a></h2>
+<p>Use the slider to control stereo width from mono to full spread:</p>
+<astro-island uid="lnP51" prefix="r17" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const width = slider(0, 0, 1)\n\nn(\&quot;0 2 4 7\&quot;).scale(\&quot;C:minor\&quot;).s(\&quot;sawtooth\&quot;).lpf(800)\n.juxBy(width, rev)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const width = slider(0, 0, 1)
+
+n(&quot;0 2 4 7&quot;).scale(&quot;C:minor&quot;).s(&quot;sawtooth&quot;).lpf(800)
+.juxBy(width, rev)</pre><!--astro:end--></astro-island>
+<p>At 0, the pattern is mono. At 1, it explodes into full stereo.</p>
+<p><code>jux</code> (short for “juxtapose”) splits your pattern into two copies: one panned left, one panned right. It applies a function to the right channel only. Here, the right channel plays the pattern reversed while the left plays it forward.</p>
+<p>When your left and right ears hear slightly different versions of the same material, your brain perceives <strong>width</strong> - a sound that fills the space between your ears.</p>
+<h2 id="width-in-practice">Width in Practice<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#width-in-practice"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="ZFDl5L" prefix="r18" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Kick: centered (low frequencies anchor the mix)\nsound(\&quot;bd*4\&quot;).pan(0.5),\n\n// Snare: slightly left\nsound(\&quot;~ sd ~ sd\&quot;).pan(0.4),\n\n// Hi-hats: moving right side\nsound(\&quot;hh*8\&quot;).pan(sine.range(0.55, 0.75).fast(2)).gain(0.5),\n\n// Synth: wide stereo spread\nn(\&quot;0 3 7 10\&quot;).scale(\&quot;C:minor\&quot;).s(\&quot;sawtooth\&quot;).lpf(1500)\n  .juxBy(0.7, x =&gt; x.add(note(0.1))).gain(0.4)\n).cpm(32)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Kick: centered (low frequencies anchor the mix)
+sound(&quot;bd*4&quot;).pan(0.5),
+
+// Snare: slightly left
+sound(&quot;~ sd ~ sd&quot;).pan(0.4),
+
+// Hi-hats: moving right side
+sound(&quot;hh*8&quot;).pan(sine.range(0.55, 0.75).fast(2)).gain(0.5),
+
+// Synth: wide stereo spread
+n(&quot;0 3 7 10&quot;).scale(&quot;C:minor&quot;).s(&quot;sawtooth&quot;).lpf(1500)
+  .juxBy(0.7, x =&gt; x.add(note(0.1))).gain(0.4)
+).cpm(32)</pre><!--astro:end--></astro-island>
+<p>Notice how each element has its own horizontal territory. The kick and snare stay relatively centered while the hi-hats float to the right and the synth spreads wide. This is <strong>stereo separation</strong> - giving each sound its own space in the width dimension.</p>
+<hr/>
+<h1 id="dimension-two-depth-front-to-back">Dimension Two: Depth (Front-to-Back)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dimension-two-depth-front-to-back"><span class="icon icon-link"></span></a></h1>
+<p>Depth is the perception of distance - how close or far a sound feels. In the physical world, distant sounds are quieter, have more reverb (room reflections), and lose high frequencies. We can simulate all of these.</p>
+<h2 id="the-proximity-experience">The Proximity Experience<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#the-proximity-experience"><span class="icon icon-link"></span></a></h2>
+<p>Move the slider from 0 (dry, upfront) to 1 (wet, distant):</p>
+<astro-island uid="hRypK" prefix="r19" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const distance = slider(0, 0, 1)\n\nsound(\&quot;bd sd bd sd\&quot;)\n.room(distance.mul(0.8))\n.roomsize(distance.mul(6))\n.gain(distance.range(1, 0.5))&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const distance = slider(0, 0, 1)
+
+sound(&quot;bd sd bd sd&quot;)
+.room(distance.mul(0.8))
+.roomsize(distance.mul(6))
+.gain(distance.range(1, 0.5))</pre><!--astro:end--></astro-island>
+<p>At 0, the drums feel right in front of you. At 1, they sound like they’re across a large hall. This is <strong>reverb</strong> - the collection of echoes that occur when sound bounces off surfaces in a space.</p>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Depth cues:</strong></p><ul>
+<li>More reverb = further away</li>
+<li>Quieter = further away</li>
+<li>Less high frequencies = further away (sound loses “air” over distance)</li>
+</ul><p>Combine these for convincing depth staging.</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="room-parameters">Room Parameters<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#room-parameters"><span class="icon icon-link"></span></a></h2>
+<p><strong>Explore the room</strong> - from tight bathroom to vast cathedral:</p>
+<astro-island uid="29KqJp" prefix="r20" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const amount = slider(0.4, 0, 1)\nconst size = slider(0.5, 0.5, 20)\nconst brightness = slider(6000, 500, 8000)\n\nnote(\&quot;c4 eb4 g4\&quot;).s(\&quot;gm_vibraphone\&quot;)\n.room(amount)\n.roomsize(size)\n.roomlp(brightness)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const amount = slider(0.4, 0, 1)
+const size = slider(0.5, 0.5, 20)
+const brightness = slider(6000, 500, 8000)
+
+note(&quot;c4 eb4 g4&quot;).s(&quot;gm_vibraphone&quot;)
+.room(amount)
+.roomsize(size)
+.roomlp(brightness)</pre><!--astro:end--></astro-island>
+<p>Try these presets:</p>
+<ul>
+<li><strong>Small room</strong> (bathroom): amount=0.4, size=0.5, brightness=6000</li>
+<li><strong>Large hall</strong> (cathedral): amount=0.6, size=8, brightness=3000</li>
+</ul>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Room parameters:</strong></p><ul>
+<li><code>room</code> - how much signal goes to the reverb (0-1+)</li>
+<li><code>roomsize</code> - the size/decay of the virtual space (0.1 to 20+)</li>
+<li><code>roomlp</code> - low-pass filter on the reverb (Hz) - darker rooms have lower values</li>
+<li><code>roomfade</code> - fade time of the reverb tail</li>
+</ul><p>Try <code>roomsize</code> values from 0.5 to 20 and notice how the space expands.</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="delay-as-spatial-depth">Delay as Spatial Depth<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#delay-as-spatial-depth"><span class="icon icon-link"></span></a></h2>
+<p>Delay creates echoes - distinct repetitions of the sound. Where reverb is diffuse (many blurred reflections), delay is discrete (clear, rhythmic repeats).</p>
+<astro-island uid="1xKlqY" prefix="r21" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;sound(\&quot;rim\&quot;).delay(0.5).delaytime(0.25).delayfeedback(0.4)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>sound(&quot;rim&quot;).delay(0.5).delaytime(0.25).delayfeedback(0.4)</pre><!--astro:end--></astro-island>
+<p><strong>Shape your echoes:</strong></p>
+<astro-island uid="1bJglr" prefix="r22" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const amount = slider(0.5, 0, 1)\nconst time = slider(0.25, 0.05, 0.5)\nconst feedback = slider(0.4, 0, 0.85)\n\nsound(\&quot;rim\&quot;)\n.delay(amount)\n.delaytime(time)\n.delayfeedback(feedback)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const amount = slider(0.5, 0, 1)
+const time = slider(0.25, 0.05, 0.5)
+const feedback = slider(0.4, 0, 0.85)
+
+sound(&quot;rim&quot;)
+.delay(amount)
+.delaytime(time)
+.delayfeedback(feedback)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Delay parameters:</strong></p><ul>
+<li><code>delay</code> - how much signal goes to the delay (0-1)</li>
+<li><code>delaytime</code> - time between echoes in seconds</li>
+<li><code>delayfeedback</code> - how many times the echo repeats (0-1) - careful above 0.9!</li>
+</ul></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="dub-delay-throws">Dub Delay Throws<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dub-delay-throws"><span class="icon icon-link"></span></a></h2>
+<p>Jamaican dub producers like King Tubby and Lee “Scratch” Perry discovered that delay could transform a simple recording into something vast and psychedelic. They would manually “throw” sounds into delay during mixing, creating dramatic spatial moments.</p>
+<astro-island uid="Z1nGW8v" prefix="r23" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;$: sound(\&quot;bd rim\&quot;).bank(\&quot;RolandTR707\&quot;)\n$: note(\&quot;[~ [d3,a3,f4]]*2\&quot;).s(\&quot;gm_electric_guitar_muted\&quot;)\n.delay(0.7).delaytime(sine.range(0.1, 0.3).slow(8)).delayfeedback(0.5)\n.room(0.4)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>$: sound(&quot;bd rim&quot;).bank(&quot;RolandTR707&quot;)
+$: note(&quot;[~ [d3,a3,f4]]*2&quot;).s(&quot;gm_electric_guitar_muted&quot;)
+.delay(0.7).delaytime(sine.range(0.1, 0.3).slow(8)).delayfeedback(0.5)
+.room(0.4)</pre><!--astro:end--></astro-island>
+<p>The guitar stabs echo through space with a slowly modulating delay time - a classic dub technique. The delay time drift creates a sense of instability and movement in the depth dimension.</p>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Try this:</strong> Change <code>.delay(0.7)</code> to <code>.delay(&quot;&lt;0 0 0 0.8&gt;&quot;)</code> to throw only every fourth hit into the delay.</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="combining-depth-techniques">Combining Depth Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#combining-depth-techniques"><span class="icon icon-link"></span></a></h2>
+<p>Control the depth of each layer independently:</p>
+<astro-island uid="Z1ox24g" prefix="r24" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const drumDepth = slider(0.05, 0, 0.5)\nconst bassDepth = slider(0.15, 0, 0.5)\nconst padDepth = slider(0.6, 0, 1)\n\nstack(\n// Front: drums\nsound(\&quot;bd [~ bd] sd [bd sd]\&quot;).room(drumDepth),\n\n// Middle: bass\nnote(\&quot;c2 ~ eb2 ~\&quot;).s(\&quot;sawtooth\&quot;).lpf(500)\n  .room(bassDepth).roomsize(bassDepth.mul(10)),\n\n// Back: pad\nnote(\&quot;&lt;c3,eb3,g3&gt;\&quot;).s(\&quot;triangle\&quot;).slow(2)\n  .room(padDepth).roomsize(padDepth.mul(10)).lpf(2000)\n  .delay(padDepth.mul(0.3)).delaytime(0.333).gain(0.4)\n).cpm(30)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const drumDepth = slider(0.05, 0, 0.5)
+const bassDepth = slider(0.15, 0, 0.5)
+const padDepth = slider(0.6, 0, 1)
+
+stack(
+// Front: drums
+sound(&quot;bd [~ bd] sd [bd sd]&quot;).room(drumDepth),
+
+// Middle: bass
+note(&quot;c2 ~ eb2 ~&quot;).s(&quot;sawtooth&quot;).lpf(500)
+  .room(bassDepth).roomsize(bassDepth.mul(10)),
+
+// Back: pad
+note(&quot;&lt;c3,eb3,g3&gt;&quot;).s(&quot;triangle&quot;).slow(2)
+  .room(padDepth).roomsize(padDepth.mul(10)).lpf(2000)
+  .delay(padDepth.mul(0.3)).delaytime(0.333).gain(0.4)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Try pushing all sliders to the same value - the depth staging collapses. Pull them apart - each layer finds its own space.</p>
+<hr/>
+<h1 id="dimension-three-height-the-frequency-spectrum">Dimension Three: Height (The Frequency Spectrum)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dimension-three-height-the-frequency-spectrum"><span class="icon icon-link"></span></a></h1>
+<p>The frequency spectrum runs from low (bass, ~20Hz) to high (treble, ~20kHz). Think of it as vertical space - bass frequencies at the bottom, high frequencies at the top. When two sounds occupy the same frequency range, they compete - this is called <strong>masking</strong>.</p>
+<h2 id="frequency-masking">Frequency Masking<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#frequency-masking"><span class="icon icon-link"></span></a></h2>
+<p>Use the slider to separate bass and chords in the frequency spectrum:</p>
+<astro-island uid="18cBcJ" prefix="r25" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const separation = slider(0, 0, 1)\n\n// Bass: lpf goes from 800 (masked) to 400 (separated)\n$: note(\&quot;c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(separation.range(800, 400))\n\n// Chords: hpf goes from 0 (masked) to 300 (separated)\n$: note(\&quot;c3 eb3 g3\&quot;).s(\&quot;sawtooth\&quot;)\n.hpf(separation.range(50, 300))\n.lpf(separation.range(800, 2000))&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const separation = slider(0, 0, 1)
+
+// Bass: lpf goes from 800 (masked) to 400 (separated)
+$: note(&quot;c2&quot;).s(&quot;sawtooth&quot;).lpf(separation.range(800, 400))
+
+// Chords: hpf goes from 0 (masked) to 300 (separated)
+$: note(&quot;c3 eb3 g3&quot;).s(&quot;sawtooth&quot;)
+.hpf(separation.range(50, 300))
+.lpf(separation.range(800, 2000))</pre><!--astro:end--></astro-island>
+<p>At 0, bass and chords fight for the same frequencies. At 1, each has its own space - bass gets the lows (under 400Hz), chords get the mids (300Hz-2000Hz). This is <strong>subtractive EQ</strong> - removing frequencies to create space.</p>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Filters in Strudel:</strong></p><ul>
+<li><code>lpf(freq)</code> - low-pass filter: frequencies below <code>freq</code> pass, highs are cut</li>
+<li><code>hpf(freq)</code> - high-pass filter: frequencies above <code>freq</code> pass, lows are cut</li>
+<li><code>bpf(freq)</code> - band-pass filter: only frequencies around <code>freq</code> pass</li>
+</ul></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="filter-resonance">Filter Resonance<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#filter-resonance"><span class="icon icon-link"></span></a></h2>
+<p>Filters can emphasize the cutoff frequency with <strong>resonance</strong> (Q-factor). Higher resonance creates a more aggressive, “ringing” sound.</p>
+<astro-island uid="ZI7nxO" prefix="r26" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c2*8\&quot;).s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(200, 2000).slow(2))\n.lpq(12)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c2*8&quot;).s(&quot;sawtooth&quot;)
+.lpf(sine.range(200, 2000).slow(2))
+.lpq(12)</pre><!--astro:end--></astro-island>
+<p>This is the classic acid house sound - a resonant low-pass filter sweep. The high <code>.lpq(12)</code> value makes the filter “sing” at its cutoff point. Watch the scope to see how resonance affects the waveform.</p>
+<p><strong>Sculpt your acid line:</strong></p>
+<astro-island uid="Z1MznFJ" prefix="r27" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;const lowFreq = slider(200, 100, 800)\nconst highFreq = slider(2000, 800, 4000)\nconst speed = slider(2, 0.5, 8)\nconst resonance = slider(12, 1, 20)\n\nnote(\&quot;c2*8\&quot;).s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(lowFreq, highFreq).slow(speed))\n.lpq(resonance)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>const lowFreq = slider(200, 100, 800)
+const highFreq = slider(2000, 800, 4000)
+const speed = slider(2, 0.5, 8)
+const resonance = slider(12, 1, 20)
+
+note(&quot;c2*8&quot;).s(&quot;sawtooth&quot;)
+.lpf(sine.range(lowFreq, highFreq).slow(speed))
+.lpq(resonance)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>Try different Q values:</strong></p><ul>
+<li><code>lpq(1)</code> - gentle, smooth filtering</li>
+<li><code>lpq(8)</code> - noticeable resonance</li>
+<li><code>lpq(15)</code> - aggressive, self-oscillating at extreme values</li>
+</ul></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="frequency-separation-in-practice">Frequency Separation in Practice<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#frequency-separation-in-practice"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="eEz8P" prefix="r28" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// Sub bass: only the lowest frequencies\nnote(\&quot;c1*4\&quot;).s(\&quot;sine\&quot;).gain(0.6),\n\n// Mid bass: punchy, filtered\nnote(\&quot;c2 c2 eb2 c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(400).hpf(60),\n\n// Chords: mid frequencies only\nnote(\&quot;&lt;c3,eb3,g3&gt;\&quot;).s(\&quot;sawtooth\&quot;).hpf(300).lpf(2000).gain(0.4),\n\n// Lead: high mids and presence\nnote(\&quot;c5 eb5 g5 bb5\&quot;).s(\&quot;triangle\&quot;).hpf(800).gain(0.5),\n\n// Hi-hats: highest frequencies\nsound(\&quot;hh*8\&quot;).hpf(6000).gain(0.4)\n).cpm(30)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// Sub bass: only the lowest frequencies
+note(&quot;c1*4&quot;).s(&quot;sine&quot;).gain(0.6),
+
+// Mid bass: punchy, filtered
+note(&quot;c2 c2 eb2 c2&quot;).s(&quot;sawtooth&quot;).lpf(400).hpf(60),
+
+// Chords: mid frequencies only
+note(&quot;&lt;c3,eb3,g3&gt;&quot;).s(&quot;sawtooth&quot;).hpf(300).lpf(2000).gain(0.4),
+
+// Lead: high mids and presence
+note(&quot;c5 eb5 g5 bb5&quot;).s(&quot;triangle&quot;).hpf(800).gain(0.5),
+
+// Hi-hats: highest frequencies
+sound(&quot;hh*8&quot;).hpf(6000).gain(0.4)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<p>Each element has its own frequency band:</p>
+<ul>
+<li>Sub bass: 20-60Hz</li>
+<li>Mid bass: 60-400Hz</li>
+<li>Chords: 300Hz-2kHz</li>
+<li>Lead: 800Hz+</li>
+<li>Hi-hats: 6kHz+</li>
+</ul>
+<p>This is <strong>complementary frequency allocation</strong> - the foundation of a clean mix.</p>
+<hr/>
+<h1 id="complementary-audio-spaces-the-three-dimensional-mix">Complementary Audio Spaces: The Three-Dimensional Mix<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#complementary-audio-spaces-the-three-dimensional-mix"><span class="icon icon-link"></span></a></h1>
+<p>Now let’s combine all three dimensions into a complete spatial arrangement.</p>
+<astro-island uid="dJ89k" prefix="r29" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\n// DRUMS: centered, dry, punchy\nstack(\n  sound(\&quot;bd [~ bd:2] ~ bd\&quot;).pan(0.5),\n  sound(\&quot;~ cp ~ cp\&quot;).pan(0.5).room(0.1),\n  sound(\&quot;hh*8\&quot;).pan(sine.range(0.4, 0.65).fast(2)).hpf(6000).gain(0.5)\n),\n\n// BASS: centered, dry, low frequencies\nnote(\&quot;c2 c2 [eb2 c2] c2\&quot;).s(\&quot;sawtooth\&quot;)\n  .lpf(400).pan(0.5).room(0),\n\n// CHORDS: wide, mid-depth, mid frequencies\nnote(\&quot;&lt;c3,eb3,g3&gt; &lt;bb2,d3,f3&gt;\&quot;).s(\&quot;sawtooth\&quot;).slow(2)\n  .hpf(300).lpf(2000)\n  .juxBy(0.6, rev).room(0.25).gain(0.35),\n\n// LEAD: off-center, deep, high-mid frequencies\nnote(\&quot;g4 ~ bb4 c5 ~ bb4 g4 ~\&quot;).s(\&quot;triangle\&quot;)\n  .hpf(600).pan(0.35)\n  .room(0.4).delay(0.2).delayfeedback(0.3)\n  .gain(0.5)\n).cpm(30)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+// DRUMS: centered, dry, punchy
+stack(
+  sound(&quot;bd [~ bd:2] ~ bd&quot;).pan(0.5),
+  sound(&quot;~ cp ~ cp&quot;).pan(0.5).room(0.1),
+  sound(&quot;hh*8&quot;).pan(sine.range(0.4, 0.65).fast(2)).hpf(6000).gain(0.5)
+),
+
+// BASS: centered, dry, low frequencies
+note(&quot;c2 c2 [eb2 c2] c2&quot;).s(&quot;sawtooth&quot;)
+  .lpf(400).pan(0.5).room(0),
+
+// CHORDS: wide, mid-depth, mid frequencies
+note(&quot;&lt;c3,eb3,g3&gt; &lt;bb2,d3,f3&gt;&quot;).s(&quot;sawtooth&quot;).slow(2)
+  .hpf(300).lpf(2000)
+  .juxBy(0.6, rev).room(0.25).gain(0.35),
+
+// LEAD: off-center, deep, high-mid frequencies
+note(&quot;g4 ~ bb4 c5 ~ bb4 g4 ~&quot;).s(&quot;triangle&quot;)
+  .hpf(600).pan(0.35)
+  .room(0.4).delay(0.2).delayfeedback(0.3)
+  .gain(0.5)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>The spatial allocation:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Element</th><th>Width (pan)</th><th>Depth (room/delay)</th><th>Height (filter)</th></tr></thead><tbody><tr><td>Kick</td><td>Center</td><td>Dry</td><td>Full range</td></tr><tr><td>Clap</td><td>Center</td><td>Slight room</td><td>Full range</td></tr><tr><td>Hi-hats</td><td>Moving right</td><td>Dry</td><td>High-pass 6kHz</td></tr><tr><td>Bass</td><td>Center</td><td>Dry</td><td>Low-pass 400Hz</td></tr><tr><td>Chords</td><td>Wide (jux)</td><td>Medium room</td><td>300Hz-2kHz</td></tr><tr><td>Lead</td><td>Left of center</td><td>Room + delay</td><td>High-pass 600Hz</td></tr></tbody></table></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<h2 id="interactive-spatial-mixer">Interactive Spatial Mixer<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#interactive-spatial-mixer"><span class="icon icon-link"></span></a></h2>
+<p>Take control of all three dimensions with this mixer. Each slider controls a different spatial parameter:</p>
+<astro-island uid="Z2pig7i" prefix="r30" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Width controls\nconst kickPan = slider(0.5, 0, 1)\nconst snarePan = slider(0.5, 0, 1)\nconst hatPan = slider(0.6, 0, 1)\nconst chordPan = slider(0.5, 0, 1)\n\n// Depth controls\nconst snareRoom = slider(0.1, 0, 0.6)\nconst chordRoom = slider(0.25, 0, 0.8)\n\n// Height controls\nconst hatHpf = slider(6000, 2000, 10000)\nconst bassLpf = slider(400, 100, 1000)\nconst chordHpf = slider(300, 100, 800)\nconst chordLpf = slider(2000, 800, 4000)\n\nstack(\nsound(\&quot;bd*4\&quot;).pan(kickPan),\nsound(\&quot;~ sd ~ sd\&quot;).pan(snarePan).room(snareRoom),\nsound(\&quot;hh*8\&quot;).pan(hatPan).hpf(hatHpf).gain(0.5),\nnote(\&quot;c2 c2 eb2 c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(bassLpf).pan(0.5),\nnote(\&quot;&lt;c3,eb3,g3&gt;\&quot;).s(\&quot;sawtooth\&quot;).slow(2)\n  .pan(chordPan).room(chordRoom).hpf(chordHpf).lpf(chordLpf).gain(0.4)\n).cpm(30)&quot;],&quot;scope&quot;:[0,true]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Width controls
+const kickPan = slider(0.5, 0, 1)
+const snarePan = slider(0.5, 0, 1)
+const hatPan = slider(0.6, 0, 1)
+const chordPan = slider(0.5, 0, 1)
+
+// Depth controls
+const snareRoom = slider(0.1, 0, 0.6)
+const chordRoom = slider(0.25, 0, 0.8)
+
+// Height controls
+const hatHpf = slider(6000, 2000, 10000)
+const bassLpf = slider(400, 100, 1000)
+const chordHpf = slider(300, 100, 800)
+const chordLpf = slider(2000, 800, 4000)
+
+stack(
+sound(&quot;bd*4&quot;).pan(kickPan),
+sound(&quot;~ sd ~ sd&quot;).pan(snarePan).room(snareRoom),
+sound(&quot;hh*8&quot;).pan(hatPan).hpf(hatHpf).gain(0.5),
+note(&quot;c2 c2 eb2 c2&quot;).s(&quot;sawtooth&quot;).lpf(bassLpf).pan(0.5),
+note(&quot;&lt;c3,eb3,g3&gt;&quot;).s(&quot;sawtooth&quot;).slow(2)
+  .pan(chordPan).room(chordRoom).hpf(chordHpf).lpf(chordLpf).gain(0.4)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<hr/>
+<h1 id="genre-spatial-signatures">Genre Spatial Signatures<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#genre-spatial-signatures"><span class="icon icon-link"></span></a></h1>
+<p>Different genres have distinct spatial aesthetics. Learning these conventions helps you understand how professionals sculpt space.</p>
+<h2 id="house--techno-tight-and-punchy">House / Techno (Tight and Punchy)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#house--techno-tight-and-punchy"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="nvb3N" prefix="r31" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd*4\&quot;).room(0.05),\nsound(\&quot;~ cp ~ cp\&quot;).room(0.12),\nsound(\&quot;hh*8\&quot;).pan(0.6).gain(0.45),\nsound(\&quot;oh\&quot;).euclid(3, 8).pan(0.35).room(0.15).gain(0.35),\nnote(\&quot;c2*8\&quot;).s(\&quot;sawtooth\&quot;).lpf(sine.range(200, 600).slow(4))\n).cpm(31)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd*4&quot;).room(0.05),
+sound(&quot;~ cp ~ cp&quot;).room(0.12),
+sound(&quot;hh*8&quot;).pan(0.6).gain(0.45),
+sound(&quot;oh&quot;).euclid(3, 8).pan(0.35).room(0.15).gain(0.35),
+note(&quot;c2*8&quot;).s(&quot;sawtooth&quot;).lpf(sine.range(200, 600).slow(4))
+).cpm(31)</pre><!--astro:end--></astro-island>
+<p><strong>Characteristics:</strong> Centered kick and bass, moderate width on percussion, short tight reverbs. Everything is upfront and punchy.</p>
+<h2 id="dub-cavernous-and-spatial">Dub (Cavernous and Spatial)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#dub-cavernous-and-spatial"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="58XFM" prefix="r32" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd ~ ~ bd ~ ~ bd ~\&quot;).room(0.25),\nsound(\&quot;~ ~ rim ~\&quot;).room(0.7).roomsize(6)\n  .delay(0.6).delaytime(0.375).delayfeedback(0.55)\n  .pan(sine.range(0.3, 0.7).slow(4)),\nnote(\&quot;[~ c4] ~ [~ eb4] ~\&quot;).s(\&quot;gm_electric_guitar_muted\&quot;)\n  .delay(0.5).delaytime(0.25).delayfeedback(0.4)\n  .room(0.3).pan(0.6),\nnote(\&quot;c2 ~ ~ c2 ~ eb2 ~ ~\&quot;).s(\&quot;sawtooth\&quot;).lpf(400)\n).cpm(22)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd ~ ~ bd ~ ~ bd ~&quot;).room(0.25),
+sound(&quot;~ ~ rim ~&quot;).room(0.7).roomsize(6)
+  .delay(0.6).delaytime(0.375).delayfeedback(0.55)
+  .pan(sine.range(0.3, 0.7).slow(4)),
+note(&quot;[~ c4] ~ [~ eb4] ~&quot;).s(&quot;gm_electric_guitar_muted&quot;)
+  .delay(0.5).delaytime(0.25).delayfeedback(0.4)
+  .room(0.3).pan(0.6),
+note(&quot;c2 ~ ~ c2 ~ eb2 ~ ~&quot;).s(&quot;sawtooth&quot;).lpf(400)
+).cpm(22)</pre><!--astro:end--></astro-island>
+<p><strong>Characteristics:</strong> Heavy reverb, dramatic delay throws with modulated times, sparse arrangement letting the space breathe. Sounds travel across the stereo field.</p>
+<h2 id="ambient-deep-and-diffuse">Ambient (Deep and Diffuse)<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#ambient-deep-and-diffuse"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="Z1YpkGj" prefix="r33" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;&lt;c3,g3,c4,e4&gt; &lt;a2,e3,a3,c4&gt; &lt;f3,a3,c4,f4&gt; &lt;g2,d3,g3,b3&gt;\&quot;)\n.s(\&quot;triangle\&quot;).slow(8)\n.attack(2).release(4)\n.lpf(sine.range(800, 2500).slow(16))\n.room(0.85).roomsize(12).roomlp(2500)\n.delay(0.35).delaytime(0.5).delayfeedback(0.45)\n.juxBy(0.4, x =&gt; x.add(note(0.05)))\n.pan(perlin.range(0.3, 0.7).slow(4))&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;&lt;c3,g3,c4,e4&gt; &lt;a2,e3,a3,c4&gt; &lt;f3,a3,c4,f4&gt; &lt;g2,d3,g3,b3&gt;&quot;)
+.s(&quot;triangle&quot;).slow(8)
+.attack(2).release(4)
+.lpf(sine.range(800, 2500).slow(16))
+.room(0.85).roomsize(12).roomlp(2500)
+.delay(0.35).delaytime(0.5).delayfeedback(0.45)
+.juxBy(0.4, x =&gt; x.add(note(0.05)))
+.pan(perlin.range(0.3, 0.7).slow(4))</pre><!--astro:end--></astro-island>
+<p><strong>Characteristics:</strong> Maximum depth (long reverbs), slow evolution, blurred transients, wide stereo field with gentle movement. The boundaries between sounds dissolve.</p>
+<hr/>
+<h1 id="using-orbits">Using Orbits<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#using-orbits"><span class="icon icon-link"></span></a></h1>
+<p>Each <strong>orbit</strong> in Strudel has its own reverb and delay. When patterns share an orbit, they share effects - which can cause conflicts. Use separate orbits to give elements independent spatial treatment.</p>
+<astro-island uid="Z1eBbx3" prefix="r34" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Drums: dry, orbit 1\n$: sound(\&quot;bd sd bd [sd cp]\&quot;).orbit(1).room(0)\n\n// Synth: wet, orbit 2\n$: note(\&quot;c4 [eb4 g4] bb4 ~\&quot;).s(\&quot;triangle\&quot;)\n.orbit(2).room(0.6).roomsize(6)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Drums: dry, orbit 1
+$: sound(&quot;bd sd bd [sd cp]&quot;).orbit(1).room(0)
+
+// Synth: wet, orbit 2
+$: note(&quot;c4 [eb4 g4] bb4 ~&quot;).s(&quot;triangle&quot;)
+.orbit(2).room(0.6).roomsize(6)</pre><!--astro:end--></astro-island>
+<div class="py-1 px-6 pr-10 bg-lineHighlight relative mb-4"> <div><p><strong>When to use separate orbits:</strong></p><ul>
+<li>Drums should typically be drier than synths/pads</li>
+<li>Different songs in a live set might need different reverb settings</li>
+<li>When reverb parameters are fighting between patterns</li>
+</ul><p>See the <a href="/jamdojo/learn/effects/#orbits">Audio Effects</a> page for more on orbits.</p></div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 absolute top-4 right-4"><path d="M10 1a6 6 0 0 0-3.815 10.631C7.237 12.5 8 13.443 8 14.456v.644a.75.75 0 0 0 .572.729 6.016 6.016 0 0 0 2.856 0A.75.75 0 0 0 12 15.1v-.644c0-1.013.762-1.957 1.815-2.825A6 6 0 0 0 10 1ZM8.863 17.414a.75.75 0 0 0-.226 1.483 9.066 9.066 0 0 0 2.726 0 .75.75 0 0 0-.226-1.483 7.553 7.553 0 0 1-2.274 0Z"></path></svg> <!-- <MusicalNoteIcon className="w-5 h-5 absolute top-4 right-4" /> --> </div>
+<hr/>
+<h1 id="live-performance-techniques">Live Performance Techniques<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#live-performance-techniques"><span class="icon icon-link"></span></a></h1>
+<p>Spatial parameters are powerful performance tools - they can transform a static pattern into something dynamic and evolving.</p>
+<h2 id="spatial-automation">Spatial Automation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#spatial-automation"><span class="icon icon-link"></span></a></h2>
+<astro-island uid="2n90na" prefix="r35" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Breathing reverb - space ebbs and flows\nnote(\&quot;c3 eb3 g3 bb3\&quot;).s(\&quot;sawtooth\&quot;).lpf(1500)\n.room(sine.range(0.1, 0.5).slow(4))\n.roomsize(sine.range(2, 8).slow(8))&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Breathing reverb - space ebbs and flows
+note(&quot;c3 eb3 g3 bb3&quot;).s(&quot;sawtooth&quot;).lpf(1500)
+.room(sine.range(0.1, 0.5).slow(4))
+.roomsize(sine.range(2, 8).slow(8))</pre><!--astro:end--></astro-island>
+<astro-island uid="1svOwr" prefix="r36" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Organic pan drift\nsound(\&quot;hh*16\&quot;).pan(perlin.range(0.2, 0.8)).gain(0.5)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Organic pan drift
+sound(&quot;hh*16&quot;).pan(perlin.range(0.2, 0.8)).gain(0.5)</pre><!--astro:end--></astro-island>
+<astro-island uid="2nsWOQ" prefix="r37" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Classic filter build\nnote(\&quot;c2*8\&quot;).s(\&quot;sawtooth\&quot;)\n.lpf(sine.range(200, 6000).slow(8))\n.lpq(sine.range(1, 15).slow(8))&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Classic filter build
+note(&quot;c2*8&quot;).s(&quot;sawtooth&quot;)
+.lpf(sine.range(200, 6000).slow(8))
+.lpq(sine.range(1, 15).slow(8))</pre><!--astro:end--></astro-island>
+<h2 id="spatial-counterpoint-with-off">Spatial Counterpoint with off<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#spatial-counterpoint-with-off"><span class="icon icon-link"></span></a></h2>
+<p><code>off</code> creates delayed copies of a pattern. Combine it with spatial changes to create rich, layered textures:</p>
+<astro-island uid="1t7KIq" prefix="r38" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;n(\&quot;0 3 5 7\&quot;).scale(\&quot;C:minor\&quot;).s(\&quot;triangle\&quot;).lpf(2000)\n.off(1/8, x =&gt; x.pan(0.75).lpf(1200).gain(0.6))\n.off(1/4, x =&gt; x.pan(0.25).lpf(800).gain(0.4).room(0.4))&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>n(&quot;0 3 5 7&quot;).scale(&quot;C:minor&quot;).s(&quot;triangle&quot;).lpf(2000)
+.off(1/8, x =&gt; x.pan(0.75).lpf(1200).gain(0.6))
+.off(1/4, x =&gt; x.pan(0.25).lpf(800).gain(0.4).room(0.4))</pre><!--astro:end--></astro-island>
+<p>The original plays center, a copy follows an 1/8th note later panned right and darker, another copy follows a 1/4 note later panned left, even darker, with reverb. This creates a cascading spatial texture.</p>
+<hr/>
+<h1 id="experiments">Experiments<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#experiments"><span class="icon icon-link"></span></a></h1>
+<h2 id="1-the-spatial-remix">1. The Spatial Remix<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#1-the-spatial-remix"><span class="icon icon-link"></span></a></h2>
+<p>Take this flat pattern and apply spatial separation. Give each element its own territory in width, depth, and frequency.</p>
+<astro-island uid="YvYUW" prefix="r39" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Flat - everything fighting for the same space\nstack(\nsound(\&quot;bd sd bd sd\&quot;),\nsound(\&quot;hh*8\&quot;),\nnote(\&quot;c2 c2 eb2 c2\&quot;).s(\&quot;sawtooth\&quot;),\nnote(\&quot;c4 eb4 g4\&quot;).s(\&quot;triangle\&quot;)\n).cpm(30)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Flat - everything fighting for the same space
+stack(
+sound(&quot;bd sd bd sd&quot;),
+sound(&quot;hh*8&quot;),
+note(&quot;c2 c2 eb2 c2&quot;).s(&quot;sawtooth&quot;),
+note(&quot;c4 eb4 g4&quot;).s(&quot;triangle&quot;)
+).cpm(30)</pre><!--astro:end--></astro-island>
+<astro-island uid="1DlnCv" prefix="r45" component-url="/jamdojo/_astro/QA.DCxP3YXk.js" component-export="default" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;q&quot;:[0,&quot;Show possible solution&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;QA&quot;,&quot;value&quot;:true}" await-children><div class="py-4 px-6 pr-10 bg-lineHighlight relative mb-4"><div class="cursor-pointer"><div>Show possible solution</div><a class="p-1 absolute top-4 right-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path></svg></a></div></div><template data-astro-template><astro-island uid="Z3zP8a" prefix="r40" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;stack(\nsound(\&quot;bd sd bd sd\&quot;).pan(0.5).room(0.05),\nsound(\&quot;hh*8\&quot;).pan(0.65).hpf(6000).gain(0.5),\nnote(\&quot;c2 c2 eb2 c2\&quot;).s(\&quot;sawtooth\&quot;).lpf(400).pan(0.5),\nnote(\&quot;c4 eb4 g4\&quot;).s(\&quot;triangle\&quot;).pan(0.35)\n  .hpf(400).room(0.3).juxBy(0.4, rev).gain(0.5)\n).cpm(30)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>stack(
+sound(&quot;bd sd bd sd&quot;).pan(0.5).room(0.05),
+sound(&quot;hh*8&quot;).pan(0.65).hpf(6000).gain(0.5),
+note(&quot;c2 c2 eb2 c2&quot;).s(&quot;sawtooth&quot;).lpf(400).pan(0.5),
+note(&quot;c4 eb4 g4&quot;).s(&quot;triangle&quot;).pan(0.35)
+  .hpf(400).room(0.3).juxBy(0.4, rev).gain(0.5)
+).cpm(30)</pre><!--astro:end--></astro-island></template><!--astro:end--></astro-island>
+<h2 id="2-genre-transformation">2. Genre Transformation<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#2-genre-transformation"><span class="icon icon-link"></span></a></h2>
+<p>Same notes, different spatial treatment. Start with this pattern and transform it into three different genres by changing only the spatial parameters (pan, room, delay, filters).</p>
+<astro-island uid="Z1shfBo" prefix="r41" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Base pattern\nstack(\nsound(\&quot;bd ~ bd ~, ~ sd ~ sd\&quot;),\nnote(\&quot;c2 ~ eb2 ~\&quot;).s(\&quot;sawtooth\&quot;),\nnote(\&quot;&lt;c3,eb3,g3&gt;\&quot;).s(\&quot;triangle\&quot;).slow(2)\n).cpm(28)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Base pattern
+stack(
+sound(&quot;bd ~ bd ~, ~ sd ~ sd&quot;),
+note(&quot;c2 ~ eb2 ~&quot;).s(&quot;sawtooth&quot;),
+note(&quot;&lt;c3,eb3,g3&gt;&quot;).s(&quot;triangle&quot;).slow(2)
+).cpm(28)</pre><!--astro:end--></astro-island>
+<p>Try making it sound like:</p>
+<ol>
+<li>Tight techno (dry, punchy)</li>
+<li>Spacious dub (reverb, delay throws)</li>
+<li>Floating ambient (maximum depth, blurred)</li>
+</ol>
+<h2 id="3-width-challenge">3. Width Challenge<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#3-width-challenge"><span class="icon icon-link"></span></a></h2>
+<p>Make a single note sound as wide as possible using only built-in Strudel tools. No samples, just one synthesizer note filling the entire stereo field.</p>
+<astro-island uid="Pb5jd" prefix="r42" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Start here - make it WIDE\nnote(\&quot;c3\&quot;).s(\&quot;sawtooth\&quot;).sustain(2)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Start here - make it WIDE
+note(&quot;c3&quot;).s(&quot;sawtooth&quot;).sustain(2)</pre><!--astro:end--></astro-island>
+<astro-island uid="ZM0AKj" prefix="r46" component-url="/jamdojo/_astro/QA.DCxP3YXk.js" component-export="default" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;q&quot;:[0,&quot;Show one approach&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;QA&quot;,&quot;value&quot;:true}" await-children><div class="py-4 px-6 pr-10 bg-lineHighlight relative mb-4"><div class="cursor-pointer"><div>Show one approach</div><a class="p-1 absolute top-4 right-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path></svg></a></div></div><template data-astro-template><astro-island uid="1SWKhn" prefix="r43" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;c3\&quot;).s(\&quot;sawtooth\&quot;).sustain(2)\n.jux(x =&gt; x.add(note(0.1)).fast(1.01))\n.room(0.3).delay(0.2).delaytime(0.02)\n.lpf(2000)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>note(&quot;c3&quot;).s(&quot;sawtooth&quot;).sustain(2)
+.jux(x =&gt; x.add(note(0.1)).fast(1.01))
+.room(0.3).delay(0.2).delaytime(0.02)
+.lpf(2000)</pre><!--astro:end--></astro-island><p>Detune and slight speed difference between L/R creates width. Short delay and reverb add dimension.</p></template><!--astro:end--></astro-island>
+<h2 id="4-depth-staging">4. Depth Staging<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#4-depth-staging"><span class="icon icon-link"></span></a></h2>
+<p>Create a three-layer arrangement where each layer is at a distinctly different depth: one upfront, one middle distance, one far back. Make it obvious which is which.</p>
+<astro-island uid="20Vqc8" prefix="r44" component-url="/jamdojo/_astro/MiniRepl.tNJ3CKLU.js" component-export="MiniRepl" renderer-url="/jamdojo/_astro/client.BnmqwyG6.js" props="{&quot;tune&quot;:[0,&quot;// Create near / mid / far layers\nstack(\n// Near:\nsound(\&quot;bd*4\&quot;),\n// Mid:\nnote(\&quot;c3 eb3\&quot;).s(\&quot;sawtooth\&quot;).slow(2),\n// Far:\nnote(\&quot;g5\&quot;).s(\&quot;triangle\&quot;).slow(4)\n).cpm(28)&quot;]}" ssr client="visible" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children><pre>// Create near / mid / far layers
+stack(
+// Near:
+sound(&quot;bd*4&quot;),
+// Mid:
+note(&quot;c3 eb3&quot;).s(&quot;sawtooth&quot;).slow(2),
+// Far:
+note(&quot;g5&quot;).s(&quot;triangle&quot;).slow(4)
+).cpm(28)</pre><!--astro:end--></astro-island>
+<hr/>
+<h1 id="quick-reference">Quick Reference<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#quick-reference"><span class="icon icon-link"></span></a></h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Dimension</th><th>Function</th><th>Parameters</th><th>Range</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Width</strong></td><td><code>pan</code></td><td>position</td><td>0-1</td><td>Left (0) to Right (1)</td></tr><tr><td></td><td><code>jux</code></td><td>function</td><td>-</td><td>Apply function to right channel</td></tr><tr><td></td><td><code>juxBy</code></td><td>amount, fn</td><td>0-1, fn</td><td>Controlled stereo split</td></tr><tr><td><strong>Depth</strong></td><td><code>room</code></td><td>amount</td><td>0-1+</td><td>Reverb send level</td></tr><tr><td></td><td><code>roomsize</code></td><td>size</td><td>0.1-20+</td><td>Reverb decay time</td></tr><tr><td></td><td><code>roomlp</code></td><td>frequency</td><td>Hz</td><td>Reverb high-frequency damping</td></tr><tr><td></td><td><code>roomfade</code></td><td>time</td><td>seconds</td><td>Reverb fade time</td></tr><tr><td></td><td><code>delay</code></td><td>amount</td><td>0-1</td><td>Delay send level</td></tr><tr><td></td><td><code>delaytime</code></td><td>time</td><td>0-2 seconds</td><td>Time between echoes</td></tr><tr><td></td><td><code>delayfeedback</code></td><td>amount</td><td>0-1</td><td>Number of echo repeats</td></tr><tr><td><strong>Height</strong></td><td><code>lpf</code></td><td>frequency</td><td>Hz</td><td>Low-pass filter cutoff</td></tr><tr><td></td><td><code>hpf</code></td><td>frequency</td><td>Hz</td><td>High-pass filter cutoff</td></tr><tr><td></td><td><code>bpf</code></td><td>frequency</td><td>Hz</td><td>Band-pass filter center</td></tr><tr><td></td><td><code>lpq</code> / <code>hpq</code></td><td>resonance</td><td>0-50+</td><td>Filter resonance (Q)</td></tr></tbody></table>
+<hr/>
+<h1 id="where-to-go-next">Where to Go Next<a aria-hidden="true" tabindex="-1" href="/jamdojo/learn/theory/auditory-space/#where-to-go-next"><span class="icon icon-link"></span></a></h1>
+<ul>
+<li><a href="/jamdojo/learn/effects/">Audio Effects</a> - Deep dive into all effects including the signal chain and orbit system</li>
+<li><a href="/jamdojo/learn/signals/">Signals</a> - Learn more about using <code>sine</code>, <code>perlin</code>, <code>saw</code> and other signals for modulation</li>
+<li><a href="/jamdojo/learn/synths/">Synths</a> - Explore synthesis techniques to create richer source sounds</li>
+<li><a href="/jamdojo/recipes/recipes/">Recipes</a> - Ready-to-use patterns demonstrating spatial techniques</li>
+</ul> </div> </div> </main> </div> </body></html>
