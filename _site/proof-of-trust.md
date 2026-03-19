@@ -22,17 +22,19 @@ Blockchain tried this. PGP tried this. Both failed. Blockchain requires nodes, w
 
 Every attempt required building new infrastructure or adding complexity to existing workflows. The adoption barrier killed them.
 
-## Email. Email is the protocol.
+## Email is the protocol.
 
 [DKIM](https://datatracker.ietf.org/doc/html/rfc6376) provides cryptographic signatures. Every mail server checks them. [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) routes between competing servers without a central authority. Most business email uses DKIM. Stripe sends DKIM-signed emails. So does every payment processor, review platform, and business service.
 
-DKIM proves origin, not truth. A DKIM signature proves Stripe's mail server sent the email; it doesn't prove the relationship claim inside is accurate. That gap narrows through structure: bilateral confirmation requires both parties to forward emails (mutual acknowledgement), the exchange publishes the graph publicly (anyone can audit), and curators decide what the topology means (reputation interpretation). The cryptography proves "this came from stripe.com." The bilateral flow attests that "both parties agreed to claim this." The public graph enables "anyone can audit the topology." Curators decide "this pattern suggests trust." Collusion is still possible—the system makes it expensive to fake at scale, not impossible.
+DKIM proves origin, not truth. A DKIM signature proves Stripe's mail server sent the email; it doesn't prove the relationship claim inside is accurate. That gap narrows through structure: bilateral confirmation requires both parties to send emails directly to the exchange (mutual acknowledgement), the exchange publishes the graph publicly (anyone can audit), and curators decide what the topology means (reputation interpretation). The cryptography proves "this came from stripe.com." The bilateral flow attests that "both parties agreed to claim this." The public graph enables "anyone can audit the topology." Curators decide "this pattern suggests trust." Collusion is still possible—the system makes it expensive to fake at scale, not impossible.
 
-The infrastructure has been running for twenty years. We just format attestations as JSON in email bodies and forward them to an exchange. The exchange is a mail server with a graph database. Curators query the graph and publish allowlists. Publishers compose trust policies from multiple curators.
+Why direct send, not forwarding? DKIM is transport-layer authentication. When a merchant clicks "Forward" in Gmail, the client creates a new message signed by the merchant's domain; Stripe's DKIM signature is gone. [ARC](https://datatracker.ietf.org/doc/html/rfc8617) preserves authentication chains through forwarding, but requires the exchange to trust the merchant's mail server, which defeats the purpose. So nobody forwards anything. Each party sends their own DKIM-signed email directly. Two first-party messages, both verifiable.
+
+The infrastructure has been running for twenty years. Attestors format claims as JSON in email bodies and send them directly to an exchange. The exchange is a mail server with an append-only log. Curators pull the log and build their own indexes. Publishers compose trust policies from multiple curators.
 
 The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop), each choosing which lists to trust. No single list controls the ecosystem. Federated curation has worked for twenty years.
 
-[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. New requirements: attestors emit structured JSON, exchanges parse and index, parties adopt forwarding workflows. Lower barrier than ads.txt: builds on email infrastructure already deployed, no new hosting needed. Bootstrap follows the [stone soup](/stone-soup) pattern: early exchanges publish graphs, early curators publish standards, and each participant shows up for their own fraud-reduction advantage.
+[ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. New requirements: attestors emit structured JSON, exchanges parse and index, parties send attestations directly. Lower barrier than ads.txt: builds on email infrastructure already deployed, no new hosting needed. Bootstrap follows the [stone soup](/stone-soup) pattern: early exchanges publish graphs, early curators publish standards, and each participant shows up for their own fraud-reduction advantage.
 
 ## The declaration
 
@@ -46,9 +48,9 @@ An advertiser publishes a signed declaration of their trust relationships:
 
 Attestations come in two forms: bilateral (mutual relationships) and unilateral (observations).
 
-**Bilateral attestations** require both parties to confirm. Stripe and the merchant both forward emails. The exchange creates a mutual edge: merchant ←→ Stripe. Relationships: payment processing, vendor partnerships, customer endorsements.
+**Bilateral attestations** require both parties to confirm. Stripe sends an attestation email to the exchange; the merchant sends a separate confirmation. Each DKIM signature is first-hop and verifiable. The exchange creates a mutual edge: merchant ←→ Stripe. Relationships: payment processing, vendor partnerships, customer endorsements.
 
-**Unilateral attestations** come from platforms observing public data. Google forwards an attestation about a restaurant's reviews. The restaurant doesn't confirm; Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
+**Unilateral attestations** come from platforms observing public data. Google sends an attestation about a restaurant's reviews directly to the exchange. The restaurant doesn't confirm; Google attests to their own platform data. The exchange creates a one-directional edge: restaurant ← Google. Observations: ratings, licenses, public records.
 
 The confirmation is cryptographic: a DKIM-signed payload anyone can verify without asking either party. Bilateral edges attest to mutual agreement. Unilateral edges attest to the platform's claim about their own data.
 
@@ -60,43 +62,61 @@ An exchange is a specialized mail server that receives, verifies, and indexes at
 
 **How it works:**
 
-1. Stripe sends merchant a DKIM-signed email: "We attest to 3 years of payment processing for merchant@example.com"
-2. Merchant forwards the email to `attestations@exchange.com`
-3. Exchange receives email, verifies DKIM signature, indexes the relationship
-4. Merchant sends Stripe: "I confirm this relationship"
-5. Stripe forwards to `attestations@exchange.com`
-6. Exchange indexes: merchant ←→ Stripe (bilateral confirmation complete)
+1. Stripe sends attestation email directly to `attestations@exchange.com`: "We attest to 3 years of payment processing for merchant@example.com"
+2. Exchange receives email, verifies Stripe's DKIM signature, indexes the claim
+3. Merchant sends confirmation email directly to `attestations@exchange.com`: "I confirm my relationship with Stripe" (referencing Stripe's attestation ID)
+4. Exchange receives email, verifies merchant's DKIM signature, matches the pair
+5. Exchange indexes: merchant ←→ Stripe (bilateral confirmation complete)
 
-The exchange is just [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) (receives emails) + DKIM verification (proves authenticity) + a graph database (indexes relationships) + a query API (exposes to curators).
+The merchant's confirmation is lightweight: Stripe's dashboard shows a "Confirm on exchange" link, a `mailto:` pre-filled with the confirmation payload. Click, send. Everybody on the internet has email.
+
+The exchange is [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) + DKIM verification + a public ledger. Discovery is [MX records](https://datatracker.ietf.org/doc/html/rfc5321#section-5.1), because the exchange is a mail server, and mail server discovery is already solved.
 
 Attestation emails contain structured data:
 
 ```
 From: attestations@stripe.com
-To: merchant@example.com
+To: attestations@exchange.com
 DKIM-Signature: [cryptographic signature]
 Subject: Payment Processing Attestation
 
 {
   "attestation_type": "payment_processor",
-  "merchant_id": "merchant@example.com",
+  "attestation_id": "stripe_merchant123_2026",
+  "subject": "merchant@example.com",
   "duration_years": 3,
   "status": "good_standing",
   "timestamp": "2026-03-18T15:00:00Z"
 }
 ```
 
-Bilateral confirmation requires emails from both parties. The merchant forwards Stripe's attestation; Stripe forwards the merchant's confirmation. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided relationship claims don't count.
+The merchant's confirmation references the attestation ID:
 
-**Unilateral attestations work differently.** Google forwards an attestation about a restaurant's reviews directly to the exchange:
+```
+From: merchant@example.com
+To: attestations@exchange.com
+DKIM-Signature: [cryptographic signature]
+Subject: Attestation Confirmation
+
+{
+  "action": "confirm",
+  "attestation_id": "stripe_merchant123_2026"
+}
+```
+
+Bilateral confirmation requires emails from both parties, sent directly. Only when both emails arrive does the exchange create a mutual edge in the graph. One-sided relationship claims don't count.
+
+**Unilateral attestations work differently.** Google sends an attestation about a restaurant's reviews directly to the exchange:
 
 ```
 From: attestations@google.com
+To: attestations@exchange.com
 DKIM-Signature: [cryptographic signature]
 
 {
   "attestation_type": "platform_rating",
-  "business_id": "restaurant@example.com",
+  "attestation_id": "google_restaurant456_2026",
+  "subject": "restaurant@example.com",
   "rating": 4.5,
   "review_count": 247,
   "platform": "Google Reviews",
@@ -110,11 +130,15 @@ The exchange builds a public graph: nodes are businesses, edges are attested rel
 
 One advertiser has three years of clean payment processing, 47 mutual customer attestations, two vendor relationships with reciprocal endorsements. Another has a week-old domain and a self-reported rating. The exchange exposes both. Curators decide what qualifies.
 
-The graph is public. Anyone can query it. That's how trust works. Private attestations are just claims. Public attestations are verifiable topology. Curators read the graph to publish allowlists. Publishers verify curator criteria. Competitors audit each other's relationships. The transparency makes forgery expensive: faking edges requires compromising multiple parties who each have reputations to lose. Like business licenses, domain [WHOIS](https://en.wikipedia.org/wiki/WHOIS), court records: trust infrastructure is public by design. Merchants control field-level disclosure (transaction volumes are opt-in), but the edges themselves (who attests to whom) are visible to everyone.
+The graph is public. Anyone can pull it. Private attestations are just claims; public attestations are verifiable topology. The exchange serves its ledger over HTTPS as an append-only feed. Curators sync the ledger and build their own indexes. The exchange competes on uptime, coverage, and freshness; the curator bears the aggregation cost.
+
+Forgery is expensive: faking edges requires compromising multiple parties who each have reputations to lose. Like business licenses, domain [WHOIS](https://en.wikipedia.org/wiki/WHOIS), court records: trust infrastructure is public by design. Merchants control field-level disclosure (transaction volumes are opt-in), but edges are visible to everyone. The exchange may serve its ledger freely or charge curators by API volume. Business decision, not protocol constraint.
+
+**Attestation types** are minimal but extensible. The protocol seeds a canonical set: `payment_processor`, `platform_rating`, `customer_endorsement`, `vendor_relationship`, `license`. Attestors extend with URI-prefixed types: `https://stripe.com/attestation/payment_processing`, `https://google.com/attestation/review_summary`. Curators normalize across synonyms. That's their job, and why they compete. No central registry governs the vocabulary. The pattern follows [IANA media types](https://www.iana.org/assignments/media-types/): a small canonical core, a permissionless extension space, usage-driven convergence.
 
 ## The curation layer
 
-Curators interpret the graph. A curator publishes an allowlist: advertisers that meet their trust criteria. Different curators, different standards.
+Curators pull the graph from exchanges and interpret it. A curator syncs one or more exchange ledgers, builds a local index, and publishes an allowlist: advertisers that meet their trust criteria. A curator that syncs five exchanges has a richer graph than one that syncs one. Different curators, different standards, different sources.
 
 A conservative health curator might require: licensed practitioner + clean payment history + minimum 20 patient attestations. A general commerce curator might require: 6 months payment history + business registration + semantic consistency. A community curator might require: 3 mutual endorsements from other businesses in the same locality.
 
@@ -148,8 +172,8 @@ Email's curation layer works the same way. Mail servers subscribe to blocklists 
 | Layer | Role | Email equivalent |
 |-------|------|------------------|
 | Advertiser | Declares trust relationships, signed | DKIM sender |
-| Exchange | Receives attestation emails, verifies DKIM, indexes graph | Mail server (SMTP + database) |
-| Curator | Publishes allowlists based on graph criteria | Blocklist operators (Spamhaus) |
+| Exchange | Receives attestation emails, verifies DKIM, serves public ledger | Mail server (SMTP + ledger) |
+| Curator | Pulls exchange logs, builds indexes, publishes allowlists | Blocklist operators (Spamhaus) |
 | Publisher | Composes trust policy from curators | Mail server spam policy |
 | Audience | Sees filtered, trust-scored results | Inbox |
 
@@ -173,19 +197,19 @@ Either party can unlink at any time by sending a revocation email:
 
 ```
 From: attestations@stripe.com
-To: merchant@example.com
+To: attestations@exchange.com
 DKIM-Signature: [cryptographic signature]
 Subject: Attestation Revocation
 
 {
   "action": "revoke",
-  "original_attestation_id": "merchant123_stripe_2023",
+  "attestation_id": "stripe_merchant123_2026",
   "reason": "account_closed",
   "timestamp": "2026-03-18T16:00:00Z"
 }
 ```
 
-The merchant forwards it to the exchange. The exchange removes the edge. Unilateral: you don't need the other party's permission.
+Either party sends a revocation directly to the exchange. The exchange removes the edge. Unilateral: you don't need the other party's permission.
 
 If Stripe detects fraud, they revoke. The merchant's payment processor edge disappears, curators see a thinner topology, the merchant drops from allowlists.
 
@@ -243,6 +267,7 @@ Every edge is timestamped. The exchange records when attestations arrive, when t
 | Verification: How do I know claims are real? | DKIM proves mail server origin. Public graph enables audit. Anyone can verify signatures and query topology. |
 | Cost: What does participation cost? | Email infrastructure only. No blockchain fees, no token purchases, no transaction costs beyond sending mail. |
 | Gaming: Can this be spammed or abused? | Faking rich topology is expensive when counterparties are costly to compromise. Curators filter weak signals. Topology reveals gaming patterns. |
+| Anti-abuse: DDoS, spam, forged DNS? | Solved problems. Exchange operators import modern web infrastructure—rate limiting, DKIM verification, spam filtering—the same way any mail server does. |
 
 ---
 
