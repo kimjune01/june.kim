@@ -175,13 +175,14 @@ Email's curation layer works the same way. Mail servers subscribe to blocklists 
 
 ## The stack
 
-| Layer | Role | Email equivalent |
-|-------|------|------------------|
-| Advertiser | Declares trust relationships, signed | DKIM sender |
-| Exchange | Receives attestation emails, verifies DKIM, serves public ledger | Mail server (SMTP + ledger) |
-| Curator | Pulls exchange logs, builds indexes, publishes allowlists | Blocklist operators (Spamhaus) |
-| Publisher | Composes trust policy from curators | Mail server spam policy |
-| Audience | Sees filtered, trust-scored results | Inbox |
+<table style="max-width: 600px; margin: 0 auto;">
+<thead><tr><th style="background:#f0f0f0">Layer</th><th style="background:#f0f0f0">Role</th><th style="background:#f0f0f0">Email equivalent</th></tr></thead>
+<tr><td>Advertiser</td><td>Declares trust relationships, signed</td><td>DKIM sender</td></tr>
+<tr><td>Exchange</td><td>Receives attestation emails, verifies DKIM, serves public ledger</td><td>Mail server (SMTP + ledger)</td></tr>
+<tr><td>Curator</td><td>Pulls exchange logs, builds indexes, publishes allowlists</td><td>Blocklist operators (Spamhaus)</td></tr>
+<tr><td>Publisher</td><td>Composes trust policy from curators</td><td>Mail server spam policy</td></tr>
+<tr><td>Audience</td><td>Sees filtered, trust-scored results</td><td>Inbox</td></tr>
+</table>
 
 Five layers. No single point of control. The protocol is email.
 
@@ -277,4 +278,4 @@ Every edge is timestamped. The exchange records when attestations arrive, when t
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
+*Written via the [double loop](/double-loop). More at [pageleft.cc](https://pageleft.cc).*
