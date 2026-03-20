@@ -12,9 +12,9 @@ Three predictions. Three biotech companies. One framework. Head-to-head with Mar
 
 ## The idea
 
-Every biotech company is a learning loop for its molecule. The drug goes through trials. The company reads the results, decides what to change, and writes those changes back — new trial design, new endpoints, new manufacturing. That's the backward pass. The [Natural Framework](/the-natural-framework) calls it the consolidate stack.
+Every biotech company is a learning loop for its molecule. The drug goes through trials. The company reads the results, decides what to change, and writes those changes back: new trial design, new endpoints, new manufacturing. That's the backward pass. The [Natural Framework](/the-natural-framework) calls it the consolidate stack.
 
-Most analysts diagnose the drug: will it work? That's the forward pass. They look at a snapshot — this trial, this endpoint, this p-value. The framework diagnoses the trajectory: is the company learning? Is the same failure recurring? Is the consolidate stack functional?
+Most analysts diagnose the drug: will it work? That's the forward pass. They look at a snapshot. This trial, this endpoint, this p-value. The framework diagnoses the trajectory: is the company learning? Is the same failure recurring?
 
 Two companies can have identical Phase 3 results and opposite outcomes, depending on whether the company's backward pass is working.
 
@@ -79,7 +79,7 @@ The predictions are binary, timestamped, and mechanically scored. The reasoning 
 
 ### Where we agree, we're more confident
 
-This is the [blind-blind-merge](/blind-blind-merge) principle. When two independent systems — one diagnosing the forward pass (Shkreli), one diagnosing the backward pass (the framework) — arrive at the same direction from different reasoning, the convergence is stronger signal than either alone.
+This is the [blind-blind-merge](/blind-blind-merge) principle. Two independent systems, one diagnosing the forward pass (Shkreli), one diagnosing the backward pass (the framework), arrive at the same direction from different reasoning. The convergence is stronger signal than either alone.
 
 | Company | Framework | Shkreli | Agreement? | Confidence |
 |---------|-----------|---------|------------|------------|
@@ -103,9 +103,7 @@ The framework is the [Natural Framework](/the-natural-framework). The consolidat
 
 ## Hypothesis: vol mispricing from broken read_outcomes
 
-The framework surfaces a second-order prediction that no analyst framework produces.
-
-When the read_outcomes pipe is broken — management systematically overframes ambiguous data — the market's information about the company's information is wrong. Implied volatility is calibrated to management's framing. If the framing is systematically optimistic, expectations narrow, and any ambiguous outcome produces a larger surprise than the market prices. Realized vol should exceed implied vol around catalyst dates.
+When management systematically overframes ambiguous data, the market's information about the company's information is wrong. Implied volatility is calibrated to management's framing. If the framing is systematically optimistic, expectations narrow, and any ambiguous outcome produces a larger surprise than the market prices. Realized vol should exceed implied vol around catalyst dates.
 
 **Testable methodology:**
 1. For each company, identify catalyst dates (trial readouts, FDA actions, earnings with pipeline updates)
@@ -132,4 +130,4 @@ We didn't incorporate insider transaction events in this pilot. But the temporal
 
 ---
 
-*Scorecard will be updated at [github.com/kimjune01/universal-diagnosis](https://github.com/kimjune01/universal-diagnosis) as catalysts resolve.*
+*Three bets. Clock's running. Scorecard at [github.com/kimjune01/universal-diagnosis](https://github.com/kimjune01/universal-diagnosis).*
