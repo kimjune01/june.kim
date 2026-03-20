@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Universal Diagnosis: Biotech Pilot"
+title: "Biotech Diagnosis"
 tags: cognition methodology
 ---
 
@@ -17,6 +17,8 @@ Every biotech company is a learning loop for its molecule. The drug goes through
 Most analysts diagnose the drug: will it work? That's the forward pass. They look at a snapshot — this trial, this endpoint, this p-value. The framework diagnoses the trajectory: is the company learning? Is the same failure recurring? Is the consolidate stack functional?
 
 Two companies can have identical Phase 3 results and opposite outcomes, depending on whether the company's backward pass is working.
+
+But a functional consolidate stack is necessary, not sufficient. It also needs cache (cash) and runway (time). A company that reads its failures perfectly and knows exactly what to change is still dead if it can't fund the next iteration. Cash is the timer on a broken forward pass. The consolidate stack decides *what* to do next; the cash decides *whether* it gets to.
 
 ## The evidence
 
