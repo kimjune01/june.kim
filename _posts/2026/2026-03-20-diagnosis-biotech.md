@@ -79,7 +79,7 @@ The predictions are binary and timestamped. The diagnosis involves judgment (LLM
 
 ### Where we agree, we're more confident
 
-This is the [blind-blind-merge](/blind-blind-merge) principle. Two independent systems, one diagnosing the forward pass (Shkreli), one diagnosing the backward pass (the framework), arrive at the same direction from different reasoning. The convergence is stronger signal than either alone.
+This borrows from the [blind-blind-merge](/blind-blind-merge) principle, loosely. True blind-blind requires neither side sees the other's work. That's impossible with public analysts — Shkreli can read this blog, and we selected targets from his positions. What we do have: independent *reasoning* on overlapping data. He diagnoses the forward pass (molecule), we diagnose the backward pass (company). When both point the same direction from different lenses, the convergence means something, even without true blindness.
 
 | Company | Framework | Shkreli | Agreement? | Confidence |
 |---------|-----------|---------|------------|------------|
