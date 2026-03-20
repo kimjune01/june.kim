@@ -45,12 +45,31 @@ done
 # No --size-only: jekyll rebuild changes timestamps on every file, but s3 sync
 # default compares ETag (MD5) so only content-changed files actually upload.
 # Dryrun first to collect what will change, then real sync.
+#
+# WHY DOES IT UPLOAD SO MANY FILES?
+# Two separate issues:
+# 1. Jekyll: incremental: false in _config.yml (incremental is unreliable).
+#    Jekyll rebuilds every HTML, but most pages have static content so their
+#    ETag doesn't change. S3 sync skips them. Only ~10-15 HTML files actually
+#    re-upload per deploy (index, feed, tag pages, sitemap, new post).
+# 2. Markdown: the second sync forces --content-type "text/plain; charset=utf-8".
+#    S3 sync compares metadata too, not just ETag. If the stored content-type
+#    doesn't match, every .md re-uploads even with identical content.
+#    Fix: dryrun must use the same flags as the real sync (see below).
 
 echo "==> Checking what changed (ETag compare)"
-CHANGED=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --dryrun 2>&1 \
+# Dryrun for non-md files (HTML, CSS, JS, images)
+CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
+# Dryrun for md files (same flags as real sync to avoid false positives)
+CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
+  --content-type "text/plain; charset=utf-8" --no-guess-mime-type --dryrun 2>&1 \
+  | grep -E "^(upload|delete):" \
+  | sed 's|.*s3://[^/]*/|/|' \
+  || true)
+CHANGED=$(printf '%s\n%s' "$CHANGED_HTML" "$CHANGED_MD" | sed '/^$/d' || true)
 
 echo "==> Syncing to S3"
 aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md"
