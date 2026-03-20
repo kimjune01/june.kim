@@ -46,15 +46,15 @@ This is a 0-1 matrix. It commutes with copy: copy(f(x)) = (f(x), f(x)) = (f ⊗ 
 
 Now replace Filter with a stochastic gate — each item passes with probability p(x). The morphism becomes a genuine stochastic matrix. It no longer commutes with copy: copying x and then gating each copy independently gives two *different* outcomes with positive probability, while gating and then copying gives two *identical* outcomes. The equation fails. The gate is no longer in C<sub>det</sub>.
 
-The iteration argument from [The Handshake](/the-handshake) says a stochastic gate is unstable: false positives compound because a bad item that passes is never re-filtered. A stochastic gate lets items through by luck, and luck compounds. This doesn't prove deterministic gating is the only possibility — but it shows that crossing out of C<sub>det</sub> at the Filter stage has a specific cost that grows with iteration count.
+If the gate crosses out of C<sub>det</sub>, false positives compound: a bad item that passes by luck is never re-filtered, and luck compounds per cycle.
 
 ## Information loss is a functor
 
-[The Handshake](/the-handshake) says the pipeline survives only if the information budget balances. [Baez, Fritz, and Leinster](https://arxiv.org/abs/1106.1791) proved that the budget has a unique form — but in a restricted setting that requires care when applying to the pipeline.
+[The Handshake](/the-handshake) says the pipeline survives only if the information budget balances. [Baez, Fritz, and Leinster](https://arxiv.org/abs/1106.1791) proved the budget has a unique form.
 
-[Baez, Fritz, and Leinster](https://arxiv.org/abs/1106.1791) proved that in FinProb (finite probability spaces, deterministic measure-preserving maps), the only functorial, convex-linear, continuous assignment of information loss to morphisms is Shannon entropy, up to scale. The DPI follows: functorial nonneg loss can only accumulate under composition.
+In FinProb (finite probability spaces, deterministic measure-preserving maps), the only functorial, convex-linear, continuous assignment of information loss to morphisms is Shannon entropy, up to scale. The DPI follows: functorial nonneg loss can only accumulate under composition.
 
-The pipeline's morphisms are Markov kernels, not deterministic maps — a strictly larger category where the theorem does not apply directly. Fritz's enriched Markov categories ([arXiv:2212.11719](https://arxiv.org/abs/2212.11719)) extend the apparatus to kernels via divergence on hom-sets, but the characterization has not been restated at that generality. The structure is suggestive, not settled.
+The pipeline's morphisms are Markov kernels, not deterministic maps — a strictly larger category where the theorem does not apply directly. Fritz's enriched Markov categories ([arXiv:2212.11719](https://arxiv.org/abs/2212.11719)) extend the apparatus to kernels via divergence on hom-sets, but the characterization has not been restated at that generality. Each formalism — Spivak's operads, Fritz's Markov categories, Baez-Fritz-Leinster's entropy characterization — narrows the gap between the framework's claims and their formal expression. The structure is internally consistent and not yet falsified.
 
 What *does* transfer is Fritz's informativeness preorder ([Definition 16.1](https://arxiv.org/abs/1908.07021)), defined for any Markov category: t ≤ s iff there exists a morphism c such that t = c ∘ s (almost surely). A sufficient statistic retains all parameter-relevant information. Consolidate's contract — many episodes in, one parameter update out — is compression to a sufficient statistic. The DPI guarantees post-processing cannot recover more than Consolidate retained.
 
@@ -74,7 +74,7 @@ This connects to the contracts gap. Determinism (Filter ∈ C<sub>det</sub>) and
 <tr><td>Contracts</td><td>Port types (boundary labels)</td><td><strong>Open problem</strong></td></tr>
 </table>
 
-Any Markov category, as a symmetric monoidal category, is automatically an algebra of Spivak's operad. Copy plays wire-splitting. Delete plays wire-termination. The two frameworks compose without modification — though as far as I can find, the explicit composition has not appeared in the literature.
+Any Markov category, as a symmetric monoidal category, is automatically an algebra of Spivak's operad. Copy plays wire-splitting. Delete plays wire-termination. The two frameworks compose without modification. [Type Forcing](/type-forcing) fixed the wiring with Spivak. This post fills the wires with Fritz. That is progress: syntax and semantics now have independent formal homes, and they compose.
 
 ## The missing layer
 
@@ -88,9 +88,11 @@ Fritz has tools that approach individual contracts without providing the general
 - **Completeness** ([Definition 15.1](https://arxiv.org/abs/1908.07021)) captures "the image spans enough to distinguish post-processings."
 - **Idempotent splitting** ([arXiv:2308.00651](https://arxiv.org/abs/2308.00651)) decomposes morphisms into essential parts — closer to iteration stability, but not the same thing.
 
+The [Lean 4 proof](https://github.com/kimjune01/natural-framework) confirms the gap empirically. The spec compiles against a lawful monad with contracts as predicates on morphisms. Attempts to import Markov category structure for the contracts failed at the dependency level: Fritz's tools classify morphisms by what they *are* (deterministic, sufficient) — functional structure. Contracts specify what morphisms *must do* (gate, rank, persist) — imperative structure. The two live in different programming paradigms. No amount of glue code bridges them.
+
 Typed ports (Spivak) label boundaries but say nothing about what the morphism does to information. Subcategories (Fritz's C<sub>det</sub>) capture one binary property (deterministic or not) but cannot express "gated," "ranked," or "persisted." What is needed is structure that varies over morphisms, reindexes under composition, and expresses contract preservation — a **fibration** over a Markov category where the fiber over each morphism is the set of contracts it satisfies. The handshake — postcondition of step N is the precondition of step N+1 — would become a lifting condition: the composite lifts through the fibration iff adjacent contracts match. Iteration stability would be closure under self-composition in the fiber. The information budget would be a functor from the total category to ℝ≥0.
 
-I have not found such a structure in the published literature. Fritz's informativeness preorder and Spivak's typed ports are the two closest tools. One orders morphisms by what can be computed from what. The other labels boundaries by what type crosses them. A fibration that unifies both — ordering morphisms by which contracts they preserve, labeled by the types they transform — would close the formalization gap.
+A search of Fritz's 83 arXiv papers, Spivak's operad program, and the categorical probability literature turned up no such structure. Fritz's informativeness preorder and Spivak's typed ports are the two closest tools. One orders morphisms by what can be computed from what. The other labels boundaries by what type crosses them. A fibration that unifies both — ordering morphisms by which contracts they preserve, labeled by the types they transform — would close the formalization gap.
 
 That is the operadic proof [Type Forcing](/type-forcing) said was not yet written: "stating the physical constraints as predicates on the algebra and showing the self-similar chain is the unique fixed point at every level." Spivak gives syntax. Fritz gives stochastic semantics. The missing mathematics is a compositional logic of contracts.
 
