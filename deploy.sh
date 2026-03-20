@@ -20,7 +20,9 @@ APPS=(pinyin-chart jamdojo)
 #
 # 3. S3 sync compares ETag AND metadata. Identical content with different
 #    content-type = "changed" file. Every .md re-uploads until the stored
-#    metadata matches. This is a one-time cost per flag change, not a bug.
+#    metadata matches. This was a one-time cost per flag change. Now both
+#    HTML and .md syncs use --size-only, so metadata-only diffs are ignored
+#    after the first deploy that set the content-type correctly.
 #
 # 4. .md uploads are metadata-only — exclude them from invalidation and
 #    change counts. Otherwise they trigger wildcard invalidation (>50 files)
@@ -41,6 +43,12 @@ APPS=(pinyin-chart jamdojo)
 #    into _site and running one global sync means every deploy re-uploads
 #    ~581 files even when the apps haven't changed. Fix: sync apps separately,
 #    gated on git diff.
+#
+# 9. --size-only means the dryrun misses files whose content changed but
+#    whose size didn't (or changed by <1 byte). The real sync uploads them
+#    but they never appear in the CHANGED list, so they're never invalidated.
+#    Fix: also pull invalidation paths from git diff on _posts/ AND assets/.
+#    A new SVG or an updated HTML that references it both need invalidation.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── deploy: build + sync ───────────────────────────────────────────────────
@@ -85,8 +93,8 @@ CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
-# Dryrun for md files (same flags as real sync to avoid false positives)
-CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete \
+# Dryrun for md files (--size-only added: metadata already correct from prior deploys)
+CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only \
   --exclude "*" --include "*.md" "${APP_EXCLUDES[@]}" \
   --content-type "text/plain; charset=utf-8" --no-guess-mime-type --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
@@ -96,7 +104,7 @@ CHANGED=$(printf '%s\n%s' "$CHANGED_HTML" "$CHANGED_MD" | sed '/^$/d' || true)
 
 echo "==> Syncing blog to S3"
 aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --exclude "*.md" "${APP_EXCLUDES[@]}"
-aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --exclude "*" --include "*.md" \
   "${APP_EXCLUDES[@]}" --content-type "text/plain; charset=utf-8" --no-guess-mime-type
 
 if [[ -z "$CHANGED" ]]; then
@@ -157,6 +165,12 @@ if [[ -n "$LAST_DEPLOYED" ]]; then
     [[ -z "$slug" ]] && continue
     PATHS+=("/$slug" "/$slug.html")
   done < <(git diff --name-only "$LAST_DEPLOYED" -- '_posts/' 2>/dev/null || true)
+
+  # Also invalidate changed assets (SVGs, images) — lesson #9
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    PATHS+=("/$f")
+  done < <(git diff --name-only "$LAST_DEPLOYED" -- 'assets/' 2>/dev/null || true)
 fi
 # Deduplicate
 PATHS=($(printf '%s\n' "${PATHS[@]}" | sort -u))

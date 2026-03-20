@@ -1,19 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 200" width="1760" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" font-family="system-ui, sans-serif">
   <style>
     .box { fill: #fff; stroke: #999; stroke-width: 1; rx: 4; }
+    .box-con { fill: #fff; stroke: #999; stroke-width: 1; rx: 4; stroke-dasharray: 0; }
     .name { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 13px; }
+    .name-con { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 13px; font-style: italic; }
     .itype { text-anchor: middle; font-size: 10px; fill: #1565c0; font-weight: 600; }
     .guar { text-anchor: middle; font-size: 9.5px; fill: #888; }
     .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
-    .fb { stroke: #999; stroke-width: 1; fill: none; marker-end: url(#b); stroke-dasharray: 4,3; }
-    .bk { stroke: #999; stroke-width: 1; fill: none; marker-end: url(#b); stroke-dasharray: 5,3; }
-    .bk-label { text-anchor: middle; font-size: 10px; fill: #999; font-style: italic; }
+    .policy-w { stroke: #1565c0; stroke-width: 1; fill: none; stroke-dasharray: 5,3; }
+    .policy-r { stroke: #1565c0; stroke-width: 0.8; fill: none; stroke-dasharray: 2,2; marker-end: url(#b); }
     .dot { fill: #1565c0; }
     .env { stroke: #888; stroke-width: 1; fill: none; marker-end: url(#c); }
   </style>
   <defs>
     <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
-    <marker id="b" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#999"/></marker>
+    <marker id="b" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4" fill="#1565c0"/></marker>
     <marker id="c" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#888"/></marker>
   </defs>
 
@@ -33,7 +34,7 @@
   <!-- Cache -->
   <rect class="box" x="172" y="54" width="120" height="40"/>
   <text class="name" x="232" y="74">Cache</text>
-  <text class="guar" x="232" y="108">retrievable</text>
+  <text class="guar" x="232" y="108">retrievable, atomic</text>
 
   <circle class="dot" cx="314" cy="74" r="3"/>
   <text class="itype" x="314" y="48">indexed</text>
@@ -45,7 +46,7 @@
   <text class="guar" x="389" y="108">strictly smaller</text>
 
   <circle class="dot" cx="471" cy="74" r="3"/>
-  <text class="itype" x="471" y="48">selected</text>
+  <text class="itype" x="471" y="48">gated</text>
   <line class="arr" x1="449" y1="74" x2="486" y2="74"/>
 
   <!-- Attend -->
@@ -62,12 +63,34 @@
   <text class="name" x="703" y="74">Remember</text>
   <text class="guar" x="703" y="108">persisted</text>
 
-  <!-- Consolidate backward pass -->
-  <path class="bk" d="M703,94 L703,138 L160,138"/>
-  <text class="bk-label" x="432" y="132">Consolidate (backward pass): persisted → policy′</text>
-  <text class="guar" x="432" y="152">reads from store async, writes to substrate</text>
+  <circle class="dot" cx="785" cy="74" r="3"/>
+  <text class="itype" x="785" y="48">persisted</text>
+  <line class="arr" x1="763" y1="74" x2="800" y2="74"/>
 
-  <!-- Feedback loop: Remember → Perceive -->
-  <path class="fb" d="M703,138 L703,178 L75,178 L75,94"/>
-  <text x="389" y="192" text-anchor="middle" font-size="10" fill="#999">trace</text>
+  <!-- Consolidate (sixth box, italic) -->
+  <rect class="box-con" x="800" y="54" width="120" height="40"/>
+  <text class="name-con" x="860" y="74">Consolidate</text>
+  <text class="guar" x="860" y="108" style="font-style:italic">policy</text>
+
+  <!-- Policy store -->
+  <rect x="250" y="148" width="380" height="18" rx="3" fill="#e8eaf6" stroke="#1565c0" stroke-width="0.8"/>
+  <text x="440" y="160" text-anchor="middle" font-size="10" fill="#1565c0" font-weight="500">policy store (S)</text>
+
+  <!-- Consolidate writes to policy store -->
+  <path class="policy-w" d="M860,94 L860,157 L630,157"/>
+
+  <!-- Policy store reads to P, F, A -->
+  <line class="policy-r" x1="320" y1="148" x2="75" y2="94"/>
+  <line class="policy-r" x1="370" y1="148" x2="389" y2="94"/>
+  <line class="policy-r" x1="430" y1="148" x2="546" y2="94"/>
+
+  <!-- Labels on reads -->
+  <text x="860" y="130" text-anchor="middle" font-size="9" fill="#1565c0" font-style="italic">writes</text>
+  <text x="75" y="128" text-anchor="middle" font-size="9" fill="#1565c0" font-style="italic">adapts</text>
+  <text x="389" y="128" text-anchor="middle" font-size="9" fill="#1565c0" font-style="italic">shifts</text>
+  <text x="546" y="128" text-anchor="middle" font-size="9" fill="#1565c0" font-style="italic">ranks</text>
+
+  <!-- State evolution label -->
+  <text x="440" y="195" text-anchor="middle" font-size="10" fill="#888" font-style="italic">state evolution (cross-cycle)</text>
+  <path d="M250,157 Q75,157 75,94" stroke="#1565c0" stroke-width="0.8" fill="none" stroke-dasharray="2,2"/>
 </svg>

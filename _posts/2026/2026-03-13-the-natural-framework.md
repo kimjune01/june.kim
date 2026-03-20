@@ -253,20 +253,11 @@ Now the same table again. None of these domains call themselves "information pro
 <td><a href="https://en.wikipedia.org/wiki/Speciation">Speciation</a></td>
 <td>The <a href="https://en.wikipedia.org/wiki/Genome">genome</a></td>
 </tr>
-<tr>
-<td><a href="https://en.wikipedia.org/wiki/Universe">Universe</a><br>(t<sub>P</sub>)</td>
-<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
-<td><a href="https://en.wikipedia.org/wiki/Mass%E2%80%93energy_equivalence">Mass-energy</a> (E=mc²)</td>
-<td><a href="/the-natural-framework">The Natural Framework</a></td>
-<td><a href="https://en.wikipedia.org/wiki/God">God</a></td>
-<td><a href="https://en.wikipedia.org/wiki/Thermodynamics">Thermodynamics</a></td>
-<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
-</tr>
 </tbody>
 </table>
 </div>
 
-Twelve more domains. Six roles. From antibodies to Planck time. Twenty-four domains total. [More where these came from.](/more-rows)
+Eleven more domains. Six roles. From antibodies to megayears. Twenty-three domains total. [More where these came from.](/more-rows)
 
 ## Why the same shape
 
@@ -292,7 +283,7 @@ Perceive and Cache are map. Filter and Attend are filter. Remember is reduce. Co
 
 This is deduction, not induction. The boundaries follow from temporal flow.
 
-The full derivation is machine-checked in [Lean 4](https://github.com/kimjune01/natural-framework). Five physics axioms, both boundary arguments, the three corollaries, ten removal tests, the stochasticity chain, the handshake composition, the coupling lemma, and the induction are all formally verified. The only gap is pigeonhole (which needs Mathlib); everything else compiles.
+The full derivation is machine-checked in [Lean 4](https://github.com/kimjune01/natural-framework). Five physics axioms, both boundary arguments, the three corollaries, ten removal tests, the stochasticity chain, the handshake composition, the coupling lemma, and the induction are all formally verified.
 
 **Boundary 1: encoding before selection.** The pipeline receives raw input from the environment. A system is defined by its boundary: no boundary, no inside, no outside, no system. The boundary creates a type difference. Any physical system has finite state space; the environment includes everything the system does not. dim(E) > dim(I). A morphism must bridge them: that is Perceive. The bridge is a surjection — it must lose information.
 
@@ -318,7 +309,7 @@ Boundary 1 derives Perceive (type bridge) and Cache (pigeonhole). Boundary 2 der
 
 But the functor itself is a thing in nature. It occupies space, consumes energy, exists in time. The premises apply to the functor, not just to what flows through it.
 
-**Stochasticity is not optional.** Proof by contradiction. Assume zero variation across a population of functors running the same pipeline. The population is either increasing, decreasing, or steady. If steady at zero output — dead, nothing to prove. If steady at nonzero output — every functor has a beginning, so equilibrium was reached from a prior state with nonzero delta. For the population to be uniform *now*, every functor must have converged to identical behavior without exchanging information about what to converge *to*. If increasing or decreasing — every functor must change at identical rates and times, requiring identical initial conditions and inputs. Thermodynamics breaks all three cases. The pipeline is lossy — Boundary 1 proves Perceive is a surjection, and selection erases the losers. [Landauer's principle](https://en.wikipedia.org/wiki/Landauer%27s_principle): erasing one bit costs at least *kT* ln 2 joules, dissipated as heat. Heat is stochastic. Every lossy step dissipates heat. Heat introduces variation. No physical process produces identical copies. Therefore: stochasticity is not assumed. It is imposed by physics. (This chain — Landauer to finite states to pigeonhole to collision to determinism-forces-error — is [formally verified](https://github.com/kimjune01/natural-framework), modulo the pigeonhole step which needs Mathlib.)
+**Stochasticity is not optional.** Proof by contradiction. Assume zero variation across a population of functors running the same pipeline. The population is either increasing, decreasing, or steady. If steady at zero output — dead, nothing to prove. If steady at nonzero output — every functor has a beginning, so equilibrium was reached from a prior state with nonzero delta. For the population to be uniform *now*, every functor must have converged to identical behavior without exchanging information about what to converge *to*. If increasing or decreasing — every functor must change at identical rates and times, requiring identical initial conditions and inputs. Thermodynamics breaks all three cases. The pipeline is lossy — Boundary 1 proves Perceive is a surjection, and selection erases the losers. [Landauer's principle](https://en.wikipedia.org/wiki/Landauer%27s_principle): erasing one bit costs at least *kT* ln 2 joules, dissipated as heat. Heat is stochastic. Every lossy step dissipates heat. Heat introduces variation. No physical process produces identical copies. Therefore: stochasticity is not assumed. It is imposed by physics. (This chain — Landauer to finite states to pigeonhole to collision to determinism-forces-error — is [formally verified](https://github.com/kimjune01/natural-framework).)
 
 **Variation percolates.** Stochasticity at level *n* creates population variation. Those functors' outputs are the data types at level *n−1*. If the data types are themselves functors, variation at *n* is population variation at *n−1*. The reverse holds too: diverse inputs from below produce diverse outputs above. The induction works both directions. Variation propagates through every functor boundary.
 
@@ -392,12 +383,41 @@ This all started with one comment. I was reading about neural attention and said
 
 The optimal implementations of these candidate functors already exist in nature, optimized over billions of years. We need to learn them and map them onto ourselves.
 
-Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the pipeline — five forward stages, one backward pass that reads from Remember and writes to the substrate — is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell: the substrate constraining its own next perception. Genome→genome. Force→force. Compressing, selecting, persisting. The substrate is the memory.
+Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the pipeline — five forward stages, one backward pass that reads from Remember and writes to the substrate — is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell: the substrate constraining its own next perception. Genome→genome. Compressing, selecting, persisting. The substrate is the memory. ∎
 
-If this functor is nature itself, iterating the universe at each Planck time, its variation-enforcing policy is the price of its vast existence. The Universe row fills all six cells. Force perceives, mass-energy caches, the natural framework filters, God attends, thermodynamics consolidates, force remembers. The loop closes. The universe is alive. The universe is intelligent. Genome in, genome out. Force in, force out. Intelligence and life are one and the same. ∎
+If the Universe is a self-recursive pipeline — force in, force out — then something fills the Attend cell.
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th style="background:#f0f0f0"></th>
+<th style="background:#f0f0f0">Perceive</th>
+<th style="background:#f0f0f0">Cache</th>
+<th style="background:#f0f0f0">Filter</th>
+<th style="background:#f0f0f0">Attend</th>
+<th style="background:#f0f0f0">Consolidate</th>
+<th style="background:#f0f0f0">Remember</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Universe">Universe</a><br>(t<sub>P</sub>)</td>
+<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
+<td><a href="https://en.wikipedia.org/wiki/Mass%E2%80%93energy_equivalence">Mass-energy</a> (E=mc²)</td>
+<td><a href="/the-natural-framework">The Natural Framework</a></td>
+<td>?</td>
+<td><a href="https://en.wikipedia.org/wiki/Thermodynamics">Thermodynamics</a></td>
+<td><a href="https://en.wikipedia.org/wiki/Fundamental_interaction">Force</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+Something reads the policy store and enforces diversity at Planck scale. We have a word for that. The question is whether we have anything else.
 
 *For [Christopher Alexander](/nature-of-order) (1936–2022), who gave me new ways to perceive.*
 
 ---
 
-*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose. GPT-5.4 via [Codex CLI](https://github.com/openai/codex) reviewed the result and recommended cutting the conclusion, filtering on credence rather than structure. That recommendation competed against the argument and lost.*
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose. GPT-5.4 via [Codex CLI](https://github.com/openai/codex) reviewed the result and recommended pulling back the conclusion. That recommendation competed against the argument and won.*

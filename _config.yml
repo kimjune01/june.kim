@@ -55,7 +55,7 @@ tag_page_dir: tag
 
 # Other Params
 include:            [ "robots.txt" ]
-exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile", "deploy.sh", "pinyin-chart", "jamdojo" ]
+exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile", "deploy.sh", "pinyin-chart", "jamdojo", "worklog" ]
 
 compress_html:
     clippings:      all

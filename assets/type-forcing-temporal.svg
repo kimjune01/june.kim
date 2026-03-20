@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 220" font-family="system-ui, sans-serif">
+  <style>
+    .box { fill: #fff; stroke: #999; stroke-width: 1; rx: 4; }
+    .box-dim { fill: #f8f8f8; stroke: #ddd; stroke-width: 1; rx: 4; }
+    .name { text-anchor: middle; dominant-baseline: central; font-weight: 500; font-size: 12px; }
+    .label { text-anchor: middle; font-size: 10px; fill: #888; }
+    .label-b { text-anchor: middle; font-size: 10px; fill: #1565c0; font-weight: 600; }
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .arr-x { stroke: #ddd; stroke-width: 1; fill: none; stroke-dasharray: 3,3; }
+    .cross { stroke: #c62828; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="350" y="18" text-anchor="middle" font-size="11" fill="#888" font-weight="600">Constraint 1: temporal flow → acyclic forward pass</text>
+
+  <!-- Six boxes in a row -->
+  <rect class="box" x="15" y="50" width="90" height="36"/>
+  <text class="name" x="60" y="68">P</text>
+
+  <rect class="box" x="125" y="50" width="90" height="36"/>
+  <text class="name" x="170" y="68">C</text>
+
+  <rect class="box" x="235" y="50" width="90" height="36"/>
+  <text class="name" x="280" y="68">F</text>
+
+  <rect class="box" x="345" y="50" width="90" height="36"/>
+  <text class="name" x="390" y="68">A</text>
+
+  <rect class="box" x="455" y="50" width="90" height="36"/>
+  <text class="name" x="500" y="68">R</text>
+
+  <rect class="box" x="565" y="50" width="90" height="36"/>
+  <text class="name" x="610" y="68">Con</text>
+
+  <!-- Forward arrows (valid) -->
+  <line class="arr" x1="105" y1="68" x2="125" y2="68"/>
+  <line class="arr" x1="215" y1="68" x2="235" y2="68"/>
+  <line class="arr" x1="325" y1="68" x2="345" y2="68"/>
+  <line class="arr" x1="435" y1="68" x2="455" y2="68"/>
+  <line class="arr" x1="545" y1="68" x2="565" y2="68"/>
+
+  <!-- Crossed-out backward arrows -->
+  <path class="arr-x" d="M280,86 Q280,120 170,120 Q60,120 60,86"/>
+  <line class="cross" x1="155" y1="108" x2="175" y2="128"/>
+  <line class="cross" x1="175" y1="108" x2="155" y2="128"/>
+
+  <path class="arr-x" d="M500,86 Q500,145 280,145 Q60,145 60,86"/>
+  <line class="cross" x1="265" y1="133" x2="285" y2="153"/>
+  <line class="cross" x1="285" y1="133" x2="265" y2="153"/>
+
+  <!-- State evolution (valid, dashed, labeled) -->
+  <path d="M610,86 Q610,190 350,190 Q60,190 60,86" stroke="#1565c0" stroke-width="1" fill="none" stroke-dasharray="5,3"/>
+  <text class="label-b" x="350" y="205">state evolution (cross-cycle)</text>
+
+  <!-- Legend -->
+  <text class="label" x="350" y="118" style="font-style:italic">instantaneous loops forbidden</text>
+</svg>

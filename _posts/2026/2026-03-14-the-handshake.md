@@ -26,7 +26,7 @@ Not all morphisms are equal. Each role carries a postcondition, a structural gua
 <colgroup><col style="width:6em"><col style="width:14em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">Role</th><th style="background:#f0f0f0">Type</th><th style="background:#f0f0f0">Guarantee</th></tr></thead>
 <tr><td>Perceive</td><td style="white-space:nowrap">raw → encoded</td><td>Parseable by next stage. Injects new bits.</td></tr>
-<tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key.</td></tr>
+<tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key. Atomic under concurrent read/write (Perceive writes while Filter reads).</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
 <tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
 <tr><td>Remember</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive. Also caches ranked output for Consolidate.</td></tr>
@@ -58,6 +58,8 @@ Four claims follow from the contracts:
 - Remember before Attend: persisting before ranking. No selection, no diversity.
 
 Consolidate is not in the forward chain. It reads from Remember and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof. The ordering is provably unique: `forward_ordering_unique` shows the type chain forces each position, and `consolidate_has_no_slot` shows Consolidate cannot occupy any forward position. The only configuration whose types compose is five canonical forward stages plus one backward pass.
+
+**Open problem: type forcing beyond linear pipelines.** The Lean proof covers linear composition. [Spivak's operad of wiring diagrams](https://arxiv.org/abs/1305.0297) gives the search space of all type-valid wirings for six boxes. If the six postcondition types are pairwise distinct and each box has arity 1, the only valid wiring in a [directed typed operad](https://arxiv.org/abs/1307.6894) is the chain. The feedback from Consolidate to Perceive is a delay node, not a regular wire. The six contracts are structurally distinct: Cache carries concurrency invariants that Filter's output doesn't; Filter is stateless where Attend reads policy; Remember is durable where Attend is transient; Consolidate emits control where Remember emits data. Every observed collapse to passthrough (δ=0) dims the downstream cells. No counterexample exists in the [twenty-four domains](/the-natural-framework). The operadic proof is not yet written.
 
 ### Data processing inequality
 
