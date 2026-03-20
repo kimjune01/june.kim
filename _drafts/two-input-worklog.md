@@ -334,3 +334,107 @@ Fed codex the original pipeline's implementation (from `kimjune01/gemini-cli:fea
 53 tests passing after absorption. The original pipeline's strength (defensive error handling, edge case coverage) continues to complement the synthesis's strength (architecture, persistence, config).
 
 **Final state:** The synthesized implementation has now absorbed improvements from all three sources: codex's architecture, Claude subagent's defensive patterns, and the original pipeline's error handling. Three passes of cross-pollination.
+
+---
+
+## Step 13: Blog post — "Blind, Blind, Merge"
+
+Published at [june.kim/blind-blind-merge](https://june.kim/blind-blind-merge). Tagged `methodology coding`.
+
+Key claims:
+- The authority rule ("no regressions, UX improvement") displaced 15 design decisions with one sentence
+- Different models fail on different sides of the same boundary (structural diversity > stochastic diversity)
+- The synthesis (pushout) ranked closest to production; neither blind implementation shipped alone
+- Prior art: AlphaCode, self-consistency, branch-solve-merge all use stochastic diversity. This uses structural diversity.
+- Parts bin connection: Attend operation with explicit redundancy control, like a portfolio solver with different models instead of different seeds
+
+Evidence repos published:
+- [Synthesis](https://github.com/kimjune01/gemini-cli/tree/feat/union-find-compaction-v2) (commit `04d6451d9`)
+- [Codex blind](https://github.com/kimjune01/gemini-cli-codex)
+- [Claude blind](https://github.com/kimjune01/gemini-cli-claude)
+
+---
+
+## Step 14: Deploy script fix
+
+`_site/` was tracked in git. Every post change rebuilt every HTML file (nav links), triggering 800+ file uploads to S3 on every deploy. Fixed:
+- Added `_site/` to `.gitignore`, removed from git tracking
+- Replaced git-diff-based deploy with `aws s3 sync --size-only`
+- Removed `_site/` commit step from deploy script
+- Deploys now take seconds and upload only size-changed files
+
+---
+
+## Step 15: Preregistration v3
+
+Published [PREREGISTRATION-V3.md](https://github.com/kimjune01/union-find-compaction-for-gemini-cli/blob/master/PREREGISTRATION-V3.md). Documents that the implementation is the blind-blind-merge synthesis (not the single-Claude build v2 preregistered). Pins to commit `04d6451d9`. Hypotheses unchanged from v2.
+
+---
+
+## Step 16: Experiment run (v3)
+
+Fixed measurement bug: harness was not calling `resolveDirty()` before scoring recall. Union-find had 0 LLM calls in the first run — was testing unsummarized raw content. Fixed per prereg protocol: "append all messages, then call `render()` + `resolveDirty()` at end of conversation."
+
+**Results (with resolveDirty):**
+
+| Hypothesis | Verdict | Detail |
+|---|---|---|
+| H1 Recall | FAIL | 25.0% → 32.3% (+7.3pp), McNemar p=not significant |
+| H2 Latency | PASS | p95 = 0.3ms (target <100ms) |
+| H3 Cost | PASS | 0.79x flat (union-find *cheaper*) |
+
+**H1 detail:**
+- McNemar's: both correct 19, flat only 5, union only 12, neither 60
+- Effect size +7.3pp but underpowered at n=96 (prereg acknowledged ~200 needed)
+- 7 of 12 conversations favored union-find, 3 favored flat, 2 tied
+
+**H3 detail:**
+- Flat: 24 calls, ~144k tokens total
+- Union-find: ~32 calls, ~114k tokens total
+- Ratio: 0.79x — union-find uses fewer tokens despite more calls (smaller per-cluster summaries vs full-history summarization)
+
+**H2 detail:**
+- Append p95: 0.3ms (three orders of magnitude under target)
+- All append and render operations synchronous, no LLM calls on blocking path
+
+**Per tuning policy:** H1 missed. 2 parameter changes allowed (merge threshold, retrieval k). Effect size is promising but test is underpowered. Decision pending.
+
+**Elapsed:** 6.2 minutes, 452 API calls, 734,779 tokens.
+
+---
+
+## Step 17: Tuning H1
+
+Per prereg tuning policy: max 2 parameter changes for H1.
+
+**Tuning change 1: merge threshold 0.15 → 0.10** (less aggressive merging)
+
+Hypothesis: too-aggressive merging loses detail. More clusters → more granular summaries → better recall.
+
+Result: flat 27.1%, union 27.1% (+0.0pp). **Worse than baseline.** Less merging scattered information across too many small clusters. Each cluster summary was too thin to answer questions.
+
+**Tuning change 2: merge threshold 0.15 → 0.20** (more aggressive merging)
+
+Hypothesis: more merging → fewer, larger clusters → richer summaries → better recall.
+
+Result: flat 28.1%, union 29.2% (+1.0pp). **Worse than baseline.** More merging compressed too much — lost the detail the summaries needed.
+
+**Tuning summary:**
+
+| Threshold | Flat | Union-find | Diff |
+|---|---|---|---|
+| 0.15 (baseline) | 25.0% | 32.3% | +7.3pp |
+| 0.10 (change 1) | 27.1% | 27.1% | +0.0pp |
+| 0.20 (change 2) | 28.1% | 29.2% | +1.0pp |
+
+The baseline (0.15) was the best configuration. Both tuning changes made recall worse. Per prereg tuning policy: tuning budget exhausted, accept result.
+
+**Final verdict (v3):**
+- H1 Recall: FAIL (+7.3pp, not significant, underpowered at n=96)
+- H2 Latency: PASS (p95 = 0.3ms)
+- H3 Cost: PASS (0.79x flat)
+- Claim strength: "Not supported" for H1. Per prereg decision rules: "H1 ❌ H2a ✅ H3 ✅ → Better append UX, comparable cost. Document; note H1 power limitation."
+
+**Observation:** Union-find recall was higher in 7 of 12 conversations, tied in 2, lower in 3. The effect is consistent in direction but the test lacks power. The prereg acknowledged this: "96 question-answer pairs likely underpowered for 5pp effect size (~200 needed for 80% power)."
+
+**Revert merge threshold to 0.15.** That's the configuration that ships.
