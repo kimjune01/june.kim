@@ -5,6 +5,7 @@ BUCKET="www.june.kim"
 DOMAIN_WWW="june.kim"
 SITE_DIR="_site"
 CF_DIST_ID="E1G9R7V0YY4VV1"
+APPS=(pinyin-chart jamdojo)
 
 # ─── lessons learned ──────────────────────────────────────────────────────────
 # Static site deploy sounds simple. It isn't. Each lesson cost a deploy cycle.
@@ -30,6 +31,11 @@ CF_DIST_ID="E1G9R7V0YY4VV1"
 # 6. Jekyll incremental builds (incremental: true) are unreliable and
 #    disabled. Every build regenerates all HTML. Most pages don't change
 #    content, so ETag comparison handles it. Don't re-enable incremental.
+#
+# 7. Astro apps (jamdojo, pinyin-chart) content-hash filenames. Copying them
+#    into _site and running one global sync means every deploy re-uploads
+#    ~581 files even when the apps haven't changed. Fix: sync apps separately,
+#    gated on git diff.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── deploy: build + sync ───────────────────────────────────────────────────
@@ -53,54 +59,40 @@ bundle install
 echo "==> Building site"
 JEKYLL_ENV=production bundle exec jekyll build
 
-# Copy static app builds into _site (excluded from Jekyll to preserve _astro dirs)
-for app in pinyin-chart jamdojo; do
-  if [[ -d "$app" ]]; then
-    cp -r "$app" "$SITE_DIR/$app"
-    echo "==> Copied $app into $SITE_DIR"
-  fi
-done
-
 echo "==> Creating .html aliases for directory index pages"
 find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
   dir="$(dirname "$f")"
   cp "$f" "$dir.html"
 done
 
-# ─── sync ────────────────────────────────────────────────────────────────────
-# No --size-only: jekyll rebuild changes timestamps on every file, but s3 sync
-# default compares ETag (MD5) so only content-changed files actually upload.
-# Dryrun first to collect what will change, then real sync.
-#
-# WHY DOES IT UPLOAD SO MANY FILES?
-# Two separate issues:
-# 1. Jekyll: incremental: false in _config.yml (incremental is unreliable).
-#    Jekyll rebuilds every HTML, but most pages have static content so their
-#    ETag doesn't change. S3 sync skips them. Only ~10-15 HTML files actually
-#    re-upload per deploy (index, feed, tag pages, sitemap, new post).
-# 2. Markdown: the second sync forces --content-type "text/plain; charset=utf-8".
-#    S3 sync compares metadata too, not just ETag. If the stored content-type
-#    doesn't match, every .md re-uploads even with identical content.
-#    Fix: dryrun must use the same flags as the real sync (see below).
+# ─── blog sync (excludes app dirs) ──────────────────────────────────────────
+
+# Build exclude flags for apps
+APP_EXCLUDES=()
+for app in "${APPS[@]}"; do
+  APP_EXCLUDES+=(--exclude "$app/*")
+done
 
 echo "==> Checking what changed (ETag compare)"
-# Dryrun for non-md files (HTML, CSS, JS, images)
-CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --dryrun 2>&1 \
+# Dryrun for non-md, non-app files
+CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete \
+  --exclude "*.md" "${APP_EXCLUDES[@]}" --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
 # Dryrun for md files (same flags as real sync to avoid false positives)
-CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
+CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete \
+  --exclude "*" --include "*.md" "${APP_EXCLUDES[@]}" \
   --content-type "text/plain; charset=utf-8" --no-guess-mime-type --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
 CHANGED=$(printf '%s\n%s' "$CHANGED_HTML" "$CHANGED_MD" | sed '/^$/d' || true)
 
-echo "==> Syncing to S3"
-aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md"
+echo "==> Syncing blog to S3"
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" "${APP_EXCLUDES[@]}"
 aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
-  --content-type "text/plain; charset=utf-8" --no-guess-mime-type
+  "${APP_EXCLUDES[@]}" --content-type "text/plain; charset=utf-8" --no-guess-mime-type
 
 if [[ -z "$CHANGED" ]]; then
   NCHANGED=0
@@ -117,6 +109,25 @@ fi
 # Always upload feed.xml (gitignored but needed on S3)
 aws s3 cp "$SITE_DIR/feed.xml" "s3://$BUCKET/feed.xml" --quiet
 echo "    feed.xml synced"
+
+# ─── app sync (only if changed) ────────────────────────────────────────────
+# Apps use content-hashed filenames (Astro). Syncing them every deploy uploads
+# hundreds of files. Only sync when git shows changes in the app dir.
+
+LAST_DEPLOYED=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+
+for app in "${APPS[@]}"; do
+  if [[ ! -d "$app" ]]; then
+    continue
+  fi
+  if [[ -n "$LAST_DEPLOYED" ]] && git diff --quiet "$LAST_DEPLOYED" -- "$app/"; then
+    echo "==> $app unchanged, skipping sync"
+  else
+    echo "==> Syncing $app to S3"
+    aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete
+    echo "    $app synced"
+  fi
+done
 
 # ─── CloudFront invalidation ────────────────────────────────────────────────
 # Only invalidate non-.md files. Markdown uploads are metadata fixes (content-type),
