@@ -10,8 +10,9 @@ APPS=(pinyin-chart jamdojo)
 # ─── lessons learned ──────────────────────────────────────────────────────────
 # Static site deploy sounds simple. It isn't. Each lesson cost a deploy cycle.
 #
-# 1. --size-only lies. Jekyll rebuilds every file with new timestamps but
-#    identical content. ETag (MD5) comparison is the only reliable diff.
+# 1. S3 sync compares size + last-modified time by default, NOT ETag.
+#    Jekyll rebuilds every file with new timestamps, so every file looks
+#    newer. Use --size-only for HTML: identical content = identical size.
 #
 # 2. Dryrun flags must match real sync flags exactly. The .md sync forces
 #    --content-type, which makes S3 compare metadata too. A dryrun without
@@ -79,7 +80,7 @@ done
 
 echo "==> Checking what changed (ETag compare)"
 # Dryrun for non-md, non-app files
-CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete \
+CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only \
   --exclude "*.md" "${APP_EXCLUDES[@]}" --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
@@ -94,7 +95,7 @@ CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete \
 CHANGED=$(printf '%s\n%s' "$CHANGED_HTML" "$CHANGED_MD" | sed '/^$/d' || true)
 
 echo "==> Syncing blog to S3"
-aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" "${APP_EXCLUDES[@]}"
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --exclude "*.md" "${APP_EXCLUDES[@]}"
 aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
   "${APP_EXCLUDES[@]}" --content-type "text/plain; charset=utf-8" --no-guess-mime-type
 
