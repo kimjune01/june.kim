@@ -79,7 +79,7 @@ The predictions are binary and timestamped. The diagnosis involves judgment (LLM
 
 ### Where we agree, we're more confident
 
-This borrows from the [blind-blind-merge](/blind-blind-merge) principle, loosely. True blind-blind requires neither side sees the other's work. That's impossible with public analysts — Shkreli can read this blog, and we selected targets from his positions. What we do have: independent *reasoning* on overlapping data. He diagnoses the forward pass (molecule), we diagnose the backward pass (company). When both point the same direction from different lenses, the convergence means something, even without true blindness.
+The [blind-blind-merge](/blind-blind-merge) operates at two levels here. The two merge instances that produce each diagnosis are truly blind to each other and to Shkreli — they see search agent outputs, not analyst positions. That's real blindness. The comparison to Shkreli is weaker: he's a public benchmark, not a merge partner. He can read this blog, and we selected targets from his positions. But the framework's direction is determined before we check his call, so the convergence — when it happens — comes from independent reasoning on overlapping data through different lenses: he diagnoses the molecule, we diagnose the company.
 
 | Company | Framework | Shkreli | Agreement? | Confidence |
 |---------|-----------|---------|------------|------------|
