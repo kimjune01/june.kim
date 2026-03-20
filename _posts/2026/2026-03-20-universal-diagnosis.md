@@ -75,6 +75,18 @@ An analyst looks at a drug. The framework looks at the company's learning loop.
 
 The predictions are binary, timestamped, and mechanically scored. The reasoning is structural — which stack is broken, which pipe changed status, whether the same failure class recurred. No judgment calls in the scoring.
 
+### Where we agree, we're more confident
+
+This is the [blind-blind-merge](/blind-blind-merge) principle. When two independent systems — one diagnosing the forward pass (Shkreli), one diagnosing the backward pass (the framework) — arrive at the same direction from different reasoning, the convergence is stronger signal than either alone.
+
+| Company | Framework | Shkreli | Agreement? | Confidence |
+|---------|-----------|---------|------------|------------|
+| SPRB | PASS | Bull | Yes | Higher — both say the molecule carries the company |
+| ATYR | PASS | Bear | **No** | Framework's edge case — we disagree on mechanism |
+| INMB | FAIL | Bear | Yes | **Highest** — independent convergence from different analyses |
+
+INMB is our strongest call. The framework says "pattern recurrence, timeline slip." Shkreli says "worthless company." Different reasoning, same direction. ATYR is where we diverge — and that's where the framework is most tested.
+
 The scorecard updates when catalysts resolve. ATYR and INMB by September 30, 2026. SPRB by December 31, 2026.
 
 ## Method
