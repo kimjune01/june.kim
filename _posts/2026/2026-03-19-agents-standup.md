@@ -91,7 +91,7 @@ Agent teams take the same structure. Before each cycle, compose the entourage: s
 
 ## Cycle one
 
-You're rebuilding [pets.com](https://www.youtube.com/watch?v=nXHrlm5Nk5w). Pet listings, search, user accounts, image uploads. The sock puppet would be proud.
+You're rebuilding [pets.com](https://www.youtube.com/watch?v=nXHrlm5Nk5w). Pet listings, search, user accounts, image uploads. The sock puppet approves.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:8em"><col style="width:5em"><col><col></colgroup>
