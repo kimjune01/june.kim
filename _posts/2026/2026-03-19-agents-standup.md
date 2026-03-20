@@ -2,7 +2,7 @@
 layout: post-wide
 title: "Agents' Standup"
 image: "/assets/the-learning-agent.jpg"
-tags: cognition methodology coding
+tags: coding cognition methodology
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [Consolidation](/consolidation), [Work Log](/work-log), [Blind, Blind, Merge](/blind-blind-merge), and [The Parts Bin](/the-parts-bin).*
