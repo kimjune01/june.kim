@@ -30,7 +30,7 @@ We diagnosed five companies from Shkreli's public positions. Two retrospective (
 
 The temporal graph tells a different story. Four iterations: ALLSTAR (MI, failed) → HOPE-1 (DMD, pivoted) → HOPE-2 (IV, signal) → HOPE-3 (Phase 3, confirmed). The company changed the indication, the delivery route, the dose, and the endpoints across four trials. The consolidate stack was functional. ALLSTAR's failure class (wrong indication) didn't recur.
 
-Framework: **dying_pivoted, PASS.** Shkreli diagnosed a snapshot. The framework diagnosed a trajectory.
+Framework: **dying_pivoted, PASS.** Shkreli diagnosed a snapshot. The framework diagnosed a trajectory. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/CAPR))
 
 Result: HOPE-3 positive (PUL v2.0 p=0.029, LVEF p=0.041). Stock +440%. Shkreli admitted "bad call." **Framework correct.**
 
@@ -40,7 +40,7 @@ AMT-130 topline was positive (cUHDRS 75% slowing, p=0.003). The drug works. But 
 
 The temporal graph shows why: FDA published guidance in October 2022 explicitly discouraging external controls for neurodegenerative gene therapies. uniQure built their entire BLA strategy on external controls anyway. When the FDA enforced its own published rules, management fought back instead of pivoting. The read_outcomes pipe was broken — the company couldn't read regulatory signals it didn't want to hear.
 
-Framework: **dying_dying.** Shkreli got out before the break, but for unrelated reasons. **Framework would have caught the trajectory.**
+Framework: **dying_dying.** Shkreli got out before the break, but for unrelated reasons. **Framework would have caught the trajectory.** ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/QURE))
 
 ### Run 1: Prospective (real predictions)
 
@@ -50,19 +50,19 @@ These are live. Outcome unknown. Published March 20, 2026.
 
 The molecule is mature (7 years, 22 patients, BTD). The company is new — acquired it from bankrupt Allievex after its own lead program failed. Consolidate stack is fragile (going concern, $48.9M cash) but functional (reading FDA feedback, hiring commercial leadership).
 
-Framework: **dying_pivoted, PASS.** Shkreli: bull. We agree on direction, disagree on reasoning. He says "drug will be approved" (forward pass). We say "company is executing despite stress" (consolidate stack). The risk: PPQ batch slip → cash crisis. The molecule has outlived two prior companies.
+Framework: **dying_pivoted, PASS.** Shkreli: bull. We agree on direction, disagree on reasoning. He says "drug will be approved" (forward pass). We say "company is executing despite stress" (consolidate stack). The risk: PPQ batch slip → cash crisis. The molecule has outlived two prior companies. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/SPRB), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/SPRB.md))
 
 **ATYR (aTyr Pharma)** — New sarcoidosis trial announced by September 30, 2026.
 
 EFZO-FIT Phase 3 missed primary (steroid dose, p=0.33) but hit secondaries (KSQ-Lung p=0.048). The drug works on quality-of-life endpoints. The trial measured the wrong thing. FDA Type C meeting mid-April 2026.
 
-Framework: **dying_pivoted, PASS.** Shkreli: bear ("really bad drug"). He's wrong on mechanism — the drug works, the endpoint was wrong. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response.
+Framework: **dying_pivoted, PASS.** Shkreli: bear ("really bad drug"). He's wrong on mechanism — the drug works, the endpoint was wrong. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/ATYR), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/ATYR.md))
 
 **INMB (INmune Bio)** — CORDStrom MAA to UK MHRA by September 30, 2026.
 
 Both programs missed primaries (CORDStrom EBDASI p=0.15 favoured placebo; XPro1595 Phase 2 ITT miss). Both pivoting to secondaries. BLA already slipped 12 months. Going concern. CEO transition mid-crisis.
 
-Framework: **dying_pivoted, FAIL.** Shkreli: bear. We agree on direction but for different reasons. He says the company is worthless. We say the consolidate stack rewrites narratives faster than it ships filings. The temporal pattern — primary miss → secondary salvage → timeline slip — predicts another delay. Both merge instances agreed unanimously.
+Framework: **dying_pivoted, FAIL.** Shkreli: bear. We agree on direction but for different reasons. He says the company is worthless. We say the consolidate stack rewrites narratives faster than it ships filings. The temporal pattern — primary miss → secondary salvage → timeline slip — predicts another delay. Both merge instances agreed unanimously. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/INMB), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/INMB.md))
 
 ## What the framework adds
 
