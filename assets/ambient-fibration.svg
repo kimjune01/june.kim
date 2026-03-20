@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 300" font-family="system-ui, sans-serif">
+  <style>
+    .base-box { rx: 5; fill: #fafafa; stroke: #999; stroke-width: 1.5; }
+    .fiber { rx: 5; stroke-width: 1.5; }
+    .fiber-line { stroke-width: 1; stroke-dasharray: 4,4; }
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .lift-arr { stroke-width: 1.3; fill: none; marker-end: url(#b); stroke-dasharray: 6,4; }
+    .label { font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .contract { font-size: 13px; font-style: italic; text-anchor: middle; font-weight: 500; }
+    .zone { font-size: 10px; fill: #999; font-weight: 500; }
+    .handshake { font-size: 9px; fill: #e65100; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+    <marker id="b" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#e65100"/></marker>
+  </defs>
+
+  <!-- Zone labels -->
+  <text class="zone" x="24" y="56">fibers</text>
+  <text class="zone" x="24" y="69">(function)</text>
+  <text class="zone" x="24" y="210">base</text>
+  <text class="zone" x="24" y="223">(structure)</text>
+
+  <!-- Divider -->
+  <line x1="70" y1="130" x2="840" y2="130" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- === Base morphisms === -->
+  <rect class="base-box" x="100" y="180" width="140" height="50"/>
+  <text class="label" x="170" y="210" fill="#666">Filter</text>
+
+  <line class="arr" x1="240" y1="205" x2="290" y2="205"/>
+
+  <rect class="base-box" x="290" y="180" width="140" height="50"/>
+  <text class="label" x="360" y="210" fill="#666">Attend</text>
+
+  <line class="arr" x1="430" y1="205" x2="480" y2="205"/>
+
+  <rect class="base-box" x="480" y="180" width="140" height="50"/>
+  <text class="label" x="550" y="210" fill="#666">Remember</text>
+
+  <line class="arr" x1="620" y1="205" x2="670" y2="205"/>
+
+  <rect class="base-box" x="670" y="180" width="150" height="50"/>
+  <text class="label" x="745" y="210" fill="#666">Consolidate</text>
+
+  <!-- === Fiber boxes (matched width to base) === -->
+  <rect class="fiber" x="120" y="36" width="100" height="42" fill="#e3f2fd" stroke="#1565c0"/>
+  <text class="contract" x="170" y="63" fill="#1565c0">gated</text>
+
+  <rect class="fiber" x="310" y="36" width="100" height="42" fill="#fff3e0" stroke="#e65100"/>
+  <text class="contract" x="360" y="63" fill="#e65100">ranked</text>
+
+  <rect class="fiber" x="500" y="36" width="100" height="42" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text class="contract" x="550" y="63" fill="#2e7d32">persisted</text>
+
+  <rect class="fiber" x="695" y="36" width="100" height="42" fill="#f3e5f5" stroke="#6a1b9a"/>
+  <text class="contract" x="745" y="63" fill="#6a1b9a">policy</text>
+
+  <!-- Fiber lines (projection) -->
+  <line class="fiber-line" x1="170" y1="78" x2="170" y2="180" stroke="#1565c0"/>
+  <line class="fiber-line" x1="360" y1="78" x2="360" y2="180" stroke="#e65100"/>
+  <line class="fiber-line" x1="550" y1="78" x2="550" y2="180" stroke="#2e7d32"/>
+  <line class="fiber-line" x1="745" y1="78" x2="745" y2="180" stroke="#6a1b9a"/>
+
+  <!-- Lifting arrows (the handshake) -->
+  <line class="lift-arr" x1="220" y1="57" x2="310" y2="57" stroke="#e65100"/>
+  <line class="lift-arr" x1="410" y1="57" x2="500" y2="57" stroke="#e65100"/>
+  <line class="lift-arr" x1="600" y1="57" x2="695" y2="57" stroke="#e65100"/>
+
+  <!-- Handshake labels on each arrow -->
+  <text class="handshake" x="265" y="48">post = pre</text>
+  <text class="handshake" x="455" y="48">post = pre</text>
+  <text class="handshake" x="648" y="48">post = pre</text>
+
+  <!-- Bottom annotation -->
+  <text x="450" y="272" text-anchor="middle" font-size="11" fill="#555">composite lifts iff adjacent contracts match</text>
+</svg>
