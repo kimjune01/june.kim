@@ -81,10 +81,11 @@ if [[ -z "$CHANGED" ]]; then
 else
   NCHANGED=$(echo "$CHANGED" | wc -l | tr -d ' ')
 fi
-echo "    $NCHANGED files synced"
+NCHANGED_CONTENT=$(echo "$CHANGED" | grep -v '\.md$' | grep -c . || true)
+echo "    $NCHANGED files synced ($NCHANGED_CONTENT content, $((NCHANGED - NCHANGED_CONTENT)) metadata-only .md)"
 
-if [[ "$NCHANGED" -eq 0 ]]; then
-  echo "Nothing changed on S3."
+if [[ "$NCHANGED_CONTENT" -eq 0 ]]; then
+  echo "No content changes on S3."
 fi
 
 # Always upload feed.xml (gitignored but needed on S3)
@@ -92,11 +93,14 @@ aws s3 cp "$SITE_DIR/feed.xml" "s3://$BUCKET/feed.xml" --quiet
 echo "    feed.xml synced"
 
 # ─── CloudFront invalidation ────────────────────────────────────────────────
+# Only invalidate non-.md files. Markdown uploads are metadata fixes (content-type),
+# not content changes — they don't need cache busting or PageLeft indexing.
 
 echo "==> Invalidating CloudFront cache"
 PATHS=()
 while IFS= read -r p; do
   [[ -z "$p" ]] && continue
+  [[ "$p" == *.md ]] && continue
   PATHS+=("${p// /%20}")
 done <<< "$CHANGED"
 
