@@ -6,7 +6,7 @@ tags: cognition methodology
 
 *Part of the [cognition](/cognition) series. Pre-registration, data, and code: [github.com/kimjune01/universal-diagnosis](https://github.com/kimjune01/universal-diagnosis)*
 
-Three predictions. Three biotech companies. One framework. Head-to-head with Martin Shkreli.
+Three predictions. Three biotech companies. One framework. Head-to-head with [Martin Shkreli](https://en.wikipedia.org/wiki/Martin_Shkreli).
 
 ---
 
@@ -38,7 +38,7 @@ Result: HOPE-3 positive (PUL v2.0 p=0.029, LVEF p=0.041). Stock +440%. Shkreli a
 
 AMT-130 topline was positive (cUHDRS 75% slowing, p=0.003). The drug works. But the FDA reversed its prior agreement on external controls — first privately (November 2025), then publicly, calling the data "distorted" and "manipulated" (March 2026). Stock -84%.
 
-The temporal graph shows why: FDA published guidance in October 2022 explicitly discouraging external controls for neurodegenerative gene therapies. uniQure built their entire BLA strategy on external controls anyway. When the FDA enforced its own published rules, management fought back instead of pivoting. The read_outcomes pipe was broken — the company couldn't read regulatory signals it didn't want to hear.
+The temporal graph shows why: FDA published [guidance in October 2022](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/human-gene-therapy-neurodegenerative-diseases) explicitly discouraging external controls for neurodegenerative gene therapies. uniQure built their entire BLA strategy on external controls anyway. When the FDA enforced its own published rules, management fought back instead of pivoting. The read_outcomes pipe was broken — the company couldn't read regulatory signals it didn't want to hear.
 
 Framework: **dying_dying.** Shkreli got out before the break, but for unrelated reasons. **Framework would have caught the trajectory.** ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/QURE))
 
@@ -93,7 +93,7 @@ The scorecard updates when catalysts resolve. ATYR and INMB by September 30, 202
 
 ## Method
 
-Each diagnosis: four parallel search agents (two forward pass, two backward pass), different data sources, semi-blind. Top two selected, merged independently by two instances of GPT-5.4 into SOAP notes. If merges disagree, first merge is primary. Human reviews but doesn't synthesize. [Full protocol](https://github.com/kimjune01/universal-diagnosis/blob/master/prereg.md).
+Each diagnosis: four parallel search agents (two forward pass, two backward pass), different data sources, semi-blind. Top two selected, merged independently by two instances of GPT-5.4 into [SOAP notes](https://en.wikipedia.org/wiki/SOAP_note). If merges disagree, first merge is primary. Human reviews but doesn't synthesize. [Full protocol](https://github.com/kimjune01/universal-diagnosis/blob/master/prereg.md).
 
 The temporal graph is modeled as a sequence-based dynamic graph ([Peters et al., 2019](https://link.springer.com/article/10.1007/s00224-018-9876-z)). Each event is a public record with an archival date. The graph grows one event at a time. No pre-defined eras — the evidence builds the timeline.
 
@@ -124,7 +124,7 @@ This is a hypothesis, not a finding. The backtest requires historical options da
 
 ## Future signal: insider transactions
 
-SEC Form 4 filings are dated public records. When insiders buy or sell before an 8-K, the read_outcomes pipe is functioning *privately* even if the public framing is spin. The divergence between insider behavior and management's public narrative is itself a diagnostic signal — it tells you whether the company knows more than it says.
+[SEC Form 4](https://en.wikipedia.org/wiki/Form_4) filings are dated public records. When insiders buy or sell before an 8-K, the read_outcomes pipe is functioning *privately* even if the public framing is spin. The divergence between insider behavior and management's public narrative is itself a diagnostic signal — it tells you whether the company knows more than it says.
 
 We didn't incorporate insider transaction events in this pilot. But the temporal graph can absorb them: each Form 4 is an event with an archival date, a pipe (read_outcomes), and an implicit status (insider selling before bad news = read_outcomes functional internally, broken externally). Adding this signal to future rounds would strengthen the read_outcomes diagnosis without requiring any change to the framework.
 
