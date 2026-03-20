@@ -24,11 +24,11 @@ Second and third runs: [GPT-5.4 (Codex)](https://github.com/openai/codex) and Cl
 
 > No regressions, UX improvement. Existing behavior is correct unless the spec explicitly changes it. Code wins on invariants. Spec wins on the blocking path.
 
-That's the authority rule. It displaced fifteen design decisions with one sentence.
+That's the ambiguity heuristic. It displaced fifteen design decisions with one sentence.
 
 ## Fifteen decisions, one sentence
 
-Before the authority rule, Codex wanted those decisions resolved upfront. Hot zone size. Model routing. Merge threshold. Timestamp format. Persistence strategy. Failure backoff. Hook contracts. Content serialization.
+Before the ambiguity heuristic, Codex wanted those decisions resolved upfront. Hot zone size. Model routing. Merge threshold. Timestamp format. Persistence strategy. Failure backoff. Hook contracts. Content serialization.
 
 When pushed to be pragmatic -- "which of these do you actually need from me?" -- every one collapsed. Existing behavior is correct, so no regressions. New behavior must improve UX, so spec wins on the blocking path. Everything else: read the code, follow the rule.
 
@@ -50,7 +50,7 @@ Different models fail on different sides of the same boundary. Neither was shipp
 ## The Method: Blind, Blind, Merge
 
 <div style="max-width:1080px; margin:1em auto;">
-<img src="/assets/img/authority-rule-workflow.svg" alt="Authority rule workflow: three inputs plus authority rule feed two blind coding agents, cross-review finds contradictions, synthesis absorbs best of both, fresh judge ranks the result" style="width:100%;"/>
+<img src="/assets/img/authority-rule-workflow.svg" alt="Blind blind merge workflow: three inputs plus ambiguity heuristic feed two blind coding agents, cross-review finds contradictions, synthesis absorbs best of both, fresh judge ranks the result" style="width:100%;"/>
 </div>
 
 The fourth implementation is the [pushout](https://en.wikipedia.org/wiki/Pushout_(category_theory)): Codex's architecture merged with Claude's defensive patterns along their shared inputs. A fresh reviewer (blind to the history) ranked the four versions:
@@ -79,7 +79,7 @@ More LLM work. Far less human work. You're paying for the subscriptions anyway.
 
 ## The last mile
 
-The bug class didn't change across any implementation: serialization loss, concurrency guards, lifecycle management. Every implementation hit bugs at boundaries the spec didn't define. The authority rule shrank the surface area. The synthesis loop caught more instances. But the failure mode is structural: prose can't carry type contracts, and no amount of process eliminates that boundary.
+The bug class didn't change across any implementation: serialization loss, concurrency guards, lifecycle management. Every implementation hit bugs at boundaries the spec didn't define. The ambiguity heuristic shrank the surface area. The synthesis loop caught more instances. But the failure mode is structural: prose can't carry type contracts, and no amount of process eliminates that boundary.
 
 The contradiction-finding pass was valuable for forcing deep reading before writing code. Every risk it catalogued, it later hit. It knew where to look.
 
@@ -91,7 +91,7 @@ The prose spec carries the *why*. [Theory is load-bearing](/theory-is-load-beari
 
 The prototype encodes decisions the prose left abstract: merge thresholds, similarity functions, lifecycle details. This could be a standalone implementation or an [experiment](https://github.com/kimjune01/union-find-compaction/blob/master/EXPERIMENT.md). Ours was ~300 lines of Python.
 
-The authority rule collapses ambiguity. One sentence that says what wins when the inputs conflict. Leave it out and the LLM asks you to resolve every decision upfront. Or worse, guesses.
+The ambiguity heuristic collapses ambiguity. One sentence that says what wins when the inputs conflict. Leave it out and the LLM asks you to resolve every decision upfront. Or worse, guesses.
 
 And two models instead of one? [AlphaCode](https://arxiv.org/abs/2203.07814) showed that generating many candidates and filtering beats generating one good one. [Self-consistency](https://arxiv.org/abs/2203.11171) showed that sampling diverse reasoning paths and voting beats single-shot. [Branch-Solve-Merge](https://arxiv.org/abs/2310.15123) showed that parallel decomposition and fusion beats sequential. All of them sample from the same model with different random seeds. The diversity is stochastic.
 

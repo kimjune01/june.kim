@@ -34,7 +34,7 @@
   <text x="130" y="199" text-anchor="middle" font-size="10" fill="#555" font-style="italic">existence proof</text>
 
   <rect x="15" y="228" width="230" height="48" rx="7" fill="#ffe0b2" stroke="#ffcc80" stroke-width="1.5"/>
-  <text x="130" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Authority Rule</text>
+  <text x="130" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Ambiguity Heuristic</text>
   <text x="130" y="265" text-anchor="middle" font-size="10" fill="#555" font-style="italic">no regressions, UX improvement</text>
 
   <!-- IMPLEMENT -->
@@ -72,7 +72,7 @@
   <line x1="245" y1="131" x2="315" y2="160" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
   <line x1="245" y1="191" x2="315" y2="172" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
 
-  <!-- Authority rule → both agents (curved, orange dashed) -->
+  <!-- Ambiguity heuristic → both agents (curved, orange dashed) -->
   <path d="M245,248 C290,248 300,100 315,84" fill="none" stroke="#e65100" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-o)"/>
   <path d="M245,256 C290,256 300,185 315,164" fill="none" stroke="#e65100" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-o)"/>
 
