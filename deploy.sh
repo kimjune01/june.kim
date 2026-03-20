@@ -41,15 +41,17 @@ find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
   cp "$f" "$dir.html"
 done
 
-# ─── size-only sync ──────────────────────────────────────────────────────────
+# ─── sync ────────────────────────────────────────────────────────────────────
+# No --size-only: jekyll rebuild changes timestamps on every file, but s3 sync
+# default compares ETag (MD5) so only content-changed files actually upload.
 
-echo "==> Syncing to S3 (size-only, skip unchanged)"
-aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md" --size-only
+echo "==> Syncing to S3 (ETag compare, skip unchanged content)"
+aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*.md"
 aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --exclude "*" --include "*.md" \
-  --content-type "text/plain; charset=utf-8" --no-guess-mime-type --size-only
+  --content-type "text/plain; charset=utf-8" --no-guess-mime-type
 
 # Collect what actually changed for CloudFront invalidation
-CHANGED=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only --dryrun 2>&1 \
+CHANGED=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
