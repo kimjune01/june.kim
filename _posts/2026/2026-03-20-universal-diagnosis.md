@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Biotech Diagnosis"
+title: "Diagnosis Biotech"
 tags: cognition methodology
 ---
 
@@ -123,6 +123,12 @@ When the read_outcomes pipe is broken — management systematically overframes a
 The directional prediction isn't "stock goes up" or "stock goes down." It's "the surprise will be bigger than the market expects" — because the company's own self-assessment is unreliable. That's a long vol position, not a directional bet.
 
 This is a hypothesis, not a finding. The backtest requires historical options data we haven't pulled. But the framework generates the hypothesis mechanically — any company diagnosed with broken read_outcomes is a candidate for vol mispricing around its next catalyst.
+
+## Future signal: insider transactions
+
+SEC Form 4 filings are dated public records. When insiders buy or sell before an 8-K, the read_outcomes pipe is functioning *privately* even if the public framing is spin. The divergence between insider behavior and management's public narrative is itself a diagnostic signal — it tells you whether the company knows more than it says.
+
+We didn't incorporate insider transaction events in this pilot. But the temporal graph can absorb them: each Form 4 is an event with an archival date, a pipe (read_outcomes), and an implicit status (insider selling before bad news = read_outcomes functional internally, broken externally). Adding this signal to future rounds would strengthen the read_outcomes diagnosis without requiring any change to the framework.
 
 ---
 
