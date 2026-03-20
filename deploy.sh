@@ -32,7 +32,11 @@ APPS=(pinyin-chart jamdojo)
 #    disabled. Every build regenerates all HTML. Most pages don't change
 #    content, so ETag comparison handles it. Don't re-enable incremental.
 #
-# 7. Astro apps (jamdojo, pinyin-chart) content-hash filenames. Copying them
+# 7. S3 dryrun can report "0 changes" when the content is already uploaded
+#    but CloudFront still caches the old version. Use git diff to find changed
+#    posts and force-invalidate them regardless of what S3 says.
+#
+# 8. Astro apps (jamdojo, pinyin-chart) content-hash filenames. Copying them
 #    into _site and running one global sync means every deploy re-uploads
 #    ~581 files even when the apps haven't changed. Fix: sync apps separately,
 #    gated on git diff.
@@ -130,8 +134,10 @@ for app in "${APPS[@]}"; do
 done
 
 # ─── CloudFront invalidation ────────────────────────────────────────────────
-# Only invalidate non-.md files. Markdown uploads are metadata fixes (content-type),
-# not content changes — they don't need cache busting or PageLeft indexing.
+# Two sources of invalidation paths:
+# 1. S3 dryrun (what actually changed on S3)
+# 2. Git diff (what changed in the commit — catches the case where S3 already
+#    has the new content from a prior deploy but CloudFront still caches the old)
 
 echo "==> Invalidating CloudFront cache"
 PATHS=()
@@ -140,6 +146,19 @@ while IFS= read -r p; do
   [[ "$p" == *.md ]] && continue
   PATHS+=("${p// /%20}")
 done <<< "$CHANGED"
+
+# Add paths from git diff for changed posts (slug.md → /slug)
+if [[ -n "$LAST_DEPLOYED" ]]; then
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    # Extract slug from _posts/YYYY/YYYY-MM-DD-slug.md
+    slug=$(basename "$f" .md | sed 's/^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}-//')
+    [[ -z "$slug" ]] && continue
+    PATHS+=("/$slug" "/$slug.html")
+  done < <(git diff --name-only "$LAST_DEPLOYED" -- '_posts/' 2>/dev/null || true)
+fi
+# Deduplicate
+PATHS=($(printf '%s\n' "${PATHS[@]}" | sort -u))
 
 if [[ ${#PATHS[@]} -eq 0 ]]; then
   echo "    No paths to invalidate"
