@@ -101,4 +101,29 @@ The framework is the [Natural Framework](/the-natural-framework). The consolidat
 
 ---
 
+## Hypothesis: vol mispricing from broken read_outcomes
+
+The framework surfaces a second-order prediction that no analyst framework produces.
+
+When the read_outcomes pipe is broken — management systematically overframes ambiguous data — the market's information about the company's information is wrong. Implied volatility is calibrated to management's framing. If the framing is systematically optimistic, expectations narrow, and any ambiguous outcome produces a larger surprise than the market prices. Realized vol should exceed implied vol around catalyst dates.
+
+**Testable methodology:**
+1. For each company, identify catalyst dates (trial readouts, FDA actions, earnings with pipeline updates)
+2. Pull 30-day implied volatility from listed options before each catalyst
+3. Measure realized volatility in the 5-day window around the catalyst
+4. Compute the realized/implied ratio per event
+5. Segment by framework diagnosis: broken read_outcomes vs. functional read_outcomes
+6. Test: do companies with broken read_outcomes have higher realized/implied ratios?
+
+**Qualitative evidence from this pilot:**
+- **CAPR**: management said "no significant deficiencies" at mid-cycle review (May 2025). CRL two months later. Stock cratered. Realized > implied?
+- **QURE**: management said FDA aligned on accelerated approval (December 2024). FDA reversed eleven months later. Stock -49% in one day, eventually -84%. Realized > implied?
+- **ATYR**: management framed Phase 3 miss around secondaries in the same press release. Stock -83% in one day. Realized > implied?
+
+The directional prediction isn't "stock goes up" or "stock goes down." It's "the surprise will be bigger than the market expects" — because the company's own self-assessment is unreliable. That's a long vol position, not a directional bet.
+
+This is a hypothesis, not a finding. The backtest requires historical options data we haven't pulled. But the framework generates the hypothesis mechanically — any company diagnosed with broken read_outcomes is a candidate for vol mispricing around its next catalyst.
+
+---
+
 *Scorecard will be updated at [github.com/kimjune01/universal-diagnosis](https://github.com/kimjune01/universal-diagnosis) as catalysts resolve.*
