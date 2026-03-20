@@ -39,7 +39,7 @@ The ingredients, all running:
 4. **[Blind-blind-merge](/blind-blind-merge) as exploration.** Parallel rollouts, no coordination, merge at the root. The diversity is structural.
 5. **The [parts bin](/the-parts-bin) as pharmacy.** Every slot in the pipeline has a catalog of operations with preconditions and postconditions. [The Missing Parts](/the-missing-parts) found the blanks.
 
-Ingredients, but not yet a recipe.
+Everything runs. Nothing learns.
 
 ## Three lessons, one backward pass
 
