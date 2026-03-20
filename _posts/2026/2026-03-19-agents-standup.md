@@ -39,7 +39,7 @@ The ingredients, all running:
 4. **[Blind-blind-merge](/blind-blind-merge) as exploration.** Parallel rollouts, no coordination, merge at the root. The diversity is structural.
 5. **The [parts bin](/the-parts-bin) as pharmacy.** Every slot in the pipeline has a catalog of operations with preconditions and postconditions. [The Missing Parts](/the-missing-parts) found the blanks.
 
-Ingredients, not a recipe.
+Ingredients, but not yet a recipe.
 
 ## Three lessons, one backward pass
 
@@ -125,7 +125,7 @@ Check the [contract](/the-parts-bin#consolidate): Consolidate reads from persist
 
 Work logs extend from documentation to training data for the live system. Agents share semantic memory at the cache layer and learned policy at the baseline. The learning is externalized, inspectable, forkable: [open prose](/open-prose) all the way down. Copyleft for cognition: every lesson one agent learns propagates to every agent that shares the store.
 
-The 1999 team never planned rotation as a learning strategy. This one does.
+The 1999 team never planned rotation as a learning strategy. Agents need to.
 
 ---
 
