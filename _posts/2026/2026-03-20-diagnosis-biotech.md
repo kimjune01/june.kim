@@ -36,11 +36,11 @@ Result: HOPE-3 positive (PUL v2.0 p=0.029, LVEF p=0.041). Stock +440%. Shkreli a
 
 **QURE (uniQure)** — Shkreli was long. Sold November 2025.
 
-AMT-130 topline was positive (cUHDRS 75% slowing, p=0.003). The drug works. But the FDA reversed its prior agreement on external controls — first privately (November 2025), then publicly, calling the data "distorted" and "manipulated" (March 2026). Stock -84%.
+AMT-130 topline was positive ([cUHDRS 75% slowing, p=0.003](https://uniqure.gcs-web.com/news-releases/news-release-details/uniqure-announces-positive-topline-results-pivotal-phase-iii)). But the FDA [reversed its prior agreement](https://en.hdbuzz.net/uniqure-and-fda-no-longer-in-alignment-on-approval-pathway-for-amt-130/) on external controls — first privately (November 2025), then publicly, with officials [calling the data "distorted" and "manipulated"](https://www.globenewswire.com/news-release/2026/03/17/3257812/32716/en/QURE-ALERT-FDA-Reportedly-Accuses-uniQure-of-Pushing-Distorted-and-Manipulated-Data-For-Failed-AMT-130-Drug-Amid-Pending-Securities-Class-Action-Hagens-Berman.html) (March 2026). Stock -84%.
 
-The temporal graph shows why: FDA published [guidance in October 2022](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/human-gene-therapy-neurodegenerative-diseases) explicitly discouraging external controls for neurodegenerative gene therapies. uniQure built their entire BLA strategy on external controls anyway. When the FDA enforced its own published rules, management fought back instead of pivoting. The read_outcomes pipe was broken — the company couldn't read regulatory signals it didn't want to hear.
+The temporal graph shows why: FDA published [guidance in October 2022](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/human-gene-therapy-neurodegenerative-diseases) explicitly discouraging external controls for neurodegenerative gene therapies. uniQure built their entire BLA strategy on external controls anyway. When the FDA enforced its own published rules, management [argued the FDA's inconsistency](https://www.themarketsdaily.com/2026/03/02/uniqure-q4-earnings-call-highlights.html) and raised ethical objections to sham trials instead of pivoting.
 
-Framework: **dying_dying.** Shkreli got out before the break, but for unrelated reasons. **Framework would have caught the trajectory.** ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/QURE))
+Framework: **dying_dying.** Shkreli got out before the break. **The framework would have flagged the risk earlier** — the 2022 guidance was the first event in the temporal graph. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/QURE))
 
 ### Run 1: Prospective (real predictions)
 
@@ -54,9 +54,9 @@ Framework: **dying_pivoted, PASS.** Shkreli: bull. We agree on direction, disagr
 
 **ATYR (aTyr Pharma)** — New sarcoidosis trial announced by September 30, 2026.
 
-EFZO-FIT Phase 3 missed primary (steroid dose, p=0.33) but hit secondaries (KSQ-Lung p=0.048). The drug works on quality-of-life endpoints. The trial measured the wrong thing. FDA Type C meeting mid-April 2026.
+EFZO-FIT Phase 3 [missed primary](https://investors.atyrpharma.com/news-releases/news-release-details/atyr-pharma-announces-topline-results-phase-3-efzo-fittm-study) (steroid dose reduction, p=0.33) but hit secondaries (KSQ-Lung p=0.048, composite steroid withdrawal + improvement p=0.020). The secondary signals suggest the drug has activity on quality-of-life endpoints; the primary endpoint may have been the wrong measure. FDA Type C meeting mid-April 2026.
 
-Framework: **dying_pivoted, PASS.** Shkreli: bear ("really bad drug"). He's wrong on mechanism — the drug works, the endpoint was wrong. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/ATYR), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/ATYR.md))
+Framework: **dying_pivoted, PASS.** Shkreli: bear ("really bad drug"). His critique was mechanism-level ("really bad drug"), but the secondary endpoints suggest the molecule has activity that the primary endpoint didn't capture. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/ATYR), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/ATYR.md))
 
 **INMB (INmune Bio)** — CORDStrom MAA to UK MHRA by September 30, 2026.
 
@@ -75,7 +75,7 @@ An analyst looks at a drug. The framework looks at the company's learning loop.
 | ATYR | Drug is bad (Shkreli) | Endpoint was wrong, company will pivot |
 | INMB | Company is worthless (Shkreli) | Pattern predicts timeline slip, not death |
 
-The predictions are binary, timestamped, and mechanically scored. The reasoning is structural — which stack is broken, which pipe changed status, whether the same failure class recurred. No judgment calls in the scoring.
+The predictions are binary and timestamped. The diagnosis involves judgment (LLM agents, human selection); the *scoring* is mechanical — check the source on the date, apply the pass condition. [Full protocol](https://github.com/kimjune01/universal-diagnosis/blob/master/prereg.md).
 
 ### Where we agree, we're more confident
 
@@ -87,7 +87,7 @@ This is the [blind-blind-merge](/blind-blind-merge) principle. Two independent s
 | ATYR | PASS | Bear | **No** | Framework's edge case — we disagree on mechanism |
 | INMB | FAIL | Bear | Yes | **Highest** — independent convergence from different analyses |
 
-INMB is our strongest call. The framework says "pattern recurrence, timeline slip." Shkreli says "worthless company." Different reasoning, same direction. ATYR is where we diverge — and that's where the framework is most tested.
+At N=3, none of this is statistically meaningful. But the structure is interesting: INMB has independent convergence from different analyses. ATYR is the pure disagreement. If the framework is adding signal, it should show on ATYR.
 
 The scorecard updates when catalysts resolve. ATYR and INMB by September 30, 2026. SPRB by December 31, 2026.
 
@@ -103,7 +103,7 @@ The framework is the [Natural Framework](/the-natural-framework). The consolidat
 
 ## Hypothesis: vol mispricing from broken read_outcomes
 
-When management systematically overframes ambiguous data, the market's information about the company's information is wrong. Implied volatility is calibrated to management's framing. If the framing is systematically optimistic, expectations narrow, and any ambiguous outcome produces a larger surprise than the market prices. Realized vol should exceed implied vol around catalyst dates.
+If management systematically overframes ambiguous data, the market's model of the company may be too narrow. When expectations are set by optimistic framing, ambiguous outcomes produce larger surprises. If this pattern holds, realized vol should exceed implied vol around catalyst dates for companies with broken read_outcomes.
 
 **Testable methodology:**
 1. For each company, identify catalyst dates (trial readouts, FDA actions, earnings with pipeline updates)
