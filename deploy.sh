@@ -6,6 +6,32 @@ DOMAIN_WWW="june.kim"
 SITE_DIR="_site"
 CF_DIST_ID="E1G9R7V0YY4VV1"
 
+# ─── lessons learned ──────────────────────────────────────────────────────────
+# Static site deploy sounds simple. It isn't. Each lesson cost a deploy cycle.
+#
+# 1. --size-only lies. Jekyll rebuilds every file with new timestamps but
+#    identical content. ETag (MD5) comparison is the only reliable diff.
+#
+# 2. Dryrun flags must match real sync flags exactly. The .md sync forces
+#    --content-type, which makes S3 compare metadata too. A dryrun without
+#    those flags reports 0 changes while the real sync uploads 298 files.
+#
+# 3. S3 sync compares ETag AND metadata. Identical content with different
+#    content-type = "changed" file. Every .md re-uploads until the stored
+#    metadata matches. This is a one-time cost per flag change, not a bug.
+#
+# 4. .md uploads are metadata-only — exclude them from invalidation and
+#    change counts. Otherwise they trigger wildcard invalidation (>50 files)
+#    and drown out the actual new post.
+#
+# 5. CloudFront invalidation is a separate API call. S3 sync doesn't
+#    trigger it. If the change list is wrong, the new post stays cached.
+#
+# 6. Jekyll incremental builds (incremental: true) are unreliable and
+#    disabled. Every build regenerates all HTML. Most pages don't change
+#    content, so ETag comparison handles it. Don't re-enable incremental.
+# ──────────────────────────────────────────────────────────────────────────────
+
 # ─── deploy: build + sync ───────────────────────────────────────────────────
 
 # Install Ruby 3.3.3 via rbenv if missing
