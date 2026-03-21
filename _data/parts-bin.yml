@@ -37,26 +37,29 @@ axes:
       values: [unsupervised, supervised, self_supervised]
 
 planes:
-  # Five planes practitioners reach for. See /the-missing-parts.
-  - name: "Plane 1: Selection semantics × Error guarantee"
-    axes: [selection_semantics, error_guarantee]
-    stage: filter
-    status: fully_occupied  # 4×3, all 12 cells filled
-  - name: "Plane 2: Output form × Redundancy control"
-    axes: [output_form, redundancy_control]
-    stage: attend
-    status: fully_occupied  # 3×3, all 9 cells filled
-  - name: "Plane 3: Data structure × Selection semantics (bounded)"
+  # Five planes with blanks. See /the-missing-parts.
+  # Two fully-occupied planes (selection_semantics × error_guarantee,
+  # output_form × redundancy_control) validate the axes but don't predict.
+  # They live in /the-parts-bin, not here.
+  - name: "Plane 1: Data structure × Selection semantics (bounded)"
     axes: [data_structure, selection_semantics]
     fixed: { error_guarantee: bounded }
-    status: 8_blanks  # dominance + causal columns empty on structured data
-  - name: "Plane 4: Temporality × Selection semantics (bounded)"
-    axes: [temporality, selection_semantics]
+    status: 7_blanks  # dominance + causal columns empty on structured data
+  - name: "Plane 2: Stationarity × Selection semantics (bounded)"
+    axes: [stationarity, selection_semantics]
     fixed: { error_guarantee: bounded }
-    status: fully_occupied  # streaming×causal is thin but occupied
-  - name: "Plane 5: Pipeline stage × Data structure"
+    status: 2_blanks  # drifting × dominance, drifting × causal
+  - name: "Plane 3: Codebook type × Temporality (Perceive)"
+    axes: [codebook_type, temporality]
+    stage: perceive
+    status: 1_blank  # learned × stream
+  - name: "Plane 4: Pipeline stage × Data structure"
     axes: [pipeline_stage, data_structure]
     status: 1_blank  # attend × partial_order
+  - name: "Plane 5: Selection semantics × Error guarantee (anchor)"
+    axes: [selection_semantics, error_guarantee]
+    stage: filter
+    status: fully_occupied  # 4×3, all 16 cells filled. Validates axes.
 
 # Plane 5 data: stage × data structure (canonical algorithm per cell)
 stage_structure_grid:
@@ -300,6 +303,21 @@ columns:
           predicate: "https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch"
           dominance: "https://cse.hkust.edu.hk/~dimitris/PAPERS/TKDE06-Sky.pdf"
           causal: "https://arxiv.org/abs/1808.04904"
+    # Plane 2: stationarity × selection semantics (bounded error column)
+    stationarity_grid:
+      - stationarity: static
+        predicate: "Threshold filtering"
+        similarity: "k-NN radius pruning"
+        dominance: "ε-dominance"
+        causal: "Conformal causal selection"
+      - stationarity: drifting
+        predicate: "ADWIN (Bifet & Gavalda 2007)"
+        similarity: "Adaptive k-NN (thin: no formal error bounds)"
+        dominance: null  # blank: streaming skylines handle insertion drift, not criterion drift
+        causal: null  # blank: adaptive conformal + anytime-valid inference exist, not composed
+        refs:
+          predicate: "https://dl.acm.org/doi/10.1145/1150402.1150423"
+          similarity: "https://ieeexplore.ieee.org/document/6835986"
     operations:
       - name: "Predicate selection (WHERE)"
         precondition: Indexed relation + boolean predicate
