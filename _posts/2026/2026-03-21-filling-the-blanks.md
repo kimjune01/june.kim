@@ -102,6 +102,10 @@ The grid's role was making the near-miss findable. Without it, you'd never cross
 
 Three cells brought into candidate form: one strong, one conditional, one heuristic. The [Parts Bin](/the-parts-bin) gets closer to what it promised: given a broken step, look up the fix.
 
+### Proof-of-concept completions
+
+The remaining five blanks are further from practical use. Each has a working implementation with passing tests, but they exist to demonstrate that the grid can fill every cell, not because anyone needs them today. They're completionist — the grid said the cell should exist, so we built it to see if it could.
+
 ### 4. Spillover-adjusted causal segments
 
 **The near-miss.** Causal filtering on flat data is solved ([Duan et al. 2024](https://doi.org/10.1515/jci-2023-0059)). [Aronow & Samii (2017)](https://isps.yale.edu/research/publications/isps18-01) handle interference via exposure mappings. But nobody has composed interference-aware causal estimation on time-series segments with FDR control.
