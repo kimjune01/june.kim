@@ -10,29 +10,9 @@ tags: cognition
 
 [The Natural Framework](/the-natural-framework) derives six roles from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
 
-PageRank is the first specimen. Its postcondition says "ranked by authority" but the Attend contract requires diversity and a bound. It made a lot of money regardless. A broken step doesn't kill instantly; it compounds.
+PageRank satisfies "ranked by authority" but the Attend contract requires diversity and a bound. Google bolted on re-ranking, topic diversity, and freshness over two decades — incremental upgrades toward a contract-preserving morphism. Quicksort satisfies order but not diversity or boundedness. Most familiar algorithms are near-misses. The formal test is iteration stability: run the full loop and observe which postcondition degrades. Diversity dies first, because without repulsion the same cluster dominates every cycle.
 
-Google bolted on re-ranking, topic diversity, and freshness signals over two decades: incremental upgrades toward a contract-preserving morphism, one patch at a time.
-
-Quicksort is the second specimen. It satisfies order, the most visible guarantee. But the Attend contract also requires diversity (survivors are dissimilar) and boundedness (output is finite top-k, not a total order). Quicksort is the default because order is the only guarantee most systems measure.
-
-Most familiar algorithms are near-misses. They satisfy some guarantees but not all. The formal test is iteration stability: run the full loop — Perceive through Remember and back — and observe which postcondition degrades. Diversity is the guarantee iteration kills first, because without repulsion between winners the same cluster dominates every cycle. Noticing which guarantee fails under iteration: that's the diagnostic power.
-
-Degenerate cases are the other edge. A chatbot has no policy store: nil Filter, nil Attend, nil Consolidate, nil Remember. Token in, token out, same rate. That is passthrough, predicted by the [existence proofs](/the-natural-framework#six-steps) when policy is zero.
-
-Union-find has no selection: every element is kept, partitions only merge, the structure grows monotonically. No competitive core, no lossy step, no compression. Both are useful. Neither learns.
-
-### Diagnostic resolution
-
-The monad is the container — it doesn't break. What breaks is a morphism's postcondition. What cascades is the composition. The derivation forces contracts of this shape, and the [induction proof](/the-handshake#hard-question-answered) shows they compose forever if they compose once.
-
-Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition is a correct algorithm that produces garbage.
-
-Governance operates at zero resolution. It can't see the interface, so it replaces the whole composition: fire everyone, rewrite from scratch, new system. Expensive. The framework increases resolution: instead of "the system is broken," the diagnosis is "Attend's diversity guarantee is missing." The parts bin increases it further: instead of "Attend is broken," the prescription is "this is a top-k sort where you need MMR re-ranking." Swap one operation, same slot, contract restored.
-
-The most efficient fix requires the most precise name. The most feared enemy is one who cannot be named. The handshake is a naming system.
-
-[Diagnosis LLM](/diagnosis-llm) took a couple of hours. Three layers, six steps each, SOAP notes with six-component plans. That precision came from the framework, not domain expertise in ML. Before germ theory: "the patient has bad air." After: "*streptococcus*, here's penicillin." The framework is the microscope. The handshake is why the microscope works.
+Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition produces garbage. The framework increases diagnostic resolution: instead of "the system is broken," the diagnosis is "Attend's diversity guarantee is missing." The parts bin increases it further: instead of "Attend is broken," the prescription is "this is a top-k sort where you need MMR re-ranking." Swap one operation, same slot, contract restored.
 
 ### Agent
 
@@ -47,6 +27,8 @@ The framework is the diagnostic manual. The parts bin, once ordered, is the phar
 **Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. If not, it flags the interface mismatch before you build it.
 
 The doctor doesn't need to understand category theory. They need to read the contracts: precondition, postcondition, fidelity. The handshake is the pharmacology. The taxonomy is the PDR. The agent is the resident who can look things up fast.
+
+The machine-readable catalog is [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Each operation has its precondition, postcondition, grid position, fidelity, variation source, and cost. An agent can load the YAML, query by step and grid coordinates, and return candidates that match the contract.
 
 ### Catalog
 
