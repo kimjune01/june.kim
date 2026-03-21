@@ -111,6 +111,8 @@ Seven blanks survive validation across three planes. They cluster around three b
 
 Plus one in Perceive (learned codebook × stream, plane 2).
 
+The grid's first contribution isn't predicting blanks. It's making cells addressable. Without the grid, nobody searches for "bounded-error dominance filtering on time series" because that combination of concepts has no name. The [time series skyline paper](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z) from 2013 exists, but you'd never find it unless you knew to cross those two axes. And even when you find a paper, judging whether it fills the cell requires checking the contract: does it satisfy bounded error? Does it respect temporal order? Is it a filter (strictly smaller output) or something else? The grid writes the question. The question is still hard to answer.
+
 Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict compositions: the pieces exist in separate literatures (skyline queries, causal inference, FDR control, graph kernels, poset theory), and the contract names what they must satisfy when assembled. Ten axes tell you where to look. Three planes tell you where to build. The grid writes the spec. The spec is seven algorithms nobody's built.
 
 ### Composition sketches
