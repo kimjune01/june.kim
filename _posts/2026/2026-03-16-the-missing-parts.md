@@ -113,7 +113,7 @@ Plus one in Perceive (learned codebook × stream, plane 2).
 
 The grid's first contribution is making cells addressable. Without the grid, nobody searches for "bounded-error dominance filtering on time series" because that combination of concepts has no name. The [time series skyline paper](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z) from 2013 exists, but you'd never find it unless you knew to cross those two axes. And even when you find a paper, judging whether it fills the cell requires checking the contract: does it satisfy bounded error? Does it respect temporal order? Is it a filter (strictly smaller output) or something else? The grid writes the question. The question is still hard to answer.
 
-For each blank, adjacent work exists: nearby algorithms that solve a restricted version or a related problem. The grid names the cell. The adjacent work names the near-miss. [Filling the Blanks](/filling-the-blanks) develops the compositions: three implemented and tested, five more sketched from existing pieces.
+For each blank, adjacent work exists: nearby algorithms that solve a restricted version or a related problem. The grid names the cell. The adjacent work names the near-miss. [Filling the Blanks](/filling-the-blanks) develops all eight compositions, each [implemented and tested](https://github.com/kimjune01/filling-the-blanks).
 
 ---
 
