@@ -29,14 +29,14 @@
   <text x="100" y="138" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Repo</text>
   <text x="100" y="155" text-anchor="middle" font-size="10" fill="#555" font-style="italic">existing code + tests</text>
 
-  <!-- VOLLEY: You -->
+  <!-- VOLLEY: Claude -->
   <rect x="230" y="62" width="140" height="52" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
-  <text x="300" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">You</text>
-  <text x="300" y="101" text-anchor="middle" font-size="10" fill="#555" font-style="italic">draft claim</text>
+  <text x="300" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Claude</text>
+  <text x="300" y="101" text-anchor="middle" font-size="10" fill="#555" font-style="italic">draft</text>
 
-  <!-- VOLLEY: Reviewer -->
+  <!-- VOLLEY: Codex -->
   <rect x="430" y="62" width="140" height="52" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
-  <text x="500" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Reviewer</text>
+  <text x="500" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Codex</text>
   <text x="500" y="101" text-anchor="middle" font-size="10" fill="#555" font-style="italic">challenge</text>
 
   <!-- Volley arrows (back and forth) -->
