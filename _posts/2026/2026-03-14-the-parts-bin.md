@@ -33,6 +33,7 @@ Each entry is an operation: input in, output out. If the precondition and postco
 <tr><td>JSON parsing</td><td>Raw string, well-formed</td><td>Structured object, addressable by key</td></tr>
 <tr><td>A/D conversion</td><td>Continuous analog signal</td><td>Discrete samples, quantized</td></tr>
 <tr><td><a href="https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf">SIFT descriptor extraction</a></td><td>Raw pixel grid</td><td>Keypoint descriptors, matchable</td></tr>
+<tr><td><a href="/filling-the-blanks#8-streaming-tokenizer">Streaming tokenizer</a></td><td>Text stream + merge threshold + window size</td><td>Token IDs, backward-compatible, bounded retokenization</td></tr>
 </table>
 
 **Cache** (encoded → indexed) — the most studied column. [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures) built a periodic table from five design primitives.
@@ -57,6 +58,12 @@ Each entry is an operation: input in, output out. If the precondition and postco
 <tr><td>Regex extraction</td><td>String corpus + pattern</td><td>Matching spans retained, non-matches discarded</td></tr>
 <tr><td>k-NN radius pruning</td><td>Metric index + query + radius r</td><td>Subset within radius, strictly smaller</td></tr>
 <tr><td>Pareto filtering</td><td>Candidates with objective vectors</td><td>Non-dominated subset, strictly smaller</td></tr>
+<tr><td><a href="/filling-the-blanks#4-spillover-adjusted-causal-segments">Spillover-adjusted causal filter</a></td><td>Time-series segments + treatment + kernel bandwidth</td><td>Segments with significant direct effect, FDR ≤ α</td></tr>
+<tr><td><a href="/filling-the-blanks#5-stochastic-dominance-over-subtrees">Subtree stochastic dominance</a></td><td>Tree + subtree nodes + leaf scores</td><td>Non-dominated subtrees, FDR ≤ α</td></tr>
+<tr><td><a href="/filling-the-blanks#6-order-context-similarity">Order-context similarity filter</a></td><td>Poset + query + similarity threshold</td><td>Items with Jaccard context overlap ≥ τ</td></tr>
+<tr><td><a href="/filling-the-blanks#7-embedding-space-causal-filtering">Embedding causal filter</a></td><td>Embeddings + treatment + outcomes + kernel bandwidth</td><td>Items with significant direct effect net of cannibalization, FDR ≤ α</td></tr>
+<tr><td><a href="/filling-the-blanks#1-residualized-dominance">Residualized dominance</a></td><td>Overlapping communities + objective vectors</td><td>Non-dominated after factoring out shared substructure</td></tr>
+<tr><td><a href="/filling-the-blanks#2-closure-level-causal-effects">Closure-level causal filter</a></td><td>Poset + outcomes + treatment closures</td><td>Nodes with significant closure-level effect, FDR ≤ α</td></tr>
 </table>
 
 **Attend** ((policy, selected) → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Policy is a function; it routes data. Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
@@ -68,6 +75,7 @@ Each entry is an operation: input in, output out. If the precondition and postco
 <tr><td><a href="https://link.springer.com/chapter/10.1007/978-3-642-12275-0_11">xQuAD re-ranking</a></td><td>Candidates + relevance + subtopic coverage</td><td>Top-k ordered, aspect coverage explicit, bounded</td></tr>
 <tr><td>Submodular maximization</td><td>Candidates + submodular utility (relevance + coverage)</td><td>Top-k greedy-ranked, diminishing-return diversity, bounded</td></tr>
 <tr><td>Diversified beam search</td><td>Stepwise expansions + diversity penalty</td><td>Top-b retained, non-redundant alternatives, bounded</td></tr>
+<tr><td><a href="/filling-the-blanks#3-diverse-top-k-from-a-poset">Poset diverse top-k</a></td><td>Poset + relevance scores + λ</td><td>Top-k ordered, order-context diversity, bounded</td></tr>
 </table>
 
 Near-misses (diagnostic counterexamples):
