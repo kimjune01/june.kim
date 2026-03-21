@@ -10,13 +10,13 @@ tags: cognition
 
 [The Natural Framework](/the-natural-framework) derives six roles from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
 
-PageRank satisfies "ranked by authority" but the Attend contract requires diversity and a bound. Google bolted on re-ranking, topic diversity, and freshness over two decades — incremental upgrades toward a contract-preserving morphism. Quicksort satisfies order but not diversity or boundedness. Most familiar algorithms are near-misses. The formal test is iteration stability: run the full loop and observe which postcondition degrades. Diversity dies first, because without repulsion the same cluster dominates every cycle.
+PageRank satisfies "ranked by authority" but the Attend contract requires diversity and a bound. Google bolted on re-ranking, topic diversity, and freshness over two decades: incremental upgrades toward a contract-preserving morphism. Quicksort satisfies order but not diversity or boundedness. Most familiar algorithms are near-misses. The formal test is iteration stability: run the full loop and observe which postcondition degrades. Diversity dies first, because without repulsion the same cluster dominates every cycle.
 
 Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition produces garbage. The framework increases diagnostic resolution: instead of "the system is broken," the diagnosis is "Attend's diversity guarantee is missing." The parts bin increases it further: instead of "Attend is broken," the prescription is "this is a top-k sort where you need MMR re-ranking." Swap one operation, same slot, contract restored.
 
 ### Agent
 
-The framework is the diagnostic manual. The parts bin, once ordered, is the pharmacy. The handshake is why the prescriptions compose. What would it look like to use them systematically?
+The framework is the diagnostic manual. The parts bin, once ordered, is the pharmacy. The handshake is why the prescriptions compose. How would an agent use this?
 
 **Describe.** A product manager says: "users sign up but never come back." An agent maps this to the six steps. Cache works. Users arrive and data is stored. Filter is missing. Users get everything, keep nothing. Consolidate is nil. Nothing changes between sessions.
 
@@ -85,7 +85,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe cannot observe this loop directly — it can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
+**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
@@ -126,7 +126,7 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 <tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
 </table>
 
-Every cell fills with a known algorithm. [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) at predicate × probabilistic — the most deployed probabilistic data structure in computing. [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance) at dominance × bounded — standard in multi-objective optimization. [Stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) at dominance × probabilistic — decision theory since the 1960s. A clean partition with no awkward fits validates the axes, but a 3×3 where every cell fills on sight is a confirmation, not a prediction.
+Every cell fills with a known algorithm. [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) at predicate × probabilistic — the most deployed probabilistic data structure in computing. [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance) at dominance × bounded — standard in multi-objective optimization. [Stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) at dominance × probabilistic — decision theory since the 1960s. A 3×3 where every cell fills on sight is a confirmation, not a prediction.
 
 Take **Attend**. Lay operations on output form vs. redundancy control:
 
