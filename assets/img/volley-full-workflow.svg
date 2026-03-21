@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 200" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#999" stroke-width="1.2"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2e7d32" stroke-width="1.2"/>
+    </marker>
+    <marker id="arr-b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+    </marker>
+  </defs>
+
+  <!-- Phase labels -->
+  <text x="80" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#999" letter-spacing="0.1em">GOAL</text>
+  <text x="250" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#999" letter-spacing="0.1em">VOLLEY 1</text>
+  <text x="470" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#999" letter-spacing="0.1em">BLIND-BLIND-MERGE</text>
+  <text x="700" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#999" letter-spacing="0.1em">VOLLEY 2</text>
+  <text x="880" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#999" letter-spacing="0.1em">SHIP</text>
+
+  <!-- Phase dividers -->
+  <line x1="155" y1="10" x2="155" y2="190" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+  <line x1="355" y1="10" x2="355" y2="190" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+  <line x1="600" y1="10" x2="600" y2="190" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+  <line x1="810" y1="10" x2="810" y2="190" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+
+  <!-- GOAL -->
+  <rect x="15" y="55" width="130" height="44" rx="7" fill="#bbdefb" stroke="#90caf9" stroke-width="1"/>
+  <text x="80" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Goal</text>
+  <text x="80" y="90" text-anchor="middle" font-size="9" fill="#555" font-style="italic">one sentence</text>
+
+  <!-- VOLLEY 1 -->
+  <rect x="170" y="45" width="80" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="210" y="67" text-anchor="middle" font-size="11" font-weight="600" fill="#333">Claude</text>
+
+  <rect x="280" y="45" width="65" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="312" y="67" text-anchor="middle" font-size="11" font-weight="600" fill="#333">Codex</text>
+
+  <!-- Volley 1 arrows -->
+  <line x1="250" y1="57" x2="275" y2="57" stroke="#1565c0" stroke-width="1.3" marker-end="url(#arr-b)"/>
+  <line x1="280" y1="73" x2="255" y2="73" stroke="#1565c0" stroke-width="1.3" marker-end="url(#arr-b)"/>
+
+  <!-- Volley 1 output -->
+  <rect x="185" y="95" width="135" height="32" rx="5" fill="#fff3e0" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="252" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Sharp spec</text>
+
+  <line x1="210" y1="81" x2="230" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="312" y1="81" x2="280" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- BLIND-BLIND-MERGE -->
+  <rect x="370" y="40" width="100" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="420" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#333">Agent A</text>
+  <text x="420" y="69" text-anchor="middle" font-size="9" fill="#999" font-style="italic">blind impl</text>
+
+  <rect x="490" y="40" width="100" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="540" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#333">Agent B</text>
+  <text x="540" y="69" text-anchor="middle" font-size="9" fill="#999" font-style="italic">blind impl</text>
+
+  <rect x="420" y="95" width="130" height="32" rx="5" fill="#c8e6c9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="485" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Merged PR</text>
+
+  <line x1="420" y1="76" x2="460" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="540" y1="76" x2="510" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Bug reduction annotation -->
+  <text x="485" y="142" text-anchor="middle" font-size="9" fill="#2e7d32">~½ bugs vs single impl</text>
+
+  <!-- Spec → agents -->
+  <line x1="320" y1="111" x2="365" y2="65" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="320" y1="111" x2="485" y2="65" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- VOLLEY 2 -->
+  <rect x="615" y="45" width="80" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="655" y="67" text-anchor="middle" font-size="11" font-weight="600" fill="#333">Claude</text>
+
+  <rect x="725" y="45" width="65" height="36" rx="5" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="757" y="67" text-anchor="middle" font-size="11" font-weight="600" fill="#333">Codex</text>
+
+  <!-- Volley 2 arrows -->
+  <line x1="695" y1="57" x2="720" y2="57" stroke="#1565c0" stroke-width="1.3" marker-end="url(#arr-b)"/>
+  <line x1="725" y1="73" x2="700" y2="73" stroke="#1565c0" stroke-width="1.3" marker-end="url(#arr-b)"/>
+
+  <!-- Volley 2 output -->
+  <rect x="630" y="95" width="135" height="32" rx="5" fill="#fff3e0" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="697" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Clean PR</text>
+
+  <line x1="655" y1="81" x2="675" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="757" y1="81" x2="725" y2="91" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Merged PR → Volley 2 -->
+  <line x1="550" y1="111" x2="610" y2="65" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- SHIP -->
+  <rect x="825" y="55" width="100" height="44" rx="7" fill="#c8e6c9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="875" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#2e7d32">Ship</text>
+  <text x="875" y="90" text-anchor="middle" font-size="9" fill="#555" font-style="italic">human inspects or trusts tests</text>
+
+  <!-- Clean PR → Ship -->
+  <path d="M765,111 C790,111 810,77 820,77" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- Human checkpoints -->
+  <text x="80" y="175" text-anchor="middle" font-size="9" fill="#e65100">✓ human</text>
+  <text x="252" y="175" text-anchor="middle" font-size="9" fill="#e65100">✓ human</text>
+  <text x="697" y="175" text-anchor="middle" font-size="9" fill="#e65100">✓ human</text>
+  <text x="875" y="175" text-anchor="middle" font-size="9" fill="#e65100">✓ human</text>
+
+  <line x1="80" y1="99" x2="80" y2="167" stroke="#e65100" stroke-width="0.8" stroke-dasharray="3,3"/>
+  <line x1="252" y1="127" x2="252" y2="167" stroke="#e65100" stroke-width="0.8" stroke-dasharray="3,3"/>
+  <line x1="697" y1="127" x2="697" y2="167" stroke="#e65100" stroke-width="0.8" stroke-dasharray="3,3"/>
+  <line x1="875" y1="99" x2="875" y2="167" stroke="#e65100" stroke-width="0.8" stroke-dasharray="3,3"/>
+</svg>
