@@ -127,7 +127,9 @@ stage_error_grid:
     probabilistic: "SQ-VAE (thin)"
   - stage: cache
     exact: "Hash index"
-    bounded: null  # blank: no bounded-approximation cache with retrieval error guarantees
+    bounded: "Cover tree / navigating nets ((1+ε)-ANN cache)"
+    refs:
+      bounded: "https://research.ibm.com/publications/cover-trees-for-nearest-neighbor"
     probabilistic: "Bloom filter"
   - stage: filter
     exact: "WHERE"
