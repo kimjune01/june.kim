@@ -102,28 +102,107 @@ The grid's role was making the near-miss findable. Without it, you'd never cross
 
 Three cells brought into candidate form: one strong, one conditional, one heuristic. The [Parts Bin](/the-parts-bin) gets closer to what it promised: given a broken step, look up the fix.
 
-### Sketches for the remaining blanks
+### 4. Spillover-adjusted causal segments
 
-Five cells have no near-miss close enough to patch with one operation. Each needs a definition or a composition from further-apart literatures. These are sketches, not implementations.
+**The near-miss.** Causal filtering on flat data is solved ([Duan et al. 2024](https://doi.org/10.1515/jci-2023-0059)). [Aronow & Samii (2017)](https://isps.yale.edu/research/publications/isps18-01) handle interference via exposure mappings. But nobody has composed interference-aware causal estimation on time-series segments with FDR control.
 
-**4. Sequence × Causal (bounded).** Define interference via embedding distance between segments: treating segment *i* spills over to nearby segments with weight *w_ij* = K(d(i,j)). Estimate per-segment effects with a doubly robust score under an exposure mapping ([Aronow & Samii 2017](https://isps.yale.edu/research/publications/isps18-01)). Get valid p-values via randomization inference. Apply [BY](https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/6791919) for FDR control under arbitrary dependence. Minor variation of spatial causal inference + classical FDR.
+**The failure mode.** A marketing team runs promotions on different weeks. Week 3 gets a promotion, but weeks 2 and 4 also see a lift because customers shift purchases to adjacent weeks. The standard per-segment test attributes the full lift to week 3. The spillover-adjusted version estimates week 3's *direct* effect after removing the interference from neighboring treated weeks.
 
-**5. Tree × Dominance (bounded).** Define subtree A to dominate subtree B if the empirical distribution of leaf utilities in A first-order stochastically dominates that of B: F_A(t) ≤ F_B(t) for all thresholds t, after depth-normalization. Test each pair with simultaneous confidence bands on F_A − F_B. Organize pairwise hypotheses on the tree and run hierarchical FDR top-down ([Yekutieli 2008](https://cris.tau.ac.il/en/publications/hierarchical-false-discovery-rate-controlling-methodology)). Novel definition — stochastic dominance over leaf CDFs hasn't been applied to subtree comparison.
+**The algorithm.** For each segment i with treatment Z_i and outcome Y_i:
 
-**6. Partial order × Similarity (bounded).** Replace metric distance with order-context overlap: s(x,y) = λ·J(↓x,↓y) + (1−λ)·J(↑x,↑y), where J is Jaccard on principal ideals/filters. Compute sketches via [MinHash](https://ieeexplore.ieee.org/document/666900). The "radius" becomes a similarity threshold τ. Test H_x: s(q,x) < τ using sketch confidence bounds. Keep discoveries after BH/BY. Novel — set-similarity search on order context hasn't been formalized as a filter.
+1. Compute spillover exposure: S_i = Σ K(d(i,j)) · Z_j, where K is a Gaussian kernel over segment distance.
+2. Regress outcomes on (Z_i, S_i) to separate direct effect from spillover.
+3. Compute per-segment p-values from the adjusted estimates.
+4. Apply [Benjamini-Yekutieli](https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/6791919) for FDR control under arbitrary dependence.
 
-**7. Embedding × Causal (bounded).** Each item has treatment Z_i, outcome Y_i, and cannibalization exposure S_i = Σ K(‖e_i − e_j‖)Z_j from embedding distance. Estimate direct effects net of interference with a generalized propensity estimator ([Giffin et al. 2023](https://pubmed.ncbi.nlm.nih.gov/35996756/)). Produce valid p-values by sample splitting. Apply BY. Minor variation — spatial causal interference applied to embedding geometry.
+**The patch.** Wire exposure mappings to segment-level FDR. The pieces are standard; the composition for time-series segments is new.
 
-**8. Learned codebook × Stream (Perceive).** Keep an append-only merge DAG: existing token IDs never change. Track candidate new merges with streaming heavy-hitters over adjacent pairs. Add a new token only if compression gain exceeds a threshold and activation is forward-only. Retokenize only inside a rolling checkpoint buffer of size W; older text keeps its old tokenization. Backward compatibility is exact (append-only). Retokenization rate is bounded (buffer size). Novel composition — existing work adapts vocabularies ([Chizhov et al. 2024](https://aclanthology.org/2024.emnlp-main.925/), [Li et al. 2025](https://aclanthology.org/2025.acl-long.207/)) but none guarantees all three: online updates, backward compatibility, bounded retokenization.
+**Reductions.** Zero bandwidth (no spillover) → standard per-segment test. All segments treated → empty output (no controls). Both cases [tested](https://github.com/kimjune01/filling-the-blanks).
+
+### 5. Stochastic dominance over subtrees
+
+**The near-miss.** Stochastic dominance testing exists for distributions. Hierarchical FDR exists for tree-structured hypotheses ([Yekutieli 2008](https://cris.tau.ac.il/en/publications/hierarchical-false-discovery-rate-controlling-methodology)). Nobody has defined "subtree A dominates subtree B" or tested it with bounded error.
+
+**The failure mode.** Two departments in a company, each a subtree of the org chart. Department A has employees scoring [3, 4, 5]. Department B has [1, 2, 6]. Average is similar (4 vs 3). But A's score distribution is uniformly better at every threshold: more employees above 2, more above 3, more above 4. A stochastically dominates B. Raw averages miss this.
+
+**The algorithm.** Define dominance via leaf-score CDFs:
+
+1. Map each subtree to its weighted leaf-score empirical CDF.
+2. Subtree A dominates B if F_A(t) ≤ F_B(t) for all thresholds t (first-order stochastic dominance).
+3. Test each pair with a one-sided [Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test).
+4. Apply [Benjamini-Hochberg](https://en.wikipedia.org/wiki/False_discovery_rate#Benjamini%E2%80%93Hochberg_procedure) across all pairwise hypotheses.
+5. Return the non-dominated set.
+
+**The patch.** The definition itself. "Subtree dominates subtree" is stochastic dominance over leaf distributions. The testing and FDR machinery are standard; the definition is novel.
+
+**Reductions.** Flat tree (all leaves) → each "subtree" is a single leaf, dominance reduces to scalar comparison. Single subtree → trivially non-dominated. Both cases [tested](https://github.com/kimjune01/filling-the-blanks).
+
+### 6. Order-context similarity
+
+**The near-miss.** [simona](https://doi.org/10.1186/s12864-024-10759-4) (Gu 2024) uses Jaccard on ancestor sets for bio-ontologies. [MinHash](https://ieeexplore.ieee.org/document/666900) (Broder 1997) estimates set similarity efficiently. Nobody has used order-theoretic context (ideals + filters) as a similarity measure for filtering with bounded error.
+
+**The failure mode.** A taxonomy: Math ≤ Algebra ≤ Linear Algebra, Math ≤ Geometry ≤ Topology. Query: "items similar to Algebra." In a metric space you'd use distance. In a poset there is no distance. But Algebra and Geometry share a downset ({Math}) and have overlapping upsets. Linear Algebra and Topology share nothing below and nothing above. Order context captures this: Algebra and Geometry are similar (shared ancestry), Linear Algebra and Topology are not.
+
+**The algorithm.** For query q and threshold τ:
+
+1. Compute downset ↓x and upset ↑x for each element.
+2. Similarity: s(q, x) = λ · J(↓q, ↓x) + (1−λ) · J(↑q, ↑x), where J is Jaccard.
+3. Return elements with s(q, x) ≥ τ.
+
+**The patch.** Use principal ideals and filters as the "feature sets" for Jaccard similarity. The radius is replaced by a similarity threshold. At scale, MinHash sketches approximate Jaccard with bounded additive error.
+
+**Reductions.** Discrete poset (no edges) → all downsets/upsets are singletons → all pairwise similarities are zero → empty output. Total order → downsets are prefixes, similarities reflect positional proximity. Both cases [tested](https://github.com/kimjune01/filling-the-blanks).
+
+### 7. Embedding-space causal filtering
+
+**The near-miss.** [Giffin et al. (2023)](https://pubmed.ncbi.nlm.nih.gov/35996756/) model spatial interference where nearer treatments matter more. [Duan et al. (2024)](https://doi.org/10.1515/jci-2023-0059) give FDR-controlled causal selection. Nobody has composed embedding-distance interference with item-level FDR for recommendation cannibalization.
+
+**The failure mode.** A content platform recommends articles. Recommending article A (machine learning) cannibalizes article B (deep learning) because they're nearby in embedding space — users who would have clicked B click A instead. The standard ATE treats each article independently. The interference-adjusted version estimates A's *direct* effect after accounting for cannibalization of similar articles.
+
+**The algorithm.** For each item i with embedding e_i, treatment Z_i, outcome Y_i:
+
+1. Compute interference exposure: S_i = Σ K(‖e_i − e_j‖) · Z_j, where K is a Gaussian kernel.
+2. Build a local weighted regression at each item: outcome ~ treatment + exposure, weighted by embedding proximity.
+3. Extract the direct effect coefficient and its standard error. Compute p-values.
+4. Apply [Benjamini-Yekutieli](https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/6791919) across all treated items.
+
+**The patch.** Use embedding distance as the interference kernel. The regression separates direct effect from cannibalization. Same pattern as sequence × causal (#4) but in embedding geometry instead of temporal distance.
+
+**Reductions.** Zero bandwidth (no interference) → standard per-item regression. All items treated → empty output (no controls). Both cases [tested](https://github.com/kimjune01/filling-the-blanks).
+
+### 8. Streaming tokenizer
+
+**The near-miss.** [Adaptive BPE](https://aclanthology.org/2024.findings-emnlp.863/) (Balde et al. 2024) and [TokAlign](https://aclanthology.org/2025.acl-long.207/) (Li et al. 2025) adapt vocabularies but operate offline. No existing tokenizer guarantees all three: online updates, backward compatibility, and bounded retokenization.
+
+**The failure mode.** A search engine indexes documents over months. The vocabulary learned from January's documents doesn't cover March's new terminology. Re-tokenizing everything is expensive. A streaming tokenizer would learn new merges from recent documents without invalidating old token IDs or forcing a full reindex.
+
+**The algorithm.**
+
+1. **Append-only vocabulary**: every character gets a token ID. New merge tokens get new IDs. Old IDs never change meaning.
+2. **Sliding window**: maintain a buffer of the most recent W token IDs.
+3. **Bigram frequency tracking**: count adjacent pairs in the window. When a pair exceeds the merge threshold, create a new merge token.
+4. **Window-local retokenization**: apply merges only within the window. Older tokens (frozen) keep their original tokenization.
+5. **Flush**: when the window fills, push the oldest tokens to frozen storage.
+
+**The patch.** Append-only merge DAG. Existing BPE mutates the vocabulary (merge = replace two tokens with one). This version only *adds* — the merge token is a new ID, the original tokens still exist. Backward compatibility is structural, not checked.
+
+**The central limitation.** Old text is suboptimally tokenized forever. A merge learned in March doesn't retokenize January's documents. The tradeoff: bounded retokenization cost vs. compression quality. Deep streams accumulate vocabulary debt.
+
+**Reductions.** Empty stream → empty vocabulary. Single-character stream → no bigram pairs → no merges. High threshold → no merges (vocabulary stays character-level). All cases [tested](https://github.com/kimjune01/filling-the-blanks).
+
+### Summary
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:10em"><col style="width:8em"><col style="width:14em"><col style="width:14em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Cell</th><th style="background:#f0f0f0">Novelty</th><th style="background:#f0f0f0">Near-miss</th><th style="background:#f0f0f0">What's new</th></tr></thead>
-<tr><td>Sequence × Causal</td><td>Minor variation</td><td>Spatial causal inference + FDR</td><td>Apply to time-series segments</td></tr>
-<tr><td>Tree × Dominance</td><td>Novel</td><td>Stochastic dominance + hierarchical FDR</td><td>Dominance defined over leaf CDFs</td></tr>
-<tr><td>Partial order × Similarity</td><td>Novel</td><td>MinHash + set-similarity search</td><td>Jaccard on order context as filter</td></tr>
-<tr><td>Embedding × Causal</td><td>Minor variation</td><td>Spatial interference + FDR</td><td>Apply to embedding cannibalization</td></tr>
-<tr><td>Learned × Stream</td><td>Novel</td><td>Adaptive BPE, TokAlign</td><td>Append-only DAG + bounded retokenization</td></tr>
+<thead><tr><th style="background:#f0f0f0">Cell</th><th style="background:#f0f0f0">Novelty</th><th style="background:#f0f0f0">Near-miss</th><th style="background:#f0f0f0">Patch</th></tr></thead>
+<tr><td>Graph × Dominance</td><td>Novel</td><td>Magnani & Assent 2013</td><td>Residualize</td></tr>
+<tr><td>Partial order × Causal</td><td>Novel</td><td>Staggered rollout</td><td>Closure estimand</td></tr>
+<tr><td>Attend × Partial order</td><td>Minor variation</td><td>Phylogenetic diversity</td><td>Jaccard kernel + MMR</td></tr>
+<tr><td>Sequence × Causal</td><td>Minor variation</td><td>Spatial causal + FDR</td><td>Exposure mapping on segments</td></tr>
+<tr><td>Tree × Dominance</td><td>Novel</td><td>Stochastic dominance + hierarchical FDR</td><td>Dominance = leaf CDF comparison</td></tr>
+<tr><td>Partial order × Similarity</td><td>Novel</td><td>MinHash + bio-ontology similarity</td><td>Jaccard on ideals/filters</td></tr>
+<tr><td>Embedding × Causal</td><td>Minor variation</td><td>Spatial interference + FDR</td><td>Embedding distance as kernel</td></tr>
+<tr><td>Learned × Stream</td><td>Novel</td><td>Adaptive BPE, TokAlign</td><td>Append-only DAG + window buffer</td></tr>
 </table>
 
 ---
