@@ -32,7 +32,7 @@ The machine-readable catalog is [`_data/parts-bin.yml`](https://github.com/kimju
 
 ### Catalog
 
-The full catalog follows. Each entry is an operation: input in, output out. If the precondition and postcondition match the contract, the operation fits the slot. Filter decides per-item admissibility: does this item pass the criterion? Attend decides how admitted items relate to each other: order, diversity, and bound are slate-level properties.
+Each entry is an operation: input in, output out. If the precondition and postcondition match the contract, the operation fits the slot. Filter decides per-item admissibility. Attend decides how admitted items relate to each other: order, diversity, and bound are slate-level properties.
 
 **Perceive** (raw → encoded) — the column every system gets right, because nothing else works until it does.
 

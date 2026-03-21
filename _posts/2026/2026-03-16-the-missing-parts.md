@@ -16,7 +16,7 @@ To find genuine blanks, the grid needs more dimensions.
 
 ### Ten axes
 
-The design space has ten dimensions. An axis qualifies if it's discrete, orthogonal to the others, and crossing it with at least one other axis produces cells that aren't trivially occupied or trivially empty.
+The design space has ten dimensions. An axis qualifies if it's discrete, orthogonal, and crossing it with another axis produces cells that aren't trivially occupied or empty.
 
 Four are universal:
 
@@ -113,7 +113,7 @@ Plus one in Perceive (learned codebook × stream, plane 2).
 
 The grid's first contribution is making cells addressable. Without the grid, nobody searches for "bounded-error dominance filtering on time series" because that combination of concepts has no name. The [time series skyline paper](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z) from 2013 exists, but you'd never find it unless you knew to cross those two axes. And even when you find a paper, judging whether it fills the cell requires checking the contract: does it satisfy bounded error? Does it respect temporal order? Is it a filter (strictly smaller output) or something else? The grid writes the question. The question is still hard to answer.
 
-None of the seven blanks are unfillable. Two are blocked only by definition choices: tree × dominance needs a formalized subtree comparison, attend × partial order needs a formalized diversity objective. Both reduce to known algorithmic patterns once the definition is fixed. Five are conditionally fillable: the algorithm works if the assumptions hold, but the assumptions are strong. Causal filtering on structured data requires identification (no hidden confounding, known exposure mapping, positivity). Poset similarity requires exploitable structure (metric, kernel, or embedding) or falls back to brute-force scan. Online tokenization requires accepting restricted update policies (append-only vocabularies, versioned codebooks). The blanks aren't where researchers were lazy. They're where the assumptions break.
+None of the seven are unfillable. Two need definitions: tree × dominance needs a formalized subtree comparison, attend × partial order needs a diversity objective. Both reduce to known patterns once the definition is fixed. Five are conditionally fillable: the algorithm works if the assumptions hold. Causal filtering on structured data requires identification (no hidden confounding, known exposure mapping, positivity). Poset similarity requires exploitable structure or falls back to brute-force scan. Online tokenization requires restricted update policies (append-only vocabularies, versioned codebooks). The blanks are where the assumptions break.
 
 Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict *conditional compositions*: the pieces exist, the contract names what they must satisfy, and the grid names which assumption must hold for the assembly to work. Ten axes tell you where to look. Three planes tell you where to build. The grid writes the spec. The spec is seven algorithms nobody's built, five of which come with a warning label.
 
