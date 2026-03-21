@@ -61,11 +61,75 @@ Perceive has no grid. A first sketch:
 
 **Learned codebook × Stream**: Adapt the encoding as data arrives. BPE is learned offline. Recent vocabulary adaptation work is still offline: [Adaptive BPE](https://aclanthology.org/2024.findings-emnlp.863/) (Balde et al. 2024), [PickyBPE](https://aclanthology.org/2024.emnlp-main.925/) (Chizhov et al. 2024). Generic online encoders exist — [online dictionary learning](https://www.jmlr.org/papers/v11/mairal10a.html) (Mairal et al. 2010), [Growing Neural Gas](https://papers.nips.cc/paper/1994/hash/d56b9fc4b0f1be8871f5e1c40c0067e7-Abstract.html) (Fritzke 1994) — but neither satisfies the Perceive contract: parseable by downstream, backward-compatible, stable enough to avoid catastrophic retokenization. This blank is less developed than the causal filter. The spec is shorter: online merge/split of codebook entries, bounded retokenization rate, predictive-utility objective. The literature is thinner. It belongs on the list but isn't ready for a composition sketch.
 
+### The third axis
+
+The grids above are two-dimensional. Filter is selection semantics × error guarantee. Attend is output form × redundancy control. Both assume the input is a flat collection — a bag of items where each item is independent.
+
+But algorithms operate *on* data structures. A sequence has order. A tree has hierarchy. A graph has adjacency. A partial order has comparability without totality. The data structure constrains which operations are possible and which postconditions are achievable. That makes it a genuine third axis, not a label.
+
+Hold the error guarantee at **bounded** — the column where the causal blank already lives — and cross data structure against selection semantics:
+
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Predicate</th><th style="background:#f0f0f0">Similarity</th><th style="background:#f0f0f0">Dominance</th><th style="background:#f0f0f0">Causal</th></tr></thead>
+<tr><td><strong>Flat</strong></td><td>Threshold filtering</td><td>k-NN radius pruning</td><td>ε-dominance</td><td style="background:#fff3cd"><em>blank</em></td></tr>
+<tr><td><strong>Sequence</strong></td><td>Change-point detection</td><td>DTW pruning</td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#fff3cd"><em>blank</em></td></tr>
+<tr><td><strong>Tree</strong></td><td>XPath + depth bound</td><td>Tree edit distance threshold</td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#fff3cd"><em>blank</em></td></tr>
+<tr><td><strong>Graph</strong></td><td>Approx subgraph match</td><td>Graph kernel pruning</td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#fff3cd"><em>blank</em></td></tr>
+<tr><td><strong>Partial order</strong></td><td><a href="https://doi.org/10.1093/biomet/asy066">DAGGER</a></td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#fff3cd"><em>blank</em></td></tr>
+</table>
+
+The flat row repeats the original grid. Everything below it is new. The predicate and similarity columns fill quickly — CS has been filtering structured data by predicate and proximity for decades. The right half empties out. Dominance and causal filtering were built for flat collections. Nobody carried them over.
+
+One cell that looked blank turned out to be occupied. [DAGGER](https://doi.org/10.1093/biomet/asy066) (Ramdas et al., Biometrika 2019) does FDR-controlled hypothesis filtering on DAGs — partial order × predicate with bounded error. The algorithm exists. The rest of the partial order row does not.
+
+### Dominance on structured data
+
+Pareto filtering assumes independent objective vectors: each item is a point in ℝ^d, dominance is coordinate-wise. What happens when items have structure?
+
+**Sequence × Dominance.** Trajectory skylines exist — [skyline queries over moving objects](https://doi.org/10.1007/s00778-020-00618-5) — but they filter *points that happen to move*, not *sequences whose ordering constrains which comparisons are valid*. A bounded-error algorithm for "this trajectory dominates that trajectory, respecting temporal order" has no standard name.
+
+**Tree × Dominance.** Tree data structures *for* Pareto processing exist (KD-trees for skyline queries). But "this subtree dominates that subtree across multiple objectives" — where the tree structure is the *input*, not the index — is unstudied.
+
+**Graph × Dominance.** The closest work is skyline community search: ["Skyline Community Search in Multi-valued Networks"](https://doi.org/10.1145/3183713.3183736) (SIGMOD 2018) finds communities that aren't dominated on multiple graph attributes. That's exact. No bounded-error variant exists.
+
+**Partial order × Dominance.** Exact algorithms exist: [TSS](https://researchportal.hkust.edu.hk/en/publications/topologically-sorted-skylines-for-partially-ordered-domains) for topologically sorted skylines, [DRSA](https://en.wikipedia.org/wiki/Dominance-based_rough_set_approach) for rough-set dominance. No bounded-error version in the FPR/FNR sense.
+
+The pattern: exact dominance on structured data has scattered coverage. Bounded-error dominance on structured data has none. Four empty cells, same gap.
+
+### Causal filtering on structured data
+
+The original blank — causal × bounded on flat data — has a composition sketch. What about structured inputs?
+
+**Sequence × Causal.** [CausalImpact](https://google.github.io/CausalImpact/CausalImpact.html) estimates causal effects on time series. [FDR-controlled change detection](https://doi.org/10.1016/j.jmva.2023.105224) bounds error rates on sequence data. Nobody has composed them into: "filter time-series segments by interventional effect with bounded FPR/FNR."
+
+**Tree × Causal.** Uplift trees and causal forests estimate treatment effects by recursive partitioning. But they *build* the tree (Consolidate). Filtering branches of an *existing* tree by causal effect with bounded error — that's a different operation, and it doesn't exist.
+
+**Graph × Causal.** Causal inference on known DAGs is a mature field. FDR-controlled selection on graph-structured hypotheses exists. But "given this causal graph, filter nodes whose interventional effect exceeds threshold τ with bounded error" has no standard algorithm. The pieces are closer here than anywhere else in the grid.
+
+### The partial order desert
+
+The bottom row is the most striking. Partial orders are everywhere — dependency graphs, taxonomies, version histories, lattices of formal concepts. One cell is occupied (DAGGER for predicate filtering). The other three are empty.
+
+Partial order × similarity is the most conceptually interesting blank. Similarity filtering assumes a metric space. Partial orders don't have distances — they have reachability. What does "similar" mean when some pairs of items are incomparable? Poset search algorithms exist. Metric-space search exists. The intersection is unstudied.
+
+### Attend and Perceive
+
+The Attend grid looked saturated in two dimensions. With data structure as an axis, two cells that looked blank turned out to be occupied:
+
+- **Graph × explicit diversity**: [Diversified Top-k Graph Pattern Matching](https://doi.org/10.14778/2536258.2536263) (PVLDB 2013) and [TED+](https://doi.org/10.1109/TKDE.2023.3312566) (TKDE 2024) both rank graph patterns with explicit redundancy control.
+- **Hypergraph ranking**: [Top-k Hyperedge Triplets](https://www.pnnl.gov/publications/retrieving-top-k-hyperedge-triplets-models-and-applications) (IEEE BigData 2024) ranks hypergraph outputs directly.
+
+Attend remains saturated even in three dimensions. The Perceive blank (learned codebook × stream) remains open — recent work on vocabulary adaptation ([BPE-knockout](https://aclanthology.org/2024.naacl-long.324/), [TokAlign](https://aclanthology.org/2025.acl-long.207/)) still operates offline.
+
 ### What the blanks tell us
 
-Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict something more specific: *compositions*. The pieces exist. The contract names what they must satisfy when assembled. The grid writes the spec.
+The original two-dimensional grids found two blanks. The data structure axis reveals eight more — and they cluster. The dominance column empties whenever the input has structure. The causal column was already empty for flat data; structured data makes it worse. The partial order row is a desert.
 
-The causal filter blank has a 4-step composition sketch, six literature entry points, and three application domains waiting. That's not "something goes here." That's a build order.
+These aren't random gaps. They follow from a structural fact: dominance and causal filtering were designed for flat collections. The algorithms assume independent items with coordinate-wise comparison or pointwise treatment assignment. Structure breaks both assumptions. Order constrains which comparisons are valid. Hierarchy nests effects. Adjacency creates interference.
+
+Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict something more specific: *compositions*. The pieces exist in separate literatures — skyline queries, causal inference, FDR control, graph kernels. The contract names what they must satisfy when assembled. The grid writes the spec. The data structure axis tells you which assembly hasn't been attempted.
+
+The causal filter blank has a 4-step composition sketch, six literature entry points, and three application domains waiting. The eight new blanks have the same shape: pieces in separate papers, a contract from the framework, and a gap where the composition should be. That's not "something goes here." That's a build order — eight times over.
 
 ---
 

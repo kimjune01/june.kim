@@ -122,21 +122,59 @@ columns:
     store: data
     contract: "Strictly smaller. Losers suppressed, winners forwarded."
     grid_axes:
-      rows: [predicate, similarity, dominance]
+      rows: [predicate, similarity, dominance, causal]
       cols: [exact, bounded_approximation, probabilistic]
+      depth: [flat, sequence, tree, graph, partial_order]  # data structure axis
     grid:
+      # 2D slice (flat data structure, original grid)
       - row: predicate
         exact: "WHERE, range query"
         bounded_approximation: "Threshold filtering (soft margin)"
-        probabilistic: null  # prediction: randomized classifier gate
+        probabilistic: "Bloom filter"
       - row: similarity
         exact: "Exact NN pruning"
         bounded_approximation: "k-NN radius pruning"
         probabilistic: "LSH filtering"
       - row: dominance
         exact: "Pareto filtering"
-        bounded_approximation: null  # prediction: approximate Pareto in high dim
-        probabilistic: null  # prediction
+        bounded_approximation: "ε-dominance"
+        probabilistic: "Stochastic dominance"
+      - row: causal
+        exact: "do-calculus gate"
+        bounded_approximation: null  # blank: pieces in 3 literatures, not composed
+        probabilistic: "Propensity score gate"
+    # 3D slice: data structure × selection semantics (bounded error column)
+    structure_grid:
+      - structure: flat
+        predicate: "Threshold filtering"
+        similarity: "k-NN radius pruning"
+        dominance: "ε-dominance"
+        causal: null  # blank (original)
+      - structure: sequence
+        predicate: "Change-point detection"
+        similarity: "DTW pruning"
+        dominance: null  # blank: trajectory skylines exist but not bounded-error
+        causal: null  # blank: CausalImpact + FDR change detection, not composed
+      - structure: tree
+        predicate: "XPath + depth bound"
+        similarity: "Tree edit distance threshold"
+        dominance: null  # blank: tree structures FOR Pareto exist, not ON trees
+        causal: null  # blank: uplift trees build trees (Consolidate), don't filter them
+      - structure: graph
+        predicate: "Approx subgraph match"
+        similarity: "Graph kernel pruning"
+        dominance: null  # blank: skyline communities (SIGMOD 2018) exact only
+        causal: null  # blank: causal inference on DAGs, no bounded-error filter
+        refs:
+          dominance_exact: "https://doi.org/10.1145/3183713.3183736"
+      - structure: partial_order
+        predicate: "DAGGER (Ramdas 2019)"  # FDR-controlled filtering on DAGs/posets
+        similarity: null  # blank: poset search + metric search exist separately
+        dominance: null  # blank: TSS/DRSA exact, no bounded-error
+        causal: null  # blank
+        refs:
+          predicate: "https://doi.org/10.1093/biomet/asy066"
+          dominance_exact: "https://en.wikipedia.org/wiki/Dominance-based_rough_set_approach"
     operations:
       - name: "Predicate selection (WHERE)"
         precondition: Indexed relation + boolean predicate
