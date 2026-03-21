@@ -6,17 +6,9 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds on [The Handshake](/the-handshake).*
 
-### Near-misses
+### How to use this
 
-[The Natural Framework](/the-natural-framework) derives six roles from temporal flow and bounded storage. [The Handshake](/the-handshake) gives each step a contract: precondition and postcondition. The CS textbook is full of operations that almost satisfy them. *Almost* is the diagnosis.
-
-PageRank satisfies "ranked by authority" but the Attend contract requires diversity and a bound. Google bolted on re-ranking, topic diversity, and freshness over two decades: incremental upgrades toward a contract-preserving morphism. Quicksort satisfies order but not diversity or boundedness. Most familiar algorithms are near-misses. The formal test is iteration stability: run the full loop and observe which postcondition degrades. Diversity dies first, because without repulsion the same cluster dominates every cycle.
-
-Step N+1's precondition is step N's postcondition. A correct algorithm with a broken precondition produces garbage. The framework increases diagnostic resolution: instead of "the system is broken," the diagnosis is "Attend's diversity guarantee is missing." The parts bin increases it further: instead of "Attend is broken," the prescription is "this is a top-k sort where you need MMR re-ranking." Swap one operation, same slot, contract restored.
-
-### Agent
-
-The framework is the diagnostic manual. The parts bin, once ordered, is the pharmacy. The handshake is why the prescriptions compose. How would an agent use this?
+[The Natural Framework](/the-natural-framework) derives six roles. [The Handshake](/the-handshake) gives each a contract. This post is the catalog of operations that satisfy them and the grids that index them. An agent uses it in four steps:
 
 **Describe.** A product manager says: "users sign up but never come back." An agent maps this to the six steps. Cache works. Users arrive and data is stored. Filter is missing. Users get everything, keep nothing. Consolidate is nil. Nothing changes between sessions.
 
@@ -26,9 +18,7 @@ The framework is the diagnostic manual. The parts bin, once ordered, is the phar
 
 **Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. If not, it flags the interface mismatch before you build it.
 
-The doctor doesn't need to understand category theory. They need to read the contracts: precondition, postcondition, fidelity. The handshake is the pharmacology. The taxonomy is the PDR. The agent is the resident who can look things up fast.
-
-The machine-readable catalog is [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Each operation has its precondition, postcondition, grid position, fidelity, variation source, and cost. An agent can load the YAML, query by step and grid coordinates, and return candidates that match the contract.
+Machine-readable version: [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
 
 ### Catalog
 
@@ -126,9 +116,9 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 <tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
 </table>
 
-Every cell fills with a known algorithm. [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) at predicate × probabilistic — the most deployed probabilistic data structure in computing. [ε-dominance](https://en.wikipedia.org/wiki/%CE%95-dominance) at dominance × bounded — standard in multi-objective optimization. [Stochastic dominance](https://en.wikipedia.org/wiki/Stochastic_dominance) at dominance × probabilistic — decision theory since the 1960s. A 3×3 where every cell fills on sight is a confirmation, not a prediction.
+Every cell fills. The axes validate.
 
-Take **Attend**. Lay operations on output form vs. redundancy control:
+**Attend.** Output form vs. redundancy control:
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">None</th><th style="background:#f0f0f0">Implicit</th><th style="background:#f0f0f0">Explicit</th></tr></thead>
@@ -137,28 +127,7 @@ Take **Attend**. Lay operations on output form vs. redundancy control:
 <tr><td><strong>Path/tree</strong></td><td>Dijkstra, A*</td><td>MCTS</td><td><a href="https://arxiv.org/abs/1111.2249">Portfolio solvers</a></td></tr>
 </table>
 
-The right column filled late. CS built ranking algorithms for decades and almost never baked redundancy control into the postcondition. It was bolted on after. Simulated annealing and CMA-ES find single optima by explicitly diversifying the search: temperature schedules force basin-hopping, covariance matrices enforce spread. Portfolio solvers spawn threads with different random seeds; stochasticity encourages divergence, budget kills at deadline, final selection picks the best from a diverse pool. Biological evolution does this with mutation rate as the stochastic dial.
-
-The grids organize the catalog. The axes partition the design space cleanly enough to prescribe: given a broken slot, name the coordinates, look up the candidate. Whether finer grids can do more — find blank cells, predict operations that haven't been composed yet — is [the next question](/the-missing-parts).
-
-### Future work
-
-The [derivation](/the-natural-framework) establishes contracts. The catalog and grids give the pharmacy. Two things are ready now:
-
-- **Build the diagnostic agent.** Describe → Diagnose → Prescribe → Validate, backed by the ordered taxonomy.
-- **[Find the missing parts.](/the-missing-parts)** The 3×3 grids confirm the axes but don't predict. Finer grids with more rows surface genuine blanks — operations that should exist but haven't been composed yet.
-
-Three need formalization work. The existence proofs and types are defined; the composition proofs are sketched:
-
-- Formalize in Haskell: define the six morphisms as Kleisli arrows in the [Giry monad](https://ncatlab.org/nlab/show/Giry+monad), test composition with [QuickCheck](https://hackage.haskell.org/package/QuickCheck)
-- String diagrams: visualize the pipeline in Stoch using the Markov category graphical calculus ([Cho & Jacobs 2019](https://arxiv.org/abs/1709.00322))
-- Enrichment: track bits per step using Bradley's enriched category framework ([Bradley 2021](https://arxiv.org/abs/2106.07890))
-
-One needs new theory. The derivation is for linear pipelines only:
-
-- Operads ([Spivak 2013](https://arxiv.org/abs/1305.0196)): extend from linear pipelines to fan-in/fan-out agent architectures
-
-Every gap in the bin is an *almost* that hasn't been named yet.
+Given a broken slot, name the coordinates, look up the candidate. For blank cells and finer grids, see [The Missing Parts](/the-missing-parts).
 
 ---
 
