@@ -131,7 +131,17 @@ Three of the eight blanks have compositions close enough to sketch. Each wires e
 
 **Sequence × Dominance (bounded).** For each trajectory: evaluate objectives in temporal order, compute pairwise [conformal p-values](https://proceedings.mlr.press/v162/fisch22a.html) for "trajectory j dominates trajectory i," aggregate per-trajectory with Bonferroni, and correct across trajectories with BY. Retain trajectories whose domination null is not rejected. P(retaining a truly dominated trajectory) ≤ α. Pieces: `paretoset`, `mapie`, `statsmodels`.
 
-The remaining five blanks need definitions before they need code. "Subtree dominates subtree" and "top-k diverse from a poset" are design choices waiting for a specification, not compositions waiting for assembly.
+The remaining five blanks need definitions before they need code. The algorithms are standard (greedy, branch-and-bound, threshold). The definitions are what's missing. Candidate definitions for each:
+
+**Tree × Dominance.** Define subtree value via a monotone tree aggregator (additive rollup, max-plus, discounted sum). Subtree A dominates B if there exists a hierarchy-respecting coupling between their nodes where every matched pair satisfies coordinate-wise ε-slack and unmatched structure incurs a penalty. Reduces to Pareto when the tree is flat. Filter via bottom-up interval sketches: compare `[L,U]` bounds, only resolve ambiguous pairs exactly.
+
+**Graph × Dominance.** Factor out shared substructure before comparing. For communities C₁ and C₂ with overlap I, decompose into residuals R₁, R₂ and compare only marginal contributions g(R₁|I) vs g(R₂|I). Overlap-aware dominance: C₁ ≤ C₂ iff the residual of C₁ is no better than C₂'s on every objective. Filter via minhash overlap estimation and residual bound comparison.
+
+**Partial order × Similarity.** Replace metric distance with contextual overlap: Sim(x,y) = α·J(Down(x),Down(y)) + β·J(Up(x),Up(y)) + γ·C(x,y), where J is Jaccard on principal ideals/filters and C is a comparability bonus. The analogue of radius is a lower-bound frontier on contextual overlap. Filter via minhash sketches of ideals/filters and threshold pruning.
+
+**Partial order × Causal.** The unit of treatment is a feasible order-closure, not a single node. Treating node x forces treatment of its descendants: T(x) = closure({x}). The causal effect is τₓ = E[Y(S₀ ∪ T(x)) − Y(S₀)] where S₀ is the baseline feasible set. Estimate via isotonic outcome models or doubly robust estimators with order-constrained nuisance fits. Filter by interval bounds on τₓ. Requires positivity over feasible closures.
+
+**Attend × Partial order.** Diversity = order repulsion: D(x,y) = 1 − Sim(x,y) using the same contextual overlap from above. Two options: (1) build a PSD order kernel from ideal/filter indicator features and use DPP, or (2) use submodular greedy over F(S) = Σr(x) + λ·cover(S) where coverage rewards spanning distinct antichain regions. "Top-k diverse from a poset" means: size-k set maximizing relevance plus order-context coverage, not a total order.
 
 ---
 
