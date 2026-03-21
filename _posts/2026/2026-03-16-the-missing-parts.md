@@ -113,15 +113,7 @@ Plus one in Perceive (learned codebook × stream, plane 2).
 
 The grid's first contribution is making cells addressable. Without the grid, nobody searches for "bounded-error dominance filtering on time series" because that combination of concepts has no name. The [time series skyline paper](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z) from 2013 exists, but you'd never find it unless you knew to cross those two axes. And even when you find a paper, judging whether it fills the cell requires checking the contract: does it satisfy bounded error? Does it respect temporal order? Is it a filter (strictly smaller output) or something else? The grid writes the question. The question is still hard to answer.
 
-None of the seven are unfillable. Two need definitions: tree × dominance needs a formalized subtree comparison, attend × partial order needs a diversity objective. Both reduce to known patterns once the definition is fixed. Five are conditionally fillable: the algorithm works if the assumptions hold. Causal filtering on structured data requires identification (no hidden confounding, known exposure mapping, positivity). Poset similarity requires exploitable structure or falls back to brute-force scan. Online tokenization requires restricted update policies (append-only vocabularies, versioned codebooks). The blanks are where the assumptions break.
-
-Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict *conditional compositions*: the pieces exist, the contract names what they must satisfy, and the grid names which assumption must hold for the assembly to work. Ten axes tell you where to look. Three planes tell you where to build. The grid writes the spec. The spec is seven algorithms nobody's built, five of which come with a warning label.
-
-### Filling the blanks
-
-Three of the seven blanks have compositions close enough to build. [Filling the Blanks](/filling-the-blanks) develops each in full: residualized dominance for overlapping graph communities, closure-level causal effects on posets, and diverse top-k from partial orders. Each wires known techniques with one new piece. The grid named the cell. The composition fills it.
-
-Four blanks remain open. Sequence × Causal needs a theory of temporal spillover. Tree × Dominance needs a definition of "subtree dominates subtree." Graph × Causal needs spillover-aware estimation at the node level. Partial order × Similarity needs a metric substitute for reachability. The grid writes the question. The answer requires new theory.
+For each blank, adjacent work exists: nearby algorithms that solve a restricted version or a related problem. The grid names the cell. The adjacent work names the near-miss. [Filling the Blanks](/filling-the-blanks) develops the compositions: three implemented and tested, five more sketched from existing pieces.
 
 ---
 
