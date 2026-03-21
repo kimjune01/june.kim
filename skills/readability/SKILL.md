@@ -25,6 +25,8 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Parallel structure mismatch.** List items that don't match meter. Fix by making items the same shape.
 
+**Contrast pairs as separate sentences.** Two consecutive sentences with the same structure that say opposite things ("X does A. Y does B.") often read stronger joined by a semicolon. The semicolon signals the contrast is intentional; the period makes it look accidental. Flag when the parallel is exact enough that a semicolon would land the opposition in one breath.
+
 **Run-on mid-register.** Sentences over 20 words where every word is mid-frequency and mid-stress. Try restructuring first: move a strong word to the end, add a colon pivot, or join with a conjunction. Split only when restructuring can't save it.
 
 **Clause ordering for flow.** Each sentence starts where the previous one ended. Given-before-new: the known thing comes first, the new thing lands last. "The team's coverage comes from overlapping T's" flows into "Fixed hours in a release cycle mean depth costs breadth" because coverage → constraint is a natural handoff. Reversing either sentence breaks the thread. When flow and emphasis align, the sentence works on both passes. When they conflict, prefer flow — the reader who stumbles never reaches the punch. Flag sentences where reordering clauses would connect better to the surrounding context. Only flag when the last noun of sentence N-1 and the first noun of sentence N have no semantic connection — that's the gap the reader has to jump. Don't flag deliberate breaks: "but" sentences, parallel structures, or contrast pairs that intentionally start somewhere new.
