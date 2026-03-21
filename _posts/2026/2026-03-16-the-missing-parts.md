@@ -121,6 +121,18 @@ The data structure plane (plane 3) empties whenever dominance or causality meets
 
 Mendeleev predicted germanium's density before anyone found the element. I-Con predicted a new algorithm. These blanks predict compositions: the pieces exist in separate literatures (skyline queries, causal inference, FDR control, graph kernels, poset theory), and the contract names what they must satisfy when assembled. Ten axes tell you where to look. Five planes tell you where to build. The grid writes the spec. The spec is eight algorithms nobody's built.
 
+### Composition sketches
+
+Three of the eight blanks have compositions close enough to sketch. Each wires existing libraries into a pipeline that satisfies the contract: input strictly larger than output, bounded FDR.
+
+**Sequence × Causal (bounded).** For each time-series segment: fit [CausalImpact](https://google.github.io/CausalImpact/CausalImpact.html) to estimate the intervention effect, compute a [split-conformal](https://proceedings.mlr.press/v162/fisch22a.html) interval from pre-period residuals, derive a one-sided p-value for effect > τ, and feed it to [SAFFRON](https://proceedings.mlr.press/v80/ramdas18a.html) for online FDR control. Accept segments where both the conformal lower bound exceeds the threshold and the online test rejects. FDR ≤ α under SAFFRON's dependence assumptions. Pieces: `causalimpact`, `mapie`, custom SAFFRON implementation.
+
+**Graph × Causal (bounded).** For each node in a known causal DAG: identify the estimand via [DoWhy](https://github.com/py-why/dowhy), estimate the node-specific interventional effect with doubly robust estimation under an [exposure mapping](https://www.frontiersin.org/articles/10.3389/fdata.2023.1128649/full) that accounts for network spillover, compute a one-sided p-value for effect > τ, and apply [Benjamini-Hochberg](https://en.wikipedia.org/wiki/False_discovery_rate#Benjamini%E2%80%93Hochberg_procedure) across all nodes. FDR ≤ α under independence/PRDS; use [BY](https://en.wikipedia.org/wiki/False_discovery_rate#Benjamini%E2%80%93Yekutieli_procedure) for arbitrary dependence. Pieces: `dowhy`, `causallib`, `networkx`, `statsmodels`.
+
+**Sequence × Dominance (bounded).** For each trajectory: evaluate objectives in temporal order, compute pairwise [conformal p-values](https://proceedings.mlr.press/v162/fisch22a.html) for "trajectory j dominates trajectory i," aggregate per-trajectory with Bonferroni, and correct across trajectories with BY. Retain trajectories whose domination null is not rejected. P(retaining a truly dominated trajectory) ≤ α. Pieces: `paretoset`, `mapie`, `statsmodels`.
+
+The remaining five blanks need definitions before they need code. "Subtree dominates subtree" and "top-k diverse from a poset" are design choices waiting for a specification, not compositions waiting for assembly.
+
 ---
 
 *Written via the [double loop](/double-loop).*
