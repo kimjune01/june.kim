@@ -37,29 +37,24 @@ axes:
       values: [unsupervised, supervised, self_supervised]
 
 planes:
-  # Five planes with blanks. See /the-missing-parts.
-  # Two fully-occupied planes (selection_semantics × error_guarantee,
-  # output_form × redundancy_control) validate the axes but don't predict.
-  # They live in /the-parts-bin, not here.
+  # Seven fully-occupied planes validate the axes but don't predict:
+  #   selection_semantics × error_guarantee (Filter, 4×3)
+  #   output_form × redundancy_control (Attend, 3×3)
+  #   stationarity × selection_semantics (Filter, 2×4)
+  #   temporality × selection_semantics (Filter, 2×4)
+  #   data_structure × error_guarantee (Filter, 5×3) — repeats plane 1 after marginalizing
+  # Three planes have blanks. See /the-missing-parts.
   - name: "Plane 1: Data structure × Selection semantics (bounded)"
     axes: [data_structure, selection_semantics]
     fixed: { error_guarantee: bounded }
-    status: 7_blanks  # dominance + causal columns empty on structured data
-  - name: "Plane 2: Stationarity × Selection semantics (bounded)"
-    axes: [stationarity, selection_semantics]
-    fixed: { error_guarantee: bounded }
-    status: 2_blanks  # drifting × dominance, drifting × causal
-  - name: "Plane 3: Codebook type × Temporality (Perceive)"
+    status: 5_blanks  # causal column sparse, tree×dominance lone holdout
+  - name: "Plane 2: Codebook type × Temporality (Perceive)"
     axes: [codebook_type, temporality]
     stage: perceive
     status: 1_blank  # learned × stream
-  - name: "Plane 4: Pipeline stage × Data structure"
+  - name: "Plane 3: Pipeline stage × Data structure"
     axes: [pipeline_stage, data_structure]
     status: 1_blank  # attend × partial_order
-  - name: "Plane 5: Selection semantics × Error guarantee (anchor)"
-    axes: [selection_semantics, error_guarantee]
-    stage: filter
-    status: fully_occupied  # 4×3, all 16 cells filled. Validates axes.
 
 # Plane 5 data: stage × data structure (canonical algorithm per cell)
 stage_structure_grid:
@@ -262,8 +257,10 @@ columns:
       - structure: sequence
         predicate: "Change-point detection"
         similarity: "DTW pruning"
-        dominance: null  # blank: trajectory skylines exist but not bounded-error
+        dominance: "Dominant skyline over multiple time series (2013)"
         causal: null  # blank: CausalImpact + FDR change detection, not composed
+        refs:
+          dominance: "https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z"
       - structure: tree
         predicate: "XPath + depth bound"
         similarity: "Tree edit distance threshold"
@@ -274,10 +271,10 @@ columns:
       - structure: graph
         predicate: "Approx subgraph match"
         similarity: "Graph kernel pruning"
-        dominance: null  # blank: skyline communities (SIGMOD 2018) exact only
+        dominance: "Subgraph skyline (TKDE 2016), Pareto-optimal community search (CIKM 2021)"
         causal: null  # blank: causal inference on DAGs, no bounded-error filter
         refs:
-          dominance_exact: "https://doi.org/10.1145/3183713.3183736"
+          dominance: "https://weiguozheng.github.io/pub/tkde16-skyline.pdf"
       - structure: partial_order
         predicate: "DAGGER (Ramdas 2019)"  # FDR-controlled filtering on DAGs/posets
         similarity: null  # blank: poset search + metric search exist separately
@@ -313,11 +310,13 @@ columns:
       - stationarity: drifting
         predicate: "ADWIN (Bifet & Gavalda 2007)"
         similarity: "Adaptive k-NN (thin: no formal error bounds)"
-        dominance: null  # blank: streaming skylines handle insertion drift, not criterion drift
-        causal: null  # blank: adaptive conformal + anytime-valid inference exist, not composed
+        dominance: "Dynamic skyline under changing attributes (2017+)"
+        causal: "Weighted conformal p-values under covariate shift (Biometrika 2025)"
         refs:
           predicate: "https://dl.acm.org/doi/10.1145/1150402.1150423"
           similarity: "https://ieeexplore.ieee.org/document/6835986"
+          dominance: "https://www.mdpi.com/2220-9964/6/5/137"
+          causal: "https://academic.oup.com/biomet/advance-article/doi/10.1093/biomet/asaf066/8250683"
     operations:
       - name: "Predicate selection (WHERE)"
         precondition: Indexed relation + boolean predicate
