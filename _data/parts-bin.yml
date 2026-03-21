@@ -11,7 +11,7 @@ axes:
     - name: pipeline_stage
       values: [perceive, cache, filter, attend, consolidate, remember]
     - name: data_structure
-      values: [flat, sequence, tree, graph, partial_order]
+      values: [flat, sequence, tree, graph, partial_order, embedding_space]
     - name: error_guarantee
       values: [exact, bounded, probabilistic]
     - name: temporality
@@ -80,24 +80,28 @@ stage_structure_grid:
     tree: "XML parsing"
     graph: "Edge list parsing"
     partial_order: "PC algorithm (thin)"
+    embedding_space: "CLIP embedding"
   - stage: cache
     flat: "Hash index"
     sequence: "B-tree"
     tree: "Trie"
     graph: "Adjacency index"
     partial_order: "Transitive closure (thin)"
+    embedding_space: "HNSW index"
   - stage: filter
     flat: "WHERE"
     sequence: "Change-point detection"
     tree: "XPath"
     graph: "Subgraph match"
     partial_order: "DAGGER (thin)"
+    embedding_space: "c-ANN search (cover tree)"
   - stage: attend
     flat: "MMR"
     sequence: "Beam search"
     tree: "MCTS"
     graph: "Diversified top-k graph pattern matching"
     partial_order: null  # blank: no ranking algorithm for posets with diversity + bound
+    embedding_space: "MMR re-ranking"
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
   - stage: consolidate
@@ -106,12 +110,14 @@ stage_structure_grid:
     tree: "Decision tree induction"
     graph: "GNN training"
     partial_order: "Lattice learning (thin)"
+    embedding_space: "Triplet-loss metric learning"
   - stage: remember
     flat: "WAL append"
     sequence: "SSTable flush"
     tree: "Git commit"
     graph: "Graph DB commit"
     partial_order: "Topological serialization"
+    embedding_space: "FAISS index serialization"
 
 # Plane 4 data: stage × error guarantee (canonical algorithm per cell)
 stage_error_grid:
@@ -267,7 +273,7 @@ columns:
     grid_axes:
       rows: [predicate, similarity, dominance, causal]
       cols: [exact, bounded_approximation, probabilistic]
-      depth: [flat, sequence, tree, graph, partial_order]  # data structure axis
+      depth: [flat, sequence, tree, graph, partial_order, embedding_space]  # data structure axis
     grid:
       # 2D slice (flat data structure, original grid)
       - row: predicate
@@ -327,6 +333,14 @@ columns:
           predicate: "https://doi.org/10.1093/biomet/asy066"
           dominance: "https://ideas.repec.org/a/oup/biomet/v109y2022i2p457-471..html"
           dominance_exact: "https://en.wikipedia.org/wiki/Dominance-based_rough_set_approach"
+      - structure: embedding_space
+        predicate: "ε-approximate range search"
+        similarity: "c-ANN (cover tree, HNSW)"
+        dominance: "Metric skyline (thin: exact only, no bounded-error guarantees)"
+        causal: null  # borderline: FDR causal selection + geometry-aware interference exist separately, not composed
+        refs:
+          similarity: "https://huggingface.co/papers/1603.09320"
+          dominance: "https://ceur-ws.org/Vol-567/paper03.pdf"
     # Plane 4: temporality × selection semantics (bounded error column)
     temporality_grid:
       - temporality: batch
