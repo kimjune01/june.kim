@@ -49,28 +49,28 @@ planes:
   #   error_guarantee × output_form (Attend, 3×3)
   #   error_guarantee × supervision_signal (Consolidate, 3×3)
   #   temporality × supervision_signal (Consolidate, 2×3)
-  #   data_structure × codebook_type (Perceive, 5×2)
+  #   data_structure × codebook_type (Perceive, 6×2)
   #   pipeline_stage × temporality (6×2)
   #
   # Planes with blanks:
   - name: "Plane 1: Data structure × Selection semantics (bounded)"
     axes: [data_structure, selection_semantics]
     fixed: { error_guarantee: bounded }
-    status: 5_blanks  # causal column sparse, tree×dominance lone holdout
+    status: all_filled  # all cells now have implementations via filling-the-blanks
   - name: "Plane 2: Codebook type × Temporality (Perceive)"
     axes: [codebook_type, temporality]
     stage: perceive
-    status: 1_blank  # learned × stream
+    status: all_filled  # learned × stream filled by streaming tokenizer
   - name: "Plane 3: Pipeline stage × Data structure"
     axes: [pipeline_stage, data_structure]
-    status: 1_blank  # attend × partial_order
+    status: all_filled  # attend × partial_order filled by poset diverse top-k
   - name: "Plane 4: Pipeline stage × Error guarantee"
     axes: [pipeline_stage, error_guarantee]
-    status: 1_blank  # cache × bounded
+    status: all_filled  # cache × bounded filled by cover tree; remember × bounded/probabilistic are structural (lossless contract)
   #
   # Projections (blanks are shadows of known blanks, not new):
-  #   data_structure × output_form (Attend, 5×3) — partial_order row blank = attend×partial_order
-  #   data_structure × redundancy_control (Attend, 5×3) — partial_order×explicit blank = same
+  #   data_structure × output_form (Attend, 6×3)
+  #   data_structure × redundancy_control (Attend, 6×3)
 
 # Plane 5 data: stage × data structure (canonical algorithm per cell)
 stage_structure_grid:
@@ -100,7 +100,7 @@ stage_structure_grid:
     sequence: "Beam search"
     tree: "MCTS"
     graph: "Diversified top-k graph pattern matching"
-    partial_order: null  # blank: no ranking algorithm for posets with diversity + bound
+    partial_order: "Poset diverse top-k (filling-the-blanks #3)"
     embedding_space: "MMR re-ranking"
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
@@ -174,7 +174,7 @@ columns:
         learned: "BPE tokenization"
       - row: stream
         fixed: "A/D conversion"
-        learned: null  # blank: no online tokenizer with bounded retokenization
+        learned: "Streaming tokenizer (filling-the-blanks #8)"
     operations:
       - name: Lexical analysis
         precondition: Raw byte stream
@@ -309,13 +309,13 @@ columns:
         predicate: "Change-point detection"
         similarity: "DTW pruning"
         dominance: "Dominant skyline over multiple time series (2013)"
-        causal: null  # blank: CausalImpact + FDR change detection, not composed
+        causal: "Spillover-adjusted causal filter (filling-the-blanks #4)"
         refs:
           dominance: "https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z"
       - structure: tree
         predicate: "XPath + depth bound"
         similarity: "Tree edit distance threshold"
-        dominance: null  # blank: tree structures FOR Pareto exist, not ON trees
+        dominance: "Subtree stochastic dominance (filling-the-blanks #5)"
         causal: "Luo & Guo 2023 (thin: subgroup trees only)"
         refs:
           causal: "https://doi.org/10.1002/sim.9900"
@@ -323,14 +323,14 @@ columns:
         predicate: "Approx subgraph match"
         similarity: "Graph kernel pruning"
         dominance: "Subgraph skyline (TKDE 2016), Pareto-optimal community search (CIKM 2021)"
-        causal: null  # blank: causal inference on DAGs, no bounded-error filter
+        causal: "Embedding causal filter (filling-the-blanks #7)"
         refs:
           dominance: "https://weiguozheng.github.io/pub/tkde16-skyline.pdf"
       - structure: partial_order
         predicate: "DAGGER (Ramdas 2019)"  # FDR-controlled filtering on DAGs/posets
-        similarity: null  # blank: poset search + metric search exist separately
+        similarity: "Order-context similarity filter (filling-the-blanks #6)"
         dominance: "Smoothed nested testing (thin: hypothesis-poset only)"
-        causal: null  # blank
+        causal: "Closure-level causal filter (filling-the-blanks #2)"
         refs:
           predicate: "https://doi.org/10.1093/biomet/asy066"
           dominance: "https://ideas.repec.org/a/oup/biomet/v109y2022i2p457-471..html"
@@ -339,7 +339,7 @@ columns:
         predicate: "ε-approximate range search"
         similarity: "c-ANN (cover tree, HNSW)"
         dominance: "Metric skyline (thin: exact only, no bounded-error guarantees)"
-        causal: null  # borderline: FDR causal selection + geometry-aware interference exist separately, not composed
+        causal: "Embedding causal filter (filling-the-blanks #7)"
         refs:
           similarity: "https://huggingface.co/papers/1603.09320"
           dominance: "https://ceur-ws.org/Vol-567/paper03.pdf"
@@ -452,11 +452,11 @@ columns:
       - row: single_best
         none: "argmax"
         implicit: "Tournament selection"
-        explicit: null  # prediction
+        explicit: "Simulated annealing, CMA-ES"
       - row: path_tree
         none: "Dijkstra, A*"
         implicit: "MCTS"
-        explicit: null  # prediction: concurrent stochastic tree search
+        explicit: "Portfolio solvers"
     near_misses:
       - name: "Quicksort / Mergesort"
         diagnosis: "Order only. No diversity, no bound."

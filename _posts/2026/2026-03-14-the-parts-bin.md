@@ -122,6 +122,7 @@ Take **Filter**. Two axes, selection semantics vs. error guarantee:
 <tr><td><strong>Predicate</strong></td><td>WHERE, range query</td><td>Threshold filtering (soft margin)</td><td><a href="https://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a></td></tr>
 <tr><td><strong>Similarity</strong></td><td>Exact NN pruning</td><td>k-NN radius pruning</td><td><a href="https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/">LSH filtering</a></td></tr>
 <tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
+<tr><td><strong>Causal</strong></td><td>do-calculus gate</td><td><a href="https://doi.org/10.1515/jci-2023-0059">Conformal causal selection</a></td><td>Propensity score gate</td></tr>
 </table>
 
 Every cell fills. The axes validate.

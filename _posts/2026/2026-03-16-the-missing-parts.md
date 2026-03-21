@@ -21,7 +21,7 @@ The design space has ten dimensions. An axis qualifies if it's discrete, orthogo
 Four are universal:
 
 1. **Pipeline stage**: perceive, cache, filter, attend, consolidate, remember
-2. **Data structure**: flat, sequence, tree, graph, partial order
+2. **Data structure**: flat, sequence, tree, graph, partial order, embedding space
 3. **Error guarantee**: exact, bounded, probabilistic
 4. **Temporality**: batch, stream
 
@@ -36,11 +36,11 @@ Six are stage-specific:
 <li><strong>Supervision signal</strong> <em>(Consolidate)</em>: unsupervised, supervised, self-supervised</li>
 </ol>
 
-Ten axes, forty-five possible planes. Most are uninteresting. Three have blanks worth building.
+Ten axes, forty-five possible planes. Most are uninteresting. Four have blanks worth building.
 
 ### Planes that validate
 
-The Parts Bin drew two planes that fill on sight: selection semantics × error guarantee (Filter, 4×3) and output form × redundancy control (Attend, 3×3). Three more planes also fill completely, confirming the taxonomy works at each new crossing:
+The Parts Bin drew two planes that fill on sight: selection semantics × error guarantee (Filter, 3×3) and output form × redundancy control (Attend, 3×3). Three more planes also fill completely, confirming the taxonomy works at each new crossing:
 
 **Stationarity × Selection semantics** (bounded error). [ADWIN](https://dl.acm.org/doi/10.1145/1150402.1150423) handles drifting predicates. [Dynamic skyline queries](https://www.mdpi.com/2220-9964/6/5/137) handle drifting dominance criteria. [Weighted conformal p-values under covariate shift](https://academic.oup.com/biomet/advance-article/doi/10.1093/biomet/asaf066/8250683) (Biometrika 2025) handles drifting causal filtering. All cells occupied.
 
@@ -103,9 +103,9 @@ Partial order × similarity is the most conceptually interesting blank: similari
 
 ### What the blanks tell us
 
-Seven blanks survive validation across three planes. They cluster around three broken assumptions:
+Eight blanks survive validation across four planes. They cluster around three broken assumptions:
 
-1. **Causal estimation assumes pointwise treatment.** Structure introduces spillover, nesting, and temporal lag. Three cells empty in plane 1 (sequence, graph, partial order).
+1. **Causal estimation assumes pointwise treatment.** Structure and geometry introduce spillover, nesting, and interference. Four cells empty: sequence, graph, partial order, and embedding space × causal.
 2. **Tree dominance has no definition.** The other structured data types have skyline algorithms. Trees don't, because "subtree dominates subtree" requires a hierarchy-respecting comparison that nobody has formalized.
 3. **Diversity and similarity assume a metric space.** Partial orders have reachability, not distance. Two cells empty (similarity in plane 1, attend in plane 3).
 

@@ -30,7 +30,7 @@ Embedding space Filter, selection semantics × error guarantee. The similarity r
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Exact</th><th style="background:#f0f0f0">Bounded</th><th style="background:#f0f0f0">Probabilistic</th></tr></thead>
 <tr><td><strong>Similarity</strong></td><td>Exact k-NN</td><td>c-ANN (cover tree, HNSW)</td><td>LSH ANN</td></tr>
 <tr><td><strong>Predicate</strong></td><td>Metric range search</td><td>ε-approximate range search</td><td>LSH range query</td></tr>
-<tr><td><strong>Causal</strong></td><td style="background:#fff3cd" colspan="3"><em>Open: geometry-aware interference estimation (<a href="https://www.econometricsociety.org/publications/econometrica/2022/01/01/causal-inference-under-approximate-neighborhood-interference">Leung 2022</a>) and FDR-controlled causal selection (<a href="https://doi.org/10.1515/jci-2023-0059">Duan et al. 2024</a>) exist separately. No known composition for embedding-distance-defined interference with bounded FDR.</em></td></tr>
+<tr><td><strong>Causal</strong></td><td colspan="3"><a href="/filling-the-blanks#7-embedding-space-causal-filtering">Embedding causal filter</a>: interference via embedding-distance kernel, FDR control via BY. Nearest prior art: <a href="https://www.econometricsociety.org/publications/econometrica/2022/01/01/causal-inference-under-approximate-neighborhood-interference">Leung 2022</a>, <a href="https://doi.org/10.1515/jci-2023-0059">Duan et al. 2024</a>.</td></tr>
 </table>
 
 ### Attend grid
@@ -39,7 +39,7 @@ Embedding space Attend. The top-k row is where agents spend most of their time.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">No diversity</th><th style="background:#f0f0f0">Implicit</th><th style="background:#f0f0f0">Explicit</th></tr></thead>
-<tr><td><strong>Top-k slate</strong></td><td>k-NN retrieval</td><td>MMR</td><td>k-center / farthest-first</td></tr>
+<tr><td><strong>Top-k slate</strong></td><td>k-NN retrieval</td><td>Beam search</td><td>MMR, k-center / farthest-first</td></tr>
 <tr><td><strong>Single best</strong></td><td>1-NN</td><td>Medoid</td><td>Farthest-point sampling</td></tr>
 </table>
 
