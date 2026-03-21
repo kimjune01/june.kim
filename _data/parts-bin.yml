@@ -37,13 +37,22 @@ axes:
       values: [unsupervised, supervised, self_supervised]
 
 planes:
-  # Seven fully-occupied planes validate the axes but don't predict:
+  # Systematic sweep of 45 possible planes. See /the-missing-parts.
+  #
+  # Fully occupied (validate but don't predict):
   #   selection_semantics × error_guarantee (Filter, 4×3)
   #   output_form × redundancy_control (Attend, 3×3)
   #   stationarity × selection_semantics (Filter, 2×4)
   #   temporality × selection_semantics (Filter, 2×4)
-  #   data_structure × error_guarantee (Filter, 5×3) — repeats plane 1 after marginalizing
-  # Three planes have blanks. See /the-missing-parts.
+  #   temporality × output_form (Attend, 2×3)
+  #   temporality × redundancy_control (Attend, 2×3)
+  #   error_guarantee × output_form (Attend, 3×3)
+  #   error_guarantee × supervision_signal (Consolidate, 3×3)
+  #   temporality × supervision_signal (Consolidate, 2×3)
+  #   data_structure × codebook_type (Perceive, 5×2)
+  #   pipeline_stage × temporality (6×2)
+  #
+  # Planes with blanks:
   - name: "Plane 1: Data structure × Selection semantics (bounded)"
     axes: [data_structure, selection_semantics]
     fixed: { error_guarantee: bounded }
@@ -55,6 +64,13 @@ planes:
   - name: "Plane 3: Pipeline stage × Data structure"
     axes: [pipeline_stage, data_structure]
     status: 1_blank  # attend × partial_order
+  - name: "Plane 4: Pipeline stage × Error guarantee"
+    axes: [pipeline_stage, error_guarantee]
+    status: 1_blank  # cache × bounded
+  #
+  # Projections (blanks are shadows of known blanks, not new):
+  #   data_structure × output_form (Attend, 5×3) — partial_order row blank = attend×partial_order
+  #   data_structure × redundancy_control (Attend, 5×3) — partial_order×explicit blank = same
 
 # Plane 5 data: stage × data structure (canonical algorithm per cell)
 stage_structure_grid:
@@ -96,6 +112,33 @@ stage_structure_grid:
     tree: "Git commit"
     graph: "Graph DB commit"
     partial_order: "Topological serialization"
+
+# Plane 4 data: stage × error guarantee (canonical algorithm per cell)
+stage_error_grid:
+  - stage: perceive
+    exact: "JSON parsing"
+    bounded: "Kernel Vector Quantization"
+    probabilistic: "SQ-VAE (thin)"
+  - stage: cache
+    exact: "Hash index"
+    bounded: null  # blank: no bounded-approximation cache with retrieval error guarantees
+    probabilistic: "Bloom filter"
+  - stage: filter
+    exact: "WHERE"
+    bounded: "Conformal filter, approximate skyline"
+    probabilistic: "LSH"
+  - stage: attend
+    exact: "A*, Viterbi"
+    bounded: "ARA*, Sieve-Streaming"
+    probabilistic: "DPP, MCTS"
+  - stage: consolidate
+    exact: "PCA via SVD"
+    bounded: "k-means++"
+    probabilistic: "SGD"
+  - stage: remember
+    exact: "WAL append"
+    bounded: null  # structural: bounded persistence violates Remember contract (lossless)
+    probabilistic: null  # structural: same reason
 
 types:
   raw:        "Unprocessed environmental input"
