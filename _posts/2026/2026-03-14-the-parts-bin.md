@@ -85,7 +85,7 @@ Near-misses (diagnostic counterexamples):
 - *Top-k selection*: bounded, no diversity.
 - *PageRank*: ranking, no diversity, no bound.
 
-**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Contains its own inner loop: mutate, score, select. The outer pipe can only notice that Attend's behavior changed. [Babbage's Difference Engine (1822)](https://en.wikipedia.org/wiki/Difference_engine) is the mechanical precedent: take a sequence of values, compute successive differences, extract the generating polynomial. Ranked examples in, compact rule out. The interface is Consolidate's type signature; Babbage built it without Attend to feed it.
+**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Consolidate's inner loop is itself a pipe: it perceives outcomes, filters which ones matter, attends to rank them, and remembers the update. The same catalog applies inside. If the parts bin has a blank at attend × partial order, any Consolidate operating on partial orders inherits that blank. The [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination: each inner level costs at least one bit, so the recursion bottoms out at passthrough.
 
 [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
 
