@@ -68,7 +68,7 @@
 
   <!-- Merge output -->
   <rect x="430" y="125" width="155" height="40" rx="7" fill="#c8e6c9" stroke="#81c784" stroke-width="1.5"/>
-  <text x="507" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Merged PR</text>
+  <text x="507" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Draft</text>
 
   <line x1="465" y1="95" x2="487" y2="121" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
   <line x1="577" y1="95" x2="530" y2="121" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
