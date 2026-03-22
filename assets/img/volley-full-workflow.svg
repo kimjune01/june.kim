@@ -27,7 +27,7 @@
   <!-- GOAL -->
   <rect x="15" y="60" width="120" height="56" rx="7" fill="#bbdefb" stroke="#90caf9" stroke-width="1"/>
   <text x="75" y="84" text-anchor="middle" font-size="14" font-weight="600" fill="#333">Goal</text>
-  <text x="75" y="104" text-anchor="middle" font-size="11" fill="#555" font-style="italic">one sentence</text>
+  <text x="75" y="104" text-anchor="middle" font-size="11" fill="#555" font-style="italic">problem description</text>
 
   <!-- VOLLEY 1: Claude -->
   <rect x="195" y="52" width="100" height="52" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
