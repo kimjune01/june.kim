@@ -58,12 +58,12 @@
 
   <!-- BLIND-BLIND-MERGE: Agent A -->
   <rect x="410" y="45" width="110" height="50" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
-  <text x="465" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Agent A</text>
+  <text x="465" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Claude</text>
   <text x="465" y="84" text-anchor="middle" font-size="10" fill="#999" font-style="italic">blind impl</text>
 
   <!-- BLIND-BLIND-MERGE: Agent B -->
   <rect x="535" y="45" width="85" height="50" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
-  <text x="577" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Agent B</text>
+  <text x="577" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="#333">Codex</text>
   <text x="577" y="84" text-anchor="middle" font-size="10" fill="#999" font-style="italic">blind impl</text>
 
   <!-- Merge output -->
