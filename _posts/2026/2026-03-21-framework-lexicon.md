@@ -285,7 +285,7 @@ Corrections welcome — [june@june.kim](mailto:june@june.kim).
 For software engineers who know code but not the math vocabulary.
 
 <table style="width:100%; font-size:13px; table-layout:fixed;">
-<colgroup><col style="width:14%%"><col style="width:14%%"><col style="width:36%%"><col style="width:36%%"></colgroup>
+<colgroup><col style="width:12%%"><col style="width:12%%"><col style="width:38%%"><col style="width:38%%"></colgroup>
 <thead><tr>
 <th style="background:#f0f0f0">Category theory</th>
 <th style="background:#f0f0f0">Software equivalent</th>
@@ -293,7 +293,7 @@ For software engineers who know code but not the math vocabulary.
 <th style="background:#f0f0f0">What it unlocks</th>
 </tr></thead>
 <tr><td>Category</td><td>Type system + composition</td><td>Objects are types, morphisms are functions, composition is chaining.</td><td>Prove something about composition once, it holds for every instance.</td></tr>
-<tr style="background:#f8f8f8"><td>Morphism</td><td>Function</td><td>A</td><td>B. Takes input, produces output. → The building block everything else is made of.</td></tr>
+<tr style="background:#f8f8f8"><td>Morphism</td><td>Function</td><td>A → B. Takes input, produces output.</td><td>The building block everything else is made of.</td></tr>
 <tr><td>Functor</td><td>Adapter / map</td><td>Translates one type system into another, preserving composition.</td><td>Port theorems between domains for free.</td></tr>
 <tr style="background:#f8f8f8"><td>Natural transformation</td><td>API migration</td><td>Converts between two adapters without breaking anything.</td><td>Swap implementations without re-proving correctness.</td></tr>
 <tr><td>Monad</td><td>Plugin architecture</td><td>A wrapper (Promise, Maybe, List, Distribution) with a composition law (flatMap).</td><td>Swap the wrapper, keep all your theorems.</td></tr>
@@ -304,7 +304,7 @@ For software engineers who know code but not the math vocabulary.
 <tr style="background:#f8f8f8"><td>Markov category</td><td>Dict of dicts + copy + delete</td><td>FinStoch with the ability to duplicate and discard data.</td><td>Detect determinism vs stochasticity by a single test (copy-naturality).</td></tr>
 <tr><td>Copy-natural (C_det)</td><td>Pure function</td><td>Deterministic. Same input always gives same output. Commutes with copy.</td><td>One test tells you if a function is pure: does copying commute?</td></tr>
 <tr style="background:#f8f8f8"><td>Support</td><td>Set of possible outputs</td><td>Which keys have nonzero probability. Forget the weights, keep the keys.</td><td>Prove safety without computing probabilities.</td></tr>
-<tr><td>Possibilistic shadow</td><td>support(distribution)</td><td>Collapse probabilities to yes/no. <code>{'{k for k,v in d.items() if v>0}'}</code>. → Defer probability calculations — reason about reachability first.</td></tr>
+<tr><td>Possibilistic shadow</td><td>support(distribution)</td><td>Collapse probabilities to yes/no. <code>{'{k for k,v in d.items() if v>0}'}</code>.</td><td>Defer probability calculations — reason about reachability first.</td></tr>
 <tr style="background:#f8f8f8"><td>Monad morphism</td><td>Plugin-to-plugin adapter</td><td>Converts wrapped values from one monad to another, preserving flatMap.</td><td>Translate between probability and reachability without losing composition.</td></tr>
 <tr><td>Hoare triple {'{P}'} c {'{Q}'}</td><td>assert P; c(); assert Q</td><td>If P holds before running c, Q holds after.</td><td>Machine-check that your pipeline can't produce bad output.</td></tr>
 <tr style="background:#f8f8f8"><td>Weakest precondition</td><td>Reverse assert</td><td>Given c and Q, what's the minimum P that guarantees Q?</td><td>Automatically compute what your input must satisfy.</td></tr>
