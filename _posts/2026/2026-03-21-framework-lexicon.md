@@ -288,36 +288,36 @@ For software engineers who know code but not the math vocabulary.
 <thead><tr>
 <th style="background:#f0f0f0">Category theory</th>
 <th style="background:#f0f0f0">Software equivalent</th>
-<th style="background:#f0f0f0">One sentence</th>
+<th style="background:#f0f0f0">What it is → what it unlocks</th>
 </tr></thead>
-<tr><td>Category</td><td>Type system + composition</td><td>Objects are types. Morphisms are functions. Composition is chaining.</td></tr>
-<tr style="background:#f8f8f8"><td>Morphism</td><td>Function</td><td>A → B. Takes input, produces output.</td></tr>
-<tr><td>Functor</td><td>Adapter / map</td><td>Translates one type system into another, preserving composition.</td></tr>
-<tr style="background:#f8f8f8"><td>Natural transformation</td><td>API migration</td><td>Converts between two adapters without breaking anything.</td></tr>
-<tr><td>Monad</td><td>Plugin architecture</td><td>A wrapper (Promise, Maybe, List, Distribution) with a composition law (flatMap).</td></tr>
-<tr style="background:#f8f8f8"><td>Kleisli category</td><td>Everything that uses this plugin</td><td>The world of functions that return wrapped values. kl(Promise) = async functions.</td></tr>
-<tr><td>Kleisli composition (>=>)</td><td>flatMap / .then() / >>=</td><td>Chain two wrapped-output functions. Run the first, feed each result into the second.</td></tr>
-<tr style="background:#f8f8f8"><td>Adjunction</td><td>Optimal adapter pair</td><td>Two functors that are "best possible" translations in opposite directions.</td></tr>
-<tr><td>FinStoch</td><td>Dict of dicts</td><td>Stochastic matrices. For each input key, a probability distribution over output keys.</td></tr>
-<tr style="background:#f8f8f8"><td>Markov category</td><td>Dict of dicts + copy + delete</td><td>FinStoch with the ability to duplicate and discard data.</td></tr>
-<tr><td>Copy-natural (C_det)</td><td>Pure function</td><td>Deterministic. Same input always gives same output. Commutes with copy.</td></tr>
-<tr style="background:#f8f8f8"><td>Support</td><td>Set of possible outputs</td><td>Which keys have nonzero probability. Forget the weights, keep the keys.</td></tr>
-<tr><td>Possibilistic shadow</td><td>support(distribution)</td><td>Collapse probabilities to yes/no. {k for k,v in d.items() if v > 0}.</td></tr>
-<tr style="background:#f8f8f8"><td>Monad morphism</td><td>Plugin-to-plugin adapter</td><td>Converts wrapped values from one monad to another, preserving flatMap.</td></tr>
-<tr><td>Hoare triple {P} c {Q}</td><td>assert P; c(); assert Q</td><td>If P holds before running c, Q holds after.</td></tr>
-<tr style="background:#f8f8f8"><td>Weakest precondition</td><td>Reverse assert</td><td>Given c and Q, what's the minimum P that guarantees Q?</td></tr>
-<tr><td>Graded monad</td><td>Effect system with costs</td><td>Like a monad but tracks how much side effect each computation uses.</td></tr>
-<tr style="background:#f8f8f8"><td>Preordered monoid</td><td>Cost algebra</td><td>Costs add (monoid) and can be compared (preorder). Nat, privacy budget, resource levels.</td></tr>
-<tr><td>Fibration</td><td>Type → metadata mapping</td><td>Each type carries a layer of predicates/properties above it. Reindexing = weakest precondition.</td></tr>
-<tr style="background:#f8f8f8"><td>Optic / Lens</td><td>Getter + setter pair</td><td>Forward: read data. Backward: update data. Compose bidirectionally.</td></tr>
-<tr><td>String diagram</td><td>Data flow diagram</td><td>Boxes are functions. Wires are types. Connecting wires = composition.</td></tr>
-<tr style="background:#f8f8f8"><td>Traced monoidal category</td><td>Feedback loop</td><td>Output feeds back to input. while loops, recursion, closed systems.</td></tr>
-<tr><td>Posetal</td><td>Has a ≤ ordering</td><td>Morphisms can be compared. "This program refines that one."</td></tr>
-<tr style="background:#f8f8f8"><td>Imperative category</td><td>Language with Hoare rules</td><td>A category where assert/run/assert works as a theorem, not an assumption.</td></tr>
-<tr><td>Effect algebra</td><td>Fuzzy boolean</td><td>Predicates that can be partial (70% true). Generalizes boolean contracts to [0,1].</td></tr>
-<tr style="background:#f8f8f8"><td>Enriched category</td><td>Typed hom-sets</td><td>The "space" between two objects carries structure (distance, cost, lattice order).</td></tr>
-<tr><td>DPI</td><td>Processing can't create info</td><td>H(output) ≤ H(input). You can only lose or preserve, never gain.</td></tr>
-<tr style="background:#f8f8f8"><td>Magnitude</td><td>Effective size</td><td>How many "independent" things are in a collection. Diversity = categorical cardinality.</td></tr>
+<tr><td>Category</td><td>Type system + composition</td><td>Objects are types, morphisms are functions, composition is chaining. → Prove something about composition once, it holds for every instance.</td></tr>
+<tr style="background:#f8f8f8"><td>Morphism</td><td>Function</td><td>A → B. Takes input, produces output. → The building block everything else is made of.</td></tr>
+<tr><td>Functor</td><td>Adapter / map</td><td>Translates one type system into another, preserving composition. → Port theorems between domains for free.</td></tr>
+<tr style="background:#f8f8f8"><td>Natural transformation</td><td>API migration</td><td>Converts between two adapters without breaking anything. → Swap implementations without re-proving correctness.</td></tr>
+<tr><td>Monad</td><td>Plugin architecture</td><td>A wrapper (Promise, Maybe, List, Distribution) with a composition law (flatMap). → Swap the wrapper, keep all your theorems.</td></tr>
+<tr style="background:#f8f8f8"><td>Kleisli category</td><td>Everything that uses this plugin</td><td>The world of functions that return wrapped values. kl(Promise) = async functions. → One composition law works for every monad.</td></tr>
+<tr><td>Kleisli composition (>=>)</td><td>flatMap / .then() / >>=</td><td>Chain two wrapped-output functions. Run the first, feed each result into the second. → Chain stochastic functions the same way you chain Promises.</td></tr>
+<tr style="background:#f8f8f8"><td>Adjunction</td><td>Optimal adapter pair</td><td>Two functors that are "best possible" translations in opposite directions. → Guarantees the translation loses the minimum possible information.</td></tr>
+<tr><td>FinStoch</td><td>Dict of dicts</td><td>Stochastic matrices. For each input key, a probability distribution over output keys. → Probability becomes composition, not special-case math.</td></tr>
+<tr style="background:#f8f8f8"><td>Markov category</td><td>Dict of dicts + copy + delete</td><td>FinStoch with the ability to duplicate and discard data. → Detect determinism vs stochasticity by a single test (copy-naturality).</td></tr>
+<tr><td>Copy-natural (C_det)</td><td>Pure function</td><td>Deterministic. Same input always gives same output. Commutes with copy. → One test tells you if a function is pure: does copying commute?</td></tr>
+<tr style="background:#f8f8f8"><td>Support</td><td>Set of possible outputs</td><td>Which keys have nonzero probability. Forget the weights, keep the keys. → Prove safety without computing probabilities.</td></tr>
+<tr><td>Possibilistic shadow</td><td>support(distribution)</td><td>Collapse probabilities to yes/no. <code>{'{k for k,v in d.items() if v>0}'}</code>. → Defer probability calculations — reason about reachability first.</td></tr>
+<tr style="background:#f8f8f8"><td>Monad morphism</td><td>Plugin-to-plugin adapter</td><td>Converts wrapped values from one monad to another, preserving flatMap. → Translate between probability and reachability without losing composition.</td></tr>
+<tr><td>Hoare triple {'{P}'} c {'{Q}'}</td><td>assert P; c(); assert Q</td><td>If P holds before running c, Q holds after. → Machine-check that your pipeline can't produce bad output.</td></tr>
+<tr style="background:#f8f8f8"><td>Weakest precondition</td><td>Reverse assert</td><td>Given c and Q, what's the minimum P that guarantees Q? → Automatically compute what your input must satisfy.</td></tr>
+<tr><td>Graded monad</td><td>Effect system with costs</td><td>Like a monad but tracks how much side effect each computation uses. → Budget side effects across a pipeline — costs compose additively.</td></tr>
+<tr style="background:#f8f8f8"><td>Preordered monoid</td><td>Cost algebra</td><td>Costs add (monoid) and can be compared (preorder). Nat, privacy budget, resource levels. → Swap the cost model, keep the composition theorems.</td></tr>
+<tr><td>Fibration</td><td>Type → metadata mapping</td><td>Each type carries a layer of predicates/properties above it. Reindexing = weakest precondition. → Properties propagate backward through composition automatically.</td></tr>
+<tr style="background:#f8f8f8"><td>Optic / Lens</td><td>Getter + setter pair</td><td>Forward: read data. Backward: update data. Compose bidirectionally. → Build forward inference + backward learning as one composable structure.</td></tr>
+<tr><td>String diagram</td><td>Data flow diagram</td><td>Boxes are functions. Wires are types. Connecting wires = composition. → Visual proofs — if the diagram connects, the types check.</td></tr>
+<tr style="background:#f8f8f8"><td>Traced monoidal category</td><td>Feedback loop</td><td>Output feeds back to input. while loops, recursion, closed systems. → Prove loop invariants from the categorical structure, not by hand.</td></tr>
+<tr><td>Posetal</td><td>Has a ≤ ordering</td><td>Morphisms can be compared. "This program refines that one." → Refinement composes — if each stage improves, the pipeline improves.</td></tr>
+<tr style="background:#f8f8f8"><td>Imperative category</td><td>Language with Hoare rules</td><td>A category where assert/run/assert works as a theorem, not an assumption. → Every Hoare rule is free once you verify the category has the right structure.</td></tr>
+<tr><td>Effect algebra</td><td>Fuzzy boolean</td><td>Predicates that can be partial (70% true). Generalizes boolean contracts to [0,1]. → Grade your assertions quantitatively, not just pass/fail.</td></tr>
+<tr style="background:#f8f8f8"><td>Enriched category</td><td>Typed hom-sets</td><td>The "space" between two objects carries structure (distance, cost, lattice order). → Measure how far apart two programs are, not just whether they're equal.</td></tr>
+<tr><td>DPI</td><td>Processing can't create info</td><td>H(output) ≤ H(input). You can only lose or preserve, never gain. → Proves your pipeline must have external input or it dies.</td></tr>
+<tr style="background:#f8f8f8"><td>Magnitude</td><td>Effective size</td><td>How many "independent" things are in a collection. Diversity = categorical cardinality. → Measure diversity as a single number that respects composition.</td></tr>
 </table>
 
 ---
