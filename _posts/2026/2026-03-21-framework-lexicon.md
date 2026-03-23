@@ -20,7 +20,7 @@ Several mathematical communities have independently formalized overlapping struc
 
 Corrections welcome — [june@june.kim](mailto:june@june.kim).
 
-<table style="width:100%; font-size:13px; table-layout:fixed;">
+<table style="width:100%; font-size:13px; ">
 <colgroup><col style="width:20%"><col style="width:20%"><col style="width:22%"><col style="width:12%"><col style="width:26%"></colgroup>
 <thead><tr>
 <th style="background:#e8f0fe">PL theory</th>
@@ -284,8 +284,8 @@ Corrections welcome — [june@june.kim](mailto:june@june.kim).
 
 For software engineers who know code but not the math vocabulary.
 
-<table style="width:100%; font-size:13px; table-layout:fixed;">
-<colgroup><col style="width:12%%"><col style="width:12%%"><col style="width:38%%"><col style="width:38%%"></colgroup>
+<table style="width:100%; font-size:13px; ">
+
 <thead><tr>
 <th style="background:#f0f0f0">Category theory</th>
 <th style="background:#f0f0f0">Software equivalent</th>
