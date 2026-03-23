@@ -94,7 +94,7 @@ Chunking requires deterministic substate results, but RL uses stochastic selecti
 
 ### Posterior convergence gate
 
-The simplest convergence test: track the **exponential moving average of Q-value changes** for each RL rule. When the EMA drops below a threshold, the preference has stabilized. This requires no architectural modification to Soar's RL, just a monitoring wrapper. A Bayesian posterior over Q-values would give a full uncertainty estimate but requires changing how Soar stores RL values from point estimates to distributions. EMA is sufficient.
+The simplest convergence test: track the **exponential moving average of Q-value changes** for each RL rule. When the EMA drops below a threshold, the preference has stabilized. This requires no architectural modification to Soar's RL, just a monitoring wrapper. A Bayesian posterior over Q-values would give a full uncertainty estimate, but it requires changing how Soar stores RL values from point estimates to distributions. EMA is sufficient.
 
 ACT-R's production compilation + utility learning is the closest parallel in another architecture, but there too the interaction is uncoordinated: compilation fires whenever two productions fire in sequence, regardless of whether utility values have stabilized. The gating idea is novel.
 
@@ -155,7 +155,7 @@ For agents that encounter many similar surprising episodes (e.g., repeated failu
 
 Treatments 1 and 3 reinforce each other. Discrimination reduces the volume; consolidation reads the survivors and compresses them into semantic knowledge.
 
-## Summary
+## Four cells, four algorithms
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:10em"><col style="width:8em"><col style="width:8em"><col></colgroup>
@@ -166,7 +166,37 @@ Treatments 1 and 3 reinforce each other. Discrimination reduces the volume; cons
 <tr><td>Episodic discrimination</td><td>Surprise gate + DPP thin</td><td>Episodic Learning</td><td>Store fewer, better episodes</td></tr>
 </table>
 
-None of these require new architectural commitments; they require existing algorithms applied to existing Soar modules, with triggers that fire the backward pass automatically.
+None of these require new architectural commitments. The algorithms exist. The modules exist. The triggers are straightforward.
+
+And yet.
+
+## The wall behind the walls
+
+Gate chunking on RL convergence. Consolidate episodes into semantic knowledge. Discriminate what's worth remembering. Soar would be a more complete architecture. It would still need a human.
+
+Laird says it plainly: "Without a human to closely guide it, Rosie is unable to get very far on its own, especially in being unable to learn new abstract symbolic concepts on its own" ([§10, p.20](https://arxiv.org/abs/2205.03854)). Rosie is Soar's most capable agent. It learns sixty tasks from natural language instruction. It needs an instructor for every one.
+
+This isn't a failure of Rosie. It's a pattern. TacAir-Soar's 8,000 rules were written by engineers. PROPS takes declarative rule descriptions authored by people. Every successful Soar agent in the [appendix](https://arxiv.org/abs/2205.03854) has a human somewhere in the causal chain, providing knowledge that the architecture cannot generate from experience alone.
+
+Soar treats this as a development-time dependency, something to be engineered away with the next learning mechanism. Laird knows better. His own assessment: "What I feel is most missing from Soar is its ability to 'bootstrap' itself up from the architecture and a set of innate knowledge into being a fully capable agent" ([§10, p.20](https://arxiv.org/abs/2205.03854)). Forty years of evidence supports the stronger reading: the human is load-bearing.
+
+### Complementation first
+
+The research program has been: build the autonomous agent, then optionally add human interaction. Instructo-Soar and Rosie add a teacher, but as one application among many. The architecture doesn't require it.
+
+What if the order is reversed?
+
+Step one: **complementation**. Human and agent, each filling the other's gaps. The agent has speed, consistency, parallel rule firing, tireless processing; the human has judgment, novel category formation, the ability to say "this is what matters." Neither is intelligent alone. Together they are.
+
+Step two: **bootstrap**. Use that composite intelligence to study what it does. Compress its patterns. Gradually move capabilities from the human side to the agent side. Chunking already does this at the substate level: compile deliberation into direct rules. The same principle, applied at the architecture level: compile human guidance into autonomous capability.
+
+Soar's forty-year trajectory suggests that generating the knowledge to fill these cells requires more intelligence than any single agent has demonstrated. If the architecture can't generate it alone, it has to borrow it. The only place it currently exists at the required level is people. Solving complementation first isn't a retreat from autonomy. It's the path to it.
+
+Soar already has the mechanism. An impasse means "I don't have enough knowledge." A substate means "go get it." What if the default resolution of certain impasses was "ask the human"? Not as a fallback. As a first-class architectural response.
+
+Chunking would compile the answer. The agent never asks the same question twice. Over time, fewer impasses reach the human. The boundary moves.
+
+The four prescriptions above are correct. They fill real gaps. But they're step two. Step one is acknowledging that the human who has always been there, quietly making every Soar agent work, belongs in the architecture.
 
 ## What flows back
 
@@ -183,10 +213,8 @@ The prescription draws from the parts bin. Soar gives back. Six algorithms from 
 <tr><td>Delta episodic storage</td><td>Remember × sequence</td><td>Store only changes between snapshots. Interval representation for persistent elements.</td></tr>
 </table>
 
-The parts bin is a two-way street. Frameworks diagnose architectures. Architectures stock the parts bin.
-
-Soar has always grown by hitting a wall and building through it. These are the next four walls.
+Soar's largest contribution is forty years of evidence for the ordering constraint. Every agent in the appendix is a data point: the right mechanisms, assembled by a human. Together they produced intelligent behavior that neither could produce alone. That's complementation. It was always complementation. The architecture just didn't have a name for it.
 
 ---
 
-*Based on Laird (2022), "[Introduction to the Soar Cognitive Architecture](https://arxiv.org/abs/2205.03854)"; Casteigts et al. (2019), "[Computing Parameters of Sequence-Based Dynamic Graphs](https://link.springer.com/article/10.1007/s00224-018-9876-z)"; Rasmussen (2025), "[Zep: A Temporal Knowledge Graph Architecture](https://arxiv.org/abs/2501.13956)"; and the [parts bin](/the-parts-bin). Written via the [double loop](/double-loop).*
+*Based on Laird (2022), "[Introduction to the Soar Cognitive Architecture](https://arxiv.org/abs/2205.03854)"; Casteigts et al. (2019), "[Computing Parameters of Sequence-Based Dynamic Graphs](https://link.springer.com/article/10.1007/s00224-018-9876-z)"; Rasmussen (2025), "[Zep: A Temporal Knowledge Graph Architecture](https://arxiv.org/abs/2501.13956)"; the [parts bin](/the-parts-bin); and the [Natural Framework](/the-natural-framework). Written via the [double loop](/double-loop).*
