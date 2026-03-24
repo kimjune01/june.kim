@@ -85,13 +85,18 @@ fi
 # CloudFront + S3 serves /about/ → about/index.html, but /about 404s unless
 # about.html exists at the root. Create aliases for every directory index page.
 # Uses process substitution (not pipe) so failures aren't swallowed.
+# Excludes app dirs — they're synced separately and may contain stale Jekyll copies.
 echo "==> Creating .html aliases for directory index pages"
+FIND_EXCLUDES=()
+for app in "${APPS[@]}"; do
+  FIND_EXCLUDES+=(-not -path "$SITE_DIR/$app/*")
+done
 ALIAS_COUNT=0
 while IFS= read -r f; do
   dir="$(dirname "$f")"
   cp "$f" "$dir.html"
   ((ALIAS_COUNT++))
-done < <(find "$SITE_DIR" -name index.html -mindepth 2)
+done < <(find "$SITE_DIR" -name index.html -mindepth 2 "${FIND_EXCLUDES[@]}")
 echo "    $ALIAS_COUNT aliases created"
 if [[ "$ALIAS_COUNT" -eq 0 ]]; then
   echo "WARNING: No aliases created — directory index pages may 404 without trailing slash"
