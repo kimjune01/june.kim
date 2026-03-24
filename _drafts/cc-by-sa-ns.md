@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "CC BY-SA-NS"
-tags: pageleft methodology
+tags: pageleft
 ---
 
 Creative Commons has six licenses. None of them have a network clause.
