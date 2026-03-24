@@ -17,7 +17,16 @@ Scan a post for AI writing tics and missed opportunities for human voice.
 4. Present both lists. **Commit the file before applying any fixes** so the human can review the diff and revert mistakes.
 5. **Judgment call:** if every finding is clear Filter-level work (em dashes, filler, negative parallelisms, restated points), apply fixes directly. If any finding touches argument structure, voice, or is ambiguous, wait for the user to approve.
 6. Apply fixes. Preserve the argument; cut the padding; add the voice. Balance flow and punch: longer sentences build momentum, short ones land the point. A post that's all short sentences reads like a telegram. A post that's all long ones reads like a textbook.
-6. Re-read the result. If anything still reads as AI or feels flat, report it.
+7. Re-read the result. If anything still reads as AI or feels flat, report it.
+
+## Batch mode
+
+When given a directory instead of a single file, or when running a targeted pass on one pattern across many files:
+
+1. **Grep first.** Use Grep with a regex for the target pattern across all files in the directory. This surfaces every instance at once.
+2. **Triage the hits.** Sort each match into "earns it" (the pattern carries genuine meaning) or "dead weight" (the negation/filler half can be cut). Report both lists so the user sees the judgment calls.
+3. **Batch-fix the dead weight.** Apply all clear fixes. Leave the earned ones alone.
+4. Verify the build.
 
 ## Patterns
 

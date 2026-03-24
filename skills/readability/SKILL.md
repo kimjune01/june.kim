@@ -63,6 +63,14 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Pacing.** Sections should alternate in weight. Flag 3+ heavy sections (4+ paragraphs each) without a breather.
 
+### 5. Bold vs italic
+
+**Bold is for definitions and terms of art.** A word is bold when the reader needs to learn it: a new concept, a named pattern, a key distinction. Bold says "remember this."
+
+**Italic is for emphasis.** Stress within a sentence, a qualifier, a tone shift. Italic says "hear this differently."
+
+**Flag non-definition bolds.** If the bolded phrase isn't introducing a term or labeling a structural element (list item, table header), swap to italic or remove. Excessive inline bold makes everything look like a heading and nothing stands out.
+
 ## Dampener
 
 Only flag issues where the fix is clearly better than what's there. Prosody is subjective — if the rhythm works despite breaking a rule, leave it. A technically perfect sentence that loses voice is worse than an imperfect one that sounds like a person.

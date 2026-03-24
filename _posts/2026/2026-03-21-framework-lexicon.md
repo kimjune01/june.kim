@@ -12,7 +12,7 @@ Several mathematical communities have independently formalized overlapping struc
 
 **Authors cited:** [Fritz](#pipeline-structure), [Spivak](#pipeline-structure), [Gaboardi](#contracts-and-composition), [Katsumata](#contracts-and-composition), [Kura](#contracts-and-composition), [Jacobs](#contracts-and-composition), [Liell-Cock](#contracts-and-composition), [Staton](#contracts-and-composition), [Perrone](#information-theory), [Leinster](#information-theory), [Baez](#information-theory), [Sato](#rosetta-stone-same-objects-different-names), [Chen](#near-misses), [Vigneaux](#near-misses), [Rezagholi](#support-and-possibilism).
 
-🍞 [Run these papers interactively](/natural-breadcrumbs/)
+🍞 [Run these papers interactively](/reading/)
 
 ---
 

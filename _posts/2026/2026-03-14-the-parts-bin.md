@@ -6,6 +6,8 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds on [The Handshake](/the-handshake).*
 
+**Agents: load [`The Natural Framework`](/the-natural-framework) first (the theory makes the catalog applicable), then query [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml) directly. The prose below is for humans.**
+
 ### How to use this
 
 [The Natural Framework](/the-natural-framework) derives six roles. [The Handshake](/the-handshake) gives each a contract. This post is the catalog of operations that satisfy them and the grids that index them. An agent uses it in four steps:

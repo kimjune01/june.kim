@@ -2,7 +2,7 @@
 layout: post
 title: "Theory Is Load-Bearing"
 date: 2026-03-17
-tags: cognition methodology
+tags: cognition methodology pageleft
 categories: cognition
 ---
 

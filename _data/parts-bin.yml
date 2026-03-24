@@ -76,47 +76,47 @@ planes:
 stage_structure_grid:
   - stage: perceive
     flat: "JSON parsing"
-    sequence: "A/D conversion"
+    sequence: ["A/D conversion", "Sinusoidal positional encoding (Vaswani 2017)"]
     tree: "XML parsing"
-    graph: "Edge list parsing"
+    graph: ["Edge list parsing", "RAG retrieval (Zhao 2023)", "MCP tool protocol (Arunkumar 2026)"]
     partial_order: "PC algorithm (thin)"
     embedding_space: "CLIP embedding"
   - stage: cache
-    flat: "Hash index"
-    sequence: "B-tree"
-    tree: "Trie"
-    graph: "Adjacency index"
-    partial_order: "Transitive closure (thin)"
-    embedding_space: "HNSW index"
+    flat: ["Hash index", "Residual + LayerNorm (Vaswani 2017)"]
+    sequence: ["B-tree", "Paged memory / MemGPT (Arunkumar 2026)"]
+    tree: ["Trie"]
+    graph: ["Adjacency index", "RETE incremental matching (Soar)"]
+    partial_order: ["Transitive closure (thin)"]
+    embedding_space: ["HNSW index"]
   - stage: filter
-    flat: "WHERE"
-    sequence: "Change-point detection"
-    tree: "XPath"
-    graph: "Subgraph match"
-    partial_order: "DAGGER (thin)"
-    embedding_space: "c-ANN search (cover tree)"
+    flat: ["WHERE"]
+    sequence: ["Change-point detection", "Causal masking (Vaswani 2017)", "Policy-driven pruning / MemAgent (Arunkumar 2026)"]
+    tree: ["XPath", "Hierarchical verification / MAKER (Arunkumar 2026)"]
+    graph: ["Subgraph match", "Justification-based truth maintenance (Soar)"]
+    partial_order: ["DAGGER (thin)"]
+    embedding_space: ["c-ANN search (cover tree)"]
   - stage: attend
-    flat: "MMR"
-    sequence: "Beam search"
-    tree: "MCTS"
-    graph: "Diversified top-k graph pattern matching"
-    partial_order: "Poset diverse top-k (filling-the-blanks #3)"
-    embedding_space: "MMR re-ranking"
+    flat: ["MMR", "Staged preference resolution (Soar)", "Scaled dot-product attention (Vaswani 2017)", "Multi-head projection (Vaswani 2017)"]
+    sequence: ["Beam search", "Surprise gate + DPP thinning (prescription-soar)", "In-context learning (Zhao 2023)", "Chain-of-thought (Zhao 2023)", "ReAct loop (Arunkumar 2026)"]
+    tree: ["MCTS", "Tree of Thoughts (Arunkumar 2026)"]
+    graph: ["Diversified top-k graph pattern matching"]
+    partial_order: ["Poset diverse top-k (filling-the-blanks #3)"]
+    embedding_space: ["MMR re-ranking"]
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
   - stage: consolidate
-    flat: "Gradient descent"
-    sequence: "Grammar induction"
-    tree: "Decision tree induction"
-    graph: "GNN training"
-    partial_order: "Lattice learning (thin)"
-    embedding_space: "Triplet-loss metric learning"
+    flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "Scaling laws (Zhao 2023)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)"]
+    sequence: ["Grammar induction", "Instruction tuning / SFT (Zhao 2023)", "Reflexion / verbal reinforcement (Arunkumar 2026)", "Episodic→semantic compression / MemInsight (Arunkumar 2026)"]
+    tree: ["Decision tree induction", "EBC/Chunking (Soar)"]
+    graph: ["GNN training", "Temporal graph coarsening (prescription-soar)"]
+    partial_order: ["Lattice learning (thin)"]
+    embedding_space: ["Triplet-loss metric learning"]
   - stage: remember
-    flat: "WAL append"
-    sequence: "SSTable flush"
-    tree: "Git commit"
-    graph: "Graph DB commit"
-    partial_order: "Topological serialization"
+    flat: ["WAL append", "Quantization (Zhao 2023)"]
+    sequence: ["SSTable flush", "Delta-based episodic storage (Soar)", "NL episode stream / Generative Agents (Arunkumar 2026)"]
+    tree: ["Git commit"]
+    graph: ["Graph DB commit"]
+    partial_order: ["Topological serialization"]
     embedding_space: "FAISS index serialization"
 
 # Plane 4 data: stage × error guarantee (canonical algorithm per cell)
@@ -212,6 +212,73 @@ columns:
         variation: none
         cost: "O(n log n)"
         ref: "https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf"
+      - name: Rabin fingerprint (rolling hash)
+        precondition: Raw byte stream + window size
+        postcondition: Sequence of hash fingerprints, matchable by downstream
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n)"
+        ref: "https://en.wikipedia.org/wiki/Rabin_fingerprint"
+        source: "Rabin (1981)"
+      - name: Soundex / Double Metaphone
+        precondition: Raw name string
+        postcondition: Phonetic code, matchable by approximate pronunciation
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n)"
+        source: "Russell & Odell (1918); Philips (2000)"
+      - name: "Thompson's NFA construction"
+        precondition: Raw regex pattern string
+        postcondition: Nondeterministic finite automaton, executable by matcher
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(m)"
+        source: "Thompson (1968)"
+      - name: Burrows-Wheeler Transform
+        precondition: Raw string
+        postcondition: Permuted string grouping similar contexts, reversible, compressible by downstream
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        source: "Burrows & Wheeler (1994)"
+      - name: Huffman encoding (apply fixed table)
+        precondition: Raw symbol stream + precomputed prefix code table
+        postcondition: Variable-length bit sequence, decodable
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        source: "Huffman (1952)"
+      - name: Sinusoidal positional encoding
+        precondition: Token sequence without position information
+        postcondition: Position-encoded sequence, relative positions recoverable as linear functions
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n * d)"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017)"
+      - name: RAG retrieval
+        precondition: Query + external document store with embeddings
+        postcondition: Retrieved context prepended to input, parseable by downstream
+        iteration_stable: true
+        fidelity: lossy  # retrieval may miss relevant documents
+        variation: none
+        cost: "O(log n) with index"
+        source: "Lewis et al. (2020); Zhao et al. (2023) §9.6"
+      - name: MCP tool protocol
+        precondition: Agent needs access to external tools and resources
+        postcondition: Standardized tool/resource descriptions parseable by agent, governance via allowlists and audit logging
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) per tool registration"
+        ref: "https://modelcontextprotocol.io/"
+        source: "Anthropic (2024); Arunkumar et al. (2026) §4.1.3"
 
   # ── Cache ─────────────────────────────────────────────────
   - name: cache
@@ -265,6 +332,58 @@ columns:
         fidelity: lossless
         variation: structural  # random level assignment
         cost: "O(n log n)"
+      - name: RETE incremental matching
+        precondition: Graph-structured working memory + production rules with multi-condition LHS
+        postcondition: All matching rule instantiations identified, incrementally maintained
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(delta) per WME change, not O(rules * WM)"
+        ref: "https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/decision_process/rete.cpp"
+        source: "Soar (Forgy, 1982)"
+      - name: Suffix array construction (SA-IS)
+        precondition: Encoded string over finite alphabet
+        postcondition: Sorted array of suffix positions, substring-retrievable in O(m + log n)
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        source: "Manber & Myers (1993); SA-IS: Nong, Zhang & Chan (2009)"
+      - name: Suffix tree construction (Ukkonen)
+        precondition: Encoded string over finite alphabet
+        postcondition: Compressed trie of all suffixes, O(m) substring retrieval
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        source: "Weiner (1973); Ukkonen (1995)"
+      - name: FM-Index construction
+        precondition: Encoded string (BWT + suffix array)
+        postcondition: Compressed full-text index, O(m) count queries in sublinear space
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        ref: "https://en.wikipedia.org/wiki/FM-index"
+        source: "Ferragina & Manzini (2000)"
+      - name: Residual connection + LayerNorm
+        precondition: Sub-layer input x + sub-layer output f(x)
+        postcondition: Normalized residual x + f(x), identity shortcut preserves gradient flow
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(d)"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017); He et al. (2016); Ba et al. (2016)"
+      - name: Paged memory (MemGPT)
+        precondition: Long conversation history exceeding context window
+        postcondition: Tiered storage (main context / archival / recall) with controller-driven page-in/page-out
+        iteration_stable: true
+        fidelity: lossy  # evicted pages only retrieved on demand
+        variation: none
+        cost: "O(1) per page operation"
+        ref: "https://arxiv.org/abs/2310.08560"
+        source: "Packer et al. (2023); Arunkumar et al. (2026) §4.1.2"
 
   # ── Filter ────────────────────────────────────────────────
   - name: filter
@@ -426,6 +545,16 @@ columns:
         variation: structural  # hash collisions are stochastic
         cost: "O(n^rho) sublinear"
         ref: "https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/"
+      - name: Justification-based truth maintenance
+        precondition: Graph-structured working memory + rule instantiations with support type (I or O)
+        postcondition: I-supported structures auto-retract when creating instantiation unmatches, strictly smaller
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) per retraction"
+        ref: "https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/soar_representation/instantiation.cpp"
+        source: "Soar (Forbus & DeKleer, 1993)"
       - name: Pareto filtering
         precondition: Candidates with objective vectors
         postcondition: Non-dominated subset, strictly smaller
@@ -434,6 +563,70 @@ columns:
         fidelity: lossless
         variation: none
         cost: "O(n log n) for 2D, O(n^(d-1)) general"
+      - name: KMP / Boyer-Moore string matching
+        precondition: Indexed text + single pattern
+        postcondition: Match positions only, non-matches discarded
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n + m)"
+        source: "Knuth, Morris & Pratt (1977); Boyer & Moore (1977)"
+      - name: Aho-Corasick multi-pattern matching
+        precondition: Indexed text + set of patterns (compiled to automaton)
+        postcondition: All pattern match positions, non-matches discarded
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n + m + z) where z = total matches"
+        source: "Aho & Corasick (1975)"
+      - name: Bitap approximate matching
+        precondition: Indexed text + pattern + edit threshold k
+        postcondition: Positions within k edits of pattern, rest discarded
+        grid_position: [similarity, bounded_approximation]
+        iteration_stable: true
+        fidelity: lossy  # bounded false negatives at word boundaries
+        variation: none
+        cost: "O(nm/w) where w = machine word size"
+        source: "Baeza-Yates & Gonnet (1992)"
+      - name: BLAST heuristic sequence search
+        precondition: Indexed sequence database + query sequence
+        postcondition: High-scoring segment pairs, low-scoring regions discarded
+        grid_position: [similarity, probabilistic]
+        iteration_stable: true
+        fidelity: lossy  # heuristic, may miss distant homologs
+        variation: none
+        cost: "O(n) expected per database sequence"
+        source: "Altschul et al. (1990)"
+      - name: Causal masking
+        precondition: Attention weight matrix over sequence positions
+        postcondition: Future positions masked to -inf before softmax, autoregressive constraint enforced
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless  # no information loss — future is undefined, not discarded
+        variation: none
+        cost: "O(n²)"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017)"
+      - name: Policy-driven pruning (MemAgent)
+        precondition: Accumulated memory entries + learned importance policy
+        postcondition: Low-value entries discarded, memory bounded
+        grid_position: [predicate, probabilistic]
+        iteration_stable: true
+        fidelity: lossy  # policy may discard useful entries
+        variation: stochastic  # depends on learned policy
+        cost: "O(n) per pruning pass"
+        source: "Arunkumar et al. (2026) §4.1.2"
+      - name: Hierarchical verification (MAKER)
+        precondition: Worker agent outputs + verifier agents
+        postcondition: Challenged outputs accepted or rejected, near-zero error on long chains
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless  # verification catches errors
+        variation: none
+        cost: "O(k) verifier calls per output"
+        source: "Arunkumar et al. (2026) §5.3.2"
 
   # ── Attend ────────────────────────────────────────────────
   - name: attend
@@ -511,6 +704,73 @@ columns:
         fidelity: lossy
         variation: none
         cost: "O(b * n * steps)"
+      - name: Surprise gate + DPP thinning
+        precondition: Stream of episodes + importance signals (reward, impasse, novelty) + similarity kernel
+        postcondition: High-importance novel episodes stored at full fidelity; periodic DPP pass ensures diversity in stored set
+        iteration_stable: true
+        fidelity: lossy
+        variation: none  # surprise gate is deterministic; DPP sampling adds stochasticity at compaction
+        cost: "O(1) per episode (gate); O(k^3) periodic (DPP thin)"
+        ref: "https://cdn.aaai.org/ojs/11595/11595-13-15123-1-2-20201228.pdf"
+        source: "Prescription Soar — episodic discrimination (Isele & Cosgun, 2018; Science, 2024)"
+      - name: Scaled dot-product attention
+        precondition: Query, key, value matrices of compatible dimension
+        postcondition: Weighted value vectors, soft lookup by query-key similarity
+        grid_position: [top_k_slate, implicit]
+        iteration_stable: true
+        fidelity: lossy  # soft weighting discards low-attention information
+        variation: none
+        cost: "O(n² * d)"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017)"
+      - name: Multi-head projection
+        precondition: Q, K, V + h learned projection matrices per head
+        postcondition: h parallel attention outputs concatenated and projected, each head attends to different subspace
+        grid_position: [top_k_slate, implicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(h * n² * d/h) = O(n² * d)"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017)"
+      - name: In-context learning
+        precondition: Prompt containing examples + query, frozen model weights
+        postcondition: Output conditioned on examples — learning without weight updates
+        grid_position: [top_k_slate, implicit]
+        iteration_stable: true
+        fidelity: lossy  # bounded by context window and attention capacity
+        variation: none
+        cost: "O(n² * d) where n = prompt + examples length"
+        source: "Brown et al. (2020); Zhao et al. (2023) §6.2"
+      - name: Chain-of-thought prompting
+        precondition: Problem + instruction to show reasoning steps
+        postcondition: Intermediate reasoning tokens generated before answer, serial decomposition of parallel knowledge
+        grid_position: [path_tree, implicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic  # sampling-dependent
+        cost: "O(steps * n * d)"
+        source: "Wei et al. (2022); Zhao et al. (2023) §6.3"
+      - name: ReAct loop
+        precondition: Observation from environment + reasoning trace so far
+        postcondition: Next action selected via interleaved thought-action-observation chain
+        grid_position: [path_tree, implicit]
+        iteration_stable: true
+        fidelity: lossy  # myopic, no backtracking
+        variation: stochastic
+        cost: "O(n * d) per step"
+        ref: "https://arxiv.org/abs/2210.03629"
+        source: "Yao et al. (2022); Arunkumar et al. (2026) §4.2.1"
+      - name: Tree of Thoughts
+        precondition: Problem + evaluation function for intermediate thoughts
+        postcondition: Best reasoning path found via BFS/DFS over thought tree with backtracking
+        grid_position: [path_tree, explicit]
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic  # depends on generation and evaluation
+        cost: "O(b^d * n) where b = branching, d = depth"
+        ref: "https://arxiv.org/abs/2305.10601"
+        source: "Yao et al. (2023); Arunkumar et al. (2026) §4.2.1"
 
   # ── Consolidate ───────────────────────────────────────────
   - name: consolidate
@@ -564,6 +824,125 @@ columns:
         fidelity: lossy
         variation: none
         cost: "O(n * k)"
+      - name: EBC/Chunking
+        precondition: Substate result that modifies superstate + dependency trace through rule firings
+        postcondition: New production rule encoding the compiled reasoning, fires directly on future match
+        iteration_stable: true
+        fidelity: lossy  # generalizes from specific trace
+        variation: none  # deterministic given trace (requires deterministic substate decisions)
+        cost: "O(trace depth)"
+        ref: "https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/explanation_based_chunking/ebc_build.cpp"
+        source: "Soar (Laird, 2022 §4; Assanie, 2022)"
+      - name: Delta-bar-delta
+        precondition: RL rules with numeric preferences + reward signal
+        postcondition: Per-production learning rates adapted, future updates scaled individually
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(1) per rule per update"
+        ref: "https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/reinforcement_learning/reinforcement_learning.cpp"
+        source: "Soar (Jacobs, 1988)"
+      - name: EMA convergence gate
+        precondition: RL rules with numeric preferences + running EMA of |ΔQ|
+        postcondition: Converged decisions flagged as deterministic, eligible for chunking
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(1) per rule per update"
+        source: "Prescription Soar — gates chunking on RL convergence"
+      - name: Temporal graph coarsening
+        precondition: Sequence of graph snapshots (episodic memory) + frequency threshold
+        postcondition: Compressed graph structures encoding cross-episode regularities
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(δ) compositions (Casteigts et al., 2019)"
+        ref: "https://link.springer.com/article/10.1007/s00224-018-9876-z"
+        source: "Prescription Soar — episodic→semantic consolidation"
+      - name: BPE merge table training
+        precondition: Ranked corpus tokens (persisted from prior cycles)
+        postcondition: Merge table reshaping future tokenization (Perceive codebook updated)
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n * V) where V = vocabulary size"
+        source: "Gage (1994); Sennrich, Haddow & Birch (2016)"
+      - name: Huffman table construction
+        precondition: Symbol frequency distribution (persisted from prior encoding)
+        postcondition: Optimal prefix code table reshaping future encoding
+        iteration_stable: true
+        fidelity: lossy  # frequency estimates compress the distribution
+        variation: none
+        cost: "O(n log n)"
+        source: "Huffman (1952)"
+      - name: Warmup + inverse-sqrt LR schedule
+        precondition: Model parameters + step counter + warmup steps
+        postcondition: Learning rate adjusted per step — linear warmup then inverse square root decay
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(1) per step"
+        ref: "https://arxiv.org/abs/1706.03762"
+        source: "Vaswani et al. (2017)"
+      - name: Scaling laws
+        precondition: Compute budget + data budget + parameter count
+        postcondition: Predicted loss as power law of compute, data, and parameters — guides allocation before training
+        iteration_stable: true
+        fidelity: lossy  # empirical fit, not exact
+        variation: none
+        cost: "O(1) to evaluate"
+        source: "Kaplan et al. (2020); Hoffmann et al. (2022); Zhao et al. (2023) §4.3"
+      - name: RLHF
+        precondition: Pre-trained model + human preference comparisons
+        postcondition: Reward model trained on preferences, policy optimized against it via PPO
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic  # PPO sampling
+        cost: "O(n * d) per update"
+        source: "Ouyang et al. (2022); Zhao et al. (2023) §5.2"
+      - name: DPO
+        precondition: Pre-trained model + preference pairs (chosen, rejected)
+        postcondition: Policy directly optimized on preferences without separate reward model
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic
+        cost: "O(n * d) per update"
+        ref: "https://arxiv.org/abs/2305.18290"
+        source: "Rafailov et al. (2023); Zhao et al. (2023) §5.2"
+      - name: LoRA
+        precondition: Frozen base model + task-specific training data + rank r
+        postcondition: Low-rank update matrices (A, B) trained, base model unchanged, mergeable at inference
+        iteration_stable: true
+        fidelity: lossy
+        variation: none
+        cost: "O(n * r * d) per update, r << d"
+        ref: "https://arxiv.org/abs/2106.09685"
+        source: "Hu et al. (2021); Zhao et al. (2023) §5.3"
+      - name: Instruction tuning (SFT)
+        precondition: Pre-trained model + (instruction, response) pairs
+        postcondition: Model fine-tuned to follow instruction format, output aligned to user intent
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic
+        cost: "O(n * d) per update"
+        source: "Wei et al. (2021); Zhao et al. (2023) §5.1"
+      - name: Reflexion (verbal reinforcement)
+        precondition: Failed task attempt + outcome signal
+        postcondition: Natural-language self-critique stored, future attempts conditioned on lessons learned
+        iteration_stable: true
+        fidelity: lossy  # verbal summary, not parametric update
+        variation: stochastic  # depends on generation
+        cost: "O(n * d) per reflection"
+        ref: "https://arxiv.org/abs/2303.11366"
+        source: "Shinn et al. (2023); Arunkumar et al. (2026) §4.2.2"
+      - name: Episodic→semantic compression (MemInsight)
+        precondition: Stream of episodic traces from agent interactions
+        postcondition: Compressed semantic insights extracted, generalizations stored for future retrieval
+        iteration_stable: true
+        fidelity: lossy  # compression discards episode-specific detail
+        variation: stochastic
+        cost: "O(n * d) per compression pass"
+        source: "Arunkumar et al. (2026) §4.1.2"
 
   # ── Remember ──────────────────────────────────────────────
   - name: remember
@@ -615,3 +994,20 @@ columns:
         fidelity: lossless
         variation: none
         cost: "O(n)"
+      - name: Quantization
+        precondition: Trained model weights in FP32/FP16
+        postcondition: Weights stored at reduced precision (INT8/INT4), behavior approximately preserved
+        iteration_stable: true
+        fidelity: lossy  # precision reduction, bounded error
+        variation: none
+        cost: "O(n) to quantize"
+        source: "Dettmers et al. (2022); Zhao et al. (2023) §9.5"
+      - name: NL episode stream (Generative Agents)
+        precondition: Agent observations and actions as natural language
+        postcondition: Timestamped episode stream persisted, retrievable by recency/importance/relevance
+        iteration_stable: true
+        fidelity: lossless  # full text preserved
+        variation: none
+        cost: "O(1) per episode write"
+        ref: "https://arxiv.org/abs/2304.03442"
+        source: "Park et al. (2023); Arunkumar et al. (2026) §4.1.2"

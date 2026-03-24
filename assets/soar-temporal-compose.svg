@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <style>
+    .box{fill:#fff;stroke:#bbb;stroke-width:1.2;rx:8}
+    .box-out{fill:#f0faf0;stroke:#2e7d32;stroke-width:1.5;rx:8}
+    .label{text-anchor:middle;dominant-baseline:central;font-weight:600;font-size:13px;fill:#1f2937}
+    .sub{text-anchor:middle;font-size:10px;fill:#6b7280}
+    .arrow{stroke:#bbb;stroke-width:1.2;fill:none;marker-end:url(#a)}
+    .arrow-green{stroke:#2e7d32;stroke-width:1.5;fill:none;marker-end:url(#ag)}
+    .section{font-weight:600;font-size:10px;fill:#9ca3af;text-transform:uppercase;letter-spacing:2px}
+    .dots{fill:#9ca3af;font-size:18px;text-anchor:middle;dominant-baseline:central}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#bbb"/></marker>
+    <marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2e7d32"/></marker>
+  </defs>
+
+  <!-- Episode snapshots -->
+  <text class="section" x="300" y="16">Episodes (EPMEM)</text>
+
+  <rect class="box" x="20" y="28" width="100" height="50" rx="8"/>
+  <text class="label" x="70" y="46">G₁</text>
+  <text class="sub" x="70" y="62">cycle 1</text>
+
+  <rect class="box" x="140" y="28" width="100" height="50" rx="8"/>
+  <text class="label" x="190" y="46">G₂</text>
+  <text class="sub" x="190" y="62">cycle 2</text>
+
+  <rect class="box" x="260" y="28" width="100" height="50" rx="8"/>
+  <text class="label" x="310" y="46">G₃</text>
+  <text class="sub" x="310" y="62">cycle 3</text>
+
+  <text class="dots" x="400" y="53">···</text>
+
+  <rect class="box" x="430" y="28" width="100" height="50" rx="8"/>
+  <text class="label" x="480" y="46">Gδ</text>
+  <text class="sub" x="480" y="62">cycle δ</text>
+
+  <!-- Compose bracket -->
+  <text class="section" x="450" y="108">Compose + Test (Peters et al.)</text>
+
+  <path d="M70,78 L70,120 Q70,130 80,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
+  <path d="M190,78 L190,120 Q190,130 200,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
+  <path d="M310,78 L310,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
+  <path d="M480,78 L480,120 Q480,130 470,130 L370,130" class="arrow" style="stroke-dasharray:4,3"/>
+
+  <rect class="box" x="270" y="118" width="100" height="40" rx="8" style="fill:#fafafa"/>
+  <text class="label" x="320" y="134">compose</text>
+  <text class="sub" x="320" y="148">union + count</text>
+
+  <line class="arrow" x1="320" y1="158" x2="320" y2="178"/>
+
+  <rect class="box" x="270" y="178" width="100" height="40" rx="8" style="fill:#fafafa"/>
+  <text class="label" x="320" y="194">test</text>
+  <text class="sub" x="320" y="208">freq ≥ k?</text>
+
+  <!-- Write to SMEM -->
+  <line class="arrow-green" x1="370" y1="198" x2="540" y2="198"/>
+
+  <rect class="box-out" x="540" y="178" width="160" height="40" rx="8"/>
+  <text class="label" x="620" y="194" style="fill:#2e7d32">new SMEM fact</text>
+  <text class="sub" x="620" y="208" style="fill:#2e7d32">graph structure</text>
+
+  <!-- Trigger label -->
+  <text class="sub" x="620" y="240">trigger: goal completion / idle / threshold</text>
+</svg>
