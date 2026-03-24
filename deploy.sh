@@ -95,7 +95,7 @@ ALIAS_COUNT=0
 while IFS= read -r f; do
   dir="$(dirname "$f")"
   cp "$f" "$dir.html"
-  ((ALIAS_COUNT++))
+  ALIAS_COUNT=$((ALIAS_COUNT + 1))
 done < <(find "$SITE_DIR" -name index.html -mindepth 2 "${FIND_EXCLUDES[@]}")
 echo "    $ALIAS_COUNT aliases created"
 if [[ "$ALIAS_COUNT" -eq 0 ]]; then

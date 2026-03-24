@@ -10,3 +10,4 @@ node_modules
 package.json
 _site/
 .reading-deployed
+reading/
