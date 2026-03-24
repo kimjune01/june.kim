@@ -8,61 +8,49 @@ CF_DIST_ID="E1G9R7V0YY4VV1"
 APPS=(pinyin-chart jamdojo reading)
 
 # ─── lessons learned ──────────────────────────────────────────────────────────
-# Static site deploy sounds simple. It isn't. Each lesson cost a deploy cycle.
+# Each lesson cost a deploy cycle.
 #
-# 1. S3 sync compares size + last-modified time by default, NOT ETag.
-#    Jekyll rebuilds every file with new timestamps, so every file looks
-#    newer. Use --size-only for HTML: identical content = identical size.
+#  1. Use --size-only for S3 sync. Jekyll rebuilds every file with new
+#     timestamps, so default (size + mtime) re-uploads everything.
 #
-# 2. Dryrun flags must match real sync flags exactly. The .md sync forces
-#    --content-type, which makes S3 compare metadata too. A dryrun without
-#    those flags reports 0 changes while the real sync uploads 298 files.
+#  2. Dryrun flags must match real sync flags exactly. --content-type in the
+#     real sync but not the dryrun = wrong change count.
 #
-# 3. S3 sync compares ETag AND metadata. Identical content with different
-#    content-type = "changed" file. Every .md re-uploads until the stored
-#    metadata matches. This was a one-time cost per flag change. Now both
-#    HTML and .md syncs use --size-only, so metadata-only diffs are ignored
-#    after the first deploy that set the content-type correctly.
+#  3. --size-only ignores metadata-only diffs. Good — avoids re-uploading
+#     every .md after a one-time content-type fix.
 #
-# 4. .md uploads are metadata-only — exclude them from invalidation and
-#    change counts. Otherwise they trigger wildcard invalidation (>50 files)
-#    and drown out the actual new post.
+#  4. Exclude .md from invalidation counts. Otherwise they trigger wildcard
+#     invalidation (>50 files) and drown out actual changes.
 #
-# 5. CloudFront invalidation is a separate API call. S3 sync doesn't
-#    trigger it. If the change list is wrong, the new post stays cached.
+#  5. S3 sync doesn't invalidate CloudFront. Separate API call required.
 #
-# 6. Jekyll incremental builds (incremental: true) are unreliable and
-#    disabled. Every build regenerates all HTML. Most pages don't change
-#    content, so ETag comparison handles it. Don't re-enable incremental.
+#  6. Jekyll incremental builds are unreliable. Always do full rebuilds.
 #
-# 7. S3 dryrun can report "0 changes" when the content is already uploaded
-#    but CloudFront still caches the old version. Use git diff to find changed
-#    posts and force-invalidate them regardless of what S3 says.
+#  7. S3 can be current while CloudFront is stale. Use git diff for
+#     invalidation, not just S3 dryrun.
 #
-# 8. Astro apps (jamdojo, pinyin-chart) content-hash filenames. Copying them
-#    into _site and running one global sync means every deploy re-uploads
-#    ~581 files even when the apps haven't changed. Fix: sync apps separately,
-#    gated on git diff.
+#  8. Astro apps content-hash filenames. Sync them separately, gated on
+#     git diff, to avoid re-uploading hundreds of unchanged files.
 #
-# 9. --size-only means the dryrun misses files whose content changed but
-#    whose size didn't (or changed by <1 byte). The real sync uploads them
-#    but they never appear in the CHANGED list, so they're never invalidated.
-#    Fix: also pull invalidation paths from git diff on _posts/ AND assets/.
-#    A new SVG or an updated HTML that references it both need invalidation.
+#  9. --size-only misses same-size content changes. Pull invalidation paths
+#     from git diff on _posts/ AND assets/ to compensate.
 #
-# 10. CloudFront treats / and /index.html as separate cache keys. Invalidating
-#     /index.html does NOT clear /. Always add / when /index.html is in the
-#     invalidation set. Same applies to /feed.xml — it's force-uploaded every
-#     deploy but was never invalidated, so readers saw stale RSS until the
-#     TTL expired.
+# 10. CloudFront treats / and /index.html as separate cache keys.
+#     Invalidate both. Same for /feed.xml and /reading/ vs /reading/*.
 #
-# 11. Always invalidate / and /index.html on every deploy. The homepage lists
-#     recent posts. A new post changes the homepage even if --size-only doesn't
-#     detect it (the size difference of one <li> is often <1 byte after gzip).
-#     Stale homepage = new posts invisible to visitors.
+# 11. Always invalidate / and /index.html. The homepage lists recent posts;
+#     a new post changes it even when --size-only doesn't detect it.
+#
+# 12. Don't accumulate PATHS before PATHS=() is declared — the app sync
+#     loop runs first and would get wiped. Use flags, add paths later.
+#
+# 13. .html aliases (about/index.html → about.html) must be created AFTER
+#     all builds complete and verified before sync. A find|while pipe can
+#     silently produce zero aliases if _site isn't fully populated yet.
+#     Use process substitution + count check.
 # ──────────────────────────────────────────────────────────────────────────────
 
-# ─── deploy: build + sync ───────────────────────────────────────────────────
+# ─── build ────────────────────────────────────────────────────────────────────
 
 # Install Ruby 3.3.3 via rbenv if missing
 if ! ruby -v 2>/dev/null | grep -q "3.3.3"; then
@@ -83,13 +71,7 @@ bundle install
 echo "==> Building site"
 JEKYLL_ENV=production bundle exec jekyll build
 
-echo "==> Creating .html aliases for directory index pages"
-find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
-  dir="$(dirname "$f")"
-  cp "$f" "$dir.html"
-done
-
-# ─── build reading site (formerly natural-breadcrumbs) ────────────────────────
+# ─── build reading site ──────────────────────────────────────────────────────
 READING_DIR="$HOME/Documents/junekim-reading"
 if [[ -d "$READING_DIR" ]]; then
   echo "==> Building reading site"
@@ -99,22 +81,35 @@ if [[ -d "$READING_DIR" ]]; then
   echo "    reading site built"
 fi
 
+# ─── create .html aliases (lesson 13) ────────────────────────────────────────
+# CloudFront + S3 serves /about/ → about/index.html, but /about 404s unless
+# about.html exists at the root. Create aliases for every directory index page.
+# Uses process substitution (not pipe) so failures aren't swallowed.
+echo "==> Creating .html aliases for directory index pages"
+ALIAS_COUNT=0
+while IFS= read -r f; do
+  dir="$(dirname "$f")"
+  cp "$f" "$dir.html"
+  ((ALIAS_COUNT++))
+done < <(find "$SITE_DIR" -name index.html -mindepth 2)
+echo "    $ALIAS_COUNT aliases created"
+if [[ "$ALIAS_COUNT" -eq 0 ]]; then
+  echo "WARNING: No aliases created — directory index pages may 404 without trailing slash"
+fi
+
 # ─── blog sync (excludes app dirs) ──────────────────────────────────────────
 
-# Build exclude flags for apps
 APP_EXCLUDES=()
 for app in "${APPS[@]}"; do
   APP_EXCLUDES+=(--exclude "$app/*")
 done
 
-echo "==> Checking what changed (ETag compare)"
-# Dryrun for non-md, non-app files
+echo "==> Checking what changed (dryrun)"
 CHANGED_HTML=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only \
   --exclude "*.md" "${APP_EXCLUDES[@]}" --dryrun 2>&1 \
   | grep -E "^(upload|delete):" \
   | sed 's|.*s3://[^/]*/|/|' \
   || true)
-# Dryrun for md files (--size-only added: metadata already correct from prior deploys)
 CHANGED_MD=$(aws s3 sync "$SITE_DIR/" "s3://$BUCKET/" --delete --size-only \
   --exclude "*" --include "*.md" "${APP_EXCLUDES[@]}" \
   --content-type "text/plain; charset=utf-8" --no-guess-mime-type --dryrun 2>&1 \
@@ -145,17 +140,29 @@ aws s3 cp "$SITE_DIR/feed.xml" "s3://$BUCKET/feed.xml" --quiet
 aws s3 cp "$SITE_DIR/sitemap.xml" "s3://$BUCKET/sitemap.xml" --quiet 2>/dev/null || true
 echo "    feed.xml synced"
 
-# ─── app sync (only if changed) ────────────────────────────────────────────
-# Apps use content-hashed filenames (Astro). Syncing them every deploy uploads
-# hundreds of files. Only sync when git shows changes in the app dir.
+# ─── app sync (only if changed) ──────────────────────────────────────────────
 
 LAST_DEPLOYED=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+READING_SYNCED=false
 
 for app in "${APPS[@]}"; do
   if [[ ! -d "$app" ]]; then
     continue
   fi
-  if [[ -n "$LAST_DEPLOYED" ]] && git diff --quiet "$LAST_DEPLOYED" -- "$app/"; then
+  if [[ "$app" == "reading" ]]; then
+    READING_HEAD=$(git -C "$READING_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")
+    READING_DEPLOYED=$(cat .reading-deployed 2>/dev/null || echo "")
+    if [[ "$READING_HEAD" == "$READING_DEPLOYED" ]]; then
+      echo "==> reading unchanged, skipping sync"
+    else
+      echo "==> Syncing $app to S3"
+      aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete
+      aws s3 cp "$app/index.html" "s3://$BUCKET/$app.html" --content-type "text/html; charset=utf-8" --quiet
+      echo "$READING_HEAD" > .reading-deployed
+      echo "    $app synced"
+      READING_SYNCED=true
+    fi
+  elif [[ -n "$LAST_DEPLOYED" ]] && git diff --quiet "$LAST_DEPLOYED" -- "$app/"; then
     echo "==> $app unchanged, skipping sync"
   else
     echo "==> Syncing $app to S3"
@@ -165,13 +172,10 @@ for app in "${APPS[@]}"; do
 done
 
 # ─── CloudFront invalidation ────────────────────────────────────────────────
-# Two sources of invalidation paths:
-# 1. S3 dryrun (what actually changed on S3)
-# 2. Git diff (what changed in the commit — catches the case where S3 already
-#    has the new content from a prior deploy but CloudFront still caches the old)
 
 echo "==> Invalidating CloudFront cache"
 PATHS=()
+[[ "$READING_SYNCED" == true ]] && PATHS+=("/reading/" "/reading/*")
 while IFS= read -r p; do
   [[ -z "$p" ]] && continue
   [[ "$p" == *.md ]] && continue
@@ -182,19 +186,18 @@ done <<< "$CHANGED"
 if [[ -n "$LAST_DEPLOYED" ]]; then
   while IFS= read -r f; do
     [[ -z "$f" ]] && continue
-    # Extract slug from _posts/YYYY/YYYY-MM-DD-slug.md
     slug=$(basename "$f" .md | sed 's/^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}-//')
     [[ -z "$slug" ]] && continue
     PATHS+=("/$slug" "/$slug.html")
   done < <(git diff --name-only "$LAST_DEPLOYED" -- '_posts/' 2>/dev/null || true)
 
-  # Also invalidate changed assets (SVGs, images) — lesson #9
   while IFS= read -r f; do
     [[ -z "$f" ]] && continue
     PATHS+=("/$f")
   done < <(git diff --name-only "$LAST_DEPLOYED" -- 'assets/' 2>/dev/null || true)
 fi
-# Lesson #10: / and /index.html are separate cache keys; /feed.xml is always re-uploaded
+
+# Always invalidate homepage and feed
 for p in "${PATHS[@]}"; do
   if [[ "$p" == "/index.html" ]]; then
     PATHS+=("/")
@@ -222,13 +225,12 @@ else
   echo "    Invalidated ${#PATHS[@]} path(s)"
 fi
 
-# ─── index on PageLeft ─────────────────────────────────────────────────────
+# ─── index on PageLeft ───────────────────────────────────────────────────────
 
 echo "==> Indexing changed posts on PageLeft"
 while IFS= read -r p; do
   [[ -z "$p" ]] && continue
   [[ "$p" != *.html ]] && continue
-  # Only root-level .html files that have a matching .md (i.e. posts)
   slug="${p#/}"
   slug="${slug%.html}"
   [[ "$slug" == */* ]] && continue
