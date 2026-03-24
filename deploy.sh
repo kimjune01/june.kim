@@ -5,7 +5,7 @@ BUCKET="www.june.kim"
 DOMAIN_WWW="june.kim"
 SITE_DIR="_site"
 CF_DIST_ID="E1G9R7V0YY4VV1"
-APPS=(pinyin-chart jamdojo)
+APPS=(pinyin-chart jamdojo reading)
 
 # ─── lessons learned ──────────────────────────────────────────────────────────
 # Static site deploy sounds simple. It isn't. Each lesson cost a deploy cycle.
@@ -49,6 +49,17 @@ APPS=(pinyin-chart jamdojo)
 #    but they never appear in the CHANGED list, so they're never invalidated.
 #    Fix: also pull invalidation paths from git diff on _posts/ AND assets/.
 #    A new SVG or an updated HTML that references it both need invalidation.
+#
+# 10. CloudFront treats / and /index.html as separate cache keys. Invalidating
+#     /index.html does NOT clear /. Always add / when /index.html is in the
+#     invalidation set. Same applies to /feed.xml — it's force-uploaded every
+#     deploy but was never invalidated, so readers saw stale RSS until the
+#     TTL expired.
+#
+# 11. Always invalidate / and /index.html on every deploy. The homepage lists
+#     recent posts. A new post changes the homepage even if --size-only doesn't
+#     detect it (the size difference of one <li> is often <1 byte after gzip).
+#     Stale homepage = new posts invisible to visitors.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── deploy: build + sync ───────────────────────────────────────────────────
@@ -77,6 +88,16 @@ find "$SITE_DIR" -name index.html -mindepth 2 | while read -r f; do
   dir="$(dirname "$f")"
   cp "$f" "$dir.html"
 done
+
+# ─── build reading site (formerly natural-breadcrumbs) ────────────────────────
+READING_DIR="$HOME/Documents/junekim-reading"
+if [[ -d "$READING_DIR" ]]; then
+  echo "==> Building reading site"
+  (cd "$READING_DIR" && pnpm install --frozen-lockfile && pnpm build)
+  rm -rf reading
+  cp -r "$READING_DIR/dist/" reading/
+  echo "    reading site built"
+fi
 
 # ─── blog sync (excludes app dirs) ──────────────────────────────────────────
 
@@ -119,8 +140,9 @@ if [[ "$NCHANGED_CONTENT" -eq 0 ]]; then
   echo "No content changes on S3."
 fi
 
-# Always upload feed.xml (gitignored but needed on S3)
+# Always upload feed.xml and sitemap (gitignored but needed on S3)
 aws s3 cp "$SITE_DIR/feed.xml" "s3://$BUCKET/feed.xml" --quiet
+aws s3 cp "$SITE_DIR/sitemap.xml" "s3://$BUCKET/sitemap.xml" --quiet 2>/dev/null || true
 echo "    feed.xml synced"
 
 # ─── app sync (only if changed) ────────────────────────────────────────────
@@ -172,6 +194,15 @@ if [[ -n "$LAST_DEPLOYED" ]]; then
     PATHS+=("/$f")
   done < <(git diff --name-only "$LAST_DEPLOYED" -- 'assets/' 2>/dev/null || true)
 fi
+# Lesson #10: / and /index.html are separate cache keys; /feed.xml is always re-uploaded
+for p in "${PATHS[@]}"; do
+  if [[ "$p" == "/index.html" ]]; then
+    PATHS+=("/")
+    break
+  fi
+done
+PATHS+=("/feed.xml" "/" "/index.html")
+
 # Deduplicate
 PATHS=($(printf '%s\n' "${PATHS[@]}" | sort -u))
 
