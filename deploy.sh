@@ -203,12 +203,6 @@ if [[ -n "$LAST_DEPLOYED" ]]; then
 fi
 
 # Always invalidate homepage and feed
-for p in "${PATHS[@]}"; do
-  if [[ "$p" == "/index.html" ]]; then
-    PATHS+=("/")
-    break
-  fi
-done
 PATHS+=("/feed.xml" "/" "/index.html")
 
 # Deduplicate
