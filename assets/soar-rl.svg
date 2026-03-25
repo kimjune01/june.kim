@@ -33,6 +33,7 @@
   <text class="role" x="790" y="20">Output</text>
   <text class="mech" x="790" y="50">Updated Q-value</text>
 
+  <rect x="440" y="70" width="400" height="18" rx="4" fill="#fff0f0" stroke="none"/>
   <path class="bk" d="M790,42 L790,62 Q790,67 785,67 L95,67 Q90,67 90,62 L90,42"/>
   <text class="bk-label" x="550" y="78">Learning — delta-bar-delta (per-rule); globals static</text>
 </svg>

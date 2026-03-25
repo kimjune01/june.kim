@@ -14,9 +14,9 @@
   <text class="mech" x="90" y="50">Input + SVS filters</text>
   <line class="arrow" x1="170" y1="25" x2="185" y2="25"/>
 
-  <rect class="step" x="185" y="8" width="160" height="34"/>
+  <rect x="185" y="8" width="160" height="34" rx="4" fill="#fff0f0" stroke="#bbb" stroke-width="1.2"/>
   <text class="role" x="265" y="20">Working Memory</text>
-  <text class="mech" x="265" y="50">Working Memory</text>
+  <text class="mech" x="265" y="50">Clogged drain (R4)</text>
   <line class="arrow" x1="345" y1="25" x2="360" y2="25"/>
 
   <rect class="step" x="360" y="8" width="160" height="34"/>
@@ -34,5 +34,5 @@
   <text class="mech" x="790" y="50">Output-link</text>
 
   <path class="bk" d="M790,42 L790,62 Q790,67 785,67 L95,67 Q90,67 90,62 L90,42"/>
-  <text class="bk-label" x="550" y="78">Learning — delegates to learning modules</text>
+  <text class="bk-label" x="550" y="78">Forgetting — built for WM and procedural, missing for semantic and episodic</text>
 </svg>

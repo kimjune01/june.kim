@@ -1,65 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 200" font-family="system-ui, -apple-system, sans-serif" font-size="13">
   <style>
-    .box{fill:#fff;stroke:#bbb;stroke-width:1.2;rx:8}
-    .box-out{fill:#f0faf0;stroke:#2e7d32;stroke-width:1.5;rx:8}
-    .label{text-anchor:middle;dominant-baseline:central;font-weight:600;font-size:13px;fill:#1f2937}
+    .label{text-anchor:middle;dominant-baseline:central;font-weight:600;font-size:12px;fill:#1f2937}
     .sub{text-anchor:middle;font-size:10px;fill:#6b7280}
-    .arrow{stroke:#bbb;stroke-width:1.2;fill:none;marker-end:url(#a)}
-    .arrow-green{stroke:#2e7d32;stroke-width:1.5;fill:none;marker-end:url(#ag)}
+    .arrow{stroke:#999;stroke-width:1.2;fill:none;marker-end:url(#a)}
     .section{font-weight:600;font-size:10px;fill:#9ca3af;text-transform:uppercase;letter-spacing:2px}
-    .dots{fill:#9ca3af;font-size:18px;text-anchor:middle;dominant-baseline:central}
+    .result-edge{stroke:#2e7d32;stroke-width:1.5}
+    .result-node{fill:#c8e6c9;stroke:#2e7d32;stroke-width:1.5}
   </style>
   <defs>
-    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#bbb"/></marker>
-    <marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2e7d32"/></marker>
+    <marker id="a" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#999"/></marker>
   </defs>
 
-  <!-- Episode snapshots -->
-  <text class="section" x="300" y="16">Episodes (EPMEM)</text>
+  <!-- G1: oldest, faintest -->
+  <text class="section" x="80" y="14">G₁</text>
+  <g opacity="0.25">
+    <circle cx="80" cy="45" r="8" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="80" y1="53" x2="55" y2="78" stroke="#aaa" stroke-width="1"/>
+    <line x1="80" y1="53" x2="105" y2="78" stroke="#aaa" stroke-width="1"/>
+    <circle cx="55" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="105" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="55" y1="92" x2="40" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="55" y1="92" x2="70" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="105" y1="92" x2="105" y2="115" stroke="#aaa" stroke-width="1"/>
+    <circle cx="40" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="70" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="105" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+  </g>
+  <text class="sub" x="80" y="150">cycle 1</text>
 
-  <rect class="box" x="20" y="28" width="100" height="50" rx="8"/>
-  <text class="label" x="70" y="46">G₁</text>
-  <text class="sub" x="70" y="62">cycle 1</text>
+  <!-- G2 -->
+  <text class="section" x="200" y="14">G₂</text>
+  <g opacity="0.45">
+    <circle cx="200" cy="45" r="8" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="200" y1="53" x2="175" y2="78" stroke="#aaa" stroke-width="1"/>
+    <line x1="200" y1="53" x2="225" y2="78" stroke="#aaa" stroke-width="1"/>
+    <circle cx="175" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="225" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="175" y1="92" x2="160" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="175" y1="92" x2="190" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="225" y1="92" x2="210" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="225" y1="92" x2="240" y2="115" stroke="#aaa" stroke-width="1"/>
+    <circle cx="160" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="190" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="210" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="240" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+  </g>
+  <text class="sub" x="200" y="150">cycle 2</text>
 
-  <rect class="box" x="140" y="28" width="100" height="50" rx="8"/>
-  <text class="label" x="190" y="46">G₂</text>
-  <text class="sub" x="190" y="62">cycle 2</text>
+  <!-- G3 -->
+  <text class="section" x="320" y="14">G₃</text>
+  <g opacity="0.7">
+    <circle cx="320" cy="45" r="8" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="320" y1="53" x2="295" y2="78" stroke="#aaa" stroke-width="1"/>
+    <line x1="320" y1="53" x2="345" y2="78" stroke="#aaa" stroke-width="1"/>
+    <circle cx="295" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="345" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="295" y1="92" x2="295" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="345" y1="92" x2="330" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="345" y1="92" x2="360" y2="115" stroke="#aaa" stroke-width="1"/>
+    <circle cx="295" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="330" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="360" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+  </g>
+  <text class="sub" x="320" y="150">cycle 3</text>
 
-  <rect class="box" x="260" y="28" width="100" height="50" rx="8"/>
-  <text class="label" x="310" y="46">G₃</text>
-  <text class="sub" x="310" y="62">cycle 3</text>
+  <!-- Gδ: most recent, full opacity -->
+  <text class="section" x="440" y="14">Gδ</text>
+  <g opacity="1">
+    <circle cx="440" cy="45" r="8" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="440" y1="53" x2="415" y2="78" stroke="#aaa" stroke-width="1"/>
+    <line x1="440" y1="53" x2="465" y2="78" stroke="#aaa" stroke-width="1"/>
+    <circle cx="415" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="465" cy="85" r="7" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <line x1="415" y1="92" x2="400" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="415" y1="92" x2="430" y2="115" stroke="#aaa" stroke-width="1"/>
+    <line x1="465" y1="92" x2="465" y2="115" stroke="#aaa" stroke-width="1"/>
+    <circle cx="400" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="430" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <circle cx="465" cy="122" r="6" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+  </g>
+  <text class="sub" x="440" y="150">cycle δ</text>
 
-  <text class="dots" x="400" y="53">···</text>
+  <!-- Time arrow beneath -->
+  <line x1="40" y1="170" x2="480" y2="170" stroke="#ccc" stroke-width="1" marker-end="url(#a)"/>
+  <text class="sub" x="260" y="190">δ window</text>
 
-  <rect class="box" x="430" y="28" width="100" height="50" rx="8"/>
-  <text class="label" x="480" y="46">Gδ</text>
-  <text class="sub" x="480" y="62">cycle δ</text>
+  <!-- Compose arrow -->
+  <line class="arrow" x1="500" y1="85" x2="560" y2="85"/>
+  <text class="sub" x="530" y="75">compose</text>
+  <text class="sub" x="530" y="63">+ test</text>
 
-  <!-- Compose bracket -->
-  <text class="section" x="450" y="108">Compose + Test (Peters et al.)</text>
+  <!-- Result: overlay / union tree, only stable edges in green -->
+  <text class="section" x="680" y="14">Stable structure</text>
 
-  <path d="M70,78 L70,120 Q70,130 80,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
-  <path d="M190,78 L190,120 Q190,130 200,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
-  <path d="M310,78 L310,130 L270,130" class="arrow" style="stroke-dasharray:4,3"/>
-  <path d="M480,78 L480,120 Q480,130 470,130 L370,130" class="arrow" style="stroke-dasharray:4,3"/>
+  <!-- Stable root + branches (present in all snapshots) -->
+  <circle class="result-node" cx="680" cy="45" r="10"/>
+  <line class="result-edge" x1="680" y1="55" x2="645" y2="85"/>
+  <line class="result-edge" x1="680" y1="55" x2="715" y2="85"/>
+  <circle class="result-node" cx="645" cy="93" r="9"/>
+  <circle class="result-node" cx="715" cy="93" r="9"/>
 
-  <rect class="box" x="270" y="118" width="100" height="40" rx="8" style="fill:#fafafa"/>
-  <text class="label" x="320" y="134">compose</text>
-  <text class="sub" x="320" y="148">union + count</text>
+  <!-- Stable left subtree -->
+  <line class="result-edge" x1="645" y1="102" x2="625" y2="128"/>
+  <circle class="result-node" cx="625" cy="135" r="7"/>
 
-  <line class="arrow" x1="320" y1="158" x2="320" y2="178"/>
+  <!-- Ghost nodes: present in some but not all -->
+  <g opacity="0.25">
+    <line x1="645" y1="102" x2="665" y2="128" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="665" cy="135" r="7" fill="#eee" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="715" y1="102" x2="700" y2="128" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="700" cy="135" r="7" fill="#eee" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="715" y1="102" x2="735" y2="128" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="735" cy="135" r="7" fill="#eee" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+  </g>
 
-  <rect class="box" x="270" y="178" width="100" height="40" rx="8" style="fill:#fafafa"/>
-  <text class="label" x="320" y="194">test</text>
-  <text class="sub" x="320" y="208">freq ≥ k?</text>
-
-  <!-- Write to SMEM -->
-  <line class="arrow-green" x1="370" y1="198" x2="540" y2="198"/>
-
-  <rect class="box-out" x="540" y="178" width="160" height="40" rx="8"/>
-  <text class="label" x="620" y="194" style="fill:#2e7d32">new SMEM fact</text>
-  <text class="sub" x="620" y="208" style="fill:#2e7d32">graph structure</text>
-
-  <!-- Trigger label -->
-  <text class="sub" x="620" y="240">trigger: goal completion / idle / threshold</text>
+  <text class="sub" x="680" y="165">green = freq ≥ k</text>
+  <text class="sub" x="680" y="178">ghost = below threshold</text>
 </svg>

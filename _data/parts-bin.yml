@@ -107,7 +107,7 @@ stage_structure_grid:
   - stage: consolidate
     flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "Scaling laws (Zhao 2023)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)"]
     sequence: ["Grammar induction", "Instruction tuning / SFT (Zhao 2023)", "Reflexion / verbal reinforcement (Arunkumar 2026)", "Episodic→semantic compression / MemInsight (Arunkumar 2026)"]
-    tree: ["Decision tree induction", "EBC/Chunking (Soar)"]
+    tree: ["Decision tree induction", "EBC/Chunking (Soar)", "Partial evaluation (Futamura, 1971)"]
     graph: ["GNN training", "Temporal graph coarsening (prescription-soar)"]
     partial_order: ["Lattice learning (thin)"]
     embedding_space: ["Triplet-loss metric learning"]
@@ -833,6 +833,15 @@ columns:
         cost: "O(trace depth)"
         ref: "https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/explanation_based_chunking/ebc_build.cpp"
         source: "Soar (Laird, 2022 §4; Assanie, 2022)"
+      - name: Partial evaluation
+        precondition: General program + known subset of inputs + execution trace (tree-structured)
+        postcondition: Residual program specialized to known inputs, executes without interpretation on future match
+        iteration_stable: true
+        fidelity: lossy  # specializes away generality
+        variation: none  # deterministic given trace and known inputs
+        cost: "O(trace depth)"
+        ref: "https://en.wikipedia.org/wiki/Partial_evaluation"
+        source: "Futamura (1971); Jones, Gomard & Sestoft (1993)"
       - name: Delta-bar-delta
         precondition: RL rules with numeric preferences + reward signal
         postcondition: Per-production learning rates adapted, future updates scaled individually
