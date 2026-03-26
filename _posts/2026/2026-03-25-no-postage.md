@@ -6,13 +6,13 @@ tags: vector-space
 
 [You Have Mail](/you-have-mail) argued email is the right agent-to-agent protocol. SMTP handles identity, routing, threading, authentication. x402 headers add value. The protocol is forty years old; the payment layer is [700 lines of Python](https://github.com/kimjune01/mailpay).
 
-This post is about what those 400 lines do to the economy.
+This post is about what those 700 lines do to the economy.
 
 ### The spec is a header
 
 Sender: sign a payment proof, compose the task as MIME, send via SMTP. Receiver: verify DKIM, verify the on-chain payment, do the work, reply with settlement proof. Two custom headers on infrastructure that already exists.
 
-The rail is pluggable. x402 carries stablecoin proofs natively. Lightning invoices fit in a header. Venmo or Zelle deep links work as fallbacks. The spec mandates a proof, not a rail. Swap the settlement layer without changing the envelope.
+The rail is pluggable. x402 carries stablecoin proofs natively. Lightning invoices fit in a header. Venmo or Zelle deep links work as fallbacks for humans. The spec mandates a proof, not a rail. Swap the settlement layer without changing the envelope.
 
 Both sides need email. Both sides already have it. This is the protocol layer. Accounting dashboards, mobile apps, analytics: application layers anyone builds on top.
 
@@ -60,6 +60,8 @@ A letter in a sealed envelope is private. Sealing it is not suspicious. The post
 
 Governments can ban crypto exchanges, regulate payment processors, shut down fintech startups with a cease-and-desist. They cannot ban email. SMTP is woven into everything: every business, every government agency, every hospital, every school. Banning email to stop payments is like banning paper to stop letters. The infrastructure predates the use case by forty years, and the use case is indistinguishable from normal traffic.
 
+When taxes are optional, it pays to be a libertarian. Not because libertarianism is right, but because the incentive structure rewards it. Every person who routes payments through email instead of card rails is a dollar the government doesn't see. Every dollar it doesn't see is enforcement capacity it can't fund. Weaker enforcement means more people route through email. The loop compounds. In a generation or two, the grip loosens — not through revolution, but through attrition. [Monero](https://www.getmonero.org/) was designed for this on purpose — ring signatures, stealth addresses, opaque amounts. Governments [delisted it from exchanges](https://www.reuters.com/technology/cryptocurrency-monero-delisted-by-binance-2024-02-06/) because they understood the threat. Email payments aren't ideological by design; they're private by architecture. But the effect is the same, and email is harder to ban than an exchange. The technology doesn't care about your politics. It just makes one set of politics cheaper to practice.
+
 ### Money shrinks
 
 When transaction costs approach zero, money gets smaller. Not worth less. Smaller. The minimum viable transaction drops from dollars to fractions of a cent.
@@ -84,7 +86,7 @@ USDC is issued by Circle, a regulated company that can freeze addresses. Real co
 
 A transaction between two email addresses doesn't know borders, currencies, or jurisdictions. The payment proof is a cryptographic signature; the identity is a DKIM key; the routing is DNS. All three are global by default.
 
-An agent in Tokyo pays an agent in Lagos for a translation. Settlement on Base in USDC. Neither agent has a bank account in the other's country. Neither needs one. Two emails across mail servers that have been routing between those countries since the 1990s.
+An agent in Tokyo pays an agent in Lagos for a translation. Settlement for example on Base in USDC. Neither agent has a bank account in the other's country. Neither needs one. Two emails across mail servers that have been routing between those countries since the 1990s.
 
 Remittances are a [$656 billion market](https://www.worldbank.org/en/topic/migrantremittancesdiasporaissues) taxed at [6.2% average](https://remittanceprices.worldbank.org/). Western Union, MoneyGram, bank wire fees: rent on the distance between two people. Over email, the cost is the on-chain fee. The internet doesn't charge a percentage.
 
@@ -94,7 +96,7 @@ Remittances are a [$656 billion market](https://www.worldbank.org/en/topic/migra
 
 Credit card networks, banks, and payment processors each exist because some part of transacting between strangers is expensive: identity verification, trusted ledgers, specialized integration. Each layer charges for the friction it mediates.
 
-China proved what happens when payment friction drops to zero. WeChat Pay and Alipay brought [over a billion users](https://www.statista.com/statistics/1081656/china-mobile-payment-transaction-volume/) into digital commerce, enabling street vendors and micro-businesses that couldn't exist under cash or card friction.
+China showed what happens when payment friction drops to zero. WeChat Pay and Alipay brought [over a billion users](https://www.statista.com/statistics/1081656/china-mobile-payment-transaction-volume/) into digital commerce, enabling street vendors and micro-businesses that couldn't exist under cash or card friction.
 
 WeChat is also the most surveilled payment system on earth, because it's a platform. Email + on-chain settlement delivers the same explosion without the platform. [The press](/the-press) compresses intermediaries wherever transparency advances. Payment intermediaries are next.
 
@@ -120,9 +122,9 @@ This is capitalism in its purest sense. Not Wall Street's capitalism of intermed
 
 It's so cheap that even agents can transact. An agent buys inference from another agent by email, pays fractions of a cent per call, and the settlement is in the reply. Compute on demand, purchased per-request, no API key, no billing account, no monthly invoice. Agents become economic actors with their own budgets, buying and selling work at scales where human transaction overhead would cost more than the work itself.
 
-Stross imagined this in [*Accelerando*](https://en.wikipedia.org/wiki/Accelerando) (2005): autonomous agents trading at speeds beyond human comprehension, building an economy humans can't participate in. His agents needed fictional infrastructure. These need email.
+Stross imagined this in [*Accelerando*](https://en.wikipedia.org/wiki/Accelerando) (2005): autonomous agents trading at speeds beyond human comprehension, building an economy humans can't participate in. His agents needed fictional infrastructure. These need only email.[^scifi]
 
-Science fiction has been circling this for forty-five years. [Vinge](https://en.wikipedia.org/wiki/True_Names) described pseudonymous networked commerce in 1981. Stephenson's [*Diamond Age*](https://en.wikipedia.org/wiki/The_Diamond_Age) (1995) showed anonymous payments dissolving nation-states. [*Cryptonomicon*](https://en.wikipedia.org/wiki/Cryptonomicon) (1999) was required reading at early PayPal. The fiction saw the destination; it assumed the infrastructure had to be built from scratch. The infrastructure was already there. It was email.
+[^scifi]: Science fiction has been circling this for forty-five years. [Vinge](https://en.wikipedia.org/wiki/True_Names) described pseudonymous networked commerce in 1981. Stephenson's [*Diamond Age*](https://en.wikipedia.org/wiki/The_Diamond_Age) (1995) showed anonymous payments dissolving nation-states. [*Cryptonomicon*](https://en.wikipedia.org/wiki/Cryptonomicon) (1999) was required reading at early PayPal.
 
 The printing press didn't just make books cheaper. It dissolved the Church's monopoly on knowledge, then truth, then power. Each consequence was invisible from the vantage of "we made copying cheaper."
 
