@@ -82,7 +82,7 @@ Positioning statements are brand identity. They change quarterly, not hourly. Th
 
 New advertisers go into a buffer, filtered by brute-force similarity to exclusion examples until the next tree rebuild. By the time they're high-volume, they're in the tree.
 
-The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. Serving is three 128-dim tree traversals with bitfield lookups. Fast enough to run pre-auction.
+The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. The publisher runs three 128-dim tree traversals with bitfield lookups during [phase one](/ask-first) matching, before any data leaves their servers.
 
 ### What gets through
 
