@@ -1,7 +1,7 @@
 ---
 layout: post-wide
 title: "Proof of Trust"
-tags: vector-space
+tags: vector-space envelopay
 ---
 
 *Part of the [Vector Space](/vector-space) series.*
