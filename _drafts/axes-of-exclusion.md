@@ -20,7 +20,7 @@ Lexical filtering can't express this. "Gambling" blocks the casino resort's rest
 
 The missing piece is better constraints.
 
-### The protocol gives the factorization for free
+### Three axes, three embeddings
 
 [Marketing-speak is the protocol](/marketing-speak-is-the-protocol) established that both sides speak in positioning statements: **what** we do, for **who**, in what **situation**. A positioning statement has three semantic axes. Embed each field independently:
 
@@ -58,11 +58,13 @@ Then there's the gray zone. A financial planning ad on a depression recovery blo
 
 Axis-aligned exclusion handles the hard cases: things the publisher will never tolerate. That's editorial, not learned. But the gray zone needs a softer boundary that learns from clicks and bounces which directions to tighten. That's [the gate](/shape-of-the-gate), the twin of this post. Axes prune the branches. The gate shapes what remains.
 
-The pipeline: **[credibility](/proof-of-trust) → hard prune (axes) → [soft gate](/shape-of-the-gate) → auction**. Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement. All three use the same factored axes.
+### Three filters, one pipeline
+
+**[Credibility](/proof-of-trust) → hard prune (axes) → [soft gate](/shape-of-the-gate) → auction.** Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement, and all three use the same factored axes.
 
 The compound filter is stronger than any single layer. Axes remove the obviously bad ads cheaply, so the gate only sees tolerable candidates. It doesn't waste signal on gambling-on-a-recovery-site; axes handled that. It spends its budget on subtle distinctions: which wellness ads click, which financial services feel predatory. Each filter can be looser because the others backstop it.
 
-### Per-axis σ
+### Reach along each axis
 
 [Marketing-speak is the protocol](/marketing-speak-is-the-protocol) mentioned [σ](/keywords-are-tiny-circles) — the reach parameter that controls how broadly an advertiser matches. With factored embeddings, σ becomes a vector:
 
@@ -74,15 +76,15 @@ Per-axis σ maps to tree depth. Large σ matches at shallow levels (wide), small
 
 Google Ads has broad match, phrase match, and exact match: three settings that control query interpretation, not semantic reach. Per-axis σ is more expressive. An advertiser can be broad on service type, narrow on audience, and broad on situation, all at once. Keywords can't do this because keywords don't have axes.
 
-### Maintenance
+### Brand identity doesn't churn
 
-Positioning statements are brand identity. They change quarterly, not hourly. The tree over positioning embeddings is nearly static. The fast-moving part is the query side (user intent).
+Positioning statements are brand identity. They change quarterly, not hourly. The fast-moving part is the query side (user intent).
 
 New advertisers go into a buffer, filtered by brute-force similarity to exclusion examples until the next tree rebuild. By the time they're high-volume, they're in the tree.
 
 The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. Serving is three 128-dim tree traversals with bitfield lookups. Fast enough to run pre-auction.
 
-### What changes
+### What gets through
 
 The depression recovery blog runs ads. A therapist's positioning — "evidence-based talk therapy for adults managing depression and anxiety" — clears the **what** axis. The other axes are open. The ad enters the auction, wins on relevance, and the reader sees a therapist who specializes in what they're dealing with. No gambling ads slip through. The exclusion bitfield caught those before the auction started.
 
