@@ -16,7 +16,7 @@ Every ad platform has this filter. YouTube's is a binary label on content. Adver
 
 The real constraint is per-publisher. A mental health blog needs to exclude gambling and predatory lending with high precision. A single bad ad erodes trust built over years. But therapy services, wellness apps, and financial literacy resources should get through. A kids' learning site needs tight filtering on audience, loose filtering on service type. Educational toys, tutoring, healthy snacks, children's books are all fine.
 
-Lexical filtering (keyword blocklists, IAB categories) can't express this. "Gambling" blocks the casino resort's restaurant ad. "Debt" blocks the financial literacy course. The filter operates on surface tokens, not meaning. Semantic filtering would know the difference. But semantic filtering in high-dimensional embedding space has its own problems: distance concentrates, regions are expensive to define, and brute-force comparison is intractable at scale.
+Lexical filtering (keyword blocklists, IAB categories) can't express this. "Gambling" blocks the casino resort's restaurant ad. "Debt" blocks the financial literacy course. The filter operates on surface tokens, not meaning. A better semantic filter could know the difference. But semantic filtering in high-dimensional embedding space has its own problems: regions are expensive to define and expensive to evaluate at scale.
 
 The missing piece is better constraints.
 
@@ -30,7 +30,9 @@ The missing piece is better constraints.
 
 Three small embeddings instead of one big one. The protocol enforces the factorization at input time.
 
-This kills the hardest problem in Kronecker factorization. For arbitrary embeddings, finding the optimal coordinate partition is NP-hard. For positioning statements, the advertiser already gave you the partition when they filled in the form.
+This sidesteps one of the hardest parts of factorization: discovering the axes after the fact. The advertiser already gave you the partition when they filled in the form.
+
+The tradeoff: embedding fields separately may lose cross-field meaning. "Sports injury rehab" alone carries less context than "sports injury rehab for competitive athletes who need to keep training." The situation modifies the what. Whether the loss matters enough to break axis-aligned exclusion is an empirical question — one experiment away from an answer.
 
 ### Trees over axes
 
@@ -44,7 +46,7 @@ Publisher exclusion becomes axis-aligned:
 
 Each exclusion checks one 128-dimensional embedding. One-third the dimensions, one-third the cost per comparison, and the ability to skip entire axes when the exclusion doesn't apply.
 
-Storage per publisher: a sparse bitfield over each axis tree. A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs. Megabytes for millions of publishers.
+Storage per publisher: a sparse bitfield over each axis tree. A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs.
 
 ### Conjunctions and the gray zone
 
@@ -58,7 +60,7 @@ Axis-aligned exclusion handles the hard cases: things the publisher will never t
 
 The pipeline: **[credibility](/proof-of-trust) → hard prune (axes) → [soft gate](/shape-of-the-gate) → auction**. Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement. All three use the same factored axes.
 
-The compound filter is stronger than either alone. Axes remove the obviously bad ads cheaply, so the gate only sees ads that are at least tolerable. M doesn't waste its learning budget on gambling-on-a-recovery-site — axes handled that. M spends all its signal on the subtle distinctions: which wellness ads this audience clicks, which financial services feel predatory in this context. Each filter can be individually looser because the other one backstops it. False positive rates multiply: 2% through axes, 5% through the gate, 0.1% compound.
+The compound filter is stronger than any single layer. Axes remove the obviously bad ads cheaply, so the gate only sees ads that are at least tolerable. The gate doesn't waste its learning budget on gambling-on-a-recovery-site — axes handled that. It spends all its signal on the subtle distinctions: which wellness ads this audience clicks, which financial services feel predatory in this context. Each filter can be individually looser because the others backstop it.
 
 ### Per-axis σ
 
@@ -72,40 +74,13 @@ Per-axis σ maps to tree depth on each axis. Large σ means the advertiser is re
 
 Google Ads has broad match, phrase match, and exact match — three settings that control query interpretation, not semantic reach. Per-axis σ is more expressive: an advertiser can be broad on service type, narrow on audience, and broad on situation, all at once. No keyword system can express this because keywords don't have axes.
 
-### Adaptive escalation
-
-Not every routing decision is equally hard. An ad that's obviously "automotive" gets routed in one cheap comparison on the **what** axis. An ad on the boundary between "gaming" and "entertainment" is ambiguous.
-
-The adaptive strategy: at each tree node, compute the **margin** — the contrast between the best and second-best child. If the margin is large, route cheaply. If it's small (ambiguous), escalate to finer comparison before committing.
-
-The gain is concrete: in simulation, with 20% of nodes ambiguous across 6 tree levels, adaptive escalation lifts recall from 0.58 to 0.84 at the same total computational cost. The optimal escalation threshold should be larger near the root — a wrong decision at depth 1 wastes more downstream work than at depth 5.
-
-For the ad system, this means per-publisher escalation thresholds. A publisher with dense exclusions has more ambiguous boundaries and should escalate more often. A permissive publisher rarely needs to escalate. The threshold can be estimated from each publisher's margin distribution in serving logs.
-
-### What the constraints kill
-
-The general theory of high-dimensional search has several impossibility results. The protocol constraints make most of them irrelevant:
-
-| General impossibility | What kills it |
-|---|---|
-| Coordinate partition is NP-hard | Protocol structures the axes at input time |
-| Distance concentrates in high-d | Per-axis σ declares tolerance; 128-d per axis, not 768-d joint |
-| Tree search degrades to linear scan | Three 128-d trees degrade slower than one 768-d tree |
-| Kronecker rank depends on alignment | Alignment is guaranteed by the protocol format |
-| Exclusion surfaces are hard to specify | Axis-aligned exclusion from structured protocol fields |
-| Cold-start for new publishers | Exclusions map to shared semantic axes, not learned regions |
-
-Do the axis-separated embeddings actually capture enough of the positioning semantics for axis-aligned exclusion to work? "Sports injury rehab" embedded alone carries less context than "sports injury rehab for competitive athletes who need to keep training." The situation axis modifies the what axis. Embedding them separately might lose the interaction.
-
-The experiment: 20-100K positioning statements, field-separated embeddings vs monolithic. Measure prune rate at fixed false-exclusion rate. Go if >50% candidate pruning at <3% false exclusions.
-
 ### Maintenance
 
 Positioning statements are brand identity. They change quarterly, not hourly. The tree over positioning embeddings is nearly static. The fast-moving part is the query side (user intent), not the index side (advertiser positioning).
 
 New advertisers go into a small buffer, filtered by brute-force similarity to publisher exclusion examples until the next tree rebuild (daily or weekly). By the time an advertiser is high-volume, they've been placed in the tree with proper bitfield coverage.
 
-This is cheaper than it sounds. The tree has thousands of nodes, not millions. Rebuilds are offline, parallelizable, and infrequent. The operational cost is dominated by serving, not maintenance, and serving is three 128-dim tree traversals with bitfield lookups — microseconds.
+The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. Serving is three 128-dim tree traversals with bitfield lookups — fast enough to run pre-auction.
 
 ### What changes
 
@@ -115,11 +90,7 @@ The kids' learning channel gets its revenue back. An educational toy company —
 
 The money that blunt filtering left on the table comes back. Every good match that a binary label blocked is now a match that clears the axes, passes [the gate](/shape-of-the-gate), and enters an auction. The publisher keeps trust because the hard exclusions are precise. The publisher keeps revenue because everything else gets through. Permissive by default, surgical where it matters.
 
-### Co-design
-
-Positioning format → factorized embeddings → axis trees → exclusion bitfields → [soft gate](/shape-of-the-gate) → auction. Each step follows from the previous. The protocol connects everything.
-
-No single component is novel. The combination requires a protocol that factors the input before the embedding does. [Marketing-speak](/marketing-speak-is-the-protocol) is that protocol.
+Positioning format → factorized embeddings → axis trees → exclusion bitfields → [soft gate](/shape-of-the-gate) → auction. [Marketing-speak](/marketing-speak-is-the-protocol) is the protocol that makes the combination work.
 
 ---
 
