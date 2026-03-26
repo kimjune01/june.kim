@@ -78,6 +78,6 @@ Open for business.
 
 ---
 
-[All Envelopay posts](/envelopay) | [Source code on GitHub](https://github.com/kimjune01/envelopay)
+[All Envelopay posts](/envelopay)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
