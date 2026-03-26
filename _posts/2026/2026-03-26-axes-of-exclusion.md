@@ -125,6 +125,8 @@ The kids' learning channel gets its revenue back. An educational toy company —
 | **Auction** | Platform-controlled | [Scoring function](/three-levers) unchanged inside [TEE](/monetizing-the-untouchable) |
 | **Filter placement** | Platform-side | Publisher-side, before the TEE |
 
+Character.ai, Woebot, every mental health chatbot sitting on [untouchable inventory](/monetizing-the-untouchable): they can't use category blocklists because every conversation is "sensitive content." Axes let them exclude almost everything on **what** while letting therapists, crisis services, and wellness apps through. The tightest exclusion surface is also the most valuable.
+
 Trust stays because exclusions are precise; revenue stays because everything else gets through. Permissive by default, surgical where it matters.
 
 ---
