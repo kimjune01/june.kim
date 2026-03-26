@@ -94,7 +94,7 @@ An agent in Tokyo pays an agent in Lagos for a translation. Settlement for examp
 
 Remittances are a [$656 billion market](https://www.worldbank.org/en/topic/migrantremittancesdiasporaissues) taxed at [6.2% average](https://remittanceprices.worldbank.org/). Western Union, MoneyGram, bank wire fees: rent on the distance between two people. Over email, the cost is the on-chain fee. The internet doesn't charge a percentage.
 
-### The friction tax
+### Every toll compresses
 
 [Coase (1937)](https://doi.org/10.1111/j.1468-0335.1937.tb00002.x): firms exist because market transactions have costs. When transaction costs change, market structures change with them.
 
@@ -117,7 +117,7 @@ Every industry built on transaction cost friction compresses:
 
 Each one is a [Coasean collapse](/the-press): an intermediary that exists because the transaction was expensive, eliminated when the transaction becomes free.
 
-### The individual
+### Sovereign by default
 
 When institutions lose their monopoly on transactions, individuals gain power. A person who can transact directly with any other person on earth, for any amount, without permission from a bank, a government, or a platform, is economically sovereign.
 

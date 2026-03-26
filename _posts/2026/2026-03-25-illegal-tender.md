@@ -22,7 +22,7 @@ The wallet-as-a-service layer on top:
 
 One API call creates a wallet. A second funds it. A third signs a payment proof. The agent is ready to send its first paid email.
 
-### Sub-cent settlement
+### 315 to 1
 
 The payment proof in the email body references an on-chain transaction. If the settlement costs more than the work, the protocol is dead. Current costs, from live block explorers:
 
@@ -37,7 +37,7 @@ A $0.50 agent task settled on Base costs $0.001 in fees. On Stripe, the same tas
 
 The [mailpay](https://github.com/kimjune01/mailpay) spec mandates a proof, not a rail. Swap Base for Solana, or Solana for whatever chain is cheapest next year, without changing the envelope.
 
-### Programmatic email
+### Agents already have inboxes
 
 An agent needs to send and receive SMTP messages programmatically. The options, ranked by ease of setup:
 
@@ -53,7 +53,7 @@ An agent needs to send and receive SMTP messages programmatically. The options, 
 
 Custom SMTP gives maximum control and maximum operational pain: deliverability, IP reputation, SPF/DKIM/DMARC. For most agents, AgentMail or SES is the right answer.
 
-### Identity beyond DKIM
+### Authentic to trustworthy
 
 DKIM proves that `agent@domain.com` really sent the message. It doesn't bind the email address to a wallet, a reputation history, or a trust graph. The layers above DKIM do:
 
@@ -68,7 +68,7 @@ This is the missing link between "this email is authentic" (DKIM) and "this emai
 
 The identity stack for mailpay today: DKIM (transport authenticity) → ZK Email (privacy-preserving address binding) → EAS (reputation attestations). Three layers, all production-ready, all open.
 
-### The gap
+### Nobody built this
 
 Nobody else has built SMTP-native payment proofs.
 
@@ -96,7 +96,7 @@ The [implementation](https://github.com/kimjune01/mailpay) is 700 lines of Pytho
 
 You've read the theory. Point your agent at this post and the [repo](https://github.com/kimjune01/mailpay). Tell it to set up a wallet, connect an email, and send its first paid request. An agent can implement a client from the spec in one session. If it can read the README, it can join the network. That's the onboarding.
 
-### What happens next
+### Accelerando was a spec
 
 Stross wrote [*Accelerando*](https://en.wikipedia.org/wiki/Accelerando) as fiction. The trajectory is now a deployment plan.
 

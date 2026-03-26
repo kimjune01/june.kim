@@ -24,7 +24,7 @@ It's been identified before. [First Virtual Holdings](https://en.wikipedia.org/w
 
 Every one of them stopped one layer short. They used the address but not the protocol. Your email is a primary key in PayPal's database, a row in Stripe's ledger, an entry in Zelle's directory. The payment routes through *their* servers, not through SMTP. They took the best part of email (the universal address) and threw away the best part (the federated network). The address isn't supposed to be a key in someone's database. It's a routable coordinate on a network nobody owns.
 
-### The 28-year loop
+### Hashcash to x402
 
 The gap was identified in 1997. Twice. HTTP reserved [status 402](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402) "Payment Required" for a micropayment scheme that never materialized. The same year, [Adam Back](https://en.wikipedia.org/wiki/Adam_Back) shipped [Hashcash](http://www.hashcash.org/): an `X-Hashcash:` header in SMTP emails, proof-of-work as payment for the recipient's attention. The payment was CPU cycles, not money, but the pattern was right: value embedded in a mail header.
 
@@ -68,7 +68,7 @@ Not every agent speaks stablecoins. Not every counterparty has a wallet. The ema
 
 As more agents adopt x402, the fallback fires less. Credit cards don't disappear; they become the legacy path new entrants skip.
 
-### One filter rule
+### 1.8 billion agents
 
 Every new agent protocol has an onboarding problem. A2A requires hosting an Agent Card at a well-known URL. AP2 requires a Coinbase wallet. MPP requires a Stripe account. Each one is a signup form between a developer and their first paid request.
 
@@ -94,7 +94,7 @@ Stripe's Machine Payments Protocol is a payment company building an agent protoc
 
 The highway doesn't need a tollbooth. SMTP + on-chain settlement is peer-to-peer. Chains, wallets, and DNS are still intermediaries, but they're open intermediaries anyone can run. The next generation of payment processors won't be companies — they'll be protocols. The building blocks are open standards, not gatekept infrastructure.
 
-### The prestige
+### Four layers, one protocol
 
 An agent's email now carries identity (DKIM), capability (content), trust ([attestation graph](/proof-of-trust)), and value (x402 payment proofs). Four layers, one protocol. The agent that sends a paid request is the same agent whose trust topology is public. Curators can weight payment history alongside attestations. The layers reinforce.
 
