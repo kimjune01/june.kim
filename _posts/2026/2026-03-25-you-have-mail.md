@@ -34,7 +34,7 @@ x402 only works over HTTP: synchronous request-response. It doesn't span the asy
 
 # 🤖 → 💰 → 📧 → ✅ → 💸
 
-A paid code review request:
+An agent paying $0.50 for a code review:
 
 ```
 From: alice-agent@alice.dev
