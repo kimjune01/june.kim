@@ -56,7 +56,7 @@ Then there's the gray zone. A financial planning ad on a depression recovery blo
 
 Axis-aligned exclusion handles the hard cases: things the publisher will never tolerate regardless of engagement. A recovery site will never serve gambling ads. That's editorial, not learned. But the gray zone — ads that are tolerable in some directions and not others — needs a softer boundary. One that learns from clicks and bounces which semantic directions to tighten and which to loosen. That's [the gate](/shape-of-the-gate), the twin of this post. Axes prune the branches. The gate shapes what remains.
 
-The pipeline: **hard prune (axes) → soft gate → auction**. Two per-publisher filters, different timescales. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement. Both use the same factored axes.
+The pipeline: **[credibility](/proof-of-trust) → hard prune (axes) → [soft gate](/shape-of-the-gate) → auction**. Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement. All three use the same factored axes.
 
 The compound filter is stronger than either alone. Axes remove the obviously bad ads cheaply, so the gate only sees ads that are at least tolerable. M doesn't waste its learning budget on gambling-on-a-recovery-site — axes handled that. M spends all its signal on the subtle distinctions: which wellness ads this audience clicks, which financial services feel predatory in this context. Each filter can be individually looser because the other one backstops it. False positive rates multiply: 2% through axes, 5% through the gate, 0.1% compound.
 
@@ -107,13 +107,19 @@ New advertisers go into a small buffer, filtered by brute-force similarity to pu
 
 This is cheaper than it sounds. The tree has thousands of nodes, not millions. Rebuilds are offline, parallelizable, and infrequent. The operational cost is dominated by serving, not maintenance, and serving is three 128-dim tree traversals with bitfield lookups — microseconds.
 
+### What changes
+
+The depression recovery blog runs ads. A therapist's positioning — "evidence-based talk therapy for adults managing depression and anxiety" — clears the **what** axis. The **who** and **situation** axes are open. The ad enters the auction, wins on relevance, and the reader sees a therapist who specializes in exactly what they're dealing with. No gambling ads slip through. No predatory lenders. The exclusion bitfield caught those at the **what** tree before the auction started.
+
+The kids' learning channel gets its revenue back. An educational toy company — "hands-on STEM kits for elementary-age kids who learn by building" — clears every axis. Adult-targeting ads are pruned at the **who** tree. The compound filter lets the channel set tight audience exclusions without sacrificing reach on service type. Trust and revenue stop being a tradeoff.
+
+The money that blunt filtering left on the table comes back. Every good match that a binary label blocked is now a match that clears the axes, passes [the gate](/shape-of-the-gate), and enters an auction. The publisher keeps trust because the hard exclusions are precise. The publisher keeps revenue because everything else gets through. Permissive by default, surgical where it matters.
+
 ### Co-design
 
-Current ad filtering assembles independent components: an embedding model, an index, a filter, a scoring function. Each optimized in isolation. The filter doesn't know about the index. The index doesn't know about the exclusion criterion.
+Positioning format → factorized embeddings → axis trees → exclusion bitfields → [soft gate](/shape-of-the-gate) → auction. Each step follows from the previous. The protocol connects everything.
 
-The protocol changes this. Positioning format → factorized embeddings → axis trees → exclusion bitfields → relevance scores. Each step follows from the previous. Nothing is designed in isolation because the protocol connects everything.
-
-No single component is novel. Per-publisher exclusion, axis-aligned filtering, tree-based indexing, adaptive escalation: each exists somewhere. The combination requires a protocol that factors the input before the embedding does. [Marketing-speak](/marketing-speak-is-the-protocol) is that protocol. The therapist reaches the recovery blog. The toy company reaches the kids' channel.
+No single component is novel. The combination requires a protocol that factors the input before the embedding does. [Marketing-speak](/marketing-speak-is-the-protocol) is that protocol.
 
 ---
 
