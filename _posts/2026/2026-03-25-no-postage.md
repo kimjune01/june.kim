@@ -26,7 +26,7 @@ mailto:shop@store.com?subject=Order%20%23417&body=%7B%22items%22%3A%5B%22widget%
 
 Scan the QR at a farmers market. Your phone opens your mail client with the order pre-composed. Your agent signs the payment and sends. The merchant's agent verifies and confirms. Two emails. No app download. No card reader. No Square account. No 2.9% + 30¢.
 
-If the buyer has a funded wallet, settlement is on-chain for fractions of a cent. If not, the email body carries a payment link: Stripe checkout, Venmo request, whatever rail works. The protocol doesn't require both sides to speak stablecoin; it rewards them when they do. The physical world meets email where it always has: at the address.
+If the buyer has a funded wallet, settlement is on-chain for fractions of a cent. If not, the email body carries a payment link: Stripe checkout, Venmo request, whatever rail works. The protocol rewards both sides when they speak stablecoin. The physical world meets email where it always has: at the address.
 
 ### The checkout is a link
 
@@ -54,7 +54,7 @@ A payment inside an encrypted email is invisible to everyone except the two part
 
 Governments monitor transactions through intermediaries: banks report to FinCEN, card networks flag patterns, payment processors enforce sanctions. [PRISM](https://en.wikipedia.org/wiki/PRISM) showed the architecture: cut deals with a handful of chokepoints (Visa, Google, Apple, the big banks) and the data flows up.
 
-When payments route through millions of federated mail servers, there's no chokepoint to squeeze. The cost of surveillance scales with the number of endpoints, not the number of intermediaries. The transaction isn't hidden because it's illegal. It's private because the envelope is.
+When payments route through millions of federated mail servers, there's no chokepoint to squeeze. The cost of surveillance scales with the number of endpoints, not the number of intermediaries. The transaction is private because the envelope is.
 
 Even if governments mandate reporting, taxation requires verification. The IRS works because W-2s come from employers and 1099s come from banks. Third-party reporting the individual can't control. When the third party is a mail server you run yourself, there's no one to send the 1099. You can't tax what you can't track.
 
@@ -72,7 +72,7 @@ When transaction costs approach zero, money gets smaller. Not worth less. Smalle
 
 Small money changes power dynamics. A tip jar with no processor cut. A street musician paid by QR code. A farmer in rural Kenya paid for produce without a bank account, because she has email. A student in Dhaka selling translations for 3¢ each, sustainable because there's no floor.
 
-[1.4 billion adults](https://www.worldbank.org/en/topic/financialinclusion/overview) lack a bank account. The gap between "has internet" and "can transact" is that bank account. Email closes it. If you're online enough to need digital payments, you already have email. If you don't, you don't need this. The onboarding is a filter rule, not a credit check.
+[1.4 billion adults](https://www.worldbank.org/en/topic/financialinclusion/overview) lack a bank account. The gap between "has internet" and "can transact" is that bank account. Email closes it. If you're online enough to need digital payments, you already have email. The onboarding is a filter rule, not a credit check.
 
 ### Return to sender
 
@@ -129,7 +129,7 @@ It's so cheap that even agents can transact. An agent buys inference from anothe
 
 The technology exists today. But 75-year-old credit card infrastructure still grips the payment networks, and every new protocol that tries to replace it adds friction instead of removing it. New wallets, new accounts, new signup forms. The only protocol that can break the grip is one with less friction than cards. Email is the only candidate, because there's nothing to install.
 
-The [Stamp Act of 1765](https://en.wikipedia.org/wiki/Stamp_Act_1765) taxed every transaction in the colonies: every newspaper, every legal document, every playing card. The colonists didn't object to stamps. They objected to the principle: that a distant authority could insert itself into every private exchange.
+The [Stamp Act of 1765](https://en.wikipedia.org/wiki/Stamp_Act_1765) taxed every transaction in the colonies: every newspaper, every legal document, every playing card. The colonists objected to the principle: that a distant authority could insert itself into every private exchange.
 
 Credit card fees are the modern Stamp Act. A 2.9% + 30¢ levy on every digital transaction. The analogy isn't perfect: the Stamp Act was compulsory taxation; credit card acceptance is technically voluntary. But try running an online business without accepting cards. The "choice" is between paying the tax and not participating in commerce. Infrastructure monopolies don't need legal compulsion when network effects do the same work.
 
