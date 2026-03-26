@@ -28,7 +28,7 @@ The missing piece is better constraints.
 - **Who** (audience): "competitive athletes" → d₂ ≈ 128 dims
 - **Situation** (qualifier): "need to keep training through recovery" → d₃ ≈ 128 dims
 
-Three small embeddings instead of one big one. The protocol enforces the factorization at input time.
+Three small embeddings instead of one big one. Each field goes through a shared sentence encoder (e.g., `all-MiniLM-L6-v2`, d=384, projected down to 128 per field). The protocol enforces the factorization at input time.
 
 This sidesteps one of the hardest parts of factorization: discovering the axes after the fact. The advertiser already gave you the partition when they filled in the form.
 
@@ -36,7 +36,7 @@ The tradeoff: embedding fields separately loses cross-field meaning. "Sports inj
 
 ### Trees over axes
 
-A tree over the **what** axis clusters advertisers by service type: "sports rehab," "divorce mediation," "roof repair" land in different branches. Separate trees over **who** and **situation** cluster by audience and qualifier.
+Build a hierarchical k-means tree over each axis. For the **what** axis: cluster all advertiser **what**-embeddings with k-means (k ≈ 16 per level, depth 3-4), producing ~4,000-65,000 leaf nodes. "Sports rehab," "divorce mediation," "roof repair" land in different branches. Separate trees over **who** and **situation** cluster by audience and qualifier the same way.
 
 Publisher exclusion becomes axis-aligned:
 
@@ -46,23 +46,43 @@ Publisher exclusion becomes axis-aligned:
 
 Each exclusion checks one 128-dimensional embedding. One-third the dimensions, one-third the cost, and axes that don't apply get skipped entirely.
 
-Storage per publisher: a sparse bitfield over each axis tree. A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs.
+Storage per publisher: a set of excluded node IDs per axis tree, stored as a sorted array or roaring bitmap. A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs. At query time, route the incoming ad's embedding down each tree; if any visited node ID appears in the publisher's exclusion set, reject.
 
 ### Conjunctions and the gray zone
 
 One-axis exclusion is clean when the publisher means "no X regardless of context." But some exclusions are conjunctive: "no crypto for minors" means exclude the intersection of a **what** branch (crypto) and a **who** branch (minors).
 
-Conjunctive exclusions check two axes: **what** first (is this crypto?), then **who** only if that matches (is the audience minors?). The first axis prunes most candidates; the second refines.
+Conjunctive exclusions check two axes: **what** first (is this crypto?), then **who** only if that matches (is the audience minors?). Stored as a pair `(what_node_id, who_node_id)` — the second check fires only if the first hits. The first axis prunes most candidates; the second refines.
 
 Then there's the gray zone. A financial planning ad on a depression recovery blog might even help. But it's not *relevant* in the way a therapy service ad would be. The publisher doesn't want to block it. They want to shape what gets through.
 
-Axis-aligned exclusion handles the hard cases: things the publisher will never tolerate. That's editorial, not learned. But the gray zone needs a softer boundary that learns from clicks and bounces which directions to tighten. That's [the gate](/shape-of-the-gate), the twin of this post. Axes prune the branches. The gate shapes what remains.
+How does a publisher set exclusions? Two paths. First: browse the tree, which is labeled with representative positioning statements at each node, and mark branches to exclude. Second: provide example ads they'd reject. The system maps each example to its tree node and marks the lowest common ancestor at the appropriate depth — tight cluster of examples means a deep, surgical exclusion; scattered examples mean a shallow, broad one.
+
+Axis-aligned exclusion handles the hard cases: things the publisher will never tolerate. That's editorial, not learned. But the gray zone needs a softer boundary.
+
+### Shaping the gate
+
+The [scoring function](/three-levers) gives publishers [τ](/set-it-and-forget-it), a relevance threshold: ads within τ distance of the query enter the auction. τ is a sphere. Same radius in every direction.
+
+A health chatbot shows a yoga mat ad next to a conversation about back pain. Users click. Then a pain clinic ad clears the same threshold. Same distance from the query, different direction entirely. Users bounce. The publisher tightens τ. Now the yoga mat ad gets filtered too.
+
+The [PID controller](/set-it-and-forget-it) that tunes τ already sees what it needs: which ads caused bounces, which got clicks, the embedding vectors of both. All that directional information gets thrown away. A bounce tightens the sphere uniformly. *Where* the match was good or bad? Discarded.
+
+A diagonal approximation fixes this. Replace `‖q − c‖²` with `Σ_j m_j (q_j − c_j)²` where **m** is a per-publisher weight vector, 384 parameters, same cost as the sphere. Some semantic directions matter more to this publisher than others. The publisher sets [one number](/set-it-and-forget-it): "10% of conversations should include a recommendation." A PID controller adjusts τ to hit that target. A second, slower loop adjusts M, the diagonal metric, from the same click/bounce stream. PID controls *how much* filtering; M controls *where*. τ responds in minutes, M shifts over days.
+
+Before going live, the publisher swipes through borderline query-ad pairs for twenty minutes. "Would you show this ad next to this conversation?" Yes or no. A few hundred labels pre-shape the diagonal. The online loop refines from there. With a bootstrapped M, the publisher can loosen τ: further out in trusted directions, tight in untrusted, before serving a single impression.
+
+Clicks conflate relevance with creative quality. Bounces conflate bad matches with slow load times. Three safeguards keep M honest: regularization toward I (sparse dimensions stay near 1), update caps (no single impression warps the metric), and daily decay (weights drift back toward 1).
+
+Each weight starts at 1 and drifts where signal concentrates. [ITML](https://jmlr.org/papers/v8/davis07a.html) (Davis et al., 2007) works: online, KL-regularized toward I, O(d) per update when diagonal. If diagonal proves too blunt: M = D + VVᵀ. Low-rank term (k = 5) captures correlated directions. But start diagonal. Earn the complexity.
 
 ### Three filters, one pipeline
 
-**[Credibility](/proof-of-trust) → hard prune (axes) → [soft gate](/shape-of-the-gate) → auction.** Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement, and all three use the same factored axes.
+**[Credibility](/proof-of-trust) → hard prune (axes) → soft gate (M) → auction.** Three per-publisher filters, different timescales. Credibility gates which advertisers enter the system. Exclusion bitfields are set at onboarding and rarely change. The gate learns continuously from engagement.
 
 The compound filter is stronger than any single layer. Axes remove the obviously bad ads cheaply, so the gate only sees tolerable candidates. It doesn't waste signal on gambling-on-a-recovery-site; axes handled that. It spends its budget on subtle distinctions: which wellness ads click, which financial services feel predatory. Each filter can be looser because the others backstop it.
+
+All three run publisher-side during [phase one](/ask-first) matching, before any embedding enters the [TEE](/monetizing-the-untouchable). The exchange never sees M, the clicks that shaped it, or the conversations it filters. The enclave only sees what survives. Inside the gate, the [scoring function](/three-levers) runs unchanged: `score_i(x) = log(b_i) − ‖x − c_i‖² / σ_i²`. M is editorial; the auction is the auction. Keeping them apart preserves the [power diagram](/power-diagrams-ad-auctions) geometry and VCG guarantees.
 
 ### Reach along each axis
 
@@ -90,10 +110,10 @@ The depression recovery blog runs ads. A therapist's positioning — "evidence-b
 
 The kids' learning channel gets its revenue back. An educational toy company — "hands-on STEM kits for elementary-age kids who learn by building" — clears every axis. Adult-targeting ads are pruned at the **who** tree. The compound filter lets the channel set tight audience exclusions without sacrificing reach on service type. Trust and revenue stop being a tradeoff.
 
-The money that blunt filtering left on the table comes back. Every match that a binary label blocked now clears the axes, passes [the gate](/shape-of-the-gate), and enters an auction. Trust stays because exclusions are precise. Revenue stays because everything else gets through. Permissive by default, surgical where it matters.
-
-Positioning format → factorized embeddings → axis trees → exclusion bitfields → [soft gate](/shape-of-the-gate) → auction. [Marketing-speak](/marketing-speak-is-the-protocol) is the protocol that makes the combination work.
+The money that blunt filtering left on the table comes back. Every match that a binary label blocked now clears the axes, passes the gate, and enters an auction. Trust stays because exclusions are precise. Revenue stays because everything else gets through. Permissive by default, surgical where it matters.
 
 ---
 
 *Part of the [Vector Space](/vector-space) series. Written via the [double loop](/double-loop).*
+
+*Adjacent work: per-query learned distance functions in [image retrieval](https://research.google/pubs/pub41900), [low-rank Mahalanobis learning](https://papers.nips.cc/paper/8369-fast-low-rank-metric-learning-for-large-scale-and-high-dimensional-data), [probabilistic retrieval thresholds](https://aclanthology.org/2025.emnlp-industry.161/), publisher-aware ad weighting in [patents](https://patents.google.com/patent/US9911135B2/en), [embedding-native ad retrieval](https://www.microsoft.com/en-us/research/publication/uni-retriever-towards-learning-the-unified-embedding-based-retriever-in-bing-sponsored-search/) at Bing, [ITML](https://jmlr.org/papers/v8/davis07a.html).*
