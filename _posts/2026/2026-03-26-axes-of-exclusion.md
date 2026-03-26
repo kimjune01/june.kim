@@ -20,21 +20,23 @@ Lexical filtering can't express this. "Gambling" blocks the casino resort's rest
 
 The missing piece is better constraints.
 
-### Three axes, three embeddings
+### Multiply, don't add
 
 [Marketing-speak is the protocol](/marketing-speak-is-the-protocol) established that both sides speak in positioning statements: **what** we do, for **who**, in what **situation**. A positioning statement has three semantic axes. Embed each field independently:
 
-- **What** (service type): "sports injury rehab" → d₁ ≈ 128 dims
-- **Who** (audience): "competitive athletes" → d₂ ≈ 128 dims
-- **Situation** (qualifier): "need to keep training through recovery" → d₃ ≈ 128 dims
+- **What** (service type): "sports injury rehab" → d₁ ≈ 8 dims
+- **Who** (audience): "competitive athletes" → d₂ ≈ 8 dims
+- **Situation** (qualifier): "need to keep training through recovery" → d₃ ≈ 6 dims
 
-Three small embeddings instead of one big one. Each field goes through a shared sentence encoder (e.g., `all-MiniLM-L6-v2`, d=384, projected down to 128 per field). The protocol enforces the factorization at input time.
+Not 128 dims per axis. Eight. The Kronecker product of three small vectors generates a full 384-dimensional space: 8 × 8 × 6 = 384, from 22 parameters total. Every dimension in the product encodes one what-feature times one who-feature times one situation-feature.
 
-This sidesteps one of the hardest parts of factorization: discovering the axes after the fact. The advertiser already gave you the partition when they filled in the form.
+Concatenation (128 + 128 + 128) treats the axes as independent; the what doesn't modify the who. The Kronecker product captures the cross: "sports rehab" × "competitive athletes" × "recovery" occupies a different point than "sports rehab" × "weekend joggers" × "recovery," even though two of three factors are identical.
 
-The tradeoff: embedding fields separately loses cross-field meaning. "Sports injury rehab" alone carries less context than the full positioning statement. The situation modifies the what. Whether the loss breaks axis-aligned exclusion is empirical. One experiment away from an answer.
+Finding the optimal coordinate partition for an arbitrary embedding is NP-hard. The protocol sidesteps it: the advertiser fills in three fields, and each field goes through a shared sentence encoder (`all-MiniLM-L6-v2`, d=384) projected down to its factor dimension.
 
-### Trees over axes
+The tradeoff: 8 dimensions per factor loses nuance that 128 would keep. Whether the compression breaks axis-aligned exclusion is empirical. One experiment away from an answer.
+
+### Kronecker trees
 
 A tree over the **what** axis clusters advertisers by service type: "sports rehab," "divorce mediation," "roof repair" land in different branches. Separate trees over **who** and **situation** cluster by audience and qualifier. Each tree is a hierarchical k-means (k ≈ 16 per level, depth 3-4, yielding ~4K-65K leaf nodes).
 
@@ -44,7 +46,7 @@ Publisher exclusion becomes axis-aligned:
 - A kids' learning site excludes branches on the **who** tree: anything targeting adults. Service type can be broad — educational toys, tutoring, healthy snacks, children's books all pass. The audience is the constraint, not the category.
 - A political news site excludes certain **situation** branches — campaign-season qualifiers — to avoid appearing partisan. Service and audience are fine.
 
-Each exclusion checks one 128-dimensional embedding. One-third the dimensions, one-third the cost, and axes that don't apply get skipped entirely.
+Each exclusion checks one 8-dimensional factor, not the full 384. Axes that don't apply get skipped entirely.
 
 Storage per publisher: a set of excluded node IDs per axis tree (sorted array or roaring bitmap). A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs. At query time, route the ad's embedding down each tree; if any visited node appears in the exclusion set, reject.
 
@@ -106,7 +108,7 @@ Positioning statements are brand identity. They change quarterly, not hourly. Th
 
 New advertisers go into a buffer, filtered by brute-force similarity to exclusion examples until the next tree rebuild. By the time they're high-volume, they're in the tree.
 
-The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. The publisher runs three 128-dim tree traversals with bitfield lookups during [phase one](/ask-first) matching, before any data leaves their servers.
+The tree has thousands of nodes, not millions. Rebuilds are offline and infrequent. The publisher runs three 8-dim tree traversals with bitfield lookups during [phase one](/ask-first) matching, before any data leaves their servers.
 
 ### What gets through
 
@@ -133,4 +135,4 @@ Trust stays because exclusions are precise; revenue stays because everything els
 
 *Part of the [Vector Space](/vector-space) series. Written via the [double loop](/double-loop).*
 
-*Adjacent work: per-query learned distance functions in [image retrieval](https://research.google/pubs/pub41900), [low-rank Mahalanobis learning](https://papers.nips.cc/paper/8369-fast-low-rank-metric-learning-for-large-scale-and-high-dimensional-data), [probabilistic retrieval thresholds](https://aclanthology.org/2025.emnlp-industry.161/), publisher-aware ad weighting in [patents](https://patents.google.com/patent/US9911135B2/en), [embedding-native ad retrieval](https://www.microsoft.com/en-us/research/publication/uni-retriever-towards-learning-the-unified-embedding-based-retriever-in-bing-sponsored-search/) at Bing, [ITML](https://jmlr.org/papers/v8/davis07a.html).*
+*Adjacent work: [Kronecker product](https://en.wikipedia.org/wiki/Kronecker_product) (Zehfuss, 1858; named after Kronecker's 1880s Berlin lectures, published posthumously by [Hensel, 1903](https://archive.org/details/vorlesungenber00kronuoft)), per-query learned distance functions in [image retrieval](https://research.google/pubs/pub41900), [low-rank Mahalanobis learning](https://papers.nips.cc/paper/8369-fast-low-rank-metric-learning-for-large-scale-and-high-dimensional-data), [probabilistic retrieval thresholds](https://aclanthology.org/2025.emnlp-industry.161/), publisher-aware ad weighting in [patents](https://patents.google.com/patent/US9911135B2/en), [embedding-native ad retrieval](https://www.microsoft.com/en-us/research/publication/uni-retriever-towards-learning-the-unified-embedding-based-retriever-in-bing-sponsored-search/) at Bing, [ITML](https://jmlr.org/papers/v8/davis07a.html).*
