@@ -62,15 +62,19 @@ Axis-aligned exclusion handles the hard cases: things the publisher will never t
 
 ### Shaping the gate
 
-The [scoring function](/three-levers) gives publishers [τ](/set-it-and-forget-it), a relevance threshold: ads within τ distance of the query enter the auction. τ is a sphere. Same radius in every direction.
+[Three Levers](/three-levers) defined τ as the publisher's relevance floor: ads within τ distance of the query enter the auction. τ is a sphere. Same radius in every direction. The axes prune *what* kind of ad gets through. τ controls *how relevant* the survivors must be. But τ can't tell directions apart.
 
 A health chatbot shows a yoga mat ad next to a conversation about back pain. Users click. Then a pain clinic ad clears the same threshold. Same distance from the query, different direction entirely. Users bounce. The publisher tightens τ. Now the yoga mat ad gets filtered too.
 
 The [PID controller](/set-it-and-forget-it) that tunes τ already sees what it needs: which ads caused bounces, which got clicks, the embedding vectors of both. All that directional information gets thrown away. A bounce tightens the sphere uniformly. *Where* the match was good or bad? Discarded.
 
-A diagonal approximation fixes this. Replace `‖q − c‖²` with `Σ_j m_j (q_j − c_j)²` where **m** is a per-publisher weight vector, 384 parameters, same cost as the sphere. Some semantic directions matter more to this publisher than others. The publisher sets [one number](/set-it-and-forget-it): "10% of conversations should include a recommendation." A PID controller adjusts τ to hit that target. A second, slower loop adjusts M, the diagonal metric, from the same click/bounce stream. PID controls *how much* filtering; M controls *where*. τ responds in minutes, M shifts over days.
+A diagonal approximation fixes this. Replace `‖q − c‖²` with `Σ_j m_j (q_j − c_j)²` where **m** is a per-publisher weight vector: 384 parameters, same cost as the sphere. Some semantic directions matter more to this publisher than others.
 
-Before going live, the publisher swipes through borderline query-ad pairs for twenty minutes. "Would you show this ad next to this conversation?" Yes or no. A few hundred labels pre-shape the diagonal. The online loop refines from there. With a bootstrapped M, the publisher can loosen τ: further out in trusted directions, tight in untrusted, before serving a single impression.
+### Two loops
+
+The publisher sets [one number](/set-it-and-forget-it): "10% of conversations should include a recommendation." A PID controller adjusts τ to hit that target. A second, slower loop adjusts M from the same click/bounce stream. PID controls *how much* filtering; M controls *where*. τ responds in minutes, M shifts over days.
+
+M doesn't have to start cold. Before going live, the publisher swipes through borderline query-ad pairs for twenty minutes. "Would you show this ad next to this conversation?" Yes or no. A few hundred labels pre-shape the diagonal. The online loop refines from there. With a bootstrapped M, the publisher can loosen τ: further out in trusted directions, tight in untrusted, before serving a single impression.
 
 Clicks conflate relevance with creative quality. Bounces conflate bad matches with slow load times. Three safeguards keep M honest: regularization toward I (sparse dimensions stay near 1), update caps (no single impression warps the metric), and daily decay (weights drift back toward 1).
 
@@ -110,7 +114,18 @@ The depression recovery blog runs ads. A therapist's positioning — "evidence-b
 
 The kids' learning channel gets its revenue back. An educational toy company — "hands-on STEM kits for elementary-age kids who learn by building" — clears every axis. Adult-targeting ads are pruned at the **who** tree. The compound filter lets the channel set tight audience exclusions without sacrificing reach on service type. Trust and revenue stop being a tradeoff.
 
-The money that blunt filtering left on the table comes back. Every match that a binary label blocked now clears the axes, passes the gate, and enters an auction. Trust stays because exclusions are precise. Revenue stays because everything else gets through. Permissive by default, surgical where it matters.
+| | Before (category labels) | With the protocol |
+|---|---|---|
+| **Granularity** | One label per video | Per-publisher, per-axis, per-branch |
+| **Exclusion** | Category blocklist | Semantic tree with bitfield lookups |
+| **Gray zone** | Block or allow | Learned directional weights (M) |
+| **Advertiser reach** | Broad / phrase / exact | [Per-axis σ](/keywords-are-tiny-circles) vector |
+| **Signal** | Content classification | Positioning embeddings + engagement |
+| **Publisher control** | Choose from platform categories | Browse tree, swipe examples, set thresholds |
+| **Auction** | Platform-controlled | [Scoring function](/three-levers) unchanged inside [TEE](/monetizing-the-untouchable) |
+| **Filter placement** | Platform-side | Publisher-side, before the TEE |
+
+Trust stays because exclusions are precise; revenue stays because everything else gets through. Permissive by default, surgical where it matters.
 
 ---
 
