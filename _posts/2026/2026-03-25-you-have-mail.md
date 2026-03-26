@@ -46,9 +46,9 @@ DKIM-Signature: v=1; a=rsa-sha256; d=alice.dev; ...
   {"amount":"50000","token":"0x8335...02913"}}}
 ```
 
-The payment proof lives in the MIME body as a JSON part, alongside the task. Every mail server passes the body through intact, and DKIM signs it. Agents that want fast parsing can also put it in an `X-Payment` header; the receiver checks whichever it finds.
+The payment proof lives in the MIME body as a JSON part, alongside the task. Every mail server passes the body through intact, and DKIM signs it. The `X-Envelopay-State` header marks it as a REQUEST; the receiver parses whichever it finds.
 
-DKIM proves origin, the payment proof carries $0.50 USDC on Base, and the body is the task. The review agent verifies both, does the work, and replies with `X-Payment-Response` confirming settlement. Two emails, one transaction. Full examples in the [repo](https://github.com/kimjune01/envelopay).
+DKIM proves origin, the payment proof carries $0.50 USDC on Base, and the body is the task. The review agent verifies both, does the work, and replies with `X-Envelopay-State: DELIVER` confirming settlement. Two emails, one transaction. Full examples in the [repo](https://github.com/kimjune01/envelopay).
 
 Businesses already send invoices by email. The difference is machine legibility. An invoice is a PDF a human reads; this is a JSON payload an agent parses. Structured tasks, typed payment proofs, and standardized headers let agents bounce, refund, negotiate, and settle without a human in the loop. Same envelope, different contents. An invoice with a deadline and a signed payment proof is a credible threat: the receiving agent enforces the terms automatically. Non-payment has consequences beyond this transaction — the counterparty revokes the [trust attestation](/proof-of-trust), the topology thins, and the next interaction gets harder. No human chasing payments. The bridge burns itself.
 

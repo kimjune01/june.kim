@@ -24,7 +24,7 @@ One API call creates a wallet. A second funds it. A third signs a payment proof.
 
 ### 315 to 1
 
-The payment proof in the email body settles on any cheap chain. Mailpay doesn't care which — swap the rail without changing the envelope. If the settlement costs more than the work, the protocol is dead. Current costs:
+The payment proof in the email body settles on any cheap chain. Envelopay doesn't care which — swap the rail without changing the envelope. If the settlement costs more than the work, the protocol is dead. Current costs:
 
 | Chain | ERC-20 transfer cost | Finality | Source |
 |-------|---------------------|----------|--------|
