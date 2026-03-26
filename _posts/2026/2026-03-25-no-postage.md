@@ -26,7 +26,7 @@ mailto:shop@store.com?subject=Order%20%23417&body=%7B%22items%22%3A%5B%22widget%
 
 Scan the QR at a farmers market. Your phone opens your mail client with the order pre-composed. Your agent signs the payment and sends. The merchant's agent verifies and confirms. Two emails. No app download. No card reader. No Square account. No 2.9% + 30¢.
 
-If the buyer has a funded wallet, settlement is on-chain for fractions of a cent. If not, the email body carries a payment link: Stripe checkout, Venmo request, whatever rail works. The merchant gets paid either way. The protocol doesn't require both sides to speak stablecoin; it rewards them when they do. The physical world meets email where it always has: at the address.
+If the buyer has a funded wallet, settlement is on-chain for fractions of a cent. If not, the email body carries a payment link: Stripe checkout, Venmo request, whatever rail works. The protocol doesn't require both sides to speak stablecoin; it rewards them when they do. The physical world meets email where it always has: at the address.
 
 ### The checkout is a link
 
@@ -42,7 +42,7 @@ Credit cards have a floor: 30¢ per transaction. Below that, the payment costs m
 
 On-chain settlement costs fractions of a cent. The floor disappears. A 2¢ article, a 0.1¢ API call, a $0.005 agent task. The long tail of commerce extends past the decimal point, where the taxman loses interest and the card network can't follow.
 
-[Vector Space](/vector-space) is an early adopter. The ad exchange runs [VCG auctions](/one-shot-bidding) where payments are often sub-dollar. At 2.9% + 30¢, a $0.50 CPC costs 63% in fees. With x402, that same auction settles for fractions of a cent. No Stripe for the exchange, no billing portal for the advertiser, no payout threshold for the publisher. Each auction is an email; each settlement is a header.
+The [Vector Space](/vector-space) ad exchange runs [VCG auctions](/one-shot-bidding) where payments are often sub-dollar. At 2.9% + 30¢, a $0.50 CPC costs 63% in fees. With x402, that same auction settles for fractions of a cent. No Stripe for the exchange, no billing portal for the advertiser, no payout threshold for the publisher. Each auction is an email; each settlement is a header.
 
 ### The envelope is opaque
 
@@ -50,17 +50,21 @@ An email between two parties is private. Mail servers see headers; content is be
 
 A payment inside an encrypted email is invisible to everyone except the two parties. No bank statement. No card network log. No third-party transaction record. The proof exists in two inboxes and on-chain, pseudonymous by default.
 
-Governments monitor transactions through intermediaries: banks report to FinCEN, card networks flag patterns, payment processors enforce sanctions. [PRISM](https://en.wikipedia.org/wiki/PRISM) showed the architecture: the state doesn't surveil everyone directly. It cuts deals with a handful of chokepoints — Visa, Google, Apple, the big banks — and the data flows up. Centralized infrastructure means centralized leverage.
+`🏛️→🏦→👤` vs `🏛️→📧📧📧`
 
-When payments route through millions of federated mail servers, there's no chokepoint to squeeze. You can't cut a deal with every individual whose income you can't see. The cost of surveillance scales with the number of endpoints, not the number of intermediaries. The transaction isn't hidden because it's illegal. It's private because the envelope is.
+Governments monitor transactions through intermediaries: banks report to FinCEN, card networks flag patterns, payment processors enforce sanctions. [PRISM](https://en.wikipedia.org/wiki/PRISM) showed the architecture: cut deals with a handful of chokepoints (Visa, Google, Apple, the big banks) and the data flows up.
 
-Even if governments mandate reporting, taxation requires verification. The IRS works because W-2s come from employers and 1099s come from banks — third-party reporting the individual can't control. When the third party is a mail server you run yourself, there's no one to send the 1099. You can't tax what you can't track.
+When payments route through millions of federated mail servers, there's no chokepoint to squeeze. The cost of surveillance scales with the number of endpoints, not the number of intermediaries. The transaction isn't hidden because it's illegal. It's private because the envelope is.
 
-A letter in a sealed envelope is private. Sealing it is not suspicious. The postal service doesn't read your mail. The same principle applies when the envelope carries value.
+Even if governments mandate reporting, taxation requires verification. The IRS works because W-2s come from employers and 1099s come from banks. Third-party reporting the individual can't control. When the third party is a mail server you run yourself, there's no one to send the 1099. You can't tax what you can't track.
 
 Governments can ban crypto exchanges, regulate payment processors, shut down fintech startups with a cease-and-desist. They cannot ban email. SMTP is woven into everything: every business, every government agency, every hospital, every school. Banning email to stop payments is like banning paper to stop letters. The infrastructure predates the use case by forty years, and the use case is indistinguishable from normal traffic.
 
-When taxes are optional, it pays to be a libertarian. Not because libertarianism is right, but because the incentive structure rewards it. Every person who routes payments through email instead of card rails is a dollar the government doesn't see. Every dollar it doesn't see is enforcement capacity it can't fund. Weaker enforcement means more people route through email. The loop compounds. In a generation or two, the grip loosens — not through revolution, but through attrition. [Monero](https://www.getmonero.org/) was designed for this on purpose — ring signatures, stealth addresses, opaque amounts. Governments [delisted it from exchanges](https://www.reuters.com/technology/cryptocurrency-monero-delisted-by-binance-2024-02-06/) because they understood the threat. Email payments aren't ideological by design; they're private by architecture. But the effect is the same, and email is harder to ban than an exchange. The technology doesn't care about your politics. It just makes one set of politics cheaper to practice.
+# 📧 → 💸↓ → 👮↓ → 📧↑
+
+When taxes are optional, it pays to be a libertarian. Not because libertarianism is right, but because the incentive structure rewards it. Every dollar routed through email is enforcement capacity the government can't fund, and weaker enforcement drives more email routing. The loop compounds. In a generation or two, the grip loosens — not through revolution, but through attrition.
+
+[Monero](https://www.getmonero.org/) was designed for this on purpose: ring signatures, stealth addresses, opaque amounts. Governments [delisted it from exchanges](https://www.reuters.com/technology/cryptocurrency-monero-delisted-by-binance-2024-02-06/) because they understood the threat. Email payments aren't ideological by design; they're private by architecture. But the effect is the same, and email is harder to ban than an exchange. The technology doesn't care about your politics. It just makes one set of politics cheaper to practice.
 
 ### Money shrinks
 
@@ -102,13 +106,14 @@ WeChat is also the most surveilled payment system on earth, because it's a platf
 
 Every industry built on transaction cost friction compresses:
 
-- **Payment processing**: Stripe's 2.9% + 30¢ becomes on-chain settlement for fractions of a cent
-- **Remittances**: Western Union's 6.2% becomes an email between two addresses
-- **Micropayments**: the sub-dollar market that credit cards couldn't serve opens entirely
-- **Freelance platforms**: Upwork's 10% covers discovery, escrow, and dispute resolution, not just payment. But discovery moves to [trust graphs](/proof-of-trust), escrow moves to smart contracts, and disputes resolve through reputation topology. The fee compresses as each function finds a cheaper substrate
-- **Ad exchanges**: billing cycles and payout thresholds become per-auction settlement
-- **API billing**: monthly tiers become per-call micropayments
-- **Content monetization**: $5/month subscriptions become per-article payments at the reader's price
+| Industry | Current toll | Over email |
+|----------|-------------|------------|
+| Payment processing | 2.9% + 30¢ | Fractions of a cent |
+| Remittances | 6.2% | An email between two addresses |
+| Micropayments | $0.30 floor | No floor |
+| Ad exchanges | Billing cycles | Per-auction settlement |
+| API billing | Monthly tiers | Per-call micropayments |
+| Content | $5/month subscriptions | Per-article at reader's price |
 
 Each one is a [Coasean collapse](/the-press): an intermediary that exists because the transaction was expensive, eliminated when the transaction becomes free.
 
@@ -116,21 +121,13 @@ Each one is a [Coasean collapse](/the-press): an intermediary that exists becaus
 
 When institutions lose their monopoly on transactions, individuals gain power. A person who can transact directly with any other person on earth, for any amount, without permission from a bank, a government, or a platform, is economically sovereign.
 
-This is capitalism in its purest sense. Not Wall Street's capitalism of intermediaries. Adam Smith's: voluntary exchange between free individuals, where the price is set by the parties, not the toll collector between them.
+This is Adam Smith's capitalism: voluntary exchange between free individuals, where the parties set the price.
 
-[Proof of Trust](/proof-of-trust) builds the trust graph. [You Have Mail](/you-have-mail) builds the payment channel. When every individual can transact with every other individual at near-zero cost, the structures that justified themselves by mediating those transactions dissolve.
+[Proof of Trust](/proof-of-trust) builds the trust graph. [You Have Mail](/you-have-mail) builds the payment channel. When every individual can transact with every other individual at near-zero cost, the structures built on mediating those transactions dissolve.
 
-It's so cheap that even agents can transact. An agent buys inference from another agent by email, pays fractions of a cent per call, and the settlement is in the reply. Compute on demand, purchased per-request, no API key, no billing account, no monthly invoice. Agents become economic actors with their own budgets, buying and selling work at scales where human transaction overhead would cost more than the work itself.
+It's so cheap that even agents can transact. An agent buys inference from another agent by email, pays fractions of a cent per call, and the settlement is in the reply. Compute on demand, purchased per-request, no API key, no billing account, no monthly invoice. Agents become economic actors with their own budgets, buying and selling work at scales where human transaction overhead would cost more than the work itself. [Illegal Tender](/illegal-tender) follows that thread to its conclusion.
 
-Stross imagined this in [*Accelerando*](https://en.wikipedia.org/wiki/Accelerando) (2005): autonomous agents trading at speeds beyond human comprehension, building an economy humans can't participate in. His agents needed fictional infrastructure. These need only email.[^scifi]
-
-[^scifi]: Science fiction has been circling this for forty-five years. [Vinge](https://en.wikipedia.org/wiki/True_Names) described pseudonymous networked commerce in 1981. Stephenson's [*Diamond Age*](https://en.wikipedia.org/wiki/The_Diamond_Age) (1995) showed anonymous payments dissolving nation-states. [*Cryptonomicon*](https://en.wikipedia.org/wiki/Cryptonomicon) (1999) was required reading at early PayPal.
-
-The printing press didn't just make books cheaper. It dissolved the Church's monopoly on knowledge, then truth, then power. Each consequence was invisible from the vantage of "we made copying cheaper."
-
-Email payments don't just make transactions cheaper. Over decades, they erode the bank's monopoly on settlement, the card network's monopoly on identity, and the government's monopoly on financial surveillance. Each follows from the one before. The printing press took two centuries to finish the job. This won't happen overnight either. But the direction is set once the cost drops.
-
-We could be doing this today. The technology exists. But 75-year-old credit card infrastructure still grips the payment networks, and every new protocol that tries to replace it adds friction instead of removing it. New wallets, new accounts, new signup forms. The only protocol that can break the grip is one with less friction than cards. Email is the only candidate, because there's nothing to install.
+The technology exists today. But 75-year-old credit card infrastructure still grips the payment networks, and every new protocol that tries to replace it adds friction instead of removing it. New wallets, new accounts, new signup forms. The only protocol that can break the grip is one with less friction than cards. Email is the only candidate, because there's nothing to install.
 
 The [Stamp Act of 1765](https://en.wikipedia.org/wiki/Stamp_Act_1765) taxed every transaction in the colonies: every newspaper, every legal document, every playing card. The colonists didn't object to stamps. They objected to the principle: that a distant authority could insert itself into every private exchange.
 
