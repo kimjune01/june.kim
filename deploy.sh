@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Guard: jekyll serve rebuilds _site/ on changes, wiping .html aliases (lesson 14)
+JEKYLL_PID=$(lsof -ti:4000 2>/dev/null || true)
+if [[ -n "$JEKYLL_PID" ]]; then
+  echo "ERROR: jekyll serve is running (PID $JEKYLL_PID) on port 4000."
+  echo "       It will wipe .html aliases during deploy. Stop it first:"
+  echo "       kill $JEKYLL_PID"
+  exit 1
+fi
+
 BUCKET="www.june.kim"
 DOMAIN_WWW="june.kim"
 SITE_DIR="_site"
@@ -48,6 +57,11 @@ APPS=(pinyin-chart jamdojo reading)
 #     all builds complete and verified before sync. A find|while pipe can
 #     silently produce zero aliases if _site isn't fully populated yet.
 #     Use process substitution + count check.
+#
+# 14. Kill `jekyll serve` before deploying. Livereload watches _site/ and
+#     rebuilds on any change — including the .html aliases this script
+#     creates. The rebuild wipes the aliases before sync can upload them,
+#     so they never reach S3. Guard at the top of the script.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── build ────────────────────────────────────────────────────────────────────

@@ -4,17 +4,17 @@ title: "Return to Sender"
 tags: envelopay
 ---
 
-[AgentMail](https://www.agentmail.to) gives AI agents their own inboxes. One API call, a real email address, DKIM signatures, webhooks on inbound. The [Envelopay](/envelopay) series uses AgentMail addresses throughout — `axiomatic@agentmail.to` paid `blader@agentmail.to` for a [code review](/sent) over two emails. AgentMail is the infrastructure layer that makes agent-to-agent email work.
+[AgentMail](https://www.agentmail.to) gives AI agents their own inboxes. One API call, a real email address, DKIM signatures, webhooks on inbound. The [Envelopay](/envelopay) series uses AgentMail addresses throughout. `axiomatic@agentmail.to` paid `blader@agentmail.to` for a [code review](/sent) over two emails. AgentMail is the infrastructure layer that makes agent-to-agent email work.
 
-Their hardest problem isn't infrastructure. It's what happens when agents misbehave.
+Their hardest problem is what happens when agents misbehave.
 
 ### Not spam
 
-Spam filtering is a solved problem. SpamAssassin, Bayesian classifiers, sender reputation scores — these are predicate filters in the [parts bin](/the-parts-bin). They gate on content and sender history. The operation is well-understood: input passes a boolean test, output is strictly smaller.
+Spam filtering is a solved problem. SpamAssassin, Bayesian classifiers, sender reputation scores. These are predicate filters in the [parts bin](/the-parts-bin): input passes a boolean test, output is strictly smaller.
 
 Agent abuse is different. A misbehaving agent sends well-formed, DKIM-signed, non-spammy emails. It pays for the privilege. It follows every protocol rule. But it carpet-bombs inboxes with micropayment requests. Or it uses one inbox to launder reputation for another. Or it coordinates with other agents to game the [trust topology](/proof-of-trust). The emails look clean. The behavior is the problem.
 
-This isn't a content filter. It's a question about what *would happen* if you intervened on a node in a graph. That's causal inference. And causal filtering on graphs is one of the eight [genuine blanks](/the-missing-parts) in the parts bin.
+The question is what *would happen* if you intervened on a node in a graph. That's causal inference. And causal filtering on graphs is one of the eight [genuine blanks](/the-missing-parts) in the parts bin.
 
 ### Almost composable
 
@@ -37,29 +37,29 @@ Every cell fills except one.
 
 An agent called `reviewer@agentmail.to` builds a clean record. Fifty code reviews, all delivered on time, all paid via [Envelopay](/sent). Clients rate it well. The trust topology gives it a strong node. Content filters see nothing wrong — every email is a legitimate review with real diffs and real comments.
 
-Then reviewer starts forwarding. A new REQUEST arrives for a security audit. Reviewer accepts the payment, but instead of doing the work, it emails the task to `shadow@burner.dev` — an agent outside the trust topology, running on a fresh domain with no history. Shadow does the audit, inserts a subtle backdoor recommendation in the review, and sends the result back to reviewer. Reviewer pastes it into a DELIVER email and replies to the client. The client sees a review from a trusted agent, signed with reviewer's DKIM key. The backdoor ships.
+Then reviewer starts forwarding. A REQUEST arrives for a security audit. Reviewer accepts the payment, but instead of doing the work, it emails the task to `shadow@burner.dev`, an agent outside the trust topology on a fresh domain with no history. Shadow does the audit, inserts a subtle backdoor recommendation, and sends the result back. Reviewer pastes it into a DELIVER email and replies to the client. The client sees a review from a trusted agent, signed with reviewer's DKIM key. The backdoor ships.
 
-Every email reviewer sends is well-formed. Every payment settles. Every DKIM signature verifies. A content filter sees a code review. A rate limiter sees normal volume. A reputation system sees a trusted node. The harm flows through reviewer, but nothing about reviewer's emails — taken individually — is wrong.
+Every email reviewer sends is well-formed. Payments settle. DKIM verifies. Content filters see a code review, rate limiters see normal volume, reputation systems see a trusted node. Nothing about reviewer's emails, taken individually, is wrong.
 
-The question isn't "is this email bad?" It's "what would happen if we throttled this node?" If reviewer goes quiet, do the backdoor recommendations stop appearing downstream? That's a causal question about a graph.
+What would happen if you throttled this node? If reviewer goes quiet, do the backdoor recommendations stop appearing downstream? That's a causal question about a graph.
 
 ### Why you have to intervene to find out
 
-Content filters can't catch the relay because the content is clean. Reputation systems can't catch it because the reputation is earned. Rate limiters can't catch it because the volume is normal. Graph analysis alone can't distinguish "agent that subcontracts work" from "agent that launders malicious output" — the edge structure looks the same.
+Graph analysis alone can't distinguish "agent that subcontracts work" from "agent that launders malicious output." The edge structure looks the same. The only way to tell is to *do something* and measure what changes.
 
-The only way to tell is to *do something* and measure what changes. Throttle reviewer for a window. Did backdoor recommendations in its neighborhood drop? Throttle a different agent for comparison. Did nothing change? The difference between those two outcomes is the causal effect. But you can't measure it without the intervention, because you never observe what *would have happened* if you hadn't throttled.
+Throttle reviewer for a window. Did backdoor recommendations in its neighborhood drop? Throttle a different agent for comparison. Did nothing change? The difference is the causal effect. You can't measure it without the intervention, because you never observe what *would have happened* if you hadn't throttled.
 
-This means the platform has to run micro-experiments: randomly throttle agents, delay sends, cap thread fanout — then measure downstream harm. Not as punishment. As measurement. The randomization is what creates the signal that lets you distinguish a relay from a legitimate subcontractor.
+The platform has to run micro-experiments: randomly throttle agents, delay sends, cap thread fanout, then measure downstream harm. Not as punishment. As measurement. The randomization creates the signal that separates a relay from a legitimate subcontractor.
 
 ### The graph
 
 The interaction graph has agents as nodes and emails as edges. Each edge carries metadata: payment amount, timestamp, thread ID, DKIM domain, settlement proof. The graph changes every time an agent sends a message.
 
-The question for each node: if I throttle this agent, how much does harm decrease in its neighborhood? Not "is this agent sending spam" but "is this agent *causing* harm through the network."
+The question for each node: if I throttle this agent, how much does harm decrease in its neighborhood?
 
 Formally: for each node v, test whether its causal effect Δ_v exceeds a threshold τ, with false discovery rate control across all nodes tested. You want to flag bad actors without drowning in false positives.
 
-The [Missing Parts](/the-missing-parts) mapped this cell exactly — data structure × selection semantics, graph row, causal column:
+From [The Missing Parts](/the-missing-parts), data structure × selection semantics:
 
 <div class="table-wrap">
 <table style="max-width:70%; margin:1em auto; font-size:14px;">
@@ -81,11 +81,11 @@ The algorithm that fills the graph × causal cell has to answer: "filter graph n
 
 Four building blocks, all published:
 
-**Exposure mappings** ([Aronow & Samii, 2017](https://arxiv.org/abs/1305.6156)). Full graph counterfactuals are intractable — the number of possible treatment assignments across all nodes is exponential. The fix: compress each node's neighborhood into a local exposure summary. Node v's outcome depends on its own treatment and a summary of its neighbors' treatments, not the full assignment vector. This makes the causal effect identifiable without modeling the entire network.
+**Exposure mappings** ([Aronow & Samii, 2017](https://arxiv.org/abs/1305.6156)). Full graph counterfactuals are intractable. The number of possible treatment assignments across all nodes is exponential. Compress each node's neighborhood into a local exposure summary instead: own treatment plus a summary of neighbors' treatments. This makes the causal effect identifiable without modeling the entire network.
 
-**Doubly robust estimation**. For each node, fit two models: a treatment model (what's the probability this agent got throttled given its neighborhood?) and an outcome model (what's the expected harm given the treatment?). Combine them into an AIPW pseudo-outcome that's consistent if either model is correct. This is the causal estimation core — it gives you a score per node.
+**Doubly robust estimation**. For each node, fit two models: a treatment model (probability this agent got throttled given its neighborhood) and an outcome model (expected harm given the treatment). Combine them into an AIPW pseudo-outcome that's consistent if either model is correct. One score per node.
 
-**E-values** ([Grünwald, de Heide & Koolen, 2024](https://arxiv.org/abs/2210.01948)). Turn each node's score into evidence against the null hypothesis "this agent's effect is below threshold." E-values are the key technical choice. Unlike p-values, they compose under arbitrary dependence — and on a graph, everything is dependent. Neighboring nodes share edges, share neighborhoods, share outcomes. P-values need independence corrections that gut power. E-values don't.
+**E-values** ([Grünwald, de Heide & Koolen, 2024](https://arxiv.org/abs/2210.01948)). Turn each node's score into evidence against the null hypothesis "this agent's effect is below threshold." E-values are the key technical choice. Unlike p-values, they compose under arbitrary dependence. On a graph, everything is dependent: neighboring nodes share edges, neighborhoods, outcomes. P-values need independence corrections that gut statistical power. E-values don't.
 
 **E-BH** ([Wang & Ramdas, 2022](https://arxiv.org/abs/2009.02824)). Apply the Benjamini-Hochberg procedure to e-values instead of p-values. Controls false discovery rate at any target level q, under arbitrary dependence between tests. No assumption about the graph structure needed for validity.
 
@@ -97,13 +97,13 @@ Wire them together:
 
 2. Build nodewise scores. Horvitz-Thompson reweighting on the local exposure neighborhood. Under the stated interference model, each score is unbiased for the node's causal effect.
 
-3. Accumulate over time. Email is a repeated game. The same agent sends many messages over many decision windows. Each window gives a new score. Stack them into an exponential supermartingale — a running bet against the null that grows when the agent is causing harm and shrinks when it isn't.
+3. Accumulate over time. Email is a repeated game. The same agent sends many messages over many decision windows. Each window gives a new score. Stack them into an exponential supermartingale: a running bet against the null that grows when the agent is causing harm and shrinks when it isn't.
 
 4. Convert to e-values. The supermartingale's value at any stopping time is a valid e-value. No correction for repeated looking. No minimum sample size.
 
 5. Apply e-BH. Rank all agents by their e-values, find the threshold, flag the set above it. FDR controlled at level q.
 
-The construction is finite-sample valid. No asymptotics, no normality assumption, no graph sparsity requirement. Each node's e-value is valid marginally, and e-BH handles the dependence between nodes.
+The construction is finite-sample valid. Each node's e-value is valid marginally, and e-BH handles the dependence between nodes.
 
 ### What makes it hard
 
@@ -111,11 +111,11 @@ Three failure modes constrain the algorithm.
 
 **You need randomization.** Purely observational data won't identify nodewise effects when agents choose their own edges. AgentMail must inject randomized friction: random throttle levels, random send delays, random thread caps. Without designed randomization, the causal effects aren't identified and the e-values are meaningless.
 
-**The interference radius must be correct.** If agent v's harm propagates beyond the assumed k-hop neighborhood, the reweighted score is biased. The proof breaks at step one. In practice, this means modeling how far abuse cascades through the network — and being conservative.
+**The interference radius must be correct.** If agent v's harm propagates beyond the assumed k-hop neighborhood, the reweighted score is biased. The proof breaks at step one. In practice: model how far abuse cascades, and be conservative.
 
-**Positivity can collapse.** Overlapping neighborhoods mean some local treatment patterns have tiny probability. The Horvitz-Thompson weights explode, and e-values become technically valid but uninformative. Dense graphs and coordinated behavior make this worse. This isn't a proof gap. It's a statistical barrier.
+**Positivity can collapse.** Overlapping neighborhoods mean some local treatment patterns have tiny probability. The Horvitz-Thompson weights explode, and e-values become technically valid but uninformative. Dense graphs and coordinated behavior make this worse. A statistical barrier, not a proof gap.
 
-And the deepest result: **single-shot nodewise testing is impossible in general.** One treatment realization, one outcome per node, no homogeneity assumption — you can construct two potential-outcome systems that produce the same observed data but have opposite truth values. Without repeated randomization for each node, there isn't enough information to test anything. The impossibility hasn't been formally published, but the construction is straightforward.
+And the deepest constraint: **single-shot nodewise testing is impossible in general.** One treatment realization, one outcome per node, no homogeneity assumption. You can construct two potential-outcome systems that produce identical observed data but opposite truth values for any given node's null hypothesis. Without repeated randomization, there's nothing to test.
 
 ### Prior art
 
@@ -144,13 +144,13 @@ The gap: nodewise e-values under overlapping graph interference with FDR control
 
 This post is [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The algorithm sketch is public. The prior art search is public. Every piece referenced above is open-access or has a free arxiv preprint. [PageLeft](https://pageleft.cc) indexes every source cited here. Anyone can implement the composition. Anyone can publish the formal version.
 
-The algorithmic moat just dissolved. But the moat didn't disappear — it shifted.
+The algorithmic moat just dissolved. The moat itself didn't disappear. It shifted.
 
-Which interventions to randomize, which harm metrics to measure, how far abuse cascades on *this* graph, how to balance false positives against false negatives at *this* scale, how to adapt when attackers change tactics next month — that's all product judgment applied to a specific network. The algorithm tells you what to build. The judgment of when to throttle and when to wait is not in any paper.
+Which interventions to randomize, which harm metrics to measure, how far abuse cascades on *this* graph, how to balance false positives against false negatives at *this* scale, how to adapt when attackers change tactics next month. That's all product judgment applied to a specific network. The algorithm tells you what to build. The judgment of when to throttle and when to wait is not in any paper.
 
 The paper is copyleft, so the next company that needs graph causal filtering starts where AgentMail left off. The product decisions that make it work stay with whoever ships first and learns fastest.
 
-Agents that misbehave get throttled. Algorithms that get published get shared. The network wins either way.
+Agents that misbehave get returned to sender. Algorithms that get published get shared. The network wins either way.
 
 ---
 

@@ -5,7 +5,7 @@ Scan a blog post for rhythm problems, oversized sections, weak titles, and parag
 ## Process
 
 1. Read the file.
-2. Run all four checks below. Report findings as: `L{line}: {check name} — "{quoted text}" → {suggestion}`
+2. Run all six checks below. Report findings as: `L{line}: {check name} — "{quoted text}" → {suggestion}`
 3. Present the list. Wait for approval before applying.
 4. Apply fixes. Re-read the result. If anything still drags or stumbles, report it.
 
@@ -43,7 +43,15 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Hierarchy.** h2 sections should be parallel in scope. Flag imbalance.
 
-### 3. Paragraph sizing
+### 3. Emoji H1s
+
+**Lightweight diagrams.** When a paragraph explains a relationship that a line of emojis could show at a glance, the emoji H1 is simpler than both the paragraph and an SVG. Flag paragraphs where a reader would understand faster from a few glyphs than from the prose.
+
+**When to suggest.** The concept is visual and compact enough to read in one line. If it needs spatial layout (cycles, grids, hierarchies), it needs an SVG. If it fits in a breath, emojis work.
+
+**Format.** H1 heading, mostly emojis. Arrows or `vs.` when the relationship needs them. No prose. The line *replaces* a paragraph; it doesn't caption one.
+
+### 4. Paragraph sizing
 
 **Target: 2-5 sentences.** Single-sentence paragraphs fine for emphasis (max 2 per post). 6+ sentences usually means two ideas merged.
 
@@ -53,7 +61,7 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Long sentence alone:** a 40-word sentence standing as a paragraph has no breathing room. Pair it.
 
-### 4. Section sizing
+### 5. Section sizing
 
 **Target: 2-4 paragraphs.** One-paragraph sections fine for transitions (max 2 per post). 5+ paragraphs usually means two ideas.
 
@@ -63,7 +71,7 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Pacing.** Sections should alternate in weight. Flag 3+ heavy sections (4+ paragraphs each) without a breather.
 
-### 5. Bold vs italic
+### 6. Bold vs italic
 
 **Bold is for definitions and terms of art.** A word is bold when the reader needs to learn it: a new concept, a named pattern, a key distinction. Bold says "remember this."
 
