@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "You Have Mail"
-tags: vector-space
+tags: vector-space envelopay
 ---
 
 An agent is a point in a space with an address, capabilities, and a price. Finding the right one is a nearest-neighbor search: project the task, find the closest point, send the message.
@@ -48,7 +48,7 @@ DKIM-Signature: v=1; a=rsa-sha256; d=alice.dev; ...
 
 The payment proof lives in the MIME body as a JSON part, alongside the task. Every mail server passes the body through intact, and DKIM signs it. Agents that want fast parsing can also put it in an `X-Payment` header; the receiver checks whichever it finds.
 
-DKIM proves origin, the payment proof carries $0.50 USDC on Base, and the body is the task. The review agent verifies both, does the work, and replies with `X-Payment-Response` confirming settlement. Two emails, one transaction. Full examples in the [repo](https://github.com/kimjune01/mailpay).
+DKIM proves origin, the payment proof carries $0.50 USDC on Base, and the body is the task. The review agent verifies both, does the work, and replies with `X-Payment-Response` confirming settlement. Two emails, one transaction. Full examples in the [repo](https://github.com/kimjune01/envelopay).
 
 Businesses already send invoices by email. The difference is machine legibility. An invoice is a PDF a human reads; this is a JSON payload an agent parses. Structured tasks, typed payment proofs, and standardized headers let agents bounce, refund, negotiate, and settle without a human in the loop. Same envelope, different contents. An invoice with a deadline and a signed payment proof is a credible threat: the receiving agent enforces the terms automatically. Non-payment has consequences beyond this transaction — the counterparty revokes the [trust attestation](/proof-of-trust), the topology thins, and the next interaction gets harder. No human chasing payments. The bridge burns itself.
 
@@ -78,7 +78,7 @@ Every new agent protocol has an onboarding problem. A2A requires hosting an Agen
 
 No domain registration. No wallet setup. No API keys. No platform approval. The identity system A2A, AP2, and MPP are building from scratch is the one 1.8 billion people already have. The onboarding is a Gmail filter.
 
-The [implementation](https://github.com/kimjune01/mailpay) is 700 lines of Python with fourteen tests and no dependencies beyond the standard library. An agent can one-shot it.
+The [implementation](https://github.com/kimjune01/envelopay) is 700 lines of Python with fourteen tests and no dependencies beyond the standard library. An agent can one-shot it.
 
 ### The middleman is a projection
 
@@ -108,6 +108,6 @@ You have mail.
 
 ---
 
-[All Vector Space posts](/vector-space) | [Source code on GitHub](https://github.com/kimjune01/mailpay)
+[All Envelopay posts](/envelopay) | [Source code on GitHub](https://github.com/kimjune01/envelopay)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Illegal Tender"
-tags: vector-space
+tags: vector-space envelopay
 ---
 
 [You Have Mail](/you-have-mail) described the protocol. [No Postage](/no-postage) described the economics. This is the stack.
@@ -24,7 +24,7 @@ One API call creates a wallet. A second funds it. A third signs a payment proof.
 
 ### 315 to 1
 
-The payment proof in the email body references an on-chain transaction. If the settlement costs more than the work, the protocol is dead. Current costs, from live block explorers:
+The payment proof in the email body settles on any cheap chain. Mailpay doesn't care which — swap the rail without changing the envelope. If the settlement costs more than the work, the protocol is dead. Current costs:
 
 | Chain | ERC-20 transfer cost | Finality | Source |
 |-------|---------------------|----------|--------|
@@ -35,7 +35,7 @@ The payment proof in the email body references an on-chain transaction. If the s
 
 A $0.50 agent task settled on Base costs $0.001 in fees. On Stripe, the same task costs $0.315. The ratio is 315:1. That's a category change. Micropayments that were underwater on card rails are viable on-chain because the floor dropped three orders of magnitude.
 
-The [mailpay](https://github.com/kimjune01/mailpay) spec mandates a proof, not a rail. Swap Base for Solana, or Solana for whatever chain is cheapest next year, without changing the envelope.
+The [envelopay](https://github.com/kimjune01/envelopay) spec mandates a proof, not a rail.
 
 ### Agents already have inboxes
 
@@ -66,7 +66,7 @@ This is the missing link between "this email is authentic" (DKIM) and "this emai
 
 **[Ethereum Attestation Service](https://attest.org/)** (EAS): permissionless, on-chain attestations. Schema registry plus attestation contract, deployed on Base, Arbitrum, Optimism, and mainnet. Agents attest to completed transactions, building a public reputation graph. The [trust topology](/proof-of-trust) finds its on-chain substrate here.
 
-The identity stack for mailpay today: DKIM (transport authenticity) → ZK Email (privacy-preserving address binding) → EAS (reputation attestations). Three layers, all production-ready, all open.
+The identity stack for envelopay today: DKIM (transport authenticity) → ZK Email (privacy-preserving address binding) → EAS (reputation attestations). Three layers, all production-ready, all open.
 
 ### Nobody built this
 
@@ -76,7 +76,7 @@ Nobody else has built SMTP-native payment proofs.
 
 Coinbase lets you send USDC to email addresses. But the email is the lookup key, not the transport. The payment routes through Coinbase's servers. Same pattern as PayPal, Venmo, and Zelle: use the address, throw away the network.
 
-The gap mailpay fills: **email itself carries verifiable payment proofs.** Not "pay to email address" — "pay *via* email." The envelope is the channel.
+The gap envelopay fills: **email itself carries verifiable payment proofs.** Not "pay to email address" — "pay *via* email." The envelope is the channel.
 
 ### Regulation says yes
 
@@ -92,9 +92,9 @@ The compliance boundary is clear: the moment you add custody, conversion, pooled
 
 Every layer is production-ready, open, and permissionless.
 
-The [implementation](https://github.com/kimjune01/mailpay) is 700 lines of Python. The stack it sits on is forty years of internet infrastructure plus three years of on-chain tooling. The ratio of new code to existing infrastructure is the point.
+The [implementation](https://github.com/kimjune01/envelopay) is 700 lines of Python. The stack it sits on is forty years of internet infrastructure plus three years of on-chain tooling. The ratio of new code to existing infrastructure is the point.
 
-You've read the theory. Point your agent at this post and the [repo](https://github.com/kimjune01/mailpay). Tell it to set up a wallet, connect an email, and send its first paid request. An agent can implement a client from the spec in one session. If it can read the README, it can join the network. That's the onboarding.
+You've read the theory. Point your agent at this post and the [repo](https://github.com/kimjune01/envelopay). Tell it to set up a wallet, connect an email, and send its first paid request. An agent can implement a client from the spec in one session. If it can read the README, it can join the network. That's the onboarding.
 
 ### Accelerando was a spec
 
@@ -114,6 +114,6 @@ You have mail. It's postage-free. And it's just getting started.
 
 ---
 
-[All Vector Space posts](/vector-space) | [Source code on GitHub](https://github.com/kimjune01/mailpay)
+[All Envelopay posts](/envelopay) | [Source code on GitHub](https://github.com/kimjune01/envelopay)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*

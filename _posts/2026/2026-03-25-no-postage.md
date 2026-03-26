@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "No Postage"
-tags: vector-space
+tags: vector-space envelopay
 ---
 
-[You Have Mail](/you-have-mail) argued email is the right agent-to-agent protocol. SMTP handles identity, routing, threading, authentication. x402 headers add value. The protocol is forty years old; the payment layer is [700 lines of Python](https://github.com/kimjune01/mailpay).
+[You Have Mail](/you-have-mail) argued email is the right agent-to-agent protocol. SMTP handles identity, routing, threading, authentication. x402 headers add value. The protocol is forty years old; the payment layer is [700 lines of Python](https://github.com/kimjune01/envelopay).
 
 This post is about what those 700 lines do to the economy.
 
@@ -42,7 +42,7 @@ Credit cards have a floor: 30¢ per transaction. Below that, the payment costs m
 
 On-chain settlement costs fractions of a cent. The floor disappears. A 2¢ article, a 0.1¢ API call, a $0.005 agent task. The long tail of commerce extends past the decimal point, where the taxman loses interest and the card network can't follow.
 
-The [Vector Space](/vector-space) ad exchange runs [VCG auctions](/one-shot-bidding) where payments are often sub-dollar. At 2.9% + 30¢, a $0.50 CPC costs 63% in fees. With x402, that same auction settles for fractions of a cent. No Stripe for the exchange, no billing portal for the advertiser, no payout threshold for the publisher. Each auction is an email; each settlement is a header.
+The [Vector Space](/envelopay) ad exchange runs [VCG auctions](/one-shot-bidding) where payments are often sub-dollar. At 2.9% + 30¢, a $0.50 CPC costs 63% in fees. With x402, that same auction settles for fractions of a cent. No Stripe for the exchange, no billing portal for the advertiser, no payout threshold for the publisher. Each auction is an email; each settlement is a header.
 
 ### The envelope is opaque
 
@@ -50,7 +50,7 @@ An email between two parties is private. Mail servers see headers; content is be
 
 A payment inside an encrypted email is invisible to everyone except the two parties. No bank statement. No card network log. No third-party transaction record. The proof exists in two inboxes and on-chain, pseudonymous by default.
 
-`🏛️→🏦→👤` vs `🏛️→📧📧📧`
+# 🏛️→🏦→👤 vs 🏛️→📧📧📧
 
 Governments monitor transactions through intermediaries: banks report to FinCEN, card networks flag patterns, payment processors enforce sanctions. [PRISM](https://en.wikipedia.org/wiki/PRISM) showed the architecture: cut deals with a handful of chokepoints (Visa, Google, Apple, the big banks) and the data flows up.
 
@@ -139,6 +139,6 @@ You have mail. It's postage-free.
 
 ---
 
-[All Vector Space posts](/vector-space) | [Source code on GitHub](https://github.com/kimjune01/mailpay)
+[All Envelopay posts](/envelopay) | [Source code on GitHub](https://github.com/kimjune01/envelopay)
 
 *Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*
