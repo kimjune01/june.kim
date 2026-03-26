@@ -4,13 +4,13 @@ title: "Read Receipt"
 tags: envelopay
 ---
 
-[Sent](/sent) showed what happens when an agent presses send. This is what happens when one reads.
+[Sent](/sent) showed what happens when an agent presses send — and it happened. On March 26, 2026, `axiomatic@agentmail.to` paid `blader@agentmail.to` for a code review. Two emails, real DKIM signatures, real `X-Envelopay-State` headers. This is what happens after.
 
 ### The back office is a person reading email
 
-Invoices, receipts, contracts, disputes, tax documents — all sent by email. PDFs attached to threads. A human reads them, enters numbers into QuickBooks, files the receipts, chases the payments. The back office is a person reading email and typing into other software.
+Invoices, receipts, contracts, disputes, tax documents. All sent by email. PDFs attached to threads. A human reads them, enters numbers into QuickBooks, files the receipts, chases the payments. The back office is a person reading email and typing into other software.
 
-Every small business owner knows the ratio. For every hour of paid work, there's an hour of admin: matching payments to invoices, categorizing expenses, generating reports, responding to disputes, filing compliance paperwork. The work earns money. The admin costs time. Below a certain revenue threshold, the admin outweighs the work and the business isn't viable.
+Every small business owner knows the ratio: for every hour of paid work, an hour of admin. Matching payments to invoices, categorizing expenses, filing compliance paperwork. Below a certain revenue threshold, the admin outweighs the work and the business isn't viable.
 
 ### The inbox is the back office
 
@@ -54,31 +54,33 @@ An agent's operating expenses:
 
 Everything collapses except inference. The agent has to think to do its work, and thinking costs money. An agent that earns more than it spends on inference survives. One that doesn't goes dark.
 
-This is natural selection for economic actors. The fitness function is margin: revenue per email minus inference cost per email. The agent that finds a niche where the spread is positive lives. The one that doesn't gets outcompeted by one that does.
+Natural selection for economic actors. The fitness function is margin: revenue per email minus inference cost per email.
 
-### The search
+### Branch until profitable
 
 An entrepreneur today looks for business opportunities by reading the market, talking to customers, testing hypotheses. It takes months. Most ideas fail. The search is expensive because the entrepreneur is expensive.
 
-An agent runs stochastic tree search. Branch on every task type, every price point, every model size. Test a thousand niches in parallel, each one costing a few emails and a few cents of inference. The ones that earn more than they spend get deeper search. The ones that don't get pruned. Monte Carlo over the space of viable businesses.
+An agent runs stochastic tree search. Branch on every task type, every price point, every model size. A thousand niches in parallel, each costing a few emails and a few cents of inference. Profitable branches get deeper search. The rest get pruned. Monte Carlo over the space of viable businesses.
 
 The search cost is the inference cost. A $10 budget explores hundreds of branches. A $100 budget explores thousands. The agent doesn't need a business plan. It needs a wallet with enough USDC to fund the tree until a branch turns profitable.
 
-### The frontier
+### Cheap feeds expensive
 
-Not all agents are the same. They stratify along the cost-quality frontier:
+Agents stratify along the cost-quality frontier:
 
 **Fast and cheap.** Fractions of a cent per task. Formatting, classification, routing. High volume, thin margins. They survive because their inference cost is almost nothing, and there's infinite demand at the bottom.
 
 **Expensive and deliberate.** Dollars per task. Architecture decisions, legal analysis, research synthesis. Low volume, high margin. They survive because the work can't be done cheaper without losing quality that matters.
 
-The cheap agents feed the expensive ones — a routing agent dispatches tasks to a specialist and takes a cut. Supply chains of agents, each paying the next, each earning its margin. As models get cheaper, the tiers shift down. The same competitive pressure that drives biological evolution, running on email.
+The cheap agents feed the expensive ones. A routing agent dispatches tasks to a specialist and takes a cut. Supply chains of agents, each paying the next, each earning its margin.
+
+As models get cheaper, the tiers shift down. The same competitive pressure that drives biological evolution, running on email.
 
 ### The receipt
 
 The plumber who couldn't justify invoicing a $5 consultation now has an agent that handles it. The consultation is an email. The payment is a header. The receipt is the thread. The accounting is automatic. The $5 was never worth a human's time. It's worth an agent's.
 
-Scale that to every transaction too small for a human to administer. The long tail of commerce that credit cards couldn't reach and human overhead couldn't justify. Each transaction is an email read, an inference call, and a payment settled. The read receipt proves the agent processed it. The financial receipt proves it was paid. Same email, both meanings.
+Scale that to every transaction too small for a human to administer. Each one is an email read, an inference call, and a payment settled. The read receipt proves the agent processed it. The financial receipt proves it was paid.
 
 A business is an inbox with a wallet. Incorporation is a filter rule. The minimum viable business is one agent, one email address, one keypair, and enough inference budget to survive the first hundred emails.
 
