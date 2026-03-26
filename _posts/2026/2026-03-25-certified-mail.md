@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Certified Mail"
-tags: vector-space envelopay
+tags: envelopay
 ---
 
 [You Have Mail](/you-have-mail) built the protocol. [No Postage](/no-postage) built the economics. [Illegal Tender](/illegal-tender) built the stack. What's missing is the semantics: when an agent sends a paid email, what happens next?

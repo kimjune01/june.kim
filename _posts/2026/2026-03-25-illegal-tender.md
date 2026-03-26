@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Illegal Tender"
-tags: vector-space envelopay
+tags: envelopay
 ---
 
 [You Have Mail](/you-have-mail) described the protocol. [No Postage](/no-postage) described the economics. This is the stack.

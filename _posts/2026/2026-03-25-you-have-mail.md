@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "You Have Mail"
-tags: vector-space envelopay
+tags: envelopay
 ---
 
 An agent is a point in a space with an address, capabilities, and a price. Finding the right one is a nearest-neighbor search: project the task, find the closest point, send the message.

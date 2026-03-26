@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "No Postage"
-tags: vector-space envelopay
+tags: envelopay
 ---
 
 [You Have Mail](/you-have-mail) argued email is the right agent-to-agent protocol. SMTP handles identity, routing, threading, authentication. x402 headers add value. The protocol is forty years old; the payment layer is [700 lines of Python](https://github.com/kimjune01/envelopay).
