@@ -64,7 +64,7 @@ Governments can ban crypto exchanges, regulate payment processors, shut down fin
 
 When taxes are optional, it pays to be a libertarian. Not because libertarianism is right, but because the incentive structure rewards it. Every dollar routed through email is enforcement capacity the government can't fund, and weaker enforcement drives more email routing. The loop compounds. In a generation or two, the grip loosens — not through revolution, but through attrition.
 
-[Monero](https://www.getmonero.org/) was designed for this on purpose: ring signatures, stealth addresses, opaque amounts. Governments [delisted it from exchanges](https://www.reuters.com/technology/cryptocurrency-monero-delisted-by-binance-2024-02-06/) because they understood the threat. Email payments aren't ideological by design; they're private by architecture. But the effect is the same, and email is harder to ban than an exchange. The technology doesn't care about your politics. It just makes one set of politics cheaper to practice.
+[Monero](https://www.getmonero.org/) was designed for this on purpose: ring signatures, stealth addresses, opaque amounts. Governments [delisted it from exchanges](https://www.reuters.com/technology/cryptocurrency-monero-delisted-by-binance-2024-02-06/) because they understood the threat. Email payments aren't ideological by design; they're private by architecture. But the effect is the same, and email is harder to ban than an exchange. The technology doesn't care about your politics. It just makes one set of politics cheaper to practice. The battle that follows is between pro-order Stasis who rebuild surveillance from scratch and anarchist realists who accept the envelope is sealed.
 
 ### Money shrinks
 
