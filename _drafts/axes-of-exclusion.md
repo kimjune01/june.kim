@@ -36,7 +36,7 @@ The tradeoff: embedding fields separately loses cross-field meaning. "Sports inj
 
 ### Trees over axes
 
-Build a hierarchical k-means tree over each axis. For the **what** axis: cluster all advertiser **what**-embeddings with k-means (k ≈ 16 per level, depth 3-4), producing ~4,000-65,000 leaf nodes. "Sports rehab," "divorce mediation," "roof repair" land in different branches. Separate trees over **who** and **situation** cluster by audience and qualifier the same way.
+A tree over the **what** axis clusters advertisers by service type: "sports rehab," "divorce mediation," "roof repair" land in different branches. Separate trees over **who** and **situation** cluster by audience and qualifier. Each tree is a hierarchical k-means (k ≈ 16 per level, depth 3-4, yielding ~4K-65K leaf nodes).
 
 Publisher exclusion becomes axis-aligned:
 
@@ -46,7 +46,7 @@ Publisher exclusion becomes axis-aligned:
 
 Each exclusion checks one 128-dimensional embedding. One-third the dimensions, one-third the cost, and axes that don't apply get skipped entirely.
 
-Storage per publisher: a set of excluded node IDs per axis tree, stored as a sorted array or roaring bitmap. A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs. At query time, route the incoming ad's embedding down each tree; if any visited node ID appears in the publisher's exclusion set, reject.
+Storage per publisher: a set of excluded node IDs per axis tree (sorted array or roaring bitmap). A publisher with ten exclusion rules across three axes stores maybe a hundred node IDs. At query time, route the ad's embedding down each tree; if any visited node appears in the exclusion set, reject.
 
 ### Conjunctions and the gray zone
 
