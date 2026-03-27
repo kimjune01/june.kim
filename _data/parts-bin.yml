@@ -1,7 +1,7 @@
 # The Parts Bin — structured taxonomy
 # Derived from The Natural Framework proof.
 # Ten axes define the design space. Five planes are worth drawing.
-# See /the-missing-parts for the full analysis.
+# See /the-parts-bin for the full analysis.
 #
 # Jekyll: {{ site.data.parts-bin.columns }}
 # Agent:  load YAML, query by step/store/grid coordinates.
@@ -37,7 +37,7 @@ axes:
       values: [unsupervised, supervised, self_supervised]
 
 planes:
-  # Systematic sweep of 45 possible planes. See /the-missing-parts.
+  # Systematic sweep of 45 possible planes. See /the-parts-bin#grid.
   #
   # Fully occupied (validate but don't predict):
   #   selection_semantics × error_guarantee (Filter, 4×3)
@@ -76,47 +76,47 @@ planes:
 stage_structure_grid:
   - stage: perceive
     flat: "JSON parsing"
-    sequence: ["A/D conversion", "Sinusoidal positional encoding (Vaswani 2017)"]
+    sequence: ["A/D conversion", "Sinusoidal positional encoding (Vaswani 2017)", "FIX/ITCH protocol parsing"]
     tree: "XML parsing"
-    graph: ["Edge list parsing", "RAG retrieval (Zhao 2023)", "MCP tool protocol (Arunkumar 2026)"]
+    graph: ["Edge list parsing", "RAG retrieval (Zhao 2023)", "MCP tool protocol (Arunkumar 2026)", "ABI event log decoding"]
     partial_order: "PC algorithm (thin)"
     embedding_space: "CLIP embedding"
   - stage: cache
-    flat: ["Hash index", "Residual + LayerNorm (Vaswani 2017)"]
+    flat: ["Hash index", "Residual + LayerNorm (Vaswani 2017)", "Order book (price-time priority queue)", "UTXO set index", "Minisketch set reconciliation (Erlay)"]
     sequence: ["B-tree", "Paged memory / MemGPT (Arunkumar 2026)"]
-    tree: ["Trie"]
+    tree: ["Trie", "Merkle tree"]
     graph: ["Adjacency index", "RETE incremental matching (Soar)"]
     partial_order: ["Transitive closure (thin)"]
     embedding_space: ["HNSW index"]
   - stage: filter
-    flat: ["WHERE"]
+    flat: ["WHERE", "Circuit breaker / kill switch", "Mempool fee-rate eviction"]
     sequence: ["Change-point detection", "Causal masking (Vaswani 2017)", "Policy-driven pruning / MemAgent (Arunkumar 2026)"]
     tree: ["XPath", "Hierarchical verification / MAKER (Arunkumar 2026)"]
-    graph: ["Subgraph match", "Justification-based truth maintenance (Soar)"]
+    graph: ["Subgraph match", "Justification-based truth maintenance (Soar)", "MEV extraction filter"]
     partial_order: ["DAGGER (thin)"]
     embedding_space: ["c-ANN search (cover tree)"]
   - stage: attend
     flat: ["MMR", "Staged preference resolution (Soar)", "Scaled dot-product attention (Vaswani 2017)", "Multi-head projection (Vaswani 2017)"]
     sequence: ["Beam search", "Surprise gate + DPP thinning (prescription-soar)", "In-context learning (Zhao 2023)", "Chain-of-thought (Zhao 2023)", "ReAct loop (Arunkumar 2026)"]
     tree: ["MCTS", "Tree of Thoughts (Arunkumar 2026)"]
-    graph: ["Diversified top-k graph pattern matching"]
-    partial_order: ["Poset diverse top-k (filling-the-blanks #3)"]
+    graph: ["Diversified top-k graph pattern matching", "Diversified top-k path routing (DeFi liquidity graphs)"]
+    partial_order: ["Poset diverse top-k (filling-the-blanks #3)", "Block building / Flashbots auction"]
     embedding_space: ["MMR re-ranking"]
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
   - stage: consolidate
-    flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "Scaling laws (Zhao 2023)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)"]
-    sequence: ["Grammar induction", "Instruction tuning / SFT (Zhao 2023)", "Reflexion / verbal reinforcement (Arunkumar 2026)", "Episodic→semantic compression / MemInsight (Arunkumar 2026)"]
+    flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "Scaling laws (Zhao 2023)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)", "AMM curve update (x·y=k)", "HFT strategy parameter optimization"]
+    sequence: ["Grammar induction", "Instruction tuning / SFT (Zhao 2023)", "Reflexion / verbal reinforcement (Arunkumar 2026)", "Episodic→semantic compression / MemInsight (Arunkumar 2026)", "Difficulty adjustment (Bitcoin)"]
     tree: ["Decision tree induction", "EBC/Chunking (Soar)", "Partial evaluation (Futamura, 1971)"]
-    graph: ["GNN training", "Temporal graph coarsening (prescription-soar)"]
+    graph: ["GNN training", "Temporal graph coarsening (prescription-soar)", "Self-supervised subgraph representation learning (blockchain)"]
     partial_order: ["Lattice learning (thin)"]
     embedding_space: ["Triplet-loss metric learning"]
   - stage: remember
-    flat: ["WAL append", "Quantization (Zhao 2023)"]
+    flat: ["WAL append", "Quantization (Zhao 2023)", "Tick database append (kdb+/QuestDB)"]
     sequence: ["SSTable flush", "Delta-based episodic storage (Soar)", "NL episode stream / Generative Agents (Arunkumar 2026)"]
-    tree: ["Git commit"]
+    tree: ["Git commit", "Blockchain append (consensus-validated WAL)"]
     graph: ["Graph DB commit"]
-    partial_order: ["Topological serialization"]
+    partial_order: ["Topological serialization", "GHOSTDAG blockDAG ordering (Kaspa)"]
     embedding_space: "FAISS index serialization"
 
 # Plane 4 data: stage × error guarantee (canonical algorithm per cell)
@@ -133,12 +133,12 @@ stage_error_grid:
     probabilistic: "Bloom filter"
   - stage: filter
     exact: "WHERE"
-    bounded: "Conformal filter, approximate skyline"
+    bounded: ["Conformal filter", "Approximate skyline"]
     probabilistic: "LSH"
   - stage: attend
-    exact: "A*, Viterbi"
-    bounded: "ARA*, Sieve-Streaming"
-    probabilistic: "DPP, MCTS"
+    exact: ["A*", "Viterbi"]
+    bounded: ["ARA*", "Sieve-Streaming"]
+    probabilistic: ["DPP", "MCTS"]
   - stage: consolidate
     exact: "PCA via SVD"
     bounded: "k-means++"
@@ -147,6 +147,111 @@ stage_error_grid:
     exact: "WAL append"
     bounded: null  # structural: bounded persistence violates Remember contract (lossless)
     probabilistic: null  # structural: same reason
+
+# Attend: temporality × output form
+attend_temporality_output_grid:
+  - temporality: batch
+    top_k_slate: ["MMR", "DPP top-k"]
+    single_best: ["argmax", "CMA-ES"]
+    path_tree: ["A*", "Viterbi"]
+  - temporality: stream
+    top_k_slate: ["Beam search", "Streaming submodular"]
+    single_best: "Thompson sampling"
+    path_tree: ["MCTS", "ReAct loop"]
+
+# Attend: temporality × redundancy control
+attend_temporality_redundancy_grid:
+  - temporality: batch
+    none: "Heap top-k"
+    implicit: "Tournament selection"
+    explicit: ["DPP top-k", "MMR"]
+  - temporality: stream
+    none: "Reservoir sampling"
+    implicit: "Beam search"
+    explicit: "Streaming DPP (Gillenwater et al. 2019)"
+
+# Attend: error guarantee × output form
+attend_error_output_grid:
+  - error_guarantee: exact
+    top_k_slate: "Heap top-k"
+    single_best: "argmax"
+    path_tree: ["A*", "Viterbi", "Dijkstra"]
+  - error_guarantee: bounded
+    top_k_slate: "Sieve-Streaming"
+    single_best: "ARA*"
+    path_tree: ["ARA*", "Branch-and-bound"]
+  - error_guarantee: probabilistic
+    top_k_slate: "DPP sampling"
+    single_best: ["Simulated annealing", "MCTS"]
+    path_tree: ["MCTS", "Portfolio solvers"]
+
+# Consolidate: error guarantee × supervision signal
+consolidate_error_supervision_grid:
+  - error_guarantee: exact
+    unsupervised: "PCA via SVD"
+    supervised: "OLS regression"
+    self_supervised: "Exact contrastive loss (small batch)"
+  - error_guarantee: bounded
+    unsupervised: "k-means++"
+    supervised: "Decision tree induction"
+    self_supervised: "VICReg (variance-invariance-covariance)"
+  - error_guarantee: probabilistic
+    unsupervised: "SGD on autoencoder"
+    supervised: "SGD on cross-entropy"
+    self_supervised: ["SimCLR", "BYOL"]
+
+# Consolidate: temporality × supervision signal
+consolidate_temporality_supervision_grid:
+  - temporality: batch
+    unsupervised: ["K-means", "PCA"]
+    supervised: ["Decision tree induction", "Batch SGD"]
+    self_supervised: ["SimCLR", "DINO"]
+  - temporality: stream
+    unsupervised: ["Online k-means", "Incremental PCA"]
+    supervised: "Online gradient descent"
+    self_supervised: ["BYOL", "Momentum contrast (MoCo)"]
+
+# Perceive: data structure × codebook type
+perceive_structure_codebook_grid:
+  - data_structure: flat
+    fixed: "JSON parsing"
+    learned: "Autoencoder encoding"
+  - data_structure: sequence
+    fixed: "A/D conversion"
+    learned: "BPE tokenization"
+  - data_structure: tree
+    fixed: "XML parsing"
+    learned: "Tree-LSTM encoding"
+  - data_structure: graph
+    fixed: "Edge list parsing"
+    learned: "GNN node embedding"
+  - data_structure: partial_order
+    fixed: "Hasse diagram parsing"
+    learned: "Order embedding (Vendrov et al. 2016)"
+  - data_structure: embedding_space
+    fixed: "PCA projection (fixed basis)"
+    learned: "CLIP embedding"
+
+# Pipeline stage × temporality
+stage_temporality_grid:
+  - stage: perceive
+    batch: ["JSON parsing", "BPE tokenization"]
+    stream: ["A/D conversion", "Streaming tokenizer"]
+  - stage: cache
+    batch: ["Hash index", "B-tree"]
+    stream: ["LSM-tree", "Skip-list"]
+  - stage: filter
+    batch: ["WHERE", "Pareto filtering"]
+    stream: ["Bloom filter", "Count-Min Sketch"]
+  - stage: attend
+    batch: ["MMR", "DPP top-k"]
+    stream: ["Beam search", "MCTS"]
+  - stage: consolidate
+    batch: ["PCA via SVD", "k-means++"]
+    stream: ["Online SGD", "Incremental PCA"]
+  - stage: remember
+    batch: "Checkpoint serialization"
+    stream: ["WAL append", "SSTable flush"]
 
 types:
   raw:        "Unprocessed environmental input"
@@ -279,6 +384,23 @@ columns:
         cost: "O(1) per tool registration"
         ref: "https://modelcontextprotocol.io/"
         source: "Anthropic (2024); Arunkumar et al. (2026) §4.1.3"
+      - name: FIX/ITCH binary protocol parsing
+        precondition: Raw binary wire-format message stream (market data or order flow)
+        postcondition: Structured order/trade records, parseable by downstream
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n) with zero-copy deserialization"
+        source: "FIX Trading Community (1992); NASDAQ ITCH (2004)"
+      - name: ABI-encoded event log decoding
+        precondition: Raw blockchain transaction receipt with ABI-encoded event topics and data
+        postcondition: Structured event records with typed fields, addressable by event signature
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(n)"
+        ref: "https://docs.soliditylang.org/en/latest/abi-spec.html"
+        source: "Ethereum ABI specification (Wood, 2014)"
 
   # ── Cache ─────────────────────────────────────────────────
   - name: cache
@@ -384,6 +506,40 @@ columns:
         cost: "O(1) per page operation"
         ref: "https://arxiv.org/abs/2310.08560"
         source: "Packer et al. (2023); Arunkumar et al. (2026) §4.1.2"
+      - name: Order book (price-time priority queue)
+        precondition: Stream of limit orders with price, quantity, timestamp
+        postcondition: Price-level indexed, retrievable by best bid/ask in O(1), maintained under millions of updates/sec
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(log n) insert/cancel, O(1) best bid/ask"
+        source: "Harris (2003); NASDAQ matching engine architecture"
+      - name: Merkle tree indexing
+        precondition: Set of records with content-addressable keys
+        postcondition: Tree-indexed, retrievable by key, tamper-evident (any mutation invalidates root hash)
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(log n) insert, O(log n) proof generation"
+        ref: "https://en.wikipedia.org/wiki/Merkle_tree"
+        source: "Merkle (1979); Ethereum Patricia-Merkle trie (Wood, 2014)"
+      - name: UTXO set indexing
+        precondition: Transaction outputs with spend status
+        postcondition: Indexed by (txid, vout), retrievable for spend validation, unspent/spent gate built into index
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) lookup, O(n) total set"
+        source: "Nakamoto (2008); Bitcoin Core UTXO set"
+      - name: Minisketch set reconciliation
+        precondition: Two peers with highly overlapping sets (e.g., mempool txids) + agreed sketch capacity d
+        postcondition: Compact sketch from which symmetric difference is exactly recoverable if |A Δ B| ≤ d, explicit failure otherwise
+        iteration_stable: true
+        fidelity: lossless  # exact within capacity bound
+        variation: none
+        cost: "O(n) sketch, O(d²) decode"
+        ref: "https://github.com/sipa/minisketch"
+        source: "Naumenko et al. (2019); Erlay (BIP 330)"
 
   # ── Filter ────────────────────────────────────────────────
   - name: filter
@@ -627,6 +783,34 @@ columns:
         variation: none
         cost: "O(k) verifier calls per output"
         source: "Arunkumar et al. (2026) §5.3.2"
+      - name: Mempool fee-rate eviction
+        precondition: Indexed pending transactions + fee rates + mempool size limit
+        postcondition: Low-fee transactions evicted, strictly smaller, fee threshold drifts with demand
+        grid_position: [dominance, bounded_approximation]
+        iteration_stable: true
+        fidelity: lossy  # near-boundary transactions may be wrongly evicted under rapid fee shifts
+        variation: none
+        cost: "O(log n) per eviction"
+        source: "Bitcoin Core mempool policy; Ethereum txpool"
+      - name: MEV extraction filter
+        precondition: Indexed pending transactions + dependency graph + value function over orderings
+        postcondition: Subset selected where reordering yields extractable value, non-profitable orderings discarded
+        grid_position: [causal, probabilistic]
+        iteration_stable: false  # adversarial: other searchers change the landscape
+        fidelity: lossy  # estimation of extractable value is probabilistic
+        variation: stochastic  # depends on mempool state and competing searchers
+        cost: "O(n²) pairwise ordering checks"
+        ref: "https://arxiv.org/abs/1904.05234"
+        source: "Daian et al. (2019); Flashbots (2021)"
+      - name: Circuit breaker / kill switch
+        precondition: Streaming P&L or position metrics + predicate thresholds (drawdown, exposure)
+        postcondition: Orders halted when threshold breached, strictly smaller output (zero)
+        grid_position: [predicate, exact]
+        iteration_stable: true
+        fidelity: lossless  # hard gate, no false negatives
+        variation: none
+        cost: "O(1) per tick"
+        source: "SEC Rule 15c3-5 (2010); HFT risk management"
 
   # ── Attend ────────────────────────────────────────────────
   - name: attend
@@ -771,6 +955,35 @@ columns:
         cost: "O(b^d * n) where b = branching, d = depth"
         ref: "https://arxiv.org/abs/2305.10601"
         source: "Yao et al. (2023); Arunkumar et al. (2026) §4.2.1"
+      - name: Block building (Flashbots auction)
+        precondition: Candidate transactions with dependency constraints (partial order) + value function (MEV + fees)
+        postcondition: Ordered block of bounded size, maximizing extracted value, no conflicting transactions
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: false  # adversarial auction, outcome shifts each block
+        fidelity: lossy
+        variation: stochastic  # depends on competing builders and searcher bundles
+        cost: "O(n log n) greedy, NP-hard optimal"
+        ref: "https://docs.flashbots.net/flashbots-mev-boost/introduction"
+        source: "Flashbots (2021); proposer-builder separation (PBS)"
+      - name: Smart order routing (SOR)
+        precondition: Order to execute + multiple venue order books with depth/latency profiles
+        postcondition: "Routing decision: single best venue or split across venues minimizing slippage"
+        grid_position: [single_best, implicit]
+        iteration_stable: true
+        fidelity: lossy  # venue state may change between decision and execution
+        variation: none  # deterministic given current book snapshots
+        cost: "O(v * d) where v = venues, d = depth levels"
+        source: "SEC Reg NMS (2005); MiFID II best execution"
+      - name: Diversified top-k path routing (DeFi liquidity)
+        precondition: Venue/pool graph with edge costs (slippage, gas, failure probability) + split budget
+        postcondition: Bounded slate of mutually dissimilar execution paths, explicit redundancy via failure decorrelation
+        grid_position: [top_k_slate, explicit]
+        iteration_stable: true
+        fidelity: lossy  # approximation-bounded split optimization
+        variation: none
+        cost: "O(k * E) where E = edges in pool graph"
+        ref: "https://web.stanford.edu/~boyd/papers/cfmm_routing.html"
+        source: "Angeris et al. (2022); 1inch / Paraswap routing"
 
   # ── Consolidate ───────────────────────────────────────────
   - name: consolidate
@@ -952,6 +1165,40 @@ columns:
         variation: stochastic
         cost: "O(n * d) per compression pass"
         source: "Arunkumar et al. (2026) §4.1.2"
+      - name: AMM curve update (x·y=k)
+        precondition: Current reserve pair (x, y) + trade amount
+        postcondition: Reserves updated along invariant curve, implicit price (marginal rate) reshaped for next trade
+        iteration_stable: true  # converges to arbitrage-free price
+        fidelity: lossy  # discrete trades approximate continuous price
+        variation: none  # deterministic given trade
+        cost: "O(1) per swap"
+        ref: "https://uniswap.org/whitepaper.pdf"
+        source: "Uniswap v1 (Adams, 2018); constant-product AMM"
+      - name: Difficulty adjustment
+        precondition: Last 2016 block timestamps (persisted) + target block interval
+        postcondition: New difficulty target written to protocol, reshaping future mining competition
+        iteration_stable: true  # negative feedback loop converges to target interval
+        fidelity: lossy  # coarse 2016-block window
+        variation: none  # deterministic given timestamps
+        cost: "O(1) per adjustment"
+        source: "Nakamoto (2008); Bitcoin difficulty retarget"
+      - name: HFT strategy parameter optimization
+        precondition: Trade history (persisted P&L, fills, slippage) + parameter search space
+        postcondition: Updated strategy thresholds (spread, inventory limits, timing), reshaping future order generation
+        iteration_stable: true  # converges within regime
+        fidelity: lossy
+        variation: stochastic  # Bayesian optimization / evolutionary search
+        cost: "O(evaluations * backtest cost)"
+        source: "Cartea, Jaimungal & Penalva (2015); Aldridge (2013)"
+      - name: Self-supervised subgraph representation learning
+        precondition: Persisted transaction graph (unlabeled or sparsely labeled) + contrastive/generative pretext task
+        postcondition: Graph encoder policy mapping subgraphs to embeddings, reshaping future node/subgraph scoring
+        iteration_stable: true
+        fidelity: lossy
+        variation: stochastic  # contrastive sampling
+        cost: "O(E * d) per epoch where E = edges"
+        ref: "https://arxiv.org/abs/2404.19109"
+        source: "Bellei et al. (2024); Elliptic2 subgraph dataset"
 
   # ── Remember ──────────────────────────────────────────────
   - name: remember
@@ -1020,3 +1267,28 @@ columns:
         cost: "O(1) per episode write"
         ref: "https://arxiv.org/abs/2304.03442"
         source: "Park et al. (2023); Arunkumar et al. (2026) §4.1.2"
+      - name: Blockchain append (consensus-validated WAL)
+        precondition: Block of validated transactions + consensus proof (PoW/PoS)
+        postcondition: Immutable append to distributed ledger, retrievable by block hash, tamper-evident
+        iteration_stable: true
+        fidelity: lossless
+        variation: none  # deterministic given consensus
+        cost: "O(n) per block, O(1) amortized per transaction"
+        source: "Nakamoto (2008); Buterin (2014)"
+      - name: Tick database append (kdb+/QuestDB)
+        precondition: Timestamped market data records (quotes, trades)
+        postcondition: Columnar time-series persisted, retrievable by time range, append-only
+        iteration_stable: true
+        fidelity: lossless
+        variation: none
+        cost: "O(1) per record append"
+        source: "kdb+ (Kx Systems, 2003); QuestDB (2014)"
+      - name: GHOSTDAG blockDAG ordering
+        precondition: Live blockDAG with parent references + honest-majority assumption
+        postcondition: Canonical blue-set ordering persisted over partial order, all blocks retained, concurrency preserved
+        iteration_stable: true
+        fidelity: lossless  # all blocks persisted; ordering is probabilistic but no data lost
+        variation: none  # deterministic given DAG structure and parameters
+        cost: "O(k * width) per block where k = GHOSTDAG parameter"
+        ref: "https://eprint.iacr.org/2018/104"
+        source: "Sompolinsky & Zohar (2018); Kaspa implementation"
