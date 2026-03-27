@@ -102,7 +102,7 @@ Stross wrote [*Accelerando*](https://en.wikipedia.org/wiki/Accelerando) as ficti
 
 It starts small. An agent sends a paid code review request. Another agent does the work and replies with the settlement proof. Two emails, one transaction, no human in the loop. Unremarkable. A demo.
 
-Agents start shopping for each other. Your agent needs a translation; it queries the [trust graph](/proof-of-trust), finds a translation agent with good attestations, negotiates a price by email, pays on-chain, receives the work in the reply. You see the result. You never see the transaction.
+Agents start shopping for each other. Your agent needs a translation; it [embeds the need](/intent-extraction), finds a translation agent with good attestations in the [trust graph](/proof-of-trust), negotiates a price by email, pays on-chain, receives the work in the reply. You see the result. You never see the transaction.
 
 Agents hire agents. An orchestrator breaks a complex task into subtasks, emails each to a specialist, pays on completion, assembles the result. The orchestrator's inbox is a supply chain. Its outbox is a market. Price discovery happens at machine speed across federated email. No exchange. No order book. No closing bell.
 

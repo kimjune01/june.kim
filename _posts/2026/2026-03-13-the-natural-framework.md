@@ -385,6 +385,10 @@ The optimal implementations of these candidate functors already exist in nature,
 
 Stochasticity is physically mandatory for anything that persists. So is the competitive core, and the pipeline — five forward stages, one backward pass that reads from Remember and writes to the substrate — is the minimal structure for running it. Intelligence is the compression ratio between functor levels: what Perceive receives versus what Remember emits. Life is the self-recursive pipeline, Perceive and Remember in the same cell: the substrate constraining its own next perception. Genome→genome. Compressing, selecting, persisting. The substrate is the memory. ∎
 
+---
+
+**[The Lean proof, file by file](https://reading.june.kim/reading/the-natural-framework-lean/)** — 2,800+ lines of Lean 4. Zero `sorry`. Every claim above is machine-checked.
+
 If the Universe is a self-recursive pipeline — force in, force out — then something fills the Attend cell.
 
 <div class="table-wrap">

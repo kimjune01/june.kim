@@ -1,7 +1,7 @@
 ---
 layout: post-wide
 title: "The Parts Bin"
-tags: cognition
+tags: cognition methodology
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [The Handshake](/the-handshake).*
@@ -10,135 +10,70 @@ tags: cognition
 
 ### How to use this
 
-[The Natural Framework](/the-natural-framework) derives six roles. [The Handshake](/the-handshake) gives each a contract. This post is the catalog of operations that satisfy them and the grids that index them. An agent uses it in four steps:
+Every information-processing system is built from the same six operations. Most of them already exist. [The Natural Framework](/the-natural-framework) derives the six roles; [The Handshake](/the-handshake) gives each a contract. This post indexes the operations that satisfy them so an agent can look up what fits. Four steps:
 
 **Describe.** A product manager says: "users sign up but never come back." An agent maps this to the six steps. Cache works. Users arrive and data is stored. Filter is missing. Users get everything, keep nothing. Consolidate is nil. Nothing changes between sessions.
 
 **Diagnose.** The agent isolates Filter. Then drills deeper: is it the precondition (wrong input from upstream), the operation (wrong mechanism), the postcondition (contract not satisfied), the fidelity (contract satisfied but too lossy), or the scale (right operation, wrong timescale)?
 
-**Prescribe.** The agent queries the taxonomy. Filters by: matching precondition, matching postcondition, sufficient fidelity, compatible scale. Returns a ranked list of candidate operations from across domains. "Your Filter slot needs: output strictly smaller, criterion applied uniformly. Candidates from the parts bin, ordered by fidelity and cost."
+**Prescribe.** The agent queries the grid. The retention problem is Filter × flat data × predicate semantics. Candidates: threshold filtering, Bloom filter, propensity score gate. The agent ranks by fidelity and cost, returns the short list.
 
-**Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. If not, it flags the interface mismatch before you build it.
+**Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. Threshold filtering outputs a strictly smaller subset. Does Attend expect that? Yes. Ship it.
 
-Machine-readable version: [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
+**Implement.** The four steps above produce a contract: broken slot, candidate operation, verified pre/postconditions. That's the PROBLEM.md that [Volley](/volley) expects as input. [Blind-blind-merge](/blind-blind-merge) it into code.
 
-### Catalog
+Machine-readable version: [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml) (50+ operations with sources, preconditions, postconditions). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
 
-Each entry is an operation: input in, output out. If the precondition and postcondition match the contract, the operation fits the slot. Filter decides per-item admissibility. Attend decides how admitted items relate to each other: order, diversity, and bound are slate-level properties.
+### Six stages
 
-**Perceive** (raw → encoded) — the column every system gets right, because nothing else works until it does.
+**Perceive** (raw → encoded): JSON parsing, A/D conversion, positional encoding. Nothing else works until this does.
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td>Lexical analysis</td><td>Raw byte stream</td><td>Token sequence, parseable</td></tr>
-<tr><td>Parsing (LL/LR)</td><td>Token stream, conforms to grammar</td><td>AST with explicit structure, traversable</td></tr>
-<tr><td>JSON parsing</td><td>Raw string, well-formed</td><td>Structured object, addressable by key</td></tr>
-<tr><td>A/D conversion</td><td>Continuous analog signal</td><td>Discrete samples, quantized</td></tr>
-<tr><td><a href="https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf">SIFT descriptor extraction</a></td><td>Raw pixel grid</td><td>Keypoint descriptors, matchable</td></tr>
-<tr><td><a href="/filling-the-blanks#8-streaming-tokenizer">Streaming tokenizer</a></td><td>Text stream + merge threshold + window size</td><td>Token IDs, backward-compatible, bounded retokenization</td></tr>
-</table>
+**Cache** (encoded → indexed): hash tables, B-trees, inverted indexes. [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures) built a periodic table from five design primitives. Soar's [RETE network](https://en.wikipedia.org/wiki/Rete_algorithm) is the exemplar: match cost stays proportional to change, not total knowledge.
 
-**Cache** (encoded → indexed) — the most studied column. [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures) built a periodic table from five design primitives.
+**Filter** (indexed → selected, strictly smaller): WHERE clauses, k-NN radius pruning, Pareto filtering, [graph causal filters](/return-to-sender). One per selection semantic: predicate, similarity, dominance, causal. The [derivation](/the-natural-framework#six-steps) proves a gate must exist whenever outputs are a proper subset of inputs. Filter decides *which items pass*. Attend decides *how the survivors relate*.
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td>Hash indexing</td><td>Records with stable keys</td><td>Keyed index, exact retrieval by key</td></tr>
-<tr><td>B-tree index construction</td><td>Records with ordered keys</td><td>Balanced index, retrieval + range queries</td></tr>
-<tr><td>Trie insertion</td><td>String keys over finite alphabet</td><td>Prefix-indexed, retrieval by string or prefix</td></tr>
-<tr><td>Inverted index construction</td><td>Tokenized corpus with document IDs</td><td>Posting lists, retrieval by term</td></tr>
-<tr><td>LSM-tree flush</td><td>Sorted runs in memory</td><td>Persistent key-value index, retrievable after compaction</td></tr>
-<tr><td>Skip-list indexing</td><td>Ordered entries</td><td>Probabilistic index, O(log n) retrieval</td></tr>
-</table>
+**Attend** ((policy, selected) → ranked, diverse, bounded): MMR, [git bisect](https://git-scm.com/docs/git-bisect-lk2009), dot-product attention, [poset diverse top-k](/filling-the-blanks#3-diverse-top-k-from-a-poset). git bisect is the surprise: a version control tool doing the same job as MCTS, picking the single query that maximizes worst-case elimination on a DAG. The grid found it; domain expertise wouldn't. Policy is a routing function; control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound. [Soar](/diagnosis-soar)'s [staged preference resolution](https://soar.eecs.umich.edu/soar_manual/02_TheSoarArchitecture/) is the rare exception: reject, then better/worse, then best/worst, then indifferent — order, diversity, and bound in one mechanism. Forty years of agent-building produced it.
 
-**Filter** (indexed → selected, strictly smaller) — gates the data store, where most systems use exact predicates. The [derivation](/the-natural-framework#six-steps) proves a gate must exist whenever outputs are a proper subset of inputs.
+**Consolidate** (persisted → policy′): gradient descent, decision tree induction, [EBC/chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)), [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation). The backward pass: reads from Remember, writes to the substrate, reshaping how each forward stage processes next cycle. Its inner loop is itself a pipe (perceive, filter, attend, remember) and the [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination. [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column; a blank cell predicted a new algorithm that beat the state of the art. Soar is the most instructive failure: every forward stage worked, but Consolidate was [missing for episodic and semantic memory](/diagnosis-soar#the-forgetting-asymmetry). The stores grew without bound and [perception narrowed to compensate](/diagnosis-soar#the-dominoes) — a clogged drain forcing the valve shut.
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td>Predicate selection (WHERE)</td><td>Indexed relation + boolean predicate</td><td>Subset matching predicate, strictly smaller</td></tr>
-<tr><td>Range query</td><td>Ordered index + interval bounds</td><td>Subset within interval, strictly smaller</td></tr>
-<tr><td>Threshold filtering</td><td>Scored items + threshold t</td><td>Subset meeting threshold, strictly smaller</td></tr>
-<tr><td>Regex extraction</td><td>String corpus + pattern</td><td>Matching spans retained, non-matches discarded</td></tr>
-<tr><td>k-NN radius pruning</td><td>Metric index + query + radius r</td><td>Subset within radius, strictly smaller</td></tr>
-<tr><td>Pareto filtering</td><td>Candidates with objective vectors</td><td>Non-dominated subset, strictly smaller</td></tr>
-<tr><td><a href="/filling-the-blanks#4-spillover-adjusted-causal-segments">Spillover-adjusted causal filter</a></td><td>Time-series segments + treatment + kernel bandwidth</td><td>Segments with significant direct effect, FDR ≤ α</td></tr>
-<tr><td><a href="/filling-the-blanks#5-stochastic-dominance-over-subtrees">Subtree stochastic dominance</a></td><td>Tree + subtree nodes + leaf scores</td><td>Non-dominated subtrees, FDR ≤ α</td></tr>
-<tr><td><a href="/filling-the-blanks#6-order-context-similarity">Order-context similarity filter</a></td><td>Poset + query + similarity threshold</td><td>Items with Jaccard context overlap ≥ τ</td></tr>
-<tr><td><a href="/filling-the-blanks#7-embedding-space-causal-filtering">Embedding causal filter</a></td><td>Embeddings + treatment + outcomes + kernel bandwidth</td><td>Items with significant direct effect net of cannibalization, FDR ≤ α</td></tr>
-<tr><td><a href="/filling-the-blanks#1-residualized-dominance">Residualized dominance</a></td><td>Overlapping communities + objective vectors</td><td>Non-dominated after factoring out shared substructure</td></tr>
-<tr><td><a href="/filling-the-blanks#2-closure-level-causal-effects">Closure-level causal filter</a></td><td>Poset + outcomes + treatment closures</td><td>Nodes with significant closure-level effect, FDR ≤ α</td></tr>
-</table>
-
-**Attend** ((policy, selected) → ranked, diverse, bounded) — reads the policy store: given the survivors, which are worth pursuing? Policy is a function; it routes data. Control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound.
-
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td><a href="https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf">MMR re-ranking</a></td><td>Candidates + relevance scores + similarity measure</td><td>Top-k ordered, diversity penalized, bounded</td></tr>
-<tr><td><a href="https://arxiv.org/abs/1207.6083">DPP top-k selection</a></td><td>Candidates + relevance weights + similarity kernel</td><td>Top-k ranked, mutually dissimilar, bounded</td></tr>
-<tr><td><a href="https://link.springer.com/chapter/10.1007/978-3-642-12275-0_11">xQuAD re-ranking</a></td><td>Candidates + relevance + subtopic coverage</td><td>Top-k ordered, aspect coverage explicit, bounded</td></tr>
-<tr><td>Submodular maximization</td><td>Candidates + submodular utility (relevance + coverage)</td><td>Top-k greedy-ranked, diminishing-return diversity, bounded</td></tr>
-<tr><td>Diversified beam search</td><td>Stepwise expansions + diversity penalty</td><td>Top-b retained, non-redundant alternatives, bounded</td></tr>
-<tr><td><a href="/filling-the-blanks#3-diverse-top-k-from-a-poset">Poset diverse top-k</a></td><td>Poset + relevance scores + λ</td><td>Top-k ordered, order-context diversity, bounded</td></tr>
-</table>
-
-Near-misses (diagnostic counterexamples):
-- *Quicksort / Mergesort*: order only. No diversity, no bound.
-- *Top-k selection*: bounded, no diversity.
-- *PageRank*: ranking, no diversity, no bound.
-
-**Consolidate** (persisted → policy′) — the backward pass. Reads from Remember (which caches the ranked output) and writes to the substrate, reshaping how each forward stage processes on the next cycle. Consolidate's inner loop is itself a pipe: it perceives outcomes, filters which ones matter, attends to rank them, and remembers the update. The same catalog applies inside. If the parts bin has a blank at attend × partial order, any Consolidate operating on partial orders inherits that blank. The [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination: each inner level costs at least one bit, so the recursion bottoms out at passthrough.
-
-[I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column. A blank cell predicted a new algorithm that beat the state of the art.
-
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td>Gradient descent update</td><td>Loss contributions + current weights</td><td>Weights updated, future predictions altered</td></tr>
-<tr><td>Bayesian posterior update</td><td>Prior parameters + weighted observations</td><td>Posterior compressed, future inference altered</td></tr>
-<tr><td>K-means update</td><td>Weighted points + codebook size k</td><td>k prototypes replacing many points, lossy</td></tr>
-<tr><td>Incremental PCA</td><td>Observations in high dimension</td><td>Low-rank basis, future projection altered</td></tr>
-<tr><td>Decision tree induction</td><td>Ranked labeled examples</td><td>Compact rule set, future classification altered</td></tr>
-<tr><td>Prototype condensation</td><td>Ranked candidates + compression budget</td><td>Small exemplar set, lossy approximation for future matching</td></tr>
-</table>
-
-**Remember** (ranked → persisted) — the last forward stage. Lossless relative to its input: no additional loss at this step. Remember also serves as the cache for Consolidate: ranked outcomes are stored here, and Consolidate reads from them asynchronously. Remember is not a separate store. It is the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe. A log entry is Remember for the logger but Cache for the monitoring pipe.
-
-If the thing being persisted is a representation rather than the final entity, it's Cache at this level, not Remember. The discipline: list write operations only.
-
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0">Operation</th><th style="background:#f0f0f0">Precondition</th><th style="background:#f0f0f0">Postcondition</th></tr></thead>
-<tr><td>WAL append + fsync</td><td>Serialized state record</td><td>Durable on crash, recoverable next cycle</td></tr>
-<tr><td>Transaction commit</td><td>Validated write set</td><td>Persisted, visible for future reads</td></tr>
-<tr><td>Git object write + commit</td><td>Content-addressed objects + manifest</td><td>Durable commit graph, retrievable by hash</td></tr>
-<tr><td>Checkpoint serialization</td><td>In-memory model/state</td><td>Persisted checkpoint, loadable on next run</td></tr>
-<tr><td>Copy-on-write snapshot commit</td><td>Consistent compressed state image</td><td>Persistent snapshot, addressable by version</td></tr>
-<tr><td>SSTable flush</td><td>Immutable key-value run in memory</td><td>Durable on-disk run, retrievable by key</td></tr>
-</table>
+**Remember** (ranked → persisted): WAL append, git commit, SSTable flush. Lossless: no additional loss at this step. Not a separate store but the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe.
 
 ### Grid
 
 The catalog is a list. A list lets you browse. Browsing doesn't scale. You need an index. The index needs axes.
 
-Take **Filter**. Two axes, selection semantics vs. error guarantee:
+An axis qualifies if it's discrete, orthogonal, and crossing it with another produces cells that aren't trivially occupied or empty. Ten axes, forty-five possible planes. Most are uninteresting. The useful ones either validate (every cell fills on sight) or predict (cells where no known algorithm satisfies the contract).
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Exact</th><th style="background:#f0f0f0">Bounded approximation</th><th style="background:#f0f0f0">Probabilistic</th></tr></thead>
-<tr><td><strong>Predicate</strong></td><td>WHERE, range query</td><td>Threshold filtering (soft margin)</td><td><a href="https://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a></td></tr>
-<tr><td><strong>Similarity</strong></td><td>Exact NN pruning</td><td>k-NN radius pruning</td><td><a href="https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/">LSH filtering</a></td></tr>
-<tr><td><strong>Dominance</strong></td><td>Pareto filtering</td><td>ε-dominance filtering</td><td>Stochastic dominance</td></tr>
-<tr><td><strong>Causal</strong></td><td>do-calculus gate</td><td><a href="https://doi.org/10.1515/jci-2023-0059">Conformal causal selection</a></td><td>Propensity score gate</td></tr>
-</table>
+Four universal axes:
 
-Every cell fills. The axes validate.
+1. **Pipeline stage**: perceive, cache, filter, attend, consolidate, remember
+2. **Data structure**: flat, sequence, tree, graph, partial order, embedding space
+3. **Error guarantee**: exact, bounded, probabilistic
+4. **Temporality**: batch, stream
 
-**Attend.** Output form vs. redundancy control:
+Six stage-specific:
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">None</th><th style="background:#f0f0f0">Implicit</th><th style="background:#f0f0f0">Explicit</th></tr></thead>
-<tr><td><strong>Top-k slate</strong></td><td>Heap top-k</td><td>Beam search</td><td>MMR, DPP top-k, xQuAD</td></tr>
-<tr><td><strong>Single best</strong></td><td>argmax</td><td>Tournament selection</td><td>Simulated annealing, CMA-ES</td></tr>
-<tr><td><strong>Path/tree</strong></td><td>Dijkstra, A*</td><td>MCTS</td><td><a href="https://arxiv.org/abs/1111.2249">Portfolio solvers</a></td></tr>
-</table>
+<ol start="5">
+<li><strong>Selection semantics</strong> <em>(Filter)</em>: predicate, similarity, dominance, causal</li>
+<li><strong>Stationarity</strong> <em>(Filter)</em>: static, drifting</li>
+<li><strong>Output form</strong> <em>(Attend)</em>: top-k slate, single best, path/tree</li>
+<li><strong>Redundancy control</strong> <em>(Attend)</em>: none, implicit, explicit</li>
+<li><strong>Codebook type</strong> <em>(Perceive)</em>: fixed, learned</li>
+<li><strong>Supervision signal</strong> <em>(Consolidate)</em>: unsupervised, supervised, self-supervised</li>
+</ol>
 
-Given a broken slot, name the coordinates, look up the candidate. For blank cells and finer grids, see [The Missing Parts](/the-missing-parts).
+Select a plane to explore. Data is pulled from [`parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Add a grid there and it appears here.
+
+<iframe src="/assets/pivot-table.html" style="width:100%;border:none;min-height:320px;" id="pivot-frame"></iframe>
+<script>
+(function(){var f=document.getElementById('pivot-frame');if(!f)return;function resize(){f.style.height=f.contentDocument.body.scrollHeight+16+'px';}f.addEventListener('load',function(){resize();new MutationObserver(resize).observe(f.contentDocument.body,{childList:true,subtree:true});});})();
+</script>
+
+The data structure × selection semantics grid started with blanks. The causal column was emptiest, but two cells dissolved once the system could *act* on what it selected, a [Filter-Remember couple](/union-find-compaction) where selection is the intervention. [Operant conditioning](https://en.wikipedia.org/wiki/Operant_conditioning) fills sequence × causal; the [graph causal filter](/return-to-sender) fills graph × causal. The partial order row filled via [Filling the Blanks](/filling-the-blanks). All cells occupied.
+
+The stage × error guarantee grid has two structural nulls in Remember's row: the contract demands losslessness, so bounded or probabilistic persistence would violate it. A taxonomy that can only sort is a catalog. One that can rule things out is a theory. The empty cells are the theory.
+
+Given a broken slot, name the coordinates, look up the candidate.
 
 ---
 

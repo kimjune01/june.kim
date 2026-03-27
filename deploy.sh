@@ -62,6 +62,16 @@ APPS=(pinyin-chart jamdojo reading)
 #     rebuilds on any change — including the .html aliases this script
 #     creates. The rebuild wipes the aliases before sync can upload them,
 #     so they never reach S3. Guard at the top of the script.
+#
+# 15. App sync without --size-only re-uploads everything. Astro outputs
+#     content-hashed filenames, so checksums change on every build even
+#     when content is identical. Use --size-only for apps too.
+#
+# 16. Blog sync --delete removes app .html aliases. The exclude pattern
+#     "reading/*" protects the directory but not "reading.html" at the
+#     root. Since alias creation skips app dirs, _site/reading.html never
+#     exists locally, so --delete removes it from S3. Exclude "$app.html"
+#     alongside "$app/*" for all apps.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── build ────────────────────────────────────────────────────────────────────
@@ -120,7 +130,7 @@ fi
 
 APP_EXCLUDES=()
 for app in "${APPS[@]}"; do
-  APP_EXCLUDES+=(--exclude "$app/*")
+  APP_EXCLUDES+=(--exclude "$app/*" --exclude "$app.html")
 done
 
 echo "==> Checking what changed (dryrun)"
@@ -175,7 +185,7 @@ for app in "${APPS[@]}"; do
       echo "==> reading unchanged, skipping sync"
     else
       echo "==> Syncing $app to S3"
-      aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete
+      aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete --size-only
       aws s3 cp "$app/index.html" "s3://$BUCKET/$app.html" --content-type "text/html; charset=utf-8" --quiet
       echo "$READING_HEAD" > .reading-deployed
       echo "    $app synced"
@@ -185,7 +195,7 @@ for app in "${APPS[@]}"; do
     echo "==> $app unchanged, skipping sync"
   else
     echo "==> Syncing $app to S3"
-    aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete
+    aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete --size-only
     echo "    $app synced"
   fi
 done

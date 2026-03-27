@@ -1,0 +1,39 @@
+A Lean-Verified Crosswalk Between Stochastic Semantics, Contracts, and Hoare Logic
+
+June Kim
+
+We machine-check in Lean 4 (2,800 lines, zero sorry, standard library only) that behavioral contracts on stochastic morphisms and Hoare triples over FinStoch are the same structure, proved from two independent angles -- one functional, one imperative -- whose equivalence is compiled, not just described.
+
+The development models an information-processing pipeline as a Kleisli composition of stochastic kernels. Each stage carries a contract: a predicate on outputs preserved under monadic composition. A separate Hoare-logic layer builds Hoare triples and weakest preconditions from scratch, then a bridge theorem shows that ContractPreserving f Q is equivalent to {T} f {Q} -- a Hoare triple with trivial precondition. Both proof paths reach the same pipeline correctness result; Lean checks their agreement. A nontriviality counterexample rules out vacuous readings of the specification.
+
+This dual proof assembles a precise crosswalk across communities that have independently formalized overlapping structures under different names:
+
+- Markov categories <-> Kleisli(D). The ambient category is Kleisli(D) = FinStoch, the paradigmatic Markov category (Fritz 2020). The Lean Support typeclass is the possibilistic shadow of Fritz, Perrone, and Rezagholi (2021): support_bind is the monad multiplication for supp : V => H.
+
+- Imperative categories <-> contract composition. Bonchi, Di Lavore, Roman, and Staton (2025) prove that Stoch is a posetal imperative category (Corollary 76) and derive Hoare rules as theorems (Theorem 79). The Lean bridge theorem is an independent verification of this identification: behavioral contracts on stochastic morphisms are Hoare triples.
+
+- Graded program logics <-> handshake conditions. The contract predicate is close to a graded Hoare postcondition (Gaboardi et al. 2021); the handshake condition between adjacent stages resembles the restricted pointwise order in graded-monadic program logics (Kura et al. 2026). These correspondences are plausible rather than exact -- the ambient categories differ.
+
+- Categorical cybernetics <-> compositional predicates. Selection relations on parametrised optics (Capucci et al. 2021) and compositional equilibrium predicates (Ghani, Hedges et al. 2018) play the same structural role as contracts: behavioral predicates preserved under composition. The ambient structures (optics, games) differ from Kleisli.
+
+The crosswalk surfaces open problems visible only from the intersection: (1) the free N-semimodule monad (Kidney & Wu 2021) composed with the support monad morphism would track support cardinality through stochastic composition, connecting Leinster's magnitude (2021) to Fritz's possibilistic shadow -- this composite has not been constructed; (2) determinantal point processes have no categorical semantics; (3) Fritz's categorical entropy has no accompanying achievability or rate-distortion results inside Markov categories.
+
+Keywords: Markov categories, Hoare logic, Lean 4, possibilistic shadow, graded monads, imperative categories, weakest precondition, compositional contracts
+
+The talk is aimed at researchers who work in one of these formalisms but not the others.
+
+The Lean development is at github.com/kimjune01/natural-framework. A browsable Rosetta stone with the full crosswalk tables is at june.kim/framework-lexicon.
+
+References
+
+Bonchi, Di Lavore, Roman, Staton. Program Logics via Distributive Monoidal Categories. arXiv:2507.18238, 2025.
+Capucci, Gavranovic, Hedges, Rischel. Towards Foundations of Categorical Cybernetics. ACT 2021.
+Fritz. A synthetic approach to Markov kernels. Advances in Mathematics, 2020.
+Fritz, Perrone, Rezagholi. Probability, valuations, hyperspace: Three monads on Top and the support as a morphism. MSCS, 2021.
+Gaboardi, Katsumata, Orchard, Sato. Graded Hoare Logic and its Categorical Semantics. ESOP 2021.
+Ghani, Kupke, Lambert, Forsberg. Compositional Game Theory with Mixed Strategies. APLAS 2020.
+Kidney, Wu. Algebras for Weighted Search. ICFP 2021.
+Kura, Gaboardi, Sekiyama, Unno. A Category-Theoretic Framework for Dependent Effect Systems. ESOP 2026.
+Leinster. Entropy and Diversity: The Axiomatic Approach. Cambridge, 2021.
+Liell-Cock, Staton. Compositional Imprecise Probability. POPL 2025.
+Sato, Katsumata. Divergences on Monads for Relational Program Logics. MSCS 2023.

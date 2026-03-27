@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lora', Georgia, serif; font-size: 14px; background: #fff; }
+select { font-family: inherit; font-size: 13px; padding: 4px 24px 4px 8px; border: none; border-bottom: 1px solid #ddd; color: #999; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23bbb'/%3E%3C/svg%3E") no-repeat right 6px center; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; }
+select:hover { color: #555; border-bottom-color: #999; }
+table { width: 100%; border-collapse: collapse; table-layout: auto; }
+th { font-family: 'Avenir', sans-serif; text-align: left; padding: 8px 10px; background: #f0f0f0; font-size: 13px; white-space: nowrap; border-bottom: 2px solid #ddd; }
+td { padding: 6px 10px; vertical-align: top; line-height: 1.35; border-bottom: 1px solid #eee; }
+td:first-child { font-family: 'Avenir', sans-serif; font-weight: 500; white-space: nowrap; }
+td.dim { opacity: 0.35; font-style: italic; }
+
+</style>
+</head>
+<body>
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;">
+<span style="font-family:'Avenir',sans-serif;font-size:13px;color:#666;text-transform:uppercase;letter-spacing:1px;">Parts Bin Pivot Table</span>
+<select id="plane-select"></select>
+</div>
+<table id="pivot-table"></table>
+<script>
+fetch('/assets/parts-bin.json')
+  .then(function(r){return r.json();})
+  .then(boot);
+
+function boot(raw) {
+  var labels = {
+    perceive:'Perceive', cache:'Cache', filter:'Filter', attend:'Attend',
+    consolidate:'Consolidate', remember:'Remember',
+    flat:'Flat', sequence:'Sequence', tree:'Tree', graph:'Graph',
+    partial_order:'Partial order', embedding_space:'Embedding space',
+    exact:'Exact', bounded:'Bounded', probabilistic:'Probabilistic',
+    bounded_approximation:'Bounded approximation',
+    batch:'Batch', stream:'Stream',
+    predicate:'Predicate', similarity:'Similarity', dominance:'Dominance', causal:'Causal',
+    static:'Static', drifting:'Drifting',
+    top_k_slate:'Top-k slate', single_best:'Single best', path_tree:'Path/tree',
+    none:'None', implicit:'Implicit', explicit:'Explicit',
+    fixed:'Fixed', learned:'Learned',
+    unsupervised:'Unsupervised', supervised:'Supervised', self_supervised:'Self-supervised'
+  };
+  function L(s){return labels[s]||s.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}
+
+  function C(v){
+    if(v==null)return null;
+    if(Array.isArray(v))return v.join(', ');
+    return String(v);
+  }
+
+  var planes = [];
+
+  (raw.columns||[]).forEach(function(col){
+    var a=col.grid_axes;
+    if(col.grid&&a&&a.rows&&a.cols){
+      var d=[];
+      col.grid.forEach(function(e){var r=[];a.cols.forEach(function(c){r.push(C(e[c]));});d.push({label:L(e.row),cells:r});});
+      planes.push({name:L(col.name)+': '+a.rows.map(L).join('/')+' \u00d7 '+a.cols.map(L).join('/'),cols:a.cols.map(L),rows:d});
+    }
+    if(col.name==='filter'){
+      var sem=['predicate','similarity','dominance','causal'];
+      [{key:'structure_grid',rk:'structure',n:'Filter: data structure \u00d7 selection semantics (bounded)',def:true},
+       {key:'temporality_grid',rk:'temporality',n:'Filter: temporality \u00d7 selection semantics (bounded)'},
+       {key:'stationarity_grid',rk:'stationarity',n:'Filter: stationarity \u00d7 selection semantics (bounded)'}
+      ].forEach(function(g){
+        if(!col[g.key])return;
+        var d=[];col[g.key].forEach(function(e){var r=[];sem.forEach(function(c){r.push(C(e[c]));});d.push({label:L(e[g.rk]),cells:r});});
+        planes.push({name:g.n,cols:sem.map(L),rows:d,def:g.def});
+      });
+    }
+  });
+
+  // Auto-discover top-level *_grid keys
+  var skip = {columns:1, planes:1, axes:1, types:1};
+  Object.keys(raw).forEach(function(key) {
+    if (!key.endsWith('_grid') || skip[key]) return;
+    var arr = raw[key];
+    if (!Array.isArray(arr) || !arr.length) return;
+    var first = arr[0];
+    var rowKey = null, colKeys = [];
+    Object.keys(first).forEach(function(k) {
+      if (k === 'refs') return;
+      if (!rowKey) { rowKey = k; } else { colKeys.push(k); }
+    });
+    if (!rowKey || !colKeys.length) return;
+    var d = [];
+    arr.forEach(function(e) {
+      var r = []; colKeys.forEach(function(c) { r.push(C(e[c])); });
+      d.push({ label: L(e[rowKey]), cells: r });
+    });
+    var rowAxis = L(rowKey);
+    var colAxis = colKeys.map(L).join(', ');
+    planes.push({ name: rowAxis + ' \u00d7 ' + colAxis, cols: colKeys.map(L), rows: d });
+  });
+
+  var sel=document.getElementById('plane-select');
+  var tbl=document.getElementById('pivot-table');
+  var defIdx=0;
+  planes.forEach(function(p,i){
+    var o=document.createElement('option');o.value=i;o.textContent=p.name;
+    if(p.def)defIdx=i;sel.appendChild(o);
+  });
+  sel.value=defIdx;
+
+  function render(i){
+    var p=planes[i];if(!p)return;
+    var h='<thead><tr><th></th>';
+    p.cols.forEach(function(c){h+='<th>'+c+'</th>';});
+    h+='</tr></thead><tbody>';
+    p.rows.forEach(function(r){
+      h+='<tr><td><strong>'+r.label+'</strong></td>';
+      r.cells.forEach(function(v){
+        h+=v===null?'<td class="dim"><em>structural null</em></td>':'<td>'+v+'</td>';
+      });
+      h+='</tr>';
+    });
+    h+='</tbody>';
+    tbl.innerHTML=h;
+  }
+
+  sel.addEventListener('change',function(){render(+this.value);});
+  render(defIdx);
+}
+</script>
+</body>
+</html>

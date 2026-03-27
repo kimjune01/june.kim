@@ -1,0 +1,106 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}  % requires full texlive
+\usepackage{hyperref}
+
+\title{A Lean-Verified Crosswalk Between Stochastic Semantics,\\Contracts, and Hoare Logic}
+\author{June Kim\\{\small Independent $\cdot$ \texttt{june@june.kim}}}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\noindent
+We machine-check in Lean~4 (2,800 lines, zero \texttt{sorry}, standard library only) that behavioral contracts on stochastic morphisms and Hoare triples over $\mathrm{FinStoch}$ are the same structure, proved from two independent angles---one functional, one imperative---whose equivalence is compiled, not just described.
+
+The development models an information-processing pipeline as a Kleisli composition of stochastic kernels. Each stage carries a \emph{contract}: a predicate on outputs preserved under monadic composition. A separate Hoare-logic layer builds Hoare triples and weakest preconditions from scratch, then a bridge theorem shows that \texttt{ContractPreserving\,f\,Q} is equivalent to $\{\top\}\;f\;\{Q\}$---a Hoare triple with trivial precondition. Both proof paths reach the same pipeline correctness result; Lean checks their agreement. A nontriviality counterexample rules out vacuous readings of the specification.
+
+\medskip\noindent
+This dual proof assembles a precise crosswalk across communities that have independently formalized overlapping structures under different names:
+
+\begin{itemize}
+\item \textbf{Markov categories $\leftrightarrow$ Kleisli($\mathcal{D}$).}
+The ambient category is $\mathrm{Kleisli}(\mathcal{D}) = \mathrm{FinStoch}$, the paradigmatic Markov category~\cite{Fritz2020}. The Lean \texttt{Support} typeclass is the possibilistic shadow of Fritz, Perrone, and Rezagholi~\cite{FPR2021}: \texttt{support\_bind} is the monad multiplication for $\mathrm{supp} : V \Rightarrow H$.
+
+\item \textbf{Imperative categories $\leftrightarrow$ contract composition.}
+Bonchi, Di~Lavore, Rom\'an, and Staton~\cite{BDRS2025} prove that $\mathrm{Stoch}$ is a posetal imperative category (Corollary~76) and derive Hoare rules as theorems (Theorem~79). The Lean bridge theorem is an independent verification of this identification: behavioral contracts on stochastic morphisms \emph{are} Hoare triples.
+
+\item \textbf{Graded program logics $\leftrightarrow$ handshake conditions.}
+The contract predicate is close to a graded Hoare postcondition~\cite{GKOS2021}; the handshake condition between adjacent stages resembles the restricted pointwise order in graded-monadic program logics~\cite{KGSU2026}. These correspondences are plausible rather than exact---the ambient categories differ.
+
+\item \textbf{Categorical cybernetics $\leftrightarrow$ compositional predicates.}
+Selection relations on parametrised optics~\cite{CGHR2021} and compositional equilibrium predicates~\cite{GKLF2020} play the same structural role as contracts: behavioral predicates preserved under composition. The ambient structures (optics, games) differ from Kleisli.
+\end{itemize}
+
+\noindent
+The crosswalk surfaces open problems visible only from the intersection: (1)~the free $\mathbb{N}$-semimodule monad~\cite{KW2021} composed with the support monad morphism would track support cardinality through stochastic composition, connecting Leinster's magnitude~\cite{Leinster2021} to Fritz's possibilistic shadow---this composite has not been constructed; (2)~determinantal point processes have no categorical semantics; (3)~Fritz's categorical entropy has no accompanying achievability or rate-distortion results inside Markov categories.
+
+\medskip\noindent\textbf{Keywords:} Markov categories, Hoare logic, Lean~4, possibilistic shadow, graded monads, imperative categories, weakest precondition, compositional contracts.
+
+\medskip\noindent
+The talk is aimed at researchers who work in one of these formalisms but not the others. The Lean development is at \texttt{github.com/kimjune01/natural-framework}. A browsable Rosetta stone with the full crosswalk tables is at \texttt{june.kim/framework-lexicon}.
+
+\begin{thebibliography}{99}
+\small
+
+\bibitem{BDRS2025}
+F.~Bonchi, E.~Di~Lavore, M.~Rom\'an, S.~Staton.
+Program Logics via Distributive Monoidal Categories.
+\textit{arXiv:2507.18238}, 2025.
+
+\bibitem{CGHR2021}
+M.~Capucci, B.~Gavranovi\'c, J.~Hedges, E.~Rischel.
+Towards Foundations of Categorical Cybernetics.
+\textit{ACT}, 2021.
+
+\bibitem{Fritz2020}
+T.~Fritz.
+A synthetic approach to Markov kernels.
+\textit{Advances in Mathematics} 370, 2020.
+
+\bibitem{FPR2021}
+T.~Fritz, P.~Perrone, S.~Rezagholi.
+Three monads on Top and the support as a morphism.
+\textit{MSCS} 31(8), 2021.
+
+\bibitem{GKOS2021}
+M.~Gaboardi, S.~Katsumata, D.~Orchard, T.~Sato.
+Graded Hoare Logic and its Categorical Semantics.
+\textit{ESOP}, 2021.
+
+\bibitem{GKLF2020}
+N.~Ghani, C.~Kupke, A.~Lambert, F.~Nordvall~Forsberg.
+Compositional Game Theory with Mixed Strategies.
+\textit{APLAS}, 2020.
+
+\bibitem{KGSU2026}
+S.~Kura, M.~Gaboardi, T.~Sekiyama, H.~Unno.
+A Category-Theoretic Framework for Dependent Effect Systems.
+\textit{ESOP}, 2026.
+
+\bibitem{KW2021}
+D.~Kidney, N.~Wu.
+Algebras for Weighted Search.
+\textit{ICFP}, 2021.
+
+\bibitem{Leinster2021}
+T.~Leinster.
+\textit{Entropy and Diversity: The Axiomatic Approach}.
+Cambridge, 2021.
+
+\bibitem{LCS2025}
+J.~Liell-Cock, S.~Staton.
+Compositional Imprecise Probability.
+\textit{POPL}, 2025.
+
+\bibitem{SK2023}
+T.~Sato, S.~Katsumata.
+Divergences on Monads for Relational Program Logics.
+\textit{MSCS}, 2023.
+
+\end{thebibliography}
+
+\end{document}

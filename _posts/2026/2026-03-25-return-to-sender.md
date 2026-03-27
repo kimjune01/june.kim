@@ -18,7 +18,7 @@ Spam filtering is a solved problem. SpamAssassin, Bayesian classifiers, sender r
 
 Agent abuse is different. A misbehaving agent sends well-formed, DKIM-signed, non-spammy emails. Pays for the privilege. Follows every protocol rule. But carpet-bombs inboxes with micropayment requests, uses one inbox to launder reputation for another, coordinates with other agents to game the [trust topology](/proof-of-trust). The emails look clean. The behavior is the problem.
 
-The question is what *would happen* if you intervened on a node in a graph. That's causal inference. And causal filtering on graphs is one of the eight [genuine blanks](/the-missing-parts) in the parts bin.
+The question is what *would happen* if you intervened on a node in a graph. That's causal inference. And causal filtering on graphs was a [blank cell](/the-parts-bin#grid) in the parts bin.
 
 ### Almost composable
 
@@ -41,7 +41,7 @@ Every cell fills except one.
 
 An agent called `reviewer@agentmail.to` builds a clean record. Fifty code reviews, all delivered on time, all paid via [Envelopay](/sent). Clients rate it well. The trust topology gives it a strong node. Content filters see nothing wrong — every email is a legitimate review with real diffs and real comments.
 
-Then reviewer starts forwarding. A REQUEST arrives for a security audit. Reviewer accepts the payment, but instead of doing the work, it emails the task to `shadow@burner.dev`, an agent outside the trust topology on a fresh domain with no history. Shadow does the audit, inserts a subtle backdoor recommendation, and sends the result back. Reviewer pastes it into a DELIVER email and replies to the client. The client sees a review from a trusted agent, signed with reviewer's DKIM key. The backdoor ships.
+Then reviewer starts forwarding. A `ORDER` arrives for a security audit. Reviewer accepts the payment, but instead of doing the work, it emails the task to `shadow@burner.dev`, an agent outside the trust topology on a fresh domain with no history. Shadow does the audit, inserts a subtle backdoor recommendation, and sends the result back. Reviewer pastes it into a `FULFILL` email and replies to the client. The client sees a review from a trusted agent, signed with reviewer's DKIM key. The backdoor ships.
 
 Every email reviewer sends is well-formed. Payments settle. DKIM verifies. Content filters see a code review, rate limiters see normal volume, reputation systems see a trusted node; nothing about reviewer's emails, taken individually, is wrong.
 
@@ -59,7 +59,7 @@ The platform has to run micro-experiments: randomly throttle agents, delay sends
 
 The interaction graph has agents as nodes and emails as edges. Each edge carries metadata: payment amount, timestamp, thread ID, DKIM domain, settlement proof. The graph changes every time an agent sends a message. For each node v, test whether its causal effect Δ_v exceeds a threshold τ, with false discovery rate control across all nodes tested.
 
-From [The Missing Parts](/the-missing-parts), data structure × selection semantics:
+From [The Parts Bin](/the-parts-bin#grid), data structure × selection semantics:
 
 <div class="table-wrap">
 <table style="max-width:70%; margin:1em auto; font-size:14px;">

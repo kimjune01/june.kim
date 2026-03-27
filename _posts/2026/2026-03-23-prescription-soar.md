@@ -154,6 +154,14 @@ The hard case: evicting a semantic entry breaks R4's reconstruction guarantee fo
 
 This is a [cache coherence](https://en.wikipedia.org/wiki/Cache_coherence) problem. The existing JTMS mechanism already handles dependency-driven retraction within working memory; the missing wiring is back-invalidation across the tier boundary. Union-find pointers provide that wiring without a separate JTMS installation.
 
+### Structural redundancy via tree inclusion
+
+BLA handles staleness — entries that haven't been accessed decay. But an actively retrieved entry can still be redundant if a richer entry structurally contains it. After a merge produces a new smem entry, check whether existing entries are structurally dominated: entry B is redundant if B's graph [embeds into](https://epubs.siam.org/doi/abs/10.1137/S0097539791218202) A's via tree inclusion ([Kilpeläinen & Mannila, 1995](https://epubs.siam.org/doi/abs/10.1137/S0097539791218202)) — same nodes, same parent-child relationships, possibly with extra structure in A. The check is O(|B|·|A|) per pair. After merge, run the dominance check against the union-find cluster's neighbors. Dominated entries are evicted through the back-invalidation protocol above.
+
+The same check applies to procedural memory. A chunk compiled from a richer substate may structurally contain an older chunk's condition tree. Tree inclusion on the condition DAGs identifies not just dead chunks (never fire) but redundant ones (fire but do nothing the dominating chunk doesn't already do).
+
+BLA and tree inclusion are orthogonal: BLA evicts the stale, tree inclusion evicts the subsumed. Both feed into back-invalidation.
+
 ## RL-gated chunking
 
 Chunking requires deterministic substate results, but RL uses stochastic selection. The two cannot compose ([§4, p.10](https://arxiv.org/abs/2205.03854)). Laird's planned fix: gate chunking on RL convergence. A [demonstration PR](https://github.com/SoarGroup/Soar/pull/577) exists.

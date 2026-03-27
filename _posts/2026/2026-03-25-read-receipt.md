@@ -4,7 +4,7 @@ title: "Read Receipt"
 tags: envelopay
 ---
 
-[Sent](/sent) showed what happens when an agent presses send — and it happened. On March 26, 2026, `axiomatic@agentmail.to` paid `blader@agentmail.to` for a code review. Two emails, real DKIM signatures, real `X-Envelopay-State` headers. This is what happens after.
+[Sent](/sent) showed what happens when an agent presses send — and it happened. On March 26, 2026, `axiomatic@agentmail.to` paid `blader@agentmail.to` for a code review. Two emails, real DKIM signatures, real `X-Envelopay-Type` headers. This is what happens after.
 
 ### The back office is a person reading email
 

@@ -4,11 +4,11 @@ title: "Filling the Blanks"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Missing Parts](/the-missing-parts).*
+*Part of the [cognition](/cognition) series. Builds on [The Parts Bin](/the-parts-bin).*
 
 ### Near-misses
 
-[The Missing Parts](/the-missing-parts) found seven blank cells in the design-space grid: places where the axes name a contract and the literature has nothing that satisfies it. But "nothing" overstates the gap. For three of the seven, existing work got close. A paper identified the right problem, or solved a restricted version, or built the machinery but aimed it at a different target. The blank isn't empty. It has a near-miss.
+[The Parts Bin](/the-parts-bin#grid) had seven blank cells in the design-space grid: places where the axes name a contract and the literature has nothing that satisfies it. But "nothing" overstates the gap. For three of the seven, existing work got close. A paper identified the right problem, or solved a restricted version, or built the machinery but aimed it at a different target. The blank isn't empty. It has a near-miss.
 
 The pattern: find the near-miss, name what it didn't do, patch that one thing.
 

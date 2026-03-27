@@ -55,9 +55,9 @@ Five fully-occupied planes. The grid validates. Now for the blanks.
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Predicate</th><th style="background:#f0f0f0">Similarity</th><th style="background:#f0f0f0">Dominance</th><th style="background:#f0f0f0">Causal</th></tr></thead>
 <tr><td><strong>Flat</strong></td><td>Threshold filtering</td><td>k-NN radius pruning</td><td>ε-dominance</td><td><a href="https://doi.org/10.1515/jci-2023-0059">Conformal causal selection</a></td></tr>
-<tr><td><strong>Sequence</strong></td><td>Change-point detection</td><td>DTW pruning</td><td><a href="https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z">Dominant skyline over time series</a></td><td style="background:#fff3cd"><em>blank</em></td></tr>
-<tr><td><strong>Tree</strong></td><td>XPath + depth bound</td><td>Tree edit distance threshold</td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#e8f4e8"><a href="https://doi.org/10.1002/sim.9900">Luo & Guo</a><sup>†</sup></td></tr>
-<tr><td><strong>Graph</strong></td><td>Approx subgraph match</td><td>Graph kernel pruning</td><td><a href="https://weiguozheng.github.io/pub/tkde16-skyline.pdf">Subgraph skyline</a></td><td style="background:#fff3cd"><em>blank</em></td></tr>
+<tr><td><strong>Sequence</strong></td><td>Change-point detection</td><td>DTW pruning</td><td><a href="https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z">Dominant skyline over time series</a></td><td>Operant conditioning (Filter-Remember couple)</td></tr>
+<tr><td><strong>Tree</strong></td><td>XPath + depth bound</td><td>Tree edit distance threshold</td><td>Tree inclusion filter (Kilpeläinen-Mannila)</td><td style="background:#e8f4e8"><a href="https://doi.org/10.1002/sim.9900">Luo & Guo</a><sup>†</sup></td></tr>
+<tr><td><strong>Graph</strong></td><td>Approx subgraph match</td><td>Graph kernel pruning</td><td><a href="https://weiguozheng.github.io/pub/tkde16-skyline.pdf">Subgraph skyline</a></td><td><a href="/return-to-sender">Graph causal filter</a> (Filter-Remember couple)</td></tr>
 <tr><td><strong>Partial order</strong></td><td><a href="https://doi.org/10.1093/biomet/asy066">DAGGER</a></td><td style="background:#fff3cd"><em>blank</em></td><td style="background:#e8f4e8"><a href="https://ideas.repec.org/a/oup/biomet/v109y2022i2p457-471..html">Smoothed nested testing</a><sup>†</sup></td><td style="background:#fff3cd"><em>blank</em></td></tr>
 </table>
 
@@ -65,7 +65,7 @@ Five fully-occupied planes. The grid validates. Now for the blanks.
 
 The flat row fills completely. Everything below it is new. The predicate and similarity columns fill quickly. The dominance column mostly fills: [dominant skyline over multiple time series](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z) (2013) handles sequences, [subgraph skyline](https://weiguozheng.github.io/pub/tkde16-skyline.pdf) (TKDE 2016) handles graphs. Tree × dominance remains open.
 
-Five blanks. The causal column is the emptiest: only flat data has a complete algorithm. [Luo & Guo (2023)](https://doi.org/10.1002/sim.9900) fills tree × causal for prespecified subgroup hierarchies but not arbitrary trees. Partial order × similarity is the most conceptually interesting blank: similarity filtering assumes a metric space, but partial orders have reachability, not distance.
+Two blanks. The causal column was the emptiest, but two cells now fill via the same structural insight: causal filtering requires intervention, and intervention is a Filter-Remember couple — the selection *is* the environmental write. Operant conditioning fills sequence × causal (every animal with a nervous system runs it). The [graph causal filter](/return-to-sender) fills graph × causal (exposure mappings → e-values → e-BH). Both are unfillable from observation alone; both fill once the system acts on what it selects. [Luo & Guo (2023)](https://doi.org/10.1002/sim.9900) fills tree × causal thinly for prespecified subgroup hierarchies. Partial order × similarity is the most conceptually interesting remaining blank: similarity filtering assumes a metric space, but partial orders have reachability, not distance.
 
 **Plane 2: Codebook type × Temporality** (Perceive). "Can my encoder adapt online?"
 
@@ -95,19 +95,18 @@ The partial order column is the weak column. Attend × partial order is a genuin
 
 ### Why the blanks cluster
 
-Causal filtering on structured data is the emptiest region. Only flat data has a complete bounded-error causal filter. [CausalImpact](https://google.github.io/CausalImpact/CausalImpact.html) estimates effects on time series but doesn't gate with bounded error. Causal inference on known DAGs is a mature field, yet "filter graph nodes whose interventional effect exceeds τ with bounded error" has no standard algorithm. The pieces exist. The composition doesn't.
+Causal filtering on structured data was the emptiest region until the [Filter-Remember couple](/union-find-compaction) resolved two cells. The insight: causal filtering requires intervention, and for an acting system, the filter decision *is* the intervention. Operant conditioning fills sequence × causal — the agent's action is simultaneously a selection and an experiment, with pair frequency as the causal estimate and extinction as the filter. The [graph causal filter](/return-to-sender) fills graph × causal by composing exposure mappings, doubly robust scores, e-values, and e-BH. Both are unfillable from pure observation. Both fill once the system has the full six roles — because Consolidate creates the precondition (intervention policy) that Filter needs.
 
-Dominance on trees is the lone holdout in its column. Sequences have [dominant skyline over time series](https://jcst.ict.ac.cn/en/article/doi/10.1007/s11390-013-1363-z). Graphs have [subgraph skyline](https://weiguozheng.github.io/pub/tkde16-skyline.pdf). Partial orders have [smoothed nested testing](https://ideas.repec.org/a/oup/biomet/v109y2022i2p457-471..html) (under a narrow reading). Trees have nothing. "Subtree dominates subtree" needs a definition before it needs an algorithm.
+Dominance on trees was the lone holdout in its column. The definition was the missing piece, not the algorithm. [Tree inclusion](https://epubs.siam.org/doi/abs/10.1137/S0097539791218202) (Kilpeläinen & Mannila 1995) defines the relation: T₁ dominates T₂ if T₂ can be obtained from T₁ by deleting nodes and reconnecting children. That's injective, ancestor-preserving containment — a natural partial order on trees. The non-dominated set under tree inclusion is computable in O(n² · |P| · |T|) via candidate-set filtering. Approximate containment via [Pinter et al. (2007)](https://www.sciencedirect.com/science/article/pii/S1570866707000780) gives the bounded-error variant. The frequent subtree mining community (CMTreeMiner, Chi et al. 2004) already computed maximal sets under this relation — they just never called it a dominance filter.
 
 Partial order × similarity is the most conceptually interesting blank: similarity filtering assumes a metric space, but partial orders have reachability, not distance. What does "similar" mean when some pairs of items are incomparable?
 
 ### What the blanks tell us
 
-Eight blanks survive validation across four planes. They cluster around three broken assumptions:
+Five blanks survive validation across four planes. They cluster around two broken assumptions:
 
-1. **Causal estimation assumes pointwise treatment.** Structure and geometry introduce spillover, nesting, and interference. Four cells empty: sequence, graph, partial order, and embedding space × causal.
-2. **Tree dominance has no definition.** The other structured data types have skyline algorithms. Trees don't, because "subtree dominates subtree" requires a hierarchy-respecting comparison that nobody has formalized.
-3. **Diversity and similarity assume a metric space.** Partial orders have reachability, not distance. Two cells empty (similarity in plane 1, attend in plane 3).
+1. **Causal estimation assumes observation.** The literature searched for pure Filter algorithms on observational data. Two cells (sequence, graph) dissolve once you allow intervention — a Filter-Remember couple where selection *is* the environmental write. Partial order × causal remains open: the order relation complicates both intervention design and effect propagation.
+2. **Diversity and similarity assume a metric space.** Partial orders have reachability, not distance. Two cells empty (similarity in plane 1, attend in plane 3).
 
 Plus one in Perceive (learned codebook × stream, plane 2).
 

@@ -37,7 +37,7 @@ The ingredients, all running:
 2. **Shared storage outside any context window.** A separate store that outlives every session. The [consolidation harness](https://github.com/kimjune01/agi) already does this.
 3. **Threshold trigger.** Turn count, byte budget, action count. When the store accumulates enough, fire the cron job.
 4. **[Blind-blind-merge](/blind-blind-merge) as exploration.** Parallel rollouts, no coordination, merge at the root. The diversity is structural.
-5. **The [parts bin](/the-parts-bin) as pharmacy.** Every slot in the pipeline has a catalog of operations with preconditions and postconditions. [The Missing Parts](/the-missing-parts) found the blanks.
+5. **The [parts bin](/the-parts-bin) as pharmacy.** Every slot in the pipeline has a catalog of operations with preconditions and postconditions. The [grids](/the-parts-bin#grid) index them by data structure, error guarantee, and selection semantics.
 
 Everything runs. Nothing learns.
 
@@ -66,7 +66,7 @@ Without eviction, rules accumulate monotonically. [Soar's failure mode](https://
 <thead><tr><th style="background:#f0f0f0">Criterion</th><th style="background:#f0f0f0">Rule</th><th style="background:#f0f0f0">Action</th></tr></thead>
 <tr><td>Staleness</td><td><code>last_fired &lt; N cycles</code></td><td>Evict</td></tr>
 <tr><td>Redundancy</td><td>Two rules within ε</td><td>Merge into one</td></tr>
-<tr><td>Causation</td><td>Does this rule <em>cause</em> better outcomes or <em>correlate</em> with them? <a href="/the-missing-parts#filter-the-causal-row">The blank cell</a>.</td><td>Evict correlates</td></tr>
+<tr><td>Causation</td><td>Does this rule <em>cause</em> better outcomes or <em>correlate</em> with them? <a href="/the-parts-bin#grid">The causal row</a>.</td><td>Evict correlates</td></tr>
 </table>
 
 Once filtered, [attend](/the-parts-bin#attend) to survivors: keep rules that are both high-value and diverse. Then [compress](/the-parts-bin#consolidate): budget k exemplar rules that approximate the full set.
