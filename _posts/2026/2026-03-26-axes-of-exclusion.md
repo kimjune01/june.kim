@@ -133,6 +133,6 @@ Trust stays because exclusions are precise; revenue stays because everything els
 
 ---
 
-*Part of the [Vector Space](/vector-space) series. Written via the [double loop](/double-loop).*
+*Part of the [Vector Space](/vector-space) series. Written via the [double loop](/double-loop). [Experiment results](https://github.com/kimjune01/axes-experiment/blob/master/results.md): factored filtering helps sharp-boundary publishers (mental health +0.26, esports +0.03), hurts diffuse ones (finance −0.28). Population effect inconclusive at n=5 publishers.*
 
 *Adjacent work: [Kronecker product](https://en.wikipedia.org/wiki/Kronecker_product) (Zehfuss, 1858; named after Kronecker's 1880s Berlin lectures, published posthumously by [Hensel, 1903](https://archive.org/details/vorlesungenber00kronuoft)), per-query learned distance functions in [image retrieval](https://research.google/pubs/pub41900), [low-rank Mahalanobis learning](https://papers.nips.cc/paper/8369-fast-low-rank-metric-learning-for-large-scale-and-high-dimensional-data), [probabilistic retrieval thresholds](https://aclanthology.org/2025.emnlp-industry.161/), publisher-aware ad weighting in [patents](https://patents.google.com/patent/US9911135B2/en), [embedding-native ad retrieval](https://www.microsoft.com/en-us/research/publication/uni-retriever-towards-learning-the-unified-embedding-based-retriever-in-bing-sponsored-search/) at Bing, [ITML](https://jmlr.org/papers/v8/davis07a.html).*
