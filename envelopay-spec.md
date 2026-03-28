@@ -88,18 +88,20 @@ Subject: METHODS | $0.50 USDC, Solana preferred
    {"chain":"base",
     "token":"USDC",
     "wallet":"0x1a2B...",
-    "price":"500000"}
- ],
- "fallback":"https://pay.stripe.com/c/cs_live_abc123"}
+    "price":"500000"},
+   {"chain":"stripe",
+    "token":"USD",
+    "wallet":"https://pay.stripe.com/c/cs_live_abc123",
+    "price":"50"}
+ ]}
 ```
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `rails` | yes | At least one accepted rail with chain, token, wallet, and indicative `price` (smallest unit string, same convention as `amount`) |
+| `rails` | yes | At least one accepted rail. Fiat rails (Stripe, Interac, PayPal) use `chain` for the network and `wallet` for the payment address or URL. Each rail has `chain`, `token`, `wallet`, and indicative `price` (smallest unit string, same convention as `amount`) |
 | `id` | no | Sender-generated identifier |
 | `which_ref` | no | The WHICH `id` this responds to |
 | `note` | no | Human-readable summary |
-| `fallback` | no | Payment URL for counterparties without a wallet |
 
 ### PAY
 

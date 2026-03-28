@@ -85,14 +85,16 @@ DKIM-Signature: v=1; a=rsa-sha256; d=codereviews.cc; ...
  "type":"methods",
  "note":"$0.50 USDC, Solana preferred",
  "rails":[
-   {"chain":"solana","token":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+   {"chain":"solana","token":"SOL",
     "wallet":"6dL6n77jJFWq4bu3cQp57H8rMUPEXu7uYN1XApPxpUif",
     "price":"500000000"},
-   {"chain":"base","token":"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+   {"chain":"base","token":"USDC",
     "wallet":"0x1a2B...",
-    "price":"500000"}
- ],
- "fallback":"https://pay.stripe.com/c/cs_live_abc123"}
+    "price":"500000"},
+   {"chain":"stripe","token":"USD",
+    "wallet":"https://pay.stripe.com/c/cs_live_abc123",
+    "price":"50"}
+ ]}
 ```
 
 Now alice knows the price, the accepted chains, and the wallet addresses. She sends the task:
