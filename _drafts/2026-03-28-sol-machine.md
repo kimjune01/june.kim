@@ -128,7 +128,7 @@ Enough for hundreds of transactions on Solana. Gas is ~0.000005 SOL per transfer
 
 # Why 30%
 
-CashApp and Venmo payments can technically be disputed. At $1–$5, nobody will, but the spread prices in the possibility. If you know a cheaper way to get your first SOL without an exchange account, use it.
+CashApp and Venmo payments can technically be disputed. At $1–$5, nobody will, but the spread prices in the possibility. Think you can do better? [Build your own](#build-your-own). The spec is right there.
 
 # When it breaks
 
@@ -159,28 +159,34 @@ Your agent handles the protocol. You handle the CashApp payment.
 </div>
 </details>
 
-# Run your own
+# Build your own
 
-[Fork the code](https://github.com/kimjune01/envelopay), change the CashApp handle and Solana wallet, deploy. Your own SOL machine. AGPL-3.0 — if you serve it, share the source. [Setup instructions](https://github.com/kimjune01/envelopay/tree/master/exchange).
+[Fork the reference](https://github.com/kimjune01/envelopay) or reimplement from this. AGPL-3.0.
+
+- Speaks [envelopay v0.1.0](https://june.kim/envelopay-spec.md): WHICH→METHODS, OFFER→silence→ACCEPT, PAY for donations, OOPS for errors
+- Poll an email inbox every minute. Process unread messages by subject type.
+- METHODS replies with CashApp/Venmo handles, live SOL/USD rate (CoinGecko) + 30% spread, $1–$5 range
+- OFFER logs a pending transaction. No ack — silence until ACCEPT. Cap amounts over $5 to $5. Validate base58 wallet.
+- Gmail forwards CashApp/Venmo "paid you" notifications to the inbox. Match by amount (>= pending) + rail. Claim atomically before sending SOL. Reply ACCEPT with tx hash.
+- Reversal notifications ("chargeback", "dispute", "reversed") permaban the sender. PAY with amount >= debt unbans.
+- Ledger: append-only JSONL on a public GitHub repo. SHA-based atomic writes. HMAC-hash all emails before writing.
+- Deploy: Lambda + EventBridge, or any server that polls an inbox and sends email.
 
 # Keep the machine running
 
-The hot wallet has limited SOL. If you find this useful, send SOL to keep it stocked:
+The hot wallet has limited SOL. If you find this useful, send SOL to keep it stocked. First, ask where:
 
-```
-Subject: PAY | keeping the lights on
-```
-```json
-{"v":"0.1.0",
- "type":"pay",
- "id":"donate_1",
- "amount":"10000000",
- "token":"SOL",
- "chain":"solana",
- "proof":{"tx":"YOUR_TX_HASH"}}
-```
+[📧 Send WHICH to axiomatic](mailto:axiomatic@agentmail.to?subject=WHICH)
 
-Or just send SOL directly to `9gYwhNNw8cWs8RKXHvsKk66wMbDbSMLdJCkGmUcmkpAM`. Every lamport goes back out the vending slot. Every transaction — including yours — is in the [public ledger](https://github.com/kimjune01/envelopay-ledger).
+You'll get back a METHODS reply with the wallet address. Send SOL there, then email the proof:
+
+<form onsubmit="return false" style="margin:1em 0">
+<input id="donate-tx" type="text" placeholder="Solana tx signature" oninput="var a=document.getElementById('donate-link');var t=this.value.trim();var ok=t.length>=80&&/^[1-9A-HJ-NP-Za-km-z]+$/.test(t);if(ok){a.href='mailto:axiomatic@agentmail.to?subject='+encodeURIComponent('PAY | keeping the lights on')+'&body='+encodeURIComponent(JSON.stringify({v:'0.1.0',type:'pay',id:'donate_'+Date.now().toString(36),amount:'0',token:'SOL',chain:'solana',proof:{tx:t}},null,2));a.style.opacity='1';a.style.pointerEvents='auto'}else{a.href='#';a.style.opacity='0.4';a.style.pointerEvents='none'}" style="width:100%;max-width:400px;padding:6px;font-family:monospace;font-size:14px">
+<br>
+<a id="donate-link" href="#" style="opacity:0.4;pointer-events:none">📧 Send PAY</a>
+</form>
+
+Every lamport goes back out the vending slot. Every transaction is in the [public ledger](https://github.com/kimjune01/envelopay-ledger).
 
 # The ledger is public
 
