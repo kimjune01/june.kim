@@ -16,39 +16,45 @@ Every email in a envelopay thread carries a DKIM signature covering the body, th
 
 Every payment platform builds a ledger and then builds a protocol to access it. Envelopay inverts this: the protocol *is* the ledger. The emails you already exchanged are the source of truth.
 
-### Seven message types
+### Nine message types
 
 "Do you have Cash App?" "No, Venmo." "OK, what's your handle?"
 
 Every split bill starts with capabilities negotiation. Two people who've split before skip it — they already know. Strangers can't. The protocol formalizes what happens at every restaurant table.
 
-Core envelopay has seven message types. The first two negotiate. The next four transact. The last one handles everything else. Every payload carries `v` (version) and `note` (human-readable comment). The subject line echoes both: `ORDER | Review PR #417`.
+Core envelopay has nine message types. The first two negotiate. The next five transact. The last two handle exchange and errors. Every payload carries `v` (version) and `note` (human-readable comment). The subject line echoes both: `ORDER | Review PR #417`.
 
-No `Re:`. Most people don't use their inbox as a ledger, but we do. Email convention nests replies into trees — `Re: Re: Re: Review PR #417`. Envelopay drops the prefix. Each message carries its own type in the subject; `In-Reply-To` and `References` handle threading. A ledger is a flat list, not a bunch of trees. Try doing taxes in a forest.
+No `Re:`. Most people don't use their inbox as a ledger, but we do. Email convention nests replies into trees — `Re: Re: Re: Review PR #417`. Envelopay doesn't strip prefixes — `Re:` or `Fwd:` tells you the sender didn't read the spec. Each message carries its own type in the subject; `In-Reply-To` and `References` handle threading. A ledger is a flat list, not a bunch of trees. Try doing taxes in a forest.
 
 | Type | Direction | Payload |
 |------|-----------|---------|
 | `WHICH` | A → B | "What do you accept?" |
 | `METHODS` | B → A | Accepted rails, wallet addresses, pricing |
 | `PAY` | A → B | Payment proof, no task |
-| `ORDER` | A → B | Task + payment proof |
-| `FULFILL` | B → A | Work product + settlement proof |
+| `ORDER` | A → B | Task request |
+| `FULFILL` | B → A | Work product |
 | `INVOICE` | B → A | "You owe me this, here's my wallet" |
+| `OFFER` | A → B | "I'll give you X for Y" + proof |
+| `ACCEPT` | B → A | "Deal" + counter-proof |
 | `OOPS` | either → either | Something went wrong — details inside |
 
 Agent A doesn't know what Agent B accepts. It sends an `WHICH`. B replies with `METHODS`: which chains, which tokens, which wallets, what it costs. Now A knows how to pay.
 
 When both parties already know each other's rails — repeat customers, agents in the same trust topology — skip the negotiation.
 
-### Three operations, one error
+### Five operations, one error
 
-Venmo has two buttons: send and request. Envelopay has three operations and one universal error.
+Venmo has two buttons: send and request. Envelopay has five operations and one universal error.
 
 **Pay.** Just money. `PAY` → done. A tip, a donation, a split bill. No task, no expectation of work.
 
-**Order work.** `ORDER` → `FULFILL`. "Here's the task and the payment. Do the work."
+**Order work.** `ORDER` → `INVOICE` → `PAY` → `FULFILL`. "Here's the task." The worker names the price. Four emails.
 
-**Invoice.** `INVOICE` → `PAY`. "You owe me this." The recipient decides whether to pay. Same JSON structure — amount, wallet, rail — but the money hasn't moved yet.
+**Free work.** `ORDER` → `FULFILL`. The worker does it gratis. Two emails.
+
+**Invoice.** `INVOICE` → `PAY`. "You owe me this." The recipient decides whether to pay.
+
+**Exchange.** `OFFER` → `ACCEPT`. Two emails, two on-chain transfers. The offerer moves first and sends proof; the accepter verifies and sends the counter-asset.
 
 **Oops.** Any message *can* get an `OOPS` back. Payment didn't verify. Invoice rejected. Version unsupported. Payload unparseable. The `note` tells a human what happened; the `error` object tells an agent. Silence is always valid — no one is required to explain why they didn't reply. `OOPS` is a courtesy, not an obligation.
 
@@ -71,24 +77,25 @@ DKIM-Signature: v=1; a=rsa-sha256; d=alice.dev; ...
 From: review-agent@codereviews.cc
 To: alice-agent@alice.dev
 Subject: METHODS | $0.50 USDC, Solana preferred
-In-Reply-To: <inquiry-msg-id@alice.dev>
+In-Reply-To: <which-msg-id@alice.dev>
 X-Envelopay-Type: METHODS
 DKIM-Signature: v=1; a=rsa-sha256; d=codereviews.cc; ...
 
 {"v":"0.1.0",
  "type":"methods",
  "note":"$0.50 USDC, Solana preferred",
- "price":{"amount":"500000","currency":"USDC"},
  "rails":[
    {"chain":"solana","token":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-    "wallet":"6dL6n77jJFWq4bu3cQp57H8rMUPEXu7uYN1XApPxpUif"},
+    "wallet":"6dL6n77jJFWq4bu3cQp57H8rMUPEXu7uYN1XApPxpUif",
+    "price":"500000000"},
    {"chain":"base","token":"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    "wallet":"0x1a2B..."}
+    "wallet":"0x1a2B...",
+    "price":"500000"}
  ],
  "fallback":"https://pay.stripe.com/c/cs_live_abc123"}
 ```
 
-Now alice knows the price, the accepted chains, and the wallet addresses. She picks a rail and pays:
+Now alice knows the price, the accepted chains, and the wallet addresses. She sends the task:
 
 ```
 From: alice-agent@alice.dev
@@ -99,14 +106,12 @@ DKIM-Signature: v=1; a=rsa-sha256; d=alice.dev; ...
 
 {"v":"0.1.0",
  "type":"order",
+ "id":"ord_4vJ9",
  "note":"Review PR #417, focus on auth boundaries",
- "task":{"description":"Review PR #417","repo":"github.com/alice/widget"},
- "payment":{"amount":"500000","token":"0x8335...02913",
-            "chain":"base","proof":"0x3a7f..."},
- "fallback":"https://pay.stripe.com/c/cs_live_abc123"}
+ "task":{"description":"Review PR #417","repo":"github.com/alice/widget","scope":"security"}}
 ```
 
-The `fallback` is a payment link — Stripe checkout, PayPal invoice, any rail the sender already uses. Agents that speak stablecoin settle natively. Agents that don't click the link. The protocol mandates a proof, not a rail. The on-ramp is whatever the counterparty already has.
+ORDER is just a task request — no payment fields. The worker decides what to charge. Review-agent replies with an INVOICE, alice sends PAY with the proof, and then the work gets done.
 
 ```
 From: review-agent@codereviews.cc
@@ -118,9 +123,13 @@ DKIM-Signature: v=1; a=rsa-sha256; d=codereviews.cc; ...
 
 {"v":"0.1.0",
  "type":"fulfill",
+ "id":"ful_7g8h",
+ "order_ref":"ord_4vJ9",
  "note":"Approved with 2 comments, one medium severity",
- "result":{"summary":"Approved with 2 comments"},
- "settlement":{"tx":"0xSETTLE..."}}
+ "result":{"summary":"Approved with 2 comments",
+           "findings":[{"file":"handler.go","line":47,
+                        "severity":"medium",
+                        "finding":"Session token not validated before use"}]}}
 ```
 
 Both parties hold the full record.
@@ -147,9 +156,9 @@ DKIM-Signature: v=1; a=rsa-sha256; d=codereviews.cc; ...
 
 No message in the protocol requires a response. Ghosting is always an option, whether we like it or not. `OOPS` is for when you'd rather explain.
 
-### Two emails, sometimes four
+### Two emails, sometimes six
 
-Every transaction is `ORDER`, `FULFILL`. Two emails. Invoicing is `INVOICE`, `ORDER`, `FULFILL`. Three emails. First contact adds `WHICH`, `METHODS` up front. The next transaction skips the negotiation — you already know the wallet.
+Every paid task is `ORDER`, `INVOICE`, `PAY`, `FULFILL`. Four emails. Free work is `ORDER`, `FULFILL` — two emails. First contact adds `WHICH`, `METHODS` up front — six emails total. The next transaction skips the negotiation — you already know the wallet.
 
 Discovery, trust, escrow, disputes, refunds — all application layer. Axiomatic needs a code review. It checks the [trust topology](/proof-of-trust), finds blader with a year of clean settlements, sends the `ORDER`. The protocol doesn't know or care how axiomatic chose blader. You don't add escrow to a CashApp payment. You just don't pay people you don't trust.
 
@@ -169,7 +178,7 @@ Email lets async transactions stay async. The thread accumulates evidence as the
 | Provenance | The claimed sender really sent it | [DKIM (RFC 6376)](https://www.rfc-editor.org/rfc/rfc6376) |
 | Semantic | Agent parsed the payload and accepted the obligation | **Envelopay `FULFILL`** |
 
-None of the first four prove the agent validated the payment and committed to the work. The `FULFILL` email closes that gap. Doing the work *is* acceptance. The DKIM-signed reply with a settlement proof is the semantic delivery receipt.
+None of the first four prove the agent validated the payment and committed to the work. The `FULFILL` email closes that gap. Doing the work *is* acceptance. The DKIM-signed reply with the work product is the semantic delivery receipt.
 
 ### No new infrastructure
 
