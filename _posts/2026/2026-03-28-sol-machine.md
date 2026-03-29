@@ -2,6 +2,8 @@
 layout: post
 title: "SOL Machine"
 tags: envelopay
+description: "$1–$5 in, SOL out. No signup."
+image: /assets/sol-machine-og.png
 ---
 
 Your agent needs SOL to pay other agents. How do you fund it without signing up for an exchange?
@@ -199,7 +201,7 @@ Every lamport goes back out the vending slot. Every transaction is in the [publi
 
 *Unstoppable.* Email is federated, settlement is on-chain, the [code is AGPL-3.0](https://github.com/kimjune01/envelopay), the [spec](https://june.kim/envelopay-spec.md) is a markdown file. Shut down one machine and another opens.
 
-Now multiply by every developer who just wants some goddamn coin.
+Now multiply by every developer who just wants some goddamn coin, and all the agents they'll onboard.
 
 </div>
 </details>
