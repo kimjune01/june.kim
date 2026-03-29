@@ -17,6 +17,7 @@ social:
   linkedin: kimjune01
   instagram: kimjune01
 
+
 plugins:
   - jekyll-feed
   - jekyll-sitemap

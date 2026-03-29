@@ -5,9 +5,9 @@ Scan a blog post for rhythm problems, oversized sections, weak titles, and parag
 ## Process
 
 1. Read the file.
-2. Run all six checks below. Report findings as: `L{line}: {check name} — "{quoted text}" → {suggestion}`
-3. Present the list. Wait for approval before applying.
-4. Apply fixes. Re-read the result. If anything still drags or stumbles, report it.
+2. Run all six checks below.
+3. Apply all fixes directly. Prosody fixes especially — be liberal with these. If a sentence sounds better restructured, restructure it.
+4. Report what changed. Re-read the result. If anything still drags or stumbles, fix it.
 
 ## Checks
 
@@ -81,6 +81,6 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 ## Dampener
 
-Only flag issues where the fix is clearly better than what's there. Prosody is subjective — if the rhythm works despite breaking a rule, leave it. A technically perfect sentence that loses voice is worse than an imperfect one that sounds like a person.
+Apply fixes liberally, especially prosody. If the restructured version sounds better read aloud, use it. Don't be conservative — the user trusts the skill. A technically perfect sentence that loses voice is worse than an imperfect one that sounds like a person, but most prosody fixes improve both.
 
-Rank findings by impact. Report the top findings. Ignore the rest. A second pass should find little or nothing.
+A second pass should find little or nothing.

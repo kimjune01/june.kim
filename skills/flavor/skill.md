@@ -1,13 +1,13 @@
 ---
 name: flavor
-description: Scan a blog post for unlinked pop culture refs, proper nouns, named theories, and historical figures. Suggest hyperlinks with research. Don't change anything until the user approves.
+description: Scan a blog post for unlinked pop culture refs, proper nouns, named theories, and historical figures. Research and apply hyperlinks automatically.
 argument-hint: <file_path>
 allowed-tools: Read, Edit, Grep, Glob, WebSearch, WebFetch, AskUserQuestion
 ---
 
 # Flavor: Link Pop Culture and Proper Nouns
 
-Scan a blog post for pop culture references, proper nouns, named theories, historical figures, and film/book/music references that lack hyperlinks. Suggest links that give the reader instant context. Do not fix anything until the user approves.
+Scan a blog post for pop culture references, proper nouns, named theories, historical figures, and film/book/music references that lack hyperlinks. Research and apply links that give the reader instant context.
 
 ## Process
 
@@ -15,8 +15,8 @@ Scan a blog post for pop culture references, proper nouns, named theories, histo
 2. **Scan** for every unlinked reference that a reader might not recognize.
 3. **Research** each reference. Use WebSearch to find the best link: YouTube trailers/clips for films, DOIs for papers, Wikipedia for historical figures. Verify the link exists and points to the right thing.
 4. Report each as: `L{line}: {type} — "{quoted text}" → [link] {why this link}`
-5. Present the list. Wait for the user to say which to fix.
-6. Apply fixes. Link inline, don't add footnotes.
+5. Apply all fixes directly. Link inline, don't add footnotes.
+6. Report what was linked.
 
 ## What to Link
 

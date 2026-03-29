@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "post@agent"
+title: "post@agent.june.kim"
 tags: coding
 ---
 
@@ -60,4 +60,4 @@ I want to take a photo of something I made and have it on my site by the time I 
 
 ---
 
-*Source: [agent/handler.py](https://github.com/kimjune01/kimjune01.github.io/tree/master/agent)*
+*Source: [agent/](https://github.com/kimjune01/june.kim/tree/b3d523c/agent)*

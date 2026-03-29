@@ -92,15 +92,15 @@ stage_structure_grid:
     flat: ["WHERE", "Circuit breaker / kill switch", "Mempool fee-rate eviction"]
     sequence: ["Change-point detection", "Causal masking (Vaswani 2017)", "Policy-driven pruning / MemAgent (Arunkumar 2026)"]
     tree: ["XPath", "Hierarchical verification / MAKER (Arunkumar 2026)"]
-    graph: ["Subgraph match", "Justification-based truth maintenance (Soar)", "MEV extraction filter"]
+    graph: ["Subgraph match", "Justification-based truth maintenance (Soar)", "MEV extraction filter", "PC algorithm (Spirtes & Glymour 1993)"]
     partial_order: ["DAGGER (thin)"]
     embedding_space: ["c-ANN search (cover tree)"]
   - stage: attend
     flat: ["MMR", "Staged preference resolution (Soar)", "Scaled dot-product attention (Vaswani 2017)", "Multi-head projection (Vaswani 2017)"]
     sequence: ["Beam search", "Surprise gate + DPP thinning (prescription-soar)", "In-context learning (Zhao 2023)", "Chain-of-thought (Zhao 2023)", "ReAct loop (Arunkumar 2026)"]
     tree: ["MCTS", "Tree of Thoughts (Arunkumar 2026)"]
-    graph: ["Diversified top-k graph pattern matching", "Diversified top-k path routing (DeFi liquidity graphs)"]
-    partial_order: ["Poset diverse top-k (filling-the-blanks #3)", "Block building / Flashbots auction"]
+    graph: ["Diversified top-k graph pattern matching", "Diversified top-k path routing (DeFi liquidity graphs)", "GES (Chickering 2002)"]
+    partial_order: ["Poset diverse top-k (filling-the-blanks #3)", "Block building / Flashbots auction", "Simon's causal ordering (Simon 1953)"]
     embedding_space: ["MMR re-ranking"]
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
@@ -811,6 +811,16 @@ columns:
         variation: none
         cost: "O(1) per tick"
         source: "SEC Rule 15c3-5 (2010); HFT risk management"
+      - name: PC algorithm
+        precondition: Fully connected graph of causal hypotheses + oracle for conditional independence tests (statistical or human)
+        postcondition: DAG (CPDAG) with edges removed where conditional independence holds; root nodes are root causes
+        grid_position: [causal, exact]
+        iteration_stable: true  # same oracle answers → same DAG
+        fidelity: lossless  # under faithfulness assumption, recovers true equivalence class
+        variation: none
+        cost: "O(n^d) where d = max degree; log₂(n) interventional queries suffice for full orientation (Eberhardt 2005)"
+        ref: "https://doi.org/10.1177/089443939100900106"
+        source: "Spirtes & Glymour (1991); Spirtes, Glymour & Scheines (1993) Causation, Prediction, and Search"
 
   # ── Attend ────────────────────────────────────────────────
   - name: attend
@@ -984,6 +994,26 @@ columns:
         cost: "O(k * E) where E = edges in pool graph"
         ref: "https://web.stanford.edu/~boyd/papers/cfmm_routing.html"
         source: "Angeris et al. (2022); 1inch / Paraswap routing"
+      - name: GES (Greedy Equivalence Search)
+        precondition: Empty graph + scoring function (BIC/BDeu) over node-parent assignments, or human oracle for edge evaluation
+        postcondition: CPDAG (completed partially directed acyclic graph) representing the Markov equivalence class; root nodes are candidate root causes
+        grid_position: [path_tree, implicit]
+        iteration_stable: true  # greedy, deterministic given scores
+        fidelity: lossy  # recovers equivalence class, not unique DAG (interventions needed to fully orient)
+        variation: none
+        cost: "O(n^4) worst case; typically much faster on sparse graphs"
+        ref: "https://www.jmlr.org/papers/volume3/chickering02b/chickering02b.pdf"
+        source: "Chickering (2002); converges to same output as PC under faithfulness"
+      - name: Simon's causal ordering
+        precondition: System of modules with input-output contracts (equations); dependency graph between modules
+        postcondition: DAG of causally ordered blocks (Dulmage-Mendelsohn decomposition); root blocks have no incoming dependencies — these are root causes
+        grid_position: [path_tree, implicit]
+        iteration_stable: true
+        fidelity: exact  # decomposition is unique for a given equation system
+        variation: none
+        cost: "O(n + m) where n = modules, m = dependencies (Hopcroft-Karp matching)"
+        ref: "https://doi.org/10.2307/1907758"
+        source: "Simon (1953); Iwasaki & Simon (1994) formalized for causal models"
 
   # ── Consolidate ───────────────────────────────────────────
   - name: consolidate
