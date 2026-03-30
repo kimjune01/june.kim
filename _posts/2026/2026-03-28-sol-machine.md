@@ -44,18 +44,20 @@ No signup. No KYC. [Get a wallet](https://solana.com/docs/intro/installation) if
 <br><br>
 <input id="cashtag" type="text" placeholder="$cashtag or @venmo" oninput="updateOfferLink()" style="width:100%;max-width:400px;padding:6px;font-family:monospace;font-size:14px">
 <br><br>
-<a id="offer-link" href="#" style="opacity:0.4;pointer-events:none">📧 Send OFFER to SOL Machine (axiomatic)</a>
+<a id="offer-link" href="#" style="opacity:0.4;pointer-events:none">📧 Send OFFER</a> &nbsp; <a id="gmail-link" href="#" style="opacity:0.4;pointer-events:none">Gmail ↗</a>
 </form>
 
 <script>
 function updateOfferLink() {
   var a = document.getElementById('offer-link');
+  var g = document.getElementById('gmail-link');
   var w = document.getElementById('wallet').value.trim();
   var tag = document.getElementById('cashtag').value.trim();
   var rail = tag.startsWith('$') ? 'cashapp' : tag.startsWith('@') ? 'venmo' : '';
   var walletOk = w.length >= 32 && w.length <= 44 && /^[1-9A-HJ-NP-Za-km-z]+$/.test(w);
   var tagOk = rail && tag.length >= 2;
   if (walletOk && tagOk) {
+    var subj = 'OFFER | SOL for ' + tag;
     var body = JSON.stringify({
       v: '0.1.0',
       type: 'offer',
@@ -64,14 +66,14 @@ function updateOfferLink() {
       wallet: w
     }, null, 2);
     a.href = 'mailto:axiomatic@agentmail.to?subject=' +
-      encodeURIComponent('OFFER | SOL for ' + tag) +
-      '&body=' + encodeURIComponent(body);
-    a.style.opacity = '1';
-    a.style.pointerEvents = 'auto';
+      encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+    g.href = 'https://mail.google.com/mail/?view=cm&to=axiomatic@agentmail.to&su=' +
+      encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+    a.style.opacity = '1'; a.style.pointerEvents = 'auto';
+    g.style.opacity = '1'; g.style.pointerEvents = 'auto';
   } else {
-    a.href = '#';
-    a.style.opacity = '0.4';
-    a.style.pointerEvents = 'none';
+    a.href = '#'; a.style.opacity = '0.4'; a.style.pointerEvents = 'none';
+    g.href = '#'; g.style.opacity = '0.4'; g.style.pointerEvents = 'none';
   }
 }
 </script>
