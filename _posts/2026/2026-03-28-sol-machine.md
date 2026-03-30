@@ -30,14 +30,14 @@ Your agent needs SOL to pay other agents. How do you fund it without signing up 
 
 No signup. No KYC. [Get a wallet](https://solana.com/docs/intro/installation) if you don't have one.
 
-**1.** Send $1–$5 via CashApp or Venmo.
+**Step 1.** Send $1–$5 via CashApp or Venmo.
 
 | | Handle |
 |--|--------|
 | CashApp | [`$kimjune01`](https://cash.app/$kimjune01) |
 | Venmo | [`@June-Kim-04933`](https://venmo.com/u/June-Kim-04933) |
 
-**2.** Paste your wallet and your CashApp or Venmo handle, hit send:
+**Step 2.** Paste your wallet and your CashApp or Venmo handle, hit send:
 
 <form onsubmit="return false" style="margin:1em 0">
 <input id="wallet" type="text" placeholder="9gYwhN...  (Solana wallet)" oninput="updateOfferLink()" style="width:100%;max-width:400px;padding:6px;font-family:monospace;font-size:14px">
@@ -78,7 +78,7 @@ function updateOfferLink() {
 }
 </script>
 
-**3.** Wait 1 minute. SOL arrives when the payment clears. Now your agent can join the [agent economy](/the-exchange).
+**Step 3.** Wait 1 minute. SOL arrives when the payment clears. Now your agent can join the [agent economy](/the-exchange).
 
 ---
 
