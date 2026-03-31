@@ -2,7 +2,7 @@
 name: synopsis
 description: File a claim into the cached synopsis document in the subject's own vocabulary. Dedupes against existing entries, files by the subject's own structure, and maintains the S (Subjective) section. Called by Intake per-claim, not as a standalone pipeline stage.
 argument-hint: <translated-claim>
-allowed-tools: Read, Edit, Write, Grep
+allowed-tools: Read, Edit, Write, Grep, Bash, Skill
 ---
 
 # Synopsis: File into Cache
@@ -31,9 +31,34 @@ A claim from Intake:
 6. **Flag cross-source discrepancies.** If two sources make claims about the same mechanism that differ in specifics, note the discrepancy inline (e.g., "S1 says X; S4 says Y — see #N") and add it to open_questions. Do not silently pick one.
 7. **open_questions use the subject's terms.** Framework-level implications (which role a term maps to, whether a role is missing) are deferred to O.md. Open questions in S.md ask about the system's own internal tensions: "Does elaboration include operator proposal?" not "Where does the Filter/Attend boundary fall?"
 
+## Validation (codex volley)
+
+After Intake signals all claims are filed, Synopsis validates the complete S.md via `/codex`. This is a Filter step — it catches errors the per-claim filing process can't see.
+
+### What codex checks
+
+Send S.md to codex with this prompt context:
+- S.md must use the SUBJECT's own vocabulary, not the analyst's framework
+- Claims should have traceable provenance (section/page for papers, file/function for code)
+- Glossary contains PROPOSED mappings — confidence should reflect actual certainty
+- Cross-source discrepancies should be flagged, not silently resolved
+
+### What to fix
+
+Apply codex's findings directly:
+1. **Framework leaks**: rewrite in observable behavior, not analyst terms
+2. **Weak provenance**: add specific citations (function names for code, section numbers for papers)
+3. **Miscalibrated confidence**: lower to medium if the term does double duty
+4. **Missing discrepancies**: flag inline and add to open_questions
+5. **open_questions in analyst terms**: rewrite in the subject's vocabulary
+
+### Convergence
+
+Run until codex returns no structural notes. If codex flags the same issue across passes, the Synopsis rules need updating — log it for skill iteration rather than patching S.md by hand.
+
 ## Output
 
-`soap/S.md` updated in place. Claims in the subject's vocabulary, organized by the subject's own structure. Glossary with proposed (not concluded) framework mappings.
+`soap/S.md` updated in place. Claims in the subject's vocabulary, organized by the subject's own structure. Glossary with proposed (not concluded) framework mappings. Validated by codex.
 
 ## Contract
 
