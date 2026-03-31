@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 220" font-family="system-ui, sans-serif">
+  <style>
+    .layer { rx: 6; }
+    .label { font-size: 13px; font-weight: 600; }
+    .desc { font-size: 11px; fill: #555; }
+    .tag { font-size: 10px; fill: #888; }
+    .brace { stroke: #bbb; stroke-width: 1.2; fill: none; }
+  </style>
+
+  <!-- Layer 1: Spivak (boundary types) -->
+  <rect class="layer" x="40" y="16" width="520" height="48" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text class="label" x="60" y="45" fill="#1565c0">Spivak</text>
+  <text class="desc" x="160" y="38">Boundary types: what plugs into what</text>
+  <text class="tag" x="160" y="53">encoded → indexed → gated → ranked → persisted → policy</text>
+
+  <!-- Layer 2: Fritz (morphism properties) -->
+  <rect class="layer" x="40" y="80" width="520" height="48" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text class="label" x="60" y="109" fill="#2e7d32">Fritz</text>
+  <text class="desc" x="160" y="102">Morphism properties: what flows through</text>
+  <text class="tag" x="160" y="117">deterministic, sufficient, complete, almost-sure equal</text>
+
+  <!-- Layer 3: Contracts (open problem) -->
+  <rect class="layer" x="40" y="144" width="520" height="48" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text class="label" x="60" y="173" fill="#f57f17">Contracts</text>
+  <text class="desc" x="160" y="166">Behavioral predicates: what each stage must do</text>
+  <text class="tag" x="160" y="181">gated, ranked, persisted, encoded, indexed, policy</text>
+
+  <!-- Right labels -->
+  <text x="580" y="45" font-size="10" fill="#1565c0" font-weight="500">syntax</text>
+  <text x="580" y="109" font-size="10" fill="#2e7d32" font-weight="500">structure</text>
+  <text x="580" y="173" font-size="10" fill="#f57f17" font-weight="500">function</text>
+
+  <!-- Brace connecting all three -->
+  <path class="brace" d="M640,20 Q660,20 660,108 Q660,196 640,196"/>
+  <text x="672" y="112" font-size="11" fill="#555" font-weight="600">reality</text>
+</svg>

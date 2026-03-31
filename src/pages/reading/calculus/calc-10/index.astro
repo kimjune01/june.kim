@@ -1,0 +1,275 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — Vectors and Geometry" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Vectors and Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus &middot; CC BY-SA &middot; <a href="https://activecalculus.org">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Scalars measure magnitude. <strong>Vectors</strong> measure magnitude and direction. The <strong>dot product</strong> measures alignment, the <strong>cross product</strong> produces a perpendicular vector, and together they give you the geometry of lines and planes in R3.</p>
+    </div>
+
+    <!-- Vectors in R2 and R3 -->
+    <h3>Vectors in R2 and R3</h3>
+    <p>A vector is an ordered list of components. Addition is component-wise. Scalar multiplication scales each component. The magnitude (length) is the square root of the sum of squared components.</p>
+
+    <SchemeRepl client:load initialCode={`; Vectors as lists
+(define (vec-add u v) (map + u v))
+(define (vec-scale c v) (map (lambda (x) (* c x)) v))
+(define (vec-mag v) (sqrt (apply + (map (lambda (x) (* x x)) v))))
+
+(define u (list 3 4))
+(define v (list 1 -2))
+
+(display "u = ") (display u) (newline)
+(display "v = ") (display v) (newline)
+(display "u + v = ") (display (vec-add u v)) (newline)
+(display "2*u = ") (display (vec-scale 2 u)) (newline)
+(display "|u| = ") (display (vec-mag u)) (newline)
+
+; 3D vectors
+(define a (list 1 2 3))
+(define b (list 4 5 6))
+(display "a + b = ") (display (vec-add a b)) (newline)
+(display "|a| = ") (display (vec-mag a))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+u = np.array([3, 4])
+v = np.array([1, -2])
+print(f"u + v = {u + v}")
+print(f"2*u = {2*u}")
+print(f"|u| = {np.linalg.norm(u):.4f}")
+
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print(f"a + b = {a + b}")
+print(f"|a| = {np.linalg.norm(a):.4f}")
+`} />
+    </div>
+
+
+    <!-- Dot product -->
+    <h3>Dot product</h3>
+    <p>The dot product u &middot; v = sum of component products = |u||v|cos(theta). It measures how much two vectors point in the same direction. Zero means perpendicular.</p>
+
+    <SchemeRepl client:load initialCode={`; Dot product
+(define (dot u v) (apply + (map * u v)))
+(define (vec-mag v) (sqrt (apply + (map (lambda (x) (* x x)) v))))
+
+(define u (list 1 2 3))
+(define v (list 4 -5 6))
+
+(display "u . v = ") (display (dot u v)) (newline)
+; 1*4 + 2*(-5) + 3*6 = 4 - 10 + 18 = 12
+
+; Angle between vectors: cos(theta) = (u.v) / (|u|*|v|)
+(define cos-theta (/ (dot u v) (* (vec-mag u) (vec-mag v))))
+(display "cos(theta) = ") (display cos-theta) (newline)
+(display "theta (radians) = ") (display (acos cos-theta)) (newline)
+
+; Perpendicular check
+(define p (list 1 0))
+(define q (list 0 1))
+(display "p . q = ") (display (dot p q)) (display " (perpendicular)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Dot product
+import numpy as np
+import math
+
+u = np.array([1, 2, 3])
+v = np.array([4, -5, 6])
+
+print("u . v = " + str(np.dot(u, v)))
+cos_theta = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
+print("cos(theta) = " + format(cos_theta, ".6f"))
+print("theta (radians) = " + format(math.acos(cos_theta), ".6f"))
+
+p = np.array([1, 0])
+q = np.array([0, 1])
+print("p . q = " + str(np.dot(p, q)) + " (perpendicular)")
+`} />
+    </div>
+
+
+    <!-- Cross product -->
+    <h3>Cross product</h3>
+    <p>The cross product u x v is defined only in R3. It produces a vector perpendicular to both u and v, with magnitude |u||v|sin(theta). Direction follows the right-hand rule.</p>
+
+    <!-- SVG: Two vectors with their cross product -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Origin -->
+        <circle cx="120" cy="200" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Vector u -->
+        <line x1="120" y1="200" x2="260" y2="170" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="256,166 264,168 258,174" fill="currentColor" fill-opacity="0.7"/>
+        <text x="200" y="165" fill="currentColor" font-size="14" fill-opacity="0.6">u</text>
+        <!-- Vector v -->
+        <line x1="120" y1="200" x2="200" y2="240" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="196,238 204,242 198,246" fill="currentColor" fill-opacity="0.7"/>
+        <text x="170" y="238" fill="currentColor" font-size="14" fill-opacity="0.6">v</text>
+        <!-- Cross product u x v (pointing up) -->
+        <line x1="120" y1="200" x2="120" y2="40" stroke="currentColor" stroke-width="2" stroke-opacity="0.9"/>
+        <polygon points="116,44 120,32 124,44" fill="currentColor" fill-opacity="0.9"/>
+        <text x="132" y="50" fill="currentColor" font-size="14" fill-opacity="0.7">u x v</text>
+        <!-- Right angle markers -->
+        <line x1="120" y1="180" x2="135" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="135" y1="180" x2="135" y2="195" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Parallelogram (area = |u x v|) -->
+        <path d="M 120 200 L 260 170 L 340 210 L 200 240 Z" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+        <text x="230" y="210" fill="currentColor" font-size="10" fill-opacity="0.4">area = |u x v|</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Cross product in R3
+(define (cross u v)
+  (list
+    (- (* (list-ref u 1) (list-ref v 2))
+       (* (list-ref u 2) (list-ref v 1)))
+    (- (* (list-ref u 2) (list-ref v 0))
+       (* (list-ref u 0) (list-ref v 2)))
+    (- (* (list-ref u 0) (list-ref v 1))
+       (* (list-ref u 1) (list-ref v 0)))))
+
+(define (dot u v) (apply + (map * u v)))
+(define (vec-mag v) (sqrt (apply + (map (lambda (x) (* x x)) v))))
+
+(define u (list 1 2 3))
+(define v (list 4 5 6))
+(define w (cross u v))
+
+(display "u x v = ") (display w) (newline)
+; (2*6-3*5, 3*4-1*6, 1*5-2*4) = (-3, 6, -3)
+
+; Verify perpendicularity
+(display "w . u = ") (display (dot w u)) (newline)   ; 0
+(display "w . v = ") (display (dot w v)) (newline)   ; 0
+(display "|u x v| = ") (display (vec-mag w))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cross product in R3
+import numpy as np
+
+u = np.array([1, 2, 3])
+v = np.array([4, 5, 6])
+w = np.cross(u, v)
+
+print("u x v = " + str(w))
+print("w . u = " + str(np.dot(w, u)))
+print("w . v = " + str(np.dot(w, v)))
+print("|u x v| = " + format(np.linalg.norm(w), ".6f"))
+`} />
+    </div>
+
+
+    <!-- Lines and planes -->
+    <h3>Lines and planes</h3>
+    <p>A line through point P in direction d: r(t) = P + t*d. A plane through point P with normal n: n &middot; (r &minus; P) = 0. The cross product of two direction vectors in the plane gives the normal.</p>
+
+    <SchemeRepl client:load initialCode={`; Line: r(t) = P + t*d
+(define P (list 1 2 3))
+(define d (list 2 -1 4))
+
+(define (point-on-line t)
+  (map (lambda (p di) (+ p (* t di))) P d))
+
+(display "Line: r(t) = (1,2,3) + t*(2,-1,4)") (newline)
+(display "t=0: ") (display (point-on-line 0)) (newline)
+(display "t=1: ") (display (point-on-line 1)) (newline)
+(display "t=2: ") (display (point-on-line 2)) (newline)
+
+; Plane: n . (r - P) = 0
+; Normal n = (1, 1, 1), point P = (0, 0, 0)
+; Equation: x + y + z = 0
+(define n (list 1 1 1))
+(define (on-plane? point)
+  (= 0 (apply + (map * n point))))
+
+(display "Is (1,-1,0) on x+y+z=0? ") (display (on-plane? (list 1 -1 0))) (newline)
+(display "Is (1,1,1) on x+y+z=0? ") (display (on-plane? (list 1 1 1)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lines and planes
+import numpy as np
+
+# Line: r(t) = P + t*d
+P = np.array([1, 2, 3])
+d = np.array([2, -1, 4])
+
+print("Line: r(t) = (1,2,3) + t*(2,-1,4)")
+for t in [0, 1, 2]:
+    print("t=" + str(t) + ": " + str(P + t * d))
+
+# Plane: n . (r - P) = 0, with n=(1,1,1), P=(0,0,0)
+n = np.array([1, 1, 1])
+on_plane = lambda pt: np.dot(n, pt) == 0
+
+print("Is (1,-1,0) on x+y+z=0? " + str(on_plane(np.array([1, -1, 0]))))
+print("Is (1,1,1) on x+y+z=0? " + str(on_plane(np.array([1, 1, 1]))))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 pr-4 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">u &middot; v</td><td class="font-sans">Dot product (scalar)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">u &times; v</td><td class="font-sans">Cross product (vector, R3 only)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|v|</td><td class="font-sans">Magnitude / length</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">r(t) = P + td</td><td class="font-sans">Parametric line</td></tr>
+          <tr><td class="py-2 pr-4">n &middot; (r &minus; P) = 0</td><td class="font-sans">Equation of a plane</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Calculus sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-09/">Ch.9 Applications of Integrals</a></li>
+      <li><a href="/reading/calculus/calc-11/">Ch.11 Partial Derivatives</a></li>
+    </ul>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/la-02/">Linear Algebra Ch.2</a> &mdash; vector spaces formalize these operations</li>
+      <li><a href="/reading/linear-algebra/hefferon-01/">📐 Linear Algebra Ch.1</a> — vectors and dot products are the algebraic counterpart to geometric vectors</li>
+      <li><a href="/reading/geometry/geom-02/">📐 Geometry Ch.2</a> — vectors in Euclidean space generalize to curved geometry</li>
+      <li><a href="/reading/physics/crowell-01/">⚛ Physics Ch.1</a> — vectors as displacements, velocities, and forces</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Dot_product"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dot product</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cross_product"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cross product</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Line_(geometry)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lines</a> / <a href="https://en.wikipedia.org/wiki/Plane_(geometry)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Planes</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-09/", label: "Applications of Integrals" }} next={{ href: "/reading/calculus/calc-11/", label: "Partial Derivatives" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,192 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.10 — TLS Handshake" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>TLS Handshake</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Transport Layer Security</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>TLS</strong> (Transport Layer Security) wraps a TCP connection in encryption. The handshake is where client and server agree on keys. It combines everything from the previous chapters: certificates (Ch.8), key exchange (Ch.7), symmetric encryption, and hashing. Every HTTPS connection starts with this dance.</p>
+    </div>
+
+    <!-- SVG: TLS handshake sequence diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 420" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Client and Server lines -->
+        <text x="80" y="25" text-anchor="middle" fill="#4ade80" font-size="13">Client</text>
+        <line x1="80" y1="35" x2="80" y2="400" stroke="#4ade80" stroke-opacity="0.3" stroke-width="1.5"/>
+
+        <text x="380" y="25" text-anchor="middle" fill="#60a5fa" font-size="13">Server</text>
+        <line x1="380" y1="35" x2="380" y2="400" stroke="#60a5fa" stroke-opacity="0.3" stroke-width="1.5"/>
+
+        <!-- 1. ClientHello -->
+        <line x1="85" y1="60" x2="375" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="370,56 378,60 370,64" fill="currentColor"/>
+        <text x="230" y="55" text-anchor="middle" fill="currentColor" font-size="10">ClientHello</text>
+        <text x="230" y="75" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">TLS version, cipher suites, client random</text>
+
+        <!-- 2. ServerHello -->
+        <line x1="375" y1="100" x2="85" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="90,96 82,100 90,104" fill="currentColor"/>
+        <text x="230" y="95" text-anchor="middle" fill="currentColor" font-size="10">ServerHello</text>
+        <text x="230" y="115" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">chosen cipher, server random</text>
+
+        <!-- 3. Certificate -->
+        <line x1="375" y1="140" x2="85" y2="140" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="90,136 82,140 90,144" fill="currentColor"/>
+        <text x="230" y="135" text-anchor="middle" fill="currentColor" font-size="10">Certificate</text>
+        <text x="230" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">server's cert chain (public key + CA sigs)</text>
+
+        <!-- 4. ServerKeyExchange -->
+        <line x1="375" y1="180" x2="85" y2="180" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="90,176 82,180 90,184" fill="currentColor"/>
+        <text x="230" y="175" text-anchor="middle" fill="currentColor" font-size="10">ServerKeyExchange</text>
+        <text x="230" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">ECDH parameters, signed</text>
+
+        <!-- 5. ServerHelloDone -->
+        <line x1="375" y1="220" x2="85" y2="220" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="90,216 82,220 90,224" fill="currentColor"/>
+        <text x="230" y="215" text-anchor="middle" fill="currentColor" font-size="10">ServerHelloDone</text>
+
+        <!-- 6. ClientKeyExchange -->
+        <line x1="85" y1="260" x2="375" y2="260" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="370,256 378,260 370,264" fill="currentColor"/>
+        <text x="230" y="255" text-anchor="middle" fill="currentColor" font-size="10">ClientKeyExchange</text>
+        <text x="230" y="275" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">client's ECDH public value</text>
+
+        <!-- Divider: both sides derive session key -->
+        <rect x="100" y="290" width="260" height="22" rx="4" fill="#f472b6" fill-opacity="0.1" stroke="#f472b6" stroke-opacity="0.3" stroke-width="1"/>
+        <text x="230" y="305" text-anchor="middle" fill="#f472b6" font-size="10">both derive symmetric session key</text>
+
+        <!-- 7. ChangeCipherSpec + Finished -->
+        <line x1="85" y1="330" x2="375" y2="330" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="370,326 378,330 370,334" fill="currentColor"/>
+        <text x="230" y="325" text-anchor="middle" fill="currentColor" font-size="10">ChangeCipherSpec + Finished</text>
+
+        <line x1="375" y1="360" x2="85" y2="360" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="90,356 82,360 90,364" fill="currentColor"/>
+        <text x="230" y="355" text-anchor="middle" fill="currentColor" font-size="10">ChangeCipherSpec + Finished</text>
+
+        <!-- Encrypted data -->
+        <line x1="85" y1="390" x2="375" y2="390" stroke="#4ade80" stroke-width="2" stroke-opacity="0.5"/>
+        <polygon points="370,386 378,390 370,394" fill="#4ade80" fill-opacity="0.5"/>
+        <text x="230" y="410" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">encrypted application data</text>
+      </svg>
+    </div>
+
+    <!-- 1. Step by step -->
+    <h3>Step by step</h3>
+
+    <SchemeRepl client:load initialCode={`; TLS 1.2 handshake walkthrough
+; Each step builds on the previous chapters.
+
+(display "1. ClientHello") (newline)
+(display "   Client sends: TLS version, supported") (newline)
+(display "   cipher suites, a random nonce.") (newline)
+(newline)
+(display "2. ServerHello") (newline)
+(display "   Server picks a cipher suite, sends") (newline)
+(display "   its own random nonce.") (newline)
+(newline)
+(display "3. Certificate") (newline)
+(display "   Server sends its certificate chain.") (newline)
+(display "   Client verifies using CA trust store") (newline)
+(display "   (Ch.8 certificate chains).") (newline)
+(newline)
+(display "4. ServerKeyExchange") (newline)
+(display "   Server sends ECDH parameters, signed") (newline)
+(display "   with its private key (Ch.7 + Ch.8).") (newline)
+(newline)
+(display "5. ClientKeyExchange") (newline)
+(display "   Client sends its ECDH public value.") (newline)
+(display "   Both sides now compute the shared") (newline)
+(display "   secret via ECDH (Ch.7).") (newline)
+(newline)
+(display "6. Derive session key") (newline)
+(display "   PRF(premaster, client_random,") (newline)
+(display "   server_random) -> symmetric key.") (newline)
+(newline)
+(display "7. Finished") (newline)
+(display "   Both send a hash of all handshake") (newline)
+(display "   messages, encrypted with the new key.") (newline)
+(display "   If both verify, the channel is live.")
+`} />
+
+    <!-- 2. Why this sequence -->
+    <h3>Why this sequence</h3>
+    <p>The handshake solves three problems at once. <strong>Authentication</strong>: the certificate proves the server's identity. <strong>Key agreement</strong>: ECDH establishes a shared secret without transmitting it. <strong>Forward secrecy</strong>: ephemeral ECDH keys mean that compromising the server's long-term key later does not decrypt past sessions. Each session gets fresh keys that are discarded afterward.</p>
+
+    <SchemeRepl client:load initialCode={`; Forward secrecy: why ephemeral keys matter
+
+(display "Without forward secrecy (RSA key exchange):") (newline)
+(display "  Client encrypts premaster with server's") (newline)
+(display "  RSA public key. If the private key leaks") (newline)
+(display "  years later, all recorded sessions can be") (newline)
+(display "  decrypted retroactively.") (newline)
+(newline)
+(display "With forward secrecy (ECDHE):") (newline)
+(display "  Each handshake generates a new ephemeral") (newline)
+(display "  key pair. The shared secret depends on") (newline)
+(display "  keys that exist only during the handshake.") (newline)
+(display "  After the session, they are deleted.") (newline)
+(display "  No amount of future key compromise helps.") (newline)
+(newline)
+(display "TLS 1.3 mandates forward secrecy.") (newline)
+(display "RSA key exchange is removed entirely.")
+`} />
+
+    <!-- 3. Cipher suite naming -->
+    <h3>Reading a cipher suite</h3>
+    <p>A cipher suite name like TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 tells you the full stack: ECDHE for key exchange, RSA for authentication (the certificate), AES-256-GCM for symmetric encryption, SHA-384 for the PRF.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Component</th>
+            <th class="py-2 pr-4">Example</th>
+            <th class="py-2">Purpose</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Key exchange</td><td class="pr-4">ECDHE</td><td class="font-sans">Establish shared secret (Ch.7)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Authentication</td><td class="pr-4">RSA</td><td class="font-sans">Verify server identity (Ch.8)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Bulk cipher</td><td class="pr-4">AES_256_GCM</td><td class="font-sans">Encrypt session data</td></tr>
+          <tr><td class="py-2 pr-4">PRF hash</td><td class="pr-4">SHA384</td><td class="font-sans">Key derivation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-09/">&#8592; Ch.9 — Zero-Knowledge Proofs</a></li>
+      <li><a href="/reading/cryptography/crypto-11/">Ch.11 — Remote Attestation &#8594;</a></li>
+    </ul>
+    <ul>
+      <li><a href="/reading/information-theory/shannon-07/">Shannon Ch.7</a> — channels: TLS creates a secure channel</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Transport_Layer_Security"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Transport Layer Security</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Forward_secrecy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Forward secrecy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cipher_suite"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cipher suite</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-09/", label: "Zero-Knowledge Proofs" }} next={{ href: "/reading/cryptography/crypto-11/", label: "Remote Attestation" }} />
+
+  </main>
+</Layout>

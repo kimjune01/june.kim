@@ -1,0 +1,164 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.5 — Cosets and Lagrange's Theorem" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Cosets and Lagrange's Theorem</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A subgroup H partitions a group G into <strong>cosets</strong> of equal size. Since the cosets tile G without overlap, |H| must divide |G|. That is <strong>Lagrange's theorem</strong>: the order of any subgroup divides the order of the group. This one fact constrains everything.</p>
+    </div>
+
+    <!-- 1. Cosets -->
+    <h3>Left cosets</h3>
+    <p>Given a subgroup H of G and an element g in G, the <strong>left coset</strong> gH is the set of all g * h for h in H. Two cosets are either identical or disjoint. Together they partition G into pieces of the same size as H.</p>
+
+    <!-- SVG: group partitioned into colored cosets -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Group G outline -->
+        <rect x="10" y="10" width="340" height="160" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="180" y="8" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">G = Z&#x2086;</text>
+
+        <!-- Coset 0: H = (0, 3) -->
+        <rect x="25" y="30" width="90" height="120" rx="5" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="70" y="55" text-anchor="middle" fill="#60a5fa" font-size="14">0</text>
+        <text x="70" y="90" text-anchor="middle" fill="#60a5fa" font-size="14">3</text>
+        <text x="70" y="135" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">H = 0+H</text>
+
+        <!-- Coset 1: 1+H = (1, 4) -->
+        <rect x="135" y="30" width="90" height="120" rx="5" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="180" y="55" text-anchor="middle" fill="#f59e0b" font-size="14">1</text>
+        <text x="180" y="90" text-anchor="middle" fill="#f59e0b" font-size="14">4</text>
+        <text x="180" y="135" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.5">1+H</text>
+
+        <!-- Coset 2: 2+H = (2, 5) -->
+        <rect x="245" y="30" width="90" height="120" rx="5" fill="#a78bfa" fill-opacity="0.1" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="290" y="55" text-anchor="middle" fill="#a78bfa" font-size="14">2</text>
+        <text x="290" y="90" text-anchor="middle" fill="#a78bfa" font-size="14">5</text>
+        <text x="290" y="135" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">2+H</text>
+
+        <!-- Caption -->
+        <text x="180" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">H = &#x7b;0,3&#x7d; partitions Z&#x2086; into 3 cosets of size 2</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Cosets of H = (0, 3) in Z6
+
+(define H '(0 3))
+
+(define (coset g H n)
+  (map (lambda (h) (modulo (+ g h) n)) H))
+
+(display "0 + H = ") (display (coset 0 H 6)) (newline)
+(display "1 + H = ") (display (coset 1 H 6)) (newline)
+(display "2 + H = ") (display (coset 2 H 6)) (newline)
+(display "3 + H = ") (display (coset 3 H 6)) (newline)
+(display "4 + H = ") (display (coset 4 H 6)) (newline)
+(display "5 + H = ") (display (coset 5 H 6)) (newline)
+; 0+H = 3+H, 1+H = 4+H, 2+H = 5+H
+; Three distinct cosets, each of size 2.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cosets of H = [0,3] in Z6
+H = [0, 3]
+for g in range(6):
+    coset = sorted((g + h) % 6 for h in H)
+    print(str(g) + "+H = " + str(coset))
+# Three distinct cosets: [0,3], [1,4], [2,5]
+`} />
+    </div>
+
+
+    <!-- 2. Lagrange's theorem -->
+    <h3>Lagrange's theorem</h3>
+    <p>If H is a subgroup of a finite group G, then |H| divides |G|. This is <a href="https://en.wikipedia.org/wiki/Lagrange%27s_theorem_(group_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lagrange's theorem</a>. The number of distinct cosets is |G|/|H|, called the <strong>index</strong> of H in G. Consequence: the order of any element divides the order of the group.</p>
+
+    <SchemeRepl client:load initialCode={`; Lagrange's theorem in action
+; G = Z12, |G| = 12
+; Subgroups have order dividing 12: 1, 2, 3, 4, 6, 12
+
+(define (cyclic gen n)
+  (let loop ((current gen) (elements (list 0)))
+    (if (= current 0)
+        (reverse elements)
+        (loop (modulo (+ current gen) n)
+              (cons current elements)))))
+
+(display "Subgroup generated by each element of Z12:") (newline)
+(let loop ((g 0))
+  (when (< g 12)
+    (let ((sub (cyclic (if (= g 0) 12 g) 12)))
+      (display "  <") (display g) (display "> has order ")
+      (display (length sub))
+      (display (if (= 0 (modulo 12 (length sub))) " | divides 12" " ERROR"))
+      (newline))
+    (loop (+ g 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lagrange's theorem: all subgroup orders divide |G|=12
+def cyclic(gen, n):
+    elts = [0]
+    cur = gen % n
+    while cur != 0:
+        elts.append(cur)
+        cur = (cur + gen) % n
+    return elts
+
+for g in range(12):
+    sub = cyclic(g if g > 0 else 12, 12)
+    divides = 12 % len(sub) == 0
+    print("<" + str(g) + "> order=" + str(len(sub)).rjust(2) + "  divides 12: " + str(divides))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">gH</td><td class="pr-4 text-green-300">(coset g H n)</td><td class="pr-4 text-blue-300">coset(g, H, n)</td><td class="font-sans">Left coset of g</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[G:H]</td><td class="pr-4 text-green-300">(/ |G| |H|)</td><td class="pr-4 text-blue-300">len(G)//len(H)</td><td class="font-sans">Index: number of cosets</td></tr>
+          <tr><td class="py-2 pr-4">|H| | |G|</td><td class="pr-4 text-green-300">divides</td><td class="pr-4 text-blue-300">divides</td><td class="font-sans">Lagrange's theorem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-04/">&larr; Ch.4 Isomorphisms</a> &mdash; coset counting constrains possible isomorphisms</li>
+      <li><a href="/reading/abstract-algebra/judson-06/">Ch.6 Rings</a> &mdash; adding a second operation</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson proves Lagrange's theorem in Ch. 6 after introducing cosets. The proof is combinatorial: cosets partition G into equal-sized pieces, so |G| = [G:H] * |H|. Normal subgroups and quotient groups (which enable the first isomorphism theorem) are a direct extension: a normal subgroup is one where left and right cosets coincide, making the set of cosets itself a group.</p>
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-04/", label: "Isomorphisms" }} next={{ href: "/reading/abstract-algebra/judson-06/", label: "Rings · 6 of 8" }} />
+
+  </main>
+</Layout>

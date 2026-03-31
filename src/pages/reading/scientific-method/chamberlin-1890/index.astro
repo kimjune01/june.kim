@@ -1,0 +1,144 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Chamberlin 1890 — The Method of Multiple Working Hypotheses" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>The Method of Multiple Working Hypotheses</h1>
+    <p class="text-gray-400 text-sm mb-6">T. C. Chamberlin · 1890 · Science · <a href="https://web.stanford.edu/dept/EHS/training/Chamberlin1890.pdf">PDF (Stanford)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Hold multiple hypotheses simultaneously, or your favorite will blind you. The single "ruling theory" breeds parental affection; multiple working hypotheses breed impartiality.</p>
+    </div>
+
+    <!-- SVG: ruling theory vs multiple hypotheses -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 260" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left: ruling theory (tunnel vision) -->
+        <text x="120" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">ruling theory</text>
+
+        <!-- Single arrow from scientist to conclusion -->
+        <circle cx="40" cy="110" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="40" y="114" text-anchor="middle" fill="currentColor" font-size="10">S</text>
+
+        <line x1="54" y1="110" x2="185" y2="110" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrowC)"/>
+
+        <!-- Blinders (dashed lines showing ignored data) -->
+        <circle cx="130" cy="60" r="4" fill="#a1a1aa" fill-opacity="0.18"/>
+        <text x="142" y="64" fill="currentColor" font-size="8" fill-opacity="0.35">ignored</text>
+        <circle cx="145" cy="155" r="4" fill="#a1a1aa" fill-opacity="0.18"/>
+        <text x="157" y="159" fill="currentColor" font-size="8" fill-opacity="0.35">ignored</text>
+        <circle cx="100" cy="160" r="4" fill="#a1a1aa" fill-opacity="0.18"/>
+
+        <!-- Conclusion box -->
+        <rect x="185" y="92" width="50" height="36" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="114" text-anchor="middle" fill="currentColor" font-size="10">H</text>
+
+        <text x="120" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">confirmation bias: data that fits is kept, the rest is invisible</text>
+
+        <!-- Divider -->
+        <line x1="260" y1="20" x2="260" y2="230" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Right: multiple working hypotheses -->
+        <text x="395" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">multiple hypotheses</text>
+
+        <!-- Fan of arrows from scientist to hypotheses -->
+        <circle cx="300" cy="110" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="114" text-anchor="middle" fill="currentColor" font-size="10">S</text>
+
+        <!-- H1 -->
+        <line x1="314" y1="104" x2="400" y2="50" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="400" y="34" width="40" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="420" y="54" text-anchor="middle" fill="currentColor" font-size="9">H1</text>
+
+        <!-- H2 -->
+        <line x1="314" y1="110" x2="400" y2="110" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="400" y="94" width="40" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="420" y="114" text-anchor="middle" fill="currentColor" font-size="9">H2</text>
+
+        <!-- H3 -->
+        <line x1="314" y1="116" x2="400" y2="170" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="400" y="154" width="40" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="420" y="174" text-anchor="middle" fill="currentColor" font-size="9">H3</text>
+
+        <!-- Data points eliminating some -->
+        <circle cx="460" cy="50" r="5" fill="#ef4444" fill-opacity="0.4" stroke="#ef4444" stroke-width="1"/>
+        <text x="472" y="54" fill="#ef4444" font-size="8" fill-opacity="0.7">eliminated</text>
+
+        <circle cx="460" cy="170" r="5" fill="#ef4444" fill-opacity="0.4" stroke="#ef4444" stroke-width="1"/>
+        <text x="472" y="174" fill="#ef4444" font-size="8" fill-opacity="0.7">eliminated</text>
+
+        <circle cx="460" cy="110" r="5" fill="#22c55e" fill-opacity="0.4" stroke="#22c55e" stroke-width="1"/>
+        <text x="472" y="114" fill="#22c55e" font-size="8" fill-opacity="0.7">survives</text>
+
+        <text x="395" y="225" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">data eliminates hypotheses; the survivor earned it</text>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrowC" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="currentColor" stroke-width="1"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+    <p>Chamberlin identifies three stages in a scientist's intellectual development. The first is the ruling theory: a single explanation adopted early and defended against all comers. The second is the working hypothesis, an improvement that treats the explanation as tentative. But even a single working hypothesis invites "parental affection." The scientist unconsciously steers toward confirmation. Observations that fit are amplified; observations that don't are explained away or simply not noticed.</p>
+
+    <p>The remedy is to hold multiple hypotheses at once. When a geologist enters the field carrying three possible explanations for a formation, no single one commands loyalty. Each observation becomes a test rather than a vindication. The method forces the mind to distribute its attention across competing accounts, and the data itself sorts the field.</p>
+
+    <p>Chamberlin wrote this decades before psychologists gave confirmation bias its name. His insight was that the bias is not intellectual weakness but emotional attachment. The cure is structural: multiply the objects of attachment until no single one can dominate.</p>
+
+    <h3>Discussion</h3>
+
+    <p>Chamberlin's method sits at a specific point in the reasoning pipeline. <a href="https://en.wikipedia.org/wiki/Abductive_reasoning"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Peirce's abduction</a> generates hypotheses from surprising observations. Chamberlin's contribution is what happens next: hold them all, simultaneously, without ranking. The ranking comes from data, not from preference.</p>
+
+    <p><a href="/reading/scientific-method/popper-1934/">Popper (1934)</a> supplied the elimination mechanism that Chamberlin left implicit. If a hypothesis is falsifiable and the data falsifies it, discard it. The surviving hypotheses are not confirmed, only not yet eliminated. Chamberlin anticipated this asymmetry without formalizing it.</p>
+
+    <p><a href="https://doi.org/10.1126/science.146.3642.347">Platt (1964)</a> operationalized Chamberlin as "strong inference": enumerate hypotheses, design experiments that exclude at least one, run them, repeat. Platt's version added urgency. Chamberlin counseled patience; Platt turned it into a loop.</p>
+
+    <p>The method has a limitation that Chamberlin did not address. Generating the right set of hypotheses is the hard part. If the true explanation is not among your working set, no amount of impartial testing will find it. Peirce's abduction and Kuhn's paradigm shifts both deal with this problem. Chamberlin assumed the hypotheses were already on the table.</p>
+
+    <h3>Failure mode</h3>
+
+    <p>Every scientist who fell in love with one theory and ignored disconfirming evidence is an instance of what Chamberlin warned against. <a href="https://en.wikipedia.org/wiki/Lord_Kelvin"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lord Kelvin</a> insisted on a young Earth because his thermodynamic calculations demanded it, dismissing geological and biological evidence that required vastly more time. He did not know about radioactive decay, but he also did not hold open the hypothesis that an unknown energy source might exist. <a href="https://en.wikipedia.org/wiki/Linus_Pauling"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Linus Pauling</a> spent his later career promoting vitamin C megadoses as a cancer treatment, interpreting ambiguous clinical results as support while dismissing controlled trials that showed no effect. <a href="https://en.wikipedia.org/wiki/Fred_Hoyle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fred Hoyle</a> championed steady-state cosmology long after the cosmic microwave background radiation made the Big Bang the only viable account, reinterpreting the CMB data rather than updating.</p>
+
+    <p>In each case the scientist had earned enormous credibility in one domain and carried a single ruling theory into a question where it failed. Chamberlin's method would not have guaranteed the right answer, but it would have prevented the tunnel vision.</p>
+
+    <h3>Integrity</h3>
+
+    <p>The deepest demand of the method is wanting your hypotheses to be wrong. When you hold multiple hypotheses, discarding one is progress, not loss. Kelvin was brilliant. Pauling won two Nobel prizes. The failure was not cognitive but dispositional: they stopped wanting to be surprised.</p>
+
+    <p>Chamberlin framed this as a habit of mind that must be cultivated deliberately. Left to its own tendencies, the mind will adopt a favorite. The method of multiple working hypotheses is an intervention against that tendency, not a description of how scientists naturally think.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/popper-1934/">Popper 1934</a> — falsifiability as the elimination mechanism Chamberlin left implicit</li>
+      <li><a href="/reading/scientific-method/fisher-1935/">Fisher 1935</a> — the statistical machinery for actually testing hypotheses</li>
+      <li><a href="/reading/scientific-method/platt-1964/">Platt 1964</a> — strong inference extends Chamberlin: design experiments that discriminate between hypotheses</li>
+      <li><a href="/reading/game-theory/nordstrom-04/">♟ Game Theory Ch.4</a> — dominated strategies and elimination: working hypotheses are eliminated by evidence, analogous to iterative dominance</li>
+      <li><a href="/reading/probability/grinstead-07/">🎰 Probability Ch.7</a> — Bayesian inference: multiple hypotheses with prior probabilities updated by evidence is Chamberlin formalized</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Abductive_reasoning"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Peirce on abduction (Wikipedia)</a> — generating hypotheses from surprising data</li>
+      <li><a href="https://doi.org/10.1126/science.146.3642.347">Platt 1964, "Strong Inference" (Science)</a> — Chamberlin operationalized as a loop</li>
+      <li><a href="https://en.wikipedia.org/wiki/Confirmation_bias"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Confirmation bias (Wikipedia)</a> — the psychology Chamberlin diagnosed before it had a name</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The paper is public domain. <a href="https://web.stanford.edu/dept/EHS/training/Chamberlin1890.pdf">Read it (Stanford PDF)</a>. It is six pages. Read all of them.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/peirce-1878/", label: "Peirce 1878 · 6 of 17" }} next={{ href: "/reading/scientific-method/fisher-1935/", label: "Fisher 1935 · 8 of 17" }} />
+  </main>
+</Layout>

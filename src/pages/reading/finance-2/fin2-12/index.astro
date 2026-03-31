@@ -1,0 +1,405 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.12 — Dynamic Portfolio Choice" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Dynamic Portfolio Choice</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Static optimization picks weights once. <strong>Dynamic portfolio choice</strong> adjusts allocations over time as wealth, market conditions, and the investment horizon change. The Bellman equation turns a T-period problem into T one-period problems, each informed by the future.</p>
+    </div>
+
+    <!-- SVG: multi-period decision tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- t=0 node -->
+        <circle cx="60" cy="90" r="8" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="60" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=0</text>
+        <text x="60" y="132" text-anchor="middle" fill="#60a5fa" font-size="8" fill-opacity="0.4">choose w&#x2080;</text>
+        <!-- t=1 nodes -->
+        <circle cx="180" cy="45" r="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <circle cx="180" cy="135" r="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="20" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=1</text>
+        <!-- t=2 terminal nodes -->
+        <circle cx="320" cy="25" r="4" fill="#60a5fa" fill-opacity="0.3"/>
+        <circle cx="320" cy="60" r="4" fill="#60a5fa" fill-opacity="0.3"/>
+        <circle cx="320" cy="115" r="4" fill="#60a5fa" fill-opacity="0.3"/>
+        <circle cx="320" cy="155" r="4" fill="#60a5fa" fill-opacity="0.3"/>
+        <text x="320" y="170" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=T</text>
+        <!-- Edges from t=0 -->
+        <line x1="68" y1="85" x2="174" y2="48" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="68" y1="95" x2="174" y2="132" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="115" y="55" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">up</text>
+        <text x="115" y="125" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">down</text>
+        <!-- Edges from t=1 up -->
+        <line x1="186" y1="41" x2="316" y2="27" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <line x1="186" y1="49" x2="316" y2="58" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <!-- Edges from t=1 down -->
+        <line x1="186" y1="131" x2="316" y2="117" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <line x1="186" y1="139" x2="316" y2="153" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <!-- Bellman label -->
+        <text x="370" y="90" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3" font-style="italic">V(W,t) = max</text>
+        <text x="370" y="102" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3" font-style="italic">E[V(W',t+1)]</text>
+      </svg>
+    </div>
+
+    <!-- 1. Multi-period optimization -->
+    <h3>Multi-period optimization</h3>
+    <p>A myopic (single-period) investor maximizes E[U(W<sub>1</sub>)]. A dynamic investor maximizes E[U(W<sub>T</sub>)] by choosing a sequence of allocations w<sub>0</sub>, w<sub>1</sub>, ..., w<sub>T-1</sub>. With CRRA utility and i.i.d. returns, the myopic solution happens to be optimal. But when returns are predictable or the horizon matters (as with labor income), the dynamic solution differs.</p>
+
+    <SchemeRepl client:load initialCode={`; Multi-period wealth evolution
+; W_{t+1} = W_t * (1 + w*r_risky + (1-w)*r_safe)
+
+(define (evolve-wealth wealth weight r-risky r-safe)
+  (* wealth (+ 1 (+ (* weight r-risky)
+                     (* (- 1 weight) r-safe)))))
+
+; CRRA utility: U(W) = W^(1-gamma) / (1-gamma)
+(define (crra-utility wealth gamma)
+  (if (= gamma 1)
+      (log wealth)
+      (/ (expt wealth (- 1 gamma)) (- 1 gamma))))
+
+; 3-period simulation: 60/40 allocation
+(define w 0.60)
+(define r-safe 0.02)
+
+(define w0 100000)
+(define w1 (evolve-wealth w0 w 0.08 r-safe))
+(define w2 (evolve-wealth w1 w -0.05 r-safe))
+(define w3 (evolve-wealth w2 w 0.12 r-safe))
+
+(display "Period 0: $") (display w0) (newline)
+(display "Period 1: $") (display (round w1)) (newline)
+(display "Period 2: $") (display (round w2)) (newline)
+(display "Period 3: $") (display (round w3)) (newline)
+(display "CRRA utility (gamma=2): ")
+(display (crra-utility w3 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multi-period wealth evolution
+def evolve_wealth(w, weight, r_risky, r_safe):
+    return w * (1 + weight * r_risky + (1 - weight) * r_safe)
+
+def crra_utility(w, gamma):
+    if gamma == 1:
+        return __import__('math').log(w)
+    return w**(1 - gamma) / (1 - gamma)
+
+w, r_safe = 0.60, 0.02
+wealth = [100_000]
+returns = [0.08, -0.05, 0.12]
+
+for r in returns:
+    wealth.append(evolve_wealth(wealth[-1], w, r, r_safe))
+
+for t, val in enumerate(wealth):
+    print(f"Period {t}: \${val:,.0f}")
+print(f"CRRA utility (gamma=2): {crra_utility(wealth[-1], 2):.6f}")
+`} />
+    </div>
+
+
+    <!-- 2. Rebalancing rules -->
+    <h3>Rebalancing rules</h3>
+    <p>Drift pushes the portfolio away from target weights. <strong>Calendar rebalancing</strong> resets weights on a fixed schedule (monthly, quarterly). <strong>Threshold rebalancing</strong> triggers only when a weight deviates beyond a band (e.g., +/-5%). Threshold rebalancing trades less often but captures larger mispricings. Transaction costs determine which rule dominates.</p>
+
+    <SchemeRepl client:load initialCode={`; Rebalancing simulation: calendar vs. threshold
+
+(define (drift-weight w r-stock r-bond)
+  ; After returns, stock weight drifts
+  (let* ((stock (* w (+ 1 r-stock)))
+         (bond (* (- 1 w) (+ 1 r-bond)))
+         (total (+ stock bond)))
+    (/ stock total)))
+
+(define target 0.60)
+(define threshold 0.05)
+
+; Simulate 4 quarters of stock/bond returns
+(define stock-returns '(0.10 -0.03 0.08 -0.12))
+(define bond-returns '(0.01 0.02 0.01 0.03))
+
+; Calendar rebalancing: reset to target every period
+(display "=== Calendar Rebalancing ===") (newline)
+(let loop ((rets-s stock-returns) (rets-b bond-returns) (w target) (trades 0))
+  (if (null? rets-s)
+      (begin (display "Total trades: ") (display trades) (newline))
+      (let ((drifted (drift-weight w (car rets-s) (car rets-b))))
+        (display "  Drifted: ") (display (round (* drifted 100)))
+        (display "% -> rebalance to 60%") (newline)
+        (loop (cdr rets-s) (cdr rets-b) target (+ trades 1)))))
+
+(newline)
+
+; Threshold rebalancing: trade only if |w - target| > threshold
+(display "=== Threshold Rebalancing ===") (newline)
+(let loop ((rets-s stock-returns) (rets-b bond-returns) (w target) (trades 0))
+  (if (null? rets-s)
+      (begin (display "Total trades: ") (display trades) (newline))
+      (let* ((drifted (drift-weight w (car rets-s) (car rets-b)))
+             (rebal? (> (abs (- drifted target)) threshold))
+             (new-w (if rebal? target drifted)))
+        (display "  Drifted: ") (display (round (* drifted 100))) (display "%")
+        (if rebal? (display " -> REBALANCE") (display " -> hold"))
+        (newline)
+        (loop (cdr rets-s) (cdr rets-b) new-w (+ trades (if rebal? 1 0))))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Rebalancing simulation
+def drift_weight(w, r_stock, r_bond):
+    stock = w * (1 + r_stock)
+    bond = (1 - w) * (1 + r_bond)
+    return stock / (stock + bond)
+
+target = 0.60
+threshold = 0.05
+stock_returns = [0.10, -0.03, 0.08, -0.12]
+bond_returns = [0.01, 0.02, 0.01, 0.03]
+
+print("=== Calendar Rebalancing ===")
+w, trades = target, 0
+for rs, rb in zip(stock_returns, bond_returns):
+    drifted = drift_weight(w, rs, rb)
+    print(f"  Drifted: {drifted*100:.1f}% -> rebalance to 60%")
+    w, trades = target, trades + 1
+print(f"Total trades: {trades}")
+
+print("\n=== Threshold Rebalancing ===")
+w, trades = target, 0
+for rs, rb in zip(stock_returns, bond_returns):
+    drifted = drift_weight(w, rs, rb)
+    if abs(drifted - target) > threshold:
+        print(f"  Drifted: {drifted*100:.1f}% -> REBALANCE")
+        w, trades = target, trades + 1
+    else:
+        print(f"  Drifted: {drifted*100:.1f}% -> hold")
+        w = drifted
+print(f"Total trades: {trades}")
+`} />
+    </div>
+
+
+    <!-- 3. Dynamic Programming / Bellman -->
+    <h3>Dynamic programming and the Bellman equation</h3>
+    <p>The <strong>Bellman equation</strong> decomposes a T-period problem into nested one-period problems: V(W,t) = max<sub>w</sub> E[V(W', t+1)]. Solve backwards from the terminal condition V(W,T) = U(W). At each step, the optimal weight depends on current wealth and time remaining. This is the fundamental tool of dynamic optimization.</p>
+
+    <SchemeRepl client:load initialCode={`; Bellman equation: 2-period discrete example
+; States: wealth can go up or down each period
+; Choose weight w in {0, 0.5, 1.0} to maximize E[U(W_T)]
+
+(define gamma 2)
+(define (utility w) (/ (expt w (- 1 gamma)) (- 1 gamma)))
+(define r-up 0.10)
+(define r-down -0.05)
+(define r-safe 0.02)
+(define prob-up 0.6)
+
+(define (portfolio-return w r)
+  (+ (* w r) (* (- 1 w) r-safe)))
+
+; Terminal value function
+(define (v-terminal wealth) (utility wealth))
+
+; One-period value: E[V(W')]
+(define (expected-value wealth weight v-next)
+  (let ((w-up (* wealth (+ 1 (portfolio-return weight r-up))))
+        (w-dn (* wealth (+ 1 (portfolio-return weight r-down)))))
+    (+ (* prob-up (v-next w-up))
+       (* (- 1 prob-up) (v-next w-dn)))))
+
+; Optimize over weights at t=1 (last decision)
+(define weights '(0.0 0.25 0.5 0.75 1.0))
+
+(define (best-weight wealth v-next)
+  (let loop ((ws weights) (best-w 0) (best-v -999999))
+    (if (null? ws) best-w
+        (let ((ev (expected-value wealth (car ws) v-next)))
+          (if (> ev best-v)
+              (loop (cdr ws) (car ws) ev)
+              (loop (cdr ws) best-w best-v))))))
+
+(define w0 100000)
+(define opt-w (best-weight w0 v-terminal))
+(display "Optimal weight at t=0: ")
+(display (* opt-w 100)) (display "%") (newline)
+
+(define ev (expected-value w0 opt-w v-terminal))
+(display "Expected utility: ") (display ev)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bellman equation: 2-period discrete example
+gamma = 2
+utility = lambda w: w**(1 - gamma) / (1 - gamma)
+
+r_up, r_down, r_safe = 0.10, -0.05, 0.02
+prob_up = 0.6
+
+def port_return(w, r):
+    return w * r + (1 - w) * r_safe
+
+def expected_value(wealth, weight, v_next):
+    w_up = wealth * (1 + port_return(weight, r_up))
+    w_dn = wealth * (1 + port_return(weight, r_down))
+    return prob_up * v_next(w_up) + (1 - prob_up) * v_next(w_dn)
+
+weights = [0.0, 0.25, 0.5, 0.75, 1.0]
+
+def best_weight(wealth, v_next):
+    return max(weights, key=lambda w: expected_value(wealth, w, v_next))
+
+w0 = 100_000
+opt_w = best_weight(w0, utility)
+ev = expected_value(w0, opt_w, utility)
+
+print(f"Optimal weight at t=0: {opt_w*100:.0f}%")
+print(f"Expected utility: {ev:.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Merton's continuous-time problem -->
+    <h3>Merton's continuous-time portfolio problem</h3>
+    <p>Merton (1969) solved the portfolio problem in continuous time. With CRRA utility and a single risky asset following geometric Brownian motion, the optimal stock allocation is w* = (&mu; &minus; r) / (&gamma; &sigma;&sup2;). The result is constant over time and independent of wealth&mdash;a striking simplicity. It says: the more risk-averse you are (higher &gamma;), or the more volatile the asset (higher &sigma;), the less you hold.</p>
+
+    <SchemeRepl client:load initialCode={`; Merton's optimal portfolio rule
+; w* = (mu - r) / (gamma * sigma^2)
+
+(define (merton-weight mu r-safe gamma sigma)
+  (/ (- mu r-safe) (* gamma (* sigma sigma))))
+
+; Equity premium 6%, risk-free 2%, vol 20%
+(define mu 0.08)
+(define r 0.02)
+(define sigma 0.20)
+
+; Different risk aversion levels
+(display "=== Merton Optimal Stock Weight ===") (newline)
+(for-each
+  (lambda (gamma)
+    (let ((w (merton-weight mu r gamma sigma)))
+      (display "  gamma=") (display gamma)
+      (display "  w*=") (display (* (round (* w 1000)) 0.1))
+      (display "%") (newline)))
+  '(1 2 3 5 10))
+
+(newline)
+; Higher volatility reduces allocation
+(display "=== Volatility Sensitivity (gamma=3) ===") (newline)
+(for-each
+  (lambda (s)
+    (let ((w (merton-weight mu r 3 s)))
+      (display "  sigma=") (display (* s 100)) (display "%")
+      (display "  w*=") (display (* (round (* w 1000)) 0.1))
+      (display "%") (newline)))
+  '(0.10 0.15 0.20 0.25 0.30))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Merton's optimal portfolio rule
+# w* = (mu - r) / (gamma * sigma^2)
+
+def merton_weight(mu, r, gamma, sigma):
+    return (mu - r) / (gamma * sigma**2)
+
+mu, r, sigma = 0.08, 0.02, 0.20
+
+print("=== Merton Optimal Stock Weight ===")
+for gamma in [1, 2, 3, 5, 10]:
+    w = merton_weight(mu, r, gamma, sigma)
+    print(f"  gamma={gamma}  w*={w*100:.1f}%")
+
+print("\n=== Volatility Sensitivity (gamma=3) ===")
+for s in [0.10, 0.15, 0.20, 0.25, 0.30]:
+    w = merton_weight(mu, r, 3, s)
+    print(f"  sigma={s*100:.0f}%  w*={w*100:.1f}%")
+`} />
+    </div>
+
+
+    <!-- 5. Horizon effects -->
+    <h3>Horizon effects and lifecycle investing</h3>
+    <p>Young investors have more human capital (future labor income), which acts like a bond. So they should hold more stocks. As retirement approaches, the bond-like human capital shrinks, and the portfolio should shift toward bonds. This is the theoretical basis for target-date funds. The glide path is not arbitrary&mdash;it follows from the Bellman equation with labor income as a state variable.</p>
+
+    <SchemeRepl client:load initialCode={`; Lifecycle glide path: stock allocation vs. years to retirement
+; Human capital decays, so stock allocation decreases
+
+(define (glide-path years-to-retire total-wealth annual-income discount-rate)
+  ; PV of human capital ~ income * annuity factor
+  (let* ((hc (if (= years-to-retire 0) 0
+                 (* annual-income
+                    (/ (- 1 (expt (+ 1 discount-rate) (- years-to-retire)))
+                       discount-rate))))
+         (total (+ total-wealth hc))
+         ; Target: 60% of total wealth in stocks
+         ; But stocks come only from financial wealth
+         (stock-target (* 0.60 total))
+         (stock-weight (min 1.0 (/ stock-target total-wealth))))
+    stock-weight))
+
+(define income 75000)
+(define rate 0.03)
+
+(display "=== Lifecycle Glide Path ===") (newline)
+(display "Years  Financial   Human Cap   Stock%") (newline)
+(for-each
+  (lambda (pair)
+    (let* ((yrs (car pair))
+           (fin-wealth (cadr pair))
+           (w (glide-path yrs fin-wealth income rate)))
+      (display "  ") (display yrs)
+      (display "     $") (display fin-wealth)
+      (display "      ") (display (* (round (* w 1000)) 0.1))
+      (display "%") (newline)))
+  '((30 50000) (20 200000) (10 500000) (5 800000) (0 1000000)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lifecycle glide path
+def glide_path(years, fin_wealth, income, r):
+    if years == 0:
+        hc = 0
+    else:
+        hc = income * (1 - (1 + r)**(-years)) / r
+    total = fin_wealth + hc
+    stock_target = 0.60 * total
+    return min(1.0, stock_target / fin_wealth)
+
+income, rate = 75_000, 0.03
+
+print("=== Lifecycle Glide Path ===")
+print(f"{'Years':>5}  {'Financial':>10}  {'Human Cap':>10}  {'Stock%':>6}")
+for yrs, fw in [(30, 50000), (20, 200000), (10, 500000), (5, 800000), (0, 1000000)]:
+    w = glide_path(yrs, fw, income, rate)
+    hc = income * (1 - (1+rate)**(-yrs)) / rate if yrs > 0 else 0
+    print(f"{yrs:>5}  \${fw:>9,}  \${hc:>9,.0f}  {w*100:>5.1f}%")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-11/">📉 Finance II Ch.11</a> &mdash; VaR constraints shape the feasible set for dynamic optimization</li>
+      <li><a href="/reading/finance-2/fin2-04/">📉 Finance II Ch.4</a> &mdash; mean-variance optimization is the single-period special case</li>
+      <li><a href="/reading/calculus/calc-11/">&#x222B; Calculus Ch.11</a> &mdash; stochastic calculus underpins Merton's continuous-time solution</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-11/", label: "Value at Risk · 11 of 12" }}
+    />
+
+  </main>
+</Layout>

@@ -1,0 +1,177 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.3 — Probability" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Probability</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 3 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Probability</strong> quantifies uncertainty. The rules are simple: probabilities are between 0 and 1, they add up for disjoint events, and conditional probability lets you update beliefs with new evidence. Bayes' theorem ties it all together.</p>
+    </div>
+
+    <!-- 1. Basic Rules -->
+    <h3>Probability rules</h3>
+    <p>For any event A: 0 &le; P(A) &le; 1. For disjoint events: P(A or B) = P(A) + P(B). For non-disjoint events: P(A or B) = P(A) + P(B) - P(A and B). The complement rule: P(not A) = 1 - P(A).</p>
+
+    <!-- SVG: Venn diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Sample space rectangle -->
+        <rect x="20" y="10" width="320" height="180" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" rx="4"/>
+        <text x="35" y="28" fill="currentColor" font-size="10" fill-opacity="0.4">S</text>
+        <!-- Circle A -->
+        <circle cx="145" cy="100" r="65" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="110" y="105" text-anchor="middle" fill="#3b82f6" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Circle B -->
+        <circle cx="215" cy="100" r="65" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="250" y="105" text-anchor="middle" fill="#f59e0b" font-size="14" fill-opacity="0.7">B</text>
+        <!-- Intersection label -->
+        <text x="180" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">A&#x2229;B</text>
+        <!-- Formula -->
+        <text x="180" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">P(A &#x222a; B) = P(A) + P(B) - P(A &#x2229; B)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Probability rules
+; P(A or B) = P(A) + P(B) - P(A and B)
+
+(define p-a 0.4)    ; P(rain)
+(define p-b 0.3)    ; P(traffic)
+(define p-ab 0.12)  ; P(rain AND traffic)
+
+; Addition rule (general)
+(define p-a-or-b (+ p-a p-b (- p-ab)))
+(display "P(rain OR traffic) = ")
+(display p-a-or-b) (newline)
+
+; Complement rule
+(define p-not-a (- 1 p-a))
+(display "P(no rain) = ")
+(display p-not-a) (newline)
+
+; If disjoint (mutually exclusive), P(A and B) = 0
+(define p-heads 0.5)
+(define p-tails 0.5)
+(display "P(heads OR tails) = ")
+(display (+ p-heads p-tails))
+`} />
+
+
+    <!-- 2. Conditional Probability -->
+    <h3>Conditional probability</h3>
+    <p>P(A | B) = P(A and B) / P(B). The probability of A, given that B happened. This is how we update probabilities with evidence.</p>
+
+    <SchemeRepl client:load initialCode={`; Conditional probability: P(A|B) = P(A and B) / P(B)
+
+(define p-disease 0.01)         ; prevalence
+(define p-positive-given-disease 0.95)  ; sensitivity
+(define p-positive-given-healthy 0.05)  ; false positive rate
+
+; P(positive) by total probability
+(define p-healthy (- 1 p-disease))
+(define p-positive
+  (+ (* p-positive-given-disease p-disease)
+     (* p-positive-given-healthy p-healthy)))
+
+(display "P(positive test) = ")
+(display p-positive) (newline)
+
+; P(disease | positive) by Bayes' theorem
+(define p-disease-given-positive
+  (/ (* p-positive-given-disease p-disease) p-positive))
+
+(display "P(disease | positive) = ")
+(display (exact->inexact p-disease-given-positive)) (newline)
+
+; Even with a 95% accurate test, a positive result
+; only means ~16% chance of disease when prevalence is 1%
+(display "Base rate matters.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bayes' theorem in Python
+p_disease = 0.01
+p_pos_given_disease = 0.95  # sensitivity
+p_pos_given_healthy = 0.05  # false positive rate
+
+p_healthy = 1 - p_disease
+p_positive = p_pos_given_disease * p_disease + p_pos_given_healthy * p_healthy
+
+p_disease_given_pos = (p_pos_given_disease * p_disease) / p_positive
+
+print(f"P(positive test) = {p_positive:.4f}")
+print(f"P(disease | positive) = {p_disease_given_pos:.4f}")
+print(f"Base rate matters.")
+`} />
+    </div>
+
+
+    <!-- 3. Independence -->
+    <h3>Independence</h3>
+    <p>Events A and B are <strong>independent</strong> if P(A | B) = P(A), equivalently P(A and B) = P(A) * P(B). Coin flips are independent. Test results from the same patient are not.</p>
+
+    <SchemeRepl client:load initialCode={`; Independence check: P(A and B) =? P(A) * P(B)
+
+; Two coin flips: independent
+(define p-h1 0.5)  ; first heads
+(define p-h2 0.5)  ; second heads
+(define p-both-heads (* p-h1 p-h2))
+(display "P(both heads) = ")
+(display p-both-heads) (newline)
+(display "P(H1) * P(H2) = ")
+(display (* p-h1 p-h2)) (newline)
+(display "Independent? ")
+(display (= p-both-heads (* p-h1 p-h2))) (newline)
+(newline)
+
+; Rain and umbrella: NOT independent
+(define p-rain 0.3)
+(define p-umbrella 0.4)
+(define p-rain-and-umbrella 0.25)  ; higher than product
+(display "P(rain) * P(umbrella) = ")
+(display (* p-rain p-umbrella)) (newline)
+(display "P(rain AND umbrella)  = ")
+(display p-rain-and-umbrella) (newline)
+(display "Independent? ")
+(display (= p-rain-and-umbrella (* p-rain p-umbrella)))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-04/">🎰 Grinstead Ch.4</a> &mdash; conditional probability with combinatorial foundations</li>
+      <li><a href="/reading/information-theory/shannon-03/">📡 Shannon Ch.3</a> &mdash; probability as the basis for entropy and information</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Bayes' theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Independence_(probability_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Independence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Law_of_total_probability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Law of total probability</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>OpenIntro introduces probability with contingency tables and tree diagrams. We focus on the computational rules. The Bayes' theorem example (disease screening) is a standard illustration of base rate neglect. The original also covers probability trees and more complex multi-step scenarios. For rigorous probability axioms, see <a href="/reading/probability/grinstead-01/">🎰 Grinstead Ch. 1</a>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-02/", label: "Summarizing Data" }} next={{ href: "/reading/statistics/openintro-04/", label: "Distributions" }} />
+
+  </main>
+</Layout>

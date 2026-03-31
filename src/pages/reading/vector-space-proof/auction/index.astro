@@ -1,0 +1,158 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="Auction.lean — Definitions for the VCG embedding auction" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>Auction.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/Auction.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">All the definitions that downstream files prove things about: what a report is, what a valuation is, how scoring works, who wins, and how much they pay. No theorems. Just vocabulary.</p>
+    </div>
+
+    <h2>Scaffolding (standard mechanism design)</h2>
+
+    <h3>Report</h3>
+    <p>A player's declared bid in a <a href="https://en.wikipedia.org/wiki/Direct_revelation_mechanism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>direct-revelation mechanism</a>. Each advertiser reports a center (where they're most relevant), a spread parameter sigma (how far their relevance reaches), and a bid (willingness to pay). Positivity fields keep logarithms and divisions well-formed downstream.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Report</span> (E : Type*) <span class="text-blue-300">where</span>
+  center : E
+  sigma : ℝ
+  bid : ℝ
+  sigma_pos : 0 &lt; sigma
+  bid_pos : 0 &lt; bid</code></pre>
+
+    <h3>Valuation</h3>
+    <p>A player's private truth: their actual center, spread, and value. The proof keeps reports and valuations as separate types so "truthful" has a precise meaning: same center, same sigma, bid equals true value.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Valuation</span> (E : Type*) <span class="text-blue-300">where</span>
+  center : E
+  trueSigma : ℝ
+  trueValue : ℝ
+  sigma_pos : 0 &lt; trueSigma
+  value_pos : 0 &lt; trueValue</code></pre>
+
+    <h3>Auction</h3>
+    <p>The full auction state: a report profile (what everyone declared) and a valuation profile (what everyone actually wants). One type parameter <code>ι</code> for the player set, one <code>E</code> for the embedding space.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Auction</span> (ι : Type*) (E : Type*) <span class="text-blue-300">where</span>
+  report : ι → Report E
+  valuation : ι → Valuation E</code></pre>
+
+    <h3>utility</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Quasilinear_utility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quasilinear utility</a>: value minus payment. Standard in mechanism design, encoded here as a definition.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">utility</span> (_auc : Auction ι E) (_i : ι) (_x : E)
+    (myValue payment : ℝ) : ℝ :=
+  myValue - payment</code></pre>
+
+    <h2>Our composition (project-specific)</h2>
+
+    <h3>score</h3>
+    <p>The scoring rule: <code>score_i(x) = log(b_i) - ‖x - c_i‖² / σ_i²</code>. Relevance decays with squared distance from the advertiser's center, scaled by their spread. The logarithm of the bid makes this additive, which connects it to <a href="https://june.kim/power-diagrams-for-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>power diagrams</a> when all sigmas are equal.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">score</span> (r : Report E) (x : E) : ℝ :=
+  Real.log r.bid - ‖x - r.center‖ ^ 2 / r.sigma ^ 2</code></pre>
+    <p class="text-sm text-gray-500">Inspired by <a href="https://doi.org/10.1145/1250910.1250918">Lahaie &amp; Pennock (2007)</a>, quality-weighted sponsored search.</p>
+
+    <h3>trueVal</h3>
+    <p>The Gaussian valuation model: <code>trueVal_i(x) = v_i · exp(-‖x - c_i‖² / σ_i²)</code>. An advertiser's value for a query decays as a Gaussian with distance from their center. The peak value <code>v_i</code> scales the whole curve.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">trueVal</span> (v : Valuation E) (x : E) : ℝ :=
+  v.trueValue * Real.exp (-(‖x - v.center‖ ^ 2 / v.trueSigma ^ 2))</code></pre>
+
+    <h3>reportedVal</h3>
+    <p>Same shape as <code>trueVal</code>, but using the <em>reported</em> parameters. The payment mechanism sees <code>reportedVal</code>. The identity <code>score = log(reportedVal)</code> holds unconditionally, no truthfulness required. This algebraic fact is one ingredient of the <a href="/reading/vector-space-proof/strategyproof/">DSIC proof</a>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">reportedVal</span> (r : Report E) (x : E) : ℝ :=
+  r.bid * Real.exp (-(‖x - r.center‖ ^ 2 / r.sigma ^ 2))</code></pre>
+
+    <h3>winner</h3>
+    <p>The allocation rule: at each query point <code>x</code>, the winner is the advertiser with the highest score.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">winner</span> (auc : Auction ι E) (x : E) : ι :=
+  <span class="text-gray-500">-- argmax over Finset.univ of score</span></code></pre>
+
+    <SchemeRepl client:load initialCode={`; Three advertisers competing for queries
+(define (score center sigma bid x)
+  (- (log bid) (/ (* (- x center) (- x center)) (* sigma sigma))))
+
+(define ads
+  '((0.2 0.3 5.0 "A") (0.5 0.2 2.0 "B") (0.8 0.4 8.0 "C")))
+
+(define (get-center a) (car a))
+(define (get-sigma a) (cadr a))
+(define (get-bid a) (caddr a))
+(define (get-name a) (cadddr a))
+
+(define (winner ads x)
+  (let loop ((rest ads) (best-score -999) (best-name ""))
+    (if (null? rest) best-name
+        (let ((s (score (get-center (car rest))
+                        (get-sigma (car rest))
+                        (get-bid (car rest)) x)))
+          (if (> s best-score)
+              (loop (cdr rest) s (get-name (car rest)))
+              (loop (cdr rest) best-score best-name))))))
+
+(let loop ((i 0))
+  (when (<= i 10)
+    (let ((x (/ i 10.0)))
+      (display x) (display "  winner: ")
+      (display (winner ads x)) (newline))
+    (loop (+ i 1))))
+`} />
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Three advertisers: (center, sigma, bid)
+ads = [
+    {"name": "A", "center": 0.2, "sigma": 0.3, "bid": 5.0},
+    {"name": "B", "center": 0.5, "sigma": 0.2, "bid": 2.0},
+    {"name": "C", "center": 0.8, "sigma": 0.4, "bid": 8.0},
+]
+
+def score(r, x):
+    return math.log(r["bid"]) - (x - r["center"])**2 / r["sigma"]**2
+
+def winner(ads, x):
+    scores = [(score(r, x), r["name"]) for r in ads]
+    return max(scores, key=lambda s: s[0])
+
+print(f"{'x':>4}  {'winner':>6}  {'scores (A, B, C)'}")
+for i in range(11):
+    x = i / 10
+    s, w = winner(ads, x)
+    scores = [f"{score(r, x):+.2f}" for r in ads]
+    print(f"{x:.1f}   {w:>5}   [{', '.join(scores)}]")
+`} />
+    </div>
+
+    <h3>Auction.withReport</h3>
+    <p>Replace player <code>i</code>'s report while leaving everyone's private valuations unchanged. This is how the proof models deviations: compare the original auction against <code>auc.withReport i r'</code> to see whether lying helps.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">Auction.withReport</span> (auc : Auction ι E) (i : ι)
+    (r' : Report E) : Auction ι E <span class="text-blue-300">where</span>
+  report := Function.update auc.report i r'
+  valuation := auc.valuation</code></pre>
+
+    <h3>vcgPayment</h3>
+    <p>Clarke pivot: player <code>i</code> pays the externality they impose on others.</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><code>welfareOthersWith</code>: reported value of the winner (excluding <code>i</code>'s contribution) under the current allocation.</li>
+      <li><code>welfareOthersWithout</code>: best reported value achievable for others if <code>i</code> were removed entirely.</li>
+    </ul>
+    <p>Payment = without minus with. The "without" term depends only on <em>others'</em> reports. That invariance is one ingredient of the <a href="/reading/vector-space-proof/strategyproof/">DSIC proof</a> (<code>welfareOthersWithout_invariant</code>).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">vcgPayment</span> (auc : Auction ι E) (i : ι) (x : E) : ℝ :=
+  welfareOthersWithout auc i x - welfareOthersWith auc i x</code></pre>
+    <p class="text-sm text-gray-500"><a href="https://doi.org/10.1007/BF01726210">Clarke (1971)</a> &sect;3, <a href="https://doi.org/10.2307/1914085">Groves (1973)</a> Thm 2.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a> &mdash; proves <code>score = log(trueVal)</code> under truthful reporting</li>
+      <li><a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a> &mdash; proves no player benefits from changing their report</li>
+      <li><a href="/reading/vector-space-proof/open-game/">OpenGame.lean</a> &mdash; wraps this auction in the compositional game interface</li>
+      <li><a href="https://doi.org/10.1145/1250910.1250918">Lahaie &amp; Pennock (2007)</a> &mdash; quality-weighted sponsored search, inspiration for the scoring rule</li>
+      <li><a href="https://doi.org/10.1007/BF01726210">Clarke (1971)</a> &mdash; the pivotal mechanism and externality pricing</li>
+      <li><a href="https://doi.org/10.2307/1914085">Groves (1973)</a> &mdash; incentives in teams, efficient choice rules</li>
+    </ul>
+    <PrevNext next={{ href: "/reading/vector-space-proof/axioms/", label: "Axioms.lean · 2 of 7" }} />
+  </main>
+</Layout>

@@ -1,0 +1,200 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.11 — Public Goods" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Public Goods</h1>
+    <p class="text-gray-400 text-sm mb-6">Paul Samuelson · 1954 / Garrett Hardin · 1968 · <a href="https://en.wikipedia.org/wiki/Public_good_(economics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Public good</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>public good</strong> is non-rival (one person's use doesn't diminish another's) and non-excludable (you can't stop people from using it). National defense, street lighting, clean air. The free rider problem: everyone wants the good, nobody wants to pay. Markets underprovide public goods because individual incentives diverge from collective benefit.</p>
+    </div>
+
+    <!-- 1. Classification -->
+    <h3>Four types of goods</h3>
+    <p>Goods are classified along two dimensions: rivalry and excludability. Public goods occupy the corner where both are absent.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left"></th>
+            <th class="py-2 pr-4 text-left">Excludable</th>
+            <th class="py-2 text-left">Non-excludable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-medium">Rival</td><td class="pr-4">Private good (food, clothing)</td><td>Common resource (fish stocks, clean air)</td></tr>
+          <tr><td class="py-2 pr-4 font-medium">Non-rival</td><td class="pr-4">Club good (cable TV, toll road)</td><td>Public good (national defense, streetlights)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2. Free rider problem -->
+    <h3>The free rider problem</h3>
+    <p>If you can enjoy the benefit without paying, why pay? Each individual has an incentive to free-ride on others' contributions. If everyone reasons this way, the good never gets provided. This is why public goods typically require government provision or other collective action mechanisms.</p>
+
+    <!-- SVG: Payoff matrix for contributing vs free-riding -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="190" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Public Good Contribution Game</text>
+
+        <!-- Column headers -->
+        <text x="280" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Player B</text>
+        <text x="220" y="80" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Contribute</text>
+        <text x="330" y="80" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Free-ride</text>
+
+        <!-- Row headers -->
+        <text x="40" y="145" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6" transform="rotate(-90, 40, 145)">Player A</text>
+        <text x="120" y="120" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Contribute</text>
+        <text x="120" y="190" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Free-ride</text>
+
+        <!-- Grid -->
+        <rect x="165" y="90" width="110" height="60" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <rect x="275" y="90" width="110" height="60" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <rect x="165" y="150" width="110" height="60" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <rect x="275" y="150" width="110" height="60" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+
+        <!-- Payoffs (A, B) -->
+        <text x="220" y="125" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">3, 3</text>
+        <text x="330" y="125" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">0, 4</text>
+        <text x="220" y="185" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">4, 0</text>
+        <text x="330" y="185" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">1, 1</text>
+
+        <!-- Nash equilibrium indicator -->
+        <rect x="275" y="150" width="110" height="60" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+        <text x="330" y="230" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Nash eq. (both free-ride)</text>
+
+        <!-- Pareto optimal indicator -->
+        <text x="220" y="230" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Pareto optimal</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Free rider problem as a game
+; Each player: contribute (cost 3, group benefit 4) or free-ride
+
+(define contribution-cost 3)
+(define benefit-per-contributor 4)
+(define n-players 2)
+
+(define (payoff my-choice other-choice)
+  (let* ((contributors (+ (if (equal? my-choice "contribute") 1 0)
+                          (if (equal? other-choice "contribute") 1 0)))
+         (total-benefit (* contributors benefit-per-contributor))
+         (my-benefit (/ total-benefit n-players))
+         (my-cost (if (equal? my-choice "contribute") contribution-cost 0)))
+    (- my-benefit my-cost)))
+
+(display "Both contribute: ")
+(display (payoff "contribute" "contribute"))
+(display ", ") (display (payoff "contribute" "contribute")) (newline)
+
+(display "I free-ride, you contribute: ")
+(display (payoff "free-ride" "contribute"))
+(display ", ") (display (payoff "contribute" "free-ride")) (newline)
+
+(display "Both free-ride: ")
+(display (payoff "free-ride" "free-ride"))
+(display ", ") (display (payoff "free-ride" "free-ride")) (newline)
+
+(display "Dominant strategy: free-ride (4 > 3, 1 > 0)")
+`} />
+
+
+    <!-- 3. Tragedy of the commons -->
+    <h3>Tragedy of the commons</h3>
+    <p>A common resource (rival but non-excludable) gets overused because each individual captures the full benefit of use but shares the cost of depletion. Overfishing, overgrazing, traffic congestion. Hardin's 1968 essay framed it as inevitable without property rights or regulation. Elinor Ostrom showed communities can self-govern commons through norms and institutions.</p>
+
+    <SchemeRepl client:load initialCode={`; Tragedy of the commons: shared pasture
+; Each herder adds cattle; overgrazing depletes the commons
+
+(define max-capacity 100)
+(define n-herders 5)
+
+(define (pasture-quality total-cattle)
+  (max 0 (- 1.0 (/ total-cattle max-capacity))))
+
+(define (herder-profit cattle total-cattle)
+  (* cattle (pasture-quality total-cattle)))
+
+; Each herder's optimal individual choice
+; vs socially optimal allocation
+(define social-optimum (/ max-capacity 2))  ; maximize total profit
+(define per-herder-social (/ social-optimum n-herders))
+
+(display "Pasture capacity: ") (display max-capacity) (newline)
+(display "Social optimum (total cattle): ") (display social-optimum) (newline)
+(display "Per herder (social): ") (display per-herder-social) (newline)
+
+; But each herder wants to add more
+; Individual best response given others at social optimum
+(define others-cattle (* (- n-herders 1) per-herder-social))
+(display "If others graze ") (display others-cattle) (display " total:") (newline)
+(display "  Profit at social share (10): ")
+(display (herder-profit 10 (+ others-cattle 10))) (newline)
+(display "  Profit at greedy share (20): ")
+(display (herder-profit 20 (+ others-cattle 20))) (newline)
+(display "  Incentive: graze more than your share")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tragedy of the commons simulation
+max_cap = 100
+n_herders = 5
+
+def quality(total):
+    return max(0, 1.0 - total / max_cap)
+
+def profit(my_cattle, total):
+    return my_cattle * quality(total)
+
+# Start at social optimum, simulate drift
+cattle = [10] * n_herders  # social optimum = 50 total
+
+for rnd in range(5):
+    total = sum(cattle)
+    profits = [profit(c, total) for c in cattle]
+    q = int(quality(total) * 100) / 100.0
+    print("Round " + str(rnd) + ": cattle=" + str(cattle) + ", total=" + str(total) + ", quality=" + str(q))
+    # Each herder adds 2 (greedy)
+    cattle = [c + 2 for c in cattle]
+
+total = sum(cattle)
+q = int(quality(total) * 100) / 100.0
+print("Final: total=" + str(total) + ", quality=" + str(q))
+print("Commons depleted by individual rationality")
+`} />
+    </div>
+
+
+    <!-- Cross-reference -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-13/">Game Theory Ch.13: Volunteer's Dilemma</a> — when public goods require someone to step up</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Public_good_(economics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Public good (economics)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Free-rider_problem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free-rider problem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tragedy_of_the_commons"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tragedy of the commons</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Elinor_Ostrom"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Elinor Ostrom</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-10/", label: "Externalities" }} next={{ href: "/reading/economics/econ-12/", label: "Monopoly and Competition" }} />
+
+  </main>
+</Layout>

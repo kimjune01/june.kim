@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Integrity — The Scientific Method" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to collection</a>
+
+    <h1>Integrity</h1>
+
+    <p class="text-lg text-gray-300 mb-6">The method already exists. What's missing is anyone practicing it.</p>
+
+    <h2>Long content</h2>
+
+    <p><a href="https://gwern.net">Gwern Branwen</a> doesn't write blog posts. Blog posts are "the triumph of the hare over the tortoise, meant to be read by a few people on a weekday in 2004 and never again." He writes long content: essays that improve over decades, designed for a 60-year lifespan. The intended audience is his future self, "who is intelligent and interested, but has forgotten."</p>
+
+    <p>Every page carries a confidence tag: certain, likely, possible, unlikely. Every page carries a completion status: notes, draft, in progress, finished. Predictions are registered publicly and scored against reality. When evidence contradicts a claim, the claim gets a correction and a link to why. He cites Darwin's method: "whenever a published fact, a new observation or thought came across me, which was opposed to my general results, to make a memorandum of it without fail and at once."</p>
+
+    <p>He runs randomized self-experiments on nootropics and publishes the data, including the nulls. He writes 50,000-word literature reviews and updates them when new evidence arrives. He follows reporting standards designed for clinical trials (STROBE, CONSORT, PRISMA) even though nobody requires it. Every cited URL is archived against link rot. The full version history is public: append <code>.md</code> to any page URL and read the source.</p>
+
+    <p>Everything is released CC-0. Public domain. His reasoning: "Obscurity is a far greater threat to authors than piracy." The license reduces friction, encourages copying, and costs him nothing.</p>
+
+    <p>No PhD. No lab. No grant. No peer review. No gatekeeper. A website and the discipline to be honest on it, for twenty years.</p>
+
+    <!-- SVG: Gwern's practices mapped to thinkers -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Center: Long Content -->
+        <circle cx="200" cy="140" r="32" fill="#facc15" fill-opacity="0.08" stroke="#facc15" stroke-width="1.5"/>
+        <text x="200" y="136" text-anchor="middle" fill="#facc15" font-size="9" fill-opacity="0.8">long</text>
+        <text x="200" y="148" text-anchor="middle" fill="#facc15" font-size="9" fill-opacity="0.8">content</text>
+
+        <!-- Bacon: top-left -->
+        <circle cx="80" cy="50" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="80" y="47" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.6">Bacon</text>
+        <text x="80" y="58" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.35">tables</text>
+        <line x1="98" y1="67" x2="175" y2="118" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="125" y="85" fill="currentColor" font-size="6" fill-opacity="0.3">confidence tags</text>
+
+        <!-- Chamberlin: top-right -->
+        <circle cx="320" cy="50" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="320" y="47" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.6">Chamberlin</text>
+        <text x="320" y="58" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.35">multiple H</text>
+        <line x1="302" y1="67" x2="225" y2="118" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="275" y="85" fill="currentColor" font-size="6" fill-opacity="0.3">contradictory evidence</text>
+
+        <!-- Popper: left -->
+        <circle cx="50" cy="170" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="50" y="167" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.6">Popper</text>
+        <text x="50" y="178" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.35">falsify</text>
+        <line x1="72" y1="168" x2="168" y2="145" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="95" y="163" fill="currentColor" font-size="6" fill-opacity="0.3">predictions</text>
+
+        <!-- Feynman: right -->
+        <circle cx="350" cy="170" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="350" y="167" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.6">Feynman</text>
+        <text x="350" y="178" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.35">report nulls</text>
+        <line x1="328" y1="168" x2="232" y2="145" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="295" y="163" fill="currentColor" font-size="6" fill-opacity="0.3">published nulls</text>
+
+        <!-- Mayo: bottom -->
+        <circle cx="200" cy="250" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="247" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.6">Mayo</text>
+        <text x="200" y="258" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.35">severity</text>
+        <line x1="200" y1="228" x2="200" y2="172" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="215" y="208" fill="currentColor" font-size="6" fill-opacity="0.3">trial standards</text>
+      </svg>
+    </div>
+
+    <h2>What he's doing that they described</h2>
+
+    <p><a href="/reading/scientific-method/bacon-1620/">Bacon</a> said: report what you observe, not what you expect. Gwern tags every page with its confidence level and updates when the evidence changes. Bacon's tables of instances, maintained in public.</p>
+
+    <p><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin</a> said: hold multiple hypotheses or your favorite will blind you. Gwern includes contradictory evidence systematically. "The only solution is to be diligent to include criticism, so even if you do not escape brainwashing, at least your readers have a chance."</p>
+
+    <p><a href="/reading/scientific-method/popper-1934/">Popper</a> said: specify in advance what would disprove your theory. Gwern registers predictions on PredictionBook.com. Embedded predictions in essays provide built-in feedback: as time passes, predictions are validated or falsified. Accountability that most scientists avoid and most pundits refuse.</p>
+
+    <p><a href="/reading/scientific-method/feynman-1974/">Feynman</a> said: report the results that didn't work. Gwern publishes null results alongside positive ones. His treadmill desk experiment found it "distracting, chronically unpleasant." Published anyway. That's Feynman's first principle, practiced rather than preached.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo</a> said: your test doesn't count unless it could have caught you being wrong. Gwern follows clinical trial reporting standards voluntarily. His quality control checklist reruns statistical code for reproducibility. Severity as personal discipline.</p>
+
+    <p>He also publishes the <a href="https://gwern.net/anime">embarrassing stuff</a>: anime predictions, treadmill desk reviews, experiments that went nowhere. A curated trail can still be Goodharted. A complete one can't.</p>
+
+    <p>That this is remarkable says more about the institution than about him.</p>
+
+    <h2>The novelty trap</h2>
+
+    <p>Every thinker on the <a href="/reading/scientific-method/">timeline</a> assumed scientists want truth. The modern incentive structure wants something else: novelty. Journals reject replications. Tenure committees count publications, not corrections.</p>
+
+    <p>P-hacking: run twenty tests, report the one that hits p &lt; 0.05. HARKing: write the introduction after you see the data, pretending you predicted what you found. Francesca Gino built a career at Harvard Business School on fabricated data. The fraud went undetected for years because her results were novel and her publications were prestigious. When <a href="https://datacolada.org/109">Data Colada</a> exposed the fabrication in 2023, the institutional response was slow, protective, conflicted.</p>
+
+    <p>Gino is the output of an optimization function, not the exception to it. Reward novelty, punish replication, and you get cargo cult science at industrial scale. <a href="/reading/scientific-method/feynman-1974/">Feynman</a> described the disease. <a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> quantified it. The replication crisis is the system working as designed.</p>
+
+    <p>Gwern opted out. No journal. No tenure track. No incentive to p-hack. His incentive is whether his future self, re-reading the page in ten years, will find it honest. That turns out to be a better optimization function than impact factor.</p>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-8 text-gray-400 text-sm">
+      <p>Honest work sits behind paywalls or on personal websites that Google may or may not surface. <a href="https://pageleft.cc">PageLeft</a> is a bet on a different structure: index the web by meaning, filter by license (copyleft only), rank by citation. A replication becomes a citation. A negative result becomes a link that says "this didn't hold." Replication builds rank.</p>
+      <p class="mt-2">— <a href="https://june.kim/pageleft-manifesto"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim</a></p>
+    </blockquote>
+
+    <h2>Scientia</h2>
+
+    <p>Science was never supposed to be a career strategy. Bacon didn't tabulate instances to get tenure. Ramanujan didn't write to Hardy for a publication credit. Gwern doesn't tag his pages with confidence levels to impress an interviewer. The word itself comes from <em>scientia</em>: knowledge, not credential. Pursuing truth together. Not keeping it to yourself. Not using it as social leverage.</p>
+
+    <p>The method works when knowledge is shared freely and tested severely. It breaks the moment someone has more to gain from a novel claim than from an honest null. <a href="/reading/scientific-method/chamberlin-1890/">Chamberlin's</a> multiple hypotheses, <a href="/reading/scientific-method/popper-1934/">Popper's</a> falsification, <a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity: the method already exists. What's missing is a structure that rewards it.</p>
+
+    <p>The next frontier of the scientific method won't come from philosophy. It will come from <a href="https://pageleft.cc">architecture</a>.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/self-experiment/">Self-Experiments</a></li>
+      <li><a href="/reading/scientific-method/registered-prediction/">Predictions</a></li>
+      <li><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis 2005</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/mayo-2018/", label: "Mayo 2018 · 14 of 17" }} next={{ href: "/reading/scientific-method/self-experiment/", label: "Self-experiment · 16 of 17" }} />
+  </main>
+</Layout>

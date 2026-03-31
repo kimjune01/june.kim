@@ -1,0 +1,275 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Volatility Modeling" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance 2</a>
+
+    <h1>Volatility Modeling</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Volatility is not constant. Historical volatility measures past variation; implied volatility extracts the market's forward-looking estimate from option prices. GARCH models capture the clustering of calm and turbulent periods that real markets exhibit.</p>
+    </div>
+
+    <!-- SVG: volatility smile curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="380" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="20" x2="40" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Strike / Spot (K/S)</text>
+        <text x="15" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,15,95)">Implied Vol</text>
+        <!-- Strike labels -->
+        <text x="80" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.8</text>
+        <text x="150" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.9</text>
+        <text x="210" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1.0</text>
+        <text x="270" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1.1</text>
+        <text x="340" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1.2</text>
+        <!-- Smile curve -->
+        <path d="M 60,55 Q 100,75 150,100 Q 190,115 210,120 Q 230,115 270,100 Q 320,75 360,55" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Skew curve (equity-like) -->
+        <path d="M 60,40 Q 100,65 150,90 Q 190,110 210,118 Q 230,122 270,128 Q 320,132 360,135" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="4,4"/>
+        <!-- Labels -->
+        <text x="365" y="50" fill="#60a5fa" font-size="9" fill-opacity="0.6">Smile</text>
+        <text x="365" y="140" fill="#f59e0b" font-size="9" fill-opacity="0.6">Skew</text>
+        <!-- ATM marker -->
+        <circle cx="210" cy="120" r="3" fill="#34d399" fill-opacity="0.7"/>
+        <text x="210" y="140" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.6">ATM</text>
+      </svg>
+    </div>
+
+    <!-- 1. Historical vs implied volatility -->
+    <h3>Historical vs implied volatility</h3>
+    <p><strong>Historical volatility</strong> is the standard deviation of log returns over a lookback window. <strong>Implied volatility</strong> is the sigma that makes Black-Scholes match the observed option price. They measure different things: what happened vs what the market expects.</p>
+
+    <SchemeRepl client:load initialCode={`; Historical volatility: stdev of log returns
+; Annualize by multiplying by sqrt(252)
+
+(define (log-return s1 s2)
+  (log (/ s2 s1)))
+
+; Sample daily prices
+(define prices (list 100 101.5 99.8 102.3 101.0 103.5 102.8 104.1))
+
+(define (log-returns prices)
+  (if (null? (cdr prices)) '()
+      (cons (log-return (car prices) (cadr prices))
+            (log-returns (cdr prices)))))
+
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+
+(define (variance lst)
+  (let ((m (mean lst)))
+    (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
+       (- (length lst) 1))))
+
+(define (stdev lst) (sqrt (variance lst)))
+
+(define rets (log-returns prices))
+(define daily-vol (stdev rets))
+(define annual-vol (* daily-vol (sqrt 252)))
+
+(display "Log returns: ")
+(for-each (lambda (r) (display (/ (round (* r 10000)) 10000)) (display " ")) rets)
+(newline)
+(display "Daily vol: ") (display (/ (round (* daily-vol 10000)) 10000)) (newline)
+(display "Annualized vol: ") (display (/ (round (* annual-vol 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+prices = [100, 101.5, 99.8, 102.3, 101.0, 103.5, 102.8, 104.1]
+log_rets = [math.log(prices[i+1]/prices[i]) for i in range(len(prices)-1)]
+
+mean_r = sum(log_rets) / len(log_rets)
+var_r = sum((r - mean_r)**2 for r in log_rets) / (len(log_rets) - 1)
+daily_vol = math.sqrt(var_r)
+annual_vol = daily_vol * math.sqrt(252)
+
+print(f"Log returns: {[round(r, 4) for r in log_rets]}")
+print(f"Daily vol: {daily_vol:.4f}")
+print(f"Annualized vol: {annual_vol:.4f}")
+`} />
+    </div>
+
+
+    <!-- 2. GARCH(1,1) model -->
+    <h3>GARCH(1,1) model</h3>
+    <p>GARCH(1,1) models volatility clustering: sigma^2(t) = omega + alpha * r(t-1)^2 + beta * sigma^2(t-1). A large return yesterday raises tomorrow's variance estimate. Alpha captures shock impact, beta captures persistence. Alpha + beta &lt; 1 ensures stationarity.</p>
+
+    <SchemeRepl client:load initialCode={`; GARCH(1,1): sigma^2(t) = omega + alpha * r(t-1)^2 + beta * sigma^2(t-1)
+; Typical equity parameters: omega=0.000002, alpha=0.1, beta=0.85
+
+(define omega 0.000002)
+(define alpha 0.1)
+(define beta 0.85)
+
+(define (garch-variance prev-var prev-return)
+  (+ omega (* alpha (* prev-return prev-return)) (* beta prev-var)))
+
+; Simulate variance path given returns
+(define returns (list 0.01 -0.03 0.005 0.02 -0.015 0.008 -0.025 0.012))
+(define initial-var (* 0.015 0.015))  ; start at 1.5% daily vol
+
+(define (garch-path var returns)
+  (if (null? returns) '()
+      (let ((new-var (garch-variance var (car returns))))
+        (cons new-var (garch-path new-var (cdr returns))))))
+
+(define vars (garch-path initial-var returns))
+(define vols (map (lambda (v) (sqrt v)) vars))
+
+(display "Return    Cond. Vol (daily)") (newline)
+(display "------    -----------------") (newline)
+(for-each
+  (lambda (r v)
+    (display (/ (round (* r 10000)) 10000)) (display "    ")
+    (display (/ (round (* v 10000)) 10000)) (newline))
+  returns vols)
+
+(newline)
+(display "alpha+beta = ") (display (+ alpha beta))
+(display "  (< 1: stationary)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+omega, alpha, beta = 0.000002, 0.1, 0.85
+returns = [0.01, -0.03, 0.005, 0.02, -0.015, 0.008, -0.025, 0.012]
+var_t = 0.015**2  # initial daily variance
+
+print("Return    Cond. Vol (daily)")
+print("------    -----------------")
+for r in returns:
+    var_t = omega + alpha * r**2 + beta * var_t
+    print(f"{r:+.4f}    {math.sqrt(var_t):.4f}")
+
+print(f"\nalpha+beta = {alpha+beta}  (< 1: stationary)")
+print(f"Long-run variance = {omega/(1-alpha-beta):.6f}")
+print(f"Long-run vol = {math.sqrt(omega/(1-alpha-beta)):.4f}")
+`} />
+    </div>
+
+
+    <!-- 3. Volatility smile and skew -->
+    <h3>Volatility smile and skew</h3>
+    <p>If Black-Scholes were exactly right, implied volatility would be the same for all strikes. It is not. Deep out-of-the-money puts carry higher implied vol than ATM options — that is the <strong>skew</strong>. When both wings are elevated, you get the <strong>smile</strong>. The pattern reveals fat tails and jump risk that the lognormal model misses.</p>
+
+    <SchemeRepl client:load initialCode={`; Volatility smile: implied vol varies by moneyness (K/S)
+; Quadratic approximation: sigma(m) = sigma_atm + a*(m-1)^2 + b*(m-1)
+; where m = K/S
+
+(define sigma-atm 0.20)
+(define a 0.30)   ; curvature (smile)
+(define b -0.10)  ; tilt (skew)
+
+(define (implied-vol moneyness)
+  (let ((m (- moneyness 1)))
+    (+ sigma-atm (* a m m) (* b m))))
+
+(display "K/S      Implied Vol") (newline)
+(display "---      -----------") (newline)
+(for-each
+  (lambda (m)
+    (display m) (display "     ")
+    (display (/ (round (* (implied-vol m) 10000)) 10000))
+    (newline))
+  (list 0.80 0.85 0.90 0.95 1.00 1.05 1.10 1.15 1.20))
+
+(newline)
+(display "Skew: OTM puts (low K/S) have higher implied vol")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Volatility smile: quadratic fit
+# sigma(m) = sigma_atm + a*(m-1)^2 + b*(m-1)
+
+sigma_atm = 0.20
+a = 0.30   # curvature (smile)
+b = -0.10  # tilt (skew)
+
+def implied_vol(moneyness):
+    m = moneyness - 1
+    return sigma_atm + a*m**2 + b*m
+
+print("K/S      Implied Vol")
+print("---      -----------")
+for m in [0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20]:
+    print(f"{m:.2f}     {implied_vol(m):.4f}")
+
+print("\nSkew: OTM puts (low K/S) have higher implied vol")
+`} />
+    </div>
+
+
+    <!-- 4. Term structure of volatility -->
+    <h3>Term structure of volatility</h3>
+    <p>Implied volatility also varies by expiration. Short-dated options are more sensitive to current conditions; long-dated options revert toward the long-run average. The <strong>volatility surface</strong> maps implied vol across both strike and maturity — a two-dimensional object that traders must model and hedge.</p>
+
+    <SchemeRepl client:load initialCode={`; Term structure: vol mean-reverts over time
+; Simple model: sigma(T) = sigma_long + (sigma_short - sigma_long) * exp(-kappa*T)
+
+(define sigma-long 0.20)   ; long-run volatility
+(define sigma-short 0.35)  ; current short-term vol (elevated)
+(define kappa 2.0)          ; mean-reversion speed
+
+(define (vol-term-structure t)
+  (+ sigma-long (* (- sigma-short sigma-long) (exp (* (- kappa) t)))))
+
+(display "Maturity (yr)  Implied Vol") (newline)
+(display "-------------  -----------") (newline)
+(for-each
+  (lambda (t)
+    (display t) (display "          ")
+    (display (/ (round (* (vol-term-structure t) 10000)) 10000))
+    (newline))
+  (list 0.083 0.25 0.5 1.0 2.0 5.0))
+
+(newline)
+(display "Short-term vol is elevated (35%), mean-reverts to 20%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+sigma_long = 0.20
+sigma_short = 0.35
+kappa = 2.0
+
+def vol_term_structure(t):
+    return sigma_long + (sigma_short - sigma_long) * math.exp(-kappa * t)
+
+print("Maturity (yr)  Implied Vol")
+print("-------------  -----------")
+for t in [1/12, 0.25, 0.5, 1.0, 2.0, 5.0]:
+    print(f"{t:<14.3f} {vol_term_structure(t):.4f}")
+
+print("\nShort-term vol elevated (35%), mean-reverts to 20%")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-04/">&#x1F4C9; Finance 2 Ch.4</a> — Monte Carlo uses volatility as a key input</li>
+      <li><a href="/reading/finance-2/fin2-06/">&#x1F4C9; Finance 2 Ch.6</a> — time series methods for estimating volatility dynamics</li>
+      <li><a href="/reading/statistics/stats-05/">&#x1F4CA; Statistics Ch.5</a> — variance estimation and hypothesis testing</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-04/", label: "Monte Carlo Methods · 4" }}
+      next={{ href: "/reading/finance-2/fin2-06/", label: "Time Series Analysis · 6" }} />
+
+  </main>
+</Layout>

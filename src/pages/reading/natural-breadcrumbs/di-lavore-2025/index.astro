@@ -1,0 +1,252 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Di Lavore, Román, Sobocinski 2025 — Partial Markov Categories" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Partial Markov Categories</h1>
+    <p class="text-gray-400 text-sm mb-6">Elena Di Lavore, Mario Román, Paweł Sobociński · 2025 · <a href="https://arxiv.org/abs/2502.03477"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2502.03477</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories). <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare logic) helps.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Not every computation succeeds. A <strong>partial Markov category</strong> extends Fritz's Markov categories with <strong>restriction</strong> — morphisms can fail, observations can have zero probability, and Bayes' theorem handles the conditioning. This is where <a href="https://en.wikipedia.org/wiki/Judea_Pearl"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pearl</a>'s conditioning and <a href="https://en.wikipedia.org/wiki/Probability_kinematics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Jeffrey's updating</a> both live.</p>
+    </div>
+
+    <h3>Restriction — morphisms that can fail</h3>
+    <p>A <a href="https://ncatlab.org/nlab/show/restriction+category">restriction category (nLab)</a> gives each morphism a "domain of definition" — a partial identity that says where the morphism is defined. In probabilistic terms: some observations have zero probability, and conditioning on them is undefined.</p>
+
+    <!-- SVG: Partial morphism — success and failure paths -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object A -->
+        <circle cx="50" cy="65" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="50" y="70" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">A</text>
+
+        <!-- Branch point -->
+        <circle cx="155" cy="65" r="4" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Arrow from A to branch -->
+        <line x1="74" y1="65" x2="151" y2="65" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Success path: solid arrow to B -->
+        <line x1="159" y1="62" x2="248" y2="35" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="245,29 255,33 247,40" fill="#4ade80"/>
+        <circle cx="290" cy="30" r="22" fill="#4ade80" fill-opacity="0.06" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="290" y="35" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">B</text>
+        <text x="200" y="36" text-anchor="middle" fill="#4ade80" font-size="9">defined</text>
+
+        <!-- Failure path: dashed arrow to fail point -->
+        <line x1="159" y1="68" x2="248" y2="100" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="245,95 255,100 247,107" fill="#ef4444" fill-opacity="0.6"/>
+        <text x="290" y="105" text-anchor="middle" fill="#ef4444" font-size="12">&#x2205;</text>
+        <text x="290" y="120" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">undefined</text>
+        <text x="200" y="96" text-anchor="middle" fill="#ef4444" font-size="9">P(event) = 0</text>
+
+        <!-- Caption -->
+        <text x="180" y="138" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">partial morphism: success or failure</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A partial function: defined on some inputs, undefined on others
+; Restriction: the domain where the function is defined
+
+(define (partial-div x y)
+  (if (= y 0) 'undefined (/ x y)))
+
+(define (restriction f)
+  ; Returns a predicate: where is f defined?
+  (lambda (args)
+    (not (eq? (apply f args) 'undefined))))
+
+(define div-defined? (restriction partial-div))
+
+(display "div(6,3) = ") (display (partial-div 6 3)) (newline)
+(display "div(6,0) = ") (display (partial-div 6 0)) (newline)
+(display "defined at (6,3)? ") (display (div-defined? '(6 3))) (newline)
+(display "defined at (6,0)? ") (display (div-defined? '(6 0)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Partial functions and restriction
+def partial_div(x, y):
+    if y == 0:
+        return None  # undefined
+    return x / y
+
+def restriction(f):
+    return lambda *args: f(*args) is not None
+
+div_ok = restriction(partial_div)
+print(f"div(6,3) = {partial_div(6,3)}, defined: {div_ok(6,3)}")
+print(f"div(6,0) = {partial_div(6,0)}, defined: {div_ok(6,0)}")
+`} />
+    </div>
+
+    <h3>Observations — conditioning on events</h3>
+    <p>An observation is a partial morphism that "tests" whether an event occurred. If the event has zero probability, the observation is undefined — you can't condition on something that can't happen. This is the categorical version of "divide by zero in Bayes' rule."</p>
+
+    <SchemeRepl client:load initialCode={`; Observation: condition a distribution on an event
+; If P(event) = 0, conditioning is undefined
+
+(define (condition dist event)
+  ; dist: alist of (value . probability)
+  ; event: predicate on values
+  (let* ((matching (filter (lambda (p) (event (car p))) dist))
+         (total (apply + (map cdr matching))))
+    (if (= total 0)
+      'undefined  ; can't condition on impossible event
+      (map (lambda (p)
+        (cons (car p) (/ (cdr p) total)))
+      matching))))
+
+(define dist '((1 . 0.3) (2 . 0.5) (3 . 0.2)))
+
+(display "P(even): ")
+(display (condition dist even?)) (newline)
+
+(display "P(> 10): ")
+(display (condition dist (lambda (x) (> x 10)))) (newline)
+; Conditioning on impossible event is undefined
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Conditioning on events
+def condition(dist, event):
+    matching = {k: v for k, v in dist.items() if event(k)}
+    total = sum(matching.values())
+    if total == 0:
+        return None  # undefined — zero-probability event
+    return {k: v / total for k, v in matching.items()}
+
+dist = {1: 0.3, 2: 0.5, 3: 0.2}
+print(f"P(even): {condition(dist, lambda x: x % 2 == 0)}")
+print(f"P(>10):  {condition(dist, lambda x: x > 10)}")
+`} />
+    </div>
+
+    <h3>Bayes' theorem in the partial setting</h3>
+    <p>Bayes' theorem becomes a theorem about partial morphisms: the posterior is defined exactly when the marginal likelihood is nonzero. The restriction structure tracks this automatically — no ad hoc division-by-zero guards needed.</p>
+
+    <SchemeRepl client:load initialCode={`; Bayes' theorem: partial when marginal likelihood = 0
+
+(define (bayes prior likelihood evidence)
+  (let* ((joint (map (lambda (hp)
+    (let ((h (car hp)) (ph (cdr hp)))
+      (let ((pe (assoc evidence (likelihood h))))
+        (if pe
+          (cons h (* ph (cdr pe)))
+          (cons h 0)))))
+    prior))
+    (total (apply + (map cdr joint))))
+    (if (= total 0)
+      'undefined  ; restriction: evidence has zero probability
+      (map (lambda (jp)
+        (cons (car jp) (/ (cdr jp) total))) joint))))
+
+(define prior '((A . 0.4) (B . 0.6)))
+(define (likelihood h)
+  (if (eq? h 'A) '((yes . 0.8) (no . 0.2))
+                  '((yes . 0.3) (no . 0.7))))
+
+(display "P(H|yes): ") (display (bayes prior likelihood 'yes)) (newline)
+(display "P(H|no):  ") (display (bayes prior likelihood 'no)) (newline)
+
+; Impossible evidence
+(define (likelihood2 h) '((yes . 0.0) (no . 1.0)))
+(display "P(H|yes) with zero likelihood: ")
+(display (bayes prior likelihood2 'yes))
+`} />
+
+    <h3>Pearl vs Jeffrey updating</h3>
+    <p>Pearl conditioning sets evidence to a certainty (hard observation). Jeffrey updating sets evidence to a distribution (soft observation). Both are instances of the same categorical structure — Jeffrey generalizes Pearl by allowing partial observations.</p>
+
+    <SchemeRepl client:load initialCode={`; Pearl: hard evidence (certainty)
+; Jeffrey: soft evidence (distribution over observations)
+
+(define (pearl-update prior likelihood evidence)
+  ; Condition on evidence = certain
+  (let* ((joint (map (lambda (hp)
+    (let* ((h (car hp)) (ph (cdr hp))
+           (pe (cdr (assoc evidence (likelihood h)))))
+      (cons h (* ph pe)))) prior))
+    (total (apply + (map cdr joint))))
+    (map (lambda (jp) (cons (car jp) (/ (cdr jp) total))) joint)))
+
+(define (jeffrey-update prior likelihood evidence-dist)
+  ; Weight by soft evidence distribution
+  (let ((updated (map (lambda (hp)
+    (let* ((h (car hp)) (ph (cdr hp))
+           (weighted (apply + (map (lambda (ep)
+             (* (cdr ep) (cdr (assoc (car ep) (likelihood h)))))
+             evidence-dist))))
+      (cons h (* ph weighted)))) prior)))
+    (let ((total (apply + (map cdr updated))))
+      (map (lambda (p) (cons (car p) (/ (cdr p) total))) updated))))
+
+(define prior '((A . 0.5) (B . 0.5)))
+(define (lk h) (if (eq? h 'A) '((e1 . 0.8) (e2 . 0.2))
+                                '((e1 . 0.3) (e2 . 0.7))))
+
+(display "Pearl (e1 certain): ")
+(display (pearl-update prior lk 'e1)) (newline)
+(display "Jeffrey (70% e1, 30% e2): ")
+(display (jeffrey-update prior lk '((e1 . 0.7) (e2 . 0.3))))
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f̄ (restriction)</td><td class="pr-4 text-green-300">(restriction f)</td><td class="font-sans">Domain where f is defined</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">obs_E</td><td class="pr-4 text-green-300">(condition dist event)</td><td class="font-sans">Observation (condition on event)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f†_π</td><td class="pr-4 text-green-300">(bayes prior lk ev)</td><td class="font-sans">Bayesian inverse (partial when P(ev)=0)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pearl(e)</td><td class="pr-4 text-green-300">(pearl-update ...)</td><td class="font-sans">Hard conditioning</td></tr>
+          <tr><td class="py-2 pr-4">Jeffrey(q)</td><td class="pr-4 text-green-300">(jeffrey-update ...)</td><td class="font-sans">Soft conditioning</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — total Markov categories (the base that this extends)</li>
+      <li><a href="/reading/natural-breadcrumbs/parzygnat-2020/">🍞 Parzygnat 2020</a> — quantum Markov categories (different extension: dagger)</li>
+      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — effectus theory (predicates as effects, related partiality)</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare logic (wp over partial morphisms)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://ncatlab.org/nlab/show/restriction+category">Restriction category (nLab)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bayesian_inference"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian inference</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Probability_kinematics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Probability kinematics (Jeffrey conditioning)</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The examples use finite distributions with explicit zero-probability checks. The paper works with restriction categories and subdistribution monads, where partiality is built into the categorical structure via restriction idempotents. For example: the conditioning function on this page returns <code>'undefined</code> when the event has zero probability. In the paper, this is a restriction idempotent — a morphism e with e;e = e that acts as a partial identity, and the zero-probability case is where the restriction is the zero morphism. The division-by-zero guard is the same; the categorical abstraction is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2502.03477"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for partial Markov categories, §5 for observations and Bayes' theorem, §7 for Pearl and Jeffrey updates.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/parzygnat-2020/", label: "Parzygnat 2020 · 16 of 21" }} next={{ href: "/reading/natural-breadcrumbs/panangaden-2009/", label: "Panangaden 2009 · 18 of 21" }} />
+  </main>
+</Layout>

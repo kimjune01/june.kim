@@ -1,0 +1,171 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Quintilian — Institutio Oratoria" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Institutio Oratoria</h1>
+    <p class="text-gray-400 text-sm mb-6">Quintilian · ~95 AD · <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Quintilian/Institutio_Oratoria/home.html">Full text (LacusCurtius, public domain)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The first complete curriculum for making someone articulate. What to say, how to find it, arrange it, phrase it, remember it, and deliver it. Five stages, from childhood to the courtroom. The rhetorical canon that every writing course still follows, whether it knows it or not.</p>
+    </div>
+
+    <!-- SVG: The five canons pipeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 560 140" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="280" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">The Five Canons of Rhetoric</text>
+
+        <!-- Inventio -->
+        <rect x="10" y="30" width="96" height="40" rx="5" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="58" y="48" text-anchor="middle" fill="#60a5fa" font-size="10">Inventio</text>
+        <text x="58" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Finding</text>
+
+        <!-- Arrow 1 -->
+        <line x1="110" y1="50" x2="122" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="122,47 128,50 122,53" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Dispositio -->
+        <rect x="130" y="30" width="96" height="40" rx="5" fill="#34d399" fill-opacity="0.15" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="178" y="48" text-anchor="middle" fill="#34d399" font-size="10">Dispositio</text>
+        <text x="178" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Arranging</text>
+
+        <!-- Arrow 2 -->
+        <line x1="230" y1="50" x2="242" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="242,47 248,50 242,53" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Elocutio -->
+        <rect x="250" y="30" width="96" height="40" rx="5" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="298" y="48" text-anchor="middle" fill="#f59e0b" font-size="10">Elocutio</text>
+        <text x="298" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Styling</text>
+
+        <!-- Arrow 3 -->
+        <line x1="350" y1="50" x2="362" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="362,47 368,50 362,53" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Memoria -->
+        <rect x="370" y="30" width="96" height="40" rx="5" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="418" y="48" text-anchor="middle" fill="#a78bfa" font-size="10">Memoria</text>
+        <text x="418" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Memorizing</text>
+
+        <!-- Arrow 4 -->
+        <line x1="470" y1="50" x2="482" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="482,47 488,50 482,53" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Pronuntiatio -->
+        <rect x="490" y="30" width="96" height="40" rx="5" fill="#facc15" fill-opacity="0.15" stroke="#facc15" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="538" y="48" text-anchor="middle" fill="#facc15" font-size="9.5">Pronuntiatio</text>
+        <text x="538" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Delivering</text>
+
+        <!-- Pipeline label -->
+        <text x="280" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">a sequence, not a menu — skip a stage and the output suffers</text>
+
+        <!-- First codified note -->
+        <text x="280" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.2">first codified in Rhetorica ad Herennium (~80 BCE) · definitive treatment by Quintilian</text>
+      </svg>
+    </div>
+
+    <!-- The argument -->
+    <h3>The argument</h3>
+
+    <p>The Roman republic fell and oratory lost its civic function. Under the emperors, public speech no longer decided policy. The law courts still operated, but the great deliberative debates were over. Quintilian redirected: if rhetoric can no longer govern the state, it can still form the person. The Institutio Oratoria is twelve books covering education from birth to retirement, and its central claim is that the good orator must first be a good man.</p>
+
+    <p>The five canons of rhetoric are not Quintilian's invention. The anonymous Rhetorica ad Herennium codified them around 80 BCE, and Cicero elaborated them further. But Quintilian gave them their definitive treatment. Where earlier authors described the canons as tools for winning cases, Quintilian embedded them in a developmental sequence. You learn inventio before dispositio because you cannot arrange what you have not found. You learn elocutio after dispositio because styling an argument before structuring it produces ornament without substance. The canons are ordered by dependency, not difficulty.</p>
+
+    <p>The Institutio is also a theory of teaching. Quintilian argued against corporal punishment, insisted that early education should feel like play, and believed that a student's character matters more than his talent. These positions were unusual in Rome. They remain unusual.</p>
+
+    <!-- The five canons -->
+    <h3>The five canons</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Canon</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Latin</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What you do</th>
+            <th class="text-left py-2 text-gray-400">Modern equivalent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Invention</td><td class="pr-3 text-gray-400">Inventio</td><td class="pr-3 text-gray-400">Find the arguments available for your case. Discover what can be said.</td><td class="text-gray-400">Brainstorming, research</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Arrangement</td><td class="pr-3 text-gray-400">Dispositio</td><td class="pr-3 text-gray-400">Put the arguments in order. Decide what comes first, what builds, what closes.</td><td class="text-gray-400">Outlining</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Style</td><td class="pr-3 text-gray-400">Elocutio</td><td class="pr-3 text-gray-400">Choose the right words for each argument. Figures of speech, sentence rhythm, tone.</td><td class="text-gray-400">Drafting, editing</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Memory</td><td class="pr-3 text-gray-400">Memoria</td><td class="pr-3 text-gray-400">Internalize the speech so delivery is fluent, not read.</td><td class="text-gray-400">Internalization</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Delivery</td><td class="pr-3 text-gray-400">Pronuntiatio</td><td class="pr-3 text-gray-400">Voice, gesture, timing. The embodied performance of the argument.</td><td class="text-gray-400">Presentation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Diagnose your draft -->
+    <h3>Diagnose your draft</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Symptom</th>
+            <th class="text-left py-2 pr-3 text-gray-400">The canon you skipped</th>
+            <th class="text-left py-2 text-gray-400">The fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Staring at a blank page</td><td class="pr-3 text-gray-400">Inventio — you haven't found your material yet</td><td class="text-gray-400">Stop writing. Research, interview, make a list of everything you know about the topic.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">The draft wanders, each paragraph on a different topic</td><td class="pr-3 text-gray-400">Dispositio — you have material but no structure</td><td class="text-gray-400">Outline after the first draft. Which point leads to which? Cut what doesn't connect.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">The sentences are correct but lifeless</td><td class="pr-3 text-gray-400">Elocutio — the structure is sound, the style isn't</td><td class="text-gray-400">Read it aloud. Where do you stumble? That's where the rhythm breaks.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">You can write it but can't explain it from memory</td><td class="pr-3 text-gray-400">Memoria — you haven't internalized the argument</td><td class="text-gray-400">Summarize your piece in one sentence without looking at it. If you can't, the argument isn't clear yet.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">The writing works on the page but falls flat in presentation</td><td class="pr-3 text-gray-400">Pronuntiatio — the delivery doesn't match the material</td><td class="text-gray-400">Practice the first thirty seconds. If the opening doesn't hook you when spoken, rewrite it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Discussion -->
+    <h3>Discussion</h3>
+
+    <p>Modern writing advice focuses almost entirely on elocutio. Style rules, sentence-level fixes, word choice. But the canons are a sequence, and each stage requires the one before it. You cannot style what you have not arranged, and you cannot arrange what you have not found. Polishing sentences in a draft that wanders is fixing the wrong problem. The <a href="https://june.kim/double-loop"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>double loop</a> formalizes this dependency: the outer loop handles inventio and dispositio (what to say and in what order), and the inner loop handles elocutio (how to say it).</p>
+
+    <p>The dependency cuts both ways. When you are stuck, the table above names the broken stage. But it also tells you where not to look. If the diagnosis is dispositio, no amount of elocutio will help. Go back to the stage you skipped, fix it there, and the downstream stages unlock.</p>
+
+    <!-- See also -->
+    <hr class="border-zinc-700 my-8"/>
+
+    <h3>See also</h3>
+
+    <p class="text-sm text-gray-500 mb-2">The prose writing sequence</p>
+    <ul>
+      <li><a href="/reading/prose-writing/aristotle/">✍️ Aristotle, Rhetoric</a> — persuasion as a theory: ethos, pathos, logos</li>
+      <li><a href="/reading/prose-writing/bacon-1597/">✍️ Bacon, Essays</a> — aphorism as compression: maximum meaning per sentence</li>
+      <li><a href="/reading/prose-writing/strunk-1918/">✍️ Strunk, Elements of Style</a> — omit needless words</li>
+      <li><a href="/reading/prose-writing/orwell-1946/">✍️ Orwell, Politics and the English Language</a> — six rules as a checklist</li>
+      <li><a href="/reading/prose-writing/williams-1981/">✍️ Williams, Style</a> — old before new, nominalizations kill sentences</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Quintilian"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quintilian</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Institutio_Oratoria"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Institutio Oratoria</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Rhetorica_ad_Herennium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rhetorica ad Herennium</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Canons_of_rhetoric"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Five canons of rhetoric</a></li>
+    </ul>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The full text is public domain. <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Quintilian/Institutio_Oratoria/home.html">Read it on LacusCurtius</a>. Start at Book III for the canons.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="/reading/prose-writing/">✍️ Prose Writing</a></p>
+
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-07/">🧠 Cognitive Science Ch.7</a> — language and communication: memoria (memory for speech) and dispositio (arrangement) map to working memory capacity and chunking in cognitive architecture</li>
+      <li><a href="/reading/prose-writing/strunk-1918/">✍️ Strunk 1918</a> — the rule with no exceptions: Quintilian's elocutio becomes Strunk's rule set — the same five canons, condensed to one: omit needless words</li>
+      <li><a href="/reading/logic/logic-01/">🔑 Logic Ch.1</a> — argumentation and proof structure: inventio (finding arguments) is the same problem as formal proof search — what counts as a valid argument, and how do you find one?</li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/aristotle/", label: "Aristotle · 1 of 10" }} next={{ href: "/reading/prose-writing/bacon-1597/", label: "Bacon 1597 · 3 of 10" }} />
+
+  </main>
+</Layout>

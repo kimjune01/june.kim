@@ -1,0 +1,17 @@
+---
+// Wraps the neighbors section in a collapsible <details> element.
+// Usage: <Neighbors> ...existing neighbor lists... </Neighbors>
+---
+<details class="neighbors-section">
+  <summary>Neighbors</summary>
+  <slot />
+</details>
+
+<style>
+  .neighbors-section :global(ul.neighbors) {
+    line-height: 1.8;
+  }
+  summary {
+    cursor: pointer;
+  }
+</style>

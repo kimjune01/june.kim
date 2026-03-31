@@ -1,0 +1,116 @@
+<!DOCTYPE html><meta charset="utf-8"><link rel="stylesheet" href="/jamdojo/_astro/bakery.Bcz97_Bt.css"><h1 id="classical-music-pattern-troubleshooting-guide">Classical Music Pattern Troubleshooting Guide</h1>
+<p>This guide covers common issues when working with classical music patterns in Strudel, particularly related to <code>stack()</code>, <code>cat()</code>, and <code>slowcat()</code>.</p>
+<h2 id="issue-1-stack-compresses-patterns-with-different-note-counts">Issue 1: <code>stack()</code> Compresses Patterns with Different Note Counts</h2>
+<p>When using <code>stack()</code> to play multiple voices simultaneously, <strong>all patterns are compressed to fit the same duration</strong>. If your patterns have different numbers of notes, they will play at different speeds.</p>
+<h3 id="the-problem">The Problem</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"a b c d e f g h i j k l"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// 12 notes</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"a b c d e f g h"</span><span style="color:#E1E4E8">)            </span><span style="color:#6A737D">// 8 notes</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>Both patterns are compressed into one cycle:</p>
+<ul>
+<li>The 12-note pattern plays faster (compressed)</li>
+<li>The 8-note pattern plays at normal speed</li>
+<li>They don’t align musically!</li>
+</ul>
+<h3 id="the-solution">The Solution</h3>
+<p>Make sure all patterns in a <code>stack()</code> have the same number of notes:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"a b c d e f g h"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// 8 notes</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"e f g a b c d e"</span><span style="color:#E1E4E8">)   </span><span style="color:#6A737D">// 8 notes</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>Now both voices play at the same speed and align properly.</p>
+<h3 id="common-pattern-fugue-expositions">Common Pattern: Fugue Expositions</h3>
+<p>For fugue expositions with sequential entries, use <code>cat()</code> instead of <code>stack()</code> with rests:</p>
+<p><strong>WRONG: Different lengths compress</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"subject 8 notes"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"~ ~ ~ ~ ~ ~ ~ ~ answer 8 notes"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// 16 notes total - compresses!</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ subject 8 notes"</span><span style="color:#E1E4E8">)  </span><span style="color:#6A737D">// 24 notes - compresses even more!</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><strong>RIGHT: Use <code>cat()</code> for sequential entries</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">cat</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"subject 8 notes"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// Cycle 1</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"subject 8 notes"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// Cycle 2: both 8 notes</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"answer 8 notes"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  ),</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"subject 8 notes"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// Cycle 3: all 8 notes</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"answer 8 notes"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"subject 8 notes"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<hr>
+<h2 id="issue-2-slowcat-with-inner-patterns">Issue 2: <code>slowcat</code> with Inner Patterns</h2>
+<p>When using <code>slowcat</code> with sections that contain inner <code>&#x3C;></code> slowcat patterns (like chord progressions), you need to ensure each section completes its inner pattern before moving to the next section. This requires the <code>.fast().slow()</code> pattern.</p>
+<h3 id="the-problem-1">The Problem</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">slowcat</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"..."</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    chord</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;D A Bm F#m G D G A>"</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">voicing</span><span style="color:#E1E4E8">()  </span><span style="color:#6A737D">// 8-chord progression</span></span>
+<span class="line"><span style="color:#E1E4E8">  ),</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"..."</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    chord</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;D A Bm F#m G D G A>"</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">voicing</span><span style="color:#E1E4E8">()  </span><span style="color:#6A737D">// 8-chord progression</span></span>
+<span class="line"><span style="color:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>Without <code>.fast()</code>, each section would only play a fraction of its chord progression before moving to the next section.</p>
+<h3 id="the-solution-1">The Solution</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">slowcat</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"..."</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    chord</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;D A Bm F#m G D G A>"</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">voicing</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">  ).</span><span style="color:#B392F0">fast</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">// 8 matches the number of chords</span></span>
+<span class="line"><span style="color:#B392F0">  stack</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    note</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"..."</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    chord</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;D A Bm F#m G D G A>"</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">voicing</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">  ).</span><span style="color:#B392F0">fast</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">)   </span><span style="color:#6A737D">// 8 matches the number of chords</span></span>
+<span class="line"><span style="color:#E1E4E8">).</span><span style="color:#B392F0">slow</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">)     </span><span style="color:#6A737D">// Reverse the .fast(8) to restore normal speed</span></span></code></pre>
+<h3 id="the-rule">The Rule</h3>
+<ol>
+<li>Count the elements in your inner <code>&#x3C;></code> pattern (e.g., <code>&#x3C;D A Bm F#m G D G A></code> = 8 elements)</li>
+<li>Add <code>.fast(n)</code> to each section, where <code>n</code> = number of elements</li>
+<li>Add <code>.slow(n)</code> to the outer <code>slowcat</code>, where <code>n</code> = same number</li>
+<li>All sections in the same <code>slowcat</code> should use the same number (standardize chord progressions if needed)</li>
+<li>Sections without inner <code>&#x3C;></code> patterns should NOT use <code>.fast()</code></li>
+</ol>
+<h3 id="common-mistakes">Common Mistakes</h3>
+<ul>
+<li>Using <code>.fast(4)</code> when the chord progression has 8 chords</li>
+<li>Forgetting to match <code>.fast()</code> and <code>.slow()</code> values</li>
+<li>Using different numbers across sections (standardize first!)</li>
+<li>Adding <code>.fast().slow()</code> to patterns with no inner <code>&#x3C;></code> slowcats</li>
+</ul>
+<hr>
+<h2 id="quick-checklist">Quick Checklist</h2>
+<h3 id="when-using-stack">When using <code>stack()</code>:</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Do all patterns have the same number of notes?</li>
+<li class="task-list-item"><input type="checkbox" disabled> If not, consider using <code>cat()</code> for sequential entries instead</li>
+<li class="task-list-item"><input type="checkbox" disabled> Are you using rest patterns (<code>~</code>)? This usually indicates you need <code>cat()</code> instead</li>
+</ul>
+<h3 id="when-using-slowcat">When using <code>slowcat()</code>:</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Do your sections contain inner <code>&#x3C;></code> patterns?</li>
+<li class="task-list-item"><input type="checkbox" disabled> Have you counted the elements in each <code>&#x3C;></code> pattern?</li>
+<li class="task-list-item"><input type="checkbox" disabled> Does each section use <code>.fast(n)</code> where <code>n</code> equals the element count?</li>
+<li class="task-list-item"><input type="checkbox" disabled> Does the outer <code>slowcat()</code> use <code>.slow(n)</code> with the same value?</li>
+<li class="task-list-item"><input type="checkbox" disabled> Are all chord progressions standardized to the same element count?</li>
+</ul>
+<h3 id="when-using-cat-for-fugue-expositions">When using <code>cat()</code> for fugue expositions:</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> First cycle: Subject alone</li>
+<li class="task-list-item"><input type="checkbox" disabled> Second cycle: <code>stack()</code> with subject + answer (same note count)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Third cycle: <code>stack()</code> with all voices (same note count)</li>
+<li class="task-list-item"><input type="checkbox" disabled> Avoid rest patterns—use separate cycles instead</li>
+</ul>
+<hr>
+<h2 id="summary">Summary</h2>
+<p><strong>Key Principle</strong>: In Strudel, patterns are compressed or expanded to fit cycles. To avoid unintended compression:</p>
+<ol>
+<li><strong><code>stack()</code></strong>: All patterns must have the same number of notes</li>
+<li><strong><code>slowcat()</code></strong>: Use <code>.fast(n).slow(n)</code> when sections contain inner <code>&#x3C;></code> patterns</li>
+<li><strong><code>cat()</code></strong>: Use for sequential voice entries instead of <code>stack()</code> with rests</li>
+</ol>
+<p>These patterns ensure your classical music compositions play with proper timing and alignment!</p>

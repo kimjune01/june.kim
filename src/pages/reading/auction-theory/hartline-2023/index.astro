@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hartline, Hoy & Taggart 2023 — Reserve Pricing" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>Reserve Pricing Preserves Competitive Efficiency</h1>
+    <p class="text-gray-400 text-sm mb-6">Hartline, Hoy &amp; Taggart &middot; 2023 &middot; <a href="https://arxiv.org/abs/2310.03702">arXiv:2310.03702</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Adding a <strong>reserve price</strong> (minimum bid) to VCG does not break its truthfulness or efficiency properties. The seller captures more surplus without distorting incentives, as long as the reserve is set below bidders' values.</p>
+    </div>
+
+    <h3>What a reserve price does</h3>
+    <p>A reserve price sets a floor: bids below it are rejected. This eliminates low-value allocations and guarantees minimum revenue. The key result is that reserve pricing composes cleanly with VCG: the mechanism stays truthful and efficient among participating bidders.</p>
+
+    <!-- SVG: Bid distribution with reserve price threshold -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="180" x2="380" y2="180" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="60" y1="180" x2="60" y2="30" stroke="currentColor" stroke-width="1.2"/>
+        <text x="220" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">bid value</text>
+        <text x="30" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90, 30, 105)">frequency</text>
+
+        <!-- Bid distribution curve -->
+        <path d="M 80,170 Q 120,160 150,130 Q 180,90 220,60 Q 260,40 290,55 Q 320,80 350,140 Q 370,170 380,175" fill="none" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Fill below curve, left of reserve (rejected) -->
+        <path d="M 80,170 Q 120,160 150,130 L 150,180 L 80,180 Z" fill="#ef4444" fill-opacity="0.1"/>
+
+        <!-- Fill below curve, right of reserve (accepted) -->
+        <path d="M 150,130 Q 180,90 220,60 Q 260,40 290,55 Q 320,80 350,140 Q 370,170 380,175 L 380,180 L 150,180 Z" fill="#4ade80" fill-opacity="0.08"/>
+
+        <!-- Reserve price line -->
+        <line x1="150" y1="30" x2="150" y2="180" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="150" y="22" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">reserve</text>
+
+        <!-- Labels -->
+        <text x="110" y="160" text-anchor="middle" fill="#ef4444" font-size="10">rejected</text>
+        <text x="270" y="160" text-anchor="middle" fill="#4ade80" font-size="10">accepted</text>
+
+        <!-- Bid examples -->
+        <circle cx="100" cy="165" r="4" fill="#ef4444" fill-opacity="0.6"/>
+        <text x="100" y="195" text-anchor="middle" fill="#ef4444" font-size="8">$2</text>
+        <circle cx="220" cy="60" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="220" y="50" fill="#4ade80" font-size="8">$10</text>
+        <circle cx="290" cy="55" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="290" y="45" fill="#4ade80" font-size="8">$8</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Reserve price in a second-price auction
+; Bids below reserve are rejected
+
+(define (auction-with-reserve bids reserve)
+  (let* ((eligible (filter (lambda (b) (>= b reserve)) bids))
+         (sorted (sort eligible >)))
+    (if (null? sorted)
+        (list 'no-sale 0 0)
+        (let* ((winner (car sorted))
+               ;; Payment = max(reserve, second-highest eligible bid)
+               (payment (if (null? (cdr sorted))
+                            reserve
+                            (max reserve (cadr sorted)))))
+          (list 'sold winner payment)))))
+
+(define bids '(10 8 5 2 1))
+(display "Bids: ") (display bids) (newline)
+
+(display "\\nNo reserve: ")
+(display (auction-with-reserve bids 0)) (newline)
+
+(display "Reserve $3: ")
+(display (auction-with-reserve bids 3)) (newline)
+
+(display "Reserve $6: ")
+(display (auction-with-reserve bids 6)) (newline)
+
+(display "Reserve $12 (no sale): ")
+(display (auction-with-reserve bids 12))
+; Reserve raises revenue without breaking truthfulness
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Reserve pricing
+def auction_with_reserve(bids, reserve):
+    eligible = sorted([b for b in bids if b >= reserve], reverse=True)
+    if not eligible:
+        return dict(result="no sale")
+    winner = eligible[0]
+    payment = max(reserve, eligible[1]) if len(eligible) > 1 else reserve
+    return dict(winner=winner, payment=payment, surplus=winner - payment)
+
+bids = [10, 8, 5, 2, 1]
+for r in [0, 3, 6, 9, 12]:
+    print("Reserve $" + str(r) + ": " + str(auction_with_reserve(bids, r)))
+`} />
+    </div>
+
+    <h3>Why it preserves efficiency</h3>
+    <p>Among bidders who clear the reserve, the allocation is still efficient (highest value wins) and truthful (dominant strategy is still to bid your value). The only "inefficiency" is when the item goes unsold because no bidder values it above the reserve. The seller gains because the payment floor is higher. Reserve pricing is one of the <a href="https://june.kim/three-levers"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>three levers</a> a platform can pull: it sets the minimum quality bar without distorting which ad wins among qualified candidates.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/three-levers"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/three-levers</a> &mdash; reserve price as a revenue lever</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">💎 VCG 1973</a> &mdash; the mechanism reserve pricing augments</li>
+      <li><a href="/reading/auction-theory/milgrom-weber-1982/">💎 Milgrom &amp; Weber 1982</a> &mdash; revenue ranking of auction formats</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2310.03702">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/lahaie-lubin-2025/", label: "Lahaie & Lubin 2025 · 6 of 8" }} next={{ href: "/reading/auction-theory/hajiaghayi-2024/", label: "Hajiaghayi 2024 · 8 of 8" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,262 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.4 — Continuous Functions" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Continuous Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 4</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A function is <strong>continuous</strong> at c if, for every &epsilon; &gt; 0, there exists &delta; &gt; 0 such that |x - c| &lt; &delta; implies |f(x) - f(c)| &lt; &epsilon;. Continuous functions on closed intervals attain their extrema and hit every value in between.</p>
+    </div>
+
+    <!-- SVG: Epsilon-delta box on a curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="200" x2="370" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="200" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Curve f(x) = x^2 scaled -->
+        <path d="M 70 190 Q 150 160 200 110 Q 250 60 330 30" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Point c -->
+        <circle cx="200" cy="110" r="3.5" fill="#f59e0b" fill-opacity="0.8"/>
+        <line x1="200" y1="200" x2="200" y2="205" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="200" y="218" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">c</text>
+        <!-- f(c) marker -->
+        <line x1="45" y1="110" x2="50" y2="110" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="38" y="114" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">f(c)</text>
+        <!-- Delta band -->
+        <rect x="165" y="20" width="70" height="180" fill="#60a5fa" fill-opacity="0.08" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <line x1="165" y1="200" x2="165" y2="205" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="235" y1="200" x2="235" y2="205" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="165" y="218" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">c-δ</text>
+        <text x="235" y="218" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">c+δ</text>
+        <!-- Epsilon band -->
+        <rect x="50" y="85" width="320" height="50" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <text x="38" y="89" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">f(c)+ε</text>
+        <text x="38" y="139" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">f(c)-ε</text>
+        <!-- Caption -->
+        <text x="210" y="235" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">The curve stays inside the ε-band whenever x stays inside the δ-band.</text>
+      </svg>
+    </div>
+
+    <h3>Epsilon-delta continuity</h3>
+    <p>The definition is a game: the adversary picks &epsilon;, you respond with &delta;. For f(x) = x^2 at c = 3, given &epsilon; = 0.1, you need |x^2 - 9| &lt; 0.1 whenever |x - 3| &lt; &delta;. Factoring: |x - 3||x + 3| &lt; 0.1. Near x = 3, |x + 3| is about 6, so &delta; = 0.1/7 works.</p>
+
+    <SchemeRepl client:load initialCode={`; Epsilon-delta for f(x) = x^2 at c = 3
+; Given epsilon, find delta such that
+; |x - 3| < delta => |x^2 - 9| < epsilon
+
+(define (find-delta c epsilon)
+  ; |x^2 - c^2| = |x-c||x+c|
+  ; Near c, |x+c| <= 2|c| + 1 (if delta <= 1)
+  (let ((bound (+ (* 2 (abs c)) 1)))
+    (min 1 (/ epsilon bound))))
+
+(define (verify-continuity c epsilon n-tests)
+  (let ((delta (find-delta c epsilon)))
+    (display "c = ") (display c)
+    (display ", epsilon = ") (display epsilon)
+    (display ", delta = ") (display delta) (newline)
+    (let loop ((i 0) (all-good #t))
+      (if (>= i n-tests) all-good
+        (let* ((x (+ c (* delta (- (* 2.0 (/ i n-tests)) 1.0))))
+               (diff (abs (- (* x x) (* c c)))))
+          (loop (+ i 1) (and all-good (< diff epsilon))))))))
+
+(display "All within epsilon? ")
+(display (verify-continuity 3 0.1 1000)) (newline)
+(display "All within epsilon? ")
+(display (verify-continuity 3 0.01 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Epsilon-delta for x^2 at c=3
+import random
+random.seed(42)
+
+def find_delta(c, eps):
+    bound = 2 * abs(c) + 1
+    return min(1, eps / bound)
+
+c, eps = 3, 0.1
+delta = find_delta(c, eps)
+tests = [c + delta * (2*i/999 - 1) for i in range(1000)]
+all_ok = all(abs(x**2 - c**2) < eps for x in tests)
+print(f"delta = {delta:.6f}, all within eps? {all_ok}")
+`} />
+    </div>
+
+    <h3>Intermediate value theorem</h3>
+    <p>If f is continuous on [a, b] and f(a) &lt; y &lt; f(b), then there exists c in (a, b) with f(c) = y. The proof uses the completeness of the reals: take the supremum of the set where f is below y. This is why continuous functions can't "jump" over values.</p>
+
+    <SchemeRepl client:load initialCode={`; IVT: f(x) = x^3 - x - 1 has a root in [1, 2]
+; f(1) = -1 < 0, f(2) = 5 > 0
+
+(define (f x) (- (- (* x x x) x) 1))
+
+(display "f(1) = ") (display (f 1)) (newline)
+(display "f(2) = ") (display (f 2)) (newline)
+(display "IVT guarantees a root in (1, 2)") (newline)
+
+; Find it by bisection (constructive IVT)
+(define (bisect a b tol)
+  (let ((mid (/ (+ a b) 2.0)))
+    (if (< (- b a) tol) mid
+      (if (< (* (f a) (f mid)) 0)
+        (bisect a mid tol)
+        (bisect mid b tol)))))
+
+(define root (bisect 1.0 2.0 1e-10))
+(display "Root: ") (display root) (newline)
+(display "f(root) = ") (display (f root))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+f = lambda x: x**3 - x - 1
+
+print("f(1) =", f(1))
+print("f(2) =", f(2))
+print("IVT guarantees a root in (1, 2)")
+
+a, b = 1.0, 2.0
+for _ in range(60):
+    mid = (a + b) / 2
+    if f(a) * f(mid) < 0:
+        b = mid
+    else:
+        a = mid
+
+print("Root:", mid)
+print("f(root) =", f(mid))
+`} />
+    </div>
+
+    <h3>Extreme value theorem</h3>
+    <p>A continuous function on a closed, bounded interval [a, b] attains its maximum and minimum. The proof combines Bolzano-Weierstrass (Ch. 2) with continuity. Open intervals or unbounded domains break this: 1/x on (0, 1] has no maximum.</p>
+
+    <SchemeRepl client:load initialCode={`; EVT: f(x) = sin(x) + x/5 on [0, 10]
+; Continuous on closed bounded interval => attains max and min
+
+(define (f x) (+ (sin x) (/ x 5.0)))
+
+; Approximate max and min by sampling
+(define (find-extrema a b n)
+  (let loop ((i 0) (xmin a) (fmin (f a)) (xmax a) (fmax (f a)))
+    (if (> i n)
+      (begin
+        (display "  min at x=") (display xmin)
+        (display ", f(x)=") (display fmin) (newline)
+        (display "  max at x=") (display xmax)
+        (display ", f(x)=") (display fmax))
+      (let* ((x (+ a (* (/ i n) (- b a))))
+             (fx (f x)))
+        (loop (+ i 1)
+              (if (< fx fmin) x xmin)
+              (if (< fx fmin) fx fmin)
+              (if (> fx fmax) x xmax)
+              (if (> fx fmax) fx fmax))))))
+
+(display "f(x) = sin(x) + x/5 on [0, 10]:") (newline)
+(find-extrema 0.0 10.0 10000)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+f = lambda x: math.sin(x) + x / 5
+
+xs = [i / 10000 * 10 for i in range(10001)]
+fvals = [(x, f(x)) for x in xs]
+xmin, fmin = min(fvals, key=lambda p: p[1])
+xmax, fmax = max(fvals, key=lambda p: p[1])
+
+print("f(x) = sin(x) + x/5 on [0, 10]:")
+print("  min at x=" + str(round(xmin, 4)) + ", f(x)=" + str(round(fmin, 6)))
+print("  max at x=" + str(round(xmax, 4)) + ", f(x)=" + str(round(fmax, 6)))
+`} />
+    </div>
+
+    <h3>Uniform continuity</h3>
+    <p>f is <strong>uniformly continuous</strong> on S if the &delta; in the continuity definition can be chosen independently of the point c. On a closed bounded interval, continuity implies uniform continuity (<a href="https://en.wikipedia.org/wiki/Heine%E2%80%93Cantor_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Heine-Cantor theorem</a>). On unbounded domains, this can fail: f(x) = x^2 is continuous but not uniformly continuous on all of R.</p>
+
+    <SchemeRepl client:load initialCode={`; Uniform vs pointwise continuity
+; f(x) = x^2 on [0, 1]: uniformly continuous
+; f(x) = x^2 on [0, infinity): NOT uniformly continuous
+;   delta depends on the point c
+
+; For f(x)=x^2, delta = eps/(2c+1)
+; As c grows, delta shrinks to 0
+(display "delta for x^2 with epsilon=0.1:") (newline)
+(for-each (lambda (c)
+  (let ((delta (/ 0.1 (+ (* 2 c) 1))))
+    (display "  c=") (display c)
+    (display ", delta=") (display delta) (newline)))
+  (list 1 10 100 1000))
+
+(display "On [0,1]: delta >= 0.1/3 for all c") (newline)
+(display "On [0,inf): delta -> 0 as c -> inf") (newline)
+(display "No single delta works for all c on [0,inf)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+print("delta for x^2 with epsilon=0.1:")
+for c in [1, 10, 100, 1000]:
+    delta = 0.1 / (2 * c + 1)
+    print("  c=" + str(c) + ", delta=" + str(delta))
+
+print("On [0,1]: delta >= 0.1/3 for all c")
+print("On [0,inf): delta -> 0 as c -> inf")
+print("No single delta works for all c on [0,inf)")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&forall;&epsilon; &exists;&delta;</td><td class="pr-4 text-green-300">(find-delta c eps)</td><td class="font-sans">Continuity at c</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">IVT</td><td class="pr-4 text-green-300">(bisect a b tol)</td><td class="font-sans">Intermediate value theorem</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">EVT</td><td class="pr-4 text-green-300">(find-extrema ...)</td><td class="font-sans">Extreme value theorem</td></tr>
+          <tr><td class="py-2 pr-4">unif. cont.</td><td class="pr-4 text-green-300">&delta; indep. of c</td><td class="font-sans">Uniform continuity</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-02/">Ch. 2: Sequences</a> — sequential characterization of continuity</li>
+      <li><a href="/reading/real-analysis/lebl-05/">Ch. 5: The Derivative</a> — differentiability implies continuity</li>
+      <li><a href="/reading/real-analysis/lebl-08/">Ch. 8: Metric Spaces</a> — continuity generalized beyond the real line</li>
+      <li><a href="/reading/calculus/calc-03/">∫ Calculus Ch.3 Limits</a> — limits and continuity from the calculus perspective</li>
+      <li><a href="/reading/control/ctrl-04/">🎛 Control Ch.4</a> — stability theory depends on continuity of the vector field</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Probability Ch.4</a> — continuous probability distributions require continuity of the CDF</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>Bisection is the constructive content of IVT. The sampling approach to EVT is not a proof; it misses the actual extremum by up to the sampling resolution. The real theorems depend on completeness and compactness, which have no computational shortcut.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-03/", label: "Series" }} next={{ href: "/reading/real-analysis/lebl-05/", label: "The Derivative" }} />
+
+  </main>
+</Layout>

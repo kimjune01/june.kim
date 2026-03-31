@@ -1,0 +1,403 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.23 — Topoi" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Topoi</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2017 · <a href="https://bartoszmilewski.com/2017/07/22/topoi/">Category Theory for Programmers, Ch. 23</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-11/">🍞 Ch11 (Limits and Colimits)</a>, <a href="/reading/category-theory/milewski-09/">🍞 Ch9 (Function Types)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>topos</strong> is a category that behaves like a universe of sets. It has all finite limits, exponentials (function objects), and a <strong>subobject classifier</strong> &Omega; that generalizes true/false. In <strong>Set</strong>, &Omega; = &lbrace;true, false&rbrace; and subsets correspond to characteristic functions. In a presheaf topos, &Omega; can have more truth values: the internal logic is intuitionistic, not classical.</p>
+    </div>
+
+    <!-- SVG: Subobject classifier pullback square -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <defs>
+          <marker id="arrowT" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+          </marker>
+          <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#4ade80" stroke-width="1" stroke-opacity="0.6"/>
+          </marker>
+        </defs>
+
+        <!-- Objects -->
+        <!-- A (subset) top-left -->
+        <text x="80" y="65" text-anchor="middle" fill="#4ade80" font-size="15" fill-opacity="0.8">A</text>
+        <!-- 1 (terminal) top-right -->
+        <text x="340" y="65" text-anchor="middle" fill="currentColor" font-size="15" fill-opacity="0.8">1</text>
+        <!-- B (ambient set) bottom-left -->
+        <text x="80" y="195" text-anchor="middle" fill="currentColor" font-size="15" fill-opacity="0.8">B</text>
+        <!-- Omega bottom-right -->
+        <text x="340" y="195" text-anchor="middle" fill="#f59e0b" font-size="15" fill-opacity="0.8">&Omega;</text>
+
+        <!-- B with elements, A highlighted -->
+        <ellipse cx="80" cy="195" rx="0" ry="0" fill="none"/>
+
+        <!-- Arrows -->
+        <!-- A ↪ B (mono, left side) -->
+        <line x1="80" y1="75" x2="80" y2="175" stroke="#4ade80" stroke-width="1.5" stroke-opacity="0.5" marker-end="url(#arrowGreen)"/>
+        <text x="60" y="130" text-anchor="end" fill="#4ade80" font-size="11" fill-opacity="0.6">m</text>
+        <text x="55" y="143" text-anchor="end" fill="#4ade80" font-size="8" fill-opacity="0.4">(mono)</text>
+
+        <!-- 1 -> Omega (true, right side) -->
+        <line x1="340" y1="75" x2="340" y2="175" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4" marker-end="url(#arrowT)"/>
+        <text x="360" y="130" fill="currentColor" font-size="11" fill-opacity="0.6">true</text>
+
+        <!-- A -> 1 (unique, top) -->
+        <line x1="100" y1="55" x2="320" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" marker-end="url(#arrowT)"/>
+        <text x="210" y="48" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">!</text>
+
+        <!-- B -> Omega (chi, bottom) -->
+        <line x1="100" y1="190" x2="318" y2="190" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5" marker-end="url(#arrowT)"/>
+        <text x="210" y="210" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.7">&chi;</text>
+
+        <!-- Pullback corner symbol -->
+        <polyline points="95,75 95,90 110,90" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+
+        <!-- Caption: the pullback condition -->
+        <text x="210" y="240" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">A = pullback of true along &chi;</text>
+        <text x="210" y="256" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">&chi;(x) = true if x &isin; A, false otherwise</text>
+      </svg>
+    </div>
+
+    <!-- 1. Subobjects and monomorphisms -->
+    <h3>Subobjects: the categorical notion of "subset"</h3>
+    <p>In set theory, a subset is defined by membership. In category theory, a <strong>subobject</strong> is an equivalence class of monomorphisms (injective arrows). A monomorphism <code>m : a &rarr; b</code> is an arrow that can be cancelled on the left: if <code>m &middot; g = m &middot; g'</code> then <code>g = g'</code>. Two monos into the same object are equivalent when they factor through each other via an isomorphism.</p>
+
+    <SchemeRepl client:load initialCode={`; Monomorphism: injective function (cancellable on the left).
+; m is mono if m(g(x)) = m(g'(x)) for all x implies g = g'.
+; In Set, mono = injective.
+
+(define (mono? f domain)
+  ; Check: no two distinct inputs map to the same output
+  (let loop ((remaining domain) (seen '()))
+    (if (null? remaining) #t
+        (let ((val (f (car remaining))))
+          (if (member val seen) #f
+              (loop (cdr remaining) (cons val seen)))))))
+
+; Injective: include even numbers into all naturals
+(define (include-evens x) x)  ; identity on evens
+(display "include-evens mono? ")
+(display (mono? include-evens '(0 2 4 6 8))) (newline)
+
+; Not injective: mod 3
+(define (mod3 x) (modulo x 3))
+(display "mod3 mono? ")
+(display (mono? mod3 '(0 1 2 3 4 5))) (newline)
+
+; Subobject: the equivalence class of monos.
+; (0,2,4) ↪ (0,1,2,3,4) and (0,2,4) ↪ (0,1,2,3,4)
+; via different injections define the SAME subobject
+; if they have the same image.
+`} />
+
+    <!-- 2. The subobject classifier -->
+    <h3>The subobject classifier &Omega;</h3>
+    <p>A <strong>subobject classifier</strong> is an object &Omega; with a distinguished arrow <code>true : 1 &rarr; &Omega;</code> such that every monomorphism <code>f : a &#8618; b</code> is the pullback of <code>true</code> along a unique arrow <code>&chi; : b &rarr; &Omega;</code>. The arrow &chi; is the <strong>characteristic function</strong> of the subobject. In Set, &Omega; = &lbrace;true, false&rbrace;, and &chi; is the indicator function: &chi;(x) = true if x is in the subset, false otherwise.</p>
+
+    <SchemeRepl client:load initialCode={`; Subobject classifier in Set:
+; Ω = (#t, #f)
+; true : 1 -> Ω sends () to #t
+;
+; For every subset A ⊆ B, the characteristic function
+; χ : B -> Ω sends x to #t if x ∈ A, #f otherwise.
+;
+; The pullback of true along χ recovers A.
+
+(define omega '(#t #f))
+
+; true : 1 -> Ω
+(define (true-arrow _) #t)
+
+; Characteristic function for a subset
+(define (char-fn subset)
+  (lambda (x) (if (member x subset) #t #f)))
+
+; Example: B = (1,2,3,4,5), A = (2,4)
+(define B '(1 2 3 4 5))
+(define A '(2 4))
+
+(define chi (char-fn A))
+
+(display "χ(1)=") (display (chi 1))
+(display " χ(2)=") (display (chi 2))
+(display " χ(3)=") (display (chi 3))
+(display " χ(4)=") (display (chi 4))
+(display " χ(5)=") (display (chi 5)) (newline)
+
+; Pullback: recover A as (x in B where χ(x) = true)
+(define (pullback-of-true chi domain)
+  (filter chi domain))
+
+(display "pullback recovers A: ")
+(display (pullback-of-true chi B))
+; => (2 4)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Subobject classifier in Set
+# Ω = (True, False), true : 1 -> Ω
+
+def char_fn(subset):
+    """Characteristic function: B -> Ω"""
+    return lambda x: x in subset
+
+B = [1, 2, 3, 4, 5]
+A = set([2, 4])
+
+chi = char_fn(A)
+result = dict((x, chi(x)) for x in B)
+print("χ: " + str(result))
+
+# Pullback of true along χ recovers the subset
+recovered = [x for x in B if chi(x)]
+print("pullback recovers A: " + str(recovered))
+`} />
+    </div>
+
+    <!-- 3. The three axioms of a topos -->
+    <h3>The three axioms of a topos</h3>
+    <p>A category is a <strong>topos</strong> when it satisfies three conditions: (1) it is <strong>cartesian closed</strong> (has a terminal object, all binary products, and exponentials), (2) it has <strong>all finite limits</strong> (equalizers + products give you pullbacks, and everything else), and (3) it has a <strong>subobject classifier</strong>. Set is the prototypical topos. But there are others where &Omega; has more than two elements.</p>
+
+    <SchemeRepl client:load initialCode={`; The topos checklist for Set:
+;
+; 1. Cartesian closed?
+;    - Terminal object: the one-element set (*)
+;    - Products: A × B (cartesian product)
+;    - Exponentials: B^A (function set)   ✓
+;
+; 2. All finite limits?
+;    - Equalizers: (x in A where f(x) = g(x))
+;    - Pullbacks: from products + equalizers   ✓
+;
+; 3. Subobject classifier?
+;    - Ω = (#t, #f), true : 1 -> Ω   ✓
+
+; Let's verify the equalizer in Set:
+(define (equalizer f g domain)
+  (filter (lambda (x) (equal? (f x) (g x))) domain))
+
+(define (f x) (* x x))     ; x²
+(define (g x) (+ (* 2 x) 3))  ; 2x + 3
+
+(display "equalizer of x² and 2x+3 over 0..5: ")
+(display (equalizer f g '(0 1 2 3 4 5))) (newline)
+; => (3)  because 9 = 9
+
+; Pullback via equalizer of products:
+; Given f: A -> C and g: B -> C,
+; pullback = ((a,b) in A×B where f(a) = g(b))
+(define (pullback f g domA domB)
+  (let loop ((as domA) (result '()))
+    (if (null? as) (reverse result)
+        (let inner ((bs domB) (acc result))
+          (if (null? bs) (loop (cdr as) acc)
+              (if (equal? (f (car as)) (g (car bs)))
+                  (inner (cdr bs) (cons (cons (car as) (car bs)) acc))
+                  (inner (cdr bs) acc)))))))
+
+(display "pullback f(a)=g(b): ")
+(display (pullback f g '(0 1 2 3 4 5) '(0 1 2 3 4 5)))
+; pairs (a,b) where a² = 2b+3
+`} />
+
+    <!-- 4. Multi-valued truth: presheaf topos -->
+    <h3>Multi-valued truth in a presheaf topos</h3>
+    <p>In Set, &Omega; has two elements. But in a <strong>presheaf topos</strong> (functors from a small category C<sup>op</sup> to Set), the subobject classifier can have more truth values. A "truth value" at stage c is a <strong>sieve</strong> on c: a downward-closed set of arrows into c. The maximal sieve (all arrows) is "totally true." The empty sieve is "false." Everything in between is a degree of partial truth. This is why the internal logic of a topos is intuitionistic: the law of excluded middle can fail.</p>
+
+    <SchemeRepl client:load initialCode={`; Multi-valued truth in a small presheaf category.
+;
+; Category C: two objects (a, b) with one non-identity arrow f: a -> b.
+; A presheaf is a functor C^op -> Set.
+;
+; Ω(b) = sieves on b = downward-closed sets of arrows into b
+;   - maximal sieve: (id_b, f)  (all arrows into b)
+;   - sieve (f)                 (only the arrow from a)
+;   - empty sieve: ()
+;
+; So Ω(b) has THREE elements, not two!
+
+(define omega-at-b
+  '((max-sieve . (id-b f))    ; totally true
+    (partial   . (f))          ; true at stage a only
+    (empty     . ())))          ; false
+
+(display "Ω(b) has ") (display (length omega-at-b))
+(display " truth values:") (newline)
+(for-each (lambda (s)
+  (display "  ") (display (car s))
+  (display " = (") (display (cdr s))
+  (display ")") (newline))
+  omega-at-b)
+
+; Ω(a) = sieves on a = (id_a) or ()
+; Only two truth values at stage a (no arrows in except id).
+(define omega-at-a
+  '((max-sieve . (id-a))
+    (empty     . ())))
+
+(display "Ω(a) has ") (display (length omega-at-a))
+(display " truth values") (newline)
+
+; The "partial" truth value has no classical equivalent.
+; ¬partial ≠ partial, but partial ∨ ¬partial ≠ max-sieve.
+; Excluded middle fails. Logic is intuitionistic.
+(display "Excluded middle fails: partial ∨ ¬partial ≠ true")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multi-valued truth: presheaf topos over (a -> b)
+#
+# Sieves on b = downward-closed sets of arrows into b
+
+omega_b = dict(
+    max=set(["id_b", "f"]),       # totally true
+    partial=set(["f"]),            # true at stage a only
+    empty=set(),                   # false
+)
+
+omega_a = dict(
+    max=set(["id_a"]),
+    empty=set(),
+)
+
+print("Ω(b) has " + str(len(omega_b)) + " truth values:")
+for name, sieve in omega_b.items():
+    print("  " + str(name) + " = " + str(sieve))
+
+print("Ω(a) has " + str(len(omega_a)) + " truth values")
+
+# Negation: not-S = arrows h where for all g composable with h, g.h not in S
+# not-partial at b: h such that f.h is never in partial
+#   h = id_b: f.id_b = f, which IS in partial. So id_b excluded.
+#   h = f: f.f undefined (domain mismatch).
+# not-partial = empty.
+# partial or not-partial = partial or empty = partial, not max.
+print("not-partial = empty, partial or empty = partial != max")
+print("Law of excluded middle FAILS.")
+`} />
+    </div>
+
+    <p class="text-sm text-gray-400">The sieve calculation is correct for this two-object category. General presheaf topoi require computing sieves over arbitrary diagrams.</p>
+
+    <!-- 5. Intuitionistic logic -->
+    <h3>Intuitionistic logic: no excluded middle</h3>
+    <p>The internal logic of a topos is <strong>intuitionistic</strong>. All the standard logical connectives exist: conjunction (&and;) via products, disjunction (&or;) via coproducts, implication (&rArr;) via exponentials. But the law of excluded middle (<code>p &or; &not;p = true</code>) does not hold in general. A proposition is "true" only when you can construct a proof. Double negation does not collapse: <code>&not;&not;p</code> does not imply <code>p</code>. This makes topoi a natural home for constructive mathematics and computation.</p>
+
+    <SchemeRepl client:load initialCode={`; Intuitionistic logic: Heyting algebra on Ω.
+;
+; In Set (classical): Ω = (set #t #f), Boolean algebra.
+; In a topos: Ω is a Heyting algebra.
+;
+; Heyting algebra operations:
+;   ∧ (meet)  = product  = AND
+;   ∨ (join)  = coproduct = OR
+;   → (impl)  = exponential = implies
+;   ¬p = p → false
+;
+; Key difference from Boolean algebra:
+;   ¬¬p does NOT imply p.
+
+; Heyting algebra on (false, partial, true) (linearly ordered)
+(define (h-and a b) (min a b))
+(define (h-or a b) (max a b))
+(define (h-implies a b) (if (<= a b) 2 b))  ; 2=true, 1=partial, 0=false
+(define (h-not a) (h-implies a 0))
+
+(define truth-vals '((false . 0) (partial . 1) (true . 2)))
+
+; ¬partial = partial → false
+(display "¬partial = ") (display (h-not 1)) (newline)
+; => 0 (false)
+
+; ¬¬partial = ¬false = false → false
+(display "¬¬partial = ") (display (h-not (h-not 1))) (newline)
+; => 2 (true)
+
+; But partial ≠ true!
+(display "partial = ") (display 1) (newline)
+(display "¬¬partial ≠ partial: double negation fails") (newline)
+
+; Excluded middle: p ∨ ¬p
+(display "partial ∨ ¬partial = ")
+(display (h-or 1 (h-not 1))) (newline)
+; => 1 (partial), not 2 (true). Excluded middle fails!
+
+; In Boolean algebra: ¬partial would be true, giving p ∨ ¬p = true.
+; Heyting algebra is strictly weaker.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&Omega;</td><td class="pr-4 text-green-300">omega</td><td class="font-sans">Subobject classifier</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">true : 1 &rarr; &Omega;</td><td class="pr-4 text-green-300">(true-arrow _)</td><td class="font-sans">Distinguished arrow picking out "true"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&chi; : b &rarr; &Omega;</td><td class="pr-4 text-green-300">(char-fn subset)</td><td class="font-sans">Characteristic function of a subobject</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Sub(b) &cong; C(b, &Omega;)</td><td class="pr-4 text-green-300">(pullback-of-true chi B)</td><td class="font-sans">&Omega; represents the subobject functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Sieve on c</td><td class="pr-4 text-green-300">(max-sieve . (id-b f))</td><td class="font-sans">Downward-closed set of arrows into c</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&not;p = p &rArr; &perp;</td><td class="pr-4 text-green-300">(h-not a)</td><td class="font-sans">Negation in Heyting algebra</td></tr>
+          <tr><td class="py-2 pr-4">p &or; &not;p &ne; &top;</td><td class="pr-4 text-green-300">(h-or 1 (h-not 1))</td><td class="font-sans">Excluded middle fails in intuitionistic logic</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-11/">🍞 Chapter 11</a> &mdash; Limits and Colimits (finite limits are a topos axiom)</li>
+      <li><a href="/reading/category-theory/milewski-09/">🍞 Chapter 9</a> &mdash; Function Types (exponentials / cartesian closure)</li>
+      <li><a href="/reading/category-theory/milewski-15/">🍞 Chapter 15</a> &mdash; Yoneda Embedding (presheaf categories form topoi)</li>
+      <li><a href="/reading/category-theory/milewski-14/">🍞 Chapter 14</a> &mdash; The Yoneda Lemma (representability of the subobject functor)</li>
+    
+      <li><a href="/reading/logic/logic-10/">🔑 Logic Ch.10</a> &mdash; topoi have their own internal logic; Gödel incompleteness is a shadow</li>
+      <li><a href="/reading/proof-writing/proofs-05/">✎ Proofs Ch.5</a> &mdash; sets as a special case of objects in a topos</li>
+      <li><a href="/reading/the-natural-framework-lean/axioms/">✏️ Axioms.lean</a> &mdash; axioms as the foundation of the formal system in a topos</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Topos"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Topos</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Subobject_classifier"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Subobject classifier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Intuitionistic_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Intuitionistic logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Heyting_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Heyting algebra</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post is conceptual rather than code-heavy: no Haskell implementations appear. This page translates the definitions into executable Scheme and Python. The subobject classifier in Set is straightforward (characteristic functions are just indicator functions). The presheaf example uses the simplest non-trivial category (two objects, one non-identity arrow) to show that &Omega; can have three truth values. In general, &Omega;(c) is the set of all sieves on c, which can be large. The Heyting algebra section demonstrates the linear order (false &lt; partial &lt; true); in richer presheaf categories, the truth values form a more complex partial order. The blog post also discusses the connection between topoi and alternative foundations of mathematics: topos theory provides a framework where "true" means "provable," aligning with constructive mathematics and type theory.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/07/22/topoi/">Read the blog post</a>. Start with the subobject classifier definition, then trace how sieves generalize truth values.
+    </div>
+
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-22/", label: "Enriched Categories" }} next={{ href: "/reading/category-theory/milewski-24/", label: "Lawvere Theories" }} />
+
+  </main>
+</Layout>

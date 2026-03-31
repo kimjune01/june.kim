@@ -1,0 +1,190 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.3 — Comparative Advantage" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Comparative Advantage</h1>
+    <p class="text-gray-400 text-sm mb-6">David Ricardo &middot; 1817 &middot; <a href="https://en.wikipedia.org/wiki/Comparative_advantage"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>On the Principles of Political Economy and Taxation, Ch. 7</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Comparative advantage</strong>: even if one country is better at producing everything, both countries gain from trade when each specializes in what it produces at the lowest opportunity cost. Ricardo proved this with England and Portugal trading wine and cloth.</p>
+    </div>
+
+    <!-- SVG: Production possibility frontiers -->
+    <h3>Two production possibility frontiers</h3>
+    <p>Portugal can produce both wine and cloth more efficiently than England (absolute advantage in both). But Portugal's relative advantage is larger in wine. England's relative advantage is in cloth. Both gain by specializing and trading.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- England PPF -->
+        <text x="110" y="18" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">England</text>
+        <!-- Axes -->
+        <line x1="30" y1="190" x2="200" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="30" y1="190" x2="30" y2="30" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="115" y="208" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Cloth</text>
+        <text x="15" y="110" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4" transform="rotate(-90, 15, 110)">Wine</text>
+        <!-- PPF line: can make 100 cloth or 80 wine -->
+        <line x1="30" y1="50" x2="180" y2="190" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="30" y="42" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">80</text>
+        <text x="185" y="205" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">100</text>
+
+        <!-- Portugal PPF -->
+        <text x="340" y="18" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Portugal</text>
+        <line x1="250" y1="190" x2="420" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="250" y1="190" x2="250" y2="30" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="335" y="208" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Cloth</text>
+        <text x="235" y="110" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4" transform="rotate(-90, 235, 110)">Wine</text>
+        <!-- PPF line: can make 90 cloth or 120 wine -->
+        <line x1="250" y1="40" x2="385" y2="190" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="250" y="32" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">120</text>
+        <text x="390" y="205" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">90</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Ricardo's England/Portugal example
+; Hours to produce one unit:
+;              Cloth   Wine
+; England:     100     120
+; Portugal:     90      80
+
+; Opportunity cost of 1 cloth (in wine given up):
+; England:  120/100 = 1.2 wine
+; Portugal:  80/90  = 0.89 wine
+
+(define eng-cloth 100)   ; hours per cloth
+(define eng-wine 120)    ; hours per wine
+(define por-cloth 90)
+(define por-wine 80)
+
+(define eng-opp-cloth (/ eng-wine eng-cloth))   ; wine forgone per cloth
+(define por-opp-cloth (/ por-wine por-cloth))
+
+(display "Opportunity cost of 1 cloth (in wine):")
+(newline)
+(display "  England:  ")
+(display (exact->inexact eng-opp-cloth))
+(newline)
+(display "  Portugal: ")
+(display (exact->inexact por-opp-cloth))
+(newline)
+(newline)
+
+; England has lower opp cost of cloth -> comparative advantage in cloth
+; Portugal has lower opp cost of wine -> comparative advantage in wine
+(display "England should specialize in: cloth (lower opp cost)")
+(newline)
+(display "Portugal should specialize in: wine (lower opp cost)")
+(newline)
+(newline)
+
+; With 1000 hours each, no trade:
+; England: 5 cloth + ~4 wine (split evenly)
+; With specialization and trade, both get more
+(display "Both gain from trade despite Portugal being")
+(newline)
+(display "absolutely better at both goods.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Ricardo's comparative advantage
+# Hours to produce one unit:
+eng_cloth, eng_wine = 100, 120
+por_cloth, por_wine = 90, 80
+
+# Opportunity cost of 1 cloth (in wine foregone)
+eng_opp = eng_wine / eng_cloth
+por_opp = por_wine / por_cloth
+
+print("Opp cost of 1 cloth (wine units):")
+print("  England:  " + str(round(eng_opp, 2)))
+print("  Portugal: " + str(round(por_opp, 2)))
+print()
+print("England: comparative advantage in cloth")
+print("Portugal: comparative advantage in wine")
+`} />
+    </div>
+
+
+    <h3>Gains from trade</h3>
+    <p>Without trade, each country splits its labor. With trade, England makes only cloth and Portugal makes only wine. They trade at a rate between their opportunity costs. Both end up with more of both goods than they could produce alone.</p>
+
+    <SchemeRepl client:load initialCode={`; Numerical gains from trade
+; Suppose each country has 1000 labor hours.
+
+; Without trade (split 50/50):
+; England: 500/100=5 cloth, 500/120=4.17 wine
+; Portugal: 500/90=5.56 cloth, 500/80=6.25 wine
+
+(define (no-trade hours cloth-cost wine-cost)
+  (let ((c (/ (/ hours 2.0) cloth-cost))
+        (w (/ (/ hours 2.0) wine-cost)))
+    (list c w)))
+
+(define eng-no-trade (no-trade 1000 100 120))
+(define por-no-trade (no-trade 1000 90 80))
+
+(display "Without trade:")
+(newline)
+(display "  England: ")
+(display (car eng-no-trade))
+(display " cloth, ")
+(display (cadr eng-no-trade))
+(display " wine")
+(newline)
+(display "  Portugal: ")
+(display (car por-no-trade))
+(display " cloth, ")
+(display (cadr por-no-trade))
+(display " wine")
+(newline)
+
+; With trade: England makes only cloth, Portugal only wine
+; England: 1000/100 = 10 cloth
+; Portugal: 1000/80 = 12.5 wine
+; Trade 4 cloth for 5 wine (rate: 1.25, between 0.89 and 1.2)
+(display "With specialization + trade (4 cloth for 5 wine):")
+(newline)
+(display "  England: 6 cloth, 5 wine")
+(newline)
+(display "  Portugal: 4 cloth, 7.5 wine")
+(newline)
+(display "Both have MORE of both goods.")
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Absolute advantage</td><td>Producing more with the same resources</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Comparative advantage</td><td>Producing at lower opportunity cost</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">PPF</td><td>Production possibility frontier: the tradeoff boundary</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Comparative_advantage"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Comparative advantage</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Ricardian_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Ricardian model</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-02/", label: "Supply and Demand" }} next={{ href: "/reading/economics/econ-04/", label: "Diminishing Returns" }} />
+
+  </main>
+</Layout>

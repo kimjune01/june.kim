@@ -1,0 +1,341 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.9 — Assignment & State" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Assignment &amp; State</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-20.html#%_sec_3.1">SICP §3.1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><code>set!</code> introduces time into the model. Once variables can change, substitution breaks down. Objects with local state model real-world entities but sacrifice referential transparency.</p>
+    </div>
+
+    <!-- SVG: Bank account state diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- State boxes -->
+        <rect x="10" y="40" width="80" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="50" y="65" text-anchor="middle" fill="#60a5fa" font-size="13">100</text>
+        <rect x="130" y="40" width="80" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="170" y="65" text-anchor="middle" fill="#60a5fa" font-size="13">75</text>
+        <rect x="250" y="40" width="80" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="290" y="65" text-anchor="middle" fill="#60a5fa" font-size="13">35</text>
+        <!-- Arrows -->
+        <line x1="90" y1="60" x2="123" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="125,60 118,55 118,65" fill="currentColor" fill-opacity="0.5"/>
+        <text x="107" y="50" text-anchor="middle" fill="#f59e0b" font-size="9">-25</text>
+        <line x1="210" y1="60" x2="243" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="245,60 238,55 238,65" fill="currentColor" fill-opacity="0.5"/>
+        <text x="227" y="50" text-anchor="middle" fill="#f59e0b" font-size="9">-40</text>
+        <!-- Labels -->
+        <text x="50" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">t₀</text>
+        <text x="170" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">t₁</text>
+        <text x="290" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">t₂</text>
+        <text x="210" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">balance changes over time — set! makes history matter</text>
+      </svg>
+    </div>
+
+    <!-- 1. Local state variables -->
+    <h3>Local state variables</h3>
+    <p><code>make-withdraw</code> returns a procedure that remembers its balance. Each call to the returned procedure mutates the enclosed variable. The procedure <em>has state</em>.</p>
+
+    <SchemeRepl client:load initialCode={`; A withdraw procedure with local state
+(define (make-withdraw balance)
+  (lambda (amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds")))
+
+(define W (make-withdraw 100))
+(display (W 25)) (newline)   ; 75
+(display (W 25)) (newline)   ; 50
+(display (W 60)) (newline)   ; Insufficient funds
+(display (W 15))             ; 35
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def make_withdraw(balance):
+    b = [balance]  # mutable cell
+    def withdraw(amount):
+        if b[0] >= amount:
+            b[0] -= amount
+            return b[0]
+        return "Insufficient funds"
+    return withdraw
+
+W = make_withdraw(100)
+print(W(25))   # 75
+print(W(25))   # 50
+print(W(60))   # Insufficient funds
+print(W(15))   # 35
+`} />
+    </div>
+
+    <p>A full bank account bundles deposit and withdraw behind a message-passing interface:</p>
+
+    <SchemeRepl client:load initialCode={`; Bank account with deposit and withdraw
+(define (make-account balance)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error "Unknown request" m))))
+  dispatch)
+
+(define acc (make-account 100))
+(display ((acc 'withdraw) 50)) (newline)  ; 50
+(display ((acc 'deposit) 40)) (newline)   ; 90
+(display ((acc 'withdraw) 60))            ; 30
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`class Account:
+    def __init__(self, balance):
+        self.balance = balance
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+            return self.balance
+        return "Insufficient funds"
+    def deposit(self, amount):
+        self.balance += amount
+        return self.balance
+
+acc = Account(100)
+print(acc.withdraw(50))  # 50
+print(acc.deposit(40))   # 90
+print(acc.withdraw(60))  # 30
+`} />
+    </div>
+
+    <!-- 2. Costs of assignment -->
+    <h3>The costs of introducing assignment</h3>
+    <p>Without <code>set!</code>, calling a procedure with the same arguments always returns the same result. That is <strong>referential transparency</strong>. Assignment destroys it: <code>(W 25)</code> returns different values on successive calls. The substitution model cannot explain this; we need the environment model (next chapter).</p>
+
+    <SchemeRepl client:load initialCode={`; Referential transparency: pure version
+; Same input always gives same output
+(define (make-decrementer balance)
+  (lambda (amount) (- balance amount)))
+
+(define D (make-decrementer 100))
+(display (D 25)) (newline)  ; always 75
+(display (D 25)) (newline)  ; always 75
+
+; Now compare with set! version:
+; Same call, different results
+(define (make-withdraw balance)
+  (lambda (amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds")))
+
+(define W (make-withdraw 100))
+(display (W 25)) (newline)  ; 75
+(display (W 25))            ; 50 — not the same!
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Pure: same input, same output
+def decrement(balance, amount):
+    return balance - amount
+
+print(decrement(100, 25))  # always 75
+print(decrement(100, 25))  # always 75
+
+# Stateful: same call, different result
+def make_withdraw(balance):
+    b = [balance]
+    def withdraw(amount):
+        if b[0] >= amount:
+            b[0] -= amount
+            return b[0]
+        return "Insufficient funds"
+    return withdraw
+
+W = make_withdraw(100)
+print(W(25))  # 75
+print(W(25))  # 50 — not the same!
+`} />
+    </div>
+
+    <!-- 3. Benefits of assignment: Monte Carlo -->
+    <h3>The benefits of assignment: Monte Carlo</h3>
+    <p>Assignment enables clean modular design when modeling processes with internal randomness. The Monte Carlo method estimates &pi; by testing random points in the unit square. The random number generator hides its state; the estimator does not need to know how randomness works.</p>
+
+    <SchemeRepl client:load initialCode={`; Monte Carlo estimation of pi
+; Using assignment for a simple linear-congruential RNG
+
+(define rand-state 42)
+
+(define (rand)
+  (set! rand-state
+        (modulo (+ (* 1103515245 rand-state) 12345)
+                (expt 2 31)))
+  rand-state)
+
+(define (monte-carlo trials experiment)
+  (define (iter remaining passed)
+    (cond ((= remaining 0)
+           (exact->inexact (/ passed trials)))
+          ((experiment)
+           (iter (- remaining 1) (+ passed 1)))
+          (else
+           (iter (- remaining 1) passed))))
+  (iter trials 0))
+
+; Cesaro test: are two random numbers coprime?
+(define (cesaro-test)
+  (= (gcd (rand) (rand)) 1))
+
+(define fraction (monte-carlo 1000 cesaro-test))
+(display "fraction coprime: ")
+(display fraction) (newline)
+(display "pi estimate: ")
+(display (sqrt (/ 6.0 fraction)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random, math
+
+def monte_carlo(trials, experiment):
+    passed = sum(1 for _ in range(trials) if experiment())
+    return passed / trials
+
+def cesaro_test():
+    return math.gcd(random.randint(1, 10000),
+                     random.randint(1, 10000)) == 1
+
+fraction = monte_carlo(1000, cesaro_test)
+pi_est = (6 / fraction) ** 0.5 if fraction > 0 else 0
+print(f"fraction coprime: {fraction:.3f}")
+print(f"pi estimate:      {pi_est:.4f}")
+`} />
+    </div>
+
+    <!-- 4. Sameness and change -->
+    <h3>Sameness and change</h3>
+    <p>If two variables refer to the same mutable object, changing one affects the other. Before <code>set!</code>, "same" meant "equal value." After <code>set!</code>, we must distinguish <strong>identity</strong> (same object) from <strong>equality</strong> (same value).</p>
+
+    <SchemeRepl client:load initialCode={`; Identity vs equality with mutable state
+(define (make-account balance)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount)) balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount)) balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error "Unknown request" m))))
+  dispatch)
+
+(define acc1 (make-account 100))
+(define acc2 (make-account 100))
+
+; acc1 and acc2 have equal balances but different identity
+((acc1 'withdraw) 30)
+((acc2 'withdraw) 10)
+
+; acc1 has 70, acc2 has 90 — same starting value, different state
+(display "acc1: ") (display ((acc1 'withdraw) 0)) (newline)
+(display "acc2: ") (display ((acc2 'withdraw) 0)) (newline)
+
+; Aliasing: acc3 IS acc1
+(define acc3 acc1)
+((acc3 'deposit) 50)
+(display "acc1 after acc3 deposit: ")
+(display ((acc1 'withdraw) 0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`class Account:
+    def __init__(self, balance):
+        self.balance = balance
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+            return self.balance
+        return "Insufficient funds"
+    def deposit(self, amount):
+        self.balance += amount
+        return self.balance
+
+acc1 = Account(100)
+acc2 = Account(100)
+acc1.withdraw(30)
+acc2.withdraw(10)
+print(f"acc1: {acc1.balance}")  # 70
+print(f"acc2: {acc2.balance}")  # 90
+
+# Aliasing: acc3 IS acc1
+acc3 = acc1
+acc3.deposit(50)
+print(f"acc1 after acc3 deposit: {acc1.balance}")  # 120
+print(f"acc1 is acc3: {acc1 is acc3}")  # True
+`} />
+    </div>
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4 text-gray-400">Scheme</th>
+            <th class="text-left py-2 pr-4 text-gray-400">Python</th>
+            <th class="text-left py-2 text-gray-400">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(set! x v)</code></td><td class="pr-4"><code>x = v</code></td><td class="text-gray-400">Mutation — assign new value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(begin e1 e2)</code></td><td class="pr-4"><code>e1; e2</code></td><td class="text-gray-400">Sequencing — evaluate in order</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(lambda (x) body)</code></td><td class="pr-4"><code>lambda x: body</code></td><td class="text-gray-400">Closure — captures enclosing scope</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(eq? a b)</code></td><td class="pr-4"><code>a is b</code></td><td class="text-gray-400">Identity — same object</td></tr>
+          <tr><td class="py-1 pr-4"><code>(equal? a b)</code></td><td class="pr-4"><code>a == b</code></td><td class="text-gray-400">Equality — same value</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li>Scheme closures capture variables by reference. Python closures do the same, but rebinding requires <code>nonlocal</code> or a mutable container (list cell).</li>
+      <li><code>set!</code> is Scheme's only mutation primitive for variables. Python uses bare assignment, with <code>nonlocal</code> to reach enclosing scopes.</li>
+      <li>Message-passing dispatch with <code>cond</code> maps directly to Python classes with methods.</li>
+    </ul>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li><a href="https://en.wikipedia.org/wiki/Referential_transparency"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Referential transparency</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Side_effect_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Side effect</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Imperative_programming"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Imperative programming</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-20.html#%_sec_3.1">Read SICP &sect;3.1</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-08/", label: "Generic Operations" }} next={{ href: "/reading/programming/sicp-10/", label: "Environment Model · 10 of 22" }} />
+
+  </main>
+</Layout>

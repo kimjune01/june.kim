@@ -1,0 +1,394 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.8 — Interest Rate Models" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Interest Rate Models</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Interest rates are not stocks&mdash;they <strong>mean-revert</strong>. A 15% rate pulls back toward some long-run level; a negative rate pushes up. The right model encodes this pull while keeping rates from reaching unrealistically extreme negative values. (Mildly negative nominal rates have occurred in practice, but the Vasicek model's Gaussian tails can push rates far below zero.)</p>
+    </div>
+
+    <!-- SVG: mean-reverting rate paths -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="380" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="20" x2="40" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">time</text>
+        <text x="15" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,15,100)">rate r(t)</text>
+        <!-- Long-run mean -->
+        <line x1="40" y1="100" x2="380" y2="100" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="6,4"/>
+        <text x="385" y="103" fill="#f59e0b" font-size="9" fill-opacity="0.6">&#x3B8;</text>
+        <!-- Path 1: starts high, reverts -->
+        <polyline points="40,45 80,55 120,65 160,75 200,85 240,90 280,95 320,98 360,100" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Path 2: starts low, reverts -->
+        <polyline points="40,160 80,148 120,138 160,128 200,118 240,112 280,106 320,103 360,101" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Path 3: starts at mean, wiggles -->
+        <polyline points="40,100 80,92 120,105 160,95 200,108 240,98 280,103 320,97 360,101" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Labels -->
+        <text x="50" y="40" fill="#60a5fa" font-size="9" fill-opacity="0.6">r&#x2080; high</text>
+        <text x="50" y="172" fill="#ef4444" font-size="9" fill-opacity="0.6">r&#x2080; low</text>
+      </svg>
+    </div>
+
+    <!-- 1. Vasicek Model -->
+    <h3>Vasicek model</h3>
+    <p>The Vasicek model is the Ornstein-Uhlenbeck process applied to interest rates: dr = &#x3BA;(&#x3B8; &#x2212; r)dt + &#x3C3;dW. The speed of mean reversion &#x3BA; controls how fast rates snap back to the long-run mean &#x3B8;. The drawback: rates can go negative because the noise term is additive.</p>
+
+    <SchemeRepl client:load initialCode={`; Vasicek model: dr = kappa*(theta - r)*dt + sigma*dW
+; Euler discretization
+
+(define (vasicek-step r kappa theta sigma dt z)
+  (+ r (* kappa (- theta r) dt) (* sigma (sqrt dt) z)))
+
+; Parameters
+(define kappa 0.5)   ; mean-reversion speed
+(define theta 0.05)  ; long-run mean (5%)
+(define sigma 0.02)  ; volatility
+(define dt 0.01)     ; time step
+
+; Simulate a path from r0=0.08 (above mean) with fixed shocks
+(define shocks (list 0.3 -0.5 0.1 -0.2 0.4 -0.8 0.2 -0.1 0.6 -0.3))
+
+(define (simulate r shocks)
+  (if (null? shocks) (list)
+      (let ((next (vasicek-step r kappa theta sigma dt (car shocks))))
+        (cons next (simulate next (cdr shocks))))))
+
+(define path (simulate 0.08 shocks))
+(display "Starting rate: 0.08") (newline)
+(display "Path: ")
+(for-each (lambda (r) (display (exact->inexact r)) (display " ")) path)
+(newline)
+
+; Expected value: E[r(t)] = theta + (r0-theta)*exp(-kappa*t)
+(define (vasicek-mean r0 t)
+  (+ theta (* (- r0 theta) (exp (* (- kappa) t)))))
+
+(display "E[r(1)] from r0=0.08: ")
+(display (exact->inexact (vasicek-mean 0.08 1.0))) (newline)
+(display "E[r(5)] from r0=0.08: ")
+(display (exact->inexact (vasicek-mean 0.08 5.0)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def vasicek_step(r, kappa, theta, sigma, dt, z):
+    return r + kappa*(theta - r)*dt + sigma*math.sqrt(dt)*z
+
+kappa, theta, sigma, dt = 0.5, 0.05, 0.02, 0.01
+shocks = [0.3, -0.5, 0.1, -0.2, 0.4, -0.8, 0.2, -0.1, 0.6, -0.3]
+
+r = 0.08
+path = []
+for z in shocks:
+    r = vasicek_step(r, kappa, theta, sigma, dt, z)
+    path.append(r)
+
+print("Starting rate: 0.08")
+print("Path:", " ".join(f"{x:.5f}" for x in path))
+
+# Analytical expected value
+def vasicek_mean(r0, t):
+    return theta + (r0 - theta)*math.exp(-kappa*t)
+
+print(f"E[r(1)] from r0=0.08: {vasicek_mean(0.08, 1.0):.6f}")
+print(f"E[r(5)] from r0=0.08: {vasicek_mean(0.08, 5.0):.6f}")
+`} />
+    </div>
+
+
+    <!-- 2. CIR Model -->
+    <h3>CIR model</h3>
+    <p>Cox-Ingersoll-Ross fixes the negativity problem: dr = &#x3BA;(&#x3B8; &#x2212; r)dt + &#x3C3;&#x221A;r dW. The &#x221A;r term shrinks volatility as rates approach zero, preventing them from going negative (provided 2&#x3BA;&#x3B8; &#x2265; &#x3C3;&#xB2;, the Feller condition). Same mean-reversion, better boundary behavior.</p>
+
+    <SchemeRepl client:load initialCode={`; CIR model: dr = kappa*(theta - r)*dt + sigma*sqrt(r)*dW
+; Key difference from Vasicek: volatility scales with sqrt(r)
+
+(define (cir-step r kappa theta sigma dt z)
+  (let ((new-r (+ r (* kappa (- theta r) dt)
+                   (* sigma (sqrt (max r 0)) (sqrt dt) z))))
+    (max new-r 0)))  ; floor at zero for numerical safety
+
+(define kappa 0.5)
+(define theta 0.05)
+(define sigma 0.1)
+(define dt 0.01)
+
+; Feller condition: 2*kappa*theta >= sigma^2
+(define feller (* 2 kappa theta))
+(define sigma-sq (* sigma sigma))
+(display "2*kappa*theta = ") (display feller) (newline)
+(display "sigma^2 = ") (display sigma-sq) (newline)
+(display "Feller satisfied? ") (display (>= feller sigma-sq)) (newline)
+
+; Simulate from r0=0.01 (near zero — this is where CIR matters)
+(define shocks (list 0.5 -1.2 0.8 -0.3 1.0 -0.6 0.2 0.9 -0.4 0.1))
+
+(define (simulate-cir r shocks)
+  (if (null? shocks) (list)
+      (let ((next (cir-step r kappa theta sigma dt (car shocks))))
+        (cons next (simulate-cir next (cdr shocks))))))
+
+(define path (simulate-cir 0.01 shocks))
+(display "CIR path from r0=0.01: ") (newline)
+(for-each (lambda (r) (display (exact->inexact r)) (display " ")) path)
+(newline)
+(display "All non-negative? ")
+(display (not (memq #f (map (lambda (r) (>= r 0)) path))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def cir_step(r, kappa, theta, sigma, dt, z):
+    new_r = r + kappa*(theta-r)*dt + sigma*math.sqrt(max(r,0))*math.sqrt(dt)*z
+    return max(new_r, 0)
+
+kappa, theta, sigma, dt = 0.5, 0.05, 0.1, 0.01
+feller = 2*kappa*theta
+print(f"2*kappa*theta = {feller}, sigma^2 = {sigma**2}")
+print(f"Feller satisfied? {feller >= sigma**2}")
+
+shocks = [0.5, -1.2, 0.8, -0.3, 1.0, -0.6, 0.2, 0.9, -0.4, 0.1]
+r = 0.01
+path = []
+for z in shocks:
+    r = cir_step(r, kappa, theta, sigma, dt, z)
+    path.append(r)
+
+print("CIR path from r0=0.01:")
+print(" ".join(f"{x:.5f}" for x in path))
+print(f"All non-negative? {all(x >= 0 for x in path)}")
+`} />
+    </div>
+
+
+    <!-- 3. HJM Framework -->
+    <h3>HJM framework</h3>
+    <p>Heath-Jarrow-Morton models the entire <strong>forward rate curve</strong> instead of a single short rate. The forward rate f(t,T) is the rate locked in at time t for instantaneous borrowing at T. The drift is not free: no-arbitrage forces it to equal &#x3C3;(t,T) times the integral of &#x3C3; from t to T. This <strong>drift condition</strong> is the heart of HJM.</p>
+
+    <SchemeRepl client:load initialCode={`; HJM drift condition: mu(t,T) = sigma(t,T) * integral_t^T sigma(t,s) ds
+; For constant volatility sigma, the drift is sigma^2 * (T-t)
+
+(define (hjm-drift sigma t cap-t)
+  (* sigma sigma (- cap-t t)))
+
+; Forward rate evolution: df(t,T) = mu(t,T)*dt + sigma*dW
+(define (forward-rate-step f sigma t cap-t dt z)
+  (+ f (* (hjm-drift sigma t cap-t) dt) (* sigma (sqrt dt) z)))
+
+(define sigma 0.01)  ; forward rate volatility
+(define dt 0.25)     ; quarterly steps
+
+; Evolve 1-year forward rate over 4 quarters
+(define shocks (list 0.5 -0.3 0.8 -0.2))
+(define f0 0.05)  ; initial 1-year forward rate
+
+(define (evolve f t cap-t shocks)
+  (if (null? shocks) (list)
+      (let ((next (forward-rate-step f sigma t cap-t dt (car shocks))))
+        (cons next (evolve next (+ t dt) cap-t (cdr shocks))))))
+
+(define path (evolve f0 0 1.0 shocks))
+(display "Forward rate f(t,1) path: ") (newline)
+(for-each (lambda (r) (display (exact->inexact r)) (display " ")) path)
+(newline)
+
+; Bond price: P(t,T) = exp(-integral_t^T f(t,s) ds)
+; Approximate: P ≈ exp(-f * (T-t))
+(define (bond-price f tau)
+  (exp (* (- f) tau)))
+
+(display "Bond price P(0,1) at f=5%: ")
+(display (exact->inexact (bond-price 0.05 1.0)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def hjm_drift(sigma, t, T):
+    return sigma**2 * (T - t)
+
+def forward_rate_step(f, sigma, t, T, dt, z):
+    return f + hjm_drift(sigma, t, T)*dt + sigma*math.sqrt(dt)*z
+
+sigma, dt = 0.01, 0.25
+shocks = [0.5, -0.3, 0.8, -0.2]
+f, t, T = 0.05, 0, 1.0
+
+path = []
+for z in shocks:
+    f = forward_rate_step(f, sigma, t, T, dt, z)
+    t += dt
+    path.append(f)
+
+print("Forward rate f(t,1) path:")
+print(" ".join(f"{x:.6f}" for x in path))
+
+# Bond price approximation
+bond_price = math.exp(-0.05 * 1.0)
+print(f"Bond price P(0,1) at f=5%: {bond_price:.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Interest Rate Derivatives -->
+    <h3>Pricing caps and floors</h3>
+    <p>A <strong>caplet</strong> pays max(r &#x2212; K, 0) at maturity: insurance against rates rising above the strike K. A <strong>floorlet</strong> pays max(K &#x2212; r, 0): insurance against rates falling. A cap is a strip of caplets; a floor is a strip of floorlets. In the Vasicek model, the distribution of future rates is normal, so caplet prices have Black-like closed forms.</p>
+
+    <SchemeRepl client:load initialCode={`; Caplet and floorlet payoffs
+; Caplet: max(r - K, 0), Floorlet: max(K - r, 0)
+
+(define (caplet-payoff r strike notional tau)
+  (* notional tau (max (- r strike) 0)))
+
+(define (floorlet-payoff r strike notional tau)
+  (* notional tau (max (- strike r) 0)))
+
+(define notional 1000000)  ; $1M notional
+(define strike 0.05)       ; 5% strike
+(define tau 0.25)          ; quarterly period
+
+; Rate scenarios
+(define rates (list 0.03 0.04 0.05 0.06 0.07 0.08))
+
+(display "Rate    Caplet      Floorlet") (newline)
+(for-each
+  (lambda (r)
+    (display (exact->inexact r)) (display "    ")
+    (display (exact->inexact (caplet-payoff r strike notional tau)))
+    (display "    ")
+    (display (exact->inexact (floorlet-payoff r strike notional tau)))
+    (newline))
+  rates)
+
+; Cap-floor parity: caplet - floorlet = forward - strike (times notional*tau)
+(newline) (display "--- Cap-Floor Parity ---") (newline)
+(define r-test 0.07)
+(define cap (caplet-payoff r-test strike notional tau))
+(define flr (floorlet-payoff r-test strike notional tau))
+(display "Caplet - Floorlet = ")
+(display (exact->inexact (- cap flr))) (newline)
+(display "Notional*tau*(r-K) = ")
+(display (exact->inexact (* notional tau (- r-test strike))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Caplet and floorlet payoffs
+def caplet(r, K, notional, tau):
+    return notional * tau * max(r - K, 0)
+
+def floorlet(r, K, notional, tau):
+    return notional * tau * max(K - r, 0)
+
+notional, strike, tau = 1_000_000, 0.05, 0.25
+rates = [0.03, 0.04, 0.05, 0.06, 0.07, 0.08]
+
+print("Rate    Caplet       Floorlet")
+for r in rates:
+    print(f"{r:.2f}    {caplet(r, strike, notional, tau):>10.2f}    {floorlet(r, strike, notional, tau):>10.2f}")
+
+# Cap-floor parity
+r_test = 0.07
+cap = caplet(r_test, strike, notional, tau)
+flr = floorlet(r_test, strike, notional, tau)
+print(f"\\nCaplet - Floorlet = {cap - flr:.2f}")
+print(f"Notional*tau*(r-K) = {notional*tau*(r_test - strike):.2f}")
+`} />
+    </div>
+
+
+    <!-- 5. Vasicek Bond Pricing -->
+    <h3>Bond pricing under Vasicek</h3>
+    <p>With Vasicek dynamics, the price of a zero-coupon bond has a closed-form solution: P(t,T) = A(&#x3C4;)e^(-B(&#x3C4;)r), where &#x3C4; = T&#x2212;t, B(&#x3C4;) = (1&#x2212;e^(-&#x3BA;&#x3C4;))/&#x3BA;, and A depends on &#x3B8;, &#x3C3;, &#x3BA;. This gives the entire yield curve from a single state variable r.</p>
+
+    <SchemeRepl client:load initialCode={`; Vasicek zero-coupon bond price: P(t,T) = A(tau)*exp(-B(tau)*r)
+; B(tau) = (1 - exp(-kappa*tau)) / kappa
+; A(tau) = exp(((B-tau)*(kappa^2*theta - sigma^2/2))/kappa^2 - sigma^2*B^2/(4*kappa))
+
+(define kappa 0.5)
+(define theta 0.05)
+(define sigma 0.02)
+
+(define (B-func tau)
+  (/ (- 1 (exp (* (- kappa) tau))) kappa))
+
+(define (A-func tau)
+  (let ((b (B-func tau)))
+    (exp (- (* (/ (- b tau)
+                  (* kappa kappa))
+               (- (* kappa kappa theta) (/ (* sigma sigma) 2)))
+            (/ (* sigma sigma b b) (* 4 kappa))))))
+
+(define (vasicek-bond-price r tau)
+  (* (A-func tau) (exp (* (- (B-func tau)) r))))
+
+; Current short rate
+(define r0 0.06)
+
+; Yield curve: price and yield for maturities 1 to 10
+(display "Maturity  Price    Yield") (newline)
+(define (show-curve tau)
+  (if (> tau 10) (display "")
+      (let* ((p (vasicek-bond-price r0 tau))
+             (y (- (/ (log p) tau))))
+        (display tau) (display "y       ")
+        (display (exact->inexact p)) (display "  ")
+        (display (exact->inexact y)) (newline)
+        (show-curve (+ tau 1)))))
+
+(show-curve 1)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+kappa, theta, sigma = 0.5, 0.05, 0.02
+
+def B(tau):
+    return (1 - math.exp(-kappa*tau)) / kappa
+
+def A(tau):
+    b = B(tau)
+    return math.exp((b-tau)*(kappa**2*theta - sigma**2/2)/kappa**2
+                    - sigma**2*b**2/(4*kappa))
+
+def vasicek_bond_price(r, tau):
+    return A(tau) * math.exp(-B(tau)*r)
+
+r0 = 0.06
+print("Maturity  Price      Yield")
+for tau in range(1, 11):
+    p = vasicek_bond_price(r0, tau)
+    y = -math.log(p) / tau
+    print(f"{tau:>4}y     {p:.6f}  {y:.6f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-01/">&#x1F4C9; Finance II Ch.1</a> &#x2014; Ornstein-Uhlenbeck is the stochastic process behind Vasicek</li>
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &#x2014; exponentials and differential equations drive these models</li>
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; normal and chi-squared distributions determine rate distributions</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-07/", label: "Factor Models · 7" }}
+      next={{ href: "/reading/finance-2/fin2-09/", label: "Credit Risk · 9" }} />
+
+  </main>
+</Layout>

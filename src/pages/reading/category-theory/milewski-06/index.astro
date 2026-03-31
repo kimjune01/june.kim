@@ -1,0 +1,470 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.6 — Simple Algebraic Data Types" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Simple Algebraic Data Types</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/01/13/simple-algebraic-data-types/">Category Theory for Programmers, Ch. 6</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-04/">🍞 Ch. 5</a> (Products and Coproducts). 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Types form a <strong>semiring</strong>. Product types are multiplication, sum types are addition, <code>Void</code> is 0, <code>Unit</code> is 1. The same algebraic identities you learned in grade school — <code>a × 1 = a</code>, <code>a + 0 = a</code>, distributivity — hold for types up to isomorphism. A type definition is an equation you can solve.</p>
+    </div>
+
+    <!-- SVG: Product and Sum type algebra -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Product: A x B -->
+        <rect x="20" y="20" width="160" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="100" y1="20" x2="100" y2="80" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="60" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A</text>
+        <text x="140" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">B</text>
+        <text x="100" y="105" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">A &#x00D7; B (product)</text>
+        <text x="100" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">a AND b</text>
+
+        <!-- Sum: A + B -->
+        <rect x="240" y="20" width="160" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Tag indicator -->
+        <rect x="240" y="20" width="20" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.18"/>
+        <text x="250" y="55" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">tag</text>
+        <text x="330" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A | B</text>
+        <text x="320" y="105" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">A + B (sum)</text>
+        <text x="320" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">a OR b</text>
+
+        <!-- Maybe a = 1 + a -->
+        <text x="210" y="150" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">Maybe a = 1 + a: Nothing | Just a</text>
+      </svg>
+    </div>
+
+    <!-- 1. Product types -->
+    <h3>Product types are multiplication</h3>
+    <p>A pair <code>(a, b)</code> is the product of two types. It contains a value of type <code>a</code> <em>and</em> a value of type <code>b</code>. The number of inhabitants of a pair is the product of the inhabitants of each component. Pairs are commutative and associative up to isomorphism, just like multiplication.</p>
+
+    <SchemeRepl client:load initialCode={`; Product type: a pair holds one value from each type.
+; Inhabitants of (Bool, Bool) = 2 * 2 = 4
+
+(define (enumerate-pairs as bs)
+  (apply append
+    (map (lambda (a)
+      (map (lambda (b) (list a b)) bs))
+    as)))
+
+(define bools '(#t #f))
+(display "Bool × Bool: ")
+(display (enumerate-pairs bools bools)) (newline)
+; 4 inhabitants
+
+; Pairs are commutative: (a, b) ≅ (b, a)
+(define (swap p) (list (cadr p) (car p)))
+(display "swap (1, #t): ")
+(display (swap '(1 #t))) (newline)
+
+; Pairs are associative: ((a, b), c) ≅ (a, (b, c))
+(define (assoc p)
+  (list (car (car p)) (cadr (car p)) (cadr p)))
+(display "flatten ((1, 2), 3): ")
+(display (assoc '((1 2) 3)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Product types: pairs
+from itertools import product
+
+bools = [True, False]
+pairs = list(product(bools, bools))
+print(f"Bool × Bool: {pairs}")  # 4 inhabitants
+
+# Commutative: (a, b) ↔ (b, a)
+def swap(p): return (p[1], p[0])
+print(f"swap((1, True)) = {swap((1, True))}")
+
+# Associative: ((a, b), c) ↔ (a, b, c)
+def flatten(p): return (p[0][0], p[0][1], p[1])
+print(f"flatten(((1, 2), 3)) = {flatten(((1, 2), 3))}")
+`} />
+    </div>
+
+    <!-- 2. Records -->
+    <h3>Records are named products</h3>
+    <p>A record (or struct) is a product type with named fields. Instead of remembering that the first element is the name and the second is the atomic number, you give each field a label. The algebra is the same: it's still multiplication.</p>
+
+    <SchemeRepl client:load initialCode={`; Records = named products.
+; Haskell: data Element = Element { name :: String, symbol :: String, atomicNumber :: Int }
+
+(define (make-element name symbol number)
+  (list 'element name symbol number))
+
+(define (element-name    e) (list-ref e 1))
+(define (element-symbol  e) (list-ref e 2))
+(define (element-number  e) (list-ref e 3))
+
+(define hydrogen (make-element "Hydrogen" "H" 1))
+(define helium   (make-element "Helium"   "He" 2))
+
+(display (element-name hydrogen)) (display " (")
+(display (element-symbol hydrogen)) (display "), Z=")
+(display (element-number hydrogen)) (newline)
+(display (element-name helium)) (display " (")
+(display (element-symbol helium)) (display "), Z=")
+(display (element-number helium))
+`} />
+
+
+    <!-- 3. Sum types -->
+    <h3>Sum types are addition</h3>
+    <p>A sum type <code>Either a b</code> holds a value of type <code>a</code> <em>or</em> a value of type <code>b</code>, tagged so you can tell which. The number of inhabitants is the sum. <code>Bool</code> is <code>1 + 1</code>: two tags, no payload.</p>
+
+    <SchemeRepl client:load initialCode={`; Sum type: Either a b = Left a | Right b
+; Inhabitants of Either Bool Unit = 2 + 1 = 3
+
+(define (left x)  (list 'left x))
+(define (right x) (list 'right x))
+(define (left? e) (eq? (car e) 'left))
+
+(define (either on-left on-right e)
+  (if (left? e) (on-left (cadr e)) (on-right (cadr e))))
+
+; Bool = 1 + 1 (two tags, no data)
+(define true-val  (left  '()))
+(define false-val (right '()))
+
+(display "true tag:  ") (display true-val) (newline)
+(display "false tag: ") (display false-val) (newline)
+
+; Either Bool () has 3 inhabitants
+(define inhabitants
+  (list (left #t) (left #f) (right '())))
+(display "Either Bool () inhabitants: ")
+(display (length inhabitants)) (display " -> ")
+(display inhabitants)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sum types via tagged tuples
+def Left(x):  return ("left", x)
+def Right(x): return ("right", x)
+
+def either(on_left, on_right, e):
+    tag, val = e
+    return on_left(val) if tag == "left" else on_right(val)
+
+# Bool = 1 + 1
+true_val  = Left(())
+false_val = Right(())
+print(f"true:  {true_val}")
+print(f"false: {false_val}")
+
+# Either Bool () = 2 + 1 = 3 inhabitants
+inhabitants = [Left(True), Left(False), Right(())]
+print(f"Either Bool () has {len(inhabitants)} inhabitants")
+`} />
+    </div>
+
+    <!-- 4. The algebra: Void, Unit, and identities -->
+    <h3>The algebra: Void is 0, Unit is 1</h3>
+    <p><code>Void</code> (no inhabitants) is the additive identity: <code>a + 0 ≅ a</code>. <code>Unit</code> (one inhabitant) is the multiplicative identity: <code>a × 1 ≅ a</code>. Multiplying by <code>Void</code> annihilates: <code>a × 0 ≅ 0</code>. These are the axioms of a <strong>semiring</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; The type algebra:
+;   Void  = 0 (no inhabitants)
+;   Unit  = 1 (one inhabitant: '())
+;   Bool  = 2 (= 1 + 1)
+;   a + 0 ≅ a     (Either a Void ≅ a)
+;   a × 1 ≅ a     ((a, ()) ≅ a)
+;   a × 0 ≅ 0     ((a, Void) ≅ Void)
+
+; a × 1 ≅ a: pairing with unit adds no information
+(define (pair-with-unit x) (list x '()))
+(define (drop-unit p)      (car p))
+
+(display "pair: ") (display (pair-with-unit 42)) (newline)
+(display "drop: ") (display (drop-unit (pair-with-unit 42))) (newline)
+; round-trip: 42 -> (42 ()) -> 42
+
+; a + 0 ≅ a: Either a Void — the Right case can never happen
+; So every value must be Left a, which is just a with a tag.
+(define (inject x) (list 'left x))
+(define (project e) (cadr e))
+
+(display "inject 7:  ") (display (inject 7)) (newline)
+(display "project:   ") (display (project (inject 7))) (newline)
+
+; Bool = 1 + 1 = 2
+(display "Bool has ") (display (+ 1 1)) (display " inhabitants")
+`} />
+
+
+    <!-- 5. Maybe a = 1 + a -->
+    <h3>Maybe a = 1 + a</h3>
+    <p><code>Maybe a</code> is <code>Nothing | Just a</code>, which is <code>1 + a</code>. It adds one extra value (Nothing) to any type. <code>Maybe Bool</code> has <code>1 + 2 = 3</code> inhabitants: Nothing, Just True, Just False. This is <code>Either () a</code>.</p>
+
+    <!-- SVG: Maybe a = 1 + a type algebra -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 110" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Maybe box split into Nothing | Just a -->
+        <rect x="30" y="15" width="240" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Nothing partition (small, gray) -->
+        <rect x="30" y="15" width="60" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.18"/>
+        <text x="60" y="44" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Nothing</text>
+        <!-- Divider -->
+        <line x1="90" y1="15" x2="90" y2="65" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3"/>
+        <!-- Just a partition (larger, blue) -->
+        <rect x="90" y="15" width="180" height="50" rx="6" fill="#60a5fa" fill-opacity="0.1"/>
+        <text x="180" y="44" text-anchor="middle" fill="#60a5fa" font-size="14">Just a</text>
+        <!-- Equals sign -->
+        <text x="295" y="44" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.6">=</text>
+        <!-- Unit + a -->
+        <text x="350" y="44" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Unit + a</text>
+        <!-- Caption -->
+        <text x="190" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Maybe is the sum of Unit and a — either nothing or something</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Maybe a = Nothing | Just a = 1 + a
+(define nothing 'nothing)
+(define (just x) (list 'just x))
+(define (nothing? x) (eq? x 'nothing))
+
+(define (maybe default f m)
+  (if (nothing? m) default (f (cadr m))))
+
+; Maybe Bool = 1 + 2 = 3 inhabitants
+(define maybe-bools (list nothing (just #t) (just #f)))
+(display "Maybe Bool: ") (display maybe-bools) (newline)
+(display "count: ") (display (length maybe-bools)) (newline)
+
+; Maybe is isomorphic to Either () a
+(define (maybe->either m)
+  (if (nothing? m)
+      (list 'left '())
+      (list 'right (cadr m))))
+
+(display "Nothing -> ") (display (maybe->either nothing)) (newline)
+(display "Just 42 -> ") (display (maybe->either (just 42))) (newline)
+
+; Safe division returns Maybe
+(define (safe-div a b)
+  (if (= b 0) nothing (just (/ a b))))
+(display "10/3: ") (display (safe-div 10 3)) (newline)
+(display "10/0: ") (display (safe-div 10 0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maybe a = 1 + a — Python uses None as Nothing
+def safe_div(a, b):
+    return None if b == 0 else a / b
+
+print(f"10/3 = {safe_div(10, 3)}")
+print(f"10/0 = {safe_div(10, 0)}")
+
+# Maybe Bool = {None, True, False} = 3 inhabitants
+maybe_bools = [None, True, False]
+print(f"Maybe Bool: {maybe_bools} ({len(maybe_bools)} values)")
+`} />
+    </div>
+
+    <!-- 6. Distributivity -->
+    <h3>Distributivity: a × (b + c) = a × b + a × c</h3>
+    <p>Products distribute over sums, just like multiplication distributes over addition. A pair of <code>(a, Either b c)</code> is isomorphic to <code>Either (a, b) (a, c)</code>. This is a real isomorphism: two functions that are inverses of each other.</p>
+
+    <SchemeRepl client:load initialCode={`; Distributivity: a × (b + c) ≅ (a × b) + (a × c)
+; (a, Either b c) ≅ Either (a, b) (a, c)
+
+(define (prod->sum p)
+  (let ((a (car p)) (e (cadr p)))
+    (if (eq? (car e) 'left)
+        (list 'left  (list a (cadr e)))
+        (list 'right (list a (cadr e))))))
+
+(define (sum->prod s)
+  (let ((pair (cadr s)))
+    (if (eq? (car s) 'left)
+        (list (car pair) (list 'left (cadr pair)))
+        (list (car pair) (list 'right (cadr pair))))))
+
+; Round-trip test
+(define test-val (list "x" (list 'left 42)))
+(display "original:   ") (display test-val) (newline)
+(display "prod->sum:  ") (display (prod->sum test-val)) (newline)
+(display "round-trip: ") (display (sum->prod (prod->sum test-val))) (newline)
+(display "match? ") (display (equal? test-val (sum->prod (prod->sum test-val))))
+`} />
+
+
+    <!-- 7. Lists as algebra -->
+    <h3>Lists: solving an equation with types</h3>
+    <p>A list is either empty or a head element followed by a tail list: <code>List a = Nil | Cons a (List a)</code>. As an equation: <code>x = 1 + a × x</code>. Expand it: <code>x = 1 + a + a² + a³ + ...</code>. A list is either empty (1), one element (a), two elements (a²), three (a³), and so on. The algebra predicts the structure.</p>
+
+    <SchemeRepl client:load initialCode={`; List a = 1 + a × List a
+; Nil = 1 (empty list), Cons a (List a) = a × List a
+; Equation: x = 1 + a*x
+; Solution: x = 1 + a + a^2 + a^3 + ...
+
+; Scheme lists already are this:
+; '() = Nil (the 1)
+; (cons head tail) = Cons head tail (the a × x)
+
+; Count inhabitants of List Bool up to length 3:
+; length 0: 1 way  (empty list)
+; length 1: 2 ways (T) (F)
+; length 2: 4 ways (TT) (TF) (FT) (FF)
+; length 3: 8 ways
+; Total = 1 + 2 + 4 + 8 = 15 (= 2^0 + 2^1 + 2^2 + 2^3)
+
+(define (lists-of-length items n)
+  (if (= n 0) '(())
+      (apply append
+        (map (lambda (rest)
+          (map (lambda (item) (cons item rest))
+               items))
+        (lists-of-length items (- n 1))))))
+
+(display "length 0: ") (display (length (lists-of-length '(#t #f) 0))) (newline)
+(display "length 1: ") (display (length (lists-of-length '(#t #f) 1))) (newline)
+(display "length 2: ") (display (length (lists-of-length '(#t #f) 2))) (newline)
+(display "length 3: ") (display (length (lists-of-length '(#t #f) 3))) (newline)
+(display "total up to 3: ") (display (+ 1 2 4 8))
+; 1 + a + a^2 + a^3 with a=2
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# List a = 1 + a * List a
+# x = 1 + a*x => x = 1 + a + a^2 + a^3 + ...
+from itertools import product
+
+def lists_of_length(items, n):
+    return list(product(items, repeat=n))
+
+bools = [True, False]
+for n in range(4):
+    count = len(lists_of_length(bools, n))
+    print(f"length {n}: {count} lists")
+
+total = sum(len(lists_of_length(bools, n)) for n in range(4))
+print(f"total up to length 3: {total}")
+# 1 + 2 + 4 + 8 = 15
+`} />
+    </div>
+
+    <!-- 8. The semiring summary -->
+    <h3>The semiring of types</h3>
+    <p>Putting it all together. Types and their operations satisfy the same laws as natural numbers with addition and multiplication. This is not a metaphor. It's a semiring isomorphism.</p>
+
+    <div class="overflow-x-auto my-4">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Type</th>
+            <th class="py-2 pr-4">Algebra</th>
+            <th class="py-2 pr-4">Identity</th>
+            <th class="py-2">Example</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Product (A &times; B)</td><td class="pr-4">Multiplication</td><td class="pr-4">Unit (1)</td><td class="font-sans">(Int, Bool)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Sum (A + B)</td><td class="pr-4">Addition</td><td class="pr-4">Void (0)</td><td class="font-sans">Either Int Bool</td></tr>
+          <tr><td class="py-2 pr-4">Function (A -&gt; B)</td><td class="pr-4">Exponentiation</td><td class="pr-4">--</td><td class="font-sans">Int -&gt; Bool</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; The semiring of types:
+;
+;  Numbers    Types             Law
+;  -------    -----             ---
+;  0          Void              additive identity
+;  1          ()                multiplicative identity
+;  a + b      Either a b        sum type
+;  a × b      (a, b)            product type
+;  a + 0 = a  Either a Void ≅ a additive identity
+;  a × 1 = a  (a, ()) ≅ a      multiplicative identity
+;  a × 0 = 0  (a, Void) ≅ Void annihilation
+;  a(b+c) = ab+ac               distributivity
+;  2 = 1+1    Bool              two constructors
+;  1 + a      Maybe a           optional value
+;
+; Verify: Bool × Bool × Bool = 2 × 2 × 2 = 8
+(define (all-triples items)
+  (apply append
+    (map (lambda (a)
+      (apply append
+        (map (lambda (b)
+          (map (lambda (c) (list a b c)) items))
+        items)))
+    items)))
+
+(define triples (all-triples '(#t #f)))
+(display "Bool^3 = ") (display (length triples)) (display " inhabitants")
+(newline)
+
+; Maybe (Maybe Bool) = 1 + (1 + 2) = 4
+(define mmb (list 'nothing
+                  (list 'just 'nothing)
+                  (list 'just (list 'just #t))
+                  (list 'just (list 'just #f))))
+(display "Maybe (Maybe Bool) = ") (display (length mmb))
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Void</td><td class="pr-4 text-green-300">(no value)</td><td class="font-sans">Empty type, 0 inhabitants</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">()</td><td class="pr-4 text-green-300">'()</td><td class="font-sans">Unit type, 1 inhabitant</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(a, b)</td><td class="pr-4 text-green-300">(list a b)</td><td class="font-sans">Product type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Either a b</td><td class="pr-4 text-green-300">(list 'left a) | (list 'right b)</td><td class="font-sans">Sum type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Maybe a</td><td class="pr-4 text-green-300">'nothing | (list 'just x)</td><td class="font-sans">Optional, 1 + a</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">data Bool = True | False</td><td class="pr-4 text-green-300">#t | #f</td><td class="font-sans">1 + 1 = 2</td></tr>
+          <tr><td class="py-2 pr-4">[a]</td><td class="pr-4 text-green-300">(list ...)</td><td class="font-sans">List a = 1 + a × List a</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-04/">🍞 Chapter 4</a> — Kleisli Categories</li>
+      <li>(next) Chapter 7 — Functors</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Algebraic_data_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Algebraic data type</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Semiring"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Semiring</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tagged_union"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tagged union</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Product_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Product type</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell algebraic data types and C++ structs/unions. This page uses Scheme tagged lists for sum types and plain lists for product types. The key insight translates directly: counting inhabitants of a type follows the same arithmetic as the type's algebraic expression. Haskell enforces these types at compile time; Scheme relies on tagging conventions. The algebra is the same either way.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/01/13/simple-algebraic-data-types/">Read the blog post</a>. The semiring table is in the middle. The list equation at the end is worth staring at.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-05/", label: "Products and Coproducts" }} next={{ href: "/reading/category-theory/milewski-07/", label: "Functors" }} />
+
+  </main>
+</Layout>

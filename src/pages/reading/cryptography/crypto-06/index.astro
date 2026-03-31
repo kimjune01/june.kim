@@ -1,0 +1,247 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.6 — RSA" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>RSA</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>RSA (cryptosystem)</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>RSA</strong> is an asymmetric cipher: the encryption key (public) and decryption key (private) are different. Anyone can encrypt a message with the public key, but only the private key holder can decrypt it. Security rests on the difficulty of factoring the product of two large primes. The math works because of Euler's theorem: m<sup>ed</sup> mod n = m when ed = 1 mod phi(n).</p>
+    </div>
+
+    <!-- SVG: public key encrypts, private key decrypts -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 110" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Plaintext -->
+        <text x="35" y="48" text-anchor="middle" fill="#86efac" font-size="11">plain</text>
+        <!-- Arrow -->
+        <line x1="62" y1="43" x2="100" y2="43" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="100,39 108,43 100,47" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Encrypt box -->
+        <rect x="112" y="28" width="70" height="30" rx="3" fill="none" stroke="#86efac" stroke-width="1.5"/>
+        <text x="147" y="47" text-anchor="middle" fill="#86efac" font-size="10">m^e mod n</text>
+        <text x="147" y="22" text-anchor="middle" fill="#86efac" font-size="9">public key (e, n)</text>
+        <!-- Arrow -->
+        <line x1="187" y1="43" x2="225" y2="43" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="225,39 233,43 225,47" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Ciphertext -->
+        <text x="255" y="48" text-anchor="middle" fill="#f87171" font-size="11">cipher</text>
+        <!-- Arrow -->
+        <line x1="278" y1="43" x2="310" y2="43" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="310,39 318,43 310,47" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Decrypt box -->
+        <rect x="322" y="28" width="70" height="30" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="357" y="47" text-anchor="middle" fill="#f59e0b" font-size="10">c^d mod n</text>
+        <text x="357" y="22" text-anchor="middle" fill="#f59e0b" font-size="9">private key (d)</text>
+        <!-- Arrow -->
+        <line x1="397" y1="43" x2="420" y2="43" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Plaintext again -->
+        <text x="435" y="48" text-anchor="end" fill="#86efac" font-size="11">plain</text>
+
+        <!-- Caption -->
+        <text x="220" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Anyone encrypts with (e, n). Only the holder of d decrypts.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Key generation -->
+    <h3>Key generation</h3>
+    <p>Pick two large primes p and q. Compute n = pq and phi(n) = (p-1)(q-1). Pick e coprime to phi(n) (commonly 65537). Compute d = e<sup>-1</sup> mod phi(n) using the extended Euclidean algorithm. Public key: (e, n). Private key: d. Discard p, q, phi(n).</p>
+
+    <SchemeRepl client:load initialCode={`; RSA key generation with small primes
+
+(define p 61)
+(define q 53)
+(define n (* p q))              ; 3233
+(define phi (* (- p 1) (- q 1))) ; 3120
+
+(display "p = ") (display p) (newline)
+(display "q = ") (display q) (newline)
+(display "n = p * q = ") (display n) (newline)
+(display "phi(n) = (p-1)(q-1) = ") (display phi) (newline)
+
+;; Choose e coprime to phi
+(define e 17)
+
+;; Extended Euclidean algorithm to find d = e^(-1) mod phi
+(define (extended-gcd a b)
+  (if (= a 0)
+    (list b 0 1)
+    (let* ((result (extended-gcd (modulo b a) a))
+           (g (car result))
+           (x (cadr result))
+           (y (caddr result)))
+      (list g (- y (* (quotient b a) x)) x))))
+
+(define (mod-inverse a m)
+  (let* ((result (extended-gcd a m))
+         (g (car result))
+         (x (cadr result)))
+    (modulo x m)))
+
+(define d (mod-inverse e phi))
+
+(display "e = ") (display e) (newline)
+(display "d = e^(-1) mod phi = ") (display d) (newline)
+(display "Check: e * d mod phi = ")
+(display (modulo (* e d) phi))  ; should be 1
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# RSA key generation in Python
+p, q = 61, 53
+n = p * q           # 3233
+phi = (p-1) * (q-1) # 3120
+e = 17
+
+# Extended Euclidean algorithm
+def extended_gcd(a, b):
+    if a == 0: return b, 0, 1
+    g, x, y = extended_gcd(b % a, a)
+    return g, y - (b // a) * x, x
+
+def mod_inverse(a, m):
+    _, x, _ = extended_gcd(a % m, m)
+    return x % m
+
+d = mod_inverse(e, phi)
+
+print(f"n = {n}, phi = {phi}")
+print(f"e = {e}, d = {d}")
+print(f"e * d mod phi = {(e * d) % phi}")  # 1
+`} />
+    </div>
+
+
+    <!-- 2. Encrypt and decrypt -->
+    <h3>Encrypt and decrypt</h3>
+    <p>To encrypt message m: compute c = m<sup>e</sup> mod n. To decrypt ciphertext c: compute m = c<sup>d</sup> mod n. This works because m<sup>ed</sup> mod n = m (by <a href="https://en.wikipedia.org/wiki/Euler%27s_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Euler's theorem</a>, since ed = 1 mod phi(n)).</p>
+
+    <SchemeRepl client:load initialCode={`; RSA encrypt and decrypt
+
+(define (mod-exp base exp m)
+  (let loop ((result 1) (b (modulo base m)) (e exp))
+    (if (= e 0) result
+        (loop (if (odd? e) (modulo (* result b) m) result)
+              (modulo (* b b) m)
+              (quotient e 2)))))
+
+(define n 3233)
+(define e 17)
+(define d 2753)  ; computed in key generation
+
+(define message 65)  ; 'A'
+
+;; Encrypt: c = m^e mod n
+(define ciphertext (mod-exp message e n))
+(display "Message:    ") (display message) (newline)
+(display "Ciphertext: ") (display ciphertext) (newline)
+
+;; Decrypt: m = c^d mod n
+(define recovered (mod-exp ciphertext d n))
+(display "Recovered:  ") (display recovered) (newline)
+(display "Round-trip? ") (display (= message recovered)) (newline)
+
+;; Try another message
+(define msg2 42)
+(define enc2 (mod-exp msg2 e n))
+(define dec2 (mod-exp enc2 d n))
+(display "42 -> ") (display enc2) (display " -> ")
+(display dec2) (display " (round-trip: ")
+(display (= msg2 dec2)) (display ")")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# RSA encrypt and decrypt in Python
+n, e, d = 3233, 17, 2753
+
+message = 65  # 'A'
+
+ciphertext = pow(message, e, n)
+recovered  = pow(ciphertext, d, n)
+
+print(f"Message:    {message}")
+print(f"Ciphertext: {ciphertext}")
+print(f"Recovered:  {recovered}")
+print(f"Round-trip? {message == recovered}")
+
+# Another message
+for m in [42, 100, 7]:
+    c = pow(m, e, n)
+    r = pow(c, d, n)
+    print(f"{m} -> {c} -> {r} (ok: {m == r})")
+`} />
+    </div>
+
+
+    <!-- 3. Why it works -->
+    <h3>Why it works: Euler's theorem</h3>
+    <p>Euler's theorem states: if gcd(m, n) = 1, then m<sup>phi(n)</sup> mod n = 1. Since ed = 1 mod phi(n), we can write ed = 1 + k*phi(n) for some integer k. Then m<sup>ed</sup> = m<sup>1 + k*phi(n)</sup> = m * (m<sup>phi(n)</sup>)<sup>k</sup> = m * 1<sup>k</sup> = m (mod n). The security relies on the fact that computing phi(n) requires factoring n = pq, which is hard for large primes.</p>
+
+    <SchemeRepl client:load initialCode={`; Verifying Euler's theorem: m^phi(n) = 1 mod n
+
+(define (mod-exp base exp m)
+  (let loop ((result 1) (b (modulo base m)) (e exp))
+    (if (= e 0) result
+        (loop (if (odd? e) (modulo (* result b) m) result)
+              (modulo (* b b) m)
+              (quotient e 2)))))
+
+(define p 61)
+(define q 53)
+(define n (* p q))                ; 3233
+(define phi (* (- p 1) (- q 1)))  ; 3120
+
+;; Euler's theorem: m^phi(n) = 1 mod n (when gcd(m,n) = 1)
+(display "Euler's theorem tests:") (newline)
+(let loop ((m-vals (list 2 7 42 100 999)))
+  (when (not (null? m-vals))
+    (let ((m (car m-vals)))
+      (display "  ") (display m) (display "^phi mod n = ")
+      (display (mod-exp m phi n)) (newline))
+    (loop (cdr m-vals))))
+
+;; Therefore m^(ed) = m^(1 + k*phi) = m * (m^phi)^k = m * 1 = m
+(define e 17)
+(define d 2753)
+(display "e * d = ") (display (* e d)) (newline)
+(display "e * d mod phi = ") (display (modulo (* e d) phi)) (newline)
+(display "m^(ed) mod n = m, for any m coprime to n")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-06/">🔗 Judson Ch. 6</a> &mdash; rings: RSA uses modular arithmetic in Z/nZ</li>
+    
+      <li><a href="/reading/number-theory/numthy-04/">&#35; Number Theory Ch.4</a> &mdash; RSA correctness is a direct corollary of Euler's theorem</li>
+      <li><a href="/reading/algorithms/algo-02/">⚙ Algorithms Ch.2</a> &mdash; fast modular exponentiation is the algorithmic heart</li>
+      <li><a href="/reading/theory-of-computation/toc-08/">🔀 Theory of Computation Ch.8</a> &mdash; RSA security assumes integer factorization is not in P</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>RSA (cryptosystem)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Euler%27s_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Euler's theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Integer_factorization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Integer factorization</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Extended Euclidean algorithm</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-05/", label: "Key Exchange" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,258 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.1 — Symmetric Ciphers" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>Symmetric Ciphers</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Symmetric-key algorithm</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>symmetric cipher</strong> uses the same key to encrypt and decrypt. The sender and receiver must both know the secret. Every cipher in this chapter is breakable by modern standards, but they introduce the core idea: transform plaintext into ciphertext using a shared secret, and reverse the transformation with the same secret.</p>
+    </div>
+
+    <!-- SVG: plaintext -> key -> ciphertext -> key -> plaintext -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 100" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Plaintext -->
+        <text x="30" y="45" text-anchor="middle" fill="#86efac" font-size="11">plain</text>
+        <!-- Arrow -->
+        <line x1="55" y1="40" x2="100" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="100,36 108,40 100,44" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Encrypt box -->
+        <rect x="112" y="25" width="60" height="30" rx="3" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <text x="142" y="44" text-anchor="middle" fill="#facc15" font-size="10">encrypt</text>
+        <!-- Key arrow down into encrypt -->
+        <text x="142" y="15" text-anchor="middle" fill="#f59e0b" font-size="10">key</text>
+        <!-- Arrow -->
+        <line x1="178" y1="40" x2="225" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="225,36 233,40 225,44" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Ciphertext -->
+        <text x="262" y="45" text-anchor="middle" fill="#f87171" font-size="11">cipher</text>
+        <!-- Arrow -->
+        <line x1="290" y1="40" x2="335" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="335,36 343,40 335,44" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Decrypt box -->
+        <rect x="348" y="25" width="60" height="30" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="378" y="44" text-anchor="middle" fill="#60a5fa" font-size="10">decrypt</text>
+        <!-- Key arrow down into decrypt -->
+        <text x="378" y="15" text-anchor="middle" fill="#f59e0b" font-size="10">key</text>
+        <!-- Arrow -->
+        <line x1="414" y1="40" x2="455" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="455,36 463,40 455,44" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Plaintext again -->
+        <text x="490" y="45" text-anchor="middle" fill="#86efac" font-size="11">plain</text>
+        <!-- Caption -->
+        <text x="260" y="85" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Same key encrypts and decrypts.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. XOR cipher -->
+    <h3>XOR cipher — the simplest encryption</h3>
+    <p>XOR each byte of the plaintext with a key byte. XOR again with the same key to decrypt. It is its own inverse: <code>a XOR k XOR k = a</code>. With a truly random key as long as the message (used once), this is the <a href="https://en.wikipedia.org/wiki/One-time_pad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>one-time pad</a>, which is information-theoretically secure. With a short repeating key, it is trivially breakable.</p>
+
+    <SchemeRepl client:load initialCode={`; XOR cipher: encrypt and decrypt are the same operation
+; XOR each character code with the key byte
+
+(define (xor-cipher text key-byte)
+  (list->string
+    (map (lambda (ch)
+           (integer->char
+             (bitwise-xor (char->integer ch) key-byte)))
+         (string->list text))))
+
+(define plaintext "HELLO")
+(define key 42)
+
+(define encrypted (xor-cipher plaintext key))
+(display "Encrypted: ")
+(display encrypted) (newline)
+
+; Decrypt by XOR-ing again with the same key
+(define decrypted (xor-cipher encrypted key))
+(display "Decrypted: ")
+(display decrypted) (newline)
+
+; Self-inverse property: a XOR k XOR k = a
+(display "Round-trip works? ")
+(display (equal? plaintext decrypted))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# XOR cipher in Python
+def xor_cipher(text, key_byte):
+    return ''.join(chr(ord(c) ^ key_byte) for c in text)
+
+plaintext = "HELLO"
+key = 42
+
+encrypted = xor_cipher(plaintext, key)
+print(f"Encrypted: {encrypted}")
+
+decrypted = xor_cipher(encrypted, key)
+print(f"Decrypted: {decrypted}")
+print(f"Round-trip works? {plaintext == decrypted}")
+`} />
+    </div>
+
+
+    <!-- 2. Caesar cipher -->
+    <h3>Caesar cipher — shift by a fixed amount</h3>
+    <p>Replace each letter with the letter <em>k</em> positions later in the alphabet (wrapping around). The key is a single number from 0 to 25. Only 26 possible keys: brute force takes 26 tries. Caesar reportedly used k=3.</p>
+
+    <SchemeRepl client:load initialCode={`; Caesar cipher: shift each letter by k positions
+(define (caesar-char ch k)
+  (if (char-alphabetic? ch)
+    (let* ((base (if (char-upper-case? ch) 65 97))
+           (shifted (modulo (+ (- (char->integer ch) base) k) 26)))
+      (integer->char (+ base shifted)))
+    ch))
+
+(define (caesar text k)
+  (list->string
+    (map (lambda (ch) (caesar-char ch k))
+         (string->list text))))
+
+(define plaintext "ATTACK AT DAWN")
+(define key 3)
+
+(define encrypted (caesar plaintext key))
+(display "Encrypted: ")
+(display encrypted) (newline)
+
+; Decrypt: shift by (26 - k)
+(define decrypted (caesar encrypted (- 26 key)))
+(display "Decrypted: ")
+(display decrypted) (newline)
+
+; Brute force: try all 26 keys
+(display "--- Brute force ---") (newline)
+(let loop ((k 0))
+  (when (< k 5)
+    (display k) (display ": ")
+    (display (caesar encrypted (- 26 k))) (newline)
+    (loop (+ k 1))))
+(display "... (26 total)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Caesar cipher in Python
+def caesar(text, k):
+    result = []
+    for ch in text:
+        if ch.isalpha():
+            base = ord('A') if ch.isupper() else ord('a')
+            result.append(chr((ord(ch) - base + k) % 26 + base))
+        else:
+            result.append(ch)
+    return ''.join(result)
+
+plaintext = "ATTACK AT DAWN"
+key = 3
+
+encrypted = caesar(plaintext, key)
+print(f"Encrypted: {encrypted}")
+print(f"Decrypted: {caesar(encrypted, 26 - key)}")
+
+# Brute force
+print("--- Brute force ---")
+for k in range(5):
+    print(f"{k}: {caesar(encrypted, 26 - k)}")
+print("... (26 total)")
+`} />
+    </div>
+
+
+    <!-- 3. Substitution cipher -->
+    <h3>Substitution cipher — arbitrary permutation</h3>
+    <p>Map each letter to a different letter via a permutation of the alphabet. The keyspace is 26! (about 4 x 10<sup>26</sup>), far too large to brute-force. But letter frequency analysis breaks it: English has known frequencies (E is the most common), and the cipher preserves those frequencies.</p>
+
+    <SchemeRepl client:load initialCode={`; Substitution cipher with a shuffled alphabet
+; Key: a permutation of A-Z
+
+(define plain-alpha "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(define cipher-alpha "QWERTYUIOPASDFGHJKLZXCVBNM")
+
+(define (sub-encrypt ch)
+  (let ((pos (- (char->integer (char-upcase ch)) 65)))
+    (if (and (>= pos 0) (< pos 26))
+      (string-ref cipher-alpha pos)
+      ch)))
+
+(define (sub-decrypt ch)
+  (let loop ((i 0))
+    (cond
+      ((= i 26) ch)
+      ((char=? ch (string-ref cipher-alpha i))
+       (string-ref plain-alpha i))
+      (else (loop (+ i 1))))))
+
+(define (encrypt-text text)
+  (list->string (map sub-encrypt (string->list text))))
+
+(define (decrypt-text text)
+  (list->string (map sub-decrypt (string->list text))))
+
+(define msg "HELLO WORLD")
+(define enc (encrypt-text msg))
+(display "Encrypted: ") (display enc) (newline)
+(display "Decrypted: ") (display (decrypt-text enc)) (newline)
+
+; Keyspace: 26!
+(display "Keyspace: 26! = ~4 x 10^26")
+`} />
+
+
+    <!-- 4. Keyspace size -->
+    <h3>Keyspace size</h3>
+    <p>The security of a cipher depends on how many keys an attacker must try. Caesar: 26 keys. Substitution: 26! keys. XOR with a 1-byte key: 256 keys. XOR with a 128-bit key: 2<sup>128</sup> keys.</p>
+    <p>Modern ciphers aim for keyspaces so large that brute force is physically impossible.</p>
+
+    <SchemeRepl client:load initialCode={`; Keyspace sizes
+(display "Caesar:       26 keys") (newline)
+(display "XOR (1 byte): 256 keys") (newline)
+
+; 26! (substitution cipher)
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(display "Substitution: ")
+(display (factorial 26))
+(display " keys") (newline)
+
+; For comparison: 2^128
+(display "AES-128:      2^128 = ")
+(display (expt 2 128))
+(display " keys")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-01/">🔢 Levin Ch. 1</a> &mdash; counting: keyspace size is a combinatorics problem</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Symmetric-key algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Caesar_cipher"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Caesar cipher</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Substitution_cipher"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Substitution cipher</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/One-time_pad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>One-time pad</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/cryptography/crypto-02/", label: "Block Ciphers" }} />
+
+  </main>
+</Layout>

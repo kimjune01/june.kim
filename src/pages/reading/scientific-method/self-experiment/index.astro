@@ -1,0 +1,163 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="The Self-Experiment — Randomization at n=1" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>The Self-Experiment</h1>
+    <p class="text-gray-400 text-sm mb-6">Randomization at n=1 · Example: Gwern Branwen, 2010→ · <a href="https://gwern.net/nootropic/nootropics">gwern.net/nootropics</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Any protocol can be Goodharted. The defense is long content: publish the data, the code, and the nulls so anyone can check.</p>
+    </div>
+
+    <!-- SVG: Self-blinding protocol -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 240" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="230" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">self-blinding protocol</text>
+
+        <!-- Step 1: Prepare capsules -->
+        <rect x="30" y="35" width="120" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="90" y="55" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">prepare capsules</text>
+        <text x="90" y="70" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">active + placebo</text>
+
+        <!-- Arrow -->
+        <line x1="155" y1="60" x2="175" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" marker-end="url(#arrow)"/>
+
+        <!-- Step 2: Randomize into bag -->
+        <rect x="180" y="35" width="120" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="240" y="55" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">randomize</text>
+        <text x="240" y="70" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">draw blind from bag</text>
+
+        <!-- Arrow -->
+        <line x1="305" y1="60" x2="325" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Step 3: Daily cycle -->
+        <rect x="330" y="35" width="110" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="385" y="55" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">take + record</text>
+        <text x="385" y="70" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">predict before reveal</text>
+
+        <!-- Results section -->
+        <text x="230" y="115" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">results published, including nulls</text>
+
+        <!-- Grid of outcomes -->
+        <rect x="40" y="130" width="115" height="45" rx="4" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1"/>
+        <text x="98" y="150" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">melatonin</text>
+        <text x="98" y="163" text-anchor="middle" fill="#4ade80" font-size="7" fill-opacity="0.5">improved sleep onset</text>
+
+        <rect x="170" y="130" width="115" height="45" rx="4" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1"/>
+        <text x="228" y="150" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">modafinil</text>
+        <text x="228" y="163" text-anchor="middle" fill="#4ade80" font-size="7" fill-opacity="0.5">clear wakefulness effect</text>
+
+        <rect x="40" y="185" width="115" height="45" rx="4" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="1"/>
+        <text x="98" y="205" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">ALCAR</text>
+        <text x="98" y="218" text-anchor="middle" fill="#ef4444" font-size="7" fill-opacity="0.5">no effect detected</text>
+
+        <rect x="170" y="185" width="115" height="45" rx="4" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="1"/>
+        <text x="228" y="205" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">magnesium</text>
+        <text x="228" y="218" text-anchor="middle" fill="#ef4444" font-size="7" fill-opacity="0.5">94% prob. of harm</text>
+
+        <rect x="300" y="185" width="115" height="45" rx="4" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="1"/>
+        <text x="358" y="205" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">ZMA</text>
+        <text x="358" y="218" text-anchor="middle" fill="#ef4444" font-size="7" fill-opacity="0.5">127 days, no signal</text>
+
+        <rect x="300" y="130" width="115" height="45" rx="4" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1"/>
+        <text x="358" y="150" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">caffeine + theanine</text>
+        <text x="358" y="163" text-anchor="middle" fill="#4ade80" font-size="7" fill-opacity="0.5">synergistic effect</text>
+
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.3"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h2>The method</h2>
+
+    <p><a href="/reading/scientific-method/fisher-1935/">Fisher</a> designed randomization for groups: split subjects into treatment and control, assign randomly, measure the difference. The method assumes you have dozens or hundreds of subjects. But the logic doesn't require groups. It requires that the experimenter cannot predict which condition comes next. If you can blind yourself — active and placebo in identical capsules, drawn from a bag — the randomization works at n=1. You become both experimenter and subject, separated by a wall of ignorance.</p>
+
+    <p>The protocol: fill gel capsules with active compound or inert powder. Pre-randomize into blocks of 28 days. Draw one daily without looking. Record your observations before unblinding. Run for months. Analyze with both Bayesian and frequentist methods. Publish everything.</p>
+
+    <p>This is what <a href="/reading/scientific-method/feynman-1974/">Feynman's</a> first principle looks like as engineering. You cannot be biased toward the active condition if you don't know which condition you're in. You cannot selectively report if you've committed to publishing the full dataset. The protocol does the work that integrity alone cannot. The difference between self-experimentation and self-promotion is the control condition.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400"></th>
+            <th class="text-left py-2 pr-3 text-gray-400"><a href="https://blueprint.bryanjohnson.com/">Bryan Johnson</a></th>
+            <th class="text-left py-2 text-gray-400">Gwern Branwen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Budget</td><td class="pr-3 text-gray-400">$2M/year</td><td class="text-gray-400">Pharmacy prices</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Blinding</td><td class="pr-3 text-gray-400">None</td><td class="text-gray-400">Self-blinded, capsules drawn from bag</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Control condition</td><td class="pr-3 text-gray-400">None</td><td class="text-gray-400">Placebo blocks, pre-randomized</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Publishes</td><td class="pr-3 text-gray-400">Biomarkers, supplement stacks, before/after photos</td><td class="text-gray-400">Blinding protocol, R code, raw data, power analysis</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Null results</td><td class="pr-3 text-gray-400">Not featured</td><td class="text-gray-400">Published with equal prominence</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">What the data proves</td><td class="pr-3 text-gray-400">That he's doing a lot</td><td class="text-gray-400">Whether any of it works</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What the method catches</h2>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity criterion: a test provides evidence only if it had a real chance of producing a different result were the hypothesis false. A 127-day blinded trial of magnesium citrate, analyzed with Bayesian methods, found a 94% probability that the supplement was actively harmful. That's a severe test producing an uncomfortable answer. Without the blinding, the experimenter would have attributed bad days to other causes and kept taking the supplement. The method caught something that self-observation never would.</p>
+
+    <p>Value-of-information analysis precedes expensive experiments. For fish oil and cognition, power analysis showed roughly 70 paired observation blocks were needed to detect a plausible effect size at 80% power. The question "is this experiment worth running?" has a quantitative answer. <a href="/reading/scientific-method/fisher-1935/">Fisher's</a> machinery includes the calculation of whether to turn the machinery on.</p>
+
+    <h2>The null results</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Substance</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Duration</th>
+            <th class="text-left py-2 text-gray-400">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">ALCAR</td><td class="pr-3 text-gray-400">Full bottle</td><td class="text-gray-400">No effects, alone or mixed with choline + piracetam</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Adrafinil</td><td class="pr-3 text-gray-400">Full course</td><td class="text-gray-400">"Did nothing whatsoever that I noticed"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Huperzine-A</td><td class="pr-3 text-gray-400">Full bottle</td><td class="text-gray-400">No side-effects, no improvements of any kind</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Coconut oil</td><td class="pr-3 text-gray-400">Months</td><td class="text-gray-400">"No longer particularly convinced it was doing anything"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">ZMA</td><td class="pr-3 text-gray-400">127 days</td><td class="text-gray-400">No statistically significant effects on sleep</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Magnesium citrate</td><td class="pr-3 text-gray-400">Months, blinded</td><td class="text-gray-400">94% Bayesian probability of net harm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Positive results circulate on their own. Null results die in file drawers. <a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> showed that publication bias inflates the false positive rate across entire fields. Every published null is one fewer false positive someone else would have to discover independently.</p>
+
+    <h2>Discussion</h2>
+
+    <p>The self-experiment has a long history. <a href="/reading/scientific-method/bacon-1620/">Bacon</a> died of pneumonia after stuffing a chicken with snow to test refrigeration. Barry Marshall drank <em>H. pylori</em> to prove it caused ulcers. The difference here is not courage but protocol. Bacon had no control group. Marshall had no blinding. The self-blinding method adds Fisher's randomization to the experimenter's willingness, and that turns anecdote into data.</p>
+
+    <p><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin</a> warned that a "ruling theory" becomes a "ruling passion." Self-experimenters are especially vulnerable: you want the substance to work because you're taking it. Blinding is the structural answer to Chamberlin's problem. You can't have a ruling theory about today's capsule if you don't know what's in it.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> showed that labs, IRBs, and grants don't prevent false findings. The institution provides the method but not the accountability. Publishing the raw data, the analysis code, and the uncomfortable results. That's the accountability. The paper trail can't be Goodharted, because gaming it requires fabrication, which the trail itself exposes.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/fisher-1935/">Fisher 1935</a></li>
+      <li><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></li>
+      <li><a href="/reading/scientific-method/registered-prediction/">Registered Prediction</a></li>
+      <li><a href="/reading/scientific-method/integrity/">Integrity</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/integrity/", label: "Integrity · 15 of 17" }} next={{ href: "/reading/scientific-method/registered-prediction/", label: "Registered prediction · 17 of 17" }} />
+  </main>
+</Layout>

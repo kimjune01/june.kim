@@ -1,0 +1,318 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Leinster 2021 — Entropy and Diversity" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Entropy and Diversity</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Leinster · 2021 · Cambridge University Press</p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: basic probability (what a distribution is). <a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> provides the entropy characterization.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Diversity_index"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hill diversity numbers</a> form a one-parameter family: at q=0 you count species, at q=1 you get the exponential of Shannon entropy, at q=2 you get Simpson's reciprocal. <strong>Magnitude</strong> extends this to metric spaces — a single number measuring the "effective size" of a space.</p>
+    </div>
+
+    <!-- SVG: interactive Hill diversity — slider controls q -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:20rem;">
+        <svg id="hill-demo" viewBox="0 0 240 220" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Title -->
+          <text id="hill-q" x="120" y="18" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold"></text>
+          <text id="hill-desc" x="120" y="32" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5"></text>
+          <!-- Species circles (5 species) -->
+          <circle id="hs0" cx="60" cy="70" fill="#60a5fa" stroke="#60a5fa" stroke-width="1.5"/>
+          <circle id="hs1" cx="100" cy="70" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/>
+          <circle id="hs2" cx="140" cy="70" fill="#34d399" stroke="#34d399" stroke-width="1.5"/>
+          <circle id="hs3" cx="80" cy="110" fill="#a78bfa" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle id="hs4" cx="120" cy="110" fill="#fb7185" stroke="#fb7185" stroke-width="1.5"/>
+          <!-- Abundance bars -->
+          <rect id="hb0" x="54" width="12" fill="#60a5fa" rx="1"/>
+          <rect id="hb1" x="94" width="12" fill="#f59e0b" rx="1"/>
+          <rect id="hb2" x="134" width="12" fill="#34d399" rx="1"/>
+          <rect id="hb3" x="74" width="12" fill="#a78bfa" rx="1"/>
+          <rect id="hb4" x="114" width="12" fill="#fb7185" rx="1"/>
+          <!-- Diversity readout -->
+          <text id="hill-d" x="120" y="210" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5"></text>
+        </svg>
+        <input type="range" id="hill-slider" min="0" max="400" value="0" step="1" style="width:100%;margin-top:4px;accent-color:#34d399;">
+      </div>
+    </div>
+    <script is:inline>
+    (function() {
+      // Abundances (raw counts) for 5 species
+      var counts = [40, 10, 15, 8, 5];
+      var total = counts.reduce(function(a,b){return a+b;}, 0);
+      var probs = counts.map(function(c){return c/total;});
+      var colors = ['#60a5fa','#f59e0b','#34d399','#a78bfa','#fb7185'];
+      var BASE_BAR = 140, MAX_BAR_H = 50;
+      var MIN_R = 5, MAX_R = 20;
+
+      var slider = document.getElementById('hill-slider');
+      var qLabel = document.getElementById('hill-q');
+      var descLabel = document.getElementById('hill-desc');
+      var dLabel = document.getElementById('hill-d');
+
+      function hillNumber(q) {
+        if (Math.abs(q - 1) < 0.01) {
+          // Shannon limit: exp(-sum(p*log(p)))
+          var h = 0;
+          for (var i = 0; i < probs.length; i++) {
+            if (probs[i] > 0) h -= probs[i] * Math.log(probs[i]);
+          }
+          return Math.exp(h);
+        }
+        var s = 0;
+        for (var i = 0; i < probs.length; i++) {
+          s += Math.pow(probs[i], q);
+        }
+        return Math.pow(s, 1 / (1 - q));
+      }
+
+      function update() {
+        var q = parseInt(slider.value) / 100;
+        var D = hillNumber(q);
+        qLabel.textContent = 'q = ' + q.toFixed(2);
+        if (q < 0.05) descLabel.textContent = 'count all species equally';
+        else if (Math.abs(q - 1) < 0.05) descLabel.textContent = 'weight by abundance (Shannon)';
+        else if (Math.abs(q - 2) < 0.05) descLabel.textContent = 'dominants matter most';
+        else if (q > 2) descLabel.textContent = 'only the dominant survives';
+        else descLabel.textContent = '';
+
+        // Weight each species: w_i = p_i^q (unnormalized visual weight)
+        var weights = [];
+        var maxW = 0;
+        for (var i = 0; i < probs.length; i++) {
+          var w = Math.pow(probs[i], Math.max(q, 0));
+          weights.push(w);
+          if (w > maxW) maxW = w;
+        }
+
+        for (var i = 0; i < 5; i++) {
+          var nw = weights[i] / maxW; // normalize to [0,1]
+          var circle = document.getElementById('hs' + i);
+          var bar = document.getElementById('hb' + i);
+          var r = MIN_R + nw * (MAX_R - MIN_R);
+          var opacity = 0.08 + nw * 0.55;
+          circle.setAttribute('r', r.toFixed(1));
+          circle.setAttribute('fill-opacity', opacity.toFixed(2));
+          circle.setAttribute('stroke-opacity', (0.2 + nw * 0.8).toFixed(2));
+          var bh = counts[i] / total * MAX_BAR_H;
+          bar.setAttribute('y', (BASE_BAR + MAX_BAR_H - bh).toFixed(1));
+          bar.setAttribute('height', bh.toFixed(1));
+          bar.setAttribute('fill-opacity', (0.1 + nw * 0.5).toFixed(2));
+        }
+
+        dLabel.textContent = 'D = ' + D.toFixed(2) + ' effective species';
+      }
+
+      slider.addEventListener('input', update);
+      update();
+    })();
+    </script>
+
+    <h3>Hill diversity numbers</h3>
+    <p>Given a probability distribution p over n species, the Hill number of order q is:</p>
+    <div class="bg-zinc-800 rounded-lg p-4 mb-4 font-mono text-center">
+      <span class="text-green-300">D_q</span> = (Σ pᵢ<sup>q</sup>)<sup>1/(1−q)</sup>
+    </div>
+    <p>This is the "effective number of species." A community with 10 equally-common species has D_q = 10 for all q. A community dominated by one species has D_q close to 1.</p>
+
+    <SchemeRepl client:load initialCode={`; Hill diversity number of order q
+; D_q(p) = (sum(p_i^q))^(1/(1-q))
+
+(define (hill-number p q)
+  (if (= q 1)
+    ; Limit as q -> 1: exp of Shannon entropy
+    (exp (- (apply + (map (lambda (pi)
+      (if (> pi 0) (* pi (log pi)) 0)) p))))
+    (expt (apply + (map (lambda (pi) (expt pi q)) p))
+          (/ 1 (- 1 q)))))
+
+; Uniform distribution: 5 equally common species
+(define uniform '(0.2 0.2 0.2 0.2 0.2))
+(display "uniform(5): D0=")
+(display (hill-number uniform 0))
+(display " D1=")
+(display (hill-number uniform 1))
+(display " D2=")
+(display (hill-number uniform 2))
+(newline)
+
+; Dominated distribution
+(define dominated '(0.9 0.05 0.03 0.01 0.01))
+(display "dominated:  D0=")
+(display (hill-number dominated 0))
+(display " D1=")
+(display (hill-number dominated 1))
+(display " D2=")
+(display (hill-number dominated 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def hill(p, q):
+    if q == 1:
+        return math.exp(-sum(pi * math.log(pi) for pi in p if pi > 0))
+    return sum(pi**q for pi in p) ** (1 / (1 - q))
+
+uniform = [0.2] * 5
+dominated = [0.9, 0.05, 0.03, 0.01, 0.01]
+
+for name, dist in [("uniform(5)", uniform), ("dominated", dominated)]:
+    print(f"{name}: D0={hill(dist,0):.1f} D1={hill(dist,1):.2f} D2={hill(dist,2):.2f}")
+`} />
+    </div>
+
+    <h3>q=0: species richness</h3>
+    <p>At q=0, all nonzero probabilities contribute equally. D₀ just counts the number of species present. Rare and common species count the same.</p>
+
+    <SchemeRepl client:load initialCode={`; D_0 = number of species with nonzero probability
+
+(define (d0 p)
+  (length (filter (lambda (pi) (> pi 0)) p)))
+
+(display "5 species, one rare: ")
+(display (d0 '(0.5 0.3 0.1 0.09 0.01)))
+(newline)
+(display "5 species, one absent: ")
+(display (d0 '(0.5 0.3 0.1 0.1 0.0)))
+(newline)
+; q=0 is a blunt instrument — it ignores how common each species is
+`} />
+
+    <h3>q=1: exponential of Shannon entropy</h3>
+    <p>At q=1 (the limit), D₁ = exp(H), where H is <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a>. This is the "effective number of equally-common species" — entropy converted from bits to a count.</p>
+
+    <SchemeRepl client:load initialCode={`; D_1 = exp(H) where H = -sum(p_i log p_i)
+
+(define (shannon-entropy p)
+  (- (apply + (map (lambda (pi)
+    (if (> pi 0) (* pi (log pi)) 0)) p))))
+
+(define (d1 p) (exp (shannon-entropy p)))
+
+(define p '(0.25 0.25 0.25 0.25))
+(display "4 uniform: H=")
+(display (shannon-entropy p))
+(display " D1=")
+(display (d1 p))
+(newline)
+
+(define q '(0.7 0.1 0.1 0.1))
+(display "4 skewed:  H=")
+(display (shannon-entropy q))
+(display " D1=")
+(display (d1 q))
+; D1 < 4 because one species dominates
+`} />
+
+    <h3>q=2: Simpson's reciprocal</h3>
+    <p>At q=2, D₂ = 1/Σpᵢ². This is the reciprocal of the probability that two randomly chosen individuals belong to the same species. Dominant species are heavily weighted.</p>
+
+    <SchemeRepl client:load initialCode={`; D_2 = 1 / sum(p_i^2) — Simpson's reciprocal
+
+(define (d2 p)
+  (/ 1 (apply + (map (lambda (pi) (* pi pi)) p))))
+
+(define uniform '(0.2 0.2 0.2 0.2 0.2))
+(define skewed '(0.8 0.05 0.05 0.05 0.05))
+
+(display "uniform(5): D2 = ") (display (d2 uniform)) (newline)
+(display "skewed:     D2 = ") (display (d2 skewed)) (newline)
+; Skewed community has low effective diversity
+; because most random pairs hit the dominant species
+`} />
+
+    <h3>Magnitude — effective size of a metric space</h3>
+    <p>Magnitude generalizes diversity to metric spaces. Given a finite metric space with distance matrix d, the magnitude is the sum of the weight vector w satisfying Zw = 1, where Z_ij = e^(-d_ij). It measures the "effective number of points" — points close together contribute less than points far apart.</p>
+
+    <SchemeRepl client:load initialCode={`; Magnitude of a finite metric space
+; Z_ij = exp(-d_ij), solve Zw = 1, magnitude = sum(w)
+
+; Simple example: 3 points on a line at positions 0, 1, t
+(define (magnitude-3 t)
+  ; Z matrix for points at 0, 1, t
+  ; Z = ((1, e^-1, e^-t), (e^-1, 1, e^-(t-1)), (e^-t, e^-(t-1), 1))
+  ; For t=1: two points coincide, magnitude should be 2
+  ; For t>>1: three well-separated points, magnitude ~ 3
+  (let* ((z01 (exp -1)) (z02 (exp (- t))) (z12 (exp (- (abs (- t 1)))))
+         ; Solve 3x3 system (simplified for demonstration)
+         (det (+ 1 (* 2 z01 z02 z12) (- (* z01 z01)) (- (* z02 z02)) (- (* z12 z12)))))
+    (/ (+ 1 1 1
+          (- z01) (- z01) (- z02) (- z02) (- z12) (- z12)
+          (* 2 z01 z02) (* 2 z01 z12) (* 2 z02 z12)
+          (- (* 2 z01 z02 z12)))
+       det)))
+
+; More intuitive: just show the concept
+(display "3 points at 0, 1, 2:") (newline)
+(display "  well-separated -> magnitude ~ 3") (newline)
+(display "3 points at 0, 0.01, 0.02:") (newline)
+(display "  clustered -> magnitude ~ 1") (newline)
+(display "Magnitude counts effective distinct points.")
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ᵍD(p)</td><td class="pr-4 text-green-300">(hill-number p q)</td><td class="font-sans">Hill diversity of order q</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(p)</td><td class="pr-4 text-green-300">(shannon-entropy p)</td><td class="font-sans">Shannon entropy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|A|</td><td class="pr-4 text-green-300">; magnitude</td><td class="font-sans">Magnitude (effective size)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Z_ij = e^(-d_ij)</td><td class="pr-4 text-green-300">(exp (- d))</td><td class="font-sans">Similarity matrix entry</td></tr>
+          <tr><td class="py-2 pr-4">w</td><td class="pr-4 text-green-300">; weight vector, Zw = 1</td><td class="font-sans">Magnitude weights</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> — characterizes Shannon entropy via functoriality</li>
+      <li><a href="/reading/natural-breadcrumbs/chen-vigneaux-2023/">🍞 Chen, Vigneaux 2023</a> — unifies magnitude and entropy categorically</li>
+      <li><a href="/reading/natural-breadcrumbs/sato-2023/">🍞 Sato 2023</a> — divergences on monads (related information measures)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/real-analysis/lebl-08/">∞ Lebl Ch.8 Metric Spaces</a> — the metric space structure that magnitude measures</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Diversity_index"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diversity index</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Magnitude_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Magnitude</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The Hill number computations are exact for finite distributions. The magnitude example is conceptual — solving the linear system Zw = 1 for arbitrary metric spaces requires matrix inversion, which the examples only sketch. For example: the magnitude discussion describes 3 points on a line. In the book, magnitude is defined for arbitrary enriched categories via the Euler characteristic of a category — a construction that subsumes metric spaces, posets, and graphs under one definition. The Hill numbers are the same; the categorical generalization of magnitude is not.</p>
+    <p>Hill number examples: <strong class="text-green-400">Exact.</strong> Magnitude example: <strong class="text-green-400">Analogy.</strong></p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? The book is published by Cambridge University Press (2021). Start at Chapter 2 for Hill numbers, Chapter 6 for magnitude.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Hill diversity and magnitude measure the Natural Framework's information budget — exp(entropy) is the effective number of distinguishable states at each pipeline stage. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/kidney-wu-2021/", label: "Kidney, Wu 2021 · 13 of 21" }} next={{ href: "/reading/natural-breadcrumbs/smithe-2021/", label: "Smithe 2021 · 15 of 21" }} />
+  </main>
+</Layout>

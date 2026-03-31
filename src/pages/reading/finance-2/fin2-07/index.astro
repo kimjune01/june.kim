@@ -1,0 +1,363 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.7 — Factor Models" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Factor Models</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>factor model</strong> decomposes an asset's return into exposure to a few common risk factors plus idiosyncratic noise. If you can identify the factors, you can separate the risk you're paid for from the risk you can diversify away.</p>
+    </div>
+
+    <!-- SVG: factor decomposition diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Asset return box -->
+        <rect x="140" y="10" width="120" height="32" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="31" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.8">R&#x1D62; = &#x3B1; + &#x3B2;F + &#x3B5;</text>
+        <!-- Arrow down to factors -->
+        <line x1="160" y1="42" x2="80" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="200" y1="42" x2="200" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="240" y1="42" x2="320" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Factor boxes -->
+        <rect x="30" y="80" width="100" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="99" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Market (MKT)</text>
+        <rect x="150" y="80" width="100" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="99" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Size (SMB)</text>
+        <rect x="270" y="80" width="100" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="320" y="99" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Value (HML)</text>
+        <!-- Idiosyncratic -->
+        <line x1="200" y1="42" x2="200" y2="150" stroke="#ef4444" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <rect x="150" y="150" width="100" height="28" rx="4" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="169" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.6">Idiosyncratic &#x3B5;</text>
+        <!-- Labels -->
+        <text x="110" y="66" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">&#x3B2;&#x2081;</text>
+        <text x="190" y="66" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">&#x3B2;&#x2082;</text>
+        <text x="280" y="66" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">&#x3B2;&#x2083;</text>
+      </svg>
+    </div>
+
+    <!-- 1. Fama-French Three-Factor Model -->
+    <h3>Fama-French three-factor model</h3>
+    <p>CAPM says one factor (the market) explains all expected returns. Fama and French showed two more matter: <strong>SMB</strong> (small minus big, the size premium) and <strong>HML</strong> (high minus low book-to-market, the value premium). A stock's expected excess return is &#x3B2;&#x2081;MKT + &#x3B2;&#x2082;SMB + &#x3B2;&#x2083;HML.</p>
+
+    <SchemeRepl client:load initialCode={`; Fama-French three-factor model
+; R_i - Rf = alpha + beta1*MKT + beta2*SMB + beta3*HML + epsilon
+
+(define (ff3-expected-return rf beta-mkt beta-smb beta-hml
+                              mkt-premium smb-premium hml-premium)
+  (+ rf
+     (* beta-mkt mkt-premium)
+     (* beta-smb smb-premium)
+     (* beta-hml hml-premium)))
+
+; Historical average premia (annualized, approximate)
+(define mkt-prem 0.06)   ; 6% market risk premium
+(define smb-prem 0.02)   ; 2% size premium
+(define hml-prem 0.035)  ; 3.5% value premium
+(define rf 0.04)          ; 4% risk-free rate
+
+; Small value stock: high exposure to all three factors
+(define small-value (ff3-expected-return rf 1.2 0.8 0.7
+                                          mkt-prem smb-prem hml-prem))
+(display "Small value expected return: ")
+(display (exact->inexact small-value)) (newline)
+
+; Large growth stock: market exposure, negative SMB and HML
+(define large-growth (ff3-expected-return rf 1.0 -0.3 -0.4
+                                           mkt-prem smb-prem hml-prem))
+(display "Large growth expected return: ")
+(display (exact->inexact large-growth)) (newline)
+
+; The difference is the factor premium, not alpha
+(display "Spread: ")
+(display (exact->inexact (- small-value large-growth)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fama-French three-factor model
+def ff3_expected_return(rf, beta_mkt, beta_smb, beta_hml,
+                        mkt_prem, smb_prem, hml_prem):
+    return rf + beta_mkt*mkt_prem + beta_smb*smb_prem + beta_hml*hml_prem
+
+mkt_prem, smb_prem, hml_prem = 0.06, 0.02, 0.035
+rf = 0.04
+
+small_value = ff3_expected_return(rf, 1.2, 0.8, 0.7,
+                                   mkt_prem, smb_prem, hml_prem)
+large_growth = ff3_expected_return(rf, 1.0, -0.3, -0.4,
+                                    mkt_prem, smb_prem, hml_prem)
+
+print(f"Small value expected return: {small_value:.4f}")
+print(f"Large growth expected return: {large_growth:.4f}")
+print(f"Spread: {small_value - large_growth:.4f}")
+`} />
+    </div>
+
+
+    <!-- 2. PCA on Returns -->
+    <h3>PCA on returns</h3>
+    <p>Principal component analysis extracts factors from the data itself. Compute the covariance matrix of returns, then eigendecompose. The first eigenvector is usually the market; subsequent ones capture sector, size, and other patterns. PCA factors are statistical, not economic&mdash;they maximize variance explained, not interpretability.</p>
+
+    <SchemeRepl client:load initialCode={`; PCA: eigendecomposition of covariance matrix
+; 2x2 covariance matrix for two correlated assets
+
+(define var-a 0.04)    ; variance of asset A (20% vol)
+(define var-b 0.09)    ; variance of asset B (30% vol)
+(define cov-ab 0.036)  ; covariance (correlation = 0.6)
+
+; For a 2x2 symmetric matrix [[a,b],[b,c]]:
+; eigenvalues = ((a+c) +/- sqrt((a-c)^2 + 4b^2)) / 2
+(define trace (+ var-a var-b))
+(define det (- (* var-a var-b) (* cov-ab cov-ab)))
+(define discriminant (sqrt (- (* trace trace) (* 4 det))))
+
+(define lambda1 (/ (+ trace discriminant) 2))
+(define lambda2 (/ (- trace discriminant) 2))
+
+(display "Eigenvalue 1 (PC1): ") (display (exact->inexact lambda1)) (newline)
+(display "Eigenvalue 2 (PC2): ") (display (exact->inexact lambda2)) (newline)
+
+; Variance explained by first component
+(define var-explained (/ lambda1 (+ lambda1 lambda2)))
+(display "Variance explained by PC1: ")
+(display (exact->inexact var-explained)) (newline)
+
+; Eigenvector for lambda1: [cov-ab, lambda1 - var-a]
+(define v1-x cov-ab)
+(define v1-y (- lambda1 var-a))
+(define norm (sqrt (+ (* v1-x v1-x) (* v1-y v1-y))))
+(display "PC1 direction: [")
+(display (exact->inexact (/ v1-x norm)))
+(display ", ")
+(display (exact->inexact (/ v1-y norm)))
+(display "]")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# 2x2 covariance matrix eigendecomposition
+var_a, var_b, cov_ab = 0.04, 0.09, 0.036
+
+trace = var_a + var_b
+det = var_a * var_b - cov_ab**2
+disc = math.sqrt(trace**2 - 4*det)
+
+lambda1 = (trace + disc) / 2
+lambda2 = (trace - disc) / 2
+
+print(f"Eigenvalue 1 (PC1): {lambda1:.6f}")
+print(f"Eigenvalue 2 (PC2): {lambda2:.6f}")
+print(f"Variance explained by PC1: {lambda1/(lambda1+lambda2):.4f}")
+
+# Eigenvector for lambda1
+v1_x, v1_y = cov_ab, lambda1 - var_a
+norm = math.sqrt(v1_x**2 + v1_y**2)
+print(f"PC1 direction: [{v1_x/norm:.4f}, {v1_y/norm:.4f}]")
+`} />
+    </div>
+
+
+    <!-- 3. Risk Decomposition -->
+    <h3>Systematic vs idiosyncratic risk</h3>
+    <p>Total variance = systematic variance + idiosyncratic variance. Systematic risk comes from factor exposures and can't be diversified away. Idiosyncratic risk is stock-specific noise that vanishes in a large portfolio. <strong>R-squared</strong> from the factor regression tells you how much is systematic.</p>
+
+    <SchemeRepl client:load initialCode={`; Risk decomposition: total = systematic + idiosyncratic
+; For a single-factor model: Var(R) = beta^2 * Var(F) + Var(epsilon)
+
+(define (risk-decomposition beta factor-vol idio-vol)
+  (let* ((systematic-var (* beta beta factor-vol factor-vol))
+         (idio-var (* idio-vol idio-vol))
+         (total-var (+ systematic-var idio-var))
+         (r-squared (/ systematic-var total-var)))
+    (list total-var systematic-var idio-var r-squared)))
+
+; Stock with beta=1.3, market vol=16%, idiosyncratic vol=25%
+(define result (risk-decomposition 1.3 0.16 0.25))
+
+(display "Total variance:       ") (display (exact->inexact (car result))) (newline)
+(display "Systematic variance:  ") (display (exact->inexact (cadr result))) (newline)
+(display "Idiosyncratic variance: ") (display (exact->inexact (caddr result))) (newline)
+(display "R-squared:            ") (display (exact->inexact (cadddr result))) (newline)
+
+; In a portfolio of N independent stocks, idio risk shrinks by 1/N
+(display "--- Diversification ---") (newline)
+(define n-stocks 50)
+(define port-idio-var (/ (caddr result) n-stocks))
+(display "Portfolio idio var (50 stocks): ")
+(display (exact->inexact port-idio-var)) (newline)
+(display "Portfolio idio vol: ")
+(display (exact->inexact (sqrt port-idio-var)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def risk_decomposition(beta, factor_vol, idio_vol):
+    sys_var = (beta * factor_vol)**2
+    idio_var = idio_vol**2
+    total_var = sys_var + idio_var
+    r_sq = sys_var / total_var
+    return total_var, sys_var, idio_var, r_sq
+
+total, sys, idio, r2 = risk_decomposition(1.3, 0.16, 0.25)
+print(f"Total variance:        {total:.6f}")
+print(f"Systematic variance:   {sys:.6f}")
+print(f"Idiosyncratic variance: {idio:.6f}")
+print(f"R-squared:             {r2:.4f}")
+
+# Diversification: idio risk shrinks by 1/N
+n = 50
+print(f"\\nPortfolio idio var ({n} stocks): {idio/n:.6f}")
+print(f"Portfolio idio vol: {math.sqrt(idio/n):.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Factor Mimicking Portfolios -->
+    <h3>Factor mimicking portfolios</h3>
+    <p>A <strong>factor mimicking portfolio</strong> is a long-short portfolio whose return tracks a given factor. For SMB: go long small caps, short large caps in equal dollar amounts. The portfolio has unit exposure to the size factor and zero net market exposure. This lets you trade abstract risk factors as concrete portfolios.</p>
+
+    <SchemeRepl client:load initialCode={`; Factor mimicking portfolio construction
+; SMB: long small-cap basket, short large-cap basket
+
+(define (portfolio-return weights returns)
+  (if (null? weights) 0
+      (+ (* (car weights) (car returns))
+         (portfolio-return (cdr weights) (cdr returns)))))
+
+; 3 small stocks, 3 large stocks
+; Weights: +1/3 each small, -1/3 each large (dollar neutral)
+(define smb-weights (list 1/3 1/3 1/3 -1/3 -1/3 -1/3))
+
+; Monthly returns: small stocks outperformed
+(define month-returns (list 0.05 0.03 0.04   ; small caps
+                            0.01 0.02 0.015)) ; large caps
+
+(define smb-return (portfolio-return smb-weights month-returns))
+(display "SMB factor return: ")
+(display (exact->inexact smb-return)) (newline)
+
+; Net investment is zero (long-short)
+(define net-investment (portfolio-return
+                         (list 1 1 1 1 1 1)
+                         smb-weights))
+(display "Net dollar exposure: ")
+(display (exact->inexact net-investment)) (newline)
+
+; HML: long high B/M, short low B/M
+(define hml-weights (list 1/3 1/3 1/3 -1/3 -1/3 -1/3))
+(define hml-returns (list 0.04 0.035 0.03    ; value stocks
+                          0.01 0.015 0.02))  ; growth stocks
+(define hml-return (portfolio-return hml-weights hml-returns))
+(display "HML factor return: ")
+(display (exact->inexact hml-return))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Factor mimicking portfolio
+def portfolio_return(weights, returns):
+    return sum(w*r for w, r in zip(weights, returns))
+
+# SMB: long small, short large (dollar neutral)
+smb_weights = [1/3, 1/3, 1/3, -1/3, -1/3, -1/3]
+month_returns = [0.05, 0.03, 0.04, 0.01, 0.02, 0.015]
+
+smb_ret = portfolio_return(smb_weights, month_returns)
+print(f"SMB factor return: {smb_ret:.4f}")
+print(f"Net dollar exposure: {sum(smb_weights):.1f}")
+
+# HML: long value, short growth
+hml_returns = [0.04, 0.035, 0.03, 0.01, 0.015, 0.02]
+hml_ret = portfolio_return(smb_weights, hml_returns)
+print(f"HML factor return: {hml_ret:.4f}")
+`} />
+    </div>
+
+
+    <!-- 5. Multi-Factor Regression -->
+    <h3>Running the regression</h3>
+    <p>To estimate factor loadings, regress excess returns on the factor returns. The betas measure sensitivity; alpha measures unexplained return. A positive, statistically significant alpha means the asset outperforms its factor-predicted return&mdash;genuine skill or a missing factor.</p>
+
+    <SchemeRepl client:load initialCode={`; Estimate alpha and beta from return data
+; Simple OLS for single factor: beta = Cov(R,F)/Var(F), alpha = mean(R) - beta*mean(F)
+
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+
+(define (covariance xs ys)
+  (let ((mx (mean xs)) (my (mean ys)))
+    (/ (apply + (map (lambda (x y) (* (- x mx) (- y my))) xs ys))
+       (length xs))))
+
+(define (variance xs)
+  (covariance xs xs))
+
+; 12 months of excess returns and market factor
+(define stock-excess (list 0.03 -0.01 0.05 0.02 -0.03 0.04
+                           0.01 0.06 -0.02 0.03 0.00 0.04))
+(define mkt-factor   (list 0.02 -0.01 0.04 0.01 -0.02 0.03
+                           0.01 0.04 -0.01 0.02 0.00 0.03))
+
+(define beta (/ (covariance stock-excess mkt-factor)
+                (variance mkt-factor)))
+(define alpha (- (mean stock-excess) (* beta (mean mkt-factor))))
+
+(display "Beta:  ") (display (exact->inexact beta)) (newline)
+(display "Alpha: ") (display (exact->inexact alpha)) (newline)
+
+; Residual variance
+(define residuals (map (lambda (r f) (- r alpha (* beta f)))
+                       stock-excess mkt-factor))
+(define idio-var (variance residuals))
+(display "Idiosyncratic vol: ")
+(display (exact->inexact (sqrt idio-var)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# OLS factor regression
+def mean(xs): return sum(xs) / len(xs)
+def cov(xs, ys):
+    mx, my = mean(xs), mean(ys)
+    return sum((x-mx)*(y-my) for x, y in zip(xs, ys)) / len(xs)
+def var(xs): return cov(xs, xs)
+
+stock = [0.03,-0.01,0.05,0.02,-0.03,0.04,0.01,0.06,-0.02,0.03,0.00,0.04]
+mkt =   [0.02,-0.01,0.04,0.01,-0.02,0.03,0.01,0.04,-0.01,0.02,0.00,0.03]
+
+beta = cov(stock, mkt) / var(mkt)
+alpha = mean(stock) - beta * mean(mkt)
+print(f"Beta:  {beta:.4f}")
+print(f"Alpha: {alpha:.6f}")
+
+residuals = [r - alpha - beta*f for r, f in zip(stock, mkt)]
+idio_vol = var(residuals)**0.5
+print(f"Idiosyncratic vol: {idio_vol:.4f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/la-01/">&#x1F4D0; Linear Algebra Ch.1</a> &#x2014; eigenvectors underpin PCA and factor extraction</li>
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; variance, covariance, and regression are the statistical toolkit</li>
+      <li><a href="/reading/finance-2/fin2-01/">&#x1F4C9; Finance II Ch.1</a> &#x2014; stochastic processes model the returns that factors decompose</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-06/", label: "Ch.6 · 6" }}
+      next={{ href: "/reading/finance-2/fin2-08/", label: "Interest Rate Models · 8" }} />
+
+  </main>
+</Layout>

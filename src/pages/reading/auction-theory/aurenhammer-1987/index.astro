@@ -1,0 +1,130 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Aurenhammer 1987 — Power Diagrams" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>Power Diagrams</h1>
+    <p class="text-gray-400 text-sm mb-6">Aurenhammer &middot; 1987 &middot; <a href="https://doi.org/10.1137/0216006">doi:10.1137/0216006</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>power diagram</strong> partitions space using weighted sites. Each cell contains the points closer to its site after adjusting for weight. Voronoi diagrams are the special case where all weights are equal. The geometry behind embedding-space ad auctions.</p>
+    </div>
+
+    <h3>From Voronoi to power diagrams</h3>
+    <p>In a standard <a href="https://en.wikipedia.org/wiki/Voronoi_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Voronoi diagram</a>, each cell contains points nearest to its site. A <a href="https://en.wikipedia.org/wiki/Power_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>power diagram</a> adds a weight to each site: the "power distance" from point x to site s with weight w is ||x - s||^2 - w. Higher weight expands a cell. In ad auctions, the weight is the bid.</p>
+
+    <!-- SVG: Weighted Voronoi / power diagram with shifted boundaries -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 250" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Background cells -->
+        <!-- Cell A (large weight, bigger region) -->
+        <path d="M 0,0 L 240,0 L 220,125 L 180,250 L 0,250 Z" fill="#4ade80" fill-opacity="0.06" stroke="none"/>
+        <!-- Cell B (small weight, smaller region) -->
+        <path d="M 240,0 L 400,0 L 400,250 L 180,250 L 220,125 Z" fill="#60a5fa" fill-opacity="0.06" stroke="none"/>
+
+        <!-- Boundary (shifted toward B because A has higher weight) -->
+        <line x1="240" y1="0" x2="180" y2="250" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3"/>
+
+        <!-- Site A -->
+        <circle cx="120" cy="120" r="12" fill="#4ade80" fill-opacity="0.2" stroke="#4ade80" stroke-width="1.5"/>
+        <circle cx="120" cy="120" r="3" fill="#4ade80"/>
+        <text x="120" y="100" text-anchor="middle" fill="#4ade80" font-size="12">A</text>
+        <text x="120" y="150" text-anchor="middle" fill="#4ade80" font-size="10">w = 9</text>
+
+        <!-- Site B -->
+        <circle cx="310" cy="130" r="6" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1.5"/>
+        <circle cx="310" cy="130" r="3" fill="#60a5fa"/>
+        <text x="310" y="115" text-anchor="middle" fill="#60a5fa" font-size="12">B</text>
+        <text x="310" y="155" text-anchor="middle" fill="#60a5fa" font-size="10">w = 1</text>
+
+        <!-- Voronoi boundary (where it would be without weights) -->
+        <line x1="215" y1="0" x2="215" y2="250" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2,4" opacity="0.3"/>
+        <text x="215" y="240" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">Voronoi</text>
+
+        <!-- Label -->
+        <text x="200" y="20" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">boundary shifts toward lower-weight site</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Power diagram: assign point to nearest site by power distance
+; power_distance(x, site, weight) = ||x - site||^2 - weight
+; Lower power distance wins
+
+(define (square x) (* x x))
+
+(define (power-distance px py sx sy weight)
+  (- (+ (square (- px sx)) (square (- py sy)))
+     weight))
+
+; Two sites with different weights (= bids)
+(define site-a '(2 3))   ; position
+(define weight-a 9)      ; high bid
+(define site-b '(8 3))   ; position
+(define weight-b 1)      ; low bid
+
+; Test point at (5, 3) — midpoint
+(define pa (power-distance 5 3 2 3 weight-a))
+(define pb (power-distance 5 3 8 3 weight-b))
+
+(display "Power dist to A: ") (display pa) (newline)
+(display "Power dist to B: ") (display pb) (newline)
+(display "Point (5,3) assigned to: ")
+(display (if (< pa pb) 'A 'B)) (newline)
+
+; Without weights, midpoint would be equidistant
+; With weights, A's higher bid captures more territory
+(display "\\nWithout weights:")
+(newline)
+(define pa0 (power-distance 5 3 2 3 0))
+(define pb0 (power-distance 5 3 8 3 0))
+(display "Dist to A: ") (display pa0) (newline)
+(display "Dist to B: ") (display pb0) (newline)
+(display "Equal? ") (display (= pa0 pb0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Power diagram assignment
+import math
+
+def power_dist(point, site, weight):
+    return sum((p - s)**2 for p, s in zip(point, site)) - weight
+
+# Two sites with different weights
+sites = [(2, 3), (8, 3)]
+weights = [9, 1]  # A bids high, B bids low
+
+# Test points along x-axis at y=3
+for x in range(0, 11):
+    dists = [power_dist((x, 3), s, w) for s, w in zip(sites, weights)]
+    winner = "A" if dists[0] < dists[1] else "B"
+    print("x=" + str(x) + ": A=" + str(int(dists[0])) + ", B=" + str(int(dists[1])) + " -> " + winner)
+`} />
+    </div>
+
+    <h3>Why this matters for ad auctions</h3>
+    <p>In embedding-space auctions, each advertiser is a site in the embedding space and their bid is the weight. The power diagram determines which advertiser wins for each query embedding. Higher bids expand your territory, but relevance (proximity) still matters. This is the geometric mechanism behind <a href="https://june.kim/buying-space-not-keywords"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>buying space instead of keywords</a>: advertisers compete for regions of the embedding space, and the power diagram draws the boundaries. The <a href="https://june.kim/keyword-tax"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>keyword tax</a> is the cost of pretending these continuous regions are discrete keyword buckets.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/">&#x25B3; Geometry</a> &mdash; geom-11: power diagrams and weighted Voronoi</li>
+      <li><a href="https://june.kim/power-diagrams-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/power-diagrams-ad-auctions</a> &mdash; applying power diagrams to ad targeting</li>
+      <li><a href="/reading/auction-theory/hajiaghayi-2024/">💎 Hajiaghayi 2024</a> &mdash; RAG-based alternative to geometric allocation</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://doi.org/10.1137/0216006">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/milgrom-weber-1982/", label: "Milgrom & Weber 1982 · 4 of 8" }} next={{ href: "/reading/auction-theory/lahaie-lubin-2025/", label: "Lahaie & Lubin 2025 · 6 of 8" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,169 @@
+---
+import Layout from '../../../layouts/Base.astro';
+---
+
+<Layout title="Prose Writing" favicon="✍️">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>✍️ Prose</h1>
+
+    <p class="text-lg text-gray-300 mb-6">Twenty-four centuries of arguing about how to write clearly. Each work responds to a failure of what came before.</p>
+
+    <!-- SVG: Timeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 560 120" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <line x1="20" y1="50" x2="540" y2="50" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+
+        <!-- Ancient rhetoric (blue) -->
+        <circle cx="40" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="40" y="30" text-anchor="middle" fill="#60a5fa" font-size="8">~350 BCE</text>
+        <text x="40" y="72" text-anchor="middle" fill="#60a5fa" font-size="7">Aristotle</text>
+
+        <circle cx="100" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="100" y="30" text-anchor="middle" fill="#60a5fa" font-size="8">~95 AD</text>
+        <text x="100" y="72" text-anchor="middle" fill="#60a5fa" font-size="7">Quintilian</text>
+
+        <!-- Compression (amber) -->
+        <circle cx="175" cy="50" r="5" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="175" y="30" text-anchor="middle" fill="#f59e0b" font-size="8">1597</text>
+        <text x="175" y="72" text-anchor="middle" fill="#f59e0b" font-size="7">Bacon</text>
+
+        <circle cx="240" cy="50" r="5" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="240" y="30" text-anchor="middle" fill="#f59e0b" font-size="8">1783</text>
+        <text x="240" y="72" text-anchor="middle" fill="#f59e0b" font-size="7">Blair</text>
+
+        <!-- Rules (green) -->
+        <circle cx="310" cy="50" r="5" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+        <text x="310" y="30" text-anchor="middle" fill="#34d399" font-size="8">1918</text>
+        <text x="310" y="72" text-anchor="middle" fill="#34d399" font-size="7">Strunk</text>
+
+        <circle cx="370" cy="50" r="5" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+        <text x="370" y="30" text-anchor="middle" fill="#34d399" font-size="8">1946</text>
+        <text x="370" y="72" text-anchor="middle" fill="#34d399" font-size="7">Orwell</text>
+
+        <!-- Analysis (purple) -->
+        <circle cx="430" cy="50" r="5" fill="#a78bfa" fill-opacity="0.3" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="430" y="30" text-anchor="middle" fill="#a78bfa" font-size="8">1976</text>
+        <text x="430" y="72" text-anchor="middle" fill="#a78bfa" font-size="7">Zinsser</text>
+
+        <circle cx="470" cy="50" r="5" fill="#a78bfa" fill-opacity="0.3" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="470" y="30" text-anchor="middle" fill="#a78bfa" font-size="8">1981</text>
+        <text x="470" y="72" text-anchor="middle" fill="#a78bfa" font-size="7">Williams</text>
+
+        <!-- Mechanical (yellow) -->
+        <circle cx="530" cy="50" r="5" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1.5"/>
+        <text x="530" y="30" text-anchor="middle" fill="#facc15" font-size="8">2017</text>
+        <text x="530" y="72" text-anchor="middle" fill="#facc15" font-size="7">Google</text>
+
+        <text x="280" y="100" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">each one responding to a failure of what came before</text>
+      </svg>
+    </div>
+
+    <p class="text-sm text-gray-400 mb-4">Want to improve your writing today? Start with <a href="/reading/prose-writing/strunk-1918/">Strunk</a> or <a href="/reading/prose-writing/orwell-1946/">Orwell</a>. Want to understand why the rules work? Read <a href="/reading/prose-writing/williams-1981/">Williams</a>. Want to practice? <a href="/reading/prose-writing/practice/">Paste your writing and see what the rules catch.</a></p>
+
+    <h2>The arc</h2>
+
+    <p>Aristotle gives persuasion three modes: ethos, pathos, logos. Quintilian builds a complete education around them. Bacon breaks from ornament and invents the aphorism: maximum meaning per sentence. Blair makes taste teachable. Strunk says omit needless words. Orwell says vague language is political, not accidental, and writes six rules to catch it. Zinsser says clutter is a thinking failure, not a style problem. Williams says a sentence has an information flow: old before new, and burying verbs inside nouns kills clarity. Google says "use the active voice" but finally writes down the three exceptions.</p>
+
+    <p>Each thinker responds to a failure of the previous method. The failures are the interesting part.</p>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2>Works</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Work</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it changed</th>
+            <th class="text-left py-2 text-gray-400">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/aristotle/">Aristotle, <em>Rhetoric</em></a></td><td class="pr-3 text-gray-400">Gave persuasion a theory: ethos, pathos, logos. Every argument moves an audience toward belief.</td><td class="text-gray-400"><a href="/reading/prose-writing/aristotle/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/quintilian/">Quintilian, <em>Institutio Oratoria</em></a></td><td class="pr-3 text-gray-400">Complete education for an orator. Systematized the rhetorical canon: invention, arrangement, style, memory, delivery.</td><td class="text-gray-400"><a href="/reading/prose-writing/quintilian/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/bacon-1597/">Bacon, <em>Essays</em></a></td><td class="pr-3 text-gray-400">Broke from Ciceronian ornament. Aphorism as compression: maximum meaning per sentence.</td><td class="text-gray-400"><a href="/reading/prose-writing/bacon-1597/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/blair-1783/">Blair, <em>Lectures on Rhetoric</em></a></td><td class="pr-3 text-gray-400">Taste as teachable. Systematized rhetoric for an age of readers, not listeners.</td><td class="text-gray-400"><a href="/reading/prose-writing/blair-1783/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/strunk-1918/">Strunk, <em>The Elements of Style</em></a></td><td class="pr-3 text-gray-400">Omit needless words. The shortest complete specification for English prose.</td><td class="text-gray-400"><a href="/reading/prose-writing/strunk-1918/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/orwell-1946/">Orwell, &ldquo;Politics and the English Language&rdquo;</a></td><td class="pr-3 text-gray-400">Vague language is political, not accidental. Six rules as a checklist.</td><td class="text-gray-400"><a href="/reading/prose-writing/orwell-1946/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/zinsser-1976/">Zinsser, <em>On Writing Well</em></a></td><td class="pr-3 text-gray-400">Writing is thinking made visible. Clutter is a thinking failure, not a style problem.</td><td class="text-gray-400"><a href="/reading/prose-writing/zinsser-1976/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/williams-1981/">Williams, <em>Style: Lessons in Clarity and Grace</em></a></td><td class="pr-3 text-gray-400">Old information before new. Nominalizations kill sentences. A sentence has an information flow.</td><td class="text-gray-400"><a href="/reading/prose-writing/williams-1981/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/prose-writing/google-2017/">Google, <em>Developer Documentation Style Guide</em></a></td><td class="pr-3 text-gray-400">Strunk's &ldquo;use the active voice&rdquo; with the exceptions finally written down. The first style guide precise enough to apply mechanically.</td><td class="text-gray-400"><a href="/reading/prose-writing/google-2017/" class="text-yellow-300 hover:text-yellow-200">✍️</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Vocabulary we inherited</h2>
+
+    <p>Every word in this table was coined or formalized by someone on the list above. We use them without thinking about the argument that produced them.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Term</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Source</th>
+            <th class="text-left py-2 text-gray-400">What it settled</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Ethos, pathos, logos</td><td class="pr-3 text-gray-400">Aristotle</td><td class="text-gray-400">The three modes of persuasion</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Invention, arrangement, style, memory, delivery</td><td class="pr-3 text-gray-400">Quintilian</td><td class="text-gray-400">The five canons of rhetoric</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Aphorism</td><td class="pr-3 text-gray-400">Bacon</td><td class="text-gray-400">Compression as a rhetorical form</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Taste</td><td class="pr-3 text-gray-400">Blair</td><td class="text-gray-400">Aesthetic judgment as learnable, not innate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">&ldquo;Omit needless words&rdquo;</td><td class="pr-3 text-gray-400">Strunk</td><td class="text-gray-400">Brevity as a moral, not just stylistic, virtue</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Nominalization</td><td class="pr-3 text-gray-400">Williams</td><td class="text-gray-400">Verbs turned into nouns &mdash; the signature of obscure prose</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Active voice with exceptions</td><td class="pr-3 text-gray-400">Google style guide</td><td class="text-gray-400">The first time &ldquo;use active voice&rdquo; came with falsifiable boundaries</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Failures that drove the next step</h2>
+
+    <p>The collection reads differently when you see what broke.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Failure</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What broke</th>
+            <th class="text-left py-2 text-gray-400">What it produced</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Sophists</td><td class="pr-3 text-gray-400">Rhetoric without ethics &mdash; persuasion as a trick</td><td class="text-gray-400">Aristotle's theory of argument</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Loss of the Roman republic</td><td class="pr-3 text-gray-400">Oratory without civic function</td><td class="text-gray-400">Quintilian's complete education</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Ciceronian ornament</td><td class="pr-3 text-gray-400">Elaboration as status signal, substance optional</td><td class="text-gray-400">Bacon's aphoristic compression</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Neoclassical excess</td><td class="pr-3 text-gray-400">Style as decoration, divorced from thought</td><td class="text-gray-400">Blair's taste as teachable discipline</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Victorian elaboration</td><td class="pr-3 text-gray-400">Wordiness as respectability</td><td class="text-gray-400">Strunk's &ldquo;omit needless words&rdquo;</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Political euphemism</td><td class="pr-3 text-gray-400">Abstraction hiding atrocity</td><td class="text-gray-400">Orwell's plain language rules</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Academic obscurantism</td><td class="pr-3 text-gray-400">Nominalization hiding absent thought</td><td class="text-gray-400">Williams' sentence dependency model</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Rules without exceptions</td><td class="pr-3 text-gray-400">Strunk said &ldquo;use the active voice&rdquo; but never said when not to</td><td class="text-gray-400">Google's three exceptions: now the rule is precise enough to follow</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">🔬 Scientific Method</a></li>
+      <li><a href="/reading/logic/">🔑 Logic</a></li>
+      <li><a href="/reading/commons/">⚖ The Commons</a></li>
+    </ul>
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/watch?v=OV5J6BfToSw">Pinker: Linguistics, Style and Writing (Royal Institution)</a></p>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">From the blog</p>
+    <ul>
+      <li><a href="https://june.kim/vibelogging"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vibelogging</a> — prose precise enough for machines to parse: the endpoint of this arc</li>
+      <li><a href="https://june.kim/open-prose"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Open Prose</a> — copyleft writing as a new category between papers and code</li>
+    </ul>
+
+  </main>
+</Layout>

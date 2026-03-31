@@ -1,0 +1,314 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hefferon Ch.3 — Maps Between Spaces" favicon="📐">
+  <main>
+
+    <a href="/reading/linear-algebra/" class="text-sm mb-4 inline-block">← back to linear algebra</a>
+
+    <h1>Maps Between Spaces</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/linearalgebra/">Linear Algebra</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>linear map</strong> (homomorphism) preserves addition and scalar multiplication. Every linear map from R^n to R^m is multiplication by an m-by-n matrix. The <a href="https://en.wikipedia.org/wiki/Rank%E2%80%93nullity_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>rank-nullity theorem</a> says: dimension of domain = dimension of image + dimension of kernel. Always.</p>
+    </div>
+
+    <!-- 1. Linear maps -->
+    <h3>Linear maps</h3>
+    <p>A function h: V to W is <strong>linear</strong> if h(v + w) = h(v) + h(w) and h(c*v) = c*h(v) for all vectors v, w and scalars c. Linearity means the map respects the vector space structure. It never bends straight lines or shifts the origin.</p>
+
+    <!-- SVG: Domain/codomain ovals with arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Domain oval -->
+        <ellipse cx="100" cy="90" rx="70" ry="60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="100" y="165" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">V (domain)</text>
+        <!-- Codomain oval -->
+        <ellipse cx="280" cy="90" rx="70" ry="60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="280" y="165" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">W (codomain)</text>
+        <!-- Points in domain -->
+        <circle cx="80" cy="65" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="68" y="60" fill="#60a5fa" font-size="10">v1</text>
+        <circle cx="90" cy="100" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="76" y="110" fill="#f59e0b" font-size="10">v2</text>
+        <circle cx="115" cy="75" r="3" fill="#34d399" fill-opacity="0.7"/>
+        <text x="120" y="70" fill="#34d399" font-size="10">v3</text>
+        <!-- Points in codomain (image) -->
+        <circle cx="265" cy="70" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="270" y="65" fill="#60a5fa" font-size="10">h(v1)</text>
+        <circle cx="275" cy="100" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="280" y="115" fill="#f59e0b" font-size="10">h(v2)</text>
+        <circle cx="265" cy="70" r="0" fill="none"/>
+        <!-- Kernel point maps to zero -->
+        <circle cx="290" cy="90" r="3" fill="#34d399" fill-opacity="0.7"/>
+        <text x="295" y="85" fill="#34d399" font-size="10">h(v3)</text>
+        <!-- Arrows -->
+        <path d="M 95 63 Q 190 30 262 67" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="262,65 256,60 258,70" fill="#60a5fa" fill-opacity="0.5"/>
+        <path d="M 105 100 Q 190 110 272 100" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="272,98 266,93 268,103" fill="#f59e0b" fill-opacity="0.5"/>
+        <path d="M 128 77 Q 200 70 287 88" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="287,86 281,81 283,91" fill="#34d399" fill-opacity="0.5"/>
+        <!-- Big label -->
+        <text x="190" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6" font-style="italic">h</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A linear map from R^2 to R^2: rotation by 90 degrees.
+; h((x,y)) = (-y, x)
+
+(define (h v)
+  (list (- (cadr v)) (car v)))
+
+; Check linearity:
+; h(v + w) should equal h(v) + h(w)
+(define (vec-add a b) (map + a b))
+(define (scalar-mult c v) (map (lambda (x) (* c x)) v))
+
+(define v '(3 1))
+(define w '(2 4))
+
+(display "h(v+w) = ")
+(display (h (vec-add v w)))
+(newline)
+
+(display "h(v)+h(w) = ")
+(display (vec-add (h v) (h w)))
+(newline)
+
+; h(c*v) should equal c*h(v)
+(display "h(3*v) = ")
+(display (h (scalar-mult 3 v)))
+(newline)
+
+(display "3*h(v) = ")
+(display (scalar-mult 3 (h v)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Rotation by 90 degrees as a linear map
+def h(v):
+    return [-v[1], v[0]]
+
+def vec_add(a, b):
+    return [x + y for x, y in zip(a, b)]
+
+def scalar_mult(c, v):
+    return [c * x for x in v]
+
+v, w = [3, 1], [2, 4]
+print(f"h(v+w)   = {h(vec_add(v, w))}")
+print(f"h(v)+h(w)= {vec_add(h(v), h(w))}")
+print(f"h(3*v)   = {h(scalar_mult(3, v))}")
+print(f"3*h(v)   = {scalar_mult(3, h(v))}")
+`} />
+    </div>
+
+
+    <!-- 2. Matrix representation -->
+    <h3>Matrix representation</h3>
+    <p>Every linear map h: R^n to R^m can be represented as multiplication by an m-by-n matrix A. The j-th column of A is h(ej), the image of the j-th standard basis vector. Conversely, every m-by-n matrix defines a linear map. Maps and matrices are two views of the same thing.</p>
+
+    <SchemeRepl client:load initialCode={`; Matrix-vector multiplication: A * v.
+; A is a list of rows; v is a column vector.
+
+(define (dot u v) (apply + (map * u v)))
+
+(define (mat-vec-mult A v)
+  (map (lambda (row) (dot row v)) A))
+
+; The rotation map h((x,y)) = (-y, x) has matrix:
+;   A = ((0 -1)
+;        (1  0))
+(define A '((0 -1)
+            (1  0)))
+
+(define v '(3 1))
+(display "A * (3,1) = ")
+(display (mat-vec-mult A v))
+(newline)
+; Should be (-1, 3) — same as rotating (3,1) by 90 degrees.
+
+; Matrix of a scaling map: h((x,y)) = (2x, 3y)
+(define B '((2 0)
+            (0 3)))
+(display "B * (4,5) = ")
+(display (mat-vec-mult B '(4 5)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Matrix-vector multiplication
+def mat_vec(A, v):
+    return [sum(a*x for a,x in zip(row, v)) for row in A]
+
+# Rotation matrix
+A = [[0, -1], [1, 0]]
+print("A * (3,1) = " + str(mat_vec(A, [3, 1])))
+
+# Scaling matrix
+B = [[2, 0], [0, 3]]
+print("B * (4,5) = " + str(mat_vec(B, [4, 5])))
+`} />
+    </div>
+
+
+    <!-- 3. Kernel and image -->
+    <h3>Kernel and image</h3>
+    <p>The <strong>kernel</strong> (null space) of a linear map h is the set of all vectors that map to zero: ker(h) = all v where h(v) = 0. The <strong>image</strong> (range) is the set of all outputs: im(h) = all h(v). Both are subspaces.</p>
+
+    <SchemeRepl client:load initialCode={`; Projection onto the x-axis: h((x,y)) = (x, 0)
+; Kernel: all (0, y) — the y-axis
+; Image: all (x, 0) — the x-axis
+
+(define (proj v)
+  (list (car v) 0))
+
+(display "h((3,7)) = ") (display (proj '(3 7))) (newline)
+(display "h((0,5)) = ") (display (proj '(0 5))) (newline)
+(display "h((0,0)) = ") (display (proj '(0 0))) (newline)
+
+; (0,5) is in the kernel: it maps to (0,0)
+(display "Kernel: the y-axis (all (0,y))")
+(newline)
+(display "Image: the x-axis (all (x,0))")
+(newline)
+
+; dim(kernel) = 1, dim(image) = 1
+; dim(domain) = 2 = 1 + 1. That's rank-nullity.
+(display "dim(ker) + dim(im) = 1 + 1 = 2 = dim(R^2)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Projection onto x-axis: h((x,y)) = (x, 0)
+def proj(v):
+    return [v[0], 0]
+
+print("h((3,7)) = " + str(proj([3, 7])))
+print("h((0,5)) = " + str(proj([0, 5])))
+print("h((0,0)) = " + str(proj([0, 0])))
+print("Kernel: the y-axis (all (0,y))")
+print("Image: the x-axis (all (x,0))")
+print("dim(ker) + dim(im) = 1 + 1 = 2 = dim(R^2)")
+`} />
+    </div>
+
+
+    <!-- 4. Rank-nullity -->
+    <h3>Rank-nullity theorem</h3>
+    <p>For any linear map h: V to W, <strong>dim(V) = dim(ker h) + dim(im h)</strong>. The dimension of the kernel is the nullity, and the dimension of the image is the rank. Rank-nullity is a conservation law: dimensions in minus dimensions lost equals dimensions out.</p>
+
+    <SchemeRepl client:load initialCode={`; Example: h: R^3 -> R^2 defined by h(x,y,z) = (x+y, y+z).
+; Matrix: ((1 1 0) (0 1 1))
+
+(define (dot u v) (apply + (map * u v)))
+(define (mat-vec-mult A v)
+  (map (lambda (row) (dot row v)) A))
+
+(define A '((1 1 0)
+            (0 1 1)))
+
+; Find kernel: solve Av = 0
+; Row reduce: already in echelon form.
+; z is free. y = -z, x = -y = z.
+; Kernel = span of (1, -1, 1).
+(display "Kernel basis: (1, -1, 1)")
+(newline)
+
+; Verify: A * (1,-1,1) = ?
+(display "A * (1,-1,1) = ")
+(display (mat-vec-mult A '(1 -1 1)))
+(newline)
+
+; Image = column space of A = span of (1,0) and (1,1).
+; These are independent, so dim(image) = 2.
+(display "Image basis: (1,0) and (1,1)")
+(newline)
+
+; Rank-nullity: 3 = 1 + 2
+(display "dim(R^3) = dim(ker) + dim(im) = 1 + 2 = 3")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Rank-nullity: h(x,y,z) = (x+y, y+z)
+def mat_vec(A, v):
+    return [sum(a*x for a,x in zip(row, v)) for row in A]
+
+A = [[1, 1, 0], [0, 1, 1]]
+
+# Kernel: A*(1,-1,1) should be (0,0)
+print("A * (1,-1,1) = " + str(mat_vec(A, [1, -1, 1])))
+print("Kernel basis: (1, -1, 1)")
+print("Image basis: (1,0) and (1,1)")
+print("dim(R^3) = dim(ker) + dim(im) = 1 + 2 = 3")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">h: V to W</td><td class="pr-4 text-green-300">(define (h v) ...)</td><td class="pr-4 text-blue-300">def h(v): ...</td><td class="font-sans">Linear map</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A * v</td><td class="pr-4 text-green-300">(mat-vec-mult A v)</td><td class="pr-4 text-blue-300">A @ v</td><td class="font-sans">Matrix-vector product</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ker(h)</td><td class="pr-4 text-green-300">solve A*v = 0</td><td class="pr-4 text-blue-300">null space</td><td class="font-sans">Vectors mapping to zero</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">im(h)</td><td class="pr-4 text-green-300">column space of A</td><td class="pr-4 text-blue-300">column space</td><td class="font-sans">All possible outputs</td></tr>
+          <tr><td class="py-2 pr-4">rank + nullity = n</td><td class="pr-4 text-green-300">dim(im) + dim(ker)</td><td class="pr-4 text-blue-300">rank + nullity</td><td class="font-sans">Rank-nullity theorem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Adjacent chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-02/">Ch.2 Vector Spaces</a> — the spaces these maps act on</li>
+      <li><a href="/reading/linear-algebra/hefferon-04/">Ch.4 Determinants</a> — a scalar invariant of square maps</li>
+    
+      <li><a href="/reading/category-theory/milewski-07/">🐱 Category Theory Ch.7</a> &mdash; functors are structure-preserving maps, just as linear maps preserve vector space structure</li>
+      <li><a href="/reading/abstract-algebra/judson-03/">🔗 Abstract Algebra Ch.3</a> &mdash; homomorphisms are the same idea for groups</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> &mdash; neural network layers are linear maps followed by nonlinearities</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-01/">Milewski Ch.1</a> — linear maps are arrows in the category of vector spaces</li>
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Milewski Ch.7 Functors</a> — linear maps between vector spaces are functors preserving the additive structure</li>
+      <li><a href="/reading/calculus/calc-11/">∫ Calculus Ch.11 Partial Derivatives</a> — the derivative of a multivariable function is a linear map (the Jacobian)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Linear_map"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Linear map</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Rank%E2%80%93nullity_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Rank-nullity theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kernel_(linear_algebra)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Kernel</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Hefferon builds up to the rank-nullity theorem through homomorphisms, isomorphisms, and the first isomorphism theorem (V/ker h is isomorphic to im h). This page focuses on the computational core. The chapter also covers composition of maps (matrix multiplication) and invertibility.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Full chapter: <a href="https://hefferon.net/linearalgebra/">Hefferon, Chapter Three — Maps Between Spaces</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/linear-algebra/hefferon-02/", label: "Vector Spaces" }} next={{ href: "/reading/linear-algebra/hefferon-04/", label: "Determinants" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,168 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.6 — Predicate Logic" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Predicate Logic</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 6 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Predicate logic</strong> extends propositional logic with predicates (properties of objects), quantifiers (&forall; "for all", &exist; "there exists"), and variables. It can express statements about individuals in a domain that propositional logic cannot.</p>
+    </div>
+
+    <!-- SVG: Domain of discourse with predicate highlighted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Domain oval -->
+        <ellipse cx="160" cy="90" rx="140" ry="70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="160" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Domain D</text>
+        <!-- Elements NOT satisfying P -->
+        <circle cx="70" cy="80" r="12" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="70" y="84" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">c</text>
+        <circle cx="120" cy="110" r="12" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="120" y="114" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">d</text>
+        <!-- Elements satisfying P (highlighted) -->
+        <circle cx="190" cy="70" r="12" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="190" y="74" text-anchor="middle" fill="#60a5fa" font-size="10">a</text>
+        <circle cx="240" cy="90" r="12" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="240" y="94" text-anchor="middle" fill="#60a5fa" font-size="10">b</text>
+        <circle cx="200" cy="115" r="12" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="119" text-anchor="middle" fill="#60a5fa" font-size="10">e</text>
+        <!-- Legend -->
+        <text x="260" y="30" fill="#60a5fa" font-size="11" fill-opacity="0.7">P(x) = true</text>
+      </svg>
+    </div>
+
+    <h3>Predicates</h3>
+    <p>A <strong>predicate</strong> is a property or relation applied to objects. P(x) means "x has property P." R(x, y) means "x stands in relation R to y." Unlike propositions, predicates have open slots that variables fill.</p>
+
+    <SchemeRepl client:load initialCode={`; Predicates are functions that return true or false
+(define (even? n) (= 0 (modulo n 2)))
+(define (greater? x y) (> x y))
+
+; Predicate applied to specific objects
+(display "even?(4) = ") (display (even? 4)) (newline)
+(display "even?(7) = ") (display (even? 7)) (newline)
+(display "greater?(5, 3) = ") (display (greater? 5 3)) (newline)
+(display "greater?(2, 8) = ") (display (greater? 2 8))
+`} />
+
+    <h3>Quantifiers</h3>
+    <p><strong>&forall;x P(x)</strong> means "for every x in the domain, P(x) is true." <strong>&exist;x P(x)</strong> means "there is at least one x in the domain where P(x) is true."</p>
+
+    <SchemeRepl client:load initialCode={`; Quantifiers over a finite domain
+(define domain (list 2 4 6 8 10))
+
+; forall: every element satisfies the predicate
+(define (forall pred domain)
+  (cond
+    ((null? domain) #t)
+    ((not (pred (car domain))) #f)
+    (else (forall pred (cdr domain)))))
+
+; exists: at least one element satisfies the predicate
+(define (exists pred domain)
+  (cond
+    ((null? domain) #f)
+    ((pred (car domain)) #t)
+    (else (exists pred (cdr domain)))))
+
+(define (even? n) (= 0 (modulo n 2)))
+(define (less-than-5? n) (< n 5))
+
+(display "forall even? in (2 4 6 8 10): ")
+(display (forall even? domain)) (newline)
+
+(display "exists less-than-5? in (2 4 6 8 10): ")
+(display (exists less-than-5? domain)) (newline)
+
+(display "forall less-than-5? in (2 4 6 8 10): ")
+(display (forall less-than-5? domain))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Quantifiers over a finite domain
+domain = [2, 4, 6, 8, 10]
+
+print(f"forall even in domain: {all(x % 2 == 0 for x in domain)}")
+print(f"exists < 5 in domain: {any(x < 5 for x in domain)}")
+print(f"forall < 5 in domain: {all(x < 5 for x in domain)}")
+`} />
+    </div>
+
+    <h3>Bound and free variables</h3>
+    <p>A variable is <strong>bound</strong> when it falls under a quantifier. A variable is <strong>free</strong> when it does not. &forall;x P(x) has x bound. P(x) &and; Q(y) has both x and y free. A <strong>sentence</strong> (closed formula) has no free variables.</p>
+
+    <SchemeRepl client:load initialCode={`; Checking for free variables in a formula
+; Representation: (forall x (P x)) or (and (P x) (Q y))
+
+(define (free-vars formula bound)
+  (cond
+    ((symbol? formula)
+     (if (member formula bound) (list) (list formula)))
+    ((or (equal? (car formula) (quote forall))
+         (equal? (car formula) (quote exists)))
+     ; Quantifier binds a variable
+     (free-vars (caddr formula) (cons (cadr formula) bound)))
+    ((member (car formula) (list (quote and) (quote or) (quote implies)))
+     (append (free-vars (cadr formula) bound)
+             (free-vars (caddr formula) bound)))
+    (else
+     ; Predicate application like (P x)
+     (let loop ((args (cdr formula)) (result (list)))
+       (if (null? args) result
+         (loop (cdr args)
+               (append result (free-vars (car args) bound))))))))
+
+; forall x. P(x) -- x is bound, no free vars
+(display "Free vars in (forall x (P x)): ")
+(display (free-vars (list (quote forall) (quote x) (list (quote P) (quote x))) (list))) (newline)
+
+; P(x) and Q(y) -- x and y are free
+(display "Free vars in (and (P x) (Q y)): ")
+(display (free-vars (list (quote and) (list (quote P) (quote x)) (list (quote Q) (quote y))) (list)))
+`} />
+
+    <h3>Translating English to logic</h3>
+    <p>"All dogs bark" becomes &forall;x(Dog(x) &rarr; Barks(x)). Note: it uses implication, not conjunction. "Some cats purr" becomes &exist;x(Cat(x) &and; Purrs(x)). Note: it uses conjunction, not implication.</p>
+
+    <SchemeRepl client:load initialCode={`; Translation examples
+; Domain: all animals
+(define animals (list "dog1" "dog2" "cat1" "cat2" "fish1"))
+
+(define (dog? x) (or (equal? x "dog1") (equal? x "dog2")))
+(define (cat? x) (or (equal? x "cat1") (equal? x "cat2")))
+(define (barks? x) (or (equal? x "dog1") (equal? x "dog2")))
+(define (purrs? x) (equal? x "cat1"))
+
+(define (forall pred domain)
+  (cond ((null? domain) #t)
+        ((not (pred (car domain))) #f)
+        (else (forall pred (cdr domain)))))
+
+(define (exists pred domain)
+  (cond ((null? domain) #f)
+        ((pred (car domain)) #t)
+        (else (exists pred (cdr domain)))))
+
+; "All dogs bark" = forall x. Dog(x) -> Barks(x)
+(define (impl p q) (or (not p) q))
+(display "All dogs bark: ")
+(display (forall (lambda (x) (impl (dog? x) (barks? x))) animals)) (newline)
+
+; "Some cats purr" = exists x. Cat(x) and Purrs(x)
+(display "Some cats purr: ")
+(display (exists (lambda (x) (and (cat? x) (purrs? x))) animals))
+`} />
+
+    <PrevNext prev={{ href: "/reading/logic/logic-05/", label: "Natural Deduction" }} next={{ href: "/reading/logic/logic-07/", label: "Predicate Logic Proofs" }} />
+
+  </main>
+</Layout>

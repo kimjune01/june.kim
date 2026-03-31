@@ -1,0 +1,220 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="The Operator Dictionary — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>The Operator Dictionary</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 1 · Reference
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        Three vocabularies for the same structure. This table is the Rosetta Stone.
+      </p>
+    </div>
+
+    <h3>The three-column crosswalk</h3>
+
+    <p>
+      Video codec engineers, temporal graph theorists, and algebraic topologists all
+      work on directed dependency graphs with time-ordered composition. Each field
+      names the parts differently. The sheaf column is this series' proposed reading —
+      the other two columns use each field's own published terminology. Where a
+      cell is blank, that field lacks the concept — and the blank is where the open
+      problems live.
+    </p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Video codecs</th>
+            <th class="py-2 pr-4 text-left">Temporal graph theory</th>
+            <th class="py-2 pr-4 text-left">Sheaf cohomology</th>
+            <th class="py-2 text-left">Shared meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">prediction residual</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">coboundary δ⁰</td>
+            <td class="font-sans text-gray-400">Per-edge error: current minus predicted</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">irreducible error</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">H¹ (cohomology)</td>
+            <td class="font-sans text-gray-400">Error no encoder/activation choice can remove</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">I-frame (checkpoint)</td>
+            <td class="pr-4 font-mono text-sm">Snapshot graph</td>
+            <td class="pr-4 font-mono text-sm">Clamped sub-complex</td>
+            <td class="font-sans text-gray-400">Self-contained state, resets dependencies</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">P-frame (delta)</td>
+            <td class="pr-4 font-mono text-sm">Edge delta</td>
+            <td class="pr-4 font-mono text-sm">1-cochain</td>
+            <td class="font-sans text-gray-400">Forward diff from a reference</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">chain break</td>
+            <td class="pr-4 font-mono text-sm">journey break</td>
+            <td class="pr-4 font-mono text-sm">exactness failure</td>
+            <td class="font-sans text-gray-400"><strong>Sequential dependency severed</strong></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">prediction DAG</td>
+            <td class="pr-4 font-mono text-sm">event graph (TEG)</td>
+            <td class="pr-4 font-mono text-sm">directed cell complex</td>
+            <td class="font-sans text-gray-400">Time-ordered dependency structure</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">R-D optimization</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">Bits vs. reconstruction quality</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">foremost / fastest / shortest</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">Three distinct path optimality criteria</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">connectivity class</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">13 classes with strict inclusion</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">temporal spanner</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">Sparse subgraph preserving journeys up to stretch α</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">Hodge decomposition</td>
+            <td class="font-sans text-gray-400">Split error into removable + irreducible</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">max-flow/min-cut</td>
+            <td class="font-sans text-gray-400">Capacity bounds via sheaf cohomology</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">scene-change detection</td>
+            <td class="pr-4 font-mono text-sm">temporal disconnection</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">Forward prediction has failed</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">DPB (buffering)</td>
+            <td class="pr-4 font-mono text-sm">bounded waiting</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="font-sans text-gray-400">Deferred usability under temporal constraints</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">B-frame</td>
+            <td class="pr-4 text-gray-500 italic">—</td>
+            <td class="pr-4 font-mono text-sm">monodromy Φ</td>
+            <td class="font-sans text-gray-400">Bidirectional / cyclic dependency</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Reading the table</h3>
+
+    <p>
+      The row with terms in all three columns — <strong>chain break / journey break /
+      exactness failure</strong> — is the strongest parallel. That's the
+      <a href="/reading/temporal-compression/ch-02/">next chapter</a>.
+    </p>
+
+    <p>
+      Rows with blanks mark where one field has concepts the others lack.
+      These aren't missing vocabulary — they're missing <em>operations</em>.
+      Codecs have lossy approximation and error budgets. TVGs have impossibility
+      proofs and formal journey types. Sheaves have removable/irreducible decomposition.
+      The <a href="/reading/temporal-compression/ch-03/">third chapter</a> inventories
+      who has what. The blanks are the
+      <a href="/reading/temporal-compression/ch-04/">open problems</a>.
+    </p>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 460 340" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Top vertex: Codecs -->
+        <circle cx="230" cy="50" r="28" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="230" y="46" text-anchor="middle" fill="currentColor" font-size="10">Codecs</text>
+        <text x="230" y="60" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="7">R-D, error accum.</text>
+
+        <!-- Bottom-left vertex: TVG -->
+        <circle cx="80" cy="290" r="28" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="80" y="286" text-anchor="middle" fill="currentColor" font-size="10">TVG</text>
+        <text x="80" y="300" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="7">journeys, classes</text>
+
+        <!-- Bottom-right vertex: Sheaves -->
+        <circle cx="380" cy="290" r="28" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="380" y="286" text-anchor="middle" fill="currentColor" font-size="10">Sheaves</text>
+        <text x="380" y="300" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="7">Hodge, exactness</text>
+
+        <!-- Edges (what's missing between each pair) -->
+        <line x1="207" y1="72" x2="103" y2="268" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <text x="132" y="168" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8">R-D bounds</text>
+        <text x="132" y="180" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8">on journeys</text>
+
+        <line x1="253" y1="72" x2="357" y2="268" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <text x="328" y="168" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8">checkpoint</text>
+        <text x="328" y="180" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8">spacing from H¹</text>
+
+        <line x1="108" y1="293" x2="352" y2="293" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <text x="230" y="324" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8">temporal dynamics in the sheaf</text>
+
+        <!-- Center -->
+        <text x="230" y="215" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">same dependency pattern</text>
+        <text x="230" y="229" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">different operations</text>
+      </svg>
+    </div>
+
+    <h3>Sources</h3>
+
+    <ul class="text-sm text-gray-400">
+      <li><a href="https://www.site.uottawa.ca/~flocchin/Papers/tvg-ijpeds.pdf">Casteigts et al. (2012)</a> — TVG framework, 13 connectivity classes</li>
+      <li><a href="https://arxiv.org/abs/2511.11092">Seely (2025)</a> — sheaf cohomology of predictive coding networks</li>
+      <li><a href="https://arxiv.org/abs/1409.6712">Krishnan (2014)</a> — flow-cut dualities for sheaves on digraphs</li>
+      <li><a href="https://www2.math.upenn.edu/~ghrist/preprints/networkcodingshort.pdf">Ghrist &amp; Hiraoka</a> — sheaf-cohomological max-flow min-cut</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792072/">Temporal state machines</a> — tropical invariance constraint</li>
+      <li><a href="https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2022.19">Bilò et al. (2022)</a> — temporal spanners</li>
+      <li><a href="https://web.stanford.edu/class/ee398a/handouts/papers/Sullivan%20-%20RD%20Opt%20for%20Video.pdf">Sullivan &amp; Wiegand (1998)</a> — R-D optimization for video</li>
+      <li><a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/ChouM06.pdf">Chou &amp; Miao (2006)</a> — packet dependency DAG</li>
+      <li><a href="https://academic.oup.com/comnet/article/6/4/639/4360827">Mellor (2018)</a>, <a href="https://www.nature.com/articles/s41598-018-29577-2">Kivelä et al. (2018)</a> — event graphs</li>
+    </ul>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Related sections</p>
+      <ul class="neighbors">
+        <li><a href="/reading/category-theory/">🐱 Category Theory</a> — composition, functors</li>
+        <li><a href="/reading/information-theory/">📡 Information Theory</a> — entropy, compression</li>
+        <li><a href="/reading/algorithms/">⚙️ Algorithms</a> — graph algorithms</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      next={{ href: "/reading/temporal-compression/ch-02/", label: "Chain Fragility" }}
+    />
+  </main>
+</Layout>

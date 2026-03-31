@@ -1,0 +1,203 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.6 — Electricity" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Electricity</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 6</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Coulomb's law</strong> gives the force between charges: F = kq1q2/r&sup2;. The <strong>electric field</strong> E = F/q is force per unit charge. <strong>Electric potential</strong> V is energy per unit charge. <strong>Capacitance</strong> stores charge. <strong>Circuits</strong> are the plumbing that moves charge through resistors, capacitors, and batteries.</p>
+    </div>
+
+    <!-- SVG: Electric field lines between two charges -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Positive charge -->
+        <circle cx="110" cy="100" r="14" fill="none" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="110" y="105" text-anchor="middle" fill="#f87171" font-size="16">+</text>
+        <!-- Negative charge -->
+        <circle cx="250" cy="100" r="14" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="250" y="106" text-anchor="middle" fill="#60a5fa" font-size="20">&minus;</text>
+
+        <!-- Field lines (from + to -) -->
+        <!-- Straight center line -->
+        <path d="M 126 100 L 234 100" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="200,97 208,100 200,103" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Upper lines -->
+        <path d="M 122 90 Q 180 50 238 90" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <polygon points="225,82 232,88 223,89" fill="currentColor" fill-opacity="0.25"/>
+
+        <path d="M 118 82 Q 180 20 242 82" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="228,72 236,80 227,80" fill="currentColor" fill-opacity="0.2"/>
+
+        <path d="M 110 86 Q 180 -5 250 86" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="237,70 245,78 236,77" fill="#a1a1aa" fill-opacity="0.18"/>
+
+        <!-- Lower lines (mirror) -->
+        <path d="M 122 110 Q 180 150 238 110" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <polygon points="225,118 232,112 223,111" fill="currentColor" fill-opacity="0.25"/>
+
+        <path d="M 118 118 Q 180 180 242 118" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="228,128 236,120 227,120" fill="currentColor" fill-opacity="0.2"/>
+
+        <path d="M 110 114 Q 180 205 250 114" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="237,130 245,122 236,123" fill="#a1a1aa" fill-opacity="0.18"/>
+
+        <!-- Caption -->
+        <text x="180" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Field lines point from positive to negative.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Coulomb's law -->
+    <h3>Coulomb's law</h3>
+    <p>The electrostatic force between two point charges is F = k * q1 * q2 / r&sup2;, where k = 8.99 * 10&sup9; N m&sup2;/C&sup2;. Like charges repel, unlike charges attract. The 1/r&sup2; law is the same shape as gravity, but electricity is vastly stronger.</p>
+
+    <SchemeRepl client:load initialCode={`; Coulomb's law: F = k * q1 * q2 / r^2
+
+(define k 8.99e9)  ; N m^2 / C^2
+
+(define (coulomb-force q1 q2 r)
+  (/ (* k q1 q2) (* r r)))
+
+; Two protons, 1 meter apart
+(define e 1.602e-19) ; Coulombs
+(define F-protons (coulomb-force e e 1))
+(display "Two protons at 1 m: F = ") (display F-protons) (display " N") (newline)
+
+; Same protons at atomic scale (0.5e-10 m, Bohr radius)
+(define r-bohr 5.29e-11)
+(define F-atom (coulomb-force e e r-bohr))
+(display "At Bohr radius:     F = ") (display F-atom) (display " N") (newline)
+
+; Compare to gravity between protons
+(define G 6.674e-11)
+(define m-proton 1.673e-27)
+(define F-grav (/ (* G m-proton m-proton) (* r-bohr r-bohr)))
+(display "Gravity at Bohr:    F = ") (display F-grav) (display " N") (newline)
+(display "Electric/gravity ratio: ") (display (/ F-atom F-grav))
+`} />
+
+
+    <!-- 2. Electric field -->
+    <h3>Electric field</h3>
+    <p>The electric field E = F/q is the force a unit positive charge would feel at each point. It is a vector field: at every point in space, there is a direction and magnitude. Field lines start at positive charges and end at negative charges. Denser lines mean stronger field.</p>
+
+    <SchemeRepl client:load initialCode={`; Electric field: E = k * Q / r^2
+; Field from a single point charge
+
+(define k 8.99e9)
+
+(define (electric-field Q r)
+  (/ (* k (abs Q)) (* r r)))
+
+; Field from a 1 microcoulomb charge
+(define Q 1e-6)
+
+(display "E-field from 1 uC charge:") (newline)
+(display "  At 0.01 m: ") (display (electric-field Q 0.01)) (display " N/C") (newline)
+(display "  At 0.1 m:  ") (display (electric-field Q 0.1)) (display " N/C") (newline)
+(display "  At 1 m:    ") (display (electric-field Q 1.0)) (display " N/C") (newline)
+(display "  At 10 m:   ") (display (electric-field Q 10.0)) (display " N/C") (newline)
+(display "1/r^2 falloff: 10x distance -> 100x weaker.")
+`} />
+
+
+    <!-- 3. Electric potential -->
+    <h3>Electric potential</h3>
+    <p>Electric potential V = kQ/r is energy per unit charge (in volts = joules per coulomb). The potential difference between two points is the work done moving a unit charge between them. A battery maintains a fixed potential difference. Voltage is to charge what height is to mass.</p>
+
+    <SchemeRepl client:load initialCode={`; Electric potential: V = k * Q / r
+; Potential energy: U = k * q1 * q2 / r
+
+(define k 8.99e9)
+
+(define (potential Q r) (/ (* k Q) r))
+
+; Potential from a proton at different distances
+(define e 1.602e-19)
+
+(display "Potential from a proton:") (newline)
+(display "  At 1e-10 m: ") (display (potential e 1e-10)) (display " V") (newline)
+(display "  At 1e-9 m:  ") (display (potential e 1e-9)) (display " V") (newline)
+(display "  At 1 m:     ") (display (potential e 1)) (display " V") (newline)
+
+; Energy to bring two protons from infinity to Bohr radius
+(define r-bohr 5.29e-11)
+(define U (/ (* k e e) r-bohr))
+(display "Energy to bring two protons to Bohr radius:") (newline)
+(display "  U = ") (display U) (display " J") (newline)
+(display "  U = ") (display (/ U e)) (display " eV")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Coulomb's law and electric field
+k = 8.99e9  # N m^2/C^2
+e = 1.602e-19  # C
+
+# Electric field from 1 uC charge
+Q = 1e-6
+for r in [0.01, 0.1, 1.0, 10.0]:
+    E = k * Q / r**2
+    print(f"  r={r:5.2f}m  E={E:.2e} N/C")
+`} />
+    </div>
+
+
+    <!-- 4. Capacitance -->
+    <h3>Capacitance and circuits</h3>
+    <p>A capacitor stores charge: C = Q/V (farads). Two parallel plates separated by a gap form a capacitor: C = epsilon_0 * A / d. In circuits, resistors dissipate energy (V = IR), capacitors store it (E = (1/2)CV&sup2;), and batteries supply it. <a href="https://en.wikipedia.org/wiki/Kirchhoff%27s_circuit_laws"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kirchhoff's laws</a> (conservation of charge and energy) govern every circuit.</p>
+
+    <SchemeRepl client:load initialCode={`; Circuits: Ohm's law V = IR, capacitor C = Q/V
+
+; Ohm's law
+(define (current V R) (/ V R))
+(define (power V R) (/ (* V V) R))
+
+(display "9V battery, 100 ohm resistor:") (newline)
+(display "  I = ") (display (current 9 100)) (display " A") (newline)
+(display "  P = ") (display (power 9 100)) (display " W") (newline)
+
+; Parallel plate capacitor
+(define epsilon0 8.854e-12) ; F/m
+
+(define (capacitance A d)
+  (/ (* epsilon0 A) d))
+
+; 10 cm x 10 cm plates, 1 mm gap
+(define C (capacitance 0.01 0.001))
+(display "10cmx10cm plates, 1mm gap:") (newline)
+(display "  C = ") (display C) (display " F") (newline)
+(display "  C = ") (display (* C 1e12)) (display " pF") (newline)
+
+; Energy stored at 100V
+(define E-stored (* 0.5 C (* 100 100)))
+(display "  Energy at 100V: ") (display E-stored) (display " J")
+`} />
+
+
+    <!-- Cross-links -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/boelkins-14/">&#x222B; Calculus Ch. 14</a> &mdash; line integrals compute work done by electric fields along paths</li>
+      <li><a href="/reading/physics/crowell-05/">&#x2190; Ch. 5: Waves</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-05/", label: "Waves" }} next={{ href: "/reading/physics/crowell-07/", label: "Magnetism" }} />
+
+  </main>
+</Layout>

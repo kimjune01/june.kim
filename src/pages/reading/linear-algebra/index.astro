@@ -1,0 +1,74 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Linear Algebra" favicon="📐">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>📐 Linear Algebra</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://hefferon.net/linearalgebra/">Jim Hefferon's <em>Linear Algebra</em></a>, licensed <a href="https://www.gnu.org/licenses/fdl-1.3.html">GFDL</a> + <a href="https://creativecommons.org/licenses/by-sa/2.5/">CC BY-SA 2.5</a>.</p>
+    <p class="text-gray-400 mb-6">Five chapters from systems of equations to eigenvalues. Runnable Python, SVG diagrams, plain English.</p>
+
+    <!-- SVG: 2D vector space with two basis vectors and a linear combination -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Grid lines -->
+        <line x1="30" y1="240" x2="330" y2="240" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="180" x2="330" y2="180" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="120" x2="330" y2="120" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="60" x2="330" y2="60" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="90" y1="20" x2="90" y2="260" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="150" y1="20" x2="150" y2="260" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="210" y1="20" x2="210" y2="260" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="270" y1="20" x2="270" y2="260" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Origin -->
+        <circle cx="90" cy="240" r="2.5" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Basis vector e1 (blue) -->
+        <line x1="90" y1="240" x2="207" y2="240" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="210,240 200,235 200,245" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="155" y="258" text-anchor="middle" fill="#60a5fa" font-size="13" font-style="italic">e₁</text>
+        <!-- Basis vector e2 (amber) -->
+        <line x1="90" y1="240" x2="90" y2="123" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="90,120 85,130 95,130" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="75" y="178" text-anchor="middle" fill="#f59e0b" font-size="13" font-style="italic">e₂</text>
+        <!-- Linear combination v = 2e1 + e2 (green, dashed components) -->
+        <line x1="90" y1="240" x2="270" y2="240" stroke="#34d399" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <line x1="270" y1="240" x2="270" y2="120" stroke="#34d399" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <!-- Result vector v -->
+        <line x1="90" y1="240" x2="266" y2="124" stroke="#34d399" stroke-width="2" stroke-opacity="0.8"/>
+        <polygon points="270,120 258,122 262,132" fill="#34d399" fill-opacity="0.8"/>
+        <text x="285" y="115" text-anchor="start" fill="#34d399" font-size="13" font-style="italic">v</text>
+        <!-- Label -->
+        <text x="280" y="85" text-anchor="start" fill="currentColor" font-size="10" fill-opacity="0.4">v = 2e₁ + e₂</text>
+        <!-- Caption -->
+        <text x="180" y="275" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Every vector is a linear combination of basis vectors.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/linear-algebra/hefferon-01/", title: "Linear Systems", desc: "Row reduction turns any system of equations into echelon form, making solutions obvious" },
+  { href: "/reading/linear-algebra/hefferon-02/", title: "Vector Spaces", desc: "Subspaces, linear independence, basis, and dimension — the vocabulary for everything that follows" },
+  { href: "/reading/linear-algebra/hefferon-03/", title: "Maps Between Spaces", desc: "Homomorphisms are structure-preserving maps, and every one of them is a matrix in disguise" },
+  { href: "/reading/linear-algebra/hefferon-04/", title: "Determinants", desc: "A single number that tells you whether a matrix is invertible and how it scales volume" },
+  { href: "/reading/linear-algebra/hefferon-05/", title: "Similarity", desc: "Eigenvalues, eigenvectors, and Jordan form — choosing the basis that makes a map simplest" }
+]} icon="📐" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.3blue1brown.com/topics/linear-algebra">3Blue1Brown: Essence of Linear Algebra</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> &mdash; linear regression, PCA, and neural networks are linear algebra in disguise</li>
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; multivariable calculus runs on vectors and matrices</li>
+      <li><a href="/reading/abstract-algebra/">🔗 Abstract Algebra</a> &mdash; vector spaces are modules over a field</li>
+      <li><a href="/reading/geometry/">△ Geometry</a> &mdash; transformations and dot products connect</li>
+      <li><a href="/reading/control/">🎛 Control Theory</a> &mdash; state space representation is matrix algebra</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

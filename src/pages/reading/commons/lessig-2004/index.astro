@@ -1,0 +1,97 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lessig 2004 — Free Culture" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>Free Culture</h1>
+    <p class="text-gray-400 text-sm mb-6">Lawrence Lessig &middot; Penguin Press &middot; 2004 &middot; <a href="https://free-culture.cc/freeculture.pdf">Read the original (CC BY-NC)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Copyright started as a fourteen-year bargain. By 2004, it was effectively permanent. Lessig traces the ratchet: each extension favoring rights holders, each framed as protecting creators. The result is <strong>permission culture</strong>, where every use requires clearance from someone who may have no connection to the original author.</p>
+    </div>
+
+    <!-- 1. The ratchet -->
+    <h3>Fourteen years to forever</h3>
+
+    <p>The <a href="/reading/commons/statute-of-anne-1710/">Statute of Anne</a> gave authors fourteen years. The US Constitution adopted the same logic: Congress may grant exclusive rights "for limited Times" to promote progress. The term was supposed to be a dial. Lessig's core argument is that the dial only turns one way.</p>
+
+    <p>Fourteen became twenty-eight. Twenty-eight became forty-two. Life of the author plus fifty. Then, in 1998, the Sonny Bono Copyright Term Extension Act pushed the term to life plus seventy years. For corporate works, ninety-five years from publication. Every extension was retroactive. Works that were about to enter the public domain were pulled back behind the fence.</p>
+
+    <blockquote>
+      <p>Each time copyright is about to expire, Congress extends it. The effect is a perpetual term on the installment plan.</p>
+    </blockquote>
+
+    <p>The Statute of Anne's framers calibrated the term to a specific asymmetry: private value diminishes over time, public value increases. Each extension broke that calibration further. By 2004, nothing had entered the US public domain in six years. The installment plan was working.</p>
+
+    <!-- 2. Four modalities -->
+    <h3>The four modalities of regulation</h3>
+
+    <p>Lessig's analytical framework is broader than copyright. He identifies four forces that regulate behavior: <strong>law</strong>, <strong>norms</strong>, <strong>markets</strong>, and <strong>architecture</strong> (which, on the internet, means code). Any behavior is constrained by all four simultaneously. Change one and the others shift to compensate or amplify.</p>
+
+    <p>This matters because copyright maximalism does not operate through law alone. DRM is architecture. Paywalls are markets. Terms of service are norms enforced by code. When a publisher wraps a book in DRM, the legal question of whether you may quote it becomes moot. The architecture prevents the act before the law can permit it. The regulation happens at the technical layer, invisible to courts.</p>
+
+    <blockquote>
+      <p>Code is law.</p>
+    </blockquote>
+
+    <p>The internet was originally regulated by an architecture of openness: open protocols, end-to-end design, no central gatekeeper. That architecture enabled a free culture by default. Lessig saw it changing. APIs replace open protocols. Walled gardens replace the open web. The architecture shifts from permissive to restrictive, and the culture shifts with it&mdash;without a single new law being passed.</p>
+
+    <!-- 3. Free culture vs. permission culture -->
+    <h3>Free as in speech</h3>
+
+    <p>Lessig draws a line. <em>Free culture</em> is a culture where creators can build on the past: quote, remix, adapt, extend. <em>Permission culture</em> is one where every use requires clearance. The distinction is not between paying and not paying. It is between a default of freedom (you may use this unless restricted) and a default of control (you may not use this unless permitted).</p>
+
+    <p>The internet started as free culture. Anyone could link. Anyone could quote. Anyone could build. Copyright law had always contained safety valves&mdash;fair use, first sale, limited terms&mdash;that kept permission culture from being the default. But those safety valves were being closed. Term extensions eliminated the public domain's growth. DRM eliminated fair use in practice. The DMCA made circumventing DRM a crime even when the underlying use was legal.</p>
+
+    <blockquote>
+      <p>A free culture is not a culture without property. It is not a culture in which artists don't get paid. A free culture is one in which creators get to create, building on the creativity that went before.</p>
+    </blockquote>
+
+    <p>The word "free" was doing important work. Lessig was not arguing against copyright. He was arguing against a copyright regime that had drifted so far from its original bargain that it now suppressed the creativity it was designed to encourage.</p>
+
+    <!-- 4. Eldred v. Ashcroft -->
+    <h3>Eldred v. Ashcroft</h3>
+
+    <p>In 2003, Lessig argued before the Supreme Court. His client, Eric Eldred, ran a free online library of public-domain works. The Sonny Bono Act had retroactively extended copyright on works Eldred was about to publish. The question: does Congress have the power to extend copyright terms retroactively, given that the Constitution limits copyright to "limited Times"?</p>
+
+    <p>The Court said yes, 7&ndash;2. Justice Ginsburg, writing for the majority, held that Congress has broad discretion over copyright terms. A term of life plus seventy is still "limited" in the constitutional sense. Retroactive extension does not violate the "limited Times" clause because the extended term is still finite.</p>
+
+    <blockquote>
+      <p>Text of the Copyright Clause does not intimate that a term of years combating the &ldquo;limited Times&rdquo; prescription must be a fixed, unalterable term.</p>
+      <cite>&mdash; Ginsburg, J., majority opinion</cite>
+    </blockquote>
+
+    <p>Lessig lost. He was forthright about what the loss meant: the public domain has no constitutional advocate. Congress can extend terms indefinitely, twenty years at a time, and no court will stop it. The "limited Times" clause constrains nothing in practice. The ratchet has no pawl.</p>
+
+    <!-- 5. CC BY-NC -->
+    <h3>The book as artifact</h3>
+
+    <p><em>Free Culture</em> is itself licensed CC BY-NC. Lessig did not merely argue for free culture. He released his argument into it. The book can be copied, shared, and adapted for noncommercial purposes without asking permission. This was not a gesture. It was a proof of concept for the Creative Commons licenses Lessig had co-founded two years earlier.</p>
+
+    <p>The Creative Commons framework offered a middle path: not public domain (no rights reserved) and not full copyright (all rights reserved), but <em>some rights reserved</em>. Authors could choose which freedoms to grant. The licenses were machine-readable, human-readable, and lawyer-readable. They were designed to work with the architecture of the internet rather than against it.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Free_Culture_(book)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Free Culture</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Eldred_v._Ashcroft"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Eldred v. Ashcroft (2003)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Creative_Commons"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Creative Commons</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Copyright_Term_Extension_Act"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Sonny Bono Act (1998)</a></li>
+      <li><a href="/reading/scientific-method/registered-prediction/">&#x1F52C; Registered Prediction</a> &mdash; knowledge as public good: science's norms enforce the same bargain copyright was supposed to encode</li>
+      <li><a href="/reading/category-theory/milewski-01/">🐱 Category Theory Ch.1</a> — composition and functors: CC BY is a functor on creative works — it preserves attribution; CC BY-SA adds a natural transformation requiring derivative works to stay in the same license category</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mt-6">Blog connection: Lessig built Creative Commons so authors could encode their permissions as machine-readable metadata. The legal structure has mathematical structure. CC BY is a functor; CC BY-SA adds a natural transformation. <a href="https://june.kim/licenses-are-functors"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Licenses Are Functors</a></p>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/commons/boyle-2003/", label: "Boyle 2003 · 5 of 8" }} next={{ href: "/reading/commons/authors-guild-v-google-2015/", label: "Authors Guild v. Google · 7 of 8" }} />
+
+  </main>
+</Layout>

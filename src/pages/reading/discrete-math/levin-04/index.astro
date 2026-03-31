@@ -1,0 +1,326 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Levin Ch.4 — Graph Theory" favicon="🔢">
+  <main>
+
+    <a href="/reading/discrete-math/" class="text-sm mb-4 inline-block">&larr; back to discrete math</a>
+
+    <h1>Graph Theory</h1>
+    <p class="text-gray-400 text-sm mb-6">Oscar Levin &middot; CC BY-SA 4.0 &middot; <a href="https://discrete.openmathbooks.org/">Discrete Mathematics: An Open Introduction, Ch. 4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A graph is a set of vertices and a set of edges connecting pairs of them. That is the entire definition. From it you get trees, planarity, coloring, and the oldest theorem in graph theory: <strong>Euler's criterion</strong> for traversing every edge exactly once.</p>
+    </div>
+
+    <!-- SVG: Konigsberg bridges (4 nodes, 7 edges) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Land masses (nodes) -->
+        <circle cx="80" cy="60" r="20" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="80" y="65" text-anchor="middle" fill="#60a5fa" font-size="13">A</text>
+        <circle cx="280" cy="60" r="20" fill="none" stroke="#34d399" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="280" y="65" text-anchor="middle" fill="#34d399" font-size="13">B</text>
+        <circle cx="180" cy="40" r="20" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="180" y="45" text-anchor="middle" fill="#f59e0b" font-size="13">C</text>
+        <circle cx="180" cy="160" r="20" fill="none" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="180" y="165" text-anchor="middle" fill="#a78bfa" font-size="13">D</text>
+        <!-- 7 bridges (edges) -->
+        <!-- A-C: two bridges -->
+        <path d="M 98 50 Q 130 20 162 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <path d="M 98 68 Q 130 80 162 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- B-C: two bridges -->
+        <path d="M 262 50 Q 230 20 198 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <path d="M 262 68 Q 230 80 198 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- A-D: one bridge -->
+        <path d="M 90 78 Q 100 120 170 150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- B-D: one bridge -->
+        <path d="M 270 78 Q 260 120 190 150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- C-D: one bridge -->
+        <line x1="180" y1="60" x2="180" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Label -->
+        <text x="180" y="205" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Konigsberg: all 4 vertices have odd degree. No Euler circuit.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Graphs and degree -->
+    <h3>Graphs and degree</h3>
+    <p>A graph G = (V, E) is a pair: a set of <strong>vertices</strong> and a set of <strong>edges</strong>. The <strong>degree</strong> of a vertex is the number of edges incident to it. The handshake lemma says the sum of all degrees equals 2|E|, because every edge contributes to two degrees.</p>
+
+    <SchemeRepl client:load initialCode={`; Represent a graph as an adjacency list (list of pairs)
+(define edges '((a b) (a c) (b c) (b d) (c d)))
+
+; Degree of a vertex
+(define (degree v edges)
+  (length (filter (lambda (e)
+    (or (equal? v (car e)) (equal? v (cadr e))))
+    edges)))
+
+(display "deg(a) = ") (display (degree 'a edges)) (newline)
+(display "deg(b) = ") (display (degree 'b edges)) (newline)
+(display "deg(c) = ") (display (degree 'c edges)) (newline)
+(display "deg(d) = ") (display (degree 'd edges)) (newline)
+
+; Handshake lemma: sum of degrees = 2 * |E|
+(define vertices '(a b c d))
+(define sum-deg
+  (apply + (map (lambda (v) (degree v edges)) vertices)))
+(display "Sum of degrees: ") (display sum-deg) (newline)
+(display "2 * |E|: ") (display (* 2 (length edges)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`edges = [('a','b'), ('a','c'), ('b','c'), ('b','d'), ('c','d')]
+vertices = ['a', 'b', 'c', 'd']
+
+degree = lambda v: sum(1 for e in edges if v in e)
+for v in vertices:
+    print(f"deg({v}) = {degree(v)}")
+
+total = sum(degree(v) for v in vertices)
+print(f"Sum of degrees: {total}, 2*|E|: {2*len(edges)}")
+`} />
+    </div>
+
+
+    <!-- 2. Paths, cycles, and connectivity -->
+    <h3>Paths, cycles, and connectivity</h3>
+    <p>A <strong>path</strong> is a sequence of vertices where each consecutive pair is connected by an edge. A <strong>cycle</strong> is a path that starts and ends at the same vertex. A graph is <strong>connected</strong> if there is a path between every pair of vertices.</p>
+
+    <SchemeRepl client:load initialCode={`; Adjacency list representation
+(define graph '((a b c) (b a c d) (c a b d) (d b c)))
+
+(define (neighbors v graph)
+  (let ((entry (assoc v graph)))
+    (if entry (cdr entry) '())))
+
+; BFS to check connectivity
+(define (bfs start graph)
+  (let loop ((queue (list start)) (visited '()))
+    (if (null? queue) visited
+        (let ((v (car queue)))
+          (if (member v visited)
+              (loop (cdr queue) visited)
+              (loop (append (cdr queue)
+                            (filter (lambda (n) (not (member n visited)))
+                                    (neighbors v graph)))
+                    (cons v visited)))))))
+
+(define reachable (bfs 'a graph))
+(display "Reachable from a: ") (display reachable) (newline)
+(display "Connected? ")
+(display (= (length reachable) (length graph)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from collections import deque
+
+graph = {'a': ['b','c'], 'b': ['a','c','d'], 'c': ['a','b','d'], 'd': ['b','c']}
+
+def bfs(start):
+    visited, queue = set(), deque([start])
+    while queue:
+        v = queue.popleft()
+        if v not in visited:
+            visited.add(v)
+            queue.extend(n for n in graph[v] if n not in visited)
+    return visited
+
+reachable = bfs('a')
+print(f"Reachable from a: {reachable}")
+print(f"Connected? {len(reachable) == len(graph)}")
+`} />
+    </div>
+
+
+    <!-- 3. Trees -->
+    <h3>Trees</h3>
+    <p>A <strong>tree</strong> is a connected graph with no cycles. Equivalently, it is a connected graph on n vertices with exactly n-1 edges. Trees are minimal connected graphs: remove any edge and the graph disconnects.</p>
+
+    <SchemeRepl client:load initialCode={`; A tree on 5 vertices has exactly 4 edges
+(define tree-edges '((a b) (a c) (b d) (b e)))
+(define tree-vertices '(a b c d e))
+
+(display "Vertices: ") (display (length tree-vertices)) (newline)
+(display "Edges: ") (display (length tree-edges)) (newline)
+(display "Is |E| = |V|-1? ")
+(display (= (length tree-edges) (- (length tree-vertices) 1))) (newline)
+
+; Every tree is a spanning tree of itself.
+; The number of labeled trees on n vertices is n^(n-2) (Cayley's formula).
+(display "Labeled trees on 4 vertices: ")
+(display (expt 4 2)) (newline) ; 16
+(display "Labeled trees on 5 vertices: ")
+(display (expt 5 3))           ; 125
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`tree_edges = [('a','b'), ('a','c'), ('b','d'), ('b','e')]
+tree_verts = ['a', 'b', 'c', 'd', 'e']
+
+print(f"|V|={len(tree_verts)}, |E|={len(tree_edges)}, |E|=|V|-1? {len(tree_edges)==len(tree_verts)-1}")
+print(f"Cayley(4) = {4**2}, Cayley(5) = {5**3}")
+`} />
+    </div>
+
+
+    <!-- 4. Euler and Hamilton paths -->
+    <h3>Euler and Hamilton paths</h3>
+    <p>An <strong>Euler path</strong> traverses every edge exactly once. Euler proved it exists if and only if exactly 0 or 2 vertices have odd degree. A <strong>Hamilton path</strong> visits every vertex exactly once. No efficient test is known for Hamilton paths; this is one of the NP-complete problems.</p>
+
+    <SchemeRepl client:load initialCode={`; Check for Euler path/circuit
+(define (degree v edges)
+  (length (filter (lambda (e)
+    (or (equal? v (car e)) (equal? v (cadr e))))
+    edges)))
+
+; Konigsberg bridges
+(define konigsberg '((A C) (A C) (A D) (B C) (B C) (B D) (C D)))
+(define k-verts '(A B C D))
+
+(define odd-degrees
+  (filter (lambda (v) (odd? (degree v konigsberg))) k-verts))
+
+(display "Konigsberg odd-degree vertices: ")
+(display odd-degrees) (newline)
+(display "Count: ") (display (length odd-degrees)) (newline)
+(display "Euler path exists? ")
+(display (or (= (length odd-degrees) 0)
+             (= (length odd-degrees) 2))) (newline)
+
+; A graph with Euler circuit: all even degrees
+(define square '((a b) (b c) (c d) (d a)))
+(define sq-verts '(a b c d))
+(define sq-odd
+  (filter (lambda (v) (odd? (degree v square))) sq-verts))
+(display "Square graph odd-degree: ")
+(display (length sq-odd)) (newline)
+(display "Euler circuit exists? ")
+(display (= (length sq-odd) 0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`konigsberg = [('A','C'),('A','C'),('A','D'),('B','C'),('B','C'),('B','D'),('C','D')]
+verts = ['A','B','C','D']
+
+deg = lambda v: sum(1 for e in konigsberg if v in e)
+odd = [v for v in verts if deg(v) % 2 == 1]
+print(f"Odd-degree vertices: {odd} (count: {len(odd)})")
+print(f"Euler path? {len(odd) in (0, 2)}")
+`} />
+    </div>
+
+
+    <!-- 5. Planar graphs and coloring -->
+    <h3>Planar graphs and coloring</h3>
+    <p>A graph is <strong>planar</strong> if it can be drawn without edge crossings. Euler's formula for connected planar graphs: V - E + F = 2, where F is the number of faces. The four color theorem says every planar graph can be vertex-colored with at most 4 colors so that no two adjacent vertices share a color.</p>
+
+    <SchemeRepl client:load initialCode={`; Euler's formula: V - E + F = 2
+; For a planar graph, check the formula
+
+; Tetrahedron (K4): V=4, E=6, F=4
+(display "K4: V-E+F = ")
+(display (+ (- 4 6) 4)) (newline) ; 2
+
+; Cube: V=8, E=12, F=6
+(display "Cube: V-E+F = ")
+(display (+ (- 8 12) 6)) (newline) ; 2
+
+; Corollary: for simple planar graph, E <= 3V - 6
+; K5 has V=5, E=10. Is 10 <= 3*5-6 = 9? No. So K5 is not planar.
+(display "K5: E=10, 3V-6=") (display (- (* 3 5) 6)) (newline)
+(display "K5 planar? ") (display (<= 10 9)) (newline)
+
+; Greedy coloring (not optimal, but illustrative)
+(define graph '((a b c) (b a c d) (c a b d) (d b c)))
+
+(define (greedy-color graph)
+  (let loop ((vs (map car graph)) (coloring '()))
+    (if (null? vs) coloring
+        (let* ((v (car vs))
+               (nbrs (cdr (assoc v graph)))
+               (used (filter-map
+                       (lambda (n) (let ((c (assoc n coloring)))
+                                     (if c (cdr c) #f)))
+                       nbrs))
+               (color (let find ((c 1))
+                        (if (not (member c used)) c (find (+ c 1))))))
+          (loop (cdr vs) (cons (cons v color) coloring))))))
+
+(display "Greedy coloring: ")
+(display (greedy-color graph))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Euler's formula
+for name, v, e, f in [("K4",4,6,4), ("Cube",8,12,6)]:
+    print(f"{name}: V-E+F = {v - e + f}")
+
+# K5 planarity check
+print(f"K5: E=10, 3V-6={3*5-6}, planar? {10 <= 3*5-6}")
+
+# Greedy coloring
+graph = {'a':['b','c'], 'b':['a','c','d'], 'c':['a','b','d'], 'd':['b','c']}
+coloring = {}
+for v in graph:
+    used = {coloring[n] for n in graph[v] if n in coloring}
+    coloring[v] = next(c for c in range(1, 100) if c not in used)
+print(f"Greedy coloring: {coloring}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">G = (V, E)</td><td class="pr-4 text-green-300">adj list</td><td class="pr-4 text-blue-300">dict</td><td class="font-sans">Graph</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">deg(v)</td><td class="pr-4 text-green-300">(degree v edges)</td><td class="pr-4 text-blue-300">degree(v)</td><td class="font-sans">Vertex degree</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V - E + F = 2</td><td class="pr-4 text-green-300">(+ (- v e) f)</td><td class="pr-4 text-blue-300">v - e + f</td><td class="font-sans">Euler's formula (planar)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">K_n</td><td class="pr-4 text-green-300">complete graph</td><td class="pr-4 text-blue-300">complete graph</td><td class="font-sans">Complete graph on n vertices</td></tr>
+          <tr><td class="py-2 pr-4">chi(G)</td><td class="pr-4 text-green-300">greedy-color</td><td class="pr-4 text-blue-300">greedy color</td><td class="font-sans">Chromatic number</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other chapter pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-11/">Grinstead Ch.11</a> — Markov chains: random walks on directed graphs</li>
+      <li><a href="/reading/discrete-math/levin-05/">Levin Ch.5</a> — matching in bipartite graphs</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Seven_Bridges_of_K%C3%B6nigsberg"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Seven Bridges of Konigsberg</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Planar_graph"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Planar graph</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Four_color_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Four color theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Eulerian_path"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Eulerian path</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Graphs are represented as adjacency lists in both Scheme and Python. The greedy coloring algorithm is not guaranteed to find the optimal coloring (the chromatic number is NP-hard to compute). Euler's criterion for Euler paths is a theorem, not a heuristic: the "if and only if" is exact. Hamilton paths have no such clean characterization, which is why the problem is NP-complete.</p>
+
+    <PrevNext prev={{ href: "/reading/discrete-math/levin-03/", label: "Symbolic Logic" }} next={{ href: "/reading/discrete-math/levin-05/", label: "Additional Topics · 5 of 5" }} />
+
+  </main>
+</Layout>

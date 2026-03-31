@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 170" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .box { stroke: #555; stroke-width: 1.5; fill: #fff; rx: 8; }
+    .box-ship { stroke: #555; stroke-width: 1.5; fill: #d4edd4; rx: 8; }
+    .box-text { text-anchor: middle; dominant-baseline: central; font-weight: 700; font-size: 12px; fill: #333; }
+    .arrow { stroke: #888; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .contract { text-anchor: middle; font-size: 9px; fill: #555; font-weight: 500; }
+    .output { text-anchor: middle; font-size: 10px; fill: #1565c0; font-weight: 600; }
+    .input { text-anchor: middle; font-size: 10px; fill: #888; font-weight: 500; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <path d="M0,0 L7,2.5 L0,5" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Framework -->
+  <rect class="box" x="5" y="30" width="130" height="44"/>
+  <text class="box-text" x="70" y="52">Framework</text>
+  <text class="input" x="70" y="90">broken system</text>
+  <text class="output" x="70" y="104">→ diagnosed role</text>
+
+  <line class="arrow" x1="135" y1="52" x2="160" y2="52"/>
+  <text class="contract" x="148" y="25">postcondition</text>
+
+  <!-- Parts Bin -->
+  <rect class="box" x="160" y="30" width="130" height="44"/>
+  <text class="box-text" x="225" y="52">Parts Bin</text>
+  <text class="input" x="225" y="90">diagnosed role</text>
+  <text class="output" x="225" y="104">→ candidate</text>
+
+  <line class="arrow" x1="290" y1="52" x2="315" y2="52"/>
+  <text class="contract" x="303" y="25">= precondition</text>
+
+  <!-- Volley 1 -->
+  <rect class="box" x="315" y="30" width="130" height="44"/>
+  <text class="box-text" x="380" y="52">Volley (spec)</text>
+  <text class="input" x="380" y="90">candidate</text>
+  <text class="output" x="380" y="104">→ sharp spec</text>
+
+  <line class="arrow" x1="445" y1="52" x2="470" y2="52"/>
+  <text class="contract" x="458" y="25">= precondition</text>
+
+  <!-- Merge -->
+  <rect class="box" x="470" y="30" width="140" height="44"/>
+  <text class="box-text" x="540" y="52">Blind, Blind, Merge</text>
+  <text class="input" x="540" y="90">sharp spec</text>
+  <text class="output" x="540" y="104">→ draft impl</text>
+
+  <line class="arrow" x1="610" y1="52" x2="635" y2="52"/>
+  <text class="contract" x="623" y="25">= precondition</text>
+
+  <!-- Volley 2 -->
+  <rect class="box" x="635" y="30" width="130" height="44"/>
+  <text class="box-text" x="700" y="52">Volley (PR)</text>
+  <text class="input" x="700" y="90">draft impl</text>
+  <text class="output" x="700" y="104">→ clean PR</text>
+
+  <line class="arrow" x1="765" y1="52" x2="790" y2="52"/>
+  <text class="contract" x="778" y="25">= precondition</text>
+
+  <!-- Ship -->
+  <rect class="box-ship" x="790" y="30" width="130" height="44"/>
+  <text class="box-text" x="855" y="52">Ship</text>
+  <text class="input" x="855" y="90">clean PR</text>
+  <text class="output" x="855" y="104">→ merged code</text>
+
+  <!-- Idempotency note -->
+  <text style="text-anchor:middle; font-size:10px; fill:#888; font-style:italic;" x="480" y="140">Each functor is idempotent. Composition preserves idempotency → reflective localization.</text>
+</svg>

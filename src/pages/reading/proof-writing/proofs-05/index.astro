@@ -1,0 +1,197 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.5 — Sets" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Sets</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>set</strong> is a collection of distinct objects. The core proof technique for sets is <strong>element-chasing</strong>: to show A is a subset of B, pick an arbitrary element x in A and show x must be in B. To show A = B, show each is a subset of the other.</p>
+    </div>
+
+    <!-- SVG: Venn diagram with intersection highlighted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Set A -->
+        <circle cx="120" cy="100" r="70" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="75" y="75" fill="#60a5fa" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Set B -->
+        <circle cx="180" cy="100" r="70" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="225" y="75" fill="#f59e0b" font-size="14" fill-opacity="0.7">B</text>
+        <!-- Intersection fill -->
+        <clipPath id="clipA"><circle cx="120" cy="100" r="70"/></clipPath>
+        <circle cx="180" cy="100" r="70" fill="#4ade80" fill-opacity="0.1" clip-path="url(#clipA)"/>
+        <!-- Intersection label -->
+        <text x="150" y="105" text-anchor="middle" fill="#4ade80" font-size="12" fill-opacity="0.7">A n B</text>
+      </svg>
+    </div>
+
+    <!-- 1. Set notation -->
+    <h3>Set notation and membership</h3>
+    <p>Sets are written with curly braces or set-builder notation. Membership is "x in A." The empty set has no elements. Two sets are equal when they have exactly the same elements, regardless of order or repetition.</p>
+
+    <SchemeRepl client:load initialCode={`; Sets as sorted lists (no duplicates)
+(define A (list 1 2 3 4 5))
+(define B (list 3 4 5 6 7))
+
+(define (member? x s)
+  (cond ((null? s) #f)
+        ((= x (car s)) #t)
+        (else (member? x (cdr s)))))
+
+(display "3 in A? ") (display (member? 3 A)) (newline)
+(display "6 in A? ") (display (member? 6 A)) (newline)
+(display "6 in B? ") (display (member? 6 B))
+`} />
+
+    <!-- 2. Subset -->
+    <h3>Subset and equality</h3>
+    <p>A is a subset of B if every element of A is also in B. To prove A = B, prove A is a subset of B and B is a subset of A. This is the standard technique for proving set equality.</p>
+
+    <SchemeRepl client:load initialCode={`; Subset: every element of A is in B
+(define (member? x s)
+  (cond ((null? s) #f)
+        ((= x (car s)) #t)
+        (else (member? x (cdr s)))))
+
+(define (subset? a b)
+  (cond ((null? a) #t)
+        ((member? (car a) b) (subset? (cdr a) b))
+        (else #f)))
+
+(define (set-equal? a b)
+  (and (subset? a b) (subset? b a)))
+
+(define A (list 1 2 3))
+(define B (list 1 2 3 4))
+(define C (list 3 2 1))
+
+(display "A subset B? ") (display (subset? A B)) (newline)
+(display "B subset A? ") (display (subset? B A)) (newline)
+(display "A = C? ") (display (set-equal? A C))
+`} />
+
+    <!-- 3. Union, intersection, complement -->
+    <h3>Union, intersection, complement</h3>
+
+    <SchemeRepl client:load initialCode={`; Set operations
+(define (member? x s)
+  (cond ((null? s) #f)
+        ((= x (car s)) #t)
+        (else (member? x (cdr s)))))
+
+(define (union a b)
+  (cond ((null? a) b)
+        ((member? (car a) b) (union (cdr a) b))
+        (else (cons (car a) (union (cdr a) b)))))
+
+(define (intersection a b)
+  (cond ((null? a) (list))
+        ((member? (car a) b) (cons (car a) (intersection (cdr a) b)))
+        (else (intersection (cdr a) b))))
+
+(define (difference a b)
+  (cond ((null? a) (list))
+        ((member? (car a) b) (difference (cdr a) b))
+        (else (cons (car a) (difference (cdr a) b)))))
+
+(define A (list 1 2 3 4 5))
+(define B (list 3 4 5 6 7))
+
+(display "A union B:      ") (display (union A B)) (newline)
+(display "A intersect B:  ") (display (intersection A B)) (newline)
+(display "A \\\\ B:          ") (display (difference A B))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Set operations in Python
+A = {1, 2, 3, 4, 5}
+B = {3, 4, 5, 6, 7}
+
+print(f"A | B  = {sorted(A | B)}")
+print(f"A & B  = {sorted(A & B)}")
+print(f"A - B  = {sorted(A - B)}")
+print(f"A <= B = {A <= B}")
+`} />
+    </div>
+
+    <!-- 4. Power set and Cartesian product -->
+    <h3>Power set and Cartesian product</h3>
+    <p>The <strong>power set</strong> of A is the set of all subsets of A. It has 2^|A| elements. The <strong>Cartesian product</strong> A x B is the set of all ordered pairs (a, b) with a in A and b in B.</p>
+
+    <SchemeRepl client:load initialCode={`; Power set: all subsets of a set
+(define (power-set s)
+  (if (null? s) (list (list))
+      (let ((rest (power-set (cdr s))))
+        (append rest
+                (map (lambda (sub) (cons (car s) sub)) rest)))))
+
+(display "P({1,2,3}):") (newline)
+(for-each (lambda (sub) (display "  ") (display sub) (newline))
+          (power-set (list 1 2 3)))
+
+(display "Size: ") (display (length (power-set (list 1 2 3))))
+; 2^3 = 8 subsets
+`} />
+
+    <!-- 5. Element-chasing proof -->
+    <h3>Element-chasing: the core technique</h3>
+    <p>Proof that A intersect (B union C) = (A intersect B) union (A intersect C). Pick x in the left side: x is in A and x is in B union C. Case 1: x is in B, so x is in A intersect B, so x is in the right side. Case 2: x is in C, so x is in A intersect C, so x is in the right side. The other direction is similar.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify distributive law: A n (B u C) = (A n B) u (A n C)
+(define (member? x s)
+  (cond ((null? s) #f)
+        ((= x (car s)) #t)
+        (else (member? x (cdr s)))))
+
+(define (union a b)
+  (cond ((null? a) b)
+        ((member? (car a) b) (union (cdr a) b))
+        (else (cons (car a) (union (cdr a) b)))))
+
+(define (intersection a b)
+  (cond ((null? a) (list))
+        ((member? (car a) b) (cons (car a) (intersection (cdr a) b)))
+        (else (intersection (cdr a) b))))
+
+(define (set-equal? a b)
+  (and (null? (difference a b)) (null? (difference b a))))
+(define (difference a b)
+  (cond ((null? a) (list))
+        ((member? (car a) b) (difference (cdr a) b))
+        (else (cons (car a) (difference (cdr a) b)))))
+
+(define A (list 1 2 3 4))
+(define B (list 2 3 5))
+(define C (list 3 4 6))
+
+(define lhs (intersection A (union B C)))
+(define rhs (union (intersection A B) (intersection A C)))
+
+(display "LHS: ") (display lhs) (newline)
+(display "RHS: ") (display rhs) (newline)
+(display "Equal? ") (display (set-equal? lhs rhs))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-01/">🔢 Discrete Math Ch.1</a> — counting sets, inclusion-exclusion</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-04/", label: "Mathematical Induction" }} next={{ href: "/reading/proof-writing/proofs-06/", label: "Functions" }} />
+
+  </main>
+</Layout>

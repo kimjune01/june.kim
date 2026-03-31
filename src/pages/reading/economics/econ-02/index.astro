@@ -1,0 +1,157 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.2 — Supply and Demand" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Supply and Demand</h1>
+    <p class="text-gray-400 text-sm mb-6">Alfred Marshall &middot; 1890 &middot; <a href="https://en.wikipedia.org/wiki/Supply_and_demand"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Principles of Economics, Book V</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>demand curve</strong> slopes down: higher price means less quantity demanded. The <strong>supply curve</strong> slopes up: higher price means more quantity supplied. Where they cross is <strong>equilibrium</strong>: the price at which buyers want exactly what sellers offer.</p>
+    </div>
+
+    <!-- SVG: Supply and demand curves -->
+    <h3>The cross diagram</h3>
+    <p>Marshall put price on the vertical axis and quantity on the horizontal. The intersection determines both the market price and the quantity traded.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="220" x2="370" y2="220" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="60" y1="220" x2="60" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="215" y="250" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Quantity</text>
+        <text x="20" y="120" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 20, 120)">Price</text>
+        <!-- Demand curve (slopes down) -->
+        <line x1="80" y1="40" x2="350" y2="200" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="355" y="205" fill="#f59e0b" font-size="13" fill-opacity="0.8">D</text>
+        <!-- Supply curve (slopes up) -->
+        <line x1="80" y1="200" x2="350" y2="40" stroke="#60a5fa" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="355" y="45" fill="#60a5fa" font-size="13" fill-opacity="0.8">S</text>
+        <!-- Equilibrium -->
+        <circle cx="215" cy="120" r="5" fill="#10b981" fill-opacity="0.8"/>
+        <text x="240" y="112" fill="#10b981" font-size="12" fill-opacity="0.8">E (P*, Q*)</text>
+        <!-- Dashed lines -->
+        <line x1="215" y1="120" x2="215" y2="220" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <line x1="215" y1="120" x2="60" y2="120" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <text x="215" y="235" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Q*</text>
+        <text x="48" y="124" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">P*</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Supply and demand as linear functions
+; Demand: Qd = a - b*P (slopes down)
+; Supply: Qs = c + d*P (slopes up)
+
+(define (demand price) (- 100 (* 2 price)))  ; Qd = 100 - 2P
+(define (supply price) (+ 0 (* 3 price)))    ; Qs = 3P
+
+; Equilibrium: Qd = Qs
+; 100 - 2P = 3P -> 100 = 5P -> P* = 20
+(define p-star (/ 100 5))
+(define q-star (demand p-star))
+
+(display "Equilibrium price: ")
+(display p-star)
+(newline)
+(display "Equilibrium quantity: ")
+(display q-star)
+(newline)
+
+; Check: both curves give same Q at P*
+(display "Demand at P*: ")
+(display (demand p-star))
+(newline)
+(display "Supply at P*: ")
+(display (supply p-star))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Supply and demand equilibrium
+def demand(p): return 100 - 2*p   # slopes down
+def supply(p): return 3*p          # slopes up
+
+# Solve: 100 - 2P = 3P
+p_star = 100 / 5
+q_star = demand(p_star)
+
+print("Equilibrium price:  " + str(p_star))
+print("Equilibrium quantity: " + str(q_star))
+print("Check — demand(P*): " + str(demand(p_star)) + ", supply(P*): " + str(supply(p_star)))
+`} />
+    </div>
+
+
+    <!-- Shifts -->
+    <h3>Shifts vs movements</h3>
+    <p>A change in price moves you <em>along</em> a curve. A change in something else (income, tastes, input costs) <em>shifts</em> the whole curve. Demand shifts right when incomes rise. Supply shifts right when production costs fall.</p>
+
+    <SchemeRepl client:load initialCode={`; Demand shift: income rises, demand increases
+; Original: Qd = 100 - 2P
+; New:      Qd = 120 - 2P (shifted right by 20)
+
+(define (demand-original price) (- 100 (* 2 price)))
+(define (demand-shifted price) (- 120 (* 2 price)))
+(define (supply price) (* 3 price))
+
+; Old equilibrium
+(define p-old (/ 100 5))
+(define q-old (demand-original p-old))
+
+; New equilibrium: 120 - 2P = 3P -> P = 24
+(define p-new (/ 120 5))
+(define q-new (demand-shifted p-new))
+
+(display "Old equilibrium: P=")
+(display p-old)
+(display ", Q=")
+(display q-old)
+(newline)
+
+(display "New equilibrium: P=")
+(display p-new)
+(display ", Q=")
+(display q-new)
+(newline)
+
+(display "Income rise -> higher price AND higher quantity")
+`} />
+
+
+    <!-- Key terms -->
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Demand curve</td><td>Quantity buyers want at each price (slopes down)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Supply curve</td><td>Quantity sellers offer at each price (slopes up)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Equilibrium</td><td>Price where quantity demanded equals quantity supplied</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Shift</td><td>The whole curve moves (vs. movement along the curve)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Supply_and_demand"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Supply and demand</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Economic_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Economic equilibrium</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-01/", label: "Division of Labor" }} next={{ href: "/reading/economics/econ-03/", label: "Comparative Advantage" }} />
+
+  </main>
+</Layout>

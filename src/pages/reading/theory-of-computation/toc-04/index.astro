@@ -1,0 +1,198 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.4 — Context-Free Grammars" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Context-Free Grammars</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 4 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>context-free grammar</strong> (CFG) generates strings through production rules. Each rule rewrites a single variable into a sequence of variables and terminals. CFGs describe more languages than regular expressions: they can handle nesting, matching brackets, and recursive structure.</p>
+    </div>
+
+    <!-- Productions and derivations -->
+    <h3>Productions and derivations</h3>
+    <p>A CFG is a 4-tuple (V, &Sigma;, R, S):</p>
+    <ul>
+      <li><strong>V</strong> &mdash; finite set of variables (nonterminals)</li>
+      <li><strong>&Sigma;</strong> &mdash; finite set of terminals (the alphabet)</li>
+      <li><strong>R</strong> &mdash; production rules of the form A &rarr; w</li>
+      <li><strong>S</strong> &mdash; start variable (S &isin; V)</li>
+    </ul>
+    <p>A <strong>derivation</strong> is a sequence of rule applications starting from S that produces a string of terminals.</p>
+
+    <!-- SVG: Parse tree for 1+2*3 -->
+    <h3>Parse trees</h3>
+    <p>A parse tree shows the structure of a derivation. The root is the start variable. Internal nodes are variables. Leaves are terminals. Reading the leaves left-to-right gives the derived string.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- E at root -->
+        <text x="180" y="20" text-anchor="middle" fill="#60a5fa" font-size="14">E</text>
+        <!-- E -> E + T -->
+        <line x1="165" y1="25" x2="80" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="180" y1="25" x2="180" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="195" y1="25" x2="280" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="80" y="70" text-anchor="middle" fill="#60a5fa" font-size="14">E</text>
+        <text x="180" y="70" text-anchor="middle" fill="#34d399" font-size="14">+</text>
+        <text x="280" y="70" text-anchor="middle" fill="#60a5fa" font-size="14">T</text>
+        <!-- Left E -> T -> 1 -->
+        <line x1="80" y1="75" x2="80" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="80" y="120" text-anchor="middle" fill="#60a5fa" font-size="14">T</text>
+        <line x1="80" y1="125" x2="80" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="80" y="170" text-anchor="middle" fill="#34d399" font-size="14">1</text>
+        <!-- Right T -> T * F -->
+        <line x1="265" y1="75" x2="220" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="280" y1="75" x2="280" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="295" y1="75" x2="340" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="220" y="120" text-anchor="middle" fill="#60a5fa" font-size="14">T</text>
+        <text x="280" y="120" text-anchor="middle" fill="#34d399" font-size="14">*</text>
+        <text x="340" y="120" text-anchor="middle" fill="#60a5fa" font-size="14">F</text>
+        <!-- T -> 2 -->
+        <line x1="220" y1="125" x2="220" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="220" y="170" text-anchor="middle" fill="#34d399" font-size="14">2</text>
+        <!-- F -> 3 -->
+        <line x1="340" y1="125" x2="340" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="340" y="170" text-anchor="middle" fill="#34d399" font-size="14">3</text>
+        <!-- Caption -->
+        <text x="180" y="200" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Parse tree for 1+2*3 (multiplication binds tighter)</text>
+        <!-- Grammar rules -->
+        <text x="180" y="225" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">E &rarr; E+T | T    T &rarr; T*F | F    F &rarr; digit</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A simple CFG for matched parentheses.
+; S -> (S) | SS | epsilon
+; Generate random derivations:
+
+(define (generate depth)
+  (if (> depth 5) ""  ; limit depth
+      (let ((r (random-integer 3)))
+        (cond
+          ((= r 0) (string-append "(" (generate (+ depth 1)) ")"))
+          ((= r 1) (string-append (generate (+ depth 1))
+                                  (generate (+ depth 1))))
+          (else "")))))
+
+; Check if parentheses are balanced
+(define (balanced? s)
+  (define (check i count)
+    (cond
+      ((< count 0) #f)
+      ((= i (string-length s)) (= count 0))
+      ((equal? (substring s i (+ i 1)) "(")
+       (check (+ i 1) (+ count 1)))
+      (else (check (+ i 1) (- count 1)))))
+  (check 0 0))
+
+(display "Generated strings from S -> (S) | SS | eps:") (newline)
+(let loop ((n 0))
+  (when (< n 6)
+    (let ((s (generate 0)))
+      (display "  \"") (display s) (display "\" balanced? ")
+      (display (balanced? s)) (newline)
+      (loop (+ n 1)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CFG for balanced parentheses: S -> (S) | SS | epsilon
+import random
+
+def generate(depth=0):
+    if depth > 5: return ""
+    r = random.randint(0, 2)
+    if r == 0: return "(" + generate(depth+1) + ")"
+    if r == 1: return generate(depth+1) + generate(depth+1)
+    return ""
+
+def balanced(s):
+    count = 0
+    for ch in s:
+        count += 1 if ch == '(' else -1
+        if count < 0: return False
+    return count == 0
+
+for _ in range(6):
+    s = generate()
+    print(f'  "{s}" balanced? {balanced(s)}')
+`} />
+    </div>
+
+
+    <!-- Ambiguity -->
+    <h3>Ambiguity</h3>
+    <p>A grammar is <strong>ambiguous</strong> if some string has two different parse trees. The classic example: E &rarr; E+E | E*E | n gives two parse trees for "1+2*3". Ambiguity is a property of the grammar, not the language. Sometimes you can find an unambiguous grammar for the same language. Sometimes you cannot: some context-free languages are inherently ambiguous.</p>
+
+    <!-- Chomsky normal form -->
+    <h3>Chomsky normal form</h3>
+    <p>Every CFG can be converted to <strong><a href="https://en.wikipedia.org/wiki/Chomsky_normal_form"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chomsky normal form</a></strong> (CNF): every production is either A &rarr; BC (two variables) or A &rarr; a (one terminal). CNF makes proofs easier and enables the <a href="https://en.wikipedia.org/wiki/CYK_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>CYK parsing algorithm</a> (O(n<sup>3</sup>) time).</p>
+
+    <SchemeRepl client:load initialCode={`; CYK algorithm for CFG in Chomsky Normal Form.
+; Grammar: S -> AB, A -> a, B -> b
+; This recognizes exactly the string "ab".
+
+; In CNF, we use dynamic programming on substrings.
+; table[i][j] = set of variables that derive s[i..j]
+
+(define (cyk s)
+  (let* ((n (string-length s))
+         (table (make-vector n)))
+    ; Initialize: length-1 substrings
+    (let init ((i 0))
+      (when (< i n)
+        (vector-set! table i (make-vector n (list)))
+        (let ((ch (substring s i (+ i 1))))
+          (cond
+            ((equal? ch "a")
+             (vector-set! (vector-ref table i) i (list "A")))
+            ((equal? ch "b")
+             (vector-set! (vector-ref table i) i (list "B")))))
+        (init (+ i 1))))
+    ; Fill table for longer substrings
+    (let len-loop ((len 2))
+      (when (<= len n)
+        (let i-loop ((i 0))
+          (when (<= (+ i len) n)
+            (let ((j (+ i len -1)))
+              (let k-loop ((k i))
+                (when (< k j)
+                  (let ((left (vector-ref (vector-ref table i) k))
+                        (right (vector-ref (vector-ref table (+ k 1)) j)))
+                    (when (and (member "A" left) (member "B" right))
+                      (let ((cur (vector-ref (vector-ref table i) j)))
+                        (unless (member "S" cur)
+                          (vector-set! (vector-ref table i) j
+                                       (cons "S" cur))))))
+                  (k-loop (+ k 1)))))
+            (i-loop (+ i 1))))
+        (len-loop (+ len 1))))
+    ; Check if S derives entire string
+    (member "S" (vector-ref (vector-ref table 0) (- n 1)))))
+
+(display "ab:  ") (display (if (cyk "ab") "accept" "reject")) (newline)
+(display "a:   ") (display (if (cyk "a") "accept" "reject")) (newline)
+(display "ba:  ") (display (if (cyk "ba") "accept" "reject"))
+`} />
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-04/">🪄 SICP Ch.4</a> — parsing and interpreters use context-free grammars</li>
+      <li><a href="/reading/programming/sicp-01/">🪄 SICP Ch.1</a> — Scheme syntax is a context-free grammar; the reader is a CFG parser</li>
+      <li><a href="/reading/machine-learning/ml-12/">🤖 ML Ch.12</a> — LLMs model language distributions but lack the inductive bias of CFGs</li>
+      <li><a href="/reading/logic/logic-06/">🔑 Logic Ch.6</a> — predicate logic has a context-free grammar for its well-formed formulas</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-03/", label: "Regular Expressions" }} next={{ href: "/reading/theory-of-computation/toc-05/", label: "Pushdown Automata" }} />
+
+  </main>
+</Layout>

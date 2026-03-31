@@ -1,0 +1,212 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §1.1 — Players and Strategies" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Players and Strategies</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Nordstrom · CC BY-SA 4.0 · <a href="https://nordstrommath.com/IntroGameTheory/S_intro.html">§1.1 Players and Strategies</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>game</strong> is any situation where players choose strategies and receive payoffs. Game theory assumes every player is self-interested and perfectly rational. These two assumptions power everything that follows.</p>
+    </div>
+
+    <!-- 1. What is a game? -->
+    <h3>What is a game?</h3>
+    <p>A game has three ingredients: <strong>players</strong> (who is playing), <strong>strategies</strong> (what each player can do), and <strong>payoffs</strong> (what each player gets for each outcome). A strategy is a complete plan. It tells you what to do in every situation, before the game starts.</p>
+
+    <!-- SVG: Two players with strategy sets, arrows to outcomes -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Player 1 -->
+        <rect x="20" y="20" width="100" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="45" text-anchor="middle" fill="currentColor" font-size="13">Player 1</text>
+        <text x="70" y="62" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">s1, s2</text>
+        <!-- Player 2 -->
+        <rect x="20" y="100" width="100" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="125" text-anchor="middle" fill="currentColor" font-size="13">Player 2</text>
+        <text x="70" y="142" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">t1, t2</text>
+        <!-- Arrows to outcomes -->
+        <line x1="120" y1="40" x2="230" y2="55" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="120" y1="60" x2="230" y2="95" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="120" y1="120" x2="230" y2="55" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="120" y1="140" x2="230" y2="95" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Outcome boxes -->
+        <rect x="230" y="35" width="170" height="35" rx="4" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="315" y="57" text-anchor="middle" fill="#60a5fa" font-size="11">(s1,t1) payoff: (3, 2)</text>
+        <rect x="230" y="80" width="170" height="35" rx="4" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="315" y="102" text-anchor="middle" fill="#60a5fa" font-size="11">(s2,t2) payoff: (1, 4)</text>
+        <!-- dots for other outcomes -->
+        <text x="315" y="140" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.3">... more outcomes</text>
+        <!-- Caption -->
+        <text x="210" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">players choose strategies, combinations produce payoffs</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A game: players, strategies, payoffs
+; Payoff is a function from (strategy-pair) to (value, value)
+
+(define (make-player name strategies)
+  (list name strategies))
+
+(define (player-name p) (car p))
+(define (player-strategies p) (cadr p))
+
+; Two players choosing A or B
+(define p1 (make-player 'Player1 '(A B)))
+(define p2 (make-player 'Player2 '(X Y)))
+
+; Payoff function: (p1-strategy, p2-strategy) -> (p1-payoff, p2-payoff)
+(define (payoff s1 s2)
+  (cond ((and (eq? s1 'A) (eq? s2 'X)) '(3 2))
+        ((and (eq? s1 'A) (eq? s2 'Y)) '(1 4))
+        ((and (eq? s1 'B) (eq? s2 'X)) '(0 1))
+        ((and (eq? s1 'B) (eq? s2 'Y)) '(2 3))))
+
+(display "Strategies for P1: ")
+(display (player-strategies p1)) (newline)
+(display "Strategies for P2: ")
+(display (player-strategies p2)) (newline)
+(display "(A, X) -> ") (display (payoff 'A 'X)) (newline)
+(display "(A, Y) -> ") (display (payoff 'A 'Y)) (newline)
+(display "(B, X) -> ") (display (payoff 'B 'X)) (newline)
+(display "(B, Y) -> ") (display (payoff 'B 'Y))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# A game: players, strategies, payoffs
+payoffs = {
+    ("A", "X"): (3, 2),
+    ("A", "Y"): (1, 4),
+    ("B", "X"): (0, 1),
+    ("B", "Y"): (2, 3),
+}
+
+p1_strategies = ["A", "B"]
+p2_strategies = ["X", "Y"]
+
+for s1 in p1_strategies:
+    for s2 in p2_strategies:
+        print(f"({s1}, {s2}) -> {payoffs[(s1, s2)]}")
+`} />
+    </div>
+
+    <!-- 2. Self-interest and rationality -->
+    <h3>Two assumptions that drive everything</h3>
+    <p><strong>Self-interest.</strong> Each player wants to maximize their own payoff. They do not care about fairness or the other player's outcome unless it affects their own.</p>
+    <p><strong>Rationality.</strong> Each player considers all available information and makes the best possible decision. And each player knows the other is doing the same. This mutual knowledge of rationality is what makes game theory work.</p>
+
+    <SchemeRepl client:load initialCode={`; Rational self-interested choice:
+; Given a set of outcomes, pick the one that maximizes YOUR payoff.
+
+(define (rational-choice options my-payoff-fn)
+  (let loop ((best (car options))
+             (best-val (my-payoff-fn (car options)))
+             (rest (cdr options)))
+    (if (null? rest) best
+        (let ((v (my-payoff-fn (car rest))))
+          (if (> v best-val)
+              (loop (car rest) v (cdr rest))
+              (loop best best-val (cdr rest)))))))
+
+; Player 1 choosing between A and B when P2 plays X
+(define (p1-payoff-given-X strategy)
+  (car (payoff strategy 'X)))
+
+(display "P1 rational choice (given P2 plays X): ")
+(display (rational-choice '(A B) p1-payoff-given-X))
+; A gives 3, B gives 0. Rational player picks A.
+`} />
+
+    <!-- 3. Perfect information and finite games -->
+    <h3>Perfect information and finite games</h3>
+    <p>A game has <strong>perfect information</strong> when every player knows all options, all opponent options, and all outcomes. Both know the other knows. Tic-tac-toe is perfect information. Poker is not (hidden cards).</p>
+    <p>A game is <strong>finite</strong> when it must end within some maximum number of moves. Tic-tac-toe is finite (at most 9 moves). Chess with the 50-move rule is finite. Without it, chess could loop forever.</p>
+
+    <SchemeRepl client:load initialCode={`; Cake-cutting: a classic perfect-information game
+; Player 1 cuts the cake into two pieces.
+; Player 2 picks the bigger piece.
+; Both are rational and self-interested.
+
+(define (cake-game cut-position)
+  ; cut-position is where P1 cuts (0 to 100, percent)
+  (let ((piece-left cut-position)
+        (piece-right (- 100 cut-position)))
+    ; P2 picks the bigger piece (rational)
+    (let ((p2-gets (max piece-left piece-right))
+          (p1-gets (min piece-left piece-right)))
+      (list p1-gets p2-gets))))
+
+; If P1 cuts at 40 percent
+(display "Cut at 40: ") (display (cake-game 40)) (newline)
+; P1 gets 40, P2 gets 60
+
+; If P1 cuts at 50 (the rational choice)
+(display "Cut at 50: ") (display (cake-game 50)) (newline)
+; P1 gets 50, P2 gets 50. Best P1 can do.
+
+; If P1 cuts at 70
+(display "Cut at 70: ") (display (cake-game 70)) (newline)
+; P1 gets 30, P2 gets 70. Worse for P1.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Term</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Player</td><td class="pr-4 text-green-300">(make-player name strategies)</td><td class="font-sans">A decision-maker with a set of strategies</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Strategy</td><td class="pr-4 text-green-300">'A, 'B, ...</td><td class="font-sans">A complete plan for playing the game</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Payoff</td><td class="pr-4 text-green-300">(payoff s1 s2)</td><td class="font-sans">What each player gets for a given outcome</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Rational choice</td><td class="pr-4 text-green-300">(rational-choice options val)</td><td class="font-sans">Pick the option that maximizes your payoff</td></tr>
+          <tr><td class="py-2 pr-4">Perfect information</td><td class="pr-4 text-green-300">--</td><td class="font-sans">All players know all options and outcomes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Next sections</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-02/">🎲 Nordstrom §1.2</a> — game matrices: payoffs in a table</li>
+      <li><a href="/reading/game-theory/nordstrom-03/">🎲 Nordstrom §1.3</a> — zero-sum games: your gain is my loss</li>
+      <li><a href="/reading/game-theory/nordstrom-04/">🎲 Nordstrom §2.2</a> — dominated strategies: delete what is always worse</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related paper pages</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory formalizes these ideas categorically</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Game_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Game theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Strategy_(game_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Strategy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Perfect_information"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Perfect information</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://nordstrommath.com/IntroGameTheory/S_intro.html">Read Nordstrom §1.1</a>. The cake-cutting example is a great place to start.
+    </div>
+
+
+    <PrevNext next={{ href: "/reading/game-theory/nordstrom-02/", label: "Game Matrices" }} />
+
+  </main>
+</Layout>

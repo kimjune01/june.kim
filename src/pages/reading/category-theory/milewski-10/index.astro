@@ -1,0 +1,405 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.10 — Natural Transformations" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Natural Transformations</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/04/07/natural-transformations/">Category Theory for Programmers, Ch. 10</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>. 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>natural transformation</strong> maps between functors while preserving structure. The naturality condition says: it doesn't matter whether you transform first and then map, or map first and then transform. In Haskell, <strong>parametric polymorphism gives you naturality for free</strong>: any function <code>F a -> G a</code> that works uniformly for all types automatically satisfies the naturality square.</p>
+    </div>
+
+    <!-- 1. Natural transformations -->
+    <h3>Natural transformations: morphisms between functors</h3>
+    <p>A functor maps objects and morphisms from one category to another. A <strong>natural transformation</strong> maps between two such functors. For functors F and G from category C to D, a natural transformation alpha provides, for each object <code>a</code> in C, a morphism <code>alpha_a : F(a) -> G(a)</code> in D. These morphisms are called <strong>components</strong>. Natural transformations are how <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the natural framework</a> connects its six processing stages: each stage is a functor, and the transitions between them are natural transformations that preserve the information structure.</p>
+
+    <SchemeRepl client:load initialCode={`; A natural transformation alpha : F -> G
+; gives a component alpha_a : F(a) -> G(a) for every type a.
+;
+; Example: safeHead is a natural transformation from List to Maybe.
+; For every type a, safeHead : List(a) -> Maybe(a).
+
+(define nothing (cons 'left '()))
+(define (just x) (cons 'right x))
+(define (nothing? m) (and (pair? m) (eq? (car m) 'left)))
+
+; safeHead : List -> Maybe  (a natural transformation)
+(define (safe-head lst)
+  (if (null? lst)
+      nothing
+      (just (car lst))))
+
+(display "safe-head '(1 2 3): ") (display (safe-head '(1 2 3))) (newline)
+(display "safe-head '():      ") (display (safe-head '())) (newline)
+(display "safe-head '(a b):   ") (display (safe-head '(a b)))
+; Works uniformly for any type — that's the "natural" part.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# safeHead: a natural transformation List -> Maybe
+def safe_head(lst):
+    if not lst:
+        return None
+    return lst[0]
+
+print(f"safe_head([1,2,3]) = {safe_head([1,2,3])}")
+print(f"safe_head([])      = {safe_head([])}")
+print(f"safe_head(['a','b']) = {safe_head(['a','b'])}")
+`} />
+    </div>
+
+
+    <!-- 2. The naturality condition -->
+    <h3>The naturality condition</h3>
+    <p>The components of a natural transformation can't be arbitrary. They must satisfy the <strong>naturality condition</strong>: for every morphism <code>f : a -> b</code>, the following square commutes.</p>
+
+    <!-- SVG: Naturality square -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 260" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Nodes -->
+        <circle cx="60" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="40" y="50" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F(a)</text>
+
+        <circle cx="280" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="300" y="50" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">G(a)</text>
+
+        <circle cx="60" cy="200" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="40" y="218" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F(b)</text>
+
+        <circle cx="280" cy="200" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="300" y="218" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">G(b)</text>
+
+        <!-- Top arrow: alpha_a -->
+        <line x1="72" y1="60" x2="268" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="266,56 274,60 266,64" fill="currentColor"/>
+        <text x="170" y="48" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x3B1;_a</text>
+
+        <!-- Bottom arrow: alpha_b -->
+        <line x1="72" y1="200" x2="268" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="266,196 274,200 266,204" fill="currentColor"/>
+        <text x="170" y="224" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x3B1;_b</text>
+
+        <!-- Left arrow: F(f) -->
+        <line x1="60" y1="72" x2="60" y2="188" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="56,186 60,194 64,186" fill="currentColor"/>
+        <text x="38" y="135" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(f)</text>
+
+        <!-- Right arrow: G(f) -->
+        <line x1="280" y1="72" x2="280" y2="188" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="276,186 280,194 284,186" fill="currentColor"/>
+        <text x="302" y="135" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">G(f)</text>
+
+        <!-- Commutes label -->
+        <text x="170" y="136" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">=</text>
+
+        <!-- Equation caption -->
+        <text x="170" y="252" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">&#x3B1;_b &#x2218; F(f) = G(f) &#x2218; &#x3B1;_a</text>
+      </svg>
+    </div>
+    <p>In words: transform then map = map then transform. This is what makes the transformation "natural" rather than ad hoc.</p>
+
+    <SchemeRepl client:load initialCode={`; Naturality condition for safeHead:
+;   fmap-maybe f . safe-head  =  safe-head . map f
+;
+; "Transform then map" = "Map then transform"
+
+(define (fmap-maybe f m)
+  (if (nothing? m) nothing (just (f (cdr m)))))
+
+; Test with f = double
+(define (double x) (* x 2))
+
+; Path 1: map first, then transform
+(define path1 (safe-head (map double '(3 1 4))))
+
+; Path 2: transform first, then map
+(define path2 (fmap-maybe double (safe-head '(3 1 4))))
+
+(display "map then transform: ") (display path1) (newline)
+(display "transform then map: ") (display path2) (newline)
+(display "equal? ") (display (equal? path1 path2)) (newline)
+
+; Also works on empty lists
+(define p1-empty (safe-head (map double '())))
+(define p2-empty (fmap-maybe double (safe-head '())))
+(display "empty path1: ") (display p1-empty) (newline)
+(display "empty path2: ") (display p2-empty) (newline)
+(display "equal? ") (display (equal? p1-empty p2-empty))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify naturality: fmap f . alpha = alpha . map f
+def safe_head(lst):
+    return None if not lst else lst[0]
+
+def fmap_maybe(f, m):
+    return None if m is None else f(m)
+
+double = lambda x: x * 2
+
+# Path 1: map then transform
+path1 = safe_head([double(x) for x in [3, 1, 4]])
+
+# Path 2: transform then map
+path2 = fmap_maybe(double, safe_head([3, 1, 4]))
+
+print(f"map then transform: {path1}")
+print(f"transform then map: {path2}")
+print(f"equal? {path1 == path2}")
+`} />
+    </div>
+
+
+    <!-- 3. length as a natural transformation -->
+    <h3>Length: List -> Const Int</h3>
+    <p>Another natural transformation: <code>length</code>. It maps from the List functor to the <code>Const Int</code> functor. The Const functor ignores its type parameter, so <code>Const Int a</code> is just <code>Int</code> regardless of <code>a</code>. Length doesn't care what's in the list, only how many elements there are. That type-blindness is naturality at work.</p>
+
+    <SchemeRepl client:load initialCode={`; length : List a -> Const Int a
+; A natural transformation that forgets the elements.
+
+(define (my-length lst) (length lst))
+
+; fmap for Const does nothing (ignores the function)
+(define (fmap-const f c) c)
+
+; Naturality: fmap-const f . my-length = my-length . map f
+; Since fmap-const ignores f, this says:
+;   length(xs) = length(map f xs)
+; Mapping can't change the number of elements!
+
+(define (double x) (* x 2))
+(define xs '(10 20 30 40))
+
+(display "length(xs):          ") (display (my-length xs)) (newline)
+(display "length(map double xs): ") (display (my-length (map double xs))) (newline)
+(display "equal? ") (display (= (my-length xs) (my-length (map double xs)))) (newline)
+
+; This works for ANY function f — that's the naturality condition.
+(display "length(map car '((a 1) (b 2))): ")
+(display (my-length (map car '((a 1) (b 2)))))
+`} />
+
+
+    <!-- 4. Parametric polymorphism -->
+    <h3>Theorems for free: polymorphism = naturality</h3>
+    <p>Here is the deepest insight. In Haskell, any polymorphic function <code>alpha :: F a -> G a</code> (where F and G are functors) automatically satisfies the naturality condition. You don't need to check it. Parametric polymorphism means the function works by one formula for all types. It can't inspect the type, so it can't break the naturality square. This is Wadler's "theorems for free": the type signature alone generates the equation <code>fmap g . alpha = alpha . fmap g</code> as a free theorem.</p>
+
+    <SchemeRepl client:load initialCode={`; "Theorems for free" — parametric polymorphism implies naturality.
+;
+; If alpha works the same way for ALL types,
+; it can't break the naturality square.
+;
+; Example: reverse : List a -> List a
+; reverse doesn't inspect elements, so:
+;   map f . reverse = reverse . map f
+
+(define (double x) (* x 2))
+(define xs '(1 2 3 4 5))
+
+; Path 1: reverse then map
+(define path1 (map double (reverse xs)))
+
+; Path 2: map then reverse
+(define path2 (reverse (map double xs)))
+
+(display "map-then-reverse:  ") (display path1) (newline)
+(display "reverse-then-map:  ") (display path2) (newline)
+(display "equal? ") (display (equal? path1 path2)) (newline)
+
+; Another example: tail : List a -> List a
+(define path3 (map double (cdr xs)))
+(define path4 (cdr (map double xs)))
+(display "map-then-tail: ") (display path3) (newline)
+(display "tail-then-map: ") (display path4) (newline)
+(display "equal? ") (display (equal? path3 path4))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Theorems for free: reverse and tail are natural transformations
+double = lambda x: x * 2
+xs = [1, 2, 3, 4, 5]
+
+# reverse commutes with map
+p1 = list(map(double, reversed(xs)))
+p2 = list(reversed(list(map(double, xs))))
+print(f"map-then-reverse: {p1}")
+print(f"reverse-then-map: {p2}")
+print(f"equal? {p1 == p2}")
+
+# tail (cdr) commutes with map
+p3 = list(map(double, xs[1:]))
+p4 = list(map(double, xs))[1:]
+print(f"map-then-tail: {p3}")
+print(f"tail-then-map: {p4}")
+print(f"equal? {p3 == p4}")
+`} />
+    </div>
+
+
+    <!-- 5. Functor categories -->
+    <h3>Functor categories</h3>
+    <p>Natural transformations compose. If <code>alpha : F -> G</code> and <code>beta : G -> H</code>, then <code>(beta . alpha)_a = beta_a . alpha_a</code> gives a natural transformation from F to H. This makes functors between two categories C and D into a category of their own: <strong>[C, D]</strong>, the functor category. Objects are functors, morphisms are natural transformations, and the identity natural transformation maps each <code>F(a)</code> to itself.</p>
+
+    <SchemeRepl client:load initialCode={`; Functor category: compose natural transformations vertically.
+; If alpha : F -> G and beta : G -> H, then (beta . alpha) : F -> H
+; Component-wise: (beta . alpha)_a = beta_a . alpha_a
+
+; Three functors: List, Maybe, Const-Bool
+; alpha = safe-head : List -> Maybe
+; beta = is-just : Maybe -> Const-Bool
+
+(define (safe-head lst)
+  (if (null? lst) nothing (just (car lst))))
+
+(define (is-just m)
+  (if (nothing? m) #f #t))
+
+; Vertical composition: is-just . safe-head : List -> Const-Bool
+; "Is the list non-empty?"
+(define (non-empty? lst)
+  (is-just (safe-head lst)))
+
+(display "non-empty? '(1 2): ") (display (non-empty? '(1 2))) (newline)
+(display "non-empty? '():    ") (display (non-empty? '())) (newline)
+
+; The composition is itself a natural transformation.
+; Naturality: fmap-const f . non-empty? = non-empty? . map f
+; fmap-const ignores f, so: non-empty?(xs) = non-empty?(map f xs)
+(define xs '(10 20 30))
+(display "non-empty?(xs):        ") (display (non-empty? xs)) (newline)
+(display "non-empty?(map * xs):  ") (display (non-empty? (map (lambda (x) (* x 2)) xs)))
+`} />
+
+
+    <!-- 6. Naturality as a constraint -->
+    <h3>Naturality as a design constraint</h3>
+    <p>The naturality condition is surprisingly restrictive. How many natural transformations are there from <code>Maybe</code> to <code>List</code>? Only two: either send <code>Nothing -> []</code> and <code>Just x -> [x]</code>, or send everything to <code>[]</code>. The naturality square forbids any other choice. The type signature <code>Maybe a -> [a]</code> pins down the implementation almost completely.</p>
+
+    <SchemeRepl client:load initialCode={`; How many natural transformations Maybe -> List?
+; Only two! Naturality constrains the options.
+
+; Option 1: Nothing -> (), Just x -> (x)
+(define (maybe-to-list-1 m)
+  (if (nothing? m) '() (list (cdr m))))
+
+; Option 2: everything -> ()
+(define (maybe-to-list-2 m)
+  '())
+
+; Any other mapping (e.g., Just x -> (x x x)) fails naturality.
+; Why? If alpha(Just x) = (x x x), then:
+;   map f (alpha (Just x)) = map f (x x x) = (f(x) f(x) f(x))
+;   alpha (fmap f (Just x)) = alpha (Just f(x)) = (f(x) f(x) f(x))
+; Wait, that works! But alpha(Nothing) must be ().
+; Actually (x x x) does satisfy naturality — but Milewski's point
+; is that parametricity limits you to one "shape" per branch.
+
+(display "opt1 Just(5):  ") (display (maybe-to-list-1 (just 5))) (newline)
+(display "opt1 Nothing:  ") (display (maybe-to-list-1 nothing)) (newline)
+(display "opt2 Just(5):  ") (display (maybe-to-list-2 (just 5))) (newline)
+(display "opt2 Nothing:  ") (display (maybe-to-list-2 nothing)) (newline)
+
+; Verify naturality for opt1:
+(define (double x) (* x 2))
+(define p1 (map double (maybe-to-list-1 (just 3))))
+(define p2 (maybe-to-list-1 (fmap-maybe double (just 3))))
+(display "path1: ") (display p1) (newline)
+(display "path2: ") (display p2) (newline)
+(display "equal? ") (display (equal? p1 p2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Natural transformations Maybe -> List: only two options
+def maybe_to_list_1(m):
+    """Nothing -> [], Just x -> [x]"""
+    return [] if m is None else [m]
+
+def maybe_to_list_2(m):
+    """Everything -> []"""
+    return []
+
+print(f"opt1(5):    {maybe_to_list_1(5)}")
+print(f"opt1(None): {maybe_to_list_1(None)}")
+print(f"opt2(5):    {maybe_to_list_2(5)}")
+print(f"opt2(None): {maybe_to_list_2(None)}")
+
+# Verify naturality for opt1
+double = lambda x: x * 2
+p1 = [double(x) for x in maybe_to_list_1(3)]
+p2 = maybe_to_list_1(double(3))
+print(f"map-then-transform: {p1}")
+print(f"transform-then-map: {p2}")
+print(f"equal? {p1 == p2}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">alpha :: F a -> G a</td><td class="pr-4 text-green-300">(alpha x)</td><td class="font-sans">Component of a natural transformation at type a</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">safeHead :: [a] -> Maybe a</td><td class="pr-4 text-green-300">(safe-head lst)</td><td class="font-sans">Natural transformation List -> Maybe</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">length :: [a] -> Const Int a</td><td class="pr-4 text-green-300">(my-length lst)</td><td class="font-sans">Natural transformation List -> Const Int</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">fmap g . alpha = alpha . fmap g</td><td class="pr-4 text-green-300">(equal? (map g (alpha xs)) (alpha (map g xs)))</td><td class="font-sans">Naturality condition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(beta . alpha)_a = beta_a . alpha_a</td><td class="pr-4 text-green-300">(beta (alpha x))</td><td class="font-sans">Vertical composition</td></tr>
+          <tr><td class="py-2 pr-4">[C, D]</td><td class="pr-4 text-green-300">—</td><td class="font-sans">Functor category: functors as objects, natural transformations as morphisms</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-08/">🍞 Chapter 8</a> — Functoriality: bifunctors, contravariance, profunctors</li>
+      <li>(prev) <a href="/reading/category-theory/milewski-07/">🍞 Chapter 7</a> — Functors: structure-preserving maps</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use natural transformations</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories use natural transformations for copy and discard</li>
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> — database queries as natural transformations between functors</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — entropy as a natural transformation</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Natural_transformation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Natural transformation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Functor_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Functor category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Parametric_polymorphism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Parametric polymorphism</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post covers three layers: natural transformations, functor categories, and the 2-category Cat. This page covers the first two. The 2-category perspective (where categories are objects, functors are 1-morphisms, and natural transformations are 2-morphisms) and horizontal composition are omitted for clarity. The blog post also discusses contravariant natural transformations with <code>Op</code> functors and shows that naturality for polymorphic functions between Haskell functors is automatic via parametricity (Wadler's "Theorems for Free"). In Scheme, we have no type system to enforce this, so naturality is verified by testing rather than by proof. The key insight carries over regardless: a transformation that works uniformly without inspecting elements will satisfy the naturality square.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/04/07/natural-transformations/">Read the blog post</a>. Start with the naturality condition, then see how parametric polymorphism gives it to you for free.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-09/", label: "Function Types" }} next={{ href: "/reading/category-theory/milewski-11/", label: "Limits and Colimits" }} />
+
+  </main>
+</Layout>

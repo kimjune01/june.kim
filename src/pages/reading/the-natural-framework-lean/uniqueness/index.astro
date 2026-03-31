@@ -1,0 +1,55 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Uniqueness.lean — The ordering is unique" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Uniqueness.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Uniqueness.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Proves that the forward pipeline has exactly one valid ordering and that Consolidate cannot be inserted into the forward chain.</p>
+    </div>
+
+    <h3>InfoTy / ForwardStage</h3>
+    <p>Interface types are modeled as an enum (raw, encoded, indexed, selected, ranked, persisted, policy). Each forward stage has a domain (input type) and codomain (output type). The handshake condition is: the codomain of stage i must equal the domain of stage i+1.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">ForwardStage.dom</span> : ForwardStage &rarr; InfoTy
+  | .perceive =&gt; .raw
+  | .cache    =&gt; .encoded
+  | .filter   =&gt; .indexed
+  | .attend   =&gt; .selected
+  | .remember =&gt; .ranked</code></pre>
+
+    <h3>Consumer uniqueness theorems</h3>
+    <p>Five theorems, one per interface type: only Perceive consumes raw, only Cache consumes encoded, only Filter consumes indexed, only Attend consumes selected, only Remember consumes ranked. Each is proved by case analysis &mdash; try every stage, only one matches.</p>
+
+    <h3>forward_ordering_unique</h3>
+    <p>The main theorem. Any handshake-compatible ordering that starts from raw must equal the canonical ordering (Perceive &rarr; Cache &rarr; Filter &rarr; Attend &rarr; Remember) at every position. The type chain forces each slot.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">forward_ordering_unique</span>
+    (ord : Fin 5 &rarr; ForwardStage)
+    (hcompat : handshake_ok ord)
+    (hfirst : (ord &langle;0, _&rangle;).dom = .raw)
+    : &forall; i : Fin 5, ord i = canonical i</code></pre>
+    <p class="text-sm text-gray-500">The proof chains through positions: position 0 must be Perceive (only consumer of raw), position 1 must be Cache (only consumer of encoded, which Perceive produces), and so on through all five positions.</p>
+
+    <h3>no_forward_consumes_policy</h3>
+    <p>No forward stage takes policy as input. Consolidate produces policy, so nothing in the forward chain can follow it. This is why Consolidate must be the backward pass, not a forward stage.</p>
+
+    <h3>consolidate_has_no_slot</h3>
+    <p>Consolidate cannot be spliced into the forward chain. Even if some stage produced persisted (Consolidate's input), the next stage would need to consume policy (Consolidate's output), and no forward stage does.</p>
+
+    <h3>pipeline_unique</h3>
+    <p>The combined uniqueness result: (1) the forward ordering is forced by the type chain, (2) Consolidate's output type has no forward consumer, (3) Consolidate's input type has no forward consumer. Therefore: five forward stages in canonical order plus Consolidate as backward pass is the only configuration whose types compose. This is why <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the framework</a> claims exactly six roles in exactly this order.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; imported; defines the Pipeline structure whose ordering is proved unique</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; imported; the handshake condition on type compatibility</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; the cross-cycle coupling that Consolidate participates in</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/boundary/", label: "Boundary.lean · 7 of 25" }} next={{ href: "/reading/the-natural-framework-lean/removal/", label: "Removal.lean · 9 of 25" }} />
+  </main>
+</Layout>

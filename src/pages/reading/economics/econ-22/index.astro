@@ -1,0 +1,234 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.22 — Inequality and Distribution" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Inequality and Distribution</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · David Ricardo, <em>Principles of Political Economy</em> (1817, public domain)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Lorenz curve</strong> plots cumulative income share against cumulative population share. The <strong>Gini coefficient</strong> measures the gap between the Lorenz curve and perfect equality. It ranges from 0 (everyone has the same) to 1 (one person has everything).</p>
+    </div>
+
+    <!-- 1. Lorenz Curve -->
+    <h3>The Lorenz curve</h3>
+    <p>Sort everyone by income, poorest to richest. The x-axis is cumulative population share, the y-axis is cumulative income share. Perfect equality is the 45-degree line. The further the Lorenz curve bows below the diagonal, the greater the inequality. The Gini coefficient is the area between the diagonal and the Lorenz curve, divided by the total area under the diagonal.</p>
+
+    <!-- SVG: Interactive Lorenz curve / Gini coefficient -->
+    <div class="flex flex-col items-center my-6">
+      <svg id="lz-svg" viewBox="0 0 400 420" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="340" x2="360" y2="340" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="60" y1="340" x2="60" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="375" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Cumulative population share</text>
+        <text x="20" y="190" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6" transform="rotate(-90,20,190)">Cumulative income share</text>
+        <!-- Axis labels -->
+        <text x="60" y="355" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">0</text>
+        <text x="360" y="355" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">1</text>
+        <text x="50" y="343" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">0</text>
+        <text x="50" y="43" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">1</text>
+        <!-- 45-degree equality line -->
+        <line x1="60" y1="340" x2="360" y2="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.4"/>
+        <text x="175" y="165" fill="currentColor" font-size="10" fill-opacity="0.4" transform="rotate(-45,175,165)">perfect equality</text>
+        <!-- Shaded area between diagonal and Lorenz curve -->
+        <path id="lz-area" fill="#f59e0b" fill-opacity="0.15"/>
+        <!-- Lorenz curve -->
+        <polyline id="lz-curve" fill="none" stroke="#34d399" stroke-width="2.5"/>
+        <!-- Labels -->
+        <text x="260" y="240" fill="#f59e0b" font-size="12" fill-opacity="0.7">Gini area</text>
+        <text x="200" y="310" fill="#34d399" font-size="11" fill-opacity="0.8">Lorenz curve</text>
+        <!-- Readout -->
+        <text id="lz-readout" x="210" y="405" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7"></text>
+      </svg>
+      <input id="lz-slider" type="range" min="0" max="80" value="35" step="1" class="w-full max-w-sm mt-2" style="accent-color: #34d399;" />
+    </div>
+    <script is:inline>
+    (function() {
+      var LEFT = 60, RIGHT = 360, TOP = 40, BOT = 340;
+      var W = RIGHT - LEFT, H = BOT - TOP;
+      function xOf(t) { return LEFT + t * W; }
+      function yOf(t) { return BOT - t * H; }
+      // Lorenz approximation: L(x) = x^(1/(1-G))
+      function lorenz(x, g) {
+        if (g <= 0) return x;
+        var exp = 1 / (1 - g);
+        return Math.pow(x, exp);
+      }
+
+      var slider = document.getElementById("lz-slider");
+      var curve = document.getElementById("lz-curve");
+      var area = document.getElementById("lz-area");
+      var readout = document.getElementById("lz-readout");
+      var N = 50;
+
+      function update() {
+        var g = slider.value / 100;
+        // Build Lorenz curve points
+        var pts = [];
+        for (var i = 0; i <= N; i++) {
+          var x = i / N;
+          var y = lorenz(x, g);
+          pts.push(xOf(x).toFixed(1) + "," + yOf(y).toFixed(1));
+        }
+        curve.setAttribute("points", pts.join(" "));
+        // Build shaded area path: diagonal down, then Lorenz curve back
+        var d = "M " + LEFT + " " + BOT;
+        // Along diagonal to top-right
+        d += " L " + RIGHT + " " + TOP;
+        // Back along Lorenz curve (reverse)
+        for (var i = N; i >= 0; i--) {
+          var x = i / N;
+          var y = lorenz(x, g);
+          d += " L " + xOf(x).toFixed(1) + " " + yOf(y).toFixed(1);
+        }
+        d += " Z";
+        area.setAttribute("d", d);
+        // Description
+        var desc;
+        if (g < 0.05) desc = "perfect equality";
+        else if (g < 0.25) desc = "low inequality";
+        else if (g < 0.35) desc = "typical developed nation";
+        else if (g < 0.45) desc = "moderate inequality";
+        else if (g < 0.55) desc = "high inequality";
+        else if (g < 0.65) desc = "very unequal";
+        else desc = "extreme inequality";
+        readout.textContent = "Gini = " + g.toFixed(2) + " — " + desc;
+      }
+      slider.addEventListener("input", update);
+      update();
+    })();
+    </script>
+
+    <SchemeRepl client:load initialCode={`; Gini coefficient from income list
+; Gini = (sum |xi - xj|) / (2 * n^2 * mean)
+
+(define (gini incomes)
+  (let* ((n (length incomes))
+         (mean (/ (apply + incomes) n))
+         (pairs
+           (apply append
+             (map (lambda (x)
+               (map (lambda (y) (abs (- x y))) incomes))
+             incomes)))
+         (sum-diffs (apply + pairs)))
+    (/ sum-diffs (* 2 n n mean))))
+
+; Example: five-person economy
+(define equal-economy (list 50 50 50 50 50))
+(define moderate (list 20 30 50 70 80))
+(define unequal (list 5 10 20 40 175))
+
+(display "Equal economy:    Gini = ")
+(display (gini equal-economy)) (newline)
+(display "Moderate economy: Gini = ")
+(display (/ (round (* (gini moderate) 1000)) 1000)) (newline)
+(display "Unequal economy:  Gini = ")
+(display (/ (round (* (gini unequal) 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gini coefficient computation
+def gini(incomes):
+    n = len(incomes)
+    mean = sum(incomes) / n
+    sum_diffs = sum(abs(x - y) for x in incomes for y in incomes)
+    return sum_diffs / (2 * n * n * mean)
+
+equal = [50, 50, 50, 50, 50]
+moderate = [20, 30, 50, 70, 80]
+unequal = [5, 10, 20, 40, 175]
+
+for name, inc in [("Equal", equal), ("Moderate", moderate), ("Unequal", unequal)]:
+    print(str(name) + ": Gini = " + str(round(gini(inc), 2)))
+`} />
+    </div>
+
+
+    <!-- 2. Pareto Distribution -->
+    <h3>The Pareto distribution</h3>
+    <p>Vilfredo Pareto observed that income follows a power law: the fraction of people with income above x is proportional to x<sup>-alpha</sup>. With alpha around 1.5-2, this generates the "80-20 rule": 20% of people hold 80% of the wealth. The Pareto distribution has a fat tail; extreme wealth is not an anomaly but a structural feature of the distribution.</p>
+
+    <SchemeRepl client:load initialCode={`; Pareto distribution: P(X > x) = (x_min / x)^alpha
+; For income: x_min = minimum income, alpha = shape parameter
+
+(define x-min 10000)  ; minimum income
+
+(define (pareto-survival x alpha)
+  (expt (/ x-min x) alpha))
+
+; What fraction earns more than $100,000?
+(display "alpha=1.5: P(X > $100k) = ")
+(display (/ (round (* (pareto-survival 100000 1.5) 10000)) 10000)) (newline)
+
+(display "alpha=2.0: P(X > $100k) = ")
+(display (/ (round (* (pareto-survival 100000 2.0) 10000)) 10000)) (newline)
+
+; 80-20 check: top 20% share with alpha=log(5)/log(4)
+(define alpha-8020 (/ (log 5) (log 4)))
+(display "80-20 alpha = ") (display (/ (round (* alpha-8020 1000)) 1000)) (newline)
+
+; Gini from Pareto: Gini = 1 / (2*alpha - 1)
+(display "Gini at alpha=1.5: ")
+(display (/ 1 (- (* 2 1.5) 1))) (newline)
+(display "Gini at alpha=2.0: ")
+(display (/ (round (* (/ 1 (- (* 2 2.0) 1)) 1000)) 1000))
+`} />
+
+
+    <!-- 3. Income vs Wealth Inequality -->
+    <h3>Income vs wealth inequality</h3>
+    <p>Income is a flow (what you earn per year). Wealth is a stock (what you own). Wealth inequality is always larger than income inequality because wealth compounds: r > g (Piketty's observation that returns on capital exceed economic growth) means the wealthy pull further ahead each generation. The US Gini is roughly 0.39 for income but 0.85 for wealth.</p>
+
+    <SchemeRepl client:load initialCode={`; r > g: wealth divergence over generations
+; Two families: one starts with $100k capital, one with $0
+; Both earn $50k/year, save 20%
+; Capital earns r=7%, wages grow at g=2%
+
+(define (simulate-generations n capital-0 wage-0 r g savings-rate)
+  (define (loop gen capital wage)
+    (if (> gen n)
+        (list capital wage)
+        (let* ((income (+ wage (* capital r)))
+               (savings (* income savings-rate))
+               (new-capital (+ capital savings))
+               (new-wage (* wage (+ 1 g))))
+          (loop (+ gen 1) new-capital new-wage))))
+  (loop 1 capital-0 wage-0))
+
+; Family A: starts with $100k capital
+(define family-a (simulate-generations 30 100000 50000 0.07 0.02 0.20))
+
+; Family B: starts with $0 capital
+(define family-b (simulate-generations 30 0 50000 0.07 0.02 0.20))
+
+(display "After 30 years:") (newline)
+(display "Family A wealth: $") (display (round (car family-a))) (newline)
+(display "Family B wealth: $") (display (round (car family-b))) (newline)
+(display "Ratio: ") (display (/ (round (* (/ (car family-a) (car family-b)) 100)) 100))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Lorenz_curve"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lorenz curve</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gini_coefficient"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gini coefficient</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pareto_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pareto distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Wealth_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wealth inequality</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-21/", label: "Behavioral Economics" }} next={{ href: "/reading/economics/econ-23/", label: "Comparative Systems" }} />
+
+  </main>
+</Layout>

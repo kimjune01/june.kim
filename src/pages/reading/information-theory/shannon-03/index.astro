@@ -1,0 +1,229 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 03 — Joint and conditional entropy" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to info theory</a>
+
+    <h1>Joint and conditional entropy</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Joint entropy</strong> H(X,Y) measures the total uncertainty of two variables together. <strong>Conditional entropy</strong> H(X|Y) = H(X,Y) &minus; H(Y) is what remains uncertain about X after observing Y. Conditioning never increases entropy.</p>
+    </div>
+
+    <!-- 1. Joint entropy -->
+    <h3>Joint entropy</h3>
+    <p>The joint entropy H(X,Y) = &minus;&sum; P(x,y) log<sub>2</sub> P(x,y) measures the total surprise of observing both X and Y together. If X and Y are independent, H(X,Y) = H(X) + H(Y). If they are dependent, the joint entropy is less: shared structure reduces total uncertainty.</p>
+
+    <!-- SVG: Venn diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- H(X) circle -->
+        <circle cx="155" cy="110" r="80" fill="#60a5fa" fill-opacity="0.08" stroke="#60a5fa" stroke-width="1.5"/>
+        <!-- H(Y) circle -->
+        <circle cx="245" cy="110" r="80" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="110" y="110" text-anchor="middle" fill="#60a5fa" font-size="12">H(X|Y)</text>
+        <text x="290" y="110" text-anchor="middle" fill="#f59e0b" font-size="12">H(Y|X)</text>
+        <text x="200" y="105" text-anchor="middle" fill="#4ade80" font-size="11">I(X;Y)</text>
+        <!-- Outer labels -->
+        <text x="120" y="30" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">H(X)</text>
+        <text x="280" y="30" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.7">H(Y)</text>
+        <!-- H(X,Y) brace at bottom -->
+        <line x1="75" y1="200" x2="325" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="75" y1="195" x2="75" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="325" y1="195" x2="325" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="215" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">H(X,Y)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Joint entropy: H(X,Y) = -sum P(x,y) log2 P(x,y)
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Weather (sunny/rainy) and umbrella (yes/no)
+; Joint distribution:
+;              umbrella-yes  umbrella-no
+; sunny         0.15          0.55
+; rainy         0.25          0.05
+
+(define joint '(0.15 0.55 0.25 0.05))
+(display "H(weather,umbrella) = ")
+(display (entropy joint))
+(display " bits") (newline)
+
+; Marginals
+(define p-sunny (+ 0.15 0.55))  ; 0.70
+(define p-rainy (+ 0.25 0.05))  ; 0.30
+(define p-umb-y (+ 0.15 0.25))  ; 0.40
+(define p-umb-n (+ 0.55 0.05))  ; 0.60
+
+(display "H(weather)  = ")
+(display (entropy (list p-sunny p-rainy)))
+(display " bits") (newline)
+
+(display "H(umbrella) = ")
+(display (entropy (list p-umb-y p-umb-n)))
+(display " bits") (newline)
+
+; If independent, H(X,Y) = H(X) + H(Y)
+(display "H(X)+H(Y)  = ")
+(display (+ (entropy (list p-sunny p-rainy))
+            (entropy (list p-umb-y p-umb-n))))
+(display " bits") (newline)
+
+; H(X,Y) < H(X) + H(Y): they share information
+(display "dependent? ")
+(display (< (entropy joint)
+            (+ (entropy (list p-sunny p-rainy))
+               (entropy (list p-umb-y p-umb-n)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+joint = [0.15, 0.55, 0.25, 0.05]
+p_weather = [0.70, 0.30]
+p_umbrella = [0.40, 0.60]
+
+print(f"H(weather,umbrella) = {entropy(joint):.4f} bits")
+print(f"H(weather)          = {entropy(p_weather):.4f} bits")
+print(f"H(umbrella)         = {entropy(p_umbrella):.4f} bits")
+print(f"H(X)+H(Y)           = {entropy(p_weather)+entropy(p_umbrella):.4f} bits")
+print(f"dependent? {entropy(joint) < entropy(p_weather)+entropy(p_umbrella)}")
+`} />
+    </div>
+
+    <!-- 2. Conditional entropy -->
+    <h3>Conditional entropy</h3>
+    <p>H(X|Y) = H(X,Y) &minus; H(Y) tells you how much uncertainty remains about X once you know Y. This is the <strong>chain rule</strong> of entropy: H(X,Y) = H(Y) + H(X|Y). Conditioning never increases entropy: H(X|Y) &le; H(X). Knowing something can only help.</p>
+
+    <SchemeRepl client:load initialCode={`; Conditional entropy: H(X|Y) = H(X,Y) - H(Y)
+; "How much uncertainty about X remains after observing Y?"
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Same weather/umbrella example
+(define h-joint (entropy '(0.15 0.55 0.25 0.05)))
+(define h-weather (entropy '(0.70 0.30)))
+(define h-umbrella (entropy '(0.40 0.60)))
+
+; H(weather | umbrella) = H(weather,umbrella) - H(umbrella)
+(define h-w-given-u (- h-joint h-umbrella))
+(display "H(W|U) = ") (display h-w-given-u) (display " bits") (newline)
+
+; H(umbrella | weather) = H(weather,umbrella) - H(weather)
+(define h-u-given-w (- h-joint h-weather))
+(display "H(U|W) = ") (display h-u-given-w) (display " bits") (newline)
+
+; Conditioning reduces entropy
+(display "H(W)   = ") (display h-weather) (display " bits") (newline)
+(display "H(W|U) <= H(W)? ") (display (<= h-w-given-u h-weather)) (newline)
+
+; Chain rule: H(X,Y) = H(X) + H(Y|X)
+(display "H(W) + H(U|W) = ") (display (+ h-weather h-u-given-w))
+(display " = H(W,U) = ") (display h-joint)
+`} />
+
+    <!-- 3. Chain rule -->
+    <h3>The chain rule</h3>
+    <p>The chain rule generalizes: H(X<sub>1</sub>, ..., X<sub>n</sub>) = H(X<sub>1</sub>) + H(X<sub>2</sub>|X<sub>1</sub>) + ... + H(X<sub>n</sub>|X<sub>1</sub>,...,X<sub>n-1</sub>). Each new variable adds only its residual uncertainty, conditioned on everything before it.</p>
+
+    <SchemeRepl client:load initialCode={`; Chain rule: H(X,Y,Z) = H(X) + H(Y|X) + H(Z|X,Y)
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Three binary variables: X, Y, Z
+; Joint: 8 probabilities (XYZ = 000, 001, 010, 011, 100, 101, 110, 111)
+(define joint-xyz '(0.20 0.05 0.10 0.05 0.05 0.15 0.10 0.30))
+(define h-xyz (entropy joint-xyz))
+
+; Marginal of X: P(X=0) = sum first 4, P(X=1) = sum last 4
+(define px0 (+ 0.20 0.05 0.10 0.05))
+(define px1 (+ 0.05 0.15 0.10 0.30))
+(define h-x (entropy (list px0 px1)))
+
+; H(X,Y): marginalize over Z
+(define pxy '(0.25 0.15 0.20 0.40))
+(define h-xy (entropy pxy))
+
+; Chain rule check
+(define h-y-given-x (- h-xy h-x))
+(define h-z-given-xy (- h-xyz h-xy))
+
+(display "H(X)       = ") (display h-x) (newline)
+(display "H(Y|X)     = ") (display h-y-given-x) (newline)
+(display "H(Z|X,Y)   = ") (display h-z-given-xy) (newline)
+(display "sum         = ") (display (+ h-x h-y-given-x h-z-given-xy)) (newline)
+(display "H(X,Y,Z)   = ") (display h-xyz)
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X,Y)</td><td class="pr-4 text-green-300">(entropy joint)</td><td class="font-sans">Joint entropy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X|Y) = H(X,Y) &minus; H(Y)</td><td class="pr-4 text-green-300">(- h-joint h-y)</td><td class="font-sans">Conditional entropy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X,Y) = H(X) + H(Y|X)</td><td class="pr-4 text-green-300">(+ h-x h-y-given-x)</td><td class="font-sans">Chain rule</td></tr>
+          <tr><td class="py-2 pr-4">H(X|Y) &le; H(X)</td><td class="pr-4 text-green-300">(&lt;= h-x-given-y h-x)</td><td class="font-sans">Conditioning reduces entropy</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-02/">📡 Shannon 02</a> &mdash; entropy: expected surprise</li>
+      <li><a href="/reading/information-theory/shannon-04/">📡 Shannon 04</a> &mdash; mutual information</li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> &mdash; Markov kernels are conditional distributions: the categorical view</li>
+      <li><a href="https://en.wikipedia.org/wiki/Joint_entropy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Joint entropy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Conditional_entropy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Conditional entropy</a></li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Probability Ch.4</a> — conditional probability is the foundation of conditional entropy</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-02/", label: "Entropy" }} next={{ href: "/reading/information-theory/shannon-04/", label: "Mutual Information" }} />
+
+  </main>
+</Layout>

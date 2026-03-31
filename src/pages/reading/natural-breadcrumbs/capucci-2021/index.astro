@@ -1,0 +1,324 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Capucci 2021 — Towards Foundations of Categorical Cybernetics" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Towards Foundations of Categorical Cybernetics</h1>
+    <p class="text-gray-400 text-sm mb-6">Capucci, Gavranović, Hedges, Rischel · 2021 · <a href="https://arxiv.org/abs/2105.06332"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2105.06332</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> (open games, selection functions). 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Goals are <strong>predicates on optics</strong>. An agent is a parametrised optic (forward pass + backward pass) with a selection relation that says which actions are "good enough." Composing agents = composing optics = wiring forward and backward channels.</p>
+    </div>
+
+    <!-- 1. Optics: forward and backward -->
+    <h3>Optics — forward and backward</h3>
+    <p>An <strong>optic</strong> pairs a forward map (observation → action) with a backward map (action + consequence → updated state). Think lens from functional programming: get/set. In cybernetics, the forward pass is "act" and the backward pass is "learn from consequences."</p>
+
+    <!-- SVG: Lens / optic diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Lens box -->
+        <rect x="120" y="20" width="140" height="100" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="75" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.4">Lens</text>
+
+        <!-- Forward pass (top): S --> A, going right -->
+        <line x1="20" y1="48" x2="120" y2="48" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="115,44 125,48 115,52" fill="#4ade80"/>
+        <text x="20" y="40" fill="#4ade80" font-size="11" fill-opacity="0.7">S</text>
+        <text x="148" y="48" fill="#4ade80" font-size="10">get / view</text>
+        <line x1="260" y1="48" x2="360" y2="48" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="355,44 365,48 355,52" fill="#4ade80"/>
+        <text x="360" y="40" fill="#4ade80" font-size="11" fill-opacity="0.7">A</text>
+
+        <!-- Backward pass (bottom): A' --> S', going left -->
+        <line x1="360" y1="92" x2="260" y2="92" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="265,88 255,92 265,96" fill="#60a5fa"/>
+        <text x="355" y="108" text-anchor="end" fill="#60a5fa" font-size="11" fill-opacity="0.7">A'</text>
+        <text x="148" y="98" fill="#60a5fa" font-size="10">put / update</text>
+        <line x1="120" y1="92" x2="20" y2="92" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="25,88 15,92 25,96" fill="#60a5fa"/>
+        <text x="20" y="108" fill="#60a5fa" font-size="11" fill-opacity="0.7">S'</text>
+
+        <!-- Caption -->
+        <text x="190" y="136" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">forward: observe. backward: update from consequences.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; An optic: forward + backward
+; forward: observation -> action
+; backward: (observation, action, consequence) -> update
+
+(define (make-optic name fwd bwd)
+  (list name fwd bwd))
+
+(define (optic-fwd o) (cadr o))
+(define (optic-bwd o) (caddr o))
+
+; Thermostat optic
+(define thermostat
+  (make-optic 'thermostat
+    (lambda (temp) (if (< temp 20) 'heat 'cool))       ; forward: act
+    (lambda (temp action result)                         ; backward: learn
+      (list 'observed temp 'did action 'got result))))
+
+(display "fwd(18): ") (display ((optic-fwd thermostat) 18)) (newline)
+(display "fwd(25): ") (display ((optic-fwd thermostat) 25)) (newline)
+(display "bwd: ")
+(display ((optic-bwd thermostat) 18 'heat 21)) (newline)
+; Forward acts, backward learns from consequences
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Optic in Python: forward + backward
+class Optic:
+    def __init__(self, name, fwd, bwd):
+        self.name, self.fwd, self.bwd = name, fwd, bwd
+
+thermostat = Optic("thermostat",
+    fwd=lambda temp: "heat" if temp < 20 else "cool",
+    bwd=lambda temp, act, result: f"saw {temp}, did {act}, got {result}")
+
+print(f"fwd(18): {thermostat.fwd(18)}")
+print(f"bwd: {thermostat.bwd(18, 'heat', 21)}")
+`} />
+    </div>
+
+    <!-- 2. Parametrised optics -->
+    <h3>Parametrised optics — agents with tunable parameters</h3>
+    <p>A <strong>parametrised optic</strong> adds parameters: the forward map depends on a parameter (policy/weights), and the backward map produces a parameter update. This is the agent abstraction. The parameter is what gets updated by learning.</p>
+
+    <!-- SVG: Parametrised optic diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Lens box -->
+        <rect x="120" y="50" width="140" height="100" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="105" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">Para</text>
+
+        <!-- Parameter wire P from top -->
+        <line x1="190" y1="8" x2="190" y2="50" stroke="#ef4444" stroke-width="1.5"/>
+        <polygon points="186,45 190,55 194,45" fill="#ef4444"/>
+        <text x="198" y="18" fill="#ef4444" font-size="11" fill-opacity="0.7">P</text>
+        <text x="210" y="34" fill="#ef4444" font-size="9" fill-opacity="0.5">parameters</text>
+
+        <!-- Forward pass (top): S --> A -->
+        <line x1="20" y1="78" x2="120" y2="78" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="115,74 125,78 115,82" fill="#4ade80"/>
+        <text x="20" y="70" fill="#4ade80" font-size="11" fill-opacity="0.7">S</text>
+        <text x="148" y="78" fill="#4ade80" font-size="10">fwd(P, S)</text>
+        <line x1="260" y1="78" x2="360" y2="78" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="355,74 365,78 355,82" fill="#4ade80"/>
+        <text x="360" y="70" fill="#4ade80" font-size="11" fill-opacity="0.7">A</text>
+
+        <!-- Backward pass (bottom): A' --> S' -->
+        <line x1="360" y1="122" x2="260" y2="122" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="265,118 255,122 265,126" fill="#60a5fa"/>
+        <text x="355" y="138" text-anchor="end" fill="#60a5fa" font-size="11" fill-opacity="0.7">A'</text>
+        <text x="148" y="128" fill="#60a5fa" font-size="10">bwd</text>
+        <line x1="120" y1="122" x2="20" y2="122" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="25,118 15,122 25,126" fill="#60a5fa"/>
+        <text x="20" y="138" fill="#60a5fa" font-size="11" fill-opacity="0.7">S'</text>
+
+        <!-- Caption -->
+        <text x="190" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">parameter P controls the forward pass. backward pass updates the agent.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Parametrised optic: forward depends on parameter
+; backward produces parameter update
+
+(define (make-para-optic name fwd bwd)
+  (list name fwd bwd))
+
+; Agent with a threshold parameter
+(define agent
+  (make-para-optic 'threshold-agent
+    (lambda (param obs)                    ; fwd(param, obs)
+      (if (> obs param) 'accept 'reject))
+    (lambda (param obs action reward)      ; bwd -> param update
+      (if (> reward 0) param               ; good outcome: keep param
+          (+ param 1)))))                   ; bad outcome: raise threshold
+
+(define param 50)
+(display "param=50, obs=60: ") (display ((cadr agent) param 60)) (newline)
+(display "param=50, obs=40: ") (display ((cadr agent) param 40)) (newline)
+
+; Bad outcome -> update parameter
+(define new-param ((caddr agent) param 40 'reject -1))
+(display "bad outcome, new param: ") (display new-param)
+; 51 — threshold raised after bad experience
+`} />
+
+    <!-- 3. Selection relations -->
+    <h3>Selection relations — goals as predicates</h3>
+    <p>In Hedges 2018, a selection <em>function</em> picks the best action. Capucci generalizes to a selection <em>relation</em>: a predicate that says which actions are acceptable. Not "the best action" but "any action that's good enough." This is the cybernetic goal — a predicate on the optic's choices.</p>
+
+    <SchemeRepl client:load initialCode={`; Selection relation: which actions are acceptable?
+; Not "pick the best" but "which ones are good enough?"
+
+(define (make-goal name predicate)
+  (list name predicate))
+
+(define (satisfies? goal action context)
+  ((cadr goal) action context))
+
+; Goal: profit > 0
+(define profitable
+  (make-goal 'profitable
+    (lambda (action context)
+      (> (- (* action context) 10) 0))))
+
+; Which prices are acceptable at demand=5?
+(define prices '(1 2 3 4 5))
+(for-each (lambda (p)
+  (display "price=") (display p)
+  (display " at demand=5: ")
+  (display (if (satisfies? profitable p 5) "accept" "reject"))
+  (newline))
+prices)
+; Selection relation: all prices where profit > 0
+; Not a single best — a set of acceptable actions
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Real selection relations are on parametrised optics in a monoidal category. Same predicate structure.</p>
+
+    <!-- 4. Composing cybernetic agents -->
+    <h3>Composing agents — wiring optics</h3>
+    <p>Two parametrised optics compose by wiring: agent 1's forward output feeds agent 2's forward input (the action becomes the observation), and agent 2's backward output feeds agent 1's backward input (consequences flow back). The composition of goals is: the whole system satisfies the goal if each agent satisfies its local goal given the context provided by the other.</p>
+
+    <SchemeRepl client:load initialCode={`; Composing two agents: wire forward and backward
+
+(define (compose-optics o1 o2)
+  (list 'composed
+    (lambda (obs)    ; forward: chain
+      (let ((mid ((cadr o1) obs)))
+        ((cadr o2) mid)))
+    (lambda (obs consequence)  ; backward: reverse chain
+      (let* ((mid ((cadr o1) obs))
+             (bwd2 ((caddr o2) mid consequence))
+             (bwd1 ((caddr o1) obs bwd2)))
+        (list bwd1 bwd2)))))
+
+; Sensor: raw -> feature
+(define sensor
+  (list 'sensor
+    (lambda (raw) (* raw 0.1))           ; forward: scale
+    (lambda (raw err) (* err 10))))      ; backward: scale gradient
+
+; Actuator: feature -> action
+(define actuator
+  (list 'actuator
+    (lambda (feat) (if (> feat 5) 'on 'off))  ; forward: threshold
+    (lambda (feat consequence) consequence)))  ; backward: pass through
+
+(define system (compose-optics sensor actuator))
+
+(display "system fwd(100): ") (display ((cadr system) 100)) (newline)
+(display "system fwd(30):  ") (display ((cadr system) 30)) (newline)
+; Forward chains, backward chains in reverse
+`} />
+
+    <!-- 5. Goals compose -->
+    <h3>Goals compose like postconditions</h3>
+    <p>This is the bridge to Staton's Hoare logic. A goal on a composed system decomposes into goals on sub-agents — exactly like a Hoare postcondition decomposes via COMP. The "handshake" is the interface between agents. Cybernetic composition IS program composition, with the backward pass added for learning.</p>
+
+    <SchemeRepl client:load initialCode={`; Goals compose: local goals + compatible interfaces => global goal
+; Same structure as Hoare COMP
+
+(define (check-pipeline stages goals input)
+  (let loop ((val input) (ss stages) (gs goals) (i 1))
+    (if (null? ss) (begin (display "All goals satisfied.") (newline))
+        (let* ((stage (car ss))
+               (goal (car gs))
+               (output (stage val))
+               (ok (goal output)))
+          (display "Stage ") (display i)
+          (display ": ") (display val)
+          (display " -> ") (display output)
+          (display (if ok " [goal met]" " [FAILED]"))
+          (newline)
+          (if ok (loop output (cdr ss) (cdr gs) (+ i 1))
+                 (display "Pipeline goal violated."))))))
+
+(define stages (list
+  (lambda (x) (abs x))           ; stage 1: make positive
+  (lambda (x) (min x 100))       ; stage 2: cap at 100
+  (lambda (x) (/ x 10))))        ; stage 3: normalize
+
+(define goals (list
+  (lambda (x) (>= x 0))          ; post-stage-1: non-negative
+  (lambda (x) (<= x 100))        ; post-stage-2: bounded
+  (lambda (x) (<= x 10))))       ; post-stage-3: normalized
+
+(check-pipeline stages goals -57)
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Analogy.</strong> The goal-composition pattern is the same. The paper works with parametrised optics in a monoidal category, not plain function chains.</p>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Optic(S,A; S',A')</td><td class="pr-4 text-green-300">(make-optic name fwd bwd)</td><td class="font-sans">Forward + backward pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Para(C)</td><td class="pr-4 text-green-300">(make-para-optic ...)</td><td class="font-sans">Parametrised optic</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ε ⊆ X × K^X</td><td class="pr-4 text-green-300">(satisfies? goal action ctx)</td><td class="font-sans">Selection relation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">G₁ ; G₂</td><td class="pr-4 text-green-300">(compose-optics o1 o2)</td><td class="font-sans">Sequential composition</td></tr>
+          <tr><td class="py-2 pr-4">BestResp</td><td class="pr-4 text-green-300"># predicate on actions</td><td class="font-sans">Best response as goal predicate</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory (the predecessor)</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — goals as postconditions = Hoare triples</li>
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category where stochastic agents live</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/calculus/calc-05/">∫ Calculus Ch.5 Chain Rule</a> — the chain rule that lens composition categorifies</li>
+      <li><a href="/reading/cognitive-science/lovelace-04/">🧠 Lovelace Ch.4 Neural Networks</a> — backpropagation as the application of lens composition</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Cybernetics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cybernetics</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Optic_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Optic (computer science)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lens_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lens (computer science)</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use plain functions for optics and simple predicates for goals. The paper works with parametrised optics in a symmetric monoidal category, selection relations as profunctors, and a formal composition theorem for goals over mixed optics. For example: the agent composition on this page wires two functions sequentially. In the paper, the same construction works over a monoidal category of parametrised optics where the forward and backward channels live in different categories (the "mixed" in mixed optics) — enabling agents whose learning substrate differs from their action space. The composition pattern is identical. The categorical scaffolding is not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2105.06332"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for parametrised optics, §4 for selection relations and goals.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a composed cybernetic system — agent composition via parametrised optics is its core structural pattern. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/hedges-2018/", label: "Hedges 2018 · 6 of 21" }} next={{ href: "/reading/natural-breadcrumbs/baez-fritz-2011/", label: "Baez, Fritz 2011 · 8 of 21" }} />
+  </main>
+</Layout>

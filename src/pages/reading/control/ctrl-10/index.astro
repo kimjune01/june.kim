@@ -1,0 +1,119 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.10 — Lyapunov Stability" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Lyapunov Stability</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Lyapunov_stability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lyapunov stability</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Lyapunov's direct method</strong>: find an energy-like function V(x) that is positive and always decreasing along trajectories. If such a function exists, the equilibrium is stable. You never need to solve the differential equation. The function V is a <strong>Lyapunov function</strong>.</p>
+    </div>
+
+    <h3>Energy-based stability</h3>
+    <p>A ball at the bottom of a bowl is stable: push it, and it rolls back. A ball on top of a hill is unstable: push it, and it rolls away. The Lyapunov function is the "height" function. If the system always moves downhill (V decreases), it converges to the bottom (equilibrium). You don't need to compute the trajectory. You just need to show that V keeps decreasing.</p>
+
+    <!-- SVG: Ball in bowl vs ball on hill -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Stable: ball in bowl -->
+        <text x="110" y="25" text-anchor="middle" fill="#22c55e" font-size="12" fill-opacity="0.7">stable</text>
+        <!-- Bowl -->
+        <path d="M 20 140 Q 110 200 200 140" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <!-- Ball at bottom -->
+        <circle cx="110" cy="170" r="10" fill="#22c55e" fill-opacity="0.3" stroke="#22c55e" stroke-width="1.5"/>
+        <!-- Arrows showing return to equilibrium -->
+        <path d="M 55 148 Q 70 165 90 170" fill="none" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="88,167 93,172 86,173" fill="#22c55e" fill-opacity="0.5"/>
+        <path d="M 165 148 Q 150 165 130 170" fill="none" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="132,167 127,172 134,173" fill="#22c55e" fill-opacity="0.5"/>
+        <!-- V decreasing label -->
+        <text x="110" y="195" text-anchor="middle" fill="#22c55e" font-size="9" fill-opacity="0.5">V decreases toward minimum</text>
+
+        <!-- Unstable: ball on hill -->
+        <text x="330" y="25" text-anchor="middle" fill="#ef4444" font-size="12" fill-opacity="0.7">unstable</text>
+        <!-- Hill -->
+        <path d="M 240 170 Q 330 80 420 170" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <!-- Ball at top -->
+        <circle cx="330" cy="107" r="10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5"/>
+        <!-- Arrows showing divergence -->
+        <path d="M 310 115 Q 290 135 270 155" fill="none" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="273,152 267,158 275,157" fill="#ef4444" fill-opacity="0.5"/>
+        <path d="M 350 115 Q 370 135 390 155" fill="none" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="387,152 393,158 385,157" fill="#ef4444" fill-opacity="0.5"/>
+        <!-- V increasing label -->
+        <text x="330" y="195" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.5">perturbation grows</text>
+      </svg>
+    </div>
+
+    <h3>The conditions</h3>
+    <p>A function V(x) is a Lyapunov function for the equilibrium x=0 if: (1) V(0) = 0, (2) V(x) is greater than 0 for x not equal to 0 (positive definite), and (3) dV/dt is less than or equal to 0 along trajectories (V is non-increasing). If dV/dt is strictly negative (not just non-increasing), the equilibrium is <strong>asymptotically stable</strong>: the state converges to zero.</p>
+
+    <h3>LaSalle's invariance principle</h3>
+    <p>What if dV/dt is only zero on some set, not everywhere? <a href="https://en.wikipedia.org/wiki/LaSalle%27s_invariance_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>LaSalle's principle</a> says: the system converges to the largest invariant set where dV/dt = 0. This handles cases where the Lyapunov function is not strictly decreasing everywhere but still guarantees convergence.</p>
+
+    <SchemeRepl client:load initialCode={`; Lyapunov analysis: x' = -x^3
+; Candidate V(x) = x^2 / 2
+; dV/dt = x * x' = x * (-x^3) = -x^4 <= 0
+; V is positive definite, dV/dt is negative definite -> stable
+
+(define dt 0.01)
+
+(define (simulate x steps)
+  (if (= steps 0)
+    (begin (display "Done.") (newline))
+    (let* ((x-dot (* -1.0 x x x))         ; x' = -x^3
+           (V (* 0.5 x x))                 ; V(x) = x^2/2
+           (dVdt (* -1.0 x x x x))         ; dV/dt = -x^4
+           (new-x (+ x (* x-dot dt))))
+      (if (= 0 (modulo steps 50))
+        (begin
+          (display "  x=") (display x)
+          (display "  V=") (display V)
+          (display "  dV/dt=") (display dVdt)
+          (newline))
+        'skip)
+      (simulate new-x (- steps 1)))))
+
+(display "Lyapunov stability: x'=-x^3, V=x^2/2") (newline)
+(display "(V decreases at every step -> stable)") (newline)
+(simulate 2.0 500)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lyapunov analysis: x' = -x^3
+# V(x) = x^2/2, dV/dt = -x^4 < 0 (stable)
+dt = 0.01
+x = 2.0
+
+print("Lyapunov stability: x'=-x^3, V=x^2/2")
+print("(V decreases at every step -> stable)")
+for step in range(500):
+    V = 0.5 * x**2
+    dVdt = -x**4
+    if step % 50 == 0:
+        print(f"  step={step:3d}  x={x:+.4f}  V={V:.6f}  dV/dt={dVdt:.6f}")
+    x += (-x**3) * dt
+
+print(f"  final   x={x:+.4f}  V={0.5*x**2:.6f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-04/">&#x221E; Lebl Ch. 4 — Continuity</a> &#x2014; Lyapunov functions must be continuous</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-09/", label: "Kalman Filter" }} />
+
+  </main>
+</Layout>

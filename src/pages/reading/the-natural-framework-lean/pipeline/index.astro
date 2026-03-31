@@ -1,0 +1,131 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Pipeline.lean — Six stages, one cycle" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Pipeline.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Pipeline.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Defines the six-stage information processing pipeline from <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the Natural Framework</a>: five forward stages (Perceive, Cache, Filter, Attend, Remember) and one backward pass (Consolidate).</p>
+    </div>
+
+    <h3>Step</h3>
+    <p>An enumeration of the six roles. Five are forward stages that process data sequentially. Consolidate is the backward pass that updates policy inside the substrate.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">inductive</span> <span class="text-green-300">Step</span> <span class="text-blue-300">where</span>
+  | perceive | cache | filter
+  | attend | consolidate | remember</code></pre>
+
+    <h3>InterfaceTypes</h3>
+    <p>The seven types that flow between pipeline stages: raw input, encoded, indexed, selected, ranked, policy, and persisted. Each stage consumes one type and produces the next.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">InterfaceTypes</span> <span class="text-blue-300">where</span>
+  raw : Type        -- environment input
+  encoded : Type    -- after Perceive
+  indexed : Type    -- after Cache
+  selected : Type   -- after Filter
+  ranked : Type     -- after Attend
+  policy : Type     -- parameterizes Attend; written by Consolidate
+  persisted : Type  -- after Remember (feeds back to Perceive)</code></pre>
+
+    <h3>Pipeline</h3>
+    <p>A complete pipeline bundles five forward kernels and one backward kernel. All are monadic &mdash; when the monad is <code>Id</code>, everything is deterministic. Attend takes a policy parameter; Consolidate reads persisted state and updates policy.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Pipeline</span> (M : Type &rarr; Type) [Monad M] (I : InterfaceTypes) <span class="text-blue-300">where</span>
+  perceive    : Kernel M I.raw I.encoded
+  cache       : Kernel M I.encoded I.indexed
+  filter      : Kernel M I.indexed I.selected
+  attend      : I.policy &rarr; Kernel M I.selected I.ranked
+  remember    : Kernel M I.ranked I.persisted
+  consolidate : I.policy &rarr; Kernel M I.persisted I.policy</code></pre>
+
+    <SchemeRepl client:load initialCode={`; The six-stage pipeline as function composition
+; Each stage: one type in, one type out
+
+(define (perceive raw)
+  (string-append "enc:" raw))
+
+(define (cache encoded)
+  (list encoded (string-append encoded "#2")))
+
+(define (filter indexed)
+  (list (car indexed)))  ; keep only first
+
+(define (attend policy selected)
+  (map (lambda (s) (string-append s "|" policy))
+       selected))
+
+(define (remember ranked) ranked)  ; lossless
+
+; Forward pass: compose perceive through attend
+(define (forward raw policy)
+  (attend policy
+    (filter (cache (perceive raw)))))
+
+(display "forward('hello', 'top-1'): ")
+(display (forward "hello" "top-1"))
+(newline)
+(display "forward('hello', 'diverse'): ")
+(display (forward "hello" "diverse"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# The six-stage pipeline as function composition
+# Each stage: one type in, one type out
+
+def perceive(raw):
+    return "enc:" + raw
+
+def cache(encoded):
+    return [encoded, encoded + "#2"]
+
+def filter_stage(indexed):
+    return [indexed[0]]  # keep only first
+
+def attend(policy, selected):
+    return [s + "|" + policy for s in selected]
+
+def remember(ranked):
+    return ranked  # lossless
+
+# Forward pass: compose perceive through attend
+def forward(raw, policy):
+    return attend(policy, filter_stage(cache(perceive(raw))))
+
+print(f"forward('hello', 'top-1'): {forward('hello', 'top-1')}")
+print(f"forward('hello', 'diverse'): {forward('hello', 'diverse')}")
+`} />
+    </div>
+
+    <h3>Pipeline.forward</h3>
+    <p>The forward data path: raw input flows through Perceive, Cache, Filter, and Attend (parameterized by current policy), producing ranked output. Written as explicit binds for proof tractability (easier for Lean to unfold).</p>
+
+    <h3>Pipeline.cycle</h3>
+    <p>One full cycle: run the forward pass, persist the result via Remember, then run Consolidate to derive updated policy. Returns the new policy and persisted state as a pair.</p>
+
+    <h3>Pipeline.iterate</h3>
+    <p>Run the pipeline n times over a stream of inputs. Each iteration chains via bind, threading the policy through cycles.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">Kleisli.lean</a> &mdash; imported; every pipeline stage is a Kernel</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; attaches postconditions to each pipeline stage</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; proves the stages compose correctly via handshake conditions</li>
+      <li><a href="/reading/the-natural-framework-lean/uniqueness/">Uniqueness.lean</a> &mdash; proves this ordering is the only valid one</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+      <li><a href="/reading/kura-2026/">🍞 Kura 2026</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/axioms/", label: "Axioms.lean · 3 of 25" }} next={{ href: "/reading/the-natural-framework-lean/contracts/", label: "Contracts.lean · 5 of 25" }} />
+  </main>
+</Layout>

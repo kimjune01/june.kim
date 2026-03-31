@@ -1,0 +1,214 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 02 — Entropy: expected surprise" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to info theory</a>
+
+    <h1>Entropy: expected surprise</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Entropy</strong> H(X) = &minus;&sum; P(x) log<sub>2</sub> P(x) is the <strong>average surprise</strong> of a random variable. A fair coin has maximum entropy (1 bit). A loaded coin has less. Certainty has zero.</p>
+    </div>
+
+    <!-- 1. From surprise to entropy -->
+    <h3>From surprise to entropy</h3>
+    <p>Self-information measures the surprise of a single event. Entropy averages that surprise over the entire distribution. If you know the probabilities, entropy tells you how many bits per symbol you need on average to encode messages from the source. Shannon invented this to solve the telegraph problem: how to send messages efficiently.</p>
+
+    <!-- SVG: Binary entropy curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 230" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="190" x2="370" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="190" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- X-axis label -->
+        <text x="210" y="218" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">p (probability of heads)</text>
+        <!-- Y-axis label -->
+        <text x="12" y="105" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,12,105)">H(p) bits</text>
+        <!-- X-axis ticks -->
+        <text x="50" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="210" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.5</text>
+        <text x="370" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <!-- Y-axis ticks -->
+        <text x="44" y="193" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="44" y="28" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <!-- Grid line at H=1 -->
+        <line x1="50" y1="25" x2="370" y2="25" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Binary entropy curve: H(p) = -p log p - (1-p) log(1-p) -->
+        <!-- Sampled at p = 0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5 and mirror -->
+        <polyline points="53,179 66,147 82,120 98,100 114,83 130,70 146,60 162,52 178,46 194,43 210,42 226,43 242,46 258,52 274,60 290,70 306,83 322,100 338,120 354,147 367,179" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <!-- Peak marker at p=0.5 -->
+        <circle cx="210" cy="42" r="4" fill="#60a5fa" fill-opacity="0.5" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="210" y="35" text-anchor="middle" fill="#60a5fa" font-size="9">max = 1 bit</text>
+        <!-- Loaded coin marker at p=0.9 -->
+        <circle cx="338" cy="120" r="4" fill="#f59e0b" fill-opacity="0.5" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="355" y="113" text-anchor="start" fill="#f59e0b" font-size="9">0.47 bits</text>
+        <text x="355" y="125" text-anchor="start" fill="#f59e0b" font-size="8" fill-opacity="0.6">p = 0.9</text>
+        <!-- Caption -->
+        <text x="210" y="228" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">H(p) = &minus;p log p &minus; (1&minus;p) log(1&minus;p)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Entropy: H(X) = -sum P(x) log2 P(x)
+; The average surprise of a random variable
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Fair coin: P(H) = P(T) = 0.5
+(display "fair coin:   ")
+(display (entropy '(0.5 0.5)))
+(display " bits") (newline)
+
+; Loaded coin: P(H) = 0.9, P(T) = 0.1
+(display "loaded coin: ")
+(display (entropy '(0.9 0.1)))
+(display " bits") (newline)
+
+; Fair die: each face P = 1/6
+(define die-probs (list (/ 1.0 6) (/ 1.0 6) (/ 1.0 6)
+                        (/ 1.0 6) (/ 1.0 6) (/ 1.0 6)))
+(display "fair die:    ")
+(display (entropy die-probs))
+(display " bits") (newline)
+
+; Certain event: P = 1
+(display "certain:     ")
+(display (entropy '(1.0)))
+(display " bits")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+print(f"fair coin:   {entropy([0.5, 0.5]):.4f} bits")
+print(f"loaded coin: {entropy([0.9, 0.1]):.4f} bits")
+print(f"fair die:    {entropy([1/6]*6):.4f} bits")
+print(f"certain:     {entropy([1.0]):.4f} bits")
+`} />
+    </div>
+
+    <!-- 2. Entropy is maximized by uniform -->
+    <h3>Uniform distributions maximize entropy</h3>
+    <p>Among all distributions over n outcomes, the uniform distribution P(x) = 1/n has maximum entropy H = log<sub>2</sub>(n). Any deviation from uniformity reduces entropy. This is because concentrating probability on some outcomes reduces average surprise.</p>
+
+    <SchemeRepl client:load initialCode={`; Entropy is maximized by the uniform distribution
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Maximum entropy for n outcomes = log2(n)
+(display "max H for 2 outcomes: ") (display (log2 2)) (newline)
+(display "max H for 6 outcomes: ") (display (log2 6)) (newline)
+(display "max H for 8 outcomes: ") (display (log2 8)) (newline)
+
+; Deviations from uniform always decrease H
+(display "uniform (3): ") (display (entropy '(0.333 0.333 0.334))) (newline)
+(display "skewed (3):  ") (display (entropy '(0.7 0.2 0.1))) (newline)
+(display "peaked (3):  ") (display (entropy '(0.98 0.01 0.01)))
+`} />
+
+    <!-- 3. Shannon's telegraph example -->
+    <h3>Shannon's telegraph example</h3>
+    <p>Shannon's original motivation: English text is not uniform. The letter E appears far more often than Z. Because the distribution is skewed, the entropy per letter is lower than log<sub>2</sub>(27) = 4.75 bits. Shannon estimated about 1 to 1.5 bits per character in English. That gap is what compression exploits, and it is the principle behind <a href="https://june.kim/context-density"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>context density</a> as a measure of how much meaning is packed into a given span of text.</p>
+
+    <SchemeRepl client:load initialCode={`; English is not uniform: entropy per letter is much
+; less than log2(27) = 4.75 bits
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Uniform over 27 symbols (26 letters + space)
+(define uniform-27
+  (let loop ((n 27) (acc '()))
+    (if (= n 0) acc
+        (loop (- n 1) (cons (/ 1.0 27) acc)))))
+
+(display "uniform 27:  ")
+(display (entropy uniform-27))
+(display " bits/char") (newline)
+
+; Approximate English letter frequencies (top 6 + rest lumped)
+; E=12.7%, T=9.1%, A=8.2%, O=7.5%, I=7.0%, N=6.7%, rest~48.8% over 21
+(define english-approx
+  (list 0.127 0.091 0.082 0.075 0.070 0.067
+        0.063 0.060 0.054 0.043 0.040 0.037
+        0.034 0.029 0.025 0.024 0.020 0.019
+        0.015 0.010 0.007 0.007 0.006 0.005
+        0.002 0.001 0.001))
+
+(display "English:     ")
+(display (entropy english-approx))
+(display " bits/char") (newline)
+
+; Shannon estimated 1.0-1.5 bits/char accounting
+; for sequential dependencies (bigrams, trigrams...)
+(display "Shannon est: ~1.0-1.5 bits/char with context")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X) = &minus;&sum; p log p</td><td class="pr-4 text-green-300">(entropy probs)</td><td class="font-sans">Shannon entropy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X) &le; log n</td><td class="pr-4 text-green-300">(log2 n)</td><td class="font-sans">Maximum entropy (uniform)</td></tr>
+          <tr><td class="py-2 pr-4">H(p, 1&minus;p)</td><td class="pr-4 text-green-300">(entropy (list p (- 1 p)))</td><td class="font-sans">Binary entropy function</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-01/">📡 Shannon 01</a> &mdash; surprise: the atomic unit</li>
+      <li><a href="/reading/information-theory/shannon-03/">📡 Shannon 03</a> &mdash; joint and conditional entropy</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez &amp; Fritz 2011</a> &mdash; uniqueness: Shannon entropy is the only functor satisfying these axioms</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> &mdash; diversity = exp(H): entropy measures effective number of types</li>
+      <li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Entropy (information theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Binary_entropy_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Binary entropy function</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-01/", label: "Surprise" }} next={{ href: "/reading/information-theory/shannon-03/", label: "Joint and Conditional" }} />
+
+  </main>
+</Layout>

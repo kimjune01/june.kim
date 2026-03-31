@@ -1,0 +1,237 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Chen, Vigneaux 2023 — Categorical Magnitude and Entropy" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Categorical Magnitude and Entropy</h1>
+    <p class="text-gray-400 text-sm mb-6">Stephanie Chen & Juan Pablo Vigneaux · 2023 · <a href="https://arxiv.org/abs/2303.00879"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2303.00879</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/leinster-2021/">🍞 Leinster 2021</a> (magnitude, Hill numbers). <a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> (entropy characterization) helps.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a> and <a href="https://en.wikipedia.org/wiki/Magnitude_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>magnitude</a> are the same invariant in disguise. Under a uniform distribution, log(magnitude) = entropy. The paper unifies them through a single categorical construction — the Euler characteristic of an enriched category.</p>
+    </div>
+
+    <!-- SVG: Probability distribution = Metric space, bridged by magnitude -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 540 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left side: probability distribution (bars) -->
+        <text x="115" y="22" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">probability distribution</text>
+        <line x1="50" y1="170" x2="180" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="170" x2="50" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Bars (uniform over 4) -->
+        <rect x="60" y="80" width="22" height="90" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="88" y="80" width="22" height="90" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="116" y="80" width="22" height="90" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="144" y="80" width="22" height="90" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <text x="45" y="85" text-anchor="end" fill="currentColor" font-size="8" fill-opacity="0.4">1/4</text>
+        <text x="115" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">H = log 4</text>
+
+        <!-- Right side: metric space (dots with distances) -->
+        <text x="425" y="22" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">metric space</text>
+        <circle cx="380" cy="100" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+        <circle cx="410" cy="140" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+        <circle cx="440" cy="80" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+        <circle cx="470" cy="130" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+        <!-- Distance lines -->
+        <line x1="385" y1="100" x2="407" y2="138" stroke="#f59e0b" stroke-width="0.7" stroke-opacity="0.2"/>
+        <line x1="385" y1="98" x2="435" y2="82" stroke="#f59e0b" stroke-width="0.7" stroke-opacity="0.2"/>
+        <line x1="413" y1="138" x2="467" y2="132" stroke="#f59e0b" stroke-width="0.7" stroke-opacity="0.2"/>
+        <line x1="443" y1="82" x2="467" y2="128" stroke="#f59e0b" stroke-width="0.7" stroke-opacity="0.2"/>
+        <text x="425" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">magnitude = 4</text>
+
+        <!-- Bridge arrow -->
+        <line x1="200" y1="105" x2="360" y2="105" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3" stroke-dasharray="6,4"/>
+        <polygon points="360,105 352,100 352,110" fill="currentColor" fill-opacity="0.3"/>
+        <polygon points="200,105 208,100 208,110" fill="currentColor" fill-opacity="0.3"/>
+        <text x="280" y="95" text-anchor="middle" fill="#4ade80" font-size="10" fill-opacity="0.7">both = Euler</text>
+        <text x="280" y="110" text-anchor="middle" fill="#4ade80" font-size="10" fill-opacity="0.7">characteristic</text>
+        <text x="280" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">log |A| = H(p)</text>
+
+        <!-- Bottom caption -->
+        <text x="270" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">same functor, different enrichment</text>
+      </svg>
+    </div>
+
+    <h3>Entropy from a uniform distribution</h3>
+    <p>Shannon entropy of a uniform distribution over n outcomes is log(n). Magnitude of n equally-spaced points is n. So log(magnitude) = log(n) = entropy. This is the simplest case of the unification.</p>
+
+    <SchemeRepl client:load initialCode={`; Uniform case: log(magnitude) = entropy
+
+(define (shannon-entropy p)
+  (- (apply + (map (lambda (pi)
+    (if (> pi 0) (* pi (log pi)) 0)) p))))
+
+(define (log-magnitude-uniform n)
+  ; For n equally-spaced points, magnitude = n
+  (log n))
+
+(for-each (lambda (n)
+  (let* ((p (make-list n (/ 1.0 n)))
+         (H (shannon-entropy p))
+         (logM (log-magnitude-uniform n)))
+    (display "n=") (display n)
+    (display " H=") (display H)
+    (display " log|A|=") (display logM)
+    (display (if (< (abs (- H logM)) 0.0001) " ✓" " ✗"))
+    (newline)))
+  '(2 3 5 10 20))
+; They agree everywhere. Not a coincidence.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy_uniform(n):
+    return math.log(n)
+
+def log_magnitude_uniform(n):
+    return math.log(n)  # magnitude of n distinct points = n
+
+for n in [2, 3, 5, 10, 20]:
+    H = entropy_uniform(n)
+    logM = log_magnitude_uniform(n)
+    print(f"  n={n:2d}: H={H:.4f}, log|A|={logM:.4f} {'match' if abs(H-logM)<0.001 else 'differ'}")
+`} />
+    </div>
+
+    <h3>Beyond uniform: the weighted case</h3>
+    <p>For non-uniform distributions, the connection goes through <strong>weighted magnitude</strong>. Given a metric space with a probability distribution (weights), the log of the weighted magnitude recovers the entropy of that distribution. The uniform case is the special case where all weights are equal.</p>
+
+    <SchemeRepl client:load initialCode={`; Weighted magnitude: assign weights to points
+; For discrete points with metric d(i,j) = infinity if i≠j:
+; magnitude with weights w = sum(w_i) when all pairs are "far"
+; In this trivial metric, log(sum(w)) relates to entropy
+
+(define (shannon-entropy p)
+  (- (apply + (map (lambda (pi)
+    (if (> pi 0) (* pi (log pi)) 0)) p))))
+
+; Non-uniform distribution
+(define p '(0.5 0.3 0.2))
+
+; Exponential of entropy = effective number of outcomes
+(define exp-H (exp (shannon-entropy p)))
+
+(display "p = ") (display p) (newline)
+(display "H(p) = ") (display (shannon-entropy p)) (newline)
+(display "exp(H) = ") (display exp-H) (newline)
+(display "# outcomes = ") (display (length p)) (newline)
+; exp(H) < 3: non-uniform distribution has fewer
+; "effective" outcomes than actual outcomes.
+; This is the diversity-magnitude bridge.
+`} />
+
+    <h3>The Euler characteristic connection</h3>
+    <p>Both entropy and magnitude arise as the Euler characteristic of an enriched category. A finite metric space is a category enriched over [0,∞). Its Euler characteristic is the magnitude. A finite probability space is a category enriched over [0,1]. Its Euler characteristic is exp(entropy). Same construction, different enrichment.</p>
+
+    <SchemeRepl client:load initialCode={`; Euler characteristic = magnitude for enriched categories
+; Finite metric space enriched over [0, infinity)
+; Finite probability space enriched over [0, 1]
+
+; For a 3-point metric space with distances:
+(define (similarity d) (exp (- d)))
+
+; Points at distances 0, 1, 2 from each other
+(define Z '((1.0    0.368  0.135)
+            (0.368  1.0    0.368)
+            (0.135  0.368  1.0)))
+; Z_ij = e^(-d_ij), diagonal = 1
+
+; Magnitude = sum of weights w where Zw = 1
+; For well-separated points, magnitude ~ number of points
+; For clustered points, magnitude ~ 1
+
+(display "Similarity matrix Z:") (newline)
+(for-each (lambda (row)
+  (display "  ") (display row) (newline)) Z)
+(display "Well-separated: magnitude ~ 3") (newline)
+(display "If all distances -> 0: magnitude -> 1") (newline)
+(display "Same structure gives entropy via different enrichment.")
+`} />
+
+    <h3>Why this matters</h3>
+    <p>The unification means entropy and magnitude aren't separate concepts that happen to look similar. They're the same functor evaluated on different enriched categories. <a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, and Leinster</a> characterized entropy as the unique information loss measure. <a href="/reading/natural-breadcrumbs/leinster-2021/">🍞 Leinster</a> characterized magnitude as the unique notion of size for metric spaces. Chen and Vigneaux show these uniqueness results are two faces of one theorem.</p>
+
+    <SchemeRepl client:load initialCode={`; The bridge: same construction, two enrichments
+; Enrichment [0, inf) -> magnitude (geometric size)
+; Enrichment [0, 1]   -> exp(entropy) (information content)
+
+(define (exp-entropy p)
+  (exp (- (apply + (map (lambda (pi)
+    (if (> pi 0) (* pi (log pi)) 0)) p)))))
+
+; Uniform: both agree
+(define uniform-4 '(0.25 0.25 0.25 0.25))
+(display "uniform(4): exp(H) = ")
+(display (exp-entropy uniform-4))
+(display ", magnitude of 4 distinct points = 4")
+(newline)
+
+; Non-uniform: exp(H) gives effective size
+(define skewed '(0.9 0.05 0.03 0.02))
+(display "skewed: exp(H) = ")
+(display (exp-entropy skewed))
+(newline)
+(display "Fewer effective outcomes — same as fewer effective points.")
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|A|</td><td class="pr-4 text-green-300">; magnitude (Euler characteristic)</td><td class="font-sans">Size of enriched category A</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(p)</td><td class="pr-4 text-green-300">(shannon-entropy p)</td><td class="font-sans">Shannon entropy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">log|A| = H</td><td class="pr-4 text-green-300">(log magnitude) = H</td><td class="font-sans">The unification (uniform case)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Z_ij = e^(-d_ij)</td><td class="pr-4 text-green-300">(similarity d)</td><td class="font-sans">Similarity matrix from distances</td></tr>
+          <tr><td class="py-2 pr-4">V-Cat</td><td class="pr-4 text-green-300">; category enriched over V</td><td class="font-sans">Enriched category (V = metric or probability)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/leinster-2021/">🍞 Leinster 2021</a> — magnitude and diversity (the metric side)</li>
+      <li><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> — entropy characterization (the information side)</li>
+      <li><a href="/reading/natural-breadcrumbs/sato-2023/">🍞 Sato 2023</a> — divergences on monads (related information measures)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Magnitude_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Magnitude</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Enriched_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Enriched category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Euler_characteristic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Euler characteristic</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The examples demonstrate the uniform-case identity (log magnitude = entropy) and the intuition behind weighted magnitude. Chen and Vigneaux's actual construction works through the Euler characteristic of categories enriched over a quantale, unifying the metric-space and probability-space cases via a change-of-base functor. For example: the "same construction, two enrichments" example on this page computes exp(H) and compares it to a count. In the paper, the comparison is between two Euler characteristics: one for a [0,∞)-enriched category (metric space) and one for a [0,1]-enriched category (probability space), connected by a lax monoidal functor between the enrichment bases. The numerical agreement is the same; the functorial explanation is not.</p>
+    <p>Uniform case: <strong class="text-green-400">Exact.</strong> Non-uniform and magnitude examples: <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2303.00879"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §2 for the enriched category setup, §4 for the magnitude-entropy theorem.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The magnitude-entropy unification gives the Natural Framework's information budget a single invariant — compression ratio is the same functor applied to different enriched categories. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/ho-wu-2026/", label: "Ho, Wu 2026 · 20 of 21" }} />
+  </main>
+</Layout>

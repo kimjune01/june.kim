@@ -1,0 +1,442 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.7 — Functors" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Functors</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/01/20/functors/">Category Theory for Programmers, Ch. 7</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-01/">🍞 Ch1</a> (Category), <a href="/reading/category-theory/milewski-02/">🍞 Ch2</a> (Types and Functions). 7 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>functor</strong> is a structure-preserving map between categories. It maps objects to objects and morphisms to morphisms, so that composition and identity are preserved: <code>fmap id = id</code> and <code>fmap (g . f) = fmap g . fmap f</code>. Every container type you already use &mdash; list, optional, function &mdash; is a functor. <code>fmap</code> is the operation that makes it one.</p>
+    </div>
+
+    <!-- 1. What is a functor? -->
+    <h3>What is a functor?</h3>
+    <p>A functor maps one category to another. It sends each object to an object and each morphism to a morphism, preserving the wiring: if <code>h = g . f</code> in the source category, then <code>F(h) = F(g) . F(f)</code> in the target. In programming, both categories are the same (types and functions), so a functor is a type constructor plus an <code>fmap</code> that lifts functions inside the container. Functors also show up in unexpected places: <a href="https://june.kim/licenses-are-functors"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>software licenses are functors</a> from a derivation category to an obligations category, preserving the composition of derivative works.</p>
+
+    <!-- SVG: Functor mapping -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Category C box -->
+        <rect x="20" y="20" width="160" height="140" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="100" y="16" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.5">C</text>
+
+        <!-- Objects in C -->
+        <circle cx="60" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="60" y="60" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">a</text>
+        <circle cx="150" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="150" y="60" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">b</text>
+
+        <!-- Arrow f in C -->
+        <line x1="68" y1="70" x2="142" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="140,66 148,70 140,74" fill="currentColor"/>
+        <text x="105" y="90" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Category D box -->
+        <rect x="300" y="20" width="160" height="140" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="380" y="16" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.5">D</text>
+
+        <!-- Objects in D -->
+        <circle cx="330" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="330" y="58" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(a)</text>
+        <circle cx="440" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="440" y="58" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(b)</text>
+
+        <!-- Arrow F(f) in D -->
+        <line x1="338" y1="70" x2="432" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="430,66 438,70 430,74" fill="currentColor"/>
+        <text x="385" y="90" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(f)</text>
+
+        <!-- Dashed arrow F from C to D -->
+        <line x1="185" y1="90" x2="295" y2="90" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <polygon points="293,86 301,90 293,94" fill="currentColor" fill-opacity="0.5"/>
+        <text x="240" y="108" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.5">F</text>
+
+        <!-- Caption -->
+        <text x="240" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">functor F maps objects and arrows, preserving structure</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A functor has two parts:
+; 1. A type constructor: wraps values (list, maybe, etc.)
+; 2. fmap: lifts a function to work inside the wrapper
+;
+; fmap :: (a -> b) -> F(a) -> F(b)
+; "Give me a function on plain values,
+;  I'll give you a function on wrapped values."
+
+; The simplest functor: a box holding one value
+(define (box v) (list 'box v))
+(define (unbox b) (cadr b))
+
+(define (fmap-box f b)
+  (box (f (unbox b))))
+
+(define b (box 5))
+(display "box: ") (display b) (newline)
+(display "fmap add1: ") (display (fmap-box add1 b)) (newline)
+(display "fmap square: ") (display (fmap-box (lambda (x) (* x x)) b))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simplest functor: a box holding one value
+class Box:
+    def __init__(self, v): self.v = v
+    def __repr__(self): return f"Box({self.v})"
+
+def fmap_box(f, b):
+    return Box(f(b.v))
+
+b = Box(5)
+print(f"box: {b}")
+print(f"fmap add1: {fmap_box(lambda x: x+1, b)}")
+print(f"fmap square: {fmap_box(lambda x: x*x, b)}")
+`} />
+    </div>
+
+    <!-- 2. The Maybe functor -->
+    <h3>The Maybe functor</h3>
+    <p><code>Maybe</code> either holds a value (<code>just</code>) or nothing. Its <code>fmap</code> applies the function when there's a value and passes through <code>nothing</code> unchanged. This is how you transform values that might not exist, without checking for null at every step.</p>
+
+    <SchemeRepl client:load initialCode={`; Maybe: 'nothing or (list 'just value)
+(define nothing 'nothing)
+(define (just v) (list 'just v))
+(define (just? m) (and (pair? m) (eq? (car m) 'just)))
+(define (from-just m) (cadr m))
+
+; fmap for Maybe
+(define (fmap-maybe f m)
+  (if (just? m)
+      (just (f (from-just m)))
+      nothing))
+
+(display "fmap add1 (just 3): ")
+(display (fmap-maybe add1 (just 3))) (newline)
+
+(display "fmap add1 nothing:  ")
+(display (fmap-maybe add1 nothing)) (newline)
+
+; Chain two fmaps
+(define result
+  (fmap-maybe (lambda (x) (* x x))
+    (fmap-maybe add1 (just 4))))
+(display "fmap square (fmap add1 (just 4)): ")
+(display result)
+; (just 25) — add1 gives 5, square gives 25
+`} />
+
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maybe functor in Python (using None for nothing)
+def fmap_maybe(f, m):
+    if m is None:
+        return None
+    return f(m)
+
+print(f"fmap add1 (just 3): {fmap_maybe(lambda x: x+1, 3)}")
+print(f"fmap add1 nothing:  {fmap_maybe(lambda x: x+1, None)}")
+
+# Chain two fmaps
+result = fmap_maybe(lambda x: x*x, fmap_maybe(lambda x: x+1, 4))
+print(f"fmap square (fmap add1 (just 4)): {result}")
+# 25
+`} />
+    </div>
+
+    <!-- 3. The List functor -->
+    <h3>The List functor</h3>
+    <p>Lists are functors. <code>fmap</code> for lists is <code>map</code>: apply a function to every element, preserving the list structure. This is the functor most programmers already use without knowing it.</p>
+
+    <SchemeRepl client:load initialCode={`; List functor: fmap = map
+; Applies f to every element, preserves structure
+
+(define (fmap-list f xs)
+  (if (null? xs) '()
+      (cons (f (car xs))
+            (fmap-list f (cdr xs)))))
+
+(display "fmap add1 '(1 2 3): ")
+(display (fmap-list add1 '(1 2 3))) (newline)
+
+(display "fmap square '(1 2 3 4): ")
+(display (fmap-list (lambda (x) (* x x)) '(1 2 3 4))) (newline)
+
+; fmap on empty list = empty list (nothing to transform)
+(display "fmap add1 '(): ")
+(display (fmap-list add1 '()))
+`} />
+
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# List functor: fmap = map
+def fmap_list(f, xs):
+    return [f(x) for x in xs]
+
+print(f"fmap add1 [1,2,3]: {fmap_list(lambda x: x+1, [1,2,3])}")
+print(f"fmap square [1,2,3,4]: {fmap_list(lambda x: x*x, [1,2,3,4])}")
+print(f"fmap add1 []: {fmap_list(lambda x: x+1, [])}")
+`} />
+    </div>
+
+    <!-- 4. The functor laws -->
+    <h3>The functor laws</h3>
+    <p>Two laws make a functor a functor. <strong>Identity</strong>: <code>fmap id = id</code>. Mapping the do-nothing function changes nothing. <strong>Composition</strong>: <code>fmap (g . f) = fmap g . fmap f</code>. Mapping a composed function equals composing the maps. If either law fails, the mapping distorts structure and isn't a functor.</p>
+
+    <!-- SVG: Functor laws — identity and composition side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Identity law (left side) -->
+        <text x="100" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Identity law</text>
+
+        <!-- id_a arrow looping on a -->
+        <circle cx="60" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="60" y="50" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">a</text>
+        <path d="M 56,54 C 40,30 80,30 64,54" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="30" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">id_a</text>
+
+        <!-- maps to arrow -->
+        <line x1="75" y1="60" x2="115" y2="60" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="95" y="72" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">F</text>
+
+        <!-- id_F(a) looping on F(a) -->
+        <circle cx="145" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="145" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">F(a)</text>
+        <path d="M 141,54 C 125,30 165,30 149,54" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="145" y="28" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">id_F(a)</text>
+
+        <text x="100" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">F(id) = id</text>
+
+        <!-- Divider -->
+        <line x1="230" y1="10" x2="230" y2="150" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Composition law (right side) -->
+        <text x="370" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Composition law</text>
+
+        <!-- Triangle: a -> b -> c with a -> c -->
+        <circle cx="290" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="282" y="62" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">F(a)</text>
+
+        <circle cx="370" cy="130" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="385" y="138" fill="currentColor" font-size="10" fill-opacity="0.5">F(b)</text>
+
+        <circle cx="450" cy="70" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="458" y="62" fill="currentColor" font-size="10" fill-opacity="0.5">F(c)</text>
+
+        <!-- F(a) -> F(b): F(f) -->
+        <line x1="294" y1="74" x2="366" y2="126" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="363,122 370,128 360,128" fill="currentColor"/>
+        <text x="318" y="110" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">F(f)</text>
+
+        <!-- F(b) -> F(c): F(g) -->
+        <line x1="374" y1="126" x2="446" y2="74" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="443,78 450,72 448,82" fill="currentColor"/>
+        <text x="422" y="110" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">F(g)</text>
+
+        <!-- F(a) -> F(c): F(g . f) along the top -->
+        <line x1="298" y1="70" x2="442" y2="70" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="440,66 448,70 440,74" fill="currentColor"/>
+        <text x="370" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">F(g&#x2218;f)</text>
+
+        <text x="370" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">F(g&#x2218;f) = F(g)&#x2218;F(f)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Functor laws — verify for List and Maybe
+
+(define (fmap-list f xs)
+  (if (null? xs) '()
+      (cons (f (car xs)) (fmap-list f (cdr xs)))))
+
+(define (id x) x)
+(define (compose f g) (lambda (x) (f (g x))))
+
+; --- Law 1: fmap id = id ---
+(define xs '(1 2 3 4))
+(display "List identity:     ")
+(display (equal? (fmap-list id xs) xs)) (newline)
+
+; --- Law 2: fmap (g . f) = fmap g . fmap f ---
+(define (f x) (+ x 1))
+(define (g x) (* x x))
+
+(define lhs (fmap-list (compose g f) xs))
+(define rhs (fmap-list g (fmap-list f xs)))
+(display "List composition:  ")
+(display (equal? lhs rhs)) (newline)
+(display "  lhs: ") (display lhs) (newline)
+(display "  rhs: ") (display rhs) (newline)
+
+; --- Maybe ---
+(define nothing 'nothing)
+(define (just v) (list 'just v))
+(define (just? m) (and (pair? m) (eq? (car m) 'just)))
+(define (from-just m) (cadr m))
+(define (fmap-maybe fn m)
+  (if (just? m) (just (fn (from-just m))) nothing))
+
+(display "Maybe id (just 5): ")
+(display (equal? (fmap-maybe id (just 5)) (just 5))) (newline)
+(display "Maybe id nothing:  ")
+(display (equal? (fmap-maybe id nothing) nothing)) (newline)
+
+(define lhs2 (fmap-maybe (compose g f) (just 3)))
+(define rhs2 (fmap-maybe g (fmap-maybe f (just 3))))
+(display "Maybe composition: ")
+(display (equal? lhs2 rhs2))
+; (just 16) — add1 gives 4, square gives 16
+`} />
+
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Functor laws verified for list and Maybe
+def fmap_list(f, xs): return [f(x) for x in xs]
+def fmap_maybe(f, m): return None if m is None else f(m)
+
+identity = lambda x: x
+f = lambda x: x + 1
+g = lambda x: x * x
+
+xs = [1, 2, 3, 4]
+
+# Law 1: fmap id = id
+print(f"List identity:     {fmap_list(identity, xs) == xs}")
+
+# Law 2: fmap (g . f) = fmap g . fmap f
+lhs = fmap_list(lambda x: g(f(x)), xs)
+rhs = fmap_list(g, fmap_list(f, xs))
+print(f"List composition:  {lhs == rhs}  {lhs}")
+
+# Maybe
+print(f"Maybe id (just 5): {fmap_maybe(identity, 5) == 5}")
+print(f"Maybe id nothing:  {fmap_maybe(identity, None) is None}")
+
+lhs2 = fmap_maybe(lambda x: g(f(x)), 3)
+rhs2 = fmap_maybe(g, fmap_maybe(f, 3))
+print(f"Maybe composition: {lhs2 == rhs2}  {lhs2}")
+`} />
+    </div>
+
+    <!-- 5. The Reader functor -->
+    <h3>The Reader functor</h3>
+    <p>Functions from a fixed type <code>r</code> are a functor. The type constructor maps <code>a</code> to <code>r -> a</code>. And <code>fmap</code> is just function composition: to transform the output of a function, compose with the transformer. <code>fmap f g = f . g</code>. This is the Reader functor.</p>
+
+    <SchemeRepl client:load initialCode={`; Reader functor: functions from a fixed type r
+; Type constructor: a -> (r -> a)
+; fmap f g = compose f g = (lambda (x) (f (g x)))
+;
+; "To transform the output of a function, compose."
+
+(define (fmap-reader f g)
+  (lambda (x) (f (g x))))
+
+; g : number -> number (double)
+(define (double x) (* x 2))
+
+; f : number -> string (show)
+(define (show x) (number->string x))
+
+; fmap show double : number -> string
+(define show-double (fmap-reader show double))
+
+(display "show-double 5: ")
+(display (show-double 5)) (newline)
+; "10"
+
+(display "show-double 21: ")
+(display (show-double 21)) (newline)
+; "42"
+
+; Verify functor laws
+(define (id x) x)
+(define (compose f g) (lambda (x) (f (g x))))
+
+; Identity: fmap id g = g
+(display "identity: ")
+(display (= ((fmap-reader id double) 7) (double 7))) (newline)
+
+; Composition: fmap (f . g) h = fmap f (fmap g h)
+(define (add1 x) (+ x 1))
+(define (square x) (* x x))
+(define lhs (fmap-reader (compose square add1) double))
+(define rhs (fmap-reader square (fmap-reader add1 double)))
+(display "composition: ")
+(display (= (lhs 3) (rhs 3)))
+; Both give 49: double(3)=6, add1=7, square=49
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">fmap :: (a -> b) -> f a -> f b</td><td class="pr-4 text-green-300">(fmap-list f xs), (fmap-maybe f m)</td><td class="font-sans">Lift function into functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">fmap id = id</td><td class="pr-4 text-green-300">(equal? (fmap-list id xs) xs)</td><td class="font-sans">Identity law</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">fmap (g . f) = fmap g . fmap f</td><td class="pr-4 text-green-300">(equal? (fmap-list (compose g f) xs) ...)</td><td class="font-sans">Composition law</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Maybe a = Nothing | Just a</td><td class="pr-4 text-green-300">'nothing | (just v)</td><td class="font-sans">Optional value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[a] (List a)</td><td class="pr-4 text-green-300">'(1 2 3)</td><td class="font-sans">List type</td></tr>
+          <tr><td class="py-2 pr-4">(->) r a</td><td class="pr-4 text-green-300">(lambda (r) ...)</td><td class="font-sans">Reader: function from r</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-04/">🍞 Chapter 4</a> — Kleisli Categories (monads use functors under the hood)</li>
+      <li><a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> — Category: the essence of composition</li>
+      <li>(next) Chapter 8 — Functoriality</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use functors</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories: functors between probability and determinism</li>
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> — databases as functors from a schema category</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/calculus/calc-15/">∫ Calculus Ch.15 Stokes' Theorem</a> — functors preserve structure, as Stokes preserves the boundary-to-interior relationship</li>
+      <li><a href="/reading/linear-algebra/hefferon-03/">📐 Hefferon Ch.3 Linear Maps</a> — linear maps between vector spaces as structure-preserving morphisms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Functor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Category_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Category (mathematics)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Endofunctor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Endofunctor</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post presents functors in Haskell (typeclasses, algebraic data types) and C++ (templates, std::transform). This page uses Scheme tagged lists for Maybe and native lists for the List functor. The Reader functor is just function composition in both languages. The Const functor from the blog post is omitted here: it maps every type to the same wrapped constant and discards the function argument entirely. It matters for lenses and Yoneda, not for building intuition about what a functor does.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/01/20/functors/">Read the blog post</a>. Start with the Haskell typeclass definition, then try the equational proofs of the functor laws.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-06/", label: "Algebraic Data Types" }} next={{ href: "/reading/category-theory/milewski-08/", label: "Functoriality" }} />
+
+  </main>
+</Layout>

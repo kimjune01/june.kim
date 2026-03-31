@@ -1,0 +1,214 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.15 — Money and Banking" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Money and Banking</h1>
+    <p class="text-gray-400 text-sm mb-6">Adam Smith · 1776 · <a href="https://en.wikipedia.org/wiki/Money"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Money</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Money</strong> serves three functions: medium of exchange (trade without barter), unit of account (common measure of value), and store of value (save purchasing power over time). <strong>Fractional reserve banking</strong> multiplies the money supply: banks lend out most deposits, those loans become new deposits elsewhere, and the chain continues as a geometric series.</p>
+    </div>
+
+    <!-- 1. Functions of money -->
+    <h3>Three functions of money</h3>
+    <p>Without money, trade requires a "double coincidence of wants": you must find someone who has what you want and wants what you have. Money eliminates this friction. It also provides a common yardstick for prices and a way to carry purchasing power into the future.</p>
+
+    <SchemeRepl client:load initialCode={`; Barter vs money: the double coincidence problem
+; Three people, three goods. Can they all trade?
+
+(define alice '("has: wheat" "wants: shoes"))
+(define bob '("has: shoes" "wants: iron"))
+(define carol '("has: iron" "wants: wheat"))
+
+(display "Barter economy:") (newline)
+(display "  Alice ") (display (car alice)) (display ", ")
+(display (cadr alice)) (newline)
+(display "  Bob ") (display (car bob)) (display ", ")
+(display (cadr bob)) (newline)
+(display "  Carol ") (display (car carol)) (display ", ")
+(display (cadr carol)) (newline)
+(newline)
+
+(display "No bilateral trade works!") (newline)
+(display "Alice wants shoes from Bob,") (newline)
+(display "but Bob wants iron, not wheat.") (newline)
+(newline)
+
+(display "With money:") (newline)
+(display "  Alice sells wheat for $5") (newline)
+(display "  Alice buys shoes for $5") (newline)
+(display "  Everyone trades. Done.")
+`} />
+
+
+    <!-- 2. Fractional reserve banking -->
+    <h3>Fractional reserve banking</h3>
+    <p>Banks keep a fraction of deposits as reserves and lend the rest. When that loan is deposited elsewhere, the receiving bank lends again. Each round creates new money. The total money created from an initial deposit is a geometric series.</p>
+
+    <!-- SVG: Deposit chain diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="210" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Deposit Chain (reserve ratio = 10%)</text>
+
+        <!-- Bank 1 -->
+        <rect x="20" y="50" width="90" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="65" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Bank A</text>
+        <text x="65" y="90" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.8">$1000</text>
+
+        <!-- Reserve 1 -->
+        <rect x="20" y="115" width="90" height="25" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+        <text x="65" y="132" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Reserve: $100</text>
+
+        <!-- Arrow to Bank 2 -->
+        <line x1="110" y1="75" x2="140" y2="75" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <polygon points="138,72 145,75 138,78" fill="currentColor" fill-opacity="0.3"/>
+        <text x="125" y="65" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">lend $900</text>
+
+        <!-- Bank 2 -->
+        <rect x="145" y="50" width="90" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="190" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Bank B</text>
+        <text x="190" y="90" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.8">$900</text>
+
+        <!-- Reserve 2 -->
+        <rect x="145" y="115" width="90" height="25" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+        <text x="190" y="132" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Reserve: $90</text>
+
+        <!-- Arrow to Bank 3 -->
+        <line x1="235" y1="75" x2="265" y2="75" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <polygon points="263,72 270,75 263,78" fill="currentColor" fill-opacity="0.3"/>
+        <text x="250" y="65" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">lend $810</text>
+
+        <!-- Bank 3 -->
+        <rect x="270" y="50" width="90" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="315" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Bank C</text>
+        <text x="315" y="90" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.8">$810</text>
+
+        <!-- Reserve 3 -->
+        <rect x="270" y="115" width="90" height="25" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+        <text x="315" y="132" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Reserve: $81</text>
+
+        <!-- Dots -->
+        <text x="385" y="80" fill="currentColor" font-size="16" fill-opacity="0.3">...</text>
+
+        <!-- Summary -->
+        <text x="210" y="175" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Total deposits = $1000 + $900 + $810 + ...</text>
+        <text x="210" y="195" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">= $1000 / 0.10 = $10,000</text>
+
+        <!-- Formula -->
+        <text x="210" y="230" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">Money multiplier = 1 / reserve ratio</text>
+        <text x="210" y="250" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">Geometric series: a / (1 - r) where r = 1 - reserve ratio</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Money multiplier via geometric series
+; Each bank keeps reserve-ratio, lends the rest
+
+(define initial-deposit 1000)
+(define reserve-ratio 0.10)
+
+; Simulate the deposit chain
+(define (deposit-chain deposit rounds)
+  (if (= rounds 0) 0
+      (begin
+        (display "  Deposit: $")
+        (display (exact->inexact deposit))
+        (display ", Reserve: $")
+        (display (exact->inexact (* deposit reserve-ratio)))
+        (display ", Lend: $")
+        (display (exact->inexact (* deposit (- 1 reserve-ratio))))
+        (newline)
+        (+ deposit
+           (deposit-chain (* deposit (- 1 reserve-ratio))
+                          (- rounds 1))))))
+
+(display "Deposit chain (first 5 rounds):") (newline)
+(define total-5 (deposit-chain initial-deposit 5))
+(display "Total after 5 rounds: $")
+(display (exact->inexact total-5)) (newline)
+
+; Exact answer: geometric series
+(define multiplier (/ 1 reserve-ratio))
+(define total-exact (* initial-deposit multiplier))
+(display "Money multiplier: ") (display multiplier) (newline)
+(display "Total money created: $")
+(display (exact->inexact total-exact))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Money multiplier: geometric series
+deposit = 1000
+reserve_ratio = 0.10
+total = 0
+
+for i in range(10):
+    reserve = deposit * reserve_ratio
+    lent = deposit * (1 - reserve_ratio)
+    total += deposit
+    print("Round " + str(i+1) + ": deposit=$" + str(round(deposit, 2)) + ", reserve=$" + str(round(reserve, 2)) + ", lend=$" + str(round(lent, 2)))
+    deposit = lent
+
+print("")
+print("Total after 10 rounds: $" + str(round(total, 2)))
+print("Exact (geometric series): $" + str(round(1000 / reserve_ratio, 2)))
+print("Multiplier: " + str(1 / reserve_ratio))
+`} />
+    </div>
+
+
+    <!-- 3. Money supply -->
+    <h3>Controlling the money supply</h3>
+    <p>Central banks control the money supply through the reserve ratio, the interest rate, and open market operations (buying/selling government bonds). Lowering the reserve ratio increases the multiplier. Lowering interest rates encourages borrowing. Buying bonds injects reserves into the banking system.</p>
+
+    <SchemeRepl client:load initialCode={`; How reserve ratio affects money multiplier
+
+(define initial 1000)
+
+(define (multiplier rr) (/ 1.0 rr))
+(define (total-money rr) (* initial (multiplier rr)))
+
+(display "Reserve ratio -> Multiplier -> Total money from $1000") (newline)
+(for-each
+  (lambda (rr)
+    (display "  ")
+    (display (exact->inexact (* rr 100))) (display "%")
+    (display " -> ") (display (multiplier rr)) (display "x")
+    (display " -> $") (display (total-money rr))
+    (newline))
+  '(0.20 0.15 0.10 0.05 0.03))
+
+(display "Lower reserves = more money creation")
+`} />
+
+
+    <!-- Cross-reference -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-03/">Probability Ch.3: Geometric Series</a> — the mathematical foundation of the money multiplier</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Money"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Money</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fractional-reserve_banking"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fractional-reserve banking</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Money_multiplier"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Money multiplier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Geometric_series"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Geometric series</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-14/", label: "Information Asymmetry" }} next={{ href: "/reading/economics/econ-16/", label: "Inflation" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,384 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.12 — Free Monoids" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Free Monoids</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/07/21/free-monoids/">Category Theory for Programmers, Ch. 12</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-03/">🍞 Ch3 (Categories Great and Small — monoids)</a>. 7 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>free monoid</strong> on a set of generators is the list type. Lists are the cheapest way to make concatenation associative with an identity element (the empty list). Any function from generators into a monoid extends uniquely to a monoid homomorphism from the free monoid: that extension is <code>fold</code>.</p>
+    </div>
+
+    <!-- 1. Monoids recap -->
+    <h3>Monoids: a set with a binary operation</h3>
+    <p>A <strong>monoid</strong> is a set with an associative binary operation and an identity element. Strings under concatenation, numbers under addition, lists under append. The question this chapter answers: given a raw set of generators, what is the most general monoid you can build from them?</p>
+
+    <SchemeRepl client:load initialCode={`; A monoid needs: a set, a binary op, and an identity.
+; (m, mappend, mempty) such that:
+;   mappend(mappend(a, b), c) = mappend(a, mappend(b, c))
+;   mappend(mempty, a) = a
+;   mappend(a, mempty) = a
+
+; Numbers under addition
+(define (add-mappend a b) (+ a b))
+(define add-mempty 0)
+
+; Strings under concatenation
+(define (str-mappend a b) (string-append a b))
+(define str-mempty "")
+
+(display "3 + 4 = ") (display (add-mappend 3 4)) (newline)
+(display "0 + 5 = ") (display (add-mappend add-mempty 5)) (newline)
+(display "\\"hello\\" ++ \\" world\\" = ")
+(display (str-mappend "hello" " world")) (newline)
+(display "\\"\\" ++ \\"abc\\" = ")
+(display (str-mappend str-mempty "abc"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Monoid examples
+# Numbers under addition: identity = 0
+print(f"3 + 4 = {3 + 4}")
+print(f"0 + 5 = {0 + 5}")
+
+# Strings under concatenation: identity = ""
+print(f'"hello" + " world" = {"hello" + " world"}')
+print(f'"" + "abc" = {"" + "abc"}')
+`} />
+    </div>
+
+
+    <!-- 2. Free construction -->
+    <h3>Free construction: add structure, nothing extra</h3>
+    <p>A <strong>free construction</strong> takes a plain set and builds the most general algebraic structure from it. "Most general" means: impose only the laws the structure requires (associativity, identity), and no additional equations. Starting from generators <code>{'{'}a, b{'}'}</code>, the free monoid contains <code>e, a, b, aa, ab, ba, bb, aab, ...</code>: all finite sequences, with concatenation as the operation. No element equals any other unless the monoid laws force it.</p>
+
+    <SchemeRepl client:load initialCode={`; Free monoid on generators {a, b}:
+; All finite sequences of a's and b's.
+; Concatenation is the operation. Empty list is the identity.
+
+(define generators '(a b))
+
+; The free monoid elements are lists of generators
+(define e '())          ; identity
+(define just-a '(a))
+(define just-b '(b))
+(define ab '(a b))
+(define ba '(b a))
+(define aab '(a a b))
+
+; The monoid operation is append
+(define (free-mappend xs ys) (append xs ys))
+(define free-mempty '())
+
+; Associativity: (ab)(ba) = a(bb)a? No — they're different lists.
+; The free monoid makes NO extra identifications.
+(display "ab * ba = ") (display (free-mappend ab ba)) (newline)
+(display "a * ab  = ") (display (free-mappend just-a ab)) (newline)
+(display "e * aab = ") (display (free-mappend free-mempty aab)) (newline)
+(display "aab * e = ") (display (free-mappend aab free-mempty))
+; Lists are the free monoid.
+`} />
+
+
+    <!-- SVG: Free monoid - generators expand into lists -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 100" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Generators -->
+        <circle cx="30" cy="50" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="30" y="40" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">a</text>
+        <circle cx="70" cy="50" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="70" y="40" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">b</text>
+        <!-- Arrow -->
+        <text x="115" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.5">&#x21A6;</text>
+        <!-- Lists (sequences) -->
+        <rect x="145" y="15" width="25" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="157" y="30" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">e</text>
+        <rect x="180" y="15" width="25" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="192" y="30" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">a</text>
+        <rect x="215" y="15" width="25" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="227" y="30" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">b</text>
+        <rect x="145" y="45" width="35" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="162" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">ab</text>
+        <rect x="190" y="45" width="35" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="207" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">ba</text>
+        <rect x="145" y="75" width="45" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="167" y="90" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">aab</text>
+        <text x="260" y="55" fill="currentColor" font-size="13" fill-opacity="0.5">...</text>
+        <text x="280" y="90" fill="currentColor" font-size="10" fill-opacity="0.3">all finite sequences</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Universal property triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 160" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- x (generators set) -->
+        <circle cx="150" cy="20" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="150" y="14" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">x</text>
+        <!-- free(x) -->
+        <circle cx="50" cy="140" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="28" y="145" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">free(x)</text>
+        <!-- U(n) -->
+        <circle cx="250" cy="140" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="272" y="145" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">U(n)</text>
+        <!-- Arrow x -> free(x): embed -->
+        <line x1="144" y1="26" x2="56" y2="134" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="56,134 60,125 52,127" fill="currentColor"/>
+        <text x="85" y="72" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03B7;</text>
+        <!-- Arrow x -> U(n): q -->
+        <line x1="156" y1="26" x2="244" y2="134" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="244,134 240,125 248,127" fill="currentColor"/>
+        <text x="215" y="72" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">q</text>
+        <!-- Arrow free(x) -> U(n): h (unique, dashed) -->
+        <line x1="58" y1="140" x2="242" y2="140" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="242,136 250,140 242,144" fill="currentColor" fill-opacity="0.6"/>
+        <text x="150" y="155" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">h (unique = fold)</text>
+      </svg>
+    </div>
+
+    <!-- 3. The universal property -->
+    <h3>The universal property</h3>
+    <p>The free monoid on a set <em>x</em> is defined by a <strong>universal property</strong>. Given any function <code>q : x -> U(n)</code> from the generators into the underlying set of some monoid <em>n</em>, there exists a <strong>unique</strong> monoid homomorphism <code>h : free(x) -> n</code> that extends <code>q</code>. The forgetful functor <code>U</code> strips a monoid down to its underlying set. The free construction is its left adjoint: the cheapest way to promote a set to a monoid.</p>
+
+    <SchemeRepl client:load initialCode={`; Universal property of free monoids:
+;
+; Given: generators x, a monoid n, a function q : x -> U(n)
+; There exists a UNIQUE homomorphism h : free(x) -> n
+; such that h(embed(g)) = q(g) for each generator g.
+;
+; In code: h = fold guided by q.
+
+; Generators: {a, b}
+; Target monoid: (integers, *, 1)
+; q maps: a -> 2, b -> 3
+
+(define (q gen)
+  (cond ((eq? gen 'a) 2)
+        ((eq? gen 'b) 3)))
+
+; The unique homomorphism is fold:
+; h([]) = 1 (identity of target)
+; h([g1, g2, ...]) = q(g1) * q(g2) * ...
+
+(define (h xs)
+  (fold-right * 1 (map q xs)))
+
+; Check it's a homomorphism: h(xs ++ ys) = h(xs) * h(ys)
+(define xs '(a b))    ; h = 2*3 = 6
+(define ys '(b a a))  ; h = 3*2*2 = 12
+
+(display "h(ab)  = ") (display (h xs)) (newline)
+(display "h(baa) = ") (display (h ys)) (newline)
+(display "h(ab ++ baa) = ") (display (h (append xs ys))) (newline)
+(display "h(ab) * h(baa) = ") (display (* (h xs) (h ys))) (newline)
+; 72 = 72. The homomorphism property holds.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Universal property: fold is the unique homomorphism
+from functools import reduce
+
+q = {"a": 2, "b": 3}
+
+def h(xs):
+    """The unique homomorphism from free monoid to (int, *, 1)"""
+    return reduce(lambda acc, g: acc * q[g], xs, 1)
+
+xs = ["a", "b"]     # h = 2*3 = 6
+ys = ["b", "a", "a"] # h = 3*2*2 = 12
+
+print(f"h(ab)  = {h(xs)}")
+print(f"h(baa) = {h(ys)}")
+print(f"h(ab ++ baa) = {h(xs + ys)}")
+print(f"h(ab) * h(baa) = {h(xs) * h(ys)}")
+# 72 = 72. Homomorphism property holds.
+`} />
+    </div>
+
+
+    <!-- 4. Monoid homomorphisms -->
+    <h3>Monoid homomorphisms: structure-preserving maps</h3>
+    <p>A <strong>monoid homomorphism</strong> is a function between monoids that preserves the operation and the identity. If <code>h(a * b) = h(a) * h(b)</code> and <code>h(e) = e'</code>, then <code>h</code> is a homomorphism. The universal property says the homomorphism from a free monoid is determined entirely by where the generators go. No choice remains.</p>
+
+    <SchemeRepl client:load initialCode={`; Monoid homomorphism: preserves operation and identity.
+; h(a * b) = h(a) * h(b)
+; h(e) = e'
+
+; Example: length is a homomorphism from (lists, append, [])
+; to (integers, +, 0)
+
+(define (h-length xs) (length xs))
+
+(define xs '(a b c))
+(define ys '(d e))
+
+(display "h([a,b,c]) = ") (display (h-length xs)) (newline)
+(display "h([d,e])   = ") (display (h-length ys)) (newline)
+(display "h([a,b,c] ++ [d,e]) = ")
+(display (h-length (append xs ys))) (newline)
+(display "h([a,b,c]) + h([d,e]) = ")
+(display (+ (h-length xs) (h-length ys))) (newline)
+; 5 = 5. Length preserves the structure.
+
+(display "h([]) = ") (display (h-length '()))
+; 0 — identity maps to identity.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# length is a monoid homomorphism: (lists, ++, []) -> (int, +, 0)
+xs = ["a", "b", "c"]
+ys = ["d", "e"]
+
+print(f"len(xs) = {len(xs)}")
+print(f"len(ys) = {len(ys)}")
+print(f"len(xs + ys) = {len(xs + ys)}")
+print(f"len(xs) + len(ys) = {len(xs) + len(ys)}")
+# 5 = 5. Homomorphism property.
+print(f"len([]) = {len([])}")
+# 0. Identity maps to identity.
+`} />
+    </div>
+
+    <!-- 5. Fold as the unique homomorphism -->
+    <h3>Fold: the universal homomorphism</h3>
+    <p>Here is the punchline in code. <code>fold</code> (or <code>reduce</code>) <em>is</em> the unique homomorphism guaranteed by the universal property. You give it a function from generators to a target monoid and the target's identity. It does the only thing it can: apply the function to each generator and combine the results with the target's operation. There is no other homomorphism that agrees on the generators.</p>
+
+    <SchemeRepl client:load initialCode={`; fold IS the universal homomorphism.
+; Given q : generators -> monoid, fold extends q to lists -> monoid.
+
+; Target 1: (string, ++, "")
+; q maps each symbol to its string name
+(define (q1 gen) (symbol->string gen))
+
+(define (h1 xs)
+  (fold-right string-append "" (map q1 xs)))
+
+(display "h1([hello world]) = ")
+(display (h1 '(hello world))) (newline)
+
+; Target 2: (bool, and, #t)
+; q maps: 'yes -> #t, 'no -> #f
+(define (q2 gen)
+  (eq? gen 'yes))
+
+(define (h2 xs)
+  (fold-right (lambda (a b) (and a b)) #t (map q2 xs)))
+
+(display "h2([yes yes]) = ") (display (h2 '(yes yes))) (newline)
+(display "h2([yes no])  = ") (display (h2 '(yes no))) (newline)
+(display "h2([])        = ") (display (h2 '())) (newline)
+; Empty list maps to #t (identity of and-monoid).
+; Each fold is uniquely determined by where the generators go.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# fold/reduce IS the unique homomorphism
+from functools import reduce
+
+# Target: (string, +, "")
+h1 = lambda xs: reduce(lambda a, b: a + b, xs, "")
+print(f'h1(["hello", " ", "world"]) = {h1(["hello", " ", "world"])}')
+
+# Target: (bool, and, True)
+q2 = lambda g: g == "yes"
+h2 = lambda xs: reduce(lambda a, b: a and b, [q2(x) for x in xs], True)
+print(f'h2(["yes", "yes"]) = {h2(["yes", "yes"])}')
+print(f'h2(["yes", "no"])  = {h2(["yes", "no"])}')
+print(f'h2([])             = {h2([])}')
+`} />
+    </div>
+
+
+    <!-- 6. Why free means no extra equations -->
+    <h3>Free means no extra equations</h3>
+    <p>Any monoid with elements from a set of generators is a <strong>quotient</strong> of the free monoid: take the free monoid and identify some elements. The integers under addition are the free monoid on one generator (the natural numbers and their negatives, a.k.a. lists of <code>+1</code> and <code>-1</code>). But the integers mod 3 are a quotient: <code>0 = 3 = 6 = ...</code>. The free monoid makes the fewest identifications possible. Every other monoid makes more.</p>
+
+    <SchemeRepl client:load initialCode={`; Free monoid on one generator = natural numbers (under +)
+; (lists of length n, append, []) ~ (n, +, 0)
+;
+; Quotient: integers mod 3
+; The free monoid says (a a a) != ()
+; The quotient says    (a a a) = ()
+
+; Free: all distinct
+(define (free-eq? xs ys) (equal? xs ys))
+
+(display "free: (a a a) = ()? ")
+(display (free-eq? '(a a a) '())) (newline)
+
+; Quotient mod 3: identify by length mod 3
+(define (mod3-eq? xs ys)
+  (= (modulo (length xs) 3)
+     (modulo (length ys) 3)))
+
+(display "mod3: (a a a) = ()? ")
+(display (mod3-eq? '(a a a) '())) (newline)
+(display "mod3: (a) = (a a a a)? ")
+(display (mod3-eq? '(a) '(a a a a))) (newline)
+; The quotient adds equations. The free monoid has none.
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[a]</td><td class="pr-4 text-green-300">(list 'a 'b ...)</td><td class="font-sans">Free monoid (list of generators)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[] (mempty)</td><td class="pr-4 text-green-300">'()</td><td class="font-sans">Identity element (empty list)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">++ (mappend)</td><td class="pr-4 text-green-300">(append xs ys)</td><td class="font-sans">Monoid operation (concatenation)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">U : Mon -> Set</td><td class="pr-4 text-green-300">(forgetful functor)</td><td class="font-sans">Strips monoid structure, keeps the set</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">h : free(x) -> n</td><td class="pr-4 text-green-300">(fold-right op e (map q xs))</td><td class="font-sans">Unique homomorphism (fold)</td></tr>
+          <tr><td class="py-2 pr-4">foldMap f</td><td class="pr-4 text-green-300">(fold-right op e (map f xs))</td><td class="font-sans">Map generators then fold with target op</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-03/">🍞 Chapter 3</a> — Categories Great and Small: where monoids are introduced</li>
+      <li>(next) Chapter 13 — Representable Functors</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Free_monoid"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free monoid</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monoid"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monoid</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Universal_property"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal property</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Free_object"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free object</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post defines free monoids via a universal construction in the category <strong>Mon</strong> of monoids, using the forgetful functor <code>U : Mon -> Set</code> and ranking candidates by the existence of unique homomorphisms. This page skips the categorical machinery and works directly with lists and fold. The key correspondence: Haskell's <code>foldMap :: Monoid m => (a -> m) -> [a] -> m</code> is the concrete implementation of the universal homomorphism. Give it a function from generators to any monoid, and it produces the unique structure-preserving map. The blog post also discusses how every monoid is a quotient of a free monoid. This page illustrates that with mod-3 arithmetic, but the full picture involves equivalence relations on the free monoid that are compatible with concatenation (i.e., congruences).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/07/21/free-monoids/">Read the blog post</a>. Start with the universal construction, then see how lists emerge as the answer.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-11/", label: "Limits and Colimits" }} next={{ href: "/reading/category-theory/milewski-13/", label: "Representable Functors" }} />
+
+  </main>
+</Layout>

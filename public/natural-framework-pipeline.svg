@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 120" font-family="system-ui, -apple-system, sans-serif" font-size="14">
+  <style>
+    .step{fill:none;stroke:#999;stroke-width:1}
+    .step-name{text-anchor:middle;dominant-baseline:central;font-weight:500;font-size:13px;fill:#1f2937}
+    .arrow{stroke:#999;stroke-width:1.5;fill:none;marker-end:url(#a)}
+    .bk{stroke:#666;stroke-width:1.2;fill:none;stroke-dasharray:5,3;marker-end:url(#ab)}
+    .bk-label{text-anchor:middle;font-size:11px;fill:#666;font-style:italic}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#999"/></marker>
+    <marker id="ab" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#666"/></marker>
+  </defs>
+
+  <!-- Five forward stages -->
+  <rect class="step" rx="8" x="10" y="20" width="130" height="40"/>
+  <text class="step-name" x="75" y="40">Perceive</text>
+  <line class="arrow" x1="140" y1="40" x2="170" y2="40"/>
+
+  <rect class="step" rx="8" x="170" y="20" width="130" height="40"/>
+  <text class="step-name" x="235" y="40">Cache</text>
+  <line class="arrow" x1="300" y1="40" x2="330" y2="40"/>
+
+  <rect class="step" rx="8" x="330" y="20" width="130" height="40"/>
+  <text class="step-name" x="395" y="40">Filter</text>
+  <line class="arrow" x1="460" y1="40" x2="490" y2="40"/>
+
+  <rect class="step" rx="8" x="490" y="20" width="130" height="40"/>
+  <text class="step-name" x="555" y="40">Attend</text>
+  <line class="arrow" x1="620" y1="40" x2="650" y2="40"/>
+
+  <rect class="step" rx="8" x="650" y="20" width="130" height="40"/>
+  <text class="step-name" x="715" y="40">Remember</text>
+
+  <!-- Consolidate backward arrow -->
+  <path class="bk" d="M715,60 L715,90 L75,90 L75,60"/>
+  <text class="bk-label" x="395" y="105">Consolidate</text>
+</svg>

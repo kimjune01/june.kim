@@ -1,0 +1,107 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="Axioms.lean — The sole non-definitional assumption" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>Axioms.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/Axioms.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The proof rests on modeling assumptions (encoded in the definitions), typeclass constraints (encoded in signatures), and one explicit axiom (this file). This page maps all three so you can see exactly what's load-bearing.</p>
+    </div>
+
+    <h3>Modeling assumptions (definitional choices in Auction.lean)</h3>
+    <p>These are assumptions of the model, but they're encoded as definitions rather than axioms &mdash; reject any and you'd need different definitions, not a different axiom file:</p>
+    <ul>
+      <li><strong>Quasilinear utility</strong> &mdash; <code>utility</code> is defined as value minus payment</li>
+      <li><strong>Positive bids and sigmas</strong> &mdash; carried as fields on Report and Valuation</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Independent_private_values"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Independent private values</a></strong> &mdash; <code>withReport</code> changes reports, not valuations</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Free_disposal"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free disposal</a></strong> &mdash; empty player set means zero welfare</li>
+      <li><strong>Gaussian valuation decay</strong> &mdash; <code>trueVal</code> is an exponential in squared distance</li>
+    </ul>
+
+    <h3>Typeclass constraints (structural requirements)</h3>
+    <ul>
+      <li><strong>Finite nonempty advertisers</strong> &mdash; <code>[Fintype ι] [Nonempty ι]</code></li>
+      <li><strong>Inner product space</strong> &mdash; <code>[NormedAddCommGroup E] [InnerProductSpace ℝ E]</code></li>
+    </ul>
+
+    <h3>QueryMeasure</h3>
+    <p>The sole axiom: there exists a monotone functional from <code>(E &rarr; ℝ)</code> to <code>ℝ</code>. If <code>f(x) &ge; g(x)</code> everywhere, then <code>integrate f &ge; integrate g</code>.</p>
+    <p>Note what this does <em>not</em> assume: normalization, linearity, additivity, or even nontriviality. It is weaker than a <a href="https://en.wikipedia.org/wiki/Probability_measure"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>probability measure</a> &mdash; any <a href="https://en.wikipedia.org/wiki/Monotone_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>monotone functional</a> satisfies it. An economist might <em>interpret</em> it as an expected-value operator, but the proof only uses monotonicity.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">QueryMeasure</span> (E : Type*) <span class="text-blue-300">where</span>
+  integrate : (E → ℝ) → ℝ
+  integral_mono : ∀ (f g : E → ℝ),
+    (∀ x, f x ≥ g x) → integrate f ≥ integrate g</code></pre>
+    <p class="text-sm text-gray-500">Monotonicity holds for any finite positive measure and any standard notion of integration. It replaces Mathlib's full measure theory stack with the one property the proof actually uses.</p>
+
+    <SchemeRepl client:load initialCode={`; Four monotone functionals — all satisfy integral_mono
+(define xs (let loop ((i 0) (acc '()))
+  (if (> i 100) (reverse acc) (loop (+ i 1) (cons (/ i 100.0) acc)))))
+
+(define (f x) (exp (- x)))
+(define (g x) (exp (* -2 x)))
+
+(define (mu-sum h) (apply + (map h xs)))
+(define (mu-max h) (apply max (map h xs)))
+(define (mu-min h) (apply min (map h xs)))
+(define (mu-pt h) (h 1.0))
+
+(define (check name mu)
+  (let ((mf (mu f)) (mg (mu g)))
+    (display name) (display ": f=")
+    (display (round (* mf 1000) )) (display "/1000  g=")
+    (display (round (* mg 1000))) (display "/1000  mono=")
+    (display (>= mf mg)) (newline)))
+
+(check "sum  " mu-sum)
+(check "max  " mu-max)
+(check "min  " mu-min)
+(check "point" mu-pt)
+`} />
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+xs = [i / 100 for i in range(101)]
+
+def f(x): return math.exp(-x)      # slower decay
+def g(x): return math.exp(-2*x)    # faster decay; f >= g everywhere
+
+# Four very different "integrals" — all monotone
+def mu_sum(h):  return sum(h(x) for x in xs)
+def mu_max(h):  return max(h(x) for x in xs)
+def mu_min(h):  return min(h(x) for x in xs)
+def mu_pt(h):   return h(xs[-1])  # point evaluation
+
+print("if f(x) >= g(x) everywhere, does integrate(f) >= integrate(g)?")
+print()
+for name, mu in [("sum", mu_sum), ("max", mu_max), ("min", mu_min), ("point", mu_pt)]:
+    mf, mg = mu(f), mu(g)
+    print(f"  {name:6s}  f={mf:.4f}  g={mg:.4f}  mono={mf >= mg}")
+
+print()
+print("All four satisfy integral_mono.")
+print("The proof needs nothing more.")
+`} />
+    </div>
+
+    <h3>What's a hypothesis on theorems (not axiomatized)</h3>
+    <ul>
+      <li><strong>isTruthful</strong> &mdash; player i reports honestly. Precondition on the DSIC theorem: only player i needs to be truthful.</li>
+      <li><strong>allTruthful</strong> &mdash; all players report honestly. Used for efficiency theorems and the Nash equilibrium corollary.</li>
+    </ul>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/integral-efficiency/">IntegralEfficiency.lean</a> &mdash; uses <code>integral_mono</code> to lift pointwise welfare to integrated welfare</li>
+      <li><a href="/reading/vector-space-proof/gaussian-optimality/">GaussianOptimality.lean</a> &mdash; composes everything through QueryMeasure</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/auction/", label: "Auction.lean · 1 of 7" }} next={{ href: "/reading/vector-space-proof/efficiency/", label: "Efficiency.lean · 3 of 7" }} />
+  </main>
+</Layout>

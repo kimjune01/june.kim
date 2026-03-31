@@ -1,0 +1,143 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.6 — Memory Management" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Memory Management</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Memory_management_(operating_systems)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Memory management</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The OS gives each process the illusion of a private, contiguous address space. Behind the scenes, <strong>paging</strong> maps virtual addresses to scattered physical frames. The <strong>page table</strong> is the translation dictionary. The <strong>TLB</strong> is the cache that makes it fast.</p>
+    </div>
+
+    <h3>Address spaces</h3>
+    <p>Each process sees virtual addresses starting from 0. The hardware (MMU) translates these to physical addresses at runtime. No process can see another's memory unless the OS explicitly shares a region.</p>
+
+    <h3>Base and limit registers</h3>
+    <p>The simplest scheme: the base register holds the starting physical address, the limit register holds the size. Every access is checked: if the virtual address exceeds the limit, trap. Simple, but no sharing and external fragmentation.</p>
+
+    <h3>Segmentation</h3>
+    <p>Divide memory into logical segments (code, stack, heap). Each segment has its own base and limit. The address is (segment, offset). Problem: variable-size segments cause external fragmentation.</p>
+
+    <h3>Paging</h3>
+    <p>Divide virtual memory into fixed-size <strong>pages</strong> and physical memory into same-size <strong>frames</strong>. The page table maps page numbers to frame numbers. No external fragmentation. Internal fragmentation is at most one page per process.</p>
+
+    <!-- SVG: Virtual -> physical address translation through page table -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Virtual address -->
+        <rect x="10" y="20" width="130" height="30" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="75" y="40" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Virtual Address</text>
+        <rect x="10" y="55" width="65" height="25" rx="3" fill="#60a5fa" fill-opacity="0.15"/>
+        <text x="42" y="72" text-anchor="middle" fill="#60a5fa" font-size="9">page #</text>
+        <rect x="75" y="55" width="65" height="25" rx="3" fill="#60a5fa" fill-opacity="0.08"/>
+        <text x="107" y="72" text-anchor="middle" fill="#60a5fa" font-size="9">offset</text>
+
+        <!-- Page Table -->
+        <rect x="185" y="15" width="110" height="140" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="240" y="32" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">Page Table</text>
+        <text x="200" y="52" fill="currentColor" font-size="9" fill-opacity="0.4">0: frame 5</text>
+        <text x="200" y="68" fill="currentColor" font-size="9" fill-opacity="0.4">1: frame 2</text>
+        <text x="200" y="84" fill="#f59e0b" font-size="9" fill-opacity="0.7">2: frame 7</text>
+        <text x="200" y="100" fill="currentColor" font-size="9" fill-opacity="0.4">3: frame 0</text>
+        <text x="200" y="116" fill="currentColor" font-size="9" fill-opacity="0.4">4: frame 3</text>
+        <text x="200" y="132" fill="currentColor" font-size="9" fill-opacity="0.4">5: frame 1</text>
+
+        <!-- Arrow from page# to page table -->
+        <line x1="75" y1="67" x2="183" y2="82" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="181,78 187,84 183,76" fill="#60a5fa" fill-opacity="0.4"/>
+        <text x="130" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">lookup</text>
+
+        <!-- Physical address -->
+        <rect x="340" y="20" width="130" height="30" rx="4" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="405" y="40" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.7">Physical Address</text>
+        <rect x="340" y="55" width="65" height="25" rx="3" fill="#34d399" fill-opacity="0.15"/>
+        <text x="372" y="72" text-anchor="middle" fill="#34d399" font-size="9">frame #</text>
+        <rect x="405" y="55" width="65" height="25" rx="3" fill="#34d399" fill-opacity="0.08"/>
+        <text x="437" y="72" text-anchor="middle" fill="#34d399" font-size="9">offset</text>
+
+        <!-- Arrow from page table to frame# -->
+        <line x1="295" y1="82" x2="338" y2="67" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="336,63 342,69 340,61" fill="#34d399" fill-opacity="0.4"/>
+
+        <!-- Arrow: offset passes through unchanged -->
+        <path d="M 107 80 Q 260 180 437 80" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="260" y="168" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">offset unchanged</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Page table: translate virtual address to physical address
+; page-size = 4096 bytes (2^12)
+
+(define page-size 4096)
+
+; Page table: maps page number to frame number
+(define page-table '((0 . 5) (1 . 2) (2 . 7) (3 . 0) (4 . 3)))
+
+(define (translate virtual-addr)
+  (let* ((page-num (quotient virtual-addr page-size))
+         (offset (modulo virtual-addr page-size))
+         (frame (cdr (assoc page-num page-table)))
+         (physical (+ (* frame page-size) offset)))
+    (display "Virtual: ") (display virtual-addr)
+    (display " -> Page ") (display page-num)
+    (display ", Offset ") (display offset)
+    (display " -> Frame ") (display frame)
+    (display " -> Physical: ") (display physical)
+    (newline)))
+
+(translate 0)       ; page 0, offset 0 -> frame 5
+(translate 8192)    ; page 2, offset 0 -> frame 7
+(translate 13000)   ; page 3, offset 808 -> frame 0
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Virtual to physical address translation
+PAGE_SIZE = 4096
+
+page_table = {0: 5, 1: 2, 2: 7, 3: 0, 4: 3}
+
+def translate(virtual_addr):
+    page = virtual_addr // PAGE_SIZE
+    offset = virtual_addr % PAGE_SIZE
+    frame = page_table[page]
+    physical = frame * PAGE_SIZE + offset
+    print(f"V:{virtual_addr} -> Page {page}, Off {offset} -> Frame {frame} -> P:{physical}")
+
+translate(0)
+translate(8192)
+translate(13000)
+`} />
+    </div>
+
+    <h3>Translation Lookaside Buffer (TLB)</h3>
+    <p>Every memory access requires a page table lookup, which is itself a memory access. The <strong>TLB</strong> is a small, fast hardware cache of recent page-to-frame mappings. TLB hit: one memory access. TLB miss: two (or more, with multi-level page tables).</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-05/">⚙ Algorithms Ch.5</a> — hash tables and address translation: memory management uses page tables as hash maps from virtual to physical addresses</li>
+      <li><a href="/reading/discrete-math/levin-01/">🔢 Discrete Math Ch.1</a> — set theory: memory allocation partitions the address space into disjoint segments</li>
+      <li><a href="/reading/programming/sicp-06/">🪄 SICP Ch.6</a> — environment frames and memory: the OS heap and stack are the runtime realization of lexical environments</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Paging"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Paging</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Page_table"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Page table</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Translation_lookaside_buffer"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Translation lookaside buffer</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-05/", label: "Deadlock" }} next={{ href: "/reading/operating-systems/os-07/", label: "Virtual Memory" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,117 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Support.lean — Which outputs a computation can produce" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Support.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Support.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Defines which values a monadic computation can produce &mdash; the possibilistic (reachability) layer that tracks what is possible, not how likely.</p>
+    </div>
+
+    <h3>Support</h3>
+    <p>A typeclass that maps any monadic computation <code>M a</code> to a yes/no predicate on <code>a</code>: "can this value come out?" For probability distributions, this is the support of the measure. For plain deterministic functions (<code>Id</code>), the support is a single value.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">class</span> <span class="text-green-300">Support</span> (M : Type &rarr; Type) [Monad M] <span class="text-blue-300">where</span>
+  support : &#123;&alpha; : Type&#125; &rarr; M &alpha; &rarr; &alpha; &rarr; Prop
+  support_pure : &forall; &#123;&alpha; : Type&#125; (a x : &alpha;),
+    support (pure a) x &harr; x = a
+  support_bind : &forall; &#123;&alpha; &beta; : Type&#125; (m : M &alpha;) (f : &alpha; &rarr; M &beta;) (y : &beta;),
+    support (bind m f) y &harr; &exists; x, support m x &and; support (f x) y</code></pre>
+    <p class="text-sm text-gray-500">Three pieces: the predicate itself, a law for <code>pure</code> (wrapping a value produces exactly that value), and a law for <code>bind</code> (chaining two computations &mdash; y is reachable from <code>m >>= f</code> iff some intermediate x is reachable from m and y is reachable from f applied to x). These two laws mirror the monad laws, but for reachability instead of computation.</p>
+
+    <h3>instance : Support Id</h3>
+    <p>The deterministic case. When the monad is <code>Id</code> (no randomness, no effects), the only possible output is the actual output. This recovers ordinary functions as a special case.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">instance</span> : <span class="text-green-300">Support</span> Id <span class="text-blue-300">where</span>
+  support := <span class="text-blue-300">fun</span> &#123;&alpha;&#125; (m : Id &alpha;) (x : &alpha;) =&gt; x = m
+  support_pure := <span class="text-blue-300">by</span>
+    intro &alpha; a x; constructor
+    &middot; intro h; exact h
+    &middot; intro h; exact h
+  support_bind := <span class="text-blue-300">by</span>
+    intro &alpha; &beta; m f y; constructor
+    &middot; intro h; exact &langle;m, rfl, h&rangle;
+    &middot; intro &langle;x, hx, hy&rangle;; rw [hx] at hy; exact hy</code></pre>
+    <p class="text-sm text-gray-500">The proofs are simple: <code>pure</code> in <code>Id</code> is the identity, so its support is trivially a singleton. <code>bind</code> in <code>Id</code> is function application, so the only intermediate is the value itself.</p>
+
+    <SchemeRepl client:load initialCode={`; Support = which outputs are reachable
+; A deterministic function has support {f(x)}.
+; A stochastic function has support = all possible outputs.
+
+(define (det-support f x)
+  (list (f x)))  ; exactly one possible output
+
+(define (stoch-support f x)
+  (f x))  ; returns the full list of possibilities
+
+(define (double x) (* x 2))
+(define (coin-flip x) (list x (- x)))  ; two outcomes
+
+(display "det support of double(3): ")
+(display (det-support double 3))
+(newline)
+(display "stoch support of coin-flip(5): ")
+(display (stoch-support coin-flip 5))
+(newline)
+(display "bind: for each y in support(f(x)),")
+(display " collect support(g(y))")
+(newline)
+(define (bind-support sf sg x)
+  (apply append (map (lambda (y) (sg y)) (sf x))))
+(display "support(coin-flip >>= coin-flip)(3): ")
+(display (bind-support
+  (lambda (x) (coin-flip x))
+  (lambda (y) (coin-flip y)) 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Support = which outputs are reachable
+# A deterministic function has support {f(x)}.
+# A stochastic function has support = all possible outputs.
+
+def det_support(f, x):
+    return [f(x)]  # exactly one possible output
+
+def stoch_support(f, x):
+    return f(x)  # returns the full list of possibilities
+
+def double(x):
+    return x * 2
+
+def coin_flip(x):
+    return [x, -x]  # two outcomes
+
+print(f"det support of double(3): {det_support(double, 3)}")
+print(f"stoch support of coin-flip(5): {stoch_support(coin_flip, 5)}")
+print("bind: for each y in support(f(x)), collect support(g(y))")
+
+def bind_support(sf, sg, x):
+    return [z for y in sf(x) for z in sg(y)]
+
+print(f"support(coin-flip >>= coin-flip)(3): {bind_support(coin_flip, coin_flip, 3)}")
+`} />
+    </div>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">Kleisli.lean</a> &mdash; uses Support to define morphisms between types</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; contracts quantify over support: "every reachable output satisfies the postcondition"</li>
+      <li><a href="/reading/the-natural-framework-lean/supportmonadmorphism/">SupportMonadMorphism.lean</a> &mdash; proves Support is a monad morphism to the reachability monad</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/fritz-perrone-2021/">🍞 Fritz-Perrone 2021</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/the-natural-framework-lean/kleisli/", label: "Kleisli.lean · 2 of 25" }} />
+  </main>
+</Layout>

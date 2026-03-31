@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#999" stroke-width="1.2"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2e7d32" stroke-width="1.2"/>
+    </marker>
+    <marker id="arr-b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+    </marker>
+  </defs>
+
+  <!-- Phase labels -->
+  <text x="90" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#999" letter-spacing="0.1em">INPUT</text>
+  <text x="390" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#999" letter-spacing="0.1em">VOLLEY</text>
+  <text x="680" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#999" letter-spacing="0.1em">OUTPUT</text>
+
+  <!-- Phase dividers -->
+  <line x1="200" y1="12" x2="200" y2="290" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+  <line x1="580" y1="12" x2="580" y2="290" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,3"/>
+
+  <!-- INPUT -->
+  <rect x="15" y="52" width="170" height="48" rx="7" fill="#bbdefb" stroke="#90caf9" stroke-width="1"/>
+  <text x="100" y="72" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Goal</text>
+  <text x="100" y="89" text-anchor="middle" font-size="10" fill="#555" font-style="italic">one sentence</text>
+
+  <rect x="15" y="118" width="170" height="48" rx="7" fill="#d4e4f7" stroke="#a8c8e8" stroke-width="1"/>
+  <text x="100" y="138" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Repo</text>
+  <text x="100" y="155" text-anchor="middle" font-size="10" fill="#555" font-style="italic">existing code + tests</text>
+
+  <!-- VOLLEY: Claude -->
+  <rect x="230" y="62" width="140" height="52" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="300" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Claude</text>
+  <text x="300" y="101" text-anchor="middle" font-size="10" fill="#555" font-style="italic">draft</text>
+
+  <!-- VOLLEY: Codex -->
+  <rect x="430" y="62" width="140" height="52" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1"/>
+  <text x="500" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Codex</text>
+  <text x="500" y="101" text-anchor="middle" font-size="10" fill="#555" font-style="italic">challenge</text>
+
+  <!-- Volley arrows (back and forth) -->
+  <line x1="370" y1="78" x2="425" y2="78" stroke="#1565c0" stroke-width="1.5" marker-end="url(#arr-b)"/>
+  <line x1="430" y1="98" x2="375" y2="98" stroke="#1565c0" stroke-width="1.5" marker-end="url(#arr-b)"/>
+
+  <!-- Round labels -->
+  <text x="400" y="72" text-anchor="middle" font-size="9" fill="#1565c0">round 1</text>
+  <text x="400" y="108" text-anchor="middle" font-size="9" fill="#1565c0">round 2</text>
+
+  <!-- Fixed point indicator -->
+  <rect x="310" y="140" width="180" height="40" rx="7" fill="#fff3e0" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="400" y="157" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Fixed point</text>
+  <text x="400" y="172" text-anchor="middle" font-size="10" fill="#555" font-style="italic">neither side improves</text>
+
+  <!-- Converge arrows down to fixed point -->
+  <line x1="300" y1="114" x2="360" y2="136" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="500" y1="114" x2="440" y2="136" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- OUTPUT -->
+  <rect x="610" y="62" width="150" height="52" rx="7" fill="#c8e6c9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="685" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Sharp claim</text>
+  <text x="685" y="99" text-anchor="middle" font-size="10" fill="#555" font-style="italic">testable, assumption-marked</text>
+
+  <!-- Fixed point → output -->
+  <path d="M490,160 C540,160 570,88 605,88" fill="none" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#arr-g)"/>
+
+  <!-- Input → You -->
+  <line x1="185" y1="76" x2="225" y2="80" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="185" y1="136" x2="225" y2="95" stroke="#999" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- What follows: blind-blind-merge -->
+  <rect x="610" y="140" width="150" height="40" rx="7" fill="#f7f7f7" stroke="#ccc" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="685" y="157" text-anchor="middle" font-size="11" fill="#999">→ blind-blind-merge</text>
+  <text x="685" y="172" text-anchor="middle" font-size="10" fill="#bbb" font-style="italic">amplifies precision</text>
+
+  <!-- Output → blind-blind-merge -->
+  <line x1="685" y1="114" x2="685" y2="135" stroke="#ccc" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- Iteration count annotation -->
+  <text x="400" y="210" text-anchor="middle" font-size="10" fill="#999">typically 2–3 rounds</text>
+
+  <!-- What gets filtered annotation -->
+  <rect x="230" y="230" width="340" height="50" rx="5" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="400" y="248" text-anchor="middle" font-size="10" fill="#666">Each round removes: vague claims, hidden assumptions,</text>
+  <text x="400" y="262" text-anchor="middle" font-size="10" fill="#666">unstated dependencies, untestable success criteria</text>
+</svg>

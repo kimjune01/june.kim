@@ -1,0 +1,210 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.23 — Comparative Systems" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Comparative Systems</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Adam Smith, <em>Wealth of Nations</em> (1776, public domain) · F.A. Hayek, "The Use of Knowledge in Society" (1945)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Markets and central planning are two answers to the same question: how to coordinate production when knowledge is distributed. <strong>Hayek's insight</strong>: prices are a communication protocol. They aggregate dispersed local knowledge into a signal that no single planner could compute.</p>
+    </div>
+
+    <!-- 1. Hayek's Knowledge Problem -->
+    <h3>The knowledge problem</h3>
+    <p>Hayek's 1945 argument: the economic problem is not how to allocate resources given complete knowledge, but how to use knowledge that is <strong>dispersed</strong> across millions of people, much of it tacit (knowledge of "the particular circumstances of time and place"). A central planner cannot collect this knowledge fast enough. Prices solve this by compressing local information into a single number that everyone can act on.</p>
+
+    <!-- SVG: Decentralized vs Centralized networks -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Decentralized (market) network -->
+        <text x="120" y="20" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">Market (decentralized)</text>
+        <!-- Nodes -->
+        <circle cx="120" cy="110" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="60" cy="60" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="180" cy="60" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="60" cy="160" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="180" cy="160" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="40" cy="110" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="200" cy="110" r="6" fill="#4ade80" fill-opacity="0.6"/>
+        <!-- Peer-to-peer edges -->
+        <line x1="120" y1="110" x2="60" y2="60" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="120" y1="110" x2="180" y2="60" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="120" y1="110" x2="60" y2="160" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="120" y1="110" x2="180" y2="160" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="60" y1="60" x2="180" y2="60" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="60" y1="160" x2="180" y2="160" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="60" y1="60" x2="40" y2="110" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="60" y1="160" x2="40" y2="110" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="180" y1="60" x2="200" y2="110" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="180" y1="160" x2="200" y2="110" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Price signals label -->
+        <text x="120" y="200" text-anchor="middle" fill="#4ade80" font-size="10" fill-opacity="0.6">price signals flow peer-to-peer</text>
+
+        <!-- Centralized (planner) network -->
+        <text x="380" y="20" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">Central planning</text>
+        <!-- Central node -->
+        <circle cx="380" cy="100" r="10" fill="#f87171" fill-opacity="0.6"/>
+        <text x="380" y="104" text-anchor="middle" fill="#000" font-size="8">P</text>
+        <!-- Peripheral nodes -->
+        <circle cx="310" cy="60" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="450" cy="60" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="310" cy="140" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="450" cy="140" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="340" cy="170" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="420" cy="170" r="6" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Spokes -->
+        <line x1="380" y1="100" x2="310" y2="60" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="380" y1="100" x2="450" y2="60" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="380" y1="100" x2="310" y2="140" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="380" y1="100" x2="450" y2="140" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="380" y1="100" x2="340" y2="170" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="380" y1="100" x2="420" y2="170" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- All info flows through center -->
+        <text x="380" y="200" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.6">all info flows through planner</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Price as distributed computation
+; Each producer knows only local cost.
+; Price aggregates this into a coordination signal.
+
+; Simulate: 5 producers with private marginal costs
+; Market price = where supply meets demand
+
+(define costs (list 3 5 7 9 11))  ; marginal costs, sorted
+
+(define (supply-at-price p costs)
+  ; How many units supplied at price p?
+  (length (filter (lambda (c) (<= c p)) costs)))
+
+(define (demand-at-price p)
+  ; Simple linear demand: Q = 10 - p
+  (max 0 (- 10 p)))
+
+; Find clearing price (integer search)
+(define (find-equilibrium p)
+  (let ((s (supply-at-price p costs))
+        (d (demand-at-price p)))
+    (if (<= s d)
+        (begin
+          (display "Price $") (display p)
+          (display ": supply=") (display s)
+          (display " demand=") (display d) (newline)
+          (if (>= s d)
+              (begin (display "Equilibrium at price $") (display p))
+              (find-equilibrium (+ p 1))))
+        (begin (display "Equilibrium at price $") (display (- p 1))))))
+
+(find-equilibrium 1)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Price as distributed computation
+costs = [3, 5, 7, 9, 11]
+
+def supply(p): return sum(1 for c in costs if c <= p)
+def demand(p): return max(0, 10 - p)
+
+for p in range(1, 12):
+    s, d = supply(p), demand(p)
+    print("Price $" + str(p) + ": supply=" + str(s) + ", demand=" + str(d))
+    if s >= d:
+        print("Equilibrium at price $" + str(p))
+        break
+`} />
+    </div>
+
+
+    <!-- 2. The Calculation Debate -->
+    <h3>The calculation debate</h3>
+    <p>Mises (1920) argued that without market prices for capital goods, a socialist planner <strong>cannot</strong> perform rational economic calculation. Lange responded that a planner could mimic markets through trial-and-error pricing. Hayek's deeper point was about <strong>knowledge</strong>: the information needed for good allocation is generated by the market process itself. Simulating the market requires having the market.</p>
+
+    <SchemeRepl client:load initialCode={`; The planner's problem: exponential complexity
+; N goods, M consumers, each with private preferences
+; Possible allocations grow combinatorially
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+; With 10 goods and 10 consumers, possible assignments:
+(define n-goods 10)
+(define n-consumers 10)
+
+; Each good can go to any consumer: n-consumers^n-goods
+(define allocations (expt n-consumers n-goods))
+(display "10 goods, 10 consumers:") (newline)
+(display "Possible allocations: ") (display allocations) (newline)
+
+; With 100 goods: 10^100 (more than atoms in universe)
+(display "100 goods, 10 consumers:") (newline)
+(display "Possible allocations: 10^100") (newline)
+(display "Atoms in universe: ~10^80") (newline) (newline)
+
+; Market solution: each person optimizes locally
+; O(n) per person, O(n*m) total, converges via price adjustment
+(display "Market: each agent optimizes locally") (newline)
+(display "Complexity: O(n * m) = ") (display (* n-goods n-consumers))
+`} />
+
+
+    <!-- 3. Mixed Economies -->
+    <h3>Mixed economies</h3>
+    <p>No modern economy is purely market or purely planned. Mixed economies use markets for most goods but intervene for public goods (defense, infrastructure), externalities (pollution taxes), merit goods (education, healthcare), and redistribution. The question is which mix, and where to draw the boundaries. Marshall's partial equilibrium analysis was designed precisely for this: analyze one market at a time, holding others constant.</p>
+
+    <SchemeRepl client:load initialCode={`; Mixed economy: market for private goods,
+; government for public goods
+
+; Public good: non-rival, non-excludable
+; Private provision underprovides (free-rider problem)
+; Government can tax and provide efficiently
+
+; Example: lighthouse
+; 10 ships benefit, each values it at $100
+; Cost to build: $500
+; Efficient? Total value ($1000) > cost ($500): yes
+
+(define n-ships 10)
+(define value-per-ship 100)
+(define cost 500)
+(define total-value (* n-ships value-per-ship))
+
+(display "Lighthouse:") (newline)
+(display "Total value: $") (display total-value) (newline)
+(display "Cost: $") (display cost) (newline)
+(display "Efficient to build? ")
+(display (if (> total-value cost) "yes" "no")) (newline) (newline)
+
+; But voluntary contribution?
+; Nash equilibrium: each contributes $0 (free-ride)
+(display "Voluntary contribution (Nash): each pays $0") (newline)
+(display "Result: lighthouse not built") (newline)
+(display "Tax solution: $50 per ship, lighthouse built") (newline)
+(display "Each ship's surplus: $") (display (- value-per-ship 50))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Economic_calculation_problem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Economic calculation problem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/The_Use_of_Knowledge_in_Society"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hayek, "The Use of Knowledge in Society"</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mixed_economy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mixed economy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Public_good_(economics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Public goods</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-22/", label: "Inequality and Distribution" }} next={{ href: "/reading/economics/econ-24/", label: "Auctions" }} />
+
+  </main>
+</Layout>

@@ -2,20 +2,13 @@
 
 Astro site hosted on S3 + CloudFront. Unified build: blog + reading + apps.
 
-## Architecture
-
-- **Blog posts**: `~/Documents/junekim-migrates/src/content/blog/*.md`
-- **Reading site**: `~/Documents/junekim-migrates/src/pages/reading/`
-- **Apps** (static, in `public/`): jamdojo, pinyin-chart, advertising-journey, croupier, vectorspace-ads
-- **Styling**: Tailwind (one `blog.css` for blog pages, reading pages use their own Tailwind)
-
 ## Local dev
 
-`cd ~/Documents/junekim-migrates && pnpm run dev` — runs on port 12345 with hot reload.
+`pnpm run dev` — runs on port 12345 with hot reload.
 
 ## Deploy
 
-`cd ~/Documents/junekim-migrates && bash deploy.sh` — builds, creates .html aliases, syncs to S3, invalidates CloudFront.
+`bash deploy.sh` — builds, creates .html aliases, syncs to S3, invalidates CloudFront.
 
 ## Adding a post
 
@@ -30,9 +23,13 @@ tags: tag1, tag2
 
 Tags are comma-separated. Available tags: coding, cognition, methodology, reflecting, envelopay, pageleft, vector-space, poetry, crafting, improving, projects, reading.
 
-## Legacy
+## Structure
 
-This repo (`june.kim`) contains the original Jekyll source. It's kept for git history but no longer used for builds. The canonical source is `~/Documents/junekim-migrates/`.
+- **Blog posts**: `src/content/blog/*.md`
+- **Blog layouts**: `src/layouts/BlogPost.astro`, `src/layouts/TagPage.astro`
+- **Reading site**: `src/pages/reading/` (Astro + React islands, Scheme/Python REPLs)
+- **Apps** (pre-built, in `public/`): jamdojo, pinyin-chart, advertising-journey, croupier, vectorspace-ads
+- **Styling**: Tailwind — `src/styles/blog.css` for blog, reading pages use their own
 
 ## Editing style
 

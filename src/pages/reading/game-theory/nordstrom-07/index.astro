@@ -1,0 +1,216 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §2.5 — Zero-Sum Summary" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Zero-Sum Strategy Summary</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> §2.5 · <a href="https://nordstrommath.com/IntroGameTheory/S_ZeroSumStrategySummary.html">nordstrommath.com</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>minimax theorem</strong>: the row player's maximin (best guaranteed minimum) equals the column player's minimax (least the row player can be held to) at the <strong>saddle point</strong>. When they meet, both players have a pure equilibrium strategy.</p>
+    </div>
+
+    <!-- 1. Maximin and minimax -->
+    <h3>Maximin and minimax</h3>
+    <p>The row player looks at each row's worst outcome (the minimum) and picks the row with the best worst case. That's <strong>maximin</strong>. The column player looks at each column's best outcome for the row player (the maximum) and picks the column that minimizes it. That's <strong>minimax</strong>. When maximin equals minimax, the game has a saddle point.</p>
+
+    <!-- SVG: Matrix with row mins, col maxes, saddle point -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Grid: 3x3 -->
+        <rect x="80" y="60" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="150" y="60" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="220" y="60" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="80" y="110" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="150" y="110" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="220" y="110" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="80" y="160" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="150" y="160" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="220" y="160" width="70" height="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Saddle point highlighted -->
+        <rect x="150" y="110" width="70" height="50" rx="3" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="2"/>
+        <!-- Column headers -->
+        <text x="115" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">C1</text>
+        <text x="185" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">C2</text>
+        <text x="255" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">C3</text>
+        <!-- Row headers -->
+        <text x="68" y="90" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">R1</text>
+        <text x="68" y="140" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">R2</text>
+        <text x="68" y="190" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">R3</text>
+        <!-- Payoffs -->
+        <text x="115" y="90" text-anchor="middle" fill="currentColor" font-size="14">4</text>
+        <text x="185" y="90" text-anchor="middle" fill="currentColor" font-size="14">-2</text>
+        <text x="255" y="90" text-anchor="middle" fill="currentColor" font-size="14">5</text>
+        <text x="115" y="140" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="185" y="140" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">3</text>
+        <text x="255" y="140" text-anchor="middle" fill="currentColor" font-size="14">0</text>
+        <text x="115" y="190" text-anchor="middle" fill="currentColor" font-size="14">-1</text>
+        <text x="185" y="190" text-anchor="middle" fill="currentColor" font-size="14">2</text>
+        <text x="255" y="190" text-anchor="middle" fill="currentColor" font-size="14">6</text>
+        <!-- Row minimums (right side) -->
+        <text x="310" y="50" text-anchor="middle" fill="#f59e0b" font-size="9">Row min</text>
+        <text x="310" y="90" text-anchor="middle" fill="#f59e0b" font-size="12">-2</text>
+        <text x="310" y="140" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">0</text>
+        <text x="310" y="190" text-anchor="middle" fill="#f59e0b" font-size="12">-1</text>
+        <!-- Arrow: maximin -->
+        <text x="360" y="140" text-anchor="middle" fill="#4ade80" font-size="8">maximin</text>
+        <path d="M 330,135 L 345,135" fill="none" stroke="#4ade80" stroke-width="1.2"/>
+        <!-- Column maximums (bottom) -->
+        <text x="30" y="230" text-anchor="middle" fill="#60a5fa" font-size="9">Col max</text>
+        <text x="115" y="230" text-anchor="middle" fill="#60a5fa" font-size="12">4</text>
+        <text x="185" y="230" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">3</text>
+        <text x="255" y="230" text-anchor="middle" fill="#60a5fa" font-size="12">6</text>
+        <!-- Arrow: minimax -->
+        <text x="185" y="250" text-anchor="middle" fill="#4ade80" font-size="8">minimax</text>
+        <path d="M 185,235 L 185,242" fill="none" stroke="#4ade80" stroke-width="1.2"/>
+        <!-- Saddle point label -->
+        <text x="185" y="265" text-anchor="middle" fill="#4ade80" font-size="10">saddle point: maximin = minimax = 3</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Maximin: row player's best guaranteed minimum
+; Minimax: column player's best limit on row player's gain
+; Saddle point: where they meet
+
+(define matrix '((4 -2 5) (1 3 0) (-1 2 6)))
+
+(define (row-mins m)
+  (map (lambda (row) (apply min row)) m))
+
+(define (col-maxes m)
+  (let ((cols (length (car m))))
+    (let loop ((c 0) (result '()))
+      (if (>= c cols) (reverse result)
+        (loop (+ c 1)
+          (cons (apply max (map (lambda (r) (list-ref r c)) m))
+                result))))))
+
+(define (maximin m) (apply max (row-mins m)))
+(define (minimax m) (apply min (col-maxes m)))
+
+(display "Row minimums: ") (display (row-mins matrix)) (newline)
+(display "Maximin: ") (display (maximin matrix)) (newline)
+(display "Column maximums: ") (display (col-maxes matrix)) (newline)
+(display "Minimax: ") (display (minimax matrix)) (newline)
+(display "Saddle point? ")
+(display (if (= (maximin matrix) (minimax matrix))
+             (string-append "Yes, value = "
+               (number->string (maximin matrix)))
+             "No saddle point"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maximin, minimax, and saddle points
+matrix = [[4, -2, 5], [1, 3, 0], [-1, 2, 6]]
+
+row_mins = [min(row) for row in matrix]
+col_maxes = [max(matrix[r][c] for r in range(len(matrix)))
+             for c in range(len(matrix[0]))]
+
+maximin = max(row_mins)
+minimax = min(col_maxes)
+
+print(f"Row minimums: {row_mins}")
+print(f"Maximin: {maximin}")
+print(f"Column maximums: {col_maxes}")
+print(f"Minimax: {minimax}")
+print(f"Saddle point: {'Yes' if maximin == minimax else 'No'}, value = {maximin}")
+`} />
+    </div>
+
+    <!-- 2. When there's no saddle point -->
+    <h3>When there is no saddle point</h3>
+    <p>If maximin does not equal minimax, the game has no pure-strategy equilibrium. The row player's guaranteed floor is below the column player's guaranteed ceiling. The gap between them is where mixed strategies live, covered in the next chapter.</p>
+
+    <SchemeRepl client:load initialCode={`; A game with no saddle point: maximin < minimax
+(define no-saddle '((1 -1) (-1 1)))
+
+(display "Matrix: ") (display no-saddle) (newline)
+(display "Row mins: ") (display (row-mins no-saddle)) (newline)
+(display "Col maxes: ") (display (col-maxes no-saddle)) (newline)
+(display "Maximin: ") (display (maximin no-saddle)) (newline)
+(display "Minimax: ") (display (minimax no-saddle)) (newline)
+(display "Gap: ") (display (- (minimax no-saddle) (maximin no-saddle))) (newline)
+(display "No pure equilibrium. Mixed strategies needed.")
+`} />
+
+    <!-- 3. The decision procedure -->
+    <h3>Zero-sum strategy checklist</h3>
+    <p>Nordstrom summarizes the procedure for solving a zero-sum game. First eliminate dominated strategies. Then check for equilibrium points. If one exists, both players should play it (pure strategy). If none exists, use mixed strategies to find the game's value.</p>
+
+    <SchemeRepl client:load initialCode={`; Full zero-sum analysis pipeline
+(define (analyze-zero-sum m)
+  (display "Matrix: ") (display m) (newline)
+  (display "1. Row minimums: ") (display (row-mins m)) (newline)
+  (display "   Maximin: ") (display (maximin m)) (newline)
+  (display "2. Column maximums: ") (display (col-maxes m)) (newline)
+  (display "   Minimax: ") (display (minimax m)) (newline)
+  (if (= (maximin m) (minimax m))
+      (begin
+        (display "3. Saddle point exists at value ")
+        (display (maximin m)) (newline)
+        (display "   -> Play pure strategies."))
+      (begin
+        (display "3. No saddle point.") (newline)
+        (display "   -> Use mixed strategies (next chapter).")))
+  (newline))
+
+(analyze-zero-sum '((4 -2 5) (1 3 0) (-1 2 6)))
+(newline)
+(analyze-zero-sum '((1 -1) (-1 1)))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Maximin</td><td class="pr-4 text-green-300">(maximin m)</td><td class="font-sans">Row player's best guaranteed minimum</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Minimax</td><td class="pr-4 text-green-300">(minimax m)</td><td class="font-sans">Column player's least concession</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Saddle point</td><td class="pr-4 text-green-300">(= (maximin m) (minimax m))</td><td class="font-sans">Pure equilibrium exists when they're equal</td></tr>
+          <tr><td class="py-2 pr-4">Dominated</td><td class="pr-4 text-green-300">eliminated first</td><td class="font-sans">Strategies that are always worse than another</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-06/">🍞 §2.4 Equilibrium Points</a> — previous section</li>
+      <li><a href="/reading/game-theory/nordstrom-08/">🍞 §3.1 Repeated Games</a> — next section</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Minimax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Minimax theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Saddle_point"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Saddle point</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Zero-sum_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Zero-sum game</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source: <a href="https://nordstrommath.com/IntroGameTheory/S_ZeroSumStrategySummary.html">Nordstrom §2.5</a>. Licensed CC BY-SA 4.0.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-06/", label: "Equilibrium Points" }} next={{ href: "/reading/game-theory/nordstrom-08/", label: "Repeated Games" }} />
+
+  </main>
+</Layout>

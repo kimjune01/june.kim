@@ -1,0 +1,275 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="The Scientific Method" favicon="🔬">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🔬 The Scientific Method</h1>
+
+    <p class="text-lg text-gray-300 mb-6">Four centuries of arguing about what counts as knowledge. Each work below changed how we do science, often by showing that the previous way was broken. The vocabulary we inherited is still load-bearing.</p>
+
+    <!-- SVG: Timeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 560 120" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <line x1="20" y1="50" x2="540" y2="50" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+
+        <!-- Empiricists (blue) -->
+        <circle cx="40" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="40" y="30" text-anchor="middle" fill="#60a5fa" font-size="8">1620</text>
+        <text x="40" y="72" text-anchor="middle" fill="#60a5fa" font-size="7">Bacon</text>
+
+        <circle cx="80" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="80" y="30" text-anchor="middle" fill="#60a5fa" font-size="8">1637</text>
+        <text x="80" y="72" text-anchor="middle" fill="#60a5fa" font-size="7">Descartes</text>
+
+        <circle cx="130" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="130" y="30" text-anchor="middle" fill="#60a5fa" font-size="8">1739</text>
+        <text x="130" y="72" text-anchor="middle" fill="#60a5fa" font-size="7">Hume</text>
+
+        <!-- Systematizers (amber) -->
+        <circle cx="175" cy="50" r="5" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="175" y="30" text-anchor="middle" fill="#f59e0b" font-size="8">1843</text>
+        <text x="175" y="72" text-anchor="middle" fill="#f59e0b" font-size="7">Mill</text>
+
+        <circle cx="210" cy="50" r="5" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="210" y="30" text-anchor="middle" fill="#f59e0b" font-size="8">1854</text>
+        <text x="210" y="72" text-anchor="middle" fill="#f59e0b" font-size="7">Boole</text>
+
+        <circle cx="250" cy="50" r="5" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="250" y="30" text-anchor="middle" fill="#f59e0b" font-size="8">1890</text>
+        <text x="250" y="72" text-anchor="middle" fill="#f59e0b" font-size="7">Chamberlin</text>
+
+        <!-- Falsificationists (green) -->
+        <circle cx="300" cy="50" r="5" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+        <text x="300" y="30" text-anchor="middle" fill="#34d399" font-size="8">1934</text>
+        <text x="300" y="72" text-anchor="middle" fill="#34d399" font-size="7">Popper</text>
+
+        <circle cx="350" cy="50" r="5" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+        <text x="350" y="30" text-anchor="middle" fill="#34d399" font-size="8">1962</text>
+        <text x="350" y="72" text-anchor="middle" fill="#34d399" font-size="7">Kuhn</text>
+
+        <circle cx="400" cy="50" r="5" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+        <text x="400" y="30" text-anchor="middle" fill="#34d399" font-size="8">1974</text>
+        <text x="400" y="72" text-anchor="middle" fill="#34d399" font-size="7">Feynman</text>
+
+        <!-- Crisis & repair (purple) -->
+        <circle cx="450" cy="50" r="5" fill="#a78bfa" fill-opacity="0.3" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="450" y="30" text-anchor="middle" fill="#a78bfa" font-size="8">2005</text>
+        <text x="450" y="72" text-anchor="middle" fill="#a78bfa" font-size="7">Ioannidis</text>
+
+        <circle cx="490" cy="50" r="5" fill="#a78bfa" fill-opacity="0.3" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="490" y="30" text-anchor="middle" fill="#a78bfa" font-size="8">2018</text>
+        <text x="490" y="72" text-anchor="middle" fill="#a78bfa" font-size="7">Mayo</text>
+
+        <!-- Practice (yellow) -->
+        <circle cx="530" cy="50" r="5" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1.5"/>
+        <text x="530" y="30" text-anchor="middle" fill="#facc15" font-size="8">2010→</text>
+        <text x="530" y="72" text-anchor="middle" fill="#facc15" font-size="7">Gwern</text>
+
+        <text x="260" y="100" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">each one responding to a failure of what came before</text>
+      </svg>
+    </div>
+
+    <h2>The arc</h2>
+
+    <p>Bacon says: observe, don't speculate. Descartes says: doubt everything, rebuild from certainty. Hume says: your observations don't prove anything. Mill says: here's how to extract causes anyway. Boole says: logic is algebra, make it mechanical. Chamberlin says: hold multiple hypotheses or you'll fool yourself. Popper says: you can't prove a theory, only disprove it. Kuhn says: scientists don't actually work that way. Feynman says: the first principle is that you must not fool yourself. Ioannidis says: you're fooling yourself. Mayo says: here's how to stop. Gwern says: any method can be gamed, so publish the trail. He calls it <em>long content</em>.</p>
+
+    <p>Each thinker responds to a failure of the previous method. The failures are the interesting part.</p>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2>Works</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Work</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it changed</th>
+            <th class="text-left py-2 text-gray-400"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/bacon-1620/">Bacon 1620</a></td><td class="pr-3 text-gray-400">Replaced Aristotelian deduction with systematic observation. Gave us <em>induction</em>.</td><td><a href="/reading/scientific-method/bacon-1620/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/descartes-1637/">Descartes 1637</a></td><td class="pr-3 text-gray-400">Doubt everything, rebuild from certainty. Decompose, solve from simplest to complex.</td><td><a href="/reading/scientific-method/descartes-1637/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/hume-1739/">Hume 1739</a></td><td class="pr-3 text-gray-400">No amount of observation proves the next instance. Killed the certainty Descartes promised.</td><td><a href="/reading/scientific-method/hume-1739/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/mill-1843/">Mill 1843</a></td><td class="pr-3 text-gray-400">Five methods for extracting causes. Vary one thing, hold the rest constant.</td><td><a href="/reading/scientific-method/mill-1843/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/boole-1854/">Boole 1854</a></td><td class="pr-3 text-gray-400">Reduced logic to algebra. Made reasoning computable. Every <code>if/then/and/or</code> descends from this.</td><td><a href="/reading/scientific-method/boole-1854/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/peirce-1878/">Peirce 1878</a></td><td class="pr-3 text-gray-400">Added abduction: inference to the best explanation. The meaning of a concept is its practical consequences.</td><td><a href="/reading/scientific-method/peirce-1878/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin 1890</a></td><td class="pr-3 text-gray-400">Hold multiple hypotheses or your favorite will blind you. Five pages that still fix confirmation bias.</td><td><a href="/reading/scientific-method/chamberlin-1890/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/fisher-1935/">Fisher 1935</a></td><td class="pr-3 text-gray-400">Randomization, significance tests, ANOVA. Built the machinery that modern science runs on.</td><td><a href="/reading/scientific-method/fisher-1935/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/popper-1934/">Popper 1934</a></td><td class="pr-3 text-gray-400">You can't prove a theory, only disprove it. Falsifiability as the line between science and everything else.</td><td><a href="/reading/scientific-method/popper-1934/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/kuhn-1962/">Kuhn 1962</a></td><td class="pr-3 text-gray-400">Science doesn't accumulate. It breaks and rebuilds. Paradigm shifts happen when anomalies pile up.</td><td><a href="/reading/scientific-method/kuhn-1962/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/platt-1964/">Platt 1964</a></td><td class="pr-3 text-gray-400">Strong inference: alternative hypotheses, crucial experiments, repeat. Why some fields move faster.</td><td><a href="/reading/scientific-method/platt-1964/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></td><td class="pr-3 text-gray-400">Cargo cult science. The first principle is that you must not fool yourself, and you are the easiest person to fool.</td><td><a href="/reading/scientific-method/feynman-1974/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis 2005</a></td><td class="pr-3 text-gray-400">Why most published research findings are false. The replication crisis, diagnosed before it had a name.</td><td><a href="/reading/scientific-method/ioannidis-2005/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></td><td class="pr-3 text-gray-400">Severe testing: a test only confirms if it had a real chance of catching you being wrong.</td><td><a href="/reading/scientific-method/mayo-2018/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/integrity/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">Long content: any method can be Goodharted, so publish the full trail — data, nulls, revisions — and let anyone audit it.</td><td><a href="/reading/scientific-method/integrity/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/self-experiment/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">The self-experiment: Fisher's randomization at n=1. Self-blinding, power analysis, and published nulls — without the institution.</td><td><a href="/reading/scientific-method/self-experiment/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/registered-prediction/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">Registered prediction: assign a probability, set a deadline, publish it, score it. Falsification operationalized.</td><td><a href="/reading/scientific-method/registered-prediction/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Vocabulary we inherited</h2>
+
+    <p>Every word in this table was coined or formalized by someone on the list above. We use them without thinking about the argument that produced them.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Term</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Source</th>
+            <th class="text-left py-2 text-gray-400">What it settled</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Induction</td><td class="pr-3 text-gray-400">Bacon</td><td class="text-gray-400">Generalize from observations, don't deduce from axioms</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Method of doubt</td><td class="pr-3 text-gray-400">Descartes</td><td class="text-gray-400">Accept nothing without evidence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Problem of induction</td><td class="pr-3 text-gray-400">Hume</td><td class="text-gray-400">Observation never proves necessity</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Method of difference</td><td class="pr-3 text-gray-400">Mill</td><td class="text-gray-400">Vary one thing, hold the rest constant</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Boolean logic</td><td class="pr-3 text-gray-400">Boole</td><td class="text-gray-400">Reasoning is algebra</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Abduction</td><td class="pr-3 text-gray-400">Peirce</td><td class="text-gray-400">Inference to the best explanation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Null hypothesis, p-value</td><td class="pr-3 text-gray-400">Fisher</td><td class="text-gray-400">Quantify how surprised you should be</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Type I/II error, power</td><td class="pr-3 text-gray-400">Neyman-Pearson</td><td class="text-gray-400">Hypothesis testing as decision procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Falsifiability</td><td class="pr-3 text-gray-400">Popper</td><td class="text-gray-400">The line between science and non-science</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Paradigm shift</td><td class="pr-3 text-gray-400">Kuhn</td><td class="text-gray-400">Science breaks and rebuilds, it doesn't just accumulate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Strong inference</td><td class="pr-3 text-gray-400">Platt</td><td class="text-gray-400">Design experiments that exclude alternatives</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Severe testing</td><td class="pr-3 text-gray-400">Mayo</td><td class="text-gray-400">A test confirms only if it could have caught you being wrong</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Long content</td><td class="pr-3 text-gray-400">Gwern</td><td class="text-gray-400">Publish the full trail — data, nulls, revisions — so the method can't be Goodharted</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Registered prediction</td><td class="text-gray-400">Gwern</td><td class="text-gray-400">Assign a probability, set a deadline, score it. Falsification with a timestamp.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Failures that drove the next step</h2>
+
+    <p>The collection reads differently when you see what broke.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Failure</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What broke</th>
+            <th class="text-left py-2 text-gray-400">What it produced</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Aristotelian physics</td><td class="pr-3 text-gray-400">Deduction from first principles without observation</td><td class="text-gray-400">Bacon's inductive method</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Phlogiston theory</td><td class="pr-3 text-gray-400">Fit the data until Lavoisier weighed the air</td><td class="text-gray-400">Quantitative experiment over plausible narrative</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Luminiferous aether</td><td class="pr-3 text-gray-400">Michelson-Morley found nothing. The most productive null result in history.</td><td class="text-gray-400">Einstein's relativity; Kuhn's paradigm shifts</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Eugenics</td><td class="pr-3 text-gray-400">Fisher's statistics weaponized by ideology. Sound method, monstrous application.</td><td class="text-gray-400">Research ethics, informed consent, institutional review</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Lysenko affair</td><td class="pr-3 text-gray-400">Political authority overriding evidence. Soviet genetics destroyed for decades.</td><td class="text-gray-400">Scientific autonomy as a value worth defending</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Cargo cult science</td><td class="pr-3 text-gray-400">Form without substance. Rituals of method without the honesty.</td><td class="text-gray-400">Feynman's integrity principle</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Replication crisis</td><td class="pr-3 text-gray-400">P-hacking, publication bias, garden of forking paths</td><td class="text-gray-400">Pre-registration, open data, Mayo's severe testing</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Goodharting the method</td><td class="pr-3 text-gray-400">Pre-registration gamed, severity selectively reported. The form of rigor without the trail.</td><td class="text-gray-400">Long content, registered prediction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The protocol</h2>
+
+    <p>Each step exists because someone on the timeline proved it was necessary.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Step</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What you do</th>
+            <th class="text-left py-2 text-gray-400">Who established it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Pre-register</td><td class="pr-3 text-gray-400">Write down your hypothesis, your analysis plan, and what would disprove you. Before you see the data.</td><td class="text-gray-400"><a href="/reading/scientific-method/popper-1934/">Popper</a>, <a href="/reading/scientific-method/mayo-2018/">Mayo</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Red-team to convergence</td><td class="pr-3 text-gray-400">Generate alternative hypotheses. Design experiments that discriminate between them. Keep generating until you can't anymore.</td><td class="text-gray-400"><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin</a>, <a href="/reading/scientific-method/platt-1964/">Platt</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Work log frequently</td><td class="pr-3 text-gray-400">Record observations as they happen. Version your drafts. Tag your confidence. The log is the evidence that you didn't backfill.</td><td class="text-gray-400"><a href="/reading/scientific-method/bacon-1620/">Bacon</a>, <a href="/reading/scientific-method/integrity/">Gwern</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Publish all</td><td class="pr-3 text-gray-400">The positives, the nulls, the embarrassing stuff, the code. A curated trail can be Goodharted. A complete one can't.</td><td class="text-gray-400"><a href="/reading/scientific-method/feynman-1974/">Feynman</a>, <a href="/reading/scientific-method/integrity/">Gwern</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SVG: Protocol pipeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Step boxes — use explicit gray fills that work on both dark and light -->
+        <rect x="10" y="20" width="100" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1"/>
+        <text x="60" y="42" text-anchor="middle" fill="currentColor" font-size="9">pre-register</text>
+        <text x="60" y="55" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5">Popper, Mayo</text>
+
+        <rect x="125" y="20" width="100" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1"/>
+        <text x="175" y="42" text-anchor="middle" fill="currentColor" font-size="9">red-team</text>
+        <text x="175" y="55" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5">Chamberlin, Platt</text>
+
+        <rect x="240" y="20" width="100" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1"/>
+        <text x="290" y="42" text-anchor="middle" fill="currentColor" font-size="9">work log</text>
+        <text x="290" y="55" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5">Bacon, Gwern</text>
+
+        <rect x="355" y="20" width="100" height="50" rx="4" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1"/>
+        <text x="405" y="42" text-anchor="middle" fill="currentColor" font-size="9">publish all</text>
+        <text x="405" y="55" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5">Feynman, Gwern</text>
+
+        <!-- Arrows between steps -->
+        <line x1="112" y1="45" x2="123" y2="45" stroke="#71717a" stroke-width="1.2"/>
+        <line x1="227" y1="45" x2="238" y2="45" stroke="#71717a" stroke-width="1.2"/>
+        <line x1="342" y1="45" x2="353" y2="45" stroke="#71717a" stroke-width="1.2"/>
+
+        <!-- Artifact arrows down -->
+        <line x1="60" y1="72" x2="60" y2="95" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="175" y1="72" x2="175" y2="95" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="290" y1="72" x2="290" y2="95" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="405" y1="72" x2="405" y2="95" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Artifact labels -->
+        <rect x="10" y="97" width="100" height="35" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1"/>
+        <text x="60" y="118" text-anchor="middle" fill="#059669" font-size="7">registered prediction</text>
+
+        <rect x="125" y="97" width="100" height="35" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1"/>
+        <text x="175" y="118" text-anchor="middle" fill="#059669" font-size="7">alternatives list</text>
+
+        <rect x="240" y="97" width="100" height="35" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1"/>
+        <text x="290" y="118" text-anchor="middle" fill="#059669" font-size="7">timestamped log</text>
+
+        <rect x="355" y="97" width="100" height="35" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1"/>
+        <text x="405" y="118" text-anchor="middle" fill="#059669" font-size="7">complete dataset</text>
+
+        <!-- Converge to trail -->
+        <line x1="60" y1="134" x2="200" y2="158" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.4"/>
+        <line x1="175" y1="134" x2="215" y2="158" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.4"/>
+        <line x1="290" y1="134" x2="245" y2="158" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.4"/>
+        <line x1="405" y1="134" x2="260" y2="158" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.4"/>
+
+        <text x="230" y="172" text-anchor="middle" fill="#059669" font-size="10" font-weight="bold">the trail</text>
+      </svg>
+    </div>
+
+    <p>Each step produces a public artifact. That trail is what counts as knowledge. Following this protocol outside the institution is discipline. Following it inside is career risk. Blame the game, not the player.</p>
+
+    <p><a href="/reading/scientific-method/integrity/">The integrity essay</a> makes the full case.</p>
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.coursera.org/learn/philosophy-of-science">UPenn: Philosophy of Science (Coursera)</a></p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎰 Probability</a></li>
+      <li><a href="/reading/statistics/">📊 Statistics</a></li>
+      <li><a href="/reading/logic/">🔑 Logic</a></li>
+      <li><a href="/reading/cognitive-architecture/">🏛️ Cognitive Architectures</a></li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

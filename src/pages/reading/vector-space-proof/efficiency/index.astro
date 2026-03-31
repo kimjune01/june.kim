@@ -1,0 +1,132 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="Efficiency.lean — Score = log(value), winner maximizes welfare" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>Efficiency.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/Efficiency.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two algebraic bridges connect the scoring rule to welfare maximization. The first needs truthfulness; the second doesn't. That asymmetry is the engine of the entire proof &mdash; and the formal version of the argument in <a href="https://june.kim/power-diagrams-for-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Power Diagrams for Ad Auctions</a>.</p>
+    </div>
+
+    <h3>isTruthful / allTruthful</h3>
+    <p>A report is truthful when it matches the player's private valuation: same center, same sigma, bid equals true value. <code>allTruthful</code> extends this to every player.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">isTruthful</span> (r : Report E) (v : Valuation E) : Prop :=
+  r.center = v.center ∧ r.sigma = v.trueSigma ∧ r.bid = v.trueValue</code></pre>
+
+    <h3>score_eq_log_trueVal (Bridge 1: truthful)</h3>
+    <p>Under truthful reporting, <code>score_i(x) = log(trueVal_i(x))</code>. The scoring function is the log of the value function when reports are honest. Since log is monotone, maximizing score is the same as maximizing value.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">score_eq_log_trueVal</span> (r : Report E) (v : Valuation E) (x : E)
+    (h : isTruthful r v) :
+    score r x = Real.log (trueVal v x)</code></pre>
+    <p>The proof: substitute the truthful equalities into the score definition, use <code>log(a · exp(b)) = log(a) + b</code> from Mathlib. Pure algebra.</p>
+
+    <h3>score_eq_log_reportedVal (Bridge 2: unconditional)</h3>
+    <p><code>score = log(reportedVal)</code> always &mdash; no truthfulness needed. The mechanism always maximizes <em>reported</em> welfare. Only the truthful player aligns reported with true welfare. This is the key to DSIC.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">score_eq_log_reportedVal</span> (r : Report E) (x : E) :
+    score r x = Real.log (reportedVal r x)</code></pre>
+
+    <SchemeRepl client:load initialCode={`; Bridge 1 vs Bridge 2
+(define center 0.4) (define sigma 0.3) (define value 7.0)
+(define x 0.6)
+
+(define (score c s bid x)
+  (- (log bid) (/ (* (- x c) (- x c)) (* s s))))
+
+(define (trueVal c s v x)
+  (* v (exp (- (/ (* (- x c) (- x c)) (* s s))))))
+
+(define (reportedVal c s bid x)
+  (* bid (exp (- (/ (* (- x c) (- x c)) (* s s))))))
+
+; Bridge 1: truthful => score = log(trueVal)
+(let ((s (score center sigma value x))
+      (tv (log (trueVal center sigma value x))))
+  (display "Truthful: score=") (display s)
+  (display " log(trueVal)=") (display tv)
+  (display " match=") (display (< (abs (- s tv)) 1e-10))
+  (newline))
+
+; Lie: bid = 20
+(let ((s (score center sigma 20.0 x))
+      (tv (log (trueVal center sigma value x))))
+  (display "Lying:    score=") (display s)
+  (display " log(trueVal)=") (display tv)
+  (display " match=") (display (< (abs (- s tv)) 1e-10))
+  (newline))
+
+; Bridge 2: always holds
+(let ((s (score center sigma 20.0 x))
+      (rv (log (reportedVal center sigma 20.0 x))))
+  (display "Bridge 2: score=") (display s)
+  (display " log(rVal)=") (display rv)
+  (display " match=") (display (< (abs (- s rv)) 1e-10))
+  (newline))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+center, sigma, value = 0.4, 0.3, 7.0
+x = 0.6
+
+def score(c, s, bid, x):
+    return math.log(bid) - (x - c)**2 / s**2
+
+def trueVal(c, s, v, x):
+    return v * math.exp(-(x - c)**2 / s**2)
+
+def reportedVal(c, s, bid, x):
+    return bid * math.exp(-(x - c)**2 / s**2)
+
+# Bridge 1: truthful => score = log(trueVal)
+s1 = score(center, sigma, value, x)
+tv = trueVal(center, sigma, value, x)
+print(f"Truthful:  score = {s1:.6f}")
+print(f"           log(trueVal) = {math.log(tv):.6f}")
+print(f"           match = {abs(s1 - math.log(tv)) < 1e-10}")
+
+# Lie: inflate bid to 20
+s2 = score(center, sigma, 20.0, x)
+print(f"\\nLying bid: score = {s2:.6f}")
+print(f"           log(trueVal) = {math.log(tv):.6f}")
+print(f"           match = {abs(s2 - math.log(tv)) < 1e-10}")
+
+# Bridge 2: score = log(reportedVal) always
+rv = reportedVal(center, sigma, 20.0, x)
+print(f"\\nBridge 2:  score = {s2:.6f}")
+print(f"           log(reportedVal) = {math.log(rv):.6f}")
+print(f"           match = {abs(s2 - math.log(rv)) < 1e-10}")
+`} />
+    </div>
+
+    <h3>winner_maximizes_reportedVal</h3>
+    <p>For any player <code>j</code>, the winner's reported value is at least <code>j</code>'s reported value. Follows from Bridge 2 plus the argmax definition of winner. No truthfulness required.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">winner_maximizes_reportedVal</span> (auc : Auction ι E) (x : E) (j : ι) :
+    reportedVal (auc.report (winner auc x)) x ≥
+      reportedVal (auc.report j) x</code></pre>
+
+    <h3>winner_maximizes_welfare</h3>
+    <p>Under truthful reporting, the winner at each query point achieves the highest true value among all players. This is the pointwise welfare-maximization result. The proof chain: argmax of score &rarr; argmax of log(trueVal) via Bridge 1 &rarr; argmax of trueVal by monotonicity of log.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">winner_maximizes_welfare</span> (auc : Auction ι E) (x : E)
+    (htruth : allTruthful auc) (j : ι) :
+    trueVal (auc.valuation (winner auc x)) x ≥
+      trueVal (auc.valuation j) x</code></pre>
+    <p class="text-sm text-gray-500">This is the result that lifts to integrated welfare in <a href="/reading/vector-space-proof/integral-efficiency/">IntegralEfficiency.lean</a>.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/auction/">Auction.lean</a> &mdash; defines score, trueVal, reportedVal, winner</li>
+      <li><a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a> &mdash; uses <code>winner_maximizes_reportedVal</code> for the DSIC proof</li>
+      <li><a href="/reading/vector-space-proof/integral-efficiency/">IntegralEfficiency.lean</a> &mdash; lifts <code>winner_maximizes_welfare</code> to integrals</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/axioms/", label: "Axioms.lean · 2 of 7" }} next={{ href: "/reading/vector-space-proof/strategyproof/", label: "Strategyproof.lean · 4 of 7" }} />
+  </main>
+</Layout>

@@ -1,0 +1,157 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.2 — Direct Proof" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Direct Proof</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>direct proof</strong> of "if P then Q" starts by assuming P is true, then deduces Q through a chain of logical steps. Each step follows from definitions, axioms, or previously proven results. No detours, no contradictions: just a straight line from hypothesis to conclusion.</p>
+    </div>
+
+    <!-- SVG: Linear chain P → step1 → step2 → Q -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 80" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- P -->
+        <rect x="10" y="24" width="60" height="32" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="40" y="45" text-anchor="middle" fill="#60a5fa" font-size="14">P</text>
+        <!-- Arrow -->
+        <line x1="72" y1="40" x2="108" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="106,36 114,40 106,44" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Step 1 -->
+        <rect x="114" y="24" width="80" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="154" y="45" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">step 1</text>
+        <!-- Arrow -->
+        <line x1="196" y1="40" x2="228" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="226,36 234,40 226,44" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Step 2 -->
+        <rect x="234" y="24" width="80" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="274" y="45" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">step 2</text>
+        <!-- Arrow -->
+        <line x1="316" y1="40" x2="348" y2="40" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="346,36 354,40 346,44" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Q -->
+        <rect x="354" y="24" width="60" height="32" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="384" y="45" text-anchor="middle" fill="#f59e0b" font-size="14">Q</text>
+      </svg>
+    </div>
+
+    <!-- 1. Structure of a direct proof -->
+    <h3>Structure of a direct proof</h3>
+    <p>Every direct proof has three parts: (1) state what you are proving, (2) assume the hypothesis, (3) derive the conclusion using definitions and known results. The chain must be gap-free: each step must follow logically from what came before.</p>
+
+    <SchemeRepl client:load initialCode={`; Direct proof: the sum of two even numbers is even.
+;
+; Claim: If a and b are even, then a + b is even.
+; Proof: Assume a and b are even.
+;   By definition, a = 2k for some integer k, b = 2m for some integer m.
+;   Then a + b = 2k + 2m = 2(k + m).
+;   Since k + m is an integer, a + b is even. QED.
+
+(define (even? n) (= 0 (modulo n 2)))
+
+; Check the claim on examples
+(define (check a b)
+  (display a) (display " + ") (display b)
+  (display " = ") (display (+ a b))
+  (display " even? ") (display (even? (+ a b)))
+  (newline))
+
+(check 4 6)
+(check 10 22)
+(check 0 8)
+(check 2 2)
+; Every sum of two evens is even.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Direct proof: sum of two evens is even
+def is_even(n):
+    return n % 2 == 0
+
+# Verify on examples
+for a, b in [(4, 6), (10, 22), (0, 8), (2, 2)]:
+    total = a + b
+    print(f"{a} + {b} = {total}, even? {is_even(total)}")
+`} />
+    </div>
+
+    <!-- 2. Example: product of rationals -->
+    <h3>Example: product of rationals is rational</h3>
+    <p>Claim: if a and b are rational, then a * b is rational. Proof: a rational number is p/q where p, q are integers and q is not zero. If a = p/q and b = r/s, then a * b = (p * r)/(q * s). Since p*r and q*s are integers and q*s is not zero, the product is rational.</p>
+
+    <SchemeRepl client:load initialCode={`; Direct proof: product of rationals is rational.
+; We represent a rational as a pair (numerator . denominator).
+
+(define (make-rat p q) (cons p q))
+(define (numer r) (car r))
+(define (denom r) (cdr r))
+
+(define (rat-multiply a b)
+  (make-rat (* (numer a) (numer b))
+            (* (denom a) (denom b))))
+
+(define (show-rat r)
+  (display (numer r)) (display "/") (display (denom r)))
+
+(define a (make-rat 2 3))   ; 2/3
+(define b (make-rat 5 7))   ; 5/7
+
+(display "a = ") (show-rat a) (newline)
+(display "b = ") (show-rat b) (newline)
+(display "a * b = ") (show-rat (rat-multiply a b)) (newline)
+; (2*5)/(3*7) = 10/21 — integer over nonzero integer — rational.
+
+(define c (make-rat 3 4))
+(define d (make-rat 8 9))
+(display "c * d = ") (show-rat (rat-multiply c d))
+; 24/36 = 2/3 — still rational.
+`} />
+
+    <!-- 3. Writing direct proofs -->
+    <h3>Writing direct proofs</h3>
+    <p>The skill is turning definitions into equations you can manipulate. "Even" means 2k. "Rational" means p/q. "Divides" means a = b*k. Every direct proof starts the same way: unpack the definitions, do the algebra, repack into the conclusion's definition.</p>
+
+    <SchemeRepl client:load initialCode={`; Direct proof: if a divides b and b divides c, then a divides c.
+; "a divides b" means b = a*k for some integer k.
+
+(define (divides? a b) (= 0 (modulo b a)))
+
+; Proof: assume a|b and b|c.
+; Then b = a*k and c = b*m for integers k, m.
+; So c = (a*k)*m = a*(k*m).
+; Since k*m is an integer, a divides c. QED.
+
+(display "3|6? ") (display (divides? 3 6)) (newline)
+(display "6|24? ") (display (divides? 6 24)) (newline)
+(display "3|24? ") (display (divides? 3 24)) (newline)
+; Transitivity: 3|6 and 6|24 implies 3|24.
+
+(display "5|15? ") (display (divides? 5 15)) (newline)
+(display "15|45? ") (display (divides? 15 45)) (newline)
+(display "5|45? ") (display (divides? 5 45))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/proof-writing/proofs-01/">✎ Proofs Ch.1</a> — the logical foundations that justify each step</li>
+      <li><a href="/reading/proof-writing/proofs-03/">✎ Proofs Ch.3</a> — what to do when direct proof is hard</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-01/", label: "Statements and Logic" }} next={{ href: "/reading/proof-writing/proofs-03/", label: "Contrapositive and Contradiction" }} />
+
+  </main>
+</Layout>

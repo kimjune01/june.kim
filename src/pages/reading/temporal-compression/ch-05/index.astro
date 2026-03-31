@@ -1,0 +1,216 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="The Assembly — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>The Assembly</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 5 · Roadmap
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        Most of the ingredients exist. The assembly doesn't. This is what it would look like.
+      </p>
+    </div>
+
+    <h3>Three fields, three edges</h3>
+
+    <p>
+      Each pair of fields has a transfer that would extend one with the other's tools.
+      Each transfer requires a theorem that doesn't exist yet. The triangle below
+      labels the edges by what's missing.
+    </p>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 460 380" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Triangle vertices -->
+        <!-- Top: Codecs -->
+        <circle cx="230" cy="50" r="30" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="230" y="46" text-anchor="middle" fill="currentColor" font-size="11">Codecs</text>
+        <text x="230" y="60" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8">empirical</text>
+
+        <!-- Bottom-left: TVG -->
+        <circle cx="80" cy="320" r="30" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="80" y="316" text-anchor="middle" fill="currentColor" font-size="11">TVG</text>
+        <text x="80" y="330" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8">theoretical</text>
+
+        <!-- Bottom-right: Sheaves -->
+        <circle cx="380" cy="320" r="30" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="380" y="316" text-anchor="middle" fill="currentColor" font-size="11">Sheaves</text>
+        <text x="380" y="330" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8">mathematical</text>
+
+        <!-- Edge: Codecs - TVG (left) -->
+        <line x1="205" y1="72" x2="105" y2="295" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <rect x="70" y="155" width="130" height="52" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+        <text x="135" y="172" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-size="9">R-D bounds on journeys</text>
+        <text x="135" y="186" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">encoding family + distortion</text>
+        <text x="135" y="198" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">functional on journey metrics</text>
+
+        <!-- Edge: TVG - Sheaves (bottom) -->
+        <line x1="110" y1="325" x2="350" y2="325" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <rect x="155" y="340" width="150" height="38" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+        <text x="230" y="356" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-size="9">Temporal dynamics in the sheaf</text>
+        <text x="230" y="370" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">lift Krishnan's semiring sheaves to event graphs</text>
+
+        <!-- Edge: Codecs - Sheaves (right) -->
+        <line x1="255" y1="72" x2="355" y2="295" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <rect x="270" y="155" width="130" height="52" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+        <text x="335" y="172" text-anchor="middle" fill="currentColor" fill-opacity="0.6" font-size="9">Checkpoint spacing</text>
+        <text x="335" y="186" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">from H¹ on sub-complexes</text>
+        <text x="335" y="198" text-anchor="middle" fill="currentColor" fill-opacity="0.35" font-size="8">clamped boundaries = I-frames</text>
+
+        <!-- Center label -->
+        <text x="230" y="250" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">each edge = a missing theorem</text>
+      </svg>
+    </div>
+
+    <h3>The theorem program</h3>
+
+    <p>
+      Three theorems would close the triangle. Computational attempts (March 2026)
+      produced one structural finding, one closed-form formula, and one achievability
+      bound. None is a finished theorem. All three advanced the problem.
+    </p>
+
+    <h3>Theorem 1: R-D bounds for journey observables</h3>
+
+    <p>
+      <strong>Transfers:</strong> codec R-D optimization → TVG theory.
+    </p>
+
+    <p>
+      <strong>Achievability (partial result):</strong> Timestamp coarsening into
+      bins of width Δ gives rate below lossless with controlled journey distortion.
+      <a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. (2008)</a>
+      did this for static graphs under MDL.
+      <a href="https://www.sciencedirect.com/science/article/pii/S0304397518307308">Bento &amp; Ioannidis (2020)</a>
+      give an information-theoretic framework for lossy link-stream compression
+      but without journey-aware distortion.
+    </p>
+
+    <p>
+      <strong>Converse (partial):</strong> The interval transfer tensor (foremost
+      arrival times between all pairs within a checkpoint interval) is i.i.d.
+      across intervals, giving R ≥ K · R<sub>seg</sub>(D). Optimal spacing
+      L* ≈ log(n)/log(np). But journeys couple intervals, so the tensor-level
+      converse does not directly yield end-to-end guarantees. The distortion
+      definition also needs repair (multiplicative vs. additive slack).
+    </p>
+
+    <p>
+      <strong>Dead end:</strong> Serializing the temporal graph as a string and
+      applying lossy LZ fails. Hamming distortion is agnostic to event criticality,
+      so worst-case journey distortion is trivial regardless of serialization order.
+    </p>
+
+    <h3>Theorem 2: Tropical sheaves (strongest finding)</h3>
+
+    <p>
+      <strong>Transfers:</strong> TVG formalism → sheaf cohomology.
+    </p>
+
+    <p>
+      <strong>Finding:</strong> The naive tropicalization of sheaf MFMC
+      breaks on event graphs. On a 4-vertex example with tropical stalks,
+      H⁰ gives earliest-arrival potentials, but max-flow > min-cut because
+      tropical flows are potentials, not conserved commodities. No subtraction
+      in the tropical semiring means the coboundary cannot be written in
+      standard form.
+    </p>
+
+    <p>
+      This is a structural obstruction, not an artifact. Existing sheaf MFMC
+      (<a href="https://arxiv.org/abs/1409.6712">Krishnan 2014</a>,
+      <a href="https://www2.math.upenn.edu/~ghrist/preprints/networkcodingshort.pdf">Ghrist &amp; Hiraoka</a>)
+      works over vector spaces where conservation makes sense. The tropical
+      semiring breaks conservation. The open question is now precise: what
+      cut notion replaces crossing-edge minima when the coefficient semiring
+      has no additive inverses?
+    </p>
+
+    <h3>Theorem 3: Checkpoint spacing (reframed)</h3>
+
+    <p>
+      <strong>Transfers:</strong> sheaf cohomology → codec engineering.
+    </p>
+
+    <p>
+      <strong>Surprise:</strong> Checkpoints increase dim H¹, not decrease it.
+      Each checkpoint adds d independent dimensions of obstruction. The right
+      quantity is not dim H¹ but ‖r*‖ under a drift model.
+    </p>
+
+    <p>
+      <strong>Closed form:</strong> For a linear chain with weight matrix W
+      and per-hop drift N(0, σ²I):
+      E[‖r*‖²] = σ² · Σᵢ (1 − μᵢⁿ)/(1 − μᵢ),
+      where μᵢ = eigenvalues of WᵀW. Optimal checkpoint spacing with cost λ:
+      L* ≈ √(2λ/(σ²d)). The relevant spectral quantity is which singular
+      values of W are near or above 1, not the condition number.
+    </p>
+
+    <p>
+      <strong>Status:</strong> The mathematics (Green's function on a path
+      with transport and drift) is standard
+      (<a href="https://link.springer.com/article/10.1007/s41468-019-00038-7">Hansen &amp; Ghrist 2019</a>).
+      The codec interpretation (recovering the GOP heuristic, correcting the
+      condition-number intuition) is new but not sufficient for a standalone
+      paper. The open question is generalization to non-chain dependency graphs.
+    </p>
+
+    <h3>What this is and what it isn't</h3>
+
+    <p>
+      This is a Rosetta Stone, not a proof. Three fields study the same directed
+      dependency structure with different operations. The three theorems above are
+      the assembly instructions: well-posed questions with existing tools on each
+      side, nobody working the seam.
+    </p>
+
+    <p>
+      The vocabulary barrier is the obstacle, not the mathematics. The codec
+      engineer's I-frame reset is the topologist's clamped sub-complex that
+      zeros the harmonic component. The TVG theorist's chain fragility is the
+      sheaf theorist's exactness failure. These connections have not been drawn
+      in the literature because the three communities don't share venues.
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source material:
+      <a href="https://june.kim/temporal-compression">
+        <img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>
+        Temporal Compression
+      </a> (blog post)
+    </div>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Key references</p>
+      <ul class="neighbors">
+        <li><a href="https://arxiv.org/abs/2511.11092">Seely 2025</a> — sheaf cohomology of predictive coding</li>
+        <li><a href="https://arxiv.org/abs/1409.6712">Krishnan 2014</a> — sheaf-theoretic MFMC over semirings</li>
+        <li><a href="https://www2.math.upenn.edu/~ghrist/preprints/networkcodingshort.pdf">Ghrist &amp; Hiraoka</a> — network robustness</li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792072/">Temporal state machines</a> — tropical invariance</li>
+        <li><a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. 2008</a> — MDL graph compression</li>
+        <li><a href="https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2022.19">Bilò et al. 2022</a> — temporal spanners</li>
+      </ul>
+      <p class="text-sm text-gray-500 mb-2 mt-4">Related sections</p>
+      <ul class="neighbors">
+        <li><a href="/reading/information-theory/">📡 Information Theory</a> — rate-distortion foundations</li>
+        <li><a href="/reading/category-theory/">🐱 Category Theory</a> — composition, functors</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/temporal-compression/ch-04/", label: "The Open Problems" }}
+      fin="End of Temporal Compression series."
+    />
+  </main>
+</Layout>

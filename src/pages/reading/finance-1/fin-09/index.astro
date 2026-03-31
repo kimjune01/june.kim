@@ -1,0 +1,308 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.9 — Efficient Markets" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Efficient Markets</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Efficient Market Hypothesis</strong> says prices fully reflect available information. You can't consistently beat the market because by the time you know something, the price already moved. The debate is over how much information "available" includes.</p>
+    </div>
+
+    <!-- SVG: Three forms of EMH as nested circles -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Strong form (outermost) -->
+        <ellipse cx="180" cy="115" rx="150" ry="90" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="180" y="28" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">Strong: all information (incl. insider)</text>
+        <!-- Semi-strong form -->
+        <ellipse cx="180" cy="120" rx="110" ry="65" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="180" y="62" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">Semi-strong: all public information</text>
+        <!-- Weak form (innermost) -->
+        <ellipse cx="180" cy="125" rx="65" ry="40" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="120" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.7">Weak: past prices</text>
+        <!-- Caption -->
+        <text x="180" y="215" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Three forms of market efficiency.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Weak, Semi-Strong, Strong Form EMH -->
+    <h3>Three forms of efficiency</h3>
+    <p><strong>Weak form:</strong> prices reflect all past trading data. Technical analysis cannot produce excess returns. <strong>Semi-strong form:</strong> prices reflect all publicly available information. Fundamental analysis cannot beat the market either. <strong>Strong form:</strong> prices reflect all information, public and private. Even insiders cannot profit. Each stronger form subsumes the one below it.</p>
+
+    <SchemeRepl client:load initialCode={`; Testing weak-form efficiency: autocorrelation of returns
+; If markets are weak-form efficient, returns should be uncorrelated
+
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+
+(define (autocorrelation returns lag)
+  (let* ((n (length returns))
+         (mu (mean returns))
+         (demeaned (map (lambda (r) (- r mu)) returns))
+         (pairs (let loop ((i 0) (acc '()))
+                  (if (>= (+ i lag) n) (reverse acc)
+                      (loop (+ i 1)
+                            (cons (* (list-ref demeaned i)
+                                     (list-ref demeaned (+ i lag)))
+                                  acc)))))
+         (variance (mean (map (lambda (r) (* r r)) demeaned))))
+    (/ (mean pairs) variance)))
+
+; Simulated daily returns (random-ish)
+(define returns '(0.012 -0.008 0.005 -0.003 0.015
+                  -0.010 0.007 -0.002 0.009 -0.006
+                  0.011 -0.007 0.003 -0.004 0.008
+                  -0.012 0.006 -0.001 0.010 -0.009))
+
+(display "Lag-1 autocorrelation: ")
+(display (/ (round (* (autocorrelation returns 1) 1000)) 1000)) (newline)
+(display "Lag-2 autocorrelation: ")
+(display (/ (round (* (autocorrelation returns 2) 1000)) 1000)) (newline)
+(display "Near zero = consistent with weak-form efficiency")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Testing weak-form efficiency: autocorrelation of returns
+def autocorrelation(returns, lag):
+    n = len(returns)
+    mu = sum(returns) / n
+    demeaned = [r - mu for r in returns]
+    var = sum(d**2 for d in demeaned) / n
+    cov = sum(demeaned[i] * demeaned[i+lag] for i in range(n - lag)) / (n - lag)
+    return cov / var
+
+returns = [0.012, -0.008, 0.005, -0.003, 0.015,
+           -0.010, 0.007, -0.002, 0.009, -0.006,
+           0.011, -0.007, 0.003, -0.004, 0.008,
+           -0.012, 0.006, -0.001, 0.010, -0.009]
+
+for lag in [1, 2, 3]:
+    ac = autocorrelation(returns, lag)
+    print(f"Lag-{lag} autocorrelation: {ac:.4f}")
+print("Near zero = consistent with weak-form efficiency")
+`} />
+    </div>
+
+
+    <!-- 2. Random Walk Hypothesis -->
+    <h3>Random walk hypothesis</h3>
+    <p>If markets are efficient, price changes are unpredictable. The <strong>random walk</strong> model says tomorrow's price equals today's price plus a random shock: P&#x209C;&#x208A;&#x2081; = P&#x209C; + &#x3B5;&#x209C;. This does not mean prices are random &mdash; it means <em>changes</em> are random. A stock can trend upward on average (drift) while its daily moves remain unpredictable.</p>
+
+    <SchemeRepl client:load initialCode={`; Random walk simulation
+; P(t+1) = P(t) * (1 + drift + sigma * z)
+; where z is a random standard normal shock
+
+; Simple pseudo-random via linear congruential generator
+(define (lcg seed) (modulo (+ (* 1103515245 seed) 12345) (expt 2 31)))
+
+; Map uniform to approximate normal (Box-Muller-ish, simplified)
+(define (pseudo-normal seed)
+  (let* ((s1 (lcg seed))
+         (u1 (/ s1 (expt 2 31)))
+         (s2 (lcg s1))
+         (u2 (/ s2 (expt 2 31)))
+         ; Approximate: use (u1 + u2 + ... - 6) for central limit
+         (s3 (lcg s2)) (u3 (/ s3 (expt 2 31)))
+         (s4 (lcg s3)) (u4 (/ s4 (expt 2 31)))
+         (s5 (lcg s4)) (u5 (/ s5 (expt 2 31)))
+         (s6 (lcg s5)) (u6 (/ s6 (expt 2 31))))
+    (list (- (+ u1 u2 u3 u4 u5 u6) 3) s6)))
+
+; Simulate 10 days
+(define (random-walk P0 drift sigma days seed)
+  (let loop ((day 0) (price P0) (s seed))
+    (if (> day days) 'done
+        (begin
+          (display "Day ") (display day)
+          (display ": $") (display (/ (round (* price 100)) 100)) (newline)
+          (if (= day days) 'done
+              (let* ((rn (pseudo-normal s))
+                     (z (car rn))
+                     (next-s (cadr rn))
+                     (ret (+ drift (* sigma z)))
+                     (next-price (* price (+ 1 ret))))
+                (loop (+ day 1) next-price next-s)))))))
+
+(display "=== Random walk: drift=0.05%/day, vol=1.5% ===" ) (newline)
+(random-walk 100 0.0005 0.015 10 42)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+random.seed(42)
+
+def random_walk(P0, drift, sigma, days):
+    """Simulate a random walk with drift."""
+    prices = [P0]
+    for _ in range(days):
+        z = random.gauss(0, 1)
+        ret = drift + sigma * z
+        prices.append(prices[-1] * (1 + ret))
+    return prices
+
+prices = random_walk(100, 0.0005, 0.015, 10)
+for day, p in enumerate(prices):
+    print(f"Day {day}: \${p:.2f}")
+
+# Daily returns
+returns = [(prices[i+1]/prices[i] - 1) for i in range(len(prices)-1)]
+print(f"\\nMean daily return: {sum(returns)/len(returns):.4%}")
+print(f"Daily vol: {(sum((r - sum(returns)/len(returns))**2 for r in returns) / len(returns))**0.5:.4%}")
+`} />
+    </div>
+
+
+    <!-- 3. Event Studies -->
+    <h3>Event studies</h3>
+    <p>An <strong>event study</strong> tests semi-strong efficiency by measuring how quickly prices adjust to new information. Calculate <strong>abnormal returns</strong> &mdash; actual return minus expected return &mdash; around the event date. If the market is semi-strong efficient, all adjustment happens immediately: abnormal returns cluster at day zero with no drift before or after.</p>
+
+    <SchemeRepl client:load initialCode={`; Event study: compute cumulative abnormal returns (CAR)
+; Abnormal return = actual return - expected return (from market model)
+
+(define (abnormal-returns actual-returns market-returns alpha beta)
+  (map (lambda (r-i r-m)
+         (- r-i (+ alpha (* beta r-m))))
+       actual-returns market-returns))
+
+(define (cumulative-sum lst)
+  (let loop ((remaining lst) (total 0) (acc '()))
+    (if (null? remaining) (reverse acc)
+        (let ((new-total (+ total (car remaining))))
+          (loop (cdr remaining) new-total (cons new-total acc))))))
+
+; Stock returns around earnings announcement (day -3 to +3)
+; Market model: E[R_i] = alpha + beta * R_m
+(define alpha 0.0001) (define beta 1.2)
+(define stock-returns  '(-0.002  0.001  0.003  0.045 -0.005  0.001  0.000))
+(define market-returns '( 0.001  0.002 -0.001  0.003  0.001  0.000  0.002))
+(define days '(-3 -2 -1 0 1 2 3))
+
+(define AR (abnormal-returns stock-returns market-returns alpha beta))
+(define CAR (cumulative-sum AR))
+
+(display "Day   AR       CAR") (newline)
+(for-each (lambda (d ar car-val)
+  (display d) (display "    ")
+  (display (/ (round (* ar 10000)) 10000)) (display "   ")
+  (display (/ (round (* car-val 10000)) 10000)) (newline))
+  days AR CAR)
+
+(display "Most abnormal return at day 0 = efficient adjustment")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Event study: cumulative abnormal returns around earnings
+alpha, beta = 0.0001, 1.2
+
+stock_returns  = [-0.002,  0.001,  0.003,  0.045, -0.005,  0.001,  0.000]
+market_returns = [ 0.001,  0.002, -0.001,  0.003,  0.001,  0.000,  0.002]
+days = list(range(-3, 4))
+
+AR = [r_i - (alpha + beta * r_m)
+      for r_i, r_m in zip(stock_returns, market_returns)]
+
+CAR = []
+total = 0
+for ar in AR:
+    total += ar
+    CAR.append(total)
+
+print(f"{'Day':>4}  {'AR':>8}  {'CAR':>8}")
+for d, ar, car in zip(days, AR, CAR):
+    print(f"{d:>4}  {ar:>8.4f}  {car:>8.4f}")
+
+print(f"\\nMost abnormal return at day 0 = efficient adjustment")
+`} />
+    </div>
+
+
+    <!-- 4. Anomalies and Challenges -->
+    <h3>Anomalies and challenges to EMH</h3>
+    <p>Several persistent patterns challenge the EMH. The <strong>January effect</strong>: small stocks outperform in January. The <strong>momentum effect</strong>: past winners keep winning for 3-12 months. The <strong>value premium</strong>: high book-to-market stocks earn more than growth stocks. Defenders argue these are compensation for risk; critics say they're evidence of behavioral biases. The debate is unresolved.</p>
+
+    <SchemeRepl client:load initialCode={`; Momentum strategy backtest (simplified)
+; Buy past winners, sell past losers
+
+(define (momentum-signal returns lookback)
+  ; Sum of past 'lookback' returns as signal
+  (let loop ((i lookback) (signals '()))
+    (if (>= i (length returns)) (reverse signals)
+        (let ((past (let inner ((j 0) (sum 0))
+                      (if (>= j lookback) sum
+                          (inner (+ j 1) (+ sum (list-ref returns (- i j 1))))))))
+          (loop (+ i 1) (cons past signals))))))
+
+; Simulated monthly returns for one stock
+(define monthly-returns '(0.02 0.05 -0.01 0.03 0.04
+                          -0.02 0.06 0.01 -0.03 0.02
+                          0.04 0.03))
+
+(define signals (momentum-signal monthly-returns 3))
+
+(display "Month  Signal  Return  Strategy") (newline)
+(let loop ((i 0) (cum-ret 0))
+  (if (>= i (length signals))
+      (begin (newline) (display "Cumulative strategy return: ")
+             (display (/ (round (* cum-ret 10000)) 10000)))
+      (let* ((sig (list-ref signals i))
+             (ret (list-ref monthly-returns (+ i 3)))
+             ; Go long if past return > 0, short if < 0
+             (position (if (> sig 0) 1 -1))
+             (strat-ret (* position ret)))
+        (display (+ i 4)) (display "      ")
+        (display (/ (round (* sig 1000)) 1000)) (display "  ")
+        (display ret) (display "    ")
+        (display (/ (round (* strat-ret 1000)) 1000)) (newline)
+        (loop (+ i 1) (+ cum-ret strat-ret)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Momentum strategy backtest (simplified)
+monthly_returns = [0.02, 0.05, -0.01, 0.03, 0.04,
+                   -0.02, 0.06, 0.01, -0.03, 0.02,
+                   0.04, 0.03]
+
+lookback = 3
+cum_return = 0
+
+print(f"{'Month':>5}  {'Signal':>7}  {'Return':>7}  {'Strategy':>9}")
+for i in range(lookback, len(monthly_returns)):
+    signal = sum(monthly_returns[i-lookback:i])
+    ret = monthly_returns[i]
+    position = 1 if signal > 0 else -1
+    strat_ret = position * ret
+    cum_return += strat_ret
+    print(f"{i+1:>5}  {signal:>7.3f}  {ret:>7.3f}  {strat_ret:>+9.3f}")
+
+print(f"\\nCumulative strategy return: {cum_return:.4f}")
+print(f"Buy-and-hold return: {sum(monthly_returns[lookback:]):.4f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-08/">📈 Options</a> &mdash; option pricing assumes markets are efficient enough for no-arbitrage</li>
+      <li><a href="/reading/finance-1/fin-10/">📈 Behavioral Finance</a> &mdash; the counterargument: systematic irrationality</li>
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; hypothesis testing methods behind event studies</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; random walks and martingale theory</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-08/", label: "Options · 8 of 12" }}
+      next={{ href: "/reading/finance-1/fin-10/", label: "Behavioral Finance · 10 of 12" }}
+    />
+
+  </main>
+</Layout>

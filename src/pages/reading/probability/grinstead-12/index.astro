@@ -1,0 +1,272 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 12 — Random Walks" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Random Walks</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Step +1 or &minus;1 with equal probability. In 1D and 2D, the walk returns to the origin infinitely often. In 3D and higher, it escapes forever. This dimension-dependent recurrence is one of the deepest results in probability.</p>
+    </div>
+
+    <!-- 1. Simple random walk -->
+    <h3>Simple random walk</h3>
+    <p>Start at 0. At each step, move +1 with probability p or &minus;1 with probability 1 &minus; p. The position after n steps is S&#x2099; = X&#x2081; + &hellip; + X&#x2099;. For the <strong>symmetric</strong> walk (p = &frac12;), E[S&#x2099;] = 0 and Var(S&#x2099;) = n.</p>
+
+    <!-- SVG: Random walk path on a number line -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Number line / x-axis -->
+        <line x1="20" y1="100" x2="420" y2="100" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Grid lines -->
+        <line x1="20" y1="60" x2="420" y2="60" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="20" y1="140" x2="420" y2="140" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="20" y1="20" x2="420" y2="20" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Y-axis labels -->
+        <text x="14" y="104" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="14" y="64" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">+2</text>
+        <text x="14" y="144" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">-2</text>
+        <text x="14" y="24" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">+4</text>
+        <!-- Random walk path: zigzag -->
+        <polyline points="40,100 65,80 90,60 115,80 140,100 165,80 190,100 215,120 240,140 265,120 290,100 315,80 340,60 365,40 390,60 415,80" fill="none" stroke="#facc15" stroke-width="2" stroke-linejoin="round"/>
+        <!-- Dots at each step -->
+        <circle cx="40" cy="100" r="3" fill="#facc15"/>
+        <circle cx="65" cy="80" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="90" cy="60" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="115" cy="80" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="140" cy="100" r="3" fill="#4ade80"/>
+        <circle cx="165" cy="80" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="190" cy="100" r="3" fill="#4ade80"/>
+        <circle cx="215" cy="120" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="240" cy="140" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="265" cy="120" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="290" cy="100" r="3" fill="#4ade80"/>
+        <circle cx="315" cy="80" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="340" cy="60" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="365" cy="40" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="390" cy="60" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <circle cx="415" cy="80" r="2.5" fill="#facc15" fill-opacity="0.7"/>
+        <!-- Green dots = returns to origin -->
+        <text x="140" y="115" text-anchor="middle" fill="#4ade80" font-size="8">return</text>
+        <text x="290" y="115" text-anchor="middle" fill="#4ade80" font-size="8">return</text>
+        <!-- X-axis label -->
+        <text x="230" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">steps &rarr;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Simple random walk: +1 or -1 with equal probability
+; Track returns to origin
+
+(define *seed* 137)
+(define (rand!)
+  (set! *seed* (modulo (+ (* 1103515245 *seed*) 12345) 2147483648))
+  *seed*)
+
+(define (random-step) (if (< (modulo (rand!) 2) 1) 1 -1))
+
+(define (random-walk n)
+  (let loop ((i 0) (pos 0) (returns 0) (path '()))
+    (if (= i n)
+        (list (reverse path) returns)
+        (let* ((step (random-step))
+               (new-pos (+ pos step))
+               (new-ret (if (= new-pos 0) (+ returns 1) returns)))
+          (loop (+ i 1) new-pos new-ret (cons new-pos path))))))
+
+(define result (random-walk 20))
+(display "path:    ") (display (car result)) (newline)
+(display "returns: ") (display (cadr result)) (newline)
+
+; Longer walk: more returns
+(define result2 (random-walk 100))
+(display "100 steps, returns: ") (display (cadr result2))
+; In 1D, the walk returns to 0 infinitely often
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+random.seed(137)
+
+def random_walk(n):
+    pos, returns, path = 0, 0, []
+    for _ in range(n):
+        pos += random.choice([1, -1])
+        path.append(pos)
+        if pos == 0:
+            returns += 1
+    return path, returns
+
+path, ret = random_walk(20)
+print(f"path:    {path}")
+print(f"returns: {ret}")
+
+_, ret100 = random_walk(100)
+print(f"100 steps, returns: {ret100}")
+`} />
+    </div>
+
+    <!-- 2. Gambler's ruin -->
+    <h3>Gambler&rsquo;s ruin</h3>
+    <p>A gambler starts with <em>k</em> dollars and bets $1 each round. The game ends when the gambler reaches 0 (ruin) or N (target). With a fair coin, the probability of ruin starting from k is (N &minus; k)/N. With an unfair coin (p &lt; &frac12;), ruin is almost certain for large N.</p>
+
+    <SchemeRepl client:load initialCode={`; Gambler's ruin: probability of ruin starting from k, target N
+
+; Fair game (p = 1/2): P(ruin from k) = (N - k) / N
+(define (ruin-fair k N)
+  (/ (- N k) N))
+
+(display "Fair game, k=3, N=10: P(ruin) = ")
+(display (ruin-fair 3 10)) (newline)
+
+; Unfair game (p != 1/2):
+; P(ruin from k) = (r^N - r^k) / (r^N - 1) where r = (1-p)/p
+(define (ruin-unfair k N p)
+  (let ((r (/ (- 1 p) p)))
+    (/ (- (expt r N) (expt r k))
+       (- (expt r N) 1))))
+
+(display "p=0.49, k=50, N=100: P(ruin) = ")
+(display (ruin-unfair 50 100 0.49)) (newline)
+; Even slight disadvantage makes ruin very likely
+
+(display "p=0.45, k=50, N=100: P(ruin) = ")
+(display (ruin-unfair 50 100 0.45)) (newline)
+
+(display "p=0.51, k=50, N=100: P(ruin) = ")
+(display (ruin-unfair 50 100 0.51)) (newline)
+; Slight advantage makes ruin unlikely
+`} />
+
+    <!-- 3. Recurrence and transience -->
+    <h3>Recurrence and transience</h3>
+    <p>A random walk is <strong>recurrent</strong> if it returns to the origin with probability 1. P&oacute;lya proved: the symmetric random walk is recurrent in 1D and 2D, but <strong>transient</strong> in 3D and higher. The probability of return in 3D is approximately 0.3405. A drunk person on a plane will find their way home. A drunk bird will not.</p>
+
+    <SchemeRepl client:load initialCode={`; Polya's recurrence theorem
+; 1D: P(return) = 1 (recurrent)
+; 2D: P(return) = 1 (recurrent)
+; 3D: P(return) ~ 0.3405 (transient)
+
+; In 1D, P(return to 0 by step 2n) involves Catalan-like counting
+; P(first return at step 2n) = C(2n,n) / (2^2n * (2n-1))
+
+; Probability of return to origin after exactly 2n steps (1D)
+(define (binom n k)
+  (let loop ((i 0) (acc 1))
+    (if (= i k) acc
+        (loop (+ i 1) (* acc (/ (- n i) (+ i 1)))))))
+
+(define (p-at-origin-1d n)
+  (/ (binom (* 2 n) n) (expt 2 (* 2 n))))
+
+; These probabilities decrease but their sum diverges => recurrent
+(display "1D P(at origin):") (newline)
+(display "  step 2:  ") (display (p-at-origin-1d 1)) (newline)
+(display "  step 4:  ") (display (p-at-origin-1d 2)) (newline)
+(display "  step 10: ") (display (p-at-origin-1d 5)) (newline)
+(display "  step 20: ") (display (p-at-origin-1d 10)) (newline)
+
+; Sum diverges ~ 1/sqrt(pi*n) => returns infinitely often
+(display "3D return probability ~ 0.3405") (newline)
+(display "A drunk bird never comes home.")
+`} />
+
+    <!-- 4. Reflection principle -->
+    <h3>Reflection principle</h3>
+    <p>To count paths from (0, 0) to (n, k) that touch or cross zero, reflect the portion before the first crossing. This bijection between "bad" paths and paths starting from a reflected origin is the <strong>reflection principle</strong>. It gives exact formulas for first-passage times and maximum positions.</p>
+
+    <SchemeRepl client:load initialCode={`; Reflection principle: count paths that touch the x-axis
+; Paths from (0,a) to (n,b) that touch 0
+; = total paths from (0,-a) to (n,b) [by reflection]
+
+; Number of lattice paths from 0 to b in n steps
+; that take +1 or -1 each step
+; Requires n and b have same parity, and |b| <= n
+(define (lattice-paths n b)
+  (if (not (= (modulo n 2) (modulo (abs b) 2))) 0
+      (let ((ups (/ (+ n b) 2)))
+        (if (or (< ups 0) (> ups n)) 0
+            (binom n ups)))))
+
+; Ballot problem: P(S_k > 0 for all k=1..n | S_n = b)
+; = b/n (for b > 0)
+(display "Ballot problem:") (newline)
+(display "P(always positive | S_10=2) = 2/10 = ")
+(display (/ 2 10)) (newline)
+(display "P(always positive | S_10=4) = 4/10 = ")
+(display (/ 4 10)) (newline)
+
+; First passage time: P(first visit to k at step n)
+; = (k/n) * C(n, (n+k)/2) / 2^n
+(define (first-passage k n)
+  (if (not (= (modulo n 2) (modulo k 2))) 0
+      (* (/ k n) (/ (binom n (/ (+ n k) 2)) (expt 2 n)))))
+
+(display "P(first reach +2 at step 2) = ")
+(display (first-passage 2 2)) (newline)
+(display "P(first reach +2 at step 4) = ")
+(display (first-passage 2 4))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S&#x2099; = X&#x2081; + &hellip; + X&#x2099;</td><td class="pr-4 text-green-300">(random-walk n)</td><td class="font-sans">Position after n steps</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(ruin from k)</td><td class="pr-4 text-green-300">(ruin-fair k N)</td><td class="font-sans">Gambler's ruin probability</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(n, k)</td><td class="pr-4 text-green-300">(binom n k)</td><td class="font-sans">Binomial coefficient</td></tr>
+          <tr><td class="py-2 pr-4">recurrent / transient</td><td class="pr-4 text-green-300">sum diverges / converges</td><td class="font-sans">Returns infinitely often, or not</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-11/">🎰 Ch 11</a> &mdash; Markov Chains (random walks are Markov chains on integers)</li>
+      <li><a href="/reading/probability/grinstead-09/">🎰 Ch 9</a> &mdash; Central Limit Theorem (the walk's position is approximately normal)</li>
+      <li><a href="/reading/probability/grinstead-03/">🎰 Ch 3</a> &mdash; Combinatorics (lattice path counting)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Connections</p>
+    <ul>
+      <li><a href="https://www.cs.mcgill.ca/~prakash/Publications/labelled-markov-processes.pdf">Panangaden 2009</a> &mdash; bisimulation on stochastic processes: when two random walks are "the same"</li>
+      <li><a href="https://en.wikipedia.org/wiki/Random_walk"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Random walk</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gambler%27s_ruin"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gambler's ruin</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/P%C3%B3lya%27s_recurrence_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>P&oacute;lya's recurrence theorem</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The random walk simulation uses a deterministic pseudo-random generator for reproducibility. The gambler's ruin formula is exact. The reflection principle is stated without proof; the textbook derives it via a bijection on lattice paths. P&oacute;lya's recurrence theorem is stated as a fact; the proof uses generating functions from Chapter 10. Panangaden 2009 extends these ideas to continuous-state stochastic processes, where bisimulation replaces exact equality of paths.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Chapter 12</a> of Grinstead &amp; Snell.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-11/", label: "Markov Chains" }} fin="fin · 12 of 12" />
+
+  </main>
+</Layout>

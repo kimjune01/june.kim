@@ -1,0 +1,223 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §2.4 — Equilibrium Points" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Equilibrium Points</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> §2.4 · <a href="https://nordstrommath.com/IntroGameTheory/S_EquilibPoints.html">nordstrommath.com</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>equilibrium point</strong> is a strategy pair where neither player can improve by switching. In a zero-sum game, every equilibrium point has the same value. This is the <a href="/reading/hedges-2018/">Nash equilibrium</a> for two-player zero-sum games.</p>
+    </div>
+
+    <!-- 1. What is an equilibrium? -->
+    <h3>Neither player wants to switch</h3>
+    <p>Look at a payoff matrix. An equilibrium pair is a cell where the row player is already in their best row (given the column) and the column player is already in their best column (given the row). Neither has a reason to deviate.</p>
+
+    <!-- SVG: 2x2 matrix with equilibrium cell highlighted green -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 240" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Grid -->
+        <rect x="100" y="60" width="80" height="60" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="180" y="60" width="80" height="60" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="100" y="120" width="80" height="60" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="180" y="120" width="80" height="60" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Equilibrium cell highlighted -->
+        <rect x="100" y="60" width="80" height="60" rx="3" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="2"/>
+        <!-- Headers -->
+        <text x="140" y="50" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">C1</text>
+        <text x="220" y="50" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">C2</text>
+        <text x="85" y="95" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.5">R1</text>
+        <text x="85" y="155" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.5">R2</text>
+        <!-- Payoffs (row player only for zero-sum) -->
+        <text x="140" y="95" text-anchor="middle" fill="#4ade80" font-size="16" font-weight="bold">2</text>
+        <text x="220" y="95" text-anchor="middle" fill="currentColor" font-size="16">-1</text>
+        <text x="140" y="155" text-anchor="middle" fill="currentColor" font-size="16">-3</text>
+        <text x="220" y="155" text-anchor="middle" fill="currentColor" font-size="16">1</text>
+        <!-- Annotations -->
+        <text x="140" y="110" text-anchor="middle" fill="#4ade80" font-size="8">best in col</text>
+        <text x="165" y="80" text-anchor="middle" fill="#4ade80" font-size="8">best in row</text>
+        <!-- Arrows showing "no reason to move" -->
+        <path d="M 100,90 L 75,90" fill="none" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="50" y="94" text-anchor="middle" fill="#4ade80" font-size="8">max</text>
+        <path d="M 140,60 L 140,40" fill="none" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="140" y="35" text-anchor="middle" fill="#4ade80" font-size="8">max</text>
+        <!-- Caption -->
+        <text x="150" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">equilibrium: best in its row AND best in its column</text>
+        <!-- Title -->
+        <text x="150" y="225" text-anchor="middle" fill="#4ade80" font-size="9">neither player wants to switch</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Finding equilibrium points in a zero-sum payoff matrix
+; An equilibrium is a cell that is:
+;   - the maximum in its column (best for row player)
+;   - the minimum in its row (best for column player, who wants row low)
+
+(define matrix '((2 -1) (-3 1)))
+
+(define (matrix-ref m r c) (list-ref (list-ref m r) c))
+(define (num-rows m) (length m))
+(define (num-cols m) (length (car m)))
+
+; Max in column c
+(define (col-max m c)
+  (apply max (map (lambda (row) (list-ref row c)) m)))
+
+; Min in row r
+(define (row-min m r)
+  (apply min (list-ref m r)))
+
+; Find all equilibrium points
+(define (find-equilibria m)
+  (let ((eqs '()))
+    (let rloop ((r 0))
+      (if (>= r (num-rows m)) eqs
+        (let cloop ((c 0))
+          (if (>= c (num-cols m)) (rloop (+ r 1))
+            (let ((val (matrix-ref m r c)))
+              (if (and (= val (col-max m c))
+                       (= val (row-min m r)))
+                  (begin (set! eqs (cons (list r c val) eqs))
+                         (cloop (+ c 1)))
+                  (cloop (+ c 1))))))))))
+
+(display "Matrix: ") (display matrix) (newline)
+(display "Equilibria (row col value): ")
+(display (find-equilibria matrix))
+; (0 0 2) — R1,C1 with value 2
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Finding equilibrium points
+matrix = [[2, -1], [-3, 1]]
+
+def find_equilibria(m):
+    rows, cols = len(m), len(m[0])
+    eqs = []
+    for r in range(rows):
+        for c in range(cols):
+            val = m[r][c]
+            col_max = max(m[i][c] for i in range(rows))
+            row_min = min(m[r])
+            if val == col_max and val == row_min:
+                eqs.append((r, c, val))
+    return eqs
+
+print(f"Matrix: {matrix}")
+print(f"Equilibria: {find_equilibria(matrix)}")
+`} />
+    </div>
+
+    <!-- 2. All equilibria have the same value -->
+    <h3>Solution theorem: all equilibria share one value</h3>
+    <p>In a two-player zero-sum game, every equilibrium point has the same payoff. The proof works by contradiction: assume two equilibria with different values, then show that at least one player could have improved by switching, contradicting the equilibrium definition.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify: all equilibrium points share the same value
+; Try several matrices
+
+(define (every pred lst) (if (null? lst) #t (if (pred (car lst)) (every pred (cdr lst)) #f)))
+
+(define (all-eq-values-same? m)
+  (let ((eqs (find-equilibria m)))
+    (if (null? eqs) "no equilibria"
+        (let ((vals (map caddr eqs)))
+          (every (lambda (v) (= v (car vals))) vals)))))
+
+; Matrix 1: one equilibrium
+(define m1 '((2 -1) (-3 1)))
+(display "M1 equilibria: ") (display (find-equilibria m1)) (newline)
+(display "Same value? ") (display (all-eq-values-same? m1)) (newline)
+
+; Matrix 2: two equilibria, both value 0
+(define m2 '((0 -1 1) (1 0 -1) (-1 1 0)))
+(display "M2 equilibria: ") (display (find-equilibria m2)) (newline)
+
+; Matrix 3: two equilibria
+(define m3 '((3 -2 1) (1 3 -2) (-2 1 3)))
+(display "M3 equilibria: ") (display (find-equilibria m3)) (newline)
+(display "Same value? ") (display (all-eq-values-same? m3))
+`} />
+
+    <!-- 3. Not every matching value is an equilibrium -->
+    <h3>Same value does not mean equilibrium</h3>
+    <p>A cell can have the same payoff as an equilibrium point without being an equilibrium itself. The value must be simultaneously the row minimum and column maximum. Just matching the number is not enough.</p>
+
+    <SchemeRepl client:load initialCode={`; A cell can have the same value as an equilibrium
+; without being an equilibrium itself.
+
+(define tricky '((1 3) (2 1)))
+
+(display "Matrix: ") (display tricky) (newline)
+(display "Equilibria: ") (display (find-equilibria tricky)) (newline)
+; (0 0 1) is an equilibrium: min of row 0, max of col 0.
+; (1 1 1) has value 1 but is NOT an equilibrium:
+;   row 1 min is 1 (ok), but col 1 max is 3 (not 1).
+(display "Cell (1,1) = 1 but col-max of col 1 = ")
+(display (col-max tricky 1)) (newline)
+(display "So (1,1) is not an equilibrium despite having value 1.")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Equilibrium pair</td><td class="pr-4 text-green-300">(find-equilibria m)</td><td class="font-sans">Strategy pair where neither player benefits from switching</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Row min</td><td class="pr-4 text-green-300">(row-min m r)</td><td class="font-sans">Best the column player can force in that row</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Col max</td><td class="pr-4 text-green-300">(col-max m c)</td><td class="font-sans">Best the row player can get in that column</td></tr>
+          <tr><td class="py-2 pr-4">Solution theorem</td><td class="pr-4 text-green-300">(all-eq-values-same? m)</td><td class="font-sans">All equilibria in a zero-sum game share one value</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-05/">🍞 §2.3 Probability and Expected Value</a> — previous section</li>
+      <li><a href="/reading/game-theory/nordstrom-07/">🍞 §2.5 Zero-Sum Summary</a> — next section</li>
+    
+      <li><a href="/reading/economics/econ-08/">💰 Economics Ch.8</a> &mdash; market equilibrium is Nash equilibrium applied to supply and demand</li>
+      <li><a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges, Ghani 2018</a> &mdash; Nash equilibrium composes categorically</li>
+      <li><a href="/reading/cognitive-science/lovelace-06/">🧠 Cognitive Science Ch.6</a> &mdash; decision theory and bounded rationality alongside equilibrium</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related papers</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — Nash equilibrium as a compositional predicate</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash equilibrium</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Saddle_point"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Saddle point</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source: <a href="https://nordstrommath.com/IntroGameTheory/S_EquilibPoints.html">Nordstrom §2.4</a>. Licensed CC BY-SA 4.0.
+    </div>
+
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-05/", label: "Probability and EV" }} next={{ href: "/reading/game-theory/nordstrom-07/", label: "Zero-Sum Summary" }} />
+
+  </main>
+</Layout>

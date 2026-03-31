@@ -1,0 +1,195 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.1 — Statements and Logic" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Statements and Logic</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>proposition</strong> is a statement that is either true or false. Logical connectives (and, or, not, implies) combine propositions into compound statements. The truth value of any compound statement is determined entirely by the truth values of its parts.</p>
+    </div>
+
+    <!-- 1. Propositions -->
+    <h3>Propositions</h3>
+    <p>A proposition is a declarative sentence with a definite truth value. "5 is prime" is a proposition (true). "Close the door" is not. "x + 1 = 3" is not, until you fix x. Questions and commands are never propositions.</p>
+
+    <SchemeRepl client:load initialCode={`; A proposition is true or false. We model them as booleans.
+(define p #t)  ; "5 is prime" — true
+(define q #f)  ; "4 is prime" — false
+
+(display "p = ") (display p) (newline)
+(display "q = ") (display q) (newline)
+
+; Not a proposition: "x + 1 = 3" depends on x.
+; Once we fix x, it becomes one:
+(define (is-proposition? x) (= (+ x 1) 3))
+(display "x=2: ") (display (is-proposition? 2)) (newline)
+(display "x=5: ") (display (is-proposition? 5))
+`} />
+
+    <!-- 2. Connectives -->
+    <h3>Connectives</h3>
+    <p>The four main connectives: <strong>not</strong> (negation), <strong>and</strong> (conjunction), <strong>or</strong> (disjunction), and <strong>implies</strong> (conditional). "Or" in math is inclusive: P or Q is true when both are true.</p>
+
+    <SchemeRepl client:load initialCode={`; Logical connectives
+(define (my-not p) (not p))
+(define (my-and p q) (and p q))
+(define (my-or p q) (or p q))
+(define (my-implies p q) (or (not p) q))
+
+(define p #t)
+(define q #f)
+
+(display "not p       = ") (display (my-not p)) (newline)
+(display "p and q     = ") (display (my-and p q)) (newline)
+(display "p or q      = ") (display (my-or p q)) (newline)
+(display "p implies q = ") (display (my-implies p q)) (newline)
+(display "q implies p = ") (display (my-implies q p))
+; False implies anything is true — this is the vacuous truth.
+`} />
+
+    <!-- 3. Truth tables -->
+    <h3>Truth tables</h3>
+    <p>A truth table lists every possible combination of truth values for the inputs and shows the output. For two variables, that is four rows. The <strong>implication</strong> P implies Q is false only when P is true and Q is false. This is the row that trips everyone up.</p>
+
+    <!-- SVG: Truth table for implication -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Header -->
+        <text x="60" y="25" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">P</text>
+        <text x="140" y="25" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">Q</text>
+        <text x="240" y="25" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">P → Q</text>
+        <line x1="20" y1="32" x2="300" y2="32" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Row 1: T T T -->
+        <text x="60" y="55" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <text x="140" y="55" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <text x="240" y="55" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <!-- Row 2: T F F — the critical row -->
+        <rect x="20" y="62" width="280" height="22" rx="3" fill="#ef4444" fill-opacity="0.1"/>
+        <text x="60" y="78" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <text x="140" y="78" text-anchor="middle" fill="#f87171" font-size="12">F</text>
+        <text x="240" y="78" text-anchor="middle" fill="#f87171" font-size="13" font-weight="bold">F</text>
+        <!-- Row 3: F T T -->
+        <text x="60" y="101" text-anchor="middle" fill="#f87171" font-size="12">F</text>
+        <text x="140" y="101" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <text x="240" y="101" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <!-- Row 4: F F T -->
+        <text x="60" y="124" text-anchor="middle" fill="#f87171" font-size="12">F</text>
+        <text x="140" y="124" text-anchor="middle" fill="#f87171" font-size="12">F</text>
+        <text x="240" y="124" text-anchor="middle" fill="#4ade80" font-size="12">T</text>
+        <!-- Annotation -->
+        <text x="160" y="160" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Only false when a true premise leads to a false conclusion</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Generate truth table for implication
+(define (implies p q) (or (not p) q))
+
+(display "P     Q     P->Q") (newline)
+(display "---   ---   ----") (newline)
+
+(define (show-row p q)
+  (display (if p "T" "F"))
+  (display "     ")
+  (display (if q "T" "F"))
+  (display "     ")
+  (display (if (implies p q) "T" "F"))
+  (newline))
+
+(show-row #t #t)
+(show-row #t #f)
+(show-row #f #t)
+(show-row #f #f)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Truth table for implication in Python
+def implies(p, q):
+    return (not p) or q
+
+print("P     Q     P->Q")
+print("---   ---   ----")
+for p in [True, False]:
+    for q in [True, False]:
+        arrow = implies(p, q)
+        print(f"{'T' if p else 'F'}     {'T' if q else 'F'}     {'T' if arrow else 'F'}")
+`} />
+    </div>
+
+    <!-- 4. Logical equivalence -->
+    <h3>Logical equivalence</h3>
+    <p>Two compound statements are <strong>logically equivalent</strong> when they have the same truth value for every possible assignment. The most important equivalence: P implies Q is equivalent to (not Q) implies (not P). This is the <strong>contrapositive</strong>, and it is the basis of an entire proof technique.</p>
+
+    <SchemeRepl client:load initialCode={`; Logical equivalence: P->Q is equivalent to (not Q)->(not P)
+(define (implies p q) (or (not p) q))
+(define (contrapositive p q) (implies (not q) (not p)))
+
+(display "P->Q  vs  ~Q->~P") (newline)
+(display "----      -------") (newline)
+
+(define (check p q)
+  (let ((orig (implies p q))
+        (contra (contrapositive p q)))
+    (display (if orig "T" "F"))
+    (display "      ")
+    (display (if contra "T" "F"))
+    (display "      ")
+    (display (if (eq? orig contra) "same" "DIFFERENT"))
+    (newline)))
+
+(check #t #t)
+(check #t #f)
+(check #f #t)
+(check #f #f)
+; Every row matches. They are logically equivalent.
+`} />
+
+    <!-- 5. The conditional -->
+    <h3>The conditional — why "false implies anything" is true</h3>
+    <p>The conditional P implies Q is a promise: "if P happens, then Q will happen." It can only be broken when P happens and Q does not. If P never happens, the promise is vacuously kept. "If pigs fly, I will eat my hat" is true, because pigs do not fly. This is <strong>vacuous truth</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Vacuous truth: false implies anything
+(define (implies p q) (or (not p) q))
+
+; "If pigs fly, I will eat my hat"
+(define pigs-fly #f)
+
+(display "Pigs fly -> eat hat: ")
+(display (implies pigs-fly #t)) (newline)
+
+(display "Pigs fly -> not eat hat: ")
+(display (implies pigs-fly #f)) (newline)
+
+; Both true! The promise is never tested.
+(display "False -> True:  ") (display (implies #f #t)) (newline)
+(display "False -> False: ") (display (implies #f #f))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-02/">🔑 Logic Ch.2</a> — propositional logic formalized</li>
+      <li><a href="/reading/logic/logic-03/">🔑 Logic Ch.3</a> — translation between English and formal logic</li>
+    
+      <li><a href="/reading/logic/logic-02/">🔑 Logic Ch.2</a> &mdash; propositional logic formalized with syntax and rules</li>
+      <li><a href="/reading/logic/logic-03/">🔑 Logic Ch.3</a> &mdash; truth tables and semantic consequence</li>
+      <li><a href="/reading/discrete-math/levin-03/">🔢 Discrete Math Ch.3</a> &mdash; symbolic logic from a different angle</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext next={{ href: "/reading/proof-writing/proofs-02/", label: "Direct Proof" }} />
+
+  </main>
+</Layout>

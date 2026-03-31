@@ -1,0 +1,477 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.21 — Explicit-Control Evaluator" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Explicit-Control Evaluator</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-34.html#%_sec_5.4">SICP &sect;5.4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The metacircular evaluator from Ch.14, compiled down to register machine instructions. Makes explicit what the high-level interpreter hides: stack saves, register assignments, goto dispatch.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 360 175" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Diamond: eval-dispatch -->
+        <polygon points="180,8 280,48 180,88 80,48" fill="#a78bfa" fill-opacity="0.1" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="180" y="44" text-anchor="middle" fill="#a78bfa" font-size="12">eval-dispatch</text>
+        <text x="180" y="57" text-anchor="middle" fill="#a78bfa" font-size="10">(expression type?)</text>
+
+        <!-- Branch: self-eval -->
+        <line x1="110" y1="68" x2="40" y2="108" stroke="#60a5fa" stroke-width="1.2" marker-end="url(#arrow21)"/>
+        <rect x="5" y="110" width="75" height="26" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="42" y="127" text-anchor="middle" fill="#60a5fa" font-size="11">self-eval</text>
+        <text x="110" y="82" fill="#60a5fa" font-size="9">number?</text>
+
+        <!-- Branch: variable -->
+        <line x1="180" y1="88" x2="180" y2="108" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrow21g)"/>
+        <rect x="142" y="110" width="75" height="26" rx="4" fill="none" stroke="#34d399" stroke-width="1.2"/>
+        <text x="180" y="127" text-anchor="middle" fill="#34d399" font-size="11">variable</text>
+        <text x="194" y="100" fill="#34d399" font-size="9">symbol?</text>
+
+        <!-- Branch: application -->
+        <line x1="250" y1="68" x2="318" y2="108" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arrow21y)"/>
+        <rect x="280" y="110" width="75" height="26" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="318" y="127" text-anchor="middle" fill="#f59e0b" font-size="11">application</text>
+        <text x="265" y="82" fill="#f59e0b" font-size="9">pair?</text>
+
+        <!-- Return labels -->
+        <text x="42" y="148" text-anchor="middle" fill="#71717a" font-size="9">return val</text>
+        <text x="180" y="148" text-anchor="middle" fill="#71717a" font-size="9">lookup env</text>
+        <text x="318" y="148" text-anchor="middle" fill="#71717a" font-size="9">apply proc</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrow21" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#60a5fa" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrow21g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#34d399" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrow21y" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="180" y="170" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">the evaluator from Ch.14, compiled to register machine dispatch</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. The dispatcher -->
+    <h3>The dispatcher &mdash; eval-dispatch</h3>
+    <p>The evaluator&rsquo;s core is a <strong>dispatch loop</strong>. It reads the expression type and jumps to the right handler. In the metacircular evaluator this was a <code>cond</code> inside <code>eval</code>. Here it&rsquo;s explicit: test the tag, branch to a label.</p>
+
+    <SchemeRepl client:load initialCode={`; eval-dispatch: classify expression, jump to handler.
+; This is the register-machine version of the metacircular eval's cond.
+
+(define (eval-dispatch exp env)
+  (cond ((number? exp)   (cons 'self-eval exp))
+        ((symbol? exp)   (cons 'variable (eval-variable exp env)))
+        ((pair? exp)
+         (let ((tag (car exp)))
+           (cond ((eq? tag 'quote)  (cons 'quoted (cadr exp)))
+                 ((eq? tag 'if)     (cons 'conditional exp))
+                 ((eq? tag 'define) (cons 'definition exp))
+                 ((eq? tag 'lambda) (cons 'lambda exp))
+                 (else              (cons 'application exp)))))
+        (else (cons 'unknown exp))))
+
+(define test-env '((x . 10) (y . 20)))
+
+(define (eval-variable name env)
+  (let ((binding (assoc name env)))
+    (if binding (cdr binding) '*unbound*)))
+
+; Test each dispatch path
+(display (eval-dispatch 42 test-env)) (newline)
+(display (eval-dispatch 'x test-env)) (newline)
+(display (eval-dispatch '(quote hello) test-env)) (newline)
+(display (eval-dispatch '(if #t 1 2) test-env)) (newline)
+(display (eval-dispatch '(+ x y) test-env))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# eval_dispatch: classify expression, route to handler
+def eval_dispatch(exp, env):
+    if isinstance(exp, (int, float)):
+        return ('self-eval', exp)
+    if isinstance(exp, str):
+        return ('variable', env.get(exp, '*unbound*'))
+    if isinstance(exp, list) and exp:
+        tag = exp[0]
+        if tag == 'quote':   return ('quoted', exp[1])
+        if tag == 'if':      return ('conditional', exp)
+        if tag == 'define':  return ('definition', exp)
+        if tag == 'lambda':  return ('lambda', exp)
+        return ('application', exp)
+    return ('unknown', exp)
+
+env = {'x': 10, 'y': 20}
+
+print(eval_dispatch(42, env))
+print(eval_dispatch('x', env))
+print(eval_dispatch(['quote', 'hello'], env))
+print(eval_dispatch(['if', True, 1, 2], env))
+print(eval_dispatch(['+', 'x', 'y'], env))
+`} />
+    </div>
+
+
+    <!-- 2. Evaluating simple expressions -->
+    <h3>Evaluating simple expressions</h3>
+    <p>Self-evaluating expressions (numbers, strings) go straight to the <code>val</code> register. Variables require an environment lookup. Quoted expressions strip the <code>quote</code> tag and return the datum. No stack needed &mdash; these are leaves of the expression tree.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple expression evaluation: no stack, no recursion.
+; The register machine just assigns val and continues.
+
+(define val '*unassigned*)
+(define env '((pi . 3.14159) (e . 2.71828) (msg . "hello")))
+
+; Self-evaluating
+(define (eval-self-evaluating exp)
+  (set! val exp)
+  val)
+
+; Variable lookup
+(define (eval-variable exp)
+  (let ((binding (assoc exp env)))
+    (set! val (if binding (cdr binding) '*unbound*))
+    val))
+
+; Quoted
+(define (eval-quoted exp)
+  (set! val (cadr exp))
+  val)
+
+(display "self-eval 42: ") (display (eval-self-evaluating 42)) (newline)
+(display "variable pi: ") (display (eval-variable 'pi)) (newline)
+(display "variable e:  ") (display (eval-variable 'e)) (newline)
+(display "quoted:      ") (display (eval-quoted '(quote (a b c)))) (newline)
+(display "variable msg: ") (display (eval-variable 'msg))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simple expression evaluation — leaf cases
+val = None
+env = {'pi': 3.14159, 'e': 2.71828, 'msg': 'hello'}
+
+def eval_self(exp):
+    global val
+    val = exp
+    return val
+
+def eval_variable(exp):
+    global val
+    val = env.get(exp, '*unbound*')
+    return val
+
+def eval_quoted(exp):
+    global val
+    val = exp[1]
+    return val
+
+print(f"self-eval 42: {eval_self(42)}")
+print(f"variable pi: {eval_variable('pi')}")
+print(f"variable e:  {eval_variable('e')}")
+print(f"quoted:      {eval_quoted(['quote', ['a', 'b', 'c']])}")
+print(f"variable msg: {eval_variable('msg')}")
+`} />
+    </div>
+
+
+    <!-- 3. Evaluating combinations -->
+    <h3>Evaluating combinations &mdash; the operand loop</h3>
+    <p>Combinations require evaluating the operator and each operand, then applying. The explicit-control evaluator must <strong>save registers</strong> before recursing into subexpressions. The operand loop pushes each evaluated argument onto a list (argl), building the argument list one element at a time.</p>
+
+    <SchemeRepl client:load initialCode={`; Evaluating (+ 3 (* 2 5)): explicit save/restore.
+; Shows what the metacircular evaluator does implicitly.
+
+(define stack '())
+(define (save! v) (set! stack (cons v stack)))
+(define (restore!) (let ((v (car stack))) (set! stack (cdr stack)) v))
+
+(define val 0)
+(define argl '())
+
+; Step-by-step evaluation trace
+(display "Evaluating (+ 3 (* 2 5))") (newline)
+(display "---") (newline)
+
+; 1. Evaluate operator: +
+(define proc +)
+(display "1. operator = +") (newline)
+
+; 2. Start operand loop
+(set! argl '())
+
+; 3. Evaluate first operand: 3 (self-evaluating)
+(set! val 3)
+(set! argl (cons val argl))
+(display "2. after eval 3, argl = ") (display argl) (newline)
+
+; 4. Save argl before evaluating subexpression (* 2 5)
+(save! argl)
+(save! proc)
+(display "3. saved argl and proc to stack") (newline)
+
+; 5. Evaluate (* 2 5) — this is a recursive eval
+(set! val (* 2 5))
+(display "4. eval (* 2 5) = ") (display val) (newline)
+
+; 6. Restore and add to argl
+(set! proc (restore!))
+(set! argl (restore!))
+(set! argl (cons val argl))
+(display "5. restored, argl = ") (display argl) (newline)
+
+; 7. Apply
+(set! val (apply proc (reverse argl)))
+(display "6. apply + to ") (display (reverse argl))
+(display " = ") (display val)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Evaluating (+ 3 (* 2 5)) with explicit stack
+stack = []
+val = 0
+argl = []
+
+print("Evaluating (+ 3 (* 2 5))")
+print("---")
+
+# 1. Evaluate operator
+import operator
+proc = operator.add
+print("1. operator = +")
+
+# 2-3. Evaluate first operand
+argl = []
+val = 3
+argl.append(val)
+print(f"2. after eval 3, argl = {argl}")
+
+# 4. Save before subexpression
+stack.append(list(argl))
+stack.append(proc)
+print("3. saved argl and proc to stack")
+
+# 5. Evaluate subexpression
+val = 2 * 5
+print(f"4. eval (* 2 5) = {val}")
+
+# 6. Restore
+proc = stack.pop()
+argl = stack.pop()
+argl.append(val)
+print(f"5. restored, argl = {argl}")
+
+# 7. Apply
+val = proc(argl[0], argl[1])
+print(f"6. apply + to {argl} = {val}")
+`} />
+    </div>
+
+
+    <!-- 4. Tail recursion -->
+    <h3>Sequence evaluation and tail recursion</h3>
+    <p>A <strong>tail call</strong> is a call in return position &mdash; nothing left to do after it returns. The explicit-control evaluator recognizes this: it skips the <code>save</code> of the continuation register. No save means the stack doesn&rsquo;t grow. This is why Scheme guarantees tail-call optimization &mdash; the evaluator&rsquo;s structure makes it free.</p>
+
+    <SchemeRepl client:load initialCode={`; Tail recursion: iterative factorial with explicit stack tracking.
+; The stack never grows because each call is in tail position.
+
+(define stack-depth 0)
+(define max-depth 0)
+
+(define (save-track!)
+  (set! stack-depth (+ stack-depth 1))
+  (if (> stack-depth max-depth) (set! max-depth stack-depth)))
+(define (restore-track!)
+  (set! stack-depth (- stack-depth 1)))
+
+; Tail-recursive factorial — no saves needed
+(define (fact-iter n acc)
+  ; In explicit-control: this is a goto, not a call
+  (if (= n 0)
+      acc
+      (fact-iter (- n 1) (* acc n))))
+
+(display "fact(10) = ") (display (fact-iter 10 1)) (newline)
+(display "stack depth stayed at: ") (display max-depth) (newline)
+
+; Non-tail-recursive — each call saves continuation
+(set! max-depth 0)
+(set! stack-depth 0)
+
+(define (fact-rec n)
+  (if (= n 0)
+      1
+      (begin
+        (save-track!)  ; simulate saving continuation
+        (let ((result (* n (fact-rec (- n 1)))))
+          (restore-track!)
+          result))))
+
+(display "fact-rec(10) = ") (display (fact-rec 10)) (newline)
+(display "max stack depth: ") (display max-depth)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tail recursion vs non-tail: stack depth tracking
+import sys
+sys.setrecursionlimit(200)
+
+# Tail-recursive (Python doesn't optimize this, but the logic is the same)
+def fact_iter(n, acc=1):
+    if n == 0:
+        return acc
+    return fact_iter(n - 1, acc * n)
+
+# Non-tail-recursive
+call_depth = [0]
+max_depth = [0]
+
+def fact_rec(n):
+    if n == 0:
+        return 1
+    call_depth[0] += 1
+    max_depth[0] = max(max_depth[0], call_depth[0])
+    result = n * fact_rec(n - 1)
+    call_depth[0] -= 1
+    return result
+
+print(f"fact_iter(10) = {fact_iter(10)}")
+print(f"(Python can't optimize tail calls — but Scheme can)")
+
+print(f"fact_rec(10) = {fact_rec(10)}")
+print(f"max stack depth: {max_depth[0]}")
+`} />
+    </div>
+
+
+    <!-- 5. Conditionals and assignments -->
+    <h3>Conditionals and assignments</h3>
+    <p>Conditionals evaluate the predicate, then branch to the consequent or alternative. The explicit-control evaluator saves the environment and unevaluated branches on the stack before evaluating the predicate. Assignments use <code>set-variable-value!</code> to mutate the environment &mdash; the only place the evaluator writes to the environment frame.</p>
+
+    <SchemeRepl client:load initialCode={`; Explicit conditional evaluation with environment.
+
+(define env '((x . 5) (y . 10)))
+
+(define (lookup var env)
+  (let ((b (assoc var env)))
+    (if b (cdr b) (error "Unbound" var))))
+
+(define (eval-if pred-val consequent alternative env)
+  ; In the real evaluator: save env, eval predicate,
+  ; then branch. Here we simulate the flow.
+  (display "  predicate = ") (display pred-val) (newline)
+  (if pred-val
+      (begin (display "  -> consequent") (newline) consequent)
+      (begin (display "  -> alternative") (newline) alternative)))
+
+; (if (> x 3) "big" "small")
+(display "eval (if (> x 3) big small):") (newline)
+(display "  result = ")
+(display (eval-if (> (lookup 'x env) 3) "big" "small")) (newline)
+
+; Assignment: (set! x 99)
+(display "Before set!: x = ") (display (lookup 'x env)) (newline)
+(set! env (cons (cons 'x 99) env))  ; shadow old binding
+(display "After set!:  x = ") (display (lookup 'x env)) (newline)
+
+; (if (> x 50) "big" "small") — now x is 99
+(display "eval (if (> x 50) big small):") (newline)
+(display "  result = ")
+(display (eval-if (> (lookup 'x env) 50) "big" "small"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Explicit conditional and assignment
+env = {'x': 5, 'y': 10}
+
+def eval_if(pred_val, consequent, alternative):
+    print(f"  predicate = {pred_val}")
+    if pred_val:
+        print("  -> consequent")
+        return consequent
+    else:
+        print("  -> alternative")
+        return alternative
+
+# if x > 3 then "big" else "small"
+print("eval (if (> x 3) big small):")
+print(f"  result = {eval_if(env['x'] > 3, 'big', 'small')}")
+
+# Assignment
+print(f"Before set!: x = {env['x']}")
+env['x'] = 99
+print(f"After set!:  x = {env['x']}")
+
+# if x > 50
+print("eval (if (> x 50) big small):")
+print(f"  result = {eval_if(env['x'] > 50, 'big', 'small')}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Register Machine / SICP</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">eval-dispatch</td><td class="pr-4 text-blue-300">eval()</td><td class="font-sans">Main dispatch loop</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(save continue)</td><td class="pr-4 text-blue-300">stack.append(return_addr)</td><td class="font-sans">Save return address</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(restore continue)</td><td class="pr-4 text-blue-300">return_addr = stack.pop()</td><td class="font-sans">Restore return address</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">ev-if / ev-assignment</td><td class="pr-4 text-blue-300">visit_If / visit_Assign</td><td class="font-sans">Handler labels (like AST visitor methods)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">argl</td><td class="pr-4 text-blue-300">args = []</td><td class="font-sans">Accumulator for evaluated operands</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">tail position &rarr; no save</td><td class="pr-4 text-blue-300">(not optimized in CPython)</td><td class="font-sans">Tail-call optimization</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The explicit-control evaluator is the bridge between the high-level metacircular evaluator (Ch.14) and real machine code. Every implicit operation &mdash; function calls, argument evaluation order, stack management &mdash; becomes a visible instruction. CPython&rsquo;s <code>ceval.c</code> is structurally the same: a giant switch statement dispatching on bytecode opcode, with an explicit value stack. Tail-call optimization is a property of the evaluator&rsquo;s structure, not a compiler trick: if the evaluator doesn&rsquo;t push a frame, the stack doesn&rsquo;t grow.</p>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-14/">SICP Ch.14</a> &mdash; the metacircular evaluator this chapter compiles down</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Control_flow"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Control flow</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Continuation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Continuation</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-34.html#%_sec_5.4">Read SICP &sect;5.4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-20/", label: "Storage & Garbage Collection" }} next={{ href: "/reading/programming/sicp-22/", label: "Compilation · 22 of 22" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,167 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.3 — Hash Functions" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>Hash Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cryptographic hash function</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>cryptographic hash function</strong> maps arbitrary-length input to a fixed-length output. It must be one-way (hard to invert), collision-resistant (hard to find two inputs with the same hash), and avalanche-prone (a small input change flips about half the output bits).</p>
+    </div>
+
+    <!-- SVG: input -> hash function -> fixed-length output -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 100" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Input (variable) -->
+        <rect x="10" y="30" width="90" height="30" rx="3" fill="none" stroke="#86efac" stroke-width="1" stroke-dasharray="4,2"/>
+        <text x="55" y="50" text-anchor="middle" fill="#86efac" font-size="10">any length</text>
+        <!-- Arrow -->
+        <line x1="105" y1="45" x2="150" y2="45" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="150,41 158,45 150,49" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Hash function box -->
+        <rect x="162" y="28" width="80" height="34" rx="4" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <text x="202" y="49" text-anchor="middle" fill="#facc15" font-size="11">H(x)</text>
+        <!-- Arrow -->
+        <line x1="247" y1="45" x2="295" y2="45" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="295,41 303,45 295,49" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Output (fixed) -->
+        <rect x="308" y="30" width="100" height="30" rx="3" fill="none" stroke="#f87171" stroke-width="1.5"/>
+        <text x="358" y="50" text-anchor="middle" fill="#f87171" font-size="10">fixed length</text>
+        <!-- One-way arrow crossed out -->
+        <text x="202" y="85" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">One-way: easy to compute, hard to invert.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. One-way property -->
+    <h3>One-way property</h3>
+    <p>Given a hash output <em>h</em>, it should be computationally infeasible to find any input <em>m</em> such that H(m) = h. This is called <strong>preimage resistance</strong>. For a hash with n-bit output, a brute-force preimage attack takes about 2<sup>n</sup> tries.</p>
+
+    <SchemeRepl client:load initialCode={`; A toy hash function to illustrate one-wayness
+; Real hash functions use much more complex mixing
+
+(define (toy-hash msg)
+  ;; Sum character codes, multiply, take modulo
+  (let loop ((chars (string->list msg)) (acc 1))
+    (if (null? chars)
+      (modulo acc 65536)
+      (loop (cdr chars)
+            (modulo (+ (* acc 31) (char->integer (car chars))) 65536)))))
+
+(display "H('hello') = ") (display (toy-hash "hello")) (newline)
+(display "H('world') = ") (display (toy-hash "world")) (newline)
+(display "H('hellp') = ") (display (toy-hash "hellp")) (newline)
+
+;; Given output 27485, can you find the input?
+;; With 16-bit output, brute force needs ~65536 tries.
+;; SHA-256 has 256-bit output: ~2^256 tries.
+(display "One bit change, very different output.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Toy hash function
+def toy_hash(msg):
+    acc = 1
+    for ch in msg:
+        acc = (acc * 31 + ord(ch)) % 65536
+    return acc
+
+print(f"H('hello') = {toy_hash('hello')}")
+print(f"H('world') = {toy_hash('world')}")
+print(f"H('hellp') = {toy_hash('hellp')}")
+print("One bit change, very different output.")
+`} />
+    </div>
+
+
+    <!-- 2. Collision resistance -->
+    <h3>Collision resistance and the birthday attack</h3>
+    <p>A <strong>collision</strong> is two different inputs that produce the same hash. For an n-bit hash, the <strong>birthday attack</strong> finds a collision in about 2<sup>n/2</sup> tries (not 2<sup>n</sup>). This is why SHA-256 provides only 128 bits of collision resistance. The birthday paradox: in a room of 23 people, there is a 50% chance two share a birthday.</p>
+
+    <SchemeRepl client:load initialCode={`; Birthday paradox simulation
+; With a small hash (8-bit = 256 buckets),
+; how many inputs until we get a collision?
+
+(define (toy-hash-8 msg-num)
+  ;; Hash a number to 0-255
+  (modulo (+ (* msg-num 31) 7) 256))
+
+;; Find first collision
+(define (find-collision)
+  (let loop ((i 0) (seen '()))
+    (let ((h (toy-hash-8 i)))
+      (if (memv h seen)
+        (begin
+          (display "Collision at input ") (display i)
+          (display ", hash = ") (display h) (newline)
+          (display "Tries: ") (display i) (newline)
+          (display "sqrt(256) = 16 (expected ~16 tries)"))
+        (loop (+ i 1) (cons h seen))))))
+
+(find-collision)
+`} />
+
+
+    <!-- 3. Merkle-Damgard construction -->
+    <h3>Merkle-Damgard construction</h3>
+    <p>SHA-256 processes the message in 512-bit blocks. Each block is fed into a <strong>compression function</strong> along with the previous hash state. The initial state is a fixed constant (IV). After all blocks, the final state is the hash. This iterative structure is the Merkle-Damgard construction.</p>
+
+    <SchemeRepl client:load initialCode={`; Merkle-Damgard construction (simplified)
+; Process message in blocks, chaining the state
+
+(define IV 42)  ;; initial value
+
+(define (compress state block)
+  ;; Toy compression: mix state with block
+  (modulo (+ (* state 31) block) 65536))
+
+(define (merkle-damgard blocks)
+  (let loop ((state IV) (remaining blocks))
+    (if (null? remaining)
+      state
+      (loop (compress state (car remaining))
+            (cdr remaining)))))
+
+;; Message split into "blocks"
+(define blocks1 (list 72 101 108 108 111))   ; "Hello"
+(define blocks2 (list 72 101 108 108 112))   ; "Hellp"
+
+(display "H('Hello') = ") (display (merkle-damgard blocks1)) (newline)
+(display "H('Hellp') = ") (display (merkle-damgard blocks2)) (newline)
+
+;; Adding a block changes the final hash
+(define blocks3 (list 72 101 108 108 111 33))  ; "Hello!"
+(display "H('Hello!') = ") (display (merkle-damgard blocks3))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-01/">📡 Shannon Ch. 1</a> &mdash; surprise and information: hash functions compress information</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cryptographic hash function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/SHA-2"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>SHA-2</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Merkle-Damgard construction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Birthday_attack"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Birthday attack</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-02/", label: "Block Ciphers" }} next={{ href: "/reading/cryptography/crypto-04/", label: "MACs and Authentication" }} />
+
+  </main>
+</Layout>

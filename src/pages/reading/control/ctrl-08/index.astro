@@ -1,0 +1,110 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.8 — Optimal Control" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Optimal Control</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Linear-quadratic regulator</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Optimal control</strong> finds the input that minimizes a cost function. The <strong>LQR</strong> (linear quadratic regulator) minimizes a weighted sum of state deviation and control effort. The solution comes from the <strong>Riccati equation</strong>. The tradeoff: penalize state error more for faster response, penalize effort more for smaller actuators.</p>
+    </div>
+
+    <h3>The cost function</h3>
+    <p>Define a cost J that sums two things over time: how far the state is from zero (weighted by matrix Q) and how much control effort you use (weighted by matrix R). J = integral of (x'Qx + u'Ru) dt. Larger Q means "care more about tracking." Larger R means "care more about saving energy." The optimal control law is a linear gain: u = -Kx, where K is computed from the Riccati equation.</p>
+
+    <!-- SVG: Cost surface with optimal trajectory -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Cost contours (ellipses) -->
+        <ellipse cx="200" cy="150" rx="160" ry="100" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <ellipse cx="200" cy="150" rx="120" ry="75" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <ellipse cx="200" cy="150" rx="80" ry="50" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <ellipse cx="200" cy="150" rx="40" ry="25" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <ellipse cx="200" cy="150" rx="10" ry="6" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Optimal point -->
+        <circle cx="200" cy="150" r="4" fill="#22c55e"/>
+        <text x="210" y="145" fill="#22c55e" font-size="10" fill-opacity="0.7">optimal</text>
+        <!-- Optimal trajectory -->
+        <path d="M 350 230 Q 320 210 290 190 Q 260 175 230 160 Q 215 153 200 150" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <circle cx="350" cy="230" r="4" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="355" y="245" fill="#60a5fa" font-size="10" fill-opacity="0.6">initial state</text>
+        <!-- Suboptimal trajectory -->
+        <path d="M 350 230 Q 300 230 250 200 Q 220 180 200 150" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <text x="280" y="225" fill="#f59e0b" font-size="9" fill-opacity="0.5">aggressive (high Q)</text>
+        <!-- Another suboptimal -->
+        <path d="M 350 230 Q 340 200 320 180 Q 280 155 240 150 Q 220 148 200 150" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <text x="330" y="170" fill="#ef4444" font-size="9" fill-opacity="0.5">gentle (high R)</text>
+        <!-- Axes labels -->
+        <text x="200" y="275" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">state x1</text>
+        <text x="15" y="150" fill="currentColor" font-size="11" fill-opacity="0.4" transform="rotate(-90,15,150)">state x2</text>
+        <!-- Cost contour label -->
+        <text x="360" y="55" fill="currentColor" font-size="9" fill-opacity="0.3">J = constant</text>
+      </svg>
+    </div>
+
+    <h3>LQR: the linear case</h3>
+    <p>For a linear system x' = Ax + Bu with quadratic cost, the optimal gain K = R^(-1) B' P where P solves the <a href="https://en.wikipedia.org/wiki/Algebraic_Riccati_equation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>algebraic Riccati equation</a>: A'P + PA - PBR^(-1)B'P + Q = 0. The result is a constant-gain state feedback law. No online optimization needed: compute K once, apply u = -Kx forever.</p>
+
+    <SchemeRepl client:load initialCode={`; LQR-like simulation: u = -K*x for a double integrator
+; x1' = x2, x2' = u
+; Hand-tuned K = [k1, k2] (in practice, solve Riccati)
+
+(define k1 1.0) (define k2 1.5)  ; feedback gains
+(define dt 0.05)
+
+(define (lqr-sim x1 x2 steps)
+  (if (= steps 0) (begin (display "Done.") (newline))
+    (let* ((u (- (+ (* k1 x1) (* k2 x2))))  ; u = -Kx
+           (new-x1 (+ x1 (* x2 dt)))
+           (new-x2 (+ x2 (* u dt)))
+           (cost (+ (* x1 x1) (* 0.1 u u)))) ; instantaneous cost
+      (if (= 0 (modulo steps 10))
+        (begin
+          (display "  x1=") (display new-x1)
+          (display "  x2=") (display new-x2)
+          (display "  u=") (display u)
+          (display "  cost=") (display cost)
+          (newline))
+        'skip)
+      (lqr-sim new-x1 new-x2 (- steps 1)))))
+
+(display "LQR-like control of double integrator:") (newline)
+(lqr-sim 5.0 0.0 100)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# LQR-like control: double integrator
+k1, k2 = 1.0, 1.5
+dt = 0.05
+x1, x2 = 5.0, 0.0
+
+print("LQR-like control of double integrator:")
+for step in range(100):
+    u = -(k1 * x1 + k2 * x2)
+    cost = x1**2 + 0.1 * u**2
+    x1 += x2 * dt
+    x2 += u * dt
+    if step % 10 == 0:
+        print(f"  step={step:3d}  x1={x1:+.3f}  x2={x2:+.3f}  u={u:+.3f}  cost={cost:.3f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-12/">&#x222B; Calculus Ch. 12 — Optimization</a> &#x2014; LQR is optimization over function space</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-07/", label: "State Space" }} next={{ href: "/reading/control/ctrl-09/", label: "Kalman Filter" }} />
+
+  </main>
+</Layout>

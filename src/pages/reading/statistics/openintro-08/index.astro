@@ -1,0 +1,335 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.8 — Simple Linear Regression" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Simple Linear Regression</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; CC BY-SA 3.0 &middot; <a href="https://www.openintro.org/book/operating-systems/">Chapter 8</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Regression fits a line y = b0 + b1*x to data. The least squares method minimizes the sum of squared residuals. R-squared measures the fraction of variance explained. Inference for the slope tells you whether the relationship is real.</p>
+    </div>
+
+    <!-- SVG: Scatter plot with regression line and residual lines -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="220" x2="370" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="220" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="250" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">x</text>
+        <text x="25" y="120" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">y</text>
+
+        <!-- Regression line: y = 190 - 1.2x (in SVG coords, higher y = lower on screen) -->
+        <line x1="60" y1="188" x2="360" y2="48" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+
+        <!-- Data points and residual lines -->
+        <!-- Point 1: x=80, observed y=170, predicted y=172 -->
+        <circle cx="80" cy="170" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 2: x=120, fitted=142, observed=130 -->
+        <line x1="120" y1="130" x2="120" y2="142" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="120" cy="130" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 3: x=160, fitted=118, observed=135 -->
+        <line x1="160" y1="135" x2="160" y2="118" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="160" cy="135" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 4: x=200, fitted=95, observed=85 -->
+        <line x1="200" y1="85" x2="200" y2="95" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="200" cy="85" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 5: x=240, fitted=72, observed=80 -->
+        <line x1="240" y1="80" x2="240" y2="72" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="240" cy="80" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 6: x=280, fitted=48, observed=60 -->
+        <line x1="280" y1="60" x2="280" y2="48" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="280" cy="60" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Point 7: x=320, fitted=25, observed=30 -->
+        <line x1="320" y1="30" x2="320" y2="25" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.5"/>
+        <circle cx="320" cy="30" r="3.5" fill="#f97316" fill-opacity="0.8"/>
+
+        <!-- Legend -->
+        <line x1="240" y1="210" x2="260" y2="210" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="265" y="214" fill="currentColor" font-size="9" fill-opacity="0.5">fitted line</text>
+        <line x1="240" y1="225" x2="260" y2="225" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="265" y="229" fill="currentColor" font-size="9" fill-opacity="0.5">residuals</text>
+      </svg>
+    </div>
+
+    <!-- 1. Least squares -->
+    <h3>Least squares line</h3>
+    <p>The slope b1 = r * (sy / sx) and the intercept b0 = y-bar - b1 * x-bar. These minimize the sum of squared residuals. The correlation r measures linear association; the regression line passes through (x-bar, y-bar).</p>
+
+    <SchemeRepl client:load initialCode={`; Least squares regression
+; Data: hours studied vs. exam score
+
+(define xs (list 1 2 3 4 5 6 7))
+(define ys (list 52 58 65 70 74 80 85))
+
+(define n (length xs))
+(define sum-x (apply + xs))
+(define sum-y (apply + ys))
+(define x-bar (/ sum-x n))
+(define y-bar (/ sum-y n))
+
+; Compute slope: b1 = sum((xi - xbar)(yi - ybar)) / sum((xi - xbar)^2)
+(define ss-xy (apply + (map (lambda (x y) (* (- x x-bar) (- y y-bar))) xs ys)))
+(define ss-xx (apply + (map (lambda (x) (* (- x x-bar) (- x x-bar))) xs)))
+
+(define b1 (/ (exact->inexact ss-xy) (exact->inexact ss-xx)))
+(define b0 (- (exact->inexact y-bar) (* b1 (exact->inexact x-bar))))
+
+(display "b0 (intercept) = ") (display b0) (newline)
+(display "b1 (slope)     = ") (display b1) (newline)
+(display "Line: y = ") (display b0) (display " + ")
+(display b1) (display " * x") (newline)
+; Predict for x = 5
+(display "Predicted y at x=5: ")
+(display (+ b0 (* b1 5)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Least squares regression
+xs = [1, 2, 3, 4, 5, 6, 7]
+ys = [52, 58, 65, 70, 74, 80, 85]
+n = len(xs)
+
+x_bar = sum(xs) / n
+y_bar = sum(ys) / n
+
+ss_xy = sum((x - x_bar) * (y - y_bar) for x, y in zip(xs, ys))
+ss_xx = sum((x - x_bar)**2 for x in xs)
+
+b1 = ss_xy / ss_xx
+b0 = y_bar - b1 * x_bar
+
+print(f"y = {b0:.2f} + {b1:.2f} * x")
+print(f"Predicted y at x=5: {b0 + b1 * 5:.2f}")
+`} />
+    </div>
+
+
+    <!-- 2. Residuals -->
+    <h3>Residuals</h3>
+    <p>A residual is the observed value minus the predicted value: e = y - y-hat. Residuals should show no pattern when plotted against x or y-hat. Patterns indicate the linear model is missing something: curvature, heteroscedasticity, or outliers.</p>
+
+    <SchemeRepl client:load initialCode={`; Computing residuals
+(define xs (list 1 2 3 4 5 6 7))
+(define ys (list 52 58 65 70 74 80 85))
+
+; Using b0=46.43, b1=5.54 from above
+(define b0 46.43)
+(define b1 5.54)
+
+(define (predict x) (+ b0 (* b1 x)))
+
+(define y-hats (map predict xs))
+(define residuals (map - ys y-hats))
+
+(display "Predicted: ") (display (map (lambda (yh) (exact->inexact yh)) y-hats)) (newline)
+(display "Residuals: ") (display (map (lambda (r) (exact->inexact r)) residuals)) (newline)
+
+; Sum of residuals should be ~0
+(define sum-resid (apply + residuals))
+(display "Sum of residuals: ") (display sum-resid) (newline)
+
+; Sum of squared residuals
+(define sse (apply + (map (lambda (e) (* e e)) residuals)))
+(display "SSE: ") (display sse)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Residuals
+xs = [1, 2, 3, 4, 5, 6, 7]
+ys = [52, 58, 65, 70, 74, 80, 85]
+b0, b1 = 46.43, 5.54
+
+residuals = [y - (b0 + b1*x) for x, y in zip(xs, ys)]
+print(f"Residuals: {[round(r, 2) for r in residuals]}")
+print(f"Sum: {sum(residuals):.4f}")
+print(f"SSE: {sum(r**2 for r in residuals):.2f}")
+`} />
+    </div>
+
+
+    <!-- 3. R-squared -->
+    <h3>R-squared</h3>
+    <p>R-squared = 1 - SSE/SST, where SST is the total sum of squares. It measures the proportion of variance in y explained by x. An R-squared of 0.95 means the regression captures 95% of the variability. It equals the square of the correlation coefficient r.</p>
+
+    <SchemeRepl client:load initialCode={`; R-squared
+(define ys (list 52 58 65 70 74 80 85))
+(define n (length ys))
+(define y-bar (/ (apply + ys) n))
+
+; SST = total sum of squares
+(define sst (apply + (map (lambda (y) (* (- y y-bar) (- y y-bar))) ys)))
+
+; SSE from residuals (b0=46.43, b1=5.54)
+(define b0 46.43) (define b1 5.54)
+(define xs (list 1 2 3 4 5 6 7))
+(define residuals (map (lambda (x y) (- y (+ b0 (* b1 x)))) xs ys))
+(define sse (apply + (map (lambda (e) (* e e)) residuals)))
+
+(define r-squared (- 1 (/ sse (exact->inexact sst))))
+
+(display "SST = ") (display (exact->inexact sst)) (newline)
+(display "SSE = ") (display sse) (newline)
+(display "R^2 = ") (display r-squared) (newline)
+(display "The model explains ")
+(display (* 100 r-squared))
+(display "% of variance")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# R-squared
+ys = [52, 58, 65, 70, 74, 80, 85]
+xs = [1, 2, 3, 4, 5, 6, 7]
+b0, b1 = 46.43, 5.54
+y_bar = sum(ys) / len(ys)
+
+sst = sum((y - y_bar)**2 for y in ys)
+sse = sum((y - (b0 + b1*x))**2 for x, y in zip(xs, ys))
+r_sq = 1 - sse / sst
+
+print(f"R^2 = {r_sq:.4f}")
+print(f"Model explains {r_sq*100:.1f}% of variance")
+`} />
+    </div>
+
+
+    <!-- 4. Inference for slope -->
+    <h3>Inference for the slope</h3>
+    <p>To test H0: beta1 = 0 (no linear relationship), compute t = b1 / SE(b1), where SE(b1) = sqrt(MSE / SS_xx). This follows a t-distribution with n - 2 degrees of freedom. The confidence interval is b1 +/- t* * SE(b1).</p>
+
+    <SchemeRepl client:load initialCode={`; Inference for slope
+(define xs (list 1 2 3 4 5 6 7))
+(define ys (list 52 58 65 70 74 80 85))
+(define n 7)
+(define b0 46.43) (define b1 5.54)
+
+; SSE and MSE
+(define residuals (map (lambda (x y) (- y (+ b0 (* b1 x)))) xs ys))
+(define sse (apply + (map (lambda (e) (* e e)) residuals)))
+(define mse (/ sse (- n 2)))  ; df = n - 2 = 5
+
+; SS_xx
+(define x-bar (/ (apply + xs) n))
+(define ss-xx (apply + (map (lambda (x) (* (- x x-bar) (- x x-bar))) xs)))
+
+(define se-b1 (sqrt (/ mse (exact->inexact ss-xx))))
+(define t-stat (/ b1 se-b1))
+
+(display "b1     = ") (display b1) (newline)
+(display "SE(b1) = ") (display se-b1) (newline)
+(display "t      = ") (display t-stat) (newline)
+(display "df     = ") (display (- n 2)) (newline)
+; Critical t at alpha=0.05, df=5: ~2.571
+(display "Reject H0: beta1=0? ")
+(display (if (> (abs t-stat) 2.571) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Inference for slope
+import math
+
+xs = [1, 2, 3, 4, 5, 6, 7]
+ys = [52, 58, 65, 70, 74, 80, 85]
+b0, b1 = 46.43, 5.54
+n = len(xs)
+
+residuals = [y - (b0 + b1*x) for x, y in zip(xs, ys)]
+mse = sum(r**2 for r in residuals) / (n - 2)
+x_bar = sum(xs) / n
+ss_xx = sum((x - x_bar)**2 for x in xs)
+se_b1 = math.sqrt(mse / ss_xx)
+t = b1 / se_b1
+
+print(f"t = {t:.3f}, SE(b1) = {se_b1:.4f}")
+print(f"Reject H0? {'Yes' if abs(t) > 2.571 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 5. Prediction intervals -->
+    <h3>Prediction intervals</h3>
+    <p>A confidence interval targets the mean response at x. A prediction interval targets a single new observation. The prediction interval is wider because it adds individual-level noise on top of estimation uncertainty: SE_pred = sqrt(MSE * (1 + 1/n + (x - x-bar)^2 / SS_xx)).</p>
+
+    <SchemeRepl client:load initialCode={`; Prediction interval at x=4
+(define n 7) (define b0 46.43) (define b1 5.54)
+(define x-new 4)
+(define y-hat (+ b0 (* b1 x-new)))
+
+; From earlier: MSE, x-bar, SS_xx
+(define mse 2.0)  ; approximate
+(define x-bar 4.0)
+(define ss-xx 28.0)
+
+; SE for prediction interval
+(define se-pred (sqrt (* mse (+ 1 (/ 1 n)
+                               (/ (* (- x-new x-bar) (- x-new x-bar)) ss-xx)))))
+
+; t* at alpha=0.05, df=5: ~2.571
+(define t-star 2.571)
+(define margin (* t-star se-pred))
+
+(display "Predicted y at x=4: ") (display y-hat) (newline)
+(display "SE(pred)   = ") (display se-pred) (newline)
+(display "95% PI: (") (display (- y-hat margin))
+(display ", ") (display (+ y-hat margin)) (display ")")
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Formula</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">b1</td><td class="pr-4">r * sy/sx</td><td class="font-sans">Slope of regression line</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">b0</td><td class="pr-4">y&#x0304; - b1*x&#x0304;</td><td class="font-sans">Intercept</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">e</td><td class="pr-4">y - y&#x0302;</td><td class="font-sans">Residual</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">R&sup2;</td><td class="pr-4">1 - SSE/SST</td><td class="font-sans">Coefficient of determination</td></tr>
+          <tr><td class="py-2 pr-4">SE(b1)</td><td class="pr-4">&radic;(MSE/SS_xx)</td><td class="font-sans">Standard error of slope</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/ch-01/">Linear Algebra Ch.1</a> &mdash; solving systems of equations, the algebraic backbone of least squares</li>
+    
+      <li><a href="/reading/machine-learning/ml-02/">🤖 ML Ch.2</a> &mdash; linear regression as a machine learning problem: gradient descent vs. the normal equation</li>
+      <li><a href="/reading/calculus/calc-12/">∫ Calculus Ch.12</a> &mdash; least-squares minimization uses the same optimization techniques</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Simple_linear_regression"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Simple linear regression</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Coefficient_of_determination"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Coefficient of determination (R-squared)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Prediction_interval"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prediction interval</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-07/", label: "Inference for Means" }} next={{ href: "/reading/statistics/openintro-09/", label: "Multiple and Logistic Regression" }} />
+
+  </main>
+</Layout>

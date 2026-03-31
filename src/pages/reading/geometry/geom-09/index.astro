@@ -1,0 +1,218 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.9 — Voronoi Diagrams" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">&larr; back to geometry</a>
+
+    <h1>Voronoi Diagrams</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (<a href="https://en.wikipedia.org/wiki/Voronoi_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Voronoi diagram</a>) &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Given a set of points (sites), the <strong>Voronoi diagram</strong> partitions the plane into cells. Each cell contains all points closer to its site than to any other. The boundaries are perpendicular bisectors. Every point in the plane belongs to exactly one cell. Nature uses Voronoi diagrams everywhere: giraffe spots, mud cracks, cell territories.</p>
+    </div>
+
+    <!-- 1. Nearest-neighbor partition -->
+    <h3>Nearest-neighbor partition</h3>
+    <p>The Voronoi cell of site p is the set of all points x where d(x, p) &le; d(x, q) for every other site q. The boundary between two cells is the perpendicular bisector of the segment joining their sites. In 2D, each cell is a convex polygon (possibly unbounded).</p>
+
+    <SchemeRepl client:load initialCode={`; Find which site is nearest to a query point
+; This is the fundamental Voronoi operation
+
+(define (dist p q)
+  (let ((dx (- (car p) (car q)))
+        (dy (- (cadr p) (cadr q))))
+    (sqrt (+ (* dx dx) (* dy dy)))))
+
+(define (nearest-site query sites)
+  (let loop ((best (car sites))
+             (best-d (dist query (car sites)))
+             (rest (cdr sites)))
+    (if (null? rest) best
+        (let ((d (dist query (car rest))))
+          (if (< d best-d)
+              (loop (car rest) d (cdr rest))
+              (loop best best-d (cdr rest)))))))
+
+; Five sites
+(define sites (list (list 1 1) (list 4 2) (list 2 5)
+                    (list 6 4) (list 5 7)))
+
+; Query several points
+(for-each
+  (lambda (q)
+    (display "Nearest to ") (display q) (display ": ")
+    (display (nearest-site q sites)) (newline))
+  (list (list 0 0) (list 3 3) (list 5 5) (list 6 1)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def dist(p, q):
+    return math.sqrt(sum((a-b)**2 for a,b in zip(p, q)))
+
+def nearest_site(query, sites):
+    return min(sites, key=lambda s: dist(query, s))
+
+sites = [(1,1), (4,2), (2,5), (6,4), (5,7)]
+
+for q in [(0,0), (3,3), (5,5), (6,1)]:
+    print(f"Nearest to {q}: {nearest_site(q, sites)}")
+`} />
+    </div>
+
+
+    <!-- SVG: Voronoi diagram -->
+    <h3>Voronoi cells</h3>
+    <p>Each cell is convex. In the Euclidean case, the number of edges per cell is at most 6 on average (by Euler's formula for planar graphs). Cells near the boundary of the point set are unbounded, extending to infinity.</p>
+
+    <!-- SVG: Point set with colored Voronoi cells -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Voronoi cells as colored polygons -->
+        <!-- Cell for site A (1,1) mapped to (50,250) — bottom-left -->
+        <polygon points="0,300 0,150 100,100 175,175 150,300" fill="#60a5fa" fill-opacity="0.1" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Cell for site B (4,2) mapped to (200,200) — bottom-center -->
+        <polygon points="150,300 175,175 250,150 350,200 400,300" fill="#f59e0b" fill-opacity="0.1" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Cell for site C (2,5) mapped to (100,50) — top-left -->
+        <polygon points="0,0 200,0 200,80 250,150 175,175 100,100 0,150" fill="#34d399" fill-opacity="0.1" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Cell for site D (6,4) mapped to (300,100) — right -->
+        <polygon points="400,0 400,300 350,200 250,150 200,80 200,0" fill="#a78bfa" fill-opacity="0.1" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Voronoi edges -->
+        <line x1="100" y1="100" x2="175" y2="175" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="175" y1="175" x2="250" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="250" y1="150" x2="200" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="0" y1="150" x2="100" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="200" y1="80" x2="200" y2="0" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="175" y1="175" x2="150" y2="300" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="250" y1="150" x2="350" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="350" y1="200" x2="400" y2="300" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Sites -->
+        <circle cx="50" cy="250" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="50" y="270" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">A</text>
+
+        <circle cx="200" cy="200" r="5" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="200" y="220" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">B</text>
+
+        <circle cx="100" cy="50" r="5" fill="#34d399" fill-opacity="0.8"/>
+        <text x="100" y="40" text-anchor="middle" fill="#34d399" font-size="11" fill-opacity="0.7">C</text>
+
+        <circle cx="300" cy="100" r="5" fill="#a78bfa" fill-opacity="0.8"/>
+        <text x="300" y="90" text-anchor="middle" fill="#a78bfa" font-size="11" fill-opacity="0.7">D</text>
+
+        <text x="200" y="295" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Voronoi diagram of four sites</text>
+      </svg>
+    </div>
+
+
+    <!-- 3. Fortune's algorithm -->
+    <h3>Fortune's algorithm</h3>
+    <p>Computing a Voronoi diagram naively (check every point against every site) is O(n) per query. <strong>Fortune's algorithm</strong> builds the entire diagram in O(n log n) by sweeping a line across the plane. It maintains a "beach line" of parabolic arcs. As the sweep line moves, arcs grow and shrink. When two arcs pinch off, a Voronoi vertex is found. A parabola is the locus of points equidistant from a point (site) and a line (sweep line).</p>
+
+    <SchemeRepl client:load initialCode={`; Fortune's algorithm concept: the beach line
+; A parabola is all points equidistant from a focus and a directrix
+;
+; For a site at (fx, fy) and sweep line at y = d:
+; distance to site = distance to directrix
+; sqrt((x-fx)^2 + (y-fy)^2) = |y - d|
+;
+; Solving for y (assuming site is above directrix):
+; y = (x-fx)^2 / (2*(fy-d)) + (fy+d)/2
+
+(define (parabola-y fx fy d x)
+  (if (= fy d) 999  ; degenerate
+      (+ (/ (* (- x fx) (- x fx))
+            (* 2 (- fy d)))
+         (/ (+ fy d) 2))))
+
+; Site at (3, 5), sweep line at y = 1
+(define fx 3) (define fy 5) (define d 1)
+
+(display "Beach line parabola y-values:") (newline)
+(for-each
+  (lambda (x)
+    (display "  x=") (display x)
+    (display "  y=") (display (parabola-y fx fy d x)) (newline))
+  (list 0 1 2 3 4 5 6))
+; At x=3 (directly below site), y is minimal
+`} />
+
+
+    <!-- 4. Applications -->
+    <h3>Applications</h3>
+    <p>Voronoi diagrams answer "which is closest?" for any set of facilities. Post offices, hospitals, cell towers, franchise territories. In computational geometry, they solve the nearest-neighbor problem, the largest empty circle problem, and serve as the foundation for Delaunay triangulations (the dual graph).</p>
+
+    <SchemeRepl client:load initialCode={`; Application: nearest facility problem
+; Given hospitals and a patient location, find nearest hospital
+
+(define (dist-sq p q)
+  (+ (* (- (car p) (car q)) (- (car p) (car q)))
+     (* (- (cadr p) (cadr q)) (- (cadr p) (cadr q)))))
+
+(define hospitals
+  (list (cons "City General" (list 2 3))
+        (cons "St. Mary's"   (list 7 1))
+        (cons "County Med"   (list 5 6))
+        (cons "Riverside"    (list 1 8))))
+
+(define (nearest-hospital patient)
+  (let loop ((best (car hospitals))
+             (rest (cdr hospitals)))
+    (if (null? rest) best
+        (loop (if (< (dist-sq patient (cdr (car rest)))
+                     (dist-sq patient (cdr best)))
+                  (car rest) best)
+              (cdr rest)))))
+
+(for-each
+  (lambda (patient)
+    (let ((h (nearest-hospital patient)))
+      (display "Patient at ") (display patient)
+      (display " -> ") (display (car h)) (newline)))
+  (list (list 3 2) (list 6 5) (list 1 7) (list 8 2)))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Geometry chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-08/">&#9651; Chapter 8</a> &mdash; Convex Geometry</li>
+      <li><a href="/reading/geometry/geom-10/">&#9651; Chapter 10</a> &mdash; Delaunay Triangulation (the dual)</li>
+    
+      <li><a href="/reading/algorithms/algo-08/">⚙ Algorithms Ch.8</a> &mdash; the Fortune sweep algorithm for computing Voronoi diagrams</li>
+      <li><a href="/reading/auction-theory/aurenhammer-1987/">🏷 Aurenhammer 1987</a> &mdash; power diagrams generalize Voronoi to weighted sites</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/algorithms/algo-08/">&#9651; Algorithms Ch.8</a> &mdash; geometric algorithms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Voronoi_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Voronoi diagram</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fortune%27s_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Fortune's algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Nearest neighbor search</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Fortune's algorithm is described conceptually here, not implemented. A full implementation requires a priority queue for site and circle events, and a balanced BST for the beach line. The Voronoi SVG is schematic: real Voronoi cells would have edges that are exact perpendicular bisectors. The nearest-site code uses brute-force O(n) lookup per query; a real Voronoi structure enables O(log n) point location.</p>
+
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-08/", label: "Convex Geometry" }} next={{ href: "/reading/geometry/geom-10/", label: "Delaunay Triangulation" }} />
+
+  </main>
+</Layout>

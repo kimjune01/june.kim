@@ -1,0 +1,62 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Axioms.lean — Five empirical assumptions" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Axioms.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Axioms.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Declares the five empirical assumptions that ground the framework &mdash; reject any one and the dependent theorems break. This is where <a href="https://june.kim/theory-is-load-bearing"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>theoretical grounding</a> becomes literal: each axiom carries structural weight.</p>
+    </div>
+
+    <h3>capacity_bound</h3>
+    <p>Bounded energy means bounded distinguishable states. A system with finite energy can only maintain finitely many internal states. This gives the finite state space (<code>Fin N</code>) that downstream proofs need.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">axiom</span> <span class="text-green-300">capacity_bound</span> (energy : Nat) (he : energy &gt; 0) :
+  &exists; N : Nat, 0 &lt; N &and; N &le; energy</code></pre>
+    <p class="text-sm text-gray-500">If you reject this (allow infinite states), the pigeonhole principle fails and there is no forced state collision.</p>
+
+    <h3>rate_mismatch</h3>
+    <p>Input can arrive faster than the system processes it. Environments are richer than processors.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">axiom</span> <span class="text-green-300">rate_mismatch</span> :
+  &exists; (input_rate drain_rate : Nat),
+    input_rate &gt; drain_rate &and; drain_rate &gt; 0</code></pre>
+    <p class="text-sm text-gray-500">Without this, no buffer is ever needed &mdash; Cache becomes optional.</p>
+
+    <h3>NonStationary</h3>
+    <p>Environments change. At some period p, the required response at time t differs from time t + p. This is a property of specific environments, not a universal law.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">NonStationary</span> &#123;O : Type&#125; (required : Nat &rarr; O) (p : Nat) : Prop :=
+  &exists; t, required t &ne; required (t + p)</code></pre>
+
+    <h3>positive_loss</h3>
+    <p>Bounded systems lose information each cycle. At least some bits are irreversibly lost per processing step.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">axiom</span> <span class="text-green-300">positive_loss</span> : &exists; (loss : Nat), loss &gt; 0</code></pre>
+    <p class="text-sm text-gray-500">Without this, lossless computation is possible and a closed loop can survive indefinitely.</p>
+
+    <h3>history_matters</h3>
+    <p>History-dependent tasks exist: the correct response to the same input can depend on what happened before.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">axiom</span> <span class="text-green-300">history_matters</span> :
+  &exists; (env : Nat &rarr; Nat) (required : Nat &rarr; Nat),
+    <span class="text-green-300">HistoryDependent</span> env required</code></pre>
+    <p class="text-sm text-gray-500">Without this, all tasks are memoryless stimulus-response and persistence is unnecessary.</p>
+
+    <h3>BoundedTransducer</h3>
+    <p>The unified formal model: a finite-state machine with <code>Fin N</code> states, processing an input stream and producing output. Its step function is deterministic: given a state and an input, it produces exactly one next state and one output.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">BoundedTransducer</span> (N : Nat) (I O : Type) <span class="text-blue-300">where</span>
+  step : Fin N &rarr; I &rarr; Fin N &times; O</code></pre>
+    <p class="text-sm text-gray-500">This is the machine that Stochasticity.lean shows is limited: determinism + finite states means it cannot distinguish arbitrarily many histories.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/boundary/">Boundary.lean</a> &mdash; derives that each pipeline stage is forced from these axioms</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; removes each postcondition and shows the system dies, citing these axioms</li>
+      <li><a href="/reading/the-natural-framework-lean/stochasticity/">Stochasticity.lean</a> &mdash; uses capacity_bound + BoundedTransducer to show deterministic limits</li>
+      <li><a href="/reading/the-natural-framework-lean/pigeonhole/">Pigeonhole.lean</a> &mdash; the collision that capacity_bound enables</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/kleisli/", label: "Kleisli.lean · 2 of 25" }} next={{ href: "/reading/the-natural-framework-lean/pipeline/", label: "Pipeline.lean · 4 of 25" }} />
+  </main>
+</Layout>

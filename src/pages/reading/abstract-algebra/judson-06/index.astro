@@ -1,0 +1,200 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.6 — Rings" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Rings</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 6</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>ring</strong> is a set with two operations: addition (which forms an abelian group) and multiplication (which is associative and distributes over addition). Rings generalize the integers. <strong>Ideals</strong> are to rings what normal subgroups are to groups.</p>
+    </div>
+
+    <!-- 1. Definition -->
+    <h3>Two operations</h3>
+    <p>A ring (R, +, *) satisfies: (1) (R, +) is an abelian group with identity 0; (2) multiplication is associative: a*(b*c) = (a*b)*c; (3) distributive laws: a*(b+c) = a*b + a*c and (a+b)*c = a*c + b*c. Multiplication need not be commutative, and multiplicative inverses may not exist.</p>
+
+    <!-- SVG: integers under + and x -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Ring Z -->
+        <ellipse cx="180" cy="80" rx="160" ry="65" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="180" y="15" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">Z (the integers)</text>
+
+        <!-- Addition side -->
+        <text x="80" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">abelian group</text>
+        <text x="80" y="75" text-anchor="middle" fill="#60a5fa" font-size="20">+</text>
+        <text x="80" y="95" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">identity: 0</text>
+        <text x="80" y="110" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">inverse: -a</text>
+
+        <!-- Multiplication side -->
+        <text x="280" y="55" text-anchor="middle" fill="#f59e0b" font-size="11">associative</text>
+        <text x="280" y="75" text-anchor="middle" fill="#f59e0b" font-size="20">&times;</text>
+        <text x="280" y="95" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">identity: 1</text>
+        <text x="280" y="110" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">no inverses (2 has none)</text>
+
+        <!-- Distributive bridge -->
+        <line x1="120" y1="80" x2="240" y2="80" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <text x="180" y="75" text-anchor="middle" fill="#a78bfa" font-size="10">distributes</text>
+
+        <!-- Caption -->
+        <text x="180" y="152" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">Z is a ring: abelian group under +, associative under &times;, with distribution</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Z6 as a ring: addition mod 6, multiplication mod 6
+
+(define (add a b) (modulo (+ a b) 6))
+(define (mul a b) (modulo (* a b) 6))
+
+; Distributive law: a * (b + c) = a*b + a*c
+(define a 3) (define b 4) (define c 5)
+
+(display "a*(b+c) = ") (display (mul a (add b c))) (newline)
+(display "a*b+a*c = ") (display (add (mul a b) (mul a c))) (newline)
+
+; Check: 3*(4+5 mod 6) = 3*3 mod 6 = 9 mod 6 = 3
+;        3*4+3*5 mod 6 = 12+15 mod 6 = 0+3 mod 6 = 3
+(display "Equal? ") (display (= (mul a (add b c))
+                                (add (mul a b) (mul a c))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Z6 as a ring
+add = lambda a, b: (a + b) % 6
+mul = lambda a, b: (a * b) % 6
+
+a, b, c = 3, 4, 5
+lhs = mul(a, add(b, c))
+rhs = add(mul(a, b), mul(a, c))
+print("a*(b+c) = " + str(lhs))
+print("a*b+a*c = " + str(rhs))
+print("Distributive: " + str(lhs == rhs))
+`} />
+    </div>
+
+
+    <!-- 2. Ideals -->
+    <h3>Ideals</h3>
+    <p>An <strong>ideal</strong> I of a ring R is a subring that absorbs multiplication: for any r in R and a in I, both r*a and a*r are in I. Ideals let you build <strong>quotient rings</strong> R/I, just as normal subgroups let you build quotient groups.</p>
+
+    <SchemeRepl client:load initialCode={`; In Z, the even numbers form an ideal.
+; For any integer r and even number a, r*a is even.
+
+(define (even? n) (= 0 (modulo n 2)))
+
+; Check absorption: r * a is in ideal for various r, a
+(display "Ideal test (multiples of 2 in Z):") (newline)
+(let loop ((r -3))
+  (when (<= r 3)
+    (let ((a 4))  ; a is in ideal (even)
+      (display "  ") (display r) (display " * ") (display a)
+      (display " = ") (display (* r a))
+      (display (if (even? (* r a)) " (even)" " ERROR"))
+      (newline))
+    (loop (+ r 1))))
+; Z/2Z = (even, odd) is the quotient ring.
+; It is isomorphic to Z2.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Even integers form an ideal of Z
+a = 4  # element of the ideal
+for r in range(-3, 4):
+    product = r * a
+    print(str(r) + " * " + str(a) + " = " + str(product).rjust(3) + "  in ideal: " + str(product % 2 == 0))
+`} />
+    </div>
+
+
+    <!-- 3. Ring homomorphisms -->
+    <h3>Ring homomorphisms</h3>
+    <p>A <strong>ring homomorphism</strong> f: R &rarr; S preserves both operations: f(a+b) = f(a)+f(b) and f(a*b) = f(a)*f(b). The kernel is an ideal, not just a subgroup.</p>
+
+    <SchemeRepl client:load initialCode={`; Ring homomorphism: f: Z -> Z6, f(n) = n mod 6
+; Preserves both + and *
+
+(define (f n) (modulo n 6))
+
+(define a 8) (define b 15)
+
+(display "f(a+b) = ") (display (f (+ a b)))
+(display "  f(a)+f(b) mod 6 = ") (display (modulo (+ (f a) (f b)) 6)) (newline)
+
+(display "f(a*b) = ") (display (f (* a b)))
+(display "  f(a)*f(b) mod 6 = ") (display (modulo (* (f a) (f b)) 6)) (newline)
+
+; Kernel = multiples of 6 = ideal 6Z
+(display "Kernel: multiples of 6")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Ring homomorphism: Z -> Z6, f(n) = n mod 6
+f = lambda n: n % 6
+a, b = 8, 15
+
+lhs_add = f(a + b)
+rhs_add = (f(a) + f(b)) % 6
+print("f(a+b) = " + str(lhs_add) + "  f(a)+f(b) mod 6 = " + str(rhs_add))
+
+lhs_mul = f(a * b)
+rhs_mul = (f(a) * f(b)) % 6
+print("f(a*b) = " + str(lhs_mul) + "  f(a)*f(b) mod 6 = " + str(rhs_mul))
+
+print("Kernel: multiples of 6")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(R, +, &middot;)</td><td class="pr-4 text-green-300">(add a b) (mul a b)</td><td class="pr-4 text-blue-300">add(a,b), mul(a,b)</td><td class="font-sans">Ring with two operations</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I &lhd; R</td><td class="pr-4 text-green-300">ideal test</td><td class="pr-4 text-blue-300">ideal test</td><td class="font-sans">I is an ideal of R</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">R/I</td><td class="pr-4 text-green-300">quotient ring</td><td class="pr-4 text-blue-300">quotient ring</td><td class="font-sans">Quotient ring</td></tr>
+          <tr><td class="py-2 pr-4">a(b+c)=ab+ac</td><td class="pr-4 text-green-300">verified above</td><td class="pr-4 text-blue-300">verified above</td><td class="font-sans">Distributive law</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-05/">&larr; Ch.5 Cosets and Lagrange's Theorem</a> &mdash; ideals generalize normal subgroups</li>
+      <li><a href="/reading/abstract-algebra/judson-07/">Ch.7 Integral Domains and Fields</a> &mdash; rings with extra properties</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-06/">Milewski Ch.6</a> &mdash; types form a semiring under sum and product types (coproduct and product)</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson treats rings in Ch. 16 and ideals in Ch. 16-17. We compress this because the definition is straightforward: a ring is an abelian group with a second associative operation that distributes. The integers are the motivating example. Commutative rings with identity (the common case in algebra) are assumed throughout. The connection to Milewski's sum/product types is informal: types under (+, *) satisfy distributivity but lack additive inverses, making them a semiring rather than a ring.</p>
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-05/", label: "Cosets and Lagrange's Theorem" }} next={{ href: "/reading/abstract-algebra/judson-07/", label: "Integral Domains and Fields · 7 of 8" }} />
+
+  </main>
+</Layout>

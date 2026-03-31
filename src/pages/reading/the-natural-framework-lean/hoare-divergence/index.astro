@@ -1,0 +1,47 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Divergence.lean — NonExpanding as threshold triples" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Divergence.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Divergence.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Shows that NonExpanding (information measure does not increase) is equivalent to preserving every information-threshold contract &mdash; bridging the metric view to the program logic view.</p>
+    </div>
+
+    <h3>nonExpanding_iff_threshold_triple</h3>
+    <p>A kernel is non-expanding if and only if it preserves every threshold triple: for all n, <code>&#123;measure &le; n&#125; f &#123;measure &le; n&#125;</code>. A kernel that does not increase information preserves every upper bound on information &mdash; and conversely.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">nonExpanding_iff_threshold_triple</span> [Monad M] [Support M]
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;m&alpha; : InfoMeasure &alpha;&#125; &#123;m&beta; : InfoMeasure &beta;&#125; :
+    NonExpanding f m&alpha; m&beta; &harr;
+      &forall; n : Nat, Triple
+        (<span class="text-blue-300">fun</span> a =&gt; m&alpha;.measure a &le; n)
+        f
+        (<span class="text-blue-300">fun</span> b =&gt; m&beta;.measure b &le; n)</code></pre>
+    <p class="text-sm text-gray-500">Forward direction: if the kernel is non-expanding, then for any input with measure &le; n, every output has measure &le; measure(input) &le; n. Backward direction: pick n = measure(a), and the threshold triple gives measure(b) &le; measure(a).</p>
+
+    <p>This connects to Sato-Katsumata (2023): divergences on a monad give a metric on morphism spaces. NonExpanding is the zero-divergence case. Stating it as a family of Hoare triples connects the metric view to the program logic view. The file notes this is an analogy in spirit, not a formal instance of their relational framework.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; imported; the threshold triples are standard Hoare triples</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; NonExpanding is defined there; this file gives the triple characterization</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-graded/">Hoare/Graded.lean</a> &mdash; graded triples are a richer quantitative view (cost bound per kernel, not just thresholds)</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/sato-2023/">🍞 Sato 2023</a></li>
+      <li><a href="/reading/panangaden-2009/">🍞 Panangaden 2009</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-static/", label: "Hoare/Static.lean · 21 of 25" }} next={{ href: "/reading/the-natural-framework-lean/variational/", label: "Variational.lean · 23 of 25" }} />
+  </main>
+</Layout>

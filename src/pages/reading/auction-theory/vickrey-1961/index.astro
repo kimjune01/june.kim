@@ -1,0 +1,175 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Vickrey 1961 — Second-Price Sealed-Bid Auction" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>Second-Price Sealed-Bid Auction</h1>
+    <p class="text-gray-400 text-sm mb-6">Vickrey &middot; 1961 &middot; <a href="https://doi.org/10.2307/2977633">doi:10.2307/2977633</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">In a <strong>second-price sealed-bid auction</strong>, the highest bidder wins but pays the <em>second-highest</em> bid. The dominant strategy is to bid your true value.</p>
+    </div>
+
+    <h3>Why truthful bidding is dominant</h3>
+    <p>If you bid above your value and win, you might pay more than the item is worth to you. If you bid below your value, you might lose an auction you would have profited from. Bidding exactly your value is always safe: you win exactly when the price is below your value. This is the foundation of <a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>one-shot bidding</a>: when you only get one chance, truthful bidding is the dominant strategy.</p>
+
+    <!-- SVG: Two bidders, winner pays second price -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Bidder A -->
+        <rect x="20" y="20" width="100" height="45" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="70" y="38" text-anchor="middle" fill="currentColor" font-size="11">Bidder A</text>
+        <text x="70" y="55" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">bids $80</text>
+        <!-- Bidder B -->
+        <rect x="20" y="90" width="100" height="45" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="70" y="108" text-anchor="middle" fill="currentColor" font-size="11">Bidder B</text>
+        <text x="70" y="125" text-anchor="middle" fill="currentColor" font-size="13">bids $50</text>
+        <!-- Arrows to auctioneer -->
+        <line x1="120" y1="42" x2="200" y2="70" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="120" y1="112" x2="200" y2="90" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Auctioneer box -->
+        <rect x="200" y="55" width="100" height="50" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="250" y="78" text-anchor="middle" fill="#60a5fa" font-size="11">2nd-price</text>
+        <text x="250" y="95" text-anchor="middle" fill="#60a5fa" font-size="11">rule</text>
+        <!-- Result -->
+        <line x1="300" y1="80" x2="380" y2="80" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="375,75 390,80 375,85" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Winner label -->
+        <text x="345" y="45" text-anchor="middle" fill="#4ade80" font-size="11">A wins</text>
+        <text x="345" y="60" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">pays $50</text>
+        <!-- Caption -->
+        <text x="210" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">highest bidder wins, pays second-highest bid</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Second-price sealed-bid auction
+; Winner = highest bidder, pays second-highest bid
+
+(define (second-price-auction bids)
+  (let* ((sorted (sort bids >))
+         (winner-bid (car sorted))
+         (second-bid (cadr sorted)))
+    (list winner-bid second-bid)))
+
+; Three bidders with true values 80, 50, 30
+; Truthful bidding: each bids their value
+(define bids '(80 50 30))
+(define result (second-price-auction bids))
+
+(display "Bids: ") (display bids) (newline)
+(display "Winner bid: ") (display (car result)) (newline)
+(display "Payment (2nd price): ") (display (cadr result)) (newline)
+(display "Surplus: ") (display (- (car result) (cadr result))) (newline)
+
+; What if the winner overbids to 100?
+; Still pays 50. No advantage.
+(display "\\nOverbid to 100: ")
+(display (second-price-auction '(100 50 30))) (newline)
+
+; What if the winner underbids to 45?
+; Loses to bidder at 50. Lost surplus.
+(display "Underbid to 45: ")
+(display (second-price-auction '(45 50 30)))
+; Now the $50 bidder wins and pays $45
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Second-price sealed-bid auction
+def second_price(bids):
+    """Winner = highest bid, payment = second-highest bid."""
+    s = sorted(bids, reverse=True)
+    return dict(winner_bid=s[0], payment=s[1])
+
+# Truthful bidding
+print(second_price([80, 50, 30]))
+
+# Overbid: still pays 50
+print(second_price([100, 50, 30]))
+
+# Underbid: loses
+print(second_price([45, 50, 30]))
+`} />
+    </div>
+
+    <h3>The dominance argument</h3>
+    <p>Truthful bidding weakly dominates every other strategy. No matter what others bid, you never do worse by bidding your true value, and sometimes you do strictly better. This is <a href="https://en.wikipedia.org/wiki/William_Vickrey"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vickrey's</a> central result.</p>
+
+    <SchemeRepl client:load initialCode={`; Dominance check: is truthful bidding always at least as good?
+; Compare payoff of bidding v (truthful) vs bidding b (deviation)
+
+(define (payoff value bid other-bids)
+  (let ((max-other (apply max other-bids)))
+    (if (> bid max-other)
+        (- value max-other)  ; win, pay second price
+        0)))                 ; lose, pay nothing
+
+(define my-value 80)
+(define others '(50 30))
+
+(display "Truthful (bid 80): ")
+(display (payoff my-value 80 others)) (newline)
+
+(display "Overbid  (bid 100): ")
+(display (payoff my-value 100 others)) (newline)
+
+(display "Underbid (bid 45):  ")
+(display (payoff my-value 45 others)) (newline)
+
+; Truthful never worse. Underbid sometimes worse (loses when it should win).
+; Against others = (75):
+(display "\\nAgainst higher competitor (75):")
+(newline)
+(display "Truthful (bid 80): ")
+(display (payoff my-value 80 '(75))) (newline)
+(display "Underbid (bid 60): ")
+(display (payoff my-value 60 '(75)))
+; Underbid loses, truthful wins with surplus 5
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">v_i</td><td class="pr-4 text-green-300">my-value</td><td class="font-sans">Bidder i's true value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">b_i = v_i</td><td class="pr-4 text-green-300">(payoff value value others)</td><td class="font-sans">Truthful bidding</td></tr>
+          <tr><td class="py-2 pr-4">p = max(b_j, j != i)</td><td class="pr-4 text-green-300">(apply max other-bids)</td><td class="font-sans">Payment = second-highest bid</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; econ-24: market mechanisms</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; nordstrom-06: dominant strategies</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">💎 VCG 1973</a> &mdash; generalizes second-price to multiple items</li>
+    
+      <li><a href="/reading/game-theory/nordstrom-01/">🎲 Game Theory Ch.1</a> &mdash; dominant strategies in the game-theoretic frame</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">💎 VCG Mechanism</a> &mdash; the multi-item generalization</li>
+      <li><a href="/reading/probability/grinstead-06/">🎰 Probability Ch.6</a> &mdash; expected revenue requires integrating over bidder distributions</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://doi.org/10.2307/2977633">Read the paper</a>.
+    </div>
+
+
+    <PrevNext next={{ href: "/reading/auction-theory/vcg-1973/", label: "VCG 1973 · 2 of 8" }} />
+
+  </main>
+</Layout>

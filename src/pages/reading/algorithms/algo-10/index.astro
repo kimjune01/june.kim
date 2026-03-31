@@ -1,0 +1,158 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — NP-Completeness" favicon="⚙">
+  <main>
+
+    <a href="/reading/algorithms/" class="text-sm mb-4 inline-block">&larr; back to algorithms</a>
+
+    <h1>NP-Completeness</h1>
+    <p class="text-gray-400 text-sm mb-6">Nievergelt &amp; Hinrichs &middot; Ch. 10 &middot; <a href="https://textbookequity.org/algorithms-and-data-structures/">Algorithms and Data Structures</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>P</strong> = problems solvable in polynomial time. <strong>NP</strong> = problems whose solutions are <em>verifiable</em> in polynomial time. <strong>NP-complete</strong> problems are the hardest in NP: if you solve one in polynomial time, you solve them all. Nobody has proved P = NP or P &ne; NP. The question is the central open problem in computer science.</p>
+    </div>
+
+    <!-- SVG: Reduction chain SAT -> 3-SAT -> Clique -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- SAT box -->
+        <rect x="20" y="50" width="100" height="50" rx="6" fill="none" stroke="#f87171" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="70" y="80" text-anchor="middle" fill="#f87171" font-size="14">SAT</text>
+        <text x="70" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Cook-Levin 1971</text>
+        <!-- Arrow SAT -> 3-SAT -->
+        <line x1="120" y1="75" x2="160" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="160,71 168,75 160,79" fill="currentColor" fill-opacity="0.5"/>
+        <text x="144" y="67" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">&le;p</text>
+        <!-- 3-SAT box -->
+        <rect x="168" y="50" width="100" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="218" y="80" text-anchor="middle" fill="#f59e0b" font-size="14">3-SAT</text>
+        <!-- Arrow 3-SAT -> Clique -->
+        <line x1="268" y1="75" x2="308" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="308,71 316,75 308,79" fill="currentColor" fill-opacity="0.5"/>
+        <text x="292" y="67" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">&le;p</text>
+        <!-- Clique box -->
+        <rect x="316" y="50" width="100" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="366" y="80" text-anchor="middle" fill="#60a5fa" font-size="14">CLIQUE</text>
+        <!-- Vertex Cover below Clique -->
+        <line x1="366" y1="100" x2="366" y2="120" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="362,120 366,128 370,120" fill="currentColor" fill-opacity="0.5"/>
+        <rect x="306" y="128" width="120" height="30" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="366" y="148" text-anchor="middle" fill="#a78bfa" font-size="12">VERTEX COVER</text>
+        <!-- Caption -->
+        <text x="220" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Polynomial reductions: solving any one solves them all</text>
+      </svg>
+    </div>
+
+    <h3>What is a reduction?</h3>
+    <p>Problem A reduces to problem B (written A &le;p B) if you can transform any instance of A into an instance of B in polynomial time. If B is easy, A is easy. Contrapositive: if A is hard, B is hard. This is how hardness spreads.</p>
+
+    <SchemeRepl client:load initialCode={`; SAT: is there an assignment that makes a Boolean formula true?
+; A formula in CNF: (x1 OR NOT x2) AND (NOT x1 OR x3) AND (x2 OR x3)
+
+; Brute-force SAT solver: try all 2^n assignments
+(define (sat-solve clauses n-vars)
+  (define (check assignment)
+    (define (var-val v)
+      (if (> v 0)
+          (list-ref assignment (- v 1))
+          (not (list-ref assignment (- (- v) 1)))))
+    (define (clause-sat clause)
+      (ormap var-val clause))
+    (andmap clause-sat clauses))
+  ; Generate all assignments
+  (define (gen n)
+    (if (= n 0) (list (list))
+        (let ((rest (gen (- n 1))))
+          (append (map (lambda (a) (cons #t a)) rest)
+                  (map (lambda (a) (cons #f a)) rest)))))
+  (let loop ((assignments (gen n-vars)))
+    (cond ((null? assignments) "UNSAT")
+          ((check (car assignments))
+           (cons "SAT" (car assignments)))
+          (else (loop (cdr assignments))))))
+
+; (x1 OR -x2) AND (-x1 OR x3) AND (x2 OR x3)
+(define formula (list (list 1 -2) (list -1 3) (list 2 3)))
+
+(display (sat-solve formula 3))
+; Exponential: 2^n assignments to try
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Brute-force SAT solver
+from itertools import product
+
+def sat_solve(clauses, n_vars):
+    for assignment in product([True, False], repeat=n_vars):
+        def var_val(v):
+            return assignment[v-1] if v > 0 else not assignment[-v-1]
+        if all(any(var_val(v) for v in clause) for clause in clauses):
+            return "SAT", assignment
+    return "UNSAT", None
+
+# (x1 OR -x2) AND (-x1 OR x3) AND (x2 OR x3)
+clauses = [[1, -2], [-1, 3], [2, 3]]
+result, assignment = sat_solve(clauses, 3)
+print(f"{result}: {assignment}")
+`} />
+    </div>
+
+    <h3>The NP-complete zoo</h3>
+    <p>SAT (satisfiability), 3-SAT, CLIQUE (is there a complete subgraph of size k?), VERTEX COVER (can you cover all edges with k vertices?), HAMILTONIAN CYCLE, SUBSET SUM, KNAPSACK. All are NP-complete. All reduce to each other in polynomial time. None have known polynomial-time algorithms.</p>
+
+    <SchemeRepl client:load initialCode={`; Clique: brute-force check for a complete subgraph of size k
+; Graph as adjacency matrix
+
+(define (has-edge? adj u v)
+  (vector-ref (vector-ref adj u) v))
+
+(define (is-clique? adj vertices)
+  (let loop ((vs vertices))
+    (if (null? vs) #t
+        (let inner ((rest (cdr vs)))
+          (if (null? rest)
+              (loop (cdr vs))
+              (if (has-edge? adj (car vs) (car rest))
+                  (inner (cdr rest))
+                  #f))))))
+
+; Graph: 0-1, 0-2, 1-2, 1-3, 2-3 (5 edges, 4 vertices)
+(define adj (vector
+  (vector #f #t #t #f)
+  (vector #t #f #t #t)
+  (vector #t #t #f #t)
+  (vector #f #t #t #f)))
+
+(display "Is (0,1,2) a clique? ")
+(display (is-clique? adj (list 0 1 2))) (newline)
+(display "Is (0,1,3) a clique? ")
+(display (is-clique? adj (list 0 1 3))) (newline)
+(display "Is (1,2,3) a clique? ")
+(display (is-clique? adj (list 1 2 3)))
+`} />
+
+    <h3>Approximation</h3>
+    <p>When exact solutions are intractable, approximation algorithms guarantee solutions within a factor of optimal. Vertex cover has a 2-approximation. Traveling salesman with triangle inequality has a 1.5-approximation (Christofides). General TSP has no constant-factor approximation unless P = NP.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/dm-03/">🔢 Discrete Math Ch.3</a> &mdash; logic: SAT is satisfiability of propositional formulas</li>
+    
+      <li><a href="/reading/theory-of-computation/toc-08/">🔀 Theory of Computation Ch.8</a> &mdash; P vs NP is the complexity-theoretic framing of the same question</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> &mdash; every hard crypto problem relies on an NP-hard assumption</li>
+      <li><a href="/reading/proof-writing/proofs-03/">✎ Proofs Ch.3</a> &mdash; NP-completeness proofs use contradiction and reduction</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/algorithms/algo-09/", label: "Dynamic Programming" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,174 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Number Theory Ch.7 — Primitive Roots" favicon="#">
+  <main>
+
+    <a href="/reading/number-theory/" class="text-sm mb-4 inline-block">&larr; back to Number Theory</a>
+
+    <h1>Primitive Roots</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon &middot; Elementary Number Theory &middot; <a href="https://jheffero.w3.uvm.edu/numbertheory/">Ch. 7</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>primitive root</strong> mod p is a number whose powers cycle through all nonzero residues. Every prime has one. Finding discrete logarithms (inverting this cycle) is believed to be hard, which is the foundation of Diffie-Hellman key exchange.</p>
+    </div>
+
+    <!-- SVG: Powers of generator cycling through residues -->
+    <h3>Order of an element</h3>
+    <p>The order of a mod n is the smallest positive integer k such that a^k &#x2261; 1 (mod n). A primitive root mod p has order p - 1: its powers hit every nonzero residue exactly once.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="200" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Powers of 2 mod 13: a primitive root</text>
+        <!-- Circle of residues 1-12 -->
+        <circle cx="200" cy="100" r="65" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- 12 positions around the circle, labeled with residues -->
+        <!-- Positions: top=1, clockwise -->
+        <!-- 2^0=1 -->
+        <circle cx="200" cy="35" r="11" fill="#facc15" fill-opacity="0.15" stroke="#facc15" stroke-width="1"/>
+        <text x="200" y="39" text-anchor="middle" fill="#facc15" font-size="10">1</text>
+        <!-- 2^1=2 -->
+        <circle cx="232" cy="38" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="232" y="42" text-anchor="middle" fill="#60a5fa" font-size="10">2</text>
+        <!-- 2^2=4 -->
+        <circle cx="256" cy="58" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="256" y="62" text-anchor="middle" fill="#60a5fa" font-size="10">4</text>
+        <!-- 2^3=8 -->
+        <circle cx="265" cy="90" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="265" y="94" text-anchor="middle" fill="#60a5fa" font-size="10">8</text>
+        <!-- 2^4=3 -->
+        <circle cx="256" cy="122" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="256" y="126" text-anchor="middle" fill="#60a5fa" font-size="10">3</text>
+        <!-- 2^5=6 -->
+        <circle cx="232" cy="148" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="232" y="152" text-anchor="middle" fill="#60a5fa" font-size="10">6</text>
+        <!-- 2^6=12 -->
+        <circle cx="200" cy="160" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="200" y="164" text-anchor="middle" fill="#60a5fa" font-size="10">12</text>
+        <!-- 2^7=11 -->
+        <circle cx="168" cy="148" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="168" y="152" text-anchor="middle" fill="#60a5fa" font-size="10">11</text>
+        <!-- 2^8=9 -->
+        <circle cx="144" cy="122" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="144" y="126" text-anchor="middle" fill="#60a5fa" font-size="10">9</text>
+        <!-- 2^9=5 -->
+        <circle cx="135" cy="90" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="135" y="94" text-anchor="middle" fill="#60a5fa" font-size="10">5</text>
+        <!-- 2^10=10 -->
+        <circle cx="144" cy="58" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="144" y="62" text-anchor="middle" fill="#60a5fa" font-size="10">10</text>
+        <!-- 2^11=7 -->
+        <circle cx="168" cy="38" r="11" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="168" y="42" text-anchor="middle" fill="#60a5fa" font-size="10">7</text>
+        <!-- Arrow arc indicating direction -->
+        <path d="M 210 36 A 67 67 0 0 1 240 42" fill="none" stroke="#facc15" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="238,44 244,40 238,36" fill="#facc15" fill-opacity="0.4"/>
+        <!-- Legend -->
+        <text x="340" y="50" fill="currentColor" font-size="9" fill-opacity="0.4">2^0 = 1</text>
+        <text x="340" y="62" fill="currentColor" font-size="9" fill-opacity="0.4">2^1 = 2</text>
+        <text x="340" y="74" fill="currentColor" font-size="9" fill-opacity="0.4">2^2 = 4</text>
+        <text x="340" y="86" fill="currentColor" font-size="9" fill-opacity="0.4">...</text>
+        <text x="340" y="98" fill="currentColor" font-size="9" fill-opacity="0.4">2^12 = 1</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Order of an element and primitive roots
+(define (mod-pow base exp mod)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (let ((half (mod-pow base (quotient exp 2) mod)))
+           (modulo (* half half) mod)))
+        (else (modulo (* base (mod-pow base (- exp 1) mod)) mod))))
+
+(define (order a n)
+  (let loop ((k 1))
+    (if (= 1 (mod-pow a k n)) k (loop (+ k 1)))))
+
+; Powers of 2 mod 13 (primitive root, order = 12)
+(display "Powers of 2 mod 13: ")
+(let loop ((k 0))
+  (when (< k 12)
+    (display (mod-pow 2 k 13)) (display " ")
+    (loop (+ k 1))))
+(newline)
+(display "order(2, 13) = ") (display (order 2 13)) (newline)
+
+; 3 is NOT a primitive root mod 13 (order = 3)
+(display "order(3, 13) = ") (display (order 3 13)) (newline)
+(display "Powers of 3 mod 13: ")
+(let loop ((k 0))
+  (when (< k 6)
+    (display (mod-pow 3 k 13)) (display " ")
+    (loop (+ k 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Primitive roots
+def order(a, n):
+    k = 1
+    while pow(a, k, n) != 1:
+        k += 1
+    return k
+
+def primitive_roots(p):
+    return [a for a in range(2, p) if order(a, p) == p - 1]
+
+print(f"order(2, 13) = {order(2, 13)}")
+print(f"order(3, 13) = {order(3, 13)}")
+print(f"Primitive roots mod 13: {primitive_roots(13)}")
+print(f"Powers of 2 mod 13: {[pow(2, k, 13) for k in range(12)]}")
+`} />
+    </div>
+
+
+    <!-- Discrete logarithm -->
+    <h3>The discrete logarithm problem</h3>
+    <p>Given g, h, p where g is a primitive root mod p, find x such that g^x &#x2261; h (mod p). Going forward (computing g^x) is fast. Going backward (finding x from h) is believed to be hard for large p. This asymmetry is the basis of Diffie-Hellman and related cryptosystems.</p>
+
+    <SchemeRepl client:load initialCode={`; Discrete logarithm by brute force (only feasible for small p)
+(define (mod-pow base exp mod)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (let ((half (mod-pow base (quotient exp 2) mod)))
+           (modulo (* half half) mod)))
+        (else (modulo (* base (mod-pow base (- exp 1) mod)) mod))))
+
+(define (discrete-log g h p)
+  (let loop ((x 0))
+    (cond ((>= x p) #f)
+          ((= h (mod-pow g x p)) x)
+          (else (loop (+ x 1))))))
+
+; g=2, p=13: find x such that 2^x = h mod 13
+(display "2^x = 8 mod 13: x = ")
+(display (discrete-log 2 8 13)) (newline)   ; 3
+
+(display "2^x = 5 mod 13: x = ")
+(display (discrete-log 2 5 13)) (newline)   ; 9
+
+(display "2^x = 7 mod 13: x = ")
+(display (discrete-log 2 7 13))             ; 11
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-05/">&rarr; Cryptography Ch.5</a> — Diffie-Hellman key exchange relies on the hardness of discrete logarithms</li>
+    
+      <li><a href="/reading/cryptography/crypto-05/">🔐 Cryptography Ch.5</a> &mdash; Diffie-Hellman key exchange is the discrete logarithm problem</li>
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> &mdash; cyclic groups are the algebraic structure of primitive roots</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext prev={{ href: "/reading/number-theory/numthy-06/", label: "Quadratic Residues" }} next={{ href: "/reading/number-theory/numthy-08/", label: "Continued Fractions" }} />
+
+  </main>
+</Layout>

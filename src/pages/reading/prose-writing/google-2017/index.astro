@@ -1,0 +1,125 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Google 2017 — Developer Documentation Style Guide" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to Prose Writing</a>
+
+    <h1>Developer Documentation Style Guide</h1>
+    <p class="text-gray-400 text-sm mb-6">Google &middot; 2017&ndash;present &middot; <a href="https://developers.google.com/style">Read the guide (CC BY 4.0)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Every style guide before this one said &ldquo;use the active voice.&rdquo; None of them said when not to. Google&rsquo;s guide is the first to enumerate the exceptions: use passive when you want to emphasize the object, when you want to de-emphasize the subject, or when the actor is irrelevant. Three cases. Falsifiable. Now the rule is precise enough to follow.</p>
+    </div>
+
+    <!-- SVG: compilable rule — decision tree -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 480 280" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Rule box at top -->
+        <rect x="155" y="10" width="170" height="40" rx="4" fill="none" stroke="#34d399" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="240" y="35" text-anchor="middle" fill="#34d399" fill-opacity="0.8" font-size="11">Use active voice.</text>
+
+        <!-- Branching lines down -->
+        <line x1="240" y1="50" x2="240" y2="70" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="70" x2="80" y2="70" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="70" x2="400" y2="70" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+
+        <line x1="80" y1="70" x2="80" y2="90" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="70" x2="240" y2="90" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="400" y1="70" x2="400" y2="90" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+
+        <!-- Exception box 1 -->
+        <rect x="10" y="90" width="140" height="50" rx="4" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.5"/>
+        <text x="80" y="110" text-anchor="middle" fill="#f59e0b" fill-opacity="0.7" font-size="9">except:</text>
+        <text x="80" y="126" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="9">emphasize object</text>
+
+        <!-- Exception box 2 -->
+        <rect x="170" y="90" width="140" height="50" rx="4" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.5"/>
+        <text x="240" y="110" text-anchor="middle" fill="#f59e0b" fill-opacity="0.7" font-size="9">except:</text>
+        <text x="240" y="126" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="9">de-emphasize subject</text>
+
+        <!-- Exception box 3 -->
+        <rect x="330" y="90" width="140" height="50" rx="4" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.5"/>
+        <text x="400" y="110" text-anchor="middle" fill="#f59e0b" fill-opacity="0.7" font-size="9">except:</text>
+        <text x="400" y="126" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="9">actor irrelevant</text>
+
+        <!-- Converging lines down -->
+        <line x1="80" y1="140" x2="80" y2="170" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="140" x2="240" y2="170" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="400" y1="140" x2="400" y2="170" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+
+        <line x1="80" y1="170" x2="240" y2="170" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="170" x2="400" y2="170" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+        <line x1="240" y1="170" x2="240" y2="195" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+
+        <!-- Output box -->
+        <rect x="105" y="195" width="270" height="40" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <text x="240" y="220" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="10">now the rule is a function, not a wish</text>
+
+        <!-- Arrow tip into output -->
+        <polygon points="235,195 240,188 245,195" fill="currentColor" fill-opacity="0.2"/>
+      </svg>
+    </div>
+
+    <!-- 1. The argument -->
+    <h3>The argument</h3>
+
+    <p>Google&rsquo;s style guide emerged from the practical problem of writing documentation at scale. Thousands of engineers writing docs for millions of readers. The guide was written for engineers, but the breakthrough applies to any team that writes: precise rules produce consistent output. The question was practical: how do you get consistent output from inconsistent writers? Strunk&rsquo;s rules are too vague to enforce. &ldquo;Use the active voice&rdquo; means different things to different people. One writer reads it as &ldquo;never use passive.&rdquo; Another reads it as &ldquo;prefer active when possible.&rdquo; Neither is wrong, and the outputs diverge.</p>
+
+    <p>Google&rsquo;s solution: make every rule precise enough that two writers reading the same rule produce the same output. The guide covers voice, tense, word choice, formatting, accessibility, and more. But the active voice section is the breakthrough. It takes a rule that&rsquo;s been vague since 1918 and makes it mechanically applicable. The rule became &ldquo;use active voice unless one of these three conditions holds&rdquo;: a decision procedure, not an aspiration.</p>
+
+    <p>This is what it means for a rule to be precise. A precise rule takes a sentence and produces a clear answer: active or passive. A vague rule takes a sentence and produces a judgment call. Judgment calls don&rsquo;t scale. Clear answers do.</p>
+
+    <!-- 2. The three exceptions -->
+    <h3>The three exceptions</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Exception</th>
+            <th class="text-left py-2 pr-3 text-gray-400">When to use passive</th>
+            <th class="text-left py-2 text-gray-400">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Emphasize the object</td><td class="pr-3 text-gray-400">The thing acted on matters more than the actor</td><td class="text-gray-400">&ldquo;The file is deleted when you close the app.&rdquo; The file matters, not the system.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">De-emphasize the subject</td><td class="pr-3 text-gray-400">The actor is awkward or distracting to name</td><td class="text-gray-400">&ldquo;The logs are written to /var/log.&rdquo; Naming the logging daemon adds nothing.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Actor is irrelevant</td><td class="pr-3 text-gray-400">Who does it doesn&rsquo;t matter</td><td class="text-gray-400">&ldquo;The page is loaded.&rdquo; Browser, CDN, cache: the reader doesn&rsquo;t care which.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. Discussion -->
+    <h3>Discussion</h3>
+
+    <p>Voice choice is now falsifiable. Three exceptions, each with a clear test: is the object more important than the actor? Is the actor distracting to name? Is the actor irrelevant? You can check each condition and arrive at an answer. You can also check whether someone else followed the rule. That&rsquo;s the difference between a guideline and a specification.</p>
+
+    <p>The guide also treats text as something processed by both humans and machines. Screen readers, translation tools, and search indexes all parse the same sentences your readers do. Short sentences translate better. Active voice parses more reliably. Consistent terminology improves search. Clarity for human readers and survival through mechanical transformation turn out to require the same things. This dual audience is exactly the constraint behind <a href="https://june.kim/vibelogging"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>vibelogging</a>: prose that is parseable by both humans and LLMs.</p>
+
+    <p>The deeper point: vague rules produce inconsistent output. Precise rules produce consistent output. Every discipline that has matured &mdash; engineering, law, accounting &mdash; has made this transition. Prose style was late. Google&rsquo;s guide is the first serious attempt to catch up. The frontier is better specification.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h3>See also</h3>
+
+    <p class="text-sm text-gray-500 mb-2">Source</p>
+    <ul>
+      <li><a href="https://developers.google.com/style">Google Developer Documentation Style Guide (CC BY 4.0)</a></li>
+      <li><a href="https://developers.google.com/style/voice">Voice and tone section</a></li>
+    </ul>
+
+    <ul class="neighbors">
+      <li><a href="/reading/prose-writing/strunk-1918/">Strunk 1918</a>: the rule with no exceptions</li>
+      <li><a href="/reading/prose-writing/orwell-1946/">Orwell 1946</a>: the escape hatch with no specification</li>
+      <li><a href="/reading/prose-writing/williams-1981/">Williams 1981</a>: the analysis that explains why passive sometimes works</li>
+      <li><a href="/reading/cognitive-science/lovelace-07/">🧠 Cognitive Science Ch.7</a> — language and communication: the active-voice preference has a cognitive basis — agents before actions matches how the brain processes sentences</li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/williams-1981/", label: "Williams 1981 · 8 of 10" }} next={{ href: "/reading/prose-writing/practice/", label: "Practice · 10 of 10" }} />
+
+  </main>
+</Layout>

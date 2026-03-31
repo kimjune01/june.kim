@@ -1,0 +1,194 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.8 — Market Equilibrium" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Market Equilibrium</h1>
+    <p class="text-gray-400 text-sm mb-6">Alfred Marshall &middot; 1890 &middot; <a href="https://en.wikipedia.org/wiki/Economic_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Principles of Economics, Book V</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When price is above equilibrium, sellers have <strong>surplus</strong>: they cut prices. When price is below equilibrium, buyers face <strong>shortage</strong>: they bid prices up. The market converges to the price where supply equals demand. Marshall called this the "true equilibrium price."</p>
+    </div>
+
+    <!-- SVG: Arrows showing convergence -->
+    <h3>Convergence to equilibrium</h3>
+    <p>The invisible hand is just two pressures. Surplus pushes price down. Shortage pushes price up. The equilibrium is the only price where neither pressure exists.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="240" x2="370" y2="240" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="60" y1="240" x2="60" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="215" y="268" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Quantity</text>
+        <text x="25" y="130" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 25, 130)">Price</text>
+        <!-- Demand (down) -->
+        <line x1="80" y1="40" x2="350" y2="220" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="355" y="225" fill="#f59e0b" font-size="12" fill-opacity="0.7">D</text>
+        <!-- Supply (up) -->
+        <line x1="80" y1="220" x2="350" y2="40" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="355" y="45" fill="#60a5fa" font-size="12" fill-opacity="0.7">S</text>
+        <!-- Equilibrium -->
+        <circle cx="215" cy="130" r="5" fill="#10b981" fill-opacity="0.8"/>
+        <text x="235" y="125" fill="#10b981" font-size="11" fill-opacity="0.8">E</text>
+        <!-- Dashed equilibrium lines -->
+        <line x1="215" y1="130" x2="215" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.25"/>
+        <line x1="215" y1="130" x2="60" y2="130" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.25"/>
+        <text x="215" y="253" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Q*</text>
+        <text x="48" y="134" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">P*</text>
+        <!-- Price too high: surplus, arrow down -->
+        <line x1="60" y1="70" x2="370" y2="70" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="375" y="74" fill="currentColor" font-size="9" fill-opacity="0.3">P high</text>
+        <text x="215" y="63" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.7">SURPLUS</text>
+        <!-- Arrow down -->
+        <line x1="40" y1="75" x2="40" y2="120" stroke="#ef4444" stroke-width="2" stroke-opacity="0.5"/>
+        <polygon points="36,118 44,118 40,128" fill="#ef4444" fill-opacity="0.5"/>
+        <!-- Price too low: shortage, arrow up -->
+        <line x1="60" y1="190" x2="370" y2="190" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="375" y="194" fill="currentColor" font-size="9" fill-opacity="0.3">P low</text>
+        <text x="215" y="207" text-anchor="middle" fill="#3b82f6" font-size="10" fill-opacity="0.7">SHORTAGE</text>
+        <!-- Arrow up -->
+        <line x1="40" y1="185" x2="40" y2="140" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.5"/>
+        <polygon points="36,142 44,142 40,132" fill="#3b82f6" fill-opacity="0.5"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Market convergence simulation
+; Demand: Qd = 100 - 2P
+; Supply: Qs = 3P
+; Equilibrium: P* = 20, Q* = 60
+
+(define (demand p) (- 100 (* 2 p)))
+(define (supply p) (* 3 p))
+
+; If price is wrong, adjust toward equilibrium
+(define (adjust price step)
+  (let ((qd (demand price))
+        (qs (supply price)))
+    (cond
+      ((> qs qd) (- price step))   ; surplus -> price falls
+      ((> qd qs) (+ price step))   ; shortage -> price rises
+      (else price))))               ; equilibrium
+
+; Simulate convergence from P=35 (too high)
+(display "Starting at P=35 (surplus):")
+(newline)
+(let loop ((p 35) (n 0))
+  (when (< n 6)
+    (display "  P=")
+    (display p)
+    (display "  Qd=")
+    (display (demand p))
+    (display "  Qs=")
+    (display (supply p))
+    (display (if (> (supply p) (demand p)) " surplus"
+              (if (> (demand p) (supply p)) " shortage" " EQUILIBRIUM")))
+    (newline)
+    (loop (adjust p 3) (+ n 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Market convergence simulation
+def demand(p): return 100 - 2*p
+def supply(p): return 3*p
+
+def adjust(price, step=3):
+    qd, qs = demand(price), supply(price)
+    if qs > qd: return price - step    # surplus
+    if qd > qs: return price + step    # shortage
+    return price                        # equilibrium
+
+p = 35  # start too high
+print("Starting at P=35 (surplus):")
+for _ in range(6):
+    qd, qs = demand(p), supply(p)
+    state = "surplus" if qs > qd else ("shortage" if qd > qs else "EQUILIBRIUM")
+    print("  P=" + str(p).rjust(2) + "  Qd=" + str(qd).rjust(3) + "  Qs=" + str(qs).rjust(3) + "  " + state)
+    p = adjust(p)
+`} />
+    </div>
+
+
+    <h3>Price ceilings and floors</h3>
+    <p>Governments sometimes fix prices. A <strong>price ceiling</strong> below equilibrium creates shortage (rent control). A <strong>price floor</strong> above equilibrium creates surplus (minimum wage, agricultural price supports). Neither eliminates the underlying supply and demand forces; they redirect them into queues, black markets, or waste.</p>
+
+    <SchemeRepl client:load initialCode={`; Price controls: ceiling and floor
+(define (demand p) (- 100 (* 2 p)))
+(define (supply p) (* 3 p))
+
+(define p-eq 20)
+(define q-eq 60)
+
+; Price ceiling at $15 (below equilibrium)
+(define ceiling 15)
+(define qd-ceil (demand ceiling))
+(define qs-ceil (supply ceiling))
+
+(display "Price ceiling at $15:")
+(newline)
+(display "  Qd = ")
+(display qd-ceil)
+(display ", Qs = ")
+(display qs-ceil)
+(newline)
+(display "  Shortage of ")
+(display (- qd-ceil qs-ceil))
+(display " units")
+(newline)
+(newline)
+
+; Price floor at $30 (above equilibrium)
+(define floor-price 30)
+(define qd-floor (demand floor-price))
+(define qs-floor (supply floor-price))
+
+(display "Price floor at $30:")
+(newline)
+(display "  Qd = ")
+(display qd-floor)
+(display ", Qs = ")
+(display qs-floor)
+(newline)
+(display "  Surplus of ")
+(display (- qs-floor qd-floor))
+(display " units")
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Surplus</td><td>Quantity supplied exceeds quantity demanded (price too high)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Shortage</td><td>Quantity demanded exceeds quantity supplied (price too low)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Price ceiling</td><td>Legal maximum price (creates shortage if below equilibrium)</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Price floor</td><td>Legal minimum price (creates surplus if above equilibrium)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Economic_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Economic equilibrium</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Price_ceiling"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Price ceiling</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Price_floor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Price floor</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-07/", label: "Opportunity Cost" }} next={{ href: "/reading/economics/econ-09/", label: "Price Discrimination" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,141 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.10 — Protection and Security" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Protection and Security</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Computer_security"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Computer security</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Protection</strong> controls which processes can access which resources. <strong>Security</strong> defends the system against external threats. The access control matrix is the theoretical foundation. Authentication, encryption, and auditing are the practical tools.</p>
+    </div>
+
+    <h3>Access control</h3>
+    <p>The OS must answer: can subject S perform operation O on object X? The <strong>access control matrix</strong> maps every (subject, object) pair to a set of allowed operations. In practice, the matrix is sparse, so it is stored as either access control lists (columns) or capability lists (rows).</p>
+
+    <!-- SVG: Access control matrix (subjects x objects) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Headers -->
+        <text x="130" y="25" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Access Control Matrix</text>
+
+        <!-- Column headers (objects) -->
+        <text x="180" y="55" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">File A</text>
+        <text x="270" y="55" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">File B</text>
+        <text x="360" y="55" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Printer</text>
+
+        <!-- Row headers (subjects) -->
+        <text x="80" y="85" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">Alice</text>
+        <text x="80" y="120" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">Bob</text>
+        <text x="80" y="155" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">Carol</text>
+
+        <!-- Grid lines -->
+        <line x1="130" y1="40" x2="395" y2="40" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="65" x2="395" y2="65" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="95" x2="395" y2="95" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="130" x2="395" y2="130" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="165" x2="395" y2="165" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="40" x2="130" y2="165" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="225" y1="40" x2="225" y2="165" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="315" y1="40" x2="315" y2="165" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="395" y1="40" x2="395" y2="165" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Cell contents -->
+        <text x="180" y="85" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">r, w</text>
+        <text x="270" y="85" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">r</text>
+        <text x="360" y="85" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">print</text>
+
+        <text x="180" y="120" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">r</text>
+        <text x="270" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="360" y="120" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">print</text>
+
+        <text x="180" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="270" y="155" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">r, w, x</text>
+        <text x="360" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+      </svg>
+    </div>
+
+    <h3>Capabilities vs ACLs</h3>
+    <p>An <strong>access control list</strong> (ACL) is stored with the object: "File A allows Alice to read and write, Bob to read." A <strong>capability</strong> is a token held by the subject: "Alice holds a read-write capability for File A." ACLs are easier to revoke (change the list on the object). Capabilities are easier to delegate (hand over the token).</p>
+
+    <SchemeRepl client:load initialCode={`; Access control matrix simulation
+
+(define matrix
+  '((alice ((fileA r w) (fileB r) (printer print)))
+    (bob   ((fileA r) (printer print)))
+    (carol ((fileB r w x)))))
+
+(define (can-access? subject object operation)
+  (let ((row (assoc subject matrix)))
+    (if (not row)
+        #f
+        (let ((entry (assoc object (cadr row))))
+          (if (not entry)
+              #f
+              (if (member operation (cdr entry)) #t #f))))))
+
+(display "Alice read fileA? ") (display (can-access? 'alice 'fileA 'r)) (newline)
+(display "Alice write fileB? ") (display (can-access? 'alice 'fileB 'w)) (newline)
+(display "Bob read fileB? ") (display (can-access? 'bob 'fileB 'r)) (newline)
+(display "Carol exec fileB? ") (display (can-access? 'carol 'fileB 'x)) (newline)
+(display "Carol print? ") (display (can-access? 'carol 'printer 'print))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Access control matrix
+matrix = {
+    "alice": {"fileA": {"r", "w"}, "fileB": {"r"}, "printer": {"print"}},
+    "bob":   {"fileA": {"r"}, "printer": {"print"}},
+    "carol": {"fileB": {"r", "w", "x"}},
+}
+
+def can_access(subject, obj, operation):
+    return operation in matrix.get(subject, {}).get(obj, set())
+
+tests = [
+    ("alice", "fileA", "r"),
+    ("alice", "fileB", "w"),
+    ("bob", "fileB", "r"),
+    ("carol", "fileB", "x"),
+    ("carol", "printer", "print"),
+]
+for s, o, op in tests:
+    print(f"{s} {op} {o}? {can_access(s, o, op)}")
+`} />
+    </div>
+
+    <h3>Authentication</h3>
+    <p>Before access control can work, the system must verify identity. Passwords, tokens, biometrics, and multi-factor authentication all serve this purpose. The OS trusts its authentication mechanism completely, which is why its weaknesses are critical vulnerabilities.</p>
+
+    <h3>Encryption at rest</h3>
+    <p>Even with good access control, a stolen disk bypasses the OS. <strong>Encryption at rest</strong> protects data on the physical medium. The OS decrypts transparently when the correct key is provided. Without the key, the data is indistinguishable from noise.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-02/">🔐 Symmetric Encryption</a> — the primitives that make encryption at rest possible</li>
+      <li><a href="/reading/cryptography/crypto-09/">🔐 Crypto Ch.9</a> — zero-knowledge proofs: OS capability systems use the same principle of proving authorization without revealing secrets</li>
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Discrete Math Ch.4</a> — graph theory: access control matrices and capability graphs are directed graphs from subjects to objects</li>
+      <li><a href="/reading/game-theory/nordstrom-11/">♟ Game Theory Ch.11</a> — mechanism design: security policies are mechanism design problems where the goal is preventing adversarial equilibria</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Access-control_matrix"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Access-control matrix</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Capability-based_security"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Capability-based security</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Disk_encryption"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Disk encryption</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-09/", label: "I/O Systems" }} />
+
+  </main>
+</Layout>

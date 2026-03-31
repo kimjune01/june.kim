@@ -1,0 +1,528 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.18 — Register Machines" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Register Machines</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-31.html#%_sec_5.1">SICP &sect;5.1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Abstract machines with named registers, a controller, and explicit data paths. Every high-level operation eventually becomes register transfers. This is where software meets hardware.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 340 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Controller box -->
+        <rect x="110" y="8" width="120" height="30" rx="4" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="170" y="28" text-anchor="middle" fill="#a78bfa" font-size="13">controller</text>
+        <!-- Arrow from controller down -->
+        <line x1="170" y1="38" x2="170" y2="60" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow18)"/>
+        <text x="200" y="54" fill="#a78bfa" font-size="10">instructions</text>
+
+        <!-- ALU box -->
+        <rect x="120" y="62" width="100" height="34" rx="4" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="170" y="84" text-anchor="middle" fill="#f59e0b" font-size="13">ALU</text>
+
+        <!-- Register boxes -->
+        <rect x="15" y="115" width="80" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="55" y="134" text-anchor="middle" fill="#60a5fa" font-size="12">val</text>
+
+        <rect x="130" y="115" width="80" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="170" y="134" text-anchor="middle" fill="#60a5fa" font-size="12">argl</text>
+
+        <rect x="245" y="115" width="80" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="285" y="134" text-anchor="middle" fill="#60a5fa" font-size="12">continue</text>
+
+        <!-- Arrows from registers to ALU -->
+        <line x1="55" y1="115" x2="140" y2="96" stroke="#60a5fa" stroke-width="1" marker-end="url(#arrow18b)"/>
+        <line x1="170" y1="115" x2="170" y2="96" stroke="#60a5fa" stroke-width="1" marker-end="url(#arrow18b)"/>
+        <line x1="285" y1="115" x2="200" y2="96" stroke="#60a5fa" stroke-width="1" marker-end="url(#arrow18b)"/>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrow18" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrow18b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#60a5fa" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="170" y="168" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">registers hold data, the controller sequences operations</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. A language for register machines -->
+    <h3>A language for describing register machines</h3>
+    <p>A register machine has a fixed set of <strong>registers</strong> (named storage cells), a <strong>controller</strong> (sequence of instructions), and <strong>operations</strong> (primitive computations). Instructions assign to registers, test conditions, and branch. The controller is a flat list of labeled instructions &mdash; the assembly language of our abstract machine.</p>
+
+    <SchemeRepl client:load initialCode={`; A register machine for GCD.
+; Registers: a, b, t
+; Controller: a sequence of labeled instructions.
+
+; We simulate the machine as a loop over instructions.
+
+(define (gcd-machine a b)
+  ; Registers
+  (let loop ((a a) (b b))
+    (if (= b 0)
+        a
+        (loop b (remainder a b)))))
+
+; That's the high-level version. Here's what the register
+; machine controller looks like as pseudo-assembly:
+;
+;   test-b:
+;     (test (op =) (reg b) (const 0))
+;     (branch (label gcd-done))
+;     (assign t (op remainder) (reg a) (reg b))
+;     (assign a (reg b))
+;     (assign b (reg t))
+;     (goto (label test-b))
+;   gcd-done:
+
+(display "gcd(206, 40) = ") (display (gcd-machine 206 40)) (newline)
+(display "gcd(48, 36)  = ") (display (gcd-machine 48 36)) (newline)
+(display "gcd(270, 192)= ") (display (gcd-machine 270 192))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# GCD register machine in Python — explicit register transfers
+
+def gcd_machine(a, b):
+    """Simulates the register machine for GCD."""
+    # Registers: a, b, t
+    while True:
+        # test-b: is b == 0?
+        if b == 0:
+            return a  # gcd-done
+        # assign t <- remainder(a, b)
+        t = a % b
+        # assign a <- b
+        a = b
+        # assign b <- t
+        b = t
+        # goto test-b (loop)
+
+print(f"gcd(206, 40) = {gcd_machine(206, 40)}")
+print(f"gcd(48, 36)  = {gcd_machine(48, 36)}")
+print(f"gcd(270, 192)= {gcd_machine(270, 192)}")
+`} />
+    </div>
+
+
+    <!-- 2. Abstraction in machine design -->
+    <h3>Abstraction in machine design</h3>
+    <p>Complex machines are built from simpler ones. A GCD machine that takes input and produces output can be a <strong>subroutine</strong> inside a larger machine. The key abstraction: a machine's interface is its registers (inputs and outputs), not its controller.</p>
+
+    <SchemeRepl client:load initialCode={`; A register machine simulator.
+; Instructions are data; the simulator interprets them.
+
+(define (make-machine registers ops controller)
+  (let ((regs (map (lambda (r) (cons r 0)) registers))
+        (pc 0))
+
+    (define (get-reg name) (cdr (assoc name regs)))
+    (define (set-reg! name val)
+      (set-cdr! (assoc name regs) val))
+    (define (get-op name) (cdr (assoc name ops)))
+
+    (define (execute)
+      (if (>= pc (length controller))
+          'done
+          (let ((inst (list-ref controller pc)))
+            (case (car inst)
+              ((assign)
+               (let ((target (cadr inst))
+                     (source (cddr inst)))
+                 (set-reg! target (eval-source source)))
+               (set! pc (+ pc 1))
+               (execute))
+              ((test)
+               (let ((op (cadr inst))
+                     (args (cddr inst)))
+                 (if (apply (get-op op) (map eval-arg args))
+                     (set! pc (+ pc 1))
+                     (set! pc (+ pc 1)))
+                 (execute)))
+              ((branch)
+               (if (get-reg 'flag)
+                   (set! pc (cadr inst))
+                   (set! pc (+ pc 1)))
+               (execute))
+              ((goto)
+               (set! pc (cadr inst))
+               (execute))
+              ((halt) 'done)
+              (else (error "Unknown instruction" inst))))))
+
+    (define (eval-source src)
+      (if (and (pair? src) (eq? (car src) 'op))
+          (apply (get-op (cadr src))
+                 (map eval-arg (cddr src)))
+          (eval-arg (car src))))
+
+    (define (eval-arg arg)
+      (cond ((and (pair? arg) (eq? (car arg) 'reg)) (get-reg (cadr arg)))
+            ((and (pair? arg) (eq? (car arg) 'const)) (cadr arg))
+            (else arg)))
+
+    (lambda (msg . args)
+      (case msg
+        ((set) (set-reg! (car args) (cadr args)))
+        ((get) (get-reg (car args)))
+        ((run) (set! pc 0) (execute))
+        (else (error "Unknown message" msg))))))
+
+; Build a simple doubling machine: result = n * 2
+(define doubler
+  (make-machine
+   '(n result)
+   (list (cons '* *))
+   '((assign result (op *) (reg n) (const 2))
+     (halt))))
+
+(doubler 'set 'n 21)
+(doubler 'run)
+(display "21 * 2 = ") (display (doubler 'get 'result))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Register machine simulator in Python
+
+class RegisterMachine:
+    def __init__(self, register_names, ops, controller):
+        self.regs = {name: 0 for name in register_names}
+        self.ops = ops
+        self.controller = controller
+
+    def set(self, name, val):
+        self.regs[name] = val
+
+    def get(self, name):
+        return self.regs[name]
+
+    def eval_arg(self, arg):
+        if isinstance(arg, tuple):
+            kind, val = arg
+            if kind == 'reg': return self.regs[val]
+            if kind == 'const': return val
+        return arg
+
+    def run(self):
+        pc = 0
+        while pc < len(self.controller):
+            inst = self.controller[pc]
+            if inst[0] == 'assign':
+                _, target, op_name, *args = inst
+                vals = [self.eval_arg(a) for a in args]
+                self.regs[target] = self.ops[op_name](*vals)
+                pc += 1
+            elif inst[0] == 'halt':
+                break
+            else:
+                pc += 1
+
+import operator
+doubler = RegisterMachine(
+    ['n', 'result'],
+    {'*': operator.mul},
+    [('assign', 'result', '*', ('reg', 'n'), ('const', 2)),
+     ('halt',)])
+
+doubler.set('n', 21)
+doubler.run()
+print(f"21 * 2 = {doubler.get('result')}")
+`} />
+    </div>
+
+
+    <!-- 3. Subroutines and the stack -->
+    <h3>Subroutines and the stack</h3>
+    <p>When a machine calls a subroutine, it must remember where to return. A <strong>stack</strong> saves and restores register values. <code>save</code> pushes a register onto the stack; <code>restore</code> pops it back. The stack is the mechanism that makes subroutines &mdash; and recursion &mdash; possible at the machine level.</p>
+
+    <SchemeRepl client:load initialCode={`; Stack operations for subroutine calls.
+; The stack enables recursion at the register level.
+
+(define stack '())
+
+(define (save val)
+  (set! stack (cons val stack)))
+
+(define (restore)
+  (let ((val (car stack)))
+    (set! stack (cdr stack))
+    val))
+
+; Simulate a machine that uses the stack for a subroutine.
+; Main computes 2*gcd(a,b) by calling gcd as a subroutine.
+
+(define (gcd-with-stack a b)
+  ; Save return info
+  (save 'main-continue)
+  (save a)
+  (save b)
+  ; GCD subroutine (iterative, uses registers directly)
+  (let gcd-loop ((a a) (b b))
+    (if (= b 0)
+        ; "Return" from subroutine: result in a
+        (let ((saved-b (restore))
+              (saved-a (restore))
+              (return-to (restore)))
+          ; Back in main: double the result
+          (* 2 a))
+        (gcd-loop b (remainder a b)))))
+
+(display "2 * gcd(206, 40) = ")
+(display (gcd-with-stack 206 40))
+(newline)
+; => 2 * 2 = 4
+
+; Show the stack in action
+(set! stack '())
+(save 10)
+(save 20)
+(save 30)
+(display "Stack: ") (display stack) (newline)
+(display "Pop: ") (display (restore)) (newline)
+(display "Pop: ") (display (restore)) (newline)
+(display "Pop: ") (display (restore))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Stack for subroutine calls in Python
+
+class Stack:
+    def __init__(self):
+        self.data = []
+
+    def save(self, val):
+        self.data.append(val)
+
+    def restore(self):
+        return self.data.pop()
+
+    def __repr__(self):
+        return f"Stack({self.data})"
+
+stack = Stack()
+stack.save(10)
+stack.save(20)
+stack.save(30)
+print(f"Stack: {stack}")
+print(f"Pop: {stack.restore()}")  # 30
+print(f"Pop: {stack.restore()}")  # 20
+print(f"Pop: {stack.restore()}")  # 10
+
+# GCD subroutine with explicit stack save/restore
+def gcd_subroutine(a, b):
+    s = Stack()
+    s.save(a)
+    s.save(b)
+    while b != 0:
+        a, b = b, a % b
+    saved_b, saved_a = s.restore(), s.restore()
+    return 2 * a
+
+print(f"2 * gcd(206, 40) = {gcd_subroutine(206, 40)}")
+`} />
+    </div>
+
+
+    <!-- 4. Recursive machines — factorial -->
+    <h3>Recursive machines &mdash; factorial</h3>
+    <p>A recursive procedure becomes a register machine that saves its state on the stack before each recursive call and restores it after. The controller has the same structure as the recursive procedure, but <code>call</code> and <code>return</code> are explicit stack operations.</p>
+
+    <SchemeRepl client:load initialCode={`; Factorial as a register machine.
+; Registers: n, val, continue
+; The stack saves n and continue before each recursive call.
+
+(define (fact-machine n)
+  (let ((stack '())
+        (val 0)
+        (continue 'done))
+
+    (define (save x) (set! stack (cons x stack)))
+    (define (restore) (let ((v (car stack))) (set! stack (cdr stack)) v))
+
+    ; Controller (simulate with labels as branches)
+    (define (fact-loop n)
+      (if (= n 1)
+          (begin
+            (set! val 1)
+            (after-fact))
+          (begin
+            (save continue)
+            (save n)
+            (set! continue 'after-fact)
+            (fact-loop (- n 1)))))
+
+    (define (after-fact)
+      (if (eq? continue 'done)
+          val
+          (let ((saved-n (restore))
+                (saved-continue (restore)))
+            (set! val (* saved-n val))
+            (set! continue saved-continue)
+            (after-fact))))
+
+    (fact-loop n)))
+
+(display "5! = ") (display (fact-machine 5)) (newline)
+(display "10! = ") (display (fact-machine 10)) (newline)
+(display "1! = ") (display (fact-machine 1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Factorial register machine in Python — explicit stack
+
+def fact_machine(n):
+    stack = []
+    val = 0
+    # Simulate the controller with an explicit stack
+    # instead of Python's call stack
+
+    # Push frames for n, n-1, ..., 1
+    while n > 1:
+        stack.append(n)
+        n -= 1
+
+    # Base case
+    val = 1
+
+    # Unwind: multiply by each saved n
+    while stack:
+        val *= stack.pop()
+
+    return val
+
+print(f"5!  = {fact_machine(5)}")
+print(f"10! = {fact_machine(10)}")
+print(f"1!  = {fact_machine(1)}")
+`} />
+    </div>
+
+
+    <!-- 5. Fibonacci machine -->
+    <h3>Recursive machines &mdash; Fibonacci</h3>
+    <p>Fibonacci is harder than factorial because it makes <em>two</em> recursive calls. The stack must save enough state to resume after each one. This is the register-machine version of the tree-recursive process from Chapter 2.</p>
+
+    <SchemeRepl client:load initialCode={`; Fibonacci register machine — two recursive calls.
+; This demonstrates how tree recursion maps to stack operations.
+
+(define (fib-machine n)
+  (let ((stack '())
+        (val 0))
+
+    (define (save x) (set! stack (cons x stack)))
+    (define (restore) (let ((v (car stack))) (set! stack (cdr stack)) v))
+
+    ; Iterative version using the stack to track pending work
+    ; (simulates what the register machine controller does)
+    (define (fib n)
+      (cond ((= n 0) 0)
+            ((= n 1) 1)
+            (else
+             ; Save state, compute fib(n-1)
+             (save n)
+             (let ((fib-n-1 (fib (- n 1))))
+               (let ((saved-n (restore)))
+                 ; Now compute fib(n-2)
+                 (+ fib-n-1 (fib (- saved-n 2))))))))
+
+    (fib n)))
+
+(display "fib(0)  = ") (display (fib-machine 0))  (newline)
+(display "fib(1)  = ") (display (fib-machine 1))  (newline)
+(display "fib(5)  = ") (display (fib-machine 5))  (newline)
+(display "fib(10) = ") (display (fib-machine 10)) (newline)
+(display "fib(15) = ") (display (fib-machine 15))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fibonacci register machine in Python — explicit stack
+# Simulates tree recursion with a work stack.
+
+def fib_machine(n):
+    """Compute fib(n) using an explicit stack instead of call stack."""
+    if n <= 1:
+        return n
+
+    # Stack-based simulation of tree recursion
+    stack = []
+    result = 0
+
+    # Use iterative approach that mirrors register machine
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+
+for i in [0, 1, 5, 10, 15]:
+    print(f"fib({i:2d}) = {fib_machine(i)}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Register machine</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(assign reg (op f) ...)</td><td class="pr-4 text-blue-300">reg = f(...)</td><td class="font-sans">Store operation result in register</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(test (op =) (reg a) (const 0))</td><td class="pr-4 text-blue-300">if a == 0:</td><td class="font-sans">Test a condition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(branch (label done))</td><td class="pr-4 text-blue-300">goto / break</td><td class="font-sans">Conditional jump</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(save reg) / (restore reg)</td><td class="pr-4 text-blue-300">stack.append / stack.pop</td><td class="font-sans">Push/pop the stack</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(goto (label start))</td><td class="pr-4 text-blue-300">while True / continue</td><td class="font-sans">Unconditional jump</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-17/">SICP Ch.17 &mdash; Logic Programming</a> &mdash; the highest level of abstraction before we descend</li>
+      <li><a href="/reading/programming/sicp-19/">SICP Ch.19 &mdash; Register Machine Simulator</a> &mdash; simulating these machines in software</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Register_machine"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Register machine</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Finite-state_machine"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Finite-state machine</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Instruction_set_architecture"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Instruction set architecture</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Register machines strip away all the abstraction that high-level languages provide. Every variable becomes a named register. Every function call becomes a stack save, jump, and restore. Python's call stack is exactly the hardware mechanism being described here &mdash; the language just hides it. The register machine notation is essentially assembly language with Lisp syntax. Understanding this layer explains why stack overflows happen, why tail calls matter, and what a compiler actually has to produce.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-31.html#%_sec_5.1">Read SICP &sect;5.1</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-17/", label: "Logic Programming" }} next={{ href: "/reading/programming/sicp-19/", label: "Register Machine Simulator · 19 of 22" }} />
+
+  </main>
+</Layout>

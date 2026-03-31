@@ -1,0 +1,151 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.5 — Elasticity" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Elasticity</h1>
+    <p class="text-gray-400 text-sm mb-6">Alfred Marshall &middot; 1890 &middot; <a href="https://en.wikipedia.org/wiki/Price_elasticity_of_demand"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Principles of Economics, Book III</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Price elasticity of demand</strong> measures how much quantity demanded changes when price changes. Elastic demand (|E| > 1): quantity responds a lot. Inelastic demand (|E| &lt; 1): quantity barely budges. The distinction determines whether raising price increases or decreases total revenue.</p>
+    </div>
+
+    <!-- SVG: Elastic vs inelastic demand curves -->
+    <h3>Steep vs flat</h3>
+    <p>An inelastic demand curve is steep: price changes, quantity barely moves (insulin, gasoline). An elastic curve is flat: a small price increase sends buyers elsewhere (one brand of cereal).</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Inelastic (left) -->
+        <text x="110" y="18" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Inelastic (|E| &lt; 1)</text>
+        <line x1="30" y1="190" x2="200" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="30" y1="190" x2="30" y2="30" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="115" y="208" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Q</text>
+        <text x="20" y="18" fill="currentColor" font-size="10" fill-opacity="0.4">P</text>
+        <!-- Steep demand -->
+        <line x1="100" y1="35" x2="120" y2="185" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="128" y="185" fill="#f59e0b" font-size="11" fill-opacity="0.7">D</text>
+
+        <!-- Elastic (right) -->
+        <text x="340" y="18" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Elastic (|E| > 1)</text>
+        <line x1="250" y1="190" x2="420" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="250" y1="190" x2="250" y2="30" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="335" y="208" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Q</text>
+        <text x="240" y="18" fill="currentColor" font-size="10" fill-opacity="0.4">P</text>
+        <!-- Flat demand -->
+        <line x1="260" y1="80" x2="410" y2="140" stroke="#60a5fa" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="415" y="145" fill="#60a5fa" font-size="11" fill-opacity="0.7">D</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Price elasticity of demand
+; E = (%change in Q) / (%change in P)
+; E = (dQ/dP) * (P/Q)
+
+(define (elasticity p1 q1 p2 q2)
+  (let ((pct-q (/ (- q2 q1) (* 0.5 (+ q1 q2))))
+        (pct-p (/ (- p2 p1) (* 0.5 (+ p1 p2)))))
+    (/ pct-q pct-p)))
+
+; Inelastic: insulin
+; Price rises 10% ($100 -> $110), quantity drops 2% (1000 -> 980)
+(define e-insulin (elasticity 100 1000 110 980))
+(display "Insulin elasticity: ")
+(display (exact->inexact e-insulin))
+(display " (inelastic)")
+(newline)
+
+; Elastic: brand of cereal
+; Price rises 10% ($4 -> $4.40), quantity drops 30% (500 -> 350)
+(define e-cereal (elasticity 4 500 4.40 350))
+(display "Cereal elasticity:  ")
+(display (exact->inexact e-cereal))
+(display " (elastic)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Midpoint elasticity formula
+def elasticity(p1, q1, p2, q2):
+    pct_q = (q2 - q1) / (0.5 * (q1 + q2))
+    pct_p = (p2 - p1) / (0.5 * (p1 + p2))
+    return pct_q / pct_p
+
+e_ins = elasticity(100, 1000, 110, 980)
+e_cer = elasticity(4, 500, 4.40, 350)
+
+print("Insulin elasticity: " + str(round(e_ins, 2)) + " (inelastic)")
+print("Cereal elasticity:  " + str(round(e_cer, 2)) + " (elastic)")
+`} />
+    </div>
+
+
+    <h3>Revenue implications</h3>
+    <p>Revenue = Price x Quantity. If demand is inelastic, raising price increases revenue (quantity barely drops). If demand is elastic, raising price decreases revenue (too many buyers leave). The revenue-maximizing price is where elasticity equals -1.</p>
+
+    <SchemeRepl client:load initialCode={`; Revenue = P * Q
+; Inelastic: raise price -> revenue goes UP
+; Elastic: raise price -> revenue goes DOWN
+
+(define (revenue p q) (* p q))
+
+; Inelastic good: price $10 -> $12, quantity 100 -> 95
+(display "Inelastic good:")
+(newline)
+(display "  Revenue at $10: ")
+(display (revenue 10 100))
+(newline)
+(display "  Revenue at $12: ")
+(display (revenue 12 95))
+(display " (UP)")
+(newline)
+(newline)
+
+; Elastic good: price $10 -> $12, quantity 100 -> 60
+(display "Elastic good:")
+(newline)
+(display "  Revenue at $10: ")
+(display (revenue 10 100))
+(newline)
+(display "  Revenue at $12: ")
+(display (revenue 12 60))
+(display " (DOWN)")
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Elastic (|E| > 1)</td><td>Quantity responds more than proportionally to price</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Inelastic (|E| &lt; 1)</td><td>Quantity responds less than proportionally to price</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Unit elastic (|E| = 1)</td><td>Percentage changes are equal; revenue is maximized</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Cross elasticity</td><td>How demand for one good responds to another good's price</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Price_elasticity_of_demand"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Price elasticity of demand</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Price_elasticity_of_supply"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Price elasticity of supply</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-04/", label: "Diminishing Returns" }} next={{ href: "/reading/economics/econ-06/", label: "Marginal Utility" }} />
+
+  </main>
+</Layout>

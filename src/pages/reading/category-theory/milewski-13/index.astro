@@ -1,0 +1,394 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.13 — Representable Functors" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Representable Functors</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/07/29/representable-functors/">Category Theory for Programmers, Ch. 13</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>, <a href="/reading/category-theory/milewski-09/">🍞 Ch9 (Function Types)</a>. 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A functor F is <strong>representable</strong> if F(a) is isomorphic to Hom(r, a) for some object r. That means every container of type F is secretly a function from r. <code>tabulate</code> turns a function into the container; <code>index</code> turns the container back into a function. Round-trip: <code>tabulate (index s) = s</code>. This is memoization, stated categorically.</p>
+    </div>
+
+    <!-- SVG: Representable functor isomorphism -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- F(a) as container -->
+        <rect x="20" y="25" width="120" height="55" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="80" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">F(a)</text>
+        <text x="80" y="65" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">container</text>
+
+        <!-- Isomorphism arrows -->
+        <line x1="150" y1="45" x2="255" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="255,41 263,45 255,49" fill="currentColor"/>
+        <text x="205" y="39" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">index</text>
+        <line x1="255" y1="60" x2="150" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="150,56 142,60 150,64" fill="currentColor"/>
+        <text x="205" y="75" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">tabulate</text>
+
+        <!-- Hom(r, a) as function -->
+        <rect x="270" y="25" width="130" height="55" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="335" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Hom(r, a)</text>
+        <text x="335" y="65" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">function</text>
+
+        <!-- Isomorphism label -->
+        <text x="210" y="110" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">natural isomorphism &#x2245;</text>
+      </svg>
+    </div>
+
+    <!-- 1. The hom-functor -->
+    <h3>The hom-functor: functions as a functor</h3>
+    <p>Fix a type <code>r</code>. The set of all functions <code>r -> a</code> depends on <code>a</code> functorially: given <code>f : a -> b</code>, you get <code>(r -> a) -> (r -> b)</code> by post-composing. This is the <strong>reader functor</strong>, also called the hom-functor Hom(r, -). A representable functor is one that's naturally isomorphic to this reader for some choice of <code>r</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; The reader functor: (r -> a) is functorial in a.
+; fmap f g = f . g  (post-compose)
+;
+; Fix r = Symbol. A "reader" is a function from symbols to values.
+
+(define (fmap-reader f g)
+  (lambda (r) (f (g r))))
+
+; g : symbol -> number (a lookup table)
+(define (lookup key)
+  (cond ((eq? key 'x) 1)
+        ((eq? key 'y) 2)
+        ((eq? key 'z) 3)
+        (else 0)))
+
+; f : number -> string
+(define (show-doubled n)
+  (number->string (* n 2)))
+
+; fmap show-doubled lookup : symbol -> string
+(define mapped (fmap-reader show-doubled lookup))
+
+(display "lookup 'x:        ") (display (lookup 'x)) (newline)
+(display "mapped 'x:        ") (display (mapped 'x)) (newline)
+(display "mapped 'y:        ") (display (mapped 'y)) (newline)
+; Post-composition: lookup first, then transform the result.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Reader functor: fmap = post-compose
+def fmap_reader(f, g):
+    return lambda r: f(g(r))
+
+lookup = {"x": 1, "y": 2, "z": 3}.get
+show_doubled = lambda n: str((n or 0) * 2)
+
+mapped = fmap_reader(show_doubled, lookup)
+
+print(f"lookup('x'):  {lookup('x')}")
+print(f"mapped('x'):  {mapped('x')}")
+print(f"mapped('y'):  {mapped('y')}")
+`} />
+    </div>
+
+
+    <!-- 2. Stream as a representable functor -->
+    <h3>Stream: an infinite container represented by Integer</h3>
+    <p>An infinite stream holds one value for every natural number. That means a stream of <code>a</code> is the same information as a function <code>Integer -> a</code>. The representing object is Integer. <code>tabulate</code> builds a stream by calling the function at 0, 1, 2, ...; <code>index</code> walks the stream to the n-th element.</p>
+
+    <SchemeRepl client:load initialCode={`; Stream: infinite list, represented by Integer.
+; Stream(a) ≅ (Integer -> a)
+;
+; tabulate : (Integer -> a) -> Stream(a)
+; index    : Stream(a) -> Integer -> a
+
+; Represent a stream as a thunk-based pair: (head . tail-thunk)
+(define (stream-cons h t) (cons h t))
+(define (stream-head s) (car s))
+(define (stream-tail s) ((cdr s)))
+
+; tabulate: turn a function into a stream
+(define (tabulate f)
+  (stream-cons (f 0)
+    (lambda () (tabulate (lambda (n) (f (+ n 1)))))))
+
+; index: turn a stream back into a function
+(define (stream-index s n)
+  (if (= n 0)
+      (stream-head s)
+      (stream-index (stream-tail s) (- n 1))))
+
+; Build a stream of squares: n -> n^2
+(define squares (tabulate (lambda (n) (* n n))))
+
+(display "squares[0]: ") (display (stream-index squares 0)) (newline)
+(display "squares[1]: ") (display (stream-index squares 1)) (newline)
+(display "squares[4]: ") (display (stream-index squares 4)) (newline)
+(display "squares[10]: ") (display (stream-index squares 10))
+; Each element is computed lazily on demand.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Stream represented by Integer
+class Stream:
+    def __init__(self, head, tail_fn):
+        self.head = head
+        self._tail = tail_fn
+
+    def tail(self):
+        return self._tail()
+
+def tabulate(f):
+    return Stream(f(0), lambda: tabulate(lambda n: f(n + 1)))
+
+def index(s, n):
+    while n > 0:
+        s = s.tail()
+        n -= 1
+    return s.head
+
+squares = tabulate(lambda n: n * n)
+
+for i in [0, 1, 4, 10]:
+    print(f"squares[{i}]: {index(squares, i)}")
+`} />
+    </div>
+
+
+    <!-- 3. The round-trip: tabulate and index are inverses -->
+    <h3>The round-trip: tabulate and index are inverses</h3>
+    <p>A functor is representable when <code>tabulate</code> and <code>index</code> are inverses. That means two laws hold: <code>tabulate (index s) = s</code> (build a stream from its own indexing function and you get the same stream) and <code>index (tabulate f) = f</code> (index into a tabulated function and you get back the original function). This is the natural isomorphism between F and Hom(r, -).</p>
+
+    <SchemeRepl client:load initialCode={`; Round-trip laws:
+; 1. index (tabulate f) n = f n
+; 2. tabulate (index s) = s
+;
+; Law 1: tabulate a function, then index into it.
+; You should get the original function back.
+
+(define (f n) (* n (+ n 1)))   ; n -> n*(n+1)
+
+(define tabulated-f (tabulate f))
+
+(display "f(0) = ") (display (f 0))
+(display "  index(tabulate(f), 0) = ")
+(display (stream-index tabulated-f 0)) (newline)
+
+(display "f(5) = ") (display (f 5))
+(display "  index(tabulate(f), 5) = ")
+(display (stream-index tabulated-f 5)) (newline)
+
+(display "f(9) = ") (display (f 9))
+(display "  index(tabulate(f), 9) = ")
+(display (stream-index tabulated-f 9)) (newline)
+
+; Law 2: index a stream to get a function, tabulate it back.
+; We can verify element-wise.
+(define roundtrip (tabulate (lambda (n) (stream-index squares n))))
+(display "squares[7] = ") (display (stream-index squares 7))
+(display "  roundtrip[7] = ") (display (stream-index roundtrip 7))
+; Same values: the isomorphism holds.
+`} />
+
+
+    <!-- 4. Memoization -->
+    <h3>Memoization: the computational meaning</h3>
+    <p>Representability is memoization. A function <code>r -> a</code> computes a value on every call. <code>tabulate</code> converts it into a data structure that stores all the results. <code>index</code> retrieves them. The function and the data structure carry the same information, but the data structure trades space for time. Milewski: "a representable functor is a memoized function."</p>
+
+    <SchemeRepl client:load initialCode={`; Memoization as representability.
+; The function computes. The stream stores.
+; tabulate = memoize. index = lookup.
+
+; An "expensive" function
+(define call-count 0)
+(define (expensive n)
+  (set! call-count (+ call-count 1))
+  (* n n n))  ; cube
+
+; Without memoization: every call recomputes
+(set! call-count 0)
+(display "expensive(5): ") (display (expensive 5)) (newline)
+(display "expensive(5): ") (display (expensive 5)) (newline)
+(display "calls: ") (display call-count) (newline)
+
+; With tabulate: compute once, store in stream
+(set! call-count 0)
+(define cubes (tabulate expensive))
+
+(display "cubes[5]:     ") (display (stream-index cubes 5)) (newline)
+(display "cubes[5]:     ") (display (stream-index cubes 5)) (newline)
+(display "calls: ") (display call-count) (newline)
+; In a lazy language, the second access reuses the stored value.
+; In Scheme, we recompute — but the structure is the same.
+; The point: tabulate IS memoization.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Memoization = tabulate
+from functools import lru_cache
+
+call_count = 0
+
+def expensive(n):
+    global call_count
+    call_count += 1
+    return n ** 3
+
+# Without memo
+call_count = 0
+print(f"expensive(5): {expensive(5)}")
+print(f"expensive(5): {expensive(5)}")
+print(f"calls: {call_count}")
+
+# With memo (Python's built-in tabulate)
+call_count = 0
+memo_expensive = lru_cache(maxsize=None)(expensive)
+print(f"memo(5):      {memo_expensive(5)}")
+print(f"memo(5):      {memo_expensive(5)}")
+print(f"calls: {call_count}")
+# Second call: 0 extra calls. That's tabulate.
+`} />
+    </div>
+
+    <!-- 5. Not every functor is representable -->
+    <h3>Not every functor is representable</h3>
+    <p>The list functor is not representable. A function <code>r -> a</code> always produces a value for every input, but a list can be empty. There's no representing object <code>r</code> such that <code>[a]</code> is isomorphic to <code>r -> a</code> for all <code>a</code>. Representable functors must have a fixed "shape" determined by the representing object. Lists have variable length, so they fail.</p>
+
+    <SchemeRepl client:load initialCode={`; List is NOT representable.
+; Why? A function (r -> a) always returns a value for every r.
+; But a list can be empty — no value to return.
+;
+; Suppose we try: what is Rep for List?
+; A list of length 3 looks like (Integer<3 -> a).
+; A list of length 0 looks like (Void -> a).
+; The "shape" changes — there's no single fixed r.
+
+; Contrast with Stream:
+; Every stream has exactly the same shape: one slot per integer.
+; tabulate always produces an infinite stream.
+; That fixed shape is what makes it representable.
+
+; Pair is representable too: Rep = Bool (two slots)
+(define (tabulate-pair f)
+  (cons (f #t) (f #f)))
+
+(define (index-pair p b)
+  (if b (car p) (cdr p)))
+
+(define p (tabulate-pair (lambda (b) (if b "left" "right"))))
+(display "pair: ") (display p) (newline)
+(display "index #t: ") (display (index-pair p #t)) (newline)
+(display "index #f: ") (display (index-pair p #f)) (newline)
+
+; Round-trip check
+(define (g b) (if b 10 20))
+(display "g(#t)=") (display (g #t))
+(display "  index(tabulate(g), #t)=")
+(display (index-pair (tabulate-pair g) #t))
+`} />
+
+
+    <!-- 6. fmap for free -->
+    <h3>fmap for free</h3>
+    <p>If a functor is representable, you get <code>fmap</code> for free. To map <code>f</code> over a container: <code>index</code> it into a function, post-compose <code>f</code>, then <code>tabulate</code> the result. This is the reader functor's <code>fmap</code> transported through the isomorphism.</p>
+
+    <SchemeRepl client:load initialCode={`; fmap from tabulate and index:
+; fmap f s = tabulate (f . index s)
+;
+; No need to pattern-match on the data structure.
+; The isomorphism does the work.
+
+(define (fmap-rep f s)
+  (tabulate (lambda (n) (f (stream-index s n)))))
+
+; Stream of naturals
+(define nats (tabulate (lambda (n) n)))
+
+; fmap: double every element
+(define doubled (fmap-rep (lambda (x) (* x 2)) nats))
+
+(display "nats[0..4]:    ")
+(let loop ((i 0))
+  (if (< i 5)
+    (begin (display (stream-index nats i)) (display " ")
+           (loop (+ i 1)))))
+(newline)
+
+(display "doubled[0..4]: ")
+(let loop ((i 0))
+  (if (< i 5)
+    (begin (display (stream-index doubled i)) (display " ")
+           (loop (+ i 1)))))
+; fmap through the isomorphism — no direct recursion on Stream.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# fmap via tabulate/index
+def fmap_stream(f, s):
+    return tabulate(lambda n: f(index(s, n)))
+
+nats = tabulate(lambda n: n)
+doubled = fmap_stream(lambda x: x * 2, nats)
+
+print("nats[0..4]:   ", [index(nats, i) for i in range(5)])
+print("doubled[0..4]:", [index(doubled, i) for i in range(5)])
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(a, -)</td><td class="pr-4 text-green-300">(lambda (x) (a -> x))</td><td class="font-sans">Hom-functor / reader functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Rep f</td><td class="pr-4 text-green-300">Integer (for Stream)</td><td class="font-sans">Representing object</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">tabulate :: (Rep f -> a) -> f a</td><td class="pr-4 text-green-300">(tabulate f)</td><td class="font-sans">Function to container</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">index :: f a -> Rep f -> a</td><td class="pr-4 text-green-300">(stream-index s n)</td><td class="font-sans">Container to function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">tabulate . index = id</td><td class="pr-4 text-green-300">(tabulate (lambda (n) (stream-index s n)))</td><td class="font-sans">Round-trip law (container)</td></tr>
+          <tr><td class="py-2 pr-4">index . tabulate = id</td><td class="pr-4 text-green-300">(stream-index (tabulate f) n) = (f n)</td><td class="font-sans">Round-trip law (function)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Chapter 7</a> — Functors: the concept representable functors generalize</li>
+      <li><a href="/reading/category-theory/milewski-09/">🍞 Chapter 9</a> — Function Types: exponentials, the Hom-set as a type</li>
+      <li><a href="/reading/category-theory/milewski-12/">🍞 Chapter 12</a> — Limits and Colimits: universal constructions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Representable_functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Representable functor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Yoneda_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda lemma</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Memoization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Memoization</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell's <code>Representable</code> typeclass with an associated type <code>Rep f</code>. This page uses plain Scheme functions, since Scheme has no type system to enforce the isomorphism laws. Streams are implemented with thunks for lazy tails, approximating Haskell's lazy evaluation. The memoization example doesn't truly cache in Scheme (no lazy thunks), but the structure is identical: <code>tabulate</code> builds the lookup structure, <code>index</code> retrieves from it. The blog post also discusses the logarithmic interpretation (if <code>F(a) = a^r</code> then <code>r = log F</code>) and the connection to the Yoneda lemma (every natural transformation from a hom-functor to F corresponds to an element of F(r), but representability requires this correspondence to be an isomorphism, not just a mapping).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/07/29/representable-functors/">Read the blog post</a>. Start with the hom-functor review, then trace the Stream instance through tabulate and index.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-12/", label: "Free Monoids" }} next={{ href: "/reading/category-theory/milewski-14/", label: "Yoneda Lemma" }} />
+
+  </main>
+</Layout>

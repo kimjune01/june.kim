@@ -1,0 +1,273 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.8 — Metric Spaces" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Metric Spaces</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 8</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>metric space</strong> is a set with a distance function satisfying positivity, symmetry, and the triangle inequality. Every concept from real analysis (convergence, continuity, compactness, completeness) generalizes to metric spaces. The reals are just one example.</p>
+    </div>
+
+    <!-- SVG: Open ball in a metric space -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 250" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Open ball (circle) -->
+        <circle cx="150" cy="120" r="80" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.4"/>
+        <!-- Center point -->
+        <circle cx="150" cy="120" r="3.5" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="158" y="117" fill="#f59e0b" font-size="12" fill-opacity="0.7">p</text>
+        <!-- Radius line -->
+        <line x1="150" y1="120" x2="220" y2="85" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="192" y="95" fill="currentColor" font-size="11" fill-opacity="0.5">r</text>
+        <!-- Points inside -->
+        <circle cx="130" cy="100" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="170" cy="140" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="115" cy="135" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="180" cy="100" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <circle cx="145" cy="155" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Point outside -->
+        <circle cx="250" cy="80" r="2" fill="#a1a1aa" fill-opacity="0.18"/>
+        <!-- Label -->
+        <text x="150" y="215" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.5">B(p, r)</text>
+        <!-- Caption -->
+        <text x="150" y="240" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Open ball: all points within distance r of p.</text>
+      </svg>
+    </div>
+
+    <h3>Definition and examples</h3>
+    <p>A <strong>metric</strong> d on a set X satisfies: (1) d(x, y) &ge; 0 with equality iff x = y, (2) d(x, y) = d(y, x), (3) d(x, z) &le; d(x, y) + d(y, z). The reals with |x - y| are a metric space. So is R^n with Euclidean distance. So is the set of bounded functions with the sup metric.</p>
+
+    <SchemeRepl client:load initialCode={`; Metric space axioms: d(x,y) for various metrics
+
+; Euclidean metric on R^2
+(define (d-euclidean p q)
+  (sqrt (+ (expt (- (car p) (car q)) 2)
+           (expt (- (cadr p) (cadr q)) 2))))
+
+; Manhattan metric on R^2
+(define (d-manhattan p q)
+  (+ (abs (- (car p) (car q)))
+     (abs (- (cadr p) (cadr q)))))
+
+; Discrete metric: d(x,y) = 0 if x=y, 1 otherwise
+(define (d-discrete x y)
+  (if (equal? x y) 0 1))
+
+(define p (list 1 2))
+(define q (list 4 6))
+
+(display "Points: p=(1,2), q=(4,6)") (newline)
+(display "Euclidean: ") (display (d-euclidean p q)) (newline)
+(display "Manhattan: ") (display (d-manhattan p q)) (newline)
+
+; Triangle inequality: d(p,r) <= d(p,q) + d(q,r)
+(define r (list 3 3))
+(display "Triangle inequality check:") (newline)
+(display "  d(p,r) = ") (display (d-euclidean p r)) (newline)
+(display "  d(p,q) + d(q,r) = ")
+(display (+ (d-euclidean p q) (d-euclidean q r))) (newline)
+(display "  d(p,r) <= d(p,q)+d(q,r)? ")
+(display (<= (d-euclidean p r)
+             (+ (d-euclidean p q) (d-euclidean q r))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def d_euclid(p, q):
+    return math.sqrt(sum((a-b)**2 for a,b in zip(p,q)))
+
+def d_manhattan(p, q):
+    return sum(abs(a-b) for a,b in zip(p,q))
+
+p, q, r = (1,2), (4,6), (3,3)
+print(f"Euclidean d(p,q) = {d_euclid(p,q):.4f}")
+print(f"Manhattan d(p,q) = {d_manhattan(p,q)}")
+print(f"Triangle: {d_euclid(p,r):.4f} <= {d_euclid(p,q)+d_euclid(q,r):.4f}")
+`} />
+    </div>
+
+    <h3>Open and closed sets</h3>
+    <p>The <strong>open ball</strong> B(p, r) is the set of all x with d(x, p) &lt; r. A set is <strong>open</strong> if every point has an open ball around it contained in the set. A set is <strong>closed</strong> if its complement is open, equivalently if it contains all its limit points.</p>
+
+    <SchemeRepl client:load initialCode={`; Open and closed sets in R
+; (0, 1) is open: every point has a ball inside
+; [0, 1] is closed: contains its limit points
+
+(define (in-open-interval? x a b) (and (> x a) (< x b)))
+(define (in-closed-interval? x a b) (and (>= x a) (<= x b)))
+
+; For any x in (0,1), r = min(x, 1-x) gives B(x,r) inside (0,1)
+(define (ball-radius x)
+  (min x (- 1 x)))
+
+(display "For x in (0,1), ball radius that fits:") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display ", r=") (display (ball-radius x)) (newline))
+  (list 0.1 0.5 0.9 0.01 0.99))
+
+; 0 is a limit point of (0,1) but not in (0,1)
+; so (0,1) is not closed
+(display "0 is a limit point of (0,1): ")
+(display "1/n -> 0, each 1/n in (0,1)") (newline)
+(display "(0,1) is open but not closed") (newline)
+(display "[0,1] is closed (contains 0 and 1)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+print("For x in (0,1), ball radius that fits:")
+for x in [0.1, 0.5, 0.9, 0.01, 0.99]:
+    r = min(x, 1 - x)
+    print("  x=" + str(x) + ", r=" + str(r))
+
+print("0 is a limit point of (0,1): 1/n -> 0, each 1/n in (0,1)")
+print("(0,1) is open but not closed")
+print("[0,1] is closed (contains 0 and 1)")
+`} />
+    </div>
+
+    <h3>Compactness</h3>
+    <p>A set is <strong>compact</strong> if every open cover has a finite subcover. In R^n, compact = closed and bounded (<a href="https://en.wikipedia.org/wiki/Heine%E2%80%93Borel_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Heine-Borel</a>). Compact sets are where the extreme value theorem and uniform continuity live. Compactness is the topological substitute for "closed bounded interval."</p>
+
+    <SchemeRepl client:load initialCode={`; Heine-Borel: in R, compact = closed and bounded
+; [0, 1] is compact
+; (0, 1) is NOT compact (not closed)
+; [0, infinity) is NOT compact (not bounded)
+
+; Consequence: continuous f on compact set attains max/min
+(define (f x) (- (sin (* 3.14159 x)) (* 0.5 x)))
+
+; Search for max on [0, 1] (compact)
+(define (find-max f a b n)
+  (let loop ((i 0) (xmax a) (fmax (f a)))
+    (if (> i n)
+      (begin
+        (display "  max at x=") (display xmax)
+        (display ", f(x)=") (display fmax))
+      (let* ((x (+ a (* (/ i n) (- b a))))
+             (fx (f x)))
+        (loop (+ i 1)
+              (if (> fx fmax) x xmax)
+              (if (> fx fmax) fx fmax))))))
+
+(display "f(x) = sin(pi*x) - x/2 on [0,1]:") (newline)
+(find-max f 0.0 1.0 10000) (newline)
+(display "Compactness guarantees this max is attained")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+f = lambda x: math.sin(math.pi * x) - 0.5 * x
+
+xs = [i / 10000 for i in range(10001)]
+fvals = [(x, f(x)) for x in xs]
+xmax, fmax = max(fvals, key=lambda p: p[1])
+
+print("f(x) = sin(pi*x) - x/2 on [0,1]:")
+print("  max at x=" + str(round(xmax, 4)) + ", f(x)=" + str(round(fmax, 6)))
+print("Compactness guarantees this max is attained")
+`} />
+    </div>
+
+    <h3>Completeness in metric spaces</h3>
+    <p>A metric space is <strong>complete</strong> if every Cauchy sequence converges. The reals are complete (Ch. 2). The rationals are not. Complete metric spaces are where the <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Banach fixed-point theorem</a> lives: a contraction on a complete metric space has a unique fixed point.</p>
+
+    <SchemeRepl client:load initialCode={`; Banach fixed point theorem
+; f(x) = cos(x) is a contraction on [0, 1]
+; Iterating from any start converges to the fixed point
+
+(define (iterate f x n)
+  (if (= n 0) x (iterate f (f x) (- n 1))))
+
+(display "Iterating cos(x) from x=0:") (newline)
+(for-each (lambda (n)
+  (let ((val (iterate cos 0.0 n)))
+    (display "  step ") (display n)
+    (display ": ") (display val) (newline)))
+  (list 1 2 5 10 20 50))
+
+; Fixed point: x = cos(x) => x ~ 0.7390851332
+(display "Fixed point: cos(x) = x at x = ")
+(display (iterate cos 0.0 100)) (newline)
+
+; Verify: cos(fixed point) = fixed point
+(let ((fp (iterate cos 0.0 100)))
+  (display "cos(fp) = ") (display (cos fp)) (newline)
+  (display "Difference: ") (display (abs (- fp (cos fp)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+x = 0.0
+print("Iterating cos(x) from x=0:")
+for n in [1, 2, 5, 10, 20, 50]:
+    val = 0.0
+    for _ in range(n):
+        val = math.cos(val)
+    print("  step " + str(n) + ":", val)
+
+# Fixed point
+fp = 0.0
+for _ in range(100):
+    fp = math.cos(fp)
+
+print("Fixed point: cos(x) = x at x =", fp)
+print("cos(fp) =", math.cos(fp))
+print("Difference:", abs(fp - math.cos(fp)))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">d(x, y)</td><td class="pr-4 text-green-300">(d-euclidean x y)</td><td class="font-sans">Metric (distance function)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">B(p, r)</td><td class="pr-4 text-green-300">d(x, p) &lt; r</td><td class="font-sans">Open ball</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">compact</td><td class="pr-4 text-green-300">closed + bounded (R^n)</td><td class="font-sans">Every open cover has finite subcover</td></tr>
+          <tr><td class="py-2 pr-4">complete</td><td class="pr-4 text-green-300">Cauchy &rArr; convergent</td><td class="font-sans">No "holes" in the space</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-02/">Ch. 2: Sequences</a> — Cauchy sequences and completeness in R</li>
+      <li><a href="/reading/real-analysis/lebl-04/">Ch. 4: Continuous Functions</a> — continuity between metric spaces</li>
+      <li><a href="/reading/category-theory/milewski-22/">Milewski Ch. 22: Enriched Categories</a> — metric spaces are categories enriched over [0, &infin;]</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — magnitude of metric spaces: a single number capturing the "effective size"</li>
+      <li><a href="/reading/geometry/geom-07/">△ Geometry Ch.7</a> — metric spaces in geometric context with visual intuition</li>
+      <li><a href="/reading/machine-learning/ml-05/">🤖 ML Ch.5</a> — kernel methods define metrics in feature space</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The metric space axioms are easy to verify computationally. The deep results (Heine-Borel, completeness of R, Banach fixed point) are theorems that our code illustrates but cannot prove. The contraction mapping iteration is the constructive content of the Banach theorem: it gives you the fixed point and a convergence rate.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-07/", label: "Sequences of Functions" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,175 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.1 — Arguments and Validity" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Arguments and Validity</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 1 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>argument</strong> is a set of premises plus a conclusion. An argument is <strong>valid</strong> when the conclusion must be true whenever all premises are true. Validity is about structure, not about whether the premises are actually true.</p>
+    </div>
+
+    <!-- SVG: Valid argument structure -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Premise boxes -->
+        <rect x="20" y="20" width="110" height="35" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="75" y="42" text-anchor="middle" fill="#60a5fa" font-size="13">Premise 1</text>
+        <rect x="170" y="20" width="110" height="35" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="225" y="42" text-anchor="middle" fill="#60a5fa" font-size="13">Premise 2</text>
+        <!-- Arrows down -->
+        <line x1="75" y1="55" x2="150" y2="100" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="225" y1="55" x2="150" y2="100" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Inference line -->
+        <line x1="70" y1="105" x2="230" y2="105" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Conclusion -->
+        <rect x="95" y="115" width="110" height="35" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="150" y="137" text-anchor="middle" fill="#f59e0b" font-size="13">Conclusion</text>
+        <!-- Caption -->
+        <text x="150" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">If premises are true, the conclusion must follow.</text>
+      </svg>
+    </div>
+
+    <h3>Premises and conclusions</h3>
+    <p>An argument has one or more <strong>premises</strong> (the given information) and exactly one <strong>conclusion</strong> (the claim being supported). The word "therefore" signals the conclusion. The word "because" signals a premise.</p>
+
+    <SchemeRepl client:load initialCode={`; An argument is a list of premises + a conclusion.
+; We represent it as: (premises . conclusion)
+
+(define (make-argument premises conclusion)
+  (cons premises conclusion))
+
+(define (get-premises arg) (car arg))
+(define (get-conclusion arg) (cdr arg))
+
+; Example: All humans are mortal. Socrates is human.
+;          Therefore Socrates is mortal.
+(define arg1
+  (make-argument
+    (list "All humans are mortal" "Socrates is human")
+    "Socrates is mortal"))
+
+(display "Premises: ")
+(display (get-premises arg1)) (newline)
+(display "Conclusion: ")
+(display (get-conclusion arg1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# An argument: premises + conclusion
+arg1 = {
+    "premises": ["All humans are mortal", "Socrates is human"],
+    "conclusion": "Socrates is mortal"
+}
+
+print(f"Premises: {arg1['premises']}")
+print(f"Conclusion: {arg1['conclusion']}")
+`} />
+    </div>
+
+    <h3>Validity vs soundness</h3>
+    <p>An argument is <strong>valid</strong> if the conclusion follows necessarily from the premises. An argument is <strong>sound</strong> if it is valid AND all premises are actually true. A valid argument can have false premises. A sound argument cannot.</p>
+
+    <SchemeRepl client:load initialCode={`; Validity: structure only. Soundness: structure + truth.
+
+; Valid AND sound:
+; P1: All dogs are animals.  (true)
+; P2: Rex is a dog.          (true)
+; C:  Rex is an animal.      (follows, and premises are true)
+
+; Valid but NOT sound:
+; P1: All fish can fly.      (false!)
+; P2: A whale is a fish.     (false!)
+; C:  A whale can fly.       (follows from premises, but premises are false)
+
+; Invalid (bad structure):
+; P1: Some cats are black.
+; P2: Felix is a cat.
+; C:  Felix is black.        (does NOT follow - "some" is not "all")
+
+(define (valid? premises-true conclusion-true)
+  ; An argument is invalid only when premises are true
+  ; but the conclusion is false.
+  (not (and premises-true (not conclusion-true))))
+
+; Test all truth combinations
+(display "T premises, T conclusion: valid? ")
+(display (valid? #t #t)) (newline)
+(display "T premises, F conclusion: valid? ")
+(display (valid? #t #f)) (newline)
+(display "F premises, T conclusion: valid? ")
+(display (valid? #f #t)) (newline)
+(display "F premises, F conclusion: valid? ")
+(display (valid? #f #f))
+; Only row 2 is invalid: true premises, false conclusion.
+`} />
+
+    <h3>Deductive vs inductive</h3>
+    <p>A <strong>deductive</strong> argument claims that the conclusion follows necessarily. A valid deductive argument is airtight. An <strong>inductive</strong> argument claims that the conclusion is probable. Even strong inductive arguments can have true premises and a false conclusion.</p>
+
+    <SchemeRepl client:load initialCode={`; Deductive: the conclusion MUST follow.
+; "All A are B. x is A. Therefore x is B."
+
+; Inductive: the conclusion PROBABLY follows.
+; "The sun rose every day so far. Therefore it will rise tomorrow."
+; Strong but not certain.
+
+; We can model the difference:
+(define (deductive-valid? all-premises-true conclusion-true)
+  ; Invalid only when premises true, conclusion false
+  (not (and all-premises-true (not conclusion-true))))
+
+(define (inductive-strong? observed-cases confirming-cases)
+  ; Strength = proportion of confirming cases
+  (/ confirming-cases observed-cases))
+
+(display "Deductive (T,T): ")
+(display (deductive-valid? #t #t)) (newline)
+(display "Deductive (T,F): ")
+(display (deductive-valid? #t #f)) (newline)
+
+(display "Inductive (1000 observations, 1000 confirming): ")
+(display (exact->inexact (inductive-strong? 1000 1000))) (newline)
+(display "Inductive (1000 observations, 950 confirming): ")
+(display (exact->inexact (inductive-strong? 1000 950)))
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Term</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Premise</td><td class="font-sans">A statement assumed true for the argument</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Conclusion</td><td class="font-sans">The statement the argument claims to establish</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Valid</td><td class="font-sans">Impossible for premises true and conclusion false</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Sound</td><td class="font-sans">Valid with actually true premises</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Deductive</td><td class="font-sans">Claims necessary conclusion</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Inductive</td><td class="font-sans">Claims probable conclusion</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-03/">🔢 Levin Ch.3</a> &mdash; propositional and predicate logic in a discrete math context</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/logic/logic-02/", label: "Propositional Logic Syntax" }} />
+
+  </main>
+</Layout>

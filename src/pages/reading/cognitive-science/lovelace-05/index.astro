@@ -1,0 +1,280 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.5 — Reinforcement Learning" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Reinforcement Learning</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An agent selects actions, receives rewards, and updates a <strong>policy</strong> that maps states to actions. The core tension: <strong>exploit</strong> what you know works, or <strong>explore</strong> to find something better. Temporal difference learning bridges this by updating value estimates from the difference between consecutive predictions. Q-learning makes this model-free: the agent learns action values without knowing the environment's dynamics.</p>
+    </div>
+
+    <!-- Agent-environment loop -->
+    <h3>The agent-environment loop</h3>
+    <p>At each time step, the agent observes a state, chooses an action, receives a reward, and transitions to a new state. The goal is to maximize cumulative reward over time. This loop is the universal interface between learner and world. When the loop closes all the way through consolidation, you get <a href="https://june.kim/general-intelligence"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>general intelligence</a>.</p>
+
+    <!-- SVG: agent-environment loop -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Agent box -->
+        <rect x="30" y="60" width="120" height="60" rx="8" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="90" y="95" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold">Agent</text>
+        <!-- Environment box -->
+        <rect x="210" y="60" width="120" height="60" rx="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="270" y="95" text-anchor="middle" fill="#34d399" font-size="14" font-weight="bold">Environment</text>
+        <!-- Action arrow: agent -> environment (top) -->
+        <line x1="150" y1="75" x2="210" y2="75" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="206,71 214,75 206,79" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="180" y="68" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">action</text>
+        <!-- State arrow: environment -> agent (bottom) -->
+        <line x1="210" y1="105" x2="150" y2="105" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="154,101 146,105 154,109" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="180" y="118" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">state</text>
+        <!-- Reward arrow: environment -> agent (curved below) -->
+        <path d="M 270 120 Q 270 170 180 170 Q 90 170 90 120" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="92,124 86,118 94,118" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="180" y="185" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.7">reward</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Simple bandit problem: two slot machines with unknown payoffs.
+; Explore vs exploit with epsilon-greedy strategy.
+
+; True payoff probabilities (unknown to agent)
+(define true-p-a 0.3)
+(define true-p-b 0.7)
+
+; Agent's estimated values (start at 0)
+(define (make-bandit) (list 0.0 0 0.0 0))  ; (q-a count-a q-b count-b)
+
+; Simulate a pull: returns 1 with probability p, else 0
+(define (pull p seed)
+  (if (< (/ (modulo (* seed 7919) 10000) 10000.0) p) 1 0))
+
+; Update running average
+(define (update-q old-q count reward)
+  (let ((new-count (+ count 1)))
+    (+ old-q (/ (- reward old-q) new-count))))
+
+; Run 20 rounds of epsilon-greedy (epsilon=0.3)
+(define (run-bandit qa na qb nb step seed)
+  (if (> step 20)
+      (begin
+        (display "Final Q(A)=") (display qa)
+        (display " Q(B)=") (display qb))
+      (let* ((explore? (< (modulo (* seed 13) 100) 30))
+             (choose-a (if explore?
+                           (< (modulo (* seed 17) 100) 50)
+                           (> qa qb)))
+             (reward (if choose-a
+                        (pull true-p-a (+ seed step))
+                        (pull true-p-b (+ seed step 1000)))))
+        (if choose-a
+            (run-bandit (update-q qa na reward) (+ na 1) qb nb (+ step 1) (+ seed 37))
+            (run-bandit qa na (update-q qb nb reward) (+ nb 1) (+ step 1) (+ seed 37))))))
+
+(run-bandit 0.0 0 0.0 0 1 42)
+; Q(B) should converge higher than Q(A)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Epsilon-greedy bandit in Python
+import random
+random.seed(42)
+
+true_p = [0.3, 0.7]  # true payoff probabilities
+q = [0.0, 0.0]       # estimated values
+n = [0, 0]            # pull counts
+epsilon = 0.3
+
+for step in range(200):
+    if random.random() < epsilon:
+        arm = random.randint(0, 1)
+    else:
+        arm = 0 if q[0] > q[1] else 1
+    reward = 1 if random.random() < true_p[arm] else 0
+    n[arm] += 1
+    q[arm] += (reward - q[arm]) / n[arm]
+
+print(f"Q(A) = {q[0]:.3f} (true: {true_p[0]})")
+print(f"Q(B) = {q[1]:.3f} (true: {true_p[1]})")
+print(f"Pulls: A={n[0]}, B={n[1]}")
+`} />
+    </div>
+
+
+    <!-- Temporal difference learning -->
+    <h3>Temporal difference learning</h3>
+    <p>Instead of waiting for the final outcome, TD learning updates value estimates after each step using the difference between consecutive predictions. The update rule: V(s) = V(s) + alpha * (reward + gamma * V(s') - V(s)). The term in parentheses is the <strong>TD error</strong>: the surprise between what you predicted and what you got plus what you now predict.</p>
+
+    <SchemeRepl client:load initialCode={`; TD learning: a 5-state random walk
+; States: 0 (left terminal) 1 2 3 4 5 (right terminal)
+; Reward: +1 at state 5, 0 elsewhere. Discount = 1.
+; True values: V(s) = s/5
+
+(define alpha 0.1)
+
+; Initialize values to 0.5 (except terminals)
+(define v (list 0.0 0.5 0.5 0.5 0.5 0.0))
+
+(define (get-v state) (list-ref v state))
+
+(define (set-v state new-val)
+  (set! v (let loop ((i 0) (acc '()))
+    (if (= i 6) (reverse acc)
+        (loop (+ i 1) (cons (if (= i state) new-val (list-ref v i)) acc))))))
+
+; One episode: start at state 3, walk randomly
+(define (td-step state seed)
+  (if (or (= state 0) (= state 5))
+      (begin (display "Values: ") (display v))
+      (let* ((go-right (< (modulo (* seed 7919) 100) 50))
+             (next (if go-right (+ state 1) (- state 1)))
+             (reward (if (= next 5) 1.0 0.0))
+             (td-error (- (+ reward (get-v next)) (get-v state)))
+             (new-v (+ (get-v state) (* alpha td-error))))
+        (set-v state new-v)
+        (td-step next (+ seed 13)))))
+
+(td-step 3 42)
+; Values should start approaching [0, 0.2, 0.4, 0.6, 0.8, 0]
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# TD learning: 5-state random walk
+import random
+random.seed(42)
+
+alpha = 0.1
+v = [0.0, 0.5, 0.5, 0.5, 0.5, 0.0]
+
+for episode in range(100):
+    state = 3
+    while 0 < state < 5:
+        next_state = state + (1 if random.random() < 0.5 else -1)
+        reward = 1.0 if next_state == 5 else 0.0
+        v[state] += alpha * (reward + v[next_state] - v[state])
+        state = next_state
+
+print("Values: " + str([round(x, 3) for x in v]))
+# Should approach [0, 0.2, 0.4, 0.6, 0.8, 0]
+`} />
+    </div>
+
+
+    <!-- Q-learning -->
+    <h3>Q-learning</h3>
+    <p>Q-learning extends TD to action selection. Q(s, a) estimates the value of taking action a in state s. The update: Q(s, a) = Q(s, a) + alpha * (reward + gamma * max_a' Q(s', a') - Q(s, a)). The max makes it <strong>off-policy</strong>: it learns the optimal policy even while exploring suboptimally.</p>
+
+    <SchemeRepl client:load initialCode={`; Q-learning concept: the update rule
+; Q(s,a) <- Q(s,a) + alpha * (reward + gamma * max Q(s',a') - Q(s,a))
+
+(define alpha 0.1)
+(define gamma 0.9)
+
+; A 2-state, 2-action MDP
+; State 0: action 'stay' -> reward 1, stay. action 'go' -> reward 0, move to state 1.
+; State 1: action 'stay' -> reward 2, stay. action 'go' -> reward 0, move to state 0.
+
+; Q-table: ((q00 q01) (q10 q11)) = ((stay go) (stay go))
+(define q '((0.0 0.0) (0.0 0.0)))
+
+(define (get-q s a) (list-ref (list-ref q s) a))
+(define (max-q s) (max (get-q s 0) (get-q s 1)))
+
+(define (update-q s a reward next-s)
+  (let* ((old (get-q s a))
+         (td-error (- (+ reward (* gamma (max-q next-s))) old))
+         (new-val (+ old (* alpha td-error))))
+    (display "Q(") (display s) (display ",") (display a)
+    (display ") = ") (display new-val) (newline)
+    new-val))
+
+; Simulate a few updates
+(display "After action 'stay' in state 1 (reward=2):") (newline)
+(update-q 1 0 2.0 1) (newline)
+
+(display "After action 'go' in state 0 (reward=0, arrive at state 1):") (newline)
+(update-q 0 1 0.0 1)
+; Q(0, go) picks up value from state 1's potential
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Q-learning: 2-state, 2-action MDP
+alpha, gamma = 0.1, 0.9
+q = [[0.0, 0.0], [0.0, 0.0]]  # q[state][action]
+
+def update_q(s, a, reward, next_s):
+    old = q[s][a]
+    td_error = reward + gamma * max(q[next_s]) - old
+    q[s][a] = old + alpha * td_error
+    print("Q(" + str(s) + "," + str(a) + ") = " + "{:.4f}".format(q[s][a]))
+
+print("After action 'stay' in state 1 (reward=2):")
+update_q(1, 0, 2.0, 1)
+print()
+print("After action 'go' in state 0 (reward=0, arrive at state 1):")
+update_q(0, 1, 0.0, 1)
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Symbol</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">V(s)</td><td>Value of state s (expected cumulative reward)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Q(s, a)</td><td>Value of taking action a in state s</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">alpha</td><td>Learning rate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">gamma</td><td>Discount factor (how much future rewards are worth)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">epsilon</td><td>Exploration rate (probability of random action)</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">TD error</td><td>reward + gamma * V(s') - V(s)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-06/">Lovelace Ch.6</a> — decision making and utility theory</li>
+      <li><a href="/reading/game-theory/hedges-2018/">Hedges 2018</a> — open games formalize the same agent-environment structure categorically</li>
+      <li><a href="/reading/game-theory/nordstrom-09/">🎲 Nordstrom 3.2 Mixed Strategies</a> — mixed strategies: randomization over actions as an RL exploration mechanism</li>
+      <li><a href="https://en.wikipedia.org/wiki/Temporal_difference_learning"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Temporal difference learning</a></li>
+    
+      <li><a href="/reading/control/ctrl-08/">🎛 Control Ch.8</a> &mdash; optimal control is reinforcement learning with a known model</li>
+      <li><a href="/reading/algorithms/algo-09/">⚙ Algorithms Ch.9</a> &mdash; dynamic programming is the mathematical backbone of RL</li>
+      <li><a href="/reading/cognitive-architecture/laird-2022/">🏛️ Soar</a> &mdash; reinforcement learning formalized in a cognitive architecture</li>
+      <li><a href="https://june.kim/diagnosis-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diagnosis of Soar</a> &mdash; where the RL cell fits and which cells remain empty</li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook connects RL to dopamine reward prediction errors in the brain, which is one of computational cognitive science's strongest success stories. This page focuses on the algorithms: bandits, TD learning, and Q-learning. The textbook also covers policy gradient methods and model-based RL, which connect to the planning and decision-making material in Chapter 6.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter5">Lovelace, Chapter 5</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-04/", label: "Neural Networks" }} next={{ href: "/reading/cognitive-science/lovelace-06/", label: "Decision Making · 6 of 8" }} />
+
+  </main>
+</Layout>

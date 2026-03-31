@@ -1,0 +1,292 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ho, Wu, Raad 2026 — Bayesian Separation Logic" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Bayesian Separation Logic</h1>
+    <p class="text-gray-400 text-sm mb-6">Jialu Ho, Nicolas Wu, Azalea Raad · POPL 2026 · <a href="https://arxiv.org/abs/2507.15530"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2507.15530</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples, wp). Some comfort with probabilistic programming helps.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Separation_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Separation logic</a> for Bayesian programs. The <strong>frame rule</strong> says: if a program only touches variables x, then independent variables y are unaffected. Independence IS the separating conjunction. Hoare logic for probabilistic programs where "separate" means "statistically independent."</p>
+    </div>
+
+    <!-- SVG: Bayesian Hoare triple with distributions -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 230" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Prior distribution (left) -->
+        <text x="90" y="25" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">prior P</text>
+        <line x1="30" y1="145" x2="150" y2="145" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Uniform-ish bars -->
+        <rect x="42" y="105" width="18" height="40" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="66" y="105" width="18" height="40" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="90" y="105" width="18" height="40" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="114" y="105" width="18" height="40" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1"/>
+
+        <!-- Program box (center) -->
+        <rect x="195" y="65" rx="6" ry="6" width="130" height="80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="260" y="100" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">program c</text>
+        <text x="260" y="118" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">sample; observe</text>
+
+        <!-- Arrow prior -> program -->
+        <line x1="155" y1="105" x2="190" y2="105" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3" marker-end="url(#arrowHW)"/>
+
+        <!-- Arrow program -> posterior -->
+        <line x1="330" y1="105" x2="365" y2="105" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3" marker-end="url(#arrowHW)"/>
+
+        <!-- Posterior distribution (right) -->
+        <text x="430" y="25" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">posterior Q</text>
+        <line x1="370" y1="145" x2="490" y2="145" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Shifted bars (evidence updated) -->
+        <rect x="382" y="125" width="18" height="20" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-width="1"/>
+        <rect x="406" y="110" width="18" height="35" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-width="1"/>
+        <rect x="430" y="80" width="18" height="65" fill="#4ade80" fill-opacity="0.4" stroke="#4ade80" stroke-width="1"/>
+        <rect x="454" y="55" width="18" height="90" fill="#4ade80" fill-opacity="0.5" stroke="#4ade80" stroke-width="1"/>
+
+        <!-- Frame rule: independent variable y unchanged -->
+        <rect x="195" y="155" rx="4" ry="4" width="130" height="30" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <text x="260" y="175" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.6">R (independent, untouched)</text>
+
+        <!-- Frame arrows -->
+        <line x1="155" y1="170" x2="190" y2="170" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.25" marker-end="url(#arrowAmberHW)"/>
+        <line x1="330" y1="170" x2="365" y2="170" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.25" marker-end="url(#arrowAmberHW)"/>
+        <text x="172" y="183" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.4">R</text>
+        <text x="347" y="183" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.4">R</text>
+
+        <!-- Caption -->
+        <text x="260" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">P * R &#x2192; c &#x2192; Q * R</text>
+        <text x="260" y="225" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">* = separating conjunction (independence)</text>
+
+        <defs>
+          <marker id="arrowHW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+          </marker>
+          <marker id="arrowAmberHW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h3>Hoare triples for probabilistic programs</h3>
+    <p>A Bayesian Hoare triple <code>{'{P}'} c {'{Q}'}</code> says: if the prior satisfies P, then after running the probabilistic program c, the posterior satisfies Q. The programs are written in a probabilistic language with sampling, conditioning (observe), and Bayesian inference built in.</p>
+
+    <Repl client:load initialCode={`# Bayesian Hoare triple: {P} c {Q}
+# P, Q are predicates on distributions (not just values)
+
+import random
+
+def sample_bernoulli(p):
+    return 1 if random.random() < p else 0
+
+# Program: sample a coin bias, then observe heads
+# {prior: bias ~ Uniform} coin; observe(heads) {posterior: bias shifted up}
+
+# Simplified: discrete approximation
+prior = {0.2: 0.2, 0.4: 0.2, 0.5: 0.2, 0.7: 0.2, 0.9: 0.2}
+
+# Observe heads: weight by likelihood
+def observe_heads(prior):
+    weighted = {bias: prob * bias for bias, prob in prior.items()}
+    total = sum(weighted.values())
+    return {bias: p / total for bias, p in weighted.items()}
+
+posterior = observe_heads(prior)
+print("prior:    ", {k: round(v, 3) for k, v in prior.items()})
+print("posterior:", {k: round(v, 3) for k, v in posterior.items()})
+print()
+print("After observing heads, higher biases are more probable.")
+print("That's Bayesian conditioning — the program's semantics.")
+`} />
+
+    <h3>s-finite kernels</h3>
+    <p>The semantics uses <strong>s-finite kernels</strong> — a generalization of probability kernels that allows unnormalized measures. This is necessary because conditioning (observe) can produce unnormalized distributions. The s-finite kernel framework makes composition well-defined even through observations.</p>
+
+    <Repl client:load initialCode={`# s-finite kernels: allow unnormalized measures
+# After conditioning, weights don't sum to 1 until normalized
+
+def s_finite_kernel(prior, likelihood, evidence):
+    """Unnormalized posterior — an s-finite kernel"""
+    unnorm = {h: ph * likelihood(h, evidence)
+              for h, ph in prior.items()}
+    return unnorm  # NOT normalized — that's the point
+
+def normalize(kernel):
+    total = sum(kernel.values())
+    if total == 0:
+        return None
+    return {k: v / total for k, v in kernel.items()}
+
+prior = {"fair": 0.5, "biased": 0.5}
+def lk(h, e):
+    if h == "fair": return 0.5
+    return 0.8 if e == "heads" else 0.2
+
+unnorm = s_finite_kernel(prior, lk, "heads")
+norm = normalize(unnorm)
+print(f"unnormalized: {unnorm}")
+print(f"total weight: {sum(unnorm.values())}")
+print(f"normalized:   {norm}")
+print()
+print("s-finite = work with unnormalized weights,")
+print("normalize only when you need probabilities.")
+`} />
+
+    <h3>The frame rule — independence as separation</h3>
+    <p>The frame rule is the core of separation logic: if <code>{'{P}'} c {'{Q}'}</code> and c doesn't touch variables in R, then <code>{'{P * R}'} c {'{Q * R}'}</code>. Here, <code>*</code> is the separating conjunction. In the Bayesian setting, <code>P * R</code> means P and R hold on <strong>independent</strong> variables. The frame rule says: independent variables stay independent after the program runs.</p>
+
+    <Repl client:load initialCode={`# Frame rule: independent variables stay independent
+# {P} c {Q} implies {P * R} c {Q * R}
+# where * means "on independent variables"
+
+import random
+
+# Two independent coins: x ~ Bernoulli(0.5), y ~ Bernoulli(0.7)
+# Program c: observe x = heads (only touches x)
+
+# Before: x and y are independent
+prior_x = {0: 0.5, 1: 0.5}
+prior_y = {0: 0.3, 1: 0.7}
+
+# Joint = product (independence)
+joint_before = {(xv, yv): px * py
+                for xv, px in prior_x.items()
+                for yv, py in prior_y.items()}
+
+# Observe x = 1 (only touches x)
+def observe_x1(joint):
+    filtered = {k: v for k, v in joint.items() if k[0] == 1}
+    total = sum(filtered.values())
+    return {k: v / total for k, v in filtered.items()}
+
+joint_after = observe_x1(joint_before)
+
+# Check: y's marginal is unchanged
+marginal_y_before = {0: 0.3, 1: 0.7}
+marginal_y_after = {}
+for (x, y), p in joint_after.items():
+    marginal_y_after[y] = marginal_y_after.get(y, 0) + p
+
+print("y marginal before:", marginal_y_before)
+print("y marginal after: ", {k: round(v, 4) for k, v in marginal_y_after.items()})
+print()
+print("y is unchanged — the frame rule in action.")
+print("Independence (separation) is preserved.")
+`} />
+
+    <h3>Composing Bayesian programs</h3>
+    <p>Sequential composition of Bayesian programs chains the s-finite kernels. The COMP rule from <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> carries over: if <code>{'{P}'} c₁ {'{R}'}</code> and <code>{'{R}'} c₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ {'{Q}'}</code>. The handshake works for probabilistic programs too.</p>
+
+    <Repl client:load initialCode={`# COMP for Bayesian programs
+# {P} c1 {R} and {R} c2 {Q} implies {P} c1;c2 {Q}
+
+# c1: sample bias ~ Uniform{0.3, 0.5, 0.7}
+# c2: observe 2 heads given bias
+
+prior = {0.3: 1/3, 0.5: 1/3, 0.7: 1/3}
+
+# c1: just the prior (identity)
+after_c1 = dict(prior)
+
+# c2: observe 2 heads — likelihood = bias^2
+def observe_2_heads(dist):
+    weighted = {b: p * b**2 for b, p in dist.items()}
+    total = sum(weighted.values())
+    return {b: p / total for b, p in weighted.items()}
+
+after_c2 = observe_2_heads(after_c1)
+
+print("prior:          ", {k: round(v, 3) for k, v in prior.items()})
+print("after 2 heads:  ", {k: round(v, 3) for k, v in after_c2.items()})
+print()
+print("Higher biases now dominate — evidence compounds.")
+print("COMP chains evidence accumulation.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <SchemeRepl client:load initialCode={`; Bayesian program composition in Scheme
+; Kleisli composition of s-finite kernels
+
+(define (observe-heads dist)
+  (let* ((weighted (map (lambda (p)
+    (cons (car p) (* (cdr p) (car p)))) dist))
+    (total (apply + (map cdr weighted))))
+    (map (lambda (p) (cons (car p) (/ (cdr p) total)))
+         weighted)))
+
+(define prior '((0.3 . 0.333) (0.5 . 0.333) (0.7 . 0.333)))
+
+(define after1 (observe-heads prior))
+(define after2 (observe-heads after1))
+
+(display "prior:   ") (display prior) (newline)
+(display "1 heads: ") (display after1) (newline)
+(display "2 heads: ") (display after2) (newline)
+`} />
+    </div>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">{'{P}'} c {'{Q}'}</td><td class="pr-4 text-green-300">assert P(prior); c; assert Q(posterior)</td><td class="font-sans">Bayesian Hoare triple</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P * R</td><td class="pr-4 text-green-300"># independent joint</td><td class="font-sans">Separating conjunction (independence)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">observe(e)</td><td class="pr-4 text-green-300">weighted = {`{h: p*lk(h,e) ...}`}</td><td class="font-sans">Condition on evidence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">s-finite kernel</td><td class="pr-4 text-green-300"># unnormalized dict</td><td class="font-sans">Generalized probability kernel</td></tr>
+          <tr><td class="py-2 pr-4">FRAME</td><td class="pr-4 text-green-300"># independent vars preserved</td><td class="font-sans">Frame rule (independence survives)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare logic for deterministic programs (this extends it to Bayesian)</li>
+      <li><a href="/reading/natural-breadcrumbs/jacobs-2014/">🍞 Jacobs 2014</a> — wp-semantics via fibrations (the theoretical backbone)</li>
+      <li><a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> — graded Hoare logic (grades track side effects)</li>
+      <li><a href="/reading/natural-breadcrumbs/di-lavore-2025/">🍞 Di Lavore 2025</a> — partial Markov categories (conditioning as restriction)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/cognitive-science/lovelace-02/">🧠 Lovelace Ch.2 Bayesian Inference</a> — Bayesian updating in cognitive science, the applied side of the lens</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Separation_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Separation logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bayesian_inference"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian inference</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>All examples use finite distributions as dicts. Ho, Wu, and Raad work with s-finite kernels on measurable spaces — a generalization that handles continuous distributions, unnormalized measures, and measure-zero conditioning events. For example: the frame rule demonstration on this page uses a 2×2 joint distribution over coin flips. In the paper, the frame rule applies to arbitrary probabilistic programs with continuous random variables, and the separating conjunction is defined via product σ-algebras and independence of σ-sub-algebras. The "independent variables stay independent" intuition is the same; the measure-theoretic formalization is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2507.15530"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the Bayesian Hoare logic, §5 for the frame rule, §4 for s-finite kernel semantics.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Bayesian separation logic extends the COMP rule to probabilistic programs — the same handshake composition the Natural Framework pipeline uses, now with independence as the separating conjunction. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/cho-jacobs-2015/", label: "Cho, Jacobs 2015 · 19 of 21" }} next={{ href: "/reading/natural-breadcrumbs/chen-vigneaux-2023/", label: "Chen, Vigneaux 2023 · 21 of 21" }} />
+  </main>
+</Layout>

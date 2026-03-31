@@ -1,0 +1,219 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.8 — Cardinality" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Cardinality</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two sets have the same <strong>cardinality</strong> when there is a bijection between them. The natural numbers and the even numbers have the same cardinality (both countably infinite). But the real numbers have strictly larger cardinality. Cantor proved this with his <strong>diagonal argument</strong>.</p>
+    </div>
+
+    <!-- SVG: Cantor's diagonal argument -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="170" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Cantor's diagonal argument</text>
+        <!-- Grid of digits -->
+        <text x="60" y="50" fill="currentColor" font-size="11" fill-opacity="0.4">r1 = 0.</text>
+        <text x="115" y="50" fill="#f87171" font-size="12" font-weight="bold">5</text>
+        <text x="130" y="50" fill="currentColor" font-size="11" fill-opacity="0.4">1 7 0 3 ...</text>
+
+        <text x="60" y="75" fill="currentColor" font-size="11" fill-opacity="0.4">r2 = 0.</text>
+        <text x="115" y="75" fill="currentColor" font-size="11" fill-opacity="0.4">3</text>
+        <text x="130" y="75" fill="#f87171" font-size="12" font-weight="bold">9</text>
+        <text x="145" y="75" fill="currentColor" font-size="11" fill-opacity="0.4">2 8 4 ...</text>
+
+        <text x="60" y="100" fill="currentColor" font-size="11" fill-opacity="0.4">r3 = 0.</text>
+        <text x="115" y="100" fill="currentColor" font-size="11" fill-opacity="0.4">7 4</text>
+        <text x="145" y="100" fill="#f87171" font-size="12" font-weight="bold">1</text>
+        <text x="160" y="100" fill="currentColor" font-size="11" fill-opacity="0.4">5 6 ...</text>
+
+        <text x="60" y="125" fill="currentColor" font-size="11" fill-opacity="0.4">r4 = 0.</text>
+        <text x="115" y="125" fill="currentColor" font-size="11" fill-opacity="0.4">0 0 6</text>
+        <text x="160" y="125" fill="#f87171" font-size="12" font-weight="bold">2</text>
+        <text x="175" y="125" fill="currentColor" font-size="11" fill-opacity="0.4">9 ...</text>
+
+        <text x="60" y="150" fill="currentColor" font-size="11" fill-opacity="0.4">r5 = 0.</text>
+        <text x="115" y="150" fill="currentColor" font-size="11" fill-opacity="0.4">8 3 0 7</text>
+        <text x="175" y="150" fill="#f87171" font-size="12" font-weight="bold">7</text>
+        <text x="190" y="150" fill="currentColor" font-size="11" fill-opacity="0.4">...</text>
+
+        <!-- Diagonal line -->
+        <line x1="112" y1="42" x2="180" y2="155" stroke="#f87171" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+
+        <!-- New number -->
+        <text x="60" y="190" fill="#4ade80" font-size="11">d  = 0.</text>
+        <text x="115" y="190" fill="#4ade80" font-size="12" font-weight="bold">6 0 2 3 8 ...</text>
+
+        <!-- Caption -->
+        <text x="170" y="220" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">d differs from every rn at position n</text>
+        <text x="170" y="233" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">so d is not in the list. The reals are uncountable.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Finite cardinality -->
+    <h3>Finite cardinality</h3>
+    <p>Two finite sets have the same cardinality when they have the same number of elements. A bijection between them pairs each element of one with exactly one element of the other.</p>
+
+    <SchemeRepl client:load initialCode={`; Two finite sets with the same cardinality
+(define A (list 1 2 3 4 5))
+(define B (list 10 20 30 40 50))
+
+; A bijection: f(x) = 10*x
+(define (f x) (* 10 x))
+
+(display "Bijection from A to B:") (newline)
+(for-each (lambda (x)
+  (display x) (display " -> ") (display (f x)) (newline))
+  A)
+
+(display "|A| = ") (display (length A)) (newline)
+(display "|B| = ") (display (length B))
+`} />
+
+    <!-- 2. Countably infinite -->
+    <h3>Countably infinite sets</h3>
+    <p>A set is <strong>countably infinite</strong> if there is a bijection with the natural numbers. The even numbers are countable: n maps to 2n. The integers are countable: 0, 1, -1, 2, -2, 3, -3, ... . The rationals are countable (by a more clever listing). Countable infinity is the "smallest" infinity.</p>
+
+    <SchemeRepl client:load initialCode={`; The even numbers are countably infinite.
+; Bijection: n -> 2n (from N to evens)
+
+(define (nat-to-even n) (* 2 n))
+(define (even-to-nat e) (/ e 2))
+
+(display "N -> Evens:") (newline)
+(define (show-pairs n limit)
+  (if (> n limit) (display "...")
+      (begin
+        (display n) (display " -> ") (display (nat-to-even n))
+        (display "  ")
+        (show-pairs (+ n 1) limit))))
+(show-pairs 0 8) (newline)
+
+; The integers are countably infinite.
+; Listing: 0, 1, -1, 2, -2, 3, -3, ...
+(define (nat-to-int n)
+  (if (= 0 (modulo n 2))
+      (/ n 2)
+      (- (/ (+ n 1) 2))))
+
+(display "N -> Z:") (newline)
+(define (show-ints n limit)
+  (if (> n limit) (display "...")
+      (begin
+        (display n) (display "->") (display (nat-to-int n))
+        (display "  ")
+        (show-ints (+ n 1) limit))))
+(show-ints 0 8)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Countable sets: bijections from N
+# N -> Evens
+print("N -> Evens:", [(n, 2*n) for n in range(8)])
+
+# N -> Integers: 0, 1, -1, 2, -2, ...
+def nat_to_int(n):
+    return n // 2 if n % 2 == 0 else -(n + 1) // 2
+print("N -> Z:    ", [(n, nat_to_int(n)) for n in range(9)])
+`} />
+    </div>
+
+    <!-- 3. Cantor's diagonal argument -->
+    <h3>Cantor's diagonal argument</h3>
+    <p>Theorem: the real numbers in [0, 1] are uncountable. Proof by contradiction: suppose we can list all reals r1, r2, r3, ... . Construct a new real d whose n-th digit differs from the n-th digit of rn. Then d is not in the list (it differs from every rn at position n). This contradicts the assumption that the list was complete.</p>
+
+    <SchemeRepl client:load initialCode={`; Cantor's diagonal argument (simulated with finite strings).
+; Given a "list" of decimal expansions, construct a number not on the list.
+
+(define r1 (list 5 1 7 0 3))
+(define r2 (list 3 9 2 8 4))
+(define r3 (list 7 4 1 5 6))
+(define r4 (list 0 0 6 2 9))
+(define r5 (list 8 3 0 7 7))
+
+(define rows (list r1 r2 r3 r4 r5))
+
+; Extract the diagonal: position n from row n
+(define (diagonal rows)
+  (define (go rs i)
+    (if (null? rs) (list)
+        (cons (list-ref (car rs) i)
+              (go (cdr rs) (+ i 1)))))
+  (go rows 0))
+
+; Flip each digit (add 1 mod 10, avoiding 0 and 9 for cleanliness)
+(define (flip d) (modulo (+ d 1) 10))
+
+(define diag (diagonal rows))
+(define anti-diag (map flip diag))
+
+(display "Diagonal:      ") (display diag) (newline)
+(display "Anti-diagonal: ") (display anti-diag) (newline)
+(display "This number differs from every row at the diagonal position.")
+`} />
+
+    <!-- 4. Continuum hypothesis -->
+    <h3>The continuum hypothesis</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Georg_Cantor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cantor</a> showed |N| is less than |R|. Is there a set with cardinality strictly between them? The <strong><a href="https://en.wikipedia.org/wiki/Continuum_hypothesis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>continuum hypothesis</a></strong> says no. <a href="https://en.wikipedia.org/wiki/Kurt_G%C3%B6del"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Godel</a> (1940) showed it is consistent with ZFC. <a href="https://en.wikipedia.org/wiki/Paul_Cohen"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cohen</a> (1963) showed its negation is also consistent. The question is undecidable from the standard axioms of set theory.</p>
+
+    <SchemeRepl client:load initialCode={`; The cardinality hierarchy:
+; |N| = aleph_0 (countably infinite)
+; |R| = 2^(aleph_0) (uncountably infinite)
+; |P(R)| = 2^(2^(aleph_0)) (even larger)
+;
+; Cantor's theorem: |S| < |P(S)| for any set S.
+; No set can biject with its power set.
+
+; Demonstrate with finite sets:
+(define (power-set s)
+  (if (null? s) (list (list))
+      (let ((rest (power-set (cdr s))))
+        (append rest
+                (map (lambda (sub) (cons (car s) sub)) rest)))))
+
+(define (check n)
+  (define s (list))
+  (define (make-set i) (if (> i n) (list) (cons i (make-set (+ i 1)))))
+  (let ((s (make-set 1)))
+    (display "|S|=") (display (length s))
+    (display "  |P(S)|=") (display (length (power-set s)))
+    (display "  |S| < |P(S)|? ") (display (< (length s) (length (power-set s))))
+    (newline)))
+
+(check 1)
+(check 2)
+(check 3)
+(check 4)
+(check 5)
+; Always |S| < |P(S)|. Cantor proved this for all sets, finite or infinite.
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/theory-of-computation/toc-07/">🔀 Theory of Computation Ch.7</a> — the halting problem uses diagonalization, the same trick Cantor invented</li>
+    
+      <li><a href="/reading/real-analysis/lebl-01/">∞ Real Analysis Ch.1</a> &mdash; real numbers and their uncountability</li>
+      <li><a href="/reading/theory-of-computation/toc-07/">🔀 Theory of Computation Ch.7</a> &mdash; the diagonal argument reappears in Turing's undecidability proof</li>
+      <li><a href="/reading/the-natural-framework-lean/pigeonhole/">✏️ Pigeonhole.lean</a> &mdash; the pigeonhole principle is a cardinality argument</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-07/", label: "Relations" }} />
+
+  </main>
+</Layout>

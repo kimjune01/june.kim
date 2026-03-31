@@ -1,0 +1,181 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Bacon 1620 — Novum Organum" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Novum Organum</h1>
+    <p class="text-gray-400 text-sm mb-6">Francis Bacon · 1620 · <a href="https://www.gutenberg.org/ebooks/45988">Full text (Project Gutenberg)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Stop deducing from axioms. Start collecting observations. Arrange them in tables. Let the pattern declare itself. Bacon replaced Aristotelian syllogism with <strong>systematic induction</strong>, and insisted that the observer's job is to report what is there, not what ought to be.</p>
+    </div>
+
+    <!-- SVG: Bacon's tables of instances -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 260" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="240" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Tables of Instances</text>
+
+        <!-- Table of Presence -->
+        <rect x="10" y="35" width="140" height="140" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="80" y="55" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Presence</text>
+        <line x1="25" y1="65" x2="135" y2="65" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="35" y="82" fill="currentColor" font-size="9" fill-opacity="0.4">sunlight</text>
+        <circle cx="125" cy="78" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="35" y="100" fill="currentColor" font-size="9" fill-opacity="0.4">fire</text>
+        <circle cx="125" cy="96" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="35" y="118" fill="currentColor" font-size="9" fill-opacity="0.4">boiling water</text>
+        <circle cx="125" cy="114" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="35" y="136" fill="currentColor" font-size="9" fill-opacity="0.4">friction</text>
+        <circle cx="125" cy="132" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="35" y="154" fill="currentColor" font-size="9" fill-opacity="0.4">lightning</text>
+        <circle cx="125" cy="150" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="80" y="168" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">heat present</text>
+
+        <!-- Table of Absence -->
+        <rect x="170" y="35" width="140" height="140" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="240" y="55" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Absence</text>
+        <line x1="185" y1="65" x2="295" y2="65" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="195" y="82" fill="currentColor" font-size="9" fill-opacity="0.4">moonlight</text>
+        <circle cx="285" cy="78" r="4" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="195" y="100" fill="currentColor" font-size="9" fill-opacity="0.4">phosphorescence</text>
+        <circle cx="285" cy="96" r="4" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="195" y="118" fill="currentColor" font-size="9" fill-opacity="0.4">still water</text>
+        <circle cx="285" cy="114" r="4" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="195" y="136" fill="currentColor" font-size="9" fill-opacity="0.4">smooth stone</text>
+        <circle cx="285" cy="132" r="4" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="195" y="154" fill="currentColor" font-size="9" fill-opacity="0.4">starlight</text>
+        <circle cx="285" cy="150" r="4" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="240" y="168" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">heat absent</text>
+
+        <!-- Table of Degrees -->
+        <rect x="330" y="35" width="140" height="140" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="400" y="55" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Degrees</text>
+        <line x1="345" y1="65" x2="455" y2="65" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="355" y="82" fill="currentColor" font-size="9" fill-opacity="0.4">ember</text>
+        <text x="445" y="82" text-anchor="end" fill="#facc15" font-size="9" fill-opacity="0.6">low</text>
+        <text x="355" y="100" fill="currentColor" font-size="9" fill-opacity="0.4">candle</text>
+        <text x="445" y="100" text-anchor="end" fill="#facc15" font-size="9" fill-opacity="0.6">med</text>
+        <text x="355" y="118" fill="currentColor" font-size="9" fill-opacity="0.4">furnace</text>
+        <text x="445" y="118" text-anchor="end" fill="#facc15" font-size="9" fill-opacity="0.6">high</text>
+        <text x="355" y="136" fill="currentColor" font-size="9" fill-opacity="0.4">volcano</text>
+        <text x="445" y="136" text-anchor="end" fill="#facc15" font-size="9" fill-opacity="0.6">extreme</text>
+        <text x="400" y="168" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">heat varies with motion</text>
+
+        <!-- Convergence arrows -->
+        <line x1="80" y1="185" x2="200" y2="220" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <line x1="240" y1="185" x2="240" y2="220" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <line x1="400" y1="185" x2="280" y2="220" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+
+        <!-- Conclusion -->
+        <rect x="170" y="220" width="140" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="240" y="240" text-anchor="middle" fill="currentColor" font-size="10">Heat = motion</text>
+      </svg>
+    </div>
+
+    <!-- The argument -->
+    <h3>The argument</h3>
+
+    <p>Aristotle's method works backward. You start with a general principle and deduce particular facts. If the principle is wrong, every deduction inherits the error. Scholastic philosophy had spent centuries elaborating theories of nature that nobody checked against the world. Bacon proposed the reverse: collect particular observations first, then generalize.</p>
+
+    <p>The tool is elimination. Gather every case where the phenomenon appears (the Table of Presence). Gather similar cases where it does not (the Table of Absence). Record cases where it varies in degree (the Table of Degrees). Whatever survives all three tables is the cause. Everything else gets excluded.</p>
+
+    <p>Bacon's worked example was heat. Sunlight produces heat. So does fire, friction, and boiling. Moonlight does not. Phosphorescence does not. Vary the source and heat tracks motion, not light. Conclusion: heat is a form of motion. He was right. It took two hundred years for thermodynamics to prove it.</p>
+
+    <!-- The idols -->
+    <h3>The idols</h3>
+
+    <p>Before building the method, Bacon had to clear the ground. The mind is not a clean lens. It distorts what it sees, and the distortions are systematic. He catalogued four types.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Idol</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Source</th>
+            <th class="text-left py-2 text-gray-400">The distortion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Tribe</td><td class="pr-3 text-gray-400">Human nature</td><td class="text-gray-400">We see patterns where none exist. We weight confirming evidence over disconfirming evidence. The senses are dull and the mind fills in what it expects.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Cave</td><td class="pr-3 text-gray-400">Individual temperament</td><td class="text-gray-400">Each person has a private cave shaped by education, habits, and accidents of experience. What you studied first colors everything after.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Marketplace</td><td class="pr-3 text-gray-400">Language</td><td class="text-gray-400">Words cut nature at joints that may not exist. Names for things that do not exist create the illusion that they do. Disputes about words get mistaken for disputes about facts.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Theatre</td><td class="pr-3 text-gray-400">Received doctrine</td><td class="text-gray-400">Philosophical systems are stage plays: elaborate, internally consistent, and disconnected from reality. Authority substitutes for evidence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4">The idols are not errors you fix once. They are the default state of the human mind, and the method works only if you guard against them continuously.</p>
+
+    <!-- The method -->
+    <h3>The method</h3>
+
+    <p>The tables of instances are the engine. Three steps, applied to any phenomenon you want to explain.</p>
+
+    <ol class="list-decimal pl-6 space-y-2 text-gray-300">
+      <li><strong>Table of Presence.</strong> List every case where the phenomenon occurs. Be thorough. Include cases that seem unrelated. The point is breadth, not elegance.</li>
+      <li><strong>Table of Absence.</strong> For each presence case, find a closely matched case where the phenomenon does not occur. Moonlight pairs with sunlight. Still water pairs with boiling water. The closer the match, the sharper the exclusion.</li>
+      <li><strong>Table of Degrees.</strong> Find cases where the phenomenon varies in intensity. Track what else varies with it. If heat rises when motion increases and falls when motion decreases, motion is implicated.</li>
+    </ol>
+
+    <p class="mt-4">Cross-reference the three tables. Any candidate cause that is present in the Absence table gets rejected. Any candidate that fails to track the Degrees table gets rejected. What remains is the "form" of the phenomenon. Bacon called the survivor the First Vintage: a provisional conclusion, held pending further exclusion.</p>
+
+    <!-- Discussion -->
+    <h3>Discussion</h3>
+
+    <p>Aristotelian deduction failed because it never touched the ground. You could reason flawlessly from "heavy objects seek their natural place" and conclude that heavier objects fall faster. <a href="https://en.wikipedia.org/wiki/Galileo_Galilei"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Galileo</a> dropped two balls from a tower and that was the end of it. The problem was not bad logic. The problem was that the premises were invented, not observed. Bacon's fix: make observation the starting point, not the afterthought.</p>
+
+    <p>The tables formalize something we now take for granted. Vary one thing, hold the rest constant. Compare the positive case to the negative case. Track the dose-response curve. <a href="/reading/scientific-method/mill-1843/">Mill</a> later codified these moves as the Method of Agreement and the Method of Difference. <a href="/reading/scientific-method/descartes-1637/">Descartes</a>, writing seventeen years after Bacon, took a different path: doubt everything, rebuild from indubitable foundations. Bacon doubted received doctrine. Descartes doubted perception itself. They agreed on one thing: inherited authority is not evidence.</p>
+
+    <p>What Bacon missed is the gap between observation and generalization. No number of white swans proves that all swans are white. <a href="/reading/scientific-method/hume-1739/">Hume</a> identified this a century later: induction depends on the assumption that nature is uniform, and that assumption cannot itself be established by induction. The tables of instances are a filter. They exclude bad explanations. They do not prove the survivor is correct. Bacon wrote as though exhaustive observation would converge on certainty. It converges on something weaker: the best explanation that has not yet been eliminated.</p>
+
+    <p>That gap between elimination and proof is the central tension in the philosophy of science from Bacon forward. Popper made it explicit: science does not verify, it falsifies. The tables of instances are, in retrospect, a falsification engine without the vocabulary for what they are doing.</p>
+
+    <!-- Integrity -->
+    <h3>The integrity principle</h3>
+
+    <p>Bacon returns to one point throughout the Novum Organum: record what you observe, not what you expect. The idols are moral failures. The Idol of the Tribe is confirmation bias. The Idol of the Cave is motivated reasoning. The Idol of the Theatre is appeal to authority. Each one is a way of substituting comfort for accuracy.</p>
+
+    <p>The tables impose discipline. You cannot fill in the Table of Absence if you only collected cases that support your theory. You cannot fill in the Table of Degrees if you only looked where you expected to find something. The method forces honesty by making omission visible. A gap in the table is a gap in your investigation, and Bacon insisted that gaps be reported rather than papered over.</p>
+
+    <p>Feynman said the same thing three and a half centuries later: report the results that did not work, the things that might make your result wrong, the alternative explanations you have not ruled out. Bacon got there first. The language is different. The principle is identical.</p>
+
+    <!-- See also -->
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/descartes-1637/">🔬 Descartes 1637</a> — doubt everything, rebuild from certainty</li>
+      <li><a href="/reading/scientific-method/hume-1739/">🔬 Hume 1739</a> — why induction never reaches certainty</li>
+      <li><a href="/reading/scientific-method/mill-1843/">🔬 Mill 1843</a> — five methods for extracting causes</li>
+      <li><a href="/reading/scientific-method/popper-1934/">🔬 Popper 1934</a> — falsifiability as the line between science and non-science</li>
+      <li><a href="/reading/scientific-method/feynman-1974/">🔬 Feynman 1974</a> — cargo cult science and the integrity principle</li>
+      <li><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin 1890</a> — multiple working hypotheses as an extension of Bacon's systematic variation</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Novum_Organum"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Novum Organum</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Francis_Bacon"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Francis Bacon</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Problem_of_induction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Problem of induction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Idola_fori"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Idols of the mind</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The full text is public domain. <a href="https://www.gutenberg.org/ebooks/45988">Read it on Project Gutenberg</a>. Start at Book II, Aphorism XI for the tables of instances.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="/reading/scientific-method/">🔬 The Scientific Method</a></p>
+
+
+    <PrevNext next={{ href: "/reading/scientific-method/descartes-1637/", label: "Descartes 1637 · 2 of 17" }} />
+  </main>
+</Layout>

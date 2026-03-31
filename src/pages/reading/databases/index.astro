@@ -1,0 +1,82 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Databases" favicon="🗄">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🗄 Databases</h1>
+    <p class="text-gray-400 mb-2">Original CC BY-SA compilation from <a href="https://en.wikipedia.org/wiki/Database"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">From Codd's relational model through transactions, indexing, and NoSQL. Translated into runnable Scheme and Python with SVG diagrams.</p>
+
+    <!-- SVG: Three tables with foreign key arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Table 1: Users -->
+        <rect x="20" y="20" width="100" height="80" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="20" y1="45" x2="120" y2="45" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="70" y="38" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="bold">Users</text>
+        <text x="30" y="60" fill="currentColor" font-size="9" fill-opacity="0.7">id</text>
+        <text x="30" y="73" fill="currentColor" font-size="9" fill-opacity="0.5">name</text>
+        <text x="30" y="86" fill="currentColor" font-size="9" fill-opacity="0.5">email</text>
+
+        <!-- Table 2: Orders -->
+        <rect x="160" y="20" width="100" height="80" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="160" y1="45" x2="260" y2="45" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="210" y="38" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="bold">Orders</text>
+        <text x="170" y="60" fill="currentColor" font-size="9" fill-opacity="0.7">id</text>
+        <text x="170" y="73" fill="currentColor" font-size="9" fill-opacity="0.5">user_id</text>
+        <text x="170" y="86" fill="currentColor" font-size="9" fill-opacity="0.5">total</text>
+
+        <!-- Table 3: Items -->
+        <rect x="300" y="20" width="100" height="80" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="300" y1="45" x2="400" y2="45" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="350" y="38" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">Items</text>
+        <text x="310" y="60" fill="currentColor" font-size="9" fill-opacity="0.7">id</text>
+        <text x="310" y="73" fill="currentColor" font-size="9" fill-opacity="0.5">order_id</text>
+        <text x="310" y="86" fill="currentColor" font-size="9" fill-opacity="0.5">product</text>
+
+        <!-- FK arrow: Orders.user_id -> Users.id -->
+        <line x1="160" y1="73" x2="120" y2="60" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="122,63 120,56 114,62" fill="#f59e0b" fill-opacity="0.5"/>
+
+        <!-- FK arrow: Items.order_id -> Orders.id -->
+        <line x1="300" y1="73" x2="260" y2="60" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="262,63 260,56 254,62" fill="#34d399" fill-opacity="0.5"/>
+
+        <!-- Caption -->
+        <text x="210" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Tables linked by foreign keys. The relational model.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/databases/db-01/", title: "The Relational Model", desc: "Tables, rows, columns, and keys: Codd's foundation for all structured data" },
+  { href: "/reading/databases/db-02/", title: "Relational Algebra", desc: "Select, project, join, union, difference: the formal operations on relations" },
+  { href: "/reading/databases/db-03/", title: "SQL Basics", desc: "CREATE, SELECT, JOIN, GROUP BY: the language that implements relational algebra" },
+  { href: "/reading/databases/db-04/", title: "Normalization", desc: "Eliminate redundancy by decomposing tables according to functional dependencies" },
+  { href: "/reading/databases/db-05/", title: "Indexing", desc: "B-trees, B+ trees, and hash indexes: trade space for speed on lookups" },
+  { href: "/reading/databases/db-06/", title: "Transactions", desc: "ACID properties guarantee correctness when multiple operations must succeed or fail together" },
+  { href: "/reading/databases/db-07/", title: "Concurrency Control", desc: "Locks, two-phase locking, and MVCC: let multiple transactions run without corrupting data" },
+  { href: "/reading/databases/db-08/", title: "Recovery", desc: "Write-ahead logging and checkpoints: survive crashes without losing committed data" },
+  { href: "/reading/databases/db-09/", title: "Query Processing", desc: "Query plans, join algorithms, and cost estimation: how the engine picks the fastest path" },
+  { href: "/reading/databases/db-10/", title: "NoSQL and Beyond", desc: "Key-value, document, column-family, graph: when relations are not the right shape" }
+]} icon="🗄" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/playlist?list=PLSE8ODhjZXjbj8BMuIrRcacnQh20hmY9g">CMU 15-445: Database Systems (Andy Pavlo)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> &mdash; relational algebra is formal logic applied to tables</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; B-trees, indexing, and query processing</li>
+      <li><a href="/reading/distributed-systems/">🌐 Distributed Systems</a> &mdash; distributed transactions and replication</li>
+      <li><a href="/reading/operating-systems/">🖥 Operating Systems</a> &mdash; storage engines use OS-level abstractions</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

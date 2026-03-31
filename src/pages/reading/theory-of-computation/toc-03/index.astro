@@ -1,0 +1,161 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.3 — Regular Expressions" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Regular Expressions</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 3 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Regular expressions</strong> describe exactly the regular languages: union, concatenation, and Kleene star. They are equivalent to finite automata. The <strong>pumping lemma</strong> proves that some languages are beyond this level.</p>
+    </div>
+
+    <!-- Syntax and semantics -->
+    <h3>Syntax</h3>
+    <p>A regular expression over alphabet &Sigma; is built from three operations:</p>
+    <ul>
+      <li><strong>Union</strong>: R<sub>1</sub> | R<sub>2</sub> matches strings in either language</li>
+      <li><strong>Concatenation</strong>: R<sub>1</sub>R<sub>2</sub> matches a string from R<sub>1</sub> followed by one from R<sub>2</sub></li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Kleene_star"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleene star</a></strong>: R* matches zero or more repetitions of R</li>
+    </ul>
+    <p>Base cases: each symbol a &isin; &Sigma; is a regex, &epsilon; matches the empty string, and &empty; matches nothing.</p>
+
+    <!-- SVG: Regex parse tree for (a|b)*c -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Root: concat -->
+        <text x="150" y="25" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">&middot;</text>
+        <!-- Left child: star -->
+        <line x1="140" y1="30" x2="80" y2="65" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="80" y="80" text-anchor="middle" fill="#f59e0b" font-size="14">*</text>
+        <!-- Right child: c -->
+        <line x1="160" y1="30" x2="220" y2="65" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="220" y="80" text-anchor="middle" fill="#34d399" font-size="14">c</text>
+        <!-- Star's child: union -->
+        <line x1="80" y1="85" x2="80" y2="115" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="80" y="130" text-anchor="middle" fill="#60a5fa" font-size="14">|</text>
+        <!-- Union left: a -->
+        <line x1="70" y1="135" x2="40" y2="165" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="40" y="180" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.6">a</text>
+        <!-- Union right: b -->
+        <line x1="90" y1="135" x2="120" y2="165" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="120" y="180" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.6">b</text>
+        <!-- Caption -->
+        <text x="150" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Parse tree for (a|b)*c</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Regex matching via recursive descent.
+; We match (a|b)*c by hand.
+
+(define (match-star-ab s i)
+  ; Match zero or more a's or b's starting at position i.
+  ; Returns list of all possible end positions.
+  (if (>= i (string-length s))
+      (list i)
+      (let ((ch (substring s i (+ i 1))))
+        (if (or (equal? ch "a") (equal? ch "b"))
+            (cons i (match-star-ab s (+ i 1)))
+            (list i)))))
+
+(define (match-regex s)
+  ; Match (a|b)*c against entire string s
+  (let ((positions (match-star-ab s 0)))
+    (define (try-c pos)
+      (and (< pos (string-length s))
+           (equal? (substring s pos (+ pos 1)) "c")
+           (= (+ pos 1) (string-length s))))
+    (not (null? (filter try-c positions)))))
+
+(display "abc:   ") (display (match-regex "abc")) (newline)
+(display "c:     ") (display (match-regex "c")) (newline)
+(display "aabbc: ") (display (match-regex "aabbc")) (newline)
+(display "ab:    ") (display (match-regex "ab")) (newline)
+(display "cc:    ") (display (match-regex "cc"))
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Regex matching: (a|b)*c
+import re
+
+pattern = re.compile(r'^[ab]*c$')
+
+for s in ["abc", "c", "aabbc", "ab", "cc"]:
+    print(s + ": " + str(bool(pattern.match(s))))
+`} />
+    </div>
+
+    <!-- Equivalence with FA -->
+    <h3>Equivalence with finite automata</h3>
+    <p>Two directions: every regex can be converted to an NFA (<a href="https://en.wikipedia.org/wiki/Thompson%27s_construction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thompson's construction</a>), and every DFA can be converted to a regex (state elimination). The regular languages are exactly those describable by regular expressions.</p>
+
+    <!-- Pumping lemma -->
+    <h3>The pumping lemma</h3>
+    <p>If a language is regular, then every sufficiently long string in it can be "pumped": a middle section can be repeated any number of times and the result stays in the language. Contrapositive: if you can find strings that resist pumping, the language is not regular.</p>
+
+    <SchemeRepl client:load initialCode={`; Pumping lemma example: L = a^n b^n is NOT regular.
+; Proof by contradiction: assume it's regular with
+; pumping length p. Take s = a^p b^p.
+; Any split s = xyz with |xy| <= p means y = a^k.
+; Pumping: xy^2z = a^(p+k) b^p, which is NOT in L.
+
+; Demonstrate: a^n b^n is easy to check but not regular.
+(define (make-anbn n)
+  (string-append (make-string n #\a) (make-string n #\b)))
+
+(define (in-anbn? s)
+  (let ((len (string-length s)))
+    (if (odd? len) #f
+        (let ((half (/ len 2)))
+          (and (equal? (substring s 0 half)
+                       (make-string half #\a))
+               (equal? (substring s half len)
+                       (make-string half #\b)))))))
+
+(display "aabb:   ") (display (in-anbn? "aabb")) (newline)
+(display "aaabbb: ") (display (in-anbn? "aaabbb")) (newline)
+(display "aab:    ") (display (in-anbn? "aab")) (newline)
+(display "abab:   ") (display (in-anbn? "abab")) (newline)
+(newline)
+(display "This language needs counting.") (newline)
+(display "No finite automaton can count unboundedly.")
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# a^n b^n: easy to check but not regular
+def in_anbn(s):
+    n = len(s)
+    if n % 2 != 0:
+        return False
+    half = n // 2
+    return s[:half] == 'a' * half and s[half:] == 'b' * half
+
+for s in ["aabb", "aaabbb", "aab", "abab", ""]:
+    print(f"{repr(s)}: {in_anbn(s)}")
+
+print()
+print("This language needs counting.")
+print("No finite automaton can count unboundedly.")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-09/">🪄 SICP Ch.9</a> — pattern matching in Scheme: regular expressions as recognition procedures</li>
+      <li><a href="/reading/information-theory/shannon-01/">📡 Information Theory Ch.1</a> — regular languages have finite entropy rate; their recognizers are minimal automata</li>
+      <li><a href="/reading/databases/db-04/">💾 Databases Ch.4</a> — SQL LIKE patterns and database query languages descend from regular expression theory</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-02/", label: "Nondeterminism" }} next={{ href: "/reading/theory-of-computation/toc-04/", label: "Context-Free Grammars" }} />
+
+  </main>
+</Layout>

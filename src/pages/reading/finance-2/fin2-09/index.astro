@@ -1,0 +1,433 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.9 — Credit Risk" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Credit Risk</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Credit risk</strong> is the possibility that a borrower fails to pay. Quantifying it means modeling when default happens, how much you lose, and how the market prices that uncertainty into bond spreads.</p>
+    </div>
+
+    <!-- SVG: Merton model — default checked only at maturity T -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 230" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="195" x2="390" y2="195" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="15" x2="40" y2="195" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="215" y="212" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">time</text>
+        <text x="15" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,15,105)">firm value V(t)</text>
+        <!-- Maturity line -->
+        <line x1="370" y1="15" x2="370" y2="195" stroke="currentColor" stroke-width="1" stroke-opacity="0.15"/>
+        <text x="370" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">T</text>
+        <!-- Debt level at maturity -->
+        <line x1="360" y1="145" x2="380" y2="145" stroke="#ef4444" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="395" y="148" fill="#ef4444" font-size="9" fill-opacity="0.7">D</text>
+        <!-- Surviving firm: V(T) > D -->
+        <polyline points="40,90 80,85 120,95 160,78 200,65 240,80 280,70 320,60 370,55" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="370" cy="55" r="4" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="375" y="45" fill="#60a5fa" font-size="9" fill-opacity="0.6">V(T)&gt;D</text>
+        <!-- Defaulting firm: V(T) < D — may go below D mid-path but that doesn't trigger default -->
+        <polyline points="40,90 80,100 120,110 160,95 200,115 240,130 280,140 320,150 370,170" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="370" cy="170" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="375" y="180" fill="#f59e0b" font-size="9" fill-opacity="0.6">V(T)&lt;D</text>
+        <!-- Equity region label -->
+        <text x="200" y="35" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.4">Equity = max(V(T)&#x2212;D, 0)</text>
+        <!-- Caption -->
+        <text x="210" y="225" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Merton model: default checked at maturity T, not mid-path.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Default Probability and Hazard Rates -->
+    <h3>Default probability and hazard rates</h3>
+    <p>The <strong>hazard rate</strong> &#x3BB;(t) is the default intensity at time t &mdash; the probability of default over a short interval [t, t+dt], conditional on survival to t, is approximately &#x3BB;(t)dt. If the hazard rate is constant, the survival probability decays exponentially: S(t) = e^(-&#x3BB;t). The cumulative default probability is 1 &#x2212; S(t). Higher hazard rate means the bond issuer is more likely to default in any given instant.</p>
+
+    <SchemeRepl client:load initialCode={`; Hazard rate and survival probability
+; Constant hazard: S(t) = exp(-lambda*t)
+; Default probability: PD(t) = 1 - S(t)
+
+(define (survival-prob hazard t)
+  (exp (* (- hazard) t)))
+
+(define (default-prob hazard t)
+  (- 1 (survival-prob hazard t)))
+
+; Investment-grade: lambda = 0.5% per year
+(define lambda-ig 0.005)
+; High-yield: lambda = 3% per year
+(define lambda-hy 0.03)
+
+(display "--- Investment Grade (lambda=0.5%) ---") (newline)
+(display "1yr survival: ") (display (exact->inexact (survival-prob lambda-ig 1))) (newline)
+(display "5yr survival: ") (display (exact->inexact (survival-prob lambda-ig 5))) (newline)
+(display "10yr PD:      ") (display (exact->inexact (default-prob lambda-ig 10))) (newline)
+
+(newline)
+(display "--- High Yield (lambda=3%) ---") (newline)
+(display "1yr survival: ") (display (exact->inexact (survival-prob lambda-hy 1))) (newline)
+(display "5yr survival: ") (display (exact->inexact (survival-prob lambda-hy 5))) (newline)
+(display "10yr PD:      ") (display (exact->inexact (default-prob lambda-hy 10))) (newline)
+
+; Expected time to default = 1/lambda
+(display "Expected default time (IG): ")
+(display (/ 1 lambda-ig)) (display " years") (newline)
+(display "Expected default time (HY): ")
+(display (exact->inexact (/ 1 lambda-hy))) (display " years")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def survival(lam, t): return math.exp(-lam * t)
+def default_prob(lam, t): return 1 - survival(lam, t)
+
+lam_ig, lam_hy = 0.005, 0.03
+
+print("--- Investment Grade (lambda=0.5%) ---")
+print(f"1yr survival: {survival(lam_ig, 1):.6f}")
+print(f"5yr survival: {survival(lam_ig, 5):.6f}")
+print(f"10yr PD:      {default_prob(lam_ig, 10):.6f}")
+
+print("\\n--- High Yield (lambda=3%) ---")
+print(f"1yr survival: {survival(lam_hy, 1):.6f}")
+print(f"5yr survival: {survival(lam_hy, 5):.6f}")
+print(f"10yr PD:      {default_prob(lam_hy, 10):.6f}")
+
+print(f"Expected default time (IG): {1/lam_ig:.0f} years")
+print(f"Expected default time (HY): {1/lam_hy:.1f} years")
+`} />
+    </div>
+
+
+    <!-- 2. Merton Structural Model -->
+    <h3>Merton structural model</h3>
+    <p>Merton treats equity as a <strong>call option on the firm's assets</strong> with strike equal to the face value of debt D. If assets V exceed D at maturity, equity holders keep V &#x2212; D. Otherwise, default: equity is worthless and debt holders recover V. This connects credit risk to option pricing&mdash;Black-Scholes gives you the default probability as N(-d&#x2082;).</p>
+
+    <SchemeRepl client:load initialCode={`; Merton model: equity = call option on firm value V
+; E = V*N(d1) - D*exp(-r*T)*N(d2)
+; d1 = (ln(V/D) + (r + sigma^2/2)*T) / (sigma*sqrt(T))
+; d2 = d1 - sigma*sqrt(T)
+; PD = N(-d2)
+
+; Approximate N(x) using logistic approximation
+(define (norm-cdf x)
+  (/ 1 (+ 1 (exp (* -1.7 x)))))
+
+(define (merton-model V D r sigma T)
+  (let* ((d1 (/ (+ (log (/ V D)) (* (+ r (/ (* sigma sigma) 2)) T))
+               (* sigma (sqrt T))))
+         (d2 (- d1 (* sigma (sqrt T))))
+         (equity (- (* V (norm-cdf d1))
+                    (* D (exp (* (- r) T)) (norm-cdf d2))))
+         (pd (norm-cdf (- d2))))
+    (list d1 d2 equity pd)))
+
+; Healthy firm: V=100, D=60, r=5%, sigma=25%, T=1
+(define result1 (merton-model 100 60 0.05 0.25 1))
+(display "--- Healthy firm (V=100, D=60) ---") (newline)
+(display "d1: ") (display (exact->inexact (car result1))) (newline)
+(display "d2: ") (display (exact->inexact (cadr result1))) (newline)
+(display "Equity value: ") (display (exact->inexact (caddr result1))) (newline)
+(display "Default prob: ") (display (exact->inexact (cadddr result1))) (newline)
+
+; Distressed firm: V=100, D=90, sigma=40%
+(newline)
+(define result2 (merton-model 100 90 0.05 0.40 1))
+(display "--- Distressed firm (V=100, D=90, vol=40%) ---") (newline)
+(display "d1: ") (display (exact->inexact (car result2))) (newline)
+(display "d2: ") (display (exact->inexact (cadr result2))) (newline)
+(display "Equity value: ") (display (exact->inexact (caddr result2))) (newline)
+(display "Default prob: ") (display (exact->inexact (cadddr result2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def norm_cdf(x):
+    return 1 / (1 + math.exp(-1.7 * x))  # logistic approximation
+
+def merton(V, D, r, sigma, T):
+    d1 = (math.log(V/D) + (r + sigma**2/2)*T) / (sigma*math.sqrt(T))
+    d2 = d1 - sigma*math.sqrt(T)
+    equity = V*norm_cdf(d1) - D*math.exp(-r*T)*norm_cdf(d2)
+    pd = norm_cdf(-d2)
+    return d1, d2, equity, pd
+
+d1, d2, eq, pd = merton(100, 60, 0.05, 0.25, 1)
+print("--- Healthy firm (V=100, D=60) ---")
+print(f"d1: {d1:.4f}, d2: {d2:.4f}")
+print(f"Equity value: {eq:.2f}")
+print(f"Default prob: {pd:.4f}")
+
+d1, d2, eq, pd = merton(100, 90, 0.05, 0.40, 1)
+print("\\n--- Distressed firm (V=100, D=90, vol=40%) ---")
+print(f"d1: {d1:.4f}, d2: {d2:.4f}")
+print(f"Equity value: {eq:.2f}")
+print(f"Default prob: {pd:.4f}")
+`} />
+    </div>
+
+
+    <!-- 3. Credit Spreads -->
+    <h3>Credit spreads</h3>
+    <p>The <strong>credit spread</strong> is the yield difference between a risky bond and a risk-free bond of the same maturity. It compensates for expected loss (default probability times loss given default) plus a risk premium. Under constant hazard rate &#x3BB; and recovery rate R, the spread approximates &#x3BB;(1 &#x2212; R).</p>
+
+    <SchemeRepl client:load initialCode={`; Credit spread approximation: s ≈ lambda * (1 - R)
+; Risky bond price: P = exp(-(r + s)*T)
+
+(define (credit-spread hazard recovery)
+  (* hazard (- 1 recovery)))
+
+(define (risky-bond-price rf spread T)
+  (exp (* (- (+ rf spread)) T)))
+
+(define rf 0.04)
+
+; Investment grade: lambda=0.5%, recovery=40%
+(define s-ig (credit-spread 0.005 0.40))
+(display "IG spread: ") (display (* s-ig 10000))
+(display " bps") (newline)
+
+; High yield: lambda=3%, recovery=35%
+(define s-hy (credit-spread 0.03 0.35))
+(display "HY spread: ") (display (* s-hy 10000))
+(display " bps") (newline)
+
+; Bond prices for 5-year maturity
+(define p-riskfree (exp (* (- rf) 5)))
+(define p-ig (risky-bond-price rf s-ig 5))
+(define p-hy (risky-bond-price rf s-hy 5))
+
+(newline)
+(display "5yr risk-free bond: ") (display (exact->inexact p-riskfree)) (newline)
+(display "5yr IG bond:        ") (display (exact->inexact p-ig)) (newline)
+(display "5yr HY bond:        ") (display (exact->inexact p-hy)) (newline)
+
+; Price discount due to credit risk
+(display "IG discount: ") (display (exact->inexact (- p-riskfree p-ig))) (newline)
+(display "HY discount: ") (display (exact->inexact (- p-riskfree p-hy)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def credit_spread(lam, recovery):
+    return lam * (1 - recovery)
+
+def risky_bond_price(rf, spread, T):
+    return math.exp(-(rf + spread) * T)
+
+rf = 0.04
+s_ig = credit_spread(0.005, 0.40)
+s_hy = credit_spread(0.03, 0.35)
+
+print(f"IG spread: {s_ig*10000:.0f} bps")
+print(f"HY spread: {s_hy*10000:.0f} bps")
+
+p_rf = math.exp(-rf * 5)
+p_ig = risky_bond_price(rf, s_ig, 5)
+p_hy = risky_bond_price(rf, s_hy, 5)
+
+print(f"\\n5yr risk-free bond: {p_rf:.6f}")
+print(f"5yr IG bond:        {p_ig:.6f}")
+print(f"5yr HY bond:        {p_hy:.6f}")
+print(f"IG discount: {p_rf - p_ig:.6f}")
+print(f"HY discount: {p_rf - p_hy:.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Ratings Transitions -->
+    <h3>Ratings transitions and migration matrices</h3>
+    <p>Credit rating agencies assign letter grades (AAA, AA, ..., D). A <strong>transition matrix</strong> gives the probability of moving from one rating to another over a period. The matrix is row-stochastic (rows sum to 1). Multi-year transitions come from raising the matrix to a power. The absorbing state D (default) only accumulates&mdash;you never leave it.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified 3-state transition matrix: A, B, Default
+; Each row: [stay, downgrade, default]
+
+; 1-year matrix (row-stochastic)
+(define A-row  (list 0.90 0.08 0.02))   ; A-rated
+(define B-row  (list 0.05 0.85 0.10))   ; B-rated
+(define D-row  (list 0.00 0.00 1.00))   ; Default (absorbing)
+
+; Matrix-vector multiply for state probabilities
+(define (dot v1 v2)
+  (apply + (map * v1 v2)))
+
+(define (mat-vec-mul mat vec)
+  (map (lambda (row) (dot row vec)) mat))
+
+; Column extraction for matrix multiply
+(define (col mat j)
+  (map (lambda (row) (list-ref row j)) mat))
+
+(define (mat-mul A B)
+  (map (lambda (row-a)
+    (map (lambda (j) (dot row-a (col B j)))
+         (list 0 1 2)))
+    A))
+
+(define M (list A-row B-row D-row))
+
+; 2-year transition matrix = M^2
+(define M2 (mat-mul M M))
+
+(display "1-year transition matrix:") (newline)
+(for-each (lambda (row)
+  (for-each (lambda (x) (display (exact->inexact x)) (display "  ")) row)
+  (newline)) M)
+
+(newline)
+(display "2-year transition matrix:") (newline)
+(for-each (lambda (row)
+  (for-each (lambda (x) (display (exact->inexact x)) (display "  ")) row)
+  (newline)) M2)
+
+; 5-year: M^5
+(define (mat-pow M n)
+  (if (<= n 1) M (mat-mul M (mat-pow M (- n 1)))))
+
+(define M5 (mat-pow M 5))
+(newline) (display "5-year cumulative default probs:") (newline)
+(display "From A: ") (display (exact->inexact (list-ref (car M5) 2))) (newline)
+(display "From B: ") (display (exact->inexact (list-ref (cadr M5) 2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Transition matrix for credit ratings
+# States: A, B, Default
+
+M = [
+    [0.90, 0.08, 0.02],  # A
+    [0.05, 0.85, 0.10],  # B
+    [0.00, 0.00, 1.00],  # Default (absorbing)
+]
+
+def mat_mul(A, B):
+    n = len(A)
+    return [[sum(A[i][k]*B[k][j] for k in range(n))
+             for j in range(n)] for i in range(n)]
+
+def mat_pow(M, n):
+    result = M
+    for _ in range(n - 1):
+        result = mat_mul(result, M)
+    return result
+
+print("1-year transition matrix:")
+for row in M: print("  ".join(f"{x:.4f}" for x in row))
+
+M2 = mat_mul(M, M)
+print("\\n2-year transition matrix:")
+for row in M2: print("  ".join(f"{x:.4f}" for x in row))
+
+M5 = mat_pow(M, 5)
+print("\\n5-year cumulative default probs:")
+print(f"From A: {M5[0][2]:.6f}")
+print(f"From B: {M5[1][2]:.6f}")
+`} />
+    </div>
+
+
+    <!-- 5. Expected Loss and CVA -->
+    <h3>Expected loss and CVA</h3>
+    <p><strong>Expected loss</strong> = PD &#xD7; LGD &#xD7; EAD (probability of default times loss given default times exposure at default). The <strong>credit valuation adjustment</strong> (CVA) discounts this across all future periods, weighting by the probability of defaulting in each interval. CVA is the market price of counterparty credit risk.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected loss and CVA calculation
+; EL = PD * LGD * EAD
+; CVA = sum over periods of: discount * marginal_PD * LGD * EAD
+
+(define (expected-loss pd lgd ead) (* pd lgd ead))
+
+; CVA: sum of discounted expected losses over time buckets
+(define (cva hazard recovery rf ead years)
+  (define lgd (- 1 recovery))
+  (define dt 1)  ; annual buckets
+  (define (loop t acc)
+    (if (> t years) acc
+        (let* ((surv-prev (exp (* (- hazard) (- t 1))))
+               (surv-now  (exp (* (- hazard) t)))
+               (marginal-pd (- surv-prev surv-now))
+               (discount (exp (* (- rf) (- t 0.5))))  ; mid-period
+               (term (* discount marginal-pd lgd ead)))
+          (loop (+ t 1) (+ acc term)))))
+  (loop 1 0))
+
+(define ead 1000000)      ; $1M exposure
+(define hazard 0.02)      ; 2% hazard rate
+(define recovery 0.40)    ; 40% recovery
+(define rf 0.04)
+
+; Simple expected loss (1 year)
+(define pd-1yr (- 1 (exp (- hazard))))
+(display "1-year PD: ") (display (exact->inexact pd-1yr)) (newline)
+(display "1-year expected loss: $")
+(display (exact->inexact (expected-loss pd-1yr (- 1 recovery) ead)))
+(newline)
+
+; CVA over 5 years
+(define cva-5 (cva hazard recovery rf ead 5))
+(display "5-year CVA: $") (display (exact->inexact cva-5)) (newline)
+
+; CVA over 10 years
+(define cva-10 (cva hazard recovery rf ead 10))
+(display "10-year CVA: $") (display (exact->inexact cva-10)) (newline)
+
+; CVA as percentage of exposure
+(display "CVA/EAD (10yr): ")
+(display (exact->inexact (* 100 (/ cva-10 ead)))) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def expected_loss(pd, lgd, ead): return pd * lgd * ead
+
+def cva(hazard, recovery, rf, ead, years):
+    lgd = 1 - recovery
+    total = 0
+    for t in range(1, years + 1):
+        surv_prev = math.exp(-hazard * (t-1))
+        surv_now = math.exp(-hazard * t)
+        marginal_pd = surv_prev - surv_now
+        discount = math.exp(-rf * (t - 0.5))
+        total += discount * marginal_pd * lgd * ead
+    return total
+
+ead, hazard, recovery, rf = 1_000_000, 0.02, 0.40, 0.04
+
+pd_1yr = 1 - math.exp(-hazard)
+print(f"1-year PD: {pd_1yr:.6f}")
+print(f"1-year expected loss: \${expected_loss(pd_1yr, 1-recovery, ead):,.2f}")
+
+cva_5 = cva(hazard, recovery, rf, ead, 5)
+cva_10 = cva(hazard, recovery, rf, ead, 10)
+print(f"5-year CVA: \${cva_5:,.2f}")
+print(f"10-year CVA: \${cva_10:,.2f}")
+print(f"CVA/EAD (10yr): {100*cva_10/ead:.4f}%")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-08/">&#x1F4C9; Finance II Ch.8</a> &#x2014; interest rate models price the risk-free component; credit adds the spread</li>
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; exponential distribution and hazard rates are survival analysis basics</li>
+      <li><a href="/reading/linear-algebra/la-01/">&#x1F4D0; Linear Algebra Ch.1</a> &#x2014; transition matrices and matrix powers drive ratings migration</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-08/", label: "Interest Rate Models · 8" }}
+      next={{ href: "/reading/finance-2/fin2-10/", label: "Ch.10 · 10" }} />
+
+  </main>
+</Layout>

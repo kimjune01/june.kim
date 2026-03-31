@@ -1,0 +1,158 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.2 — Propositional Logic Syntax" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Propositional Logic Syntax</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 2 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Propositional logic has <strong>atomic propositions</strong> (P, Q, R) and five <strong>connectives</strong>: not, and, or, implies, iff. A <strong>well-formed formula</strong> is built recursively from these pieces. Parsing a formula means finding its structure.</p>
+    </div>
+
+    <!-- SVG: Parse tree for (P and Q) implies R -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Root: implies -->
+        <text x="150" y="30" text-anchor="middle" fill="#f59e0b" font-size="14">&rarr;</text>
+        <!-- Left child: and -->
+        <line x1="140" y1="35" x2="80" y2="70" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="75" y="80" text-anchor="middle" fill="#60a5fa" font-size="14">&and;</text>
+        <!-- Right child: R -->
+        <line x1="160" y1="35" x2="220" y2="70" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="225" y="80" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">R</text>
+        <!-- Left-left: P -->
+        <line x1="68" y1="85" x2="40" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="35" y="130" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">P</text>
+        <!-- Left-right: Q -->
+        <line x1="82" y1="85" x2="110" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="115" y="130" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">Q</text>
+        <!-- Caption -->
+        <text x="150" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Parse tree for (P &and; Q) &rarr; R</text>
+      </svg>
+    </div>
+
+    <h3>Atomic propositions</h3>
+    <p>An atomic proposition is a statement that is either true or false, with no internal logical structure. We use capital letters P, Q, R as variables standing for any proposition.</p>
+
+    <SchemeRepl client:load initialCode={`; Atomic propositions: just symbols
+; We represent them as Scheme symbols
+
+(define P (quote P))
+(define Q (quote Q))
+(define R (quote R))
+
+(display "Atomic propositions: ")
+(display (list P Q R))
+`} />
+
+    <h3>Connectives</h3>
+    <p>The five connectives build compound formulas from simpler ones.</p>
+
+    <div class="overflow-x-auto my-4">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Name</th>
+            <th class="py-2 pr-4">English</th>
+            <th class="py-2">Arity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">&not;</td><td class="pr-4">Negation</td><td class="pr-4">not P</td><td>1 (unary)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">&and;</td><td class="pr-4">Conjunction</td><td class="pr-4">P and Q</td><td>2 (binary)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">&or;</td><td class="pr-4">Disjunction</td><td class="pr-4">P or Q</td><td>2 (binary)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">&rarr;</td><td class="pr-4">Conditional</td><td class="pr-4">if P then Q</td><td>2 (binary)</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">&harr;</td><td class="pr-4">Biconditional</td><td class="pr-4">P if and only if Q</td><td>2 (binary)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Well-formed formulas</h3>
+    <p>A <strong>well-formed formula</strong> (wff) is defined recursively: every atom is a wff. If A is a wff, then (not A) is a wff. If A and B are wffs, then (A and B), (A or B), (A implies B), and (A iff B) are wffs. Nothing else is a wff.</p>
+
+    <SchemeRepl client:load initialCode={`; Formulas as S-expressions (already trees!)
+; (not P)
+; (and P Q)
+; (or P Q)
+; (implies P Q)
+; (iff P Q)
+
+; Check if something is a well-formed formula
+(define (atom? x) (symbol? x))
+
+(define (wff? f)
+  (cond
+    ((atom? f) #t)
+    ((not (list? f)) #f)
+    ((and (= (length f) 2) (equal? (car f) (quote neg)))
+     (wff? (cadr f)))
+    ((and (= (length f) 3)
+          (member (car f) (list (quote and) (quote or)
+                                (quote implies) (quote iff))))
+     (and (wff? (cadr f)) (wff? (caddr f))))
+    (else #f)))
+
+; Test
+(display "(implies (and P Q) R) is wff? ")
+(display (wff? (list (quote implies) (list (quote and) (quote P) (quote Q)) (quote R)))) (newline)
+
+(display "(and P) is wff? ")
+(display (wff? (list (quote and) (quote P)))) (newline)
+
+(display "P is wff? ")
+(display (wff? (quote P)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Formulas as nested tuples
+# ("not", P)  ("and", P, Q)  ("implies", P, Q)
+
+def is_wff(f):
+    if isinstance(f, str):
+        return True  # atom
+    if not isinstance(f, tuple):
+        return False
+    if len(f) == 2 and f[0] == "not":
+        return is_wff(f[1])
+    if len(f) == 3 and f[0] in ("and", "or", "implies", "iff"):
+        return is_wff(f[1]) and is_wff(f[2])
+    return False
+
+print(f'("implies", ("and", "P", "Q"), "R"): {is_wff(("implies", ("and", "P", "Q"), "R"))}')
+print(f'("and", "P"): {is_wff(("and", "P"))}')
+print(f'"P": {is_wff("P")}')
+`} />
+    </div>
+
+    <h3>Parsing</h3>
+    <p>Parsing a formula means recovering its tree structure. The <strong>main connective</strong> is the root of the parse tree: the last connective applied. For (P &and; Q) &rarr; R, the main connective is &rarr; because implication was applied last.</p>
+
+    <SchemeRepl client:load initialCode={`; The main connective is the outermost operator
+(define (main-connective f)
+  (if (symbol? f)
+    (quote atom)
+    (car f)))
+
+(define formula (list (quote implies) (list (quote and) (quote P) (quote Q)) (quote R)))
+
+(display "Formula: ") (display formula) (newline)
+(display "Main connective: ") (display (main-connective formula)) (newline)
+
+; Subformulas
+(display "Left subformula: ") (display (cadr formula)) (newline)
+(display "Right subformula: ") (display (caddr formula))
+`} />
+
+    <PrevNext prev={{ href: "/reading/logic/logic-01/", label: "Arguments and Validity" }} next={{ href: "/reading/logic/logic-03/", label: "Truth Tables" }} />
+
+  </main>
+</Layout>

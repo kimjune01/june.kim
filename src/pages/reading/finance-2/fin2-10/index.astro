@@ -1,0 +1,296 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — Credit Derivatives" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Credit Derivatives</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>credit derivative</strong> transfers credit risk without transferring the underlying asset. The buyer pays a periodic premium; the seller pays out if a credit event occurs. Mispricing these instruments was central to the 2008 financial crisis.</p>
+    </div>
+
+    <!-- SVG: CDS cash flow diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Protection buyer -->
+        <rect x="20" y="60" width="120" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="82" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">Protection</text>
+        <text x="80" y="97" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">Buyer</text>
+        <!-- Protection seller -->
+        <rect x="280" y="60" width="120" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="340" y="82" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Protection</text>
+        <text x="340" y="97" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Seller</text>
+        <!-- Premium arrow (top) -->
+        <line x1="140" y1="70" x2="275" y2="70" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="275,67 269,65 271,72" fill="#60a5fa" fill-opacity="0.4"/>
+        <text x="207" y="62" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">CDS spread (bps/yr)</text>
+        <!-- Contingent payment arrow (bottom) -->
+        <line x1="280" y1="100" x2="145" y2="100" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <polygon points="145,97 151,95 149,102" fill="#f59e0b" fill-opacity="0.4"/>
+        <text x="207" y="120" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.5">Loss given default (if credit event)</text>
+        <!-- Reference entity -->
+        <rect x="160" y="140" width="100" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="210" y="159" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Reference Entity</text>
+        <line x1="210" y1="140" x2="210" y2="115" stroke="currentColor" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="2,2"/>
+        <!-- Caption -->
+        <text x="210" y="8" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Credit default swap: periodic premium vs contingent payout.</text>
+      </svg>
+    </div>
+
+    <!-- 1. CDS Pricing -->
+    <h3>Credit default swap pricing</h3>
+    <p>A CDS is insurance on a bond. The <strong>protection buyer</strong> pays a periodic spread s (in basis points per year) on the notional. If the reference entity defaults, the seller pays (1 &minus; R) &times; notional, where R is the recovery rate. The fair spread equates the present value of premium payments to the present value of the contingent leg.</p>
+
+    <SchemeRepl client:load initialCode={`; CDS pricing: fair spread from default probability
+; Simplified 1-period model
+
+(define (cds-fair-spread prob-default recovery-rate risk-free-rate)
+  ; PV of contingent leg = PD * (1 - R) / (1 + r)
+  ; PV of premium leg   = (1 - PD) * s / (1 + r)  +  PD * s * 0.5 / (1 + r)
+  ; Solve for s:  s = PD * (1 - R) / (1 - PD * 0.5)
+  (let ((lgd (- 1 recovery-rate))
+        (pd prob-default))
+    (/ (* pd lgd)
+       (- 1 (* pd 0.5)))))
+
+; Example: 2% default probability, 40% recovery
+(define spread (cds-fair-spread 0.02 0.40 0.05))
+(display "Fair CDS spread: ")
+(display (* spread 10000))
+(display " bps") (newline)
+
+; Higher default probability -> wider spread
+(define spread-risky (cds-fair-spread 0.10 0.40 0.05))
+(display "Risky CDS spread: ")
+(display (* spread-risky 10000))
+(display " bps")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CDS pricing: fair spread from default probability
+def cds_fair_spread(pd, recovery, r):
+    """1-period fair CDS spread."""
+    lgd = 1 - recovery
+    return (pd * lgd) / (1 - pd * 0.5)
+
+# 2% default probability, 40% recovery
+spread = cds_fair_spread(0.02, 0.40, 0.05)
+print(f"Fair CDS spread: {spread * 10000:.1f} bps")
+
+# Higher default probability
+spread_risky = cds_fair_spread(0.10, 0.40, 0.05)
+print(f"Risky CDS spread: {spread_risky * 10000:.1f} bps")
+`} />
+    </div>
+
+
+    <!-- 2. CDO Tranching -->
+    <h3>CDO tranching</h3>
+    <p>A <strong>collateralized debt obligation</strong> pools credit-risky assets and slices cash flows into tranches. The <strong>equity tranche</strong> absorbs first losses (highest yield, highest risk). The <strong>mezzanine</strong> takes losses after equity is wiped out. The <strong>senior tranche</strong> is last to lose and is often rated AAA. Correlation between defaults is the key parameter: higher correlation means the senior tranche is riskier than its rating suggests.</p>
+
+    <SchemeRepl client:load initialCode={`; CDO tranche loss allocation
+; Given a portfolio loss rate, compute each tranche's loss
+
+(define (tranche-loss portfolio-loss attach detach)
+  ; Tranche width
+  (let ((width (- detach attach)))
+    (cond
+      ((<= portfolio-loss attach) 0.0)                    ; no loss hits tranche
+      ((>= portfolio-loss detach) 1.0)                     ; tranche wiped out
+      (else (/ (- portfolio-loss attach) width)))))        ; partial loss
+
+; Standard CDO tranches: equity 0-3%, mezz 3-7%, senior 7-100%
+(define (allocate-losses loss-rate)
+  (display "Portfolio loss: ") (display (* loss-rate 100)) (display "%") (newline)
+  (display "  Equity  (0-3%):  ") (display (* (tranche-loss loss-rate 0.0 0.03) 100)) (display "% loss") (newline)
+  (display "  Mezz    (3-7%):  ") (display (* (tranche-loss loss-rate 0.03 0.07) 100)) (display "% loss") (newline)
+  (display "  Senior (7-100%): ") (display (* (tranche-loss loss-rate 0.07 1.0) 100)) (display "% loss") (newline))
+
+(allocate-losses 0.02) (newline)
+(allocate-losses 0.05) (newline)
+(allocate-losses 0.15)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CDO tranche loss allocation
+def tranche_loss(portfolio_loss, attach, detach):
+    width = detach - attach
+    if portfolio_loss <= attach:
+        return 0.0
+    elif portfolio_loss >= detach:
+        return 1.0
+    else:
+        return (portfolio_loss - attach) / width
+
+def allocate_losses(loss_rate):
+    print(f"Portfolio loss: {loss_rate*100:.0f}%")
+    print(f"  Equity  (0-3%):  {tranche_loss(loss_rate, 0, 0.03)*100:.0f}% loss")
+    print(f"  Mezz    (3-7%):  {tranche_loss(loss_rate, 0.03, 0.07)*100:.0f}% loss")
+    print(f"  Senior (7-100%): {tranche_loss(loss_rate, 0.07, 1.0)*100:.1f}% loss")
+
+allocate_losses(0.02)
+print()
+allocate_losses(0.05)
+print()
+allocate_losses(0.15)
+`} />
+    </div>
+
+
+    <!-- 3. Counterparty Risk -->
+    <h3>Counterparty risk</h3>
+    <p><strong>Counterparty risk</strong> is the risk that the protection seller cannot pay when the credit event occurs. This creates <strong>wrong-way risk</strong>: the seller is most likely to default exactly when the protection is needed most, because systemic stress hits everyone. The credit valuation adjustment (CVA) prices this risk into the derivative.</p>
+
+    <SchemeRepl client:load initialCode={`; Credit Valuation Adjustment (CVA)
+; CVA = expected loss due to counterparty default
+
+(define (cva exposure-at-default counterparty-pd counterparty-lgd)
+  (* exposure-at-default counterparty-pd counterparty-lgd))
+
+; Exposure: $10M, counterparty PD: 5%, LGD: 60%
+(define base-cva (cva 10000000 0.05 0.60))
+(display "Base CVA: $") (display base-cva) (newline)
+
+; Wrong-way risk: counterparty PD doubles during stress
+(define stress-cva (cva 10000000 0.10 0.60))
+(display "Stress CVA: $") (display stress-cva) (newline)
+
+; CVA as fraction of notional
+(display "CVA / notional: ")
+(display (* (/ base-cva 10000000) 100))
+(display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Credit Valuation Adjustment (CVA)
+def cva(exposure, counterparty_pd, counterparty_lgd):
+    return exposure * counterparty_pd * counterparty_lgd
+
+notional = 10_000_000
+base = cva(notional, 0.05, 0.60)
+stress = cva(notional, 0.10, 0.60)
+
+print(f"Base CVA: \${base:,.0f}")
+print(f"Stress CVA: \${stress:,.0f}")
+print(f"CVA / notional: {base/notional*100:.1f}%")
+`} />
+    </div>
+
+
+    <!-- 4. Lessons from 2008 -->
+    <h3>Lessons from 2008</h3>
+    <p>The crisis revealed three failures: (1) Gaussian copula models underestimated default correlation, treating tail events as nearly impossible. (2) Rating agencies applied the same AAA label to CDO tranches and sovereign debt, despite fundamentally different risk profiles. (3) Concentration of counterparty risk at AIG meant that when AIG was rescued by the U.S. government in September 2008, it exposed how a single institution's failure could have cascaded through the system. The lesson: model risk is itself a systemic risk.</p>
+
+    <SchemeRepl client:load initialCode={`; Correlation sensitivity: how default correlation
+; affects the probability of catastrophic losses
+
+; Binomial model: n independent bonds, each with PD p
+; P(k defaults) with independence assumption
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n) (* (factorial k) (factorial (- n k)))))
+
+(define (binom-prob n k p)
+  (* (choose n k)
+     (expt p k)
+     (expt (- 1 p) (- n k))))
+
+; 100-bond pool, 5% individual PD
+; P(10+ defaults) under independence
+(define (prob-at-least-k n k p)
+  (let loop ((j k) (total 0))
+    (if (> j n) total
+        (loop (+ j 1) (+ total (binom-prob n j p))))))
+
+(define p-tail (prob-at-least-k 100 10 0.05))
+(display "P(10+ defaults | independent): ")
+(display p-tail) (newline)
+
+; With correlation, tail risk is MUCH higher
+; The Gaussian copula hid this fact
+(display "Copula models assumed low correlation")
+(display " -> underpriced senior tranches")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Correlation sensitivity in default models
+from math import comb
+
+def binom_prob(n, k, p):
+    return comb(n, k) * p**k * (1 - p)**(n - k)
+
+def prob_at_least_k(n, k, p):
+    return sum(binom_prob(n, j, p) for j in range(k, n + 1))
+
+# 100-bond pool, 5% individual PD
+p_tail = prob_at_least_k(100, 10, 0.05)
+print(f"P(10+ defaults | independent): {p_tail:.6f}")
+print("Copula models assumed low correlation")
+print("-> underpriced senior tranches")
+`} />
+    </div>
+
+
+    <!-- 5. CDS-Bond Basis -->
+    <h3>CDS-bond basis</h3>
+    <p>The <strong>CDS-bond basis</strong> is the difference between the CDS spread and the bond's credit spread over the risk-free rate. In theory the basis is zero (no-arbitrage). In practice, funding costs, liquidity premiums, and counterparty risk drive it away from zero. A negative basis (CDS cheaper than the bond spread) signals a potential arbitrage.</p>
+
+    <SchemeRepl client:load initialCode={`; CDS-bond basis: arbitrage indicator
+(define (cds-bond-basis bond-yield risk-free-rate cds-spread)
+  (- cds-spread (- bond-yield risk-free-rate)))
+
+; Bond yields 6%, risk-free 4%, CDS spread 150 bps
+(define basis (cds-bond-basis 0.06 0.04 0.015))
+(display "CDS-bond basis: ")
+(display (* basis 10000))
+(display " bps") (newline)
+
+; Negative basis: CDS protection is cheap relative to bond spread
+(define neg-basis (cds-bond-basis 0.07 0.04 0.02))
+(display "Negative basis: ")
+(display (* neg-basis 10000))
+(display " bps") (newline)
+(display "Negative basis -> potential long-credit arbitrage")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CDS-bond basis
+def cds_bond_basis(bond_yield, rf_rate, cds_spread):
+    return cds_spread - (bond_yield - rf_rate)
+
+basis = cds_bond_basis(0.06, 0.04, 0.015)
+print(f"CDS-bond basis: {basis * 10000:.0f} bps")
+
+neg_basis = cds_bond_basis(0.07, 0.04, 0.02)
+print(f"Negative basis: {neg_basis * 10000:.0f} bps")
+print("Negative basis -> potential long-credit arbitrage")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-09/">📉 Finance II Ch.9</a> &mdash; fixed income derivatives underpin CDS pricing</li>
+      <li><a href="/reading/finance-2/fin2-11/">📉 Finance II Ch.11</a> &mdash; Value at Risk measures the downside these instruments create</li>
+      <li><a href="/reading/probability/prob-08/">🎲 Probability Ch.8</a> &mdash; copulas and joint distributions drive correlation modeling</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-09/", label: "Fixed Income Derivatives · 9 of 12" }}
+      next={{ href: "/reading/finance-2/fin2-11/", label: "Value at Risk · 11 of 12" }}
+    />
+
+  </main>
+</Layout>

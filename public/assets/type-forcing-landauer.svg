@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" font-family="system-ui, sans-serif">
+  <style>
+    .box-forced { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1.5; rx: 4; }
+    .name { text-anchor: middle; dominant-baseline: central; font-weight: 600; font-size: 12px; fill: #1565c0; }
+    .label { text-anchor: middle; font-size: 10px; fill: #888; }
+    .label-b { text-anchor: middle; font-size: 10px; fill: #1565c0; font-weight: 600; }
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .type { text-anchor: middle; font-size: 9.5px; fill: #1565c0; font-weight: 600; }
+    .policy { stroke: #1565c0; stroke-width: 1; fill: none; stroke-dasharray: 5,3; }
+    .policy-read { stroke: #1565c0; stroke-width: 0.8; fill: none; stroke-dasharray: 2,2; marker-end: url(#b); }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+    <marker id="b" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4" fill="#1565c0"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="350" y="18" text-anchor="middle" font-size="11" fill="#888" font-weight="600">Constraint 3: Landauer → all six types forced</text>
+
+  <!-- All six boxes forced -->
+  <rect class="box-forced" x="15" y="50" width="90" height="36"/>
+  <text class="name" x="60" y="68">Perceive</text>
+  <text class="type" x="60" y="100">encoded</text>
+
+  <line class="arr" x1="105" y1="68" x2="125" y2="68"/>
+
+  <rect class="box-forced" x="125" y="50" width="90" height="36"/>
+  <text class="name" x="170" y="68">Cache</text>
+  <text class="type" x="170" y="100">indexed</text>
+
+  <line class="arr" x1="215" y1="68" x2="235" y2="68"/>
+
+  <rect class="box-forced" x="235" y="50" width="90" height="36"/>
+  <text class="name" x="280" y="68">Filter</text>
+  <text class="type" x="280" y="100">gated</text>
+
+  <line class="arr" x1="325" y1="68" x2="345" y2="68"/>
+
+  <rect class="box-forced" x="345" y="50" width="90" height="36"/>
+  <text class="name" x="390" y="68">Attend</text>
+  <text class="type" x="390" y="100">ranked</text>
+
+  <line class="arr" x1="435" y1="68" x2="455" y2="68"/>
+
+  <rect class="box-forced" x="455" y="50" width="90" height="36"/>
+  <text class="name" x="500" y="68">Remember</text>
+  <text class="type" x="500" y="100">persisted</text>
+
+  <line class="arr" x1="545" y1="68" x2="565" y2="68"/>
+
+  <rect class="box-forced" x="565" y="50" width="90" height="36"/>
+  <text class="name" x="610" y="68">Consolidate</text>
+  <text class="type" x="610" y="100">policy</text>
+
+  <!-- Policy store bar -->
+  <rect x="200" y="135" width="300" height="20" rx="3" fill="#e8eaf6" stroke="#1565c0" stroke-width="0.8"/>
+  <text x="350" y="148" text-anchor="middle" font-size="10" fill="#1565c0" font-weight="500">policy store (S)</text>
+
+  <!-- Consolidate writes to policy store -->
+  <path class="policy" d="M610,86 L610,145 L500,145"/>
+
+  <!-- Policy store reads to P, F, A -->
+  <line class="policy-read" x1="270" y1="135" x2="60" y2="86"/>
+  <line class="policy-read" x1="310" y1="135" x2="280" y2="86"/>
+  <line class="policy-read" x1="370" y1="135" x2="390" y2="86"/>
+
+  <!-- Labels -->
+  <text class="label" x="60" y="122" style="font-style:italic">adapts</text>
+  <text class="label" x="280" y="122" style="font-style:italic">shifts</text>
+  <text class="label" x="390" y="122" style="font-style:italic">ranks</text>
+  <text class="label" x="610" y="122" style="font-style:italic">writes</text>
+
+  <!-- State evolution -->
+  <path d="M200,145 Q60,145 60,86" stroke="#1565c0" stroke-width="0.8" fill="none" stroke-dasharray="2,2"/>
+</svg>

@@ -1,0 +1,198 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.2 — Conservation of Momentum" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Conservation of Momentum</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Momentum</strong> p = mv is conserved in every isolated system. <strong>Impulse</strong> (force times time) changes momentum. Collisions split into <strong>elastic</strong> (KE conserved) and <strong>inelastic</strong> (KE lost to heat/deformation). The <strong>center of mass</strong> moves at constant velocity regardless.</p>
+    </div>
+
+    <!-- 1. Momentum -->
+    <h3>Momentum</h3>
+    <p>Momentum is mass times velocity: p = mv. It is a vector quantity. A truck moving slowly can have the same momentum as a bullet moving fast. The total momentum of an isolated system never changes.</p>
+
+    <!-- SVG: Two balls colliding with momentum vectors -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Before collision label -->
+        <text x="130" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Before</text>
+        <!-- Ball 1 (moving right) -->
+        <circle cx="80" cy="60" r="15" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="80" y="64" text-anchor="middle" fill="currentColor" font-size="10">m1</text>
+        <!-- Momentum vector 1 -->
+        <line x1="98" y1="60" x2="155" y2="60" stroke="#f59e0b" stroke-width="2.5"/>
+        <polygon points="155,55 165,60 155,65" fill="#f59e0b"/>
+        <text x="130" y="50" text-anchor="middle" fill="#f59e0b" font-size="10">p1</text>
+        <!-- Ball 2 (moving left, smaller momentum) -->
+        <circle cx="190" cy="60" r="10" fill="#34d399" fill-opacity="0.5"/>
+        <text x="190" y="64" text-anchor="middle" fill="currentColor" font-size="10">m2</text>
+        <!-- Momentum vector 2 (pointing left) -->
+        <line x1="178" y1="60" x2="155" y2="60" stroke="#f87171" stroke-width="2"/>
+        <polygon points="155,56 148,60 155,64" fill="#f87171"/>
+        <text x="165" y="78" text-anchor="middle" fill="#f87171" font-size="10">p2</text>
+
+        <!-- After collision label -->
+        <text x="330" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">After</text>
+        <!-- Ball 1 after -->
+        <circle cx="280" cy="60" r="15" fill="#60a5fa" fill-opacity="0.3"/>
+        <!-- Ball 2 after -->
+        <circle cx="310" cy="60" r="10" fill="#34d399" fill-opacity="0.3"/>
+        <!-- Combined momentum vector -->
+        <line x1="322" y1="60" x2="365" y2="60" stroke="#f59e0b" stroke-width="2"/>
+        <polygon points="365,56 372,60 365,64" fill="#f59e0b"/>
+        <text x="350" y="50" text-anchor="middle" fill="#f59e0b" font-size="10">p_total</text>
+
+        <!-- Divider -->
+        <line x1="225" y1="15" x2="225" y2="120" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+
+        <!-- Caption -->
+        <text x="200" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">p1 + p2 before = p1' + p2' after</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Momentum: p = m * v
+; Conservation: total momentum before = total momentum after
+
+(define (momentum m v) (* m v))
+
+; Two balls collide head-on
+(define m1 3)  ; kg
+(define v1 4)  ; m/s (rightward = positive)
+(define m2 1)  ; kg
+(define v2 -2) ; m/s (leftward = negative)
+
+(define p-total (+ (momentum m1 v1) (momentum m2 v2)))
+
+(display "p1 = ") (display (momentum m1 v1)) (display " kg m/s") (newline)
+(display "p2 = ") (display (momentum m2 v2)) (display " kg m/s") (newline)
+(display "Total momentum = ") (display p-total) (display " kg m/s") (newline)
+(display "This total is conserved no matter what happens in the collision.")
+`} />
+
+
+    <!-- 2. Impulse -->
+    <h3>Impulse</h3>
+    <p>Impulse J = F * dt equals the change in momentum. A large force over a short time (baseball bat) and a small force over a long time (airbag) can produce the same impulse. The airbag spreads the force over more time, reducing peak force on your body.</p>
+
+    <SchemeRepl client:load initialCode={`; Impulse: J = F * dt = delta p
+; Same momentum change, different force/time
+
+(define delta-p 600) ; kg m/s (change in momentum)
+
+; Crash without airbag: 0.05 s
+(define dt-no-bag 0.05)
+(define F-no-bag (/ delta-p dt-no-bag))
+
+; Crash with airbag: 0.5 s
+(define dt-bag 0.5)
+(define F-bag (/ delta-p dt-bag))
+
+(display "Without airbag: F = ") (display F-no-bag) (display " N") (newline)
+(display "With airbag:    F = ") (display F-bag) (display " N") (newline)
+(display "Force ratio: ") (display (/ F-no-bag F-bag)) (display "x")
+`} />
+
+
+    <!-- 3. Collisions -->
+    <h3>Elastic and inelastic collisions</h3>
+    <p>In an <strong>elastic</strong> collision, both momentum and kinetic energy are conserved. In a <strong>perfectly inelastic</strong> collision, the objects stick together: momentum is conserved but kinetic energy is lost to deformation and heat. Most real collisions fall between these extremes.</p>
+
+    <SchemeRepl client:load initialCode={`; Elastic collision: 1D, two masses
+; Conservation of momentum AND kinetic energy
+; v1' = (m1-m2)/(m1+m2) * v1 + 2*m2/(m1+m2) * v2
+; v2' = 2*m1/(m1+m2) * v1 + (m2-m1)/(m1+m2) * v2
+
+(define (elastic-collision m1 v1 m2 v2)
+  (let ((total (+ m1 m2)))
+    (list
+      (+ (* (/ (- m1 m2) total) v1) (* (/ (* 2 m2) total) v2))
+      (+ (* (/ (* 2 m1) total) v1) (* (/ (- m2 m1) total) v2)))))
+
+; Equal masses, one at rest: the classic billiard shot
+(define result (elastic-collision 1 5 1 0))
+(display "Equal masses, billiard shot:") (newline)
+(display "  v1' = ") (display (car result)) (display " m/s") (newline)
+(display "  v2' = ") (display (car (cdr result))) (display " m/s") (newline)
+; Ball 1 stops, ball 2 takes all the velocity
+
+; Perfectly inelastic: objects stick together
+(define (inelastic-collision m1 v1 m2 v2)
+  (/ (+ (* m1 v1) (* m2 v2)) (+ m1 m2)))
+
+(define v-stuck (inelastic-collision 3 4 1 0))
+(display "Inelastic (3kg@4m/s + 1kg@0): v = ")
+(display v-stuck) (display " m/s")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Elastic vs inelastic collisions
+def elastic(m1, v1, m2, v2):
+    total = m1 + m2
+    v1f = (m1-m2)/total * v1 + 2*m2/total * v2
+    v2f = 2*m1/total * v1 + (m2-m1)/total * v2
+    return v1f, v2f
+
+def inelastic(m1, v1, m2, v2):
+    return (m1*v1 + m2*v2) / (m1 + m2)
+
+v1f, v2f = elastic(1, 5, 1, 0)
+print(f"Elastic billiard: v1'={v1f}, v2'={v2f}")
+
+v = inelastic(3, 4, 1, 0)
+print(f"Inelastic: v={v} m/s")
+
+# KE comparison
+ke_before = 0.5*3*4**2
+ke_after = 0.5*4*v**2
+print(f"KE before: {ke_before} J, after: {ke_after} J")
+print(f"KE lost: {ke_before - ke_after} J ({(1 - ke_after/ke_before)*100:.0f}%)")
+`} />
+    </div>
+
+
+    <!-- 4. Center of mass -->
+    <h3>Center of mass</h3>
+    <p>The center of mass of a system moves at constant velocity when no external forces act. Individual pieces can bounce, spin, and fragment, but the center of mass glides on serenely. This is why conservation of momentum is really about the center of mass.</p>
+
+    <SchemeRepl client:load initialCode={`; Center of mass: x_cm = (m1*x1 + m2*x2) / (m1 + m2)
+; v_cm = (m1*v1 + m2*v2) / (m1 + m2)
+
+(define m1 3) (define v1 4)
+(define m2 1) (define v2 -6)
+
+(define v-cm (/ (+ (* m1 v1) (* m2 v2)) (+ m1 m2)))
+(display "v_cm = ") (display v-cm) (display " m/s") (newline)
+(display "v_cm is the same before and after any collision.") (newline)
+
+; After perfectly inelastic collision, both move at v_cm
+(define v-stuck (/ (+ (* m1 v1) (* m2 v2)) (+ m1 m2)))
+(display "v_stuck = ") (display v-stuck) (display " m/s") (newline)
+(display "v_stuck = v_cm? ") (display (= v-stuck v-cm))
+`} />
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-01/">&#x2190; Ch. 1: Conservation of Energy</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-01/", label: "Conservation of Energy" }} next={{ href: "/reading/physics/crowell-03/", label: "Conservation of Angular Momentum" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,193 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.1 — Processes" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Processes</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Process_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Process (computing)</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>process</strong> is a program in execution. The program is static code on disk. The process is the live instance: code plus current state, registers, open files, and a place in the scheduling queue.</p>
+    </div>
+
+    <!-- Process vs Program -->
+    <h3>Process vs program</h3>
+    <p>A program is a passive file. A process is active. One program can spawn many processes (open two terminals running the same shell). Each process has its own address space, program counter, and stack. The operating system tracks all of this in a <strong>Process Control Block</strong> (PCB).</p>
+
+    <!-- SVG: Process state diagram -->
+    <h3>Process states</h3>
+    <p>Every process moves through a lifecycle. The five-state model covers it: new, ready, running, waiting, terminated.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- States -->
+        <rect x="10" y="90" width="70" height="30" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="45" y="110" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">New</text>
+
+        <rect x="120" y="90" width="70" height="30" rx="4" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="155" y="110" text-anchor="middle" fill="#34d399" font-size="11" fill-opacity="0.7">Ready</text>
+
+        <rect x="230" y="90" width="80" height="30" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="270" y="110" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Running</text>
+
+        <rect x="230" y="170" width="80" height="30" rx="4" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="270" y="190" text-anchor="middle" fill="#a78bfa" font-size="11" fill-opacity="0.7">Waiting</text>
+
+        <rect x="380" y="90" width="100" height="30" rx="4" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="430" y="110" text-anchor="middle" fill="#f87171" font-size="11" fill-opacity="0.7">Terminated</text>
+
+        <!-- Arrows -->
+        <!-- New -> Ready -->
+        <line x1="80" y1="105" x2="118" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="116,101 122,105 116,109" fill="currentColor" fill-opacity="0.4"/>
+        <text x="99" y="98" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">admit</text>
+
+        <!-- Ready -> Running -->
+        <line x1="190" y1="100" x2="228" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="226,96 232,100 226,104" fill="currentColor" fill-opacity="0.4"/>
+        <text x="209" y="93" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">dispatch</text>
+
+        <!-- Running -> Ready (preempt, curved above) -->
+        <path d="M 270 90 Q 220 60 170 90" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="172,87 168,93 175,92" fill="currentColor" fill-opacity="0.4"/>
+        <text x="220" y="65" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">preempt</text>
+
+        <!-- Running -> Waiting -->
+        <line x1="270" y1="120" x2="270" y2="168" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="266,166 270,172 274,166" fill="currentColor" fill-opacity="0.4"/>
+        <text x="290" y="148" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">I/O wait</text>
+
+        <!-- Waiting -> Ready -->
+        <path d="M 230 185 Q 170 185 155 122" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="151,124 155,118 159,124" fill="currentColor" fill-opacity="0.4"/>
+        <text x="178" y="165" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">I/O done</text>
+
+        <!-- Running -> Terminated -->
+        <line x1="310" y1="105" x2="378" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="376,101 382,105 376,109" fill="currentColor" fill-opacity="0.4"/>
+        <text x="344" y="98" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">exit</text>
+      </svg>
+    </div>
+
+    <h3>Process Control Block</h3>
+    <p>The PCB stores everything the OS needs to manage a process: PID, state, program counter, CPU registers, memory limits, list of open files, and scheduling priority. Context switching means saving one PCB and loading another.</p>
+
+    <SchemeRepl client:load initialCode={`; A process control block as a simple association list
+; Each PCB holds: pid, state, program-counter, registers
+
+(define (make-pcb pid state pc registers)
+  (list (cons 'pid pid)
+        (cons 'state state)
+        (cons 'pc pc)
+        (cons 'registers registers)))
+
+(define (pcb-get pcb key)
+  (cdr (assoc key pcb)))
+
+; Create two processes
+(define p1 (make-pcb 1 'running 100 '(ax=0 bx=5)))
+(define p2 (make-pcb 2 'ready 200 '(ax=3 bx=7)))
+
+(display "P1 state: ") (display (pcb-get p1 'state)) (newline)
+(display "P2 state: ") (display (pcb-get p2 'state)) (newline)
+(display "P1 PC: ") (display (pcb-get p1 'pc)) (newline)
+(display "P2 PC: ") (display (pcb-get p2 'pc))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Process Control Block in Python
+class PCB:
+    def __init__(self, pid, state, pc, registers):
+        self.pid = pid
+        self.state = state
+        self.pc = pc
+        self.registers = registers.copy()
+
+    def __repr__(self):
+        return f"PCB(pid={self.pid}, state={self.state}, pc={self.pc})"
+
+# Create processes
+p1 = PCB(1, "running", 100, {"ax": 0, "bx": 5})
+p2 = PCB(2, "ready", 200, {"ax": 3, "bx": 7})
+
+print(p1)
+print(p2)
+
+# Context switch: save p1, load p2
+def context_switch(old, new):
+    old.state = "ready"
+    new.state = "running"
+    print(f"Switched from PID {old.pid} to PID {new.pid}")
+    return old, new
+
+p1, p2 = context_switch(p1, p2)
+print(p1)
+print(p2)
+`} />
+    </div>
+
+    <h3>Context switching</h3>
+    <p>When the OS switches from one process to another, it saves the entire CPU state (registers, program counter, stack pointer) into the outgoing PCB and loads the state from the incoming PCB. This is pure overhead. The faster you can do it, the more responsive the system feels. Hardware support (like special save/restore instructions) helps.</p>
+
+    <SchemeRepl client:load initialCode={`; Simulate context switching between processes
+; A "ready queue" is just a list of PCBs
+
+(define (make-pcb pid state pc)
+  (list (cons 'pid pid) (cons 'state state) (cons 'pc pc)))
+
+(define (pcb-get pcb key) (cdr (assoc key pcb)))
+
+(define (set-state pcb new-state)
+  (map (lambda (pair)
+         (if (eq? (car pair) 'state)
+             (cons 'state new-state)
+             pair))
+       pcb))
+
+; Three processes in the ready queue
+(define ready-queue
+  (list (make-pcb 1 'ready 100)
+        (make-pcb 2 'ready 200)
+        (make-pcb 3 'ready 300)))
+
+; Dispatch: take first from queue, set to running
+(define running (set-state (car ready-queue) 'running))
+(define remaining (cdr ready-queue))
+
+(display "Now running PID: ")
+(display (pcb-get running 'pid)) (newline)
+(display "State: ")
+(display (pcb-get running 'state)) (newline)
+(display "Remaining in queue: ")
+(display (length remaining))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/theory-of-computation/toc-06/">🔀 Turing Machines</a> — abstract processes: a tape, a head, and a state machine</li>
+      <li><a href="/reading/theory-of-computation/toc-05/">💻 TOC Ch.5</a> — pushdown automata and stack machines: processes use a call stack that is a runtime instance of the pushdown automaton</li>
+      <li><a href="/reading/programming/sicp-08/">🪄 SICP Ch.8</a> — environments and closures: OS processes are isolated environments, analogous to lexical closures in a language</li>
+      <li><a href="/reading/algorithms/algo-01/">⚙ Algorithms Ch.1</a> — asymptotic analysis: process creation and context-switch costs determine scheduling feasibility</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Process_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Process (computing)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Process_control_block"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Process control block</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Context_switch"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Context switch</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/operating-systems/os-02/", label: "Scheduling" }} />
+
+  </main>
+</Layout>

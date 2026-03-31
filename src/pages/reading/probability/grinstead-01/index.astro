@@ -1,0 +1,260 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 1 — Discrete Probability" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">← back to probability</a>
+
+    <h1>Discrete Probability</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell · GFDL · <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>probability function</strong> assigns a number between 0 and 1 to every outcome, and the numbers must add up to 1. That is the entire foundation. Everything else in probability is built on these two constraints.</p>
+    </div>
+
+    <!-- 1. Sample spaces -->
+    <h3>Sample spaces and events</h3>
+    <p>An experiment has a set of possible outcomes called the <strong>sample space</strong> (written &Omega;). An <strong>event</strong> is any subset of the sample space. Rolling a die: &Omega; = &lbrace;1, 2, 3, 4, 5, 6&rbrace;. "Rolling even" is the event &lbrace;2, 4, 6&rbrace;.</p>
+
+    <!-- SVG: Sample space as dots, event as highlighted subset -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Background: sample space -->
+        <rect x="20" y="10" width="320" height="140" rx="12" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="340" y="148" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.4">&Omega;</text>
+        <!-- Event highlight -->
+        <ellipse cx="230" cy="80" rx="110" ry="55" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="310" y="35" fill="#60a5fa" font-size="11">E = even</text>
+        <!-- Dots: outcomes 1-6 -->
+        <circle cx="60" cy="55" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="60" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <circle cx="120" cy="55" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="120" y="60" text-anchor="middle" fill="currentColor" font-size="14">3</text>
+        <circle cx="60" cy="110" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="115" text-anchor="middle" fill="currentColor" font-size="14">5</text>
+        <!-- Event dots (highlighted) -->
+        <circle cx="190" cy="55" r="14" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="190" y="60" text-anchor="middle" fill="#60a5fa" font-size="14">2</text>
+        <circle cx="260" cy="55" r="14" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="260" y="60" text-anchor="middle" fill="#60a5fa" font-size="14">4</text>
+        <circle cx="225" cy="110" r="14" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="225" y="115" text-anchor="middle" fill="#60a5fa" font-size="14">6</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Sample space = list of outcomes
+; Event = subset (filtered list)
+
+(define die '(1 2 3 4 5 6))
+
+(define (event? outcome)
+  (= 0 (modulo outcome 2)))
+
+(define even-event (filter event? die))
+
+(display "sample space: ") (display die) (newline)
+(display "even event:   ") (display even-event) (newline)
+(display "size of event: ") (display (length even-event))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sample space and events
+die = [1, 2, 3, 4, 5, 6]
+even_event = [x for x in die if x % 2 == 0]
+
+print(f"sample space: {die}")
+print(f"even event:   {even_event}")
+print(f"size of event: {len(even_event)}")
+`} />
+    </div>
+
+    <!-- 2. Probability function -->
+    <h3>The probability function axioms</h3>
+    <p>A probability function P assigns a weight to each outcome. Three axioms define it:</p>
+    <ol>
+      <li><strong>Non-negative:</strong> P(&omega;) &ge; 0 for every outcome &omega;</li>
+      <li><strong>Sums to 1:</strong> the weights of all outcomes add to 1</li>
+      <li><strong>Additive:</strong> for disjoint events A and B, P(A &cup; B) = P(A) + P(B)</li>
+    </ol>
+    <p>The probability of an event is the sum of the probabilities of its outcomes.</p>
+
+    <SchemeRepl client:load initialCode={`; Probability function: assign weights, check axioms
+
+(define (make-prob-fn weights)
+  ; weights is a list of (outcome . probability) pairs
+  (lambda (outcome)
+    (let ((pair (assoc outcome weights)))
+      (if pair (cdr pair) 0))))
+
+; Fair die: each outcome gets 1/6
+(define fair-die
+  (map (lambda (x) (cons x (/ 1 6))) '(1 2 3 4 5 6)))
+
+(define P (make-prob-fn fair-die))
+
+; Check axiom 1: non-negative
+(display "P(1) = ") (display (P 1)) (newline)
+
+; Check axiom 2: sums to 1
+(define total (apply + (map cdr fair-die)))
+(display "sum = ") (display total) (newline)
+
+; Probability of an event = sum of outcome probabilities
+(define (prob-event P outcomes)
+  (apply + (map P outcomes)))
+
+(display "P(even) = ")
+(display (prob-event P '(2 4 6))) (newline)
+(display "P(odd)  = ")
+(display (prob-event P '(1 3 5)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Probability function on a fair die
+probs = {i: 1/6 for i in range(1, 7)}
+
+# Axiom 1: non-negative
+print(f"P(1) = {probs[1]:.4f}")
+
+# Axiom 2: sums to 1
+print(f"sum  = {sum(probs.values()):.4f}")
+
+# P(event) = sum of outcome probs
+even = [2, 4, 6]
+print(f"P(even) = {sum(probs[x] for x in even):.4f}")
+print(f"P(odd)  = {sum(probs[x] for x in [1,3,5]):.4f}")
+`} />
+    </div>
+
+    <!-- 3. Uniform distribution -->
+    <h3>Uniform distribution on finite sets</h3>
+    <p>When every outcome is equally likely, P(&omega;) = 1/n where n = |&Omega;|. The probability of an event E is just |E|/|&Omega;|. Counting favorable outcomes over total outcomes is the oldest probability calculation there is.</p>
+
+    <SchemeRepl client:load initialCode={`; Uniform distribution: P(E) = |E| / |omega|
+; This is the "classical" definition of probability
+
+(define (uniform-prob event sample-space)
+  (/ (length event) (length sample-space)))
+
+; Two dice: sample space is all pairs
+(define two-dice
+  (let loop ((i 1) (pairs '()))
+    (if (> i 6) pairs
+        (loop (+ i 1)
+              (append pairs
+                (map (lambda (j) (list i j))
+                     '(1 2 3 4 5 6)))))))
+
+(display "total outcomes: ") (display (length two-dice)) (newline)
+
+; Event: sum equals 7
+(define sum-7 (filter (lambda (p) (= 7 (+ (car p) (cadr p)))) two-dice))
+(display "ways to get 7: ") (display (length sum-7)) (newline)
+(display "P(sum=7) = ") (display (uniform-prob sum-7 two-dice)) (newline)
+
+; Event: doubles
+(define doubles (filter (lambda (p) (= (car p) (cadr p))) two-dice))
+(display "P(doubles) = ") (display (uniform-prob doubles two-dice))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Uniform distribution: count favorable / total
+from itertools import product
+
+two_dice = list(product(range(1,7), repeat=2))
+print(f"total outcomes: {len(two_dice)}")
+
+sum_7 = [(a,b) for a,b in two_dice if a+b == 7]
+print(f"ways to get 7: {len(sum_7)}")
+print(f"P(sum=7) = {len(sum_7)/len(two_dice):.4f}")
+
+doubles = [(a,b) for a,b in two_dice if a == b]
+print(f"P(doubles) = {len(doubles)/len(two_dice):.4f}")
+`} />
+    </div>
+
+    <!-- 4. Coin flips -->
+    <h3>Coin flips and repeated trials</h3>
+    <p>Flip a fair coin n times. The sample space has 2^n outcomes, each equally likely. The number of sequences with exactly k heads is "n choose k" (a preview of Chapter 3). For 3 flips, the probability of exactly 2 heads is 3/8.</p>
+
+    <SchemeRepl client:load initialCode={`; Coin flips: enumerate all sequences of length n
+(define (coin-sequences n)
+  (if (= n 0) '(())
+      (let ((rest (coin-sequences (- n 1))))
+        (append
+          (map (lambda (s) (cons 'H s)) rest)
+          (map (lambda (s) (cons 'T s)) rest)))))
+
+(define flips3 (coin-sequences 3))
+(display "all 3-flip sequences: ") (display (length flips3)) (newline)
+
+; Count heads in a sequence
+(define (count-heads seq)
+  (length (filter (lambda (x) (eq? x 'H)) seq)))
+
+; P(exactly 2 heads in 3 flips)
+(define two-heads (filter (lambda (s) (= 2 (count-heads s))) flips3))
+(display "sequences with 2 heads: ") (display two-heads) (newline)
+(display "P(2 heads) = ") (display (/ (length two-heads) (length flips3)))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&Omega;</td><td class="pr-4 text-green-300">die, two-dice</td><td class="font-sans">Sample space</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E &sube; &Omega;</td><td class="pr-4 text-green-300">(filter pred omega)</td><td class="font-sans">Event (subset)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(&omega;)</td><td class="pr-4 text-green-300">(P outcome)</td><td class="font-sans">Probability of outcome</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(E) = |E|/|&Omega;|</td><td class="pr-4 text-green-300">(uniform-prob event omega)</td><td class="font-sans">Uniform probability</td></tr>
+          <tr><td class="py-2 pr-4">&sum; P(&omega;) = 1</td><td class="pr-4 text-green-300">(apply + (map cdr weights))</td><td class="font-sans">Normalization axiom</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Next chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-02/">🎰 Ch 2: Continuous Probability</a> — what happens when the sample space is uncountable</li>
+      <li><a href="/reading/probability/grinstead-03/">🎰 Ch 3: Combinatorics</a> — counting the outcomes that make uniform probabilities work</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Ch 4: Conditional Probability</a> — updating probabilities with new information</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories axiomatize probability with morphisms instead of measure theory</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — probabilistic programming composes distributions like programs</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Probability_axioms"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Probability axioms</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sample_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Sample space</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Discrete_uniform_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Discrete uniform distribution</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Ch 1</a> of Grinstead &amp; Snell.
+    </div>
+
+
+    <PrevNext next={{ href: "/reading/probability/grinstead-02/", label: "Continuous Probability" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,140 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.9 — I/O Systems" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>I/O Systems</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Input/output"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Input/output</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The OS mediates all communication between CPU and devices. Three strategies, in order of sophistication: <strong>polling</strong> (CPU waits), <strong>interrupts</strong> (device signals CPU), and <strong>DMA</strong> (device transfers data directly to memory). The device driver translates generic OS calls into device-specific commands.</p>
+    </div>
+
+    <h3>Polling vs interrupts</h3>
+    <p><strong>Polling</strong>: the CPU repeatedly checks a status register. Simple, but burns CPU cycles. Good only for fast devices where data arrives immediately. <strong>Interrupts</strong>: the device sends a signal when ready. The CPU does other work until then. Better for slow devices, but interrupt handling has overhead.</p>
+
+    <h3>Direct Memory Access (DMA)</h3>
+    <p><strong>DMA</strong> lets a device transfer data to/from memory without CPU involvement. The CPU sets up the transfer (source, destination, count), then the DMA controller handles it. When done, the controller interrupts the CPU. Bulk transfers (disk, network) would be impractical without DMA.</p>
+
+    <h3>Device drivers</h3>
+    <p>A <strong>device driver</strong> is the OS module that knows the specifics of a particular hardware device. The OS provides a uniform interface (open, read, write, close). The driver translates these into the actual hardware commands (port I/O, register writes, command queues).</p>
+
+    <h3>Disk scheduling</h3>
+    <p>When multiple I/O requests target different locations on a spinning disk, the order of service matters. The disk arm must physically move to each track. Minimizing total arm movement reduces latency.</p>
+
+    <p><strong>FCFS</strong>: serve in arrival order. Simple, but the arm may zigzag. <strong>SCAN</strong> (elevator): the arm sweeps one direction, servicing requests, then reverses. <strong>C-SCAN</strong>: like SCAN, but only services requests in one direction, then jumps back to the start.</p>
+
+    <!-- SVG: Disk arm movement under SCAN -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="10" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">SCAN (elevator) — head starts at track 50, moving right</text>
+
+        <!-- Track axis -->
+        <line x1="40" y1="170" x2="440" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="40" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">0</text>
+        <text x="140" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">50</text>
+        <text x="240" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">100</text>
+        <text x="340" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">150</text>
+        <text x="440" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">199</text>
+
+        <!-- Request positions (vertical lines) -->
+        <line x1="80" y1="165" x2="80" y2="175" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="80" y="163" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.5">20</text>
+
+        <line x1="120" y1="165" x2="120" y2="175" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="120" y="163" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.5">40</text>
+
+        <line x1="200" y1="165" x2="200" y2="175" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="200" y="163" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.5">80</text>
+
+        <line x1="260" y1="165" x2="260" y2="175" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="260" y="163" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.5">110</text>
+
+        <line x1="360" y1="165" x2="360" y2="175" stroke="#f87171" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="360" y="163" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.5">160</text>
+
+        <!-- Head path: 50 -> 80 -> 110 -> 160 -> 199 (end) -> reverse -> 40 -> 20 -->
+        <!-- Time goes up (y decreases) -->
+        <circle cx="140" cy="145" r="3" fill="#34d399" fill-opacity="0.7"/>
+        <text x="148" y="143" fill="#34d399" font-size="8" fill-opacity="0.5">start:50</text>
+
+        <polyline points="140,145 200,125 260,105 360,85 440,65" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polyline points="440,65 120,35 80,25" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Service order dots -->
+        <circle cx="200" cy="125" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <circle cx="260" cy="105" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <circle cx="360" cy="85" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <circle cx="440" cy="65" r="3" fill="#f59e0b" fill-opacity="0.3"/>
+        <circle cx="120" cy="35" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <circle cx="80" cy="25" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+
+        <text x="445" y="58" fill="currentColor" font-size="7" fill-opacity="0.3">end</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; SCAN disk scheduling simulation
+; Head starts at position, moves in one direction, then reverses
+
+(define (scan-schedule requests start max-track)
+  (let* ((sorted (sort requests <))
+         (right (filter (lambda (r) (>= r start)) sorted))
+         (left (filter (lambda (r) (< r start)) sorted))
+         (order (append right (list max-track) (reverse left))))
+    (display "Service order: ") (display order) (newline)
+    ; Calculate total head movement
+    (define (total-movement seq prev total)
+      (if (null? seq) total
+          (total-movement (cdr seq) (car seq)
+                          (+ total (abs (- (car seq) prev))))))
+    (let ((movement (total-movement order start 0)))
+      (display "Total head movement: ") (display movement))))
+
+(scan-schedule '(20 40 80 110 160) 50 199)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# SCAN (elevator) disk scheduling
+def scan(requests, start, max_track=199):
+    right = sorted(r for r in requests if r >= start)
+    left = sorted((r for r in requests if r < start), reverse=True)
+    order = right + [max_track] + left
+
+    movement = sum(abs(order[i] - (order[i-1] if i > 0 else start))
+                   for i in range(len(order)))
+
+    print(f"Service order: {order}")
+    print(f"Total head movement: {movement}")
+
+scan([20, 40, 80, 110, 160], start=50)
+`} />
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/control/ctrl-06/">🎛 Control Ch.6</a> — frequency response: interrupt-driven I/O uses polling rate vs. latency tradeoffs analogous to control system bandwidth</li>
+      <li><a href="/reading/algorithms/algo-07/">⚙ Algorithms Ch.7</a> — priority queues: I/O schedulers use priority queues to merge and reorder disk requests for throughput</li>
+      <li><a href="/reading/probability/grinstead-11/">🎰 Probability Ch.11</a> — queuing theory: I/O scheduling is applied queuing theory with service times and arrival rates</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Direct_memory_access"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Direct memory access</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/I/O_scheduling"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>I/O scheduling</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Device_driver"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Device driver</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-08/", label: "File Systems" }} next={{ href: "/reading/operating-systems/os-10/", label: "Protection and Security" }} />
+
+  </main>
+</Layout>

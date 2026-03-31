@@ -1,0 +1,121 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.6 — Byzantine Fault Tolerance" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Byzantine Fault Tolerance</h1>
+    <p class="text-gray-400 text-sm mb-6">Lamport, Shostak, Pease 1982 &middot; Castro &amp; Liskov 1999 &middot; <a href="https://en.wikipedia.org/wiki/Byzantine_fault"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Byzantine generals problem</strong>: nodes can send contradictory messages. To tolerate f Byzantine faults, you need at least <strong>3f + 1</strong> nodes. With fewer, a traitor can make honest nodes disagree. PBFT (Practical Byzantine Fault Tolerance) makes this work in practice with three rounds of communication.</p>
+    </div>
+
+    <!-- 1. The problem -->
+    <h3>Byzantine generals problem</h3>
+    <p>Generals surround a city. They must agree to attack or retreat. Some generals are traitors who send conflicting messages. The loyal generals must all reach the same decision, and if they all start with the same preference, that preference must win. With fewer than 3f + 1 generals, f traitors can prevent agreement.</p>
+
+    <!-- SVG: generals sending messages with one traitor -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- General 1 (loyal) -->
+        <circle cx="200" cy="40" r="22" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        <text x="200" y="45" text-anchor="middle" fill="#34d399" font-size="11">G1</text>
+        <text x="200" y="16" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.6">loyal</text>
+        <!-- General 2 (loyal) -->
+        <circle cx="60" cy="160" r="22" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        <text x="60" y="165" text-anchor="middle" fill="#34d399" font-size="11">G2</text>
+        <text x="60" y="190" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.6">loyal</text>
+        <!-- General 3 (loyal) -->
+        <circle cx="340" cy="160" r="22" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        <text x="340" y="165" text-anchor="middle" fill="#34d399" font-size="11">G3</text>
+        <text x="340" y="190" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.6">loyal</text>
+        <!-- General 4 (traitor) -->
+        <circle cx="200" cy="220" r="22" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="200" y="225" text-anchor="middle" fill="#ef4444" font-size="11">G4</text>
+        <text x="200" y="250" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.8">traitor</text>
+        <!-- Messages from G1 -->
+        <line x1="182" y1="52" x2="78" y2="148" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="115" y="90" fill="#34d399" font-size="8" fill-opacity="0.7">attack</text>
+        <line x1="218" y1="52" x2="322" y2="148" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="280" y="90" fill="#34d399" font-size="8" fill-opacity="0.7">attack</text>
+        <!-- Traitor sends conflicting messages -->
+        <line x1="182" y1="210" x2="78" y2="172" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="110" y="200" fill="#ef4444" font-size="8" fill-opacity="0.8">attack</text>
+        <line x1="218" y1="210" x2="322" y2="172" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="290" y="200" fill="#ef4444" font-size="8" fill-opacity="0.8">retreat</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Byzantine generals: 3f+1 nodes to tolerate f traitors.
+; With 4 nodes, tolerate 1 traitor. With 3, cannot.
+
+(define (bft-required f) (+ (* 3 f) 1))
+
+(display "To tolerate 1 traitor: need ")
+(display (bft-required 1)) (display " nodes") (newline)
+(display "To tolerate 2 traitors: need ")
+(display (bft-required 2)) (display " nodes") (newline)
+(display "To tolerate 3 traitors: need ")
+(display (bft-required 3)) (display " nodes") (newline)
+
+; Why 3f+1? With fewer, a traitor can create a tie.
+; f traitors + f honest on one side + f honest on other side
+; = 3f. The (f+1)th honest node breaks the tie.
+(display "3 nodes, 1 traitor: ")
+(display (if (>= 3 (bft-required 1)) "safe" "UNSAFE"))
+`} />
+
+    <!-- 2. PBFT -->
+    <h3>PBFT overview</h3>
+    <p>Practical BFT (Castro and Liskov, 1999) works in three phases: pre-prepare (leader assigns sequence number), prepare (2f+1 nodes agree on order), commit (2f+1 nodes confirm). Total messages per request: O(n^2). Expensive, but it works with Byzantine faults and has been deployed in production systems.</p>
+
+    <SchemeRepl client:load initialCode={`; PBFT message complexity.
+; n = 3f + 1 nodes.
+; Pre-prepare: 1 message from leader
+; Prepare: each node sends to all others = n*(n-1)
+; Commit: each node sends to all others = n*(n-1)
+; Total per request ~ 2*n^2
+
+(define (pbft-messages f)
+  (let* ((n (+ (* 3 f) 1))
+         (per-phase (* n (- n 1)))
+         (total (+ 1 per-phase per-phase)))
+    (display "f=") (display f)
+    (display ", n=") (display n)
+    (display ", messages=") (display total) (newline)))
+
+(pbft-messages 1)   ; n=4
+(pbft-messages 2)   ; n=7
+(pbft-messages 3)   ; n=10
+(pbft-messages 10)  ; n=31 -> expensive
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# PBFT message complexity
+for f in [1, 2, 3, 10]:
+    n = 3 * f + 1
+    msgs = 1 + 2 * n * (n - 1)
+    print(f"f={f}, n={n}, messages per request={msgs}")
+`} />
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-08/">&#x1F510; Cryptography Ch.8</a> — digital signatures authenticate messages, enabling BFT</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-05/", label: "Raft" }} next={{ href: "/reading/distributed-systems/dist-07/", label: "CAP Theorem" }} />
+
+  </main>
+</Layout>

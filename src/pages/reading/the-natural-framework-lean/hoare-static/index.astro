@@ -1,0 +1,59 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Static.lean — Iteration stability" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Static.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Static.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Relates IterationStable to Fritz's static idempotents and proves composition/identity laws for iteration stability.</p>
+    </div>
+
+    <h3>iteration_stable_is_triple</h3>
+    <p>IterationStable is exactly a Hoare triple where precondition equals postcondition: <code>&#123;c&#125; f &#123;c&#125;</code>. This is a loop invariant &mdash; the predicate survives application of f.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">iteration_stable_is_triple</span> [Monad M] [Support M]
+    &#123;f : Kernel M &alpha; &alpha;&#125; &#123;c : Contract &alpha;&#125;
+    : IterationStable f c &harr; Triple c f c</code></pre>
+
+    <h3>StaticOn</h3>
+    <p>A kernel is static on predicate c if: for any input satisfying c, the only possible output is the input itself. This is Fritz's "e acts as identity on its own image" &mdash; strictly stronger than IterationStable (which only requires the output to satisfy the predicate, not to equal the input).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">StaticOn</span> [Monad M] [Support M]
+    (f : Kernel M &alpha; &alpha;) (c : &alpha; &rarr; Prop) : Prop :=
+  &forall; a : &alpha;, c a &rarr; &forall; b : &alpha;, Support.support (f a) b &rarr; b = a</code></pre>
+
+    <h3>static_implies_stable</h3>
+    <p>StaticOn implies IterationStable: if the output equals the input, and the input satisfies c, the output trivially satisfies c. The converse does not hold in general.</p>
+
+    <h3>iteration_stable_comp</h3>
+    <p>Composing two iteration-stable kernels for the same contract gives an iteration-stable kernel. The invariant propagates through composition &mdash; like a loop invariant through sequential code.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">iteration_stable_comp</span> [Monad M] [LawfulMonad M] [Support M]
+    &#123;f g : Kernel M &alpha; &alpha;&#125; &#123;c : Contract &alpha;&#125;
+    (hf : IterationStable f c) (hg : IterationStable g c)
+    : IterationStable (Kernel.comp f g) c</code></pre>
+    <p class="text-sm text-gray-500">The proof decomposes the bind: an intermediate value mid satisfies c (from hf), then the final value satisfies c (from hg applied to mid).</p>
+
+    <h3>iteration_stable_id</h3>
+    <p>The identity kernel is trivially iteration-stable for any contract. Since the output is the input, the contract is preserved.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; imported; iteration stability is a self-loop triple</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; IterationStable is defined there; this file gives the Hoare characterization</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; iteration stability ensures the pipeline loop survives re-application</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/gaboardi-2021/">🍞 Gaboardi 2021</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-effects/", label: "Hoare/Effects.lean · 20 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-divergence/", label: "Hoare/Divergence.lean · 22 of 25" }} />
+  </main>
+</Layout>

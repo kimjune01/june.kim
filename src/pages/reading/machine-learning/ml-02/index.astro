@@ -1,0 +1,254 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.2 — Linear Regression" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Linear Regression</h1>
+    <p class="text-gray-400 text-sm mb-6">Deisenroth et al., <em>Mathematics for Machine Learning</em> (CC BY 4.0) &middot; <a href="https://mml-book.github.io/">mml-book.github.io</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Find weights that <strong>minimize squared error</strong>. The <strong>normal equation</strong> gives the closed-form solution: w = (X&#x1D40;X)&#x207B;&#xB9;X&#x1D40;y. <strong>Gradient descent</strong> gives the iterative one: update weights in the direction that reduces error fastest. Both arrive at the same answer for linear models.</p>
+    </div>
+
+    <!-- SVG: scatter plot with fitted line and residuals -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="340" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="170" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="190" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">x</text>
+        <text x="25" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">y</text>
+        <!-- Fitted line: y = 0.45x + 20 mapped to viewBox -->
+        <line x1="50" y1="148" x2="320" y2="38" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Data points and residual lines -->
+        <circle cx="70" cy="140" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="70" y1="140" x2="70" y2="142" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="110" cy="118" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="110" y1="118" x2="110" y2="124" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="140" cy="125" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="140" y1="125" x2="140" y2="112" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="180" cy="88" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="180" y1="88" x2="180" y2="96" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="220" cy="72" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="220" y1="72" x2="220" y2="80" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="260" cy="55" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="260" y1="55" x2="260" y2="63" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <circle cx="300" cy="48" r="3.5" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="300" y1="48" x2="300" y2="45" stroke="#34d399" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+        <!-- Legend -->
+        <circle cx="250" cy="180" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="258" y="184" fill="currentColor" font-size="9" fill-opacity="0.4">data</text>
+        <line x1="285" y1="180" x2="300" y2="180" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="305" y="184" fill="currentColor" font-size="9" fill-opacity="0.4">fit</text>
+        <!-- Caption -->
+        <text x="190" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Residuals (green dashes) are what the line gets wrong.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Normal equation -->
+    <h3>Normal equation</h3>
+    <p>For y = wx + b, the least-squares solution has a closed form. With one feature: w = sum((x&#x1D62; - x&#x0304;)(y&#x1D62; - y&#x0304;)) / sum((x&#x1D62; - x&#x0304;)&#xB2;) and b = y&#x0304; - w&#xB7;x&#x0304;. This is the normal equation in scalar form.</p>
+
+    <SchemeRepl client:load initialCode={`; Normal equation for simple linear regression
+; y = wx + b, minimize sum of squared residuals
+
+(define xs '(1 2 3 4 5 6 7))
+(define ys '(2.1 4.0 5.8 8.1 9.9 12.2 13.8))
+
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+
+(define (dot a b)
+  (apply + (map * a b)))
+
+(define x-bar (mean xs))
+(define y-bar (mean ys))
+
+; Center the data
+(define xc (map (lambda (x) (- x x-bar)) xs))
+(define yc (map (lambda (y) (- y y-bar)) ys))
+
+; w = sum(xc * yc) / sum(xc * xc)
+(define w (/ (dot xc yc) (dot xc xc)))
+(define b (- y-bar (* w x-bar)))
+
+(display "w = ") (display w) (newline)
+(display "b = ") (display b) (newline)
+(display "Model: y = ") (display w) (display "x + ")
+(display b)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Normal equation for simple linear regression
+xs = [1, 2, 3, 4, 5, 6, 7]
+ys = [2.1, 4.0, 5.8, 8.1, 9.9, 12.2, 13.8]
+
+x_bar = sum(xs) / len(xs)
+y_bar = sum(ys) / len(ys)
+
+xc = [x - x_bar for x in xs]
+yc = [y - y_bar for y in ys]
+
+w = sum(a*b for a,b in zip(xc, yc)) / sum(a*a for a in xc)
+b = y_bar - w * x_bar
+
+print("w =", round(w, 4))
+print("b =", round(b, 4))
+print("Model: y =", round(w, 4), "* x +", round(b, 4))
+`} />
+    </div>
+
+    <!-- 2. Gradient descent -->
+    <h3>Gradient descent loop</h3>
+    <p>When closed-form solutions are too expensive (millions of features), iterate instead. Compute the gradient of the loss with respect to each weight, then take a small step downhill. Repeat until convergence.</p>
+
+    <SchemeRepl client:load initialCode={`; Gradient descent for linear regression
+; y = wx + b, loss = (1/n) * sum((y_pred - y_true)^2)
+
+(define xs '(1 2 3 4 5 6 7))
+(define ys '(2.1 4.0 5.8 8.1 9.9 12.2 13.8))
+(define n (length xs))
+(define lr 0.01)  ; learning rate
+
+; Start with w=0, b=0
+(define (train w b steps)
+  (if (= steps 0)
+      (begin
+        (display "w = ") (display w) (newline)
+        (display "b = ") (display b))
+      (let* ((preds (map (lambda (x) (+ (* w x) b)) xs))
+             (errors (map - preds ys))
+             (dw (/ (* 2 (apply + (map * errors xs))) n))
+             (db (/ (* 2 (apply + errors)) n)))
+        (train (- w (* lr dw))
+               (- b (* lr db))
+               (- steps 1)))))
+
+(display "After 1000 steps of gradient descent:") (newline)
+(train 0 0 1000)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gradient descent for linear regression
+xs = [1, 2, 3, 4, 5, 6, 7]
+ys = [2.1, 4.0, 5.8, 8.1, 9.9, 12.2, 13.8]
+n = len(xs)
+lr = 0.01
+
+w, b = 0.0, 0.0
+for step in range(1000):
+    preds = [w * x + b for x in xs]
+    errors = [p - y for p, y in zip(preds, ys)]
+    dw = 2 * sum(e * x for e, x in zip(errors, xs)) / n
+    db = 2 * sum(errors) / n
+    w -= lr * dw
+    b -= lr * db
+
+print("After 1000 steps:")
+print("w =", round(w, 4))
+print("b =", round(b, 4))
+`} />
+    </div>
+
+    <!-- 3. Comparing predictions -->
+    <h3>Comparing predictions</h3>
+    <p>Both methods should give the same answer. Compare by computing predictions on held-out data and measuring mean squared error.</p>
+
+    <SchemeRepl client:load initialCode={`; Compare normal equation vs gradient descent predictions
+; Using the weights we found above
+
+; Normal equation solution (pre-computed)
+(define w-ne 1.96)
+(define b-ne 0.04)
+
+; Test data
+(define test-x '(8 9 10))
+(define test-y '(16.0 18.1 19.8))
+
+(define (predict w b x) (+ (* w x) b))
+
+(define (mse predictions actuals)
+  (/ (apply + (map (lambda (p a) (expt (- p a) 2))
+                   predictions actuals))
+     (length predictions)))
+
+(define preds (map (lambda (x) (predict w-ne b-ne x))
+                   test-x))
+
+(display "Predictions: ") (display preds) (newline)
+(display "Actuals:     ") (display test-y) (newline)
+(display "MSE: ") (display (mse preds test-y))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compare predictions
+w, b = 1.96, 0.04
+
+test_x = [8, 9, 10]
+test_y = [16.0, 18.1, 19.8]
+
+preds = [w * x + b for x in test_x]
+mse = sum((p - y)**2 for p, y in zip(preds, test_y)) / len(test_y)
+
+print("Predictions:", [round(p, 2) for p in preds])
+print("Actuals:    ", test_y)
+print("MSE:", round(mse, 4))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">w, b</td><td class="pr-4 text-green-300">w, b</td><td class="pr-4 text-blue-300">w, b</td><td class="font-sans">Weight and bias</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">X&#x1D40;X</td><td class="pr-4 text-green-300">(dot xc xc)</td><td class="pr-4 text-blue-300">sum(x*x for x in xc)</td><td class="font-sans">Inner product</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&nabla;L</td><td class="pr-4 text-green-300">dw, db</td><td class="pr-4 text-blue-300">dw, db</td><td class="font-sans">Gradient of loss</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&eta;</td><td class="pr-4 text-green-300">lr</td><td class="pr-4 text-blue-300">lr</td><td class="font-sans">Learning rate</td></tr>
+          <tr><td class="py-2 pr-4">MSE</td><td class="pr-4 text-green-300">(mse preds ys)</td><td class="pr-4 text-blue-300">mse</td><td class="font-sans">Mean squared error</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The normal equation computes the answer in one pass &mdash; clean and functional. Gradient descent is inherently iterative: each step depends on the previous weights. Scheme handles this via tail recursion (<code>train</code> calls itself with updated <code>w</code> and <code>b</code>). Python uses a <code>for</code> loop with mutation. Same computation, different idioms.</p>
+    <p class="mt-2">In practice, gradient descent wins for large datasets because the normal equation requires inverting X&#x1D40;X, which is O(d&#xB3;) in the number of features. Gradient descent is O(nd) per step.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-01/">📐 Hefferon Ch.1</a> &mdash; linear systems: the normal equation is a linear system in disguise</li>
+      <li><a href="/reading/calculus/calc-12/">∫ Calculus Ch.12</a> &mdash; gradient: the direction of steepest ascent that gradient descent reverses</li>
+    
+      <li><a href="/reading/statistics/openintro-08/">📊 Statistics Ch.8</a> &mdash; linear regression in the statistical inference frame</li>
+      <li><a href="/reading/linear-algebra/hefferon-01/">📐 Linear Algebra Ch.1</a> &mdash; the normal equation solves a linear system</li>
+      <li><a href="/reading/calculus/calc-12/">∫ Calculus Ch.12</a> &mdash; gradient descent is optimization by following partial derivatives</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Read <a href="https://mml-book.github.io/">Mathematics for Machine Learning</a> Ch. 9 and <a href="https://d2l.ai/chapter_linear-regression/">D2L Ch. 3</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-01/", label: "What is ML?" }} next={{ href: "/reading/machine-learning/ml-03/", label: "Optimization · 3 of 12" }} />
+
+  </main>
+</Layout>

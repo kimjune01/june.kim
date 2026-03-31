@@ -1,0 +1,289 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — Sequence Models" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Sequence Models</h1>
+    <p class="text-gray-400 text-sm mb-6">MML (CC BY 4.0) &middot; D2L (CC BY-SA 4.0) &middot; 10 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">RNNs process sequences by maintaining hidden state. LSTMs add gates to control what to remember and forget. The hidden state is a <a href="https://june.kim/context-density"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>lossy compression</a> of the past &mdash; the bottleneck that attention solves.</p>
+    </div>
+
+    <!-- SVG: RNN unrolled over time -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 130" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Time step 1 -->
+        <rect x="40" y="40" width="50" height="35" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="65" y="62" text-anchor="middle" fill="#a78bfa" font-size="12">h&#x2081;</text>
+        <text x="65" y="100" text-anchor="middle" fill="#60a5fa" font-size="11">x&#x2081;</text>
+        <line x1="65" y1="90" x2="65" y2="77" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="65,75 60,83 70,83" fill="#60a5fa" fill-opacity="0.4"/>
+
+        <!-- Time step 2 -->
+        <rect x="160" y="40" width="50" height="35" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="185" y="62" text-anchor="middle" fill="#a78bfa" font-size="12">h&#x2082;</text>
+        <text x="185" y="100" text-anchor="middle" fill="#60a5fa" font-size="11">x&#x2082;</text>
+        <line x1="185" y1="90" x2="185" y2="77" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="185,75 180,83 190,83" fill="#60a5fa" fill-opacity="0.4"/>
+
+        <!-- Time step 3 -->
+        <rect x="280" y="40" width="50" height="35" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="305" y="62" text-anchor="middle" fill="#a78bfa" font-size="12">h&#x2083;</text>
+        <text x="305" y="100" text-anchor="middle" fill="#60a5fa" font-size="11">x&#x2083;</text>
+        <line x1="305" y1="90" x2="305" y2="77" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="305,75 300,83 310,83" fill="#60a5fa" fill-opacity="0.4"/>
+
+        <!-- Recurrent arrows h1 -> h2 -->
+        <line x1="90" y1="57" x2="155" y2="57" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="157,57 149,52 149,62" fill="#f59e0b" fill-opacity="0.5"/>
+
+        <!-- Recurrent arrows h2 -> h3 -->
+        <line x1="210" y1="57" x2="275" y2="57" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="277,57 269,52 269,62" fill="#f59e0b" fill-opacity="0.5"/>
+
+        <!-- Output arrows -->
+        <line x1="65" y1="40" x2="65" y2="25" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="65,23 60,31 70,31" fill="#34d399" fill-opacity="0.4"/>
+        <text x="65" y="18" text-anchor="middle" fill="#34d399" font-size="11">y&#x2081;</text>
+
+        <line x1="185" y1="40" x2="185" y2="25" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="185,23 180,31 190,31" fill="#34d399" fill-opacity="0.4"/>
+        <text x="185" y="18" text-anchor="middle" fill="#34d399" font-size="11">y&#x2082;</text>
+
+        <line x1="305" y1="40" x2="305" y2="25" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="305,23 300,31 310,31" fill="#34d399" fill-opacity="0.4"/>
+        <text x="305" y="18" text-anchor="middle" fill="#34d399" font-size="11">y&#x2083;</text>
+
+        <!-- Ellipsis -->
+        <text x="360" y="62" fill="currentColor" font-size="14" fill-opacity="0.3">...</text>
+
+        <!-- Caption -->
+        <text x="210" y="125" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Unrolled RNN: hidden state carries information forward through time.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Simple RNN forward pass -->
+    <h3>Simple RNN forward pass</h3>
+    <p>At each time step, the RNN combines the current input with the previous hidden state through a linear transformation plus a nonlinearity. The same weights W are shared across all time steps. This weight sharing is what lets the network handle variable-length sequences.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple RNN: h_t = tanh(W_hh * h_{t-1} + W_xh * x_t + b)
+; Using scalars for clarity (real RNNs use matrices)
+
+(define W-hh 0.5)   ; hidden-to-hidden weight
+(define W-xh 0.8)   ; input-to-hidden weight
+(define bias 0.0)
+
+(define (rnn-step h-prev x)
+  (let ((pre (+ (* W-hh h-prev) (* W-xh x) bias)))
+    ; tanh approximation: (e^x - e^-x) / (e^x + e^-x)
+    (let ((ep (exp pre)) (en (exp (- pre))))
+      (/ (- ep en) (+ ep en)))))
+
+; Process a sequence
+(define xs '(1.0 0.5 -0.3 0.8 -1.0))
+(define h0 0.0)
+
+(let loop ((xs xs) (h h0) (step 1))
+  (if (null? xs) 'done
+      (let ((h-new (rnn-step h (car xs))))
+        (display "t=") (display step)
+        (display "  x=") (display (car xs))
+        (display "  h=") (display (/ (round (* h-new 10000)) 10000))
+        (newline)
+        (loop (cdr xs) h-new (+ step 1)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Simple RNN forward pass (scalar version)
+W_hh, W_xh, bias = 0.5, 0.8, 0.0
+
+def rnn_step(h_prev, x):
+    return math.tanh(W_hh * h_prev + W_xh * x + bias)
+
+xs = [1.0, 0.5, -0.3, 0.8, -1.0]
+h = 0.0
+for t, x in enumerate(xs, 1):
+    h = rnn_step(h, x)
+    print("t={}  x={:5.1f}  h={:.4f}".format(t, x, h))
+`} />
+    </div>
+
+
+    <!-- 2. LSTM gate computation -->
+    <h3>LSTM gate computation</h3>
+    <p>An LSTM replaces the simple RNN cell with four gates: forget (what to erase), input (what to write), cell update (the candidate values), and output (what to expose). The cell state acts as a conveyor belt &mdash; gradients flow through it without vanishing, solving the problem that kills vanilla RNNs on long sequences.</p>
+
+    <SchemeRepl client:load initialCode={`; LSTM gates (scalar version for clarity)
+; f = forget gate, i = input gate, o = output gate
+
+(define (sigmoid x)
+  (/ 1.0 (+ 1.0 (exp (- x)))))
+
+(define (tanh-approx x)
+  (let ((ep (exp x)) (en (exp (- x))))
+    (/ (- ep en) (+ ep en))))
+
+; Weights (scalar simplification)
+(define Wf 0.6) (define Uf 0.4) (define bf -0.1)
+(define Wi 0.7) (define Ui 0.3) (define bi 0.1)
+(define Wc 0.8) (define Uc 0.5) (define bc 0.0)
+(define Wo 0.5) (define Uo 0.6) (define bo 0.0)
+
+(define (lstm-step h-prev c-prev x)
+  (let ((f (sigmoid (+ (* Wf x) (* Uf h-prev) bf)))
+        (i (sigmoid (+ (* Wi x) (* Ui h-prev) bi)))
+        (c-hat (tanh-approx (+ (* Wc x) (* Uc h-prev) bc)))
+        (o (sigmoid (+ (* Wo x) (* Uo h-prev) bo))))
+    (let ((c-new (+ (* f c-prev) (* i c-hat))))
+      (let ((h-new (* o (tanh-approx c-new))))
+        (list h-new c-new f i o)))))
+
+(define xs '(1.0 0.5 -0.3 0.8))
+(let loop ((xs xs) (h 0.0) (c 0.0) (step 1))
+  (if (null? xs) 'done
+      (let ((result (lstm-step h c (car xs))))
+        (display "t=") (display step)
+        (display "  f=") (display (/ (round (* (list-ref result 2) 100)) 100))
+        (display "  i=") (display (/ (round (* (list-ref result 3) 100)) 100))
+        (display "  h=") (display (/ (round (* (car result) 10000)) 10000))
+        (newline)
+        (loop (cdr xs) (car result) (list-ref result 1) (+ step 1)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# LSTM gates (scalar version)
+def sigmoid(x): return 1 / (1 + math.exp(-x))
+
+Wf, Uf, bf = 0.6, 0.4, -0.1
+Wi, Ui, bi = 0.7, 0.3,  0.1
+Wc, Uc, bc = 0.8, 0.5,  0.0
+Wo, Uo, bo = 0.5, 0.6,  0.0
+
+def lstm_step(h, c, x):
+    f = sigmoid(Wf*x + Uf*h + bf)
+    i = sigmoid(Wi*x + Ui*h + bi)
+    c_hat = math.tanh(Wc*x + Uc*h + bc)
+    o = sigmoid(Wo*x + Uo*h + bo)
+    c_new = f*c + i*c_hat
+    h_new = o * math.tanh(c_new)
+    return h_new, c_new, f, i, o
+
+xs = [1.0, 0.5, -0.3, 0.8]
+h, c = 0.0, 0.0
+for t, x in enumerate(xs, 1):
+    h, c, f, i, o = lstm_step(h, c, x)
+    print("t={}  f={:.2f}  i={:.2f}  h={:.4f}".format(t, f, i, h))
+`} />
+    </div>
+
+
+    <!-- 3. Sequence prediction -->
+    <h3>Sequence prediction (next character)</h3>
+    <p>Given a sequence of characters, the model predicts the next one. Each character is encoded as a number, fed through the RNN, and the output is compared to the true next character. This is the simplest form of language modeling &mdash; the same objective that scales up to GPT.</p>
+
+    <SchemeRepl client:load initialCode={`; Predict next element in a repeating sequence
+; Pattern: 0 1 2 0 1 2 0 1 2 ...
+; RNN should learn: after 0 predict 1, after 1 predict 2, after 2 predict 0
+
+(define (sigmoid x) (/ 1.0 (+ 1.0 (exp (- x)))))
+
+; Trained weights (hand-tuned for this pattern)
+(define W-hh 0.9)
+(define W-xh 1.5)
+
+(define (rnn-predict h x)
+  (let ((h-new (sigmoid (+ (* W-hh h) (* W-xh x)))))
+    ; Quantize output to 0, 1, or 2
+    (let ((pred (cond ((< h-new 0.4) 0)
+                      ((< h-new 0.7) 1)
+                      (else 2))))
+      (list h-new pred))))
+
+(define sequence '(0 1 2 0 1 2 0 1 2))
+
+(display "Input -> Predicted next:") (newline)
+(let loop ((seq sequence) (h 0.0))
+  (if (null? (cdr seq)) 'done
+      (let ((result (rnn-predict h (car seq))))
+        (display "  ") (display (car seq))
+        (display " -> ") (display (list-ref result 1))
+        (display " (actual: ") (display (cadr seq)) (display ")")
+        (newline)
+        (loop (cdr seq) (car result)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Next-element prediction on repeating pattern 0,1,2,0,1,2,...
+def sigmoid(x): return 1 / (1 + math.exp(-x))
+
+W_hh, W_xh = 0.9, 1.5
+
+def rnn_predict(h, x):
+    h_new = sigmoid(W_hh * h + W_xh * x)
+    if h_new < 0.4: pred = 0
+    elif h_new < 0.7: pred = 1
+    else: pred = 2
+    return h_new, pred
+
+sequence = [0, 1, 2, 0, 1, 2, 0, 1, 2]
+print("Input -> Predicted next:")
+h = 0.0
+for t in range(len(sequence) - 1):
+    h, pred = rnn_predict(h, sequence[t])
+    actual = sequence[t + 1]
+    print("  {} -> {} (actual: {})".format(sequence[t], pred, actual))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">h<sub>t</sub> = tanh(W<sub>hh</sub>h<sub>t-1</sub> + W<sub>xh</sub>x<sub>t</sub>)</td><td class="pr-4 text-green-300">(rnn-step h-prev x)</td><td class="font-sans">RNN update</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f<sub>t</sub> = &#x3C3;(W<sub>f</sub>x + U<sub>f</sub>h + b)</td><td class="pr-4 text-green-300">(sigmoid (+ ...))</td><td class="font-sans">LSTM forget gate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">c<sub>t</sub> = f&#x22C5;c<sub>t-1</sub> + i&#x22C5;c&#x0302;</td><td class="pr-4 text-green-300">(+ (* f c-prev) (* i c-hat))</td><td class="font-sans">Cell state update</td></tr>
+          <tr><td class="py-2 pr-4">&#x3C3;(x) = 1/(1+e<sup>-x</sup>)</td><td class="pr-4 text-green-300">(sigmoid x)</td><td class="font-sans">Sigmoid activation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">The scalar RNN above is pedagogical. Real RNNs use matrix multiplications: h<sub>t</sub> = tanh(W<sub>hh</sub> &middot; h<sub>t-1</sub> + W<sub>xh</sub> &middot; x<sub>t</sub> + b) where W<sub>hh</sub> is (hidden_dim &times; hidden_dim) and W<sub>xh</sub> is (hidden_dim &times; input_dim). GRUs are a simpler alternative to LSTMs with two gates instead of three.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-13/">&#x1F4D6; SICP Ch.13</a> &mdash; streams as lazy sequences, the functional view of time</li>
+      <li><a href="/reading/cognitive-science/lovelace-07/">&#x1F9E0; Lovelace Ch.7</a> &mdash; language models and cognition</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-09/", label: "Convolutional Networks" }} next={{ href: "/reading/machine-learning/ml-11/", label: "Transformers" }} />
+
+  </main>
+</Layout>

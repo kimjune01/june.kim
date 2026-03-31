@@ -1,0 +1,243 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §1.2 — Game Matrices" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Game Matrices</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Nordstrom · CC BY-SA 4.0 · <a href="https://nordstrommath.com/IntroGameTheory/S_IntroMatrices.html">§1.2 Game Matrices</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>payoff matrix</strong> encodes a simultaneous game in a table. Player 1 picks a row, Player 2 picks a column. The cell where they meet holds both payoffs as an ordered pair: (Player 1, Player 2).</p>
+    </div>
+
+    <!-- 1. Reading a matrix -->
+    <h3>Reading a payoff matrix</h3>
+    <p>Convention: rows belong to Player 1, columns to Player 2. Each cell contains a <strong>payoff vector</strong> (p1, p2). Player 1's payoff is always listed first.</p>
+
+    <!-- SVG: A 2x2 payoff matrix with labeled rows/columns -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Column headers -->
+        <text x="230" y="20" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Player 2</text>
+        <text x="180" y="45" text-anchor="middle" fill="currentColor" font-size="11">Heads</text>
+        <text x="280" y="45" text-anchor="middle" fill="currentColor" font-size="11">Tails</text>
+        <!-- Row headers -->
+        <text x="40" y="100" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 40, 100)">Player 1</text>
+        <text x="90" y="95" text-anchor="middle" fill="currentColor" font-size="11">Heads</text>
+        <text x="90" y="155" text-anchor="middle" fill="currentColor" font-size="11">Tails</text>
+        <!-- Grid -->
+        <rect x="130" y="55" width="100" height="50" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="230" y="55" width="100" height="50" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="130" y="105" width="100" height="50" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="230" y="105" width="100" height="50" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Payoff vectors -->
+        <text x="180" y="85" text-anchor="middle" fill="#4ade80" font-size="13">(1, -1)</text>
+        <text x="280" y="85" text-anchor="middle" fill="#ef4444" font-size="13">(-1, 1)</text>
+        <text x="180" y="135" text-anchor="middle" fill="#ef4444" font-size="13">(-1, 1)</text>
+        <text x="280" y="135" text-anchor="middle" fill="#4ade80" font-size="13">(1, -1)</text>
+        <!-- Highlight annotation -->
+        <line x1="180" y1="160" x2="180" y2="190" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="180" y="205" text-anchor="middle" fill="#60a5fa" font-size="9">(P1 payoff, P2 payoff)</text>
+        <!-- Caption -->
+        <text x="210" y="232" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">Matching Pennies: P1 wins when coins match</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A payoff matrix as a function from (row, col) to (p1, p2)
+; Matching Pennies: P1 wins when both choose the same side
+
+(define (matching-pennies row col)
+  (cond ((and (eq? row 'H) (eq? col 'H)) '(1 -1))
+        ((and (eq? row 'H) (eq? col 'T)) '(-1 1))
+        ((and (eq? row 'T) (eq? col 'H)) '(-1 1))
+        ((and (eq? row 'T) (eq? col 'T)) '(1 -1))))
+
+; Read the matrix: for each combination, show the payoff vector
+(for-each
+  (lambda (row)
+    (for-each
+      (lambda (col)
+        (display row) (display ",")
+        (display col) (display " -> ")
+        (display (matching-pennies row col))
+        (display "  "))
+      '(H T))
+    (newline))
+  '(H T))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Payoff matrix as a dictionary
+matching_pennies = {
+    ("H", "H"): (1, -1),
+    ("H", "T"): (-1, 1),
+    ("T", "H"): (-1, 1),
+    ("T", "T"): (1, -1),
+}
+
+for row in ["H", "T"]:
+    for col in ["H", "T"]:
+        print(f"({row},{col}) -> {matching_pennies[(row, col)]}", end="  ")
+    print()
+`} />
+    </div>
+
+    <!-- 2. Bigger matrices -->
+    <h3>Larger games</h3>
+    <p>Matrices scale to any number of strategies. A 3x3 game has nine cells. The reading rule stays the same: row player picks a row, column player picks a column, read the payoff vector at the intersection.</p>
+
+    <SchemeRepl client:load initialCode={`; A 3x3 game matrix
+; Player 1: A, B, C (rows)
+; Player 2: X, Y, Z (columns)
+
+(define matrix
+  '(((1 2)  (0 4)  (3 1))
+    ((2 1)  (1 3)  (0 0))
+    ((0 3)  (2 2)  (1 1))))
+
+(define rows '(A B C))
+(define cols '(X Y Z))
+
+(define (lookup r c)
+  (list-ref (list-ref matrix r) c))
+
+; Display as a table
+(display "     X      Y      Z") (newline)
+(let loop ((i 0))
+  (if (< i 3)
+    (begin (display (list-ref rows i)) (display "  ")
+      (let col-loop ((j 0))
+        (if (< j 3)
+          (begin (display (lookup i j)) (display "  ")
+                 (col-loop (+ j 1)))))
+      (newline)
+      (loop (+ i 1)))))
+
+; What does P1 get if P1 plays B and P2 plays Y?
+(newline)
+(display "P1 plays B, P2 plays Y -> ")
+(display (lookup 1 1))
+; (1 3) means P1 gets 1, P2 gets 3
+`} />
+
+    <!-- 3. Finding best responses -->
+    <h3>Finding best responses in a matrix</h3>
+    <p>To find Player 1's best response to a column: scan down that column and find the row with the highest P1 payoff. To find Player 2's best response to a row: scan across and find the column with the highest P2 payoff.</p>
+
+    <SchemeRepl client:load initialCode={`; Best response: scan a column (or row) for the best payoff
+
+; P1 best response to column j: maximize first element of payoff
+(define (p1-best-response matrix col-idx)
+  (let loop ((row 0) (best-row 0)
+             (best-val (car (lookup 0 col-idx))))
+    (if (>= row (length matrix))
+        (list-ref rows best-row)
+        (let ((val (car (lookup row col-idx))))
+          (if (> val best-val)
+              (loop (+ row 1) row val)
+              (loop (+ row 1) best-row best-val))))))
+
+; P2 best response to row i: maximize second element of payoff
+(define (p2-best-response matrix row-idx)
+  (let ((row-data (list-ref matrix row-idx)))
+    (let loop ((col 0) (best-col 0)
+               (best-val (cadr (car row-data))))
+      (if (>= col (length row-data))
+          (list-ref cols best-col)
+          (let ((val (cadr (list-ref row-data col))))
+            (if (> val best-val)
+                (loop (+ col 1) col val)
+                (loop (+ col 1) best-col best-val)))))))
+
+(display "P1 best response to X: ")
+(display (p1-best-response matrix 0)) (newline)
+(display "P1 best response to Y: ")
+(display (p1-best-response matrix 1)) (newline)
+(display "P2 best response to A: ")
+(display (p2-best-response matrix 0)) (newline)
+(display "P2 best response to B: ")
+(display (p2-best-response matrix 1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Best responses in a matrix
+matrix = {
+    ("A","X"):(1,2), ("A","Y"):(0,4), ("A","Z"):(3,1),
+    ("B","X"):(2,1), ("B","Y"):(1,3), ("B","Z"):(0,0),
+    ("C","X"):(0,3), ("C","Y"):(2,2), ("C","Z"):(1,1),
+}
+
+def p1_best(col):
+    rows = ["A", "B", "C"]
+    return max(rows, key=lambda r: matrix[(r, col)][0])
+
+def p2_best(row):
+    cols = ["X", "Y", "Z"]
+    return max(cols, key=lambda c: matrix[(row, c)][1])
+
+for c in ["X", "Y", "Z"]:
+    print(f"P1 best response to {c}: {p1_best(c)}")
+for r in ["A", "B", "C"]:
+    print(f"P2 best response to {r}: {p2_best(r)}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Term</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Payoff vector (a, b)</td><td class="pr-4 text-green-300">'(a b)</td><td class="font-sans">P1 gets a, P2 gets b</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Row player</td><td class="pr-4 text-green-300">row index</td><td class="font-sans">Player 1 chooses a row</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Column player</td><td class="pr-4 text-green-300">col index</td><td class="font-sans">Player 2 chooses a column</td></tr>
+          <tr><td class="py-2 pr-4">Best response</td><td class="pr-4 text-green-300">(p1-best-response matrix col)</td><td class="font-sans">Maximize your payoff given the other player's choice</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Prev / Next</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-01/">🎲 Nordstrom §1.1</a> — players and strategies: the ingredients of a game</li>
+      <li><a href="/reading/game-theory/nordstrom-03/">🎲 Nordstrom §1.3</a> — zero-sum games: your gain is my loss</li>
+      <li><a href="/reading/game-theory/nordstrom-04/">🎲 Nordstrom §2.2</a> — dominated strategies: delete what is always worse</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related paper pages</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — open games generalize payoff matrices with composition</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Normal-form_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Normal-form game</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Best_response"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Best response</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://nordstrommath.com/IntroGameTheory/S_IntroMatrices.html">Read Nordstrom §1.2</a>. Try the exercises with 3x3 matrices.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-01/", label: "Players and Strategies" }} next={{ href: "/reading/game-theory/nordstrom-03/", label: "Zero-Sum Games" }} />
+
+  </main>
+</Layout>

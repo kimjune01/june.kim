@@ -1,0 +1,146 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.3 — Replication" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Replication</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; Cambridge Distributed Systems &middot; <a href="https://en.wikipedia.org/wiki/Replication_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Replication</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Copy data to multiple nodes for fault tolerance and lower latency. The hard part is keeping copies consistent. Three architectures: leader/follower, multi-leader, leaderless. The quorum condition R + W &gt; N guarantees you read at least one up-to-date copy.</p>
+    </div>
+
+    <!-- 1. Why replicate -->
+    <h3>Why replicate</h3>
+    <p>Single copies are single points of failure. Replication buys you: (1) fault tolerance: if a node dies, others have the data; (2) lower latency: serve reads from the nearest copy; (3) higher throughput: spread read load across replicas. The cost is consistency: when one copy is updated, others lag behind.</p>
+
+    <!-- 2. Leader/follower -->
+    <h3>Leader/follower (primary/backup)</h3>
+    <p>One node is the leader. All writes go to the leader. The leader replicates to followers. Reads can go to any replica (but might be stale). If the leader dies, a follower must be promoted. Simple, but the leader is a bottleneck and a single point of failure for writes.</p>
+
+    <SchemeRepl client:load initialCode={`; Leader/follower replication.
+; Leader accepts writes, replicates to followers.
+
+(define leader-data 0)
+(define follower-1 0)
+(define follower-2 0)
+
+(define (write-to-leader value)
+  (set! leader-data value)
+  ; replicate to followers (synchronous)
+  (set! follower-1 value)
+  (set! follower-2 value)
+  (display "Wrote ") (display value) (display " to leader + 2 followers")
+  (newline))
+
+(define (read-from node)
+  (cond
+    ((equal? node "leader") leader-data)
+    ((equal? node "follower-1") follower-1)
+    ((equal? node "follower-2") follower-2)))
+
+(write-to-leader 42)
+(display "Read from leader: ") (display (read-from "leader")) (newline)
+(display "Read from follower-1: ") (display (read-from "follower-1")) (newline)
+(display "Read from follower-2: ") (display (read-from "follower-2"))
+`} />
+
+    <!-- 3. Quorum reads/writes -->
+    <h3>Quorum reads and writes</h3>
+    <p>In a leaderless system with N replicas, write to W nodes and read from R nodes. If R + W &gt; N, at least one node in every read set has the latest write. This is the <strong>quorum condition</strong>. With N=3, R=2, W=2: every read overlaps every write.</p>
+
+    <!-- SVG: quorum diagram with R=2, W=2, N=3 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Three replica nodes -->
+        <circle cx="100" cy="100" r="30" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="105" text-anchor="middle" fill="#60a5fa" font-size="12">R1</text>
+        <circle cx="200" cy="100" r="30" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="105" text-anchor="middle" fill="#34d399" font-size="12">R2</text>
+        <circle cx="300" cy="100" r="30" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="300" y="105" text-anchor="middle" fill="#f59e0b" font-size="12">R3</text>
+        <!-- Write quorum (W=2): R1, R2 -->
+        <rect x="60" y="55" width="180" height="90" rx="8" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+        <text x="150" y="48" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.7">write quorum (W=2)</text>
+        <!-- Read quorum (R=2): R2, R3 -->
+        <rect x="160" y="55" width="180" height="90" rx="8" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+        <text x="250" y="170" text-anchor="middle" fill="#fb923c" font-size="10" fill-opacity="0.7">read quorum (R=2)</text>
+        <!-- Overlap label -->
+        <text x="200" y="135" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">overlap: R2</text>
+        <!-- Caption -->
+        <text x="200" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">R + W &gt; N guarantees overlap. N=3, R=2, W=2.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Quorum condition: R + W > N
+; With N=3, which R, W pairs guarantee consistency?
+
+(define N 3)
+
+(define (quorum? R W)
+  (> (+ R W) N))
+
+(display "N = ") (display N) (newline)
+(display "R=1, W=1: ") (display (quorum? 1 1)) (newline)  ; no
+(display "R=1, W=2: ") (display (quorum? 1 2)) (newline)  ; no
+(display "R=1, W=3: ") (display (quorum? 1 3)) (newline)  ; yes
+(display "R=2, W=2: ") (display (quorum? 2 2)) (newline)  ; yes
+(display "R=3, W=1: ") (display (quorum? 3 1)) (newline)  ; yes
+(display "R=2, W=1: ") (display (quorum? 2 1))            ; no
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Quorum condition: R + W > N
+N = 3
+for R in range(1, N+1):
+    for W in range(1, N+1):
+        ok = R + W > N
+        print(f"R={R}, W={W}: {'quorum' if ok else 'no quorum'}")
+`} />
+    </div>
+
+    <!-- 4. Consistency models -->
+    <h3>Consistency models</h3>
+    <p><strong>Strong consistency</strong>: every read sees the most recent write. Requires coordination (slow). <strong>Eventual consistency</strong>: replicas converge eventually, but reads may be stale. <strong>Causal consistency</strong>: if A caused B, everyone sees A before B, but concurrent events may appear in any order. Stronger is safer, weaker is faster.</p>
+
+    <SchemeRepl client:load initialCode={`; Consistency models as guarantees about read results.
+
+(define (strong-consistency writes reads)
+  ; Every read returns the last write
+  (display "Strong: every read sees latest write") (newline)
+  (display "Read returns: ") (display (car (reverse writes))))
+
+(define (eventual-consistency writes reads)
+  ; Eventually all reads return the last write
+  (display "Eventual: reads may be stale for a while") (newline)
+  (display "Read might return: ") (display (car writes))  ; old value
+  (display " (will converge to ")
+  (display (car (reverse writes))) (display ")"))
+
+(strong-consistency (list 1 2 3) "any-read")
+(newline)
+(eventual-consistency (list 1 2 3) "any-read")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/distributed-systems/dist-07/">&#x1F310; Ch.7 CAP Theorem</a> — the fundamental tradeoff between consistency and availability</li>
+      <li><a href="/reading/distributed-systems/dist-10/">&#x1F310; Ch.10 CRDTs</a> — eventual consistency without coordination</li>
+      <li><a href="https://june.kim/caches-all-the-way-down"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/caches-all-the-way-down</a> — replication as caching: every replica is a cache of the leader's state</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-02/", label: "Time and Clocks" }} next={{ href: "/reading/distributed-systems/dist-04/", label: "Consensus" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,212 @@
+---
+import Layout from '../../layouts/Base.astro';
+import Search from '../../components/Search';
+---
+
+<Layout title="Runnable Textbooks" favicon="📚">
+  <main>
+
+    <h1 class="text-3xl font-bold mb-2">Runnable Textbooks</h1>
+    <p class="text-sm text-gray-400 mb-6">Open-source textbooks translated into runnable code and diagrams.</p>
+
+    <details class="mb-6">
+      <summary class="text-sm text-gray-500 cursor-pointer">How to read these: are you new to programming languages?</summary>
+      <p class="text-gray-400 mt-2 mb-4 text-sm">Every page has runnable code. If you're new to the languages used on this site, start here.</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr>
+              <th class="text-left py-2 pr-3 text-gray-400">📄</th>
+              <th class="text-left py-2 pr-3 text-gray-400">Language</th>
+              <th class="text-left py-2 pr-3 text-gray-400">Role on this site</th>
+              <th class="text-left py-2 text-gray-400"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-2 pr-3">🟢</td>
+              <td class="pr-3">Scheme</td>
+              <td class="pr-3 text-gray-400">Primary REPL on every page. Functional, minimal syntax.</td>
+              <td><a href="/reading/how/scheme/" class="text-yellow-300 hover:text-yellow-200">start</a></td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3">🔵</td>
+              <td class="pr-3">Python</td>
+              <td class="pr-3 text-gray-400">Imperative equivalent in collapsible blocks. Familiar syntax.</td>
+              <td><a href="/reading/how/python/" class="text-yellow-300 hover:text-yellow-200">start</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <Search client:load />
+
+    <h2 class="text-xl font-semibold mb-4">Mathematics</h2>
+    <div class="overflow-x-auto mb-6">
+      <table class="subject-table text-sm">
+        <tbody>
+          <tr><td class="py-2 pr-3"><a href="/reading/calculus/">∫</a></td><td class="pr-3"><a href="/reading/calculus/">Calculus</a></td><td class="pr-3 text-gray-400">Active Calculus</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/real-analysis/">∞</a></td><td class="pr-3"><a href="/reading/real-analysis/">Real Analysis</a></td><td class="pr-3 text-gray-400">Jiří Lebl</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/linear-algebra/">📐</a></td><td class="pr-3"><a href="/reading/linear-algebra/">Linear Algebra</a></td><td class="pr-3 text-gray-400">Jim Hefferon</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/abstract-algebra/">🔗</a></td><td class="pr-3"><a href="/reading/abstract-algebra/">Abstract Algebra</a></td><td class="pr-3 text-gray-400">Tom Judson</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/discrete-math/">🔢</a></td><td class="pr-3"><a href="/reading/discrete-math/">Discrete Math</a></td><td class="pr-3 text-gray-400">Oscar Levin</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/number-theory/">#</a></td><td class="pr-3"><a href="/reading/number-theory/">Number Theory</a></td><td class="pr-3 text-gray-400">Jim Hefferon</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/geometry/">△</a></td><td class="pr-3"><a href="/reading/geometry/">Geometry</a></td><td class="pr-3 text-gray-400">Wikipedia + june.kim</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/logic/">🔑</a></td><td class="pr-3"><a href="/reading/logic/">Logic</a></td><td class="pr-3 text-gray-400">Craig DeLancey</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/proof-writing/">✎</a></td><td class="pr-3"><a href="/reading/proof-writing/">Proofs</a></td><td class="pr-3 text-gray-400">Jim Hefferon</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/category-theory/">🐱</a></td><td class="pr-3"><a href="/reading/category-theory/">Category Theory</a></td><td class="pr-3 text-gray-400">Bartosz Milewski</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4">Computer Science</h2>
+    <div class="overflow-x-auto mb-6">
+      <table class="subject-table text-sm">
+        <tbody>
+          <tr><td class="py-2 pr-3"><a href="/reading/programming/">🪄</a></td><td class="pr-3"><a href="/reading/programming/">Programming</a></td><td class="pr-3 text-gray-400">Abelson &amp; Sussman (SICP)</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/algorithms/">⚙</a></td><td class="pr-3"><a href="/reading/algorithms/">Algorithms</a></td><td class="pr-3 text-gray-400">Nievergelt &amp; Hinrichs</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/theory-of-computation/">🔀</a></td><td class="pr-3"><a href="/reading/theory-of-computation/">Theory of Computation</a></td><td class="pr-3 text-gray-400">Maheshwari &amp; Smid</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/operating-systems/">🖥</a></td><td class="pr-3"><a href="/reading/operating-systems/">Operating Systems</a></td><td class="pr-3 text-gray-400">Wikipedia</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/databases/">🗄</a></td><td class="pr-3"><a href="/reading/databases/">Databases</a></td><td class="pr-3 text-gray-400">Wikipedia</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/distributed-systems/">🌐</a></td><td class="pr-3"><a href="/reading/distributed-systems/">Distributed Systems</a></td><td class="pr-3 text-gray-400">Wikipedia + Cambridge CS</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/cryptography/">🔐</a></td><td class="pr-3"><a href="/reading/cryptography/">Cryptography</a></td><td class="pr-3 text-gray-400">Wikipedia</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/machine-learning/">🤖</a></td><td class="pr-3"><a href="/reading/machine-learning/">Machine Learning</a></td><td class="pr-3 text-gray-400">MML + Dive into Deep Learning</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4">Science &amp; Engineering</h2>
+    <div class="overflow-x-auto mb-6">
+      <table class="subject-table text-sm">
+        <tbody>
+          <tr><td class="py-2 pr-3"><a href="/reading/physics/">⚛</a></td><td class="pr-3"><a href="/reading/physics/">Physics</a></td><td class="pr-3 text-gray-400">Benjamin Crowell</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/control/">🎛</a></td><td class="pr-3"><a href="/reading/control/">Control Theory</a></td><td class="pr-3 text-gray-400">Wikipedia</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/probability/">🎰</a></td><td class="pr-3"><a href="/reading/probability/">Probability</a></td><td class="pr-3 text-gray-400">Grinstead &amp; Snell</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/statistics/">📊</a></td><td class="pr-3"><a href="/reading/statistics/">Statistics</a></td><td class="pr-3 text-gray-400">OpenIntro</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/information-theory/">📡</a></td><td class="pr-3"><a href="/reading/information-theory/">Information Theory</a></td><td class="pr-3 text-gray-400">Shannon 1948 + Wikipedia</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4">Social Science</h2>
+    <div class="overflow-x-auto mb-6">
+      <table class="subject-table text-sm">
+        <tbody>
+          <tr><td class="py-2 pr-3"><a href="/reading/game-theory/">🎲</a></td><td class="pr-3"><a href="/reading/game-theory/">Game Theory</a></td><td class="pr-3 text-gray-400">Jennifer Nordstrom</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/economics/">💰</a></td><td class="pr-3"><a href="/reading/economics/">Economics</a></td><td class="pr-3 text-gray-400">Smith, Ricardo, Marshall + Wikipedia</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/finance-1/">📈</a></td><td class="pr-3"><a href="/reading/finance-1/">Finance</a></td><td class="pr-3 text-gray-400">OpenStax + MIT OCW (Andrew Lo)</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/finance-2/">📉</a></td><td class="pr-3"><a href="/reading/finance-2/">Finance II</a></td><td class="pr-3 text-gray-400">MIT OCW 18.S096 + 15.450</td></tr>
+          <tr><td class="py-2 pr-3"><a href="/reading/cognitive-science/">🧠</a></td><td class="pr-3"><a href="/reading/cognitive-science/">Cognitive Science</a></td><td class="pr-3 text-gray-400">Lovelace textbook</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4">Papers</h2>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="subject-table text-sm">
+        <thead>
+        <tbody>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/natural-breadcrumbs/">🍞</a></td>
+            <td class="pr-3"><a href="/reading/natural-breadcrumbs/">Natural Breadcrumbs</a></td>
+            <td class="text-gray-400">Applied category theory papers: probability, program logics, and games — made runnable</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/the-natural-framework-lean/">✏️</a></td>
+            <td class="pr-3"><a href="/reading/the-natural-framework-lean/">Natural Framework Proof</a></td>
+            <td class="text-gray-400">The Natural Framework proof, file by file &mdash; plain English + Lean 4</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/vector-space-proof/">📐</a></td>
+            <td class="pr-3"><a href="/reading/vector-space-proof/">Vector Space Proof</a></td>
+            <td class="text-gray-400">VCG on Gaussian embeddings is welfare-optimal and DSIC &mdash; Lean 4</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/scientific-method/">🔬</a></td>
+            <td class="pr-3"><a href="/reading/scientific-method/">The Scientific Method</a></td>
+            <td class="text-gray-400">Bacon to Mayo and beyond: four centuries of arguing about what counts as knowledge</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/cognitive-architecture/">🏛️</a></td>
+            <td class="pr-3"><a href="/reading/cognitive-architecture/">Cognitive Architecture</a></td>
+            <td class="text-gray-400">Minsky to Soar to transformers to LLM agents</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/auction-theory/">💎</a></td>
+            <td class="pr-3"><a href="/reading/auction-theory/">Auction Theory</a></td>
+            <td class="text-gray-400">Papers behind the Vector Space ad auction series</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/prose-writing/">✍️</a></td>
+            <td class="pr-3"><a href="/reading/prose-writing/">Prose Writing</a></td>
+            <td class="text-gray-400">Aristotle to Google: learn to write clearly, with interactive practice</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3"><a href="/reading/commons/">⚖</a></td>
+            <td class="pr-3"><a href="/reading/commons/">The Commons</a></td>
+            <td class="text-gray-400">Who owns knowledge, and what happens when the answers stop working</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Further reading (external)</h2>
+    <p class="text-gray-400 mb-4 text-sm">Permissive-licensed sources worth reading directly.</p>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Logic &amp; Foundations</p>
+    <ul class="text-gray-400 text-sm space-y-1 mb-4">
+      <li><a href="https://forallx.openlogicproject.org/">forall x: Calgary</a> — propositional and predicate logic (CC BY 4.0)</li>
+      <li><a href="https://openlogicproject.org/">Open Logic Project</a> — formal proof systems, model theory (CC BY 4.0)</li>
+      <li><a href="https://leanprover-community.github.io/logic_and_proof/">Logic and Proof</a> — induction, Lean-flavored proofs (Apache 2.0)</li>
+      <li><a href="https://softwarefoundations.cis.upenn.edu/plf-current/index.html">Software Foundations vol. 2</a> — Hoare logic, weakest preconditions (MIT)</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Mathematics</p>
+    <ul class="text-gray-400 text-sm space-y-1 mb-4">
+      <li><a href="https://www.jirka.org/diffyqs/">Notes on Diffy Qs</a> — differential equations (CC BY-SA 4.0)</li>
+      <li><a href="https://topology.pi-base.org/">pi-Base</a> — searchable database of topological spaces (MIT)</li>
+      <li><a href="https://linear.ups.edu/">A First Course in Linear Algebra</a> — Beezer, more computational than Hefferon (GFDL)</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Computer Science</p>
+    <ul class="text-gray-400 text-sm space-y-1 mb-4">
+      <li><a href="https://craftinginterpreters.com/">Crafting Interpreters</a> — compilers, from tree-walk to bytecode (MIT)</li>
+      <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a> — virtualization, concurrency, persistence (free)</li>
+      <li><a href="https://beej.us/guide/bgnet/">Beej's Guide to Network Programming</a> — sockets from scratch (CC BY-SA 4.0)</li>
+      <li><a href="https://www.nand2tetris.org/">Nand2Tetris</a> — build a computer from logic gates to OS (CC BY-SA 3.0)</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Optimization</p>
+    <ul class="text-gray-400 text-sm space-y-1 mb-4">
+      <li><a href="https://web.stanford.edu/~boyd/cvxbook/">Convex Optimization</a> — Boyd &amp; Vandenberghe (free PDF)</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Science</p>
+    <ul class="text-gray-400 text-sm space-y-1 mb-4">
+      <li><a href="https://openstax.org/subjects/science">OpenStax Sciences</a> — biology, chemistry, astronomy (CC BY 4.0)</li>
+      <li><a href="https://www.feynmanlectures.caltech.edu/">Feynman Lectures on Physics</a> — the classic, free online</li>
+    </ul>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <p class="text-gray-400 mb-4 text-sm"><a href="https://june.kim/books/"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Book notes</a> (52 posts, 2012-2023) · <a href="https://june.kim/poetry/"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Poetry</a> — the same ideas as <a href="/reading/natural-breadcrumbs/">Natural Breadcrumbs</a>, before the math</p>
+
+    <hr class="border-zinc-700 my-8"/>
+    <p class="text-gray-600 text-xs">This site is licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="underline hover:text-gray-400">CC BY-SA 4.0</a>. Fork it, build on it, keep it open.</p>
+    <p class="text-gray-600 text-xs mt-1"><a href="https://june.kim" class="underline hover:text-gray-400">june.kim</a></p>
+
+  </main>
+</Layout>
+
+<style>
+  .subject-table { table-layout: fixed; width: 100%; }
+  .subject-table td:first-child { width: 1.5rem; text-align: center; }
+  .subject-table td:nth-child(2) { width: 12rem; }
+  @media (max-width: 640px) {
+    .subject-table td:nth-child(3) { display: none; }
+  }
+</style>

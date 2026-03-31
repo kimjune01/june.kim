@@ -1,0 +1,255 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.2 — Probability and Bayes" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Probability and Bayes</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Bayes' theorem</strong> tells you how to update beliefs when new evidence arrives. Start with a prior (what you believed before), multiply by the likelihood (how probable the evidence is under each hypothesis), and normalize. The posterior is your updated belief. This is the engine underneath every Bayesian model of cognition.</p>
+    </div>
+
+    <!-- Bayes' theorem -->
+    <h3>Bayes' theorem</h3>
+    <p>P(H|D) = P(D|H) P(H) / P(D). The prior P(H) encodes what you believed before seeing data. The likelihood P(D|H) says how probable the observed data is if hypothesis H is true. Your updated belief is the posterior P(H|D). The denominator P(D) is a normalizing constant that ensures it sums to one.</p>
+
+    <!-- SVG: Prior -> Likelihood -> Posterior -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Prior box -->
+        <rect x="10" y="30" width="100" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="50" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">Prior</text>
+        <text x="60" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">P(H)</text>
+        <!-- Arrow -->
+        <line x1="110" y1="55" x2="140" y2="55" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="140,51 148,55 140,59" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Multiply sign -->
+        <text x="155" y="60" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.4">&times;</text>
+        <!-- Likelihood box -->
+        <rect x="162" y="30" width="100" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="212" y="50" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">Likelihood</text>
+        <text x="212" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">P(D|H)</text>
+        <!-- Arrow -->
+        <line x1="262" y1="55" x2="302" y2="55" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="302,51 310,55 302,59" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Posterior box -->
+        <rect x="310" y="30" width="100" height="50" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="360" y="50" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">Posterior</text>
+        <text x="360" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">P(H|D)</text>
+        <!-- Evidence label below -->
+        <text x="210" y="110" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Normalize by P(D) = sum over all H of P(D|H)P(H)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Bayes' theorem: P(H|D) = P(D|H) * P(H) / P(D)
+;
+; Example: a disease test.
+; Prior: 1% of people have the disease.
+; Likelihood: test is 90% sensitive (true positive rate).
+; False positive rate: 5%.
+
+(define p-disease 0.01)
+(define p-healthy 0.99)
+(define p-positive-given-disease 0.90)
+(define p-positive-given-healthy 0.05)
+
+; P(D) = total probability of a positive test
+(define p-positive
+  (+ (* p-positive-given-disease p-disease)
+     (* p-positive-given-healthy p-healthy)))
+
+; Posterior: P(disease | positive test)
+(define p-disease-given-positive
+  (/ (* p-positive-given-disease p-disease) p-positive))
+
+(display "P(disease | positive test) = ")
+(display (exact->inexact p-disease-given-positive))
+(newline)
+; About 15% — most positive tests are false positives
+; because the disease is rare (low prior).
+
+(display "P(healthy | positive test) = ")
+(display (exact->inexact (- 1 p-disease-given-positive)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bayes' theorem in Python
+p_disease = 0.01
+p_healthy = 0.99
+p_pos_disease = 0.90
+p_pos_healthy = 0.05
+
+p_positive = p_pos_disease * p_disease + p_pos_healthy * p_healthy
+p_disease_given_pos = (p_pos_disease * p_disease) / p_positive
+
+print(f"P(disease | positive) = {p_disease_given_pos:.4f}")
+print(f"P(healthy | positive) = {1 - p_disease_given_pos:.4f}")
+`} />
+    </div>
+
+
+    <!-- Priors and updating -->
+    <h3>Priors and sequential updating</h3>
+    <p>The posterior from one observation becomes the prior for the next. Bayesian inference is naturally sequential: each new piece of evidence sharpens (or broadens) your beliefs. The order of evidence does not matter. Two observations yield the same posterior regardless of which comes first.</p>
+
+    <SchemeRepl client:load initialCode={`; Sequential Bayesian updating
+; Coin flipping: is the coin fair (p=0.5) or biased (p=0.8)?
+; Prior: 50/50 between fair and biased.
+
+(define (update prior-fair prior-biased observation)
+  (let* ((p-obs-fair (if (equal? observation 'heads) 0.5 0.5))
+         (p-obs-biased (if (equal? observation 'heads) 0.8 0.2))
+         (evidence (+ (* p-obs-fair prior-fair)
+                      (* p-obs-biased prior-biased)))
+         (post-fair (/ (* p-obs-fair prior-fair) evidence))
+         (post-biased (/ (* p-obs-biased prior-biased) evidence)))
+    (list post-fair post-biased)))
+
+; Start: 50/50
+(define start (list 0.5 0.5))
+(display "Start:     ") (display start) (newline)
+
+; Observe heads
+(define after-h (update 0.5 0.5 'heads))
+(display "After H:   ") (display after-h) (newline)
+
+; Observe another heads
+(define after-hh (update (car after-h) (cadr after-h) 'heads))
+(display "After HH:  ") (display after-hh) (newline)
+
+; Observe tails
+(define after-hht (update (car after-hh) (cadr after-hh) 'tails))
+(display "After HHT: ") (display after-hht)
+; Tails pulls belief back toward fair
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sequential Bayesian updating: fair vs biased coin
+def update(pf, pb, obs):
+    pof = 0.5 if obs == "H" else 0.5
+    pob = 0.8 if obs == "H" else 0.2
+    evidence = pof * pf + pob * pb
+    return pof * pf / evidence, pob * pb / evidence
+
+pf, pb = 0.5, 0.5
+print("Start:     " + str([pf, pb]))
+
+for obs in ["H", "H", "T"]:
+    pf, pb = update(pf, pb, obs)
+    print("After " + obs + ":   [" + "{:.4f}".format(pf) + ", " + "{:.4f}".format(pb) + "]")
+`} />
+    </div>
+
+
+    <!-- Conjugate priors -->
+    <h3>Conjugate priors</h3>
+    <p>A prior is <strong>conjugate</strong> to a likelihood function when the posterior has the same functional form as the prior. The Beta distribution is conjugate to the Binomial likelihood: if your prior on a coin's bias is Beta(a, b), then after observing h heads and t tails, the posterior is Beta(a+h, b+t). The update is just adding counts to the parameters.</p>
+
+    <SchemeRepl client:load initialCode={`; Beta-Binomial conjugacy
+; Prior: Beta(a, b). After h heads and t tails: Beta(a+h, b+t).
+; The mean of Beta(a, b) is a/(a+b).
+
+(define (beta-mean a b) (/ a (+ a b)))
+
+; Uniform prior: Beta(1, 1) — mean = 0.5
+(define prior-a 1)
+(define prior-b 1)
+(display "Prior mean: ")
+(display (exact->inexact (beta-mean prior-a prior-b)))
+(newline)
+
+; Observe 7 heads, 3 tails
+(define post-a (+ prior-a 7))
+(define post-b (+ prior-b 3))
+(display "After 7H 3T: Beta(")
+(display post-a) (display ", ") (display post-b) (display ")")
+(newline)
+(display "Posterior mean: ")
+(display (exact->inexact (beta-mean post-a post-b)))
+(newline)
+
+; More data: 70 heads, 30 tails total
+(define post2-a (+ prior-a 70))
+(define post2-b (+ prior-b 30))
+(display "After 70H 30T: Beta(")
+(display post2-a) (display ", ") (display post2-b) (display ")")
+(newline)
+(display "Posterior mean: ")
+(display (exact->inexact (beta-mean post2-a post2-b)))
+; More data = tighter posterior, converging on 0.7
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Beta-Binomial conjugacy
+def beta_mean(a, b):
+    return a / (a + b)
+
+a, b = 1, 1  # uniform prior
+print("Prior mean: " + str(beta_mean(a, b)))
+
+# After 7 heads, 3 tails
+a1, b1 = a + 7, b + 3
+print("After 7H 3T: Beta(" + str(a1) + ", " + str(b1) + ")")
+print("Posterior mean: " + "{:.4f}".format(beta_mean(a1, b1)))
+
+# After 70 heads, 30 tails
+a2, b2 = a + 70, b + 30
+print("After 70H 30T: Beta(" + str(a2) + ", " + str(b2) + ")")
+print("Posterior mean: " + "{:.4f}".format(beta_mean(a2, b2)))
+`} />
+    </div>
+
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Symbol</th>
+            <th class="text-left py-2 pr-4">Scheme</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(H)</td><td class="pr-4 text-green-300">p-hypothesis</td><td class="font-sans">Prior probability</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(D|H)</td><td class="pr-4 text-green-300">p-data-given-h</td><td class="font-sans">Likelihood</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(H|D)</td><td class="pr-4 text-green-300">p-h-given-data</td><td class="font-sans">Posterior probability</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(D)</td><td class="pr-4 text-green-300">p-evidence</td><td class="font-sans">Marginal likelihood (normalizer)</td></tr>
+          <tr><td class="py-2 pr-4">Beta(a, b)</td><td class="pr-4 text-green-300">(beta-mean a b)</td><td class="font-sans">Conjugate prior for coin bias</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-04/">Grinstead Ch.4</a> — Bayes' theorem from first principles</li>
+      <li><a href="/reading/category-theory/fritz-2020/">Fritz 2020</a> — Markov categories: a categorical foundation for probability</li>
+      <li><a href="/reading/ho-wu-2026/">🍞 Ho &amp; Wu 2026</a> — Bayesian inference as a lens: prior-to-posterior update via optics</li>
+      <li><a href="https://en.wikipedia.org/wiki/Conjugate_prior"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Conjugate prior</a> — the mathematical convenience that makes sequential updating tractable</li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook introduces probability from scratch with interactive visualizations. This page assumes basic familiarity with probability and focuses on the Bayesian update machinery that subsequent chapters build on. The textbook also covers joint distributions, marginalization, and independence, which are prerequisites for the graphical models in Chapter 3.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter2">Lovelace, Chapter 2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-01/", label: "What is Computational Cognitive Science?" }} next={{ href: "/reading/cognitive-science/lovelace-03/", label: "Bayesian Models of Cognition" }} />
+
+  </main>
+</Layout>

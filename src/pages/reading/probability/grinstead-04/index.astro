@@ -1,0 +1,252 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 4 — Conditional Probability" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">← back to probability</a>
+
+    <h1>Conditional Probability</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell · GFDL · <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Conditional probability</strong> is the probability of A given that B has occurred: P(A|B) = P(A &cap; B) / P(B). This is how you update beliefs with new information. Bayes' theorem flips the direction: knowing P(B|A), compute P(A|B).</p>
+    </div>
+
+    <!-- 1. Definition -->
+    <h3>P(A|B) — restricting the sample space</h3>
+    <p>When you learn that B has occurred, the sample space shrinks from &Omega; to B. The conditional probability P(A|B) re-normalizes by dividing by P(B). Only outcomes in both A and B survive.</p>
+
+    <!-- SVG: Probability tree diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Root -->
+        <circle cx="60" cy="110" r="5" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Branch B -->
+        <line x1="65" y1="107" x2="180" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <text x="110" y="65" fill="currentColor" font-size="11" fill-opacity="0.6">P(B)</text>
+        <circle cx="180" cy="50" r="5" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="185" y="45" fill="#60a5fa" font-size="12">B</text>
+        <!-- Branch not-B -->
+        <line x1="65" y1="113" x2="180" y2="170" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="158" fill="currentColor" font-size="11" fill-opacity="0.6">P(B')</text>
+        <circle cx="180" cy="170" r="5" fill="currentColor" fill-opacity="0.3"/>
+        <text x="185" y="178" fill="currentColor" font-size="12" fill-opacity="0.5">B'</text>
+        <!-- Sub-branch: A given B -->
+        <line x1="185" y1="47" x2="310" y2="25" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="240" y="25" fill="#60a5fa" font-size="10">P(A|B)</text>
+        <circle cx="310" cy="25" r="5" fill="#4ade80" fill-opacity="0.5"/>
+        <text x="325" y="30" fill="#4ade80" font-size="11">A &cap; B</text>
+        <!-- Sub-branch: not-A given B -->
+        <line x1="185" y1="53" x2="310" y2="75" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="240" y="75" fill="currentColor" font-size="10" fill-opacity="0.4">P(A'|B)</text>
+        <circle cx="310" cy="75" r="4" fill="currentColor" fill-opacity="0.2"/>
+        <text x="325" y="80" fill="currentColor" font-size="11" fill-opacity="0.4">A' &cap; B</text>
+        <!-- Sub-branch: A given not-B -->
+        <line x1="185" y1="167" x2="310" y2="145" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <circle cx="310" cy="145" r="4" fill="currentColor" fill-opacity="0.2"/>
+        <text x="325" y="150" fill="currentColor" font-size="11" fill-opacity="0.4">A &cap; B'</text>
+        <!-- Sub-branch: not-A given not-B -->
+        <line x1="185" y1="173" x2="310" y2="195" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <circle cx="310" cy="195" r="4" fill="currentColor" fill-opacity="0.2"/>
+        <text x="325" y="200" fill="currentColor" font-size="11" fill-opacity="0.4">A' &cap; B'</text>
+        <!-- Caption -->
+        <text x="200" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">probability tree: branch probabilities multiply along paths</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Conditional probability: P(A|B) = P(A and B) / P(B)
+
+(define (cond-prob p-a-and-b p-b)
+  (/ p-a-and-b p-b))
+
+; Example: fair die. A = "even", B = "greater than 3"
+; Omega = (1 2 3 4 5 6)
+; A = (2 4 6), B = (4 5 6), A and B = (4 6)
+(define p-a 3/6)
+(define p-b 3/6)
+(define p-a-and-b 2/6)
+
+(display "P(A) = ") (display (exact->inexact p-a)) (newline)
+(display "P(B) = ") (display (exact->inexact p-b)) (newline)
+(display "P(A and B) = ") (display (exact->inexact p-a-and-b)) (newline)
+(display "P(A|B) = P(even | >3) = ")
+(display (exact->inexact (cond-prob p-a-and-b p-b)))
+; 2/3 — knowing the roll is >3 makes "even" more likely
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Conditional probability
+p_a_and_b = 2/6  # even AND > 3
+p_b = 3/6        # > 3
+
+p_a_given_b = p_a_and_b / p_b
+print(f"P(even | >3) = {p_a_given_b:.4f}")
+# 0.6667 — learning ">3" shifts the probability of "even"
+`} />
+    </div>
+
+    <!-- 2. Multiplication rule -->
+    <h3>The multiplication rule</h3>
+    <p>Rearranging the definition: P(A &cap; B) = P(A|B) &middot; P(B). For a chain of events: P(A &cap; B &cap; C) = P(A) &middot; P(B|A) &middot; P(C|A &cap; B). Multiply along the branches of the tree.</p>
+
+    <SchemeRepl client:load initialCode={`; Multiplication rule: P(A and B) = P(A|B) * P(B)
+; Drawing cards without replacement
+
+; P(first card is ace) = 4/52
+; P(second card is ace | first was ace) = 3/51
+; P(both aces) = (4/52) * (3/51)
+
+(define p-first-ace 4/52)
+(define p-second-ace-given-first 3/51)
+(define p-both-aces (* p-first-ace p-second-ace-given-first))
+
+(display "P(1st ace) = ") (display (exact->inexact p-first-ace)) (newline)
+(display "P(2nd ace | 1st ace) = ") (display (exact->inexact p-second-ace-given-first)) (newline)
+(display "P(both aces) = ") (display (exact->inexact p-both-aces))
+`} />
+
+    <!-- 3. Bayes' theorem -->
+    <h3>Bayes' theorem</h3>
+    <p>P(A|B) = P(B|A) &middot; P(A) / P(B). You know how likely the evidence is given the hypothesis (P(B|A)). Bayes lets you compute how likely the hypothesis is given the evidence (P(A|B)). The denominator P(B) is often expanded using the law of total probability.</p>
+
+    <SchemeRepl client:load initialCode={`; Bayes' theorem: P(A|B) = P(B|A) * P(A) / P(B)
+; Classic example: medical test
+
+; Disease prevalence: 1%
+(define p-disease 0.01)
+(define p-healthy 0.99)
+
+; Test sensitivity: P(positive | disease) = 95%
+(define p-pos-given-disease 0.95)
+; False positive rate: P(positive | healthy) = 5%
+(define p-pos-given-healthy 0.05)
+
+; P(positive) by total probability
+(define p-pos (+ (* p-pos-given-disease p-disease)
+                 (* p-pos-given-healthy p-healthy)))
+
+; P(disease | positive) by Bayes
+(define p-disease-given-pos
+  (/ (* p-pos-given-disease p-disease) p-pos))
+
+(display "P(positive) = ") (display p-pos) (newline)
+(display "P(disease | positive) = ")
+(display p-disease-given-pos) (newline)
+; Only ~16%! Most positives are false positives
+; because the disease is rare.
+(display "Most positives are healthy people.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bayes' theorem: medical test
+p_disease = 0.01
+p_pos_given_disease = 0.95
+p_pos_given_healthy = 0.05
+
+p_pos = p_pos_given_disease * p_disease + p_pos_given_healthy * (1 - p_disease)
+p_disease_given_pos = (p_pos_given_disease * p_disease) / p_pos
+
+print(f"P(positive) = {p_pos:.4f}")
+print(f"P(disease | positive) = {p_disease_given_pos:.4f}")
+print("Most positives are false positives when prevalence is low.")
+`} />
+    </div>
+
+    <!-- 4. Independence -->
+    <h3>Independence</h3>
+    <p>Events A and B are <strong>independent</strong> if P(A|B) = P(A), meaning B gives no information about A. Equivalently, P(A &cap; B) = P(A) &middot; P(B). Coin flips are independent. Card draws without replacement are not.</p>
+
+    <SchemeRepl client:load initialCode={`; Independence: P(A and B) = P(A) * P(B)
+
+(define (independent? p-a p-b p-a-and-b)
+  (let ((product (* p-a p-b)))
+    (< (abs (- p-a-and-b product)) 0.0001)))
+
+; Two fair coins: P(H1) = 1/2, P(H2) = 1/2, P(H1 and H2) = 1/4
+(display "coins independent? ")
+(display (independent? 0.5 0.5 0.25)) (newline)
+
+; Die: A = "even", B = "> 3"
+; P(A) = 1/2, P(B) = 1/2, P(A and B) = 2/6 = 1/3
+(display "even and >3 independent? ")
+(display (independent? 0.5 0.5 (/ 2.0 6))) (newline)
+; Not independent: knowing >3 changes P(even) from 1/2 to 2/3
+
+; Die: A = "even", C = "< 5"
+; P(A) = 1/2, P(C) = 4/6 = 2/3, P(A and C) = 2/6 = 1/3
+(display "even and <5 independent? ")
+(display (independent? 0.5 (/ 4.0 6) (/ 2.0 6)))
+; Independent: P(A)*P(C) = 1/2 * 2/3 = 1/3 = P(A and C)
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(A|B)</td><td class="pr-4 text-green-300">(cond-prob p-ab p-b)</td><td class="font-sans">Conditional probability</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(A &cap; B) = P(A|B)P(B)</td><td class="pr-4 text-green-300">(* p-a-given-b p-b)</td><td class="font-sans">Multiplication rule</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(A|B) = P(B|A)P(A)/P(B)</td><td class="pr-4 text-green-300">(/ (* p-ba p-a) p-b)</td><td class="font-sans">Bayes' theorem</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A &perp; B</td><td class="pr-4 text-green-300">(independent? ...)</td><td class="font-sans">Independence</td></tr>
+          <tr><td class="py-2 pr-4">P(B) = &sum; P(B|A_i)P(A_i)</td><td class="pr-4 text-green-300">(+ (* p-b-a1 p-a1) ...)</td><td class="font-sans">Law of total probability</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Adjacent chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-03/">🎰 Ch 3: Combinatorics</a> — counting makes conditional probabilities computable</li>
+      <li><a href="/reading/probability/grinstead-01/">🎰 Ch 1: Discrete Probability</a> — the axioms that conditional probability builds on</li>
+      <li><a href="/reading/probability/grinstead-02/">🎰 Ch 2: Continuous Probability</a> — conditioning works for densities too (condition on events with positive measure)</li>
+    
+      <li><a href="/reading/cognitive-science/lovelace-02/">🧠 Cognitive Science Ch.2</a> &mdash; Bayes' theorem as a model of human reasoning</li>
+      <li><a href="/reading/machine-learning/ml-04/">🤖 ML Ch.4</a> &mdash; logistic regression uses conditional probability directly</li>
+      <li><a href="/reading/statistics/openintro-03/">📊 Statistics Ch.3</a> &mdash; conditional probability in the context of inference</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories axiomatize conditional probability as morphism composition. Conditioning is a morphism, not a derived operation</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez-Fritz 2011</a> — entropy measures how much conditioning reduces uncertainty</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — probabilistic programs implement conditioning via observe statements</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/cognitive-science/lovelace-02/">🧠 Lovelace Ch.2 Bayesian Inference</a> — Bayes' theorem applied to cognitive science</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Conditional_probability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Conditional probability</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayes' theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Independence_(probability_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Independence</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Ch 4</a> of Grinstead &amp; Snell.
+    </div>
+
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-03/", label: "Combinatorics" }} next={{ href: "/reading/probability/grinstead-05/", label: "Distributions" }} />
+
+  </main>
+</Layout>

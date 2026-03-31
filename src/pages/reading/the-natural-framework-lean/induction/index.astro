@@ -1,0 +1,62 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Induction.lean — Life persists iff all six fire" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Induction.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Induction.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Proves that life persists when all six interfaces from <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the Natural Framework</a> fire every cycle, and any single interface failure ends life &mdash; bundled in a SystemModel structure.</p>
+    </div>
+
+    <h3>all_six_fire</h3>
+    <p>A predicate: all six interfaces (Perceive, Cache, Filter, Attend, Consolidate, Remember) fire at cycle k. This is the conjunction of six predicates.</p>
+
+    <h3>SystemModel</h3>
+    <p>Bundles the temporal predicates (<code>alive</code> at cycle k, <code>fires</code> for each interface at cycle k) with their relationships. Replaces ten separate axioms with one structure. The key fields:</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">SystemModel</span> <span class="text-blue-300">where</span>
+  alive : Nat &rarr; Prop
+  fires : Step &rarr; Nat &rarr; Prop
+  base : alive 0
+  perceive_necessary : &forall; k, alive k &rarr; &not;fires .perceive k &rarr; &not;alive (k + 1)
+  -- ... (one for each interface)
+  sufficiency : &forall; k, alive k &rarr; all_six_fire fires k &rarr; alive (k + 1)</code></pre>
+    <p class="text-sm text-gray-500">The base case (<code>alive 0</code>) is a field, not a global axiom. Each interface is necessary: failure kills life next cycle. Sufficiency: all six firing means life continues.</p>
+
+    <h3>foundation</h3>
+    <p>The contested sixth assumption: <code>life_at_zero ∨ god_is_real</code>. Either life exists at time 0 (empirical observation) or the universe selects with purpose (teleological). Pick one, derive the other. This is the only disjunctive axiom.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">axiom</span> <span class="text-green-300">foundation</span> : life_at_zero &or; god_is_real</code></pre>
+
+    <h3>life_persists</h3>
+    <p>If all six interfaces fire at every cycle, life persists at every cycle. Uses survival_induction from DeathConditions.lean with the SystemModel's base case and sufficiency condition.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">life_persists</span> (m : SystemModel)
+    (all_fire : &forall; k, all_six_fire m.fires k)
+    : &forall; k, m.alive k :=
+  survival_induction m.alive m.base
+    (<span class="text-blue-300">fun</span> k hk =&gt; m.sufficiency k hk (all_fire k))</code></pre>
+
+    <h3>life_requires_all_six</h3>
+    <p>Contrapositive: any single interface failure at cycle k (while alive) ends life at cycle k+1.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/deathconditions/">DeathConditions.lean</a> &mdash; imported; provides survival_induction</li>
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; imported; Step enum for the six interfaces</li>
+      <li><a href="/reading/the-natural-framework-lean/fractal/">Fractal.lean</a> &mdash; the foundation axiom's disjunction mirrors the two induction directions on the tower</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-19/">🐱 Milewski Ch19 F-Algebras</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/deathconditions/", label: "DeathConditions.lean · 12 of 25" }} next={{ href: "/reading/the-natural-framework-lean/fractal/", label: "Fractal.lean · 14 of 25" }} />
+  </main>
+</Layout>

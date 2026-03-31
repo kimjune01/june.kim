@@ -1,0 +1,166 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Mayo 2018 — Statistical Inference as Severe Testing" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Statistical Inference as Severe Testing</h1>
+    <p class="text-gray-400 text-sm mb-6">Deborah G. Mayo · 2018 · <a href="https://www.cambridge.org/core/books/statistical-inference-as-severe-testing/D9DF409EF568090F3F60407FF2B973B2">Cambridge University Press</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A test only confirms a hypothesis if it had a real chance of catching the hypothesis being wrong. The severity principle.</p>
+    </div>
+
+    <!-- SVG: Severe vs non-severe test -->
+    <h3>Severe vs. non-severe tests</h3>
+
+    <p>Two experiments both produce data consistent with hypothesis H. Only one of them tells you anything.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 340" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Severe test (left) -->
+        <text x="125" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Severe test</text>
+
+        <!-- Narrow prediction band -->
+        <rect x="30" y="40" width="190" height="120" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Prediction region: narrow band -->
+        <rect x="85" y="60" width="80" height="80" rx="3" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="125" y="78" text-anchor="middle" fill="#4ade80" font-size="8" fill-opacity="0.7">H predicts</text>
+        <text x="125" y="88" text-anchor="middle" fill="#4ade80" font-size="8" fill-opacity="0.7">narrow range</text>
+
+        <!-- Data point: inside the narrow band -->
+        <circle cx="120" cy="115" r="5" fill="#4ade80" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="140" y="119" fill="#4ade80" font-size="9">data</text>
+
+        <!-- Large region where data would land if H false -->
+        <text x="55" y="148" fill="currentColor" font-size="8" fill-opacity="0.3">if H false, data lands</text>
+        <text x="55" y="157" fill="currentColor" font-size="8" fill-opacity="0.3">almost anywhere else</text>
+
+        <!-- Verdict -->
+        <text x="125" y="182" text-anchor="middle" fill="#4ade80" font-size="11">High severity</text>
+        <text x="125" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">test could easily have caught H being wrong</text>
+        <text x="125" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">data in the narrow zone is informative</text>
+
+        <!-- Non-severe test (right) -->
+        <text x="375" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Non-severe test</text>
+
+        <!-- Wide prediction band -->
+        <rect x="280" y="40" width="190" height="120" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Prediction region: covers nearly everything -->
+        <rect x="290" y="50" width="170" height="100" rx="3" fill="#fbbf24" fill-opacity="0.08" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="375" y="70" text-anchor="middle" fill="#fbbf24" font-size="8" fill-opacity="0.7">H predicts</text>
+        <text x="375" y="80" text-anchor="middle" fill="#fbbf24" font-size="8" fill-opacity="0.7">almost anything</text>
+
+        <!-- Data point: inside (trivially) -->
+        <circle cx="370" cy="115" r="5" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="390" y="119" fill="#fbbf24" font-size="9">data</text>
+
+        <!-- Verdict -->
+        <text x="375" y="182" text-anchor="middle" fill="#fbbf24" font-size="11">Low severity</text>
+        <text x="375" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">data fits H, but it fits everything</text>
+        <text x="375" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">passing this test proves nothing</text>
+
+        <!-- Divider -->
+        <line x1="250" y1="35" x2="250" y2="215" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Formal statement at bottom -->
+        <rect x="60" y="240" width="380" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="250" y="262" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Severity principle</text>
+        <text x="250" y="280" text-anchor="middle" fill="currentColor" font-size="10">Data x are evidence for H only if the test was severe:</text>
+        <text x="250" y="294" text-anchor="middle" fill="currentColor" font-size="10">P(test yields result as or more agreeable to H | H is false) is low</text>
+      </svg>
+    </div>
+
+    <!-- The argument -->
+    <h3>The argument</h3>
+
+    <p>Mayo reunifies two traditions that had been at war for decades. Popper said science works by trying to falsify hypotheses. Fisher and Neyman-Pearson built the statistical machinery for testing them. The two sides never agreed on what a "significant result" actually means. Mayo resolves the dispute by showing both contribute to the same underlying logic: severity.</p>
+
+    <p>A result is evidence for H only if the test had a high probability of producing a different result when H is false. That is the severity principle. It sounds obvious once stated. The consequences are not.</p>
+
+    <p>Consider a drug trial. The drug shows a small positive effect, p = 0.04. By the standard ritual, this is "significant." But severity asks: how likely was this test to detect that the drug does not work? If the trial was underpowered, the answer is: not very. A weak test that happens to produce p &lt; 0.05 has low severity. The positive result is not informative. It passed a test that could not have caught it failing.</p>
+
+    <p>Flip it around. A well-powered trial produces p = 0.06. By the ritual, this is "not significant." But severity asks a different question: has this test severely probed the claim that the drug has no effect? If the trial had 95% power and the best it found was p = 0.06, then the claim of zero effect has been severely tested and not refuted. The data are evidence that any effect is small. The ritual says "not significant." Severity says "informative."</p>
+
+    <!-- Key concepts table -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Concept</th>
+            <th class="text-left py-2 text-gray-400">What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Severity principle</td><td class="text-gray-400">Data support H only when the test had a high chance of finding against H if H were false.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Error statistics</td><td class="text-gray-400">The framework: evaluate inference methods by their error probabilities, not by posterior beliefs.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Piecemeal testing</td><td class="text-gray-400">Don't test an entire theory at once. Isolate specific claims and severely test each one. Build from parts.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Probativeness</td><td class="text-gray-400">The capacity of a test to discriminate between H and alternatives. A test is probative when passing it counts for something.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Connections -->
+    <h3>Connections</h3>
+
+    <p><a href="/reading/scientific-method/popper-1934/">Popper</a> gave falsification its philosophical force. A theory is scientific only if it can be falsified. But Popper never provided a statistical account of how much evidence counts as falsification. He dealt in logical possibility, not probability. Mayo gives falsification statistical teeth. Severity quantifies how hard you tried to falsify and how decisively the attempt failed. Popper says "try to refute." Mayo says "here is how to measure whether you tried hard enough."</p>
+
+    <p><a href="/reading/scientific-method/fisher-1935/">Fisher</a> introduced the p-value as a measure of surprise under the null hypothesis. <a href="https://en.wikipedia.org/wiki/Neyman%E2%80%93Pearson_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Neyman and Pearson</a> reframed testing as a decision procedure with Type I and Type II error rates. The two approaches were never reconciled in their lifetimes. Fisher called Neyman's framework "childish." Neyman called Fisher's p-values "worse than useless." Mayo shows that both contribute to severity. Fisher's p-value measures how surprising the data are under the null. Neyman-Pearson's power measures how likely the test was to catch a false null. Severity needs both: a low p-value from a high-power test is severe. A low p-value from a low-power test is not.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> demonstrated that most published findings are false. Severity is the diagnostic for his problem. The studies Ioannidis flags as unreliable are precisely those with low severity: small samples, flexible designs, low prior probability, underpowered tests. They produced p &lt; 0.05, but they could not have caught the hypothesis being wrong. Severity does not merely diagnose the replication crisis. It predicts which findings will fail to replicate and which will hold.</p>
+
+    <p><a href="/reading/scientific-method/feynman-1974/">Feynman</a> said the first principle is that you must not fool yourself. Severity operationalizes that principle. A non-severe test is exactly the mechanism by which you fool yourself: you designed a procedure that confirms your hypothesis regardless of whether it is true. The test looks like science. It has a p-value, a sample size, a confidence interval. But it could not have caught you being wrong. Severity turns Feynman's informal principle into something you can calculate.</p>
+
+    <!-- Capstone -->
+    <h3>The capstone</h3>
+
+    <p>This book sits at the end of the scientific method collection for a reason. Everything before it is building toward this.</p>
+
+    <p>Bacon gave us observation. Descartes gave us systematic doubt. Hume showed that observation alone proves nothing. Mill provided methods for extracting causes. Popper said the only honest move is to try to refute your own theory. Kuhn showed that scientists usually don't. Feynman said they should. Ioannidis showed that they don't, at massive scale, with measurable consequences.</p>
+
+    <p>Mayo provides the answer: severity. Your test counts only if it could have caught you being wrong. Apply this principle and you get Popper's falsificationism with statistical rigor. Ignore it and you get the replication crisis. The principle is simple. Following it is hard. Following it is the whole point.</p>
+
+    <!-- Integrity angle -->
+    <h3>Integrity as severity</h3>
+
+    <p>Scientific integrity, in Mayo's framework, has a precise definition. An honest scientist designs tests that are severe with respect to their own hypotheses. They choose experiments that could refute their claims. They report the sensitivity of their tests alongside the results. They ask "what would it take for this test to show I am wrong?" before they ask "what did the test show?"</p>
+
+    <p>This is more demanding than it sounds. A researcher who runs many analyses and reports the one that works has low severity. A researcher who pre-registers a single analysis and sticks to it has higher severity. The difference is not honesty in the colloquial sense. It is structural: the second researcher designed a procedure that could catch a mistake. The first designed one that could not.</p>
+
+    <!-- Book access note -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The book is published by <a href="https://www.cambridge.org/core/books/statistical-inference-as-severe-testing/D9DF409EF568090F3F60407FF2B973B2">Cambridge University Press</a>. Mayo's blog <a href="https://errorstatistics.com">errorstatistics.com</a> has extensive free commentary, excerpts, and applications of the severity framework.
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/popper-1934/">🔬 Popper 1934</a> — falsification without statistical machinery; Mayo supplies it</li>
+      <li><a href="/reading/scientific-method/fisher-1935/">🔬 Fisher 1935</a> — the p-value and significance testing that severity subsumes</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis 2005</a> — the crisis severity was built to diagnose</li>
+      <li><a href="/reading/scientific-method/feynman-1974/">🔬 Feynman 1974</a> — "you must not fool yourself," now with a formal definition</li>
+      <li><a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin 1890</a> — multiple hypotheses as a prerequisite for severe testing</li>
+      <li><a href="/reading/scientific-method/platt-1964/">🔬 Platt 1964</a> — strong inference as a special case of severity</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://errorstatistics.com">errorstatistics.com</a> — Mayo's blog, the best free resource on severity</li>
+      <li><a href="https://en.wikipedia.org/wiki/Severity_(philosophy)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Severity in philosophy of science (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Neyman%E2%80%93Pearson_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Neyman-Pearson lemma (Wikipedia)</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/ioannidis-2005/", label: "Ioannidis 2005 · 13 of 17" }} next={{ href: "/reading/scientific-method/integrity/", label: "Integrity · 15 of 17" }} />
+  </main>
+</Layout>

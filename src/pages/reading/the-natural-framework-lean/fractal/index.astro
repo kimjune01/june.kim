@@ -1,0 +1,124 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Fractal.lean — Recursive consolidation with budget termination" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Fractal.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Fractal.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Consolidate contains its own pipeline recursively. An encoding step at each depth plus a strictly decreasing bit budget guarantees termination &mdash; at zero bits, selection is impossible and Consolidate becomes passthrough.</p>
+    </div>
+
+    <h3>passthrough / theorem passthrough_preserves</h3>
+    <p>At zero bits, Consolidate cannot select: it returns the input policy unchanged (<code>pure pol</code>). This is the budget floor. Passthrough trivially preserves any contract because the output equals the input.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">passthrough</span> [Monad M] (pol : &alpha;) (_ : &beta;) : M &alpha; := pure pol</code></pre>
+
+    <h3>Budget termination</h3>
+    <p>The bit budget at depth d is <code>initial - d</code>. Each level costs at least 1 bit (Filter is strictly lossy). The budget reaches zero at depth = initial, and stays zero beyond. Tower height is bounded by the initial bit count.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">budget_strictly_decreases</span> (initial d : Nat) (hd : d &lt; initial) :
+    bits_at_depth initial (d + 1) &lt; bits_at_depth initial d</code></pre>
+
+    <h3>tower_consolidate</h3>
+    <p>The recursive construction. At depth 0: passthrough. At depth d+1: encode (policy, persisted) as raw input, run the inner pipeline's cycle, extract the updated policy. The inner pipeline shares forward stages with the base but uses depth-d consolidation. This self-similarity is what makes <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the six roles</a> appear at every scale.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">tower_consolidate</span> [Monad M] [LawfulMonad M]
+    &#123;I : InterfaceTypes&#125;
+    (base : Pipeline M I)
+    (encode : I.policy &rarr; I.persisted &rarr; I.raw)
+    : Nat &rarr; I.policy &rarr; I.persisted &rarr; M I.policy
+  | 0, pol, _ =&gt; pure pol
+  | d + 1, pol, per =&gt;
+    <span class="text-blue-300">let</span> inner : Pipeline M I :=
+      &#123; base <span class="text-blue-300">with</span> consolidate := tower_consolidate base encode d &#125;
+    inner.cycle (encode pol per) pol &gt;&gt;= <span class="text-blue-300">fun</span> result =&gt;
+    pure result.1</code></pre>
+
+    <SchemeRepl client:load initialCode={`; Fractal tower: recursive consolidation with budget
+; At depth 0 => passthrough (return input unchanged)
+; Each level costs 1 bit; at 0 bits, recursion stops.
+
+(define (tower-consolidate depth policy persisted)
+  (if (= depth 0)
+    policy  ; passthrough — no bits left
+    (let* ((inner-policy
+             (tower-consolidate (- depth 1) policy persisted))
+           (updated (string-append inner-policy "+")))
+      updated)))
+
+(define (bits-at-depth initial d)
+  (max 0 (- initial d)))
+
+; Tower with 3-bit budget
+(display "depth 0 (0 bits): ")
+(display (tower-consolidate 0 "p0" "data"))
+(newline)
+(display "depth 1 (2 bits): ")
+(display (tower-consolidate 1 "p0" "data"))
+(newline)
+(display "depth 3 (0 bits): ")
+(display (tower-consolidate 3 "p0" "data"))
+(newline)
+(display "budget: ")
+(do ((d 0 (+ d 1))) ((> d 4))
+  (display (bits-at-depth 3 d))
+  (display " "))
+(newline)
+(display "Terminates: budget hits 0 at depth=initial")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fractal tower: recursive consolidation with budget
+# At depth 0 => passthrough (return input unchanged)
+# Each level costs 1 bit; at 0 bits, recursion stops.
+
+def tower_consolidate(depth, policy, persisted):
+    if depth == 0:
+        return policy  # passthrough — no bits left
+    inner_policy = tower_consolidate(depth - 1, policy, persisted)
+    return inner_policy + "+"
+
+def bits_at_depth(initial, d):
+    return max(0, initial - d)
+
+# Tower with 3-bit budget
+print(f"depth 0 (0 bits): {tower_consolidate(0, 'p0', 'data')}")
+print(f"depth 1 (2 bits): {tower_consolidate(1, 'p0', 'data')}")
+print(f"depth 3 (0 bits): {tower_consolidate(3, 'p0', 'data')}")
+print("budget:", " ".join(str(bits_at_depth(3, d)) for d in range(5)))
+print("Terminates: budget hits 0 at depth=initial")
+`} />
+    </div>
+
+    <h3>tower_preserves_up</h3>
+    <p>Up-induction (the life_at_zero path). Start at passthrough (depth 0): output = input, trivially preserves the postcondition. Build upward: if depth d preserves for a given policy, depth d+1 does too. This is the constructive path &mdash; observe life, build the mechanism step by step.</p>
+    <p class="text-sm text-gray-500">The proof uses induction on d. Base case: support of <code>pure pol</code> is &#123;pol&#125;, so the postcondition holds. Inductive step: decompose the cycle, extract that the output policy came from tower(n) applied to the same input policy, apply the induction hypothesis.</p>
+
+    <h3>tower_preserves_down</h3>
+    <p>Down-induction (the god_is_real path). If the postcondition holds for all policies universally (because purpose guarantees it), the tower preserves at every depth. No step-by-step construction needed &mdash; the premise gives the conclusion immediately.</p>
+
+    <h3>tower_satisfies_hcon</h3>
+    <p>The combined result. The coupling lemma's hypothesis (<code>hcon</code>) is satisfied at every tower depth under either reading of the foundation axiom. The left branch (life_at_zero) feeds the weak form of cycle_preserves_policy; the right branch (god_is_real) feeds the strong form. Both converge on the same conclusion.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; imported; provides cycle_preserves_policy and PipelineHandshake</li>
+      <li><a href="/reading/the-natural-framework-lean/induction/">Induction.lean</a> &mdash; the foundation axiom's disjunction is mirrored in the two tower directions</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; passthrough preserves any Contract</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-06/">📡 Shannon Ch6 DPI</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/induction/", label: "Induction.lean · 13 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-core/", label: "Hoare/Core.lean · 15 of 25" }} />
+  </main>
+</Layout>

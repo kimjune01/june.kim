@@ -1,0 +1,131 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Popper 1934 — The Logic of Scientific Discovery" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>The Logic of Scientific Discovery</h1>
+    <p class="text-gray-400 text-sm mb-6">Karl Popper · 1934 (German), 1959 (English) · Routledge · <a href="https://archive.org/details/logicofscientifi0000popp">Internet Archive</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">You cannot prove a theory, only disprove it. Falsifiability is the line between science and non-science. A theory that forbids nothing explains nothing.</p>
+    </div>
+
+    <!-- SVG: the asymmetry of falsification -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 260" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left: attempted verification (fails) -->
+        <text x="120" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">verification (impossible)</text>
+
+        <!-- White swans in a row -->
+        <circle cx="40" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="70" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="100" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="130" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="160" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="190" y="74" fill="currentColor" font-size="12" fill-opacity="0.4">...</text>
+
+        <!-- Arrow to claim -->
+        <line x1="100" y1="90" x2="100" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="120" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">"all swans are white"</text>
+        <text x="120" y="158" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">never proven, no matter how many</text>
+
+        <!-- Divider -->
+        <line x1="260" y1="15" x2="260" y2="240" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Right: falsification (one counterexample suffices) -->
+        <text x="395" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">falsification (one suffices)</text>
+
+        <!-- White swans -->
+        <circle cx="310" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="340" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="370" cy="70" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+
+        <!-- Black swan -->
+        <circle cx="420" cy="70" r="12" fill="currentColor" fill-opacity="0.7" stroke="currentColor" stroke-width="1.5"/>
+        <text x="420" y="74" text-anchor="middle" fill="#18181b" font-size="8">black</text>
+
+        <!-- Arrow to falsified -->
+        <line x1="395" y1="92" x2="395" y2="120" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="395" y="140" text-anchor="middle" fill="currentColor" font-size="10">"all swans are white"</text>
+        <line x1="335" y1="138" x2="455" y2="138" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="395" y="158" text-anchor="middle" fill="#22c55e" font-size="9" fill-opacity="0.7">falsified by one counterexample</text>
+
+        <!-- Bottom caption -->
+        <text x="260" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the logical asymmetry: universal statements cannot be verified, only falsified</text>
+
+        <!-- Hume's problem callout -->
+        <text x="260" y="225" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">Hume showed induction cannot prove. Popper accepted it and built on the ruins.</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+    <p>Hume demonstrated that induction has no logical foundation. Observing a thousand white swans does not prove the next one will be white. The inference from "all observed" to "all" is a habit of mind, not a logical entailment. Most philosophers treated this as a problem to solve. Popper treated it as a fact to accept.</p>
+
+    <p>If induction cannot prove theories, what can science do? Popper's answer: science advances by conjecture and refutation. Scientists propose bold theories that stick their necks out, make specific predictions, forbid certain observations. Then they try to falsify those predictions. A theory that survives repeated attempts at falsification is "corroborated" but never confirmed. A theory that fails is discarded.</p>
+
+    <p>Falsifiability becomes the demarcation criterion. A statement is scientific if and only if it specifies what observations would refute it. "All swans are white" is scientific because a black swan refutes it. "Everything happens for a reason" is not scientific because no observation could refute it. The content of a theory is what it forbids. A theory that forbids nothing tells you nothing.</p>
+
+    <p>Popper sharpened this into a measure of theoretical virtue. Bolder theories forbid more, so they are more falsifiable, so they are more scientific. Newton's theory is better than a vague claim about gravity because Newton's predicts specific trajectories that could be wrong. Einstein's is better still because it predicts specific deviations from Newton that could also be wrong. Science progresses toward theories that risk more.</p>
+
+    <h3>Discussion</h3>
+
+    <p><a href="https://en.wikipedia.org/wiki/David_Hume"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hume</a> is Popper's explicit starting point. The problem of induction appears in the first chapter, and Popper returns to it throughout. Where other responses to Hume tried to rehabilitate induction (through pragmatism, probability, or habit), Popper simply conceded: Hume was right. Then he reframed what science does. Science does not prove. It eliminates.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Thomas_Kuhn"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kuhn (1962)</a> showed that scientists do not actually behave the way Popper prescribed. Normal science does not consist of bold conjectures and severe tests. It consists of puzzle-solving within an accepted paradigm. Anomalies accumulate until a crisis triggers a paradigm shift. Kuhn's account is descriptive where Popper's is normative. They answer different questions: Kuhn asks how science works, Popper asks how it should work. The tension between them has never been fully resolved.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Imre_Lakatos"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lakatos</a> tried to split the difference. His "methodology of scientific research programmes" preserves Popper's emphasis on criticism but softens the demand for instant falsification. A research programme has a "hard core" of unfalsifiable assumptions surrounded by a "protective belt" of auxiliary hypotheses that can be modified. A programme is progressive if its modifications lead to new predictions; degenerative if they only explain away anomalies. This captures what Kuhn observed (scientists protect their core commitments) while retaining what Popper demanded (there must be a way to tell progressive science from stagnation).</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Deborah_Mayo"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mayo</a> gave falsification statistical teeth. Popper's framework is qualitative: either an observation falsifies a theory or it doesn't. Mayo's severe testing says the strength of evidence depends on the probability of the test detecting the falsity if the theory is false. This connects Popper to <a href="/reading/scientific-method/fisher-1935/">Fisher's p-values</a> and to the Neyman-Pearson framework. A low p-value is evidence against the null precisely because the test was designed to produce a high p-value if the null were true. Severity is quantified falsification.</p>
+
+    <p><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin (1890)</a> anticipated the spirit of Popper's method without the formalization. Multiple working hypotheses serve the same function as bold conjectures: they give the scientist something to try to kill. Chamberlin's contribution was psychological (resist attachment), while Popper's was logical (specify what would count as refutation).</p>
+
+    <h3>Failure mode</h3>
+
+    <p>Popper's own examples of unfalsifiable pseudoscience were Freudian psychoanalysis, Adlerian psychology, and Marxist historicism. In each case the theory could accommodate any observation. A patient's behavior confirmed the Freudian interpretation regardless of what the behavior was. Historical events confirmed the Marxist narrative regardless of what happened. The theories did not forbid anything, so they explained everything, so they explained nothing.</p>
+
+    <p>The more insidious failure is a theory that starts falsifiable and becomes unfalsifiable through ad hoc modifications. Ptolemaic astronomy added epicycles to save geocentrism. Each epicycle was a patch that absorbed an anomaly without improving predictions. Lakatos's framework handles this better than Popper's: the question is not whether the modification saves the theory but whether it leads somewhere new.</p>
+
+    <p>String theory is a contemporary example that generates debate along Popperian lines. Critics argue that the landscape of possible string vacua is so vast that the theory accommodates any observation, making it unfalsifiable in practice. Defenders argue that the theory makes structural predictions that could in principle be tested. The debate turns on whether "in principle" falsifiability counts or whether science requires "in practice" falsifiability. Popper's framework raises the question but does not settle it.</p>
+
+    <h3>Integrity</h3>
+
+    <p>The core demand is specifying in advance what would disprove your theory. Before collecting data, before running the experiment, write down what results would make you abandon the hypothesis. This is harder than it sounds. Most scientists can articulate what would confirm their theory. Fewer can articulate what would falsify it. The asymmetry reveals where their commitment lies.</p>
+
+    <p>Pre-registration of hypotheses and analysis plans in clinical trials and psychology is the institutional version of this demand. When researchers specify their predictions before seeing the data, they cannot unconsciously adjust their hypotheses to fit what they find. The replication crisis in psychology showed what happens when this discipline breaks down: flexible analysis produces impressive-looking results that evaporate on replication.</p>
+
+    <p>Popper was asking scientists to practice a specific kind of honesty. Not the honesty of reporting data accurately (that is necessary but insufficient) but the honesty of committing to the conditions under which they would change their minds. The willingness to be refuted is not a personality trait. It is a practice, and it requires structure.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin 1890</a> — multiple hypotheses as psychological preparation for falsification</li>
+      <li><a href="/reading/scientific-method/fisher-1935/">Fisher 1935</a> — the statistical tools that make falsification quantitative</li>
+      <li><a href="/reading/scientific-method/hume-1739/">Hume 1739</a> — the problem of induction that Popper sought to escape through falsifiability</li>
+      <li><a href="/reading/logic/logic-06/">🔑 Logic Ch.6</a> — predicate logic and quantification: Popper's falsifiability criterion is about existential vs. universal statements</li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a> — severity testing as a rigorous version of corroboration: Popper gave the idea, Mayo gave it statistics</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/David_Hume"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>David Hume (Wikipedia)</a> — the problem of induction that Popper accepted</li>
+      <li><a href="https://en.wikipedia.org/wiki/Thomas_Kuhn"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thomas Kuhn (Wikipedia)</a> — the descriptive account that challenged Popper's normative one</li>
+      <li><a href="https://en.wikipedia.org/wiki/Imre_Lakatos"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Imre Lakatos (Wikipedia)</a> — research programmes as a softened Popperian framework</li>
+      <li><a href="https://en.wikipedia.org/wiki/Deborah_Mayo"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deborah Mayo (Wikipedia)</a> — severe testing as quantified falsification</li>
+      <li><a href="https://en.wikipedia.org/wiki/Falsifiability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Falsifiability (Wikipedia)</a> — the demarcation criterion</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The book is in print from Routledge. <a href="https://archive.org/details/logicofscientifi0000popp">Read it on the Internet Archive</a>. Chapters I-IV for the core argument; Chapter X for corroboration vs. confirmation.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/fisher-1935/", label: "Fisher 1935 · 8 of 17" }} next={{ href: "/reading/scientific-method/kuhn-1962/", label: "Kuhn 1962 · 10 of 17" }} />
+  </main>
+</Layout>

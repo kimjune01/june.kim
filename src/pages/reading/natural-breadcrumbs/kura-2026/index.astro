@@ -1,0 +1,545 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Kura 2026 — Indexed Graded Monads" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Indexed Graded Monads and Their Logics</h1>
+    <p class="text-gray-400 text-sm mb-6">Kura, Gaboardi, Sekiyama, Unno · ESOP 2026 · <a href="https://arxiv.org/abs/2601.14846"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2601.14846</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples), <a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> (graded effects).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>indexed graded monad</strong> combines two ideas: the <em>index</em> says which type of state you start and end in (like a state machine), and the <em>grade</em> tracks cumulative effects. Definition 7 gives the composition rule: the output index of stage 1 must equal the input index of stage 2.</p>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-6">Simplifications on this page: grades are natural numbers with <code>+</code> as the semiring operation, indices are symbols, and logical quantification ("for all x") is demonstrated by finite test sets.</p>
+
+    <!-- 1. Indexing = state machine -->
+    <h3>Indexing — which state you're in</h3>
+    <p>An indexed monad T(i, j, A) means: "a computation that starts in state i, ends in state j, and produces a value of type A." You can only compose T(i, j, _) with T(j, k, _) — the output state of the first must match the input state of the second. This is the handshake.</p>
+
+    <!-- SVG: Pipeline handshake — 3 stages with contracts between them -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 150" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Stage 1 -->
+        <rect x="20" y="25" width="90" height="45" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="52" text-anchor="middle" fill="currentColor" font-size="12">Stage 1</text>
+        <!-- Handshake 1 -->
+        <rect x="118" y="20" width="56" height="55" rx="4" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="146" y="42" text-anchor="middle" fill="#4ade80" font-size="10">post</text>
+        <text x="146" y="54" text-anchor="middle" fill="#4ade80" font-size="8" fill-opacity="0.7">= pre</text>
+        <text x="146" y="70" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.5">j</text>
+        <!-- Stage 2 -->
+        <rect x="182" y="25" width="90" height="45" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="227" y="52" text-anchor="middle" fill="currentColor" font-size="12">Stage 2</text>
+        <!-- Handshake 2 -->
+        <rect x="280" y="20" width="56" height="55" rx="4" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="308" y="42" text-anchor="middle" fill="#4ade80" font-size="10">post</text>
+        <text x="308" y="54" text-anchor="middle" fill="#4ade80" font-size="8" fill-opacity="0.7">= pre</text>
+        <text x="308" y="70" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.5">k</text>
+        <!-- Stage 3 -->
+        <rect x="344" y="25" width="90" height="45" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="389" y="52" text-anchor="middle" fill="currentColor" font-size="12">Stage 3</text>
+        <!-- Index labels below -->
+        <text x="25" y="90" fill="currentColor" font-size="9" fill-opacity="0.4">i</text>
+        <text x="146" y="90" text-anchor="middle" fill="#4ade80" font-size="9">j</text>
+        <text x="308" y="90" text-anchor="middle" fill="#4ade80" font-size="9">k</text>
+        <text x="430" y="90" fill="currentColor" font-size="9" fill-opacity="0.4">l</text>
+        <!-- Arrows connecting indices -->
+        <line x1="30" y1="85" x2="140" y2="85" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="152" y1="85" x2="302" y2="85" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="314" y1="85" x2="425" y2="85" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Caption -->
+        <text x="227" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">each stage's postcondition is the next stage's precondition</text>
+      </svg>
+    </div>
+
+    <svg viewBox="0 0 500 100" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
+      <!-- raw -->
+      <rect x="20" y="30" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="60" y="53" text-anchor="middle" fill="currentColor" font-size="12">raw</text>
+      <!-- arrow 1 -->
+      <line x1="100" y1="48" x2="170" y2="48" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="170,44 178,48 170,52" fill="currentColor"/>
+      <text x="135" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">T(i, j, A)</text>
+      <!-- filtered -->
+      <rect x="180" y="30" width="100" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="230" y="53" text-anchor="middle" fill="currentColor" font-size="12">filtered</text>
+      <!-- arrow 2 -->
+      <line x1="280" y1="48" x2="340" y2="48" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="340,44 348,48 340,52" fill="currentColor"/>
+      <text x="310" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">T(j, k, A)</text>
+      <!-- ranked -->
+      <rect x="350" y="30" width="90" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="395" y="53" text-anchor="middle" fill="currentColor" font-size="12">ranked</text>
+      <!-- handshake annotation -->
+      <text x="230" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">output index of step 1 = input index of step 2</text>
+    </svg>
+
+    <SchemeRepl client:load initialCode={`; Indexed computation: (start-state end-state value)
+; Compose only when indices match: T(i,j) ; T(j,k) = T(i,k)
+
+(define (make-indexed start end val) (list start end val))
+(define idx-start car)
+(define idx-end cadr)
+(define idx-val caddr)
+
+(define (idx-bind m f)
+  (let* ((j (idx-end m))
+         (result (f (idx-val m))))
+    (if (eq? j (idx-start result))
+        (make-indexed (idx-start m) (idx-end result) (idx-val result))
+        (begin (display "ERROR: Index mismatch — handshake failed") (newline)))))
+
+; raw -> filtered -> ranked
+(define step1 (make-indexed 'raw 'filtered '(a b c)))
+(define step2-fn (lambda (v) (make-indexed 'filtered 'ranked (length v))))
+
+(define pipeline (idx-bind step1 step2-fn))
+(display "pipeline: ") (display pipeline) (newline)
+; (raw ranked 3) — indices chain, handshake holds
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Indexed computation in Python
+class Indexed:
+    def __init__(self, start, end, val):
+        self.start, self.end, self.val = start, end, val
+
+    def bind(self, f):
+        result = f(self.val)
+        assert self.end == result.start, f"Index mismatch: {self.end} != {result.start}"
+        return Indexed(self.start, result.end, result.val)
+
+    def __repr__(self):
+        return f"({self.start} -> {self.end}: {self.val})"
+
+step1 = Indexed("raw", "filtered", ["a", "b", "c"])
+step2 = lambda v: Indexed("filtered", "ranked", len(v))
+
+print(step1.bind(step2))
+`} />
+    </div>
+
+    <!-- 2. Grading on top -->
+    <h3>Adding grades on top</h3>
+    <p>Now add a grade: T(i, j, e, A) means "start in i, end in j, with effect e, producing A." Composition requires index match (handshake) AND grade composition (budget accounting). This is Definition 3 in the paper. The paper uses a preordered semiring for grades; on this page, we use (&#x2115;, +, 0) — natural numbers with addition.</p>
+
+    <!-- SVG: Indexed graded monad composition — T(i,j) ; T(j,k) = T(i,k) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- T(i,j) box -->
+        <rect x="20" y="25" width="110" height="50" rx="6" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="75" y="48" text-anchor="middle" fill="#60a5fa" font-size="13">T(i, j)</text>
+        <text x="75" y="64" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">grade e&#x2081;</text>
+        <!-- Junction point j — highlighted -->
+        <circle cx="175" cy="50" r="8" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="175" y="54" text-anchor="middle" fill="#4ade80" font-size="11">j</text>
+        <line x1="130" y1="50" x2="167" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="183" y1="50" x2="210" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <!-- T(j,k) box -->
+        <rect x="210" y="25" width="110" height="50" rx="6" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="265" y="48" text-anchor="middle" fill="#60a5fa" font-size="13">T(j, k)</text>
+        <text x="265" y="64" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">grade e&#x2082;</text>
+        <!-- Equals -->
+        <text x="350" y="55" text-anchor="middle" fill="currentColor" font-size="16">=</text>
+        <!-- T(i,k) composed box -->
+        <rect x="370" y="25" width="100" height="50" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="2"/>
+        <text x="420" y="48" text-anchor="middle" fill="#60a5fa" font-size="13">T(i, k)</text>
+        <text x="420" y="64" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">e&#x2081; &#xB7; e&#x2082;</text>
+        <!-- Labels -->
+        <text x="25" y="18" fill="currentColor" font-size="9" fill-opacity="0.4">i</text>
+        <text x="175" y="18" text-anchor="middle" fill="#4ade80" font-size="9">j must match</text>
+        <text x="315" y="18" fill="currentColor" font-size="9" fill-opacity="0.4">k</text>
+        <!-- Caption -->
+        <text x="240" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">indices must match at boundaries; grades compose</text>
+      </svg>
+    </div>
+
+    <svg viewBox="0 0 500 110" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
+      <!-- raw -->
+      <rect x="20" y="30" width="70" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="55" y="53" text-anchor="middle" fill="currentColor" font-size="12">raw</text>
+      <!-- arrow 1 with grade -->
+      <line x1="90" y1="48" x2="155" y2="48" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="155,44 163,48 155,52" fill="currentColor"/>
+      <text x="123" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">i → j</text>
+      <rect x="108" y="55" width="30" height="16" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="123" y="66" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">e=2</text>
+      <!-- cached -->
+      <rect x="165" y="30" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="205" y="53" text-anchor="middle" fill="currentColor" font-size="12">cached</text>
+      <!-- arrow 2 with grade -->
+      <line x1="245" y1="48" x2="310" y2="48" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="310,44 318,48 310,52" fill="currentColor"/>
+      <text x="278" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">j → k</text>
+      <rect x="263" y="55" width="30" height="16" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="278" y="66" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">e=1</text>
+      <!-- filtered -->
+      <rect x="320" y="30" width="90" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="365" y="53" text-anchor="middle" fill="currentColor" font-size="12">filtered</text>
+      <!-- total grade -->
+      <text x="220" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">total grade: 2 + 1 = 3</text>
+    </svg>
+
+    <SchemeRepl client:load initialCode={`; Indexed graded computation: (start end grade value)
+(define (make-ig s e g v) (list s e g v))
+(define ig-start car)
+(define ig-end cadr)
+(define ig-grade caddr)
+(define ig-val cadddr)
+
+(define (ig-bind m f grade-op)
+  (let* ((j (ig-end m))
+         (result (f (ig-val m))))
+    (if (eq? j (ig-start result))
+        (make-ig (ig-start m)
+                 (ig-end result)
+                 (grade-op (ig-grade m) (ig-grade result))
+                 (ig-val result))
+        (begin (display "ERROR: Index mismatch") (newline)))))
+
+; stage 1: raw->cached, cost 2
+(define step1 (make-ig 'raw 'cached 2 '(x y z)))
+
+; stage 2: cached->filtered, cost 1
+(define step2-fn
+  (lambda (v) (make-ig 'cached 'filtered 1 (length v))))
+
+(define result (ig-bind step1 step2-fn +))
+(display "result: ") (display result) (newline)
+; (raw filtered 3 3) — indices chain, grades add
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Indexed graded computation in Python
+class IndexedGraded:
+    def __init__(self, start, end, grade, val):
+        self.start, self.end, self.grade, self.val = start, end, grade, val
+
+    def bind(self, f, grade_op=lambda a, b: a + b):
+        result = f(self.val)
+        assert self.end == result.start, f"Index mismatch: {self.end} != {result.start}"
+        return IndexedGraded(self.start, result.end,
+                             grade_op(self.grade, result.grade), result.val)
+
+    def __repr__(self):
+        return f"({self.start} -> {self.end}, grade={self.grade}: {self.val})"
+
+step1 = IndexedGraded("raw", "cached", 2, ["x", "y", "z"])
+step2 = lambda v: IndexedGraded("cached", "filtered", 1, len(v))
+
+print(step1.bind(step2))
+# (raw -> filtered, grade=3: 3)
+`} />
+    </div>
+
+    <!-- 3. Restricted pointwise order -->
+    <h3>The restricted pointwise order</h3>
+    <p>Kura's innovation: the <strong>restricted pointwise order</strong> on graded predicates. A graded predicate Q at grade e refines Q' at grade e' if e ≤ e' and Q(x) implies Q'(x) for all x. This lets you weaken postconditions by increasing the allowed effect budget — you can always over-approximate.</p>
+
+    <svg viewBox="0 0 500 150" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
+      <!-- Bottom-left: tight Q, low cost (refines) -->
+      <rect x="80" y="90" width="130" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="145" y="108" text-anchor="middle" fill="currentColor" font-size="10">x &gt; 10, cost=1</text>
+      <text x="145" y="122" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">tight, cheap</text>
+      <!-- Top-right: loose Q', high cost -->
+      <rect x="290" y="20" width="130" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+      <text x="355" y="38" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">x &gt; 0, cost=3</text>
+      <text x="355" y="52" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">loose, expensive</text>
+      <!-- Arrow: refines (bottom-left to top-right) -->
+      <line x1="210" y1="100" x2="285" y2="50" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="285,46 290,54 281,52" fill="currentColor"/>
+      <text x="255" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">&#x2264;</text>
+      <!-- Axis labels -->
+      <text x="30" y="75" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3" transform="rotate(-90, 30, 75)">tighter Q</text>
+      <text x="250" y="145" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">higher cost budget &#x2192;</text>
+    </svg>
+
+    <SchemeRepl client:load initialCode={`; Restricted pointwise order (toy checker — finite sample, not proof):
+; (Q, e) ≤ (Q', e') iff e ≤ e' AND Q(x) => Q'(x) for all x
+
+(define (every pred lst) (if (null? lst) #t (if (pred (car lst)) (every pred (cdr lst)) #f)))
+
+(define (refines? Q e Q-prime e-prime test-vals)
+  (and (<= e e-prime)
+       (every (lambda (x)
+         (if (Q x) (Q-prime x) #t))
+       test-vals)))
+
+(define Q  (lambda (x) (> x 10)))     ; strong: x > 10
+(define Q* (lambda (x) (> x 0)))      ; weak: x > 0
+
+; The real definition quantifies over all x.
+; We test a finite sample to build intuition.
+(define test-vals '(-5 0 5 10 15 20))
+
+(display "(x>10, cost=1) refines (x>0, cost=3)? ")
+(display (refines? Q 1 Q* 3 test-vals)) (newline)
+; #t — tighter postcondition, lower budget
+
+(display "(x>0, cost=3) refines (x>10, cost=1)? ")
+(display (refines? Q* 3 Q 1 test-vals)) (newline)
+; #f — looser postcondition can't refine tighter
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Restricted pointwise order in Python
+def refines(Q, e, Q_prime, e_prime, test_vals):
+    """(Q, e) refines (Q', e') iff e <= e' and Q(x) => Q'(x) for all x"""
+    if e > e_prime:
+        return False
+    return all(Q_prime(x) for x in test_vals if Q(x))
+
+Q_strong = lambda x: x > 10    # tight: x > 10
+Q_weak   = lambda x: x > 0     # loose: x > 0
+vals = [-5, 0, 5, 10, 15, 20]
+
+print(f"(x>10, cost=1) refines (x>0, cost=3)? {refines(Q_strong, 1, Q_weak, 3, vals)}")
+# True — tighter postcondition, lower budget
+
+print(f"(x>0, cost=3) refines (x>10, cost=1)? {refines(Q_weak, 3, Q_strong, 1, vals)}")
+# False — looser postcondition can't refine tighter
+`} />
+    </div>
+
+    <!-- 4. The handshake (Def 7) -->
+    <h3>The handshake — Definition 7</h3>
+    <p>Definition 7 gives the composition rule for indexed graded Hoare triples. If <code>{'{P}'} c₁ : (i→j, e₁) {'{R}'}</code> and <code>{'{R}'} c₂ : (j→k, e₂) {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ : (i→k, e₁·e₂) {'{Q}'}</code>. The intermediate R is the handshake — it must satisfy both the postcondition of c₁ and the precondition of c₂, at matching index j.</p>
+
+    <svg viewBox="0 0 500 200" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
+      <!-- Triple 1 -->
+      <rect x="20" y="20" width="200" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="120" y="45" text-anchor="middle" fill="currentColor" font-size="11">{'{P}'} c&#x2081; {'{R}'}</text>
+      <text x="120" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">i &#x2192; j, grade e&#x2081;</text>
+      <!-- Triple 2 -->
+      <rect x="280" y="20" width="200" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+      <text x="380" y="45" text-anchor="middle" fill="currentColor" font-size="11">{'{R}'} c&#x2082; {'{Q}'}</text>
+      <text x="380" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">j &#x2192; k, grade e&#x2082;</text>
+      <!-- Handshake point -->
+      <circle cx="250" cy="50" r="5" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="220" y1="50" x2="245" y2="50" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="255" y1="50" x2="280" y2="50" stroke="currentColor" stroke-width="1.5"/>
+      <text x="250" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">j = j</text>
+      <text x="250" y="108" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">handshake</text>
+      <!-- Composed result -->
+      <rect x="80" y="130" width="340" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-dasharray="6,3" stroke-opacity="0.4"/>
+      <text x="250" y="155" text-anchor="middle" fill="currentColor" font-size="11">{'{P}'} c&#x2081;;c&#x2082; {'{Q}'}</text>
+      <text x="250" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">i &#x2192; k, grade e&#x2081;&#xB7;e&#x2082;</text>
+      <!-- Arrows down from triples to composed -->
+      <line x1="120" y1="80" x2="180" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="380" y1="80" x2="320" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+    </svg>
+
+    <SchemeRepl client:load initialCode={`; Definition 7: The indexed graded handshake
+; {P} c1 : (i->j, e1) {R}  and  {R} c2 : (j->k, e2) {Q}
+;   => {P} c1;c2 : (i->k, e1+e2) {Q}
+
+(define (make-triple pre post start end grade fn)
+  (list pre post start end grade fn))
+(define t-pre car) (define t-post cadr) (define t-start caddr)
+(define t-end cadddr)
+(define (t-grade t) (list-ref t 4))
+(define (t-fn t) (list-ref t 5))
+
+(define (compose-triples t1 t2 grade-op)
+  (if (not (eq? (t-end t1) (t-start t2)))
+      (begin (display "ERROR: Index mismatch") (newline)))
+  ; The logical handshake: t1's postcondition must imply t2's precondition
+  (list (t-pre t1) (t-post t2)
+        (t-start t1) (t-end t2)
+        (grade-op (t-grade t1) (t-grade t2))
+        (lambda (x) ((t-fn t2) ((t-fn t1) x)))))
+
+(define (run-triple t x)
+  (if (not ((t-pre t) x)) (begin (display "ERROR: Precondition failed") (newline)))
+  (let ((y ((t-fn t) x)))
+    (if (not ((t-post t) y)) (begin (display "ERROR: Postcondition failed") (newline)))
+    y))
+
+; c1: takes any number, guarantees result >= 0
+(define c1 (make-triple number? (lambda (y) (>= y 0))
+            'raw 'cached 2 abs))
+
+; c2: requires input >= 0, guarantees result <= 10
+(define c2 (make-triple (lambda (y) (>= y 0)) (lambda (y) (<= y 10))
+            'cached 'filtered 1 (lambda (x) (min x 10))))
+
+; Composes: c1 guarantees >= 0, c2 requires >= 0 — handshake holds
+(define pipeline (compose-triples c1 c2 +))
+(display "Composed: ") (display (t-start pipeline))
+(display " -> ") (display (t-end pipeline))
+(display ", grade=") (display (t-grade pipeline)) (newline)
+(display "run(-7): ") (display (run-triple pipeline -7)) (newline)
+; raw -> filtered, grade=3, run(-7)=7
+
+; Now break it: c3 requires input > 100 — c1 can't guarantee that
+(define c3 (make-triple (lambda (y) (> y 100)) (lambda (y) #t)
+            'cached 'filtered 1 (lambda (x) x)))
+(define bad (compose-triples c1 c3 +))
+(display "run(-7) with bad pipeline: ")
+(display (run-triple bad -7))
+; Error: precondition of c3 fails — 7 is not > 100
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Definition 7: Indexed graded Hoare triple composition
+class Triple:
+    def __init__(self, pre, post, start, end, grade, fn):
+        self.pre, self.post = pre, post
+        self.start, self.end, self.grade, self.fn = start, end, grade, fn
+
+    def compose(self, other, grade_op=lambda a, b: a + b):
+        assert self.end == other.start, f"Index mismatch: {self.end} != {other.start}"
+        return Triple(self.pre, other.post,
+                      self.start, other.end,
+                      grade_op(self.grade, other.grade),
+                      lambda x: other.fn(self.fn(x)))
+
+    def run(self, x):
+        assert self.pre(x), f"Precondition failed on {x}"
+        y = self.fn(x)
+        assert self.post(y), f"Postcondition failed on {y}"
+        return y
+
+# c1: any number -> guarantees >= 0
+c1 = Triple(lambda x: isinstance(x, (int, float)), lambda y: y >= 0,
+            "raw", "cached", 2, abs)
+# c2: requires >= 0 -> guarantees <= 10
+c2 = Triple(lambda y: y >= 0, lambda y: y <= 10,
+            "cached", "filtered", 1, lambda x: min(x, 10))
+
+pipeline = c1.compose(c2)
+print(f"{pipeline.start} -> {pipeline.end}, grade={pipeline.grade}")
+print(f"run(-7): {pipeline.run(-7)}")
+
+# Break it: c3 requires > 100 — c1 can't guarantee that
+c3 = Triple(lambda y: y > 100, lambda y: True,
+            "cached", "filtered", 1, lambda x: x)
+bad = c1.compose(c3)
+print(f"run(-7) with bad pipeline: {bad.run(-7)}")
+# AssertionError: Precondition failed on 7
+`} />
+    </div>
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Captures the composition law. The paper's version works over graded Freyd categories with a preordered semiring.</p>
+
+    <!-- 5. Graded monad lifting -->
+    <h3>Graded monad lifting</h3>
+    <p>The restricted pointwise order weakens postconditions: more budget, less guaranteed about the output. Lifting works the other direction. It pulls a postcondition backward through a computation to derive the weakest precondition on the input. The grade controls how much that precondition relaxes. Same monotonicity, opposite ends of the pipe.</p>
+
+    <SchemeRepl client:load initialCode={`; Graded lifting: wp_e(c, Q) — weakest pre adjusted by grade
+; Grade = tolerance. Higher grade = weaker precondition needed.
+
+(define (graded-wp c grade Q)
+  ; Returns a predicate: "does x satisfy the weakest
+  ; precondition of c for postcondition Q at this grade?"
+  (lambda (x)
+    (let ((result (c x)))
+      (Q result grade))))
+
+; Postcondition: result within tolerance of target
+(define target 100)
+(define (within-tolerance y grade) (<= (abs (- y target)) (* grade 5)))
+
+(define (noisy-measure x) (+ x 3))  ; systematic bias of 3
+
+; wp at grade 1: only inputs where |c(x) - 100| <= 5
+(define wp-tight (graded-wp noisy-measure 1 within-tolerance))
+; wp at grade 4: inputs where |c(x) - 100| <= 20
+(define wp-loose (graded-wp noisy-measure 4 within-tolerance))
+
+(define vals '(80 90 95 97 100 103 110 120))
+(for-each (lambda (x)
+  (display x)
+  (display " grade=1:") (display (if (wp-tight x) "pass" "fail"))
+  (display " grade=4:") (display (if (wp-loose x) "pass" "fail"))
+  (newline))
+vals)
+; Higher grade => more inputs pass the weakest precondition
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Graded lifting: weakest precondition adjusted by grade
+def graded_wp(c, grade, Q):
+    """Returns predicate: does x satisfy wp of c for Q at this grade?"""
+    return lambda x: Q(c(x), grade)
+
+def noisy_measure(x):
+    return x + 3  # systematic bias of 3
+
+target = 100
+def within_tolerance(y, grade):
+    return abs(y - target) <= grade * 5
+
+wp_tight = graded_wp(noisy_measure, 1, within_tolerance)  # tolerance 5
+wp_loose = graded_wp(noisy_measure, 4, within_tolerance)  # tolerance 20
+
+for x in [80, 90, 95, 97, 100, 103, 110, 120]:
+    t = "pass" if wp_tight(x) else "fail"
+    l = "pass" if wp_loose(x) else "fail"
+    print(f"{x}  grade=1:{t}  grade=4:{l}")
+# Higher grade => more inputs pass
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">T(i, j, e, A)</td><td class="pr-4 text-green-300">(make-ig i j e val)</td><td class="font-sans">Indexed graded computation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">e₁ · e₂</td><td class="pr-4 text-green-300">(grade-op e1 e2)</td><td class="font-sans">Grade composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">i = j (Def 7)</td><td class="pr-4 text-green-300">(eq? (idx-end t1) (idx-start t2))</td><td class="font-sans">Index handshake</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">≤_rpo</td><td class="pr-4 text-green-300">refines?</td><td class="font-sans">Restricted pointwise order</td></tr>
+          <tr><td class="py-2 pr-4">wp_e(c, Q)</td><td class="pr-4 text-green-300">(graded-wp c grade Q)</td><td class="font-sans">Graded weakest precondition</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> — graded Hoare logic (grading without indexing)</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — ungraded Hoare logic (the handshake without budgets)</li>
+      <li><a href="/reading/natural-breadcrumbs/liell-cock-2025/">🍞 Liell-Cock 2025</a> — graded monads in the Para construction</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Semiring"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Semiring</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use simple integers for grades and symbols for indices. The paper works over preordered semirings for grades and arbitrary index categories, with the restricted pointwise order defined on fibered predicates. For example: the handshake demonstration on this page checks symbol equality between two stages. In the paper, the same definition works over a category of indexed types where the index match is a morphism equation in the index category — allowing non-trivial coercions between compatible state types. The composition pattern is identical. The categorical generality is not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2601.14846"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for indexed graded monads (Def 3), §4 for the Hoare logic (Def 7).
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's handshake composition maps directly to Definition 7 — the output index of each stage must match the input index of the next. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/gaboardi-2021/", label: "Gaboardi 2021 · 4 of 21" }} next={{ href: "/reading/natural-breadcrumbs/hedges-2018/", label: "Hedges 2018 · 6 of 21" }} />
+  </main>
+</Layout>

@@ -1,0 +1,170 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.7 — Relations" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Relations</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>relation</strong> on a set is a subset of its Cartesian product. The important ones are <strong>equivalence relations</strong> (reflexive + symmetric + transitive), which partition a set into non-overlapping classes. Every partition defines an equivalence relation, and every equivalence relation defines a partition.</p>
+    </div>
+
+    <!-- SVG: Equivalence classes as colored clusters -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Cluster 1 -->
+        <ellipse cx="70" cy="90" rx="50" ry="60" fill="#60a5fa" fill-opacity="0.08" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="55" cy="70" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="80" cy="85" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="60" cy="110" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="70" y="165" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">[a]</text>
+        <!-- Cluster 2 -->
+        <ellipse cx="170" cy="90" rx="45" ry="55" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="160" cy="75" r="4" fill="#f59e0b" fill-opacity="0.6"/>
+        <circle cx="180" cy="95" r="4" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="170" y="165" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.5">[b]</text>
+        <!-- Cluster 3 -->
+        <ellipse cx="270" cy="90" rx="50" ry="60" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="260" cy="70" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="280" cy="90" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="255" cy="110" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <circle cx="285" cy="110" r="4" fill="#4ade80" fill-opacity="0.6"/>
+        <text x="270" y="165" text-anchor="middle" fill="#4ade80" font-size="10" fill-opacity="0.5">[c]</text>
+        <!-- Caption -->
+        <text x="170" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Equivalence classes: no overlaps, no gaps</text>
+      </svg>
+    </div>
+
+    <!-- 1. Properties of relations -->
+    <h3>Properties of relations</h3>
+    <p><strong>Reflexive</strong>: a ~ a for all a. <strong>Symmetric</strong>: a ~ b implies b ~ a. <strong>Transitive</strong>: a ~ b and b ~ c implies a ~ c. An equivalence relation has all three.</p>
+
+    <SchemeRepl client:load initialCode={`; Congruence mod 3 is an equivalence relation.
+; a ~ b iff 3 divides (a - b).
+
+(define (related? a b) (= 0 (modulo (- a b) 3)))
+
+; Reflexive: a ~ a
+(display "7 ~ 7? ") (display (related? 7 7)) (newline)
+
+; Symmetric: 7 ~ 4 and 4 ~ 7
+(display "7 ~ 4? ") (display (related? 7 4)) (newline)
+(display "4 ~ 7? ") (display (related? 4 7)) (newline)
+
+; Transitive: 7 ~ 4 and 4 ~ 1 implies 7 ~ 1
+(display "4 ~ 1? ") (display (related? 4 1)) (newline)
+(display "7 ~ 1? ") (display (related? 7 1)) (newline)
+
+; Not related: 7 and 5 differ by 2, not divisible by 3
+(display "7 ~ 5? ") (display (related? 7 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Congruence mod 3
+def related(a, b):
+    return (a - b) % 3 == 0
+
+# Check all three properties
+print(f"Reflexive: 7~7 = {related(7,7)}")
+print(f"Symmetric: 7~4 = {related(7,4)}, 4~7 = {related(4,7)}")
+print(f"Transitive: 7~4={related(7,4)}, 4~1={related(4,1)}, 7~1={related(7,1)}")
+`} />
+    </div>
+
+    <!-- 2. Equivalence classes -->
+    <h3>Equivalence classes</h3>
+    <p>The <strong>equivalence class</strong> of a is the set of all elements related to a: [a] = all x in S such that x ~ a. Equivalence classes are either identical or disjoint. They partition the set into non-overlapping groups.</p>
+
+    <SchemeRepl client:load initialCode={`; Equivalence classes of congruence mod 3 on {0,...,11}
+(define (class-of a universe)
+  (define (related? x) (= 0 (modulo (- x a) 3)))
+  (define (go lst)
+    (cond ((null? lst) (list))
+          ((related? (car lst)) (cons (car lst) (go (cdr lst))))
+          (else (go (cdr lst)))))
+  (go universe))
+
+(define U (list 0 1 2 3 4 5 6 7 8 9 10 11))
+
+(display "[0] = ") (display (class-of 0 U)) (newline)
+(display "[1] = ") (display (class-of 1 U)) (newline)
+(display "[2] = ") (display (class-of 2 U)) (newline)
+; Three classes, covering all of {0,...,11} with no overlaps.
+(display "[3] = ") (display (class-of 3 U))
+; [3] = [0] — same class.
+`} />
+
+    <!-- 3. Partitions -->
+    <h3>Partitions</h3>
+    <p>A <strong>partition</strong> of set S is a collection of non-empty, pairwise disjoint subsets whose union is S. The fundamental theorem: equivalence relations and partitions are two views of the same thing. Given a partition, define a ~ b iff they are in the same block. Given an equivalence relation, the classes form a partition.</p>
+
+    <SchemeRepl client:load initialCode={`; From partition to equivalence relation and back.
+; Partition of {1,...,6}: {{1,4}, {2,5}, {3,6}}
+
+(define blocks (list (list 1 4) (list 2 5) (list 3 6)))
+
+(define (member? x s)
+  (cond ((null? s) #f)
+        ((= x (car s)) #t)
+        (else (member? x (cdr s)))))
+
+(define (find-block x)
+  (define (go bs)
+    (cond ((null? bs) (list))
+          ((member? x (car bs)) (car bs))
+          (else (go (cdr bs)))))
+  (go blocks))
+
+(define (equiv? a b)
+  (equal? (find-block a) (find-block b)))
+
+(display "1 ~ 4? ") (display (equiv? 1 4)) (newline)
+(display "1 ~ 2? ") (display (equiv? 1 2)) (newline)
+(display "2 ~ 5? ") (display (equiv? 2 5)) (newline)
+(display "3 ~ 6? ") (display (equiv? 3 6))
+`} />
+
+    <!-- 4. Partial orders -->
+    <h3>Partial orders (reflexive + antisymmetric + transitive)</h3>
+    <p>A <strong>partial order</strong> is reflexive, antisymmetric (a ~ b and b ~ a implies a = b), and transitive. The divisibility relation on positive integers is a partial order. Unlike equivalence relations, partial orders have a direction: a divides b does not mean b divides a.</p>
+
+    <SchemeRepl client:load initialCode={`; Divisibility as a partial order on {1,...,12}
+(define (divides? a b) (= 0 (modulo b a)))
+
+; Reflexive: a | a
+(display "6|6? ") (display (divides? 6 6)) (newline)
+
+; Antisymmetric: if a|b and b|a, then a=b
+(display "3|6? ") (display (divides? 3 6)) (newline)
+(display "6|3? ") (display (divides? 6 3)) (newline)
+; 3|6 but not 6|3, so no antisymmetry violation.
+
+; Transitive: 2|6 and 6|12 implies 2|12
+(display "2|6? ") (display (divides? 2 6)) (newline)
+(display "6|12? ") (display (divides? 6 12)) (newline)
+(display "2|12? ") (display (divides? 2 12))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-03/">🐱 Milewski Ch.3</a> — preorders (reflexive + transitive) are categories</li>
+      <li><a href="/reading/abstract-algebra/judson-05/">🔗 Abstract Algebra Ch.5</a> — cosets are equivalence classes of a subgroup relation</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-06/", label: "Functions" }} next={{ href: "/reading/proof-writing/proofs-08/", label: "Cardinality" }} />
+
+  </main>
+</Layout>

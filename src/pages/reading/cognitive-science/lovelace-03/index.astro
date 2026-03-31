@@ -1,0 +1,234 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.3 — Bayesian Models of Cognition" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Bayesian Models of Cognition</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Concept learning is hypothesis testing. Given a few examples, learners infer which concept generated them by computing a posterior over a structured hypothesis space. The <strong>size principle</strong> favors smaller, tighter hypotheses: a concept that could generate fewer examples gets more credit for generating the ones you saw. Abstract knowledge helps rather than hurts. This is the <strong>blessing of abstraction</strong>.</p>
+    </div>
+
+    <!-- Concept learning as hypothesis testing -->
+    <h3>Concept learning as hypothesis testing</h3>
+    <p>You see the numbers 2, 4, 8. What is the rule? "Powers of two" is a tighter hypothesis than "even numbers," which is tighter than "all numbers." Bayesian inference naturally favors the tightest hypothesis consistent with the data, because the likelihood of generating exactly those examples is higher under a smaller set.</p>
+
+    <!-- SVG: hypothesis space narrowing -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Outermost: all numbers -->
+        <ellipse cx="180" cy="95" rx="160" ry="75" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="340" y="45" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.3">all numbers</text>
+        <!-- Middle: even numbers -->
+        <ellipse cx="170" cy="95" rx="110" ry="55" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="280" y="65" text-anchor="end" fill="#f59e0b" font-size="10" fill-opacity="0.5">even numbers</text>
+        <!-- Inner: powers of two -->
+        <ellipse cx="160" cy="95" rx="60" ry="35" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="160" y="75" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.7">powers of 2</text>
+        <!-- Data points -->
+        <circle cx="130" cy="100" r="4" fill="#ef4444" fill-opacity="0.8"/>
+        <text x="130" y="118" text-anchor="middle" fill="#ef4444" font-size="10">2</text>
+        <circle cx="160" cy="95" r="4" fill="#ef4444" fill-opacity="0.8"/>
+        <text x="160" y="113" text-anchor="middle" fill="#ef4444" font-size="10">4</text>
+        <circle cx="190" cy="100" r="4" fill="#ef4444" fill-opacity="0.8"/>
+        <text x="190" y="118" text-anchor="middle" fill="#ef4444" font-size="10">8</text>
+        <!-- Caption -->
+        <text x="180" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Tighter hypotheses get more likelihood credit (size principle)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Concept learning: which hypothesis generated {2, 4, 8}?
+; Size principle: P(data|H) = (1/|H|)^n for n examples.
+
+(define (size-principle hypothesis-size n-examples)
+  (expt (/ 1.0 hypothesis-size) n-examples))
+
+; Hypothesis sizes (how many numbers each contains, up to 100)
+(define powers-of-2-size 7)    ; 1,2,4,8,16,32,64
+(define even-numbers-size 50)  ; 2,4,6,...,100
+(define all-numbers-size 100)  ; 1,2,...,100
+
+; 3 examples observed: {2, 4, 8}
+(define n 3)
+
+(define lik-powers (size-principle powers-of-2-size n))
+(define lik-evens  (size-principle even-numbers-size n))
+(define lik-all    (size-principle all-numbers-size n))
+
+(display "Likelihood (powers of 2): ")
+(display lik-powers) (newline)
+(display "Likelihood (even numbers): ")
+(display lik-evens) (newline)
+(display "Likelihood (all numbers):  ")
+(display lik-all) (newline)
+
+; With uniform priors, posterior is proportional to likelihood
+(let ((total (+ lik-powers lik-evens lik-all)))
+  (display "Posterior (powers of 2): ")
+  (display (/ lik-powers total)) (newline)
+  (display "Posterior (even):        ")
+  (display (/ lik-evens total)) (newline)
+  (display "Posterior (all):         ")
+  (display (/ lik-all total)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Size principle in Python
+def size_principle(h_size, n):
+    return (1.0 / h_size) ** n
+
+sizes = {"powers_of_2": 7, "even": 50, "all": 100}
+n = 3
+
+liks = {h: size_principle(s, n) for h, s in sizes.items()}
+total = sum(liks.values())
+for h, l in liks.items():
+    print(f"P({h:15s} | data) = {l/total:.6f}")
+`} />
+    </div>
+
+
+    <!-- Causal reasoning -->
+    <h3>Causal reasoning</h3>
+    <p>Bayesian models extend to causal reasoning. Given a causal graph (A causes B, B causes C), you can infer causes from effects by inverting the generative model with Bayes' theorem. Observing wet grass, you infer rain is more likely. Observing that the sprinkler is on reduces the evidence for rain. This "explaining away" falls out naturally from the posterior computation.</p>
+
+    <SchemeRepl client:load initialCode={`; Causal reasoning: rain vs sprinkler explaining wet grass.
+; Generative model:
+;   P(rain) = 0.2
+;   P(sprinkler | no rain) = 0.4, P(sprinkler | rain) = 0.01
+;   P(wet | rain, sprinkler) = 0.99
+;   P(wet | rain, no sprinkler) = 0.8
+;   P(wet | no rain, sprinkler) = 0.9
+;   P(wet | no rain, no sprinkler) = 0.0
+
+(define (wet-grass-model)
+  (let* ((p-rain 0.2)
+         (p-no-rain 0.8)
+         ; Enumerate all four combinations
+         ; (rain, sprinkler), (rain, no-spr), (no-rain, spr), (no-rain, no-spr)
+         (j1 (* p-rain 0.01 0.99))        ; rain + sprinkler + wet
+         (j2 (* p-rain 0.99 0.8))         ; rain + no-sprinkler + wet
+         (j3 (* p-no-rain 0.4 0.9))       ; no-rain + sprinkler + wet
+         (j4 (* p-no-rain 0.6 0.0))       ; no-rain + no-sprinkler + wet
+         (p-wet (+ j1 j2 j3 j4)))
+    (display "P(rain | wet grass) = ")
+    (display (/ (+ j1 j2) p-wet))
+    (newline)
+    ; Now condition on sprinkler ON and wet:
+    (let ((p-wet-spr (+ j1 j3)))
+      (display "P(rain | wet, sprinkler on) = ")
+      (display (/ j1 p-wet-spr)))
+    ; Rain becomes less likely once sprinkler explains the wetness
+    ))
+
+(wet-grass-model)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Causal reasoning: rain vs sprinkler
+p_rain = 0.2
+# Joint probabilities for wet grass
+j1 = p_rain * 0.01 * 0.99       # rain + sprinkler + wet
+j2 = p_rain * 0.99 * 0.8        # rain + no-sprinkler + wet
+j3 = (1-p_rain) * 0.4 * 0.9     # no-rain + sprinkler + wet
+j4 = (1-p_rain) * 0.6 * 0.0     # no-rain + no-sprinkler + wet
+
+p_wet = j1 + j2 + j3 + j4
+print("P(rain | wet grass) = " + "{:.4f}".format((j1+j2) / p_wet))
+
+# Condition on sprinkler ON
+p_wet_spr = j1 + j3
+print("P(rain | wet, sprinkler on) = " + "{:.4f}".format(j1 / p_wet_spr))
+# Rain less likely once sprinkler explains wetness
+`} />
+    </div>
+
+
+    <!-- Blessing of abstraction -->
+    <h3>The blessing of abstraction</h3>
+    <p>Hierarchical Bayesian models learn at multiple levels simultaneously. Abstract knowledge (e.g., "animals in this ecosystem tend to be small") constrains lower-level inference (e.g., "this new species is probably small too"). More abstract hypotheses are learnable from fewer examples because they constrain many lower-level hypotheses at once. Abstraction does not cost you data efficiency. It buys you data efficiency.</p>
+
+    <SchemeRepl client:load initialCode={`; Blessing of abstraction: abstract prior helps learn specifics.
+; Scenario: you visit two islands. Island 1 has small animals.
+; Island 2 has small animals. Now you arrive at Island 3.
+; Abstract hypothesis: "islands in this chain have small animals."
+
+; Without abstraction: uniform prior on Island 3 animal size
+(define (uniform-prior) 0.5)
+
+; With abstraction: prior shaped by islands 1 and 2
+; After seeing 2 islands with small animals:
+; Beta(1+2, 1+0) = Beta(3, 1), mean = 0.75
+(define (abstract-prior) 0.75)
+
+(display "P(small animals on Island 3)") (newline)
+(display "  Without abstraction: ")
+(display (uniform-prior)) (newline)
+(display "  With abstraction:    ")
+(display (abstract-prior)) (newline)
+(display "Abstraction makes prediction before seeing ANY Island 3 data.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Blessing of abstraction
+# Without abstraction: uniform prior
+print("P(small animals on Island 3)")
+print("  Without abstraction: 0.5")
+
+# With abstraction: Beta(1+2, 1+0) = Beta(3,1), mean = 0.75
+print("  With abstraction:    0.75")
+print("Abstraction makes prediction before seeing ANY Island 3 data.")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Term</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Size principle</td><td>P(data|H) = (1/|H|)^n; smaller hypotheses get more credit</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Explaining away</td><td>Observing one cause reduces the posterior of competing causes</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Hierarchical Bayes</td><td>Priors at one level are learned from data at another</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">Blessing of abstraction</td><td>Abstract knowledge helps rather than hurts data efficiency</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-02/">Lovelace Ch.2</a> — the Bayesian machinery this chapter applies</li>
+      <li><a href="/reading/category-theory/parzygnat-2020/">Parzygnat 2020</a> — Bayesian inversion as a categorical construction</li>
+      <li><a href="https://en.wikipedia.org/wiki/Bayesian_cognition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian cognition</a> — the broader research program</li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook walks through Tenenbaum's number game in detail and includes interactive sliders for hypothesis spaces. This page extracts the core principles: the size principle as the source of Bayesian Occam's razor, causal reasoning as posterior inference over generative models, and the blessing of abstraction as a scaling argument for hierarchical models. The textbook also covers iterated learning and cultural transmission, which connect to Chapter 7.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter3">Lovelace, Chapter 3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-02/", label: "Probability and Bayes" }} next={{ href: "/reading/cognitive-science/lovelace-04/", label: "Neural Networks · 4 of 8" }} />
+
+  </main>
+</Layout>

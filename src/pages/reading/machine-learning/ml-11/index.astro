@@ -1,0 +1,304 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.11 — Transformers" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Transformers</h1>
+    <p class="text-gray-400 text-sm mb-6">MML (CC BY 4.0) &middot; D2L (CC BY-SA 4.0) &middot; 11 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Attention replaces recurrence: every token attends to every other token in parallel. Q, K, V matrices compute similarity. Multi-head attention learns different relationship types. Positional encoding adds sequence order since attention is permutation-equivariant.</p>
+    </div>
+
+    <!-- SVG: attention matrix -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Column labels (keys) -->
+        <text x="160" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Keys</text>
+        <text x="120" y="35" text-anchor="middle" fill="#60a5fa" font-size="10">the</text>
+        <text x="160" y="35" text-anchor="middle" fill="#60a5fa" font-size="10">cat</text>
+        <text x="200" y="35" text-anchor="middle" fill="#60a5fa" font-size="10">sat</text>
+        <text x="240" y="35" text-anchor="middle" fill="#60a5fa" font-size="10">down</text>
+
+        <!-- Row labels (queries) -->
+        <text x="45" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Queries</text>
+        <text x="90" y="65" text-anchor="end" fill="#a78bfa" font-size="10">the</text>
+        <text x="90" y="105" text-anchor="end" fill="#a78bfa" font-size="10">cat</text>
+        <text x="90" y="145" text-anchor="end" fill="#a78bfa" font-size="10">sat</text>
+        <text x="90" y="185" text-anchor="end" fill="#a78bfa" font-size="10">down</text>
+
+        <!-- Attention matrix cells - row 1 (the) -->
+        <rect x="100" y="45" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.5" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="120" y="65" text-anchor="middle" fill="currentColor" font-size="9">.40</text>
+        <rect x="140" y="45" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="160" y="65" text-anchor="middle" fill="currentColor" font-size="9">.30</text>
+        <rect x="180" y="45" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="200" y="65" text-anchor="middle" fill="currentColor" font-size="9">.20</text>
+        <rect x="220" y="45" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="240" y="65" text-anchor="middle" fill="currentColor" font-size="9">.10</text>
+
+        <!-- Row 2 (cat) -->
+        <rect x="100" y="85" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="120" y="105" text-anchor="middle" fill="currentColor" font-size="9">.15</text>
+        <rect x="140" y="85" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.5" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="160" y="105" text-anchor="middle" fill="currentColor" font-size="9">.45</text>
+        <rect x="180" y="85" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="200" y="105" text-anchor="middle" fill="currentColor" font-size="9">.25</text>
+        <rect x="220" y="85" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="240" y="105" text-anchor="middle" fill="currentColor" font-size="9">.15</text>
+
+        <!-- Row 3 (sat) -->
+        <rect x="100" y="125" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="120" y="145" text-anchor="middle" fill="currentColor" font-size="9">.10</text>
+        <rect x="140" y="125" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="160" y="145" text-anchor="middle" fill="currentColor" font-size="9">.35</text>
+        <rect x="180" y="125" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.35" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="200" y="145" text-anchor="middle" fill="currentColor" font-size="9">.30</text>
+        <rect x="220" y="125" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="240" y="145" text-anchor="middle" fill="currentColor" font-size="9">.25</text>
+
+        <!-- Row 4 (down) -->
+        <rect x="100" y="165" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="120" y="185" text-anchor="middle" fill="currentColor" font-size="9">.05</text>
+        <rect x="140" y="165" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="160" y="185" text-anchor="middle" fill="currentColor" font-size="9">.15</text>
+        <rect x="180" y="165" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="200" y="185" text-anchor="middle" fill="currentColor" font-size="9">.35</text>
+        <rect x="220" y="165" width="40" height="30" rx="3" fill="#f59e0b" fill-opacity="0.5" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="240" y="185" text-anchor="middle" fill="currentColor" font-size="9">.45</text>
+
+        <!-- Legend -->
+        <text x="320" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">darker =</text>
+        <text x="320" y="133" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">more</text>
+        <text x="320" y="146" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">attention</text>
+      </svg>
+    </div>
+
+    <!-- 1. Scaled dot-product attention -->
+    <h3>Scaled dot-product attention</h3>
+    <p>The core operation: given queries Q, keys K, and values V, compute attention(Q,K,V) = softmax(QK&#x1D40;/&#x221A;d)V. The dot product measures similarity between query and key. The &#x221A;d scaling prevents the softmax from saturating when dimensions are large. The result is a weighted sum of values.</p>
+
+    <SchemeRepl client:load initialCode={`; Scaled dot-product attention (single query, multiple keys)
+; attention(q, K, V) = softmax(q . K^T / sqrt(d)) . V
+
+(define (dot a b) (apply + (map * a b)))
+
+(define (softmax xs)
+  (let ((mx (apply max xs)))
+    (let ((exps (map (lambda (x) (exp (- x mx))) xs)))
+      (let ((total (apply + exps)))
+        (map (lambda (e) (/ e total)) exps)))))
+
+(define (attention query keys values)
+  (let* ((d (length query))
+         (scale (sqrt d))
+         (scores (map (lambda (k) (/ (dot query k) scale)) keys))
+         (weights (softmax scores)))
+    (display "Scores:  ") (display (map (lambda (s) (/ (round (* s 100)) 100)) scores)) (newline)
+    (display "Weights: ") (display (map (lambda (w) (/ (round (* w 100)) 100)) weights)) (newline)
+    ; Weighted sum of values
+    (let ((d-v (length (car values))))
+      (let loop ((j 0) (result '()))
+        (if (= j d-v) (reverse result)
+            (loop (+ j 1)
+                  (cons (apply + (map (lambda (w v) (* w (list-ref v j)))
+                                      weights values))
+                        result)))))))
+
+(define query  '(1.0 0.5 0.0))
+(define keys   '((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)))
+(define values '((1.0 0.0) (0.0 1.0) (0.5 0.5)))
+
+(display "Output:  ") (display (map (lambda (x) (/ (round (* x 100)) 100))
+                                    (attention query keys values)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Scaled dot-product attention
+def dot(a, b):
+    return sum(x*y for x, y in zip(a, b))
+
+def softmax(xs):
+    mx = max(xs)
+    exps = [math.exp(x - mx) for x in xs]
+    total = sum(exps)
+    return [e / total for e in exps]
+
+def attention(query, keys, values):
+    d = len(query)
+    scale = math.sqrt(d)
+    scores = [dot(query, k) / scale for k in keys]
+    weights = softmax(scores)
+    print("Scores: ", [round(s, 2) for s in scores])
+    print("Weights:", [round(w, 2) for w in weights])
+    d_v = len(values[0])
+    out = [sum(w * v[j] for w, v in zip(weights, values)) for j in range(d_v)]
+    return out
+
+query  = [1.0, 0.5, 0.0]
+keys   = [[1,0,0], [0,1,0], [0,0,1]]
+values = [[1.0, 0.0], [0.0, 1.0], [0.5, 0.5]]
+
+result = attention(query, keys, values)
+print("Output: ", [round(x, 2) for x in result])
+`} />
+    </div>
+
+
+    <!-- 2. Multi-head split -->
+    <h3>Multi-head attention</h3>
+    <p>Instead of one attention function, split Q, K, V into h heads, run attention on each, then concatenate and project. Each head learns a different type of relationship: one head might attend to syntactic neighbors, another to semantic relatives. This is why transformers are expressive.</p>
+
+    <SchemeRepl client:load initialCode={`; Multi-head attention: split embedding into heads
+; d_model = 4, n_heads = 2, d_head = 2
+
+(define (split-heads vec n-heads)
+  (let ((d-head (/ (length vec) n-heads)))
+    (let loop ((i 0) (heads '()))
+      (if (= i n-heads) (reverse heads)
+          (let inner ((j 0) (head '()))
+            (if (= j d-head)
+                (loop (+ i 1) (cons (reverse head) heads))
+                (inner (+ j 1)
+                       (cons (list-ref vec (+ (* i d-head) j)) head))))))))
+
+(define (concat-heads heads)
+  (apply append heads))
+
+(define embedding '(0.2 0.8 -0.3 0.5))
+
+(display "Full embedding: ") (display embedding) (newline)
+(display "Head 1:         ") (display (car (split-heads embedding 2))) (newline)
+(display "Head 2:         ") (display (cadr (split-heads embedding 2))) (newline)
+(display "Concatenated:   ") (display (concat-heads (split-heads embedding 2))) (newline)
+
+; Each head runs its own attention, then results are concatenated
+(display "n_heads=2, d_model=4 -> d_head=2") (newline)
+(display "Each head attends independently, then merge.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multi-head split and concatenation
+def split_heads(vec, n_heads):
+    d_head = len(vec) // n_heads
+    return [vec[i*d_head:(i+1)*d_head] for i in range(n_heads)]
+
+def concat_heads(heads):
+    return [x for head in heads for x in head]
+
+embedding = [0.2, 0.8, -0.3, 0.5]
+
+print("Full embedding:", embedding)
+heads = split_heads(embedding, 2)
+print("Head 1:        ", heads[0])
+print("Head 2:        ", heads[1])
+print("Concatenated:  ", concat_heads(heads))
+print("n_heads=2, d_model=4 -> d_head=2")
+`} />
+    </div>
+
+
+    <!-- 3. Positional encoding -->
+    <h3>Positional encoding (sinusoidal)</h3>
+    <p>Attention treats its input as a set, not a sequence &mdash; it's permutation-equivariant. To inject order, add a positional encoding to each token embedding. The sinusoidal version uses sin and cos at different frequencies: position i, dimension j gets sin(i/10000<sup>j/d</sup>) for even j and cos for odd j. The wavelengths form a geometric progression from 2&#x3C0; to 20000&#x3C0;.</p>
+
+    <SchemeRepl client:load initialCode={`; Sinusoidal positional encoding
+; PE(pos, 2i)   = sin(pos / 10000^(2i/d))
+; PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
+
+(define d-model 8)
+
+(define (pos-encoding pos)
+  (let loop ((i 0) (enc '()))
+    (if (= i d-model) (reverse enc)
+        (let ((angle (/ pos (expt 10000 (/ (* 2 (quotient i 2)) d-model)))))
+          (loop (+ i 1)
+                (cons (if (even? i) (sin angle) (cos angle))
+                      enc))))))
+
+(define (show-enc pos)
+  (display "pos=") (display pos) (display ": ")
+  (display (map (lambda (x) (/ (round (* x 1000)) 1000))
+                (pos-encoding pos)))
+  (newline))
+
+(show-enc 0)
+(show-enc 1)
+(show-enc 2)
+(show-enc 3)
+
+; Each position gets a unique pattern
+; Nearby positions have similar encodings
+; The model can learn relative positions from these
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Sinusoidal positional encoding
+d_model = 8
+
+def pos_encoding(pos):
+    enc = []
+    for i in range(d_model):
+        angle = pos / (10000 ** (2 * (i // 2) / d_model))
+        enc.append(math.sin(angle) if i % 2 == 0 else math.cos(angle))
+    return enc
+
+for pos in range(4):
+    enc = [round(x, 3) for x in pos_encoding(pos)]
+    print("pos={}: {}".format(pos, enc))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">softmax(QK&#x1D40;/&#x221A;d)V</td><td class="pr-4 text-green-300">(attention q keys values)</td><td class="font-sans">Scaled dot-product attention</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Q, K, V</td><td class="pr-4 text-green-300">query, keys, values</td><td class="font-sans">Query, Key, Value projections</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">d<sub>k</sub></td><td class="pr-4 text-green-300">d-head</td><td class="font-sans">Key/query dimension per head</td></tr>
+          <tr><td class="py-2 pr-4">PE(pos, i)</td><td class="pr-4 text-green-300">(pos-encoding pos)</td><td class="font-sans">Positional encoding vector</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">"<a href="https://en.wikipedia.org/wiki/Attention_Is_All_You_Need"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Attention Is All You Need</a>" (Vaswani et al., 2017) introduced the transformer. The encoder-decoder architecture processes both input and output sequences. Modern LLMs typically use decoder-only transformers. The self-attention mechanism has O(n&#xB2;) complexity in sequence length &mdash; the motivation behind recent work on linear attention, sparse attention, and state-space models. The quadratic cost makes <a href="https://june.kim/context-density"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>context density</a> a practical concern: when the context window is finite, every token must earn its place.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-03/">&#x1F4D0; Hefferon Ch.3</a> &mdash; linear maps as the Q, K, V projections</li>
+      <li><a href="/reading/category-theory/milewski-10/">&#x1F408; Milewski Ch.10</a> &mdash; natural transformations: maps between functors, the category theory of "attention"</li>
+    
+      <li><a href="/reading/linear-algebra/hefferon-05/">📐 Linear Algebra Ch.5</a> &mdash; eigendecomposition is the mathematical foundation of PCA</li>
+      <li><a href="/reading/cognitive-architecture/vaswani-2017/">🏛️ Attention Is All You Need</a> &mdash; transformers use attention rather than PCA, but both find structure in high-dimensional representations</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-10/", label: "Sequence Models" }} next={{ href: "/reading/machine-learning/ml-12/", label: "Large Language Models" }} />
+
+  </main>
+</Layout>

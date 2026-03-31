@@ -1,0 +1,67 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Cryptography" favicon="🔐">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🔐 Cryptography</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://en.wikipedia.org/wiki/Cryptography"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">From XOR ciphers to TEE enclaves. Each chapter builds one layer of the modern security stack, with runnable code and diagrams.</p>
+
+    <!-- SVG: plaintext -> lock -> ciphertext -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Plaintext label -->
+        <text x="40" y="65" text-anchor="middle" fill="#86efac" font-size="12">plaintext</text>
+        <!-- Arrow to lock -->
+        <line x1="80" y1="60" x2="150" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="150,56 158,60 150,64" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Padlock body -->
+        <rect x="165" y="45" width="50" height="35" rx="4" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <!-- Padlock shackle -->
+        <path d="M 178 45 V 32 A 12 12 0 0 1 202 32 V 45" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <!-- Key hole -->
+        <circle cx="190" cy="58" r="4" fill="#facc15" fill-opacity="0.4"/>
+        <line x1="190" y1="62" x2="190" y2="72" stroke="#facc15" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Key below lock -->
+        <line x1="210" y1="95" x2="240" y2="95" stroke="#f59e0b" stroke-width="1.5"/>
+        <circle cx="245" cy="95" r="5" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+        <line x1="215" y1="95" x2="215" y2="90" stroke="#f59e0b" stroke-width="1"/>
+        <line x1="222" y1="95" x2="222" y2="90" stroke="#f59e0b" stroke-width="1"/>
+        <text x="228" y="110" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">key</text>
+        <!-- Arrow from lock to ciphertext -->
+        <line x1="222" y1="60" x2="290" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="290,56 298,60 290,64" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Ciphertext label -->
+        <text x="340" y="65" text-anchor="middle" fill="#f87171" font-size="12">ciphertext</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/cryptography/crypto-01/", title: "Symmetric Ciphers", desc: "XOR, Caesar, substitution: encryption and decryption share the same secret" },
+  { href: "/reading/cryptography/crypto-02/", title: "Block Ciphers", desc: "Feistel networks and AES: fixed-size blocks, multiple rounds, diffusion and confusion" },
+  { href: "/reading/cryptography/crypto-03/", title: "Hash Functions", desc: "One-way compression: any input to a fixed-length fingerprint, no way back" },
+  { href: "/reading/cryptography/crypto-04/", title: "MACs and Authentication", desc: "HMAC: a keyed hash that proves the message was not tampered with" },
+  { href: "/reading/cryptography/crypto-05/", title: "Key Exchange", desc: "Diffie-Hellman: two strangers agree on a shared secret over a public channel" },
+  { href: "/reading/cryptography/crypto-06/", title: "RSA", desc: "Public key encrypts, private key decrypts: the factoring problem makes it hard" }
+]} icon="🔐" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/channel/UC1usFRN4LCMcfIV7UjHNuQg">Christof Paar: Introduction to Cryptography</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/number-theory/">&#35; Number Theory</a> &mdash; RSA is Euler's theorem, key exchange is discrete logarithm</li>
+      <li><a href="/reading/abstract-algebra/">🔗 Abstract Algebra</a> &mdash; elliptic curves are abelian groups</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; Shannon's perfect secrecy is information-theoretic security</li>
+      <li><a href="/reading/theory-of-computation/">🔀 Theory of Computation</a> &mdash; computational hardness assumptions underlie every scheme</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

@@ -1,0 +1,141 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Zinsser 1976 — On Writing Well" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>On Writing Well</h1>
+    <p class="text-gray-400 text-sm mb-6">William Zinsser &middot; 1976 &middot; Copyrighted &mdash; available in bookstores and libraries; no full text online</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Strunk said omit needless words. Zinsser asked: why are they there? His answer: because the writer hasn&rsquo;t finished thinking. Clutter is a symptom of unclear thought. The cure is rewriting, not once, but until every sentence says exactly what you mean and nothing else.</p>
+    </div>
+
+    <!-- SVG: Zinsser's causal diagnosis — clutter traces back to unclear thinking -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+
+        <!-- Strunk's view (surface) -->
+        <text x="240" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Strunk sees this</text>
+
+        <!-- Cluttered sentence -->
+        <rect x="80" y="28" width="320" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.06" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <text x="100" y="47" fill="currentColor" font-size="8" fill-opacity="0.25">I think what I'm trying to say is that</text>
+        <text x="320" y="47" fill="#ef4444" font-size="8" fill-opacity="0.5">needless words</text>
+
+        <!-- Strunk's fix: delete -->
+        <line x1="420" y1="43" x2="450" y2="43" stroke="#ef4444" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="455" y="46" fill="#ef4444" font-size="8" fill-opacity="0.5">cut</text>
+
+        <!-- Divider -->
+        <line x1="60" y1="75" x2="420" y2="75" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.2"/>
+
+        <!-- Zinsser's view (cause) -->
+        <text x="240" y="95" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.6">Zinsser asks why</text>
+
+        <!-- Causal chain: unclear thought → clutter → rewrite → clear thought -->
+        <rect x="30" y="110" width="95" height="40" rx="4" fill="#a78bfa" fill-opacity="0.06" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="77" y="128" text-anchor="middle" fill="#a78bfa" font-size="8" fill-opacity="0.6">unclear</text>
+        <text x="77" y="140" text-anchor="middle" fill="#a78bfa" font-size="8" fill-opacity="0.6">thought</text>
+
+        <!-- Arrow: produces -->
+        <line x1="128" y1="130" x2="155" y2="130" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="153,127 160,130 153,133" fill="#a78bfa" fill-opacity="0.3"/>
+        <text x="143" y="122" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.2">produces</text>
+
+        <rect x="163" y="110" width="75" height="40" rx="4" fill="#ef4444" fill-opacity="0.06" stroke="#ef4444" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="200" y="134" text-anchor="middle" fill="#ef4444" font-size="8" fill-opacity="0.5">clutter</text>
+
+        <!-- Arrow: rewrite -->
+        <line x1="241" y1="130" x2="268" y2="130" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="266,127 273,130 266,133" fill="#a78bfa" fill-opacity="0.3"/>
+        <text x="256" y="122" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.2">rewrite</text>
+
+        <rect x="276" y="110" width="75" height="40" rx="4" fill="#a78bfa" fill-opacity="0.06" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="313" y="128" text-anchor="middle" fill="#a78bfa" font-size="8" fill-opacity="0.6">clearer</text>
+        <text x="313" y="140" text-anchor="middle" fill="#a78bfa" font-size="8" fill-opacity="0.6">thought</text>
+
+        <!-- Arrow: produces -->
+        <line x1="354" y1="130" x2="381" y2="130" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="379,127 386,130 379,133" fill="#a78bfa" fill-opacity="0.3"/>
+        <text x="369" y="122" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.2">produces</text>
+
+        <rect x="389" y="110" width="75" height="40" rx="4" fill="#34d399" fill-opacity="0.08" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="426" y="128" text-anchor="middle" fill="#34d399" font-size="8" fill-opacity="0.6">clean</text>
+        <text x="426" y="140" text-anchor="middle" fill="#34d399" font-size="8" fill-opacity="0.6">prose</text>
+
+        <!-- Feedback loop arrow from "clearer thought" back to rewrite -->
+        <path d="M 313 153 C 313 175, 200 175, 200 153" fill="none" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.25" stroke-dasharray="3,3"/>
+        <polygon points="197,155 200,148 203,155" fill="#a78bfa" fill-opacity="0.25"/>
+        <text x="256" y="186" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.2">repeat until the thought is finished</text>
+
+        <!-- Bottom note -->
+        <text x="240" y="210" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.2">the fix is upstream of the sentence</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Zinsser was a journalist, editor, and writing teacher at Yale. <em>On Writing Well</em> has sold over a million copies across seven editions since 1976. Where Strunk wrote a slim rulebook and Orwell wrote a polemical essay, Zinsser wrote something closer to a workshop: practical, discursive, full of examples from his own drafts showing how bad sentences become good ones through revision.</p>
+
+    <p>His central claim: writing is not a natural gift. It is a craft learned through practice, and the fundamental practice is cutting. Every sentence should be interrogated. Is this necessary? Does this word earn its place? Can I say this more simply? The answers reveal whether the writer has actually thought through what they are saying. A cluttered sentence is not a style problem. It is a thinking problem made visible on the page.</p>
+
+    <p>Zinsser extends Strunk&rsquo;s prescriptive rules into a diagnostic. Strunk says omit needless words. Zinsser asks why needless words appeared in the first place and finds the answer in incomplete thinking. The clutter is a symptom. The disease is a writer who has not yet decided what they mean. Rewriting is the process of finishing the thought.</p>
+
+    <h3>Zinsser&rsquo;s principles</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Principle</th>
+            <th class="text-left py-2 text-gray-400">What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Clutter = unclear thinking</td><td class="text-gray-400">Every unnecessary word reveals a place where the writer hasn&rsquo;t decided what to say</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Rewriting is the work</td><td class="text-gray-400">First drafts are thinking out loud; the real writing is revision</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Write for yourself</td><td class="text-gray-400">If you write to please everyone, you&rsquo;ll please no one. Write what interests you.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Unity</td><td class="text-gray-400">Every piece should have one mood, one attitude, one tense</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Three drafts</h3>
+
+    <p>The SVG above shows three boxes getting smaller. Here is what that looks like in prose:</p>
+
+    <p class="text-gray-400 text-xs uppercase tracking-wide mt-6 mb-2">Draft 1 — thinking out loud</p>
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-400 italic">"I think what I'm trying to say here is that the problem with most corporate communications is that they try to sound important instead of actually communicating anything useful, and I've noticed this in basically every company I've worked at, where the emails are full of jargon and nobody really says what they mean."</blockquote>
+
+    <p class="text-gray-400 text-xs uppercase tracking-wide mt-6 mb-2">Draft 2 — cut</p>
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-400 italic">"Corporate writing tries to sound important instead of communicating. The emails are full of jargon. Nobody says what they mean."</blockquote>
+
+    <p class="text-gray-400 text-xs uppercase tracking-wide mt-6 mb-2">Draft 3 — clarify</p>
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-300 italic">"Corporate writing hides behind jargon. Say what you mean."</blockquote>
+
+    <p>Draft 1 is thinking out loud — that's fine. Draft 2 cuts the throat-clearing ("I think what I'm trying to say") and the autobiography ("every company I've worked at"). Draft 3 asks what's left that the reader actually needs. Three sentences become two. Zinsser's point: the first draft isn't bad writing. It's the writer discovering what they think. The second and third drafts are the writing.</p>
+
+    <h3>Discussion</h3>
+
+    <p>Zinsser&rsquo;s diagnostic is causal: clutter reveals incomplete thinking, and rewriting is how the thinking finishes. Most style advice treats bad prose as a surface defect. Zinsser treats it as evidence that the writer hasn&rsquo;t yet decided what they mean. The fix is upstream of the sentence.</p>
+
+    <p>The limitation: &ldquo;think more clearly&rdquo; is correct but not actionable. It names the problem without supplying a method. A writer who reads Zinsser knows what good prose looks like and why clutter appears, but still lacks a mechanical procedure for producing clarity in any given sentence.</p>
+
+    <p>What Zinsser does provide is permission. Permission to write badly on the first pass, because the first draft is thinking out loud. Permission to cut ruthlessly, because the reader never sees what you removed. Permission to write about what interests you, because a bored writer produces boring prose. The other authors in this collection give you rules, analysis, and specifications. Zinsser gives you a relationship with the work itself.</p>
+
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/On_Writing_Well"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></li>
+      <li><a href="https://june.kim/writing-with-claude"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Writing with Claude</a> — the 70/30 split: Zinsser's revision process with an AI drafting partner</li>
+      <li><a href="https://june.kim/double-loop"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Double Loop</a> — the editorial loop formalized</li>
+      <li><a href="/reading/prose-writing/">back to prose writing</a></li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/orwell-1946/", label: "Orwell 1946 · 6 of 10" }} next={{ href: "/reading/prose-writing/williams-1981/", label: "Williams 1981 · 8 of 10" }} />
+
+  </main>
+</Layout>

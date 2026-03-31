@@ -1,0 +1,207 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.3 — Homomorphisms" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Homomorphisms</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>homomorphism</strong> is a function between groups that preserves the operation: f(a * b) = f(a) * f(b). The <strong>kernel</strong> measures what it forgets. The <strong>image</strong> measures what it hits. These three pieces tell you everything about how one group maps onto another.</p>
+    </div>
+
+    <!-- 1. Definition -->
+    <h3>Structure-preserving maps</h3>
+    <p>A function f: G to H is a <strong>group homomorphism</strong> if f(a *_G b) = f(a) *_H f(b) for all a, b in G. The operation on the left is G's operation; the operation on the right is H's. The function translates one group's structure into the other's without distortion.</p>
+
+    <!-- SVG: two groups with a map between them -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Group G (left) -->
+        <ellipse cx="90" cy="80" rx="70" ry="55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="90" y="20" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">G</text>
+        <circle cx="70" cy="60" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="60" y="56" text-anchor="end" fill="#60a5fa" font-size="10">a</text>
+        <circle cx="110" cy="60" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="120" y="56" text-anchor="start" fill="#60a5fa" font-size="10">b</text>
+        <circle cx="90" cy="100" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="90" y="118" text-anchor="middle" fill="#f59e0b" font-size="10">a*b</text>
+
+        <!-- Group H (right) -->
+        <ellipse cx="310" cy="80" rx="70" ry="55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="310" y="20" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">H</text>
+        <circle cx="290" cy="60" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="280" y="56" text-anchor="end" fill="#60a5fa" font-size="10">f(a)</text>
+        <circle cx="330" cy="60" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="340" y="56" text-anchor="start" fill="#60a5fa" font-size="10">f(b)</text>
+        <circle cx="310" cy="100" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="310" y="118" text-anchor="middle" fill="#f59e0b" font-size="10">f(a)*f(b)</text>
+
+        <!-- Arrow f -->
+        <line x1="165" y1="60" x2="278" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="278,56 286,60 278,64" fill="currentColor" fill-opacity="0.5"/>
+        <text x="220" y="52" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">f</text>
+
+        <!-- Dashed arrow: f(a*b) = f(a)*f(b) -->
+        <line x1="165" y1="100" x2="298" y2="100" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <polygon points="298,96 306,100 298,104" fill="currentColor" fill-opacity="0.3"/>
+        <text x="220" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">f(a*b) = f(a)*f(b)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Homomorphism: f(a*b) = f(a)*f(b)
+; Example: f: Z -> Z6, f(n) = n mod 6
+; G = (Z, +), H = (Z6, + mod 6)
+
+(define (f n) (modulo n 6))
+
+; Check: f(a + b) = f(a) +6 f(b)
+(define a 8)
+(define b 15)
+
+(display "f(a + b) = f(") (display (+ a b))
+(display ") = ") (display (f (+ a b))) (newline)
+
+(display "f(a) + f(b) mod 6 = ")
+(display (modulo (+ (f a) (f b)) 6)) (newline)
+
+; They match! The mod function is a homomorphism.
+(display "Equal? ") (display (= (f (+ a b))
+                                (modulo (+ (f a) (f b)) 6)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Homomorphism: Z -> Z6 via mod 6
+f = lambda n: n % 6
+a, b = 8, 15
+
+print("f(a+b) = f(" + str(a+b) + ") = " + str(f(a+b)))
+print("f(a)+f(b) mod 6 = " + str((f(a)+f(b)) % 6))
+print("Equal? " + str(f(a+b) == (f(a)+f(b)) % 6))
+`} />
+    </div>
+
+
+    <!-- 2. Kernel -->
+    <h3>Kernel</h3>
+    <p>The <strong>kernel</strong> of f is the set of elements that map to the identity: ker(f) = (a in G : f(a) = e_H). The kernel is always a subgroup of G. A homomorphism is injective if and only if its kernel is trivial (just the identity).</p>
+
+    <SchemeRepl client:load initialCode={`; Kernel of f: Z -> Z6, f(n) = n mod 6
+; ker(f) = all integers n where n mod 6 = 0
+; That is: ..., -12, -6, 0, 6, 12, ... = 6Z
+
+(define (f n) (modulo n 6))
+
+; Check a range
+(display "Kernel elements in [-12..12]: ")
+(let loop ((n -12))
+  (when (<= n 12)
+    (when (= (f n) 0)
+      (display n) (display " "))
+    (loop (+ n 1))))
+(newline)
+
+; The kernel is the subgroup 6Z of Z.
+; It is isomorphic to Z itself.
+(display "ker(f) = 6Z = multiples of 6")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Kernel of f: Z -> Z6
+f = lambda n: n % 6
+kernel = [n for n in range(-12, 13) if f(n) == 0]
+print("Kernel in [-12..12]: " + str(kernel))
+print("ker(f) = 6Z = multiples of 6")
+`} />
+    </div>
+
+
+    <!-- 3. Image -->
+    <h3>Image</h3>
+    <p>The <strong>image</strong> of f is the set of elements in H that are actually hit: im(f) = (f(a) : a in G). The image is always a subgroup of H. A homomorphism is surjective if its image is all of H.</p>
+
+    <SchemeRepl client:load initialCode={`; Image of f: Z4 -> Z4, f(n) = 2n mod 4
+
+(define (f n) (modulo (* 2 n) 4))
+
+(display "f(0) = ") (display (f 0)) (newline)
+(display "f(1) = ") (display (f 1)) (newline)
+(display "f(2) = ") (display (f 2)) (newline)
+(display "f(3) = ") (display (f 3)) (newline)
+
+; Image = (0, 2). A subgroup of Z4.
+; Not surjective (1 and 3 are not hit).
+(display "Image = (0, 2)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Image of f: Z4 -> Z4, f(n) = 2n mod 4
+f = lambda n: (2 * n) % 4
+
+for n in range(4):
+    print("f(" + str(n) + ") = " + str(f(n)))
+
+image = sorted(set(f(n) for n in range(4)))
+print("Image = " + str(image))
+# Not surjective: 1 and 3 are not hit.
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f: G &rarr; H</td><td class="pr-4 text-green-300">(define (f x) ...)</td><td class="pr-4 text-blue-300">def f(x): ...</td><td class="font-sans">Homomorphism from G to H</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ker(f)</td><td class="pr-4 text-green-300">(= (f x) 0)</td><td class="pr-4 text-blue-300">f(x) == 0</td><td class="font-sans">Elements mapping to identity</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">im(f)</td><td class="pr-4 text-green-300">(map f G)</td><td class="pr-4 text-blue-300">set(f(x) for x in G)</td><td class="font-sans">Elements in H that are hit</td></tr>
+          <tr><td class="py-2 pr-4">f(ab) = f(a)f(b)</td><td class="pr-4 text-green-300">verified above</td><td class="pr-4 text-blue-300">verified above</td><td class="font-sans">Homomorphism property</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-02/">&larr; Ch.2 Subgroups</a> &mdash; kernels and images are subgroups</li>
+      <li><a href="/reading/abstract-algebra/judson-04/">Ch.4 Isomorphisms</a> &mdash; bijective homomorphisms</li>
+    
+      <li><a href="/reading/category-theory/milewski-07/">🐱 Category Theory Ch.7</a> &mdash; functors are homomorphisms between categories</li>
+      <li><a href="/reading/linear-algebra/hefferon-03/">📐 Linear Algebra Ch.3</a> &mdash; linear maps are homomorphisms of vector spaces</li>
+      <li><a href="/reading/proof-writing/proofs-06/">✎ Proofs Ch.6</a> &mdash; the function properties (injective, surjective) used to classify homomorphisms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-07/">Milewski Ch.7</a> &mdash; functors are homomorphisms between categories: they preserve composition and identity</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson covers homomorphisms in Ch. 11 and isomorphisms in Ch. 9, after treating permutation groups and cosets. We pull homomorphisms forward because the concept is simpler than the textbook ordering suggests: it is just "f preserves the operation." The first isomorphism theorem (G/ker(f) is isomorphic to im(f)) is the punchline of this material but requires quotient groups, covered implicitly in Ch. 5.</p>
+
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-02/", label: "Subgroups" }} next={{ href: "/reading/abstract-algebra/judson-04/", label: "Isomorphisms · 4 of 8" }} />
+
+  </main>
+</Layout>

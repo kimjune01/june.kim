@@ -1,0 +1,85 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Control Theory" favicon="🎛">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🎛 Control Theory</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://en.wikipedia.org/wiki/Control_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia articles</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">How to make systems do what you want: measure the output, compare it to the goal, adjust the input. Ten chapters from feedback loops to Lyapunov stability.</p>
+
+    <!-- SVG: Feedback loop diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Reference input -->
+        <text x="10" y="80" fill="currentColor" font-size="12" fill-opacity="0.6">reference</text>
+        <!-- Summing junction -->
+        <circle cx="100" cy="75" r="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="80" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.5">&Sigma;</text>
+        <text x="88" y="68" fill="currentColor" font-size="10" fill-opacity="0.4">+</text>
+        <text x="88" y="95" fill="currentColor" font-size="10" fill-opacity="0.4">&minus;</text>
+        <!-- Arrow: ref to sum -->
+        <line x1="55" y1="75" x2="84" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="84,71 92,75 84,79" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Controller box -->
+        <rect x="145" y="55" width="90" height="40" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="190" y="80" text-anchor="middle" fill="#60a5fa" font-size="13">Controller</text>
+        <!-- Arrow: sum to controller -->
+        <line x1="114" y1="75" x2="143" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="143,71 151,75 143,79" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Plant box -->
+        <rect x="275" y="55" width="90" height="40" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="320" y="80" text-anchor="middle" fill="#f59e0b" font-size="13">Plant</text>
+        <!-- Arrow: controller to plant -->
+        <line x1="235" y1="75" x2="273" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="273,71 281,75 273,79" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Output -->
+        <line x1="365" y1="75" x2="480" y2="75" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="470,71 478,75 470,79" fill="currentColor" fill-opacity="0.5"/>
+        <text x="490" y="80" fill="currentColor" font-size="12" fill-opacity="0.6">output</text>
+        <!-- Sensor box -->
+        <rect x="210" y="135" width="90" height="40" rx="4" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="255" y="160" text-anchor="middle" fill="#a78bfa" font-size="13">Sensor</text>
+        <!-- Feedback path: output down, left, up to summing junction -->
+        <line x1="420" y1="75" x2="420" y2="155" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="420" y1="155" x2="302" y2="155" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="208" y1="155" x2="100" y2="155" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="100" y1="155" x2="100" y2="91" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="96,91 100,83 104,91" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Caption -->
+        <text x="260" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">The feedback loop: measure, compare, correct.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/control/ctrl-01/", title: "Feedback", desc: "Open-loop guesses; closed-loop measures and corrects" },
+  { href: "/reading/control/ctrl-02/", title: "Transfer Functions", desc: "Laplace transforms turn differential equations into algebra" },
+  { href: "/reading/control/ctrl-03/", title: "PID Control", desc: "Three knobs that handle most real-world control problems" },
+  { href: "/reading/control/ctrl-04/", title: "Stability", desc: "A system is stable when bounded inputs produce bounded outputs" },
+  { href: "/reading/control/ctrl-05/", title: "Root Locus", desc: "Watch the poles migrate as you turn up the gain" },
+  { href: "/reading/control/ctrl-06/", title: "Frequency Response", desc: "Bode plots show how a system amplifies or attenuates each frequency" },
+  { href: "/reading/control/ctrl-07/", title: "State Space", desc: "Replace one high-order ODE with a system of first-order equations" },
+  { href: "/reading/control/ctrl-08/", title: "Optimal Control", desc: "Minimize a cost function to find the best control law" },
+  { href: "/reading/control/ctrl-09/", title: "Kalman Filter", desc: "Optimally fuse noisy measurements with a model prediction" },
+  { href: "/reading/control/ctrl-10/", title: "Lyapunov Stability", desc: "Prove stability by finding an energy function that always decreases" }
+]} icon="🎛" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/user/ControlLectures">Brian Douglas: Control Systems Lectures</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; differential equations are the language of control</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; state space representation is matrix algebra</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; the Kalman filter is a Bayesian filter</li>
+      <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> &mdash; reinforcement learning is optimal control with learned dynamics</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

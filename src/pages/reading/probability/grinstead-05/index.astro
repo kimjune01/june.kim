@@ -1,0 +1,307 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 5 — Distributions" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Important Distributions</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>distribution</strong> is a recipe for randomness. The binomial counts successes, the Poisson counts rare events, the geometric waits for the first success, and the normal emerges when you add enough of anything together.</p>
+    </div>
+
+    <!-- 1. Binomial distribution -->
+    <h3>Binomial distribution</h3>
+    <p>Flip a coin n times, each with success probability p. The number of successes k follows the <strong>binomial distribution</strong>: P(X = k) = C(n,k) p^k (1-p)^(n-k). Each bar in the diagram is one possible count of successes.</p>
+
+    <!-- SVG: Binomial distribution bars for n=10, p=0.3 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="420" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="180" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Y-axis label -->
+        <text x="12" y="100" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,12,100)">P(X = k)</text>
+        <!-- X-axis label -->
+        <text x="230" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">k (number of successes)</text>
+        <!-- Title -->
+        <text x="230" y="15" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Binomial(n=10, p=0.3)</text>
+        <!-- Bars: C(10,k) * 0.3^k * 0.7^(10-k), scaled so max height ~150px -->
+        <!-- k=0: 0.0282 -> h=17 -->
+        <rect x="52" y="163" width="28" height="17" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="66" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <!-- k=1: 0.1211 -> h=73 -->
+        <rect x="86" y="107" width="28" height="73" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="100" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">1</text>
+        <!-- k=2: 0.2335 -> h=140 -->
+        <rect x="120" y="40" width="28" height="140" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="134" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">2</text>
+        <!-- k=3: 0.2668 -> h=160 (max) -->
+        <rect x="154" y="20" width="28" height="160" rx="2" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="168" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">3</text>
+        <!-- k=4: 0.2001 -> h=120 -->
+        <rect x="188" y="60" width="28" height="120" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="202" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">4</text>
+        <!-- k=5: 0.1029 -> h=62 -->
+        <rect x="222" y="118" width="28" height="62" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="236" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">5</text>
+        <!-- k=6: 0.0368 -> h=22 -->
+        <rect x="256" y="158" width="28" height="22" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="270" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">6</text>
+        <!-- k=7: 0.0090 -> h=5 -->
+        <rect x="290" y="175" width="28" height="5" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="304" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">7</text>
+        <!-- k=8: 0.0014 -> h=1 -->
+        <rect x="324" y="179" width="28" height="1" rx="2" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="338" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">8</text>
+        <!-- k=9,10: negligible -->
+        <text x="372" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">9</text>
+        <text x="406" y="196" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">10</text>
+        <!-- Peak annotation -->
+        <text x="168" y="16" text-anchor="middle" fill="#f59e0b" font-size="9">mode = 3</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Binomial distribution: P(X = k) = C(n,k) * p^k * (1-p)^(n-k)
+; n independent trials, each with success probability p
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n) (* (factorial k) (factorial (- n k)))))
+
+(define (binomial-pmf n p k)
+  (* (choose n k)
+     (expt p k)
+     (expt (- 1 p) (- n k))))
+
+; n=10 trials, p=0.3 success probability
+(define n 10)
+(define p 0.3)
+
+(display "P(X = 0) = ") (display (binomial-pmf n p 0)) (newline)
+(display "P(X = 3) = ") (display (binomial-pmf n p 3)) (newline)
+(display "P(X = 5) = ") (display (binomial-pmf n p 5)) (newline)
+
+; Verify: all probabilities sum to 1
+(define (sum-pmf k)
+  (if (> k n) 0
+      (+ (binomial-pmf n p k) (sum-pmf (+ k 1)))))
+(display "Sum = ") (display (sum-pmf 0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Binomial distribution
+from math import comb
+
+def binomial_pmf(n, p, k):
+    return comb(n, k) * p**k * (1-p)**(n-k)
+
+n, p = 10, 0.3
+for k in range(n+1):
+    bar = "#" * int(binomial_pmf(n, p, k) * 200)
+    print(f"P(X={k:2d}) = {binomial_pmf(n, p, k):.4f} {bar}")
+`} />
+    </div>
+
+    <!-- 2. Poisson distribution -->
+    <h3>Poisson distribution</h3>
+    <p>When n is large and p is small, the binomial approaches the <strong>Poisson distribution</strong> with parameter lambda = np. It counts rare events: typos per page, emails per hour, mutations per generation. P(X = k) = e^(-lambda) lambda^k / k!.</p>
+
+    <SchemeRepl client:load initialCode={`; Poisson distribution: limit of binomial for rare events
+; P(X = k) = e^(-lambda) * lambda^k / k!
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define e 2.718281828)
+
+(define (poisson-pmf lam k)
+  (* (expt e (- lam))
+     (/ (expt lam k) (factorial k))))
+
+; lambda = 3 (e.g., 3 typos per page on average)
+(define lam 3)
+
+(display "Poisson(3):") (newline)
+(display "P(X = 0) = ") (display (poisson-pmf lam 0)) (newline)
+(display "P(X = 1) = ") (display (poisson-pmf lam 1)) (newline)
+(display "P(X = 3) = ") (display (poisson-pmf lam 3)) (newline)
+(display "P(X = 5) = ") (display (poisson-pmf lam 5)) (newline)
+
+; Compare with Binomial(1000, 0.003) -- should be close
+(define (choose n k)
+  (if (= k 0) 1 (* (/ (- n (- k 1)) k) (choose n (- k 1)))))
+(define (binom-pmf n p k)
+  (* (choose n k) (expt p k) (expt (- 1 p) (- n k))))
+
+(display "Binomial(1000,0.003) at k=3: ")
+(display (binom-pmf 1000 0.003 3))
+; Close to Poisson(3) at k=3
+`} />
+
+    <!-- 3. Geometric distribution -->
+    <h3>Geometric distribution</h3>
+    <p>How many trials until the first success? The <strong>geometric distribution</strong> answers this: P(X = k) = (1-p)^(k-1) p. It is memoryless. No matter how many failures you have seen, the probability of success on the next trial stays at p.</p>
+
+    <SchemeRepl client:load initialCode={`; Geometric distribution: waiting for first success
+; P(X = k) = (1-p)^(k-1) * p   (k = 1, 2, 3, ...)
+
+(define (geometric-pmf p k)
+  (* (expt (- 1 p) (- k 1)) p))
+
+; p = 0.2 (20% chance each trial)
+(define p 0.2)
+
+(display "Geometric(0.2):") (newline)
+(display "P(first on trial 1) = ") (display (geometric-pmf p 1)) (newline)
+(display "P(first on trial 3) = ") (display (geometric-pmf p 3)) (newline)
+(display "P(first on trial 5) = ") (display (geometric-pmf p 5)) (newline)
+(display "P(first on trial 10) = ") (display (geometric-pmf p 10)) (newline)
+
+; Expected number of trials = 1/p
+(display "E[X] = 1/p = ") (display (/ 1.0 p))
+; On average, 5 trials to first success
+`} />
+
+    <!-- 4. Normal distribution -->
+    <h3>Normal (Gaussian) distribution</h3>
+    <p>The <strong>normal distribution</strong> is continuous. Its PDF is f(x) = (1 / sqrt(2 pi sigma^2)) exp(-(x - mu)^2 / (2 sigma^2)). It arises whenever many small independent effects add up, which is why it appears everywhere. The Central Limit Theorem (Ch 9) explains why.</p>
+
+    <SchemeRepl client:load initialCode={`; Normal distribution PDF
+; f(x) = (1 / sqrt(2*pi*sigma^2)) * exp(-(x-mu)^2 / (2*sigma^2))
+
+(define pi 3.14159265)
+(define e 2.71828183)
+
+(define (normal-pdf mu sigma x)
+  (* (/ 1 (sqrt (* 2 pi sigma sigma)))
+     (expt e (/ (- (* (- x mu) (- x mu)))
+                (* 2 sigma sigma)))))
+
+; Standard normal: mu=0, sigma=1
+(display "Standard normal N(0,1):") (newline)
+(display "f(0)  = ") (display (normal-pdf 0 1 0)) (newline)
+(display "f(1)  = ") (display (normal-pdf 0 1 1)) (newline)
+(display "f(-1) = ") (display (normal-pdf 0 1 -1)) (newline)
+(display "f(2)  = ") (display (normal-pdf 0 1 2)) (newline)
+
+; Wider distribution: sigma=2
+(display "N(0,2):") (newline)
+(display "f(0) = ") (display (normal-pdf 0 2 0)) (newline)
+; Shorter peak, wider spread
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Normal PDF
+import math
+
+def normal_pdf(mu, sigma, x):
+    return (1 / math.sqrt(2 * math.pi * sigma**2)) * \
+           math.exp(-(x - mu)**2 / (2 * sigma**2))
+
+# Standard normal
+for x in [-3, -2, -1, 0, 1, 2, 3]:
+    bar = "#" * int(normal_pdf(0, 1, x) * 100)
+    print(f"f({x:+d}) = {normal_pdf(0, 1, x):.4f} {bar}")
+`} />
+    </div>
+
+    <!-- 5. PMF vs PDF -->
+    <h3>PMF vs PDF</h3>
+    <p>Discrete distributions have a <strong>probability mass function</strong> (PMF): P(X = k) gives the probability of each exact value. Continuous distributions have a <strong>probability density function</strong> (PDF): f(x) gives density, and probability comes from integrating over an interval. The density at a single point is not a probability.</p>
+
+    <SchemeRepl client:load initialCode={`; PMF: each value has a probability (sums to 1)
+; PDF: density function (integrates to 1)
+
+; PMF example: fair die
+(define (die-pmf k) (/ 1.0 6))
+
+(display "Fair die PMF:") (newline)
+(display "P(X=1) = ") (display (die-pmf 1)) (newline)
+(display "P(X=4) = ") (display (die-pmf 4)) (newline)
+
+; PDF example: approximate integral of standard normal from -1 to 1
+; Using the rectangle rule with small steps
+(define pi 3.14159265)
+(define e 2.71828183)
+(define (std-normal x)
+  (* (/ 1 (sqrt (* 2 pi)))
+     (expt e (/ (- (* x x)) 2))))
+
+(define (integrate f a b steps)
+  (let ((dx (/ (- b a) steps)))
+    (let loop ((i 0) (sum 0))
+      (if (>= i steps) (* sum dx)
+          (loop (+ i 1) (+ sum (f (+ a (* dx (+ i 0.5))))))))))
+
+(display "P(-1 < X < 1) ~ ") (display (integrate std-normal -1 1 100))
+; About 0.6827 -- the 68% rule
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Notation</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">B(n,p)</td><td class="pr-4 text-green-300">(binomial-pmf n p k)</td><td class="font-sans">Binomial: k successes in n trials</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pois(&#x03BB;)</td><td class="pr-4 text-green-300">(poisson-pmf lam k)</td><td class="font-sans">Poisson: rare events at rate &#x03BB;</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Geom(p)</td><td class="pr-4 text-green-300">(geometric-pmf p k)</td><td class="font-sans">Geometric: trials until first success</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">N(&#x03BC;,&#x03C3;&sup2;)</td><td class="pr-4 text-green-300">(normal-pdf mu sigma x)</td><td class="font-sans">Normal: bell curve with mean &#x03BC;, variance &#x03C3;&sup2;</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(X = k)</td><td class="pr-4 text-green-300">(pmf k)</td><td class="font-sans">PMF: probability of exact value</td></tr>
+          <tr><td class="py-2 pr-4">f(x)</td><td class="pr-4 text-green-300">(pdf x)</td><td class="font-sans">PDF: probability density</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-04/">&#x1F3B0; Ch 4</a> &mdash; conditional probability (needed for Bayes with these distributions)</li>
+      <li><a href="/reading/probability/grinstead-06/">&#x1F3B0; Ch 6</a> &mdash; expected value and variance of these distributions</li>
+      <li><a href="/reading/probability/grinstead-03/">&#x1F3B0; Ch 3</a> &mdash; combinatorics (the C(n,k) in binomial)</li>
+    
+      <li><a href="/reading/statistics/openintro-04/">📊 Statistics Ch.4</a> &mdash; the same distributions used for inference</li>
+      <li><a href="/reading/machine-learning/ml-07/">🤖 ML Ch.7</a> &mdash; Gaussian processes are distributions over functions</li>
+      <li><a href="/reading/information-theory/shannon-02/">📡 Information Theory Ch.2</a> &mdash; entropy is defined over probability distributions like these</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Binomial_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Binomial distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Poisson_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Poisson distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Geometric_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Geometric distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Normal_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Normal distribution</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Grinstead &amp; Snell</a>, Chapter 5.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-04/", label: "Conditional Probability" }} next={{ href: "/reading/probability/grinstead-06/", label: "Expected Value" }} />
+
+  </main>
+</Layout>

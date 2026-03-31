@@ -1,0 +1,211 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.12 — Trusted Execution Environments" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>Trusted Execution Environments</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Trusted_execution_environment"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Trusted execution environment</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>trusted execution environment</strong> (TEE) is an enclave: attestation + encryption + memory isolation. The operator runs the server but cannot read the enclave's memory. The user verifies what code runs (attestation), then sends encrypted data that only the enclave can decrypt. The result: computation on private data without trusting the operator.</p>
+    </div>
+
+    <!-- SVG: Server with enclave, encrypted channel bypassing operator -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 300" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Server box -->
+        <rect x="140" y="30" width="280" height="220" rx="8" fill="none" stroke="#71717a" stroke-opacity="0.45" stroke-width="1.5"/>
+        <text x="280" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">Server (operator controls)</text>
+
+        <!-- Enclave box inside server -->
+        <rect x="180" y="80" width="200" height="130" rx="6" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="280" y="105" text-anchor="middle" fill="#4ade80" font-size="13">Enclave</text>
+        <text x="280" y="125" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">isolated memory</text>
+        <text x="280" y="140" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">encrypted at rest</text>
+        <text x="280" y="155" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">attested code</text>
+
+        <!-- Code inside enclave -->
+        <rect x="210" y="165" width="140" height="30" rx="4" fill="none" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+        <text x="280" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">application logic</text>
+
+        <!-- User -->
+        <circle cx="50" cy="150" r="15" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="50" y="154" text-anchor="middle" fill="#60a5fa" font-size="10">User</text>
+
+        <!-- Encrypted channel from user directly to enclave -->
+        <path d="M 68 145 L 175 145" fill="none" stroke="#f472b6" stroke-width="2" stroke-opacity="0.6"/>
+        <polygon points="173,141 181,145 173,149" fill="#f472b6" fill-opacity="0.6"/>
+        <text x="122" y="138" text-anchor="middle" fill="#f472b6" font-size="9">encrypted channel</text>
+
+        <!-- Operator (crossed out) -->
+        <text x="280" y="270" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.3">Operator: can run server, cannot read enclave memory</text>
+
+        <!-- X marks blocking operator from enclave -->
+        <text x="160" y="240" fill="red" fill-opacity="0.4" font-size="16">&#x2717;</text>
+        <path d="M 165 225 L 200 170" fill="none" stroke="red" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Attestation arrow -->
+        <path d="M 50 132 Q 50 60 175 90" fill="none" stroke="#4ade80" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+        <text x="90" y="75" fill="#4ade80" font-size="9" fill-opacity="0.7">1. verify attestation</text>
+
+        <!-- Data arrow -->
+        <text x="122" y="160" text-anchor="middle" fill="#f472b6" font-size="9" fill-opacity="0.5">2. send encrypted data</text>
+      </svg>
+    </div>
+
+    <!-- 1. The three ingredients -->
+    <h3>The three ingredients</h3>
+    <p>A TEE combines three mechanisms. <strong>Attestation</strong> (Ch.11): the user verifies what code is running. <strong>Encryption</strong>: data sent to the enclave is encrypted with a key only the enclave holds. <strong>Memory isolation</strong>: the hardware prevents the OS, hypervisor, and operator from reading the enclave's memory, even with root access.</p>
+
+    <SchemeRepl client:load initialCode={`; TEE = Attestation + Encryption + Isolation
+
+(display "Ingredient 1: Attestation") (newline)
+(display "  User verifies the enclave runs the") (newline)
+(display "  expected code (hash matches).") (newline)
+(display "  -> Ch.11 Remote Attestation") (newline)
+(newline)
+(display "Ingredient 2: Encryption") (newline)
+(display "  Data is encrypted in transit with a key") (newline)
+(display "  that only the enclave can decrypt.") (newline)
+(display "  The operator sees ciphertext only.") (newline)
+(newline)
+(display "Ingredient 3: Memory isolation") (newline)
+(display "  Hardware enforces that no software outside") (newline)
+(display "  the enclave can read its memory pages.") (newline)
+(display "  Even the OS kernel is locked out.") (newline)
+(newline)
+(display "Together: the user knows what code runs,") (newline)
+(display "sends data only that code can read, and") (newline)
+(display "the operator cannot interfere.")
+`} />
+
+    <!-- 2. Real implementations -->
+    <h3>Real implementations</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Platform</th>
+            <th class="py-2 pr-4">Vendor</th>
+            <th class="py-2">Isolation mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Intel SGX</td><td class="pr-4">Intel</td><td>CPU-level enclaves in user process</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">ARM TrustZone</td><td class="pr-4">ARM</td><td>Secure world / normal world split</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">AMD SEV</td><td class="pr-4">AMD</td><td>Encrypted VM memory, per-VM keys</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">AWS Nitro Enclaves</td><td class="pr-4">AWS</td><td>Isolated VM with no persistent storage, no network</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Comparison of TEE approaches
+
+(display "Intel SGX:") (newline)
+(display "  + Fine-grained: enclave inside a process") (newline)
+(display "  + Small TCB (trusted computing base)") (newline)
+(display "  - Limited enclave memory (EPC)") (newline)
+(display "  - Side-channel attacks demonstrated") (newline)
+(newline)
+(display "ARM TrustZone:") (newline)
+(display "  + Widely deployed (mobile phones)") (newline)
+(display "  + Hardware-enforced world separation") (newline)
+(display "  - Single secure world (not per-app)") (newline)
+(newline)
+(display "AWS Nitro Enclaves:") (newline)
+(display "  + No persistent storage, no SSH") (newline)
+(display "  + Attestation via Nitro TPM") (newline)
+(display "  + No side-channel via shared CPU") (newline)
+(display "  - Requires AWS infrastructure")
+`} />
+
+    <!-- 3. Application: honest auction -->
+    <h3>Application: the honest auction</h3>
+    <p>Consider an ad auction server. Advertisers submit bids, and the server runs a <a href="https://en.wikipedia.org/wiki/Vickrey%E2%80%93Clarke%E2%80%93Groves_auction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>VCG auction</a> (second-price). Without a TEE, the operator could peek at bids, favor certain advertisers, or lie about the winning price.</p>
+    <p>With a TEE, the auction code runs in an enclave. Advertisers verify the code via attestation, then send encrypted bids. The enclave computes the winner and price. The operator never sees the bids or the auction logic's internal state.</p>
+
+    <SchemeRepl client:load initialCode={`; Honest auction in an enclave
+; The operator runs the server but cannot see bids.
+
+(display "Without TEE:") (newline)
+(display "  Operator sees all bids in cleartext") (newline)
+(display "  Operator could change auction logic") (newline)
+(display "  Bidders must trust the operator") (newline)
+(newline)
+(display "With TEE:") (newline)
+(display "  1. Operator deploys auction code to enclave") (newline)
+(display "  2. Bidders verify attestation:") (newline)
+(display "     hash(auction code) matches published hash") (newline)
+(display "  3. Bidders encrypt bids to enclave's key") (newline)
+(display "  4. Enclave decrypts, runs VCG auction") (newline)
+(display "  5. Enclave outputs: winner + price") (newline)
+(display "  6. Operator sees only the result") (newline)
+(newline)
+(display "The enclave proves honest VCG") (newline)
+(display "without seeing the query.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# VCG auction: enclave logic
+# Second-price auction: winner pays second-highest bid
+
+def vcg_auction(bids):
+    """Run VCG (second-price) auction.
+    Returns (winner_id, price_they_pay)."""
+    if len(bids) < 2:
+        return (0, 0)
+    sorted_bids = sorted(enumerate(bids), key=lambda x: -x[1])
+    winner_id = sorted_bids[0][0]
+    price = sorted_bids[1][1]  # second-highest bid
+    return (winner_id, price)
+
+# Encrypted bids arrive, enclave decrypts and runs:
+bids = [3.50, 7.20, 5.10, 2.80]
+winner, price = vcg_auction(bids)
+print("Bids:", bids)
+print("Winner: bidder", winner, "(bid", bids[winner], ")")
+print("Pays:", price, "(second-highest)")
+print("\\nOperator sees only: winner=" + str(winner) + ", price=" + str(price))
+print("Operator never sees individual bids.")
+`} />
+    </div>
+
+    <p class="text-sm mt-4">This is the architecture behind the <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> privacy-preserving ad auction. The enclave implementation is at <a href="https://github.com/kimjune01/vectorspace-enclave"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>vectorspace-enclave</a>.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-11/">&#8592; Ch.11 — Remote Attestation</a></li>
+    </ul>
+    <ul>
+      <li><a href="/reading/cryptography/crypto-03/">Crypto Ch.3</a> — hashing: attestation measurements are hashes</li>
+      <li><a href="/reading/cryptography/crypto-08/">Crypto Ch.8</a> — digital signatures: attestation reports are signed</li>
+      <li><a href="/reading/cryptography/crypto-11/">Crypto Ch.11</a> — remote attestation: the foundation TEEs build on</li>
+      <li><a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space series</a> — the privacy-preserving ad auction that uses all of this</li>
+      <li><a href="https://github.com/kimjune01/vectorspace-enclave"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>github.com/kimjune01/vectorspace-enclave</a> — enclave implementation</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Trusted_execution_environment"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Trusted execution environment</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Software_Guard_Extensions"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Intel SGX</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/TrustZone"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ARM TrustZone</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Nitro_Enclaves"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>AWS Nitro Enclaves</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-11/", label: "Remote Attestation" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,521 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.20 — Ends and Coends" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Ends and Coends</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2017 · <a href="https://bartoszmilewski.com/2017/03/29/ends-and-coends/">Category Theory for Programmers, Ch. 20</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-11/">🍞 Ch11</a> (Limits and Colimits), <a href="/reading/category-theory/milewski-10/">🍞 Ch10</a> (Natural Transformations). 12 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>end</strong> is a product indexed by objects, constrained to be <strong>dinatural</strong>: it must work for both covariant and contravariant arguments simultaneously. The end of a profunctor P is <code>&int;<sub>c</sub> P(c,c)</code>. Natural transformations fall out as a special case: <code>Nat(F,G) = &int;<sub>a</sub> Hom(F(a), G(a))</code>. Reverse the arrows and you get <strong>coends</strong>: generalized sums that quotient by dinaturality.</p>
+    </div>
+
+    <!-- 1. Profunctors -->
+    <h3>Profunctors — functors of mixed variance</h3>
+    <p>A <strong>profunctor</strong> P : C<sup>op</sup> &times; C &rarr; Set takes two arguments: one contravariant (first slot), one covariant (second slot). The canonical example is the hom-functor Hom(a,b). The operation <code>dimap</code> lifts morphisms into both slots: contravariant on the left, covariant on the right.</p>
+
+    <SchemeRepl client:load initialCode={`; A profunctor takes two arguments with mixed variance.
+; dimap : (c -> a) -> (b -> d) -> P(a,b) -> P(c,d)
+; Contravariant in the first argument, covariant in the second.
+
+; The hom-profunctor: P(a,b) = functions from a to b.
+; dimap pre-composes on the left, post-composes on the right.
+
+(define (dimap-hom f g h)
+  ; f : c -> a (pre-compose)
+  ; g : b -> d (post-compose)
+  ; h : a -> b (the original morphism)
+  (lambda (x) (g (h (f x)))))
+
+; Example: h : Int -> Int is (* 2)
+; f : String -> Int is string-length (contravariant)
+; g : Int -> String is number->string (covariant)
+(define h (lambda (n) (* n 2)))
+(define f string-length)
+(define g number->string)
+
+(define lifted (dimap-hom f g h))
+
+(display "h(5) = ") (display (h 5)) (newline)
+(display "lifted(\\"hello\\") = ") (display (lifted "hello")) (newline)
+; "hello" -> 5 -> 10 -> "10"
+; dimap routes through both variance directions.
+`} />
+
+
+    <!-- SVG: Dinatural transformation / wedge diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- w at top -->
+        <circle cx="150" cy="20" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="150" y="14" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">w</text>
+        <!-- P(a,a) left -->
+        <rect x="20" y="75" width="65" height="28" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="52" y="94" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">P(a,a)</text>
+        <!-- P(b,b) right -->
+        <rect x="215" y="75" width="65" height="28" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="247" y="94" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">P(b,b)</text>
+        <!-- P(a,b) bottom -->
+        <rect x="107" y="155" width="65" height="28" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="139" y="174" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">P(a,b)</text>
+        <!-- w -> P(a,a) -->
+        <line x1="144" y1="26" x2="78" y2="73" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="78,73 84,67 72,67" fill="currentColor"/>
+        <text x="100" y="44" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">&#x03B1;&#x2090;</text>
+        <!-- w -> P(b,b) -->
+        <line x1="156" y1="26" x2="222" y2="73" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="222,73 216,67 228,67" fill="currentColor"/>
+        <text x="200" y="44" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">&#x03B1;&#x1D47;</text>
+        <!-- P(a,a) -> P(a,b) via P(id,f) -->
+        <line x1="65" y1="106" x2="115" y2="153" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="115,153 107,150 111,157" fill="currentColor"/>
+        <text x="72" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">P(id,f)</text>
+        <!-- P(b,b) -> P(a,b) via P(f,id) -->
+        <line x1="233" y1="106" x2="170" y2="153" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="170,153 176,157 172,149" fill="currentColor"/>
+        <text x="218" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">P(f,id)</text>
+      </svg>
+    </div>
+
+    <!-- 2. Wedge condition and dinaturality -->
+    <h3>The wedge condition</h3>
+    <p>A <strong>wedge</strong> for a profunctor P is an object w with a family of morphisms &alpha;<sub>a</sub> : w &rarr; P(a,a) (one per object a) that satisfy the <strong>wedge condition</strong>: for any morphism f : a &rarr; b, the two paths from w to P(a,b) must agree. One path lifts f covariantly, the other contravariantly. This is the dinaturality constraint. It is weaker than naturality because it only touches diagonal elements P(a,a).</p>
+
+    <SchemeRepl client:load initialCode={`; Wedge condition: for any f : a -> b,
+;   dimap id f . alpha_a  =  dimap f id . alpha_b
+;
+; Both sides land in P(a,b). The two paths must agree.
+;
+; Think of a diamond:
+;           w
+;          / \\
+;    alpha_a   alpha_b
+;        |       |
+;      P(a,a)  P(b,b)
+;         \\     /
+;     P(id,f)  P(f,id)
+;           \\ /
+;          P(a,b)
+
+; Concrete: P = Hom, so P(a,a) = (a -> a), P(b,b) = (b -> b)
+; alpha_a picks out the identity at each type: alpha_a = id_a
+; Wedge condition: (f . id_a) = (id_b . f) -- trivially true!
+
+(define (alpha-id type-name)
+  ; The identity function at every type is a wedge for Hom
+  (lambda (x) x))
+
+; Check: for f : Int -> String = number->string
+(define f number->string)
+
+; Path 1: alpha_Int then post-compose f
+; alpha_Int = id, so: f . id = f
+(define path1 (lambda (x) (f ((alpha-id 'Int) x))))
+
+; Path 2: alpha_String then pre-compose f
+; alpha_String = id, so: id . f = f
+(define path2 (lambda (x) ((alpha-id 'String) (f x))))
+
+(display "path1(42): ") (display (path1 42)) (newline)
+(display "path2(42): ") (display (path2 42)) (newline)
+(display "Wedge condition holds? ") (display (equal? (path1 42) (path2 42)))
+; Both paths give "42". The identity family is a wedge.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Wedge condition: two paths through the diamond must agree.
+# For the Hom profunctor, alpha = identity at each type.
+# Wedge condition: f . id_a = id_b . f (trivially true).
+
+f = str  # f : int -> str
+
+path1 = lambda x: f(x)       # f . id
+path2 = lambda x: f(x)       # id . f
+
+print(f"path1(42) = {path1(42)}")
+print(f"path2(42) = {path2(42)}")
+print(f"Wedge holds? {path1(42) == path2(42)}")
+`} />
+    </div>
+
+
+    <!-- 3. Ends -->
+    <h3>Ends — the universal wedge</h3>
+    <p>The <strong>end</strong> of a profunctor P, written <code>&int;<sub>c</sub> P(c,c)</code>, is the universal wedge: the terminal object in the category of wedges. It comes with projections &pi;<sub>a</sub> : &int;<sub>c</sub> P(c,c) &rarr; P(a,a) satisfying the wedge condition, and every other wedge factors through it uniquely. In Haskell, the end is <code>forall a. p a a</code> -- a polymorphic value that works at every type simultaneously.</p>
+
+    <SchemeRepl client:load initialCode={`; End of P = the universal wedge.
+; In Haskell: forall a. p a a
+; In Set over a finite category: the subset of the product
+; of all P(a,a) that satisfies the wedge condition.
+
+; Finite category: objects = {0, 1}, one non-identity morphism f: 0 -> 1
+; Profunctor P = Hom, so:
+;   P(0,0) = Hom(0,0) = {id_0}
+;   P(1,1) = Hom(1,1) = {id_1}
+;   P(0,1) = Hom(0,1) = {f}
+;   P(1,0) = Hom(1,0) = {}
+
+; A wedge is (w0, w1) in P(0,0) x P(1,1) satisfying:
+;   P(id, f)(w0) = P(f, id)(w1)
+; i.e., f . w0 = w1 . f
+
+; Only option: w0 = id_0, w1 = id_1
+; Check: f . id_0 = f = id_1 . f. Yes!
+
+; The end is a single element: the pair (id_0, id_1).
+
+(define objects '(0 1))
+
+; Morphisms in our category
+(define (compose g f)
+  (cond ((eq? f 'id-0) g)
+        ((eq? g 'id-1) f)
+        ((and (eq? f 'id-0) (eq? g 'f01)) 'f01)
+        (else 'undefined)))
+
+; All elements of the product P(0,0) x P(1,1)
+(define P00 '(id-0))
+(define P11 '(id-1))
+
+; Wedge condition: for morphism f: 0 -> 1,
+; compose f w0 = compose w1 f
+(define (wedge-ok? w0 w1)
+  (equal? (compose 'f01 w0) (compose w1 'f01)))
+
+; Find all wedges (= the end)
+(define end-elements
+  (let loop ((xs P00) (result '()))
+    (if (null? xs) (reverse result)
+        (let inner ((ys P11) (acc result))
+          (if (null? ys) (loop (cdr xs) acc)
+              (if (wedge-ok? (car xs) (car ys))
+                  (inner (cdr ys) (cons (list (car xs) (car ys)) acc))
+                  (inner (cdr ys) acc)))))))
+
+(display "End (universal wedge): ") (display end-elements) (newline)
+; ((id-0 id-1)) -- a single element: the identity natural transformation.
+(display "This is the set of natural transformations Id => Id.")
+`} />
+
+
+    <!-- 4. Natural transformations as an end -->
+    <h3>Natural transformations as an end</h3>
+    <p>The set of natural transformations between functors F and G is an end: <code>Nat(F,G) = &int;<sub>a</sub> Hom(F(a), G(a))</code>. The profunctor here is P(a,b) = Hom(F(a), G(b)). Taking diagonal elements gives Hom(F(a), G(a)), which is the set of components at a. The wedge condition enforces the naturality square: <code>G(f) . &alpha;<sub>a</sub> = &alpha;<sub>b</sub> . F(f)</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Nat(F,G) = End_a Hom(F(a), G(a))
+;
+; Category: {0, 1} with f: 0 -> 1
+; F = "double": F(0) = 0, F(1) = 2, F(f) = (lambda (x) (* 2 x))
+; G = "add-ten": G(0) = 10, G(1) = 11, G(f) = (lambda (x) (+ 10 x))
+;
+; Wait -- functors on finite categories map objects to sets.
+; Let's use a simpler model.
+
+; Category C = {a, b}, one morphism f: a -> b
+; F maps: F(a) = {0,1}, F(b) = {0,1,2}, F(f) = identity embedding
+; G maps: G(a) = {10,11}, G(b) = {10,11,12}, G(f) = identity embedding
+
+; A natural transformation alpha: F => G needs:
+;   alpha_a : F(a) -> G(a)  and  alpha_b : F(b) -> G(b)
+;   such that G(f) . alpha_a = alpha_b . F(f)
+
+; Profunctor: P(x,y) = Hom(F(x), G(y))
+; End = all (alpha_a, alpha_b) in Hom(F(a),G(a)) x Hom(F(b),G(b))
+;   satisfying the wedge (= naturality) condition.
+
+; Simple model: F(a)={0,1}, G(a)={0,1}, F(b)={0,1}, G(b)={0,1}
+; F(f) = id, G(f) = id
+; Then naturality says: id . alpha_a = alpha_b . id
+; i.e., alpha_a = alpha_b
+
+(define Fa '(0 1))
+(define Ga '(0 1))
+
+; All functions Fa -> Ga (there are 4)
+(define (all-functions domain codomain)
+  (if (null? domain) '(())
+      (let ((rest (all-functions (cdr domain) codomain)))
+        (apply append
+          (map (lambda (val)
+            (map (lambda (r) (cons (cons (car domain) val) r)) rest))
+            codomain)))))
+
+(define hom-fa-ga (all-functions Fa Ga))
+
+; Apply a function-as-alist
+(define (apply-fn fn x) (cdr (assoc x fn)))
+
+; Naturality: alpha_a(x) = alpha_b(x) for all x (since F(f)=G(f)=id)
+(define (every pred lst) (if (null? lst) #t (if (pred (car lst)) (every pred (cdr lst)) #f)))
+
+(define nat-transformations
+  (filter (lambda (pair)
+    (let ((alpha-a (car pair)) (alpha-b (cadr pair)))
+      (every (lambda (x) (equal? (apply-fn alpha-a x) (apply-fn alpha-b x)))
+             Fa)))
+    (apply append
+      (map (lambda (a) (map (lambda (b) (list a b)) hom-fa-ga))
+           hom-fa-ga))))
+
+(display "Number of natural transformations: ")
+(display (length nat-transformations)) (newline)
+(display "They are (alpha_a = alpha_b):") (newline)
+(for-each (lambda (pair)
+  (display "  ") (display (car pair)) (newline))
+  nat-transformations)
+; 4 natural transformations, each determined by alpha_a alone.
+; The end enforces alpha_a = alpha_b -- that's naturality.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Nat(F,G) = End_a Hom(F(a), G(a))
+# Finite category: {a, b}, f: a -> b, F(f) = G(f) = id
+# Naturality: alpha_a = alpha_b
+
+from itertools import product
+
+Fa = Ga = [0, 1]
+
+# All functions {0,1} -> {0,1}
+all_fns = [dict(zip(Fa, vals)) for vals in product(Ga, repeat=len(Fa))]
+
+# Natural transformations: pairs (alpha_a, alpha_b) where alpha_a == alpha_b
+nat_trans = [(a, b) for a in all_fns for b in all_fns
+             if all(a[x] == b[x] for x in Fa)]
+
+print(f"Natural transformations: {len(nat_trans)}")
+for a, _ in nat_trans:
+    print(f"  {a}")
+`} />
+    </div>
+
+
+    <!-- 5. Coends -->
+    <h3>Coends — dinatural sums</h3>
+    <p>The <strong>coend</strong> of a profunctor P, written <code>&int;<sup>c</sup> P(c,c)</code>, dualizes the end. Instead of a universal wedge (product + constraint), it is a universal cowedge (coproduct + quotient). Take the disjoint union of all P(a,a), then identify elements that are connected by dinaturality: for every f : a &rarr; b, we glue P(id,f)(x) to P(f,id)(x). In Haskell, this is the existential type <code>exists a. p a a</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Coend = coproduct of all P(a,a), quotiented by dinaturality.
+;
+; For each f : a -> b, identify:
+;   P(id,f)(x)  in P(a,b)  with  P(f,id)(y)  in P(a,b)
+;
+; Example: P(a,b) = {labeled pairs (a,b)}
+; Category: {0, 1, 2}, morphisms: f01: 0->1, f12: 1->2, f02: 0->2
+
+; P(a,a) elements with source labels
+(define diagonal-elements
+  '((0 . "elem-00")
+    (1 . "elem-11")
+    (2 . "elem-22")))
+
+; Dinaturality identifications from morphism f01: 0 -> 1
+; P(id, f01) sends elem-00 to something in P(0,1)
+; P(f01, id) sends elem-11 to something in P(0,1)
+; These get identified in the coend.
+
+; Build equivalence classes
+(define (union-find elements identifications)
+  (let ((parent (map (lambda (e) (cons e e)) elements)))
+    (define (find x)
+      (let ((p (cdr (assoc x parent))))
+        (if (equal? p x) x (find p))))
+    (define (union! a b)
+      (let ((ra (find a)) (rb (find b)))
+        (if (not (equal? ra rb))
+          (begin (set! parent
+            (map (lambda (p)
+              (if (equal? (cdr p) rb) (cons (car p) ra) p))
+              parent))))))
+    (for-each (lambda (id) (union! (car id) (cdr id))) identifications)
+    ; Return equivalence classes
+    (let ((classes '()))
+      (for-each (lambda (e)
+        (let ((root (find e)))
+          (let ((existing (assoc root classes)))
+            (if existing
+                (set-cdr! existing (cons e (cdr existing)))
+                (set! classes (cons (cons root (list e)) classes))))))
+        elements)
+      (map cdr classes))))
+
+(define elements '("elem-00" "elem-11" "elem-22"))
+
+; Identifications from dinaturality:
+; f01 identifies elem-00 ~ elem-11
+; f12 identifies elem-11 ~ elem-22
+(define identifications
+  '(("elem-00" . "elem-11")
+    ("elem-11" . "elem-22")))
+
+(define coend-classes (union-find elements identifications))
+
+(display "Diagonal elements: ") (display elements) (newline)
+(display "After dinaturality quotient:") (newline)
+(for-each (lambda (cls)
+  (display "  class: ") (display cls) (newline))
+  coend-classes)
+; All three collapse into one class: the coend is a single point.
+; In a connected category, the coend of Hom is a single element.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Coend: coproduct quotiented by dinaturality
+# Take all diagonal elements, identify via morphisms
+
+class UnionFind:
+    def __init__(self, elements):
+        self.parent = {e: e for e in elements}
+    def find(self, x):
+        while self.parent[x] != x:
+            x = self.parent[x]
+        return x
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra != rb:
+            self.parent[rb] = ra
+    def classes(self):
+        groups = {}
+        for e in self.parent:
+            r = self.find(e)
+            groups.setdefault(r, []).append(e)
+        return list(groups.values())
+
+elements = ["elem-00", "elem-11", "elem-22"]
+uf = UnionFind(elements)
+
+# Dinaturality: f01 identifies 00~11, f12 identifies 11~22
+uf.union("elem-00", "elem-11")
+uf.union("elem-11", "elem-22")
+
+print("Coend equivalence classes:")
+for cls in uf.classes():
+    print(f"  {cls}")
+# All collapse to one class in a connected category.
+`} />
+    </div>
+
+
+    <!-- 6. Ninja Yoneda -->
+    <h3>The ninja Yoneda lemma</h3>
+    <p>The Yoneda lemma has an end/coend formulation. The <strong>end version</strong>: <code>&int;<sub>z</sub> Set(C(a,z), F(z)) &cong; F(a)</code>. A natural transformation from the representable Hom(a,&ndash;) to F is determined by where it sends the identity, giving an element of F(a). The <strong>coend version</strong> (ninja Yoneda): <code>&int;<sup>z</sup> C(z,a) &times; F(z) &cong; F(a)</code>. Every element paired with a morphism into a collapses to an element of F(a) by applying the morphism.</p>
+
+    <SchemeRepl client:load initialCode={`; Ninja Yoneda (coend version):
+; integral^z  C(z,a) x F(z)  ~=  F(a)
+;
+; Take all pairs (f: z -> a, x in F(z)) and quotient by
+; dinaturality. The result is just F(a).
+;
+; Intuition: the pair (f, x) means "x lives at z,
+; and f tells you how to move it to a."
+; The quotient says: if you can factor through an intermediate
+; object, the result is the same.
+
+; Category: {0, 1, 2}, morphisms include id's and f: 0->1, g: 1->2, gf: 0->2
+; Functor F: F(0) = {a,b}, F(1) = {c}, F(2) = {d,e}
+; Target: a = 2
+
+; C(z, 2) x F(z) for each z:
+;   z=0: C(0,2) x F(0) = {gf} x {a,b} = {(gf,a), (gf,b)}
+;   z=1: C(1,2) x F(1) = {g}  x {c}   = {(g,c)}
+;   z=2: C(2,2) x F(2) = {id} x {d,e} = {(id,d), (id,e)}
+
+; F on morphisms: F(f)(a)=c, F(f)(b)=c, F(g)(c)=d
+
+; Dinaturality identifies:
+;   (gf, a) ~ (g, F(f)(a)) = (g, c) ~ (id, F(g)(c)) = (id, d)
+;   (gf, b) ~ (g, F(f)(b)) = (g, c) ~ (id, d)
+;   (g, c) ~ (id, d)
+
+; After quotient:
+;   class 1: {(gf,a), (gf,b), (g,c), (id,d)}  ~>  d
+;   class 2: {(id,e)}                           ~>  e
+
+; Result: {d, e} = F(2) = F(a). Ninja Yoneda confirmed!
+
+(define pairs '((gf a) (gf b) (g c) (id-2 d) (id-2 e)))
+
+; Apply the morphism to get the element in F(a)
+(define (evaluate pair)
+  (let ((mor (car pair)) (elem (cadr pair)))
+    (cond
+      ; F(gf)(a) = d, F(gf)(b) = d
+      ((eq? mor 'gf) (cond ((eq? elem 'a) 'd) ((eq? elem 'b) 'd)))
+      ; F(g)(c) = d
+      ((eq? mor 'g)  (cond ((eq? elem 'c) 'd)))
+      ; F(id)(x) = x
+      ((eq? mor 'id-2) elem))))
+
+(display "Pairs and their images in F(a):") (newline)
+(for-each (lambda (p)
+  (display "  ") (display p) (display " => ") (display (evaluate p)) (newline))
+  pairs)
+(display "Image: ") (display (delete-duplicates (map evaluate pairs))) (newline)
+(display "F(2) = {d, e}") (newline)
+(display "Ninja Yoneda: coend ~= F(a). Confirmed.")
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">dimap f g h</td><td class="pr-4 text-green-300">(dimap-hom f g h)</td><td class="font-sans">Lift into both slots of a profunctor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;<sub>c</sub> P(c,c)</td><td class="pr-4 text-green-300">(filter wedge-ok? product)</td><td class="font-sans">End: universal wedge</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;<sup>c</sup> P(c,c)</td><td class="pr-4 text-green-300">(union-find elements ids)</td><td class="font-sans">Coend: coproduct modulo dinaturality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">forall a. p a a</td><td class="pr-4 text-green-300">(end as filtered product)</td><td class="font-sans">End in Haskell</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">exists a. p a a</td><td class="pr-4 text-green-300">(coend as quotient of coproduct)</td><td class="font-sans">Coend in Haskell</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Nat(F,G) = &int;<sub>a</sub> Hom(F a, G a)</td><td class="pr-4 text-green-300">(nat-transformations)</td><td class="font-sans">Natural transformations as an end</td></tr>
+          <tr><td class="py-2 pr-4">&int;<sup>z</sup> C(z,a) &times; F(z) &cong; F(a)</td><td class="pr-4 text-green-300">(evaluate pair)</td><td class="font-sans">Ninja Yoneda lemma</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-11/">🍞 Chapter 11</a> — Limits and Colimits (ends generalize limits, coends generalize colimits)</li>
+      <li><a href="/reading/category-theory/milewski-10/">🍞 Chapter 10</a> — Natural Transformations (recovered as an end)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/End_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>End (category theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Profunctor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Profunctor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Yoneda_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda lemma</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Dinatural_transformation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dinatural transformation</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post develops ends and coends via Haskell's type system, where the end is <code>forall a. p a a</code> and the coend is an existential. This page computes both over finite categories instead: the end is a filtered product (keep only elements satisfying the wedge condition), and the coend is a union-find quotient of a coproduct. The ninja Yoneda lemma is verified by showing that pairs (morphism, element) collapse to exactly F(a) after the dinaturality quotient. Milewski also covers profunctor composition via coends and the continuity of the hom-functor (turning coends in the first argument into ends), which require infinite categories to be interesting and are omitted here.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/03/29/ends-and-coends/">Read the blog post</a>. Start with the wedge condition, then see how <code>Nat(F,G) = &int;<sub>a</sub> Hom(F a, G a)</code> makes naturality automatic.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-19/", label: "F-Algebras" }} next={{ href: "/reading/category-theory/milewski-21/", label: "Kan Extensions" }} />
+
+  </main>
+</Layout>

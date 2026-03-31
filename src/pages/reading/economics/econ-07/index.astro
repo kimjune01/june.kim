@@ -1,0 +1,160 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.7 — Opportunity Cost" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Opportunity Cost</h1>
+    <p class="text-gray-400 text-sm mb-6">Friedrich von Wieser &middot; 1914 &middot; <a href="https://en.wikipedia.org/wiki/Opportunity_cost"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Opportunity cost</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The cost of any choice is <strong>the best alternative you gave up</strong>. Spending an hour studying economics means not spending that hour studying calculus. The dollar price of something understates its true cost: you must also count what else you could have done with the money, time, or resources.</p>
+    </div>
+
+    <!-- SVG: PPF with points -->
+    <h3>The production possibility frontier</h3>
+    <p>The PPF shows all combinations of two goods an economy can produce with its resources. Points on the frontier are efficient: to get more of one, you must give up some of the other. Points inside are wasteful. Points outside are impossible with current resources.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="230" x2="370" y2="230" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="230" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="210" y="260" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Good A (e.g. guns)</text>
+        <text x="18" y="125" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 18, 125)">Good B (e.g. butter)</text>
+        <!-- PPF curve (concave to origin) -->
+        <path d="M 50 40 Q 100 45 180 80 Q 260 130 320 200 Q 340 220 350 230" fill="none" stroke="#10b981" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="200" y="65" fill="#10b981" font-size="11" fill-opacity="0.6">PPF</text>
+        <!-- Point ON the frontier (efficient) -->
+        <circle cx="220" cy="108" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="235" y="103" fill="#60a5fa" font-size="11" fill-opacity="0.8">A (efficient)</text>
+        <!-- Point INSIDE (wasteful) -->
+        <circle cx="170" cy="160" r="5" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="185" y="155" fill="#f59e0b" font-size="11" fill-opacity="0.8">B (wasteful)</text>
+        <!-- Point OUTSIDE (impossible) -->
+        <circle cx="300" cy="60" r="5" fill="#ef4444" fill-opacity="0.8"/>
+        <text x="315" y="55" fill="#ef4444" font-size="11" fill-opacity="0.8">C (impossible)</text>
+        <!-- Arrow showing tradeoff -->
+        <line x1="140" y1="65" x2="280" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.25" stroke-dasharray="4,3"/>
+        <text x="230" y="130" fill="currentColor" font-size="9" fill-opacity="0.3" transform="rotate(30, 230, 130)">tradeoff</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Production Possibility Frontier
+; PPF: butter = sqrt(100 - guns^2) (quarter circle, scaled)
+; Moving along the frontier: more guns = less butter
+
+(define (ppf guns)
+  ; Max 10 guns or 10 butter, concave tradeoff
+  (if (> guns 10) 0
+    (sqrt (- 100 (* guns guns)))))
+
+(display "Guns  Butter  Opp. cost of 1 more gun")
+(newline)
+(display "----  ------  -----------------------")
+(newline)
+
+(define (show g)
+  (let ((b (ppf g))
+        (opp (if (= g 0) 0
+               (- (ppf (- g 1)) (ppf g)))))
+    (display g)
+    (display "     ")
+    (display (exact->inexact b))
+    (display "   ")
+    (display (exact->inexact opp))
+    (display " butter")
+    (newline)))
+
+(show 0)
+(show 2)
+(show 4)
+(show 6)
+(show 8)
+(show 10)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def ppf(guns):
+    if guns > 10: return 0
+    return math.sqrt(100 - guns**2)
+
+print("Guns  Butter  Opp cost")
+print("----  ------  --------")
+for g in [0, 2, 4, 6, 8, 10]:
+    b = ppf(g)
+    opp = (ppf(g-1) - ppf(g)) if g > 0 else 0
+    print(str(g).rjust(4) + "  " + str(round(b,2)).rjust(6) + "  " + str(round(opp,2)).rjust(8))
+`} />
+    </div>
+
+
+    <h3>Increasing opportunity cost</h3>
+    <p>The PPF bows outward because opportunity costs increase. The first gun costs little butter to produce. The last gun costs a lot. Resources are not equally suited to producing both goods: dairy farmers make poor gunsmiths.</p>
+
+    <SchemeRepl client:load initialCode={`; Personal opportunity cost: should you study or work?
+; Studying: future salary increase of $5000/year
+; Working: earn $15/hour now
+
+(define study-hours 4)
+(define hourly-wage 15)
+(define future-gain-per-hour 5000)  ; annual, per hour of study
+
+; Opportunity cost of studying = wages forgone
+(define opp-cost (* study-hours hourly-wage))
+
+; Benefit of studying = future income gain
+(define benefit (* study-hours (/ future-gain-per-hour 2000)))
+; Assuming 2000 work hours/year, that's $2.50/hour future gain
+; Over 40 years: significant
+
+(display "4 hours studying:")
+(newline)
+(display "  Wages forgone (opp cost): $")
+(display opp-cost)
+(newline)
+(display "  Future gain per year: $")
+(display (* study-hours (/ future-gain-per-hour 1)))
+(newline)
+(display "  Study if future gain > present cost")
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Opportunity cost</td><td>Value of the best foregone alternative</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">PPF</td><td>Boundary of producible combinations given fixed resources</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Increasing opp. cost</td><td>PPF bows outward: each unit costs more than the last</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Opportunity_cost"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Opportunity cost</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Production%E2%80%93possibility_frontier"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Production possibility frontier</a></li>
+      <li><a href="/reading/calculus/calc-12/">Calculus Ch.12</a> &mdash; optimization with constraints</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-06/", label: "Marginal Utility" }} next={{ href: "/reading/economics/econ-08/", label: "Market Equilibrium" }} />
+
+  </main>
+</Layout>

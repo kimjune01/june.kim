@@ -1,0 +1,72 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Algorithms and Data Structures" favicon="⚙">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>⚙ Algorithms and Data Structures</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://textbookequity.org/algorithms-and-data-structures/">Nievergelt &amp; Hinrichs</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>.</p>
+    <p class="text-gray-400 mb-6">With applications to graphics and geometry. Translated into runnable Scheme and Python with SVG diagrams.</p>
+
+    <!-- SVG: Balanced binary search tree with 7 nodes -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Edges -->
+        <line x1="180" y1="40" x2="100" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="180" y1="40" x2="260" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="100" y1="90" x2="60" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="100" y1="90" x2="140" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="260" y1="90" x2="220" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="260" y1="90" x2="300" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Nodes -->
+        <circle cx="180" cy="40" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="45" text-anchor="middle" fill="#60a5fa" font-size="13">4</text>
+        <circle cx="100" cy="90" r="16" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="100" y="95" text-anchor="middle" fill="#f59e0b" font-size="13">2</text>
+        <circle cx="260" cy="90" r="16" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="260" y="95" text-anchor="middle" fill="#f59e0b" font-size="13">6</text>
+        <circle cx="60" cy="140" r="16" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="145" text-anchor="middle" fill="#34d399" font-size="13">1</text>
+        <circle cx="140" cy="140" r="16" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="140" y="145" text-anchor="middle" fill="#34d399" font-size="13">3</text>
+        <circle cx="220" cy="140" r="16" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="220" y="145" text-anchor="middle" fill="#34d399" font-size="13">5</text>
+        <circle cx="300" cy="140" r="16" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="300" y="145" text-anchor="middle" fill="#34d399" font-size="13">7</text>
+        <!-- Caption -->
+        <text x="180" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Balanced BST: every query halves the search space.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/algorithms/algo-01/", title: "Complexity and O-Notation", desc: "Big-O, big-Omega, big-Theta: how to compare algorithms by their growth rates" },
+  { href: "/reading/algorithms/algo-02/", title: "Recursion", desc: "Divide and conquer, recurrence relations, and the master theorem" },
+  { href: "/reading/algorithms/algo-03/", title: "Sorting", desc: "Insertion sort, merge sort, quicksort, heapsort, and the n log n lower bound" },
+  { href: "/reading/algorithms/algo-04/", title: "Searching", desc: "Binary search, hash tables, and interpolation search" },
+  { href: "/reading/algorithms/algo-05/", title: "Trees", desc: "BSTs, AVL trees, B-trees, and the three traversal orders" },
+  { href: "/reading/algorithms/algo-06/", title: "Graphs", desc: "BFS, DFS, topological sort, and connected components" },
+  { href: "/reading/algorithms/algo-07/", title: "Shortest Paths", desc: "Dijkstra, Bellman-Ford, Floyd-Warshall, and negative cycles" },
+  { href: "/reading/algorithms/algo-08/", title: "Geometric Algorithms", desc: "Convex hull, line intersection, closest pair, Voronoi diagrams" },
+  { href: "/reading/algorithms/algo-09/", title: "Dynamic Programming", desc: "Optimal substructure and memoization: Fibonacci, knapsack, edit distance" },
+  { href: "/reading/algorithms/algo-10/", title: "NP-Completeness", desc: "P vs NP, reductions, and the problems we believe are hard" }
+]} icon="⚙" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/">MIT 6.006 Introduction to Algorithms</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> &mdash; graphs and combinatorics are the mathematical objects algorithms operate on</li>
+      <li><a href="/reading/theory-of-computation/">🔀 Theory of Computation</a> &mdash; NP-completeness and complexity classes</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; randomized algorithms and expected complexity</li>
+      <li><a href="/reading/geometry/">△ Geometry</a> &mdash; computational geometry shares Voronoi and Delaunay structures</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

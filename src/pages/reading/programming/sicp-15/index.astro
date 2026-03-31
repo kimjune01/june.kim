@@ -1,0 +1,427 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.15 — Lazy Evaluation" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Lazy Evaluation</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-27.html#%_sec_4.2">SICP &sect;4.2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Normal-order evaluation delays arguments until needed. <strong>Thunks</strong> wrap unevaluated expressions with their environments. Memoization ensures each thunk is forced at most once.</p>
+    </div>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 150" class="w-full max-w-sm mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- Thunk box -->
+      <rect x="40" y="12" width="120" height="80" rx="5" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="100" y="8" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="600">thunk</text>
+      <!-- Expression compartment -->
+      <rect x="48" y="20" width="104" height="28" rx="3" fill="#a78bfa" fill-opacity="0.1"/>
+      <text x="100" y="39" text-anchor="middle" fill="#60a5fa" font-size="11">expression</text>
+      <!-- Environment compartment -->
+      <rect x="48" y="56" width="104" height="28" rx="3" fill="#a78bfa" fill-opacity="0.1"/>
+      <text x="100" y="75" text-anchor="middle" fill="#34d399" font-size="11">environment</text>
+      <!-- Arrow: force -->
+      <line x1="170" y1="52" x2="225" y2="52" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrowLazy)"/>
+      <text x="198" y="44" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">force</text>
+      <!-- Value box -->
+      <rect x="230" y="32" width="60" height="40" rx="5" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="260" y="57" text-anchor="middle" fill="#f59e0b" font-size="12">value</text>
+      <!-- Caption -->
+      <text x="160" y="118" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">a thunk wraps an unevaluated expression</text>
+      <text x="160" y="131" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">with its environment</text>
+      <defs>
+        <marker id="arrowLazy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!-- 1. Normal order vs applicative order -->
+    <h3>Normal order vs applicative order</h3>
+    <p>Applicative order evaluates arguments before applying the procedure. Normal order passes arguments unevaluated and only forces them when actually needed. The results agree for pure functions, but diverge when evaluation has side effects or non-termination.</p>
+
+    <SchemeRepl client:load initialCode={`; Applicative vs normal order — the difference matters
+; when an argument would diverge.
+
+; In applicative order, (test 0 (/ 1 0)) would error
+; because (/ 1 0) is evaluated before test is called.
+; In normal order, the second argument is never used.
+
+(define (try a b)
+  (if (= a 0) 1 b))
+
+; Applicative order: both args evaluated
+; (try 0 (/ 1 0)) => ERROR in standard Scheme
+
+; But with short-circuit tricks we can simulate normal order:
+(define (try-lazy a b-thunk)
+  (if (= a 0) 1 (b-thunk)))
+
+(display "try-lazy(0, <error>): ")
+(display (try-lazy 0 (lambda () (/ 1 0))))
+(newline)
+; => 1  (the thunk is never called)
+
+; When a != 0, the thunk IS forced:
+(display "try-lazy(1, <42>): ")
+(display (try-lazy 1 (lambda () 42)))
+; => 42
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Normal vs applicative order in Python
+
+def try_eager(a, b):
+    """Applicative: b is always evaluated"""
+    return 1 if a == 0 else b
+
+# try_eager(0, 1/0)  # ZeroDivisionError!
+
+def try_lazy(a, b_thunk):
+    """Normal order: b is a thunk, called only if needed"""
+    return 1 if a == 0 else b_thunk()
+
+print(f"try_lazy(0, <error>): {try_lazy(0, lambda: 1/0)}")  # 1
+print(f"try_lazy(1, <42>):    {try_lazy(1, lambda: 42)}")    # 42
+`} />
+    </div>
+
+
+    <!-- 2. Thunks -->
+    <h3>An interpreter with lazy evaluation</h3>
+    <p>To make evaluation lazy, we change <code>apply</code>: instead of evaluating arguments, we wrap them as <strong>thunks</strong>. A thunk is a pair of (expression, environment) &mdash; everything needed to evaluate the expression later. When a value is actually needed, we <code>force</code> the thunk.</p>
+
+    <SchemeRepl client:load initialCode={`; Thunks: delayed expressions with their environments.
+
+(define (make-thunk exp env)
+  (list 'thunk exp env))
+
+(define (thunk? obj)
+  (and (pair? obj) (eq? (car obj) 'thunk)))
+
+(define (thunk-exp t) (cadr t))
+(define (thunk-env t) (caddr t))
+
+(define (force-thunk t eval-fn)
+  (if (thunk? t)
+      (eval-fn (thunk-exp t) (thunk-env t))
+      t))  ; already forced
+
+; Create thunks — they carry their expression and env
+(define env (list (cons 'x 10)))
+(define t1 (make-thunk '(+ x 5) env))
+(define t2 (make-thunk '42 env))
+
+(display "thunk? t1: ")  (display (thunk? t1))  (newline)
+(display "thunk? 42: ")  (display (thunk? 42))  (newline)
+
+; Force a thunk with a tiny eval
+(define (tiny-eval exp env)
+  (cond ((number? exp) exp)
+        ((symbol? exp) (cdr (assoc exp env)))
+        (else (apply (cdr (assoc (car exp) env))
+                     (map (lambda (e) (tiny-eval e env))
+                          (cdr exp))))))
+
+(define full-env (list (cons '+ +) (cons 'x 10)))
+(display "force t1: ")
+(display (force-thunk (make-thunk '(+ x 5) full-env) tiny-eval))
+; => 15
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Thunks in Python
+
+class Thunk:
+    def __init__(self, exp, env):
+        self.exp = exp
+        self.env = env
+        self._forced = False
+        self._value = None
+
+    def force(self, eval_fn):
+        if not self._forced:
+            self._value = eval_fn(self.exp, self.env)
+            self._forced = True
+        return self._value
+
+def tiny_eval(exp, env):
+    if isinstance(exp, (int, float)):
+        return exp
+    if isinstance(exp, str):
+        return env[exp]
+    proc = env[exp[0]]
+    args = [tiny_eval(a, env) for a in exp[1:]]
+    return proc(*args)
+
+import operator
+env = {'+': operator.add, 'x': 10}
+t = Thunk(['+', 'x', 5], env)
+print(f"force thunk: {t.force(tiny_eval)}")  # 15
+print(f"force again: {t.force(tiny_eval)}")  # 15 (cached)
+`} />
+    </div>
+
+
+    <!-- 3. Memoization -->
+    <h3>Thunks and memoization</h3>
+    <p>Without memoization, forcing the same thunk twice evaluates the expression twice. A <strong>memoized thunk</strong> caches its result after the first force. This is the difference between call-by-name (no memo) and call-by-need (with memo). Haskell uses call-by-need throughout.</p>
+
+    <SchemeRepl client:load initialCode={`; Memoized thunks — force once, cache forever.
+
+(define force-count 0)
+
+(define (make-memo-thunk exp env)
+  (let ((forced #f) (value #f))
+    (lambda (eval-fn)
+      (if forced value
+          (begin
+            (set! force-count (+ force-count 1))
+            (set! value (eval-fn exp env))
+            (set! forced #t)
+            value)))))
+
+(define (tiny-eval exp env)
+  (cond ((number? exp) exp)
+        ((symbol? exp) (cdr (assoc exp env)))
+        (else (apply (cdr (assoc (car exp) env))
+                     (map (lambda (e) (tiny-eval e env)) (cdr exp))))))
+
+(define env (list (cons '* *) (cons 'x 7)))
+(define t (make-memo-thunk '(* x x) env))
+
+(set! force-count 0)
+(display "First force:  ") (display (t tiny-eval)) (newline)
+(display "Second force: ") (display (t tiny-eval)) (newline)
+(display "Times evaluated: ") (display force-count)
+; => First force: 49, Second force: 49, Times evaluated: 1
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Memoized thunks in Python
+import operator
+
+force_count = 0
+
+class MemoThunk:
+    def __init__(self, exp, env):
+        self.exp = exp
+        self.env = env
+        self._value = None
+        self._forced = False
+
+    def force(self, eval_fn):
+        global force_count
+        if not self._forced:
+            force_count += 1
+            self._value = eval_fn(self.exp, self.env)
+            self._forced = True
+        return self._value
+
+def tiny_eval(exp, env):
+    if isinstance(exp, (int, float)):
+        return exp
+    if isinstance(exp, str):
+        return env[exp]
+    proc = env[exp[0]]
+    return proc(*[tiny_eval(a, env) for a in exp[1:]])
+
+env = {'*': operator.mul, 'x': 7}
+t = MemoThunk(['*', 'x', 'x'], env)
+
+force_count = 0
+print(f"First force:  {t.force(tiny_eval)}")    # 49
+print(f"Second force: {t.force(tiny_eval)}")    # 49
+print(f"Times evaluated: {force_count}")         # 1
+`} />
+    </div>
+
+
+    <!-- 4. Streams as lazy lists -->
+    <h3>Streams as lazy lists</h3>
+    <p>With lazy evaluation built into the interpreter, streams become ordinary lists. <code>cons</code> delays its second argument automatically. No special <code>cons-stream</code> or <code>delay</code>/<code>force</code> needed &mdash; the language itself is lazy. This unifies lists and streams.</p>
+
+    <SchemeRepl client:load initialCode={`; Streams via explicit laziness (delay/force).
+; In a lazy evaluator, these would be implicit.
+
+(define-syntax my-delay
+  (syntax-rules ()
+    ((my-delay expr) (lambda () expr))))
+
+(define (my-force thunk) (thunk))
+
+(define (stream-cons x delayed-y)
+  (cons x delayed-y))
+
+(define (stream-car s) (car s))
+(define (stream-cdr s) (my-force (cdr s)))
+
+; Infinite stream of integers from n
+(define (integers-from n)
+  (stream-cons n (my-delay (integers-from (+ n 1)))))
+
+(define nats (integers-from 1))
+
+; Take first k elements
+(define (stream-take s k)
+  (if (= k 0) '()
+      (cons (stream-car s)
+            (stream-take (stream-cdr s) (- k 1)))))
+
+(display "First 10 naturals: ")
+(display (stream-take nats 10))
+(newline)
+
+; Lazy filter
+(define (stream-filter pred s)
+  (cond ((pred (stream-car s))
+         (stream-cons (stream-car s)
+                      (my-delay (stream-filter pred (stream-cdr s)))))
+        (else (stream-filter pred (stream-cdr s)))))
+
+(define evens (stream-filter even? nats))
+(display "First 8 evens: ")
+(display (stream-take evens 8))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lazy lists via generators in Python
+
+def integers_from(n):
+    while True:
+        yield n
+        n += 1
+
+def take(stream, k):
+    result = []
+    for x in stream:
+        if len(result) >= k:
+            break
+        result.append(x)
+    return result
+
+nats = integers_from(1)
+print(f"First 10 naturals: {take(nats, 10)}")
+
+def lazy_filter(pred, stream):
+    for x in stream:
+        if pred(x):
+            yield x
+
+evens = lazy_filter(lambda x: x % 2 == 0, integers_from(1))
+print(f"First 8 evens: {take(evens, 8)}")
+`} />
+    </div>
+
+
+    <!-- 5. Lazy evaluation and control flow -->
+    <h3>Lazy evaluation and control flow</h3>
+    <p>In a lazy language, <code>if</code> doesn't need to be a special form &mdash; it can be an ordinary procedure, since arguments aren't evaluated until needed. User-defined control structures become possible. This is why Haskell can define <code>if-then-else</code> as a regular function.</p>
+
+    <SchemeRepl client:load initialCode={`; In a lazy language, if could be a regular procedure.
+; We simulate this with thunks (lambdas).
+
+(define (lazy-if condition then-thunk else-thunk)
+  (if condition (then-thunk) (else-thunk)))
+
+; Works correctly — only the chosen branch runs
+(display "lazy-if true:  ")
+(display (lazy-if #t
+                  (lambda () "yes")
+                  (lambda () (/ 1 0))))  ; never evaluated!
+(newline)
+
+(display "lazy-if false: ")
+(display (lazy-if #f
+                  (lambda () (/ 1 0))   ; never evaluated!
+                  (lambda () "no")))
+(newline)
+
+; Custom control: unless
+(define (unless condition then-thunk else-thunk)
+  (lazy-if (not condition) then-thunk else-thunk))
+
+(display "unless false:  ")
+(display (unless #f
+                 (lambda () "ran the body")
+                 (lambda () "skipped")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lazy if as a regular function in Python
+
+def lazy_if(condition, then_thunk, else_thunk):
+    return then_thunk() if condition else else_thunk()
+
+print(f"lazy_if True:  {lazy_if(True, lambda: 'yes', lambda: 1/0)}")
+print(f"lazy_if False: {lazy_if(False, lambda: 1/0, lambda: 'no')}")
+
+def unless(condition, then_thunk, else_thunk):
+    return lazy_if(not condition, then_thunk, else_thunk)
+
+print(f"unless False:  {unless(False, lambda: 'ran the body', lambda: 'skipped')}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(delay expr)</td><td class="pr-4 text-blue-300">lambda: expr</td><td class="font-sans">Wrap as thunk (suspend evaluation)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(force thunk)</td><td class="pr-4 text-blue-300">thunk()</td><td class="font-sans">Evaluate a thunk</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cons-stream a b)</td><td class="pr-4 text-blue-300">yield / generator</td><td class="font-sans">Lazy pair (b is delayed)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">call-by-name</td><td class="pr-4 text-blue-300">lambda wrapper</td><td class="font-sans">Re-evaluate thunk each time</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">call-by-need</td><td class="pr-4 text-blue-300">@functools.cache</td><td class="font-sans">Evaluate thunk once, cache result</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-13/">SICP Ch.13 &mdash; Streams</a> &mdash; explicit delay/force for infinite sequences</li>
+      <li><a href="/reading/programming/sicp-14/">SICP Ch.14 &mdash; Metacircular Evaluator</a> &mdash; the base interpreter we're modifying</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Thunk"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thunk</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Memoization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Memoization</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lazy_evaluation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lazy evaluation</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Python is strictly applicative-order, so laziness must be encoded explicitly via <code>lambda</code> wrappers or generators. Scheme's <code>delay</code>/<code>force</code> are macros that do the wrapping automatically. In a fully lazy evaluator (like Haskell), neither is needed &mdash; all arguments are thunks by default. The Python generator protocol (<code>yield</code>) provides a natural translation for streams but not for general lazy arguments.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-27.html#%_sec_4.2">Read SICP &sect;4.2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-14/", label: "Metacircular Evaluator" }} next={{ href: "/reading/programming/sicp-16/", label: "Nondeterministic Computing · 16 of 22" }} />
+
+  </main>
+</Layout>

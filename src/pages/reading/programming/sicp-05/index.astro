@@ -1,0 +1,372 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.5 — Hierarchical Data" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Hierarchical Data</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-15.html#%_sec_2.2">SICP §2.2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>closure property</strong> of cons: the result of combining things can itself be combined. Pairs of pairs build lists and trees. <code>map</code>, <code>filter</code>, <code>accumulate</code> are the universal interfaces for sequence operations &mdash; once you have them, you stop writing loops and start describing pipelines.</p>
+    </div>
+
+    <!-- SVG: Box-and-pointer diagram for ((1 2) (3 4)) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 205" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Top-level pair 1: points to (1 2) and to pair 2 -->
+        <rect x="40" y="20" width="40" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <rect x="80" y="20" width="40" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="60" y="11" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">car</text>
+        <text x="100" y="11" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">cdr</text>
+
+        <!-- Top-level pair 2: points to (3 4) and nil -->
+        <rect x="200" y="20" width="40" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <rect x="240" y="20" width="40" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Arrow from pair1 cdr to pair2 -->
+        <line x1="100" y1="35" x2="195" y2="35" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <polygon points="195,35 187,31 187,39" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- Nil slash in pair2 cdr -->
+        <line x1="245" y1="45" x2="275" y2="25" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Sublist (1 2): pair at row 2 left -->
+        <rect x="20" y="100" width="30" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+        <rect x="50" y="100" width="30" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+
+        <!-- Arrow from pair1 car down to sublist (1 2) -->
+        <line x1="60" y1="50" x2="50" y2="96" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <polygon points="50,96 46,88 54,88" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- (1 2) second pair -->
+        <rect x="110" y="100" width="30" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+        <rect x="140" y="100" width="30" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+
+        <!-- Arrow from (1 2) pair1 cdr to pair2 -->
+        <line x1="65" y1="112" x2="106" y2="112" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="106,112 100,108 100,116" fill="#60a5fa" fill-opacity="0.5"/>
+
+        <!-- Nil slash in (1 2) pair2 cdr -->
+        <line x1="145" y1="120" x2="165" y2="105" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.5"/>
+
+        <!-- Values 1 and 2 -->
+        <line x1="35" y1="125" x2="35" y2="150" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="35" y="165" text-anchor="middle" fill="#60a5fa" font-size="14">1</text>
+        <line x1="125" y1="125" x2="125" y2="150" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="125" y="165" text-anchor="middle" fill="#60a5fa" font-size="14">2</text>
+
+        <!-- Sublist (3 4): pair at row 2 right -->
+        <rect x="200" y="100" width="30" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+        <rect x="230" y="100" width="30" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+
+        <!-- Arrow from pair2 car down to sublist (3 4) -->
+        <line x1="220" y1="50" x2="220" y2="96" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <polygon points="220,96 216,88 224,88" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- (3 4) second pair -->
+        <rect x="290" y="100" width="30" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+        <rect x="320" y="100" width="30" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+
+        <!-- Arrow from (3 4) pair1 cdr to pair2 -->
+        <line x1="245" y1="112" x2="286" y2="112" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="286,112 280,108 280,116" fill="#f59e0b" fill-opacity="0.5"/>
+
+        <!-- Nil slash -->
+        <line x1="325" y1="120" x2="345" y2="105" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.5"/>
+
+        <!-- Values 3 and 4 -->
+        <line x1="215" y1="125" x2="215" y2="150" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="215" y="165" text-anchor="middle" fill="#f59e0b" font-size="14">3</text>
+        <line x1="305" y1="125" x2="305" y2="150" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="305" y="165" text-anchor="middle" fill="#f59e0b" font-size="14">4</text>
+
+        <!-- Caption -->
+        <text x="220" y="192" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">((1 2) (3 4)) — pairs of pairs build trees</text>
+      </svg>
+    </div>
+
+    <!-- 1. Sequences as lists -->
+    <h3>Sequences as lists</h3>
+    <p>A list is a chain of pairs. <code>(list 1 2 3)</code> builds <code>(cons 1 (cons 2 (cons 3 '())))</code>. <code>car</code> takes the first element, <code>cdr</code> takes the rest. <code>map</code> applies a function to every element, producing a new list with the same structure.</p>
+
+    <SchemeRepl client:load initialCode={`; Building and traversing lists
+(define xs (list 1 2 3 4 5))
+(display "list:   ") (display xs) (newline)
+(display "car:    ") (display (car xs)) (newline)
+(display "cdr:    ") (display (cdr xs)) (newline)
+(display "cadr:   ") (display (cadr xs)) (newline)
+
+; length — count elements
+(define (length items)
+  (if (null? items) 0
+      (+ 1 (length (cdr items)))))
+
+(display "length: ") (display (length xs)) (newline)
+
+; map — apply f to every element
+(define (my-map f items)
+  (if (null? items) '()
+      (cons (f (car items))
+            (my-map f (cdr items)))))
+
+(display "map square: ")
+(display (my-map (lambda (x) (* x x)) xs))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Building and traversing lists
+xs = [1, 2, 3, 4, 5]
+print(f"list:   {xs}")
+print(f"first:  {xs[0]}")
+print(f"rest:   {xs[1:]}")
+print(f"second: {xs[1]}")
+print(f"length: {len(xs)}")
+
+# map — apply f to every element
+print(f"map square: {[x*x for x in xs]}")
+`} />
+    </div>
+
+    <!-- 2. Hierarchical structures -->
+    <h3>Hierarchical structures</h3>
+    <p>When list elements are themselves lists, you get a tree. <code>count-leaves</code> recursively walks both the <code>car</code> and <code>cdr</code> of each pair. This is where the closure property pays off: the same operations that work on flat lists work on nested structures.</p>
+
+    <SchemeRepl client:load initialCode={`; Trees as nested lists
+(define tree (list (list 1 2) (list 3 (list 4 5))))
+(display "tree: ") (display tree) (newline)
+
+; count-leaves: walk both branches
+(define (count-leaves t)
+  (cond ((null? t) 0)
+        ((not (pair? t)) 1)
+        (else (+ (count-leaves (car t))
+                 (count-leaves (cdr t))))))
+
+(display "leaves: ") (display (count-leaves tree)) (newline)
+
+; scale-tree: multiply every leaf by a factor
+(define (scale-tree t factor)
+  (cond ((null? t) '())
+        ((not (pair? t)) (* t factor))
+        (else (cons (scale-tree (car t) factor)
+                    (scale-tree (cdr t) factor)))))
+
+(display "scale by 10: ")
+(display (scale-tree tree 10))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Trees as nested lists
+tree = [[1, 2], [3, [4, 5]]]
+print(f"tree: {tree}")
+
+# count_leaves: walk both branches
+def count_leaves(t):
+    if t == []:
+        return 0
+    if not isinstance(t, list):
+        return 1
+    return sum(count_leaves(x) for x in t)
+
+print(f"leaves: {count_leaves(tree)}")
+
+# scale_tree: multiply every leaf
+def scale_tree(t, factor):
+    if not isinstance(t, list):
+        return t * factor
+    return [scale_tree(x, factor) for x in t]
+
+print(f"scale by 10: {scale_tree(tree, 10)}")
+`} />
+    </div>
+
+    <!-- 3. Sequence operations -->
+    <h3>Sequence operations</h3>
+    <p><code>filter</code> keeps elements that satisfy a predicate. <code>accumulate</code> (fold) combines elements with an operation. Together with <code>map</code>, they form a signal-processing pipeline: enumerate, then map, then filter, then accumulate. No explicit loops.</p>
+
+    <SchemeRepl client:load initialCode={`; filter — keep elements where predicate is true
+(define (my-filter pred items)
+  (cond ((null? items) '())
+        ((pred (car items))
+         (cons (car items) (my-filter pred (cdr items))))
+        (else (my-filter pred (cdr items)))))
+
+; accumulate (fold-right) — combine with op
+(define (accumulate op init items)
+  (if (null? items) init
+      (op (car items)
+          (accumulate op init (cdr items)))))
+
+(define xs (list 1 2 3 4 5 6 7 8 9 10))
+
+(display "evens:  ")
+(display (my-filter even? xs)) (newline)
+
+(display "sum:    ")
+(display (accumulate + 0 xs)) (newline)
+
+(display "product of odds: ")
+(display (accumulate * 1 (my-filter odd? xs))) (newline)
+
+; Pipeline: sum of squares of odd numbers
+(define (square x) (* x x))
+(display "sum of odd squares: ")
+(display (accumulate + 0
+  (map square (my-filter odd? xs))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from functools import reduce
+
+xs = list(range(1, 11))
+
+# filter
+evens = [x for x in xs if x % 2 == 0]
+print(f"evens:  {evens}")
+
+# accumulate (reduce)
+print(f"sum:    {reduce(lambda a, b: a+b, xs, 0)}")
+
+odds = [x for x in xs if x % 2 == 1]
+print(f"product of odds: {reduce(lambda a, b: a*b, odds, 1)}")
+
+# Pipeline: sum of squares of odd numbers
+print(f"sum of odd squares: {sum(x*x for x in xs if x % 2 == 1)}")
+`} />
+    </div>
+
+    <!-- 4. Nested mappings -->
+    <h3>Nested mappings</h3>
+    <p><code>flatmap</code> maps a function that returns a list over a list, then flattens the results into a single list. It replaces nested loops. Here it generates all ordered pairs (i, j) where 1 &le; j &lt; i &le; n and their sum is prime.</p>
+
+    <SchemeRepl client:load initialCode={`; flatmap = append all results of mapping
+(define (accumulate op init items)
+  (if (null? items) init
+      (op (car items) (accumulate op init (cdr items)))))
+
+(define (flatmap f items)
+  (accumulate append '() (map f items)))
+
+; enumerate integers from low to high
+(define (enumerate-interval low high)
+  (if (> low high) '()
+      (cons low (enumerate-interval (+ low 1) high))))
+
+; All pairs (i,j) with 1 <= j < i <= n
+(define (unique-pairs n)
+  (flatmap (lambda (i)
+    (map (lambda (j) (list i j))
+         (enumerate-interval 1 (- i 1))))
+    (enumerate-interval 1 n)))
+
+(display "pairs up to 5: ")
+(display (unique-pairs 5)) (newline)
+
+; Filter to pairs whose sum is prime
+(define (divides? a b) (= (remainder b a) 0))
+(define (smallest-divisor n)
+  (define (find d)
+    (cond ((> (* d d) n) n)
+          ((divides? d n) d)
+          (else (find (+ d 1)))))
+  (find 2))
+(define (prime? n) (and (> n 1) (= (smallest-divisor n) n)))
+
+(define (prime-sum-pairs n)
+  (map (lambda (p) (list (car p) (cadr p) (+ (car p) (cadr p))))
+    (filter (lambda (p) (prime? (+ (car p) (cadr p))))
+            (unique-pairs n))))
+
+(display "prime-sum pairs up to 6: ")
+(display (prime-sum-pairs 6))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from math import isqrt
+
+def is_prime(n):
+    if n < 2: return False
+    for d in range(2, isqrt(n) + 1):
+        if n % d == 0: return False
+    return True
+
+# Nested mapping: all pairs (i,j) with j < i
+def unique_pairs(n):
+    return [(i, j) for i in range(1, n+1) for j in range(1, i)]
+
+print(f"pairs up to 5: {unique_pairs(5)}")
+
+# Filter to pairs whose sum is prime
+def prime_sum_pairs(n):
+    return [(i, j, i+j) for i, j in unique_pairs(n) if is_prime(i+j)]
+
+print(f"prime-sum pairs up to 6: {prime_sum_pairs(6)}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(list 1 2 3)</td><td class="pr-4">[1, 2, 3]</td><td class="font-sans">Construct a list</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cons x xs)</td><td class="pr-4">[x] + xs</td><td class="font-sans">Prepend element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(car xs)</td><td class="pr-4">xs[0]</td><td class="font-sans">First element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cdr xs)</td><td class="pr-4">xs[1:]</td><td class="font-sans">All but first</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(map f xs)</td><td class="pr-4">[f(x) for x in xs]</td><td class="font-sans">Apply f to each element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(filter pred xs)</td><td class="pr-4">[x for x in xs if pred(x)]</td><td class="font-sans">Keep elements satisfying predicate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(accumulate op init xs)</td><td class="pr-4">functools.reduce(op, xs, init)</td><td class="font-sans">Fold right with initial value</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(flatmap f xs)</td><td class="pr-4">[y for x in xs for y in f(x)]</td><td class="font-sans">Map then flatten</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Scheme's <code>accumulate</code> is a right fold: it processes the last element first. Python's <code>reduce</code> is a left fold. For associative operations (addition, multiplication) they give the same result. For non-associative ones (subtraction, cons) they differ. The SICP convention uses right fold because it mirrors the recursive structure of lists: process the head, then recurse on the tail.</p>
+    <p class="mt-2">Python's list comprehensions do the work of <code>map</code>, <code>filter</code>, and <code>flatmap</code> in a single syntax. The Scheme decomposition is more explicit about the pipeline stages, which matters when you start composing them programmatically.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">SICP chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-04/">🪄 Chapter 4</a> — Data Abstraction (cons, car, cdr introduced)</li>
+      <li><a href="/reading/programming/sicp-06/">🪄 Chapter 6</a> — Symbolic Data (quotation enables data as code)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Milewski Ch.7</a> — Functors: <code>map</code> is <code>fmap</code> for the List functor</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Cons"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cons</a> — the pair primitive underlying all Lisp data structures</li>
+      <li><a href="https://en.wikipedia.org/wiki/Tree_(data_structure)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tree (data structure)</a> — hierarchical structures from recursive pairs</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-15.html#%_sec_2.2">Read SICP &sect;2.2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-04/", label: "Data Abstraction" }} next={{ href: "/reading/programming/sicp-06/", label: "Symbolic Data · 6 of 22" }} />
+
+  </main>
+</Layout>

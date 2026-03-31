@@ -1,0 +1,67 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Computational Cognitive Science" favicon="🧠">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🧠 Computational Cognitive Science</h1>
+    <p class="text-gray-400 mb-2">Based on the <a href="https://computationalcognitivescience.github.io/lovelace/home">Lovelace textbook</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">How minds compute: Bayesian inference, neural networks, reinforcement learning, and the architectures that tie them together. For a framework that decomposes these into <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>six functional roles</a>, see The Natural Framework.</p>
+
+    <!-- SVG: A simple Bayesian network — 3 nodes with directed edges and probability labels -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Node: Rain -->
+        <circle cx="180" cy="35" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="40" text-anchor="middle" fill="#60a5fa" font-size="13">Rain</text>
+        <!-- Node: Sprinkler -->
+        <circle cx="80" cy="140" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="145" text-anchor="middle" fill="#f59e0b" font-size="11">Sprinkler</text>
+        <!-- Node: Wet Grass -->
+        <circle cx="280" cy="140" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="280" y="145" text-anchor="middle" fill="#34d399" font-size="11">Wet Grass</text>
+        <!-- Arrow: Rain -> Sprinkler -->
+        <line x1="162" y1="53" x2="98" y2="122" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="97,120 105,118 100,126" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Arrow: Rain -> Wet Grass -->
+        <line x1="198" y1="53" x2="262" y2="122" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="263,120 256,118 261,126" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Probability labels -->
+        <text x="115" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.45" font-style="italic">P(S|R)</text>
+        <text x="245" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.45" font-style="italic">P(W|R)</text>
+        <text x="180" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.45" font-style="italic">P(R)</text>
+        <!-- Caption -->
+        <text x="180" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">A Bayesian network: causes point to effects, probabilities propagate.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/cognitive-science/lovelace-01/", title: "What is Computational Cognitive Science?", desc: "Models as precise theories of cognition, tested at Marr's computational, algorithmic, and implementational levels" },
+  { href: "/reading/cognitive-science/lovelace-02/", title: "Probability and Bayes", desc: "Bayes' theorem inverts conditional probabilities, turning evidence into updated beliefs" },
+  { href: "/reading/cognitive-science/lovelace-03/", title: "Bayesian Models of Cognition", desc: "Concept learning and causal reasoning as probabilistic inference over structured hypotheses" },
+  { href: "/reading/cognitive-science/lovelace-04/", title: "Neural Networks", desc: "Perceptrons, backpropagation, and how distributed representations learn features from data" },
+  { href: "/reading/cognitive-science/lovelace-05/", title: "Reinforcement Learning", desc: "Agents learn policies by maximizing reward, balancing exploration against exploitation" },
+  { href: "/reading/cognitive-science/lovelace-06/", title: "Decision Making", desc: "Utility theory, prospect theory, and why bounded rationality beats unbounded optimization" },
+  { href: "/reading/cognitive-science/lovelace-07/", title: "Language and Communication", desc: "Probabilistic models of language production, comprehension, and pragmatic inference" },
+  { href: "/reading/cognitive-science/lovelace-08/", title: "Cognitive Architecture", desc: "Production systems like ACT-R and Soar that unify memory, learning, and action selection — see also" }
+]} icon="🧠" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://oyc.yale.edu/psychology/psyc-110">Yale PSYC 110: Introduction to Psychology (Paul Bloom)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; Bayesian models of cognition throughout</li>
+      <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> &mdash; neural networks and reinforcement learning as cognitive models</li>
+      <li><a href="/reading/cognitive-architecture/">🏛️ Cognitive Architecture</a> &mdash; the systems-level view of the same questions</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; information as the currency of cognition</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <style>
+    .box{fill:#fff;stroke:#bbb;stroke-width:1.2;rx:8}
+    .box-green{fill:#f0faf0;stroke:#2e7d32;stroke-width:1.5;rx:8}
+    .box-amber{fill:#fffbeb;stroke:#b45309;stroke-width:1.5;rx:8}
+    .label{text-anchor:middle;dominant-baseline:central;font-weight:600;font-size:13px;fill:#1f2937}
+    .sub{text-anchor:middle;font-size:10px;fill:#6b7280}
+    .arrow{stroke:#bbb;stroke-width:1.2;fill:none;marker-end:url(#a)}
+    .arrow-green{stroke:#2e7d32;stroke-width:1.5;fill:none;marker-end:url(#ag)}
+    .section{font-weight:600;font-size:10px;fill:#9ca3af;text-transform:uppercase;letter-spacing:2px}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#bbb"/></marker>
+    <marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2e7d32"/></marker>
+  </defs>
+
+  <text class="section" x="450" y="16">RL-gated chunking</text>
+
+  <!-- RL side -->
+  <rect class="box" x="20" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="100" y="52">RL rules fire</text>
+  <text class="sub" x="100" y="68">numeric preferences</text>
+
+  <line class="arrow" x1="180" y1="59" x2="220" y2="59"/>
+
+  <rect class="box" x="220" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="300" y="52">TD updates</text>
+  <text class="sub" x="300" y="68">Q-values shift</text>
+
+  <line class="arrow" x1="380" y1="59" x2="420" y2="59"/>
+
+  <!-- Variance gate -->
+  <rect class="box-amber" x="420" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="500" y="52">variance &lt; τ ?</text>
+  <text class="sub" x="500" y="68">posterior converged</text>
+
+  <!-- Yes path -->
+  <line class="arrow-green" x1="580" y1="59" x2="620" y2="59"/>
+
+  <rect class="box-green" x="620" y="34" width="180" height="50" rx="8"/>
+  <text class="label" x="710" y="52" style="fill:#2e7d32">chunking fires</text>
+  <text class="sub" x="710" y="68" style="fill:#2e7d32">new production rule</text>
+
+  <!-- No path: loop back -->
+  <path d="M500,84 L500,130 Q500,140 490,140 L110,140 Q100,140 100,130 L100,84" class="arrow" style="stroke-dasharray:4,3"/>
+  <text class="sub" x="300" y="155">variance still high → keep exploring</text>
+
+  <!-- Labels -->
+  <text class="sub" x="600" y="100" style="fill:#2e7d32;font-weight:600">yes</text>
+  <text class="sub" x="500" y="100" style="fill:#b45309;font-weight:600">no</text>
+</svg>

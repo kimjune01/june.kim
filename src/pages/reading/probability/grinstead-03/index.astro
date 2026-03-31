@@ -1,0 +1,279 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 3 — Combinatorics" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">← back to probability</a>
+
+    <h1>Combinatorics</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell · GFDL · <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Probability on finite sets reduces to <strong>counting</strong>. Permutations count ordered arrangements, combinations count unordered selections, and the binomial coefficient C(n, k) = n! / (k!(n-k)!) ties them together. Pascal's triangle is the lookup table.</p>
+    </div>
+
+    <!-- 1. Permutations -->
+    <h3>Permutations — order matters</h3>
+    <p>A <strong>permutation</strong> of n objects is an arrangement in a specific order. There are n! = n &times; (n-1) &times; ... &times; 1 permutations. If you only arrange k objects out of n, there are n!/(n-k)! ways (the "falling factorial" P(n,k)).</p>
+
+    <SchemeRepl client:load initialCode={`; Factorial and permutations
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+; P(n, k) = n! / (n-k)! — ordered arrangements of k from n
+(define (permutations n k)
+  (/ (factorial n) (factorial (- n k))))
+
+(display "5! = ") (display (factorial 5)) (newline)
+
+; How many ways to arrange 3 books from a shelf of 5?
+(display "P(5,3) = ") (display (permutations 5 3)) (newline)
+
+; How many ways to seat 4 people in 4 chairs?
+(display "P(4,4) = ") (display (permutations 4 4))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Permutations
+from math import factorial, perm
+
+print(f"5! = {factorial(5)}")
+print(f"P(5,3) = {perm(5,3)}")
+print(f"P(4,4) = {perm(4,4)}")
+`} />
+    </div>
+
+    <!-- 2. Combinations -->
+    <h3>Combinations — order does not matter</h3>
+    <p>A <strong>combination</strong> selects k items from n without caring about order. C(n, k) = n! / (k!(n-k)!). This is the <strong>binomial coefficient</strong>, often written "n choose k." It counts the number of k-element subsets of an n-element set.</p>
+
+    <SchemeRepl client:load initialCode={`; C(n, k) = n! / (k! * (n-k)!)
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n)
+     (* (factorial k) (factorial (- n k)))))
+
+; How many 5-card hands from a 52-card deck?
+(display "C(52,5) = ") (display (choose 52 5)) (newline)
+
+; How many ways to choose 3 toppings from 8?
+(display "C(8,3)  = ") (display (choose 8 3)) (newline)
+
+; Key identity: C(n,k) = C(n, n-k)
+(display "C(10,3) = ") (display (choose 10 3)) (newline)
+(display "C(10,7) = ") (display (choose 10 7))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Combinations
+from math import comb
+
+print(f"C(52,5) = {comb(52,5)}")
+print(f"C(8,3)  = {comb(8,3)}")
+print(f"C(10,3) = {comb(10,3)}")
+print(f"C(10,7) = {comb(10,7)}")
+`} />
+    </div>
+
+    <!-- SVG: Pascal's triangle -->
+    <h3>Pascal's triangle</h3>
+    <p>Each entry in Pascal's triangle is C(n, k). The entry equals the sum of the two entries above it: C(n, k) = C(n-1, k-1) + C(n-1, k). The n-th row gives the coefficients of (a + b)^n.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Row 0: 1 -->
+        <text x="150" y="25" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="30" y="25" fill="currentColor" font-size="10" fill-opacity="0.4">n=0</text>
+        <!-- Row 1: 1 1 -->
+        <text x="130" y="60" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="170" y="60" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="30" y="60" fill="currentColor" font-size="10" fill-opacity="0.4">n=1</text>
+        <!-- Row 2: 1 2 1 -->
+        <text x="110" y="95" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="150" y="95" text-anchor="middle" fill="#60a5fa" font-size="14">2</text>
+        <text x="190" y="95" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="30" y="95" fill="currentColor" font-size="10" fill-opacity="0.4">n=2</text>
+        <!-- Row 3: 1 3 3 1 -->
+        <text x="90" y="130" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="130" y="130" text-anchor="middle" fill="#60a5fa" font-size="14">3</text>
+        <text x="170" y="130" text-anchor="middle" fill="#60a5fa" font-size="14">3</text>
+        <text x="210" y="130" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="30" y="130" fill="currentColor" font-size="10" fill-opacity="0.4">n=3</text>
+        <!-- Row 4: 1 4 6 4 1 -->
+        <text x="70" y="165" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="110" y="165" text-anchor="middle" fill="#60a5fa" font-size="14">4</text>
+        <text x="150" y="165" text-anchor="middle" fill="#60a5fa" font-size="14">6</text>
+        <text x="190" y="165" text-anchor="middle" fill="#60a5fa" font-size="14">4</text>
+        <text x="230" y="165" text-anchor="middle" fill="currentColor" font-size="14">1</text>
+        <text x="30" y="165" fill="currentColor" font-size="10" fill-opacity="0.4">n=4</text>
+        <!-- Addition arrows for highlighted entry -->
+        <line x1="130" y1="64" x2="142" y2="85" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.4"/>
+        <line x1="170" y1="64" x2="158" y2="85" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.4"/>
+        <!-- Caption -->
+        <text x="150" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">C(n,k) = C(n-1, k-1) + C(n-1, k)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Pascal's triangle: each entry = sum of two above
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n)
+     (* (factorial k) (factorial (- n k)))))
+
+; Build row n of Pascal's triangle
+(define (pascal-row n)
+  (let loop ((k 0) (row '()))
+    (if (> k n) (reverse row)
+        (loop (+ k 1) (cons (choose n k) row)))))
+
+; Print first 6 rows
+(let loop ((n 0))
+  (when (< n 6)
+    (display "n=") (display n) (display ": ")
+    (display (pascal-row n)) (newline)
+    (loop (+ n 1))))
+`} />
+
+    <!-- 3. Binomial theorem -->
+    <h3>The binomial theorem</h3>
+    <p>(a + b)^n = &sum; C(n, k) a^k b^(n-k) for k from 0 to n. This connects algebra to counting. Setting a = b = 1 gives 2^n = &sum; C(n, k), the total number of subsets of an n-element set.</p>
+
+    <SchemeRepl client:load initialCode={`; Binomial theorem: (a + b)^n = sum of C(n,k) * a^k * b^(n-k)
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n)
+     (* (factorial k) (factorial (- n k)))))
+
+(define (binomial-expand a b n)
+  (let loop ((k 0) (total 0))
+    (if (> k n) total
+        (loop (+ k 1)
+              (+ total (* (choose n k)
+                          (expt a k)
+                          (expt b (- n k))))))))
+
+; (1+1)^4 = 2^4 = 16
+(display "(1+1)^4 = ") (display (binomial-expand 1 1 4)) (newline)
+
+; (2+3)^3 = 5^3 = 125
+(display "(2+3)^3 = ") (display (binomial-expand 2 3 3)) (newline)
+
+; Sum of all C(n,k) for n=10 = 2^10 = 1024
+(display "sum C(10,k) = ") (display (binomial-expand 1 1 10))
+`} />
+
+    <!-- 4. Application to probability -->
+    <h3>Counting for probability</h3>
+    <p>With uniform distributions, P(E) = |E|/|&Omega;|. Combinatorics gives you |E| and |&Omega;|. The probability of exactly k heads in n fair coin flips is C(n, k) / 2^n.</p>
+
+    <SchemeRepl client:load initialCode={`; P(exactly k heads in n fair flips) = C(n,k) / 2^n
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n)
+     (* (factorial k) (factorial (- n k)))))
+
+(define (coin-prob n k)
+  (/ (choose n k) (expt 2 n)))
+
+; 10 flips
+(display "P(5 heads in 10 flips) = ")
+(display (exact->inexact (coin-prob 10 5))) (newline)
+(display "P(3 heads in 10 flips) = ")
+(display (exact->inexact (coin-prob 10 3))) (newline)
+
+; Poker: P(flush) = C(4,1)*C(13,5) / C(52,5)
+(define p-flush (/ (* (choose 4 1) (choose 13 5)) (choose 52 5)))
+(display "P(flush) = ")
+(display (exact->inexact p-flush))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Counting for probability
+from math import comb
+
+def coin_prob(n, k):
+    return comb(n, k) / 2**n
+
+print(f"P(5 heads in 10) = {coin_prob(10, 5):.4f}")
+print(f"P(3 heads in 10) = {coin_prob(10, 3):.4f}")
+
+# Poker flush
+p_flush = comb(4,1) * comb(13,5) / comb(52,5)
+print(f"P(flush) = {p_flush:.6f}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">n!</td><td class="pr-4 text-green-300">(factorial n)</td><td class="font-sans">Factorial</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(n, k)</td><td class="pr-4 text-green-300">(permutations n k)</td><td class="font-sans">Ordered arrangements</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(n, k) = (n k)</td><td class="pr-4 text-green-300">(choose n k)</td><td class="font-sans">Binomial coefficient</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(a+b)^n</td><td class="pr-4 text-green-300">(binomial-expand a b n)</td><td class="font-sans">Binomial theorem</td></tr>
+          <tr><td class="py-2 pr-4">C(n,k)/2^n</td><td class="pr-4 text-green-300">(coin-prob n k)</td><td class="font-sans">Probability of k heads in n flips</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Adjacent chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-02/">🎰 Ch 2: Continuous Probability</a> — continuous distributions use calculus instead of counting</li>
+      <li><a href="/reading/probability/grinstead-01/">🎰 Ch 1: Discrete Probability</a> — where counting outcomes first appeared</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Ch 4: Conditional Probability</a> — combinatorics helps count conditional events</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories abstract the structure that combinatorics computes concretely</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez-Fritz 2011</a> — entropy measures surprise, which connects to counting microstates</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Permutation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Permutation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Combination"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Combination</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pascal's triangle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Binomial_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Binomial theorem</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Ch 3</a> of Grinstead &amp; Snell.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-02/", label: "Continuous Probability" }} next={{ href: "/reading/probability/grinstead-04/", label: "Conditional Probability" }} />
+
+  </main>
+</Layout>

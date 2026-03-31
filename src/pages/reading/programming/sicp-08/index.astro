@@ -1,0 +1,421 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.8 — Generic Operations" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Generic Operations</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-18.html#%_sec_2.5">SICP §2.5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>generic arithmetic system</strong> that works across number types. Coercion and type towers let you add a rational to a complex number without either type knowing about the other. The dispatch table from Chapter 7 scales to an entire algebra.</p>
+    </div>
+
+    <!-- SVG: Type tower — integer < rational < real < complex -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 200 220" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Tower levels -->
+        <rect x="40" y="10" width="120" height="35" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="32" text-anchor="middle" fill="#a78bfa" font-size="12">complex</text>
+        <rect x="50" y="55" width="100" height="35" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="77" text-anchor="middle" fill="#60a5fa" font-size="12">real</text>
+        <rect x="55" y="100" width="90" height="35" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="122" text-anchor="middle" fill="#f59e0b" font-size="12">rational</text>
+        <rect x="60" y="145" width="80" height="35" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="167" text-anchor="middle" fill="#34d399" font-size="12">integer</text>
+        <!-- Raise arrows -->
+        <line x1="170" y1="158" x2="170" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="170,140 167,146 173,146" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="170" y1="113" x2="170" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="170,95 167,101 173,101" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="170" y1="68" x2="170" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="170,50 167,56 173,56" fill="currentColor" fill-opacity="0.3"/>
+        <text x="182" y="130" fill="currentColor" font-size="8" fill-opacity="0.4">raise</text>
+        <!-- Caption -->
+        <text x="100" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">each type can be raised to the next</text>
+      </svg>
+    </div>
+
+    <!-- 1. Generic arithmetic operations -->
+    <h3>Generic arithmetic operations</h3>
+    <p>We want <code>(add x y)</code> to work whether x and y are ordinary numbers, rationals, or complex. Each number type installs its own <code>add</code>, <code>mul</code>, etc. in the dispatch table. The generic operations look up the types and delegate.</p>
+
+    <SchemeRepl client:load initialCode={`; Generic arithmetic: dispatch table + tagged data
+(define table '())
+(define (put op types proc)
+  (set! table (cons (list op types proc) table)))
+(define (get op types)
+  (define (lookup entries)
+    (cond ((null? entries) #f)
+          ((and (equal? (car (car entries)) op)
+                (equal? (cadr (car entries)) types))
+           (caddr (car entries)))
+          (else (lookup (cdr entries)))))
+  (lookup table))
+
+(define (attach-tag tag x) (cons tag x))
+(define (type-tag x) (car x))
+(define (contents x) (cdr x))
+
+(define (apply-generic op . args)
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (error "No method" op type-tags)))))
+
+; Generic operations
+(define (add x y) (apply-generic 'add x y))
+(define (mul x y) (apply-generic 'mul x y))
+
+; Install ordinary numbers
+(define (make-scheme-number n) (attach-tag 'scheme-number n))
+(put 'add '(scheme-number scheme-number)
+  (lambda (x y) (make-scheme-number (+ x y))))
+(put 'mul '(scheme-number scheme-number)
+  (lambda (x y) (make-scheme-number (* x y))))
+
+; Install rational numbers
+(define (make-rat n d) (attach-tag 'rational (cons n d)))
+(define (numer r) (car r))
+(define (denom r) (cdr r))
+(put 'add '(rational rational)
+  (lambda (x y)
+    (make-rat (+ (* (numer x) (denom y))
+                 (* (numer y) (denom x)))
+              (* (denom x) (denom y)))))
+(put 'mul '(rational rational)
+  (lambda (x y)
+    (make-rat (* (numer x) (numer y))
+              (* (denom x) (denom y)))))
+
+; Test
+(define a (make-scheme-number 3))
+(define b (make-scheme-number 4))
+(display "3 + 4 = ") (display (add a b)) (newline)
+(display "3 * 4 = ") (display (mul a b)) (newline)
+
+(define r1 (make-rat 1 3))
+(define r2 (make-rat 1 4))
+(display "1/3 + 1/4 = ") (display (add r1 r2)) (newline)
+(display "1/3 * 1/4 = ") (display (mul r1 r2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Generic arithmetic with dispatch dict
+dispatch = {}
+
+def put(op, types, fn): dispatch[(op, tuple(types))] = fn
+def get(op, types): return dispatch.get((op, tuple(types)))
+
+class Tagged:
+    def __init__(self, tag, val): self.tag, self.val = tag, val
+    def __repr__(self): return f"({self.tag} {self.val})"
+
+def apply_generic(op, *args):
+    types = [a.tag for a in args]
+    fn = get(op, types)
+    if fn: return fn(*[a.val for a in args])
+    raise Exception(f"No method: {op} {types}")
+
+def add(x, y): return apply_generic('add', x, y)
+def mul(x, y): return apply_generic('mul', x, y)
+
+# Ordinary numbers
+def make_num(n): return Tagged('num', n)
+put('add', ['num','num'], lambda x,y: make_num(x+y))
+put('mul', ['num','num'], lambda x,y: make_num(x*y))
+
+# Rationals
+from fractions import Fraction
+def make_rat(n,d): return Tagged('rat', Fraction(n,d))
+put('add', ['rat','rat'], lambda x,y: Tagged('rat', x+y))
+put('mul', ['rat','rat'], lambda x,y: Tagged('rat', x*y))
+
+print(f"3 + 4 = {add(make_num(3), make_num(4))}")
+print(f"3 * 4 = {mul(make_num(3), make_num(4))}")
+print(f"1/3 + 1/4 = {add(make_rat(1,3), make_rat(1,4))}")
+print(f"1/3 * 1/4 = {mul(make_rat(1,3), make_rat(1,4))}")
+`} />
+    </div>
+
+    <!-- 2. Coercion -->
+    <h3>Combining data of different types</h3>
+    <p>What about <code>(add 3 1/4)</code>? The types don't match. Coercion converts one type to the other. A coercion table maps (from-type, to-type) to a conversion function. When <code>apply-generic</code> finds no direct match, it tries coercing one argument to the other's type.</p>
+
+    <SchemeRepl client:load initialCode={`; Coercion: converting between types
+; We'll simulate with a simple number + rational system
+
+(define coercion-table '())
+(define (put-coercion from to proc)
+  (set! coercion-table (cons (list from to proc) coercion-table)))
+(define (get-coercion from to)
+  (define (lookup entries)
+    (cond ((null? entries) #f)
+          ((and (eq? (car (car entries)) from)
+                (eq? (cadr (car entries)) to))
+           (caddr (car entries)))
+          (else (lookup (cdr entries)))))
+  (lookup coercion-table))
+
+; Coerce scheme-number to rational: n -> n/1
+(put-coercion 'scheme-number 'rational
+  (lambda (n) (cons 'rational (cons n 1))))
+
+; Demonstrate coercion lookup
+(define coerce (get-coercion 'scheme-number 'rational))
+(define n (cons 'scheme-number 3))
+(display "original: ") (display n) (newline)
+(display "coerced:  ") (display (coerce n)) (newline)
+
+; A smarter apply-generic would try:
+; 1. Direct lookup (same types)
+; 2. Coerce arg1 to type2, retry
+; 3. Coerce arg2 to type1, retry
+; 4. Give up
+(display "Strategy: try direct, then coerce left, then coerce right")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Coercion table
+coercion = {}
+
+def put_coercion(from_t, to_t, fn):
+    coercion[(from_t, to_t)] = fn
+
+def get_coercion(from_t, to_t):
+    return coercion.get((from_t, to_t))
+
+# int -> Fraction
+from fractions import Fraction
+put_coercion('num', 'rat', lambda n: ('rat', Fraction(n)))
+
+coerce = get_coercion('num', 'rat')
+print(f"original: ('num', 3)")
+print(f"coerced:  {coerce(3)}")
+print("Strategy: try direct, then coerce left, then coerce right")
+`} />
+    </div>
+
+    <!-- 3. Type towers -->
+    <h3>Type towers and hierarchies</h3>
+    <p>Types form a tower: integer &lt; rational &lt; real &lt; complex. Each type can be "raised" to the next level. When types don't match, raise the lower one until they do. This is simpler than explicit coercion between every pair: you only need n-1 raise functions instead of n(n-1) coercions.</p>
+
+    <SchemeRepl client:load initialCode={`; Type tower: integer < rational < real < complex
+; Each type knows how to raise itself one level
+
+(define (raise-integer n)
+  (list 'rational n 1))  ; n -> n/1
+
+(define (raise-rational r)
+  (list 'real (exact->inexact (/ (cadr r) (caddr r)))))
+
+(define (raise-real x)
+  (list 'complex (cadr x) 0))  ; x -> x + 0i
+
+; Tower position
+(define (tower-level type)
+  (cond ((eq? type 'integer) 0)
+        ((eq? type 'rational) 1)
+        ((eq? type 'real) 2)
+        ((eq? type 'complex) 3)))
+
+; Raise a value to target level
+(define (raise-to val target-type)
+  (let ((current (car val)))
+    (cond ((eq? current target-type) val)
+          ((eq? current 'integer)
+           (raise-to (raise-integer (cadr val)) target-type))
+          ((eq? current 'rational)
+           (raise-to (raise-rational val) target-type))
+          ((eq? current 'real)
+           (raise-to (raise-real val) target-type)))))
+
+; Demo: raise integer 3 through the tower
+(define n (list 'integer 3))
+(display "integer:  ") (display n) (newline)
+(display "rational: ") (display (raise-to n 'rational)) (newline)
+(display "real:     ") (display (raise-to n 'real)) (newline)
+(display "complex:  ") (display (raise-to n 'complex))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Type tower: int < Fraction < float < complex
+from fractions import Fraction
+
+tower = [int, Fraction, float, complex]
+
+def raise_value(val, target_type):
+    """Raise val up the tower until it matches target_type."""
+    while type(val) != target_type:
+        idx = tower.index(type(val))
+        if idx >= tower.index(target_type):
+            break
+        next_type = tower[idx + 1]
+        if next_type == Fraction:
+            val = Fraction(val)
+        elif next_type == float:
+            val = float(val)
+        elif next_type == complex:
+            val = complex(val, 0)
+    return val
+
+n = 3
+print(f"integer:  {n} ({type(n).__name__})")
+print(f"rational: {raise_value(n, Fraction)} ({type(raise_value(n, Fraction)).__name__})")
+print(f"real:     {raise_value(n, float)} ({type(raise_value(n, float)).__name__})")
+print(f"complex:  {raise_value(n, complex)} ({type(raise_value(n, complex)).__name__})")
+`} />
+    </div>
+
+    <!-- 4. Polynomial arithmetic -->
+    <h3>Polynomial arithmetic</h3>
+    <p>The generic arithmetic system is extensible enough to add polynomials. A polynomial is a variable plus a list of terms. <code>add-poly</code> adds matching terms. Polynomial coefficients can themselves be polynomials (or rationals, or complex numbers), because the coefficient arithmetic uses the same generic <code>add</code> and <code>mul</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified polynomial arithmetic
+; A poly is (variable . term-list)
+; A term-list is ((order coeff) ...)
+
+(define (make-poly var terms) (list 'poly var terms))
+(define (poly-var p) (cadr p))
+(define (poly-terms p) (caddr p))
+
+; Add two term lists (same variable, ordered by descending order)
+(define (add-terms L1 L2)
+  (cond ((null? L1) L2)
+        ((null? L2) L1)
+        (else
+         (let ((t1 (car L1)) (t2 (car L2)))
+           (let ((o1 (car t1)) (o2 (car t2)))
+             (cond ((> o1 o2)
+                    (cons t1 (add-terms (cdr L1) L2)))
+                   ((< o1 o2)
+                    (cons t2 (add-terms L1 (cdr L2))))
+                   (else
+                    (cons (list o1 (+ (cadr t1) (cadr t2)))
+                          (add-terms (cdr L1) (cdr L2))))))))))
+
+(define (add-poly p1 p2)
+  (make-poly (poly-var p1)
+             (add-terms (poly-terms p1) (poly-terms p2))))
+
+; Display a polynomial
+(define (show-poly p)
+  (define (show-term t)
+    (let ((o (car t)) (c (cadr t)))
+      (cond ((= o 0) (number->string c))
+            ((= o 1) (string-append (number->string c) (symbol->string (poly-var p))))
+            (else (string-append (number->string c)
+                    (symbol->string (poly-var p)) "^"
+                    (number->string o))))))
+  (define (join terms)
+    (if (null? (cdr terms))
+        (show-term (car terms))
+        (string-append (show-term (car terms)) " + " (join (cdr terms)))))
+  (join (poly-terms p)))
+
+; p1 = 2x^2 + 3x + 1
+(define p1 (make-poly 'x '((2 2) (1 3) (0 1))))
+; p2 = x^2 + 5
+(define p2 (make-poly 'x '((2 1) (0 5))))
+
+(display "p1:      ") (display (show-poly p1)) (newline)
+(display "p2:      ") (display (show-poly p2)) (newline)
+(display "p1 + p2: ") (display (show-poly (add-poly p1 p2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Polynomial arithmetic
+class Poly:
+    def __init__(self, var, terms):
+        self.var = var
+        self.terms = dict(terms)  # {order: coeff}
+
+    def __add__(self, other):
+        result = dict(self.terms)
+        for order, coeff in other.terms.items():
+            result[order] = result.get(order, 0) + coeff
+        return Poly(self.var, sorted(result.items(), reverse=True))
+
+    def __repr__(self):
+        parts = []
+        for order, coeff in sorted(self.terms.items(), reverse=True):
+            if order == 0: parts.append(str(coeff))
+            elif order == 1: parts.append(f"{coeff}{self.var}")
+            else: parts.append(f"{coeff}{self.var}^{order}")
+        return " + ".join(parts)
+
+# p1 = 2x^2 + 3x + 1
+p1 = Poly('x', [(2,2), (1,3), (0,1)])
+# p2 = x^2 + 5
+p2 = Poly('x', [(2,1), (0,5)])
+
+print(f"p1:      {p1}")
+print(f"p2:      {p2}")
+print(f"p1 + p2: {p1 + p2}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(add x y)</td><td class="pr-4">add(x, y) / x + y</td><td class="font-sans">Generic addition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(apply-generic op . args)</td><td class="pr-4">apply_generic(op, *args)</td><td class="font-sans">Dispatch on all argument types</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(put-coercion from to proc)</td><td class="pr-4">coercion[(from, to)] = fn</td><td class="font-sans">Register type conversion</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(raise x)</td><td class="pr-4">raise_value(x, target)</td><td class="font-sans">Move up the type tower</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(make-poly var terms)</td><td class="pr-4">Poly(var, terms)</td><td class="font-sans">Polynomial constructor</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(add-poly p1 p2)</td><td class="pr-4">p1 + p2</td><td class="font-sans">Add polynomials</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Python's <code>__add__</code>, <code>__mul__</code> and friends are exactly SICP's generic operations, baked into the language. The dispatch table is the method resolution order (MRO). Coercion is <code>__radd__</code> and <code>__coerce__</code> (deprecated but instructive). The type tower is Python's numeric abstract base classes: <code>Integral &lt; Rational &lt; Real &lt; Complex</code> in the <code>numbers</code> module.</p>
+    <p class="mt-2">The polynomial example shows the real payoff: because polynomial coefficients use the same generic arithmetic, you get polynomials over rationals, polynomials over complex numbers, and even polynomials over polynomials (multivariate) for free. This is the algebraic structure that type classes in Haskell and protocols in Swift formalize.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">SICP chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-07/">🪄 Chapter 7</a> — Multiple Representations (dispatch tables introduced)</li>
+      <li><a href="/reading/programming/sicp-09/">🪄 Chapter 9</a> — Assignment &amp; State (mutation changes everything)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-04/">🍞 Milewski Ch.4</a> — Kleisli categories: type lifting via monadic bind is the categorical version of coercion</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Type_coercion"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Type coercion</a> — implicit conversion between types</li>
+      <li><a href="https://en.wikipedia.org/wiki/Algebraic_data_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Algebraic data type</a> — the type theory behind tagged unions</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-18.html#%_sec_2.5">Read SICP &sect;2.5</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-07/", label: "Multiple Representations" }} next={{ href: "/reading/programming/sicp-09/", label: "Assignment & State · 9 of 22" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,300 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.9 — Multiple and Logistic Regression" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Multiple and Logistic Regression</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; CC BY-SA 3.0 &middot; <a href="https://www.openintro.org/book/operating-systems/">Chapter 9</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Multiple regression uses several predictors to model a continuous outcome. Logistic regression models a binary outcome using the sigmoid function. Both extend simple regression: one by adding predictors, the other by changing the link function.</p>
+    </div>
+
+    <!-- SVG: Logistic curve (sigmoid) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="190" x2="370" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="190" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="210" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">x</text>
+        <text x="25" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">p</text>
+
+        <!-- Horizontal reference lines -->
+        <line x1="50" y1="30" x2="370" y2="30" stroke="#71717a" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.45"/>
+        <text x="45" y="34" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <line x1="50" y1="110" x2="370" y2="110" stroke="#71717a" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.45"/>
+        <text x="45" y="114" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0.5</text>
+        <text x="45" y="194" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+
+        <!-- Sigmoid curve: p = 1 / (1 + e^(-0.05*(x-210))) scaled to SVG coords -->
+        <!-- Plot from x=60 to x=360, sigmoid centered at x=210 -->
+        <path d="M 60 188 Q 80 187 100 186 Q 120 184 130 182 Q 140 178 150 172 Q 160 164 170 152 Q 180 138 190 122 Q 200 108 210 110 Q 200 92 210 78 Q 220 62 230 52 Q 240 44 250 38 Q 260 35 270 33 Q 290 31 310 30 Q 340 30 360 30" fill="none" stroke="#60a5fa" stroke-width="2"/>
+
+        <!-- Better sigmoid approximation using a smooth path -->
+        <path d="M 60 186 C 100 186 140 182 160 168 C 180 148 195 120 210 110 C 225 100 240 62 260 42 C 280 34 320 31 360 30" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-opacity="0"/>
+
+        <!-- Actual smooth sigmoid with many points -->
+        <polyline points="60,187 80,186 100,185 120,183 140,178 150,173 160,165 170,153 180,138 190,120 200,105 210,110 210,90 220,72 230,58 240,48 250,42 260,38 270,35 280,33 290,32 310,31 340,30 360,30" fill="none" stroke="#60a5fa" stroke-width="2"/>
+
+        <!-- Label -->
+        <text x="310" y="55" fill="#60a5fa" font-size="10">p(x) = 1/(1+e&#x207B;&#x02E3;)</text>
+      </svg>
+    </div>
+
+    <!-- 1. Multiple predictors -->
+    <h3>Multiple predictors</h3>
+    <p>The model y = b0 + b1*x1 + b2*x2 + ... + bp*xp uses p predictors. Each coefficient bi represents the expected change in y for a one-unit increase in xi, holding all other predictors constant. This "holding constant" interpretation is the difference from running p separate simple regressions.</p>
+
+    <SchemeRepl client:load initialCode={`; Multiple regression: y = b0 + b1*x1 + b2*x2
+; Predicting exam score from hours studied (x1)
+; and hours slept (x2)
+; Coefficients (pre-computed): b0=30, b1=5, b2=3
+
+(define b0 30)
+(define b1 5)
+(define b2 3)
+
+(define (predict x1 x2) (+ b0 (* b1 x1) (* b2 x2)))
+
+; Student A: 6 hours study, 8 hours sleep
+(display "Student A (6h study, 8h sleep): ")
+(display (predict 6 8)) (newline)
+
+; Student B: 8 hours study, 6 hours sleep
+(display "Student B (8h study, 6h sleep): ")
+(display (predict 8 6)) (newline)
+
+; Effect of one more hour studying (holding sleep constant)
+(display "Extra hour studying: +")
+(display b1) (display " points") (newline)
+
+; Effect of one more hour sleeping (holding study constant)
+(display "Extra hour sleeping: +")
+(display b2) (display " points")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multiple regression prediction
+b0, b1, b2 = 30, 5, 3
+
+predict = lambda x1, x2: b0 + b1*x1 + b2*x2
+
+print(f"Student A (6h study, 8h sleep): {predict(6, 8)}")
+print(f"Student B (8h study, 6h sleep): {predict(8, 6)}")
+print(f"Extra hour studying: +{b1} points")
+print(f"Extra hour sleeping: +{b2} points")
+`} />
+    </div>
+
+
+    <!-- 2. Adjusted R-squared -->
+    <h3>Adjusted R-squared</h3>
+    <p>R-squared always increases when you add a predictor, even a useless one. Adjusted R-squared penalizes for the number of predictors: R-adj = 1 - (SSE/(n-p-1)) / (SST/(n-1)). It only increases when the new predictor improves the model more than chance would predict.</p>
+
+    <SchemeRepl client:load initialCode={`; Adjusted R-squared
+; Compares R^2 with and without penalty for extra predictors
+
+(define n 50)        ; sample size
+(define sst 1000.0)  ; total SS
+
+; Model 1: 1 predictor, SSE = 300
+(define p1 1) (define sse1 300.0)
+(define r2-1 (- 1 (/ sse1 sst)))
+(define r2-adj-1 (- 1 (/ (/ sse1 (- n p1 1)) (/ sst (- n 1)))))
+
+; Model 2: 3 predictors, SSE = 280
+(define p2 3) (define sse2 280.0)
+(define r2-2 (- 1 (/ sse2 sst)))
+(define r2-adj-2 (- 1 (/ (/ sse2 (- n p2 1)) (/ sst (- n 1)))))
+
+(display "Model 1 (1 predictor):") (newline)
+(display "  R^2     = ") (display r2-1) (newline)
+(display "  R^2_adj = ") (display r2-adj-1) (newline)
+(display "Model 2 (3 predictors):") (newline)
+(display "  R^2     = ") (display r2-2) (newline)
+(display "  R^2_adj = ") (display r2-adj-2) (newline)
+(display "Extra predictors worth it? ")
+(display (if (> r2-adj-2 r2-adj-1) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Adjusted R-squared comparison
+n, sst = 50, 1000.0
+
+for label, p, sse in [("1 predictor", 1, 300), ("3 predictors", 3, 280)]:
+    r2 = 1 - sse / sst
+    r2_adj = 1 - (sse / (n - p - 1)) / (sst / (n - 1))
+    print(f"{label}: R^2={r2:.3f}, R^2_adj={r2_adj:.3f}")
+`} />
+    </div>
+
+
+    <!-- 3. Multicollinearity -->
+    <h3>Multicollinearity</h3>
+    <p>When predictors are correlated with each other, individual coefficients become unstable: large standard errors, sign flips, sensitivity to which observations are included. The variance inflation factor (VIF) quantifies this: VIF = 1 / (1 - R^2_j), where R^2_j is from regressing predictor j on all other predictors. VIF above 5-10 signals trouble.</p>
+
+    <SchemeRepl client:load initialCode={`; Variance Inflation Factor
+; VIF = 1 / (1 - R^2_j)
+; R^2_j = how well predictor j is predicted by other predictors
+
+; If x1 and x2 have correlation r = 0.9:
+; R^2 of x1 ~ x2 is roughly r^2 = 0.81
+
+(define (vif r-squared) (/ 1 (- 1 r-squared)))
+
+(display "Correlation between predictors -> VIF:") (newline)
+(display "  r = 0.0:  VIF = ") (display (vif 0.00)) (newline)
+(display "  r = 0.5:  VIF = ") (display (vif 0.25)) (newline)
+(display "  r = 0.7:  VIF = ") (display (vif 0.49)) (newline)
+(display "  r = 0.9:  VIF = ") (display (vif 0.81)) (newline)
+(display "  r = 0.95: VIF = ") (display (vif 0.9025)) (newline)
+(display "Rule of thumb: VIF > 5 is concerning")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# VIF for different correlations
+vif = lambda r_sq: 1 / (1 - r_sq)
+
+for r in [0.0, 0.5, 0.7, 0.9, 0.95]:
+    print(f"r = {r}: VIF = {vif(r**2):.2f}")
+`} />
+    </div>
+
+
+    <!-- 4. Logistic regression -->
+    <h3>Logistic regression</h3>
+    <p>For a binary outcome (0 or 1), linear regression can predict probabilities outside 0-1. Logistic regression fixes this by modeling the log-odds: log(p/(1-p)) = b0 + b1*x. Solving for p gives the sigmoid: p = 1 / (1 + e^-(b0+b1*x)). The coefficients represent changes in log-odds, not in probability.</p>
+
+    <SchemeRepl client:load initialCode={`; Logistic regression: the sigmoid function
+; log(p / (1-p)) = b0 + b1*x
+; p = 1 / (1 + e^(-(b0 + b1*x)))
+
+(define b0 -4)
+(define b1 0.8)
+
+(define (sigmoid z) (/ 1 (+ 1 (exp (- z)))))
+(define (predict-prob x) (sigmoid (+ b0 (* b1 x))))
+
+(display "P(y=1) at different x values:") (newline)
+(define test-xs (list 0 2 4 5 6 8 10))
+(for-each (lambda (x)
+  (display "  x = ") (display x)
+  (display " -> p = ") (display (predict-prob x))
+  (newline))
+  test-xs)
+
+; At x=5, the log-odds = b0 + b1*5 = -4 + 4 = 0
+; So p = 0.5: this is the decision boundary
+(display "Decision boundary at x = ")
+(display (/ (- b0) b1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Logistic regression
+import math
+
+b0, b1 = -4, 0.8
+sigmoid = lambda z: 1 / (1 + math.exp(-z))
+predict = lambda x: sigmoid(b0 + b1 * x)
+
+print("P(y=1) at different x values:")
+for x in [0, 2, 4, 5, 6, 8, 10]:
+    print(f"  x = {x} -> p = {predict(x):.4f}")
+print(f"Decision boundary at x = {-b0/b1}")
+`} />
+    </div>
+
+
+    <!-- 5. Odds ratios -->
+    <h3>Odds ratios</h3>
+    <p>The odds of an event is p/(1-p). In logistic regression, e^b1 is the <strong>odds ratio</strong>: the factor by which the odds multiply for each one-unit increase in x. An odds ratio of 2.23 means the odds more than double per unit increase. This is the natural scale for interpreting logistic coefficients.</p>
+
+    <SchemeRepl client:load initialCode={`; Odds ratios
+; If b1 = 0.8, then odds ratio = e^0.8
+
+(define b1 0.8)
+(define odds-ratio (exp b1))
+
+(display "b1 = ") (display b1) (newline)
+(display "Odds ratio = e^b1 = ") (display odds-ratio) (newline)
+(display "Interpretation: each unit increase in x") (newline)
+(display "  multiplies the odds by ") (display odds-ratio) (newline)
+
+; Example: if baseline odds = 1:3 (p=0.25)
+(define baseline-odds (/ 1 3))
+(display "Baseline odds: ") (display (exact->inexact baseline-odds)) (newline)
+(define new-odds (* baseline-odds odds-ratio))
+(display "After x+1:     ") (display new-odds) (newline)
+; Convert odds to probability
+(define (odds->prob odds) (/ odds (+ 1 odds)))
+(display "Baseline prob:  ") (display (odds->prob baseline-odds)) (newline)
+(display "New prob:       ") (display (odds->prob new-odds))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Odds ratios
+import math
+
+b1 = 0.8
+odds_ratio = math.exp(b1)
+print(f"Odds ratio = e^{b1} = {odds_ratio:.3f}")
+
+# Baseline odds 1:3
+baseline_odds = 1/3
+new_odds = baseline_odds * odds_ratio
+to_prob = lambda o: o / (1 + o)
+print(f"Baseline p = {to_prob(baseline_odds):.3f}")
+print(f"After x+1: p = {to_prob(new_odds):.3f}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Formula</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">R&sup2;_adj</td><td class="pr-4">1-(SSE/(n-p-1))/(SST/(n-1))</td><td class="font-sans">Adjusted R-squared</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">VIF</td><td class="pr-4">1/(1-R&sup2;_j)</td><td class="font-sans">Variance inflation factor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">logit(p)</td><td class="pr-4">log(p/(1-p))</td><td class="font-sans">Log-odds (link function)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&sigma;(z)</td><td class="pr-4">1/(1+e&#x207B;&#x1DBB;)</td><td class="font-sans">Sigmoid function</td></tr>
+          <tr><td class="py-2 pr-4">OR</td><td class="pr-4">e&#x1D47;&#x00B9;</td><td class="font-sans">Odds ratio</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/ch-04/">Cogsci Ch.4</a> &mdash; neural networks use logistic (sigmoid) activation functions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Linear_regression"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Multiple linear regression</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Logistic_regression"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Logistic regression</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Odds_ratio"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Odds ratio</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Multicollinearity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Multicollinearity</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-08/", label: "Simple Linear Regression" }} />
+
+  </main>
+</Layout>

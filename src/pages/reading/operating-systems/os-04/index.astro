@@ -1,0 +1,178 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.4 — Synchronization" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Synchronization</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Synchronization_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Synchronization</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Synchronization primitives</strong> enforce order on concurrent access to shared resources. Mutexes give exclusive access. Semaphores generalize to counting. Monitors bundle the lock with the data. The classic problems (producer-consumer, dining philosophers) test whether your primitive is strong enough.</p>
+    </div>
+
+    <h3>Mutexes</h3>
+    <p>A <strong>mutex</strong> (mutual exclusion lock) has two operations: lock and unlock. Only one thread can hold the lock. Others block until it is released. Simple, effective, and the foundation of most synchronization.</p>
+
+    <h3>Semaphores</h3>
+    <p>A <strong>semaphore</strong> is an integer with two atomic operations: wait (decrement, block if zero) and signal (increment). A binary semaphore acts like a mutex. A counting semaphore controls access to a pool of resources.</p>
+
+    <SchemeRepl client:load initialCode={`; Semaphore simulation
+; wait: if count > 0, decrement; else block (we simulate by returning 'blocked)
+; signal: increment
+
+(define (make-semaphore initial)
+  (list initial))
+
+(define (sem-value s) (car s))
+
+(define (sem-wait! s)
+  (if (> (car s) 0)
+      (begin (set-car! s (- (car s) 1)) 'acquired)
+      'blocked))
+
+(define (sem-signal! s)
+  (set-car! s (+ (car s) 1))
+  'signaled)
+
+; Binary semaphore (mutex)
+(define mutex (make-semaphore 1))
+(display "Initial: ") (display (sem-value mutex)) (newline)
+(display "Wait: ") (display (sem-wait! mutex)) (newline)
+(display "Value: ") (display (sem-value mutex)) (newline)
+(display "Wait again: ") (display (sem-wait! mutex)) (newline)
+(display "Signal: ") (display (sem-signal! mutex)) (newline)
+(display "Value: ") (display (sem-value mutex))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Semaphore in Python (threading module has a real one)
+import threading
+
+sem = threading.Semaphore(2)  # allow 2 concurrent accesses
+
+results = []
+
+def worker(name):
+    sem.acquire()
+    results.append(f"{name} entered")
+    sem.release()
+    results.append(f"{name} exited")
+
+threads = [threading.Thread(target=worker, args=(f"T{i}",)) for i in range(4)]
+for t in threads: t.start()
+for t in threads: t.join()
+for r in results: print(r)
+`} />
+    </div>
+
+    <h3>Producer-Consumer</h3>
+    <p>One thread produces items into a bounded buffer. Another consumes them. Two semaphores coordinate: one counts empty slots, one counts full slots. A mutex protects the buffer itself.</p>
+
+    <SchemeRepl client:load initialCode={`; Producer-consumer with a bounded buffer
+; Simulated step-by-step (no real threads)
+
+(define buffer '())
+(define buffer-size 3)
+
+(define (produce item buf)
+  (if (>= (length buf) buffer-size)
+      (begin (display "Buffer full, cannot produce ") (display item) (newline) buf)
+      (let ((new-buf (append buf (list item))))
+        (display "Produced: ") (display item)
+        (display "  Buffer: ") (display new-buf) (newline)
+        new-buf)))
+
+(define (consume buf)
+  (if (null? buf)
+      (begin (display "Buffer empty, cannot consume") (newline) buf)
+      (let ((item (car buf)) (rest (cdr buf)))
+        (display "Consumed: ") (display item)
+        (display "  Buffer: ") (display rest) (newline)
+        rest)))
+
+(define b '())
+(set! b (produce 'A b))
+(set! b (produce 'B b))
+(set! b (produce 'C b))
+(set! b (produce 'D b))  ; full!
+(set! b (consume b))
+(set! b (consume b))
+(set! b (produce 'D b))
+(set! b (consume b))
+`} />
+
+    <h3>Dining Philosophers</h3>
+    <p>Five philosophers sit around a table, each needing two forks to eat. If every philosopher picks up their left fork simultaneously, nobody can pick up their right fork. Deadlock. Solutions: limit diners, impose ordering, or use a waiter.</p>
+
+    <!-- SVG: Dining philosophers around a table -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 300" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Table -->
+        <circle cx="150" cy="150" r="60" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Philosophers (circles at vertices of pentagon) -->
+        <circle cx="150" cy="70" r="18" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="150" y="74" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">P0</text>
+
+        <circle cx="226" cy="120" r="18" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="226" y="124" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">P1</text>
+
+        <circle cx="200" cy="210" r="18" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="214" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.7">P2</text>
+
+        <circle cx="100" cy="210" r="18" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="214" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.7">P3</text>
+
+        <circle cx="74" cy="120" r="18" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="74" y="124" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.7">P4</text>
+
+        <!-- Forks (small lines between philosophers) -->
+        <line x1="185" y1="85" x2="195" y2="95" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="198" y="88" fill="currentColor" font-size="8" fill-opacity="0.3">F0</text>
+
+        <line x1="220" y1="155" x2="218" y2="168" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="230" y="165" fill="currentColor" font-size="8" fill-opacity="0.3">F1</text>
+
+        <line x1="160" y1="215" x2="148" y2="218" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="155" y="230" fill="currentColor" font-size="8" fill-opacity="0.3">F2</text>
+
+        <line x1="82" y1="168" x2="80" y2="155" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="65" y="165" fill="currentColor" font-size="8" fill-opacity="0.3">F3</text>
+
+        <line x1="105" y1="95" x2="115" y2="85" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="96" y="88" fill="currentColor" font-size="8" fill-opacity="0.3">F4</text>
+      </svg>
+    </div>
+
+    <h3>Monitors</h3>
+    <p>A <strong>monitor</strong> bundles the shared data, the operations on it, and the synchronization into one construct. Only one thread can be active inside the monitor at a time. Condition variables let threads wait inside the monitor for specific events.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Discrete Math Ch.4</a> — graph theory: the happens-before relation for synchronization primitives is a directed acyclic graph</li>
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> — groups and atomicity: mutex operations are the OS implementation of atomic group actions on shared state</li>
+      <li><a href="/reading/proof-writing/proofs-07/">✎ Proofs Ch.7</a> — equivalence relations: linearizability defines an equivalence between concurrent and sequential executions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Mutual_exclusion"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mutual exclusion</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Semaphore_(programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Semaphore</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Dining_philosophers_problem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dining philosophers problem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monitor_(synchronization)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monitor</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-03/", label: "Threads and Concurrency" }} next={{ href: "/reading/operating-systems/os-05/", label: "Deadlock" }} />
+
+  </main>
+</Layout>

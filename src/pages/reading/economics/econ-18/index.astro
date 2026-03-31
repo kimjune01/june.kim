@@ -1,0 +1,164 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.18 — GDP and Measurement" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>GDP and Measurement</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Simon Kuznets, national income accounting (public domain concepts)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>GDP</strong> = C + I + G + NX. Four components, one number. It measures market activity, not welfare. Knowing what GDP misses is as important as knowing what it counts.</p>
+    </div>
+
+    <!-- 1. The Expenditure Identity -->
+    <h3>The expenditure identity</h3>
+    <p>GDP sums all final spending in an economy. <strong>C</strong> = consumption (households), <strong>I</strong> = investment (business capital + housing + inventories), <strong>G</strong> = government purchases (not transfers), <strong>NX</strong> = net exports (exports minus imports). This is an accounting identity, not a theory. It holds by definition.</p>
+
+    <!-- SVG: GDP components as stacked bars -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="80" y1="220" x2="360" y2="220" stroke="currentColor" stroke-width="1"/>
+        <!-- Bar: stacked components (US approximate shares) -->
+        <!-- C = 68% -->
+        <rect x="140" y="68" width="100" height="152" fill="#4ade80" fill-opacity="0.7" rx="2"/>
+        <text x="190" y="150" text-anchor="middle" fill="#000" font-size="13" font-weight="bold">C</text>
+        <text x="190" y="167" text-anchor="middle" fill="#000" font-size="10">68%</text>
+        <!-- I = 18% -->
+        <rect x="140" y="28" width="100" height="40" fill="#60a5fa" fill-opacity="0.7" rx="2"/>
+        <text x="190" y="52" text-anchor="middle" fill="#000" font-size="13" font-weight="bold">I</text>
+        <text x="190" y="65" text-anchor="middle" fill="#000" font-size="10">18%</text>
+        <!-- G = 17% -->
+        <rect x="260" y="182" width="80" height="38" fill="#fbbf24" fill-opacity="0.7" rx="2"/>
+        <text x="300" y="205" text-anchor="middle" fill="#000" font-size="13" font-weight="bold">G</text>
+        <text x="300" y="217" text-anchor="middle" fill="#000" font-size="9">17%</text>
+        <!-- NX = -3% (negative, shown below axis) -->
+        <rect x="260" y="220" width="80" height="7" fill="#f87171" fill-opacity="0.7" rx="2"/>
+        <text x="300" y="240" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">NX = -3%</text>
+        <!-- Labels -->
+        <text x="190" y="245" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">GDP Components (US approx.)</text>
+        <text x="80" y="224" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; GDP = C + I + G + NX
+; US 2023 approximate values (trillions)
+
+(define C 18.5)   ; Consumption
+(define I 4.9)    ; Investment
+(define G 4.6)    ; Government
+(define NX -0.8)  ; Net exports (deficit)
+
+(define GDP (+ C I G NX))
+
+(display "C  = $") (display C) (display "T") (newline)
+(display "I  = $") (display I) (display "T") (newline)
+(display "G  = $") (display G) (display "T") (newline)
+(display "NX = $") (display NX) (display "T") (newline)
+(display "GDP = $") (display GDP) (display "T") (newline)
+
+; Shares
+(display "C share: ") (display (round (* 100 (/ C GDP)))) (display "%") (newline)
+(display "I share: ") (display (round (* 100 (/ I GDP)))) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# GDP = C + I + G + NX
+C, I, G, NX = 18.5, 4.9, 4.6, -0.8
+GDP = C + I + G + NX
+
+for name, val in [("C", C), ("I", I), ("G", G), ("NX", NX)]:
+    print(str(name) + " = $" + str(val) + "T")
+print("GDP = $" + str(GDP) + "T")
+print("C share: " + str(round(C/GDP*100, 2)) + "%")
+`} />
+    </div>
+
+
+    <!-- 2. Nominal vs Real GDP -->
+    <h3>Nominal vs real GDP</h3>
+    <p>Nominal GDP uses current prices. Real GDP adjusts for inflation by using constant base-year prices. The <strong>GDP deflator</strong> = (Nominal / Real) * 100. If nominal GDP rises 8% but the deflator rises 5%, real growth is roughly 3%. Without this adjustment, inflation masquerades as growth.</p>
+
+    <SchemeRepl client:load initialCode={`; Nominal vs Real GDP
+; GDP deflator = (Nominal / Real) * 100
+
+(define nominal-2020 21.0)
+(define nominal-2023 27.4)
+
+; If prices rose ~15% from 2020 to 2023
+(define deflator-2023 115)  ; base year 2020 = 100
+
+(define real-2023 (* (/ nominal-2023 deflator-2023) 100))
+
+(display "Nominal GDP 2023: $") (display nominal-2023) (display "T") (newline)
+(display "GDP deflator: ") (display deflator-2023) (newline)
+(display "Real GDP 2023 (2020 dollars): $")
+(display (/ (round (* real-2023 10)) 10))
+(display "T") (newline)
+
+; Nominal growth vs real growth
+(define nominal-growth (/ (- nominal-2023 nominal-2020) nominal-2020))
+(define real-growth (/ (- real-2023 nominal-2020) nominal-2020))
+(display "Nominal growth: ") (display (round (* 100 nominal-growth))) (display "%") (newline)
+(display "Real growth: ") (display (round (* 100 real-growth))) (display "%")
+`} />
+
+
+    <!-- 3. What GDP Misses -->
+    <h3>What GDP misses</h3>
+    <p>GDP counts market transactions. It misses <strong>inequality</strong> (a country can grow while most people stagnate), <strong>environmental damage</strong> (pollution increases GDP via cleanup spending), <strong>unpaid work</strong> (childcare, household labor), and <strong>leisure</strong>. A hurricane that destroys and rebuilds raises GDP. Kuznets himself warned against using his measure as a welfare indicator.</p>
+
+    <SchemeRepl client:load initialCode={`; GDP per capita hides distribution
+; Two economies, same GDP per capita, different welfare
+
+(define (gini-from-shares shares)
+  ; Simplified: mean absolute difference / (2 * mean)
+  (let* ((n (length shares))
+         (mean (/ (apply + shares) n))
+         (pairs (apply append
+           (map (lambda (x)
+             (map (lambda (y) (abs (- x y))) shares))
+           shares)))
+         (mad (/ (apply + pairs) (* n n))))
+    (/ mad (* 2 mean))))
+
+; Economy A: relatively equal
+(define economy-a (list 40 45 50 55 60))
+; Economy B: very unequal
+(define economy-b (list 10 15 20 30 175))
+
+(display "Economy A - GDP/capita: ")
+(display (/ (apply + economy-a) (length economy-a))) (newline)
+(display "Economy B - GDP/capita: ")
+(display (/ (apply + economy-b) (length economy-b))) (newline)
+
+(display "Economy A - Gini: ")
+(display (/ (round (* 100 (gini-from-shares economy-a))) 100)) (newline)
+(display "Economy B - Gini: ")
+(display (/ (round (* 100 (gini-from-shares economy-b))) 100))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Gross_domestic_product"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gross domestic product</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/GDP_deflator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>GDP deflator</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Genuine_progress_indicator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Genuine progress indicator</a> — one attempt to fix what GDP misses</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-17/", label: "Interest and Time Value" }} next={{ href: "/reading/economics/econ-19/", label: "Fiscal and Monetary Policy" }} />
+
+  </main>
+</Layout>

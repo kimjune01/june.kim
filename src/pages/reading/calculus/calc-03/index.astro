@@ -1,0 +1,283 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.3 — Limits and Continuity" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Limits and Continuity</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>limit</strong> captures what f(x) approaches as x approaches a, even if f(a) is undefined. The epsilon-delta definition makes "approaches" precise. Continuity means the limit equals the function value. The Intermediate Value Theorem is the payoff.</p>
+    </div>
+
+    <!-- SVG: function approaching a limit -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="150" x2="320" y2="150" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="60" y1="20" x2="60" y2="160" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Curve approaching but with hole at x=180 -->
+        <path d="M 80 130 Q 130 90 170 60" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <path d="M 190 60 Q 230 30 300 40" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Open circle (hole) at the limit point -->
+        <circle cx="180" cy="55" r="4" fill="#1a1a2e" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Dashed horizontal line to limit value -->
+        <line x1="55" y1="55" x2="175" y2="55" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Dashed vertical line to x=a -->
+        <line x1="180" y1="55" x2="180" y2="150" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="40" y="58" fill="#f59e0b" font-size="10" fill-opacity="0.6">L</text>
+        <text x="180" y="165" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">a</text>
+        <text x="250" y="30" fill="currentColor" font-size="10" fill-opacity="0.4">lim f(x) = L</text>
+        <text x="250" y="42" fill="currentColor" font-size="9" fill-opacity="0.3">x&#x2192;a</text>
+      </svg>
+    </div>
+
+    <!-- 1. Intuitive limits -->
+    <h3>Intuitive limits</h3>
+    <p>The limit of f(x) as x approaches a is L if f(x) gets arbitrarily close to L whenever x is sufficiently close to a (but not equal to a). We can test this numerically by plugging in values closer and closer to a.</p>
+
+    <SchemeRepl client:load initialCode={`; Limit of sin(x)/x as x -> 0
+; f(0) is undefined (0/0), but the limit exists
+
+(define (f x) (/ (sin x) x))
+
+; Approach 0 from the right
+(display "x=1.0:    ") (display (f 1.0)) (newline)
+(display "x=0.1:    ") (display (f 0.1)) (newline)
+(display "x=0.01:   ") (display (f 0.01)) (newline)
+(display "x=0.001:  ") (display (f 0.001)) (newline)
+(display "x=0.0001: ") (display (f 0.0001)) (newline)
+
+; Approach 0 from the left
+(display "x=-0.01:  ") (display (f -0.01)) (newline)
+(display "x=-0.001: ") (display (f -0.001)) (newline)
+
+(display "Limit = 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def f(x): return math.sin(x) / x
+
+for x in [1.0, 0.1, 0.01, 0.001, 0.0001]:
+    print(f"f({x}) = {f(x):.8f}")
+
+print("Limit as x -> 0 is 1")
+`} />
+    </div>
+
+
+    <!-- 2. Epsilon-delta -->
+    <h3>Epsilon-delta definition</h3>
+    <p>For every &#x3B5; &gt; 0, there exists a &#x3B4; &gt; 0 such that |f(x) - L| &lt; &#x3B5; whenever 0 &lt; |x - a| &lt; &#x3B4;. This replaces "approaches" with a checkable inequality. &#x3B5; is the tolerance on the output; &#x3B4; is the tolerance on the input.</p>
+
+    <SchemeRepl client:load initialCode={`; Epsilon-delta: show that lim(2x+1) as x->3 = 7
+; For any epsilon, we need delta such that
+; |f(x) - 7| < epsilon when 0 < |x - 3| < delta
+; |(2x+1) - 7| = |2x - 6| = 2|x-3| < epsilon
+; So delta = epsilon/2 works.
+
+(define (f x) (+ (* 2 x) 1))
+(define L 7)
+(define a 3)
+
+(define (check-epsilon-delta epsilon)
+  (let ((delta (/ epsilon 2)))
+    ; Test a point just inside delta
+    (let ((x (+ a (* delta 0.99))))
+      (let ((error (abs (- (f x) L))))
+        (display "eps=") (display epsilon)
+        (display " delta=") (display delta)
+        (display " |f(x)-L|=") (display (/ (round (* error 100000)) 100000))
+        (display (if (< error epsilon) " OK" " FAIL"))
+        (newline)))))
+
+(check-epsilon-delta 1.0)
+(check-epsilon-delta 0.1)
+(check-epsilon-delta 0.01)
+(check-epsilon-delta 0.001)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Epsilon-delta: lim(2x+1) as x->3 = 7
+# delta = epsilon/2 works because |(2x+1)-7| = 2|x-3|
+def f(x): return 2*x + 1
+L, a = 7, 3
+
+for eps in [1.0, 0.1, 0.01, 0.001]:
+    delta = eps / 2
+    x = a + delta * 0.99
+    error = abs(f(x) - L)
+    status = "OK" if error < eps else "FAIL"
+    print("eps={} delta={} |f(x)-L|={:.5f} {}".format(eps, delta, error, status))
+`} />
+    </div>
+
+
+    <!-- 3. Squeeze theorem -->
+    <h3>Squeeze theorem</h3>
+    <p>If g(x) &#x2264; f(x) &#x2264; h(x) near a, and lim g(x) = lim h(x) = L, then lim f(x) = L. The classic example: -1 &#x2264; sin(x) &#x2264; 1, so -|x| &#x2264; x sin(1/x) &#x2264; |x|. As x approaches 0, both bounds go to 0, so x sin(1/x) goes to 0.</p>
+
+    <SchemeRepl client:load initialCode={`; Squeeze theorem: x*sin(1/x) -> 0 as x -> 0
+; Because -|x| <= x*sin(1/x) <= |x|
+
+(define (f x) (* x (sin (/ 1 x))))
+(define (lower x) (- (abs x)))
+(define (upper x) (abs x))
+
+(define (show x)
+  (display "x=") (display x)
+  (display " lower=") (display (/ (round (* (lower x) 10000)) 10000))
+  (display " f=") (display (/ (round (* (f x) 10000)) 10000))
+  (display " upper=") (display (/ (round (* (upper x) 10000)) 10000))
+  (newline))
+
+(show 1.0)
+(show 0.1)
+(show 0.01)
+(show 0.001)
+(display "All three squeeze to 0")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Squeeze theorem: -|x| <= x*sin(1/x) <= |x|
+def f(x): return x * math.sin(1/x)
+
+for x in [1.0, 0.1, 0.01, 0.001]:
+    print("x={} lower={:.4f} f={:.4f} upper={:.4f}".format(
+        x, -abs(x), f(x), abs(x)))
+print("All three squeeze to 0")
+`} />
+    </div>
+
+
+    <!-- 4. Continuity -->
+    <h3>Continuity</h3>
+    <p>f is <strong>continuous</strong> at a if three things hold: f(a) exists, lim f(x) as x approaches a exists, and the limit equals f(a). Polynomials, sin, cos, exp are continuous everywhere on their domains. Rational functions are continuous except where the denominator is zero.</p>
+
+    <SchemeRepl client:load initialCode={`; Continuity check: f is continuous at a if lim f(x) = f(a)
+
+; Continuous: f(x) = x^2 at x = 2
+(define (f x) (* x x))
+(display "f(2) = ") (display (f 2)) (newline)
+(display "f(1.99) = ") (display (f 1.99)) (newline)
+(display "f(2.01) = ") (display (f 2.01)) (newline)
+(display "Continuous: limit = f(2) = 4") (newline) (newline)
+
+; Discontinuous: g(x) = 1/x at x = 0
+; g(0) is undefined, so g is not continuous at 0
+(display "g(0.001) = ") (display (/ 1 0.001)) (newline)
+(display "g(-0.001) = ") (display (/ 1 -0.001)) (newline)
+(display "Left and right limits disagree: not continuous")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Continuity: lim f(x) must equal f(a)
+# Continuous: f(x) = x^2 at x = 2
+f = lambda x: x**2
+print("f(2) =", f(2))
+print("f(1.99) =", f(1.99))
+print("f(2.01) =", f(2.01))
+print("Continuous: limit = f(2) = 4")
+print()
+
+# Discontinuous: g(x) = 1/x at x = 0
+print("g(0.001) =", 1/0.001)
+print("g(-0.001) =", 1/-0.001)
+print("Left and right limits disagree: not continuous")
+`} />
+    </div>
+
+
+    <!-- 5. IVT -->
+    <h3>Intermediate Value Theorem</h3>
+    <p>If f is continuous on [a,b] and f(a) &lt; c &lt; f(b), then there exists some x in (a,b) where f(x) = c. Geometrically: a continuous curve that goes from below c to above c must cross c somewhere. This is how we prove roots exist.</p>
+
+    <SchemeRepl client:load initialCode={`; IVT: if f is continuous and changes sign, there's a root
+; Use bisection to find where x^2 - 2 = 0 (i.e., sqrt(2))
+
+(define (f x) (- (* x x) 2))
+
+(define (bisect lo hi n)
+  (if (= n 0)
+      (let ((mid (/ (+ lo hi) 2)))
+        (display "root ~ ") (display mid) (newline)
+        (display "f(root) ~ ") (display (f mid)))
+      (let ((mid (/ (+ lo hi) 2)))
+        (if (< (* (f lo) (f mid)) 0)
+            (bisect lo mid (- n 1))
+            (bisect mid hi (- n 1))))))
+
+(display "f(1) = ") (display (f 1)) (newline)   ; -1
+(display "f(2) = ") (display (f 2)) (newline)   ;  2
+(display "Sign change: root exists in (1,2)") (newline)
+(bisect 1.0 2.0 30)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# IVT + bisection to find sqrt(2)
+def f(x): return x**2 - 2
+
+lo, hi = 1.0, 2.0
+print("f(1) =", f(1), " f(2) =", f(2))
+print("Sign change: root exists in (1,2)")
+
+for _ in range(30):
+    mid = (lo + hi) / 2
+    if f(lo) * f(mid) < 0:
+        hi = mid
+    else:
+        lo = mid
+
+print("root ~", mid)
+print("f(root) ~", f(mid))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">lim<sub>x&#x2192;a</sub> f(x)</td><td class="pr-4 text-green-300">(f (+ a 0.0001))</td><td class="font-sans">Limit: value f approaches</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x3B5;, &#x3B4;</td><td class="pr-4 text-green-300">epsilon, delta</td><td class="font-sans">Output and input tolerances</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|x - a| &lt; &#x3B4;</td><td class="pr-4 text-green-300">(< (abs (- x a)) delta)</td><td class="font-sans">x is within delta of a</td></tr>
+          <tr><td class="py-2 pr-4">IVT</td><td class="pr-4 text-green-300">bisection</td><td class="font-sans">Intermediate Value Theorem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-04/">∫ Ch.4 The Derivative</a> — the derivative is defined as a limit</li>
+      <li><a href="/reading/real-analysis/lebl-04/">∞ Lebl Ch.4 Continuity</a> — the epsilon-delta definition formalized in analysis</li>
+      <li><a href="/reading/real-analysis/lebl-03/">∞ Real Analysis Ch.3</a> — limits of sequences: the same epsilon-delta machinery applied to sequences</li>
+      <li><a href="/reading/logic/logic-03/">🔑 Logic Ch.3</a> — quantifiers formalize the "for all epsilon there exists delta" definition</li>
+      <li><a href="/reading/proof-writing/proofs-03/">✏️ Proofs Ch.3</a> — epsilon-delta proofs are a canonical application of direct proof</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-02/", label: "Trigonometry" }} next={{ href: "/reading/calculus/calc-04/", label: "The Derivative · 4 of 15" }} />
+
+  </main>
+</Layout>

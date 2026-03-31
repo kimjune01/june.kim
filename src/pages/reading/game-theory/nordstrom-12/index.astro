@@ -1,0 +1,249 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="🍞 Prisoner's Dilemma and Chicken" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Prisoner's Dilemma and Chicken</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> · <a href="https://nordstrommath.com/IntroGameTheory/pdandchicken.html">Section 4.2</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The two most famous non-zero-sum games. In the <strong><a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prisoner's Dilemma</a></strong>, defecting dominates but mutual cooperation pays better. In <strong><a href="https://en.wikipedia.org/wiki/Chicken_(game)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chicken</a></strong>, swerving is safe but going straight wins if the other swerves. Both show how individual rationality can produce collective irrationality.</p>
+    </div>
+
+    <!-- SVG: Two 2x2 matrices side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 640 230" class="w-full max-w-2xl" style="font-family: ui-monospace, monospace;">
+        <!-- Prisoner's Dilemma matrix -->
+        <text x="140" y="20" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">Prisoner's Dilemma</text>
+        <!-- Column headers -->
+        <text x="160" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Confess</text>
+        <text x="250" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Don't</text>
+        <!-- Row headers -->
+        <text x="55" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Confess</text>
+        <text x="55" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Don't</text>
+        <!-- Grid lines -->
+        <line x1="90" y1="55" x2="290" y2="55" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="90" y1="110" x2="290" y2="110" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="90" y1="165" x2="290" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="90" y1="55" x2="90" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="200" y1="55" x2="200" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="290" y1="55" x2="290" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <!-- Nash highlight on (Confess, Confess) -->
+        <rect x="91" y="56" width="108" height="53" fill="#ef4444" fill-opacity="0.12" rx="2"/>
+        <!-- Payoff values -->
+        <text x="145" y="88" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="bold">8, 8</text>
+        <text x="245" y="88" text-anchor="middle" fill="currentColor" font-size="12">0.25, 10</text>
+        <text x="145" y="143" text-anchor="middle" fill="currentColor" font-size="12">10, 0.25</text>
+        <text x="245" y="143" text-anchor="middle" fill="currentColor" font-size="12">1, 1</text>
+        <!-- Nash label -->
+        <text x="145" y="102" text-anchor="middle" fill="#ef4444" font-size="8">Nash</text>
+        <!-- Years label -->
+        <text x="190" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">(years in prison, lower = better)</text>
+
+        <!-- Chicken matrix -->
+        <text x="480" y="20" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">Chicken</text>
+        <!-- Column headers -->
+        <text x="480" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Swerve</text>
+        <text x="570" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Straight</text>
+        <!-- Row headers -->
+        <text x="385" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Swerve</text>
+        <text x="385" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Straight</text>
+        <!-- Grid lines -->
+        <line x1="420" y1="55" x2="620" y2="55" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="420" y1="110" x2="620" y2="110" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="420" y1="165" x2="620" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="420" y1="55" x2="420" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="530" y1="55" x2="530" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <line x1="620" y1="55" x2="620" y2="165" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <!-- Nash highlights on (Swerve, Straight) and (Straight, Swerve) -->
+        <rect x="531" y="56" width="88" height="53" fill="#3b82f6" fill-opacity="0.12" rx="2"/>
+        <rect x="421" y="111" width="108" height="53" fill="#3b82f6" fill-opacity="0.12" rx="2"/>
+        <!-- Payoff values -->
+        <text x="475" y="88" text-anchor="middle" fill="currentColor" font-size="12">0, 0</text>
+        <text x="575" y="88" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="bold">-1, 10</text>
+        <text x="475" y="143" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="bold">10, -1</text>
+        <text x="575" y="143" text-anchor="middle" fill="currentColor" font-size="12">-100, -100</text>
+        <!-- Nash labels -->
+        <text x="575" y="102" text-anchor="middle" fill="#3b82f6" font-size="8">Nash</text>
+        <text x="475" y="157" text-anchor="middle" fill="#3b82f6" font-size="8">Nash</text>
+        <!-- Units -->
+        <text x="520" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">(higher = better)</text>
+      </svg>
+    </div>
+
+    <h3>Prisoner's Dilemma: defect dominates</h3>
+    <p>Each prisoner can confess (defect) or stay quiet (cooperate). Whatever the other does, confessing gives a better personal outcome. So both confess, ending up at (8, 8) years. But mutual silence would give (1, 1). The dominant strategy leads to a worse outcome for everyone.</p>
+
+    <SchemeRepl client:load initialCode={`; Prisoner's Dilemma: find the dominant strategy
+; Payoffs are years in prison (lower is better)
+
+(define (pd-payoff me other)
+  (cond
+    ((and (eq? me 'confess) (eq? other 'confess)) 8)
+    ((and (eq? me 'confess) (eq? other 'quiet))   0.25)
+    ((and (eq? me 'quiet)   (eq? other 'confess)) 10)
+    ((and (eq? me 'quiet)   (eq? other 'quiet))   1)))
+
+; Check: is confess dominant?
+; Against confess: confess=8, quiet=10
+; Against quiet:   confess=0.25, quiet=1
+; Confess is better in both cases (lower years)
+
+(display "vs confess: confess=")
+(display (pd-payoff 'confess 'confess))
+(display ", quiet=")
+(display (pd-payoff 'quiet 'confess))
+(newline)
+
+(display "vs quiet:   confess=")
+(display (pd-payoff 'confess 'quiet))
+(display ", quiet=")
+(display (pd-payoff 'quiet 'quiet))
+(newline)
+
+(display "confess dominates? ")
+(display (and (< (pd-payoff 'confess 'confess)
+               (pd-payoff 'quiet 'confess))
+             (< (pd-payoff 'confess 'quiet)
+               (pd-payoff 'quiet 'quiet))))
+`} />
+
+    <h3>Chicken: two equilibria, no dominant strategy</h3>
+    <p>Two drivers race toward each other. Swerving avoids disaster but looks weak. Going straight wins big if the other swerves, but if both go straight, catastrophe. Unlike PD, neither strategy dominates: your best move depends on what the other does. There are two Nash equilibria, one favoring each player.</p>
+
+    <SchemeRepl client:load initialCode={`; Chicken: check for dominated strategies and Nash equilibria
+
+(define (chicken-payoff me other)
+  (cond
+    ((and (eq? me 'swerve)   (eq? other 'swerve))   0)
+    ((and (eq? me 'swerve)   (eq? other 'straight)) -1)
+    ((and (eq? me 'straight) (eq? other 'swerve))   10)
+    ((and (eq? me 'straight) (eq? other 'straight))  -100)))
+
+; No dominated strategy:
+; vs swerve:   swerve=0, straight=10 -> straight better
+; vs straight: swerve=-1, straight=-100 -> swerve better
+
+(display "vs swerve:   swerve=")
+(display (chicken-payoff 'swerve 'swerve))
+(display ", straight=")
+(display (chicken-payoff 'straight 'swerve))
+(newline)
+
+(display "vs straight: swerve=")
+(display (chicken-payoff 'swerve 'straight))
+(display ", straight=")
+(display (chicken-payoff 'straight 'straight))
+(newline)
+
+; Nash equilibria: no player can improve by switching
+(define (nash? s1 s2)
+  (let ((other-s1 (if (eq? s1 'swerve) 'straight 'swerve))
+        (other-s2 (if (eq? s2 'swerve) 'straight 'swerve)))
+    (and (>= (chicken-payoff s1 s2) (chicken-payoff other-s1 s2))
+         (>= (chicken-payoff s2 s1) (chicken-payoff other-s2 s1)))))
+
+(display "(swerve, straight) Nash? ")
+(display (nash? 'swerve 'straight))
+(newline)
+(display "(straight, swerve) Nash? ")
+(display (nash? 'straight 'swerve))
+(newline)
+(display "(swerve, swerve) Nash? ")
+(display (nash? 'swerve 'swerve))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# PD and Chicken payoffs in Python
+def pd(me, other):
+    payoffs = {
+        ("confess","confess"): 8, ("confess","quiet"): 0.25,
+        ("quiet","confess"): 10, ("quiet","quiet"): 1
+    }
+    return payoffs[(me, other)]
+
+def chicken(me, other):
+    payoffs = {
+        ("swerve","swerve"): 0, ("swerve","straight"): -1,
+        ("straight","swerve"): 10, ("straight","straight"): -100
+    }
+    return payoffs[(me, other)]
+
+# PD: confess dominates
+for other in ["confess", "quiet"]:
+    print(f"vs {other}: confess={pd('confess',other)}, quiet={pd('quiet',other)}")
+
+# Chicken: Nash equilibria
+strategies = ["swerve", "straight"]
+for s1 in strategies:
+    for s2 in strategies:
+        alt1 = "straight" if s1 == "swerve" else "swerve"
+        alt2 = "straight" if s2 == "swerve" else "swerve"
+        nash = chicken(s1,s2) >= chicken(alt1,s2) and chicken(s2,s1) >= chicken(alt2,s1)
+        if nash:
+            print(f"Nash: ({s1}, {s2}) -> ({chicken(s1,s2)}, {chicken(s2,s1)})")
+`} />
+    </div>
+
+    <h3>The key difference</h3>
+    <p>PD has one Nash equilibrium and it is Pareto-dominated: both players would prefer mutual cooperation but can't get there. Chicken has two Nash equilibria, both asymmetric: coordination is the problem, not defection. PD models arms races. Chicken models brinksmanship.</p>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 pr-4 text-left">Scheme</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Dominant strategy</td><td class="pr-4 text-green-300">(< (pd-payoff 'confess x) (pd-payoff 'quiet x))</td><td class="font-sans">Better regardless of opponent</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Nash equilibrium</td><td class="pr-4 text-green-300">(nash? s1 s2)</td><td class="font-sans">Neither player can improve by switching</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Pareto dominated</td><td class="pr-4 text-green-300">(and (&lt; alt1 curr1) (&lt; alt2 curr2))</td><td class="font-sans">Both players prefer another outcome</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Cooperative game</td><td class="pr-4 text-green-300">-</td><td class="font-sans">Communication allowed before choosing</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Game theory foundations</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-11/">🎲 Nordstrom 11</a> — non-zero-sum games introduction</li>
+      <li><a href="/reading/game-theory/nordstrom-13/">🎲 Nordstrom 13</a> — Volunteer's Dilemma (N-player Chicken)</li>
+      <li><a href="/reading/game-theory/nordstrom-14/">🎲 Nordstrom 14</a> — Repeated Prisoner's Dilemma</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper connections</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory makes PD and Chicken composable sub-games</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prisoner's dilemma</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Chicken_(game)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chicken (game)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash equilibrium</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>Nordstrom uses years in prison as PD payoffs (lower is better), which is the original formulation. Many textbooks flip the sign and use utility (higher is better). The Nash equilibrium analysis is identical either way. Chicken payoffs here follow Nordstrom's convention: +10 for winning, -1 for swerving alone, -100 for mutual crash.</p>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-11/", label: "Non-Zero-Sum Games" }} next={{ href: "/reading/game-theory/nordstrom-13/", label: "Volunteer's Dilemma" }} />
+
+  </main>
+</Layout>

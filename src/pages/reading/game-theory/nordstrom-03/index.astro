@@ -1,0 +1,227 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §1.3 — Zero-Sum Games" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Zero-Sum Games</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Nordstrom · CC BY-SA 4.0 · <a href="https://nordstrommath.com/IntroGameTheory/S_IntroZeroSum.html">§1.3 Zero-Sum Games</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">In a <strong>zero-sum game</strong>, the payoffs in every outcome add to the same constant. One player's gain is exactly the other's loss. The total is fixed. The only question is how it splits.</p>
+    </div>
+
+    <!-- 1. What makes a game zero-sum -->
+    <h3>What makes a game zero-sum</h3>
+    <p>A game is zero-sum when every payoff vector (a, b) satisfies a + b = c for the same constant c. Usually we normalize so that a + b = 0, giving payoff vectors of the form (a, -a). Matching Pennies is zero-sum. Prisoner's Dilemma is not.</p>
+
+    <!-- SVG: Seesaw/balance showing +3/-3 payoffs -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Fulcrum triangle -->
+        <polygon points="180,140 165,170 195,170" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Beam tilted -->
+        <line x1="50" y1="110" x2="310" y2="110" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- P1 side (winning, higher) -->
+        <rect x="50" y="75" width="70" height="35" rx="4" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="85" y="97" text-anchor="middle" fill="#4ade80" font-size="14">+3</text>
+        <text x="85" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">P1</text>
+        <!-- P2 side (losing, lower) -->
+        <rect x="240" y="75" width="70" height="35" rx="4" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="275" y="97" text-anchor="middle" fill="#ef4444" font-size="14">-3</text>
+        <text x="275" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">P2</text>
+        <!-- Sum annotation -->
+        <text x="180" y="55" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">+3 + (-3) = 0</text>
+        <!-- Caption -->
+        <text x="180" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">zero-sum: total payoff is always zero</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Check if a game is zero-sum
+; Every payoff vector must sum to the same constant
+
+(define (zero-sum? payoff-fn strategies1 strategies2)
+  (let* ((first-sum (apply + (payoff-fn (car strategies1) (car strategies2))))
+         (all-same
+          (every (lambda (s1)
+            (every (lambda (s2)
+              (= (apply + (payoff-fn s1 s2)) first-sum))
+              strategies2))
+            strategies1)))
+    (list all-same first-sum)))
+
+; Matching Pennies: zero-sum
+(define (matching-pennies r c)
+  (if (eq? r c) '(1 -1) '(-1 1)))
+
+(display "Matching Pennies zero-sum? ")
+(display (zero-sum? matching-pennies '(H T) '(H T)))
+(newline)
+
+; Prisoner's Dilemma: NOT zero-sum
+(define (prisoners r c)
+  (cond ((and (eq? r 'C) (eq? c 'C)) '(3 3))
+        ((and (eq? r 'C) (eq? c 'D)) '(0 5))
+        ((and (eq? r 'D) (eq? c 'C)) '(5 0))
+        (else '(1 1))))
+
+(display "Prisoner's Dilemma zero-sum? ")
+(display (zero-sum? prisoners '(C D) '(C D)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Check if a game is zero-sum
+def is_zero_sum(payoffs):
+    sums = [a + b for a, b in payoffs.values()]
+    return all(s == sums[0] for s in sums), sums[0]
+
+matching_pennies = {
+    ("H","H"): (1,-1), ("H","T"): (-1,1),
+    ("T","H"): (-1,1), ("T","T"): (1,-1),
+}
+
+prisoners = {
+    ("C","C"): (3,3), ("C","D"): (0,5),
+    ("D","C"): (5,0), ("D","D"): (1,1),
+}
+
+print(f"Matching Pennies: {is_zero_sum(matching_pennies)}")
+print(f"Prisoner's Dilemma: {is_zero_sum(prisoners)}")
+`} />
+    </div>
+
+    <!-- 2. Why zero-sum matters -->
+    <h3>Why zero-sum matters</h3>
+    <p>In a zero-sum game, you only need one number per cell. If P1 gets +3, P2 gets -3 automatically. This simplifies the matrix and makes analysis easier. Nordstrom writes the matrix with just P1's payoffs. P2's payoffs are the negatives.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified zero-sum matrix: only store P1 payoffs
+; P2 payoff = negative of P1 payoff
+
+(define (make-zero-sum-matrix p1-payoffs)
+  p1-payoffs)
+
+(define (full-payoff zs-matrix row col)
+  (let ((p1 (list-ref (list-ref zs-matrix row) col)))
+    (list p1 (- p1))))
+
+; Election campaign game (Nordstrom example)
+; Two candidates choose positions. Values = P1 vote share above 50 percent.
+(define election '((0 4 -1)
+                   (-4 0 3)
+                   (1 -3 0)))
+
+(display "Full payoffs from simplified matrix:") (newline)
+(let loop ((i 0))
+  (if (< i 3)
+    (begin (let col-loop ((j 0))
+      (if (< j 3)
+        (begin (display (full-payoff election i j)) (display " ")
+               (col-loop (+ j 1)))))
+    (newline)
+    (loop (+ i 1)))))
+`} />
+
+    <!-- 3. Equilibrium in zero-sum games -->
+    <h3>Equilibrium pairs</h3>
+    <p>An <strong>equilibrium pair</strong> is a pair of strategies where neither player benefits from switching. In a zero-sum game, Player 1 wants to maximize the cell value. Player 2 wants to minimize it. An equilibrium is a cell that is both the maximum of its column and the minimum of its row: a saddle point.</p>
+
+    <SchemeRepl client:load initialCode={`; Find equilibrium (saddle point) in a zero-sum game
+; A cell is an equilibrium if:
+;   it is the minimum of its row (P1 cannot be exploited)
+;   AND the maximum of its column (P2 cannot be exploited)
+
+(define (row-min matrix row)
+  (apply min (list-ref matrix row)))
+
+(define (col-max matrix col)
+  (apply max (map (lambda (row) (list-ref row col)) matrix)))
+
+(define (find-saddle-points matrix)
+  (let ((n-rows (length matrix))
+        (n-cols (length (car matrix))))
+    (let row-loop ((i 0) (results '()))
+      (if (>= i n-rows) results
+          (let col-loop ((j 0) (res results))
+            (if (>= j n-cols)
+                (row-loop (+ i 1) res)
+                (let ((val (list-ref (list-ref matrix i) j)))
+                  (if (and (= val (row-min matrix i))
+                           (= val (col-max matrix j)))
+                      (col-loop (+ j 1) (cons (list i j val) res))
+                      (col-loop (+ j 1) res)))))))))
+
+; Game with a saddle point
+(define game1 '((3 1 2)
+                (0 -1 4)
+                (2 1 0)))
+
+(display "Saddle points: ") (display (find-saddle-points game1))
+; Row 0, Col 1, value 1 is equilibrium if present
+
+(newline)
+; Game without a saddle point
+(define game2 '((2 -1)
+                (-3 4)))
+(display "Saddle points: ") (display (find-saddle-points game2))
+; Empty. No pure-strategy equilibrium.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Term</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Zero-sum</td><td class="pr-4 text-green-300">(zero-sum? payoff-fn s1 s2)</td><td class="font-sans">All payoff vectors sum to the same constant</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Saddle point</td><td class="pr-4 text-green-300">(find-saddle-points matrix)</td><td class="font-sans">Min of row AND max of column</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Equilibrium pair</td><td class="pr-4 text-green-300">(row, col)</td><td class="font-sans">Neither player benefits from switching</td></tr>
+          <tr><td class="py-2 pr-4">Simplified matrix</td><td class="pr-4 text-green-300">'((a b) (c d))</td><td class="font-sans">P1 payoffs only. P2 = negative.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Prev / Next</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-01/">🎲 Nordstrom §1.1</a> — players and strategies: the ingredients of a game</li>
+      <li><a href="/reading/game-theory/nordstrom-02/">🎲 Nordstrom §1.2</a> — game matrices: payoffs in a table</li>
+      <li><a href="/reading/game-theory/nordstrom-04/">🎲 Nordstrom §2.2</a> — dominated strategies: delete what is always worse</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related paper pages</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory handles both zero-sum and non-zero-sum</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Zero-sum_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Zero-sum game</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Saddle_point"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Saddle point</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Minimax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Minimax theorem</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://nordstrommath.com/IntroGameTheory/S_IntroZeroSum.html">Read Nordstrom §1.3</a>. The poker and cake-cutting examples make it concrete.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-02/", label: "Game Matrices" }} next={{ href: "/reading/game-theory/nordstrom-04/", label: "Dominated Strategies" }} />
+
+  </main>
+</Layout>

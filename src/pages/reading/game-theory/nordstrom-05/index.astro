@@ -1,0 +1,220 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §2.3 — Probability and Expected Value" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Probability and Expected Value</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> §2.3 · <a href="https://nordstrommath.com/IntroGameTheory/S_Probability.html">nordstrommath.com</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>mixed strategy</strong> assigns probabilities to pure strategies. The <strong>expected value</strong> is the weighted average payoff: multiply each outcome by its probability and sum. A game is <strong>fair</strong> when the expected value is zero.</p>
+    </div>
+
+    <!-- 1. Probability basics -->
+    <h3>Probability over strategies</h3>
+    <p>When a player randomizes, each pure strategy gets a probability. The probabilities must sum to 1. A probability distribution over strategies is the simplest object in mixed-strategy game theory. The same machinery applies to <a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>one-shot bidding</a>, where a bidder chooses a bid under uncertainty about the competition.</p>
+
+    <!-- SVG: Probability distribution bars over strategies -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="150" x2="320" y2="150" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="60" y1="150" x2="60" y2="20" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Y-axis labels -->
+        <text x="50" y="150" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <text x="50" y="85" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">0.5</text>
+        <text x="50" y="24" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">1.0</text>
+        <!-- Gridlines -->
+        <line x1="60" y1="85" x2="320" y2="85" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Bar: Rock p=0.2 -->
+        <rect x="85" y="124" width="50" height="26" rx="2" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1"/>
+        <text x="110" y="162" text-anchor="middle" fill="currentColor" font-size="10">Rock</text>
+        <text x="110" y="119" text-anchor="middle" fill="#60a5fa" font-size="10">0.2</text>
+        <!-- Bar: Paper p=0.5 -->
+        <rect x="155" y="85" width="50" height="65" rx="2" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1"/>
+        <text x="180" y="162" text-anchor="middle" fill="currentColor" font-size="10">Paper</text>
+        <text x="180" y="80" text-anchor="middle" fill="#60a5fa" font-size="10">0.5</text>
+        <!-- Bar: Scissors p=0.3 -->
+        <rect x="225" y="111" width="50" height="39" rx="2" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1"/>
+        <text x="250" y="162" text-anchor="middle" fill="currentColor" font-size="10">Scissors</text>
+        <text x="250" y="106" text-anchor="middle" fill="#60a5fa" font-size="10">0.3</text>
+        <!-- Sum label -->
+        <text x="190" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">probabilities sum to 1.0</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A mixed strategy is a probability distribution over pure strategies.
+; Probabilities must sum to 1.
+
+(define (make-mixed-strategy actions probs)
+  (if (not (= 1 (apply + probs)))
+      (begin (display "ERROR: probabilities must sum to 1") (newline))
+      (map list actions probs)))
+
+; Rock-Paper-Scissors: biased toward Paper
+(define rps-mix
+  (make-mixed-strategy '(rock paper scissors) '(0.2 0.5 0.3)))
+
+(display "Mixed strategy: ") (display rps-mix) (newline)
+
+; Uniform distribution (optimal for RPS)
+(define rps-uniform
+  (make-mixed-strategy '(rock paper scissors)
+    '(0.333 0.334 0.333)))
+
+(display "Uniform: ") (display rps-uniform)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Mixed strategy as probability distribution
+def mixed_strategy(actions, probs):
+    assert abs(sum(probs) - 1.0) < 1e-9, "must sum to 1"
+    return list(zip(actions, probs))
+
+rps_mix = mixed_strategy(["rock", "paper", "scissors"], [0.2, 0.5, 0.3])
+print(f"Mixed strategy: {rps_mix}")
+
+rps_uniform = mixed_strategy(["rock", "paper", "scissors"], [1/3, 1/3, 1/3])
+print(f"Uniform: {rps_uniform}")
+`} />
+    </div>
+
+    <!-- 2. Expected value -->
+    <h3>Expected value</h3>
+    <p>The expected value of a game is what you'd average per play over many repetitions. Multiply each outcome's payoff by its probability, then sum. If the expected value is zero, the game is <strong>fair</strong>. If it's negative, the house wins on average.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected value: sum of (probability * payoff) over all outcomes
+(define (expected-value outcomes probs)
+  (apply + (map * outcomes probs)))
+
+; Fair coin toss: win $25 on heads, lose $25 on tails
+(define coin-ev
+  (expected-value '(25 -25) '(0.5 0.5)))
+(display "Fair coin EV: $") (display coin-ev) (newline)
+
+; Two-coin game: HH wins $2, HT wins $1, TT loses $4
+; P(HH)=0.25, P(HT)=0.5, P(TT)=0.25
+(define two-coin-ev
+  (expected-value '(2 1 -4) '(0.25 0.5 0.25)))
+(display "Two-coin EV: $") (display two-coin-ev) (newline)
+
+; Roulette: 18 red, 18 black, 2 green out of 38
+; Bet $1 on red: win $1 or lose $1
+(define roulette-ev
+  (expected-value '(1 -1) '(0.4737 0.5263)))
+(display "Roulette EV: $") (display roulette-ev) (newline)
+(display "House always wins.")
+`} />
+
+    <!-- 3. Expected value of a mixed strategy -->
+    <h3>Expected value of a mixed strategy</h3>
+    <p>When both players mix, the expected payoff is the weighted average over all strategy combinations. Each cell of the payoff matrix contributes its payoff times the product of both players' probabilities for that cell.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected value when both players use mixed strategies
+; Payoff matrix (row player's payoffs):
+;           Col1    Col2
+; Row1       3      -1
+; Row2      -2       4
+;
+; Row player mixes (0.6, 0.4), Col player mixes (0.3, 0.7)
+
+(define payoffs '((3 -1) (-2 4)))
+(define row-probs '(0.6 0.4))
+(define col-probs '(0.3 0.7))
+
+(define (mixed-ev matrix rp cp)
+  (apply +
+    (map (lambda (row rprob)
+      (apply +
+        (map (lambda (cell cprob)
+          (* rprob cprob cell))
+        row cp)))
+    matrix rp)))
+
+(define ev (mixed-ev payoffs row-probs col-probs))
+(display "Expected payoff: ") (display ev) (newline)
+
+; Break it down:
+; 0.6*0.3*3 + 0.6*0.7*(-1) + 0.4*0.3*(-2) + 0.4*0.7*4
+; = 0.54 + (-0.42) + (-0.24) + 1.12 = 1.0
+(display "Check: ")
+(display (+ (* 0.6 0.3 3) (* 0.6 0.7 -1) (* 0.4 0.3 -2) (* 0.4 0.7 4)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected value with mixed strategies
+payoffs = [[3, -1], [-2, 4]]
+row_probs = [0.6, 0.4]
+col_probs = [0.3, 0.7]
+
+ev = sum(
+    rp * cp * payoffs[r][c]
+    for r, rp in enumerate(row_probs)
+    for c, cp in enumerate(col_probs)
+)
+print(f"Expected payoff: {ev}")
+
+# Breakdown
+terms = [
+    (0.6, 0.3, 3), (0.6, 0.7, -1),
+    (0.4, 0.3, -2), (0.4, 0.7, 4)
+]
+for rp, cp, v in terms:
+    print(f"  {rp}*{cp}*{v:+d} = {rp*cp*v:+.2f}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(E)</td><td class="pr-4 text-green-300">p</td><td class="font-sans">Probability of event E, between 0 and 1</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E(X)</td><td class="pr-4 text-green-300">(expected-value ...)</td><td class="font-sans">Expected value: weighted average payoff</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">sigma</td><td class="pr-4 text-green-300">(make-mixed-strategy ...)</td><td class="font-sans">Mixed strategy: probability distribution over actions</td></tr>
+          <tr><td class="py-2 pr-4">E(X) = 0</td><td class="pr-4 text-green-300">(= ev 0)</td><td class="font-sans">Fair game: neither player has an edge</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-04/">🍞 §2.2 Dominated Strategies</a> — previous section</li>
+      <li><a href="/reading/game-theory/nordstrom-06/">🍞 §2.4 Equilibrium Points</a> — next section</li>
+      <li><a href="/reading/game-theory/nordstrom-08/">🍞 §3.1 Repeated Games</a> — where mixed strategies pay off</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Expected_value"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Expected value</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Strategy_(game_theory)#Mixed_strategy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mixed strategy</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source: <a href="https://nordstrommath.com/IntroGameTheory/S_Probability.html">Nordstrom §2.3</a>. Licensed CC BY-SA 4.0.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-04/", label: "Dominated Strategies" }} next={{ href: "/reading/game-theory/nordstrom-06/", label: "Equilibrium Points" }} />
+
+  </main>
+</Layout>

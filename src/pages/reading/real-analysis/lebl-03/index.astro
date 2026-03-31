@@ -1,0 +1,241 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.3 — Series" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Series</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 3</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>series</strong> converges if its sequence of partial sums converges. Absolute convergence implies convergence, but not vice versa. The comparison, ratio, and root tests give practical criteria. Power series converge inside a radius and diverge outside it.</p>
+    </div>
+
+    <!-- SVG: Partial sums approaching a limit -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="160" x2="380" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="160" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="380" y="175" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">n</text>
+        <text x="35" y="30" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">S_n</text>
+        <!-- Limit line -->
+        <line x1="40" y1="50" x2="380" y2="50" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <text x="385" y="54" fill="#f59e0b" font-size="10" fill-opacity="0.6">S</text>
+        <!-- Partial sum points (geometric series sum 1/2^k) -->
+        <!-- S_1=0.5, S_2=0.75, S_3=0.875, ... approaching 1 -->
+        <!-- Mapped: S=1 at y=50, S=0 at y=150 -->
+        <circle cx="70" cy="100" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="110" cy="75" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="150" cy="62" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="190" cy="56" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="230" cy="53" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="270" cy="51.5" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="310" cy="50.7" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="350" cy="50.3" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <!-- Connecting lines -->
+        <polyline points="70,100 110,75 150,62 190,56 230,53 270,51.5 310,50.7 350,50.3" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Caption -->
+        <text x="200" y="148" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Partial sums S_n approach the series sum S.</text>
+      </svg>
+    </div>
+
+    <h3>Convergence of series</h3>
+    <p>The series &Sigma; a_n converges if the partial sums S_n = a_1 + a_2 + ... + a_n converge. The necessary condition: if &Sigma; a_n converges, then a_n &rarr; 0. The converse is false: the harmonic series &Sigma; 1/n diverges even though 1/n &rarr; 0.</p>
+
+    <SchemeRepl client:load initialCode={`; Geometric series: sum of 1/2^k = 1
+(define (geometric-partial n)
+  (let loop ((k 1) (s 0.0))
+    (if (> k n) s
+      (loop (+ k 1) (+ s (/ 1.0 (expt 2 k)))))))
+
+(display "Geometric series sum 1/2^k:") (newline)
+(for-each (lambda (n)
+  (display "  S_") (display n) (display " = ")
+  (display (geometric-partial n)) (newline))
+  (list 1 5 10 20 30))
+
+; Harmonic series diverges: sum 1/k -> infinity
+(define (harmonic-partial n)
+  (let loop ((k 1) (s 0.0))
+    (if (> k n) s
+      (loop (+ k 1) (+ s (/ 1.0 k))))))
+
+(display "Harmonic series (diverges):") (newline)
+(for-each (lambda (n)
+  (display "  S_") (display n) (display " = ")
+  (display (harmonic-partial n)) (newline))
+  (list 10 100 1000 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Geometric vs harmonic series
+geo = sum(1/2**k for k in range(1, 31))
+harm = sum(1/k for k in range(1, 10001))
+
+print(f"Geometric (30 terms): {geo:.10f} (converges to 1)")
+print(f"Harmonic (10000 terms): {harm:.4f} (diverges)")
+`} />
+    </div>
+
+    <h3>Comparison, ratio, and root tests</h3>
+    <p>The <strong>comparison test</strong>: if 0 &le; a_n &le; b_n and &Sigma; b_n converges, so does &Sigma; a_n. The <strong>ratio test</strong>: if |a_(n+1)/a_n| &rarr; L, the series converges absolutely when L &lt; 1 and diverges when L &gt; 1. The <strong>root test</strong>: if |a_n|^(1/n) &rarr; L, same conclusion.</p>
+
+    <SchemeRepl client:load initialCode={`; Ratio test: sum n!/n^n
+; a_{n+1}/a_n = (n/(n+1))^n -> 1/e < 1, so it converges
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (ratio n)
+  (/ (/ (factorial (+ n 1)) (expt (+ n 1) (+ n 1)))
+     (/ (factorial n) (expt n n))))
+
+(display "Ratio test for n!/n^n:") (newline)
+(for-each (lambda (n)
+  (display "  a_(n+1)/a_n at n=")
+  (display n)
+  (display ": ")
+  (display (exact->inexact (ratio n)))
+  (newline))
+  (list 2 5 10 20))
+
+(display "  Limit = 1/e = ")
+(display (/ 1.0 (exp 1)))
+(display " < 1: converges")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def ratio(n):
+    return (math.factorial(n+1) / (n+1)**(n+1)) / (math.factorial(n) / n**n)
+
+print("Ratio test for n!/n^n:")
+for n in [2, 5, 10, 20]:
+    print("  a_(n+1)/a_n at n=" + str(n) + ":", ratio(n))
+
+print("  Limit = 1/e =", 1/math.e, "< 1: converges")
+`} />
+    </div>
+
+    <h3>Absolute vs conditional convergence</h3>
+    <p><strong>Absolute convergence</strong> (&Sigma; |a_n| converges) implies convergence. <strong>Conditional convergence</strong> means &Sigma; a_n converges but &Sigma; |a_n| diverges. The alternating harmonic series &Sigma; (-1)^(n+1)/n converges conditionally to ln(2). <a href="https://en.wikipedia.org/wiki/Riemann_series_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Riemann's rearrangement theorem</a>: a conditionally convergent series can be rearranged to sum to any value.</p>
+
+    <SchemeRepl client:load initialCode={`; Alternating harmonic series: conditionally convergent
+; sum (-1)^(n+1) / n = ln(2)
+
+(define (alt-harmonic-partial n)
+  (let loop ((k 1) (s 0.0))
+    (if (> k n) s
+      (loop (+ k 1)
+            (+ s (/ (if (odd? k) 1.0 -1.0) k))))))
+
+(display "Alternating harmonic (converges to ln 2):") (newline)
+(for-each (lambda (n)
+  (display "  S_") (display n) (display " = ")
+  (display (alt-harmonic-partial n)) (newline))
+  (list 10 100 1000 10000))
+
+(display "  ln(2) = ")
+(display (log 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def alt_harmonic(n):
+    return sum((1 if k % 2 == 1 else -1) / k for k in range(1, n + 1))
+
+print("Alternating harmonic (converges to ln 2):")
+for n in [10, 100, 1000, 10000]:
+    print("  S_" + str(n) + " =", alt_harmonic(n))
+
+print("  ln(2) =", math.log(2))
+`} />
+    </div>
+
+    <h3>Power series</h3>
+    <p>A <strong>power series</strong> &Sigma; c_n x^n has a <strong>radius of convergence</strong> R: it converges absolutely for |x| &lt; R and diverges for |x| &gt; R. Inside the radius, power series can be differentiated and integrated term by term.</p>
+
+    <SchemeRepl client:load initialCode={`; Power series for e^x = sum x^n/n!
+; Radius of convergence: R = infinity
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (exp-series x terms)
+  (let loop ((n 0) (s 0.0))
+    (if (> n terms) s
+      (loop (+ n 1) (+ s (/ (expt x n) (factorial n)))))))
+
+(display "e^x via power series:") (newline)
+(for-each (lambda (x)
+  (display "  e^") (display x) (display " = ")
+  (display (exp-series x 20))
+  (display " (exact: ") (display (exp x)) (display ")")
+  (newline))
+  (list 1 2 -1 0.5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def taylor_exp(x, n):
+    return sum(x**k / math.factorial(k) for k in range(n + 1))
+
+print("e^x via power series:")
+for x in [1, 2, -1, 0.5]:
+    approx = taylor_exp(x, 20)
+    exact = math.exp(x)
+    print("  e^" + str(x) + " = " + str(approx) + " (exact: " + str(exact) + ")")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&Sigma; a_n</td><td class="pr-4 text-green-300">(partial-sum n)</td><td class="font-sans">Series: limit of partial sums</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|a_(n+1)/a_n| &rarr; L</td><td class="pr-4 text-green-300">(ratio n)</td><td class="font-sans">Ratio test</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">R (radius)</td><td class="pr-4 text-green-300">1/lim|c_n|^(1/n)</td><td class="font-sans">Radius of convergence</td></tr>
+          <tr><td class="py-2 pr-4">&Sigma; |a_n|</td><td class="pr-4 text-green-300">absolute conv.</td><td class="font-sans">Absolute convergence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-02/">Ch. 2: Sequences</a> — series convergence reduces to sequence convergence</li>
+      <li><a href="/reading/real-analysis/lebl-07/">Ch. 7: Sequences of Functions</a> — power series are sequences of functions</li>
+      <li><a href="/reading/calculus/calc-08/">📐 Calculus Ch.8</a> — integration techniques include series-based methods like Taylor expansion</li>
+      <li><a href="/reading/information-theory/shannon-02/">📡 Information Theory Ch.2</a> — entropy as an infinite series: log sums that converge only under certain conditions</li>
+      <li><a href="/reading/probability/grinstead-10/">🎰 Probability Ch.10</a> — generating functions are formal power series encoding sequences</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The harmonic series diverges slowly: 10,000 terms only reaches about 9.8. Our numerical partial sums illustrate convergence speed but cannot prove convergence or divergence. The comparison test is a proof technique, not a computation.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-02/", label: "Sequences" }} next={{ href: "/reading/real-analysis/lebl-04/", label: "Continuous Functions" }} />
+
+  </main>
+</Layout>

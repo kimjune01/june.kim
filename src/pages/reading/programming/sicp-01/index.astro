@@ -1,0 +1,293 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.1 — Expressions" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Expressions</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-10.html#%_sec_1.1">SICP &sect;1.1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Programs are <strong>expressions</strong>. Evaluation = substitution. The environment maps names to values. Every compound expression is a tree of operator and operands, evaluated inside-out.</p>
+    </div>
+
+
+    <!-- SVG: Expression tree for (+ (* 3 5) (- 10 6)) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Root: + -->
+        <circle cx="160" cy="30" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="160" y="35" text-anchor="middle" fill="#60a5fa" font-size="14">+</text>
+        <!-- Left child: * -->
+        <line x1="148" y1="44" x2="90" y2="76" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="80" cy="85" r="16" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="90" text-anchor="middle" fill="#f59e0b" font-size="14">*</text>
+        <!-- Right child: - -->
+        <line x1="172" y1="44" x2="230" y2="76" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="240" cy="85" r="16" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="240" y="90" text-anchor="middle" fill="#f59e0b" font-size="14">-</text>
+        <!-- Leaves of * -->
+        <line x1="68" y1="99" x2="45" y2="126" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="40" y="145" text-anchor="middle" fill="#34d399" font-size="13">3</text>
+        <line x1="92" y1="99" x2="115" y2="126" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="120" y="145" text-anchor="middle" fill="#34d399" font-size="13">5</text>
+        <!-- Leaves of - -->
+        <line x1="228" y1="99" x2="205" y2="126" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="145" text-anchor="middle" fill="#34d399" font-size="13">10</text>
+        <line x1="252" y1="99" x2="275" y2="126" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="280" y="145" text-anchor="middle" fill="#34d399" font-size="13">6</text>
+        <!-- Caption -->
+        <text x="160" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">(+ (* 3 5) (- 10 6)) = 19 &#x2014; evaluated inside-out</text>
+      </svg>
+    </div>
+
+    <!-- 1. Primitive expressions -->
+    <h3>Primitive expressions</h3>
+    <p>The simplest expressions are <strong>self-evaluating</strong>: numbers evaluate to themselves, strings evaluate to themselves. The interpreter reads, evaluates, and prints. That loop is the whole interface.</p>
+
+    <SchemeRepl client:load initialCode={`; Primitive expressions — they evaluate to themselves.
+
+486
+; => 486
+
+"hello"
+; => "hello"
+
+; Primitive procedures are built in:
+(+ 137 349)
+; => 486
+
+(- 1000 334)
+; => 666
+
+(* 5 99)
+; => 495
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Primitive expressions in Python
+print(486)          # 486
+print("hello")      # hello
+print(137 + 349)    # 486
+print(1000 - 334)   # 666
+print(5 * 99)       # 495
+`} />
+    </div>
+
+
+    <!-- 2. Combinations -->
+    <h3>Combinations &mdash; prefix notation</h3>
+    <p>A <strong>combination</strong> is a list where the first element is the operator and the rest are operands. Parentheses make the structure explicit. There is no precedence to memorize &mdash; nesting is the only grouping mechanism.</p>
+
+    <SchemeRepl client:load initialCode={`; Combinations: (operator operand1 operand2 ...)
+; No precedence rules — nesting is explicit.
+
+(+ 21 35 12 7)
+; => 75
+
+(* 25 4 12)
+; => 1200
+
+; Nesting: the tree structure is visible
+(+ (* 3 5) (- 10 6))
+; => 19
+
+; Deeper nesting
+(+ (* 3 (+ (* 2 4) (+ 3 5))) (+ (- 10 7) 6))
+; => 57
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Combinations — Python uses infix, so precedence matters
+print(21 + 35 + 12 + 7)        # 75
+print(25 * 4 * 12)              # 1200
+print(3 * 5 + (10 - 6))         # 19
+print(3 * (2 * 4 + (3 + 5)) + ((10 - 7) + 6))  # 57
+`} />
+    </div>
+
+
+    <!-- 3. Naming with define -->
+    <h3>Naming &mdash; define</h3>
+    <p><code>define</code> binds a name to a value in the environment. Once bound, the name can stand in for the value anywhere. This is the simplest form of abstraction: giving things names so we don't have to remember their values.</p>
+
+    <SchemeRepl client:load initialCode={`; Naming: define associates a name with a value.
+
+(define size 2)
+
+(display "size = ")
+(display size) (newline)
+; => 2
+
+(display "5 * size = ")
+(display (* 5 size)) (newline)
+; => 10
+
+(define pi 3.14159)
+(define radius 10)
+(define circumference (* 2 pi radius))
+
+(display "circumference = ")
+(display circumference)
+; => 62.8318
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Naming in Python
+size = 2
+print(f"size = {size}")         # 2
+print(f"5 * size = {5 * size}") # 10
+
+import math
+pi = math.pi
+radius = 10
+circumference = 2 * pi * radius
+print(f"circumference = {circumference:.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Conditional expressions -->
+    <h3>Conditional expressions &mdash; cond and if</h3>
+    <p><code>cond</code> tests clauses in order and returns the value of the first true one. <code>if</code> is the two-branch special case. Both are <strong>special forms</strong>: they don't evaluate all their arguments.</p>
+
+    <SchemeRepl client:load initialCode={`; Conditional expressions
+
+(define (abs x)
+  (cond ((> x 0) x)
+        ((= x 0) 0)
+        ((< x 0) (- x))))
+
+(display "abs(-5) = ") (display (abs -5)) (newline)
+(display "abs(0)  = ") (display (abs 0)) (newline)
+(display "abs(3)  = ") (display (abs 3)) (newline)
+
+; Shorter with if:
+(define (abs2 x)
+  (if (< x 0) (- x) x))
+
+(display "abs2(-7) = ") (display (abs2 -7))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Conditional expressions in Python
+def abs_val(x):
+    if x > 0:
+        return x
+    elif x == 0:
+        return 0
+    else:
+        return -x
+
+print(f"abs(-5) = {abs_val(-5)}")
+print(f"abs(0)  = {abs_val(0)}")
+print(f"abs(3)  = {abs_val(3)}")
+
+# Shorter with ternary:
+abs2 = lambda x: -x if x < 0 else x
+print(f"abs2(-7) = {abs2(-7)}")
+`} />
+    </div>
+
+
+    <!-- 5. The substitution model -->
+    <h3>The substitution model</h3>
+    <p>To evaluate a combination: evaluate the subexpressions, then apply the operator to the operand values. For compound procedures, substitute the argument values for the formal parameters in the body. This is the <strong>substitution model</strong> &mdash; simple, mechanical, and sufficient until we introduce assignment in Chapter 3.</p>
+
+    <SchemeRepl client:load initialCode={`; The substitution model in action.
+; Define a procedure, then trace its evaluation.
+
+(define (square x) (* x x))
+(define (sum-of-squares x y)
+  (+ (square x) (square y)))
+(define (f a)
+  (sum-of-squares (+ a 1) (* a 2)))
+
+; Evaluate (f 5):
+; -> (sum-of-squares (+ 5 1) (* 5 2))
+; -> (sum-of-squares 6 10)
+; -> (+ (square 6) (square 10))
+; -> (+ (* 6 6) (* 10 10))
+; -> (+ 36 100)
+; -> 136
+
+(display "(f 5) = ")
+(display (f 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Substitution model in Python
+def square(x):
+    return x * x
+
+def sum_of_squares(x, y):
+    return square(x) + square(y)
+
+def f(a):
+    return sum_of_squares(a + 1, a * 2)
+
+# f(5) -> sum_of_squares(6, 10) -> square(6) + square(10)
+#       -> 36 + 100 -> 136
+print(f"f(5) = {f(5)}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(+ 1 2)</td><td class="pr-4 text-blue-300">1 + 2</td><td class="font-sans">Combination (prefix vs infix)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(define x 5)</td><td class="pr-4 text-blue-300">x = 5</td><td class="font-sans">Bind name to value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(define (f x) body)</td><td class="pr-4 text-blue-300">def f(x): body</td><td class="font-sans">Define a procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cond (p1 e1) (p2 e2))</td><td class="pr-4 text-blue-300">if p1: e1; elif p2: e2</td><td class="font-sans">Conditional</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(if test then else)</td><td class="pr-4 text-blue-300">then if test else else</td><td class="font-sans">Two-branch conditional</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-01/">Milewski Ch.1</a> &mdash; composition as the essence of structure</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Lambda_calculus"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lambda calculus</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/S-expression"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>S-expression</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Read-eval-print loop</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Scheme uses prefix notation uniformly; Python uses infix for arithmetic and keyword syntax for definitions and conditionals. The substitution model described here is applicative-order (evaluate arguments first). Python also uses applicative order. Normal-order (evaluate arguments only when needed) appears in Chapter 15 (Lazy Evaluation). The <code>cond</code> special form has no direct Python equivalent &mdash; the closest is an if/elif chain.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-10.html#%_sec_1.1">Read SICP &sect;1.1</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/programming/sicp-02/", label: "Recursion & Iteration · 2 of 22" }} />
+
+  </main>
+</Layout>

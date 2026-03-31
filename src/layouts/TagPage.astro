@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import '../styles/blog.css';
+
+interface Props {
+  tag: string;
+  title: string;
+}
+
+const { tag, title } = Astro.props;
+
+const posts = await getCollection('blog');
+const filtered = posts
+  .filter(post => {
+    const tags = post.data.tags;
+    if (!tags) return false;
+    const arr = typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : tags;
+    return arr.includes(tag);
+  })
+  .sort((a, b) => {
+    const dateA = a.id.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] || '';
+    const dateB = b.id.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] || '';
+    return dateB.localeCompare(dateA);
+  });
+
+function formatDate(id: string) {
+  const match = id.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return '';
+  const d = new Date(`${match[1]}-${match[2]}-${match[3]}T00:00:00`);
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+}
+
+function slugFromId(id: string) {
+  return id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title} | june.kim</title>
+  <link rel="icon" href="/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//code.cdn.mozilla.net/fonts/fira.css">
+  <link rel="alternate" type="application/rss+xml" href="https://june.kim/feed.xml">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body>
+  <aside class="logo">
+    <a href="/">
+      <img src="/images/gravatar.png" width="80" height="80" class="gravatar">
+    </a>
+    <span class="logo-prompt">Home</span>
+  </aside>
+
+  <main class="fade-shift">
+    <section>
+      <h1>{title}</h1>
+
+      <slot />
+
+      <ul>
+        {filtered.map(post => (
+          <li>
+            <div class="post-date">
+              <span>{formatDate(post.id)}</span>
+            </div>
+            <div class="title">
+              <a href={`/${slugFromId(post.id)}`}>{post.data.title}</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <footer class="edit-footer">
+    <span class="license">
+      <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+    </span>
+  </footer>
+</body>
+</html>

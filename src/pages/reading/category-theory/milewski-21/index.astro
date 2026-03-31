@@ -1,0 +1,511 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.21 — Kan Extensions" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Kan Extensions</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski &middot; 2017 &middot; <a href="https://bartoszmilewski.com/2017/04/17/kan-extensions/">Category Theory for Programmers, Ch. 21</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-16/">&#x1F35E; Ch16 (Adjunctions)</a>, Ch20 (Ends and Coends). 12 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">"All concepts are Kan extensions" (<a href="https://en.wikipedia.org/wiki/Saunders_Mac_Lane"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mac Lane</a>). Given functors K : I &rarr; A and D : I &rarr; C, the <strong>right Kan extension</strong> Ran<sub>K</sub>D : A &rarr; C is the best approximation of D along K. It answers: how do you extend a functor defined on a subcategory to the whole category? Limits, colimits, and adjunctions are all special cases.</p>
+    </div>
+
+    <!-- 1. The problem: extending a functor -->
+    <h3>The problem: extending a functor</h3>
+    <p>You have a functor D : I &rarr; C that maps a small category I into C. You also have a functor K : I &rarr; A that embeds I into a larger category A. You want to extend D to all of A, not just the image of K. The <a href="https://en.wikipedia.org/wiki/Kan_extension"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kan extension</a> is the universal solution: the best functor A &rarr; C that approximates D, given K.</p>
+
+    <SchemeRepl client:load initialCode={`; Setup: I is a small subcategory, A is the full category.
+; K embeds I into A.  D maps I into values (our target).
+; Goal: extend D to all of A, not just where K lands.
+;
+; Concrete example:
+; I = {mon, tue}    (two days we have data for)
+; A = {mon, tue, wed, thu, fri}  (full work week)
+; K embeds mon->mon, tue->tue
+; D maps mon->10, tue->20  (sales on those days)
+;
+; Right Kan extension: conservative estimate for wed, thu, fri.
+; Left Kan extension: liberal estimate.
+
+(define I '(mon tue))
+(define A '(mon tue wed thu fri))
+
+; D: the functor we know (defined on I)
+(define (D day)
+  (cond ((eq? day 'mon) 10)
+        ((eq? day 'tue) 20)
+        (else (begin (display "ERROR: D is only defined on I") (newline)))))
+
+; K: the embedding I -> A (identity on the subcategory)
+(define (K day) day)
+
+(display "D(mon) = ") (display (D 'mon)) (newline)
+(display "D(tue) = ") (display (D 'tue)) (newline)
+(display "D is not defined on wed, thu, fri.") (newline)
+(display "Kan extensions fill in those gaps.")
+`} />
+
+    <!-- 2. Right Kan extension -->
+    <h3>Right Kan extension: the conservative approximation</h3>
+    <p>The <strong>right Kan extension</strong> Ran<sub>K</sub>D comes with a natural transformation &epsilon; : Ran<sub>K</sub>D &#8728; K &rarr; D. It is universal: for any other functor F with &epsilon;' : F &#8728; K &rarr; D, there is a unique &sigma; : F &rarr; Ran<sub>K</sub>D such that &epsilon;' factors through &epsilon;. In Set, it is computed as an end: Ran<sub>K</sub>D(a) = &int;<sub>i</sub> Set(A(a, Ki), Di). Read this as: "for each object a in A, consider all morphisms from a into the image of K, and use them to probe D."</p>
+
+    <!-- SVG: Right Kan extension triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Category labels -->
+        <rect x="135" y="8" width="30" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="25" text-anchor="middle" fill="currentColor" font-size="14">A</text>
+
+        <rect x="285" y="188" width="30" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="205" text-anchor="middle" fill="currentColor" font-size="14">C</text>
+
+        <rect x="15" y="188" width="24" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="27" y="205" text-anchor="middle" fill="currentColor" font-size="14">I</text>
+
+        <!-- K: I -> A (bottom-left to top) -->
+        <line x1="39" y1="192" x2="138" y2="32" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="135,36 142,28 139,39" fill="currentColor"/>
+        <text x="72" y="100" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">K</text>
+
+        <!-- D: I -> C (bottom-left to bottom-right) -->
+        <line x1="42" y1="200" x2="282" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="282,196 290,200 282,204" fill="currentColor"/>
+        <text x="160" y="218" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">D</text>
+
+        <!-- Ran_K D: A -> C (top to bottom-right, dashed) -->
+        <line x1="165" y1="28" x2="286" y2="188" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <polygon points="282,184 290,192 280,190" fill="currentColor"/>
+        <text x="255" y="100" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Ran&#x2096;D</text>
+
+        <!-- epsilon: 2-cell label -->
+        <text x="175" y="158" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">&#x21D0; &#x03B5;</text>
+        <text x="175" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">Ran&#x2096;D &#x2218; K &#x2192; D</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Right Kan extension via the end formula (for Set-valued functors):
+;   Ran_K D (a) = ∫_i Set(A(a, K i), D i)
+;
+; In finite sets, the end is a product over all i in I
+; of the function space A(a, Ki) -> D(i).
+;
+; For our example with discrete I (no non-identity morphisms),
+; Ran_K D (a) = ∏_i (A(a, Ki) -> D(i))
+;
+; When a = mon, A(mon, K(mon)) = {id}, A(mon, K(tue)) = {}
+; So Ran_K D (mon) is determined by D(mon) = 10.
+; When a = wed, A(wed, K(i)) = {} for all i in I,
+; so the product over empty hom-sets gives the terminal object.
+
+; Model: A has edges mon->tue, tue->wed, wed->thu, thu->fri
+(define (hom-A a b)
+  (define order '((mon . 0) (tue . 1) (wed . 2) (thu . 3) (fri . 4)))
+  (let ((ia (cdr (assq a order)))
+        (ib (cdr (assq b order))))
+    (if (<= ia ib) (list (list a '-> b)) '())))
+
+; Right Kan: for each a, take the min of D(i) over all i
+; reachable from a. Min = conservative (tightest constraint).
+; If no i is reachable, return +inf (terminal = no constraint).
+(define (ran-K-D a)
+  (let ((vals (filter number?
+          (map (lambda (i)
+                 (if (pair? (hom-A a (K i))) (D i) #f))
+               I))))
+    (if (null? vals) '+inf (apply min vals))))
+
+(display "Ran_K D:") (newline)
+(for-each (lambda (a)
+  (display "  ") (display a) (display " -> ")
+  (display (ran-K-D a)) (newline))
+  A)
+; mon->10, tue->20 (recovers D), wed/thu/fri->+inf (no constraint)
+`} />
+
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Right Kan extension: conservative estimate
+I = ["mon", "tue"]
+A = ["mon", "tue", "wed", "thu", "fri"]
+order = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4}
+D = {"mon": 10, "tue": 20}
+
+def hom_A(a, b):
+    """Morphisms from a to b in the total order"""
+    return [(a, "->", b)] if order[a] <= order[b] else []
+
+def ran_K_D(a):
+    """Right Kan extension: min over reachable D-values"""
+    vals = [D[i] for i in I if hom_A(a, i)]
+    return min(vals) if vals else float("inf")
+
+for a in A:
+    print(f"  Ran_K D({a}) = {ran_K_D(a)}")
+`} />
+    </div>
+
+    <!-- 3. Left Kan extension -->
+    <h3>Left Kan extension: the liberal approximation</h3>
+    <p>The <strong>left Kan extension</strong> Lan<sub>K</sub>D is the dual. It comes with a unit &eta; : D &rarr; Lan<sub>K</sub>D &#8728; K, and is universal from the other side. In Set, it is computed as a coend: Lan<sub>K</sub>D(a) = &int;<sup>i</sup> A(Ki, a) &times; D(i). Where the right extension takes the tightest constraint (end = limit = universal quantifier), the left extension takes the freest construction (coend = colimit = existential quantifier).</p>
+
+    <!-- SVG: Left Kan extension triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Category labels -->
+        <rect x="135" y="8" width="30" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="25" text-anchor="middle" fill="currentColor" font-size="14">A</text>
+
+        <rect x="285" y="188" width="30" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="205" text-anchor="middle" fill="currentColor" font-size="14">C</text>
+
+        <rect x="15" y="188" width="24" height="24" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="27" y="205" text-anchor="middle" fill="currentColor" font-size="14">I</text>
+
+        <!-- K: I -> A (bottom-left to top) -->
+        <line x1="39" y1="192" x2="138" y2="32" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="135,36 142,28 139,39" fill="currentColor"/>
+        <text x="72" y="100" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">K</text>
+
+        <!-- D: I -> C (bottom-left to bottom-right) -->
+        <line x1="42" y1="200" x2="282" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="282,196 290,200 282,204" fill="currentColor"/>
+        <text x="160" y="218" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">D</text>
+
+        <!-- Lan_K D: A -> C (top to bottom-right, dashed) -->
+        <line x1="165" y1="28" x2="286" y2="188" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <polygon points="282,184 290,192 280,190" fill="currentColor"/>
+        <text x="255" y="100" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Lan&#x2096;D</text>
+
+        <!-- eta: 2-cell label (arrow direction reversed from epsilon) -->
+        <text x="175" y="158" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">&#x21D2; &#x03B7;</text>
+        <text x="175" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">D &#x2192; Lan&#x2096;D &#x2218; K</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Left Kan extension via the coend formula:
+;   Lan_K D (a) = ∫^i A(K i, a) × D(i)
+;
+; In finite sets with a discrete I, this is a coproduct:
+;   Lan_K D (a) = ∐_i A(K(i), a) × D(i)
+;
+; When a = fri, A(K(mon), fri) and A(K(tue), fri) are nonempty,
+; so both D(mon) and D(tue) contribute.
+; Left Kan = liberal: take the max (loosest bound).
+
+(define (lan-K-D a)
+  (let ((vals (filter number?
+          (map (lambda (i)
+                 (if (pair? (hom-A (K i) a)) (D i) #f))
+               I))))
+    (if (null? vals) '-inf (apply max vals))))
+
+(display "Lan_K D:") (newline)
+(for-each (lambda (a)
+  (display "  ") (display a) (display " -> ")
+  (display (lan-K-D a)) (newline))
+  A)
+; mon->10, tue->20 (recovers D on I)
+; wed->20, thu->20, fri->20 (liberal: max of reachable values)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Left Kan extension: liberal estimate
+def lan_K_D(a):
+    """Left Kan extension: max over D-values that reach a"""
+    vals = [D[i] for i in I if hom_A(i, a)]
+    return max(vals) if vals else float("-inf")
+
+for a in A:
+    print(f"  Lan_K D({a}) = {lan_K_D(a)}")
+# Liberal: extends D by taking the largest contributing value.
+`} />
+    </div>
+
+
+    <!-- 4. Haskell types -->
+    <h3>Kan extensions as Haskell types</h3>
+    <p>In Haskell, the right Kan extension is an end (universal quantification over a type variable), and the left Kan extension is a coend (existential quantification). These match the end/coend formulas exactly.</p>
+
+    <SchemeRepl client:load initialCode={`; Haskell:
+;   newtype Ran k d a = Ran (forall i. (a -> k i) -> d i)
+;   data    Lan k d a = forall i. Lan (k i -> a) (d i)
+;
+; Ran: given ANY way to go from a to k(i), produce d(i).
+;      "forall" = end = universal quantifier.
+;
+; Lan: there EXISTS some i, a way to go from k(i) to a,
+;      and a value in d(i).
+;      "exists" = coend = existential quantifier.
+;
+; Scheme encoding (no types, so we use closures):
+
+; Right Kan: a function that, given a->k(i), returns d(i)
+(define (make-ran k d)
+  (lambda (a)
+    (lambda (a->ki)
+      ; For each i, if a->ki maps a into k(i), return d(i)
+      ; This is the "best" approximation: works for ALL probes
+      (d (a->ki a)))))
+
+; Left Kan: a pair of (k(i)->a, d(i)) for some i
+(define (make-lan k d i)
+  (lambda (a)
+    (list 'lan (lambda (ki) a) (d i))))
+
+; Example: k = list, d = length
+; Ran: "forall i. (a -> [i]) -> Int"
+; If you give me any way to turn a into a list, I give you the length.
+(define (ran-example a->list)
+  (length (a->list 'anything)))
+
+(display "Ran with (lambda (x) '(1 2 3)): ")
+(display (ran-example (lambda (x) '(1 2 3)))) (newline)
+(display "Ran with (lambda (x) '(a b)): ")
+(display (ran-example (lambda (x) '(a b))))
+`} />
+
+
+    <!-- 5. Limits as Kan extensions -->
+    <h3>Limits as Kan extensions</h3>
+    <p>A <strong>limit</strong> of D : I &rarr; C is the right Kan extension of D along the unique functor K : I &rarr; <strong>1</strong> (the terminal category with one object). The Kan extension Ran<sub>K</sub>D maps the single object of <strong>1</strong> to the limit of D. The universal property of the Kan extension becomes the universal property of the limit cone.</p>
+
+    <SchemeRepl client:load initialCode={`; Limit = Right Kan extension along K : I -> 1
+;
+; K collapses everything to a single object *.
+; Ran_K D (*) = ∫_i Set(1(*, K i), D i)
+;             = ∫_i Set(1(*, *), D i)    (K i = * for all i)
+;             = ∫_i D i
+;             = limit of D
+;
+; Example: D maps three objects to sets of numbers.
+; The limit (= product, since I is discrete) is all tuples.
+
+(define (D-values i)
+  (cond ((eq? i 'a) '(1 2))
+        ((eq? i 'b) '(3 4))
+        ((eq? i 'c) '(5))))
+
+; K : I -> 1 (collapses everything to '*)
+(define (K-to-1 i) '*)
+
+; Limit of D over discrete I = product of all D(i)
+(define (cartesian-product lists)
+  (if (null? lists) '(())
+      (let ((rest (cartesian-product (cdr lists))))
+        (apply append
+          (map (lambda (x)
+            (map (lambda (r) (cons x r)) rest))
+            (car lists))))))
+
+(define I-objs '(a b c))
+(define lim (cartesian-product (map D-values I-objs)))
+
+(display "D(a)={1,2}, D(b)={3,4}, D(c)={5}") (newline)
+(display "Limit (product): ") (display lim) (newline)
+(display "  = Ran_K D (*) where K : I -> 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Limit = Right Kan extension along K : I -> 1
+from itertools import product
+
+D_vals = {"a": [1, 2], "b": [3, 4], "c": [5]}
+lim = list(product(*D_vals.values()))
+
+print(f"D(a)={{1,2}}, D(b)={{3,4}}, D(c)={{5}}")
+print(f"Limit (product): {lim}")
+print("  = Ran_K D(*) where K : I -> 1")
+`} />
+    </div>
+
+
+    <!-- 6. Adjunctions as Kan extensions -->
+    <h3>Adjunctions as Kan extensions</h3>
+    <p>If L &#8866; R is an adjunction, then L = Lan<sub>R</sub>Id and R = Ran<sub>L</sub>Id. The left adjoint is the left Kan extension of the identity along the right adjoint, and vice versa. This is Mac Lane's punchline: adjunctions, limits, colimits, ends, coends are all Kan extensions.</p>
+
+    <SchemeRepl client:load initialCode={`; Adjunctions as Kan extensions:
+;   L = Lan_R Id    (left adjoint = left Kan of Id along R)
+;   R = Ran_L Id    (right adjoint = right Kan of Id along L)
+;
+; Recall: L ⊣ R means Hom(L a, b) ≅ Hom(a, R b)
+;
+; Lan_R Id (b) = ∫^a A(R a, b) × a     (coend formula)
+;              = ∫^a C(R a, b) × a
+;
+; By Yoneda, this equals L(b) when the adjunction exists.
+;
+; Verify with product ⊣ exponential:
+;   L(a) = (a, s)   R(b) = s -> b
+
+(define s 10)  ; fixed state type (a number)
+
+(define (L a) (cons a s))        ; pair with s
+(define (R b) (lambda (st) b))   ; constant function (simplified)
+
+; Lan_R Id should recover L:
+; "The freest way to approximate Id using R"
+; Since R(b) = s->b, and we want Lan_R Id (a),
+; we need: ∃b. Hom(R(b), a) × b = ∃b. Hom(s->b, a) × b
+; The canonical choice: b = a, the map is "evaluate at s"
+
+(define (lan-R-id a)
+  ; Exists b=a, with map (s->b) -> a given by (f -> f(s))
+  ; The value is (a, s) — exactly L(a)
+  (cons a s))
+
+(display "L(42) = ") (display (L 42)) (newline)
+(display "Lan_R Id (42) = ") (display (lan-R-id 42)) (newline)
+(display "They agree: the left adjoint IS the left Kan extension.")
+`} />
+
+
+    <!-- 7. The free functor as a left Kan extension -->
+    <h3>The free functor as a left Kan extension</h3>
+    <p>Given a type constructor <code>f</code> (not necessarily a functor), its <strong>free functor</strong> is the left Kan extension of <code>f</code> along the identity. In Haskell: <code>data FreeF f a = forall i. FMap (i &rarr; a) (f i)</code>. This freely adds <code>fmap</code> to any type constructor. The existential packages up a value of type <code>f i</code> together with a function <code>i &rarr; a</code>, and <code>fmap</code> just composes with that function.</p>
+
+    <SchemeRepl client:load initialCode={`; Free functor = Lan_Id f
+; data FreeF f a = forall i. FMap (i -> a) (f i)
+;
+; fmap g (FMap h fi) = FMap (g . h) fi
+;
+; This gives fmap to any type constructor for free.
+
+; A "type constructor" that isn't a functor:
+; It holds a value but provides no map.
+(define (box-new x) (list 'box x))
+(define (box-val b) (cadr b))
+
+; Free functor wrapping: store a function and a box
+(define (free-f func bx) (list 'free func bx))
+(define (free-func ff) (cadr ff))
+(define (free-box ff) (caddr ff))
+
+; Wrap a box into the free functor (func = identity)
+(define (free-lift bx)
+  (free-f (lambda (x) x) bx))
+
+; fmap for the free functor: just compose
+(define (free-fmap g ff)
+  (free-f (lambda (x) (g ((free-func ff) x)))
+          (free-box ff)))
+
+; Extract the final value
+(define (free-run ff)
+  ((free-func ff) (box-val (free-box ff))))
+
+; Demo: box has no fmap, but FreeF does
+(define b (box-new 5))
+(define fb (free-lift b))
+(define mapped (free-fmap (lambda (x) (* x 3)) fb))
+(define mapped2 (free-fmap (lambda (x) (+ x 1)) mapped))
+
+(display "original box: ") (display (box-val b)) (newline)
+(display "after fmap (*3): ") (display (free-run mapped)) (newline)
+(display "after fmap (+1) again: ") (display (free-run mapped2))
+; fmap composes the functions; the box is never touched.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Free functor: gives fmap to any type constructor
+class Box:
+    """A container with no map method."""
+    def __init__(self, val): self.val = val
+
+class FreeF:
+    """Left Kan extension: adds fmap to any container."""
+    def __init__(self, func, box):
+        self.func = func
+        self.box = box
+
+    @staticmethod
+    def lift(box):
+        return FreeF(lambda x: x, box)
+
+    def fmap(self, g):
+        f = self.func
+        return FreeF(lambda x: g(f(x)), self.box)
+
+    def run(self):
+        return self.func(self.box.val)
+
+b = Box(5)
+fb = FreeF.lift(b)
+mapped = fb.fmap(lambda x: x * 3)
+mapped2 = mapped.fmap(lambda x: x + 1)
+
+print(f"original: {b.val}")
+print(f"after fmap (*3): {mapped.run()}")
+print(f"after fmap (+1): {mapped2.run()}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Ran<sub>K</sub>D</td><td class="pr-4 text-green-300">(ran-K-D a)</td><td class="font-sans">Right Kan extension of D along K</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Lan<sub>K</sub>D</td><td class="pr-4 text-green-300">(lan-K-D a)</td><td class="font-sans">Left Kan extension of D along K</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;<sub>i</sub> Set(A(a,Ki), Di)</td><td class="pr-4 text-green-300">(apply min ...)</td><td class="font-sans">End formula (right Kan in Set)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;<sup>i</sup> A(Ki,a) &times; Di</td><td class="pr-4 text-green-300">(apply max ...)</td><td class="font-sans">Coend formula (left Kan in Set)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Ran k d a = &forall;i. (a&rarr;k i)&rarr;d i</td><td class="pr-4 text-green-300">(lambda (a->ki) ...)</td><td class="font-sans">Haskell right Kan type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Lan k d a = &exist;i. (k i&rarr;a, d i)</td><td class="pr-4 text-green-300">(list 'lan f val)</td><td class="font-sans">Haskell left Kan type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Lim D = Ran<sub>!</sub>D</td><td class="pr-4 text-green-300">(cartesian-product ...)</td><td class="font-sans">Limit as right Kan along ! : I&rarr;1</td></tr>
+          <tr><td class="py-2 pr-4">FreeF f a = Lan<sub>Id</sub> f a</td><td class="pr-4 text-green-300">(free-f func bx)</td><td class="font-sans">Free functor as left Kan extension</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-16/">&#x1F35E; Chapter 16</a> &mdash; Adjunctions (adjunctions are Kan extensions)</li>
+      <li><a href="/reading/category-theory/milewski-15/">&#x1F35E; Chapter 15</a> &mdash; The Yoneda Lemma (used in the coend derivation)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/leinster-2021/">&#x1F35E; Leinster 2021</a> &mdash; entropy as a functor; Kan extensions appear in change-of-base</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Kan_extension"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1F160; Kan extension</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/End_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1F160; End (category theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Adjoint_functors"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1F160; Adjoint functors</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post works in Haskell where the end formula becomes <code>forall i. (a -> k i) -> d i</code> and the coend formula becomes the existential <code>data Lan k d a = forall i. Lan (k i -> a) (d i)</code>. This page uses a finite poset (the weekday ordering) to make the end/coend computable as min/max. In the real formulas, the end is a limit (equalizer of products) and the coend is a colimit (coequalizer of coproducts). The blog post also derives the <strong>codensity monad</strong> as the right Kan extension of a functor along itself: <code>Ran m m a = forall i. (a -> m i) -> m i</code>, which is the continuation monad when m is an endofunctor. The free functor construction (Lan<sub>Id</sub> f) demonstrates that left Kan extensions freely add structure, while right Kan extensions preserve it conservatively. This asymmetry mirrors the left/right adjoint distinction from Chapter 16.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/04/17/kan-extensions/">Read the blog post</a>. Start with the universal property diagrams, then trace how the end/coend formulas implement them.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-20/", label: "Ends and Coends" }} next={{ href: "/reading/category-theory/milewski-22/", label: "Enriched Categories" }} />
+
+  </main>
+</Layout>

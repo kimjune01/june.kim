@@ -1,0 +1,326 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.1 — Category: The Essence of Composition" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to foundations</a>
+
+    <h1>Category: The Essence of Composition</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2014 · <a href="https://bartoszmilewski.com/2014/11/04/category-the-essence-of-composition/">Category Theory for Programmers, Ch. 1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>category</strong> is objects plus arrows (morphisms) plus composition. Composition is associative. Every object has an identity arrow. That's it. Every compositional structure you'll meet is a special case of this.</p>
+    </div>
+
+    <!-- 1. Composition -->
+    <h3>Composition — the one operation</h3>
+    <p>If there's an arrow from A to B and an arrow from B to C, there must be an arrow from A to C: their <strong>composition</strong>. In Haskell it's the dot operator. In math it's the circle. Here we build it from scratch.</p>
+
+    <!-- SVG: Composition diagram A -> B -> C with composite g.f -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object A -->
+        <circle cx="50" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="50" y="45" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Object B -->
+        <circle cx="180" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="45" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">B</text>
+        <!-- Object C -->
+        <circle cx="310" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="310" y="45" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">C</text>
+        <!-- Arrow f: A -> B -->
+        <line x1="58" y1="60" x2="170" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="170,56 178,60 170,64" fill="currentColor"/>
+        <text x="115" y="53" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">f</text>
+        <!-- Arrow g: B -> C -->
+        <line x1="188" y1="60" x2="300" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="300,56 308,60 300,64" fill="currentColor"/>
+        <text x="245" y="53" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">g</text>
+        <!-- Dashed composite g.f: A -> C (curved below) -->
+        <path d="M 58 68 Q 180 130 300 68" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="298,72 306,66 300,62" fill="currentColor" fill-opacity="0.6"/>
+        <text x="180" y="115" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">g &#x2218; f</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Composition: if f : A -> B and g : B -> C,
+; then (compose g f) : A -> C
+; Note: g comes first — it's applied after f.
+
+(define (compose g f)
+  (lambda (x) (g (f x))))
+
+; Example arrows
+(define (add1 x) (+ x 1))
+(define (double x) (* x 2))
+
+; Compose: first add1, then double
+(define add1-then-double (compose double add1))
+
+(display "add1-then-double(3) = ")
+(display (add1-then-double 3)) (newline)
+; 3 -> 4 -> 8
+
+; Compose the other way
+(define double-then-add1 (compose add1 double))
+
+(display "double-then-add1(3) = ")
+(display (double-then-add1 3))
+; 3 -> 6 -> 7
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Composition in Python
+def compose(g, f):
+    return lambda x: g(f(x))
+
+add1 = lambda x: x + 1
+double = lambda x: x * 2
+
+add1_then_double = compose(double, add1)
+double_then_add1 = compose(add1, double)
+
+print(f"add1_then_double(3) = {add1_then_double(3)}")  # 8
+print(f"double_then_add1(3) = {double_then_add1(3)}")  # 7
+`} />
+    </div>
+
+
+    <!-- 2. Identity -->
+    <h3>Identity — the arrow that does nothing</h3>
+    <p>Every object A has an <strong>identity morphism</strong> id<sub>A</sub> that goes from A back to A. Composing any arrow with identity gives back the same arrow. It's the "do nothing" function, and it's required to exist for every object in the category.</p>
+
+    <!-- SVG: Identity loop on object A -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 200 120" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Object A -->
+        <circle cx="100" cy="80" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="100" y="100" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Curved loop arrow from A back to A -->
+        <path d="M 96 76 C 60 10 140 10 104 76" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="102,78 108,74 104,68" fill="currentColor"/>
+        <!-- Label -->
+        <text x="100" y="35" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">id&#x2090;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Identity morphism: id(x) = x
+; For every arrow f:
+;   compose(f, id) = f
+;   compose(id, f) = f
+
+(define (id x) x)
+
+(define (add1 x) (+ x 1))
+(define (compose g f) (lambda (x) (g (f x))))
+
+; Left identity: compose(add1, id) = add1
+(define left (compose add1 id))
+(display "compose(add1, id)(5) = ")
+(display (left 5)) (newline)
+
+; Right identity: compose(id, add1) = add1
+(define right (compose id add1))
+(display "compose(id, add1)(5) = ")
+(display (right 5)) (newline)
+
+; Both equal add1(5) = 6
+(display "add1(5)              = ")
+(display (add1 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Identity in Python
+identity = lambda x: x
+add1 = lambda x: x + 1
+compose = lambda g, f: lambda x: g(f(x))
+
+# Left identity
+print(f"compose(add1, id)(5) = {compose(add1, identity)(5)}")
+# Right identity
+print(f"compose(id, add1)(5) = {compose(identity, add1)(5)}")
+# Both equal 6
+print(f"add1(5)              = {add1(5)}")
+`} />
+    </div>
+
+
+    <!-- 3. Associativity -->
+    <h3>Associativity — parentheses don't matter</h3>
+    <p>Given three arrows f, g, h that chain together, <strong>h . (g . f) = (h . g) . f</strong>. You can group any way you like. This is what makes long pipelines unambiguous: there's only one way to compose a chain.</p>
+
+    <SchemeRepl client:load initialCode={`; Associativity: h . (g . f) = (h . g) . f
+; Three arrows that chain: A -> B -> C -> D
+
+(define (compose g f) (lambda (x) (g (f x))))
+
+(define (add1 x) (+ x 1))
+(define (double x) (* x 2))
+(define (square x) (* x x))
+
+; Group left: (square . double) . add1
+(define left-grouped
+  (compose (compose square double) add1))
+
+; Group right: square . (double . add1)
+(define right-grouped
+  (compose square (compose double add1)))
+
+(display "((square . double) . add1)(3) = ")
+(display (left-grouped 3)) (newline)
+; 3 -> 4 -> 8 -> 64
+
+(display "(square . (double . add1))(3) = ")
+(display (right-grouped 3)) (newline)
+; 3 -> 4 -> 8 -> 64
+
+(display "Equal? ")
+(display (= (left-grouped 3) (right-grouped 3)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Associativity in Python
+compose = lambda g, f: lambda x: g(f(x))
+
+add1 = lambda x: x + 1
+double = lambda x: x * 2
+square = lambda x: x * x
+
+left  = compose(compose(square, double), add1)
+right = compose(square, compose(double, add1))
+
+print(f"((square . double) . add1)(3) = {left(3)}")   # 64
+print(f"(square . (double . add1))(3) = {right(3)}")   # 64
+print(f"Equal? {left(3) == right(3)}")
+`} />
+    </div>
+
+
+    <!-- 4. The category of types and functions -->
+    <h3>The category of types and functions</h3>
+    <p>Milewski's running example: objects are types (Integer, Boolean, String), arrows are functions between types. Composition is function composition. Identity is the identity function. This category is called <strong>Set</strong> (or <strong>Hask</strong> for Haskellers). Every program you write lives here.</p>
+
+    <SchemeRepl client:load initialCode={`; Types as objects, functions as arrows
+; The category of types and functions
+
+(define (compose g f) (lambda (x) (g (f x))))
+(define (id x) x)
+
+; Arrows between "types"
+(define (length-of s) (string-length s))   ; String -> Integer
+(define (is-even? n) (= 0 (modulo n 2)))   ; Integer -> Boolean
+(define (show b) (if b "yes" "no"))         ; Boolean -> String
+
+; Compose a pipeline: String -> Integer -> Boolean -> String
+(define pipeline
+  (compose show (compose is-even? length-of)))
+
+(display "pipeline(\"hello\") = ")
+(display (pipeline "hello")) (newline)    ; 5 letters, odd -> "no"
+
+(display "pipeline(\"hi\")    = ")
+(display (pipeline "hi")) (newline)       ; 2 letters, even -> "yes"
+
+(display "pipeline(\"test\")  = ")
+(display (pipeline "test"))               ; 4 letters, even -> "yes"
+`} />
+
+
+    <!-- 5. Why composition matters -->
+    <h3>Why composition matters</h3>
+    <p>Milewski's argument: human cognition has a limited chunk budget. We manage complexity by decomposing problems into pieces and recomposing solutions. Composition is not an optional design pattern. It's how finite minds handle infinite complexity. Surface area grows slower than volume: good interfaces expose less than they hide. This chunking constraint is the starting point for <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the natural framework</a>, which models information processing as a six-stage pipeline where each stage composes into the next.</p>
+
+    <SchemeRepl client:load initialCode={`; The chunking argument: decompose, solve, recompose.
+; A complex function built from simple composed pieces.
+
+(define (compose g f) (lambda (x) (g (f x))))
+
+; Simple pieces
+(define (double x) (* x 2))
+(define (add1 x) (+ x 1))
+(define (square x) (* x x))
+
+; Compose into pipelines
+(define double-then-add1 (compose add1 double))
+(define add1-then-square (compose square add1))
+
+(display "double-then-add1(3) = ")
+(display (double-then-add1 3)) (newline)  ; (3*2)+1 = 7
+
+(display "add1-then-square(3) = ")
+(display (add1-then-square 3)) (newline)  ; (3+1)^2 = 16
+
+; Deeper pipeline: three functions composed
+(define pipeline (compose square (compose add1 double)))
+(display "square(add1(double(3))) = ")
+(display (pipeline 3))  ; square(add1(6)) = square(7) = 49
+; Each piece is one chunk. The pipeline is one chunk.
+; Total cognitive load: 4 chunks, not n^2 interactions.
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">g . f</td><td class="pr-4 text-green-300">(compose g f)</td><td class="pr-4 text-blue-300">compose(g, f)</td><td class="font-sans">Composition: apply f then g</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">id</td><td class="pr-4 text-green-300">(lambda (x) x)</td><td class="pr-4 text-blue-300">lambda x: x</td><td class="font-sans">Identity morphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f :: A -> B</td><td class="pr-4 text-green-300">(define (f a) ...)</td><td class="pr-4 text-blue-300">def f(a: A) -> B</td><td class="font-sans">Arrow from A to B</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">h.(g.f) = (h.g).f</td><td class="pr-4 text-green-300">verified above</td><td class="pr-4 text-blue-300">verified above</td><td class="font-sans">Associativity law</td></tr>
+          <tr><td class="py-2 pr-4">f . id = f</td><td class="pr-4 text-green-300">verified above</td><td class="pr-4 text-blue-300">verified above</td><td class="font-sans">Identity law</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> — categories applied to databases and data migration</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — entropy as a functor, another category-theoretic lens</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — composition of programs follows the same axioms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/abstract-algebra/judson-04/">🔗 Judson Ch.4 Isomorphisms</a> — group isomorphisms as the algebraic instance of categorical isomorphisms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Category_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Category (mathematics)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Function_composition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Function composition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Identity_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Identity function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Associative_property"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Associative property</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use total functions over simple types. The original post uses Haskell, where the category Hask includes bottom (non-termination) and laziness, which our Scheme and Python translations ignore. Milewski also discusses the category of sets and partial functions, and poses six challenges (e.g., implementing memoize, checking composition of partial functions). Those are omitted here but worth doing. The surface-area-vs-volume argument is informal motivation, not a theorem.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2014/11/04/category-the-essence-of-composition/">Read Milewski's post</a>. The challenges at the end are particularly good.
+    </div>
+
+
+    <PrevNext next={{ href: "/reading/category-theory/milewski-02/", label: "Types and Functions" }} />
+
+  </main>
+</Layout>

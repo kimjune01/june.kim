@@ -1,0 +1,62 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Operating Systems" favicon="🖥">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🖥 Operating Systems</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://en.wikipedia.org/wiki/Operating_system"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">How software manages hardware: processes, memory, files, and protection. Translated into runnable code and diagrams.</p>
+
+    <!-- SVG: Layered diagram (hardware -> kernel -> user space) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Hardware layer -->
+        <rect x="40" y="140" width="280" height="45" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="167" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">Hardware (CPU, RAM, Disk, I/O)</text>
+        <!-- Kernel layer -->
+        <rect x="60" y="80" width="240" height="45" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="107" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.7">Kernel (OS)</text>
+        <!-- User space layer -->
+        <rect x="80" y="20" width="200" height="45" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="180" y="47" text-anchor="middle" fill="#34d399" font-size="13" fill-opacity="0.7">User Space (Applications)</text>
+        <!-- Arrows -->
+        <line x1="180" y1="65" x2="180" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="176,78 180,84 184,78" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="180" y1="125" x2="180" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="176,138 180,144 184,138" fill="currentColor" fill-opacity="0.3"/>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/operating-systems/os-01/", title: "Processes", desc: "A program in execution with its own state, context, and lifecycle" },
+  { href: "/reading/operating-systems/os-02/", title: "Scheduling", desc: "Deciding which process runs next and for how long" },
+  { href: "/reading/operating-systems/os-03/", title: "Threads and Concurrency", desc: "Lightweight execution within a process sharing the same address space" },
+  { href: "/reading/operating-systems/os-04/", title: "Synchronization", desc: "Coordinating concurrent access to shared resources without corruption" },
+  { href: "/reading/operating-systems/os-05/", title: "Deadlock", desc: "When processes wait forever in a cycle of held resources" },
+  { href: "/reading/operating-systems/os-06/", title: "Memory Management", desc: "Translating virtual addresses to physical memory through paging and segmentation" },
+  { href: "/reading/operating-systems/os-07/", title: "Virtual Memory", desc: "The illusion of infinite memory backed by disk and page replacement" },
+  { href: "/reading/operating-systems/os-08/", title: "File Systems", desc: "Organizing persistent data into files, directories, and metadata" },
+  { href: "/reading/operating-systems/os-09/", title: "I/O Systems", desc: "Moving data between CPU and devices via polling, interrupts, and DMA" },
+  { href: "/reading/operating-systems/os-10/", title: "Protection and Security", desc: "Controlling who can access what through access matrices and encryption" }
+]} icon="🖥" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/">MIT 6.828 Operating System Engineering</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; scheduling and memory management are algorithmic problems</li>
+      <li><a href="/reading/distributed-systems/">🌐 Distributed Systems</a> &mdash; distributed OS and consensus protocols</li>
+      <li><a href="/reading/programming/">🪄 Programming</a> &mdash; concurrency and streams connect to SICP</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> &mdash; trusted execution and protection mechanisms</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

@@ -1,0 +1,274 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — Time Value of Money" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Time Value of Money</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (CC BY 4.0) · MIT OCW 15.401 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A dollar today is worth more than a dollar tomorrow. The <strong>discount rate</strong> bridges the two: it bundles the cost of waiting, inflation expectations, and risk. Most financial decisions start by comparing present values.</p>
+    </div>
+
+    <!-- SVG: timeline showing PV → FV with discount/compound arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline -->
+        <line x1="40" y1="80" x2="380" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Tick marks -->
+        <line x1="80" y1="72" x2="80" y2="88" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="80" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">t=0</text>
+        <line x1="180" y1="72" x2="180" y2="88" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="180" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">t=1</text>
+        <line x1="280" y1="72" x2="280" y2="88" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="280" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">t=2</text>
+        <text x="315" y="84" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">&#x2026;</text>
+        <line x1="350" y1="72" x2="350" y2="88" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="350" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">t=n</text>
+        <!-- PV label -->
+        <text x="80" y="55" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.8">PV</text>
+        <circle cx="80" cy="80" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <!-- FV label -->
+        <text x="350" y="55" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.8">FV</text>
+        <circle cx="350" cy="80" r="4" fill="#f59e0b" fill-opacity="0.6"/>
+        <!-- Compound arrow (top) -->
+        <path d="M 90,65 Q 215,25 340,65" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="340,62 334,58 336,67" fill="#60a5fa" fill-opacity="0.4"/>
+        <text x="215" y="30" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">compound: &#xd7;(1+r)n</text>
+        <!-- Discount arrow (bottom) -->
+        <path d="M 340,95 Q 215,135 90,95" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="90,92 96,88 94,97" fill="#f59e0b" fill-opacity="0.4"/>
+        <text x="215" y="140" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.5">discount: &#xf7;(1+r)n</text>
+        <!-- Caption -->
+        <text x="210" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Present value and future value on a timeline.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Present Value and Future Value -->
+    <h3>Present value and future value</h3>
+    <p><strong>Future value</strong> compounds a present amount forward: FV = PV &times; (1+r)<sup>n</sup>. <strong>Present value</strong> discounts a future amount back: PV = FV / (1+r)<sup>n</sup>. The discount factor 1/(1+r)<sup>n</sup> tells you what one future dollar is worth today.</p>
+
+    <SchemeRepl client:load initialCode={`; Future value: FV = PV * (1 + r)^n
+(define (future-value pv r n)
+  (* pv (expt (+ 1 r) n)))
+
+; Present value: PV = FV / (1 + r)^n
+(define (present-value fv r n)
+  (/ fv (expt (+ 1 r) n)))
+
+; $1000 at 5% for 10 years
+(display "FV of $1000 at 5% for 10yr: $")
+(display (round (future-value 1000 0.05 10)))
+(newline)
+
+; What is $1629 in 10 years worth today at 5%?
+(display "PV of $1629 at 5% for 10yr: $")
+(display (round (present-value 1629 0.05 10)))
+(newline)
+
+; Discount factor
+(define (discount-factor r n)
+  (/ 1 (expt (+ 1 r) n)))
+
+(display "Discount factor (5%, 10yr): ")
+(display (discount-factor 0.05 10))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Future value and present value
+def future_value(pv, r, n):
+    return pv * (1 + r) ** n
+
+def present_value(fv, r, n):
+    return fv / (1 + r) ** n
+
+def discount_factor(r, n):
+    return 1 / (1 + r) ** n
+
+fv = future_value(1000, 0.05, 10)
+print(f"FV of $1000 at 5% for 10yr: \${fv:.2f}")
+
+pv = present_value(1629, 0.05, 10)
+print(f"PV of $1629 at 5% for 10yr: \${pv:.2f}")
+
+print(f"Discount factor (5%, 10yr): {discount_factor(0.05, 10):.6f}")
+`} />
+    </div>
+
+
+    <!-- 2. Compound vs Simple Interest -->
+    <h3>Compound vs simple interest</h3>
+    <p><strong>Simple interest</strong> pays on the original principal only: FV = PV &times; (1 + r&middot;n). <strong>Compound interest</strong> pays on accumulated interest too. The gap widens with time. At high rates or long horizons, compounding dominates.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple interest: FV = PV * (1 + r*n)
+(define (simple-fv pv r n)
+  (* pv (+ 1 (* r n))))
+
+; Compound interest: FV = PV * (1 + r)^n
+(define (compound-fv pv r n)
+  (* pv (expt (+ 1 r) n)))
+
+; Compare $1000 at 8% for 20 years
+(define pv 1000)
+(define r 0.08)
+(define n 20)
+
+(display "Simple:   $") (display (round (simple-fv pv r n))) (newline)
+(display "Compound: $") (display (round (compound-fv pv r n))) (newline)
+(display "Difference: $")
+(display (round (- (compound-fv pv r n) (simple-fv pv r n))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simple vs compound interest
+def simple_fv(pv, r, n):
+    return pv * (1 + r * n)
+
+def compound_fv(pv, r, n):
+    return pv * (1 + r) ** n
+
+pv, r, n = 1000, 0.08, 20
+s = simple_fv(pv, r, n)
+c = compound_fv(pv, r, n)
+print(f"Simple:   \${s:.2f}")
+print(f"Compound: \${c:.2f}")
+print(f"Difference: \${c - s:.2f}")
+`} />
+    </div>
+
+
+    <!-- 3. Net Present Value -->
+    <h3>Net present value</h3>
+    <p><strong>NPV</strong> sums the present values of all cash flows, including the initial outlay (time 0). A positive NPV means the investment creates value &mdash; provided the discount rate reflects the true opportunity cost of capital. The core decision rule in corporate finance.</p>
+
+    <SchemeRepl client:load initialCode={`; NPV = sum of PV of each cash flow
+; Cash flows: list of (time . amount) pairs
+(define (pv-cashflow cf r)
+  (/ (cdr cf) (expt (+ 1 r) (car cf))))
+
+(define (npv cashflows r)
+  (apply + (map (lambda (cf) (pv-cashflow cf r)) cashflows)))
+
+; Project: invest $10,000 now, receive $3,000/yr for 5 years
+(define project
+  (list (cons 0 -10000)
+        (cons 1 3000) (cons 2 3000) (cons 3 3000)
+        (cons 4 3000) (cons 5 3000)))
+
+(display "NPV at 8%: $")
+(display (round (npv project 0.08)))
+(newline)
+(display "NPV at 12%: $")
+(display (round (npv project 0.12)))
+(newline)
+(display "NPV at 15%: $")
+(display (round (npv project 0.15)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Net Present Value
+def npv(cashflows, r):
+    """cashflows: list of (time, amount) tuples"""
+    return sum(amt / (1 + r) ** t for t, amt in cashflows)
+
+# Invest $10,000, receive $3,000/yr for 5 years
+project = [(0, -10000)] + [(t, 3000) for t in range(1, 6)]
+
+for rate in [0.08, 0.12, 0.15]:
+    print(f"NPV at {rate:.0%}: \${npv(project, rate):.2f}")
+`} />
+    </div>
+
+
+    <!-- 4. Annuities and Perpetuities -->
+    <h3>Annuities and perpetuities</h3>
+    <p>An <strong>annuity</strong> pays a fixed amount C at the end of each period for n periods (ordinary annuity). Its PV = C &times; [1 - (1+r)<sup>-n</sup>] / r. A <strong>perpetuity</strong> pays forever: PV = C / r. A <strong>growing perpetuity</strong> with growth rate g has PV = C<sub>1</sub> / (r - g), where C<sub>1</sub> is the first payment (one period from now) and r &gt; g. These are closed-form shortcuts for the NPV sum. All assume end-of-period cash flows and a constant discount rate.</p>
+
+    <SchemeRepl client:load initialCode={`; Annuity: PV = C * [1 - (1+r)^(-n)] / r
+(define (annuity-pv c r n)
+  (* c (/ (- 1 (expt (+ 1 r) (- n))) r)))
+
+; Perpetuity: PV = C / r  (n -> infinity)
+(define (perpetuity-pv c r)
+  (/ c r))
+
+; $500/year for 30 years at 6%
+(display "Annuity PV ($500/yr, 30yr, 6%): $")
+(display (round (annuity-pv 500 0.06 30)))
+(newline)
+
+; $500/year forever at 6%
+(display "Perpetuity PV ($500/yr, 6%): $")
+(display (round (perpetuity-pv 500 0.06)))
+(newline)
+
+; Growing perpetuity: PV = C1 / (r - g), where C1 is first payment, r > g
+(define (growing-perpetuity-pv c1 r g)
+  (/ c1 (- r g)))
+
+; C1 = $500 is the first payment (one period from now)
+(display "Growing perpetuity (C1=$500, 6%, 2% growth): $")
+(display (round (growing-perpetuity-pv 500 0.06 0.02)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Annuities and perpetuities
+def annuity_pv(c, r, n):
+    return c * (1 - (1 + r) ** -n) / r
+
+def perpetuity_pv(c, r):
+    return c / r
+
+def growing_perpetuity_pv(c1, r, g):
+    """c1 = first payment (one period from now), requires r > g"""
+    return c1 / (r - g)
+
+print(f"Annuity PV ($500/yr, 30yr, 6%): \${annuity_pv(500, 0.06, 30):.2f}")
+print(f"Perpetuity PV ($500/yr, 6%): \${perpetuity_pv(500, 0.06):.2f}")
+print(f"Growing perpetuity (C1=$500, 6%, 2% growth): \${growing_perpetuity_pv(500, 0.06, 0.02):.2f}")
+`} />
+    </div>
+
+
+    <!-- 5. Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">PV</td><td class="pr-4 text-green-300">(present-value fv r n)</td><td class="pr-4 text-blue-300">present_value(fv, r, n)</td><td class="font-sans">Present value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">FV</td><td class="pr-4 text-green-300">(future-value pv r n)</td><td class="pr-4 text-blue-300">future_value(pv, r, n)</td><td class="font-sans">Future value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">r</td><td class="pr-4 text-green-300">0.05</td><td class="pr-4 text-blue-300">0.05</td><td class="font-sans">Discount / interest rate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">n</td><td class="pr-4 text-green-300">10</td><td class="pr-4 text-blue-300">10</td><td class="font-sans">Number of periods</td></tr>
+          <tr><td class="py-2 pr-4">NPV</td><td class="pr-4 text-green-300">(npv cashflows r)</td><td class="pr-4 text-blue-300">npv(cashflows, r)</td><td class="font-sans">Net present value</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &mdash; exponential and logarithmic functions power compound interest</li>
+      <li><a href="/reading/finance-1/fin-02/">&#x1F4C8; Finance Ch.2</a> &mdash; bond pricing applies TVM to fixed coupon streams</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/finance-1/fin-02/", label: "Fixed Income · 2 of 12" }} />
+
+  </main>
+</Layout>

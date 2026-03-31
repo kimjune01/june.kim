@@ -1,0 +1,243 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom 3.3 — Mixed Strategies: Expected Value" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Mixed Strategies: Expected Value</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Firkins Nordstrom · <a href="https://nordstrommath.com/IntroGameTheory/S_MixStratEV.html">Introduction to Game Theory, Section 3.3</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Choose your mix so your opponent is <strong>indifferent</strong> between their options. If they aren't indifferent, they have a best response, which means your mix isn't optimal. Solve the system of equations where expected values are equal.</p>
+    </div>
+
+    <!-- 1. The indifference principle -->
+    <h3>The indifference principle</h3>
+    <p>If Player 2 can tell that one column is better against your mix, they'll play it. Your mix is only optimal when Player 2 gets the same expected payoff no matter which column they pick. Set the expected values equal and solve for your probabilities. This indifference condition is the same principle behind optimal <a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>one-shot bidding</a>: your bid should make competitors indifferent to marginal changes in theirs.</p>
+
+    <!-- SVG: Two equations as balance scales -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Scale 1: Player 1's perspective -->
+        <!-- Fulcrum -->
+        <polygon points="110,150 100,170 120,170" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Beam (balanced) -->
+        <line x1="30" y1="150" x2="190" y2="150" stroke="currentColor" stroke-width="2"/>
+        <!-- Left pan: E1(H) -->
+        <line x1="50" y1="150" x2="50" y2="165" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="25" y="165" width="50" height="22" rx="3" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="50" y="180" text-anchor="middle" fill="#60a5fa" font-size="10">E1(C)</text>
+        <!-- Right pan: E1(T) -->
+        <line x1="170" y1="150" x2="170" y2="165" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="145" y="165" width="50" height="22" rx="3" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+        <text x="170" y="180" text-anchor="middle" fill="#60a5fa" font-size="10">E1(D)</text>
+        <!-- Equals sign between pans -->
+        <text x="110" y="135" text-anchor="middle" fill="#fbbf24" font-size="14">=</text>
+        <!-- Label -->
+        <text x="110" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Player 2 indifferent</text>
+
+        <!-- Scale 2: Player 2's perspective -->
+        <!-- Fulcrum -->
+        <polygon points="330,150 320,170 340,170" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Beam (balanced) -->
+        <line x1="250" y1="150" x2="410" y2="150" stroke="currentColor" stroke-width="2"/>
+        <!-- Left pan: E2(A) -->
+        <line x1="270" y1="150" x2="270" y2="165" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="245" y="165" width="50" height="22" rx="3" fill="#f87171" fill-opacity="0.15" stroke="#f87171" stroke-width="1"/>
+        <text x="270" y="180" text-anchor="middle" fill="#f87171" font-size="10">E2(A)</text>
+        <!-- Right pan: E2(B) -->
+        <line x1="390" y1="150" x2="390" y2="165" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="365" y="165" width="50" height="22" rx="3" fill="#f87171" fill-opacity="0.15" stroke="#f87171" stroke-width="1"/>
+        <text x="390" y="180" text-anchor="middle" fill="#f87171" font-size="10">E2(B)</text>
+        <!-- Equals sign -->
+        <text x="330" y="135" text-anchor="middle" fill="#fbbf24" font-size="14">=</text>
+        <!-- Label -->
+        <text x="330" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Player 1 indifferent</text>
+
+        <!-- Top annotation -->
+        <text x="220" y="30" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">At equilibrium, both scales balance.</text>
+        <text x="220" y="50" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">Each player's mix makes the other indifferent.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Matching Pennies (zero-sum):
+;         H     T
+;   H  [ 1    -1 ]
+;   T  [-1     1 ]
+;
+; Player 1 plays H with prob p, T with (1-p).
+; Player 2 plays H with prob q, T with (1-q).
+;
+; For Player 2 to be indifferent:
+;   E2(H) = E2(T)
+;   -1*p + 1*(1-p) = 1*p + (-1)*(1-p)
+;   1 - 2p = 2p - 1
+;   2 = 4p => p = 1/2
+;
+; For Player 1 to be indifferent:
+;   E1(H) = E1(T)
+;   1*q + (-1)*(1-q) = (-1)*q + 1*(1-q)
+;   2q - 1 = 1 - 2q
+;   4q = 2 => q = 1/2
+
+(display "Matching Pennies:") (newline)
+(display "  Player 1 mix: p = 1/2 (H), 1/2 (T)") (newline)
+(display "  Player 2 mix: q = 1/2 (H), 1/2 (T)") (newline)
+
+; Verify: expected value at equilibrium
+(define p 0.5) (define q 0.5)
+(define ev1-H (+ (* 1 q) (* -1 (- 1 q))))
+(define ev1-T (+ (* -1 q) (* 1 (- 1 q))))
+(display "  E1(H) = ") (display ev1-H) (newline)
+(display "  E1(T) = ") (display ev1-T) (newline)
+(display "  Indifferent? ") (display (= ev1-H ev1-T))
+`} />
+
+    <!-- 2. Solving a general 2x2 -->
+    <h3>Solving a general 2x2 game</h3>
+    <p>For any 2x2 zero-sum game, write the expected value of each of the opponent's strategies in terms of your mixing probability. Set them equal. Solve. The answer tells you both the optimal mix and the value of the game.</p>
+
+    <SchemeRepl client:load initialCode={`; General solver for 2x2 zero-sum games
+; Matrix (Player 1's payoffs):
+;        C       D
+;   A  [ a       b ]
+;   B  [ c       d ]
+;
+; Player 1 plays B with prob p.
+; E(vs C) = a(1-p) + cp = a + (c-a)p
+; E(vs D) = b(1-p) + dp = b + (d-b)p
+; Set equal: a + (c-a)p = b + (d-b)p
+; Solve:     p = (b-a) / ((c-a) - (d-b))
+
+(define (solve-2x2 a b c d)
+  (let* ((num (- b a))
+         (den (- (- c a) (- d b)))
+         (p (/ num den))
+         (value (+ a (* (- c a) p))))
+    (list p value)))
+
+; Example from Section 3.2: A=[1,0], B=[-1,2]
+(define result (solve-2x2 1 0 -1 2))
+(display "Matrix [[1,0],[-1,2]]:") (newline)
+(display "  p(B) = ") (display (car result)) (newline)
+(display "  game value = ") (display (cadr result)) (newline)
+
+; Rock-Paper-Scissors needs 3 equations, 3 unknowns
+(display "  (RPS: symmetric => each with prob 1/3)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected value method: make the opponent indifferent
+# Matrix (Player 1's payoffs):
+#        C    D
+#   A  [ a    b ]
+#   B  [ c    d ]
+
+def solve_2x2(a, b, c, d):
+    """Find optimal p(B) and game value."""
+    p = (b - a) / ((c - a) - (d - b))
+    value = a + (c - a) * p
+    return p, value
+
+# Example: A=[1,0], B=[-1,2]
+p, v = solve_2x2(1, 0, -1, 2)
+print(f"p(B) = {p:.4f}")
+print(f"Game value = {v:.4f}")
+
+# Verify indifference
+ev_C = 1 * (1 - p) + (-1) * p
+ev_D = 0 * (1 - p) + 2 * p
+print(f"E(vs C) = {ev_C:.4f}")
+print(f"E(vs D) = {ev_D:.4f}")
+print(f"Indifferent? {abs(ev_C - ev_D) < 1e-10}")
+`} />
+    </div>
+
+    <!-- 3. Why indifference works -->
+    <h3>Why indifference works</h3>
+    <p>If Player 2 is not indifferent, they have a pure best response. Then Player 1 should adjust to exploit that response. The only stable state is where neither player can gain by shifting. Indifference is the algebraic expression of Nash equilibrium in mixed strategies.</p>
+
+    <SchemeRepl client:load initialCode={`; If you DON'T make them indifferent, they exploit you.
+; Suppose Player 1 plays B with p = 0.8 in our game:
+;   E(vs C) = 1 - 2(0.8) = -0.6
+;   E(vs D) = 2(0.8) = 1.6
+; Player 2 picks C (gives P1 payoff -0.6). Disaster.
+
+(define (show-exploitation p)
+  (let ((ec (+ 1 (* -2 p)))
+        (ed (* 2 p)))
+    (display "p = ") (display p)
+    (display "  E(vs C) = ") (display ec)
+    (display "  E(vs D) = ") (display ed)
+    (display "  P2 picks: ")
+    (display (if (< ec ed) "C (hurts you)" "D (hurts you)"))
+    (newline)))
+
+(show-exploitation 0.1)
+(show-exploitation 0.25)  ; optimal - tied
+(show-exploitation 0.5)
+(show-exploitation 0.8)
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E1(H) = E1(T)</td><td class="pr-4 text-green-300">(= ev1-H ev1-T)</td><td class="font-sans">Indifference condition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p, 1-p</td><td class="pr-4 text-green-300">p, (- 1 p)</td><td class="font-sans">Player 1's mixed strategy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">q, 1-q</td><td class="pr-4 text-green-300">q, (- 1 q)</td><td class="font-sans">Player 2's mixed strategy</td></tr>
+          <tr><td class="py-2 pr-4">V</td><td class="pr-4 text-green-300">(cadr (solve-2x2 ...))</td><td class="font-sans">Value of the game</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-09/">🎲 Nordstrom 3.2</a> — Mixed Strategies: Graphical (previous)</li>
+      <li><a href="/reading/game-theory/nordstrom-11/">🎲 Nordstrom 4.1</a> — Non-Zero-Sum Intro (next)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related pages</p>
+    <ul>
+      <li><a href="/reading/game-theory/nordstrom-05/">🎲 Nordstrom 2.4</a> — Probability and Expected Value (the foundation for this method)</li>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — selection functions generalize the indifference principle</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash equilibrium</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Indifference_curve"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Indifference</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The expected value method scales to larger games by adding more equations. Rock-Paper-Scissors gives three equations in three unknowns. For games bigger than 3x3, the linear algebra is the same but you typically reach for linear programming. The graphical method (previous page) gives the same answer for 2x2 games but with geometric intuition instead of algebra.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://nordstrommath.com/IntroGameTheory/S_MixStratEV.html">Read Section 3.3</a> in Nordstrom's textbook.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-09/", label: "Mixed: Graphical" }} next={{ href: "/reading/game-theory/nordstrom-11/", label: "Non-Zero-Sum Games" }} />
+
+  </main>
+</Layout>

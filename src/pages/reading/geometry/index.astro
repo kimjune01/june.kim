@@ -1,0 +1,69 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>△ Geometry</h1>
+    <p class="text-gray-400 mb-2">Sources: <a href="https://en.wikipedia.org/"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) · <a href="https://june.kim">june.kim</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).</p>
+    <p class="text-gray-400 mb-6">From Euclid to curvature. Runnable code, SVG diagrams, plain English.</p>
+
+    <!-- SVG: Triangle inscribed in a circle with a perpendicular bisector -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 300" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Circumscribed circle -->
+        <circle cx="180" cy="145" r="115" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <!-- Triangle vertices on the circle -->
+        <!-- A at top: (180, 30) -->
+        <!-- B at bottom-left: (80, 203) -->
+        <!-- C at bottom-right: (280, 203) -->
+        <polygon points="180,30 80,203 280,203" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Vertex labels -->
+        <text x="180" y="22" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">A</text>
+        <text x="67" y="215" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">B</text>
+        <text x="293" y="215" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">C</text>
+        <!-- Perpendicular bisector of BC (vertical line through midpoint of BC) -->
+        <line x1="180" y1="25" x2="180" y2="250" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="5,3"/>
+        <!-- Midpoint of BC -->
+        <circle cx="180" cy="203" r="2.5" fill="#f59e0b" fill-opacity="0.6"/>
+        <!-- Right angle mark at midpoint -->
+        <polyline points="188,203 188,195 180,195" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Caption -->
+        <text x="180" y="285" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Triangle inscribed in its circumscribed circle.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/geometry/geom-01/", title: "Euclidean Geometry", desc: "Five axioms, compass and straightedge, and the theorem that launched a thousand proofs" },
+  { href: "/reading/geometry/geom-02/", title: "Coordinate Geometry", desc: "Descartes put numbers on geometry: distance, slope, lines, and conic sections" },
+  { href: "/reading/geometry/geom-03/", title: "Transformations", desc: "Translate, rotate, reflect, scale — and discover that symmetries form a group" },
+  { href: "/reading/geometry/geom-04/", title: "Projective Geometry", desc: "Add points at infinity so parallel lines meet, then watch points and lines swap roles" },
+  { href: "/reading/geometry/geom-05/", title: "Non-Euclidean Geometry", desc: "Drop the parallel postulate: on a saddle there are many parallels, on a sphere there are none" },
+  { href: "/reading/geometry/geom-06/", title: "Differential Geometry", desc: "Curves bend, surfaces curve, and curvature is a number you can compute" },
+  { href: "/reading/geometry/geom-07/", title: "Metric Spaces", desc: "Distance functions, open balls, and metric spaces as enriched categories" },
+  { href: "/reading/geometry/geom-08/", title: "Convex Geometry", desc: "Convex sets, convex hulls, separation theorems, and Minkowski sums" },
+  { href: "/reading/geometry/geom-09/", title: "Voronoi Diagrams", desc: "Nearest-neighbor partitions, Voronoi cells, and Fortune's algorithm" },
+  { href: "/reading/geometry/geom-10/", title: "Delaunay Triangulation", desc: "Dual of Voronoi, circumcircle property, convex hull in one higher dimension" },
+  { href: "/reading/geometry/geom-11/", title: "Power Diagrams", desc: "Weighted Voronoi diagrams and the geometry behind ad auctions" },
+  { href: "/reading/geometry/geom-12/", title: "The Erlangen Program", desc: "Klein's insight: a geometry is defined by its symmetry group" }
+]} icon="△" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/18-900-geometry-and-topology-in-the-plane-spring-2023/">MIT 18.900 Geometry and Topology</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; dot products, projections, and transformations are geometric</li>
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; differential geometry uses multivariable calculus</li>
+      <li><a href="/reading/real-analysis/">∞ Real Analysis</a> &mdash; metric spaces generalize geometry</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; Voronoi diagrams and Delaunay triangulation are computational geometry</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

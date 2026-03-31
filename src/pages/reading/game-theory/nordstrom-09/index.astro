@@ -1,0 +1,235 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom 3.2 — Mixed Strategies: Graphical" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Mixed Strategies: Graphical</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Firkins Nordstrom · <a href="https://nordstrommath.com/IntroGameTheory/S_MixStratGraph.html">Introduction to Game Theory, Section 3.2</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Plot expected payoff against mixing probability <em>p</em>. Each of the opponent's pure strategies gives a line. The <strong>optimal mix</strong> is where the lines cross: the point where the opponent can't exploit your pattern.</p>
+    </div>
+
+    <!-- 1. The setup -->
+    <h3>The setup: a 2x2 zero-sum game</h3>
+    <p>Take a game with no pure-strategy equilibrium. Player 1 mixes between rows A and B with probability <em>p</em> on B. For each of Player 2's pure strategies (column C or D), Player 1's expected payoff is a linear function of <em>p</em>. Plot both lines.</p>
+
+    <SchemeRepl client:load initialCode={`; Payoff matrix (Player 1's payoffs, zero-sum):
+;        C    D
+;   A  [ 1    0 ]
+;   B  [-1    2 ]
+;
+; Player 1 plays B with probability p, A with (1-p).
+; Expected payoff vs Player 2's pure strategies:
+;   E(vs C) = 1*(1-p) + (-1)*p = 1 - 2p
+;   E(vs D) = 0*(1-p) + 2*p   = 2p
+
+(define (ev-vs-C p) (+ (* 1 (- 1 p)) (* -1 p)))
+(define (ev-vs-D p) (+ (* 0 (- 1 p)) (* 2 p)))
+
+; Sample points
+(display "p=0.0: vs C = ") (display (ev-vs-C 0.0))
+(display ", vs D = ") (display (ev-vs-D 0.0)) (newline)
+
+(display "p=0.5: vs C = ") (display (ev-vs-C 0.5))
+(display ", vs D = ") (display (ev-vs-D 0.5)) (newline)
+
+(display "p=1.0: vs C = ") (display (ev-vs-C 1.0))
+(display ", vs D = ") (display (ev-vs-D 1.0)) (newline)
+`} />
+
+    <!-- SVG: interactive mixed strategy — drag p slider -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg id="mix-strat" viewBox="0 0 400 300" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axes -->
+          <line x1="60" y1="250" x2="360" y2="250" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="60" y1="250" x2="60" y2="30" stroke="currentColor" stroke-width="1.5"/>
+          <text x="210" y="280" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">p (probability of B)</text>
+          <text x="25" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6" transform="rotate(-90, 25, 140)">E (payoff)</text>
+          <text x="60" y="268" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">0</text>
+          <text x="360" y="268" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">1</text>
+          <line x1="55" y1="210" x2="65" y2="210" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <text x="48" y="214" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">0</text>
+          <line x1="55" y1="130" x2="65" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <text x="48" y="134" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">1</text>
+          <line x1="55" y1="50" x2="65" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <text x="48" y="54" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">2</text>
+          <line x1="60" y1="210" x2="360" y2="210" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+          <line x1="60" y1="130" x2="360" y2="130" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+          <line x1="60" y1="50" x2="360" y2="50" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+          <!-- Line: E(vs C) = 1 - 2p -->
+          <line x1="60" y1="130" x2="360" y2="290" stroke="#f87171" stroke-width="2"/>
+          <text x="365" y="290" fill="#f87171" font-size="11">vs C</text>
+          <!-- Line: E(vs D) = 2p -->
+          <line x1="60" y1="210" x2="360" y2="50" stroke="#60a5fa" stroke-width="2"/>
+          <text x="365" y="50" fill="#60a5fa" font-size="11">vs D</text>
+          <!-- Equilibrium marker (fixed) -->
+          <circle cx="135" cy="170" r="5" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-opacity="0.3"/>
+          <!-- Vertical p-line (draggable) -->
+          <line id="ms-vline" y1="30" y2="250" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+          <!-- Dots on each line at current p -->
+          <circle id="ms-dot-c" r="5" fill="#f87171"/>
+          <circle id="ms-dot-d" r="5" fill="#60a5fa"/>
+          <!-- Readout -->
+          <text id="ms-readout" x="200" y="296" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5"></text>
+        </svg>
+        <input type="range" id="ms-slider" min="0" max="100" value="25" step="1" style="width:100%;margin-top:4px;accent-color:#a78bfa;">
+      </div>
+    </div>
+    <script is:inline>
+    (function() {
+      var XL = 60, XR = 360, Y0 = 210, SCALE = 80; // 1 unit = 80px up
+      var slider = document.getElementById('ms-slider');
+      var vline = document.getElementById('ms-vline');
+      var dotC = document.getElementById('ms-dot-c');
+      var dotD = document.getElementById('ms-dot-d');
+      var readout = document.getElementById('ms-readout');
+
+      function update() {
+        var p = parseInt(slider.value) / 100;
+        var x = XL + p * (XR - XL);
+        var eC = 1 - 2 * p;  // E(vs C)
+        var eD = 2 * p;      // E(vs D)
+        var yC = Y0 - eC * SCALE;
+        var yD = Y0 - eD * SCALE;
+        vline.setAttribute('x1', x); vline.setAttribute('x2', x);
+        dotC.setAttribute('cx', x); dotC.setAttribute('cy', yC);
+        dotD.setAttribute('cx', x); dotD.setAttribute('cy', yD);
+        var minE = Math.min(eC, eD);
+        var eq = Math.abs(eC - eD) < 0.02;
+        readout.textContent = 'p = ' + p.toFixed(2) + '  |  vs C: ' + eC.toFixed(2) + '  |  vs D: ' + eD.toFixed(2) + (eq ? '  \u2714 equilibrium!' : '  |  guaranteed: ' + minE.toFixed(2));
+      }
+
+      slider.addEventListener('input', update);
+      update();
+    })();
+    </script>
+
+    <!-- 2. Finding the intersection -->
+    <h3>Finding the intersection</h3>
+    <p>Set the two expected-payoff lines equal: 1 - 2p = 2p. Solve: p = 1/4. Player 1 should play B with probability 1/4, A with probability 3/4. The expected payoff is 1/2 regardless of what Player 2 does. That's the guarantee.</p>
+
+    <SchemeRepl client:load initialCode={`; Find the intersection: solve E(vs C) = E(vs D)
+; 1 - 2p = 2p => 1 = 4p => p = 1/4
+
+(define (find-optimal-p ev1 ev2)
+  ; Binary search for intersection
+  (let loop ((lo 0.0) (hi 1.0) (n 50))
+    (if (= n 0) (/ (+ lo hi) 2.0)
+        (let ((mid (/ (+ lo hi) 2.0)))
+          (if (> (- (ev1 mid) (ev2 mid)) 0)
+              (loop mid hi (- n 1))
+              (loop lo mid (- n 1)))))))
+
+(define p* (find-optimal-p ev-vs-C ev-vs-D))
+(display "Optimal p = ") (display p*) (newline)
+(display "Expected payoff = ") (display (ev-vs-C p*)) (newline)
+(display "Check vs D:       ") (display (ev-vs-D p*))
+; Both lines give 0.5 at p = 0.25
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Graphical method: find where expected payoff lines cross
+# Matrix: A=[1,0], B=[-1,2]
+
+def ev_vs_C(p):
+    return 1 * (1 - p) + (-1) * p  # 1 - 2p
+
+def ev_vs_D(p):
+    return 0 * (1 - p) + 2 * p     # 2p
+
+# Solve 1 - 2p = 2p
+p_star = 1 / 4
+print(f"Optimal p = {p_star}")
+print(f"E(vs C) = {ev_vs_C(p_star)}")
+print(f"E(vs D) = {ev_vs_D(p_star)}")
+
+# The maximin: Player 1 guarantees a payoff of 0.5
+`} />
+    </div>
+
+    <!-- 3. Why the intersection is optimal -->
+    <h3>Why the intersection is optimal</h3>
+    <p>Below the intersection, the minimum payoff comes from one line. Above it, from the other. The maximum of the minimum is at the crossing point. This is the <strong>maximin</strong> in action: Player 1 chooses the mix that makes the worst case as good as possible.</p>
+
+    <SchemeRepl client:load initialCode={`; The maximin principle: maximize your minimum payoff
+; At any p, the opponent picks whichever column hurts you more.
+; Your guaranteed payoff = min of the two lines.
+
+(define (guaranteed-payoff p)
+  (min (ev-vs-C p) (ev-vs-D p)))
+
+; Scan across p to find the best guarantee
+(display "p=0.00: guarantee = ") (display (guaranteed-payoff 0.0)) (newline)
+(display "p=0.10: guarantee = ") (display (guaranteed-payoff 0.1)) (newline)
+(display "p=0.25: guarantee = ") (display (guaranteed-payoff 0.25)) (newline)
+(display "p=0.50: guarantee = ") (display (guaranteed-payoff 0.5)) (newline)
+(display "p=1.00: guarantee = ") (display (guaranteed-payoff 1.0)) (newline)
+; Best guarantee is at p=0.25, payoff=0.5
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p</td><td class="pr-4 text-green-300">p</td><td class="font-sans">Probability Player 1 plays row B</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E(vs C)</td><td class="pr-4 text-green-300">(ev-vs-C p)</td><td class="font-sans">Expected payoff when Player 2 plays C</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E(vs D)</td><td class="pr-4 text-green-300">(ev-vs-D p)</td><td class="font-sans">Expected payoff when Player 2 plays D</td></tr>
+          <tr><td class="py-2 pr-4">maximin</td><td class="pr-4 text-green-300">(guaranteed-payoff p)</td><td class="font-sans">Minimum payoff across opponent's choices</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-08/">🎲 Nordstrom 3.1</a> — Repeated Games (previous)</li>
+      <li><a href="/reading/game-theory/nordstrom-10/">🎲 Nordstrom 3.3</a> — Mixed Strategies: Expected Value (next)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related pages</p>
+    <ul>
+      <li><a href="/reading/game-theory/nordstrom-06/">🎲 Nordstrom 2.5</a> — Equilibrium Points (pure strategy version)</li>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — Compositional Game Theory (where mixed strategies live categorically)</li>
+      <li><a href="/reading/cognitive-science/lovelace-05/">🧠 Lovelace Ch.5 Reinforcement Learning</a> — exploration-exploitation tradeoffs use mixed strategies</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Minimax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Minimax theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mixed_strategy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mixed strategy</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The graphical method only works for 2x2 games because we need exactly two lines in a 2D plot. For larger games, use the expected value method (next page) or linear programming. For a geometric approach to strategy spaces in auctions, see <a href="https://june.kim/power-diagrams-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>power diagrams applied to ad auctions</a>. The payoff matrix here uses Nordstrom's example from Section 3.2.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://nordstrommath.com/IntroGameTheory/S_MixStratGraph.html">Read Section 3.2</a> in Nordstrom's textbook.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-08/", label: "Repeated Games" }} next={{ href: "/reading/game-theory/nordstrom-10/", label: "Mixed: Expected Value" }} />
+
+  </main>
+</Layout>

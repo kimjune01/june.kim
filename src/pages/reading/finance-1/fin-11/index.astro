@@ -1,0 +1,301 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.11 — Capital Budgeting" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Capital Budgeting</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A firm should invest in a project if and only if its <strong>net present value</strong> is positive. NPV is the gold standard. IRR and payback period are useful shortcuts, but each has traps.</p>
+    </div>
+
+    <!-- SVG: NPV as a function of discount rate -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="180" x2="330" y2="180" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="20" x2="50" y2="180" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Zero line -->
+        <line x1="50" y1="120" x2="330" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="4,3"/>
+        <!-- Axis labels -->
+        <text x="190" y="200" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Discount rate (r)</text>
+        <text x="15" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90, 15, 100)">NPV ($)</text>
+        <text x="55" y="117" fill="currentColor" font-size="9" fill-opacity="0.3">0</text>
+        <!-- NPV curve: starts positive, crosses zero at IRR, goes negative -->
+        <path d="M 60,40 Q 120,70 180,120 Q 230,155 310,170" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- IRR point -->
+        <circle cx="180" cy="120" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="185" y="138" fill="#f59e0b" font-size="9" fill-opacity="0.7">IRR</text>
+        <!-- NPV > 0 region -->
+        <text x="100" y="55" fill="#10b981" font-size="9" fill-opacity="0.6">NPV &gt; 0: accept</text>
+        <!-- NPV < 0 region -->
+        <text x="240" y="165" fill="#ef4444" font-size="9" fill-opacity="0.6">NPV &lt; 0: reject</text>
+        <!-- Caption -->
+        <text x="190" y="215" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">NPV as a function of discount rate</text>
+      </svg>
+    </div>
+
+    <!-- 1. NPV Rule -->
+    <h3>The NPV rule</h3>
+    <p><strong>Net present value</strong> discounts all future cash flows back to today at the opportunity cost of capital, then subtracts the initial investment. If NPV &gt; 0, the project creates value. If NPV &lt; 0, it destroys value. Accept all positive-NPV projects.</p>
+
+    <SchemeRepl client:load initialCode={`; Net Present Value
+; NPV = -C0 + C1/(1+r) + C2/(1+r)^2 + ... + Cn/(1+r)^n
+
+(define (npv rate cash-flows)
+  ; cash-flows is a list: (C0 C1 C2 ... Cn)
+  ; C0 is typically negative (initial investment)
+  (define (helper flows t)
+    (if (null? flows)
+        0
+        (+ (/ (car flows) (expt (+ 1 rate) t))
+           (helper (cdr flows) (+ t 1)))))
+  (helper cash-flows 0))
+
+; Project: invest $1000 today, receive $400/year for 4 years
+(define project (list -1000 400 400 400 400))
+
+(display "NPV at 10%: $") (display (round (npv 0.10 project))) (newline)
+(display "NPV at 15%: $") (display (round (npv 0.15 project))) (newline)
+(display "NPV at 20%: $") (display (round (npv 0.20 project))) (newline)
+(display "NPV at 25%: $") (display (round (npv 0.25 project))) (newline)
+
+; Decision: accept if NPV > 0
+(display "At 10% cost of capital: ")
+(display (if (> (npv 0.10 project) 0) "ACCEPT" "REJECT"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Net Present Value
+
+def npv(rate, cash_flows):
+    return sum(cf / (1 + rate)**t for t, cf in enumerate(cash_flows))
+
+project = [-1000, 400, 400, 400, 400]
+
+for r in [0.10, 0.15, 0.20, 0.25]:
+    print(f"NPV at {r:.0%}: \${npv(r, project):.0f}")
+
+print(f"At 10% cost of capital: {'ACCEPT' if npv(0.10, project) > 0 else 'REJECT'}")
+`} />
+    </div>
+
+
+    <!-- 2. IRR and Its Pitfalls -->
+    <h3>Internal rate of return (IRR) and its pitfalls</h3>
+    <p>The <strong>IRR</strong> is the discount rate that makes NPV exactly zero. For conventional projects (one outflow followed by inflows), IRR works fine: accept if IRR exceeds the cost of capital. But IRR breaks down with non-conventional cash flows (multiple sign changes produce multiple IRRs) and when comparing mutually exclusive projects of different scales.</p>
+
+    <SchemeRepl client:load initialCode={`; Finding IRR by bisection
+; IRR is the rate r where NPV(r) = 0
+
+(define (npv rate flows)
+  (define (helper fs t)
+    (if (null? fs) 0
+        (+ (/ (car fs) (expt (+ 1 rate) t))
+           (helper (cdr fs) (+ t 1)))))
+  (helper flows 0))
+
+(define (find-irr flows lo hi iterations)
+  (if (= iterations 0)
+      (/ (+ lo hi) 2)
+      (let ((mid (/ (+ lo hi) 2)))
+        (if (> (npv mid flows) 0)
+            (find-irr flows mid hi (- iterations 1))
+            (find-irr flows lo mid (- iterations 1))))))
+
+; Project: -1000, +400, +400, +400, +400
+(define project (list -1000 400 400 400 400))
+(define irr (find-irr project 0.0 1.0 50))
+
+(display "IRR = ") (display (* 100 irr)) (display "%") (newline)
+(display "NPV at IRR: $") (display (round (npv irr project))) (newline)
+
+; Pitfall: non-conventional cash flows can have multiple IRRs
+; Project: -100, +230, -132 (two sign changes)
+(define weird (list -100 230 -132))
+(display "Weird project NPV at 10%: $") (display (npv 0.10 weird)) (newline)
+(display "Weird project NPV at 20%: $") (display (npv 0.20 weird))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# IRR by bisection
+
+def npv(rate, flows):
+    return sum(cf / (1 + rate)**t for t, cf in enumerate(flows))
+
+def find_irr(flows, lo=0.0, hi=1.0, iterations=50):
+    for _ in range(iterations):
+        mid = (lo + hi) / 2
+        if npv(mid, flows) > 0:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+project = [-1000, 400, 400, 400, 400]
+irr = find_irr(project)
+print(f"IRR = {irr:.2%}")
+print(f"NPV at IRR: \${npv(irr, project):.2f}")
+
+# Pitfall: non-conventional cash flows
+weird = [-100, 230, -132]
+print(f"Weird project NPV at 10%: \${npv(0.10, weird):.2f}")
+print(f"Weird project NPV at 20%: \${npv(0.20, weird):.2f}")
+`} />
+    </div>
+
+
+    <!-- 3. Payback Period -->
+    <h3>Payback period</h3>
+    <p>The <strong>payback period</strong> counts how many years it takes to recover the initial investment. Simple and intuitive, but it ignores the time value of money and everything that happens after payback. The <strong>discounted payback period</strong> fixes the first problem but not the second.</p>
+
+    <SchemeRepl client:load initialCode={`; Payback period: years to recover initial investment
+
+(define (payback cash-flows)
+  (define (helper flows cumulative year)
+    (if (null? flows)
+        (begin (display "Never pays back") -1)
+        (let ((new-cum (+ cumulative (car flows))))
+          (if (>= new-cum 0)
+              year
+              (helper (cdr flows) new-cum (+ year 1))))))
+  (helper (cdr cash-flows) (car cash-flows) 1))
+
+; Project A: -1000, +500, +500, +200
+(display "Project A payback: year ")
+(display (payback (list -1000 500 500 200))) (newline)
+
+; Project B: -1000, +100, +200, +300, +400, +500
+(display "Project B payback: year ")
+(display (payback (list -1000 100 200 300 400 500))) (newline)
+
+; Discounted payback
+(define (discounted-payback rate cash-flows)
+  (define (helper flows cumulative year)
+    (if (null? flows)
+        (begin (display "Never") -1)
+        (let ((pv (/ (car flows) (expt (+ 1 rate) year))))
+          (let ((new-cum (+ cumulative pv)))
+            (if (>= new-cum 0)
+                year
+                (helper (cdr flows) new-cum (+ year 1)))))))
+  (helper (cdr cash-flows) (car cash-flows) 1))
+
+(display "Project A discounted payback at 10%: year ")
+(display (discounted-payback 0.10 (list -1000 500 500 200)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Payback period
+
+def payback(cash_flows):
+    cumulative = cash_flows[0]
+    for year, cf in enumerate(cash_flows[1:], 1):
+        cumulative += cf
+        if cumulative >= 0:
+            return year
+    return None
+
+def discounted_payback(rate, cash_flows):
+    cumulative = cash_flows[0]
+    for year, cf in enumerate(cash_flows[1:], 1):
+        cumulative += cf / (1 + rate) ** year
+        if cumulative >= 0:
+            return year
+    return None
+
+print(f"Project A payback: year {payback([-1000, 500, 500, 200])}")
+print(f"Project B payback: year {payback([-1000, 100, 200, 300, 400, 500])}")
+print(f"Project A discounted payback at 10%: year {discounted_payback(0.10, [-1000, 500, 500, 200])}")
+`} />
+    </div>
+
+
+    <!-- 4. Comparing Mutually Exclusive Projects -->
+    <h3>Comparing mutually exclusive projects</h3>
+    <p>When you can only pick one project, IRR can mislead. A small project with 50% IRR is not necessarily better than a large project with 20% IRR. NPV settles every comparison: pick the project with the highest NPV. When projects have different lives, use equivalent annual annuity to compare.</p>
+
+    <SchemeRepl client:load initialCode={`; Mutually exclusive projects: NPV wins over IRR
+
+(define (npv rate flows)
+  (define (helper fs t)
+    (if (null? fs) 0
+        (+ (/ (car fs) (expt (+ 1 rate) t))
+           (helper (cdr fs) (+ t 1)))))
+  (helper flows 0))
+
+(define (find-irr flows)
+  (define (bisect lo hi n)
+    (if (= n 0) (/ (+ lo hi) 2)
+        (let ((mid (/ (+ lo hi) 2)))
+          (if (> (npv mid flows) 0)
+              (bisect mid hi (- n 1))
+              (bisect lo mid (- n 1))))))
+  (bisect 0.0 1.0 50))
+
+; Small project: invest $100, get $150 next year
+(define small (list -100 150))
+; Large project: invest $10000, get $13000 next year
+(define large (list -10000 13000))
+
+(define r 0.10)
+(display "Small: IRR = ") (display (round (* 100 (find-irr small)))) (display "%")
+(display ", NPV = $") (display (round (npv r small))) (newline)
+(display "Large: IRR = ") (display (round (* 100 (find-irr large)))) (display "%")
+(display ", NPV = $") (display (round (npv r large))) (newline)
+
+; IRR says small is better (50% > 30%)
+; NPV says large is better ($36 > $1818) — NPV is correct
+(display "Choose: ") (display (if (> (npv r large) (npv r small)) "LARGE" "SMALL"))
+(display " (higher NPV)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Mutually exclusive projects: NPV > IRR for decisions
+
+def npv(rate, flows):
+    return sum(cf / (1 + rate)**t for t, cf in enumerate(flows))
+
+def find_irr(flows, lo=0.0, hi=1.0):
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        if npv(mid, flows) > 0: lo = mid
+        else: hi = mid
+    return (lo + hi) / 2
+
+small = [-100, 150]
+large = [-10000, 13000]
+r = 0.10
+
+print(f"Small: IRR = {find_irr(small):.0%}, NPV = \${npv(r, small):.0f}")
+print(f"Large: IRR = {find_irr(large):.0%}, NPV = \${npv(r, large):.0f}")
+print(f"Choose: {'LARGE' if npv(r, large) > npv(r, small) else 'SMALL'} (higher NPV)")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-01/">📈 Finance Ch.1</a> &mdash; time value of money: the foundation NPV is built on</li>
+      <li><a href="/reading/finance-1/fin-04/">📈 Finance Ch.4</a> &mdash; risk and return: how to choose the discount rate</li>
+      <li><a href="/reading/finance-1/fin-06/">📈 Finance Ch.6</a> &mdash; CAPM provides the cost of capital for NPV calculations</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-10/", label: "Behavioral Finance · 10 of 12" }}
+      next={{ href: "/reading/finance-1/fin-12/", label: "Risk Management · 12 of 12" }}
+    />
+
+  </main>
+</Layout>

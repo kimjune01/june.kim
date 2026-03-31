@@ -1,0 +1,139 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Fisher 1935 — The Design of Experiments" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>The Design of Experiments</h1>
+    <p class="text-gray-400 text-sm mb-6">R. A. Fisher · 1935 · Oliver &amp; Boyd · <a href="https://archive.org/details/in.ernet.dli.2015.502684">Internet Archive</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Randomization, significance tests, analysis of variance. Fisher built the statistical machinery that modern experimental science runs on. The null hypothesis, the p-value, factorial design: all codified here.</p>
+    </div>
+
+    <!-- SVG: randomized controlled trial structure -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Population -->
+        <rect x="10" y="80" width="70" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="45" y="100" text-anchor="middle" fill="currentColor" font-size="10">population</text>
+        <text x="45" y="116" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">N subjects</text>
+
+        <!-- Random assignment -->
+        <line x1="80" y1="105" x2="140" y2="105" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="140" cy="105" r="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="109" text-anchor="middle" fill="currentColor" font-size="9">R</text>
+        <text x="140" y="135" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">random</text>
+        <text x="140" y="145" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">assignment</text>
+
+        <!-- Treatment arm -->
+        <line x1="150" y1="99" x2="210" y2="65" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="210" y="44" width="80" height="42" rx="6" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="250" y="62" text-anchor="middle" fill="currentColor" font-size="10">treatment</text>
+        <text x="250" y="76" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">intervention</text>
+
+        <!-- Control arm -->
+        <line x1="150" y1="111" x2="210" y2="145" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="210" y="124" width="80" height="42" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="250" y="142" text-anchor="middle" fill="currentColor" font-size="10">control</text>
+        <text x="250" y="156" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">no intervention</text>
+
+        <!-- Measure -->
+        <line x1="290" y1="65" x2="340" y2="65" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="290" y1="145" x2="340" y2="145" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="340" y="46" width="60" height="36" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="370" y="68" text-anchor="middle" fill="currentColor" font-size="9">measure</text>
+        <rect x="340" y="128" width="60" height="36" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="370" y="150" text-anchor="middle" fill="currentColor" font-size="9">measure</text>
+
+        <!-- Compare -->
+        <line x1="400" y1="65" x2="440" y2="105" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="400" y1="145" x2="440" y2="105" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="440" y="84" width="65" height="42" rx="6" fill="#22c55e" fill-opacity="0.12" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="472" y="102" text-anchor="middle" fill="currentColor" font-size="10">compare</text>
+        <text x="472" y="116" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">p-value</text>
+
+        <!-- Caption -->
+        <text x="260" y="200" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the randomized controlled trial: random assignment makes groups comparable on all variables, known and unknown</text>
+      </svg>
+    </div>
+
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2">Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Null hypothesis</td><td>The default claim that there is no effect; the thing you try to reject.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p-value</td><td>The probability of data this extreme if the null hypothesis were true.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Randomization</td><td>Assign subjects to conditions by chance, so confounders cancel out.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Factorial design</td><td>Vary multiple factors simultaneously to detect interactions.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Replication</td><td>Repeat measurements to estimate variability and improve precision.</td></tr>
+          <tr><td class="py-2 pr-4">ANOVA</td><td>Partition total variance into components (treatment, error) to test group differences.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The argument</h3>
+    <p>Fisher's starting point was agricultural field trials at Rothamsted. Different plots of land vary in soil quality, drainage, sunlight. If you assign all treatment plots to one side of the field and all control plots to the other, any measured difference might be the treatment or might be the soil. Randomization solves this by making it equally likely that each plot ends up in either group. Confounding variables do not disappear, but they distribute evenly in expectation.</p>
+
+    <p>From randomization Fisher built significance testing. Under the null hypothesis, the treatment has no effect, so any measured difference is due to chance variation in assignment. The p-value measures how surprising the observed difference would be under this null. A small p-value means the data are unlikely if nothing is happening, which is grounds (Fisher argued) for rejecting the null.</p>
+
+    <p>Fisher also formalized factorial design: instead of testing one variable at a time (does fertilizer work? does irrigation work?), vary both simultaneously. This is more efficient and reveals interactions that single-factor experiments cannot detect. A fertilizer that works on dry soil but not irrigated soil is invisible to one-factor-at-a-time testing.</p>
+
+    <p>The lady tasting tea opens the book and illustrates the whole framework in miniature. A colleague claimed she could tell whether milk or tea was poured first. Fisher designed a protocol: eight cups, four of each type, presented in random order. Under the null hypothesis (she is guessing), the probability of getting all eight correct is 1/70. The example contains randomization, a null hypothesis, and a significance calculation in three pages.</p>
+
+    <h3>Discussion</h3>
+
+    <p>Fisher formalized what <a href="https://en.wikipedia.org/wiki/Mill%27s_Methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mill called the method of difference</a>: if two situations differ in one factor and produce different results, that factor is the cause. Randomization is what makes the "differ in one factor" condition achievable in practice. Without it, Mill's method is an aspiration. With it, the method becomes a protocol.</p>
+
+    <p>The <a href="https://en.wikipedia.org/wiki/Neyman%E2%80%93Pearson_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Neyman-Pearson framework</a> reframed significance testing as decision theory. Where Fisher treated the p-value as a measure of evidence against the null, Neyman and Pearson introduced Type I errors (false positives) and Type II errors (false negatives) and treated testing as choosing between two actions. Fisher rejected this framing for the rest of his life. He saw the p-value as a property of the data, not a decision rule. The two frameworks coexist in modern practice, often inconsistently. Most textbooks teach a hybrid that neither Fisher nor Neyman would endorse.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Deborah_Mayo"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deborah Mayo</a> has spent decades reconciling them. Her "severe testing" framework says a result is evidence for a hypothesis only if the test had a high probability of not producing that result if the hypothesis were false. This recovers Fisher's intuition (the p-value matters) within a Neyman-Pearson structure (error probabilities matter). It also connects back to <a href="/reading/scientific-method/popper-1934/">Popper</a>: a severe test is one that could have falsified the hypothesis but didn't.</p>
+
+    <h3>Failure and integrity</h3>
+
+    <p>Fisher was a eugenicist. Not casually or incidentally, but as a matter of sustained intellectual commitment. He served on the editorial board of the Annals of Eugenics. He argued against the scientific consensus on the harms of tobacco, partly to defend individual liberty but also because his statistical judgment was colored by personal conviction. He opposed the UNESCO statement on race in 1950.</p>
+
+    <p>This is the hardest integrity question in the collection. Fisher's statistical methods are sound. Randomization works. ANOVA partitions variance correctly. The p-value does what it says. The tools are morally neutral. The scientist who built them was not.</p>
+
+    <p>It would be simpler if his eugenics reflected statistical errors, but it does not. Fisher applied competent statistics to questions framed by ideology. The framing itself was the failure: which questions to ask, which populations to study, which outcomes to measure. Sound method applied to a monstrous program produces monstrous conclusions with an unearned veneer of rigor. The tools did not cause the harm, but they lent it authority.</p>
+
+    <p>The lesson is that statistical competence does not protect against moral error. <a href="/reading/scientific-method/chamberlin-1890/">Chamberlin's method</a> of multiple working hypotheses might have helped at the level of scientific questions, but the problem with eugenics was not a shortage of alternative hypotheses. The problem was that the questions themselves were corrupted by the assumption that human worth admits of quantitative comparison.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin 1890</a> — hold multiple hypotheses; Fisher provided the machinery to test them</li>
+      <li><a href="/reading/scientific-method/popper-1934/">Popper 1934</a> — falsifiability as demarcation; Fisher's p-value as a falsification tool</li>
+      <li><a href="/reading/probability/grinstead-03/">🎰 Probability Ch.3</a> — combinatorics and the null distribution: Fisher's exact test counts permutations to compute p-values</li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a> — severity testing as a rigorous reinterpretation of Fisher's p-value framework</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis 2005</a> — why Fisher's framework breaks down under selection pressure and low base rates</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Neyman%E2%80%93Pearson_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Neyman-Pearson (Wikipedia)</a> — the rival framework Fisher rejected</li>
+      <li><a href="https://en.wikipedia.org/wiki/Deborah_Mayo"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deborah Mayo (Wikipedia)</a> — severe testing as reconciliation</li>
+      <li><a href="https://en.wikipedia.org/wiki/Mill%27s_Methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mill's Methods (Wikipedia)</a> — the philosophical ancestor Fisher operationalized</li>
+      <li><a href="https://en.wikipedia.org/wiki/Lady_tasting_tea"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The lady tasting tea (Wikipedia)</a> — Fisher's opening example</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The book remains in print. <a href="https://archive.org/details/in.ernet.dli.2015.502684">Read it on the Internet Archive</a>. The lady tasting tea is Chapter II.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/chamberlin-1890/", label: "Chamberlin 1890 · 7 of 17" }} next={{ href: "/reading/scientific-method/popper-1934/", label: "Popper 1934 · 9 of 17" }} />
+  </main>
+</Layout>

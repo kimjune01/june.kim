@@ -1,0 +1,76 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Finance" favicon="📈">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>📈 Finance</h1>
+    <p class="text-gray-400 mb-2">Sources: <a href="https://openstax.org/details/books/principles-finance">OpenStax</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>).</p>
+    <p class="text-gray-400 mb-6">How money moves through time, how risk gets priced, and why markets sometimes get it wrong.</p>
+
+    <!-- SVG: Efficient frontier curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="330" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="170" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Axis labels -->
+        <text x="190" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Risk (&#963;)</text>
+        <text x="15" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90, 15, 95)">Return (&#956;)</text>
+        <!-- Efficient frontier curve -->
+        <path d="M 80,150 Q 100,60 200,40 Q 280,25 310,30" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Individual assets (dots) -->
+        <circle cx="120" cy="130" r="3" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="150" cy="110" r="3" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="180" cy="90" r="3" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="200" cy="80" r="3" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="240" cy="70" r="3" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="160" cy="140" r="3" fill="#f59e0b" fill-opacity="0.3"/>
+        <circle cx="200" cy="120" r="3" fill="#f59e0b" fill-opacity="0.3"/>
+        <circle cx="250" cy="100" r="3" fill="#f59e0b" fill-opacity="0.3"/>
+        <!-- Tangent portfolio -->
+        <circle cx="170" cy="65" r="4" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="185" y="62" fill="#60a5fa" font-size="9" fill-opacity="0.7">T</text>
+        <!-- Capital market line -->
+        <line x1="50" y1="140" x2="310" y2="30" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="5,3"/>
+        <!-- Risk-free rate -->
+        <circle cx="50" cy="140" r="3" fill="#10b981" fill-opacity="0.6"/>
+        <text x="60" y="145" fill="#10b981" font-size="9" fill-opacity="0.7">r&#x66;</text>
+        <!-- Caption -->
+        <text x="180" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Efficient frontier and capital market line.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/finance-1/fin-01/", title: "Time Value of Money", desc: "A dollar today is worth more than a dollar tomorrow. Present value, future value, discounting." },
+  { href: "/reading/finance-1/fin-02/", title: "Fixed Income", desc: "Bonds, yield curves, duration, and why interest rates move prices." },
+  { href: "/reading/finance-1/fin-03/", title: "Equities", desc: "Stock valuation: dividends, earnings, growth, and what a share price represents." },
+  { href: "/reading/finance-1/fin-04/", title: "Risk and Return", desc: "Variance, standard deviation, Sharpe ratio: measuring what you get for what you risk." },
+  { href: "/reading/finance-1/fin-05/", title: "Portfolio Theory", desc: "Markowitz: diversification is the only free lunch. Efficient frontier, optimal portfolios." },
+  { href: "/reading/finance-1/fin-06/", title: "CAPM and APT", desc: "Systematic vs. idiosyncratic risk. Beta, the security market line, and arbitrage pricing." },
+  { href: "/reading/finance-1/fin-07/", title: "Forwards and Futures", desc: "Locking in prices today for delivery tomorrow. No-arbitrage pricing, hedging." },
+  { href: "/reading/finance-1/fin-08/", title: "Options", desc: "Calls, puts, payoff diagrams, put-call parity, and the Black-Scholes formula." },
+  { href: "/reading/finance-1/fin-09/", title: "Efficient Markets", desc: "Prices reflect information. Weak, semi-strong, strong forms, and the anomalies that test them." },
+  { href: "/reading/finance-1/fin-10/", title: "Behavioral Finance", desc: "When markets aren't efficient: biases, heuristics, bubbles, and limits to arbitrage." },
+  { href: "/reading/finance-1/fin-11/", title: "Capital Budgeting", desc: "NPV, IRR, payback: how firms decide which projects to fund." },
+  { href: "/reading/finance-1/fin-12/", title: "Risk Management", desc: "Value at risk, hedging strategies, and why tail risk matters." }
+]} icon="📈" />
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT 15.401: Finance Theory I (Andrew Lo)</a> · <a href="https://oyc.yale.edu/economics/econ-252">Yale ECON 252: Financial Markets (Shiller)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; the broader discipline finance sits inside</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; distributions and expected values underpin pricing</li>
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; regression, hypothesis testing for market data</li>
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> &mdash; mechanism design meets market microstructure</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

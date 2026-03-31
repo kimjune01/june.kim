@@ -1,0 +1,206 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.9 — Zero-Knowledge Proofs" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>Zero-Knowledge Proofs</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Zero-knowledge proof</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>zero-knowledge proof</strong> lets you prove you know a secret without revealing the secret itself. The verifier learns nothing except that the statement is true. This is one of the deepest ideas in cryptography: conviction without information.</p>
+    </div>
+
+    <!-- SVG: Ali Baba cave -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 320" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Cave entrance -->
+        <rect x="190" y="10" width="60" height="40" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="220" y="35" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">entrance</text>
+
+        <!-- Path down -->
+        <line x1="220" y1="50" x2="220" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+
+        <!-- Fork -->
+        <circle cx="220" cy="100" r="4" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Left path (A) -->
+        <path d="M 216 100 Q 120 120 100 180 Q 80 240 140 280" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="80" y="175" fill="currentColor" font-size="12" fill-opacity="0.5">Path A</text>
+
+        <!-- Right path (B) -->
+        <path d="M 224 100 Q 320 120 340 180 Q 360 240 300 280" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="340" y="175" fill="currentColor" font-size="12" fill-opacity="0.5">Path B</text>
+
+        <!-- Magic door at bottom connecting A and B -->
+        <rect x="155" y="270" width="130" height="30" rx="4" fill="#f472b6" fill-opacity="0.1" stroke="#f472b6" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="220" y="290" text-anchor="middle" fill="#f472b6" font-size="11">magic door (secret)</text>
+
+        <!-- Verifier at entrance -->
+        <circle cx="220" cy="5" r="8" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-opacity="0.5" stroke-width="1"/>
+        <text x="250" y="9" fill="#60a5fa" font-size="10">Verifier</text>
+
+        <!-- Prover inside -->
+        <circle cx="100" cy="220" r="8" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-opacity="0.5" stroke-width="1"/>
+        <text x="60" y="224" fill="#4ade80" font-size="10">Prover</text>
+
+        <!-- Challenge arrow -->
+        <path d="M 228 15 Q 390 40 350 160" fill="none" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="370" y="100" fill="#60a5fa" font-size="9" fill-opacity="0.7">challenge:</text>
+        <text x="370" y="112" fill="#60a5fa" font-size="9" fill-opacity="0.7">"come out A"</text>
+
+        <!-- Response -->
+        <path d="M 110 210 Q 150 140 210 95" fill="none" stroke="#4ade80" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="110" y="155" fill="#4ade80" font-size="9" fill-opacity="0.7">exits A</text>
+        <text x="100" y="167" fill="#4ade80" font-size="9" fill-opacity="0.7">(used door)</text>
+      </svg>
+    </div>
+
+    <!-- 1. The Ali Baba cave -->
+    <h3>The Ali Baba cave</h3>
+    <p>Imagine a circular cave with a magic door at the back. The prover enters and takes path A or B (the verifier does not see which). The verifier shouts "come out path A" or "come out path B." If the prover knows the secret to open the door, they can always comply. If they do not, they have a 50% chance of being on the wrong side. After 20 rounds, a fake prover's odds of passing are less than one in a million.</p>
+
+    <SchemeRepl client:load initialCode={`; Ali Baba cave simulation
+; The prover either knows the secret (can use door) or doesn't.
+
+; Simple pseudo-random (linear congruential)
+(define seed 42)
+(define (rand)
+  (set! seed (modulo (+ (* seed 1103515245) 12345) 2147483648))
+  (modulo seed 2))
+
+(define (simulate-cave knows-secret rounds)
+  (define (go round passed)
+    (if (> round rounds)
+        passed
+        (let* ((prover-path (rand))        ; 0=A, 1=B
+               (challenge (rand))          ; 0=A, 1=B
+               (can-comply (or knows-secret
+                              (= prover-path challenge))))
+          (go (+ round 1)
+              (and passed can-comply)))))
+  (go 1 #t))
+
+; Honest prover (knows the secret): always passes
+(display "Honest prover (20 rounds): ")
+(display (simulate-cave #t 20)) (newline)
+
+; Fake prover: almost certainly caught
+(display "Fake prover trials:") (newline)
+(define (run-fakes n caught)
+  (if (= n 0) caught
+      (run-fakes (- n 1)
+                 (if (simulate-cave #f 20) caught (+ caught 1)))))
+
+(define total 10)
+(define caught (run-fakes total 0))
+(display "  ") (display caught) (display "/")
+(display total) (display " caught")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Ali Baba cave simulation
+import random
+random.seed(42)
+
+def simulate_cave(knows_secret, rounds=20):
+    for _ in range(rounds):
+        prover_path = random.randint(0, 1)  # 0=A, 1=B
+        challenge = random.randint(0, 1)
+        can_comply = knows_secret or (prover_path == challenge)
+        if not can_comply:
+            return False
+    return True
+
+# Honest prover always passes
+print(f"Honest prover: {simulate_cave(True)}")
+
+# Fake prover: almost always caught
+caught = sum(1 for _ in range(1000) if not simulate_cave(False))
+print(f"Fake prover: {caught}/1000 caught")
+`} />
+    </div>
+
+    <!-- 2. Interactive vs non-interactive -->
+    <h3>Interactive vs non-interactive</h3>
+    <p>The cave protocol is <strong>interactive</strong>: the verifier must be online, issuing fresh challenges. A <strong>non-interactive</strong> proof replaces the verifier with a hash function (the <a href="https://en.wikipedia.org/wiki/Fiat%E2%80%93Shamir_heuristic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fiat-Shamir heuristic</a>). The prover hashes the commitment to generate their own challenge. Anyone can verify the proof later without interaction.</p>
+
+    <SchemeRepl client:load initialCode={`; Fiat-Shamir heuristic: replace the verifier with a hash.
+; Interactive: verifier sends challenge c
+; Non-interactive: c = hash(commitment)
+
+; Schnorr identification protocol (simplified)
+; Prover knows secret x, public key y = g^x mod p
+; 1. Prover picks random r, sends commitment t = g^r mod p
+; 2. Challenge c = hash(t) (non-interactive)
+; 3. Prover sends s = r + c*x
+; 4. Verifier checks g^s = t * y^c
+
+(display "Interactive ZKP:") (newline)
+(display "  Prover -> commitment -> Verifier") (newline)
+(display "  Verifier -> challenge -> Prover") (newline)
+(display "  Prover -> response -> Verifier checks") (newline)
+(newline)
+(display "Non-interactive (Fiat-Shamir):") (newline)
+(display "  challenge = hash(commitment)") (newline)
+(display "  Proof = (commitment, response)") (newline)
+(display "  Anyone can verify, anytime")
+`} />
+
+    <!-- 3. ZK-SNARKs -->
+    <h3>ZK-SNARKs</h3>
+    <p><strong>ZK-SNARK</strong> stands for Zero-Knowledge Succinct Non-interactive Argument of Knowledge. "Succinct" means the proof is tiny (a few hundred bytes) regardless of the computation's size. "Non-interactive" means no back-and-forth. ZK-SNARKs let you prove you ran an arbitrary computation correctly, without revealing the inputs.</p>
+
+    <SchemeRepl client:load initialCode={`; ZK-SNARKs: what each word means
+
+(display "Zero-Knowledge:") (newline)
+(display "  Verifier learns nothing beyond validity") (newline)
+(newline)
+(display "Succinct:") (newline)
+(display "  Proof size is O(1), not O(computation)") (newline)
+(display "  A proof for 1M operations is the same") (newline)
+(display "  size as a proof for 10 operations") (newline)
+(newline)
+(display "Non-interactive:") (newline)
+(display "  Single message from prover to verifier") (newline)
+(newline)
+(display "Argument of Knowledge:") (newline)
+(display "  The prover must actually know a witness") (newline)
+(display "  (not just that one exists)") (newline)
+(newline)
+(display "Applications:") (newline)
+(display "  - Private transactions (Zcash)") (newline)
+(display "  - Credential verification without") (newline)
+(display "    revealing the credential") (newline)
+(display "  - Verifiable computation (prove you") (newline)
+(display "    ran the code correctly)")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-08/">&#8592; Ch.8 — Digital Signatures</a></li>
+      <li><a href="/reading/cryptography/crypto-10/">Ch.10 — TLS Handshake &#8594;</a></li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Zero-knowledge proof</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fiat%E2%80%93Shamir_heuristic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fiat-Shamir heuristic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ZK-SNARK</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-08/", label: "Digital Signatures" }} next={{ href: "/reading/cryptography/crypto-10/", label: "TLS Handshake" }} />
+
+  </main>
+</Layout>

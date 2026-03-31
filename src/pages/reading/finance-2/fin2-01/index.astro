@@ -1,0 +1,252 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — Stochastic Processes" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Stochastic Processes</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>stochastic process</strong> is a sequence of random variables indexed by time. Finance models asset prices as stochastic processes because tomorrow's price depends on today's, plus noise you can't predict.</p>
+    </div>
+
+    <!-- SVG: random walk diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="380" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="20" x2="40" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">time steps</text>
+        <text x="15" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,15,100)">position</text>
+        <!-- Random walk path 1 -->
+        <polyline points="40,100 74,90 108,80 142,90 176,80 210,70 244,80 278,70 312,60 346,70 380,60"
+                  fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Random walk path 2 -->
+        <polyline points="40,100 74,110 108,120 142,110 176,120 210,130 244,120 278,130 312,140 346,130 380,140"
+                  fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Random walk path 3 -->
+        <polyline points="40,100 74,90 108,100 142,110 176,100 210,110 244,100 278,110 312,100 346,90 380,100"
+                  fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Start point -->
+        <circle cx="40" cy="100" r="3" fill="currentColor" fill-opacity="0.6"/>
+        <text x="50" y="96" fill="currentColor" font-size="9" fill-opacity="0.5">S₀</text>
+        <!-- Labels -->
+        <text x="380" y="55" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.6">path 1</text>
+        <text x="380" y="155" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.6">path 2</text>
+        <text x="380" y="95" text-anchor="end" fill="#34d399" font-size="9" fill-opacity="0.6">path 3</text>
+      </svg>
+    </div>
+
+    <!-- 1. Random Walks -->
+    <h3>Random walks and their properties</h3>
+    <p>A <strong>random walk</strong> starts at zero and at each step moves up or down by one with equal probability. After n steps the expected position is 0, but the expected distance from the origin grows as &#x221A;n. This square-root scaling is the heartbeat of finance: volatility grows with the square root of time.</p>
+
+    <SchemeRepl client:load initialCode={`; Symmetric random walk: +1 or -1 each step
+; Simulate using a linear congruential generator
+
+(define (lcg seed) (modulo (+ (* 1103515245 seed) 12345) (expt 2 31)))
+
+(define (random-walk steps seed)
+  (if (= steps 0)
+      (list 0)
+      (let* ((trail (random-walk (- steps 1) (lcg seed)))
+             (prev (car trail))
+             (bit (modulo (lcg (+ seed steps)) 2))
+             (step (if (= bit 0) 1 -1)))
+        (cons (+ prev step) trail))))
+
+(define walk (reverse (random-walk 10 42)))
+(display "10-step walk: ") (display walk) (newline)
+(display "Final position: ") (display (car (reverse walk))) (newline)
+
+; Expected |position| ~ sqrt(n)
+(display "sqrt(10) = ") (display (sqrt 10))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+random.seed(42)
+
+def random_walk(steps):
+    positions = [0]
+    for _ in range(steps):
+        step = random.choice([1, -1])
+        positions.append(positions[-1] + step)
+    return positions
+
+walk = random_walk(10)
+print("10-step walk:", walk)
+print("Final position:", walk[-1])
+print(f"sqrt(10) = {10**0.5:.4f}")
+`} />
+    </div>
+
+
+    <!-- 2. Markov Chains -->
+    <h3>Markov chains and transition matrices</h3>
+    <p>A <strong>Markov chain</strong> is memoryless: the next state depends only on the current state, not the history. A transition matrix P has entry P(i,j) = probability of moving from state i to state j. Multiply the matrix by itself n times to get n-step transition probabilities.</p>
+
+    <SchemeRepl client:load initialCode={`; 2-state Markov chain: Bull / Bear market
+; P = [[0.9, 0.1],   (Bull stays Bull 90%)
+;      [0.3, 0.7]]   (Bear recovers 30%)
+
+(define (mat-mul A B)
+  ; 2x2 matrix multiply
+  (let ((a11 (car (car A))) (a12 (cadr (car A)))
+        (a21 (car (cadr A))) (a22 (cadr (cadr A)))
+        (b11 (car (car B))) (b12 (cadr (car B)))
+        (b21 (car (cadr B))) (b22 (cadr (cadr B))))
+    (list (list (+ (* a11 b11) (* a12 b21))
+                (+ (* a11 b12) (* a12 b22)))
+          (list (+ (* a21 b11) (* a22 b21))
+                (+ (* a21 b12) (* a22 b22))))))
+
+(define P (list (list 0.9 0.1) (list 0.3 0.7)))
+
+; 2-step transition matrix P^2
+(define P2 (mat-mul P P))
+(display "P^2 = ") (display P2) (newline)
+
+; Stationary distribution: pi = pi * P => pi = [0.75, 0.25]
+(display "Stationary: 75% Bull, 25% Bear") (newline)
+(display "Check: 0.75*0.9 + 0.25*0.3 = ")
+(display (+ (* 0.75 0.9) (* 0.25 0.3)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+# Bull/Bear transition matrix
+P = np.array([[0.9, 0.1],
+              [0.3, 0.7]])
+
+P2 = P @ P
+print("P^2 =")
+print(P2)
+
+# Stationary distribution via eigenvalue
+eigenvalues, eigenvectors = np.linalg.eig(P.T)
+# Find eigenvector for eigenvalue 1
+idx = np.argmin(np.abs(eigenvalues - 1))
+pi = eigenvectors[:, idx].real
+pi = pi / pi.sum()
+print(f"Stationary distribution: {pi}")
+`} />
+    </div>
+
+
+    <!-- 3. Brownian Motion -->
+    <h3>Brownian motion as limit of random walks</h3>
+    <p><strong>Brownian motion</strong> B(t) is what you get when you take a random walk, shrink the step size, speed up the steps, and take the limit. Formally: scale n steps of size 1/&#x221A;n over time [0,1]. The central limit theorem guarantees the limit is Gaussian. B(t) has independent increments, B(t) - B(s) ~ N(0, t-s), and continuous but nowhere-differentiable paths.</p>
+
+    <SchemeRepl client:load initialCode={`; Brownian motion: variance grows linearly with time
+; B(t) - B(s) ~ N(0, t - s)
+; So Var[B(t)] = t
+
+; Simulate scaled random walk approaching Brownian motion
+(define (scaled-walk n seed)
+  ; n steps, each of size 1/sqrt(n)
+  (define step-size (/ 1.0 (sqrt n)))
+  (define (walk k s pos)
+    (if (= k 0) pos
+        (let* ((new-s (modulo (+ (* 1103515245 s) 12345) (expt 2 31)))
+               (direction (if (= (modulo new-s 2) 0) 1 -1)))
+          (walk (- k 1) new-s (+ pos (* direction step-size))))))
+  (walk n seed 0))
+
+; More steps => final position has variance closer to 1
+(display "n=10:  final = ") (display (scaled-walk 10 42)) (newline)
+(display "n=100: final = ") (display (scaled-walk 100 42)) (newline)
+(display "n=1000: final = ") (display (scaled-walk 1000 42)) (newline)
+(display "Theory: Var[B(1)] = 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+import math
+random.seed(42)
+
+def scaled_random_walk(n):
+    """n-step random walk scaled to approximate B(1)"""
+    step_size = 1.0 / math.sqrt(n)
+    position = 0
+    for _ in range(n):
+        position += random.choice([1, -1]) * step_size
+    return position
+
+for n in [10, 100, 1000, 10000]:
+    print(f"n={n:>5}: B(1) ≈ {scaled_random_walk(n):+.4f}")
+print("Theory: Var[B(1)] = 1")
+`} />
+    </div>
+
+
+    <!-- 4. Martingales -->
+    <h3>Martingales &#x2014; fair games</h3>
+    <p>A <strong>martingale</strong> is a stochastic process whose expected future value, given all past information, equals its current value: E[X(t+1) | history] = X(t). A symmetric random walk is a martingale. A stock price under the risk-neutral measure is a (discounted) martingale. This is the mathematical formalization of "you can't beat a fair game."</p>
+
+    <SchemeRepl client:load initialCode={`; Martingale property: E[X(t+1) | X(t)] = X(t)
+; For a symmetric random walk, each step has E = 0
+
+; Verify: average of many final positions ≈ starting position
+(define (walk-final steps seed)
+  (if (= steps 0) 0
+      (let* ((new-seed (modulo (+ (* 1103515245 seed) 12345) (expt 2 31)))
+             (step (if (= (modulo new-seed 2) 0) 1 -1)))
+        (+ step (walk-final (- steps 1) new-seed)))))
+
+; Run 8 walks with different seeds, average their endpoints
+(define endpoints
+  (map (lambda (s) (walk-final 20 (* s 7919)))
+       (list 1 2 3 4 5 6 7 8)))
+
+(display "Endpoints: ") (display endpoints) (newline)
+
+(define avg (/ (apply + endpoints) (length endpoints)))
+(display "Average final position: ") (display avg) (newline)
+(display "Martingale prediction:  0")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+
+def simulate_walks(n_walks, steps):
+    endpoints = []
+    for i in range(n_walks):
+        random.seed(i * 7919)
+        pos = 0
+        for _ in range(steps):
+            pos += random.choice([1, -1])
+        endpoints.append(pos)
+    return endpoints
+
+endpoints = simulate_walks(1000, 50)
+avg = sum(endpoints) / len(endpoints)
+print(f"Average of {len(endpoints)} walk endpoints: {avg:.3f}")
+print("Martingale prediction: 0")
+print(f"Std dev: {(sum((x-avg)**2 for x in endpoints)/len(endpoints))**0.5:.2f}")
+print(f"Theory std dev: {50**0.5:.2f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; random variables and expectation are prerequisites</li>
+      <li><a href="/reading/linear-algebra/la-01/">&#x1F4D0; Linear Algebra Ch.1</a> &#x2014; transition matrices are matrix multiplication</li>
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &#x2014; limits underpin the random walk &#x2192; Brownian motion construction</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/finance-2/fin2-02/", label: "Ito Calculus · 2" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,264 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.7 — Forwards and Futures" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Forwards and Futures</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>forward contract</strong> locks in today's price for future delivery. The no-arbitrage forward price equals the spot price grown at the risk-free rate, adjusted for carry costs. Futures are exchange-traded forwards with daily settlement.</p>
+    </div>
+
+    <!-- SVG: Forward contract payoff diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="110" x2="330" y2="110" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="180" y1="20" x2="180" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Axis labels -->
+        <text x="335" y="115" fill="currentColor" font-size="9" fill-opacity="0.5">S&#x1D40;</text>
+        <text x="185" y="18" fill="currentColor" font-size="9" fill-opacity="0.5">Payoff</text>
+        <text x="180" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">F</text>
+        <!-- Long forward payoff: 45-degree line through (F, 0) -->
+        <line x1="60" y1="190" x2="300" y2="30" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="305" y="35" fill="#60a5fa" font-size="9" fill-opacity="0.7">Long</text>
+        <!-- Short forward payoff -->
+        <line x1="60" y1="30" x2="300" y2="190" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="305" y="195" fill="#f59e0b" font-size="9" fill-opacity="0.7">Short</text>
+        <!-- Zero line label -->
+        <text x="35" y="114" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <!-- Caption -->
+        <text x="180" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Forward contract payoffs: zero-sum game.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Forward Contract Payoff -->
+    <h3>Forward contract payoff</h3>
+    <p>A <strong>long forward</strong> obliges you to buy the asset at the agreed forward price F at expiration. If the spot price S&#x1D40; exceeds F, you profit; otherwise you lose. The payoff is S&#x1D40; &minus; F. The short side's payoff is the mirror: F &minus; S&#x1D40;. No money changes hands at inception &mdash; the contract starts at zero value.</p>
+
+    <SchemeRepl client:load initialCode={`; Forward contract payoff
+; Long payoff = S_T - F
+; Short payoff = F - S_T
+
+(define (forward-payoff-long spot forward-price)
+  (- spot forward-price))
+
+(define (forward-payoff-short spot forward-price)
+  (- forward-price spot))
+
+; Example: forward price = 100
+(define F 100)
+
+(display "Spot=110: Long=") (display (forward-payoff-long 110 F))
+(display ", Short=") (display (forward-payoff-short 110 F)) (newline)
+
+(display "Spot=100: Long=") (display (forward-payoff-long 100 F))
+(display ", Short=") (display (forward-payoff-short 100 F)) (newline)
+
+(display "Spot=85:  Long=") (display (forward-payoff-long 85 F))
+(display ", Short=") (display (forward-payoff-short 85 F)) (newline)
+
+; Zero-sum check: long + short = 0
+(display "Sum at S=110: ")
+(display (+ (forward-payoff-long 110 F) (forward-payoff-short 110 F)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Forward contract payoff
+def forward_payoff_long(spot, F):
+    return spot - F
+
+def forward_payoff_short(spot, F):
+    return F - spot
+
+F = 100
+
+for S in [110, 100, 85]:
+    l = forward_payoff_long(S, F)
+    s = forward_payoff_short(S, F)
+    print(f"Spot={S}: Long={l}, Short={s}, Sum={l+s}")
+`} />
+    </div>
+
+
+    <!-- 2. No-Arbitrage Forward Pricing -->
+    <h3>No-arbitrage forward pricing</h3>
+    <p>The forward price must equal the spot price grown at the risk-free rate, or arbitrageurs will exploit the gap. For an asset with no income: F = S&#x2080; &middot; e&#x72;&#x1D40;. With a continuous dividend yield q: F = S&#x2080; &middot; e&#x28;&#x72;&minus;&#x71;&#x29;&#x1D40;. Storage costs increase the forward price; convenience yields decrease it. This is the <strong>cost of carry</strong> model.</p>
+
+    <SchemeRepl client:load initialCode={`; No-arbitrage forward price
+; F = S0 * e^(r * T)  (no income)
+; F = S0 * e^((r - q) * T)  (continuous dividend yield q)
+
+(define (forward-price-no-income S0 r T)
+  (* S0 (exp (* r T))))
+
+(define (forward-price-dividend S0 r q T)
+  (* S0 (exp (* (- r q) T))))
+
+; Gold: S0 = $1800, r = 5%, T = 1 year, no income
+(display "Gold 1-yr forward: $")
+(display (round (forward-price-no-income 1800 0.05 1))) (newline)
+
+; Stock index: S0 = 4000, r = 5%, q = 2% div yield, T = 0.5 yr
+(display "Index 6-mo forward: $")
+(display (round (forward-price-dividend 4000 0.05 0.02 0.5))) (newline)
+
+; Verify no-arbitrage: borrow S0, buy spot, deliver at F
+; Profit = F - S0*e^(rT) must be zero
+(define S0 1800) (define r 0.05) (define T 1)
+(define F-market (forward-price-no-income S0 r T))
+(define borrow-cost (* S0 (exp (* r T))))
+(display "Arbitrage profit: $")
+(display (- F-market borrow-cost))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def forward_price(S0, r, T, q=0):
+    """Cost of carry forward price. q = continuous yield."""
+    return S0 * math.exp((r - q) * T)
+
+# Gold: S0=1800, r=5%, T=1yr
+print(f"Gold 1-yr forward: \${forward_price(1800, 0.05, 1):.2f}")
+
+# Stock index: S0=4000, r=5%, q=2%, T=0.5yr
+print(f"Index 6-mo forward: \${forward_price(4000, 0.05, 0.5, q=0.02):.2f}")
+
+# No-arbitrage check
+S0, r, T = 1800, 0.05, 1
+F = forward_price(S0, r, T)
+borrow_cost = S0 * math.exp(r * T)
+print(f"Arbitrage profit: \${F - borrow_cost:.2f}")
+`} />
+    </div>
+
+
+    <!-- 3. Futures vs Forwards -->
+    <h3>Futures vs forwards</h3>
+    <p><strong>Forwards</strong> are private, over-the-counter contracts. <strong>Futures</strong> are standardized, exchange-traded, and marked to market daily. Daily settlement means gains and losses are realized every day, not just at expiration. This introduces reinvestment risk but eliminates counterparty risk through the clearinghouse. When interest rates are non-stochastic, forward and futures prices are identical.</p>
+
+    <SchemeRepl client:load initialCode={`; Daily mark-to-market on a futures position
+; Track margin account balance over 5 days
+
+(define initial-margin 10000)
+(define (daily-settle prices)
+  (define (loop prev-prices balance day)
+    (if (null? (cdr prev-prices))
+        (begin (display "Final balance: $") (display balance))
+        (let* ((daily-pnl (- (cadr prev-prices) (car prev-prices)))
+               (new-balance (+ balance daily-pnl)))
+          (display "Day ") (display day)
+          (display ": price=") (display (cadr prev-prices))
+          (display ", P&L=") (display daily-pnl)
+          (display ", balance=$") (display new-balance) (newline)
+          (loop (cdr prev-prices) new-balance (+ day 1)))))
+  (loop prices initial-margin 1))
+
+; Futures prices over 5 days (long 1 contract)
+(display "=== Long futures, daily settlement ===" ) (newline)
+(daily-settle '(100 102 99 101 104 103))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Daily mark-to-market on a futures position
+initial_margin = 10000
+prices = [100, 102, 99, 101, 104, 103]
+
+print("=== Long futures, daily settlement ===")
+balance = initial_margin
+for day in range(1, len(prices)):
+    pnl = prices[day] - prices[day - 1]
+    balance += pnl
+    print(f"Day {day}: price={prices[day]}, P&L={pnl:+}, balance=\${balance}")
+
+print(f"\\nTotal P&L: \${prices[-1] - prices[0]:+}")
+print(f"Final balance: \${balance}")
+`} />
+    </div>
+
+
+    <!-- 4. Hedging with Futures -->
+    <h3>Hedging with futures</h3>
+    <p>A producer who will sell an asset in the future can <strong>short futures</strong> to lock in today's price. A consumer who will buy can <strong>go long</strong>. The hedge ratio h = &#x3C1; &middot; (&#x3C3;&#x209B;/&#x3C3;&#x1DA0;) minimizes portfolio variance when the hedge asset differs from the underlying. Basis risk &mdash; the gap between spot and futures &mdash; remains.</p>
+
+    <SchemeRepl client:load initialCode={`; Minimum variance hedge ratio
+; h* = rho * (sigma_S / sigma_F)
+; where rho = correlation, sigma = std dev
+
+(define (hedge-ratio rho sigma-s sigma-f)
+  (* rho (/ sigma-s sigma-f)))
+
+; Airline hedging jet fuel with crude oil futures
+; rho = 0.85, sigma_jet = 0.30, sigma_crude = 0.25
+(define h (hedge-ratio 0.85 0.30 0.25))
+(display "Optimal hedge ratio: ") (display h) (newline)
+
+; Hedging 1,000,000 gallons of jet fuel
+; Each crude futures contract = 42,000 gallons
+(define gallons 1000000)
+(define contract-size 42000)
+(define n-contracts (round (* h (/ gallons contract-size))))
+(display "Contracts needed: ") (display n-contracts) (newline)
+
+; Hedge effectiveness: with vs without hedge
+(define spot-change -15)  ; jet fuel drops $15
+(define futures-change -12)  ; crude drops $12
+(define unhedged-loss (* spot-change gallons))
+(define hedge-gain (* futures-change n-contracts contract-size -1))
+(display "Unhedged loss: $") (display unhedged-loss) (newline)
+(display "Futures gain: $") (display hedge-gain) (newline)
+(display "Net position: $") (display (+ unhedged-loss hedge-gain))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Minimum variance hedge ratio
+def hedge_ratio(rho, sigma_s, sigma_f):
+    return rho * (sigma_s / sigma_f)
+
+# Airline hedging jet fuel with crude oil futures
+rho, sigma_jet, sigma_crude = 0.85, 0.30, 0.25
+h = hedge_ratio(rho, sigma_jet, sigma_crude)
+print(f"Optimal hedge ratio: {h:.4f}")
+
+gallons = 1_000_000
+contract_size = 42_000
+n_contracts = round(h * gallons / contract_size)
+print(f"Contracts needed: {n_contracts}")
+
+# Hedge effectiveness
+spot_change, futures_change = -15, -12
+unhedged = spot_change * gallons
+hedge_gain = -futures_change * n_contracts * contract_size
+print(f"Unhedged loss: \${unhedged:,}")
+print(f"Futures gain:  \${hedge_gain:,}")
+print(f"Net position:  \${unhedged + hedge_gain:,}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-06/">📈 CAPM and APT</a> &mdash; systematic risk pricing that forwards help hedge</li>
+      <li><a href="/reading/finance-1/fin-08/">📈 Options</a> &mdash; nonlinear payoffs, the next step beyond forwards</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; expected values and distributions behind pricing</li>
+      <li><a href="/reading/finance-1/fin-04/">📈 Risk and Return</a> &mdash; variance measures that drive hedge ratios</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-06/", label: "CAPM and APT · 6 of 12" }}
+      next={{ href: "/reading/finance-1/fin-08/", label: "Options · 8 of 12" }}
+    />
+
+  </main>
+</Layout>

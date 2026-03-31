@@ -1,0 +1,266 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.7 — Metric Spaces" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">&larr; back to geometry</a>
+
+    <h1>Metric Spaces</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (<a href="https://en.wikipedia.org/wiki/Metric_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Metric space</a>) &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>metric space</strong> is a set X equipped with a function d : X &times; X &rarr; [0, &infin;) that measures distance. Four axioms: d(x,y) &ge; 0 (non-negativity), d(x,y) = 0 iff x = y (identity of indiscernibles), d(x,y) = d(y,x) (symmetry), and d(x,z) &le; d(x,y) + d(y,z) (triangle inequality). Every geometry you know is a special case.</p>
+    </div>
+
+    <!-- 1. The four axioms -->
+    <h3>The four axioms</h3>
+    <p>A distance function (or <strong>metric</strong>) must satisfy four properties. These are not optional: drop any one and you get a different, weaker structure (pseudometric, quasimetric, semimetric). The triangle inequality is the one that does the most work. It says detours never shorten the trip.</p>
+
+    <SchemeRepl client:load initialCode={`; A metric d must satisfy:
+; 1. d(x,y) >= 0           (non-negativity)
+; 2. d(x,y) = 0 iff x = y  (identity)
+; 3. d(x,y) = d(y,x)       (symmetry)
+; 4. d(x,z) <= d(x,y) + d(y,z) (triangle inequality)
+
+; Euclidean distance in 2D
+(define (euclidean p q)
+  (let ((dx (- (car p) (car q)))
+        (dy (- (cadr p) (cadr q))))
+    (sqrt (+ (* dx dx) (* dy dy)))))
+
+(define a (list 0 0))
+(define b (list 3 4))
+(define c (list 6 0))
+
+(display "d(a,b) = ") (display (euclidean a b)) (newline)
+(display "d(b,c) = ") (display (euclidean b c)) (newline)
+(display "d(a,c) = ") (display (euclidean a c)) (newline)
+(display "triangle: d(a,c) <= d(a,b) + d(b,c)? ")
+(display (<= (euclidean a c)
+             (+ (euclidean a b) (euclidean b c))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def euclidean(p, q):
+    return math.sqrt(sum((a - b) ** 2 for a, b in zip(p, q)))
+
+a, b, c = (0, 0), (3, 4), (6, 0)
+
+print(f"d(a,b) = {euclidean(a, b)}")
+print(f"d(b,c) = {euclidean(b, c)}")
+print(f"d(a,c) = {euclidean(a, c)}")
+print(f"triangle: d(a,c) <= d(a,b) + d(b,c)? {euclidean(a, c) <= euclidean(a, b) + euclidean(b, c)}")
+`} />
+    </div>
+
+
+    <!-- 2. Open balls -->
+    <h3>Open balls</h3>
+    <p>The <strong>open ball</strong> B(x, r) is the set of all points within distance r of x. Open balls are the building blocks of the topology induced by the metric. In Euclidean space they are circles. In taxicab space they are diamonds. The metric determines the shape of "nearness."</p>
+
+    <!-- SVG: Euclidean circles vs taxicab diamonds around the same center -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left: Euclidean -->
+        <text x="120" y="20" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Euclidean: circles</text>
+        <!-- Grid -->
+        <line x1="40" y1="110" x2="200" y2="110" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="120" y1="30" x2="120" y2="190" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Center point -->
+        <circle cx="120" cy="110" r="3" fill="#60a5fa" fill-opacity="0.8"/>
+        <!-- r=1 ball (Euclidean = circle) -->
+        <circle cx="120" cy="110" r="40" fill="#60a5fa" fill-opacity="0.08" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- r=2 ball -->
+        <circle cx="120" cy="110" r="70" fill="#60a5fa" fill-opacity="0.04" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="120" y="205" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">B(x, r) = circle</text>
+
+        <!-- Right: Taxicab -->
+        <text x="360" y="20" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Taxicab: diamonds</text>
+        <!-- Grid -->
+        <line x1="280" y1="110" x2="440" y2="110" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="360" y1="30" x2="360" y2="190" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Center point -->
+        <circle cx="360" cy="110" r="3" fill="#f59e0b" fill-opacity="0.8"/>
+        <!-- r=1 ball (taxicab = diamond) -->
+        <polygon points="360,70 400,110 360,150 320,110" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- r=2 ball -->
+        <polygon points="360,40 430,110 360,180 290,110" fill="#f59e0b" fill-opacity="0.04" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="360" y="205" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">B(x, r) = diamond</text>
+      </svg>
+    </div>
+
+
+    <!-- 3. Four metrics -->
+    <h3>Four metrics on the same set</h3>
+    <p>The same set of points can carry different metrics. Each metric defines a different notion of distance, different open balls, and different convergent sequences. The set does not change. The structure does.</p>
+
+    <SchemeRepl client:load initialCode={`; Four metrics on pairs of real numbers
+
+; 1. Euclidean: sqrt(dx^2 + dy^2)
+(define (d-euclidean p q)
+  (let ((dx (- (car p) (car q)))
+        (dy (- (cadr p) (cadr q))))
+    (sqrt (+ (* dx dx) (* dy dy)))))
+
+; 2. Taxicab (Manhattan): |dx| + |dy|
+(define (d-taxicab p q)
+  (+ (abs (- (car p) (car q)))
+     (abs (- (cadr p) (cadr q)))))
+
+; 3. Chebyshev (L-infinity): max(|dx|, |dy|)
+(define (d-chebyshev p q)
+  (max (abs (- (car p) (car q)))
+       (abs (- (cadr p) (cadr q)))))
+
+; 4. Discrete: 0 if same, 1 otherwise
+(define (d-discrete p q)
+  (if (equal? p q) 0 1))
+
+(define a (list 0 0))
+(define b (list 3 4))
+
+(display "Euclidean:  ") (display (d-euclidean a b)) (newline)
+(display "Taxicab:    ") (display (d-taxicab a b)) (newline)
+(display "Chebyshev:  ") (display (d-chebyshev a b)) (newline)
+(display "Discrete:   ") (display (d-discrete a b))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def d_euclidean(p, q):
+    return math.sqrt(sum((a-b)**2 for a,b in zip(p,q)))
+
+def d_taxicab(p, q):
+    return sum(abs(a-b) for a,b in zip(p,q))
+
+def d_chebyshev(p, q):
+    return max(abs(a-b) for a,b in zip(p,q))
+
+def d_discrete(p, q):
+    return 0 if p == q else 1
+
+a, b = (0, 0), (3, 4)
+print(f"Euclidean:  {d_euclidean(a, b)}")
+print(f"Taxicab:    {d_taxicab(a, b)}")
+print(f"Chebyshev:  {d_chebyshev(a, b)}")
+print(f"Discrete:   {d_discrete(a, b)}")
+`} />
+    </div>
+
+
+    <!-- 4. Hausdorff distance -->
+    <h3>Hausdorff distance</h3>
+    <p>The <strong>Hausdorff distance</strong> measures how far apart two <em>sets</em> are. It is the greatest distance any point in one set has to travel to reach the other set. If H(A, B) = 0, the closures of A and B are equal. Hausdorff distance turns the collection of compact subsets of a metric space into a metric space itself.</p>
+
+    <SchemeRepl client:load initialCode={`; Hausdorff distance between two finite point sets
+; H(A,B) = max(sup_a inf_b d(a,b), sup_b inf_a d(a,b))
+
+(define (d-euclidean p q)
+  (let ((dx (- (car p) (car q)))
+        (dy (- (cadr p) (cadr q))))
+    (sqrt (+ (* dx dx) (* dy dy)))))
+
+(define (min-dist point set)
+  (apply min (map (lambda (q) (d-euclidean point q)) set)))
+
+(define (directed-hausdorff A B)
+  (apply max (map (lambda (a) (min-dist a B)) A)))
+
+(define (hausdorff A B)
+  (max (directed-hausdorff A B)
+       (directed-hausdorff B A)))
+
+; Two small sets
+(define set-A (list (list 0 0) (list 1 0) (list 0 1)))
+(define set-B (list (list 2 0) (list 3 0) (list 2 1)))
+
+(display "H(A, B) = ") (display (hausdorff set-A set-B))
+; Furthest any point in A must travel to reach B
+`} />
+
+
+    <!-- 5. Metric space as enriched category -->
+    <h3>Metric space as enriched category</h3>
+    <p>A metric space is a category enriched over ([0, &infin;], &ge;, +). Objects are points. The hom-value from x to y is d(x, y). Identity says d(x, x) = 0. Composition says d(x, z) &le; d(x, y) + d(y, z), which is exactly the triangle inequality. Lawvere noticed this in 1973: a metric space is what you get when you replace "arrows exist or not" (Bool-enriched) with "arrows have a cost" ([0, &infin;]-enriched).</p>
+
+    <SchemeRepl client:load initialCode={`; Metric space as enriched category:
+; - Objects: points
+; - hom(x,y) = d(x,y) in [0, inf]
+; - Identity: d(x,x) = 0
+; - Composition: d(x,z) <= d(x,y) + d(y,z)
+;
+; Compare with a Bool-enriched category (preorder):
+; - hom(x,y) = #t or #f
+; - Identity: hom(x,x) = #t
+; - Composition: hom(x,y) AND hom(y,z) => hom(x,z)
+;
+; Replacing Bool with [0,inf] and AND with +
+; and TRUE with 0, turns a preorder into a metric space.
+
+(define (d p q)
+  (let ((dx (- (car p) (car q)))
+        (dy (- (cadr p) (cadr q))))
+    (sqrt (+ (* dx dx) (* dy dy)))))
+
+(define x (list 0 0))
+(define y (list 1 1))
+(define z (list 3 0))
+
+; Identity law: d(x,x) = 0
+(display "d(x,x) = ") (display (d x x)) (newline)
+
+; Triangle inequality = composition law
+(display "d(x,z) = ") (display (d x z)) (newline)
+(display "d(x,y) + d(y,z) = ")
+(display (+ (d x y) (d y z))) (newline)
+(display "composition holds? ")
+(display (<= (d x z) (+ (d x y) (d y z))))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Geometry chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-06/">&#9651; Chapter 6</a> &mdash; Differential Geometry</li>
+      <li><a href="/reading/geometry/geom-08/">&#9651; Chapter 8</a> &mdash; Convex Geometry</li>
+    
+      <li><a href="/reading/real-analysis/lebl-08/">∞ Real Analysis Ch.8</a> &mdash; metric spaces are the same objects, analyzed rather than visualized</li>
+      <li><a href="/reading/machine-learning/ml-05/">🤖 ML Ch.5</a> &mdash; kernel methods use distance functions in feature space</li>
+      <li><a href="/reading/algorithms/algo-07/">⚙ Algorithms Ch.7</a> &mdash; shortest paths generalize Euclidean distance to discrete graphs</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/real-analysis/lebl-08/">&#9651; Analysis Ch.8</a> &mdash; metric spaces from the analysis side</li>
+      <li><a href="/reading/category-theory/milewski-22/">&#9651; Milewski Ch.22</a> &mdash; enriched categories (metric spaces are [0,&infin;]-enriched)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Metric_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Metric space</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hausdorff_distance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Hausdorff distance</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Taxicab_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Taxicab geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Enriched_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Enriched category</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The enriched-category perspective comes from Lawvere's 1973 paper "Metric spaces, generalized logic, and closed categories." Milewski covers enriched categories in chapter 22 of Category Theory for Programmers, where the running example is exactly this: Bool-enrichment gives preorders, [0,&infin;]-enrichment gives metric spaces. The Hausdorff distance example uses finite sets for computability; the general definition uses suprema over arbitrary sets.</p>
+
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-06/", label: "Differential Geometry" }} next={{ href: "/reading/geometry/geom-08/", label: "Convex Geometry" }} />
+
+  </main>
+</Layout>

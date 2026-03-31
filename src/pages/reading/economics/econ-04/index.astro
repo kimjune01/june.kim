@@ -1,0 +1,151 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.4 — Diminishing Returns" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Diminishing Returns</h1>
+    <p class="text-gray-400 text-sm mb-6">David Ricardo &middot; 1817 &middot; <a href="https://en.wikipedia.org/wiki/Diminishing_returns"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Principles, Ch. 2</a> &middot; Also: <a href="https://en.wikipedia.org/wiki/Diminishing_returns"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Adding more of one input while holding others fixed eventually yields <strong>less and less additional output</strong>. The first worker on a farm adds a lot. The tenth adds less. The hundredth might add almost nothing. The curve of total output bends and flattens.</p>
+    </div>
+
+    <!-- SVG: Total output curve flattening -->
+    <h3>The bending curve</h3>
+    <p>Total output rises, but each additional unit of input contributes less. The slope of the total output curve decreases. This is what "diminishing marginal product" looks like.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="200" x2="370" y2="200" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="200" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="210" y="230" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Units of input (e.g. workers)</text>
+        <text x="18" y="110" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 18, 110)">Total output</text>
+        <!-- Total output curve (concave, flattening) -->
+        <path d="M 50 200 Q 120 180 160 140 Q 200 100 250 70 Q 300 50 370 40" fill="none" stroke="#10b981" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="375" y="36" fill="#10b981" font-size="11" fill-opacity="0.7">Total</text>
+        <!-- Tangent lines showing decreasing slope -->
+        <line x1="100" y1="195" x2="140" y2="155" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <text x="145" y="150" fill="#f59e0b" font-size="9" fill-opacity="0.5">steep</text>
+        <line x1="280" y1="55" x2="340" y2="45" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <text x="345" y="52" fill="#f59e0b" font-size="9" fill-opacity="0.5">flat</text>
+        <!-- Caption -->
+        <text x="210" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Each additional worker adds less output</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Diminishing returns: output = sqrt(input) * scale
+; Each additional worker produces less additional output
+
+(define (total-output workers)
+  (* 10 (sqrt workers)))
+
+(define (marginal-product n)
+  (- (total-output n) (total-output (- n 1))))
+
+(display "Workers  Total   Marginal")
+(newline)
+(display "-------  -----   --------")
+(newline)
+
+(define (show-row n)
+  (display n)
+  (display "        ")
+  (display (exact->inexact (total-output n)))
+  (display "   ")
+  (display (exact->inexact (marginal-product n)))
+  (newline))
+
+(show-row 1)
+(show-row 2)
+(show-row 4)
+(show-row 9)
+(show-row 16)
+(show-row 25)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def total_output(workers):
+    return 10 * math.sqrt(workers)
+
+def marginal_product(n):
+    return total_output(n) - total_output(n - 1)
+
+print("Workers    Total  Marginal")
+print("-------    -----  --------")
+for n in [1, 2, 4, 9, 16, 25]:
+    print(str(n).rjust(7) + "  " + str(round(total_output(n),2)).rjust(7) + "  " + str(round(marginal_product(n),2)).rjust(8))
+`} />
+    </div>
+
+
+    <h3>Why it happens</h3>
+    <p>Fixed factors become bottlenecks. More workers share the same land, the same tools, the same factory floor. Coordination costs rise. Each worker has less capital to work with. Ricardo saw this first in agriculture: more labor on the same land yields diminishing harvests.</p>
+
+    <SchemeRepl client:load initialCode={`; Fixed capital, variable labor
+; Output = min(workers, machines) * productivity
+; When workers exceed machines, extras add less
+
+(define machines 5)
+(define productivity 10)
+
+(define (output workers)
+  ; Each machine needs one worker to operate fully.
+  ; Extra workers help but at reduced rate.
+  (let ((full (min workers machines))
+        (extra (max 0 (- workers machines))))
+    (* productivity (+ full (* 0.2 extra)))))
+
+(display "Workers  Output  Marginal")
+(newline)
+(let loop ((n 1) (prev 0))
+  (when (<= n 10)
+    (let ((out (output n)))
+      (display n)
+      (display "        ")
+      (display (exact->inexact out))
+      (display "    ")
+      (display (exact->inexact (- out prev)))
+      (newline)
+      (loop (+ n 1) out))))
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Diminishing returns</td><td>Each additional unit of input produces less additional output</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Marginal product</td><td>The extra output from one more unit of input</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Fixed factor</td><td>An input held constant while others vary</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Diminishing_returns"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Diminishing returns</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Marginal_product"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Marginal product</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-03/", label: "Comparative Advantage" }} next={{ href: "/reading/economics/econ-05/", label: "Elasticity" }} />
+
+  </main>
+</Layout>

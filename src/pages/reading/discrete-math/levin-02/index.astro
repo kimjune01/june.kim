@@ -1,0 +1,306 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Levin Ch.2 — Sequences" favicon="🔢">
+  <main>
+
+    <a href="/reading/discrete-math/" class="text-sm mb-4 inline-block">&larr; back to discrete math</a>
+
+    <h1>Sequences</h1>
+    <p class="text-gray-400 text-sm mb-6">Oscar Levin &middot; CC BY-SA 4.0 &middot; <a href="https://discrete.openmathbooks.org/">Discrete Mathematics: An Open Introduction, Ch. 2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A sequence is a function from the naturals to some codomain. The interesting question is never "what is the next term?" but "what is the <strong>closed form</strong>?" Recurrence relations define sequences by self-reference. Solving them means eliminating the self-reference. Induction proves the solution is correct.</p>
+    </div>
+
+    <!-- SVG: Staircase showing induction step -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Staircase steps -->
+        <rect x="20" y="140" width="50" height="30" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="45" y="160" text-anchor="middle" fill="#60a5fa" font-size="11">n=0</text>
+        <rect x="70" y="110" width="50" height="30" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="95" y="130" text-anchor="middle" fill="#60a5fa" font-size="11">n=1</text>
+        <rect x="120" y="80" width="50" height="30" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="145" y="100" text-anchor="middle" fill="#60a5fa" font-size="11">n=2</text>
+        <rect x="170" y="50" width="50" height="30" fill="none" stroke="#34d399" stroke-width="2.5" stroke-opacity="1"/>
+        <text x="195" y="70" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">n=k</text>
+        <!-- Arrow from k to k+1 -->
+        <path d="M 220 55 Q 240 35 250 45" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.8"/>
+        <polygon points="248,42 255,45 250,50" fill="#f59e0b" fill-opacity="0.8"/>
+        <rect x="250" y="20" width="60" height="30" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.8" stroke-dasharray="4,2"/>
+        <text x="280" y="40" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">n=k+1</text>
+        <!-- Labels -->
+        <text x="45" y="15" fill="currentColor" font-size="10" fill-opacity="0.4">base case</text>
+        <text x="235" y="12" fill="currentColor" font-size="10" fill-opacity="0.4">inductive step</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Arithmetic sequences -->
+    <h3>Arithmetic sequences</h3>
+    <p>Each term differs from the previous by a constant <strong>d</strong>. The closed form is a(n) = a(0) + dn. The sum of the first n terms is n(a(0) + a(n))/2. These are linear functions in disguise.</p>
+
+    <SchemeRepl client:load initialCode={`; Arithmetic sequence: a(n) = a0 + d*n
+(define (arith a0 d n) (+ a0 (* d n)))
+
+; Example: 3, 7, 11, 15, ...  (a0=3, d=4)
+(display "First 6 terms: ")
+(let loop ((i 0))
+  (when (< i 6)
+    (display (arith 3 4 i))
+    (display " ")
+    (loop (+ i 1))))
+(newline)
+
+; Sum of arithmetic sequence: n * (a0 + an) / 2
+(define (arith-sum a0 d n)
+  (/ (* (+ n 1) (+ a0 (arith a0 d n))) 2))
+
+(display "Sum of first 6 terms: ")
+(display (arith-sum 3 4 5))  ; 3+7+11+15+19+23 = 78
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Arithmetic sequence
+def arith(a0, d, n):
+    return a0 + d * n
+
+terms = [arith(3, 4, i) for i in range(6)]
+print(f"First 6 terms: {terms}")
+print(f"Sum: {sum(terms)}")
+`} />
+    </div>
+
+
+    <!-- 2. Geometric sequences -->
+    <h3>Geometric sequences</h3>
+    <p>Each term is the previous multiplied by a constant ratio <strong>r</strong>. The closed form is a(n) = a(0) * r^n. The partial sum is a(0)(r^n - 1)/(r - 1) when r is not 1. Exponential growth lives here.</p>
+
+    <SchemeRepl client:load initialCode={`; Geometric sequence: a(n) = a0 * r^n
+(define (geom a0 r n)
+  (if (= n 0) a0
+      (* a0 (expt r n))))
+
+; Example: 2, 6, 18, 54, ...  (a0=2, r=3)
+(display "First 5 terms: ")
+(let loop ((i 0))
+  (when (< i 5)
+    (display (geom 2 3 i))
+    (display " ")
+    (loop (+ i 1))))
+(newline)
+
+; Partial sum: a0 * (r^n - 1) / (r - 1)
+(define (geom-sum a0 r n)
+  (/ (* a0 (- (expt r (+ n 1)) 1)) (- r 1)))
+
+(display "Sum of first 5 terms: ")
+(display (geom-sum 2 3 4))  ; 2+6+18+54+162 = 242
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Geometric sequence
+def geom(a0, r, n):
+    return a0 * r ** n
+
+terms = [geom(2, 3, i) for i in range(5)]
+print(f"First 5 terms: {terms}")
+print(f"Sum: {sum(terms)}")
+`} />
+    </div>
+
+
+    <!-- 3. Recurrence relations -->
+    <h3>Recurrence relations</h3>
+    <p>A recurrence defines each term using previous terms. The Fibonacci sequence is the classic: F(n) = F(n-1) + F(n-2). A <strong>linear homogeneous recurrence with constant coefficients</strong> can be solved by finding roots of its characteristic equation. The characteristic root technique turns a recursive definition into a closed formula.</p>
+
+    <SchemeRepl client:load initialCode={`; Fibonacci: F(0)=0, F(1)=1, F(n) = F(n-1) + F(n-2)
+(define (fib n)
+  (if (< n 2) n
+      (let loop ((a 0) (b 1) (i 2))
+        (if (= i n) (+ a b)
+            (loop b (+ a b) (+ i 1))))))
+
+(display "Fibonacci 0..10: ")
+(let loop ((i 0))
+  (when (<= i 10)
+    (display (fib i))
+    (display " ")
+    (loop (+ i 1))))
+(newline)
+
+; Tower of Hanoi: T(n) = 2*T(n-1) + 1, T(0)=0
+; Closed form: T(n) = 2^n - 1
+(define (hanoi n) (- (expt 2 n) 1))
+
+(display "Hanoi moves for 1..6 discs: ")
+(let loop ((i 1))
+  (when (<= i 6)
+    (display (hanoi i))
+    (display " ")
+    (loop (+ i 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fibonacci (iterative)
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+print(f"Fibonacci 0..10: {[fib(i) for i in range(11)]}")
+print(f"Hanoi moves: {[2**i - 1 for i in range(1, 7)]}")
+`} />
+    </div>
+
+
+    <!-- 4. Solving recurrences -->
+    <h3>Solving recurrences: the characteristic root method</h3>
+    <p>For a(n) = c1*a(n-1) + c2*a(n-2), guess a(n) = r^n. Substituting gives r^2 = c1*r + c2. Solve this quadratic for r. If you get two distinct roots r1 and r2, the general solution is a(n) = A*r1^n + B*r2^n, where A and B come from initial conditions.</p>
+
+    <SchemeRepl client:load initialCode={`; Solve: a(n) = a(n-1) + 2*a(n-2), a(0)=0, a(1)=1
+; Characteristic equation: r^2 = r + 2
+; Roots: r = 2 and r = -1
+; General: a(n) = A*2^n + B*(-1)^n
+; From a(0)=0: A + B = 0
+; From a(1)=1: 2A - B = 1
+; So A = 1/3, B = -1/3
+
+; Closed form
+(define (closed n)
+  (/ (- (expt 2 n) (expt -1 n)) 3))
+
+; Verify against recurrence
+(define (recur n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (recur (- n 1)) (* 2 (recur (- n 2)))))))
+
+(display "Closed:    ")
+(let loop ((i 0))
+  (when (< i 8)
+    (display (closed i)) (display " ")
+    (loop (+ i 1))))
+(newline)
+
+(display "Recurrence:")
+(let loop ((i 0))
+  (when (< i 8)
+    (display " ") (display (recur i))
+    (loop (+ i 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Characteristic root method
+closed = lambda n: (2**n - (-1)**n) // 3
+
+def recur(n):
+    if n < 2: return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, b + 2*a
+    return b
+
+for label, f in [("Closed", closed), ("Recur", recur)]:
+    print(f"{label}:  {[f(i) for i in range(8)]}")
+`} />
+    </div>
+
+
+    <!-- 5. Proof by induction -->
+    <h3>Proof by induction</h3>
+    <p>Induction proves a statement P(n) for all n >= 0. Prove P(0) (base case). Then prove that P(k) implies P(k+1) (inductive step). The domino analogy: knock over the first, and every domino falls. Here we verify (not prove, since programs check instances) the classic sum formula.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify by induction: sum(0..n) = n*(n+1)/2
+; Base case: sum(0..0) = 0 = 0*1/2. Check.
+; Inductive step: if sum(0..k) = k*(k+1)/2,
+;   then sum(0..k+1) = k*(k+1)/2 + (k+1) = (k+1)*(k+2)/2.
+
+(define (sum-formula n) (/ (* n (+ n 1)) 2))
+
+(define (sum-direct n)
+  (let loop ((i 0) (acc 0))
+    (if (> i n) acc
+        (loop (+ i 1) (+ acc i)))))
+
+; Check both agree for n = 0..20
+(define (verify n)
+  (let loop ((i 0) (all-ok #t))
+    (if (> i n)
+        all-ok
+        (loop (+ i 1)
+              (and all-ok (= (sum-formula i) (sum-direct i)))))))
+
+(display "sum(0..10) by formula: ")
+(display (sum-formula 10)) (newline)   ; 55
+(display "sum(0..10) directly:   ")
+(display (sum-direct 10)) (newline)    ; 55
+(display "All match for 0..20? ")
+(display (verify 20))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify sum formula by checking instances
+formula = lambda n: n * (n + 1) // 2
+direct = lambda n: sum(range(n + 1))
+
+print(f"sum(0..10) formula: {formula(10)}")
+print(f"sum(0..10) direct:  {direct(10)}")
+print(f"All match 0..20? {all(formula(i) == direct(i) for i in range(21))}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a(n) = a(0) + dn</td><td class="pr-4 text-green-300">(arith a0 d n)</td><td class="pr-4 text-blue-300">a0 + d*n</td><td class="font-sans">Arithmetic closed form</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a(n) = a(0) * r^n</td><td class="pr-4 text-green-300">(geom a0 r n)</td><td class="pr-4 text-blue-300">a0 * r**n</td><td class="font-sans">Geometric closed form</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">r^2 = c1*r + c2</td><td class="pr-4 text-green-300">solve by hand</td><td class="pr-4 text-blue-300">solve by hand</td><td class="font-sans">Characteristic equation</td></tr>
+          <tr><td class="py-2 pr-4">P(0) and P(k) implies P(k+1)</td><td class="pr-4 text-green-300">verify instances</td><td class="pr-4 text-blue-300">verify instances</td><td class="font-sans">Induction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other chapter pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-19/">Milewski Ch.19</a> — F-algebras and catamorphisms: recursion as a categorical pattern</li>
+      <li><a href="/reading/discrete-math/levin-05/">Levin Ch.5</a> — generating functions encode sequences as formal power series</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Recurrence_relation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Recurrence relation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mathematical_induction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mathematical induction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Characteristic_equation_(calculus)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Characteristic equation</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Levin treats sequences as functions from naturals. The Scheme implementations use iterative loops where possible to avoid stack overflow on large inputs. The characteristic root method is demonstrated but the algebra (solving quadratics, plugging in initial conditions) happens by hand. Programs verify the result, they do not derive it.</p>
+
+    <PrevNext prev={{ href: "/reading/discrete-math/levin-01/", label: "Counting" }} next={{ href: "/reading/discrete-math/levin-03/", label: "Symbolic Logic · 3 of 5" }} />
+
+  </main>
+</Layout>

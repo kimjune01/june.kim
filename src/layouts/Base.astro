@@ -1,0 +1,385 @@
+---
+interface Props {
+  title: string;
+  favicon?: string;
+}
+const { title, favicon } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {favicon && <link rel="icon" href={`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${favicon}</text></svg>`}/>}
+    <style>
+      @import "tailwindcss";
+
+
+      /* Practical Typography defaults */
+      @layer base {
+        html {
+          font-size: 19px;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+          font-kerning: normal;
+        }
+
+        body {
+          font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+          line-height: 1.4;
+          color: #d4d4d8;
+          background: #18181b;
+        }
+
+        /* Light mode — toggled via .light class on html */
+        :root.light {
+          body {
+            color: #27272a;            /* zinc-800 */
+            background: #fafaf9;       /* stone-50 */
+          }
+          h1, h2, h3, h4 { color: #18181b; }
+          a, a:link, a:visited { color: #09090b; text-decoration: none; background: #e7e5e4; padding: 0.1em 0.3em; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+          a.visited-link { color: #57534e; background: rgba(0,0,0,0.04); }
+          a.bare-link, a.bare-link:link, a.bare-link:visited, a.bare-link:hover { background: transparent; }
+          a:hover, a:visited:hover { color: #09090b; background: #d6d3d1; }
+          code:not(pre code) {
+            background: #f0f0f0;
+            color: #18181b;
+          }
+          pre:not(.pointer-events-none) {
+            background: #f5f5f4 !important; /* stone-100 */
+            color: #1c1917 !important;      /* stone-900 */
+          }
+          pre:not(.pointer-events-none) code, .font-mono {
+            color: #166534 !important;      /* green-800 — readable on light bg */
+          }
+          table th { color: #27272a; }
+          thead tr { background: rgba(0,0,0,0.06) !important; }
+          tbody tr:nth-child(even) { background: rgba(0,0,0,0.04) !important; }
+          tbody tr { border-bottom: 1px solid rgba(0,0,0,0.08) !important; }
+          table td { color: #18181b; }
+          table td.font-mono, table .text-green-300 {
+            color: #15803d !important;      /* green-700 */
+          }
+          table .text-blue-300 {
+            color: #1d4ed8 !important;      /* blue-700 */
+          }
+          table .text-gray-300, table .text-gray-400, table .text-gray-500 {
+            color: #3f3f46 !important;      /* zinc-700 — darker for light bg */
+          }
+          .bg-zinc-800 {
+            background: #f5f5f4 !important; /* stone-100 */
+          }
+          .bg-zinc-900 {
+            background: #fafaf9 !important;
+          }
+          .bg-zinc-950 {
+            background: #e7e5e4 !important; /* stone-200 */
+          }
+          .text-gray-400, .text-gray-500 { color: #52525b !important; }
+          .text-gray-300 { color: #3f3f46 !important; }
+          .text-green-300 { color: #166534 !important; }
+          .text-blue-300 { color: #1e40af !important; }
+          .text-yellow-300 { color: #a16207 !important; }
+          .text-green-400 { color: #15803d !important; }
+          .border-zinc-700, .border-zinc-800 { border-color: #d6d3d1 !important; }
+          blockquote { border-color: #d4d4d8; color: #52525b; }
+          /* SVGs: currentColor at 0.2 opacity is invisible on white.
+             Make it a dark gray so low-opacity structural elements stay visible. */
+          svg { color: #18181b; }
+        }
+
+        /* Paragraph spacing: space between, no indent */
+        p {
+          margin-bottom: 0.75em;
+          max-width: 65ch;             /* ~65 chars — within 45-90 range */
+        }
+
+        /* Headings: sans-serif contrast — styled inline via Astro, CSS just handles color/spacing */
+        h1, h2, h3, h4 {
+          color: #fafafa;
+          letter-spacing: -0.01em;
+          line-height: 1.2;
+        }
+
+        h1 { font-size: 1.6rem; margin-bottom: 0.5em; }
+        h2 { font-size: 1.25rem; margin-top: 1.8em; margin-bottom: 0.5em; }
+        h3 { font-size: 1.1rem; margin-top: 1.4em; margin-bottom: 0.4em; }
+
+        /* Links: styled in is:global block below (base layer loses to Tailwind) */
+
+        /* Code: monospace stays monospace */
+        code, pre {
+          font-family: 'Berkeley Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+          font-size: 0.85em;
+        }
+
+        pre {
+          line-height: 1.5;
+        }
+
+        code:not(pre code) {
+          background: #27272a;
+          padding: 0.1em 0.3em;
+          border-radius: 3px;
+        }
+
+        /* Tables */
+        table {
+          font-size: 0.9em;
+          border-collapse: collapse;
+        }
+
+        th {
+          font-family: system-ui, -apple-system, sans-serif;
+          font-weight: 600;
+          text-align: left;
+        }
+
+        td, th {
+          padding: 0.5em 0.8em;
+          vertical-align: top;
+        }
+
+        /* Blockquotes */
+        blockquote {
+          font-style: italic;
+          border-left: 3px solid #3f3f46;
+          padding-left: 1em;
+          color: #a1a1aa;
+        }
+
+
+        /* Lists */
+        ul, ol {
+          padding-left: 0;
+          margin-bottom: 0.75em;
+          list-style: none;
+        }
+        li {
+          margin-bottom: 0.25em;
+        }
+
+        /* Small caps for abbreviations */
+        abbr {
+          font-variant: small-caps;
+          letter-spacing: 0.05em;
+        }
+
+        /* Highlights */
+      }
+    </style>
+    <style is:global>
+      h1, h2, h3, h4 { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif !important; font-weight: 500 !important; }
+      ul, ol { list-style: none !important; padding-left: 0 !important; }
+      ul.neighbors { line-height: 1.8; }
+      th, td { padding: 0.5em 0.8em; text-align: left; }
+      thead tr { background: rgba(255,255,255,0.06) !important; }
+      tbody tr:nth-child(even) { background: rgba(255,255,255,0.03) !important; }
+      :root.light thead tr { background: rgba(0,0,0,0.04) !important; }
+      :root.light tbody tr:nth-child(even) { background: rgba(0,0,0,0.03) !important; }
+      textarea, pre { overflow: auto !important; scrollbar-width: thin; scrollbar-color: #52525b transparent; }
+      textarea::-webkit-scrollbar, pre::-webkit-scrollbar { -webkit-appearance: none; width: 8px; height: 8px; }
+      textarea::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb { background: #52525b; border-radius: 4px; }
+      textarea::-webkit-scrollbar-track, pre::-webkit-scrollbar-track { background: #27272a; }
+      img[alt="jk"], img[alt="arxiv"], img[alt="gh"], img[alt="wp"], img[src$="-pipeline.svg"] { filter: invert(1); }
+      :root.light img[alt="jk"], :root.light img[alt="arxiv"], :root.light img[alt="gh"], :root.light img[alt="wp"], :root.light img[src$="-pipeline.svg"] { filter: none; }
+      :root:not(.light) a, :root:not(.light) a:link, :root:not(.light) a:visited { color: #e4e4e7; text-decoration: none; background: #27272a; padding: 0.1em 0.3em; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+      :root:not(.light) a.visited-link { color: #bbbbc4; background: rgba(255,255,255,0.04); }
+      :root:not(.light) a:hover { color: #fafafa; background: #3f3f46; }
+      /* REPL textarea — selection keeps text hidden, shows highlight only */
+      .callout p { font-size: 1rem; }
+      .repl-input::selection { color: transparent !important; -webkit-text-fill-color: transparent !important; background: rgba(96,165,250,0.25); }
+      :root.light .repl-input::selection { background: rgba(37,99,235,0.2); }
+      /* Highlight popup button */
+      #hl-btn {
+        position: absolute;
+        display: none;
+        z-index: 60;
+        background: #bbf7d0;
+        color: #09090b;
+        border: none;
+        border-radius: 4px;
+        padding: 0.1em 0.45em;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        line-height: 1.4;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+      #hl-btn:hover { background: #86efac; }
+      :root:not(.light) #hl-btn { background: rgba(74,222,128,0.3); color: #d4d4d8; border: 1px solid rgba(74,222,128,0.4); }
+      :root:not(.light) #hl-btn:hover { background: rgba(74,222,128,0.45); }
+      /* @layer base loses to browser defaults (e.g. <mark> yellow). Put overrides here in is:global. */
+      ::selection { background: rgba(74,222,128,0.3) !important; color: inherit !important; }
+      :root.light ::selection { background: rgba(134,239,172,0.4) !important; color: inherit !important; }
+      mark.user-highlight { background: rgba(74,222,128,0.3) !important; color: inherit !important; border-radius: 2px; padding: 0; }
+      :root.light mark.user-highlight { background: rgba(134,239,172,0.4) !important; color: inherit !important; }
+      /* REPL background — used by inline styles in components */
+      :root { --repl-bg: #18181b; --repl-caret: #93c5fd; }
+      :root.light { --repl-bg: #fafaf9; --repl-caret: #1d4ed8; }
+      /* Syntax highlight tokens — dark mode */
+      .hl-comment { color: #6b7280; }
+      .hl-string { color: #fbbf24; }
+      .hl-keyword { color: #60a5fa; }
+      .hl-number { color: #34d399; }
+      .hl-bool { color: #f472b6; }
+      .hl-builtin { color: #c084fc; }
+      .hl-decorator { color: #a78bfa; }
+      /* Syntax highlight tokens — light mode */
+      :root.light .hl-comment { color: #6b7280; }
+      :root.light .hl-string { color: #b45309; }
+      :root.light .hl-keyword { color: #1d4ed8; }
+      :root.light .hl-number { color: #047857; }
+      :root.light .hl-bool { color: #be185d; }
+      :root.light .hl-builtin { color: #7c3aed; }
+      :root.light .hl-decorator { color: #6d28d9; }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <div class="max-w-3xl mx-auto px-6 py-10">
+      <button id="theme-toggle" style="position:fixed;top:1rem;right:1rem;background:transparent;border:1px solid #52525b;border-radius:4px;padding:0.2em 0.5em;cursor:pointer;font-size:0.8rem;color:inherit;z-index:50;" aria-label="Toggle dark/light mode" title="Switch to light mode">☀︎</button>
+      <button id="lang-toggle" style="position:fixed;top:1rem;right:3.5rem;background:transparent;border:1px solid #52525b;border-radius:4px;padding:0.2em 0.5em;cursor:pointer;font-size:0.8rem;color:inherit;z-index:50;" aria-label="Toggle Scheme/Python" title="Switch to Python">λ</button>
+      <slot />
+    </div>
+    <button id="hl-btn">H</button>
+    <script>
+      import { createHighlighter } from '../highlighter.js';
+
+      var btn = document.getElementById('hl-btn');
+      var hl = createHighlighter(document, localStorage, location.pathname);
+
+      function showBtn(x, y) {
+        btn.style.left = (x + window.scrollX) + 'px';
+        btn.style.top = (y + window.scrollY - 30) + 'px';
+        btn.style.display = 'block';
+      }
+      function hideBtn() { btn.style.display = 'none'; }
+
+      document.addEventListener('mouseup', function(e) {
+        if (e.target === btn) return;
+        setTimeout(function() {
+          var sel = window.getSelection();
+          if (!sel || sel.isCollapsed || !sel.toString().trim()) { hideBtn(); return; }
+          var range = sel.getRangeAt(0);
+          var el = hl._allowedAncestor(range.startContainer);
+          if (!el) { hideBtn(); return; }
+          var endEl = hl._allowedAncestor(range.endContainer);
+          if (el !== endEl) { hideBtn(); return; }
+          var rect = range.getBoundingClientRect();
+          showBtn(rect.right + 6, rect.bottom - 4);
+        }, 10);
+      });
+
+      btn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hl.doHighlight(window.getSelection());
+        hideBtn();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key !== 'h' && e.key !== 'H') return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        var tag = (e.target.tagName || '').toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+        var sel = window.getSelection();
+        if (!sel || sel.isCollapsed) {
+          if (hl.lastHighlightText) { e.preventDefault(); hl.undoLast(); }
+          return;
+        }
+        var el = hl._allowedAncestor(sel.getRangeAt(0).startContainer);
+        if (!el) return;
+        e.preventDefault();
+        hl.doHighlight(window.getSelection());
+        hideBtn();
+      });
+
+      document.addEventListener('mousedown', function(e) {
+        if (e.target !== btn) hideBtn();
+      });
+
+      hl.restoreHighlights();
+    </script>
+    <script is:inline>
+      (function() {
+        // Visited link tracking
+        var visited = JSON.parse(localStorage.getItem('visitedLinks') || '[]');
+        var path = location.pathname;
+        if (visited.indexOf(path) === -1) {
+          visited.push(path);
+          localStorage.setItem('visitedLinks', JSON.stringify(visited));
+        }
+        var links = document.querySelectorAll('a[href]');
+        for (var i = 0; i < links.length; i++) {
+          var href = links[i].getAttribute('href');
+          if (href && visited.indexOf(href) !== -1) {
+            links[i].classList.add('visited-link');
+          }
+        }
+      })();
+      // Language toggle: swap Scheme (primary) and Python (.python-block) visibility
+      (function() {
+        var langBtn = document.getElementById('lang-toggle');
+        var lang = localStorage.getItem('replLang') || 'scheme';
+
+        function applyLang() {
+          var pyBlocks = document.querySelectorAll('.python-block');
+
+          for (var j = 0; j < pyBlocks.length; j++) {
+            var pyBlock = pyBlocks[j];
+            // Walk backwards to find the closest preceding div that contains a textarea (SchemeRepl)
+            var prev = pyBlock.previousElementSibling;
+            while (prev) {
+              if (prev.querySelector && prev.querySelector('textarea')) break;
+              prev = prev.previousElementSibling;
+            }
+            if (!prev) continue;
+
+            if (lang === 'python') {
+              prev.style.display = 'none';
+              pyBlock.style.display = '';
+            } else {
+              prev.style.display = '';
+              pyBlock.style.display = 'none';
+            }
+          }
+
+          langBtn.textContent = lang === 'scheme' ? 'λ' : 'py';
+          langBtn.title = lang === 'scheme' ? 'Switch to Python' : 'Switch to Scheme';
+        }
+
+        // Apply on load. React islands may render later, so also on click.
+        window.addEventListener('load', applyLang);
+        langBtn.addEventListener('click', function() {
+          lang = lang === 'scheme' ? 'python' : 'scheme';
+          localStorage.setItem('replLang', lang);
+          applyLang();
+        });
+      })();
+      (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('theme-toggle');
+        // Init from localStorage or system preference
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || (!stored && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          html.classList.add('light');
+        }
+        function update() {
+          const isLight = html.classList.contains('light');
+          btn.textContent = isLight ? '☾' : '☀︎';
+          btn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+        }
+        update();
+        btn.addEventListener('click', function() {
+          html.classList.toggle('light');
+          localStorage.setItem('theme', html.classList.contains('light') ? 'light' : 'dark');
+          update();
+        });
+      })();
+    </script>
+  </body>
+</html>

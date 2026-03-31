@@ -1,0 +1,276 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.12 — The Erlangen Program" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">&larr; back to geometry</a>
+
+    <h1>The Erlangen Program</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (<a href="https://en.wikipedia.org/wiki/Erlangen_program"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Erlangen program</a>) &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Felix_Klein"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Felix Klein</a>'s 1872 insight: <strong>a geometry is defined by its symmetry group</strong>. Euclidean geometry studies what rigid motions preserve. Affine geometry studies what affine maps preserve. Projective geometry studies what projective maps preserve. Topology studies what continuous maps preserve. Each geometry is its invariants under its group.</p>
+    </div>
+
+    <!-- 1. The key insight -->
+    <h3>Geometry = group + invariants</h3>
+    <p>Before Klein, geometry was a zoo: Euclidean, projective, affine, hyperbolic, each with its own axioms and flavor. Klein unified them with one sentence: a geometry is a set X together with a group G acting on X. The geometry studies properties invariant under G. Change the group, change the geometry. Every theorem is a statement about what the group cannot destroy.</p>
+
+    <SchemeRepl client:load initialCode={`; A geometry is (Space, Group).
+; The group determines what "same" means.
+
+; Euclidean group: translations + rotations + reflections
+; Invariant: distance, angle
+; "Same" means: congruent
+
+; Affine group: linear maps + translations
+; Invariant: parallelism, ratios of lengths on a line
+; "Same" means: related by shearing/scaling/translating
+
+; Projective group: projective transformations
+; Invariant: cross-ratio, collinearity
+; "Same" means: related by perspective projection
+
+; Topological group: homeomorphisms (continuous bijections)
+; Invariant: connectedness, number of holes
+; "Same" means: can be continuously deformed
+
+(display "Euclidean: distance is invariant") (newline)
+(display "  Rotate (1,0) by 90 degrees -> (0,1)") (newline)
+(display "  Distance from origin: 1 -> 1 (preserved)") (newline)
+(newline)
+(display "Affine: parallelism is invariant") (newline)
+(display "  Shear a square -> parallelogram") (newline)
+(display "  Opposite sides still parallel (preserved)") (newline)
+(newline)
+(display "Projective: cross-ratio is invariant") (newline)
+(display "  Project a line through a point") (newline)
+(display "  Distances change, but cross-ratio preserved") (newline)
+(newline)
+(display "Topology: connectedness is invariant") (newline)
+(display "  Stretch a circle into an ellipse") (newline)
+(display "  Still one connected piece (preserved)")
+`} />
+
+
+    <!-- 2. Euclidean geometry -->
+    <h3>Euclidean geometry: rigid motions</h3>
+    <p>The Euclidean group consists of translations, rotations, and reflections. These are the <strong>isometries</strong>: distance-preserving maps. Two figures are "the same" in Euclidean geometry if one can be moved onto the other by a rigid motion. Distance and angle are the invariants.</p>
+
+    <SchemeRepl client:load initialCode={`; Euclidean transformations preserve distance
+
+(define pi 3.141592653589793)
+
+(define (rotate theta px py)
+  ; Rotate point (px, py) by angle theta around origin
+  (let ((c (cos theta)) (s (sin theta)))
+    (list (- (* c px) (* s py))
+          (+ (* s px) (* c py)))))
+
+(define (translate dx dy px py)
+  (list (+ px dx) (+ py dy)))
+
+(define (dist p q)
+  (sqrt (+ (* (- (car p) (car q)) (- (car p) (car q)))
+           (* (- (cadr p) (cadr q)) (- (cadr p) (cadr q))))))
+
+; Triangle vertices
+(define a (list 0 0)) (define b (list 3 0)) (define c (list 0 4))
+
+; Rotate 45 degrees
+(define theta (/ pi 4))
+(define a2 (rotate theta (car a) (cadr a)))
+(define b2 (rotate theta (car b) (cadr b)))
+(define c2 (rotate theta (car c) (cadr c)))
+
+(display "Original side lengths:") (newline)
+(display "  AB = ") (display (dist a b)) (newline)
+(display "  BC = ") (display (dist b c)) (newline)
+(display "  CA = ") (display (dist c a)) (newline)
+
+(display "After 45-degree rotation:") (newline)
+(display "  AB = ") (display (dist a2 b2)) (newline)
+(display "  BC = ") (display (dist b2 c2)) (newline)
+(display "  CA = ") (display (dist c2 a2)) (newline)
+(display "Distances preserved.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rotate(theta, p):
+    c, s = math.cos(theta), math.sin(theta)
+    return (c*p[0] - s*p[1], s*p[0] + c*p[1])
+
+def dist(p, q):
+    return math.sqrt(sum((a-b)**2 for a,b in zip(p,q)))
+
+a, b, c = (0,0), (3,0), (0,4)
+theta = math.pi / 4
+a2, b2, c2 = rotate(theta, a), rotate(theta, b), rotate(theta, c)
+
+print("Original:", dist(a,b), dist(b,c), dist(c,a))
+print("Rotated: ", dist(a2,b2), dist(b2,c2), dist(c2,a2))
+print("Distances preserved.")
+`} />
+    </div>
+
+
+    <!-- 3. The hierarchy -->
+    <h3>The hierarchy of geometries</h3>
+    <p>Each geometry's group contains the next as a subgroup. Every rigid motion is an affine map. Every affine map is a projective map. Every projective map is a continuous map. So: <strong>Topology &supset; Projective &supset; Affine &supset; Euclidean</strong>. Moving up the hierarchy, the group gets larger and the invariants get fewer. Topology preserves almost nothing. Euclidean preserves almost everything.</p>
+
+    <!-- SVG: Nested ovals showing the hierarchy -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Topology (outermost) -->
+        <ellipse cx="200" cy="140" rx="185" ry="125" fill="#a78bfa" fill-opacity="0.06" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="200" y="28" text-anchor="middle" fill="#a78bfa" font-size="12" fill-opacity="0.7">Topology</text>
+        <text x="200" y="42" text-anchor="middle" fill="#a78bfa" font-size="9" fill-opacity="0.4">homeomorphisms</text>
+
+        <!-- Projective -->
+        <ellipse cx="200" cy="148" rx="145" ry="95" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="200" y="65" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.7">Projective</text>
+        <text x="200" y="79" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.4">projective maps</text>
+
+        <!-- Affine -->
+        <ellipse cx="200" cy="155" rx="105" ry="65" fill="#34d399" fill-opacity="0.06" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="200" y="105" text-anchor="middle" fill="#34d399" font-size="12" fill-opacity="0.7">Affine</text>
+        <text x="200" y="119" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.4">affine maps</text>
+
+        <!-- Euclidean (innermost) -->
+        <ellipse cx="200" cy="160" rx="60" ry="38" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="155" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.8">Euclidean</text>
+        <text x="200" y="169" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.5">rigid motions</text>
+
+        <!-- Invariants on the right side -->
+        <text x="390" y="140" text-anchor="end" fill="#a78bfa" font-size="9" fill-opacity="0.5">connectedness, genus</text>
+        <text x="350" y="155" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.5">cross-ratio</text>
+        <text x="315" y="170" text-anchor="end" fill="#34d399" font-size="9" fill-opacity="0.5">parallelism</text>
+        <text x="275" y="185" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">distance, angle</text>
+
+        <text x="200" y="272" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Larger group = fewer invariants = coarser geometry</text>
+      </svg>
+    </div>
+
+
+    <!-- 4. Affine geometry -->
+    <h3>Affine geometry: what shearing preserves</h3>
+    <p>Affine maps include scaling, shearing, rotation, translation, and their compositions. They preserve parallelism, ratios of distances along a line, and the property of being a midpoint. They destroy angles and absolute distances. A circle becomes an ellipse; a square becomes a parallelogram; but parallel lines stay parallel.</p>
+
+    <SchemeRepl client:load initialCode={`; Affine transformation: x -> Ax + b
+; Preserves parallelism, destroys angles
+
+(define (affine-transform a11 a12 a21 a22 b1 b2 px py)
+  (list (+ (* a11 px) (* a12 py) b1)
+        (+ (* a21 px) (* a22 py) b2)))
+
+; Shear transformation: [[1, 1], [0, 1]]
+(define (shear px py)
+  (affine-transform 1 1 0 1 0 0 px py))
+
+; Square vertices
+(define sq (list (list 0 0) (list 1 0) (list 1 1) (list 0 1)))
+
+(display "Square -> Sheared parallelogram:") (newline)
+(for-each
+  (lambda (p)
+    (display "  ") (display p) (display " -> ")
+    (display (shear (car p) (cadr p))) (newline))
+  sq)
+
+; Check parallelism: opposite sides still parallel
+; Side AB: (0,0)->(1,0), direction (1,0)
+; Side DC: (0,1)->(1,1) sheared to (1,1)->(2,1), direction (1,0)
+(display "Top and bottom sides still parallel.") (newline)
+
+; But angles change
+(display "Right angle at origin is no longer 90 degrees.")
+`} />
+
+
+    <!-- 5. The Erlangen program as a functor -->
+    <h3>The Erlangen program as a functor</h3>
+    <p>In modern language, the Erlangen program defines a functor from the category of groups (with group homomorphisms) to the category of geometries (with structure-preserving maps). A subgroup inclusion G &hookrightarrow; H induces a "forgetful" map from the H-geometry to the G-geometry: more symmetries means fewer invariants. The hierarchy is a chain of functors.</p>
+
+    <SchemeRepl client:load initialCode={`; The Erlangen program: Group -> Geometry is a functor
+;
+; Objects: groups (Euclidean, Affine, Projective, Topological)
+; Morphisms: group inclusions (subgroup embeddings)
+;
+; The functor maps:
+;   Euclidean group  ->  Euclidean geometry (distance, angle)
+;   Affine group     ->  Affine geometry (parallelism, ratios)
+;   Projective group ->  Projective geometry (cross-ratio)
+;   Topological group -> Topology (connectedness)
+;
+; Inclusion Euclidean < Affine means:
+;   Everything invariant under Affine is also invariant under Euclidean
+;   But Euclidean has MORE invariants (distance, angle)
+
+; Demonstrate: distance is a Euclidean invariant but not affine
+(define (dist p q)
+  (sqrt (+ (* (- (car p) (car q)) (- (car p) (car q)))
+           (* (- (cadr p) (cadr q)) (- (cadr p) (cadr q))))))
+
+(define a (list 0 0)) (define b (list 1 0))
+
+; Euclidean (rotation): preserves distance
+(define pi 3.141592653589793)
+(define a-rot (list 0 0))
+(define b-rot (list (cos (/ pi 3)) (sin (/ pi 3))))
+(display "After rotation: d = ") (display (dist a-rot b-rot)) (newline)
+
+; Affine (scale by 2 in x): destroys distance
+(define a-scaled (list 0 0))
+(define b-scaled (list 2 0))
+(display "After x-scale:  d = ") (display (dist a-scaled b-scaled)) (newline)
+
+; But both preserve the midpoint property
+(display "Midpoint after rotation: ")
+(display (list (/ (+ (car a-rot) (car b-rot)) 2)
+               (/ (+ (cadr a-rot) (cadr b-rot)) 2))) (newline)
+(display "Midpoint after scaling:  ")
+(display (list (/ (+ (car a-scaled) (car b-scaled)) 2)
+               (/ (+ (cadr a-scaled) (cadr b-scaled)) 2)))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Geometry chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-11/">&#9651; Chapter 11</a> &mdash; Power Diagrams</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/abstract-algebra/judson-01/">&#9651; Abstract Algebra Ch.1</a> &mdash; groups (the Erlangen program is built on group theory)</li>
+      <li><a href="/reading/category-theory/milewski-07/">&#9651; Milewski Ch.7</a> &mdash; functors (the Erlangen program is a functor from groups to geometries)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Erlangen_program"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Erlangen program</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Euclidean_group"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Euclidean group</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Affine_group"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Affine group</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Projective_linear_group"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Projective group</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Felix_Klein"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Felix Klein</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Klein's original 1872 Erlangen lecture was titled "Vergleichende Betrachtungen uber neuere geometrische Forschungen" (A Comparative Review of Recent Researches in Geometry). The functorial interpretation is modern. The hierarchy shown here (topology &supset; projective &supset; affine &supset; Euclidean) is the standard one, but there are geometries that do not fit neatly into this chain: hyperbolic and elliptic geometry branch off from projective geometry rather than sitting in the linear chain. Milewski's chapter 7 covers functors in the programming context; the Erlangen program is the original mathematical example of "structure-preserving maps between categories."</p>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-11/", label: "Power Diagrams" }} />
+
+  </main>
+</Layout>

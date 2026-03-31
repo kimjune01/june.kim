@@ -1,0 +1,320 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.1 — Real Numbers" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Real Numbers</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 1</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The real numbers are an <strong>ordered field</strong> with the <strong>least upper bound property</strong>: every nonempty set bounded above has a supremum. This single axiom separates the reals from the rationals and makes calculus possible.</p>
+    </div>
+
+    <!-- SVG: interactive supremum — drag marker along number line -->
+    <div class="flex justify-center my-6">
+      <svg id="sup-demo" viewBox="0 0 400 110" class="w-full max-w-md" style="font-family: ui-monospace, monospace; cursor: pointer;">
+        <!-- Number line -->
+        <line x1="30" y1="50" x2="370" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Tick marks -->
+        <line x1="60" y1="45" x2="60" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="60" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">0</text>
+        <line x1="160" y1="45" x2="160" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="160" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">1</text>
+        <line x1="260" y1="45" x2="260" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="260" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">2</text>
+        <line x1="360" y1="45" x2="360" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="360" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">3</text>
+        <!-- Set S: points clustered below sup (sup = ~1.85 → px 245) -->
+        <circle cx="80" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="110" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="140" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="170" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="195" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="215" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="230" cy="50" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+        <!-- sup S marker (fixed) -->
+        <circle cx="245" cy="50" r="4" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <text x="245" y="35" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.8">sup S</text>
+        <!-- S label -->
+        <text x="160" y="88" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">S</text>
+        <!-- Draggable upper-bound marker -->
+        <line id="sup-line" y1="30" y2="70" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.6"/>
+        <circle id="sup-dot" r="5" cy="50" fill="#a78bfa" fill-opacity="0.8" style="cursor: grab;"/>
+        <text id="sup-label" y="22" text-anchor="middle" fill="#a78bfa" font-size="10"></text>
+        <!-- Verdict -->
+        <text id="sup-verdict" x="200" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4"></text>
+      </svg>
+    </div>
+    <script is:inline>
+    (function() {
+      var LEFT = 60, RIGHT = 360, Y = 50;
+      var SUP_PX = 245; // sup S at ~1.85 on number line
+      var svg = document.getElementById('sup-demo');
+      var dot = document.getElementById('sup-dot');
+      var line = document.getElementById('sup-line');
+      var label = document.getElementById('sup-label');
+      var verdict = document.getElementById('sup-verdict');
+      var mx = 310; // initial marker position
+
+      function toVal(px) { return (px - LEFT) / (RIGHT - LEFT) * 3; }
+
+      function update() {
+        dot.setAttribute('cx', mx);
+        line.setAttribute('x1', mx); line.setAttribute('x2', mx);
+        label.setAttribute('x', mx);
+        var v = toVal(mx);
+        label.textContent = v.toFixed(2);
+        var supVal = toVal(SUP_PX);
+        if (mx >= SUP_PX) {
+          var gap = v - supVal;
+          if (gap < 0.08) {
+            verdict.textContent = '\u2714 upper bound — and the tightest one. This IS the sup.';
+            verdict.setAttribute('fill', '#f59e0b');
+          } else {
+            verdict.textContent = '\u2714 upper bound (bounds S from above, but not the tightest)';
+            verdict.setAttribute('fill', '#a78bfa');
+          }
+        } else {
+          verdict.textContent = '\u2718 not an upper bound — some elements of S are larger';
+          verdict.setAttribute('fill', '#ef4444');
+        }
+      }
+
+      function svgX(e) {
+        var pt = svg.createSVGPoint();
+        if (e.touches) e = e.touches[0];
+        pt.x = e.clientX; pt.y = e.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse()).x;
+      }
+
+      var dragging = false;
+      svg.addEventListener('mousedown', function(e) { dragging = true; mx = Math.max(LEFT, Math.min(RIGHT, svgX(e))); update(); e.preventDefault(); });
+      svg.addEventListener('mousemove', function(e) { if (!dragging) return; mx = Math.max(LEFT, Math.min(RIGHT, svgX(e))); update(); e.preventDefault(); });
+      window.addEventListener('mouseup', function() { dragging = false; });
+      svg.addEventListener('touchstart', function(e) { dragging = true; mx = Math.max(LEFT, Math.min(RIGHT, svgX(e))); update(); e.preventDefault(); }, {passive:false});
+      svg.addEventListener('touchmove', function(e) { if (!dragging) return; mx = Math.max(LEFT, Math.min(RIGHT, svgX(e))); update(); e.preventDefault(); }, {passive:false});
+      window.addEventListener('touchend', function() { dragging = false; });
+
+      update();
+    })();
+    </script>
+
+    <h3>The axioms of an ordered field</h3>
+    <p>The reals satisfy the field axioms (addition, multiplication, inverses) and the order axioms (trichotomy, transitivity, compatibility with arithmetic). The rationals satisfy these too. What sets the reals apart is one more axiom.</p>
+
+    <SchemeRepl client:load initialCode={`; The field axioms in action
+; Commutativity, associativity, distributivity, inverses
+
+(display "Commutativity: 3 + 5 = ")
+(display (+ 3 5))
+(display ", 5 + 3 = ")
+(display (+ 5 3)) (newline)
+
+(display "Associativity: (2+3)+4 = ")
+(display (+ (+ 2 3) 4))
+(display ", 2+(3+4) = ")
+(display (+ 2 (+ 3 4))) (newline)
+
+(display "Distributivity: 2*(3+4) = ")
+(display (* 2 (+ 3 4)))
+(display ", 2*3 + 2*4 = ")
+(display (+ (* 2 3) (* 2 4))) (newline)
+
+; Order: trichotomy
+(define (trichotomy a b)
+  (cond ((< a b) "a < b")
+        ((= a b) "a = b")
+        (else "a > b")))
+
+(display "trichotomy(3, 5) = ")
+(display (trichotomy 3 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+# Field axioms in action
+print("Commutativity: 3 + 5 =", 3 + 5, ", 5 + 3 =", 5 + 3)
+print("Associativity: (2+3)+4 =", (2+3)+4, ", 2+(3+4) =", 2+(3+4))
+print("Distributivity: 2*(3+4) =", 2*(3+4), ", 2*3 + 2*4 =", 2*3 + 2*4)
+
+def trichotomy(a, b):
+    if a < b: return "a < b"
+    elif a == b: return "a = b"
+    else: return "a > b"
+
+print("trichotomy(3, 5) =", trichotomy(3, 5))
+`} />
+    </div>
+
+    <h3>Completeness: the least upper bound property</h3>
+    <p>A set S of reals is <strong>bounded above</strong> if some number M satisfies x &le; M for all x in S. The <strong>supremum</strong> (least upper bound) is the smallest such M. The completeness axiom says: every nonempty bounded-above subset of the reals has a supremum in the reals. The rationals fail this. The set of rationals whose square is less than 2 is bounded above, but its supremum is &radic;2, which is not rational.</p>
+
+    <SchemeRepl client:load initialCode={`; Supremum: the least upper bound
+; S = rationals p such that p^2 < 2
+; sup S = sqrt(2), which is irrational
+
+; Approximate sup by bisection
+(define (find-sup low high steps)
+  (if (= steps 0)
+    (/ (+ low high) 2.0)
+    (let ((mid (/ (+ low high) 2.0)))
+      (if (< (* mid mid) 2)
+        (find-sup mid high (- steps 1))
+        (find-sup low mid (- steps 1))))))
+
+(define approx-sqrt2 (find-sup 1.0 2.0 50))
+(display "Approximate sup{p in Q : p^2 < 2} = ")
+(display approx-sqrt2) (newline)
+(display "approx^2 = ")
+(display (* approx-sqrt2 approx-sqrt2)) (newline)
+
+; sqrt(2) is irrational: no fraction p/q in lowest
+; terms satisfies p^2 = 2*q^2 (parity argument)
+(display "The completeness axiom guarantees sqrt(2) exists in R")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bisection to find sup{p : p^2 < 2}
+low, high = 1.0, 2.0
+for _ in range(50):
+    mid = (low + high) / 2
+    if mid * mid < 2:
+        low = mid
+    else:
+        high = mid
+
+print(f"approx sqrt(2) = {low}")
+print(f"approx^2       = {low * low}")
+`} />
+    </div>
+
+    <h3>Archimedean property and density of rationals</h3>
+    <p>The <strong><a href="https://en.wikipedia.org/wiki/Archimedean_property"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Archimedean property</a></strong> says: for any real x, there exists a natural number n with n &gt; x. No real number is infinite. A consequence: between any two distinct reals lies a rational number (density of Q in R). The rationals are dense, yet they have "holes" that the completeness axiom fills.</p>
+
+    <SchemeRepl client:load initialCode={`; Archimedean property: for any x, there exists n > x
+(define (archimedean x)
+  (let loop ((n 1))
+    (if (> n x) n (loop (+ n 1)))))
+
+(display "Archimedean: n > 3.7 => n = ")
+(display (archimedean 3.7)) (newline)
+(display "Archimedean: n > 100.1 => n = ")
+(display (archimedean 100.1)) (newline)
+
+; Density of Q: between any two reals, find a rational p/q
+; Given a < b, pick n with 1/n < b-a, then find m with m/n in (a,b)
+(define (rational-between a b)
+  (let* ((n (archimedean (/ 1.0 (- b a))))
+         (m (+ 1 (floor (* a n)))))
+    (/ m n)))
+
+(define r (rational-between 1.41 1.42))
+(display "Rational between 1.41 and 1.42: ")
+(display (exact->inexact r))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def archimedean(x):
+    n = 1
+    while n <= x:
+        n += 1
+    return n
+
+print("Archimedean: n > 3.7 => n =", archimedean(3.7))
+print("Archimedean: n > 100.1 => n =", archimedean(100.1))
+
+def rational_between(a, b):
+    n = archimedean(1.0 / (b - a))
+    m = 1 + math.floor(a * n)
+    return m / n
+
+r = rational_between(1.41, 1.42)
+print("Rational between 1.41 and 1.42:", r)
+`} />
+    </div>
+
+    <h3>Infimum and the completeness of lower bounds</h3>
+    <p>The <strong>infimum</strong> (greatest lower bound) is the dual of supremum. Every nonempty set bounded below has an infimum. You don't need a separate axiom: if S is bounded below, then the set of negations -S is bounded above, and inf S = -sup(-S).</p>
+
+    <SchemeRepl client:load initialCode={`; Infimum from supremum via negation
+; inf S = -sup(-S)
+
+; S = {1/n : n = 1,2,3,...}
+; S is bounded below by 0
+; inf S = 0 (but 0 is not in S)
+
+(define (partial-inf-search n terms)
+  (if (= terms 0) n
+    (let ((val (/ 1.0 terms)))
+      (if (< val n)
+        (partial-inf-search val (- terms 1))
+        (partial-inf-search n (- terms 1))))))
+
+(display "min of first 100 terms of {1/n}: ")
+(display (partial-inf-search 999.0 100)) (newline)
+(display "min of first 10000 terms: ")
+(display (partial-inf-search 999.0 10000)) (newline)
+(display "inf{1/n : n >= 1} = 0 (limit, not attained)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+# inf of {1/n : n >= 1}
+for count in [100, 10000]:
+    terms = [1/n for n in range(1, count + 1)]
+    print("min of first " + str(count) + " terms of 1/n:", min(terms))
+
+print("inf{1/n : n >= 1} = 0 (limit, not attained)")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">sup S</td><td class="pr-4 text-green-300">(find-sup ...)</td><td class="font-sans">Least upper bound of S</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">inf S</td><td class="pr-4 text-green-300">-sup(-S)</td><td class="font-sans">Greatest lower bound of S</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">N, Z, Q, R</td><td class="pr-4 text-green-300">number types</td><td class="font-sans">Naturals, integers, rationals, reals</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">x &le; M for all x in S</td><td class="pr-4 text-green-300">(bounded-above? S M)</td><td class="font-sans">M is an upper bound of S</td></tr>
+          <tr><td class="py-2 pr-4">&radic;2 &notin; Q</td><td class="pr-4 text-green-300">parity argument</td><td class="font-sans">sqrt(2) is irrational</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/">Discrete Math</a> — proof techniques (induction, contradiction) used throughout</li>
+      <li><a href="/reading/abstract-algebra/">Abstract Algebra</a> — field axioms in the algebraic context</li>
+      <li><a href="/reading/abstract-algebra/judson-07/">🔗 Judson Ch.7 Rings and Fields</a> — the algebraic structure that makes R a field</li>
+      <li><a href="/reading/calculus/calc-03/">📐 Calculus Ch.3</a> — limits in calculus depend on the completeness of the reals</li>
+      <li><a href="/reading/proof-writing/proofs-03/">📝 Proofs Ch.3</a> — proof by contradiction: used to prove the irrationality of √2</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Floating-point arithmetic is not the reals. Our bisection for &radic;2 converges to a float, not an exact real. The completeness axiom is about the mathematical structure, not any computer representation. The irrationality proof of &radic;2 is a proof by contradiction that can't be "run" in the REPL.</p>
+
+    <PrevNext next={{ href: "/reading/real-analysis/lebl-02/", label: "Sequences" }} />
+
+  </main>
+</Layout>

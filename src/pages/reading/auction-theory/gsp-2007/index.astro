@@ -1,0 +1,138 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="GSP 2007 — Generalized Second-Price Auction" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>Generalized Second-Price Auction</h1>
+    <p class="text-gray-400 text-sm mb-6">Edelman, Ostrovsky &amp; Schwarz &middot; 2007 &middot; <a href="https://www.aeaweb.org/articles?id=10.1257/aer.97.1.242">AER 97(1)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Generalized Second-Price</strong> auction ranks ads by bid, assigns them to slots with decreasing click rates, and charges each winner the bid of the advertiser below them. GSP is <em>not</em> truthful, but its equilibria are efficient. Google adopted it because it is simpler than VCG and revenue-comparable.</p>
+    </div>
+
+    <h3>Ranked slots with decreasing click rates</h3>
+    <p>In search advertising, higher positions get more clicks. GSP assigns the highest bidder to position 1, second-highest to position 2, and so on. Each advertiser pays the bid of the one below them (per click). The entire model assumes <a href="https://june.kim/keywords-are-tiny-circles"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>keywords as discrete units</a>; once you move to continuous embedding spaces, the slot metaphor breaks down.</p>
+
+    <!-- SVG: Ranked ad slots with decreasing click rates -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Slot 1 -->
+        <rect x="20" y="15" width="260" height="40" rx="6" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="35" y="40" fill="#4ade80" font-size="12" font-weight="bold">Slot 1</text>
+        <text x="110" y="40" fill="currentColor" font-size="11">Ad A (bid $10)</text>
+        <text x="300" y="35" fill="currentColor" font-size="10" fill-opacity="0.5">100 clicks</text>
+        <text x="400" y="35" fill="#4ade80" font-size="10">pays $8</text>
+
+        <!-- Slot 2 -->
+        <rect x="20" y="65" width="210" height="40" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="35" y="90" fill="#60a5fa" font-size="12" font-weight="bold">Slot 2</text>
+        <text x="110" y="90" fill="currentColor" font-size="11">Ad B (bid $8)</text>
+        <text x="300" y="85" fill="currentColor" font-size="10" fill-opacity="0.5">60 clicks</text>
+        <text x="400" y="85" fill="#60a5fa" font-size="10">pays $2</text>
+
+        <!-- Slot 3 -->
+        <rect x="20" y="115" width="160" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="35" y="140" fill="currentColor" font-size="12">Slot 3</text>
+        <text x="110" y="140" fill="currentColor" font-size="11">Ad C (bid $2)</text>
+        <text x="300" y="135" fill="currentColor" font-size="10" fill-opacity="0.5">20 clicks</text>
+        <text x="400" y="135" fill="currentColor" font-size="10" fill-opacity="0.5">pays $0</text>
+
+        <!-- Click rate bars -->
+        <text x="300" y="178" fill="currentColor" font-size="9" fill-opacity="0.35">click rate decreases with position</text>
+
+        <!-- Arrows showing "pays next bid" -->
+        <line x1="380" y1="45" x2="380" y2="68" stroke="#4ade80" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="380" y1="95" x2="380" y2="118" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Generalized Second-Price auction
+; Each advertiser pays the bid of the one below them
+
+(define (gsp-auction bids click-rates)
+  ;; Sort bids descending, assign to slots
+  (let* ((sorted (sort bids >))
+         (n (length sorted))
+         (payments
+           (let loop ((i 0) (result '()))
+             (if (>= i (min n (length click-rates)))
+                 (reverse result)
+                 (let ((pay (if (< (+ i 1) n)
+                               (list-ref sorted (+ i 1))
+                               0)))
+                   (loop (+ i 1) (cons pay result)))))))
+    (list sorted payments click-rates)))
+
+(define result (gsp-auction '(10 8 2) '(100 60 20)))
+(display "Bids (ranked):    ") (display (car result)) (newline)
+(display "Payments per click: ") (display (cadr result)) (newline)
+(display "Click rates:      ") (display (caddr result)) (newline)
+
+; Total revenue
+(define (dot a b)
+  (if (null? a) 0
+      (+ (* (car a) (car b)) (dot (cdr a) (cdr b)))))
+
+(display "Total revenue: $")
+(display (dot (cadr result) (caddr result)))
+; $8*100 + $2*60 + $0*20 = $920
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# GSP auction
+def gsp(bids, click_rates):
+    ranked = sorted(bids, reverse=True)
+    payments = [ranked[i+1] if i+1 < len(ranked) else 0
+                for i in range(min(len(ranked), len(click_rates)))]
+    revenue = sum(p * c for p, c in zip(payments, click_rates))
+    return dict(ranked=ranked, payments=payments, revenue=revenue)
+
+print(gsp([10, 8, 2], [100, 60, 20]))
+`} />
+    </div>
+
+    <h3>Not truthful, but stable</h3>
+    <p>Unlike <a href="/reading/auction-theory/vcg-1973/">💎 VCG</a>, bidders in GSP can sometimes benefit by bidding below their true value to get a cheaper slot. The paper shows that GSP has a locally envy-free equilibrium equivalent to the VCG outcome. Advertisers shade their bids just enough that no one envies an adjacent slot. The shading problem disappears in <a href="https://june.kim/buying-space-not-keywords"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>space-based auctions</a>, where advertisers buy continuous regions rather than ranked positions.</p>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">alpha_k</td><td class="pr-4 text-green-300">click-rates</td><td class="font-sans">Click-through rate for slot k</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p_k = b_(k+1)</td><td class="pr-4 text-green-300">(list-ref sorted (+ i 1))</td><td class="font-sans">Per-click payment = next bid</td></tr>
+          <tr><td class="py-2 pr-4">LEF</td><td class="pr-4 text-green-300">locally envy-free</td><td class="font-sans">No one envies adjacent slot</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/one-shot-bidding</a> &mdash; GSP in practice</li>
+      <li><a href="/reading/auction-theory/vickrey-1961/">💎 Vickrey 1961</a> &mdash; the single-item version GSP generalizes</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">💎 VCG 1973</a> &mdash; the truthful alternative GSP approximates</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://www.aeaweb.org/articles?id=10.1257/aer.97.1.242">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/vcg-1973/", label: "VCG 1973 · 2 of 8" }} next={{ href: "/reading/auction-theory/milgrom-weber-1982/", label: "Milgrom & Weber 1982 · 4 of 8" }} />
+
+  </main>
+</Layout>

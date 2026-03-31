@@ -1,0 +1,173 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.19 — Fiscal and Monetary Policy" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Fiscal and Monetary Policy</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Hicks (1937), IS-LM model · Taylor (1993), Taylor rule</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Governments spend and tax (fiscal). Central banks set interest rates and control money supply (monetary). The <strong>IS-LM model</strong> shows how these two levers interact to determine output and interest rates simultaneously.</p>
+    </div>
+
+    <!-- 1. IS-LM Model -->
+    <h3>The IS-LM model</h3>
+    <p>The <strong>IS curve</strong> (Investment-Saving) shows combinations of interest rate r and output Y where the goods market clears. Higher r means less investment, so lower Y. The <strong>LM curve</strong> (Liquidity-Money) shows where money demand equals money supply. Higher Y means more money demand, so higher r. The intersection is general equilibrium.</p>
+
+    <!-- SVG: IS-LM curves with equilibrium -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="250" x2="370" y2="250" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="60" y1="250" x2="60" y2="30" stroke="currentColor" stroke-width="1.5"/>
+        <text x="215" y="280" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Y (output)</text>
+        <text x="25" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6" transform="rotate(-90,25,140)">r (interest rate)</text>
+        <!-- IS curve: downward sloping -->
+        <line x1="80" y1="60" x2="350" y2="220" stroke="#4ade80" stroke-width="2.5"/>
+        <text x="355" y="225" fill="#4ade80" font-size="12">IS</text>
+        <!-- LM curve: upward sloping -->
+        <line x1="80" y1="220" x2="350" y2="60" stroke="#60a5fa" stroke-width="2.5"/>
+        <text x="355" y="65" fill="#60a5fa" font-size="12">LM</text>
+        <!-- Equilibrium point -->
+        <circle cx="215" cy="140" r="5" fill="#fbbf24"/>
+        <text x="230" y="135" fill="#fbbf24" font-size="11">equilibrium</text>
+        <!-- Dashed lines to axes -->
+        <line x1="215" y1="140" x2="215" y2="250" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="215" y1="140" x2="60" y2="140" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="215" y="265" text-anchor="middle" fill="#fbbf24" font-size="10">Y*</text>
+        <text x="50" y="143" text-anchor="end" fill="#fbbf24" font-size="10">r*</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; IS-LM equilibrium
+; IS: Y = multiplier * (autonomous spending - b*r)
+; LM: r = (1/h) * (k*Y - M/P)
+
+; Parameters
+(define C0 100)   ; autonomous consumption
+(define b 500)    ; investment sensitivity to r
+(define G 200)    ; government spending
+(define T 150)    ; taxes
+(define c 0.8)    ; marginal propensity to consume
+(define k 0.5)    ; income sensitivity of money demand
+(define h 1000)   ; interest sensitivity of money demand
+(define M/P 500)  ; real money supply
+
+; IS curve: Y = (1/(1-c)) * (C0 - c*T + G - b*r)
+; Multiplier
+(define mult (/ 1 (- 1 c)))
+(display "Multiplier: ") (display mult) (newline)
+
+; Solve IS-LM simultaneously:
+; Y = mult * (C0 - c*T + G - b*r)
+; r = (k*Y - M/P) / h
+; Substituting LM into IS:
+; Y = mult * (C0 - c*T + G - b*(k*Y - M/P)/h)
+; Y * (1 + mult*b*k/h) = mult * (C0 - c*T + G + b*M/P/h)
+
+(define A (+ C0 (- (* c T)) G))
+(define denom (+ 1 (/ (* mult b k) h)))
+(define Y-star (/ (+ (* mult A) (/ (* mult b M/P) h)) denom))
+(define r-star (/ (- (* k Y-star) M/P) h))
+
+(display "Equilibrium Y* = ") (display (round Y-star)) (newline)
+(display "Equilibrium r* = ") (display (/ (round (* r-star 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# IS-LM equilibrium solver
+C0, b, G, T, c = 100, 500, 200, 150, 0.8
+k, h, MP = 0.5, 1000, 500
+
+mult = 1 / (1 - c)
+A = C0 - c*T + G
+denom = 1 + mult*b*k/h
+Y_star = (mult*A + mult*b*MP/h) / denom
+r_star = (k*Y_star - MP) / h
+
+print("Multiplier: " + str(mult))
+print("Equilibrium Y* = " + str(round(Y_star, 2)))
+print("Equilibrium r* = " + str(round(r_star, 2)))
+`} />
+    </div>
+
+
+    <!-- 2. Government Spending Multiplier -->
+    <h3>The spending multiplier</h3>
+    <p>If the government spends an extra dollar, GDP rises by more than a dollar. The <strong>multiplier</strong> = 1/(1-c), where c is the marginal propensity to consume. With c = 0.8, the multiplier is 5: each dollar spent becomes income, 80 cents of which is re-spent, and so on. In IS-LM, the multiplier is smaller because higher Y raises r, which crowds out private investment.</p>
+
+    <SchemeRepl client:load initialCode={`; Spending multiplier: trace the rounds
+; MPC = 0.8, initial spending = $100
+
+(define mpc 0.8)
+
+(define (multiplier-rounds G rounds)
+  (define (loop n spending total)
+    (if (> n rounds)
+        total
+        (begin
+          (display "Round ") (display n)
+          (display ": $") (display (round spending)) (newline)
+          (loop (+ n 1) (* spending mpc) (+ total spending)))))
+  (loop 1 G 0))
+
+(display "--- Multiplier rounds ---") (newline)
+(define total (multiplier-rounds 100 8))
+(display "Total after 8 rounds: $") (display (round total)) (newline)
+(display "Theoretical total (infinite): $")
+(display (/ 100 (- 1 mpc)))
+`} />
+
+
+    <!-- 3. Central Bank Tools and Taylor Rule -->
+    <h3>Central bank tools and the Taylor rule</h3>
+    <p>Central banks control the money supply through open market operations, reserve requirements, and the policy rate. The <strong>Taylor rule</strong> gives a formula: r = r* + 0.5(inflation - target) + 0.5(output gap). It says: raise rates when inflation is above target or output is above potential.</p>
+
+    <SchemeRepl client:load initialCode={`; Taylor Rule:
+; r = r* + 0.5*(pi - pi*) + 0.5*(y - y*)
+; r* = neutral real rate, pi = inflation,
+; pi* = target, y-y* = output gap (% of potential)
+
+(define (taylor-rate r-neutral inflation target output-gap)
+  (+ r-neutral
+     (* 0.5 (- inflation target))
+     (* 0.5 output-gap)))
+
+; Scenario 1: inflation at target, no output gap
+(display "Baseline: ")
+(display (taylor-rate 0.02 0.02 0.02 0.0)) (newline)
+
+; Scenario 2: inflation 5%, target 2%, output gap +1%
+(display "High inflation: ")
+(display (taylor-rate 0.02 0.05 0.02 0.01)) (newline)
+
+; Scenario 3: recession, inflation 1%, output gap -3%
+(display "Recession: ")
+(display (taylor-rate 0.02 0.01 0.02 -0.03))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/IS%E2%80%93LM_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>IS-LM model</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fiscal_multiplier"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fiscal multiplier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Taylor_rule"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Taylor rule</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monetary_policy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monetary policy</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-18/", label: "GDP and Measurement" }} next={{ href: "/reading/economics/econ-20/", label: "Mechanism Design" }} />
+
+  </main>
+</Layout>

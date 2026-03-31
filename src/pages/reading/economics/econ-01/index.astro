@@ -1,0 +1,209 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.1 — Division of Labor" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Division of Labor</h1>
+    <p class="text-gray-400 text-sm mb-6">Adam Smith &middot; 1776 &middot; <a href="https://en.wikipedia.org/wiki/The_Wealth_of_Nations"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Wealth of Nations, Book I, Ch. 1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Splitting a task into specialized steps multiplies output. Smith's pin factory: one worker alone makes perhaps one pin a day. Ten workers, each handling one step, produce 4,800 pins a day. Specialization works because it saves switching time, builds skill through repetition, and invites tool-making.</p>
+    </div>
+
+    <!-- SVG: 1 worker vs 10 workers -->
+    <h3>The pin factory</h3>
+    <p>Smith observed an actual pin factory. The difference between craft production and divided labor was not incremental. It was orders of magnitude.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left: 1 worker -->
+        <rect x="20" y="30" width="150" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="95" y="22" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">1 worker, all steps</text>
+        <text x="95" y="60" text-anchor="middle" fill="currentColor" font-size="28" fill-opacity="0.7">1</text>
+        <text x="95" y="80" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">pin per day</text>
+        <!-- Single worker icon -->
+        <circle cx="95" cy="115" r="8" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="95" y1="123" x2="95" y2="138" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+
+        <!-- Right: 10 workers -->
+        <rect x="220" y="30" width="160" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="300" y="22" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">10 workers, divided</text>
+        <text x="300" y="60" text-anchor="middle" fill="#10b981" font-size="28" fill-opacity="0.9">4,800</text>
+        <text x="300" y="80" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">pins per day</text>
+        <!-- Worker icons in a row -->
+        <circle cx="240" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="255" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="270" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="285" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="300" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="315" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="330" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="345" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="360" cy="110" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="252" cy="130" r="5" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+        <!-- Arrow showing multiplier -->
+        <text x="200" y="95" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.3">&rarr;</text>
+        <!-- Caption -->
+        <text x="200" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">4,800x improvement from specialization alone</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Smith's pin factory: division of labor
+; One worker doing all 18 steps: ~1 pin/day
+; Ten workers, each specializing: ~4,800 pins/day
+
+(define solo-output 1)        ; pins per worker per day (undivided)
+(define team-size 10)
+(define divided-output 4800)  ; total pins per day (divided)
+
+; Output per worker
+(define per-worker-divided (/ divided-output team-size))
+
+(display "Solo worker: ")
+(display solo-output)
+(display " pin/day")
+(newline)
+
+(display "Divided, per worker: ")
+(display per-worker-divided)
+(display " pins/day")
+(newline)
+
+; The multiplier from specialization
+(define multiplier (/ per-worker-divided solo-output))
+(display "Productivity multiplier: ")
+(display multiplier)
+(display "x")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Smith's pin factory
+solo_output = 1        # pins per worker per day (undivided)
+team_size = 10
+divided_output = 4800  # total pins per day (divided)
+
+per_worker = divided_output / team_size
+multiplier = per_worker / solo_output
+
+print("Solo worker: " + str(solo_output) + " pin/day")
+print("Divided, per worker: " + str(int(per_worker)) + " pins/day")
+print("Productivity multiplier: " + str(int(multiplier)) + "x")
+`} />
+    </div>
+
+
+    <!-- Why specialization works -->
+    <h3>Three reasons specialization works</h3>
+    <p>Smith identified three mechanisms. First, <strong>dexterity</strong>: repeating one task makes you faster at it. Second, <strong>saved time</strong>: no switching between tasks, no putting down one tool and picking up another. Third, <strong>invention</strong>: workers who focus on one step discover shortcuts and build specialized tools.</p>
+
+    <SchemeRepl client:load initialCode={`; Model: time cost of switching vs specializing
+; Suppose each of 5 steps takes 10 minutes of work,
+; but switching between steps costs 3 minutes each time.
+
+(define steps 5)
+(define work-per-step 10)   ; minutes
+(define switch-cost 3)       ; minutes per switch
+
+; Generalist: does all 5 steps, switches 4 times
+(define generalist-time
+  (+ (* steps work-per-step) (* (- steps 1) switch-cost)))
+
+; Specialist: does 1 step, no switching
+(define specialist-time work-per-step)
+
+; In a team of 5 specialists, throughput per hour
+(define generalist-pins-per-hour (/ 60.0 generalist-time))
+(define specialist-pins-per-hour (/ 60.0 specialist-time))
+
+(display "Generalist: ")
+(display generalist-time)
+(display " min/pin -> ")
+(display (exact->inexact generalist-pins-per-hour))
+(display " pins/hr")
+(newline)
+
+(display "Specialist: ")
+(display specialist-time)
+(display " min/step -> ")
+(display (exact->inexact specialist-pins-per-hour))
+(display " units/hr per worker")
+(newline)
+
+(display "Team of 5 bottleneck throughput: ")
+(display (exact->inexact specialist-pins-per-hour))
+(display " pins/hr (pipeline)")
+`} />
+
+
+    <!-- The extent of the market -->
+    <h3>The extent of the market</h3>
+    <p>Division of labor is limited by the size of the market. A village cannot support a full-time pin-maker. A city can. Trade expands the market, which enables deeper specialization, which raises productivity, which funds more trade. This is Smith's virtuous cycle.</p>
+
+    <SchemeRepl client:load initialCode={`; The extent of the market limits specialization.
+; Small market: each worker must be a generalist.
+; Large market: workers can specialize deeply.
+
+(define (output-per-worker market-size)
+  ; More market -> more specialization -> more output
+  ; Simplified model: output grows with log of market size
+  ; (diminishing returns to further division)
+  (let ((max-division 18)   ; Smith counted 18 steps in pin-making
+        (useful-division (min max-division (floor (log market-size)))))
+    (* 10 (+ 1 useful-division))))
+
+(display "Market size 10:     ")
+(display (output-per-worker 10))
+(display " pins/worker/day")
+(newline)
+
+(display "Market size 1000:   ")
+(display (output-per-worker 1000))
+(display " pins/worker/day")
+(newline)
+
+(display "Market size 100000: ")
+(display (output-per-worker 100000))
+(display " pins/worker/day")
+`} />
+
+
+    <!-- Notation -->
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Division of labor</td><td>Splitting production into specialized tasks</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Dexterity</td><td>Skill gained from repeating one task</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Switching cost</td><td>Time lost changing between tasks</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Extent of the market</td><td>Market size limits how far labor can be divided</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Division_of_labour"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Division of labour</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pin_factory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Pin factory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Specialization_(economics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Specialization</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/economics/econ-02/", label: "Supply and Demand" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,189 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.11 — Remote Attestation" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>Remote Attestation</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Trusted_Computing#Remote_attestation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Remote attestation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Remote attestation</strong> lets a remote party verify what code is running on a machine, without trusting the machine's operator. The hardware hashes the running code, signs the hash with a key burned into the chip, and the verifier checks the signature against a known-good measurement. The attestation proves the code, not the person.</p>
+    </div>
+
+    <!-- SVG: Attestation flow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Enclave box -->
+        <rect x="30" y="40" width="120" height="80" rx="6" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="90" y="65" text-anchor="middle" fill="#4ade80" font-size="12">Enclave</text>
+        <text x="90" y="82" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">running code</text>
+        <text x="90" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">HW key</text>
+
+        <!-- Arrow: measure -->
+        <line x1="155" y1="70" x2="200" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="200,66 208,70 200,74" fill="currentColor"/>
+        <text x="180" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">measure</text>
+
+        <!-- Hash box -->
+        <rect x="210" y="55" width="80" height="30" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="250" y="75" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">hash(code)</text>
+
+        <!-- Arrow: sign -->
+        <line x1="295" y1="70" x2="330" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="330,66 338,70 330,74" fill="currentColor"/>
+        <text x="312" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">sign</text>
+
+        <!-- Signature -->
+        <rect x="340" y="55" width="70" height="30" rx="4" fill="none" stroke="#f472b6" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="375" y="75" text-anchor="middle" fill="#f472b6" font-size="10">attestation</text>
+
+        <!-- Arrow: send to verifier -->
+        <path d="M 375 90 L 375 150" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="371,150 375,158 379,150" fill="currentColor"/>
+
+        <!-- Verifier -->
+        <rect x="310" y="160" width="130" height="45" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="375" y="180" text-anchor="middle" fill="#60a5fa" font-size="12">Verifier</text>
+        <text x="375" y="196" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">checks sig + hash</text>
+
+        <!-- Known-good hash -->
+        <rect x="120" y="165" width="120" height="30" rx="4" fill="none" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+        <text x="180" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">known-good hash</text>
+
+        <!-- Arrow from known-good to verifier -->
+        <line x1="245" y1="180" x2="305" y2="180" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <text x="275" y="175" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">compare</text>
+      </svg>
+    </div>
+
+    <!-- 1. What gets measured -->
+    <h3>What gets measured</h3>
+    <p>At launch time, the hardware measures the code loaded into the enclave: the binary, its initial data, and the launch configuration. This measurement is a cryptographic hash. If a single byte of the code changes, the hash changes completely. It is deterministic: the same code always produces the same hash.</p>
+
+    <SchemeRepl client:load initialCode={`; Attestation = hash(code) + sign(hash)
+; The verifier knows what hash to expect.
+; If the measurement matches, the code is authentic.
+
+; Simulate with simple hash (real systems use SHA-256)
+(define (simple-hash str)
+  (define (go chars acc)
+    (if (null? chars) (modulo acc 1000000007)
+        (go (cdr chars)
+            (modulo (+ (* acc 31) (char->integer (car chars)))
+                    1000000007))))
+  (go (string->list str) 0))
+
+; The "code" running in the enclave
+(define honest-code "(define (auction bids) (apply max bids))")
+(define tampered-code "(define (auction bids) (car bids))")
+
+(define honest-hash (simple-hash honest-code))
+(define tampered-hash (simple-hash tampered-code))
+
+(display "Honest code hash:   ") (display honest-hash) (newline)
+(display "Tampered code hash: ") (display tampered-hash) (newline)
+(display "Match? ") (display (= honest-hash tampered-hash)) (newline)
+(newline)
+
+; The verifier publishes the expected hash
+(define expected-hash honest-hash)
+(display "Verifier expects: ") (display expected-hash) (newline)
+(display "Honest passes?  ") (display (= honest-hash expected-hash)) (newline)
+(display "Tampered passes? ") (display (= tampered-hash expected-hash))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Attestation: hash the code, check against known-good
+import hashlib
+
+honest_code = "(define (auction bids) (apply max bids))"
+tampered_code = "(define (auction bids) (car bids))"
+
+honest_hash = hashlib.sha256(honest_code.encode()).hexdigest()[:16]
+tampered_hash = hashlib.sha256(tampered_code.encode()).hexdigest()[:16]
+
+print(f"Honest hash:   {honest_hash}")
+print(f"Tampered hash: {tampered_hash}")
+print(f"Match? {honest_hash == tampered_hash}")
+
+expected = honest_hash
+print(f"\\nVerifier expects: {expected}")
+print(f"Honest passes?  {honest_hash == expected}")
+print(f"Tampered passes? {tampered_hash == expected}")
+`} />
+    </div>
+
+    <!-- 2. The hardware key -->
+    <h3>The hardware-bound key</h3>
+    <p>The signing key is fused into the chip at manufacturing time. The operator cannot extract it, even with physical access. The chip manufacturer certifies the key, creating a chain of trust: chip manufacturer signs chip key, chip key signs attestation. The verifier traces the chain back to the manufacturer.</p>
+
+    <SchemeRepl client:load initialCode={`; Chain of trust for attestation:
+; Manufacturer -> Chip -> Enclave measurement
+
+(display "Trust chain:") (newline)
+(display "  1. Manufacturer burns key into chip") (newline)
+(display "  2. Manufacturer publishes chip's public key") (newline)
+(display "  3. Enclave loads, hardware measures code") (newline)
+(display "  4. Hardware signs measurement with chip key") (newline)
+(display "  5. Verifier checks:") (newline)
+(display "     - Signature valid? (chip key)") (newline)
+(display "     - Chip key certified? (manufacturer)") (newline)
+(display "     - Measurement matches expected code?") (newline)
+(newline)
+(display "The operator never touches the signing key.") (newline)
+(display "The verifier never trusts the operator.") (newline)
+(display "Trust flows: manufacturer -> hardware -> code.")
+`} />
+
+    <!-- 3. What attestation proves -->
+    <h3>What attestation proves (and does not prove)</h3>
+    <p>Attestation proves <em>what code is running</em>, not <em>what the code does</em>. A verifier must independently audit the source code, compile it reproducibly, and compare the hash. Attestation closes the gap between "I audited this source" and "that source is what's actually running on that machine." Without attestation, the operator could run different code.</p>
+
+    <SchemeRepl client:load initialCode={`; Attestation proves vs. does not prove
+
+(display "Attestation PROVES:") (newline)
+(display "  - Exactly this binary is running") (newline)
+(display "  - The hardware is genuine (chip key)") (newline)
+(display "  - The operator did not swap the code") (newline)
+(newline)
+(display "Attestation DOES NOT PROVE:") (newline)
+(display "  - The code is correct or bug-free") (newline)
+(display "  - The code does what you want") (newline)
+(display "  - Side channels are absent") (newline)
+(newline)
+(display "You still need to audit the source.") (newline)
+(display "Attestation bridges: source audit -> runtime.")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-10/">&#8592; Ch.10 — TLS Handshake</a></li>
+      <li><a href="/reading/cryptography/crypto-12/">Ch.12 — Trusted Execution Environments &#8594;</a></li>
+    </ul>
+    <ul>
+      <li><a href="/reading/cryptography/crypto-03/">Crypto Ch.3</a> — hashing: the measurement is a hash</li>
+      <li><a href="/reading/cryptography/crypto-08/">Crypto Ch.8</a> — digital signatures: the attestation is signed</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Trusted_Computing#Remote_attestation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Remote attestation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Trusted_Platform_Module"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Trusted Platform Module</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-10/", label: "TLS Handshake" }} next={{ href: "/reading/cryptography/crypto-12/", label: "Trusted Execution Environments" }} />
+
+  </main>
+</Layout>

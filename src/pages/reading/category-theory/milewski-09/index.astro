@@ -1,0 +1,452 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.9 — Function Types" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Function Types</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/03/13/function-types/">Category Theory for Programmers, Ch. 9</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-05/">🍞 Ch5 (Products and Coproducts)</a>, <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A function type <code>a → b</code> is not just a mapping. It is an <strong>object in the category</strong>, called the exponential <code>b<sup>a</sup></code>. Currying is the adjunction between products and exponentials: <code>(a × b) → c ≅ a → (b → c)</code>. This isomorphism is why every multi-argument function is secretly a chain of single-argument functions.</p>
+    </div>
+
+    <!-- 1. Universal construction -->
+    <h3>Universal construction of function objects</h3>
+    <p>In <strong>Set</strong>, the set of all functions from <code>a</code> to <code>b</code> is itself a set (the hom-set). In an arbitrary category, there is no guarantee that morphisms between two objects form an object in the same category. The <strong>exponential object</strong> <code>b<sup>a</sup></code> is defined by a universal construction: it comes equipped with an <code>eval</code> morphism from <code>b<sup>a</sup> × a</code> to <code>b</code>, and any other candidate factors through it uniquely.</p>
+
+    <SchemeRepl client:load initialCode={`; The universal property of function objects:
+; For any g : z × a → b, there exists a unique
+; h : z → (a => b) such that eval ∘ (h × id) = g
+;
+; eval : (a => b) × a → b
+; eval "applies" a function object to an argument.
+
+(define (my-eval func-and-arg)
+  ((car func-and-arg) (cdr func-and-arg)))
+
+; A function object: the set of all functions from Bool to Int
+; Bool = {#t, #f}, so a function Bool→Int is a pair of Ints.
+(define (bool->int-1 b) (if b 10 20))
+(define (bool->int-2 b) (if b 99 0))
+
+; eval applies the function to the argument
+(display "eval(f1, #t): ") (display (my-eval (cons bool->int-1 #t))) (newline)
+(display "eval(f1, #f): ") (display (my-eval (cons bool->int-1 #f))) (newline)
+(display "eval(f2, #t): ") (display (my-eval (cons bool->int-2 #t))) (newline)
+
+; The exponential Int^Bool has |Int|^2 inhabitants.
+; Each function is determined by two choices: what #t maps to, what #f maps to.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# eval: apply a function object to an argument
+def my_eval(pair):
+    func, arg = pair
+    return func(arg)
+
+f1 = lambda b: 10 if b else 20
+f2 = lambda b: 99 if b else 0
+
+print(f"eval(f1, True):  {my_eval((f1, True))}")
+print(f"eval(f1, False): {my_eval((f1, False))}")
+print(f"eval(f2, True):  {my_eval((f2, True))}")
+`} />
+    </div>
+
+
+    <!-- SVG: Currying isomorphism -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Left side: (A x B) -> C -->
+        <rect x="20" y="30" width="70" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="55" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">A &#x00D7; B</text>
+        <circle cx="160" cy="50" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="160" y="40" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">C</text>
+        <line x1="95" y1="50" x2="152" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="152,46 160,50 152,54" fill="currentColor"/>
+        <text x="125" y="44" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Isomorphism symbol -->
+        <text x="220" y="55" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.6">&#x2245;</text>
+
+        <!-- Right side: A -> (B -> C) -->
+        <circle cx="280" cy="50" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="280" y="40" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">A</text>
+        <rect x="340" y="30" width="75" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="377" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">B &#x2192; C</text>
+        <line x1="288" y1="50" x2="335" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="335,46 343,50 335,54" fill="currentColor"/>
+        <text x="312" y="44" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">g</text>
+
+        <!-- Labels -->
+        <text x="95" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">uncurried</text>
+        <text x="350" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">curried</text>
+        <text x="220" y="125" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">curry / uncurry are inverses</text>
+      </svg>
+    </div>
+
+    <!-- 2. Currying -->
+    <h3>Currying: the adjunction</h3>
+    <p>Currying is the heart of this chapter. A function of two arguments <code>(a × b) → c</code> can always be rewritten as a function that takes one argument and returns a function: <code>a → (b → c)</code>. This is a natural isomorphism: the two forms carry the same information.</p>
+
+    <SchemeRepl client:load initialCode={`; curry : ((a × b) → c) → (a → (b → c))
+; uncurry : (a → (b → c)) → ((a × b) → c)
+;
+; These are inverses: uncurry(curry(f)) = f, curry(uncurry(g)) = g
+
+(define (my-curry f)
+  (lambda (a)
+    (lambda (b)
+      (f (cons a b)))))
+
+(define (my-uncurry g)
+  (lambda (pair)
+    ((g (car pair)) (cdr pair))))
+
+; A function on pairs: add two numbers
+(define (add-pair p) (+ (car p) (cdr p)))
+
+; Curry it: now takes one arg, returns a function
+(define add-curried (my-curry add-pair))
+
+(display "uncurried: ") (display (add-pair (cons 3 4))) (newline)
+(display "curried:   ") (display ((add-curried 3) 4)) (newline)
+
+; Round-trip: uncurry(curry(f)) = f
+(define add-back (my-uncurry add-curried))
+(display "round-trip: ") (display (add-back (cons 3 4))) (newline)
+
+; Partial application falls out for free
+(define add10 (add-curried 10))
+(display "add10(5):  ") (display (add10 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# curry / uncurry in Python
+def curry(f):
+    return lambda a: lambda b: f((a, b))
+
+def uncurry(g):
+    return lambda pair: g(pair[0])(pair[1])
+
+add_pair = lambda p: p[0] + p[1]
+add_curried = curry(add_pair)
+
+print(f"uncurried: {add_pair((3, 4))}")
+print(f"curried:   {add_curried(3)(4)}")
+print(f"round-trip: {uncurry(add_curried)((3, 4))}")
+
+# Partial application
+add10 = add_curried(10)
+print(f"add10(5):  {add10(5)}")
+`} />
+    </div>
+
+
+    <!-- 3. The isomorphism -->
+    <h3>The isomorphism: (a × b) → c ≅ a → (b → c)</h3>
+    <p>Curry and uncurry are inverses. This means the set of functions from a product is isomorphic to the set of higher-order functions. In exponential notation: <code>c<sup>(a×b)</sup> ≅ (c<sup>b</sup>)<sup>a</sup></code>. This is the familiar law of exponents: <code>x<sup>yz</sup> = (x<sup>y</sup>)<sup>z</sup></code>. The algebraic identity is not an analogy. It is the same identity, living in the category.</p>
+
+    <SchemeRepl client:load initialCode={`; Demonstrate the isomorphism with finite types.
+; Bool → (Bool → Bool): how many inhabitants?
+; (Bool^Bool)^Bool = (2^2)^2 = 4^2 = 16
+; (Bool × Bool) → Bool: how many inhabitants?
+; Bool^(Bool×Bool) = 2^(2×2) = 2^4 = 16  ✓ Same!
+
+; Let's enumerate some:
+; Uncurried: takes a pair of bools, returns a bool
+(define (f-and p) (and (car p) (cdr p)))
+(define (f-or p) (or (car p) (cdr p)))
+(define (f-xor p) (not (eq? (car p) (cdr p))))
+
+; Curried versions:
+(define c-and (lambda (a) (lambda (b) (and a b))))
+(define c-or  (lambda (a) (lambda (b) (or a b))))
+(define c-xor (lambda (a) (lambda (b) (not (eq? a b)))))
+
+; They compute the same thing:
+(display "AND pair:    ") (display (f-and (cons #t #f))) (newline)
+(display "AND curried: ") (display ((c-and #t) #f)) (newline)
+(display "OR pair:     ") (display (f-or (cons #f #t))) (newline)
+(display "OR curried:  ") (display ((c-or #f) #t)) (newline)
+(display "XOR pair:    ") (display (f-xor (cons #t #t))) (newline)
+(display "XOR curried: ") (display ((c-xor #t) #t))
+; Same answers. The isomorphism preserves behavior.
+`} />
+
+
+    <!-- 4. Why exponentials? -->
+    <h3>Why "exponentials"?</h3>
+    <p>The notation is not metaphorical. For finite sets, the number of functions from <code>a</code> to <code>b</code> is literally <code>|b|<sup>|a|</sup></code>. A function from a 3-element set to a 2-element set must make 3 independent binary choices, giving 2<sup>3</sup> = 8 possible functions. The algebraic laws of exponents hold exactly because they are the algebraic laws of function types.</p>
+
+    <SchemeRepl client:load initialCode={`; Counting functions between finite types.
+; |b^a| = |b|^|a|
+
+; Bool = {#t, #f}           |Bool| = 2
+; Three = {0, 1, 2}         |Three| = 3
+
+; All functions Three → Bool: 2^3 = 8
+; Each function picks a bool for each of 0, 1, 2.
+
+(define (enumerate-three->bool)
+  (let loop ((i 0) (count 0) (results '()))
+    (if (>= i 8) (list count results)
+        (let* ((b0 (if (zero? (modulo i 2)) #f #t))
+               (b1 (if (zero? (modulo (quotient i 2) 2)) #f #t))
+               (b2 (if (zero? (modulo (quotient i 4) 2)) #f #t)))
+          (loop (+ i 1) (+ count 1)
+                (cons (list b0 b1 b2) results))))))
+
+(define result (enumerate-three->bool))
+(display "Number of functions {0,1,2} → Bool: ")
+(display (car result)) (newline)
+; 8 = 2^3
+
+; Algebraic laws:
+; a^0 = 1    (one function from Void: absurd)
+; 1^a = 1    (one function to Unit: always ())
+; a^1 = a    (functions from Unit ≅ elements of a)
+(display "a^0 = 1: unique function from empty set") (newline)
+(display "1^a = 1: every input maps to ()") (newline)
+(display "a^1 = a: picking a function Unit→a = picking an element of a")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Counting functions between finite types
+from itertools import product
+
+# All functions {0,1,2} → {True, False}
+domain = [0, 1, 2]
+codomain = [True, False]
+all_fns = list(product(codomain, repeat=len(domain)))
+print(f"Functions {{0,1,2}} → Bool: {len(all_fns)}")  # 8 = 2^3
+
+# Algebraic laws with finite sets
+print(f"|Bool|^|Three| = {len(codomain)}^{len(domain)} = {len(codomain)**len(domain)}")
+
+# a^(b+c) = a^b × a^c
+# Functions from a disjoint union = pair of functions
+four = [0, 1, 2, 3]  # |four| = 4
+# Bool^(Three + Four) should equal Bool^Three × Bool^Four
+lhs = len(codomain) ** (len(domain) + len(four))
+rhs = len(codomain) ** len(domain) * len(codomain) ** len(four)
+print(f"2^(3+4) = {lhs}, 2^3 × 2^4 = {rhs}, equal: {lhs == rhs}")
+`} />
+    </div>
+
+    <!-- 5. Cartesian closed categories -->
+    <h3>Cartesian closed categories</h3>
+    <p>A category where you can always form products and exponentials is called <strong>Cartesian closed</strong>. It must have three things: a terminal object (the empty product), a product for every pair of objects, and an exponential for every pair of objects. <strong>Set</strong> is the canonical example. So is every typed lambda calculus. A Cartesian closed category is exactly the categorical semantics of a language with functions and tuples.</p>
+
+    <SchemeRepl client:load initialCode={`; Cartesian closed: terminal object + products + exponentials.
+;
+; In Set:
+;   Terminal object = {()}       (unit / singleton set)
+;   Product a × b  = {(x,y) | x ∈ a, y ∈ b}
+;   Exponential b^a = {f | f : a → b}
+;
+; The lambda calculus is the internal language of a CCC.
+; Every lambda term is a morphism in a CCC.
+
+; Terminal object: unit
+(define unit '())
+
+; Product: pairs
+(define (make-pair a b) (cons a b))
+
+; Exponential: lambda
+; (lambda (x) body) is an element of the exponential b^a
+
+; The CCC structure gives us:
+; 1. Pairing:  a → b → a × b
+; 2. Projecting: a × b → a,  a × b → b
+; 3. Currying: (a × b → c) → (a → b → c)
+; 4. Eval: (b^a) × a → b
+
+(define (fst p) (car p))
+(define (snd p) (cdr p))
+
+(display "fst(3, 7): ") (display (fst (make-pair 3 7))) (newline)
+(display "snd(3, 7): ") (display (snd (make-pair 3 7))) (newline)
+
+; Eval in a CCC = function application
+(display "eval(add1, 5): ") (display (my-eval (cons (lambda (x) (+ x 1)) 5)))
+
+; Every well-typed program in a functional language
+; is a proof that the corresponding CCC diagram commutes.
+`} />
+
+
+    <!-- 6. Algebraic laws of exponentials -->
+    <h3>Algebraic laws of exponentials</h3>
+    <p>In a bicartesian closed category (one that also has coproducts), the laws of high-school algebra hold for types. Sums are addition, products are multiplication, exponentials are exponentiation, and the distributive law connects them. These are not analogies. They are isomorphisms between types.</p>
+
+    <SchemeRepl client:load initialCode={`; The algebra of types:
+; 0 = Void (initial object / empty type)
+; 1 = Unit (terminal object)
+; a + b = Either a b (coproduct)
+; a × b = (a, b)    (product)
+; b^a = a → b       (exponential)
+;
+; Laws (all are type isomorphisms):
+; a^0 = 1           Void → a  has exactly one function (absurd)
+; 1^a = 1           a → ()    has exactly one function (const ())
+; a^1 = a           () → a    ≅ picking an element of a
+; a^(b+c) = a^b × a^c   Either → a  ≅  pair of functions
+; (a^b)^c = a^(b×c)     currying!
+; (a×b)^c = a^c × b^c   c → (a,b)   ≅  pair of functions from c
+
+; Let's verify: a^(b+c) = a^b × a^c
+; A function from Either takes a Left or Right,
+; so it's equivalent to two separate functions.
+
+(define (either-fn e)
+  (if (eq? (car e) 'left)
+      (* (cdr e) 2)       ; handle Left (numbers)
+      (string-length (cdr e))))  ; handle Right (strings)
+
+; Split into two functions:
+(define (left-fn n) (* n 2))
+(define (right-fn s) (string-length s))
+
+(display "either-fn(Left 5):    ") (display (either-fn (cons 'left 5))) (newline)
+(display "left-fn(5):           ") (display (left-fn 5)) (newline)
+(display "either-fn(Right \"hi\"): ") (display (either-fn (cons 'right "hi"))) (newline)
+(display "right-fn(\"hi\"):       ") (display (right-fn "hi")) (newline)
+; Same results. One function from a sum = two functions.
+; a^(b+c) = a^b × a^c
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# a^(b+c) = a^b × a^c
+# A function from a union = a pair of handlers
+
+# One function that handles both cases
+def either_fn(tag, val):
+    if tag == "left":
+        return val * 2
+    return len(val)
+
+# Equivalent pair of functions
+left_fn = lambda n: n * 2
+right_fn = lambda s: len(s)
+
+print(f"either_fn('left', 5):    {either_fn('left', 5)}")
+print(f"left_fn(5):              {left_fn(5)}")
+print(f"either_fn('right', 'hi'): {either_fn('right', 'hi')}")
+print(f"right_fn('hi'):           {right_fn('hi')}")
+
+# (a^b)^c = a^(b×c)  — this is currying!
+f_curried = lambda c: lambda b: c + b     # (a^b)^c
+f_uncurried = lambda pair: pair[0] + pair[1]  # a^(b×c)
+print(f"curried:   {f_curried(10)(3)}")
+print(f"uncurried: {f_uncurried((10, 3))}")
+`} />
+    </div>
+
+
+    <!-- 7. Curry-Howard -->
+    <h3>Curry-Howard: functions as proofs</h3>
+    <p>Under the Curry-Howard correspondence, the function type <code>a → b</code> is logical implication: "if a then b." The <code>eval</code> morphism proves modus ponens: given <code>(a ⇒ b)</code> and <code>a</code>, produce <code>b</code>. Currying proves the deduction theorem: to prove <code>a ⇒ (b ⇒ c)</code>, assume <code>a</code> and <code>b</code>, then prove <code>c</code>. Cartesian closed categories constrain what compositions are physically realizable — <a href="https://june.kim/type-forcing"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>type forcing</a> shows how physical constraints collapse Spivak's operad of possible wirings down to the ones that actually typecheck.</p>
+
+    <SchemeRepl client:load initialCode={`; Curry-Howard correspondence:
+; Types         ↔  Propositions
+; Functions     ↔  Proofs
+; a → b         ↔  a ⇒ b (implication)
+; (a, b)        ↔  a ∧ b  (conjunction)
+; Either a b    ↔  a ∨ b  (disjunction)
+; Void          ↔  ⊥ (false)
+; Unit          ↔  ⊤ (true)
+
+; eval proves modus ponens:
+; ((a ⇒ b) ∧ a) ⇒ b
+; "If you have a proof of a⇒b and a proof of a, you get a proof of b."
+
+(define (modus-ponens proof-and-evidence)
+  ((car proof-and-evidence) (cdr proof-and-evidence)))
+
+; Proof that "even? ⇒ not-odd?" (a specific implication)
+(define proof-even-implies-not-odd
+  (lambda (n) (not (odd? n))))
+
+; Apply modus ponens: given the proof and evidence (4 is even)
+(display "modus ponens: ")
+(display (modus-ponens (cons proof-even-implies-not-odd 4)))
+(newline)
+
+; Currying proves the deduction theorem:
+; To prove a ⇒ (b ⇒ c), assume a and b, then prove c.
+; curry : ((a ∧ b) ⇒ c) → (a ⇒ (b ⇒ c))
+(display "Deduction theorem = currying")
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a ⇒ b / b<sup>a</sup></td><td class="pr-4 text-green-300">(lambda (x) ...)</td><td class="font-sans">Exponential object / function type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">eval :: (a⇒b, a) → b</td><td class="pr-4 text-green-300">(my-eval (cons f x))</td><td class="font-sans">Function application as a morphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">curry f a b = f (a, b)</td><td class="pr-4 text-green-300">(my-curry f)</td><td class="font-sans">Product argument → higher-order function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">uncurry f (a,b) = f a b</td><td class="pr-4 text-green-300">(my-uncurry g)</td><td class="font-sans">Higher-order function → product argument</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">CCC</td><td class="pr-4 text-green-300">—</td><td class="font-sans">Cartesian closed category: terminal + products + exponentials</td></tr>
+          <tr><td class="py-2 pr-4">a → b (Curry-Howard)</td><td class="pr-4 text-green-300">(lambda ...)</td><td class="font-sans">Logical implication / proof</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-08/">🍞 Chapter 8</a> — Functoriality: bifunctors, contravariance, profunctors</li>
+      <li>(next) <a href="/reading/category-theory/milewski-10/">Chapter 10</a> — Natural Transformations: polymorphic functions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-05/">🍞 Chapter 5</a> — Products and Coproducts: the product half of the adjunction</li>
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> — Adjunctions: curry/uncurry generalized</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Exponential_object"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Exponential object</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cartesian_closed_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cartesian closed category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Currying"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Currying</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curry-Howard correspondence</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell's native currying (all functions are curried by default) and C++ templates. This page makes currying explicit with <code>my-curry</code> and <code>my-uncurry</code>, since Scheme's <code>lambda</code> can take multiple arguments. The universal construction of exponentials is presented informally here. In the blog post, Milewski gives the full pattern: a candidate is a pair <code>(z, g : z × a → b)</code>, the ranking says <code>z</code> is better than <code>z'</code> when there exists <code>h : z' → z</code> such that <code>g' = g ∘ (h × id)</code>, and the exponential <code>b<sup>a</sup></code> is the universal (best) such candidate. The eval morphism is not just function application dressed up in categorical language. It is the counit of the product-exponential adjunction, which Chapter 16 covers in full.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/03/13/function-types/">Read the blog post</a>. Start with the universal construction, then trace how the exponential laws recover high-school algebra.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-08/", label: "Functoriality" }} next={{ href: "/reading/category-theory/milewski-10/", label: "Natural Transformations" }} />
+
+  </main>
+</Layout>

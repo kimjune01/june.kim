@@ -1,0 +1,318 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.8 — Techniques of Integration" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Techniques of Integration</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Finding antiderivatives is harder than finding derivatives. Five techniques cover most integrals: <strong>substitution</strong> (reverse chain rule), <strong>integration by parts</strong> (reverse product rule), <strong>partial fractions</strong> (decompose rational functions), <strong>trig substitution</strong> (for square roots), and <strong>improper integrals</strong> (infinite limits).</p>
+    </div>
+
+    <!-- SVG: area under curve with substitution arrow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left: integral in x -->
+        <path d="M 30 120 Q 60 40 100 70 Q 130 90 160 50" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <path d="M 30 120 Q 60 40 100 70 Q 130 90 160 50 L 160 120 Z" fill="#60a5fa" fill-opacity="0.1"/>
+        <text x="95" y="140" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">hard in x</text>
+        <!-- Arrow: substitution -->
+        <line x1="175" y1="80" x2="225" y2="80" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="225,76 233,80 225,84" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="200" y="70" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">u = g(x)</text>
+        <!-- Right: integral in u (simpler shape) -->
+        <path d="M 240 120 Q 280 40 360 60" fill="none" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.7"/>
+        <path d="M 240 120 Q 280 40 360 60 L 360 120 Z" fill="#a78bfa" fill-opacity="0.1"/>
+        <text x="300" y="140" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">easy in u</text>
+      </svg>
+    </div>
+
+    <!-- 1. Substitution -->
+    <h3>Substitution (u-substitution)</h3>
+    <p>If the integrand looks like f(g(x)) &#xB7; g'(x), let u = g(x), du = g'(x)dx. The integral becomes the integral of f(u)du, which is often simpler. This reverses the chain rule.</p>
+
+    <SchemeRepl client:load initialCode={`; u-substitution: integral of 2x * cos(x^2) dx
+; Let u = x^2, du = 2x dx
+; Becomes: integral of cos(u) du = sin(u) + C = sin(x^2) + C
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+; Original integrand
+(define (integrand x) (* 2 x (cos (* x x))))
+
+; Antiderivative via substitution: sin(x^2)
+(define (F x) (sin (* x x)))
+
+; Compare on [0, 1]
+(define numerical (integrate integrand 0 1 10000))
+(define exact (- (F 1) (F 0)))
+
+(display "Numerical: ") (display (/ (round (* numerical 10000)) 10000)) (newline)
+(display "Exact:     ") (display (/ (round (* exact 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# integral of 2x*cos(x^2) dx from 0 to 1
+# u = x^2, answer = sin(x^2) evaluated at bounds
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+numerical = integrate(lambda x: 2*x*math.cos(x**2), 0, 1)
+exact = math.sin(1) - math.sin(0)
+print(f"Numerical: {numerical:.6f}")
+print(f"Exact:     {exact:.6f}")
+`} />
+    </div>
+
+
+    <!-- 2. Integration by parts -->
+    <h3>Integration by parts</h3>
+    <p>The integral of u dv = uv - the integral of v du. This reverses the product rule. Choose u as the function that simplifies when differentiated, and dv as the rest. LIATE order: Logarithmic, Inverse trig, Algebraic, Trig, Exponential.</p>
+
+    <SchemeRepl client:load initialCode={`; Integration by parts: integral of x*e^x dx
+; u = x, dv = e^x dx
+; du = dx, v = e^x
+; = x*e^x - integral of e^x dx = x*e^x - e^x + C = (x-1)*e^x + C
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define (integrand x) (* x (exp x)))
+(define (F x) (* (- x 1) (exp x)))  ; antiderivative
+
+; Integral from 0 to 1
+(define numerical (integrate integrand 0 1 10000))
+(define exact (- (F 1) (F 0)))
+
+(display "Numerical: ") (display (/ (round (* numerical 10000)) 10000)) (newline)
+(display "Exact:     ") (display (/ (round (* exact 10000)) 10000)) (newline)
+; Exact = (1-1)*e^1 - (0-1)*e^0 = 0 + 1 = 1
+(display "= e^1 * 0 - e^0 * (-1) = 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Integration by parts: integral of x*e^x dx
+# u=x, dv=e^x dx => antiderivative = (x-1)*e^x
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+integrand = lambda x: x * math.exp(x)
+F = lambda x: (x - 1) * math.exp(x)
+
+numerical = integrate(integrand, 0, 1)
+exact = F(1) - F(0)
+print("Numerical: {:.4f}".format(numerical))
+print("Exact:     {:.4f}".format(exact))
+print("= e^1 * 0 - e^0 * (-1) = 1")
+`} />
+    </div>
+
+
+    <!-- 3. Partial fractions -->
+    <h3>Partial fractions</h3>
+    <p>To integrate a rational function p(x)/q(x), factor the denominator and decompose into simpler fractions. Each factor (x-a) in the denominator contributes a term A/(x-a). Each integral becomes A ln|x-a|.</p>
+
+    <SchemeRepl client:load initialCode={`; Partial fractions: integral of 1/(x^2 - 1) dx
+; 1/(x^2-1) = 1/((x-1)(x+1)) = A/(x-1) + B/(x+1)
+; 1 = A(x+1) + B(x-1)
+; x=1: 1 = 2A, A = 1/2
+; x=-1: 1 = -2B, B = -1/2
+; integral = (1/2)ln|x-1| - (1/2)ln|x+1| + C
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define (integrand x) (/ 1 (- (* x x) 1)))
+
+; Antiderivative: (1/2) ln|(x-1)/(x+1)|
+(define (F x) (* 0.5 (log (abs (/ (- x 1) (+ x 1))))))
+
+; Integral from 2 to 5 (avoiding the singularity at x=1)
+(define numerical (integrate integrand 2 5 10000))
+(define exact (- (F 5) (F 2)))
+
+(display "Numerical: ") (display (/ (round (* numerical 10000)) 10000)) (newline)
+(display "Exact:     ") (display (/ (round (* exact 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Partial fractions: integral of 1/(x^2 - 1) dx from 2 to 5
+# = (1/2) ln|(x-1)/(x+1)| + C
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+integrand = lambda x: 1 / (x**2 - 1)
+F = lambda x: 0.5 * math.log(abs((x-1)/(x+1)))
+
+numerical = integrate(integrand, 2, 5)
+exact = F(5) - F(2)
+print("Numerical: {:.4f}".format(numerical))
+print("Exact:     {:.4f}".format(exact))
+`} />
+    </div>
+
+
+    <!-- 4. Trig substitution -->
+    <h3>Trig substitution</h3>
+    <p>For integrands with square roots of quadratics, substitute a trig function. For sqrt(a&#xB2; - x&#xB2;): let x = a sin&#x3B8;. For sqrt(a&#xB2; + x&#xB2;): let x = a tan&#x3B8;. For sqrt(x&#xB2; - a&#xB2;): let x = a sec&#x3B8;. The Pythagorean identity eliminates the square root.</p>
+
+    <SchemeRepl client:load initialCode={`; Trig substitution: integral of sqrt(1 - x^2) dx from 0 to 1
+; This is the area of a quarter circle of radius 1 = pi/4
+; Let x = sin(theta), dx = cos(theta) d(theta)
+; sqrt(1-x^2) = cos(theta)
+; Integral becomes integral of cos^2(theta) d(theta)
+
+(define pi 3.141592653589793)
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define (integrand x) (sqrt (- 1 (* x x))))
+
+(define numerical (integrate integrand 0 1 10000))
+(define exact (/ pi 4))
+
+(display "Numerical: ") (display (/ (round (* numerical 10000)) 10000)) (newline)
+(display "pi/4:      ") (display (/ (round (* exact 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Trig substitution: integral of sqrt(1-x^2) from 0 to 1
+# This is the area of a quarter circle = pi/4
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+integrand = lambda x: math.sqrt(1 - x**2)
+numerical = integrate(integrand, 0, 1)
+exact = math.pi / 4
+
+print("Numerical: {:.4f}".format(numerical))
+print("pi/4:      {:.4f}".format(exact))
+`} />
+    </div>
+
+
+    <!-- 5. Improper integrals -->
+    <h3>Improper integrals</h3>
+    <p>When the interval is infinite or the integrand blows up, take a limit. The integral from 1 to infinity of 1/x&#xB2; dx = lim<sub>b&#x2192;&#x221E;</sub> [-1/x] from 1 to b = 0 - (-1) = 1. The integral converges if the limit is finite.</p>
+
+    <SchemeRepl client:load initialCode={`; Improper integral: integral of 1/x^2 from 1 to infinity
+; = lim(b->inf) [-1/x] from 1 to b = lim(-1/b + 1) = 1
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define (integrand x) (/ 1 (* x x)))
+
+; Approximate with increasing upper limits
+(display "1 to 10:    ") (display (/ (round (* (integrate integrand 1 10 1000) 10000)) 10000)) (newline)
+(display "1 to 100:   ") (display (/ (round (* (integrate integrand 1 100 10000) 10000)) 10000)) (newline)
+(display "1 to 1000:  ") (display (/ (round (* (integrate integrand 1 1000 100000) 10000)) 10000)) (newline)
+(display "Exact: 1") (newline) (newline)
+
+; Divergent: integral of 1/x from 1 to infinity = ln(b) -> infinity
+(display "1/x from 1 to 100:  ") (display (/ (round (* (integrate (lambda (x) (/ 1 x)) 1 100 10000) 100)) 100)) (newline)
+(display "1/x from 1 to 1000: ") (display (/ (round (* (integrate (lambda (x) (/ 1 x)) 1 1000 100000) 100)) 100)) (newline)
+(display "Diverges: ln(b) grows without bound")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Improper integral: 1/x^2 from 1 to infinity = 1 (converges)
+def integrate(f, a, b, n):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+for b, n in [(10, 1000), (100, 10000), (1000, 100000)]:
+    val = integrate(lambda x: 1/x**2, 1, b, n)
+    print("1/x^2 from 1 to {}: {:.4f}".format(b, val))
+print("Exact: 1")
+print()
+
+# 1/x from 1 to infinity diverges
+for b, n in [(100, 10000), (1000, 100000)]:
+    val = integrate(lambda x: 1/x, 1, b, n)
+    print("1/x from 1 to {}: {:.2f}".format(b, val))
+print("Diverges: ln(b) grows without bound")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Technique</th>
+            <th class="py-2 pr-4">When to use</th>
+            <th class="py-2">Key idea</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Substitution</td><td class="pr-4 text-green-300">f(g(x)) g'(x)</td><td>Reverse chain rule</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Parts</td><td class="pr-4 text-green-300">product of two types</td><td>Reverse product rule</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Partial fractions</td><td class="pr-4 text-green-300">rational p(x)/q(x)</td><td>Decompose denominator</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Trig sub</td><td class="pr-4 text-green-300">sqrt(a&#xB2; &#xB1; x&#xB2;)</td><td>Pythagorean identity</td></tr>
+          <tr><td class="py-2 pr-4">Improper</td><td class="pr-4 text-green-300">infinite limit or singularity</td><td>Take a limit</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-07/">∫ Ch.7 The Integral</a> — what these techniques are finding (antiderivatives)</li>
+      <li><a href="/reading/calculus/calc-05/">∫ Ch.5 Derivative Rules</a> — each integration technique reverses a differentiation rule</li>
+      <li><a href="/reading/calculus/calc-02/">∫ Ch.2 Trigonometry</a> — trig substitution requires fluency with identities</li>
+      <li><a href="/reading/real-analysis/lebl-06/">∞ Real Analysis Ch.6</a> — the Riemann integral formalized: when do these techniques converge?</li>
+      <li><a href="/reading/probability/grinstead-02/">🎰 Probability Ch.2</a> — continuous probability uses the same integration techniques for density functions</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-07/", label: "The Integral" }} next={{ href: "/reading/calculus/calc-09/", label: "Applications of Integrals" }} />
+
+  </main>
+</Layout>

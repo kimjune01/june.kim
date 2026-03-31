@@ -1,0 +1,258 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.11 — Quantum Mechanics" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Quantum Mechanics</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 11 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Particles are waves of probability. The <strong>uncertainty principle</strong> says you cannot simultaneously know position and momentum with arbitrary precision. The <strong>Schrodinger equation</strong> governs how the probability amplitude evolves in time.</p>
+    </div>
+
+    <!-- 1. Wave-particle duality -->
+    <h3>Wave-particle duality</h3>
+    <p>Light acts as both wave and particle. The photoelectric effect showed light comes in quanta (photons) with energy E = h*f. <a href="https://en.wikipedia.org/wiki/Louis_de_Broglie"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>De Broglie</a> showed the reverse: particles have wavelength lambda = h/p. Every object has a wavelength, but for macroscopic objects it is absurdly small. For electrons, it matters.</p>
+
+    <SchemeRepl client:load initialCode={`; De Broglie wavelength: lambda = h / p = h / (m*v)
+; Photon energy: E = h * f = h * c / lambda
+
+(define h 6.626e-34)    ; Planck's constant (J*s)
+(define c 3e8)
+
+(define (de-broglie m v)
+  (/ h (* m v)))
+
+(define (photon-energy lambda)
+  (/ (* h c) lambda))
+
+; Electron at 1e6 m/s
+(define m-e 9.109e-31)
+(display "Electron (v=1e6 m/s):") (newline)
+(display "  wavelength = ")
+(display (de-broglie m-e 1e6))
+(display " m") (newline)
+
+; Baseball at 40 m/s
+(define m-ball 0.145)
+(display "Baseball (v=40 m/s):") (newline)
+(display "  wavelength = ")
+(display (de-broglie m-ball 40))
+(display " m") (newline)
+
+; Green photon (532 nm)
+(display "Green photon (532 nm):") (newline)
+(display "  energy = ")
+(display (photon-energy 532e-9))
+(display " J = ")
+(display (/ (photon-energy 532e-9) 1.6e-19))
+(display " eV")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`h = 6.626e-34
+c = 3e8
+
+def de_broglie(m, v):
+    return h / (m * v)
+
+def photon_energy(lam):
+    return h * c / lam
+
+m_e = 9.109e-31
+print(f"Electron wavelength: {de_broglie(m_e, 1e6):.3e} m")
+print(f"Baseball wavelength: {de_broglie(0.145, 40):.3e} m")
+
+E = photon_energy(532e-9)
+print(f"Green photon: {E:.3e} J = {E/1.6e-19:.2f} eV")
+`} />
+    </div>
+
+
+    <!-- 2. Uncertainty principle -->
+    <h3>The uncertainty principle</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Werner_Heisenberg"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Heisenberg</a>'s uncertainty principle: <strong>delta_x * delta_p >= h_bar / 2</strong>. This is not about measurement clumsiness. It is a fundamental property of waves. A well-localized wave packet (small delta_x) must contain many wavelengths (large delta_p). You cannot have both.</p>
+
+    <SchemeRepl client:load initialCode={`; Uncertainty principle: dx * dp >= hbar/2
+; hbar = h / (2*pi)
+; Minimum uncertainty: dx * dp = hbar/2
+
+(define h 6.626e-34)
+(define pi 3.14159265)
+(define hbar (/ h (* 2 pi)))
+
+; If we know position to 1 nanometer, what's the minimum dp?
+(define dx 1e-9)
+(define dp-min (/ hbar (* 2 dx)))
+(display "Position uncertainty: 1 nm") (newline)
+(display "Minimum momentum uncertainty: ")
+(display dp-min) (display " kg*m/s") (newline)
+
+; For an electron, what velocity uncertainty does that imply?
+(define m-e 9.109e-31)
+(define dv (/ dp-min m-e))
+(display "Electron velocity uncertainty: ")
+(display dv) (display " m/s") (newline)
+(display "That's ") (display (/ dv 1000)) (display " km/s") (newline)
+
+; For a 1 kg ball?
+(define dv-ball (/ dp-min 1.0))
+(display "1 kg ball velocity uncertainty: ")
+(display dv-ball) (display " m/s") (newline)
+(display "Unmeasurably small: quantum effects are negligible for macroscopic objects.")
+`} />
+
+
+    <!-- 3. Schrodinger equation -->
+    <h3>The Schrodinger equation</h3>
+    <p>The <strong>Schrodinger equation</strong> is the wave equation for probability amplitudes. For a particle in a box (infinite square well), the allowed wavelengths are quantized: only standing waves fit. Energy levels go as n^2. The wave function psi gives probability density: the probability of finding the particle between x and x+dx is |psi(x)|^2 * dx.</p>
+
+    <!-- SVG: Double-slit interference pattern -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Screen on right -->
+        <rect x="330" y="20" width="4" height="180" fill="#a1a1aa" fill-opacity="0.18"/>
+        <!-- Barrier with two slits -->
+        <rect x="148" y="20" width="4" height="70" fill="currentColor" fill-opacity="0.4"/>
+        <rect x="148" y="100" width="4" height="20" fill="currentColor" fill-opacity="0.4"/>
+        <rect x="148" y="130" width="4" height="70" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Slit openings -->
+        <!-- Upper slit at y=95, Lower slit at y=125 -->
+        <!-- Source on left -->
+        <circle cx="40" cy="110" r="5" fill="#60a5fa" fill-opacity="0.5"/>
+        <!-- Waves from source to slits -->
+        <line x1="45" y1="108" x2="148" y2="93" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="45" y1="112" x2="148" y2="127" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Waves from upper slit spreading -->
+        <line x1="152" y1="93" x2="330" y2="40" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="93" x2="330" y2="80" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="93" x2="330" y2="110" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="93" x2="330" y2="140" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="93" x2="330" y2="170" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.2"/>
+        <!-- Waves from lower slit spreading -->
+        <line x1="152" y1="127" x2="330" y2="50" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="127" x2="330" y2="80" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="127" x2="330" y2="110" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="127" x2="330" y2="140" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="152" y1="127" x2="330" y2="170" stroke="#a78bfa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <!-- Interference pattern on screen (bright/dark bands) -->
+        <rect x="336" y="28" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="40" width="8" height="12" fill="#f59e0b" fill-opacity="0.5"/>
+        <rect x="336" y="55" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="66" width="8" height="12" fill="#f59e0b" fill-opacity="0.5"/>
+        <rect x="336" y="81" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="92" width="8" height="16" fill="#f59e0b" fill-opacity="0.8"/>
+        <rect x="336" y="111" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="122" width="8" height="16" fill="#f59e0b" fill-opacity="0.5"/>
+        <rect x="336" y="141" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="152" width="8" height="12" fill="#f59e0b" fill-opacity="0.4"/>
+        <rect x="336" y="167" width="8" height="8" fill="#f59e0b" fill-opacity="0.1"/>
+        <rect x="336" y="178" width="8" height="12" fill="#f59e0b" fill-opacity="0.3"/>
+        <!-- Labels -->
+        <text x="40" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">source</text>
+        <text x="150" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">double slit</text>
+        <text x="355" y="115" fill="currentColor" font-size="9" fill-opacity="0.4">screen</text>
+        <text x="200" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Single electrons build up the pattern one dot at a time.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Particle in a box: E_n = n^2 * h^2 / (8 * m * L^2)
+; Standing waves: only wavelengths lambda = 2L/n fit.
+; Ground state is n=1 (not n=0): zero-point energy.
+
+(define h 6.626e-34)
+(define m-e 9.109e-31)
+(define eV 1.6e-19)
+
+(define (energy-level n m L)
+  (/ (* n n h h) (* 8 m L L)))
+
+; Electron in a 1 nm box (roughly atomic scale)
+(define L 1e-9)
+
+(display "Electron in 1 nm box:") (newline)
+(define (show-level n)
+  (let ((E (energy-level n m-e L)))
+    (display "  n=") (display n)
+    (display ": E = ") (display (/ E eV))
+    (display " eV") (newline)))
+
+(for-each show-level (list 1 2 3 4 5))
+
+; Energy ratios: E_n / E_1 = n^2
+(display "Ratio E2/E1 = ")
+(display (/ (energy-level 2 m-e L) (energy-level 1 m-e L))) (newline)
+(display "Ratio E3/E1 = ")
+(display (/ (energy-level 3 m-e L) (energy-level 1 m-e L)))
+`} />
+
+
+    <!-- 4. Probability amplitudes -->
+    <h3>Probability amplitudes</h3>
+    <p>The wave function psi is a <strong>probability amplitude</strong>, not a probability. Probability is |psi|^2. Amplitudes add before squaring, which is why interference happens. Two paths to the same point: if their amplitudes add constructively, the particle is likely there. If they cancel, the particle is never found there. This is how the double-slit pattern forms one particle at a time.</p>
+
+    <SchemeRepl client:load initialCode={`; Probability amplitudes and interference
+; Two paths with amplitudes a1 and a2:
+; Classical: P = |a1|^2 + |a2|^2 (no interference)
+; Quantum:   P = |a1 + a2|^2 (interference!)
+
+; Simulate with real amplitudes (ignoring complex phase for simplicity)
+(define (classical-prob a1 a2)
+  (+ (* a1 a1) (* a2 a2)))
+
+(define (quantum-prob a1 a2)
+  (let ((sum (+ a1 a2)))
+    (* sum sum)))
+
+; Equal amplitudes
+(define a 0.5)
+
+; Constructive: both positive
+(display "Constructive interference:") (newline)
+(display "  Classical: ") (display (classical-prob a a)) (newline)
+(display "  Quantum:   ") (display (quantum-prob a a)) (newline)
+
+; Destructive: opposite signs (phase difference of pi)
+(display "Destructive interference:") (newline)
+(display "  Classical: ") (display (classical-prob a (- a))) (newline)
+(display "  Quantum:   ") (display (quantum-prob a (- a))) (newline)
+
+; Quantum probability can be ZERO even when both paths exist.
+; Classical probability is always positive.
+(display "This is why quantum mechanics is different.")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-02/">Probability Ch.2</a> — continuous distributions: |psi|^2 is a probability density</li>
+      <li><a href="/reading/information-theory/shannon-01/">Shannon Ch.1</a> — information = surprise: measurement collapses uncertainty</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Wave%E2%80%93particle_duality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wave-particle duality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Uncertainty_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Uncertainty principle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Schrodinger equation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Double-slit_experiment"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Double-slit experiment</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>We use real-valued amplitudes for simplicity. The full Schrodinger equation uses complex amplitudes, and interference depends on relative phase. The particle-in-a-box is the simplest exactly solvable quantum system. Crowell builds up to the hydrogen atom (next chapter). Our probability amplitude example captures the essential logic: amplitudes add, then you square. This is the origin of all quantum weirdness.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-10/", label: "Relativity" }} next={{ href: "/reading/physics/crowell-12/", label: "The Atom" }} />
+
+  </main>
+</Layout>

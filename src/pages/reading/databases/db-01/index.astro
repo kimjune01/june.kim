@@ -1,0 +1,195 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.1 — The Relational Model" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>The Relational Model</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Relational_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Relational model</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>relation</strong> is a set of tuples that all share the same attributes. In everyday terms: a table where every row has the same columns. <a href="https://en.wikipedia.org/wiki/Edgar_F._Codd"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Edgar Codd</a> proposed this model in 1970, replacing navigational databases with pure set theory. Everything in relational databases follows from this one idea.</p>
+    </div>
+
+    <!-- SVG: A relation as a table with key column highlighted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Table border -->
+        <rect x="40" y="20" width="280" height="130" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Header row -->
+        <rect x="40" y="20" width="280" height="25" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <line x1="40" y1="45" x2="320" y2="45" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Column dividers -->
+        <line x1="110" y1="20" x2="110" y2="150" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="200" y1="20" x2="200" y2="150" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Key highlight -->
+        <rect x="40" y="20" width="70" height="130" rx="3" fill="#f59e0b" fill-opacity="0.08"/>
+        <!-- Headers -->
+        <text x="75" y="37" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="bold">id (key)</text>
+        <text x="155" y="37" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">name</text>
+        <text x="260" y="37" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">email</text>
+        <!-- Row 1 -->
+        <text x="75" y="63" text-anchor="middle" fill="#f59e0b" font-size="10">1</text>
+        <text x="155" y="63" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Alice</text>
+        <text x="260" y="63" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">alice@db.io</text>
+        <!-- Row 2 -->
+        <text x="75" y="83" text-anchor="middle" fill="#f59e0b" font-size="10">2</text>
+        <text x="155" y="83" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Bob</text>
+        <text x="260" y="83" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">bob@db.io</text>
+        <!-- Row 3 -->
+        <text x="75" y="103" text-anchor="middle" fill="#f59e0b" font-size="10">3</text>
+        <text x="155" y="103" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Carol</text>
+        <text x="260" y="103" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">carol@db.io</text>
+        <!-- Row 4 -->
+        <text x="75" y="123" text-anchor="middle" fill="#f59e0b" font-size="10">4</text>
+        <text x="155" y="123" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">Dave</text>
+        <text x="260" y="123" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">dave@db.io</text>
+        <!-- Caption -->
+        <text x="180" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">A relation: set of tuples with a primary key.</text>
+      </svg>
+    </div>
+
+
+    <!-- Relations -->
+    <h3>Relations, tuples, and attributes</h3>
+    <p>A <strong>relation</strong> is a named set of tuples. Each tuple is an ordered collection of attribute values. Each attribute has a name and a domain (the set of allowed values). The <strong>schema</strong> defines the attribute names and domains. The <strong>instance</strong> is the current set of tuples.</p>
+
+    <SchemeRepl client:load initialCode={`; A relation is a set of tuples.
+; Each tuple maps attribute names to values.
+; We represent a relation as a list of association lists.
+
+(define users
+  (list
+    (list (cons "id" 1) (cons "name" "Alice") (cons "email" "alice@db.io"))
+    (list (cons "id" 2) (cons "name" "Bob")   (cons "email" "bob@db.io"))
+    (list (cons "id" 3) (cons "name" "Carol") (cons "email" "carol@db.io"))))
+
+; Get an attribute from a tuple
+(define (get-attr tuple attr)
+  (cdr (assoc attr tuple)))
+
+; Display all names
+(for-each
+  (lambda (tuple)
+    (display (get-attr tuple "name"))
+    (display " ")
+    (display (get-attr tuple "email"))
+    (newline))
+  users)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# A relation as a list of dictionaries
+users = [
+    {"id": 1, "name": "Alice", "email": "alice@db.io"},
+    {"id": 2, "name": "Bob",   "email": "bob@db.io"},
+    {"id": 3, "name": "Carol", "email": "carol@db.io"},
+]
+
+for row in users:
+    print(row['name'] + " " + row['email'])
+`} />
+    </div>
+
+
+    <!-- Keys -->
+    <h3>Keys</h3>
+    <p>A <strong>superkey</strong> is any set of attributes that uniquely identifies a tuple. A <strong>candidate key</strong> is a minimal superkey (remove any attribute and it stops being unique). The <strong>primary key</strong> is the candidate key chosen to identify rows. A <strong>foreign key</strong> references the primary key of another relation, creating links between tables.</p>
+
+    <SchemeRepl client:load initialCode={`; Primary key: uniquely identifies each tuple.
+; Foreign key: references another relation's primary key.
+
+(define users
+  (list
+    (list (cons "id" 1) (cons "name" "Alice"))
+    (list (cons "id" 2) (cons "name" "Bob"))))
+
+(define orders
+  (list
+    (list (cons "oid" 101) (cons "user_id" 1) (cons "item" "book"))
+    (list (cons "oid" 102) (cons "user_id" 2) (cons "item" "pen"))
+    (list (cons "oid" 103) (cons "user_id" 1) (cons "item" "lamp"))))
+
+(define (get-attr tuple attr) (cdr (assoc attr tuple)))
+
+; Look up a user by primary key
+(define (find-user uid)
+  (let loop ((rows users))
+    (cond
+      ((null? rows) #f)
+      ((= (get-attr (car rows) "id") uid) (car rows))
+      (else (loop (cdr rows))))))
+
+; For each order, resolve the foreign key
+(for-each
+  (lambda (order)
+    (let ((user (find-user (get-attr order "user_id"))))
+      (display (get-attr user "name"))
+      (display " ordered ")
+      (display (get-attr order "item"))
+      (newline)))
+  orders)
+`} />
+
+
+    <!-- Codd's rules -->
+    <h3>Codd's rules</h3>
+    <p>In 1985, Codd published twelve rules (numbered 0 through 12) that a database must satisfy to be considered fully relational. The key ones: all data is represented as values in tables (Rule 1). Null values represent missing data uniformly (Rule 3). The database description is stored in the same relational structure as ordinary data (Rule 4). There is a comprehensive data sublanguage (Rule 5, fulfilled by SQL).</p>
+
+    <SchemeRepl client:load initialCode={`; Codd's Rule 1: Information Rule
+; All information is represented as values in tables.
+; Even metadata (table names, column names) is a table.
+
+(define metadata
+  (list
+    (list (cons "table" "users")  (cons "column" "id")    (cons "type" "integer"))
+    (list (cons "table" "users")  (cons "column" "name")  (cons "type" "text"))
+    (list (cons "table" "users")  (cons "column" "email") (cons "type" "text"))
+    (list (cons "table" "orders") (cons "column" "oid")   (cons "type" "integer"))
+    (list (cons "table" "orders") (cons "column" "user_id") (cons "type" "integer"))))
+
+(define (get-attr tuple attr) (cdr (assoc attr tuple)))
+
+; Query the metadata: what columns does 'users' have?
+(display "Columns in 'users':") (newline)
+(for-each
+  (lambda (row)
+    (if (string=? (get-attr row "table") "users")
+      (begin
+        (display "  ")
+        (display (get-attr row "column"))
+        (display " : ")
+        (display (get-attr row "type"))
+        (newline))))
+  metadata)
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> — sets and operations: relations are sets of tuples, keys are set-theoretic constraints</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Relational_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Relational model</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Edgar_F._Codd"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Edgar F. Codd</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Codd%27s_12_rules"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Codd's 12 rules</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Primary_key"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Primary key</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext next={{ href: "/reading/databases/db-02/", label: "Relational Algebra" }} />
+
+  </main>
+</Layout>

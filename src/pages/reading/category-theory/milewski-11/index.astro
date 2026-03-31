@@ -1,0 +1,552 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.11 — Limits and Colimits" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Limits and Colimits</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/04/15/limits-and-colimits/">Category Theory for Programmers, Ch. 11</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-05/">🍞 Ch5</a> (Products and Coproducts), <a href="/reading/category-theory/milewski-10/">🍞 Ch10</a> (Natural Transformations). 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>limit</strong> is a universal cone over a diagram. Products, terminal objects, and equalizers are all limits. Reverse the arrows and you get <strong>colimits</strong>: coproducts, initial objects, and coequalizers. One construction, many shapes.</p>
+    </div>
+
+    <!-- 1. Diagrams and cones -->
+    <h3>Diagrams and cones</h3>
+    <p>A <strong>diagram</strong> is a functor D : I → C from an index category I (the "shape") into a target category C. A <strong>cone</strong> over that diagram is an apex object <em>c</em> together with morphisms from <em>c</em> to every object in the diagram, such that every triangle commutes. Think of it as a tent pole (<em>c</em>) with ropes (morphisms) to each stake (diagram object), where the ropes respect the connections between stakes.</p>
+
+    <!-- SVG: Cone diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Apex c -->
+        <circle cx="150" cy="40" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="45" text-anchor="middle" fill="currentColor" font-size="14">c</text>
+
+        <!-- Diagram object d1 -->
+        <circle cx="60" cy="160" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="165" text-anchor="middle" fill="currentColor" font-size="13">d&#x2081;</text>
+
+        <!-- Diagram object d2 -->
+        <circle cx="240" cy="160" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="240" y="165" text-anchor="middle" fill="currentColor" font-size="13">d&#x2082;</text>
+
+        <!-- Arrow pi1: c -> d1 -->
+        <line x1="136" y1="55" x2="74" y2="145" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="74,145 82,136 76,134" fill="currentColor"/>
+        <text x="85" y="95" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03C0;&#x2081;</text>
+
+        <!-- Arrow pi2: c -> d2 -->
+        <line x1="164" y1="55" x2="226" y2="145" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="226,145 218,136 224,134" fill="currentColor"/>
+        <text x="215" y="95" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03C0;&#x2082;</text>
+
+        <!-- Arrow f: d1 -> d2 -->
+        <line x1="78" y1="160" x2="222" y2="160" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="222,160 214,155 214,165" fill="currentColor"/>
+        <text x="150" y="178" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Commutes label -->
+        <text x="150" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">f &#x2218; &#x03C0;&#x2081; = &#x03C0;&#x2082;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A cone: an apex with morphisms to every object in the diagram,
+; such that the triangles commute.
+;
+; Diagram: two objects a, b (no morphisms between them).
+; A cone over this diagram is: apex c, proj1: c->a, proj2: c->b.
+; That's just a product candidate!
+
+(define (make-cone apex proj1 proj2)
+  (list apex proj1 proj2))
+
+(define (cone-apex cone) (car cone))
+(define (cone-proj1 cone) (cadr cone))
+(define (cone-proj2 cone) (caddr cone))
+
+; Cone 1: apex = (3 7 "extra"), projections extract components
+(define cone1
+  (make-cone '(3 7 "extra")
+    (lambda (t) (car t))       ; proj1
+    (lambda (t) (cadr t))))    ; proj2
+
+; Cone 2: apex = (3 7), projections are fst and snd
+(define cone2
+  (make-cone '(3 7)
+    (lambda (p) (car p))       ; proj1
+    (lambda (p) (cadr p))))    ; proj2
+
+(display "Cone 1 apex: ") (display (cone-apex cone1)) (newline)
+(display "Cone 1 proj1: ") (display ((cone-proj1 cone1) '(3 7 "extra"))) (newline)
+(display "Cone 2 apex: ") (display (cone-apex cone2)) (newline)
+(display "Cone 2 proj1: ") (display ((cone-proj1 cone2) '(3 7))) (newline)
+; Both are cones. But cone2 is the limit — the universal one.
+`} />
+
+
+    <!-- 2. Product as a limit -->
+    <h3>Products are limits over discrete diagrams</h3>
+    <p>When the index category has two objects and no morphisms between them (the discrete category <strong>2</strong>), a cone is an apex with two projections. The <strong>limit</strong> is the universal cone: the one through which every other cone factors uniquely. That's the product. The terminal object is the limit over the empty diagram (zero objects, zero morphisms).</p>
+
+    <!-- SVG: Universal cone / limit -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 260" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Outer cone apex c' -->
+        <circle cx="150" cy="30" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="35" text-anchor="middle" fill="currentColor" font-size="13">c&#x2032;</text>
+
+        <!-- Universal cone apex c (the limit) -->
+        <circle cx="150" cy="110" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="115" text-anchor="middle" fill="currentColor" font-size="14">c</text>
+
+        <!-- Dashed unique morphism m: c' -> c -->
+        <line x1="150" y1="48" x2="150" y2="92" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="150,92 145,82 155,82" fill="currentColor"/>
+        <text x="165" y="73" fill="currentColor" font-size="11" fill-opacity="0.5">m</text>
+        <text x="135" y="73" fill="currentColor" font-size="9" fill-opacity="0.3">!</text>
+
+        <!-- Diagram object d1 -->
+        <circle cx="60" cy="220" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="225" text-anchor="middle" fill="currentColor" font-size="13">d&#x2081;</text>
+
+        <!-- Diagram object d2 -->
+        <circle cx="240" cy="220" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="240" y="225" text-anchor="middle" fill="currentColor" font-size="13">d&#x2082;</text>
+
+        <!-- Arrow pi1: c -> d1 -->
+        <line x1="136" y1="125" x2="74" y2="205" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="74,205 82,196 76,194" fill="currentColor"/>
+        <text x="85" y="165" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03C0;&#x2081;</text>
+
+        <!-- Arrow pi2: c -> d2 -->
+        <line x1="164" y1="125" x2="226" y2="205" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="226,205 218,196 224,194" fill="currentColor"/>
+        <text x="215" y="165" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03C0;&#x2082;</text>
+
+        <!-- Dashed arrows from c' to d1 and d2 -->
+        <line x1="134" y1="40" x2="72" y2="205" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <line x1="166" y1="40" x2="228" y2="205" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+
+        <!-- Arrow f: d1 -> d2 -->
+        <line x1="78" y1="220" x2="222" y2="220" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="222,220 214,215 214,225" fill="currentColor"/>
+        <text x="150" y="240" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Label -->
+        <text x="150" y="256" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">every cone factors uniquely through c</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; The limit is the universal cone.
+; For a discrete two-object diagram, the limit is the product.
+;
+; Universal property: for any cone (c', p', q'),
+; there exists a unique morphism m: c' -> product
+; such that p' = fst . m and q' = snd . m.
+
+(define (fst p) (car p))
+(define (snd p) (cadr p))
+
+; Factorizer: given any two morphisms from c' to a and b,
+; build the unique morphism m: c' -> (a, b)
+(define (factorizer p q)
+  (lambda (x) (list (p x) (q x))))
+
+; Example: c' = integer, a = is-even?, b = show
+(define (is-even? n) (= 0 (modulo n 2)))
+(define (show n) (number->string n))
+
+(define m (factorizer is-even? show))
+
+(display "m(42): ") (display (m 42)) (newline)
+(display "m(7):  ") (display (m 7)) (newline)
+
+; Verify the universal property
+(display "fst(m(42)) = is-even?(42)? ")
+(display (equal? (fst (m 42)) (is-even? 42))) (newline)
+(display "snd(m(42)) = show(42)?     ")
+(display (equal? (snd (m 42)) (show 42))) (newline)
+
+; Terminal object = limit over the empty diagram.
+; No diagram objects => cone has no projections => just the apex.
+; The universal such apex is the one every object maps to uniquely.
+(define (unit x) '())
+(display "unit(42): ") (display (unit 42))
+; '() is the terminal object — the limit of nothing.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Product as a limit over a discrete two-object diagram
+fst = lambda p: p[0]
+snd = lambda p: p[1]
+
+def factorizer(p, q):
+    return lambda x: (p(x), q(x))
+
+is_even = lambda n: n % 2 == 0
+show = str
+
+m = factorizer(is_even, show)
+print(f"m(42) = {m(42)}")
+print(f"m(7)  = {m(7)}")
+
+# Universal property
+print(f"fst(m(42)) == is_even(42)? {fst(m(42)) == is_even(42)}")
+print(f"snd(m(42)) == show(42)?    {snd(m(42)) == show(42)}")
+
+# Terminal object = limit of the empty diagram
+unit = lambda x: None
+print(f"unit(42) = {unit(42)}")
+`} />
+    </div>
+
+
+    <!-- 3. Equalizers -->
+    <h3>Equalizers — where two morphisms agree</h3>
+    <p>When the index category has two objects with two parallel morphisms between them (a ⇉ b), the limit is an <strong>equalizer</strong>. It picks out the subobject of <em>a</em> where the two morphisms agree: the set of all <em>x</em> such that f(x) = g(x). The equalizer comes with an embedding <code>eq : E → a</code> such that <code>f ∘ eq = g ∘ eq</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Equalizer: the limit where two parallel morphisms agree.
+; Given f, g : a -> b, the equalizer is { x in a | f(x) = g(x) }
+
+(define (equalizer f g domain)
+  (filter (lambda (x) (equal? (f x) (g x))) domain))
+
+; Example: f(x) = x^2, g(x) = 2x
+; Where do they agree? x^2 = 2x => x(x-2) = 0 => x = 0 or x = 2
+(define (f x) (* x x))
+(define (g x) (* 2 x))
+
+(define domain '(-3 -2 -1 0 1 2 3 4 5))
+(define eq-set (equalizer f g domain))
+
+(display "f(x) = x^2, g(x) = 2x") (newline)
+(display "Equalizer: ") (display eq-set) (newline)
+; (0 2) — exactly where f and g agree.
+
+; Verify the equalizer property: f(x) = g(x) for every x in eq-set
+(for-each
+  (lambda (x)
+    (display "  f(") (display x) (display ") = ") (display (f x))
+    (display ", g(") (display x) (display ") = ") (display (g x))
+    (newline))
+  eq-set)
+
+; The embedding eq: E -> a is just inclusion.
+; The universal property: any other set where f = g
+; factors through eq-set via a unique function.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Equalizer: elements where f(x) == g(x)
+def equalizer(f, g, domain):
+    return [x for x in domain if f(x) == g(x)]
+
+f = lambda x: x * x
+g = lambda x: 2 * x
+
+domain = list(range(-3, 6))
+eq_set = equalizer(f, g, domain)
+
+print(f"f(x) = x^2, g(x) = 2x")
+print(f"Equalizer: {eq_set}")
+
+for x in eq_set:
+    print(f"  f({x}) = {f(x)}, g({x}) = {g(x)}")
+`} />
+    </div>
+
+
+    <!-- 4. Pullbacks -->
+    <h3>Pullbacks — matching over a shared target</h3>
+    <p>A <strong>pullback</strong> is the limit over a cospan: two morphisms f : a → b and g : c → b pointing at the same object. The pullback is the set of pairs (x, y) from a and c that land on the same element in b: f(x) = g(y). It generalizes the product (a product is a pullback over the terminal object) and the equalizer (an equalizer is a pullback where a = c).</p>
+
+    <!-- SVG: Pullback square -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 260 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- P (pullback) top-left -->
+        <circle cx="50" cy="40" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="50" y="45" text-anchor="middle" fill="currentColor" font-size="14">P</text>
+
+        <!-- A top-right -->
+        <circle cx="210" cy="40" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="45" text-anchor="middle" fill="currentColor" font-size="14">A</text>
+
+        <!-- B bottom-left -->
+        <circle cx="50" cy="170" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="50" y="175" text-anchor="middle" fill="currentColor" font-size="14">B</text>
+
+        <!-- C bottom-right -->
+        <circle cx="210" cy="170" r="18" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="175" text-anchor="middle" fill="currentColor" font-size="14">C</text>
+
+        <!-- Arrow p1: P -> A -->
+        <line x1="68" y1="40" x2="192" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="192,40 184,35 184,45" fill="currentColor"/>
+        <text x="130" y="32" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">p&#x2081;</text>
+
+        <!-- Arrow p2: P -> B -->
+        <line x1="50" y1="58" x2="50" y2="152" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="50,152 45,142 55,142" fill="currentColor"/>
+        <text x="37" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">p&#x2082;</text>
+
+        <!-- Arrow f: A -> C -->
+        <line x1="210" y1="58" x2="210" y2="152" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="210,152 205,142 215,142" fill="currentColor"/>
+        <text x="224" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Arrow g: B -> C -->
+        <line x1="68" y1="170" x2="192" y2="170" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="192,170 184,165 184,175" fill="currentColor"/>
+        <text x="130" y="188" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">g</text>
+
+        <!-- Commutes label -->
+        <text x="130" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">f &#x2218; p&#x2081; = g &#x2218; p&#x2082;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Pullback: given f: a -> b and g: c -> b,
+; find all pairs (x, y) such that f(x) = g(y).
+;
+;    d --q--> c
+;    |        |
+;    p        g
+;    v        v
+;    a --f--> b
+
+(define (pullback f g domain-a domain-c)
+  (let loop ((xs domain-a) (result '()))
+    (if (null? xs) (reverse result)
+        (let inner ((ys domain-c) (acc result))
+          (if (null? ys) (loop (cdr xs) acc)
+              (if (equal? (f (car xs)) (g (car ys)))
+                  (inner (cdr ys) (cons (list (car xs) (car ys)) acc))
+                  (inner (cdr ys) acc)))))))
+
+; Example: students and courses matched by department
+; f: student -> department, g: course -> department
+(define students '(alice bob carol dave))
+(define courses  '(math101 phys201 math202 chem101))
+
+(define (dept-of-student s)
+  (cond ((eq? s 'alice) 'math)
+        ((eq? s 'bob)   'phys)
+        ((eq? s 'carol) 'math)
+        ((eq? s 'dave)  'chem)))
+
+(define (dept-of-course c)
+  (cond ((eq? c 'math101) 'math)
+        ((eq? c 'phys201) 'phys)
+        ((eq? c 'math202) 'math)
+        ((eq? c 'chem101) 'chem)))
+
+(define matches (pullback dept-of-student dept-of-course students courses))
+
+(display "Student-course pairs in the same department:") (newline)
+(for-each (lambda (pair)
+  (display "  ") (display (car pair))
+  (display " - ") (display (cadr pair))
+  (display " (") (display (dept-of-student (car pair))) (display ")")
+  (newline))
+  matches)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Pullback: pairs (x, y) where f(x) == g(y)
+def pullback(f, g, domain_a, domain_c):
+    return [(x, y) for x in domain_a for y in domain_c if f(x) == g(y)]
+
+students = ["alice", "bob", "carol", "dave"]
+courses = ["math101", "phys201", "math202", "chem101"]
+
+dept_student = {"alice": "math", "bob": "phys", "carol": "math", "dave": "chem"}
+dept_course = {"math101": "math", "phys201": "phys", "math202": "math", "chem101": "chem"}
+
+matches = pullback(lambda s: dept_student[s], lambda c: dept_course[c], students, courses)
+print("Student-course pairs in the same department:")
+for s, c in matches:
+    print(f"  {s} - {c} ({dept_student[s]})")
+`} />
+    </div>
+
+
+    <!-- 5. Colimits -->
+    <h3>Colimits — reverse the arrows</h3>
+    <p>A <strong>colimit</strong> is a limit in the opposite category. Reverse all the arrows in a cone and you get a <strong>cocone</strong>: morphisms going <em>from</em> the diagram objects <em>to</em> the apex. The colimit is the universal cocone. Coproducts are colimits over discrete diagrams. Initial objects are colimits over the empty diagram. Pushouts are dual to pullbacks. The coequalizer is dual to the equalizer: it identifies elements that two morphisms map differently.</p>
+
+    <SchemeRepl client:load initialCode={`; Colimit = limit with arrows reversed.
+; Cocone: morphisms FROM diagram objects TO the apex.
+;
+; Coproduct = colimit over discrete two-object diagram.
+; Injections go IN to the apex (reversed from projections OUT).
+
+(define (Left x) (list 'Left x))
+(define (Right x) (list 'Right x))
+
+; Coequalizer: dual of equalizer.
+; Given f, g : a -> b, the coequalizer merges elements
+; in b that are "connected" by f and g.
+; If f(x) and g(x) differ, the coequalizer identifies them.
+
+(define (coequalizer f g domain)
+  ; Build equivalence classes: f(x) ~ g(x) for all x
+  (let ((classes '()))
+    (for-each
+      (lambda (x)
+        (let ((fx (f x)) (gx (g x)))
+          (set! classes (merge-classes classes fx gx))))
+      domain)
+    classes))
+
+(define (merge-classes classes a b)
+  (if (equal? a b) classes
+      (let ((ca (find-class classes a))
+            (cb (find-class classes b)))
+        (cond
+          ((and (not ca) (not cb))
+           (cons (list a b) classes))
+          ((and ca (not cb))
+           (map (lambda (c) (if (eq? c ca) (cons b c) c)) classes))
+          ((and (not ca) cb)
+           (map (lambda (c) (if (eq? c cb) (cons a c) c)) classes))
+          ((eq? ca cb) classes)
+          (else
+           (let ((merged (append ca cb)))
+             (cons merged
+               (filter (lambda (c) (and (not (eq? c ca)) (not (eq? c cb))))
+                       classes))))))))
+
+(define (find-class classes x)
+  (cond ((null? classes) #f)
+        ((member x (car classes)) (car classes))
+        (else (find-class (cdr classes) x))))
+
+; Example: f(x) = x mod 3, g(x) = x mod 2
+; Coequalizer identifies f(x) with g(x) in the codomain
+(define (f x) (modulo x 3))
+(define (g x) (modulo x 2))
+
+(display "f(x) = x mod 3, g(x) = x mod 2") (newline)
+(display "Coequalizer merges codomain elements:") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display ": f(x)=") (display (f x))
+  (display ", g(x)=") (display (g x))
+  (if (not (equal? (f x) (g x)))
+    (begin (display " => merge ") (display (f x))
+           (display " ~ ") (display (g x))))
+  (newline))
+  '(0 1 2 3 4 5))
+`} />
+
+
+    <!-- 6. The Hom-set definition -->
+    <h3>The hom-set definition of limits</h3>
+    <p>There's a cleaner way to state the universal property. A limit Lim D exists when there's a natural isomorphism: <code>C(c, Lim D) ≅ Nat(Δc, D)</code>. The left side is morphisms from <em>c</em> to the limit. The right side is natural transformations from the constant functor at <em>c</em> to the diagram D, which are exactly cones with apex <em>c</em>. This says: morphisms into the limit correspond one-to-one with cones.</p>
+
+    <SchemeRepl client:load initialCode={`; Hom-set definition: C(c, Lim D) ≅ Nat(Δc, D)
+;
+; Left side:  morphisms from c to the limit (the product)
+; Right side: cones with apex c (pairs of morphisms to each diagram object)
+;
+; For the product a x b:
+;   C(c, a x b) ≅ C(c, a) x C(c, b)
+; A morphism into the product IS a pair of morphisms.
+
+; Demonstrate: one morphism m: c -> (a, b)
+; corresponds to a pair (fst . m, snd . m)
+
+(define (fst p) (car p))
+(define (snd p) (cadr p))
+
+; Direction 1: morphism -> cone
+(define (morphism->cone m)
+  (lambda (x) (list (fst (m x)) (snd (m x)))))
+
+; Direction 2: cone -> morphism
+(define (cone->morphism p q)
+  (lambda (x) (list (p x) (q x))))
+
+; Test: round-trip
+(define p (lambda (n) (* n n)))       ; n -> n^2
+(define q (lambda (n) (+ n 1)))       ; n -> n+1
+
+; Cone (p, q) -> morphism m -> cone (fst.m, snd.m) = (p, q)
+(define m (cone->morphism p q))
+(define recovered (morphism->cone m))
+
+(display "Original cone at 5: (") (display (p 5)) (display ", ") (display (q 5)) (display ")") (newline)
+(display "Round-trip at 5:    ") (display ((recovered) 5)) (newline)
+(display "Match? ") (display (equal? (list (p 5) (q 5)) ((recovered) 5)))
+; The isomorphism is the factorizer, seen from the other side.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D : I → C</td><td class="pr-4 text-green-300">(list of objects and morphisms)</td><td class="font-sans">Diagram (functor from index category)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Δc</td><td class="pr-4 text-green-300">(lambda (_) c)</td><td class="font-sans">Constant functor at c</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Cone (apex, πᵢ)</td><td class="pr-4 text-green-300">(make-cone apex p1 p2)</td><td class="font-sans">Cone over a diagram</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Lim D</td><td class="pr-4 text-green-300">(product, equalizer, ...)</td><td class="font-sans">Limit (universal cone)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Equalizer</td><td class="pr-4 text-green-300">(equalizer f g domain)</td><td class="font-sans">Limit where f(x) = g(x)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pullback</td><td class="pr-4 text-green-300">(pullback f g dom-a dom-c)</td><td class="font-sans">Limit over a cospan</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Colim D</td><td class="pr-4 text-green-300">(coproduct, coequalizer, ...)</td><td class="font-sans">Colimit (universal cocone)</td></tr>
+          <tr><td class="py-2 pr-4">C(c, Lim D) ≅ Nat(Δc, D)</td><td class="pr-4 text-green-300">(morphism->cone, cone->morphism)</td><td class="font-sans">Hom-set characterization</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-05/">🍞 Chapter 5</a> — Products and Coproducts (limits over discrete diagrams)</li>
+      <li><a href="/reading/category-theory/milewski-10/">🍞 Chapter 10</a> — Natural Transformations (cones are natural transformations from Δc to D)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use limits</p>
+    <ul>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — limits in the context of entropy and category theory</li>
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> — limits appear in database schemas as queries</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Limit_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Limit (category theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Equaliser_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Equaliser</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pullback_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pullback</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pushout_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pushout</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post introduces limits via the constant functor Δ and natural transformations, building up from products and terminal objects to equalizers and pullbacks. This page follows the same progression but makes everything executable. The equalizer is computed by filtering a finite domain rather than defining a subobject categorically. The pullback is computed by brute-force enumeration of pairs, which matches the set-theoretic definition but hides the universal property. The coequalizer uses explicit equivalence-class merging, which is the computational content of a quotient. In the blog post, Milewski also covers continuity (functors that preserve limits), which requires representable functors and is deferred to a later chapter.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/04/15/limits-and-colimits/">Read the blog post</a>. Start with the cone construction, then see how the hom-set definition <code>C(c, Lim D) ≅ Nat(Δc, D)</code> unifies everything.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-10/", label: "Natural Transformations" }} next={{ href: "/reading/category-theory/milewski-12/", label: "Free Monoids" }} />
+
+  </main>
+</Layout>

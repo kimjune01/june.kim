@@ -1,0 +1,73 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Machine Learning" favicon="🤖">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🤖 Machine Learning</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://mml-book.github.io/">Deisenroth, Faisal &amp; Ong, <em>Mathematics for Machine Learning</em></a>, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
+    <p class="text-gray-400 mb-2">Also draws from <a href="https://d2l.ai/">Zhang et al., <em>Dive into Deep Learning</em></a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">Scheme REPLs run in the browser. Python equivalents in collapsible blocks.</p>
+
+    <!-- SVG: data → model → prediction with loss feedback -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Data box -->
+        <rect x="20" y="40" width="80" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="60" y="65" text-anchor="middle" fill="#60a5fa" font-size="13">data</text>
+        <!-- Model box -->
+        <rect x="160" y="40" width="80" height="40" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="65" text-anchor="middle" fill="#a78bfa" font-size="13">model</text>
+        <!-- Prediction box -->
+        <rect x="300" y="40" width="100" height="40" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="350" y="65" text-anchor="middle" fill="#34d399" font-size="13">prediction</text>
+        <!-- data → model arrow -->
+        <line x1="100" y1="60" x2="155" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="157,60 149,55 149,65" fill="currentColor" fill-opacity="0.4"/>
+        <!-- model → prediction arrow -->
+        <line x1="240" y1="60" x2="295" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="297,60 289,55 289,65" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Loss feedback arrow (curves below) -->
+        <path d="M 350 82 L 350 110 Q 350 120 340 120 L 210 120 Q 200 120 200 110 L 200 82" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <polygon points="200,84 195,92 205,92" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="275" y="116" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.6">loss</text>
+        <!-- Caption -->
+        <text x="210" y="16" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Data in, predictions out. Loss tells the model how wrong it is.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/machine-learning/ml-01/", title: "What is ML?", desc: "Function approximation from data &mdash; supervised, unsupervised, reinforcement" },
+  { href: "/reading/machine-learning/ml-02/", title: "Linear Regression", desc: "Find weights that minimize squared error &mdash; normal equation or gradient descent" },
+  { href: "/reading/machine-learning/ml-03/", title: "Optimization", desc: "Follow the negative gradient downhill &mdash; learning rate, convexity, convergence" },
+  { href: "/reading/machine-learning/ml-04/", title: "Logistic Regression", desc: "Squash linear output through sigmoid for probabilities &mdash; cross-entropy loss" },
+  { href: "/reading/machine-learning/ml-05/", title: "Kernel Methods", desc: "Replace dot products with kernel functions to learn nonlinear boundaries" },
+  { href: "/reading/machine-learning/ml-06/", title: "Neural Networks", desc: "Stack linear layers with nonlinearities &mdash; universal approximation by composition" },
+  { href: "/reading/machine-learning/ml-07/", title: "Backpropagation", desc: "The chain rule applied layer by layer &mdash; how gradients flow backward through a network" },
+  { href: "/reading/machine-learning/ml-08/", title: "Regularization", desc: "Penalize complexity to prevent overfitting &mdash; L1, L2, dropout, early stopping" },
+  { href: "/reading/machine-learning/ml-09/", title: "Convolutional Networks", desc: "Exploit spatial structure &mdash; shared filters, pooling, translation equivariance" },
+  { href: "/reading/machine-learning/ml-10/", title: "Recurrent Networks", desc: "Process sequences by feeding hidden state forward &mdash; vanishing gradients and LSTMs" },
+  { href: "/reading/machine-learning/ml-11/", title: "Dimensionality Reduction", desc: "PCA finds the axes of maximum variance &mdash; compress data without losing structure" },
+  { href: "/reading/machine-learning/ml-12/", title: "Clustering", desc: "Group data by similarity &mdash; k-means, EM, and the bias-variance tradeoff in unsupervised learning" }
+]} icon="🤖" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://cs229.stanford.edu/">Stanford CS229: Machine Learning</a> · <a href="https://www.3blue1brown.com/topics/neural-networks">3Blue1Brown: Neural Networks</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; the language of weights, features, and transformations</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; generative models and Bayesian inference</li>
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; gradient descent and backpropagation</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; cross-entropy loss and mutual information</li>
+      <li><a href="/reading/cognitive-architecture/">🏛️ Cognitive Architecture</a> &mdash; transformers as cognitive models</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

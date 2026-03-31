@@ -1,0 +1,280 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.12 — The Atom" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>The Atom</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 12 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Quantum mechanics explains the atom. The <strong>Bohr model</strong> gets the energy levels right. Full quantum mechanics adds angular momentum quantum numbers, spin, and the exclusion principle. Together they build the periodic table from first principles.</p>
+    </div>
+
+    <!-- 1. Bohr model -->
+    <h3>The Bohr model</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Niels_Bohr"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bohr</a> postulated that electrons orbit the nucleus in quantized orbits where the angular momentum is n * h_bar. This gives energy levels E_n = -13.6 eV / n^2 for hydrogen. The model is wrong in detail (electrons are not point particles on orbits) but gets the energy levels right, which is why spectral lines match.</p>
+
+    <!-- SVG: Energy level diagram with transitions -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Energy levels -->
+        <line x1="80" y1="240" x2="250" y2="240" stroke="currentColor" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="260" y="244" fill="currentColor" font-size="11" fill-opacity="0.6">n=1 (-13.6 eV)</text>
+        <line x1="80" y1="160" x2="250" y2="160" stroke="currentColor" stroke-width="2" stroke-opacity="0.5"/>
+        <text x="260" y="164" fill="currentColor" font-size="11" fill-opacity="0.5">n=2 (-3.4 eV)</text>
+        <line x1="80" y1="110" x2="250" y2="110" stroke="currentColor" stroke-width="2" stroke-opacity="0.4"/>
+        <text x="260" y="114" fill="currentColor" font-size="11" fill-opacity="0.4">n=3 (-1.5 eV)</text>
+        <line x1="80" y1="80" x2="250" y2="80" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+        <text x="260" y="84" fill="currentColor" font-size="11" fill-opacity="0.3">n=4 (-0.85 eV)</text>
+        <line x1="80" y1="40" x2="250" y2="40" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="260" y="44" fill="currentColor" font-size="11" fill-opacity="0.2">n=inf (0 eV)</text>
+        <!-- Transition arrows (photon emission) -->
+        <!-- Lyman alpha: n=2 -> n=1 (UV) -->
+        <line x1="110" y1="160" x2="110" y2="240" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="106,238 114,238 110,246" fill="#a78bfa" fill-opacity="0.7"/>
+        <text x="95" y="205" fill="#a78bfa" font-size="9" fill-opacity="0.6" transform="rotate(-90, 95, 205)">Lyman-a</text>
+        <!-- Balmer alpha: n=3 -> n=2 (red) -->
+        <line x1="160" y1="110" x2="160" y2="160" stroke="#f87171" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="156,158 164,158 160,166" fill="#f87171" fill-opacity="0.7"/>
+        <text x="172" y="138" fill="#f87171" font-size="9" fill-opacity="0.6">H-alpha</text>
+        <!-- n=4 -> n=2 (blue-green) -->
+        <line x1="200" y1="80" x2="200" y2="160" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <polygon points="196,158 204,158 200,166" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="212" y="125" fill="#60a5fa" font-size="9" fill-opacity="0.5">H-beta</text>
+        <!-- Label -->
+        <text x="165" y="272" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Photon emitted when electron drops to lower level.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Hydrogen energy levels: E_n = -13.6 eV / n^2
+; Photon energy for transition: E = E_upper - E_lower
+; Wavelength: lambda = h*c / E
+
+(define h 6.626e-34)
+(define c 3e8)
+(define eV 1.6e-19)
+
+(define (hydrogen-energy n)
+  (/ -13.6 (* n n)))
+
+(define (transition-energy n-upper n-lower)
+  (- (hydrogen-energy n-upper) (hydrogen-energy n-lower)))
+
+(define (transition-wavelength n-upper n-lower)
+  (let ((E-eV (transition-energy n-upper n-lower)))
+    (/ (* h c) (* (abs E-eV) eV))))
+
+(display "Hydrogen energy levels:") (newline)
+(define (show-E n)
+  (display "  n=") (display n)
+  (display ": E = ") (display (hydrogen-energy n))
+  (display " eV") (newline))
+(for-each show-E (list 1 2 3 4 5))
+
+(display "Transitions (emission):") (newline)
+; Lyman series (to n=1)
+(display "  Lyman-alpha (2->1): ")
+(display (* (transition-wavelength 2 1) 1e9))
+(display " nm") (newline)
+
+; Balmer series (to n=2) -- visible light!
+(display "  H-alpha (3->2): ")
+(display (* (transition-wavelength 3 2) 1e9))
+(display " nm (red)") (newline)
+(display "  H-beta  (4->2): ")
+(display (* (transition-wavelength 4 2) 1e9))
+(display " nm (blue-green)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`h = 6.626e-34
+c = 3e8
+eV = 1.6e-19
+
+def E_n(n):
+    return -13.6 / n**2
+
+def wavelength(n_upper, n_lower):
+    dE = abs(E_n(n_upper) - E_n(n_lower))
+    return h * c / (dE * eV)
+
+for n in range(1, 6):
+    print(f"n={n}: E = {E_n(n):.4f} eV")
+
+print(f"Lyman-alpha: {wavelength(2,1)*1e9:.1f} nm")
+print(f"H-alpha:     {wavelength(3,2)*1e9:.1f} nm")
+print(f"H-beta:      {wavelength(4,2)*1e9:.1f} nm")
+`} />
+    </div>
+
+
+    <!-- 2. Quantum numbers -->
+    <h3>Quantum numbers</h3>
+    <p>The full quantum description of an electron in an atom requires four quantum numbers. <strong>n</strong> (principal): energy level, 1, 2, 3, ... <strong>l</strong> (angular momentum): 0 to n-1. <strong>m_l</strong> (magnetic): -l to +l. <strong>m_s</strong> (spin): +1/2 or -1/2. The Pauli exclusion principle says no two electrons can share all four numbers.</p>
+
+    <SchemeRepl client:load initialCode={`; Count states for each shell (principal quantum number n)
+; l ranges from 0 to n-1
+; m_l ranges from -l to +l (2l+1 values)
+; m_s = +1/2 or -1/2 (2 values)
+; Total states in shell n = 2 * n^2
+
+(define (states-in-subshell l)
+  (* 2 (+ (* 2 l) 1)))
+
+(define (states-in-shell n)
+  (let loop ((l 0) (total 0))
+    (if (>= l n)
+        total
+        (loop (+ l 1) (+ total (states-in-subshell l))))))
+
+(define subshell-names (list "s" "p" "d" "f"))
+
+(define (show-shell n)
+  (display "n=") (display n) (display ": ")
+  (let loop ((l 0))
+    (if (< l n)
+        (begin
+          (display (list-ref subshell-names l))
+          (display "(") (display (states-in-subshell l)) (display ") ")
+          (loop (+ l 1)))
+        (begin
+          (display "= ") (display (states-in-shell n))
+          (display " total") (newline)))))
+
+(for-each show-shell (list 1 2 3 4))
+
+; This explains the periodic table:
+; Period 1: 2 elements (1s)
+; Period 2: 8 elements (2s + 2p)
+; Period 3: 8 elements (3s + 3p)
+; Period 4: 18 elements (4s + 3d + 4p)
+(display "Formula: 2n^2 states per shell")
+`} />
+
+
+    <!-- 3. The periodic table -->
+    <h3>The periodic table</h3>
+    <p>Electrons fill orbitals from lowest energy up (Aufbau principle). Each orbital holds at most 2 electrons (Pauli exclusion). Electrons in the same subshell spread out before pairing (Hund's rule). These three rules, plus the quantum numbers, generate the entire periodic table. Chemistry is applied quantum mechanics.</p>
+
+    <SchemeRepl client:load initialCode={`; Electron configurations
+; Fill order: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, ...
+; Each subshell holds 2*(2l+1) electrons
+
+(define fill-order
+  (list (list 1 0) (list 2 0) (list 2 1) (list 3 0) (list 3 1)
+        (list 4 0) (list 3 2) (list 4 1) (list 5 0) (list 4 2)))
+
+(define subshell-names (list "s" "p" "d" "f"))
+
+(define (max-electrons l) (* 2 (+ (* 2 l) 1)))
+
+(define (electron-config Z)
+  (let loop ((remaining Z) (orbitals fill-order) (config ""))
+    (if (or (<= remaining 0) (null? orbitals))
+        config
+        (let* ((nl (car orbitals))
+               (n (car nl))
+               (l (cadr nl))
+               (maxe (max-electrons l))
+               (e (min remaining maxe))
+               (name (list-ref subshell-names l))
+               (label (string-append (number->string n) name (number->string e) " ")))
+          (loop (- remaining e) (cdr orbitals) (string-append config label))))))
+
+; Show configurations for familiar elements
+(define elements (list (list 1 "H") (list 2 "He") (list 6 "C")
+                       (list 8 "O") (list 11 "Na") (list 26 "Fe")))
+
+(for-each (lambda (pair)
+  (display (cadr pair)) (display " (Z=") (display (car pair))
+  (display "): ") (display (electron-config (car pair))) (newline))
+  elements)
+`} />
+
+
+    <!-- 4. Nuclear physics and radioactive decay -->
+    <h3>Nuclear physics and radioactive decay</h3>
+    <p>The nucleus holds protons and neutrons together with the strong force. Unstable nuclei decay: <strong>alpha decay</strong> emits a helium-4 nucleus, <strong>beta decay</strong> converts a neutron to a proton (or vice versa), and <strong>gamma decay</strong> emits a photon. Radioactive decay is exponential: N(t) = N_0 * e^(-t/tau), where tau is the mean lifetime.</p>
+
+    <SchemeRepl client:load initialCode={`; Radioactive decay: N(t) = N0 * exp(-t / tau)
+; Half-life: t_1/2 = tau * ln(2)
+; tau = mean lifetime
+
+(define (decay N0 tau t)
+  (* N0 (exp (/ (- t) tau))))
+
+(define (half-life tau)
+  (* tau (log 2)))
+
+; Carbon-14: half-life = 5730 years
+(define t-half-C14 5730)
+(define tau-C14 (/ t-half-C14 (log 2)))
+
+(display "Carbon-14:") (newline)
+(display "  Half-life: ") (display t-half-C14) (display " years") (newline)
+(display "  Mean lifetime: ") (display (inexact->exact (round tau-C14)))
+(display " years") (newline)
+
+; How much remains after various times?
+(define N0 1000000)
+(define (show-remaining years)
+  (let ((N (decay N0 tau-C14 years)))
+    (display "  After ") (display years) (display " years: ")
+    (display (inexact->exact (round N)))
+    (display " remain (")
+    (display (inexact->exact (round (* 100 (/ N N0)))))
+    (display "%)") (newline)))
+
+(for-each show-remaining (list 1000 5730 11460 20000 50000))
+; This is how carbon dating works:
+; measure the ratio of C-14 to C-12, solve for t.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def decay(N0, tau, t):
+    return N0 * math.exp(-t / tau)
+
+t_half = 5730  # years
+tau = t_half / math.log(2)
+N0 = 1_000_000
+
+print(f"C-14 half-life: {t_half} years")
+print(f"Mean lifetime:  {tau:.0f} years")
+
+for years in [1000, 5730, 11460, 20000, 50000]:
+    N = decay(N0, tau, years)
+    print(f"  After {years:>5} yr: {N:>10.0f} ({100*N/N0:.1f}%)")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Bohr_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bohr model</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Quantum_number"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quantum number</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pauli_exclusion_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pauli exclusion principle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Electron_configuration"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Electron configuration</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Radioactive_decay"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Radioactive decay</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The Bohr model is historically important but physically wrong: electrons do not orbit like planets. The Schrodinger equation gives probability clouds (orbitals), not orbits. However, the energy levels E_n = -13.6/n^2 eV are exact for hydrogen. Our electron configuration code follows the Aufbau filling order, which has exceptions for chromium (Z=24) and copper (Z=29) due to half-filled subshell stability. The radioactive decay law is exact for large numbers of atoms; individual decays are random.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-11/", label: "Quantum Mechanics" }} />
+
+  </main>
+</Layout>

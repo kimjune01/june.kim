@@ -1,0 +1,396 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.15 — The Yoneda Embedding" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>The Yoneda Embedding</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/10/28/yoneda-embedding/">Category Theory for Programmers, Ch. 15</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-14/">🍞 Ch14 (The Yoneda Lemma)</a>. 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Every category <strong>embeds fully and faithfully</strong> into its presheaf category [C<sup>op</sup>, Set]. The Yoneda embedding Y sends each object <em>a</em> to its hom-functor C(a, &ndash;), and no information is lost: distinct morphisms stay distinct, and every natural transformation between hom-functors comes from a morphism in C.</p>
+    </div>
+
+    <!-- SVG: Yoneda embedding — small category into presheaves -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 150" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Small category C -->
+        <rect x="15" y="20" width="130" height="90" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="80" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">C</text>
+        <!-- Objects in C -->
+        <circle cx="45" cy="55" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="45" y="46" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">a</text>
+        <circle cx="110" cy="45" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="110" y="36" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">b</text>
+        <circle cx="90" cy="90" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="90" y="81" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">c</text>
+        <!-- Arrows in C -->
+        <line x1="52" y1="53" x2="103" y2="47" stroke="currentColor" stroke-width="1"/>
+        <polygon points="103,45 98,42 99,49" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="107" y1="51" x2="94" y2="84" stroke="currentColor" stroke-width="1"/>
+        <polygon points="94,84 97,76 90,78" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- Y functor arrow -->
+        <line x1="155" y1="65" x2="235" y2="65" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="235,61 243,65 235,69" fill="currentColor"/>
+        <text x="195" y="58" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Y</text>
+
+        <!-- Presheaf category [C, Set] -->
+        <rect x="250" y="10" width="175" height="110" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="337" y="8" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">[C, Set]</text>
+        <!-- Hom-functors as boxes -->
+        <rect x="265" y="25" width="70" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="300" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">C(a, &#x2013;)</text>
+        <rect x="265" y="55" width="70" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="300" y="72" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">C(b, &#x2013;)</text>
+        <rect x="265" y="85" width="70" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="300" y="102" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">C(c, &#x2013;)</text>
+
+        <!-- Label -->
+        <text x="220" y="142" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">fully faithful: no information lost</text>
+      </svg>
+    </div>
+
+    <!-- 1. The embedding functor -->
+    <h3>The embedding: objects become hom-functors</h3>
+    <p>Fix a category C. For each object <em>a</em>, the mapping C(a, &ndash;) is a covariant functor from C to Set. The <strong>Yoneda embedding</strong> Y maps each object <em>a</em> to this functor, and each morphism f : a &rarr; b to a natural transformation between the corresponding hom-functors. We build a small category (a 3-object graph) and embed it.</p>
+
+    <SchemeRepl client:load initialCode={`; A small category with 3 objects: A, B, C
+; Morphisms: f: A->B, g: B->C, gf: A->C (composition)
+; Plus identity morphisms.
+
+(define objects '(A B C))
+
+; hom(x, y): list all morphisms from x to y
+(define (hom x y)
+  (cond
+    ((and (eq? x 'A) (eq? y 'A)) '(id-A))
+    ((and (eq? x 'B) (eq? y 'B)) '(id-B))
+    ((and (eq? x 'C) (eq? y 'C)) '(id-C))
+    ((and (eq? x 'A) (eq? y 'B)) '(f))
+    ((and (eq? x 'B) (eq? y 'C)) '(g))
+    ((and (eq? x 'A) (eq? y 'C)) '(gf))
+    (else '())))
+
+; The Yoneda embedding sends object a to the functor C(a, -).
+; That functor maps each object x to the set hom(a, x).
+(define (yoneda-embed a)
+  (lambda (x) (hom a x)))
+
+; Embed each object and display its functor's values
+(for-each
+  (lambda (a)
+    (display "Y(") (display a) (display "):  ")
+    (for-each
+      (lambda (x)
+        (display x) (display "->")
+        (display ((yoneda-embed a) x)) (display "  "))
+      objects)
+    (newline))
+  objects)
+; Each row is a different functor. Distinct objects give distinct functors.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# 3-object category: A, B, C
+# Morphisms: f: A->B, g: B->C, gf: A->C, plus identities
+
+def hom(x, y):
+    table = {
+        ("A","A"): ["id_A"], ("B","B"): ["id_B"], ("C","C"): ["id_C"],
+        ("A","B"): ["f"], ("B","C"): ["g"], ("A","C"): ["gf"],
+    }
+    return table.get((x, y), [])
+
+def yoneda_embed(a):
+    """Y(a) = the functor C(a, -)"""
+    return {x: hom(a, x) for x in ["A", "B", "C"]}
+
+for a in ["A", "B", "C"]:
+    row = " ".join(f"{x}->{yoneda_embed(a)[x]}" for x in ["A","B","C"])
+    print(f"Y({a}): {row}")
+`} />
+    </div>
+
+
+    <!-- 2. Faithfulness -->
+    <h3>Fully faithful: no information lost</h3>
+    <p>A functor is <strong>faithful</strong> if it's injective on hom-sets (distinct morphisms stay distinct), and <strong>full</strong> if it's surjective (every natural transformation between the image functors comes from a morphism). The Yoneda embedding is both. The proof is the Yoneda lemma itself: natural transformations [C, Set](C(a, &ndash;), C(b, &ndash;)) are in bijection with C(b, a). Reversing the direction gives the contravariant version.</p>
+
+    <SchemeRepl client:load initialCode={`; Fully faithful means: the set of natural transformations
+; between Y(a) and Y(b) is isomorphic to hom(a, b).
+;
+; Yoneda lemma: Nat(C(a,-), C(b,-)) ≅ C(b, a)
+; (substitute F = C(b,-) into the Yoneda lemma)
+
+; For our 3-object category:
+; Nat(Y(A), Y(B)) ≅ hom(B, A) = {} (empty — no morphism B->A)
+; Nat(Y(A), Y(C)) ≅ hom(C, A) = {} (empty)
+; Nat(Y(B), Y(A)) ≅ hom(A, B) = {f}  (one morphism)
+
+; Check: morphisms in C match nat-trans count
+(define (nat-trans-count a b)
+  (length (hom b a)))  ; Yoneda: reversed!
+
+(display "Nat(Y(A), Y(B)) count = ") (display (nat-trans-count 'A 'B))
+(display "  hom(B,A) = ") (display (hom 'B 'A)) (newline)
+
+(display "Nat(Y(B), Y(A)) count = ") (display (nat-trans-count 'B 'A))
+(display "  hom(A,B) = ") (display (hom 'A 'B)) (newline)
+
+(display "Nat(Y(A), Y(C)) count = ") (display (nat-trans-count 'A 'C))
+(display "  hom(C,A) = ") (display (hom 'C 'A)) (newline)
+
+(display "Nat(Y(B), Y(C)) count = ") (display (nat-trans-count 'B 'C))
+(display "  hom(C,B) = ") (display (hom 'C 'B)) (newline)
+
+; Bijection holds everywhere: the embedding is fully faithful.
+`} />
+
+
+    <!-- 3. Contravariant Yoneda -->
+    <h3>Contravariant Yoneda: the co-Yoneda embedding</h3>
+    <p>The dual version uses the contravariant hom-functor C(&ndash;, a). This embeds C into the presheaf category [C<sup>op</sup>, Set]. The isomorphism becomes: Nat(C(&ndash;, a), C(&ndash;, b)) &cong; C(a, b). No reversal this time: the directions match.</p>
+
+    <SchemeRepl client:load initialCode={`; Co-Yoneda embedding: Y^op(a) = C(-, a)
+; This is a contravariant functor: given h: x -> y,
+; C(-, a) sends h to precomposition C(y, a) -> C(x, a).
+
+(define (co-yoneda-embed a)
+  (lambda (x) (hom x a)))
+
+; Display the contravariant embedding
+(for-each
+  (lambda (a)
+    (display "Y^op(") (display a) (display "): ")
+    (for-each
+      (lambda (x)
+        (display x) (display "->")
+        (display ((co-yoneda-embed a) x)) (display "  "))
+      objects)
+    (newline))
+  objects)
+
+; Co-Yoneda: Nat(C(-,a), C(-,b)) ≅ C(a, b)  (no reversal)
+(newline)
+(display "Nat(Y^op(A), Y^op(B)) ≅ hom(A,B) = ")
+(display (hom 'A 'B)) (newline)
+(display "Nat(Y^op(B), Y^op(C)) ≅ hom(B,C) = ")
+(display (hom 'B 'C))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Co-Yoneda: Y^op(a) = C(-, a)
+def co_yoneda_embed(a):
+    return {x: hom(x, a) for x in ["A", "B", "C"]}
+
+for a in ["A", "B", "C"]:
+    row = " ".join(f"{x}->{co_yoneda_embed(a)[x]}" for x in ["A","B","C"])
+    print(f"Y^op({a}): {row}")
+
+# Co-Yoneda: Nat(C(-,a), C(-,b)) ≅ hom(a, b)
+print(f"\\nNat(Y^op(A), Y^op(B)) ≅ hom(A,B) = {hom('A','B')}")
+print(f"Nat(Y^op(B), Y^op(C)) ≅ hom(B,C) = {hom('B','C')}")
+`} />
+    </div>
+
+    <!-- 4. Preserves and reflects isomorphisms -->
+    <h3>Preserving and reflecting isomorphisms</h3>
+    <p>A fully faithful functor both <strong>preserves</strong> and <strong>reflects</strong> isomorphisms. If a &cong; b in C, then Y(a) &cong; Y(b) in [C, Set] (preservation). Conversely, if Y(a) &cong; Y(b), then a &cong; b (reflection). Two objects are isomorphic if and only if they "look the same from the outside" &mdash; they have the same pattern of incoming and outgoing morphisms.</p>
+
+    <SchemeRepl client:load initialCode={`; Add an isomorphic copy: object D with iso: B <-> D
+; i: B->D, j: D->B, j.i = id-B, i.j = id-D
+
+(define (hom2 x y)
+  (cond
+    ; Original category
+    ((and (eq? x 'A) (eq? y 'A)) '(id-A))
+    ((and (eq? x 'B) (eq? y 'B)) '(id-B))
+    ((and (eq? x 'C) (eq? y 'C)) '(id-C))
+    ((and (eq? x 'A) (eq? y 'B)) '(f))
+    ((and (eq? x 'B) (eq? y 'C)) '(g))
+    ((and (eq? x 'A) (eq? y 'C)) '(gf))
+    ; D is isomorphic to B
+    ((and (eq? x 'D) (eq? y 'D)) '(id-D))
+    ((and (eq? x 'B) (eq? y 'D)) '(i))
+    ((and (eq? x 'D) (eq? y 'B)) '(j))
+    ; Composites through D
+    ((and (eq? x 'A) (eq? y 'D)) '(if))   ; i . f
+    ((and (eq? x 'D) (eq? y 'C)) '(gj))   ; g . j
+    (else '())))
+
+(define objects2 '(A B C D))
+
+; Y(B) and Y(D) should look the same (same hom-set sizes)
+(display "Y(B): ")
+(for-each (lambda (x) (display x) (display "->")
+  (display (length (hom2 'B x))) (display " ")) objects2)
+(newline)
+
+(display "Y(D): ")
+(for-each (lambda (x) (display x) (display "->")
+  (display (length (hom2 'D x))) (display " ")) objects2)
+(newline)
+
+; Same profile => isomorphic functors => B ≅ D reflected back
+(display "B ≅ D in C?  hom(B,D)=") (display (hom2 'B 'D))
+(display " hom(D,B)=") (display (hom2 'D 'B))
+(display "  Yes: i and j are mutual inverses.")
+`} />
+
+
+    <!-- 5. CPS as Yoneda -->
+    <h3>In Haskell: CPS is the Yoneda embedding</h3>
+    <p>In Haskell, the Yoneda embedding becomes: <code>forall x. (a -> x) -> (b -> x) &cong; b -> a</code>. This is continuation-passing style. Given a function <code>btoa :: b -> a</code>, you construct a polymorphic function that takes any continuation <code>a -> x</code> and pre-composes it. Recovering <code>btoa</code> is just applying the identity continuation.</p>
+
+    <SchemeRepl client:load initialCode={`; CPS encoding = Yoneda embedding in Hask
+; forall x. (a -> x) -> (b -> x) ≅ (b -> a)
+;
+; Given btoa: b -> a, build the CPS version:
+;   fromY k b = k (btoa b)
+;
+; Recover btoa: fromY identity
+
+(define (btoa b)
+  (+ b 10))  ; example: add 10
+
+; CPS-encode it: take any continuation k, apply after btoa
+(define (from-y k)
+  (lambda (b) (k (btoa b))))
+
+; Use with different continuations
+(display "k=identity: ") (display ((from-y (lambda (x) x)) 5)) (newline)
+(display "k=double:   ") (display ((from-y (lambda (x) (* x 2))) 5)) (newline)
+(display "k=show:     ") (display ((from-y number->string) 5)) (newline)
+
+; Recover the original function: apply k=identity
+(display "recovered btoa(5) = ") (display ((from-y (lambda (x) x)) 5))
+; 15 — same as (btoa 5)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CPS = Yoneda embedding in programming
+# forall x. (a -> x) -> (b -> x) ≅ (b -> a)
+
+def btoa(b):
+    return b + 10
+
+def from_y(k):
+    """CPS-encode btoa: take continuation k, pre-compose with btoa"""
+    return lambda b: k(btoa(b))
+
+print(f"k=identity: {from_y(lambda x: x)(5)}")
+print(f"k=double:   {from_y(lambda x: x*2)(5)}")
+print(f"k=str:      {from_y(str)(5)}")
+
+# Recover original: use identity as continuation
+recovered = from_y(lambda x: x)
+print(f"recovered btoa(5) = {recovered(5)}")  # 15
+`} />
+    </div>
+
+
+    <!-- 6. Preorder example -->
+    <h3>Preorder example: the embedding as implication</h3>
+    <p>In a preorder (where hom-sets are either empty or singletons), the Yoneda embedding becomes: a &le; b if and only if for all x, x &le; a implies x &le; b. Knowing all the morphisms into an object completely determines its position in the order. This is the "behavioral" characterization: an object is defined by what maps into it.</p>
+
+    <SchemeRepl client:load initialCode={`; Preorder: 1 ≤ 2 ≤ 3
+; hom(x,y) = {*} if x ≤ y, else {}
+
+(define (hom-pre x y)
+  (if (<= x y) '(*) '()))
+
+; Y(a) maps each x to hom(a, x)
+(define (y-pre a)
+  (map (lambda (x) (list x (hom-pre a x))) '(1 2 3)))
+
+(display "Y(1): ") (display (y-pre 1)) (newline)
+(display "Y(2): ") (display (y-pre 2)) (newline)
+(display "Y(3): ") (display (y-pre 3)) (newline)
+
+; a ≤ b  iff  for all x, (x ≤ a) => (x ≤ b)
+; Check: is 1 ≤ 2?
+(display "1 ≤ 2? ")
+(display (every (lambda (x)
+  (or (null? (hom-pre x 1))      ; x ≤ 1 is false, so implication holds
+      (not (null? (hom-pre x 2))))) ; x ≤ 2 is true
+  '(1 2 3)))
+(newline)
+
+; Check: is 3 ≤ 1?
+(display "3 ≤ 1? ")
+(display (every (lambda (x)
+  (or (null? (hom-pre x 3))
+      (not (null? (hom-pre x 1)))))
+  '(1 2 3)))
+; #f — 3 ≤ 3 but not 3 ≤ 1
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(a, &ndash;)</td><td class="pr-4 text-green-300">(yoneda-embed a)</td><td class="font-sans">Covariant hom-functor (representable)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(&ndash;, a)</td><td class="pr-4 text-green-300">(co-yoneda-embed a)</td><td class="font-sans">Contravariant hom-functor (presheaf)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Y : C &rarr; [C, Set]</td><td class="pr-4 text-green-300">(yoneda-embed a)</td><td class="font-sans">Yoneda embedding functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[C, Set](C(a,&ndash;), C(b,&ndash;)) &cong; C(b,a)</td><td class="pr-4 text-green-300">(nat-trans-count a b)</td><td class="font-sans">Fully faithful: nat-trans = morphisms</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">forall x. (a&rarr;x)&rarr;(b&rarr;x) &cong; b&rarr;a</td><td class="pr-4 text-green-300">(from-y k)</td><td class="font-sans">CPS encoding (Haskell version)</td></tr>
+          <tr><td class="py-2 pr-4">a &le; b &hArr; &forall;x. x&le;a &rArr; x&le;b</td><td class="pr-4 text-green-300">(every ... '(1 2 3))</td><td class="font-sans">Preorder embedding as implication</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-14/">🍞 Chapter 14</a> — The Yoneda Lemma: the isomorphism this embedding relies on</li>
+      <li>(next) Chapter 16 — Limits and Colimits</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — uses representable functors and the Yoneda perspective</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — parametrised optics live in presheaf categories</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Yoneda_lemma#The_Yoneda_embedding"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda embedding</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Representable_functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Representable functor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Presheaf_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Presheaf</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post works in Haskell, where the Yoneda embedding manifests as the polymorphic isomorphism <code>forall x. (a -> x) -> (b -> x) &cong; b -> a</code>. This page uses explicit finite categories in Scheme, which makes the hom-sets visible as concrete lists. The trade-off: you can see the bijection by counting, but you lose the polymorphic elegance. The blog post also discusses naturality of the Yoneda isomorphism in both arguments (forming a higher-order natural transformation between evaluation and hom-pairing). That machinery requires 2-categorical language and is omitted here. The preorder example is faithful to the original. The CPS example is the same construction Milewski gives, translated from Haskell <code>tabulate</code>/<code>index</code> style to explicit lambda application.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/10/28/yoneda-embedding/">Read the blog post</a>. Start with the fully faithful proof, then trace the CPS encoding.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-14/", label: "Yoneda Lemma" }} next={{ href: "/reading/category-theory/milewski-16/", label: "Adjunctions" }} />
+
+  </main>
+</Layout>

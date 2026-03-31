@@ -1,0 +1,243 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom 4.1 — Non-Zero-Sum Games" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Non-Zero-Sum Games</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Firkins Nordstrom · <a href="https://nordstrommath.com/IntroGameTheory/Intrononzero.html">Introduction to Game Theory, Section 4.1</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When payoffs don't sum to zero, both players can win or both can lose. <strong>Cooperation enters.</strong> The zero-sum tools (minimax, graphical method, expected value method) break down because minimizing the opponent's payoff no longer maximizes yours.</p>
+    </div>
+
+    <!-- 1. Zero-sum vs non-zero-sum -->
+    <h3>Zero-sum vs non-zero-sum</h3>
+    <p>In a zero-sum game, every dollar you gain is a dollar your opponent loses. In a non-zero-sum game, the total payoff can grow or shrink. Trade is positive-sum (both sides gain). War is negative-sum (both sides lose). Most real situations are non-zero-sum.</p>
+
+    <!-- SVG: Two payoff grids side by side -->
+    <div class="flex justify-center my-6 gap-6 flex-wrap">
+      <!-- Zero-sum grid -->
+      <div class="text-center">
+        <svg viewBox="0 0 200 180" class="w-full" style="max-width:190px; font-family: ui-monospace, monospace;">
+          <!-- Title -->
+          <text x="100" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Zero-sum</text>
+          <!-- Grid lines -->
+          <rect x="40" y="60" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="100" y="60" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="40" y="100" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="100" y="100" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <!-- Column headers -->
+          <text x="70" y="52" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">C</text>
+          <text x="130" y="52" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">D</text>
+          <!-- Row headers -->
+          <text x="30" y="84" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">A</text>
+          <text x="30" y="124" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">B</text>
+          <!-- Payoffs: (P1, P2) always sum to 0 -->
+          <text x="55" y="82" text-anchor="middle" fill="#f87171" font-size="10">3</text>
+          <text x="85" y="86" text-anchor="middle" fill="#60a5fa" font-size="9">-3</text>
+          <text x="115" y="82" text-anchor="middle" fill="#f87171" font-size="10">-2</text>
+          <text x="145" y="86" text-anchor="middle" fill="#60a5fa" font-size="9">2</text>
+          <text x="55" y="122" text-anchor="middle" fill="#f87171" font-size="10">-1</text>
+          <text x="85" y="126" text-anchor="middle" fill="#60a5fa" font-size="9">1</text>
+          <text x="115" y="122" text-anchor="middle" fill="#f87171" font-size="10">4</text>
+          <text x="145" y="126" text-anchor="middle" fill="#60a5fa" font-size="9">-4</text>
+          <!-- Sum annotation -->
+          <text x="100" y="160" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">every cell sums to 0</text>
+          <!-- Color key -->
+          <text x="55" y="38" text-anchor="middle" fill="#f87171" font-size="8">P1</text>
+          <text x="85" y="38" text-anchor="middle" fill="#60a5fa" font-size="8">P2</text>
+        </svg>
+      </div>
+
+      <!-- Non-zero-sum grid -->
+      <div class="text-center">
+        <svg viewBox="0 0 200 180" class="w-full" style="max-width:190px; font-family: ui-monospace, monospace;">
+          <!-- Title -->
+          <text x="100" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Non-zero-sum</text>
+          <!-- Grid lines -->
+          <rect x="40" y="60" width="60" height="40" fill="#4ade80" fill-opacity="0.06" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="100" y="60" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="40" y="100" width="60" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <rect x="100" y="100" width="60" height="40" fill="#ef4444" fill-opacity="0.06" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <!-- Column headers -->
+          <text x="70" y="52" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Action</text>
+          <text x="130" y="52" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Comedy</text>
+          <!-- Row headers -->
+          <text x="30" y="84" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">A</text>
+          <text x="30" y="124" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">C</text>
+          <!-- Payoffs: Battle of the Sexes -->
+          <text x="55" y="82" text-anchor="middle" fill="#f87171" font-size="10">2</text>
+          <text x="85" y="86" text-anchor="middle" fill="#60a5fa" font-size="9">1</text>
+          <text x="115" y="82" text-anchor="middle" fill="#f87171" font-size="10">-1</text>
+          <text x="145" y="86" text-anchor="middle" fill="#60a5fa" font-size="9">-1</text>
+          <text x="55" y="122" text-anchor="middle" fill="#f87171" font-size="10">-1</text>
+          <text x="85" y="126" text-anchor="middle" fill="#60a5fa" font-size="9">-1</text>
+          <text x="115" y="122" text-anchor="middle" fill="#f87171" font-size="10">1</text>
+          <text x="145" y="126" text-anchor="middle" fill="#60a5fa" font-size="9">2</text>
+          <!-- Sum annotation -->
+          <text x="100" y="155" text-anchor="middle" fill="#4ade80" font-size="9">both win: sum = 3</text>
+          <text x="100" y="168" text-anchor="middle" fill="#ef4444" font-size="9">both lose: sum = -2</text>
+          <!-- Color key -->
+          <text x="55" y="38" text-anchor="middle" fill="#f87171" font-size="8">P1</text>
+          <text x="85" y="38" text-anchor="middle" fill="#60a5fa" font-size="8">P2</text>
+        </svg>
+      </div>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Zero-sum: payoffs always sum to 0
+(define (zero-sum? matrix)
+  (every (lambda (row)
+    (every (lambda (cell)
+      (= 0 (+ (car cell) (cadr cell))))
+    row))
+  matrix))
+
+; Zero-sum game: [[3,-3],[-2,2]],[[-1,1],[4,-4]]
+(define zs-game '(((3 -3) (-2 2)) ((-1 1) (4 -4))))
+(display "Zero-sum? ") (display (zero-sum? zs-game)) (newline)
+
+; Battle of the Sexes: (2,1),(-1,-1),(-1,-1),(1,2)
+(define bos-game '(((2 1) (-1 -1)) ((-1 -1) (1 2))))
+(display "Zero-sum? ") (display (zero-sum? bos-game)) (newline)
+
+; Check totals
+(display "BoS cell sums: ")
+(for-each (lambda (row)
+  (for-each (lambda (cell)
+    (display (+ (car cell) (cadr cell))) (display " "))
+  row))
+bos-game)
+; 3, -2, -2, 3 -- not constant
+`} />
+
+    <!-- 2. Communication matters -->
+    <h3>Communication changes everything</h3>
+    <p>In a zero-sum game, telling your opponent your strategy is always bad. In a non-zero-sum game, communication can help both players. Battle of the Sexes: if Alice and Bob can talk, they coordinate on one movie and both benefit. Without communication, they might clash and both get -1.</p>
+
+    <SchemeRepl client:load initialCode={`; Battle of the Sexes: coordination matters
+;           Action  Comedy
+;  Action  (2, 1)  (-1,-1)
+;  Comedy (-1,-1)  (1, 2)
+;
+; Two Nash equilibria: (Action, Action) and (Comedy, Comedy)
+; Without communication: might end up at (-1, -1)
+; With communication: agree on one, both benefit
+
+(define (bos-payoff p1 p2)
+  (cond ((and (eq? p1 'A) (eq? p2 'A)) '(2 1))
+        ((and (eq? p1 'C) (eq? p2 'C)) '(1 2))
+        (else '(-1 -1))))
+
+(display "Both pick Action:  ") (display (bos-payoff 'A 'A)) (newline)
+(display "Both pick Comedy:  ") (display (bos-payoff 'C 'C)) (newline)
+(display "Mismatch:          ") (display (bos-payoff 'A 'C)) (newline)
+
+; In zero-sum, revealing "I'll play A" lets opponent exploit you.
+; Here, revealing "I'll go to Action" helps both coordinate.
+(display "Communication helps: both outcomes beat the mismatch")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Battle of the Sexes
+def bos_payoff(p1, p2):
+    if p1 == "A" and p2 == "A": return (2, 1)
+    if p1 == "C" and p2 == "C": return (1, 2)
+    return (-1, -1)
+
+for moves in [("A","A"), ("C","C"), ("A","C"), ("C","A")]:
+    pay = bos_payoff(*moves)
+    total = sum(pay)
+    print(f"{moves}: payoffs={pay}, sum={total}")
+`} />
+    </div>
+
+    <!-- 3. Why zero-sum tools break -->
+    <h3>Why zero-sum tools break</h3>
+    <p>The graphical method and expected value method both assume that minimizing the opponent's payoff is the same as maximizing yours. In non-zero-sum games, this is false. You might gain by helping your opponent gain. New tools needed: best response analysis, dominance with payoff pairs, and eventually the full Nash equilibrium machinery.</p>
+
+    <SchemeRepl client:load initialCode={`; In zero-sum: maximin = minimax (von Neumann)
+; Your best strategy against their worst case IS the equilibrium.
+;
+; In non-zero-sum: maximin is NOT the answer.
+; Battle of the Sexes maximin analysis:
+
+(define (p1-maximin)
+  ; Row A: payoffs 2, -1. Minimum = -1.
+  ; Row C: payoffs -1, 1. Minimum = -1.
+  ; Maximin: both rows tie at -1. No help.
+  (display "P1 maximin: min(A) = -1, min(C) = -1") (newline)
+  (display "  Maximin says: indifferent. Not useful.") (newline))
+
+(p1-maximin)
+
+; But Nash equilibrium finds two pure equilibria:
+(display "Nash equilibria: (A,A) and (C,C)") (newline)
+(display "  Both are stable: no unilateral deviation helps.") (newline)
+(display "  Maximin missed them because it ignores coordination.")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2 pr-4">Zero-sum</th>
+            <th class="py-2">Non-zero-sum</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Payoff cell</td><td class="pr-4">(a, -a)</td><td>(a, b) where a + b varies</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Opponent's loss</td><td class="pr-4">= your gain</td><td>independent</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Communication</td><td class="pr-4">always hurts</td><td>can help (coordination)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Maximin</td><td class="pr-4">= equilibrium</td><td>too conservative</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Equilibria</td><td class="pr-4">unique (mixed)</td><td>often multiple</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-10/">🎲 Nordstrom 3.3</a> — Mixed Strategies: Expected Value (previous)</li>
+      <li><a href="/reading/game-theory/nordstrom-12/">🎲 Nordstrom 4.2</a> — Prisoner's Dilemma and Chicken (next)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related pages</p>
+    <ul>
+      <li><a href="/reading/game-theory/nordstrom-03/">🎲 Nordstrom 2.1</a> — Zero-Sum Games (the contrast)</li>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory handles non-zero-sum naturally</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Non-zero-sum_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Non-zero-sum game</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Battle_of_the_sexes_(game_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Battle of the Sexes</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Coordination_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Coordination game</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The Battle of the Sexes example is from Nordstrom's textbook. The shift from zero-sum to non-zero-sum is not just a change in payoff numbers. It's a change in the strategic structure: communication, cooperation, and multiple equilibria all become relevant. This is why Chapters 2-3 (zero-sum) needed different tools from Chapter 4 onward.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://nordstrommath.com/IntroGameTheory/Intrononzero.html">Read Section 4.1</a> in Nordstrom's textbook.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-10/", label: "Mixed: Expected Value" }} next={{ href: "/reading/game-theory/nordstrom-12/", label: "Prisoner's Dilemma" }} />
+
+  </main>
+</Layout>

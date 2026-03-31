@@ -1,0 +1,188 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.1 — Finite Automata" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Finite Automata</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 1 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>deterministic finite automaton</strong> (DFA) is a 5-tuple (Q, &Sigma;, &delta;, q<sub>0</sub>, F): finite states, an alphabet, a transition function, a start state, and accepting states. It reads a string one symbol at a time and either accepts or rejects. That is the simplest model of computation.</p>
+    </div>
+
+    <!-- 1. The five components -->
+    <h3>The five components</h3>
+    <p>A DFA is defined by:</p>
+    <ul>
+      <li><strong>Q</strong> &mdash; a finite set of states</li>
+      <li><strong>&Sigma;</strong> &mdash; a finite alphabet of input symbols</li>
+      <li><strong>&delta;</strong> &mdash; a transition function Q &times; &Sigma; &rarr; Q</li>
+      <li><strong>q<sub>0</sub></strong> &mdash; the start state (q<sub>0</sub> &isin; Q)</li>
+      <li><strong>F</strong> &mdash; a set of accepting states (F &sube; Q)</li>
+    </ul>
+
+    <!-- SVG: DFA for strings ending in "01" -->
+    <h3>Example: strings ending in "01"</h3>
+    <p>Over the alphabet &#123;0, 1&#125;, this DFA accepts exactly the strings that end with "01".</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- State q0 -->
+        <circle cx="70" cy="80" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="70" y="85" text-anchor="middle" fill="#60a5fa" font-size="13">q0</text>
+        <!-- Start arrow -->
+        <line x1="15" y1="80" x2="45" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="46,80 38,75 38,85" fill="currentColor" fill-opacity="0.5"/>
+        <!-- State q1 -->
+        <circle cx="210" cy="80" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="210" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">q1</text>
+        <!-- State q2 (accepting) -->
+        <circle cx="350" cy="80" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="350" cy="80" r="18" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="350" y="85" text-anchor="middle" fill="#34d399" font-size="13">q2</text>
+        <!-- q0 --0--> q1 -->
+        <line x1="94" y1="80" x2="185" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="186,80 178,75 178,85" fill="currentColor" fill-opacity="0.5"/>
+        <text x="140" y="72" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">0</text>
+        <!-- q1 --1--> q2 -->
+        <line x1="234" y1="80" x2="325" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="326,80 318,75 318,85" fill="currentColor" fill-opacity="0.5"/>
+        <text x="280" y="72" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">1</text>
+        <!-- q0 self-loop: 1 -->
+        <path d="M 58 62 C 40 25 100 25 82 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="82,60 86,68 78,66" fill="currentColor" fill-opacity="0.4"/>
+        <text x="70" y="30" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">1</text>
+        <!-- q1 self-loop: 0 -->
+        <path d="M 198 62 C 180 25 240 25 222 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="222,60 226,68 218,66" fill="currentColor" fill-opacity="0.4"/>
+        <text x="210" y="30" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">0</text>
+        <!-- q2 --0--> q1 (curved below) -->
+        <path d="M 330 98 Q 280 145 232 98" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="232,100 228,92 236,92" fill="currentColor" fill-opacity="0.4"/>
+        <text x="280" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">0</text>
+        <!-- q2 --1--> q0 (curved below) -->
+        <path d="M 340 104 Q 210 180 80 104" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="80,104 78,96 86,96" fill="currentColor" fill-opacity="0.4"/>
+        <text x="210" y="155" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">1</text>
+      </svg>
+    </div>
+
+    <!-- DFA simulator -->
+    <h3>Simulating a DFA</h3>
+
+    <SchemeRepl client:load initialCode={`; DFA for strings ending in "01"
+; States: q0 (start), q1 (saw 0), q2 (accept: saw 01)
+
+(define (dfa-step state symbol)
+  (cond
+    ((and (= state 0) (equal? symbol "0")) 1)
+    ((and (= state 0) (equal? symbol "1")) 0)
+    ((and (= state 1) (equal? symbol "0")) 1)
+    ((and (= state 1) (equal? symbol "1")) 2)
+    ((and (= state 2) (equal? symbol "0")) 1)
+    ((and (= state 2) (equal? symbol "1")) 0)
+    (else state)))
+
+(define (run-dfa input)
+  (define (step state i)
+    (if (= i (string-length input))
+        state
+        (step (dfa-step state (substring input i (+ i 1)))
+              (+ i 1))))
+  (let ((final (step 0 0)))
+    (= final 2)))
+
+(display "101:  ") (display (run-dfa "101")) (newline)
+(display "1001: ") (display (run-dfa "1001")) (newline)
+(display "11:   ") (display (run-dfa "11")) (newline)
+(display "01:   ") (display (run-dfa "01")) (newline)
+(display "0101: ") (display (run-dfa "0101"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# DFA for strings ending in "01"
+def run_dfa(input_str):
+    # transition[state][symbol] -> next state
+    transition = {
+        0: {'0': 1, '1': 0},
+        1: {'0': 1, '1': 2},
+        2: {'0': 1, '1': 0},
+    }
+    state = 0
+    for ch in input_str:
+        state = transition[state][ch]
+    return state == 2  # q2 is accepting
+
+for s in ["101", "1001", "11", "01", "0101"]:
+    print(s + ": " + str(run_dfa(s)))
+`} />
+    </div>
+
+
+    <!-- Language recognition -->
+    <h3>Language recognition</h3>
+    <p>The <strong>language</strong> of a DFA is the set of all strings it accepts. We write L(M) for the language recognized by machine M. A language is <strong>regular</strong> if some DFA recognizes it. Not all languages are regular: we will prove limits in Chapter 3.</p>
+
+    <SchemeRepl client:load initialCode={`; A DFA that accepts strings with an even number of 1s.
+; Two states: even (start, accept) and odd.
+
+(define (even-ones input)
+  (define (step state i)
+    (if (= i (string-length input))
+        state
+        (let ((ch (substring input i (+ i 1))))
+          (if (equal? ch "1")
+              (step (- 1 state) (+ i 1))   ; toggle
+              (step state (+ i 1))))))      ; stay
+  (= (step 0 0) 0))  ; 0 = even (accepting)
+
+(display "110:  ") (display (even-ones "110")) (newline)
+(display "111:  ") (display (even-ones "111")) (newline)
+(display "0000: ") (display (even-ones "0000")) (newline)
+(display "1:    ") (display (even-ones "1")) (newline)
+(display "empty: ") (display (even-ones ""))
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Q</td><td class="font-sans">Finite set of states</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&Sigma;</td><td class="font-sans">Input alphabet</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&delta;(q, a)</td><td class="font-sans">Transition function: state q reading symbol a</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">q<sub>0</sub></td><td class="font-sans">Start state</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F</td><td class="font-sans">Set of accepting (final) states</td></tr>
+          <tr><td class="py-2 pr-4">L(M)</td><td class="font-sans">Language recognized by machine M</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/dm-04/">🔢 Discrete Math Ch.4</a> — graphs (automata are labeled directed graphs)</li>
+      <li><a href="/reading/discrete-math/levin-03/">🔢 Discrete Math Ch.3</a> — propositional logic: automata can be expressed as logical formulas</li>
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> — groups and monoids: FSAs are exactly the monoid recognizers</li>
+      <li><a href="/reading/programming/sicp-11/">🪄 SICP Ch.11</a> — state machines in code: stream processors as explicit automata</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/theory-of-computation/toc-02/", label: "Nondeterminism" }} />
+
+  </main>
+</Layout>

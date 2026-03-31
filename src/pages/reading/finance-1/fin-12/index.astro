@@ -1,0 +1,278 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.12 — Risk Management" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Risk Management</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Risk management does not eliminate risk &mdash; it transforms risk you cannot bear into risk you can. The core tools are <strong>hedging</strong>, <strong>diversification</strong>, and <strong>insurance</strong>. Value at Risk (VaR) measures how bad things could get.</p>
+    </div>
+
+    <!-- SVG: Risk types diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Central node -->
+        <circle cx="180" cy="100" r="30" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="97" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.8">Financial</text>
+        <text x="180" y="109" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.8">Risk</text>
+        <!-- Market risk -->
+        <circle cx="80" cy="45" r="25" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="43" text-anchor="middle" fill="#10b981" font-size="9" fill-opacity="0.7">Market</text>
+        <text x="80" y="53" text-anchor="middle" fill="#10b981" font-size="9" fill-opacity="0.7">Risk</text>
+        <line x1="105" y1="55" x2="155" y2="82" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <!-- Credit risk -->
+        <circle cx="280" cy="45" r="25" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="280" y="43" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">Credit</text>
+        <text x="280" y="53" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">Risk</text>
+        <line x1="255" y1="55" x2="205" y2="82" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <!-- Operational risk -->
+        <circle cx="130" cy="170" r="25" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="130" y="168" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">Operational</text>
+        <text x="130" y="178" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">Risk</text>
+        <line x1="147" y1="150" x2="167" y2="125" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+        <!-- Liquidity risk -->
+        <circle cx="240" cy="170" r="25" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="240" y="168" text-anchor="middle" fill="#a78bfa" font-size="9" fill-opacity="0.7">Liquidity</text>
+        <text x="240" y="178" text-anchor="middle" fill="#a78bfa" font-size="9" fill-opacity="0.7">Risk</text>
+        <line x1="222" y1="152" x2="197" y2="125" stroke="currentColor" stroke-width="1" stroke-opacity="0.2"/>
+      </svg>
+    </div>
+
+    <!-- 1. Types of Financial Risk -->
+    <h3>Types of financial risk</h3>
+    <p><strong>Market risk</strong> comes from price movements: equities, interest rates, currencies, commodities. <strong>Credit risk</strong> is the chance a counterparty defaults. <strong>Operational risk</strong> covers everything else: system failures, fraud, legal liability. Each type requires different measurement and different tools.</p>
+
+    <SchemeRepl client:load initialCode={`; Quantifying different risk types with simple models
+
+; Market risk: portfolio loss from a 2-sigma equity move
+(define portfolio-value 1000000)
+(define daily-vol 0.015)  ; 1.5% daily volatility
+(define two-sigma-loss (* portfolio-value (* 2 daily-vol)))
+(display "2-sigma daily market loss: $")
+(display (round two-sigma-loss)) (newline)
+
+; Credit risk: expected loss = PD × LGD × EAD
+(define prob-default 0.02)       ; 2% probability of default
+(define loss-given-default 0.60) ; recover 40%, lose 60%
+(define exposure 500000)
+(define expected-credit-loss (* prob-default loss-given-default exposure))
+(display "Expected credit loss: $")
+(display (round expected-credit-loss)) (newline)
+
+; Operational risk: frequency × severity
+(define events-per-year 3)
+(define avg-loss-per-event 25000)
+(define expected-op-loss (* events-per-year avg-loss-per-event))
+(display "Expected operational loss: $")
+(display expected-op-loss) (newline)
+
+(display "Total expected annual loss: $")
+(display (round (+ (* two-sigma-loss 252) expected-credit-loss expected-op-loss)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Quantifying risk types
+
+# Market risk: 2-sigma daily loss
+portfolio = 1_000_000
+daily_vol = 0.015
+two_sigma_loss = portfolio * 2 * daily_vol
+print(f"2-sigma daily market loss: \${two_sigma_loss:,.0f}")
+
+# Credit risk: EL = PD × LGD × EAD
+pd, lgd, ead = 0.02, 0.60, 500_000
+ecl = pd * lgd * ead
+print(f"Expected credit loss: \${ecl:,.0f}")
+
+# Operational risk
+op_loss = 3 * 25_000
+print(f"Expected operational loss: \${op_loss:,.0f}")
+
+print(f"Total expected annual loss: \${two_sigma_loss * 252 + ecl + op_loss:,.0f}")
+`} />
+    </div>
+
+
+    <!-- 2. Hedging Strategies -->
+    <h3>Hedging strategies</h3>
+    <p>A <strong>hedge</strong> takes an offsetting position to reduce exposure. A wheat farmer sells futures to lock in today's price. An airline buys fuel futures to lock in costs. A perfect hedge eliminates risk but also eliminates upside. Most hedges are partial: reduce variance without zeroing it out.</p>
+
+    <SchemeRepl client:load initialCode={`; Hedging with futures: lock in a price
+
+(define (hedged-outcome spot-price futures-price quantity)
+  ; Farmer sells futures at futures-price
+  ; At delivery: sells at spot, settles futures difference
+  (let ((spot-revenue (* spot-price quantity))
+        (futures-gain (* (- futures-price spot-price) quantity)))
+    (+ spot-revenue futures-gain)))
+
+(define futures-price 5.00)  ; locked in at $5/bushel
+(define quantity 10000)      ; 10,000 bushels
+
+(display "Futures lock-in price: $") (display futures-price) (newline)
+(display "---") (newline)
+
+; Scenario 1: price drops to $4
+(display "Spot = $4.00: revenue = $")
+(display (hedged-outcome 4.00 futures-price quantity)) (newline)
+
+; Scenario 2: price stays at $5
+(display "Spot = $5.00: revenue = $")
+(display (hedged-outcome 5.00 futures-price quantity)) (newline)
+
+; Scenario 3: price rises to $6 — farmer misses upside
+(display "Spot = $6.00: revenue = $")
+(display (hedged-outcome 6.00 futures-price quantity)) (newline)
+
+; All outcomes = $50,000 regardless of spot price
+(display "Perfect hedge: all outcomes equal $")
+(display (* futures-price quantity))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Hedging with futures
+
+def hedged_outcome(spot, futures_price, quantity):
+    spot_revenue = spot * quantity
+    futures_gain = (futures_price - spot) * quantity
+    return spot_revenue + futures_gain
+
+futures_price = 5.00
+quantity = 10_000
+
+for spot in [4.00, 5.00, 6.00]:
+    rev = hedged_outcome(spot, futures_price, quantity)
+    print(f"Spot = \${spot:.2f}: revenue = \${rev:,.0f}")
+
+print(f"Perfect hedge: all outcomes = \${futures_price * quantity:,.0f}")
+`} />
+    </div>
+
+
+    <!-- 3. Value at Risk -->
+    <h3>Value at Risk (VaR)</h3>
+    <p><strong>Value at Risk</strong> answers one question: what is the maximum loss over a given period at a given confidence level? A 1-day 95% VaR of $50,000 means there is a 5% chance of losing more than $50,000 in one day. VaR is easy to communicate but dangerous to trust: it says nothing about how bad losses get beyond the threshold. A detailed treatment of VaR models belongs in Finance II.</p>
+
+    <SchemeRepl client:load initialCode={`; Parametric VaR (variance-covariance method)
+; Assumes returns are normally distributed
+
+; VaR = portfolio_value × z_score × volatility × sqrt(time)
+
+(define (var-parametric value vol confidence-z days)
+  (* value confidence-z vol (sqrt days)))
+
+(define portfolio 1000000)
+(define annual-vol 0.20)
+(define daily-vol (/ annual-vol (sqrt 252)))
+
+; 1-day 95% VaR (z = 1.645)
+(display "1-day 95% VaR: $")
+(display (round (var-parametric portfolio daily-vol 1.645 1))) (newline)
+
+; 1-day 99% VaR (z = 2.326)
+(display "1-day 99% VaR: $")
+(display (round (var-parametric portfolio daily-vol 2.326 1))) (newline)
+
+; 10-day 95% VaR (used by regulators)
+(display "10-day 95% VaR: $")
+(display (round (var-parametric portfolio daily-vol 1.645 10))) (newline)
+
+; VaR limitation: says nothing about tail losses
+(display "VaR caveat: 5% of the time, losses EXCEED this number")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Parametric VaR
+
+def var_parametric(value, vol, z, days):
+    return value * z * vol * math.sqrt(days)
+
+portfolio = 1_000_000
+annual_vol = 0.20
+daily_vol = annual_vol / math.sqrt(252)
+
+print(f"1-day 95% VaR: \${var_parametric(portfolio, daily_vol, 1.645, 1):,.0f}")
+print(f"1-day 99% VaR: \${var_parametric(portfolio, daily_vol, 2.326, 1):,.0f}")
+print(f"10-day 95% VaR: \${var_parametric(portfolio, daily_vol, 1.645, 10):,.0f}")
+print("VaR caveat: 5% of the time, losses EXCEED this number")
+`} />
+    </div>
+
+
+    <!-- 4. Insurance and Diversification -->
+    <h3>Insurance and diversification as risk tools</h3>
+    <p><strong>Diversification</strong> is free risk reduction: holding uncorrelated assets shrinks portfolio variance without sacrificing expected return. <strong>Insurance</strong> transfers catastrophic risk to someone who can pool it across many policyholders. Both reduce the impact of any single bad outcome, but through different mechanisms &mdash; diversification averages across assets, insurance averages across people.</p>
+
+    <SchemeRepl client:load initialCode={`; Diversification: portfolio volatility drops with more assets
+
+(define (portfolio-vol single-vol n correlation)
+  ; For n equal-weight assets with uniform pairwise correlation
+  ; sigma_p = sigma * sqrt((1/n) + ((n-1)/n) * rho)
+  (* single-vol
+     (sqrt (+ (/ 1 n)
+              (* (/ (- n 1) n) correlation)))))
+
+(define stock-vol 0.30)  ; 30% annual vol per stock
+
+(display "Portfolio volatility (rho=0.3):") (newline)
+(display "  1 stock:   ") (display (round (* 100 (portfolio-vol stock-vol 1 0.3)))) (display "%") (newline)
+(display "  5 stocks:  ") (display (round (* 100 (portfolio-vol stock-vol 5 0.3)))) (display "%") (newline)
+(display "  10 stocks: ") (display (round (* 100 (portfolio-vol stock-vol 10 0.3)))) (display "%") (newline)
+(display "  30 stocks: ") (display (round (* 100 (portfolio-vol stock-vol 30 0.3)))) (display "%") (newline)
+(display "  100 stocks:") (display (round (* 100 (portfolio-vol stock-vol 100 0.3)))) (display "%") (newline)
+
+; Floor: even with infinite assets, vol → sigma * sqrt(rho)
+(display "Undiversifiable floor: ")
+(display (round (* 100 (* stock-vol (sqrt 0.3))))) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Diversification benefit
+
+def portfolio_vol(stock_vol, n, rho):
+    return stock_vol * math.sqrt(1/n + (n-1)/n * rho)
+
+vol = 0.30
+rho = 0.3
+
+print("Portfolio volatility (rho=0.3):")
+for n in [1, 5, 10, 30, 100]:
+    pv = portfolio_vol(vol, n, rho)
+    print(f"  {n:>3} stocks: {pv:.0%}")
+
+floor = vol * math.sqrt(rho)
+print(f"Undiversifiable floor: {floor:.0%}")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-04/">📈 Finance Ch.4</a> &mdash; risk and return: measuring the risk that risk management manages</li>
+      <li><a href="/reading/finance-1/fin-05/">📈 Finance Ch.5</a> &mdash; portfolio theory: diversification formalized</li>
+      <li><a href="/reading/finance-1/fin-07/">📈 Finance Ch.7</a> &mdash; forwards and futures: the instruments hedging uses</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; distributions and tail probabilities behind VaR</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-11/", label: "Capital Budgeting · 11 of 12" }}
+    />
+
+  </main>
+</Layout>

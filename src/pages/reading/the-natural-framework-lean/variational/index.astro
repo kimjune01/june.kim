@@ -1,0 +1,56 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Variational.lean — Contracts from optimization" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Variational.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Variational.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Derives two contracts as optimality conditions (Consolidate and Filter) and packages one from feasibility constraints (Attend), connecting optimization problems to <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the pipeline's</a> contracts.</p>
+    </div>
+
+    <h3>MinimizesOn / MaximizesOn</h3>
+    <p>Optimality predicates. An element minimizes a cost function over a feasible set if it is feasible and no feasible element has lower cost. MaximizesOn is the dual for scores.</p>
+
+    <h3>ConsolidateOptimality</h3>
+    <p>The consolidation optimization problem. The kernel <code>update</code> maps (policy, ranked) to a new policy. The key hypothesis is <code>self_feasible</code>: the current policy is always an admissible candidate. This is discrete rate-distortion &mdash; any optimal output costs no more than the incumbent.</p>
+
+    <h3>ConsolidateOptimality.optimal_implies_lossy</h3>
+    <p>An optimal consolidation kernel is lossy: output information never exceeds input information. The output minimizes info over the feasible set, and the incumbent policy is feasible, so <code>info(p') &le; info(p)</code>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">ConsolidateOptimality.optimal_implies_lossy</span>
+    &#123;M : Type &rarr; Type&#125; [Monad M] [Support M]
+    &#123;policy ranked : Type&#125;
+    (P : ConsolidateOptimality M policy ranked) :
+    &forall; p r p', Support.support (P.update p r) p' &rarr;
+      P.info.measure p' &le; P.info.measure p</code></pre>
+
+    <h3>FilterOptimality</h3>
+    <p>The filter optimization problem. Two hypotheses do the real work: <code>outputs_optimal</code> (the kernel picks the smallest feasible output) and <code>strict_witness</code> (for every input, a feasible output strictly smaller exists). Minimality plus witness gives the strict reduction contract.</p>
+
+    <h3>FilterOptimality.optimal_implies_strictly_smaller</h3>
+    <p>An optimal filter kernel is strictly reducing. Chain: minimality gives <code>sizeOf(b) &le; sizeOf(c)</code> for any feasible c. The strict witness gives a feasible c with <code>sizeOf(c) &lt; sizeOf(a)</code>. Therefore <code>sizeOf(b) &lt; sizeOf(a)</code>.</p>
+
+    <h3>AttendFeasibility</h3>
+    <p>Attend's contract comes from feasibility constraints, not optimization. The proof never uses maximality &mdash; both boundedness and diversity are the feasibility constraint projected back out. The file is honest about this: a genuine variational derivation of diversity would require cardinality arguments not present in the possibilistic formalization.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; the contract structures (FilterContract, ConsolidateContract, AttendContract) that these constructors build</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; imported; the contracts plug into existing handshake and coupling machinery</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-05/">📡 Shannon Ch5 KL Divergence</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-divergence/", label: "Hoare/Divergence.lean · 22 of 25" }} next={{ href: "/reading/the-natural-framework-lean/corollary/", label: "Corollary.lean · 24 of 25" }} />
+  </main>
+</Layout>

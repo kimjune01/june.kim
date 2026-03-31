@@ -1,0 +1,246 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.4 — Neural Networks" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Neural Networks</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A neural network is a function built from layers of simple units. Each unit computes a weighted sum of its inputs, adds a bias, and passes the result through a nonlinear <strong>activation function</strong>. Stacking layers lets the network learn hierarchical representations. <strong>Backpropagation</strong> adjusts the weights by propagating error gradients backward through the layers. With enough hidden units, a single hidden layer can approximate any continuous function.</p>
+    </div>
+
+    <!-- Perceptron -->
+    <h3>The perceptron</h3>
+    <p>The simplest neural network: one unit, n inputs, n weights, one bias. Output = activation(w1*x1 + w2*x2 + ... + bias). A single perceptron can learn any linearly separable function (AND, OR) but not XOR. This limitation motivated multilayer networks.</p>
+
+    <!-- SVG: simple 3-layer network -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Input layer -->
+        <circle cx="60" cy="40" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="44" text-anchor="middle" fill="#60a5fa" font-size="10">x1</text>
+        <circle cx="60" cy="100" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="104" text-anchor="middle" fill="#60a5fa" font-size="10">x2</text>
+        <circle cx="60" cy="160" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="164" text-anchor="middle" fill="#60a5fa" font-size="10">x3</text>
+        <!-- Hidden layer -->
+        <circle cx="180" cy="50" r="14" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="54" text-anchor="middle" fill="#f59e0b" font-size="10">h1</text>
+        <circle cx="180" cy="100" r="14" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="104" text-anchor="middle" fill="#f59e0b" font-size="10">h2</text>
+        <circle cx="180" cy="150" r="14" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="154" text-anchor="middle" fill="#f59e0b" font-size="10">h3</text>
+        <!-- Output layer -->
+        <circle cx="300" cy="100" r="14" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="300" y="104" text-anchor="middle" fill="#34d399" font-size="10">y</text>
+        <!-- Connections: input to hidden -->
+        <line x1="74" y1="40" x2="166" y2="50" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="40" x2="166" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="40" x2="166" y2="150" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="100" x2="166" y2="50" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="100" x2="166" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="100" x2="166" y2="150" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="160" x2="166" y2="50" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="160" x2="166" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="74" y1="160" x2="166" y2="150" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <!-- Connections: hidden to output -->
+        <line x1="194" y1="50" x2="286" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="194" y1="100" x2="286" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <line x1="194" y1="150" x2="286" y2="100" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25"/>
+        <!-- Layer labels -->
+        <text x="60" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">input</text>
+        <text x="180" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">hidden</text>
+        <text x="300" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">output</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A perceptron: weighted sum + step activation
+; Learning AND gate
+
+(define (step x) (if (>= x 0) 1 0))
+
+(define (perceptron inputs weights bias)
+  (step (+ bias (apply + (map * inputs weights)))))
+
+; AND gate: w1=1, w2=1, bias=-1.5
+(define w '(1 1))
+(define b -1.5)
+
+(display "AND(0,0) = ") (display (perceptron '(0 0) w b)) (newline)
+(display "AND(0,1) = ") (display (perceptron '(0 1) w b)) (newline)
+(display "AND(1,0) = ") (display (perceptron '(1 0) w b)) (newline)
+(display "AND(1,1) = ") (display (perceptron '(1 1) w b)) (newline)
+
+; OR gate: w1=1, w2=1, bias=-0.5
+(define b-or -0.5)
+(newline)
+(display "OR(0,0) = ") (display (perceptron '(0 0) w b-or)) (newline)
+(display "OR(0,1) = ") (display (perceptron '(0 1) w b-or)) (newline)
+(display "OR(1,0) = ") (display (perceptron '(1 0) w b-or)) (newline)
+(display "OR(1,1) = ") (display (perceptron '(1 1) w b-or))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Perceptron in Python
+def perceptron(inputs, weights, bias):
+    return 1 if sum(x*w for x,w in zip(inputs, weights)) + bias >= 0 else 0
+
+w = [1, 1]
+print("AND gate:")
+for x in [(0,0),(0,1),(1,0),(1,1)]:
+    print(f"  AND{x} = {perceptron(x, w, -1.5)}")
+print("OR gate:")
+for x in [(0,0),(0,1),(1,0),(1,1)]:
+    print(f"  OR{x} = {perceptron(x, w, -0.5)}")
+`} />
+    </div>
+
+
+    <!-- Backpropagation -->
+    <h3>Backpropagation</h3>
+    <p>Backpropagation computes the gradient of the loss with respect to each weight by applying the chain rule layer by layer, from output back to input. Each weight is then nudged in the direction that reduces the loss. The learning rate controls the step size. This is gradient descent applied to a compositional function. The same backward-pass structure appears in cognitive architectures as <a href="https://june.kim/consolidation"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>consolidation</a>: a process that reads from experience and writes parameter changes back to the substrate.</p>
+
+    <SchemeRepl client:load initialCode={`; Backpropagation on a tiny network: 1 input, 1 hidden, 1 output
+; Sigmoid activation, MSE loss
+; Task: learn f(x) = 2x for x in [0, 1]
+
+(define (sigmoid x) (/ 1.0 (+ 1.0 (exp (- x)))))
+(define (sigmoid-deriv s) (* s (- 1 s)))
+
+; Initialize weights
+(define w1 0.5)   ; input -> hidden
+(define b1 0.0)
+(define w2 0.5)   ; hidden -> output
+(define b2 0.0)
+(define lr 1.0)   ; learning rate
+
+; One training step
+(define (train-step x target w1 b1 w2 b2)
+  ; Forward pass
+  (let* ((z1 (+ (* w1 x) b1))
+         (h (sigmoid z1))
+         (z2 (+ (* w2 h) b2))
+         (y-hat (sigmoid z2))
+         ; Backward pass
+         (d-loss (* 2 (- y-hat target)))         ; dL/dy-hat
+         (d-z2 (* d-loss (sigmoid-deriv y-hat)))  ; dL/dz2
+         (d-w2 (* d-z2 h))
+         (d-b2 d-z2)
+         (d-h (* d-z2 w2))
+         (d-z1 (* d-h (sigmoid-deriv h)))
+         (d-w1 (* d-z1 x))
+         (d-b1 d-z1))
+    ; Update weights
+    (list (- w1 (* lr d-w1))
+          (- b1 (* lr d-b1))
+          (- w2 (* lr d-w2))
+          (- b2 (* lr d-b2))
+          y-hat)))
+
+; Train for a few steps on x=0.5, target=1.0 (i.e., 2*0.5)
+(define (train-loop x target w1 b1 w2 b2 steps)
+  (if (= steps 0)
+      (begin
+        (display "Final prediction: ") (display (list-ref (train-step x target w1 b1 w2 b2) 4)))
+      (let ((result (train-step x target w1 b1 w2 b2)))
+        (if (= (modulo steps 50) 0)
+            (begin (display "Step ") (display steps) (display ": y-hat = ")
+                   (display (list-ref result 4)) (newline))
+            #f)
+        (train-loop x target
+                    (list-ref result 0) (list-ref result 1)
+                    (list-ref result 2) (list-ref result 3)
+                    (- steps 1)))))
+
+(train-loop 0.5 1.0 w1 b1 w2 b2 200)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Backpropagation: 1 input -> 1 hidden -> 1 output
+import math
+
+def sigmoid(x):
+    return 1.0 / (1.0 + math.exp(-x))
+
+w1, b1, w2, b2 = 0.5, 0.0, 0.5, 0.0
+lr = 1.0
+x, target = 0.5, 1.0
+
+for step in range(200):
+    # Forward
+    h = sigmoid(w1 * x + b1)
+    y_hat = sigmoid(w2 * h + b2)
+    # Backward
+    d_loss = 2 * (y_hat - target)
+    d_z2 = d_loss * y_hat * (1 - y_hat)
+    d_z1 = d_z2 * w2 * h * (1 - h)
+    w2 -= lr * d_z2 * h
+    b2 -= lr * d_z2
+    w1 -= lr * d_z1 * x
+    b1 -= lr * d_z1
+    if (step + 1) % 50 == 0:
+        print("Step " + str(step+1) + ": y_hat = " + "{:.6f}".format(y_hat))
+
+print("Final prediction: " + "{:.6f}".format(sigmoid(w2 * sigmoid(w1 * x + b1) + b2)))
+`} />
+    </div>
+
+
+    <!-- Universal approximation -->
+    <h3>Universal approximation</h3>
+    <p>A feedforward network with a single hidden layer and enough units can approximate any continuous function on a compact domain to arbitrary precision. This is the <strong>universal approximation theorem</strong>. It guarantees expressiveness but says nothing about learnability: finding the right weights is a separate problem, and that is where depth, architecture, and training dynamics matter.</p>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Symbol</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">w, b</td><td>Weights and biases</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">sigma(z)</td><td>Activation function (e.g., sigmoid, ReLU)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">dL/dw</td><td>Gradient of loss with respect to weight</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">lr</td><td>Learning rate (step size for gradient descent)</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">UAT</td><td>Universal approximation theorem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-05/">Lovelace Ch.5</a> — reinforcement learning uses neural networks as function approximators</li>
+      <li><a href="/reading/cognitive-science/lovelace-08/">Lovelace Ch.8</a> — cognitive architectures that integrate neural-network-style learning</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — backpropagation as lens composition: the categorical structure of gradient descent</li>
+      <li><a href="/reading/calculus/calc-05/">∫ Calculus Ch.5 Chain Rule</a> — the chain rule that makes backpropagation work</li>
+      <li><a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal approximation theorem</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook covers the history of connectionism, from Rosenblatt's perceptron through the PDP group to modern deep learning. This page focuses on the computational mechanics: what a network computes, how backpropagation trains it, and why universal approximation matters. The textbook also discusses representation learning and distributed representations, which are central to the connectionist program in cognitive science.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter4">Lovelace, Chapter 4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-03/", label: "Bayesian Models of Cognition" }} next={{ href: "/reading/cognitive-science/lovelace-05/", label: "Reinforcement Learning" }} />
+
+  </main>
+</Layout>

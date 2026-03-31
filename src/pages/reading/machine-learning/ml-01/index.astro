@@ -1,0 +1,253 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — What is ML?" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>What is ML?</h1>
+    <p class="text-gray-400 text-sm mb-6">Deisenroth et al., <em>Mathematics for Machine Learning</em> (CC BY 4.0) &middot; <a href="https://mml-book.github.io/">mml-book.github.io</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">ML is <strong>function approximation from data</strong>. Supervised learning fits a function from labeled examples. Unsupervised learning discovers structure without labels. Reinforcement learning learns from reward signals. Every ML algorithm is choosing a function from a hypothesis space that best explains the data it has seen.</p>
+    </div>
+
+    <!-- SVG: taxonomy tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Root -->
+        <rect x="145" y="10" width="110" height="32" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="31" text-anchor="middle" fill="#a78bfa" font-size="12">Machine Learning</text>
+        <!-- Branches -->
+        <line x1="170" y1="42" x2="70" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="200" y1="42" x2="200" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="230" y1="42" x2="330" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Supervised -->
+        <rect x="15" y="80" width="110" height="32" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="70" y="101" text-anchor="middle" fill="#60a5fa" font-size="11">Supervised</text>
+        <text x="70" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">labeled examples</text>
+        <text x="70" y="142" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">(x, y) pairs</text>
+        <!-- Unsupervised -->
+        <rect x="145" y="80" width="110" height="32" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="101" text-anchor="middle" fill="#34d399" font-size="11">Unsupervised</text>
+        <text x="200" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">structure discovery</text>
+        <text x="200" y="142" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">x only</text>
+        <!-- Reinforcement -->
+        <rect x="275" y="80" width="110" height="32" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="330" y="101" text-anchor="middle" fill="#f59e0b" font-size="11">Reinforcement</text>
+        <text x="330" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">reward signals</text>
+        <text x="330" y="142" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">action &rarr; reward</text>
+        <!-- Caption -->
+        <text x="200" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Three paradigms, one goal: approximate the right function.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Train/test split -->
+    <h3>Train/test split</h3>
+    <p>The most basic discipline in ML: never evaluate on the data you trained on. Hold out a portion for testing. The training set teaches; the test set judges.</p>
+
+    <SchemeRepl client:load initialCode={`; Train/test split — hold out data for evaluation
+; We'll use a simple dataset: (input, label) pairs
+
+(define data '((1 3) (2 5) (3 7) (4 9) (5 11)
+               (6 13) (7 15) (8 17) (9 19) (10 21)))
+
+; Split: first 7 for training, last 3 for testing
+(define (take lst n)
+  (if (or (= n 0) (null? lst)) '()
+      (cons (car lst) (take (cdr lst) (- n 1)))))
+
+(define (drop lst n)
+  (if (or (= n 0) (null? lst)) lst
+      (drop (cdr lst) (- n 1))))
+
+(define train (take data 7))
+(define test (drop data 7))
+
+(display "Training set: ") (display train) (newline)
+(display "Test set: ") (display test) (newline)
+(display "Train size: ") (display (length train)) (newline)
+(display "Test size: ") (display (length test))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Train/test split
+data = [(x, 2*x + 1) for x in range(1, 11)]
+
+train = data[:7]
+test = data[7:]
+
+print("Training set:", train)
+print("Test set:", test)
+print("Train size:", len(train))
+print("Test size:", len(test))
+`} />
+    </div>
+
+    <!-- 2. Nearest-neighbor classifier -->
+    <h3>Nearest-neighbor classifier</h3>
+    <p>The simplest possible classifier: given a new point, find the closest training point and copy its label. No parameters to learn. The training data <em>is</em> the model.</p>
+
+    <SchemeRepl client:load initialCode={`; Nearest-neighbor classifier
+; Dataset: (x, y, label) — two classes
+(define data '((1 1 "A") (2 3 "A") (3 2 "A")
+               (6 7 "B") (7 6 "B") (8 8 "B")))
+
+(define (dist p1 p2)
+  (sqrt (+ (expt (- (car p1) (car p2)) 2)
+           (expt (- (cadr p1) (cadr p2)) 2))))
+
+(define (nearest-neighbor query data)
+  (define (closer? a b)
+    (< (dist query a) (dist query b)))
+  (define (find-best best rest)
+    (if (null? rest) best
+        (find-best (if (closer? (car rest) best)
+                       (car rest) best)
+                   (cdr rest))))
+  (find-best (car data) (cdr data)))
+
+(define query '(4 4))
+(define nn (nearest-neighbor query data))
+(display "Query: ") (display query) (newline)
+(display "Nearest: ") (display nn) (newline)
+(display "Predicted class: ") (display (caddr nn))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Nearest-neighbor classifier
+import math
+
+data = [(1,1,"A"), (2,3,"A"), (3,2,"A"),
+        (6,7,"B"), (7,6,"B"), (8,8,"B")]
+
+def dist(p1, p2):
+    return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+
+def nearest_neighbor(query, data):
+    return min(data, key=lambda p: dist(query, p))
+
+query = (4, 4)
+nn = nearest_neighbor(query, data)
+print("Query:", query)
+print("Nearest:", nn)
+print("Predicted class:", nn[2])
+`} />
+    </div>
+
+    <!-- 3. Evaluating accuracy -->
+    <h3>Evaluating accuracy</h3>
+    <p>Accuracy is the fraction of test examples the model gets right. It is the most basic metric &mdash; good enough to start, too coarse for serious work. Function approximation alone is not <a href="https://june.kim/general-intelligence"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>intelligence</a>; that requires closed feedback loops where the system consolidates what it has learned back into its own processing.</p>
+
+    <SchemeRepl client:load initialCode={`; Evaluate accuracy of nearest-neighbor
+(define train '((1 1 "A") (2 3 "A") (3 2 "A")
+                (6 7 "B") (7 6 "B") (8 8 "B")))
+
+(define test '((2 2 "A") (5 5 "B") (7 7 "B") (1 3 "A")))
+
+(define (dist p1 p2)
+  (sqrt (+ (expt (- (car p1) (car p2)) 2)
+           (expt (- (cadr p1) (cadr p2)) 2))))
+
+(define (predict query train)
+  (define (find-best best rest)
+    (if (null? rest) (caddr best)
+        (find-best (if (< (dist query (car rest))
+                          (dist query best))
+                       (car rest) best)
+                   (cdr rest))))
+  (find-best (car train) (cdr train)))
+
+(define (accuracy test train)
+  (define (count-correct remaining correct)
+    (if (null? remaining)
+        (/ correct (length test))
+        (let ((point (car remaining))
+              (true-label (caddr (car remaining))))
+          (count-correct (cdr remaining)
+                         (if (equal? (predict point train)
+                                     true-label)
+                             (+ correct 1) correct)))))
+  (count-correct test 0))
+
+(define acc (accuracy test train))
+(display "Correct: ") (display (* acc (length test)))
+(display " / ") (display (length test)) (newline)
+(display "Accuracy: ") (display (* acc 100)) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Evaluate accuracy
+import math
+
+train = [(1,1,"A"), (2,3,"A"), (3,2,"A"),
+         (6,7,"B"), (7,6,"B"), (8,8,"B")]
+
+test = [(2,2,"A"), (5,5,"B"), (7,7,"B"), (1,3,"A")]
+
+def dist(p1, p2):
+    return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+
+def predict(query, train):
+    return min(train, key=lambda p: dist(query, p))[2]
+
+correct = sum(1 for p in test if predict(p, train) == p[2])
+print("Correct:", correct, "/", len(test))
+print("Accuracy:", correct / len(test) * 100, "%")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f: X &rarr; Y</td><td class="pr-4 text-green-300">(define (f x) ...)</td><td class="pr-4 text-blue-300">def f(x): ...</td><td class="font-sans">Function mapping</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(x&#x1D62;, y&#x1D62;)</td><td class="pr-4 text-green-300">(list xi yi)</td><td class="pr-4 text-blue-300">(xi, yi)</td><td class="font-sans">Labeled example</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x2016;x - y&#x2016;</td><td class="pr-4 text-green-300">(dist x y)</td><td class="pr-4 text-blue-300">dist(x, y)</td><td class="font-sans">Euclidean distance</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">argmin</td><td class="pr-4 text-green-300">(find-best ...)</td><td class="pr-4 text-blue-300">min(..., key=...)</td><td class="font-sans">Index of minimum</td></tr>
+          <tr><td class="py-2 pr-4">accuracy</td><td class="pr-4 text-green-300">(/ correct n)</td><td class="pr-4 text-blue-300">correct / n</td><td class="font-sans">Fraction correct</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Nearest-neighbor is pure functional: no mutation, no learned parameters. The training data is passed as an argument, making the model explicit. Python's <code>min</code> with a <code>key</code> function is the imperative equivalent of the recursive <code>find-best</code>. Both are linear scans &mdash; O(n) per query.</p>
+    <p class="mt-2">Real ML frameworks (scikit-learn, PyTorch) add indexing structures for speed, but the core idea is identical: find the function that best explains the data.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-01/">🪄 SICP Ch.1</a> &mdash; expressions as data: the foundation for representing training examples</li>
+      <li><a href="/reading/probability/grinstead-01/">🎲 Grinstead Ch.1</a> &mdash; sample spaces: the probabilistic framing behind every ML model</li>
+    
+      <li><a href="/reading/statistics/openintro-01/">📊 Statistics Ch.1</a> &mdash; statistics and ML share the same core problem: inferring patterns from data</li>
+      <li><a href="/reading/probability/grinstead-01/">🎰 Probability Ch.1</a> &mdash; the probabilistic framing underlying most ML models</li>
+      <li><a href="/reading/linear-algebra/hefferon-01/">📐 Linear Algebra Ch.1</a> &mdash; the mathematical backbone of most ML algorithms</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Read <a href="https://mml-book.github.io/">Mathematics for Machine Learning</a> Ch. 8 and <a href="https://d2l.ai/">Dive into Deep Learning</a> Ch. 1.
+    </div>
+
+
+    <PrevNext next={{ href: "/reading/machine-learning/ml-02/", label: "Linear Regression · 2 of 12" }} />
+
+  </main>
+</Layout>

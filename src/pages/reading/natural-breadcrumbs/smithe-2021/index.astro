@@ -1,0 +1,293 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Smithe 2021 — Bayesian Lenses and Statistical Games" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Bayesian Lenses and Statistical Games</h1>
+    <p class="text-gray-400 text-sm mb-6">Toby St Clere Smithe · 2021 · <a href="https://arxiv.org/abs/2109.04461"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2109.04461</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, Bayesian inversion). <a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> (compositional games) helps but isn't required.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>Bayesian lens</strong> pairs a forward channel (prediction) with a backward channel (Bayesian update). Composing lenses gives you a system that predicts and then corrects — <a href="https://en.wikipedia.org/wiki/Free_energy_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>active inference</a> falls out as the equilibrium of a statistical game.</p>
+    </div>
+
+    <h3>Lenses: forward and backward</h3>
+    <p>A lens is a pair: a <strong>get</strong> (forward pass, observation) and a <strong>put</strong> (backward pass, update). In the Bayesian setting, get is a likelihood channel and put is the Bayesian inverse — the posterior update given new evidence.</p>
+
+    <!-- SVG: Bayesian lens -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Lens box -->
+        <rect x="130" y="20" width="160" height="110" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="80" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">Bayesian Lens</text>
+
+        <!-- Forward pass: prior --> observation (inference) -->
+        <line x1="15" y1="50" x2="130" y2="50" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="125,46 135,50 125,54" fill="#4ade80"/>
+        <text x="15" y="42" fill="#4ade80" font-size="11" fill-opacity="0.7">prior</text>
+        <text x="155" y="50" fill="#4ade80" font-size="10">predict</text>
+        <line x1="290" y1="50" x2="405" y2="50" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="400,46 410,50 400,54" fill="#4ade80"/>
+        <text x="355" y="42" fill="#4ade80" font-size="11" fill-opacity="0.7">observation</text>
+
+        <!-- Backward pass: observation --> posterior (learning) -->
+        <line x1="405" y1="100" x2="290" y2="100" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="295,96 285,100 295,104" fill="#60a5fa"/>
+        <text x="355" y="118" fill="#60a5fa" font-size="11" fill-opacity="0.7">evidence</text>
+        <text x="155" y="106" fill="#60a5fa" font-size="10">update</text>
+        <line x1="130" y1="100" x2="15" y2="100" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="20,96 10,100 20,104" fill="#60a5fa"/>
+        <text x="15" y="118" fill="#60a5fa" font-size="11" fill-opacity="0.7">posterior</text>
+
+        <!-- Labels for directions -->
+        <text x="70" y="38" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.5">inference &#x2192;</text>
+        <text x="70" y="130" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">&#x2190; learning</text>
+
+        <!-- Caption -->
+        <text x="210" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">forward: predict from beliefs. backward: Bayesian update.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A Bayesian lens: (forward, backward)
+; Forward: prior -> observation distribution
+; Backward: (prior, observation) -> posterior
+
+(define (make-lens forward backward)
+  (list forward backward))
+
+(define (lens-forward L) (car L))
+(define (lens-backward L) (cadr L))
+
+; Example: coin with unknown bias
+; Forward: bias -> coin outcome distribution
+(define (coin-forward bias)
+  (list (cons 'heads bias) (cons 'tails (- 1 bias))))
+
+; Backward: Bayesian update on bias given outcome
+(define (coin-backward prior outcome)
+  ; Simplified: if heads, shift belief toward higher bias
+  (if (eq? outcome 'heads)
+    (min 1.0 (+ prior 0.1))
+    (max 0.0 (- prior 0.1))))
+
+(define coin-lens (make-lens coin-forward coin-backward))
+
+(display "prior: 0.5") (newline)
+(display "observe heads -> posterior: ")
+(display (coin-backward 0.5 'heads)) (newline)
+(display "observe tails -> posterior: ")
+(display (coin-backward 0.5 'tails))
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Bayesian lens: forward prediction + backward update
+def coin_forward(bias):
+    return {"heads": bias, "tails": 1 - bias}
+
+def coin_backward(prior, outcome):
+    # Simplified Bayesian update
+    if outcome == "heads":
+        return min(1.0, prior + 0.1)
+    return max(0.0, prior - 0.1)
+
+print(f"prior: 0.5")
+print(f"observe heads -> posterior: {coin_backward(0.5, 'heads')}")
+print(f"observe tails -> posterior: {coin_backward(0.5, 'tails')}")
+`} />
+    </div>
+
+    <h3>Bayesian inversion as the backward pass</h3>
+    <p>The backward channel is the <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian inverse</a>: given a prior and an observation, compute the posterior. This isn't an arbitrary update — it's the unique channel that makes the joint distribution factor correctly.</p>
+
+    <SchemeRepl client:load initialCode={`; Bayesian inversion: P(A|B) = P(B|A) * P(A) / P(B)
+
+(define (bayes-update prior likelihood evidence)
+  ; prior: alist of (hypothesis . probability)
+  ; likelihood: hypothesis -> (evidence . probability)
+  ; evidence: observed value
+  (let* ((joint (map (lambda (hp)
+    (let ((h (car hp)) (ph (cdr hp)))
+      (let ((pe-given-h (cdr (assoc evidence (likelihood h)))))
+        (cons h (* ph pe-given-h)))))
+    prior))
+    (total (apply + (map cdr joint))))
+    (map (lambda (jp) (cons (car jp) (/ (cdr jp) total))) joint)))
+
+; Two hypotheses: fair coin (0.5) or biased (0.8)
+(define prior '((fair . 0.5) (biased . 0.5)))
+
+(define (likelihood h)
+  (if (eq? h 'fair)
+    '((heads . 0.5) (tails . 0.5))
+    '((heads . 0.8) (tails . 0.2))))
+
+(display "prior: ") (display prior) (newline)
+(display "after heads: ")
+(display (bayes-update prior likelihood 'heads)) (newline)
+(display "after tails: ")
+(display (bayes-update prior likelihood 'tails))
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Bayesian inversion
+def bayes_update(prior, likelihood, evidence):
+    joint = {h: ph * likelihood(h)[evidence] for h, ph in prior.items()}
+    total = sum(joint.values())
+    return {h: p / total for h, p in joint.items()}
+
+prior = {"fair": 0.5, "biased": 0.5}
+def likelihood(h):
+    return {"heads": 0.5, "tails": 0.5} if h == "fair" else {"heads": 0.8, "tails": 0.2}
+
+print(f"prior: {prior}")
+print(f"after heads: {bayes_update(prior, likelihood, 'heads')}")
+print(f"after tails: {bayes_update(prior, likelihood, 'tails')}")
+`} />
+    </div>
+
+    <h3>Composing lenses</h3>
+    <p>Two Bayesian lenses compose: the forward passes chain (predict through both stages), and the backward passes chain in reverse (update flows back). This is the categorical structure of lenses — composition is well-defined and associative.</p>
+
+    <SchemeRepl client:load initialCode={`; Composing lenses: forward chains, backward reverses
+; L1: A -> B, L2: B -> C
+; Composed: A -> C (forward), C -> A (backward)
+
+(define (compose-lens L1 L2)
+  (let ((f1 (car L1)) (b1 (cadr L1))
+        (f2 (car L2)) (b2 (cadr L2)))
+    (list
+      ; Forward: f2(f1(a))
+      (lambda (a) (f2 (f1 a)))
+      ; Backward: b1(a, b2(f1(a), c))
+      (lambda (a c) (b1 a (b2 (f1 a) c))))))
+
+(define L1 (list (lambda (x) (+ x 1))
+                 (lambda (x obs) (- obs 1))))
+(define L2 (list (lambda (x) (* x 2))
+                 (lambda (x obs) (/ obs 2))))
+
+(define L (compose-lens L1 L2))
+(display "forward(3) = ") (display ((car L) 3)) (newline)
+(display "backward(3, 10) = ") (display ((cadr L) 3 10))
+; forward: (3+1)*2 = 8, backward: recovers via inverse
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Composing Bayesian lenses: forward chains, backward reverses
+def compose_lens(L1, L2):
+    f1, b1 = L1
+    f2, b2 = L2
+    forward = lambda a: f2(f1(a))
+    backward = lambda a, c: b1(a, b2(f1(a), c))
+    return (forward, backward)
+
+L1 = (lambda x: x + 1, lambda x, obs: obs - 1)
+L2 = (lambda x: x * 2, lambda x, obs: obs / 2)
+
+L = compose_lens(L1, L2)
+print(f"forward(3) = {L[0](3)}")      # (3+1)*2 = 8
+print(f"backward(3, 10) = {L[1](3, 10)}")  # recovers via inverse
+`} />
+    </div>
+
+    <h3>Free energy as the game's objective</h3>
+    <p>A statistical game has players that minimize <a href="https://en.wikipedia.org/wiki/Variational_Bayesian_methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>variational free energy</a> — the gap between their model's predictions and the actual observations. The equilibrium of the game is active inference: each agent updates its beliefs to minimize surprise.</p>
+
+    <SchemeRepl client:load initialCode={`; Free energy: surprise + complexity
+; F = -log P(observation | model) + KL(posterior || prior)
+; At equilibrium, agents minimize F
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (free-energy obs-prob kl-div)
+  (+ (- (log2 obs-prob)) kl-div))
+
+; Good model: high observation probability, low divergence
+(display "good model: F = ")
+(display (free-energy 0.8 0.1)) (newline)
+
+; Bad model: low observation probability, high divergence
+(display "bad model:  F = ")
+(display (free-energy 0.1 2.0)) (newline)
+
+; Active inference minimizes F by updating beliefs
+(display "Agents update beliefs to reduce free energy.")
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`import math
+
+def free_energy(obs_prob, kl_div):
+    return -math.log2(obs_prob) + kl_div
+
+# Good model: high observation probability, low divergence
+print(f"good model: F = {free_energy(0.8, 0.1):.3f}")
+
+# Bad model: low observation probability, high divergence
+print(f"bad model:  F = {free_energy(0.1, 2.0):.3f}")
+
+print("Agents update beliefs to reduce free energy.")
+`} />
+    </div>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(f, f†)</td><td class="pr-4 text-green-300">(make-lens fwd bwd)</td><td class="font-sans">Bayesian lens (forward, inverse)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f†</td><td class="pr-4 text-green-300">(bayes-update ...)</td><td class="font-sans">Bayesian inverse channel</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F</td><td class="pr-4 text-green-300">(free-energy ...)</td><td class="font-sans">Variational free energy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">L₁ ⊙ L₂</td><td class="pr-4 text-green-300">(compose-lens L1 L2)</td><td class="font-sans">Lens composition</td></tr>
+          <tr><td class="py-2 pr-4">BayesLens(C)</td><td class="pr-4 text-green-300">; category of Bayesian lenses</td><td class="font-sans">Category with Bayesian backward passes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category where these lenses live</li>
+      <li><a href="/reading/natural-breadcrumbs/capucci-2021/">🍞 Capucci 2021</a> — cybernetic lenses (the general framework)</li>
+      <li><a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory (the game structure)</li>
+      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — states/effects duality (related to forward/backward)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayes' theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Free_energy_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free energy principle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Variational_Bayesian_methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Variational free energy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lens_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lens (computer science)</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The Bayesian update examples use finite hypothesis spaces with explicit probability tables. Smithe works with Bayesian inversions in arbitrary Markov categories, where the backward channel is defined via a universal property (the <a href="https://en.wikipedia.org/wiki/Disintegration_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>disintegration</a>). For example: the coin-bias update on this page shifts a point estimate by ±0.1. In the paper, the backward channel is the exact Bayesian posterior computed via disintegration of the joint measure — a construction that works over continuous parameter spaces and requires measure-theoretic conditioning. The predict-then-update structure is identical. The exactness of the inversion is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2109.04461"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for Bayesian lenses, §5 for statistical games and free energy.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The backward pass of a Bayesian lens corresponds to the Natural Framework's Consolidate stage — the policy update that reads from persistent memory. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/leinster-2021/", label: "Leinster 2021 · 14 of 21" }} next={{ href: "/reading/natural-breadcrumbs/parzygnat-2020/", label: "Parzygnat 2020 · 16 of 21" }} />
+  </main>
+</Layout>

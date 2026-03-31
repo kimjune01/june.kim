@@ -1,0 +1,221 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.9 — Price Discrimination" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Price Discrimination</h1>
+    <p class="text-gray-400 text-sm mb-6">Adam Smith · 1776 · <a href="https://en.wikipedia.org/wiki/Price_discrimination"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Price discrimination</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Price discrimination</strong> means charging different prices for the same good based on the buyer's willingness to pay. It comes in three degrees: perfect (unique price per buyer), quantity-based (bulk discounts), and segment-based (student tickets, senior discounts). The seller captures more of the surplus that would otherwise go to consumers.</p>
+    </div>
+
+    <!-- 1. First Degree -->
+    <h3>First degree: perfect price discrimination</h3>
+    <p>The seller charges each buyer their exact maximum willingness to pay. All consumer surplus is captured. In practice this is rare, but personalized pricing algorithms approximate it. Auctions are a close real-world mechanism.</p>
+
+    <SchemeRepl client:load initialCode={`; First degree: charge each buyer their max willingness to pay
+; Buyers have different reservation prices
+
+(define buyers '(50 40 35 25 20 15))
+(define cost 10)
+
+; Uniform pricing at $25
+(define uniform-price 25)
+(define (uniform-profit buyers price cost)
+  (let ((sold (filter (lambda (b) (>= b price)) buyers)))
+    (* (length sold) (- price cost))))
+
+(display "Uniform price $25, profit: $")
+(display (uniform-profit buyers uniform-price cost))
+(newline)
+
+; Perfect discrimination: charge each buyer their reservation price
+(define (perfect-profit buyers cost)
+  (apply + (map (lambda (b) (if (>= b cost) (- b cost) 0)) buyers)))
+
+(display "Perfect discrimination, profit: $")
+(display (perfect-profit buyers cost))
+(newline)
+
+; Consumer surplus under each regime
+(define (consumer-surplus buyers price)
+  (apply + (map (lambda (b) (if (>= b price) (- b price) 0)) buyers)))
+
+(display "Consumer surplus (uniform): $")
+(display (consumer-surplus buyers uniform-price))
+(newline)
+
+(display "Consumer surplus (perfect): $0")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# First degree price discrimination
+buyers = [50, 40, 35, 25, 20, 15]
+cost = 10
+
+# Uniform pricing
+price = 25
+sold = [b for b in buyers if b >= price]
+uniform_profit = len(sold) * (price - cost)
+print("Uniform price $" + str(price) + ", profit: $" + str(uniform_profit))
+
+# Perfect discrimination
+perfect_profit = sum(b - cost for b in buyers if b >= cost)
+print("Perfect discrimination, profit: $" + str(perfect_profit))
+
+# Consumer surplus
+cs_uniform = sum(b - price for b in buyers if b >= price)
+print("Consumer surplus (uniform): $" + str(cs_uniform))
+print("Consumer surplus (perfect): $0")
+`} />
+    </div>
+
+
+    <!-- 2. Second Degree -->
+    <h3>Second degree: quantity discounts</h3>
+    <p>The seller offers different price-quantity packages. Buyers self-select into tiers. Think bulk discounts, software licensing tiers, or phone data plans. The seller doesn't need to know each buyer's type; the menu is designed so each type prefers the package meant for them.</p>
+
+    <SchemeRepl client:load initialCode={`; Second degree: quantity discounts
+; Buyers self-select into tiers
+
+(define (tier-price quantity)
+  (cond
+    ((>= quantity 100) 8)   ; bulk: $8/unit
+    ((>= quantity 10) 10)   ; medium: $10/unit
+    (else 15)))             ; single: $15/unit
+
+(define (total-cost quantity)
+  (* quantity (tier-price quantity)))
+
+(display "1 unit:   $") (display (total-cost 1)) (newline)
+(display "10 units: $") (display (total-cost 10)) (newline)
+(display "50 units: $") (display (total-cost 50)) (newline)
+(display "100 units: $") (display (total-cost 100)) (newline)
+
+; Per-unit price falls with quantity
+(display "Per-unit at 1:   $") (display (tier-price 1)) (newline)
+(display "Per-unit at 50:  $") (display (tier-price 50)) (newline)
+(display "Per-unit at 100: $") (display (tier-price 100))
+`} />
+
+
+    <!-- 3. Third Degree -->
+    <h3>Third degree: market segmentation</h3>
+    <p>The seller divides buyers into identifiable groups and charges each group a different price. Student discounts, senior pricing, geographic pricing, matinee tickets. The requirement: the seller must be able to identify group membership and prevent resale between groups.</p>
+
+    <!-- SVG: Same product, three price levels -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Product -->
+        <rect x="150" y="10" width="100" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+        <text x="200" y="35" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">Same Product</text>
+
+        <!-- Lines to segments -->
+        <line x1="175" y1="50" x2="60" y2="100" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <line x1="200" y1="50" x2="200" y2="100" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <line x1="225" y1="50" x2="340" y2="100" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+
+        <!-- Segment A: Business -->
+        <rect x="10" y="100" width="100" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <text x="60" y="125" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Business</text>
+        <text x="60" y="155" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.9">$800</text>
+        <text x="60" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">low elasticity</text>
+
+        <!-- Segment B: Regular -->
+        <rect x="150" y="100" width="100" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <text x="200" y="125" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Regular</text>
+        <text x="200" y="155" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.9">$350</text>
+        <text x="200" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">medium elasticity</text>
+
+        <!-- Segment C: Student -->
+        <rect x="290" y="100" width="100" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <text x="340" y="125" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Student</text>
+        <text x="340" y="155" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.9">$150</text>
+        <text x="340" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">high elasticity</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Airline pricing: third degree price discrimination
+; Same seat, different prices by segment
+
+(define segments
+  '(("Business"  800  20 0.3)   ; (name price quantity elasticity)
+    ("Regular"   350  80 1.0)
+    ("Student"   150  40 2.5)))
+
+(define cost-per-seat 100)
+
+(define (segment-profit seg)
+  (let ((price (cadr seg))
+        (qty (caddr seg)))
+    (* qty (- price cost-per-seat))))
+
+(define (show-segment seg)
+  (display (car seg))
+  (display ": ")
+  (display (cadr seg))
+  (display " x ")
+  (display (caddr seg))
+  (display " = $")
+  (display (segment-profit seg))
+  (newline))
+
+(for-each show-segment segments)
+
+(define total (apply + (map segment-profit segments)))
+(display "Total profit: $")
+(display total)
+(newline)
+
+; Compare to uniform price of $350
+(define uniform-qty 100)  ; lose some business, gain some students
+(define uniform-profit (* uniform-qty (- 350 cost-per-seat)))
+(display "Uniform at $350 (100 seats): $")
+(display uniform-profit)
+`} />
+
+
+    <!-- Notation -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Degree</th>
+            <th class="py-2 pr-4 text-left">Mechanism</th>
+            <th class="py-2 text-left">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">First (perfect)</td><td class="pr-4">Unique price per buyer</td><td>Auctions, negotiated deals</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Second (quantity)</td><td class="pr-4">Self-selecting menus</td><td>Bulk discounts, software tiers</td></tr>
+          <tr><td class="py-2 pr-4">Third (segment)</td><td class="pr-4">Observable group membership</td><td>Student/senior discounts, airlines</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Price_discrimination"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Price discrimination</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Consumer_surplus"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Consumer surplus</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Price_elasticity_of_demand"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Price elasticity of demand</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-08/", label: "Elasticity" }} next={{ href: "/reading/economics/econ-10/", label: "Externalities" }} />
+
+  </main>
+</Layout>

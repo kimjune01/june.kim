@@ -1,0 +1,52 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Boundary.lean — Why each stage is forced" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Boundary.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Boundary.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Proves that removing any pipeline stage leads to a measurable bad outcome &mdash; each stage is forced by the axioms, not optional. Each proof here is a formal instance of why <a href="https://june.kim/theory-is-load-bearing"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>theory is load-bearing</a>: the stages exist because the math demands them.</p>
+    </div>
+
+    <h3>perceive_forced</h3>
+    <p>The environment has strictly more distinguishable configurations than the system can represent internally. A lossy encoding step (Perceive) is forced to bridge the gap.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">perceive_forced</span> (energy env_dim : Nat)
+    (henv : env_dim &gt; energy)
+    : &forall; N : Nat, N &le; energy &rarr; env_dim &gt; N</code></pre>
+    <p class="text-sm text-gray-500">Derived from capacity_bound. If internal state could be as large as the environment, no lossy encoding would be needed.</p>
+
+    <h3>no_cache_cumulative_loss</h3>
+    <p>Without a buffer, rate mismatch causes cumulative loss. If input arrives faster than drain, at least one item is lost per cycle, and the loss compounds over time.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">no_cache_cumulative_loss</span>
+    (input_rate drain_rate k : Nat)
+    (hmismatch : input_rate &gt; drain_rate)
+    : k * (input_rate - drain_rate) &ge; k</code></pre>
+    <p class="text-sm text-gray-500">Derived from rate_mismatch. If input never exceeds drain rate, no buffer is needed.</p>
+
+    <h3>cache_from_rate_mismatch</h3>
+    <p>Cache existence follows directly from the rate_mismatch axiom: the axiom guarantees a scenario where input outpaces drain, and without a buffer, loss is cumulative.</p>
+
+    <h3>no_filter_fills_store</h3>
+    <p>Without selection, a store of finite capacity fills after enough insertions. Once full, the system halts or drops items implicitly. Explicit selection (Filter) prevents this.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">no_filter_fills_store</span>
+    (capacity items_per_cycle : Nat) (hitems : items_per_cycle &gt; 0)
+    : &exists; t : Nat, t * items_per_cycle &ge; capacity</code></pre>
+
+    <h3>no_persistence_no_memory</h3>
+    <p>Without persistence, a system with fixed state is a pure function of current input. Same input always produces same output regardless of history. This makes the system unable to handle history-dependent tasks.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> &mdash; imported; every boundary proof cites an axiom</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; the full removal table, combining all boundary arguments</li>
+      <li><a href="/reading/the-natural-framework-lean/corollary/">Corollary.lean</a> &mdash; derives the competitive core and control/data separation from these proofs</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/handshake/", label: "Handshake.lean · 6 of 25" }} next={{ href: "/reading/the-natural-framework-lean/uniqueness/", label: "Uniqueness.lean · 8 of 25" }} />
+  </main>
+</Layout>

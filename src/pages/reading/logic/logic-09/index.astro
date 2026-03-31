@@ -1,0 +1,191 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.9 — Mathematical Induction" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Mathematical Induction</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 9 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Mathematical induction</strong> proves a property holds for all natural numbers. Prove the base case (n = 0). Then prove that if it holds for n, it holds for n + 1. The chain of implications covers every number.</p>
+    </div>
+
+    <!-- SVG: Domino chain -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Base case domino (falling) -->
+        <rect x="30" y="30" width="18" height="50" rx="2" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5" transform="rotate(-15, 39, 80)"/>
+        <text x="39" y="95" text-anchor="middle" fill="#60a5fa" font-size="9">base</text>
+        <!-- Domino 1 -->
+        <rect x="80" y="25" width="18" height="50" rx="2" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.4" transform="rotate(-10, 89, 75)"/>
+        <text x="89" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">n=1</text>
+        <!-- Domino 2 -->
+        <rect x="130" y="22" width="18" height="50" rx="2" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.4" transform="rotate(-5, 139, 72)"/>
+        <text x="139" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">n=2</text>
+        <!-- Domino 3 (still standing) -->
+        <rect x="180" y="20" width="18" height="50" rx="2" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="189" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">n=3</text>
+        <!-- Dots -->
+        <text x="230" y="50" fill="currentColor" font-size="14" fill-opacity="0.3">...</text>
+        <!-- Domino k -->
+        <rect x="260" y="20" width="18" height="50" rx="2" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="269" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">n=k</text>
+        <!-- Arrow from base -->
+        <path d="M 50 40 Q 65 15 78 30" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="78,28 82,34 76,34" fill="#f59e0b" fill-opacity="0.5"/>
+        <!-- Caption -->
+        <text x="180" y="115" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Base case topples n=1, which topples n=2, ...</text>
+      </svg>
+    </div>
+
+    <h3>Weak induction</h3>
+    <p>To prove &forall;n P(n): (1) prove P(0) (base case), (2) prove P(k) &rarr; P(k+1) for arbitrary k (inductive step). The assumption P(k) is the <strong>inductive hypothesis</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Prove: sum of 1..n = n*(n+1)/2
+
+; Base case: sum of 1..0 = 0 = 0*1/2
+(display "Base case (n=0): ")
+(display (= 0 (/ (* 0 1) 2))) (newline)
+
+; Inductive step: assume sum(1..k) = k*(k+1)/2
+;                 prove  sum(1..k+1) = (k+1)*(k+2)/2
+; sum(1..k+1) = sum(1..k) + (k+1)
+;             = k*(k+1)/2 + (k+1)     [by IH]
+;             = (k+1)*(k/2 + 1)
+;             = (k+1)*(k+2)/2         QED
+
+; Verify for several values
+(define (sum-formula n) (/ (* n (+ n 1)) 2))
+(define (sum-actual n)
+  (let loop ((i 1) (s 0))
+    (if (> i n) s (loop (+ i 1) (+ s i)))))
+
+(define (check n)
+  (display "n=") (display n)
+  (display ": formula=") (display (sum-formula n))
+  (display " actual=") (display (sum-actual n))
+  (display " match=") (display (= (sum-formula n) (sum-actual n)))
+  (newline))
+
+(check 0) (check 1) (check 5) (check 10) (check 100)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify sum formula by induction-style checking
+def sum_formula(n): return n * (n + 1) // 2
+def sum_actual(n): return sum(range(1, n + 1))
+
+for n in [0, 1, 5, 10, 100]:
+    print(f"n={n}: formula={sum_formula(n)}, actual={sum_actual(n)}, match={sum_formula(n) == sum_actual(n)}")
+`} />
+    </div>
+
+    <h3>Strong induction</h3>
+    <p>In <strong>strong induction</strong>, the inductive hypothesis assumes P(j) for ALL j &le; k, not just P(k). This is equivalent to weak induction but sometimes easier to use. Useful when the inductive step needs cases smaller than k-1.</p>
+
+    <SchemeRepl client:load initialCode={`; Strong induction example: every integer >= 2 has a prime factor
+; Base: 2 is prime, so it has a prime factor (itself).
+; Strong step: assume every j with 2 <= j <= k has a prime factor.
+;   Case 1: k+1 is prime -> done.
+;   Case 2: k+1 = a*b where 2 <= a,b <= k.
+;     By IH, a has a prime factor p. p divides a, a divides k+1,
+;     so p divides k+1.
+
+(define (prime? n)
+  (if (< n 2) #f
+    (let loop ((d 2))
+      (cond ((> (* d d) n) #t)
+            ((= 0 (modulo n d)) #f)
+            (else (loop (+ d 1)))))))
+
+(define (smallest-prime-factor n)
+  (let loop ((d 2))
+    (cond ((> (* d d) n) n)
+          ((= 0 (modulo n d)) d)
+          (else (loop (+ d 1))))))
+
+; Verify for 2..20
+(let loop ((n 2))
+  (if (> n 20) (display "All verified!")
+    (begin
+      (display "n=") (display n)
+      (display " smallest prime factor=")
+      (display (smallest-prime-factor n))
+      (newline)
+      (loop (+ n 1)))))
+`} />
+
+    <h3>Structural induction</h3>
+    <p><strong>Structural induction</strong> generalizes mathematical induction to recursively defined structures (lists, trees, formulas). Base case: the simplest structures. Inductive step: if the property holds for the substructures, it holds for the whole structure.</p>
+
+    <SchemeRepl client:load initialCode={`; Structural induction on lists:
+; Prove: length(append(xs, ys)) = length(xs) + length(ys)
+
+; Base case: xs = empty list
+; length(append((), ys)) = length(ys) = 0 + length(ys). Done.
+
+; Inductive step: assume it holds for xs.
+; append(cons(x, xs), ys) = cons(x, append(xs, ys))
+; length = 1 + length(append(xs, ys))
+;        = 1 + length(xs) + length(ys)    [by IH]
+;        = length(cons(x, xs)) + length(ys). Done.
+
+; Verify:
+(define (my-append xs ys)
+  (if (null? xs) ys
+    (cons (car xs) (my-append (cdr xs) ys))))
+
+(define xs (list 1 2 3))
+(define ys (list 4 5))
+
+(display "length(append(xs,ys)) = ")
+(display (length (my-append xs ys))) (newline)
+(display "length(xs) + length(ys) = ")
+(display (+ (length xs) (length ys))) (newline)
+(display "Equal: ")
+(display (= (length (my-append xs ys))
+            (+ (length xs) (length ys))))
+`} />
+
+    <h3>Well-ordering principle</h3>
+    <p>Every non-empty set of natural numbers has a <strong>least element</strong>. This is equivalent to the principle of mathematical induction. If P fails for some n, it fails for a smallest n, and that contradicts the inductive step.</p>
+
+    <SchemeRepl client:load initialCode={`; Well-ordering: every non-empty set of naturals has a minimum
+; Equivalent to induction
+
+; If we have a set S of naturals where the property FAILS,
+; well-ordering says S has a minimum element m.
+; But induction says: P(0) is true, and P(k)->P(k+1).
+; So P can't fail at m, contradiction. S must be empty.
+
+(define (well-ordered? s)
+  (if (null? s) #t  ; vacuously true
+    (let ((minimum (apply min s)))
+      (display "Minimum of ") (display s)
+      (display " is ") (display minimum) (newline)
+      #t)))
+
+(well-ordered? (list 5 3 8 1 9))
+(well-ordered? (list 100 42 7))
+(display "Every non-empty set of naturals has a least element.")
+`} />
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-02/">🔢 Levin Ch.2</a> &mdash; sequences and induction in discrete math</li>
+      <li><a href="/reading/category-theory/milewski-19/">🐱 Milewski Ch.19</a> &mdash; F-algebras and catamorphisms (structural recursion as a functor)</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/logic/logic-08/", label: "Identity and Functions" }} next={{ href: "/reading/logic/logic-10/", label: "Soundness and Completeness" }} />
+
+  </main>
+</Layout>

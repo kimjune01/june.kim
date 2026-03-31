@@ -1,0 +1,81 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Pigeonhole.lean — No injection from n+1 to n" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Pigeonhole.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Pigeonhole.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Proves the pigeonhole principle from scratch: you cannot injectively map n+1 items into n slots, so at least two must collide.</p>
+    </div>
+
+    <h3>compress</h3>
+    <p>A helper that removes one element from <code>Fin (n+1)</code>, compressing the remaining elements into <code>Fin n</code>. Elements below the removed value keep their index; elements above shift down by 1.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">private def</span> <span class="text-green-300">compress</span> &#123;n : Nat&#125; (v x : Fin (n + 1)) (h : x &ne; v) : Fin n :=
+  <span class="text-blue-300">if</span> hlt : x.val &lt; v.val <span class="text-blue-300">then</span>
+    &langle;x.val, <span class="text-blue-300">by</span> omega&rangle;
+  <span class="text-blue-300">else</span>
+    &langle;x.val - 1, <span class="text-blue-300">by</span> ...&rangle;</code></pre>
+
+    <h3>Fin.no_injection</h3>
+    <p>There is no injective function from <code>Fin (n+1)</code> to <code>Fin n</code>. Proved by induction on n with element removal at each step.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">Fin.no_injection</span> (n : Nat)
+    : &forall; g : Fin (n + 1) &rarr; Fin n, &not; Function.Injective g</code></pre>
+    <p class="text-sm text-gray-500">Base case: <code>Fin 1 &rarr; Fin 0</code> is impossible since <code>Fin 0</code> is empty. Inductive step: given <code>g : Fin (k+2) &rarr; Fin (k+1)</code>, remove the image of the last element from the codomain. The compressed function <code>g' : Fin (k+1) &rarr; Fin k</code> inherits injectivity, contradicting the induction hypothesis.</p>
+
+    <h3>pigeonhole</h3>
+    <p>Among N+1 values in <code>Fin N</code>, at least two must collide. The collision gives specific indices i &lt; j where <code>f i = f j</code>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">pigeonhole</span> &#123;N : Nat&#125; (f : Fin (N + 1) &rarr; Fin N)
+    : &exists; i j : Fin (N + 1), i &lt; j &and; f i = f j</code></pre>
+    <p class="text-sm text-gray-500">Uses <code>Fin.no_injection</code> by contradiction: if no collision existed, f would be injective, which is impossible.</p>
+
+    <Repl client:load initialCode={`# Pigeonhole: N+1 items into N slots => collision
+# This is why bounded transducers must repeat states.
+
+def find_collision(values, num_slots):
+    """Map N+1 values into Fin(N). Return colliding pair."""
+    seen = {}
+    for i, v in enumerate(values):
+        slot = v % num_slots
+        if slot in seen:
+            return (seen[slot], i, slot)
+        seen[slot] = i
+    return None  # impossible if len(values) > num_slots
+
+N = 4
+items = list(range(N + 1))  # 5 items into 4 slots
+i, j, slot = find_collision(items, N)
+print(f"{N+1} items into {N} slots:")
+print(f"  item[{i}]={items[i]} and item[{j}]={items[j]}"
+      f" both map to slot {slot}")
+print(f"  Collision guaranteed — no injection from"
+      f" Fin({N+1}) to Fin({N})")
+`} />
+
+    <h3>pigeonhole_nat</h3>
+    <p>A convenience wrapper for Nat-indexed sequences: among values f(0), ..., f(N), at least two in <code>Fin N</code> must collide.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/stochasticity/">Stochasticity.lean</a> &mdash; uses pigeonhole to get state collisions in bounded transducers</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; A3 and Co1 removal tests assume the collision that pigeonhole provides</li>
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> &mdash; capacity_bound gives the finite state space that pigeonhole needs</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-03/">🎰 Grinstead Ch3 Combinatorics</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/removal/", label: "Removal.lean · 9 of 25" }} next={{ href: "/reading/the-natural-framework-lean/stochasticity/", label: "Stochasticity.lean · 11 of 25" }} />
+  </main>
+</Layout>

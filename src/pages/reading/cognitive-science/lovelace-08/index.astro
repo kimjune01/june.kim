@@ -1,0 +1,271 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.8 — Cognitive Architecture" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Cognitive Architecture</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>cognitive architecture</strong> is a fixed computational infrastructure within which knowledge and skills operate. <strong>ACT-R</strong> and <strong>Soar</strong> are the two most influential architectures. Both use <strong>production rules</strong> (if-then rules that fire on working memory contents) as their central mechanism. The question is not which module does what, but how the modules compose into a unified system that perceives, remembers, decides, and acts. <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a> decomposes this into six functional roles.</p>
+    </div>
+
+    <!-- Production systems -->
+    <h3>Production systems</h3>
+    <p>A production system has three parts: a <strong>working memory</strong> that holds the current situation, a set of <strong>production rules</strong> (condition-action pairs), and a <strong>conflict resolution</strong> mechanism that selects which rule fires when multiple rules match. The cycle repeats: match rules against working memory, select one, fire it, update working memory.</p>
+
+    <!-- SVG: perception/memory/action architecture -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Perception module -->
+        <rect x="20" y="80" width="90" height="55" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="65" y="100" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="bold">Perception</text>
+        <text x="65" y="118" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">visual, aural</text>
+        <!-- Working Memory (central) -->
+        <rect x="140" y="20" width="120" height="55" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="42" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">Working</text>
+        <text x="200" y="58" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">Memory</text>
+        <!-- Production Rules (central) -->
+        <rect x="140" y="90" width="120" height="45" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="110" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">Productions</text>
+        <text x="200" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">if-then rules</text>
+        <!-- Long-term Memory -->
+        <rect x="140" y="150" width="120" height="50" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="172" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Long-term</text>
+        <text x="200" y="188" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Memory</text>
+        <!-- Action module -->
+        <rect x="290" y="80" width="90" height="55" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="335" y="100" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="bold">Action</text>
+        <text x="335" y="118" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">motor, vocal</text>
+        <!-- Arrows -->
+        <line x1="110" y1="100" x2="140" y2="100" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="136,96 144,100 136,104" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="260" y1="100" x2="290" y2="100" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="286,96 294,100 286,104" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="200" y1="75" x2="200" y2="90" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="196,86 204,86 200,94" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="200" y1="135" x2="200" y2="150" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="196,146 204,146 200,154" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Bidirectional arrow between WM and LTM -->
+        <line x1="195" y1="150" x2="195" y2="135" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="191,139 199,139 195,131" fill="currentColor" fill-opacity="0.3"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A minimal production system
+; Working memory is a list of facts.
+; Productions are (condition action) pairs.
+; The cycle: match, select, fire.
+
+(define working-memory '("hungry" "see-food"))
+
+(define productions
+  (list
+    (list (lambda (wm) (and (member "hungry" wm) (member "see-food" wm)))
+          (lambda (wm)
+            (display "FIRE: eat food") (newline)
+            (cons "eating" (filter (lambda (x) (not (equal? x "hungry"))) wm))))
+    (list (lambda (wm) (member "eating" wm))
+          (lambda (wm)
+            (display "FIRE: finished eating") (newline)
+            (cons "satisfied" (filter (lambda (x) (not (equal? x "eating"))) wm))))))
+
+(define (match-rules wm rules)
+  (filter (lambda (r) ((car r) wm)) rules))
+
+(define (run-cycle wm rules steps)
+  (if (= steps 0) (begin (display "WM: ") (display wm))
+      (let ((matched (match-rules wm rules)))
+        (if (null? matched)
+            (begin (display "No rules match. WM: ") (display wm))
+            (let ((new-wm ((cadr (car matched)) wm)))
+              (run-cycle new-wm rules (- steps 1)))))))
+
+(display "Initial WM: ") (display working-memory) (newline)
+(run-cycle working-memory productions 3)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Minimal production system in Python
+wm = {"hungry", "see-food"}
+
+productions = [
+    (lambda wm: "hungry" in wm and "see-food" in wm,
+     lambda wm: (print("FIRE: eat food"), (wm - {"hungry"}) | {"eating"})[1]),
+    (lambda wm: "eating" in wm,
+     lambda wm: (print("FIRE: finished"), (wm - {"eating"}) | {"satisfied"})[1]),
+]
+
+print(f"Initial WM: {wm}")
+for _ in range(3):
+    matched = [p for p in productions if p[0](wm)]
+    if not matched:
+        break
+    wm = matched[0][1](wm)
+print(f"Final WM: {wm}")
+`} />
+    </div>
+
+
+    <!-- ACT-R -->
+    <h3>ACT-R</h3>
+    <p>ACT-R (Adaptive Control of Thought-Rational) models cognition as the interaction of independent modules: a visual module, a declarative memory module, a procedural module (production rules), a goal module, and a motor module. Each module operates in parallel but communicates through buffers. Only one production rule fires per cycle (~50ms). Declarative retrieval is governed by activation: frequently and recently used facts are retrieved faster.</p>
+
+    <SchemeRepl client:load initialCode={`; ACT-R activation: base-level + spreading activation
+; Base-level: B = ln(sum of t_j^(-d)) where t_j are times since use
+; Simplified: more recent and frequent = higher activation
+
+(define decay 0.5)
+
+(define (base-level-activation times-since-use)
+  (log (apply + (map (lambda (t) (expt t (- decay))) times-since-use))))
+
+; Fact "Paris is the capital of France"
+; Used 1 second ago, 10 seconds ago, 100 seconds ago
+(define paris-times '(1 10 100))
+(display "Activation (Paris, recent use): ")
+(display (base-level-activation paris-times)) (newline)
+
+; Fact "Ouagadougou is the capital of Burkina Faso"
+; Used 10000 seconds ago only
+(define ouaga-times '(10000))
+(display "Activation (Ouagadougou, old): ")
+(display (base-level-activation ouaga-times)) (newline)
+
+(display "Higher activation = faster retrieval = lower RT")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# ACT-R base-level activation
+import math
+
+decay = 0.5
+
+def base_level(times_since_use):
+    return math.log(sum(t ** (-decay) for t in times_since_use))
+
+paris = [1, 10, 100]
+ouaga = [10000]
+
+print("Activation (Paris, recent use): " + "{:.4f}".format(base_level(paris)))
+print("Activation (Ouagadougou, old):  " + "{:.4f}".format(base_level(ouaga)))
+print("Higher activation = faster retrieval = lower RT")
+`} />
+    </div>
+
+
+    <!-- Soar -->
+    <h3>Soar</h3>
+    <p>Soar models cognition as search through a problem space. When no production rule applies (an <strong>impasse</strong>), Soar creates a subgoal and searches for a resolution. Once resolved, the result is <strong>chunked</strong> into a new production rule so the impasse never recurs. This is learning by problem-solving: every solved impasse becomes compiled knowledge. But chunking only covers one of Soar's learning mechanisms; a <a href="https://june.kim/diagnosis-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>diagnostic analysis</a> reveals gaps in the architecture's semantic and episodic learning cells, and a <a href="https://june.kim/prescription-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>prescriptive follow-up</a> proposes consolidation mechanisms to fill them.</p>
+
+    <SchemeRepl client:load initialCode={`; Soar-style chunking: solve an impasse, compile the result
+; into a new production rule
+
+(define known-rules '())
+
+(define (lookup goal rules)
+  (let ((match (filter (lambda (r) (equal? (car r) goal)) rules)))
+    (if (null? match) #f (cdar match))))
+
+(define (solve-with-chunking goal)
+  (let ((cached (lookup goal known-rules)))
+    (if cached
+        (begin (display "Retrieved: ") (display goal)
+               (display " -> ") (display cached) (newline)
+               cached)
+        ; Impasse: no rule matches. Solve by subgoaling.
+        (let ((result (cond
+                ((equal? goal "3+4") 7)
+                ((equal? goal "7*2") 14)
+                (else "unknown"))))
+          (display "Impasse on ") (display goal)
+          (display " -> solved: ") (display result) (newline)
+          ; Chunk: add new production rule
+          (set! known-rules (cons (cons goal result) known-rules))
+          (display "Chunked into new rule") (newline)
+          result))))
+
+; First time: impasse and chunk
+(solve-with-chunking "3+4") (newline)
+
+; Second time: retrieved directly (no impasse)
+(solve-with-chunking "3+4")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Soar-style chunking: solve, then cache as a rule
+known_rules = {}
+
+def solve(goal):
+    if goal in known_rules:
+        print("Retrieved: " + goal + " -> " + str(known_rules[goal]))
+        return known_rules[goal]
+    # Impasse: no rule matches. Solve by subgoaling.
+    results = {"3+4": 7, "7*2": 14}
+    result = results.get(goal, "unknown")
+    print("Impasse on " + goal + " -> solved: " + str(result))
+    known_rules[goal] = result
+    print("Chunked into new rule")
+    return result
+
+solve("3+4")
+print()
+solve("3+4")  # second time: retrieved directly
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Term</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Production rule</td><td>IF condition THEN action</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Working memory</td><td>Current state of activated knowledge</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Activation</td><td>Retrieval strength in ACT-R (recency + frequency)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Impasse</td><td>Soar: no production matches; triggers subgoaling</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">Chunking</td><td>Soar: compile solved subgoals into new productions</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/diagnosis-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diagnosis of Soar</a> — where Soar's learning cells are empty</li>
+      <li><a href="https://june.kim/prescription-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prescription for Soar</a> — consolidation mechanisms to fill the gaps</li>
+      <li><a href="https://june.kim/memory"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Memory</a> — memory as a RESTful interface vs consolidation as async scheduler</li>
+      <li><a href="/reading/cognitive-science/lovelace-04/">Lovelace Ch.4</a> — neural networks as an alternative substrate</li>
+      <li><a href="/reading/cognitive-science/lovelace-05/">Lovelace Ch.5</a> — reinforcement learning for action selection</li>
+      <li><a href="https://en.wikipedia.org/wiki/ACT-R"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ACT-R</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Soar</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook covers ACT-R and Soar in detail, including their module architectures, learning mechanisms, and how they have been applied to model tasks like arithmetic, driving, and air traffic control. This page focuses on the shared core: production systems as the computational mechanism, and the key differences (ACT-R's activation-based retrieval vs Soar's impasse-driven learning). The textbook also discusses EPIC, CLARION, and the debate about whether a single architecture can capture all of cognition. One structural reason architectures stall is that <a href="https://june.kim/the-plateau"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>consolidation has its own recursive consolidation</a>, and missing that recursion creates learning plateaus.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter8">Lovelace, Chapter 8</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-07/", label: "Language and Communication" }} fin="fin · 8 of 8" />
+
+  </main>
+</Layout>

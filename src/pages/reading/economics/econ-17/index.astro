@@ -1,0 +1,196 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.17 — Interest and Time Value" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Interest and Time Value</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Adam Smith, <em>Wealth of Nations</em> (1776, public domain)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A dollar today is worth more than a dollar tomorrow. <strong>Compound interest</strong> turns this intuition into arithmetic: future value grows exponentially, present value shrinks by discounting. Every investment decision reduces to comparing present values.</p>
+    </div>
+
+    <!-- 1. Compound Interest -->
+    <h3>Compound interest</h3>
+    <p>If you invest principal P at annual rate r, compounded once per year, after t years you have FV = P(1 + r)<sup>t</sup>. Compounding more frequently (n times per year) gives FV = P(1 + r/n)<sup>nt</sup>. As n approaches infinity, you get continuous compounding: FV = Pe<sup>rt</sup>.</p>
+
+    <!-- SVG: Compound growth curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 250" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="200" x2="370" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="50" y1="200" x2="50" y2="30" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="230" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Years</text>
+        <text x="20" y="115" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6" transform="rotate(-90,20,115)">Value</text>
+        <!-- Grid lines -->
+        <line x1="50" y1="160" x2="370" y2="160" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="50" y1="120" x2="370" y2="120" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="50" y1="80" x2="370" y2="80" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Simple interest (linear) -->
+        <line x1="50" y1="180" x2="370" y2="100" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3" stroke-dasharray="5,3"/>
+        <text x="372" y="100" fill="currentColor" font-size="10" fill-opacity="0.4">simple</text>
+        <!-- Compound interest (exponential curve, 7% over 30 years) -->
+        <path d="M 50 180 Q 130 170 180 155 Q 230 135 270 105 Q 310 70 350 35" fill="none" stroke="#4ade80" stroke-width="2"/>
+        <text x="352" y="35" fill="#4ade80" font-size="10">compound</text>
+        <!-- Labels -->
+        <text x="50" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+        <text x="210" y="215" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">15</text>
+        <text x="370" y="215" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">30</text>
+        <text x="45" y="183" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">P</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Compound interest: FV = P * (1 + r)^t
+; P = principal, r = annual rate, t = years
+
+(define (future-value P r t)
+  (* P (expt (+ 1 r) t)))
+
+; $1000 at 7% for 10, 20, 30 years
+(display "10 years: $")
+(display (round (future-value 1000 0.07 10))) (newline)
+(display "20 years: $")
+(display (round (future-value 1000 0.07 20))) (newline)
+(display "30 years: $")
+(display (round (future-value 1000 0.07 30))) (newline)
+
+; Rule of 72: doubling time ~ 72/r
+(display "Rule of 72 doubling time at 7%: ")
+(display (/ 72 7))
+(display " years")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compound interest
+def future_value(P, r, t):
+    return P * (1 + r) ** t
+
+for t in [10, 20, 30]:
+    fv = future_value(1000, 0.07, t)
+    print(str(t) + " years: $" + str(round(fv)))
+
+# Rule of 72
+print("Rule of 72 doubling time at 7%: " + str(round(72/7, 1)) + " years")
+`} />
+    </div>
+
+
+    <!-- 2. Present Value and Discounting -->
+    <h3>Present value and discounting</h3>
+    <p>Present value reverses the direction: PV = FV / (1 + r)<sup>t</sup>. The discount rate r encodes your opportunity cost. A dollar arriving in 10 years at 7% discount is worth only $0.51 today. This is the foundation of all valuation.</p>
+
+    <SchemeRepl client:load initialCode={`; Present value: PV = FV / (1 + r)^t
+
+(define (present-value FV r t)
+  (/ FV (expt (+ 1 r) t)))
+
+; What is $1000 received in 10 years worth today?
+(display "PV of $1000 in 10 years at 7%: $")
+(display (round (present-value 1000 0.07 10))) (newline)
+
+(display "PV of $1000 in 20 years at 7%: $")
+(display (round (present-value 1000 0.07 20))) (newline)
+
+; Higher discount rate = lower present value
+(display "PV of $1000 in 10 years at 12%: $")
+(display (round (present-value 1000 0.12 10)))
+`} />
+
+
+    <!-- 3. Net Present Value -->
+    <h3>Net present value</h3>
+    <p>NPV sums the present values of all future cash flows, minus the initial investment. If NPV is greater than zero, the project creates value. NPV is additive: two independent projects can be evaluated separately.</p>
+
+    <SchemeRepl client:load initialCode={`; NPV = sum of discounted cash flows - initial cost
+; Cash flows: list of (year . amount) pairs
+
+(define (present-value FV r t)
+  (/ FV (expt (+ 1 r) t)))
+
+(define (npv rate initial-cost cash-flows)
+  (define (sum-pv flows)
+    (if (null? flows)
+        0
+        (+ (present-value (cdar flows) rate (caar flows))
+           (sum-pv (cdr flows)))))
+  (- (sum-pv cash-flows) initial-cost))
+
+; Project: costs $5000 upfront, returns $2000/year for 3 years
+(define flows (list (cons 1 2000) (cons 2 2000) (cons 3 2000)))
+
+(display "NPV at 5%: $")
+(display (round (npv 0.05 5000 flows))) (newline)
+(display "NPV at 15%: $")
+(display (round (npv 0.15 5000 flows)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Net present value
+def npv(rate, initial_cost, cash_flows):
+    pv_sum = sum(cf / (1 + rate)**t for t, cf in cash_flows)
+    return pv_sum - initial_cost
+
+# Project: $5000 upfront, $2000/year for 3 years
+flows = [(1, 2000), (2, 2000), (3, 2000)]
+
+print("NPV at 5%: $" + str(round(npv(0.05, 5000, flows), 2)))
+print("NPV at 15%: $" + str(round(npv(0.15, 5000, flows), 2)))
+`} />
+    </div>
+
+
+    <!-- 4. Annuities -->
+    <h3>Annuities</h3>
+    <p>An annuity is a fixed payment C repeated for n periods. The present value of an annuity has a closed form: PV = C * (1 - (1+r)<sup>-n</sup>) / r. Mortgages, bonds, and pensions are all annuities in disguise. The connection to integrals: a continuous annuity is the integral of Ce<sup>-rt</sup> from 0 to T.</p>
+
+    <SchemeRepl client:load initialCode={`; Annuity PV = C * (1 - (1+r)^(-n)) / r
+; C = payment per period, r = rate, n = periods
+
+(define (annuity-pv C r n)
+  (* C (/ (- 1 (expt (+ 1 r) (- n))) r)))
+
+; $500/month for 30 years at 6% annual (0.5% monthly)
+(define monthly-pv (annuity-pv 500 0.005 360))
+(display "PV of $500/month for 30 years: $")
+(display (round monthly-pv)) (newline)
+
+; Mortgage: what monthly payment for $300,000 loan?
+; C = PV * r / (1 - (1+r)^(-n))
+(define (mortgage-payment PV r n)
+  (* PV (/ r (- 1 (expt (+ 1 r) (- n))))))
+
+(define pmt (mortgage-payment 300000 0.005 360))
+(display "Monthly payment on $300k mortgage: $")
+(display (round pmt))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-07/">Calculus Ch.7</a> — integrals: continuous discounting as integration</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Compound_interest"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Compound interest</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Present_value"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Present value</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Net_present_value"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Net present value</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Annuity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Annuity</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-16/", label: "Trade and Globalization" }} next={{ href: "/reading/economics/econ-18/", label: "GDP and Measurement" }} />
+
+  </main>
+</Layout>

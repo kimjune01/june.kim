@@ -1,0 +1,133 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lahaie & Lubin 2025 — VCG as a Linear Program" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>VCG as a Linear Program</h1>
+    <p class="text-gray-400 text-sm mb-6">Lahaie &amp; Lubin &middot; 2025 &middot; <a href="https://arxiv.org/abs/2507.03252">arXiv:2507.03252</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">VCG allocation is a <strong>linear program</strong>: maximize total value subject to feasibility constraints. The LP dual gives the VCG prices directly. This makes VCG computable even for multi-item combinatorial auctions.</p>
+    </div>
+
+    <h3>The allocation LP</h3>
+    <p>Maximize social welfare (sum of winner values) subject to: each item goes to at most one bidder, each bidder gets at most one bundle. The LP relaxation is tight for many auction formats. The dual variables are the prices.</p>
+
+    <!-- SVG: LP feasible region with optimal point -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="240" x2="350" y2="240" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="60" y1="240" x2="60" y2="30" stroke="currentColor" stroke-width="1.2"/>
+        <text x="350" y="255" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">x1 (item to A)</text>
+        <text x="55" y="30" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">x2 (item to B)</text>
+
+        <!-- Feasible region (polytope) -->
+        <polygon points="60,240 280,240 280,100 180,60 60,60" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="160" y="170" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.6">feasible</text>
+
+        <!-- Constraint labels -->
+        <text x="290" y="170" fill="currentColor" font-size="9" fill-opacity="0.4">x1 &le; 1</text>
+        <text x="120" y="52" fill="currentColor" font-size="9" fill-opacity="0.4">x1 + x2 &le; 1 (capacity)</text>
+
+        <!-- Objective gradient arrow -->
+        <line x1="130" y1="200" x2="200" y2="130" stroke="#fbbf24" stroke-width="1.5"/>
+        <polygon points="196,134 208,124 200,140" fill="#fbbf24"/>
+        <text x="220" y="140" fill="#fbbf24" font-size="10">max welfare</text>
+
+        <!-- Optimal point -->
+        <circle cx="180" cy="60" r="6" fill="#4ade80" fill-opacity="0.3" stroke="#4ade80" stroke-width="2"/>
+        <circle cx="180" cy="60" r="2.5" fill="#4ade80"/>
+        <text x="195" y="50" fill="#4ade80" font-size="11">optimal</text>
+
+        <!-- Dual price annotation -->
+        <text x="200" y="265" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">dual variables = VCG prices</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; VCG as optimization: maximize welfare, then compute payments
+; For single-item: LP is trivial. Multi-item shows the power.
+
+;; Single item, 3 bidders
+(define (vcg-lp-single bids)
+  ;; Primal: max sum(v_i * x_i) s.t. sum(x_i) <= 1, x_i in 0,1
+  ;; Solution: give item to highest bidder
+  (let* ((n (length bids))
+         (max-bid (apply max bids))
+         (winner (let loop ((i 0))
+                   (if (= (list-ref bids i) max-bid) i (loop (+ i 1)))))
+         ;; Dual: price = shadow price of capacity constraint
+         ;; = second-highest bid (marginal value of relaxing capacity)
+         (sorted (sort bids >))
+         (dual-price (cadr sorted)))
+    (list winner max-bid dual-price)))
+
+(define result (vcg-lp-single '(10 7 4)))
+(display "Winner: bidder ") (display (car result)) (newline)
+(display "Value: $") (display (cadr result)) (newline)
+(display "VCG price (LP dual): $") (display (caddr result)) (newline)
+
+;; Multi-item: 2 items, 3 bidders, unit demand
+(define (vcg-lp-multi bids k)
+  ;; Give items to top-k bidders
+  ;; Each winner's price = (k+1)-th highest bid (the excluded bidder)
+  (let* ((sorted (sort bids >))
+         (winners (let loop ((i 0) (acc '()))
+                    (if (= i k) (reverse acc)
+                        (loop (+ i 1) (cons (list-ref sorted i) acc)))))
+         (marginal (list-ref sorted k)))
+    (list winners marginal)))
+
+(display "\\n2 items, bids (10 7 4 3):")
+(newline)
+(define r2 (vcg-lp-multi '(10 7 4 3) 2))
+(display "Winners: ") (display (car r2)) (newline)
+(display "Each pays: $") (display (cadr r2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# VCG via LP (using simple optimization)
+def vcg_lp(values, k=1):
+    """k items, unit demand. LP relaxation is tight."""
+    s = sorted(enumerate(values), key=lambda x: -x[1])
+    winners = s[:k]
+    # Dual price = shadow price = value of marginal excluded bidder
+    dual_price = s[k][1] if k < len(s) else 0
+    return dict(
+        winners=[(i, v) for i, v in winners],
+        vcg_price_each=dual_price,
+        total_revenue=dual_price * k,
+    )
+
+print("Single item:", vcg_lp([10, 7, 4], k=1))
+print("Two items:  ", vcg_lp([10, 7, 4, 3], k=2))
+`} />
+    </div>
+
+    <h3>Why the LP matters</h3>
+    <p>For combinatorial auctions (multiple items, complex bundles), brute-force VCG requires solving the allocation problem once per bidder. The LP formulation solves it once, and the dual gives all prices simultaneously. This is what makes VCG practical at scale, and what makes <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>embedding-space ad auctions</a> computationally feasible: the allocation over continuous query space reduces to an LP whose dual prices the regions.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/one-shot-bidding</a> &mdash; VCG in ad auction practice</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; hefferon-01: solving systems of equations</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">💎 VCG 1973</a> &mdash; the mechanism this paper makes computable</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2507.03252">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/aurenhammer-1987/", label: "Aurenhammer 1987 · 5 of 8" }} next={{ href: "/reading/auction-theory/hartline-2023/", label: "Hartline 2023 · 7 of 8" }} />
+
+  </main>
+</Layout>

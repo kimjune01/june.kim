@@ -1,0 +1,137 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Blair 1783 — Lectures on Rhetoric" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Lectures on Rhetoric and Belles Lettres</h1>
+    <p class="text-gray-400 text-sm mb-6">Hugh Blair &middot; 1783 &middot; <a href="https://archive.org/details/lecturesonrheto31blaigoog">Full text (Internet Archive, public domain)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Rhetoric was oral. Blair made it literary. For the first time, someone taught style as a skill you develop through study and practice. "Taste" became learnable, not an aristocratic inheritance.</p>
+    </div>
+
+    <!-- SVG: Before Blair vs. after Blair -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+
+        <!-- Left: Before Blair — taste as innate -->
+        <text x="110" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">before Blair</text>
+
+        <!-- "Good taste" circle — locked, opaque -->
+        <circle cx="110" cy="70" r="30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.2" stroke-dasharray="4,3"/>
+        <text x="110" y="67" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">taste</text>
+        <text x="110" y="79" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.2">(innate)</text>
+
+        <!-- Three people, two locked out -->
+        <text x="55" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.15">born with it</text>
+        <text x="55" y="143" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.5">&#x2713;</text>
+        <text x="110" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.15">not born with it</text>
+        <text x="110" y="143" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.4">&#x2717;</text>
+        <text x="165" y="130" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.15">not born with it</text>
+        <text x="165" y="143" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.4">&#x2717;</text>
+
+        <!-- Divider -->
+        <line x1="230" y1="10" x2="230" y2="180" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.3"/>
+
+        <!-- Right: After Blair — taste as curriculum -->
+        <text x="360" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">after Blair</text>
+
+        <!-- Curriculum stack -->
+        <rect x="310" y="35" width="100" height="22" rx="3" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="360" y="50" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.6">read widely</text>
+
+        <rect x="310" y="62" width="100" height="22" rx="3" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="360" y="77" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.6">notice reactions</text>
+
+        <rect x="310" y="89" width="100" height="22" rx="3" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="360" y="104" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.6">practice judgment</text>
+
+        <!-- Arrow down to taste -->
+        <line x1="360" y1="114" x2="360" y2="132" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="356,130 360,138 364,130" fill="#f59e0b" fill-opacity="0.4"/>
+
+        <!-- "Taste" circle — open, earned -->
+        <circle cx="360" cy="158" r="20" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="360" y="162" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">taste</text>
+
+        <!-- Bottom note -->
+        <text x="240" y="195" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.2">judgment as curriculum, not birthright</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Hugh Blair held the first Regius Chair of Rhetoric and Belles Lettres at the University of Edinburgh, appointed in 1762. Over twenty years he delivered forty-seven lectures covering everything from sublimity to sentence structure. When they were published in 1783, they became the standard rhetoric textbook on both sides of the Atlantic for the next century.</p>
+
+    <p>Blair's key move was recognizing that rhetoric had changed its medium. Classical rhetoric (Aristotle, Cicero, Quintilian) was about speaking to a crowd. The orator could read the room, adjust tone, use gesture, pause for effect. Blair saw that the age of print had shifted the center of gravity. Writing for a reader who isn't in the room changes everything. You can't rely on vocal emphasis or audience feedback. The sentence itself has to carry the meaning, the pacing, and the persuasion. Structure replaces delivery. Revision replaces improvisation.</p>
+
+    <p>The deeper claim was about taste. Blair insisted that the ability to judge what's good, to distinguish elegant prose from clumsy prose, genuine sublimity from mere loudness, is not innate. Taste improves with exposure and practice, like any other skill. This was a democratizing move. Rhetoric was no longer the property of those born into the right families or trained from childhood in the classical canon. It was a discipline anyone could develop through study. Every writing workshop descends from this claim.</p>
+
+    <h3>What Blair systematized</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Topic</th>
+            <th class="text-left py-2 text-gray-400">Blair's contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Taste</td><td class="text-gray-400">Learnable through exposure and practice, not an innate gift or aristocratic inheritance</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Sublimity</td><td class="text-gray-400">Adapted from Longinus for written prose: greatness of conception, not merely elevated diction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Sentence structure</td><td class="text-gray-400">First systematic treatment for English: unity, strength, clarity as structural properties</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Criticism</td><td class="text-gray-400">Judgment as a skill to be developed, not a gift to be discovered</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Developing taste</h3>
+
+    <p>Blair says taste is learnable. What does that look like in practice? Compare two sentences that say the same thing:</p>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-400 italic">"The importance of maintaining a consistent and well-organized approach to the management of one's daily tasks cannot be overstated, as it is through such diligent attention to the proper ordering of activities that one achieves the kind of productivity that leads to success."</blockquote>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-300 italic">"Organize your day, or it organizes you."</blockquote>
+
+    <p>Both say the same thing. The first took sixty words. The second took seven. Blair would say the ability to feel the difference — to wince at the first and nod at the second — is taste. You develop it by reading widely and paying attention to your own reactions. Which sentences do you re-read for pleasure? Which do you skim? The pattern in your reactions is your taste forming.</p>
+
+    <p>Now listen for rhythm:</p>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-400 italic">"The sequential implementation of the various project phases was completed on time."</blockquote>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-300 italic">"Each phase finished on time."</blockquote>
+
+    <p>The first trips over itself. The second lands clean. You don't need to name the difference to feel it. That feeling is taste.</p>
+
+    <p>Now watch for specificity:</p>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-400 italic">"The event was a great success and many people attended."</blockquote>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-4 text-gray-300 italic">"Three hundred people showed up. We ran out of chairs."</blockquote>
+
+    <p>The first tells you it went well. The second puts you in the room. Blair would say: the writer who reaches for "great success" hasn't looked closely enough. The writer who counts the chairs has.</p>
+
+    <h3>Discussion</h3>
+
+    <p>Blair's lectures were the standard rhetoric textbook for a century. They were used at Edinburgh, Harvard, Yale, and across the English-speaking world. That influence is itself the proof of his central thesis: if taste were innate, you wouldn't need a textbook.</p>
+
+    <p>His weakness: "taste" without criteria is circular. What makes one sentence better than another? Blair appeals to the consensus of educated readers. Good taste is what people with good taste recognize. He never gets past this. Strunk later gave concrete rules: omit needless words, use the active voice. Williams later gave structural principles: old before new, characters as subjects, actions as verbs. Both were doing what Blair couldn't: turning taste into something falsifiable.</p>
+
+    <p>But Blair established the frame that made Strunk and Williams possible. Before Blair, rhetoric was either an elite birthright (the classical tradition) or a collection of ornamental tricks (the elocutionists). After Blair, it was a discipline with a curriculum. The specific content would be replaced many times over. The frame has not.</p>
+
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Hugh_Blair"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></li>
+      <li><a href="https://june.kim/slop-detection"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Slop Detection</a> — can trained taste distinguish human from machine prose?</li>
+      <li><a href="/reading/prose-writing/">back to prose writing</a></li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/bacon-1597/", label: "Bacon 1597 · 3 of 10" }} next={{ href: "/reading/prose-writing/strunk-1918/", label: "Strunk 1918 · 5 of 10" }} />
+
+  </main>
+</Layout>

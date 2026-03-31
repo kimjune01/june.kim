@@ -1,0 +1,254 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.14 — Information Asymmetry" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Information Asymmetry</h1>
+    <p class="text-gray-400 text-sm mb-6">George Akerlof · 1970 / Michael Spence · 1973 · <a href="https://en.wikipedia.org/wiki/Information_asymmetry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Information asymmetry</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Information asymmetry</strong> means one side of a transaction knows more than the other. Sellers know their car's history. Employees know their own effort level. Insurees know their own risk. This imbalance causes markets to malfunction: good products get driven out, risky people get insured, and effort drops when unobserved.</p>
+    </div>
+
+    <!-- 1. Akerlof's lemons -->
+    <h3>The market for lemons</h3>
+    <p>Akerlof's 1970 insight: if buyers can't distinguish good used cars from bad ones ("lemons"), they offer an average price. Sellers of good cars find this too low and withdraw. The average quality drops, so the price drops further. In the worst case, only lemons remain. Bad quality drives out good: adverse selection.</p>
+
+    <!-- SVG: Market with hidden quality gradient -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Quality gradient bar -->
+        <text x="200" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Car Quality (hidden from buyer)</text>
+
+        <!-- Cars as rectangles with gradient -->
+        <rect x="40" y="40" width="40" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <text x="60" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Lemon</text>
+
+        <rect x="100" y="40" width="40" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <rect x="160" y="40" width="40" height="30" rx="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <rect x="220" y="40" width="40" height="30" rx="3" fill="currentColor" fill-opacity="0.30" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <rect x="280" y="40" width="40" height="30" rx="3" fill="currentColor" fill-opacity="0.38" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+        <rect x="340" y="40" width="40" height="30" rx="3" fill="currentColor" fill-opacity="0.45" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <text x="360" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Peach</text>
+
+        <!-- Arrow: quality direction -->
+        <line x1="60" y1="85" x2="360" y2="85" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <polygon points="358,82 365,85 358,88" fill="currentColor" fill-opacity="0.3"/>
+        <text x="210" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">increasing quality</text>
+
+        <!-- Buyer's price line -->
+        <line x1="40" y1="130" x2="380" y2="130" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+        <text x="385" y="134" fill="currentColor" font-size="10" fill-opacity="0.5">Buyer's price</text>
+
+        <!-- Sellers' reservation prices (rising) -->
+        <line x1="60" y1="155" x2="60" y2="125" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <circle cx="60" cy="155" r="2" fill="currentColor" fill-opacity="0.5"/>
+
+        <line x1="120" y1="145" x2="120" y2="125" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <circle cx="120" cy="145" r="2" fill="currentColor" fill-opacity="0.5"/>
+
+        <line x1="180" y1="135" x2="180" y2="125" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <circle cx="180" cy="135" r="2" fill="currentColor" fill-opacity="0.5"/>
+
+        <line x1="240" y1="120" x2="240" y2="125" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <circle cx="240" cy="120" r="2" fill="currentColor" fill-opacity="0.5"/>
+        <text x="240" y="115" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">withdraws</text>
+
+        <circle cx="300" cy="110" r="2" fill="currentColor" fill-opacity="0.5"/>
+        <text x="300" y="105" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">withdraws</text>
+
+        <circle cx="360" cy="100" r="2" fill="currentColor" fill-opacity="0.5"/>
+        <text x="360" y="95" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">withdraws</text>
+
+        <!-- Result label -->
+        <text x="200" y="185" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Good cars withdraw. Average quality falls.</text>
+        <text x="200" y="205" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Buyer lowers price. More withdraw. Only lemons remain.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Akerlof's lemons problem
+; Sellers know quality, buyers don't
+
+(define cars '((1000 "lemon")
+               (3000 "fair")
+               (5000 "good")
+               (8000 "great")
+               (12000 "excellent")))
+
+(define (value car) (car car))
+(define (seller-min-price car) (* 0.8 (value car)))
+
+; Buyer offers average value (can't distinguish)
+(define (average-value cars)
+  (/ (apply + (map value cars)) (length cars)))
+
+(define (market-round cars round)
+  (if (null? cars) (display "Market collapse: no cars remain")
+      (let* ((offer (average-value cars))
+             (willing (filter (lambda (c) (<= (seller-min-price c) offer)) cars)))
+        (display "Round ") (display round)
+        (display ": Offer=$") (display (exact->inexact offer))
+        (display ", Cars remaining=") (display (length willing))
+        (newline)
+        (if (= (length willing) (length cars))
+            (display "Market stabilizes")
+            (if (null? willing)
+                (display "Market collapse!")
+                (market-round willing (+ round 1)))))))
+
+(market-round cars 1)
+`} />
+
+
+    <!-- 2. Adverse selection -->
+    <h3>Adverse selection</h3>
+    <p>The lemons problem generalizes: whenever one side has private information before a transaction, the wrong types tend to participate. Health insurance attracts the sick. Loan markets attract risky borrowers. The uninformed side anticipates this and adjusts terms, which drives away more good types.</p>
+
+    <SchemeRepl client:load initialCode={`; Adverse selection in insurance
+; High-risk people are more likely to buy
+
+(define (expected-claim risk) (* risk 10000))
+
+(define population
+  '((0.05 "low-risk")
+    (0.15 "medium-risk")
+    (0.30 "high-risk")))
+
+; Average risk if everyone buys
+(define avg-risk
+  (/ (apply + (map car population)) (length population)))
+
+(define premium (expected-claim avg-risk))
+(display "Fair premium (all buy): $")
+(display (exact->inexact premium)) (newline)
+
+; But low-risk won't buy at this price
+(define buyers
+  (filter (lambda (p) (>= (expected-claim (car p)) (* 0.8 premium)))
+          population))
+
+(display "Who buys at $") (display (exact->inexact premium))
+(display "? ") (newline)
+(for-each (lambda (b) (display "  ") (display (cadr b)) (newline)) buyers)
+
+; New average risk is higher
+(define new-avg
+  (/ (apply + (map car buyers)) (length buyers)))
+(display "New average risk: ") (display (exact->inexact new-avg)) (newline)
+(display "Adverse selection: pool gets riskier")
+`} />
+
+
+    <!-- 3. Moral hazard -->
+    <h3>Moral hazard</h3>
+    <p>After the transaction, the informed party may change behavior. Insured people take more risks. Employees with guaranteed pay shirk. The problem is hidden action, not hidden information. Solutions include deductibles, co-pays, monitoring, and performance-based pay.</p>
+
+    <SchemeRepl client:load initialCode={`; Moral hazard: behavior changes after insurance
+
+(define base-accident-prob 0.10)
+(define loss-if-accident 10000)
+
+; Without insurance: careful
+(define careful-prob base-accident-prob)
+(define expected-loss-careful (* careful-prob loss-if-accident))
+
+; With full insurance: reckless (no personal cost)
+(define reckless-prob 0.25)
+(define expected-loss-reckless (* reckless-prob loss-if-accident))
+
+(display "Expected loss (careful): $")
+(display (exact->inexact expected-loss-careful)) (newline)
+(display "Expected loss (reckless): $")
+(display (exact->inexact expected-loss-reckless)) (newline)
+
+; Solution: deductible
+(define deductible 2000)
+(display "With $2000 deductible:") (newline)
+(display "  Personal risk if reckless: $")
+(display (exact->inexact (* reckless-prob deductible))) (newline)
+(display "  Personal risk if careful: $")
+(display (exact->inexact (* careful-prob deductible))) (newline)
+(display "  Incentive to be careful: $")
+(display (exact->inexact (* (- reckless-prob careful-prob) deductible)))
+`} />
+
+
+    <!-- 4. Signaling -->
+    <h3>Signaling and screening</h3>
+    <p>Spence's signaling model: the informed party takes a costly action to reveal their type. A college degree may not teach much, but it signals ability because it's cheaper for high-ability people to obtain. Screening is the reverse: the uninformed party designs a menu that makes types self-select (insurance deductibles, warranty options).</p>
+
+    <SchemeRepl client:load initialCode={`; Spence signaling: education as a signal
+; High-ability: degree costs $20k
+; Low-ability: degree costs $60k
+; Wage with degree: $80k, without: $40k
+
+(define wage-with-degree 80000)
+(define wage-without 40000)
+(define signal-value (- wage-with-degree wage-without))
+
+(define cost-high 20000)  ; high ability
+(define cost-low 60000)   ; low ability
+
+(display "Signal value (wage premium): $")
+(display signal-value) (newline) (newline)
+
+(display "High ability:") (newline)
+(display "  Cost of degree: $") (display cost-high) (newline)
+(display "  Net gain: $") (display (- signal-value cost-high)) (newline)
+(display "  Get degree? ")
+(display (if (> signal-value cost-high) "Yes" "No")) (newline) (newline)
+
+(display "Low ability:") (newline)
+(display "  Cost of degree: $") (display cost-low) (newline)
+(display "  Net gain: $") (display (- signal-value cost-low)) (newline)
+(display "  Get degree? ")
+(display (if (> signal-value cost-low) "Yes" "No")) (newline) (newline)
+
+(display "Separating equilibrium: only high-ability get degrees")
+`} />
+
+
+    <!-- Key concepts -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Problem</th>
+            <th class="py-2 pr-4 text-left">When</th>
+            <th class="py-2 text-left">Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Adverse selection</td><td class="pr-4">Before transaction (hidden type)</td><td>Screening, mandatory participation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Moral hazard</td><td class="pr-4">After transaction (hidden action)</td><td>Deductibles, monitoring, incentive pay</td></tr>
+          <tr><td class="py-2 pr-4">Signaling</td><td class="pr-4">Before transaction (informed acts)</td><td>Costly signals separate types</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/The_Market_for_Lemons"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Market for Lemons (Akerlof)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Adverse_selection"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Adverse selection</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Moral_hazard"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Moral hazard</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Signalling_(economics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Signalling (Spence)</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-13/", label: "Oligopoly" }} next={{ href: "/reading/economics/econ-15/", label: "Money and Banking" }} />
+
+  </main>
+</Layout>

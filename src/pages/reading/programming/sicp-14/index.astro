@@ -1,0 +1,465 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.14 — Metacircular Evaluator" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Metacircular Evaluator</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-26.html#%_sec_4.1">SICP &sect;4.1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A Scheme interpreter written in Scheme. <code>eval</code> dispatches on expression type, <code>apply</code> dispatches on procedure type. The mutual recursion between eval and apply is the whole story.</p>
+    </div>
+
+    <!-- SVG: eval/apply cycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 205" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- eval box -->
+        <rect x="40" y="50" width="120" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="80" text-anchor="middle" fill="#60a5fa" font-size="15">eval</text>
+        <!-- apply box -->
+        <rect x="240" y="50" width="120" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="300" y="80" text-anchor="middle" fill="#f59e0b" font-size="15">apply</text>
+        <!-- eval -> apply (top arrow) -->
+        <path d="M 160 60 C 195 30, 205 30, 235 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="237,58 227,52 230,62" fill="currentColor" fill-opacity="0.5"/>
+        <text x="200" y="35" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">procedure + args</text>
+        <!-- apply -> eval (bottom arrow) -->
+        <path d="M 240 90 C 205 120, 195 120, 165 90" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="163,92 173,98 170,88" fill="currentColor" fill-opacity="0.5"/>
+        <text x="200" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">body in new env</text>
+        <!-- environment -->
+        <rect x="150" y="150" width="100" height="30" rx="4" fill="none" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="170" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">environment</text>
+        <line x1="100" y1="100" x2="175" y2="150" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3"/>
+        <line x1="300" y1="100" x2="225" y2="150" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3"/>
+        <!-- Caption -->
+        <text x="200" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">The eval/apply cycle &mdash; mutual recursion is the whole interpreter.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. The core: eval -->
+    <h3>The core of the evaluator &mdash; eval</h3>
+    <p><code>eval</code> takes an expression and an environment. It classifies the expression &mdash; self-evaluating? variable? special form? application? &mdash; and dispatches accordingly. For applications, it evaluates the operator and operands, then calls <code>apply</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; A tiny eval — dispatches on expression type.
+; We represent expressions as tagged lists.
+
+(define (my-eval exp env)
+  (cond ((number? exp) exp)                     ; self-evaluating
+        ((symbol? exp) (lookup exp env))         ; variable
+        ((eq? (car exp) 'quote) (cadr exp))      ; quoted
+        ((eq? (car exp) 'if)                     ; conditional
+         (if (my-eval (cadr exp) env)
+             (my-eval (caddr exp) env)
+             (my-eval (cadddr exp) env)))
+        (else                                    ; application
+         (my-apply (my-eval (car exp) env)
+                   (map (lambda (e) (my-eval e env))
+                        (cdr exp))))))
+
+; Stub helpers for demonstration
+(define (lookup var env)
+  (cond ((null? env) (error "Unbound variable" var))
+        ((eq? var (caar env)) (cdar env))
+        (else (lookup var (cdr env)))))
+
+(define (my-apply proc args)
+  (cond ((procedure? proc) (apply proc args))
+        (else (error "Not a procedure" proc))))
+
+; Test: evaluate arithmetic in a tiny environment
+(define env (list (cons '+ +) (cons '* *) (cons 'x 10)))
+(display (my-eval '(+ x 5) env))
+(newline)
+; => 15
+
+(display (my-eval '(* x x) env))
+(newline)
+; => 100
+
+(display (my-eval '(if #t 42 99) env))
+; => 42
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# A tiny eval in Python — dispatches on expression type.
+
+def my_eval(exp, env):
+    if isinstance(exp, (int, float)):     # self-evaluating
+        return exp
+    if isinstance(exp, str):              # variable
+        return env[exp]
+    op = exp[0]
+    if op == 'quote':
+        return exp[1]
+    if op == 'if':
+        _, test, yes, no = exp
+        return my_eval(yes, env) if my_eval(test, env) else my_eval(no, env)
+    # application
+    proc = my_eval(exp[0], env)
+    args = [my_eval(a, env) for a in exp[1:]]
+    return proc(*args)
+
+import operator
+env = {'+': operator.add, '*': operator.mul, 'x': 10}
+
+print(my_eval(['+', 'x', 5], env))       # 15
+print(my_eval(['*', 'x', 'x'], env))     # 100
+print(my_eval(['if', True, 42, 99], env)) # 42
+`} />
+    </div>
+
+
+    <!-- 2. apply -->
+    <h3>The core of the evaluator &mdash; apply</h3>
+    <p><code>apply</code> takes a procedure and a list of arguments. For primitive procedures, it calls the underlying implementation. For compound procedures, it extends the environment with bindings for the formal parameters and evaluates the body.</p>
+
+    <SchemeRepl client:load initialCode={`; apply: dispatch on procedure type.
+; Compound procedures carry their own environment.
+
+(define (make-procedure params body env)
+  (list 'compound params body env))
+
+(define (compound? proc) (and (pair? proc) (eq? (car proc) 'compound)))
+(define (proc-params proc) (cadr proc))
+(define (proc-body proc) (caddr proc))
+(define (proc-env proc) (cadddr proc))
+
+(define (extend-env params args env)
+  (if (null? params) env
+      (cons (cons (car params) (car args))
+            (extend-env (cdr params) (cdr args) env))))
+
+(define (my-apply2 proc args)
+  (cond ((procedure? proc) (apply proc args))  ; primitive
+        ((compound? proc)                        ; compound
+         (eval-body (proc-body proc)
+                    (extend-env (proc-params proc)
+                                args
+                                (proc-env proc))))
+        (else (error "Unknown procedure type"))))
+
+(define (eval-body body env)
+  ; simplified: body is a single expression
+  (my-eval2 body env))
+
+; Reuse eval with our new apply
+(define (my-eval2 exp env)
+  (cond ((number? exp) exp)
+        ((symbol? exp) (lookup exp env))
+        ((eq? (car exp) 'lambda)
+         (make-procedure (cadr exp) (caddr exp) env))
+        (else
+         (my-apply2 (my-eval2 (car exp) env)
+                    (map (lambda (e) (my-eval2 e env))
+                         (cdr exp))))))
+
+; Test: define and call a lambda
+(define base-env (list (cons '+ +) (cons '* *)))
+(define square-expr '((lambda (x) (* x x)) 7))
+(display (my-eval2 square-expr base-env))
+; => 49
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# apply in Python — compound procedures carry their env.
+import operator
+
+class Procedure:
+    def __init__(self, params, body, env):
+        self.params = params
+        self.body = body
+        self.env = env
+
+def my_apply(proc, args):
+    if callable(proc):                        # primitive
+        return proc(*args)
+    if isinstance(proc, Procedure):           # compound
+        new_env = dict(list(proc.env.items()) + list(zip(proc.params, args)))
+        return my_eval(proc.body, new_env)
+    raise TypeError(f"Not a procedure: {proc}")
+
+def my_eval(exp, env):
+    if isinstance(exp, (int, float)):
+        return exp
+    if isinstance(exp, str):
+        return env[exp]
+    if exp[0] == 'lambda':
+        _, params, body = exp
+        return Procedure(params, body, env)
+    proc = my_eval(exp[0], env)
+    args = [my_eval(a, env) for a in exp[1:]]
+    return my_apply(proc, args)
+
+base_env = {'+': operator.add, '*': operator.mul}
+# ((lambda (x) (* x x)) 7)
+print(my_eval([['lambda', ['x'], ['*', 'x', 'x']], 7], base_env))
+# => 49
+`} />
+    </div>
+
+
+    <!-- 3. Representing expressions -->
+    <h3>Representing expressions</h3>
+    <p>The evaluator classifies expressions with simple predicates: <code>self-evaluating?</code>, <code>variable?</code>, <code>quoted?</code>, <code>assignment?</code>, <code>definition?</code>, <code>if?</code>, <code>lambda?</code>, <code>begin?</code>, and <code>application?</code>. Each predicate checks the tag (first element) of the expression list. This is data-directed programming applied to syntax.</p>
+
+    <SchemeRepl client:load initialCode={`; Expression classification predicates.
+; The evaluator pattern-matches on these.
+
+(define (self-evaluating? exp)
+  (or (number? exp) (string? exp) (boolean? exp)))
+
+(define (variable? exp) (symbol? exp))
+
+(define (tagged-list? exp tag)
+  (and (pair? exp) (eq? (car exp) tag)))
+
+(define (quoted? exp)    (tagged-list? exp 'quote))
+(define (assignment? exp)(tagged-list? exp 'set!))
+(define (definition? exp)(tagged-list? exp 'define))
+(define (if? exp)        (tagged-list? exp 'if))
+(define (lambda? exp)    (tagged-list? exp 'lambda))
+(define (begin? exp)     (tagged-list? exp 'begin))
+
+; Test each classifier
+(display "42 self-eval? ")  (display (self-evaluating? 42))  (newline)
+(display "x variable?   ")  (display (variable? 'x))         (newline)
+(display "'foo quoted?  ")  (display (quoted? '(quote foo)))  (newline)
+(display "if? on (if ..) ") (display (if? '(if #t 1 2)))     (newline)
+(display "lambda?       ")  (display (lambda? '(lambda (x) x)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expression classification in Python
+
+def self_evaluating(exp):
+    return isinstance(exp, (int, float, str, bool))
+
+def variable(exp):
+    return isinstance(exp, str) and not exp.startswith("'")
+
+def tagged_list(exp, tag):
+    return isinstance(exp, list) and len(exp) > 0 and exp[0] == tag
+
+def quoted(exp):    return tagged_list(exp, 'quote')
+def assignment(exp):return tagged_list(exp, 'set!')
+def definition(exp):return tagged_list(exp, 'define')
+def if_exp(exp):    return tagged_list(exp, 'if')
+def lambda_exp(exp):return tagged_list(exp, 'lambda')
+
+print(f"42 self-eval? {self_evaluating(42)}")
+print(f"if? on ['if',..]: {if_exp(['if', True, 1, 2])}")
+print(f"lambda?: {lambda_exp(['lambda', ['x'], 'x'])}")
+`} />
+    </div>
+
+
+    <!-- 4. Environments -->
+    <h3>Evaluator data structures &mdash; environments</h3>
+    <p>An environment is a chain of <strong>frames</strong>. Each frame is a table of bindings (name &rarr; value). Variable lookup walks the chain from innermost to outermost. <code>define</code> adds to the first frame; <code>set!</code> mutates the first frame where the variable is found.</p>
+
+    <SchemeRepl client:load initialCode={`; Environments as lists of frames.
+; Each frame is an alist (association list).
+
+(define (make-frame vars vals)
+  (map cons vars vals))
+
+(define (extend-environment vars vals base-env)
+  (cons (make-frame vars vals) base-env))
+
+(define (lookup-variable-value var env)
+  (define (scan frame)
+    (cond ((null? frame) #f)
+          ((eq? var (caar frame)) (cdar frame))
+          (else (scan (cdr frame)))))
+  (if (null? env)
+      (error "Unbound variable" var)
+      (let ((result (scan (car env))))
+        (if result result
+            (lookup-variable-value var (cdr env))))))
+
+; Build an environment: global -> local
+(define global (extend-environment '(x y) '(1 2) '()))
+(define local  (extend-environment '(x z) '(10 30) global))
+
+; x is shadowed in local
+(display "x in local: ")  (display (lookup-variable-value 'x local))  (newline)
+; => 10
+(display "y in local: ")  (display (lookup-variable-value 'y local))  (newline)
+; => 2  (found in enclosing frame)
+(display "z in local: ")  (display (lookup-variable-value 'z local))
+; => 30
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Environments as chained dicts in Python
+
+class Environment:
+    def __init__(self, bindings=None, parent=None):
+        self.bindings = bindings or {}
+        self.parent = parent
+
+    def lookup(self, var):
+        if var in self.bindings:
+            return self.bindings[var]
+        if self.parent:
+            return self.parent.lookup(var)
+        raise NameError(f"Unbound variable: {var}")
+
+    def define(self, var, val):
+        self.bindings[var] = val
+
+global_env = Environment({'x': 1, 'y': 2})
+local_env  = Environment({'x': 10, 'z': 30}, parent=global_env)
+
+print(f"x in local: {local_env.lookup('x')}")   # 10 (shadowed)
+print(f"y in local: {local_env.lookup('y')}")   # 2 (from parent)
+print(f"z in local: {local_env.lookup('z')}")   # 30
+`} />
+    </div>
+
+
+    <!-- 5. Running the evaluator -->
+    <h3>Running the evaluator</h3>
+    <p>The driver loop reads an expression, evaluates it, and prints the result. This is the read-eval-print loop (REPL). The metacircular evaluator is a REPL implemented in the language it evaluates &mdash; Scheme interpreting Scheme.</p>
+
+    <SchemeRepl client:load initialCode={`; A complete tiny evaluator, end to end.
+; Supports: numbers, variables, if, lambda, application.
+
+(define (tiny-eval exp env)
+  (cond ((number? exp) exp)
+        ((boolean? exp) exp)
+        ((symbol? exp) (cdr (assoc exp env)))
+        ((eq? (car exp) 'if)
+         (if (tiny-eval (cadr exp) env)
+             (tiny-eval (caddr exp) env)
+             (tiny-eval (cadddr exp) env)))
+        ((eq? (car exp) 'lambda)
+         (list 'closure (cadr exp) (caddr exp) env))
+        (else  ; application
+         (let ((proc (tiny-eval (car exp) env))
+               (args (map (lambda (a) (tiny-eval a env)) (cdr exp))))
+           (if (procedure? proc)
+               (apply proc args)
+               ; compound: extend env with param bindings
+               (tiny-eval (caddr proc)
+                          (append (map cons (cadr proc) args)
+                                  (cadddr proc))))))))
+
+(define env (list (cons '+ +) (cons '- -) (cons '* *)
+                  (cons '< <) (cons '= =)))
+
+; factorial via the metacircular evaluator!
+(define fact-prog
+  '((lambda (f n) (f f n))
+    (lambda (self n)
+      (if (< n 2) 1
+          (* n (self self (- n 1)))))
+    10))
+
+(display "10! = ")
+(display (tiny-eval fact-prog env))
+; => 3628800
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Complete tiny evaluator in Python
+import operator
+
+def tiny_eval(exp, env):
+    if isinstance(exp, (int, float, bool)):
+        return exp
+    if isinstance(exp, str):
+        return env[exp]
+    if exp[0] == 'if':
+        _, test, yes, no = exp
+        return tiny_eval(yes, env) if tiny_eval(test, env) else tiny_eval(no, env)
+    if exp[0] == 'lambda':
+        _, params, body = exp
+        return ('closure', params, body, env)
+    # application
+    proc = tiny_eval(exp[0], env)
+    args = [tiny_eval(a, env) for a in exp[1:]]
+    if callable(proc):
+        return proc(*args)
+    # compound procedure
+    _, params, body, closure_env = proc
+    new_env = dict(list(closure_env.items()) + list(zip(params, args)))
+    return tiny_eval(body, new_env)
+
+env = {'+': operator.add, '-': operator.sub,
+       '*': operator.mul, '<': operator.lt, '=': operator.eq}
+
+# factorial: ((lambda (f n) (f f n)) (lambda (self n) ...) 10)
+fact_prog = [['lambda', ['f', 'n'], ['f', 'f', 'n']],
+             ['lambda', ['self', 'n'],
+              ['if', ['<', 'n', 2], 1,
+               ['*', 'n', ['self', 'self', ['-', 'n', 1]]]]],
+             10]
+
+print(f"10! = {tiny_eval(fact_prog, env)}")  # 3628800
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(eval exp env)</td><td class="pr-4 text-blue-300">eval(exp, env)</td><td class="font-sans">Evaluate expression in environment</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(apply proc args)</td><td class="pr-4 text-blue-300">proc(*args)</td><td class="font-sans">Apply procedure to arguments</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(tagged-list? e 'if)</td><td class="pr-4 text-blue-300">e[0] == 'if'</td><td class="font-sans">Check expression type by tag</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(extend-environment ...)</td><td class="pr-4 text-blue-300">dict(env, **new)</td><td class="font-sans">Create new frame over base env</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(define (f x) body)</td><td class="pr-4 text-blue-300">def f(x): body</td><td class="font-sans">Syntactic sugar for lambda + define</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-13/">SICP Ch.13 &mdash; Streams</a></li>
+      <li><a href="/reading/programming/sicp-15/">SICP Ch.15 &mdash; Lazy Evaluation</a></li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Meta-circular_evaluator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Meta-circular evaluator</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Eval"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Eval</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Interpreter_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Interpreter (computing)</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The metacircular evaluator uses Scheme to interpret Scheme, so the host language and the interpreted language share the same syntax. In Python, we represent Scheme expressions as nested lists. This survives the translation: <code>eval</code> classifies expressions, <code>apply</code> classifies procedures, and they call each other. The only structural difference is that Python's compound procedures use dictionaries for environments while Scheme uses association lists.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-26.html#%_sec_4.1">Read SICP &sect;4.1</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-13/", label: "Streams" }} next={{ href: "/reading/programming/sicp-15/", label: "Lazy Evaluation · 15 of 22" }} />
+
+  </main>
+</Layout>

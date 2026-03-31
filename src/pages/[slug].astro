@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => {
+    // Strip date prefix from filename: 2026-03-25-no-postage -> no-postage
+    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    // Extract date from filename
+    const dateMatch = post.id.match(/^(\d{4}-\d{2}-\d{2})/);
+    const date = dateMatch ? new Date(dateMatch[1]) : new Date();
+    return {
+      params: { slug },
+      props: { post, date },
+    };
+  });
+}
+
+const { post, date } = Astro.props;
+const { Content } = await render(post);
+const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+---
+
+<BlogPost
+  title={post.data.title}
+  layout={post.data.layout}
+  tags={post.data.tags}
+  image={post.data.image}
+  date={date}
+  slug={slug}
+  monospace_title={post.data.monospace_title}
+>
+  <Content />
+</BlogPost>

@@ -1,0 +1,75 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Theory of Computation" favicon="🔀">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🔀 Theory of Computation</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Maheshwari &amp; Smid, "Introduction to Theory of Computation"</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">What can be computed, how fast, and how do we prove it? Finite automata to NP-completeness, translated into runnable code and diagrams.</p>
+
+    <!-- SVG: Simple finite automaton — 3 states, one accepting -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- State q0 -->
+        <circle cx="60" cy="70" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="75" text-anchor="middle" fill="#60a5fa" font-size="13">q0</text>
+        <!-- Start arrow -->
+        <line x1="10" y1="70" x2="35" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="36,70 28,65 28,75" fill="currentColor" fill-opacity="0.5"/>
+        <!-- State q1 -->
+        <circle cx="190" cy="70" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="190" y="75" text-anchor="middle" fill="#f59e0b" font-size="13">q1</text>
+        <!-- State q2 (accepting — double circle) -->
+        <circle cx="320" cy="70" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="320" cy="70" r="18" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="320" y="75" text-anchor="middle" fill="#34d399" font-size="13">q2</text>
+        <!-- Transition q0 -> q1: a -->
+        <line x1="84" y1="70" x2="165" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="166,70 158,65 158,75" fill="currentColor" fill-opacity="0.5"/>
+        <text x="125" y="60" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">a</text>
+        <!-- Transition q1 -> q2: b -->
+        <line x1="214" y1="70" x2="295" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="296,70 288,65 288,75" fill="currentColor" fill-opacity="0.5"/>
+        <text x="255" y="60" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">b</text>
+        <!-- Self-loop on q0: b -->
+        <path d="M 48 52 C 30 15 90 15 72 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="72,50 76,58 68,56" fill="currentColor" fill-opacity="0.4"/>
+        <text x="60" y="22" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">b</text>
+        <!-- Self-loop on q2: a,b -->
+        <path d="M 308 52 C 290 15 350 15 332 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="332,50 336,58 328,56" fill="currentColor" fill-opacity="0.4"/>
+        <text x="320" y="22" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">a,b</text>
+        <!-- Caption -->
+        <text x="200" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">A finite automaton: states, transitions, one accepting state.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/theory-of-computation/toc-01/", title: "Finite Automata", desc: "Five components define a machine that reads input and accepts or rejects" },
+  { href: "/reading/theory-of-computation/toc-02/", title: "Nondeterminism", desc: "Multiple paths at once, epsilon jumps, and the subset construction that removes them" },
+  { href: "/reading/theory-of-computation/toc-03/", title: "Regular Expressions", desc: "A pattern language exactly as powerful as finite automata, plus a pumping lemma to prove limits" },
+  { href: "/reading/theory-of-computation/toc-04/", title: "Context-Free Grammars", desc: "Production rules, parse trees, and the grammars behind every programming language" },
+  { href: "/reading/theory-of-computation/toc-05/", title: "Pushdown Automata", desc: "A finite automaton with a stack, exactly as powerful as context-free grammars" },
+  { href: "/reading/theory-of-computation/toc-06/", title: "Turing Machines", desc: "An infinite tape, a head, and states: the simplest model of general computation" },
+  { href: "/reading/theory-of-computation/toc-07/", title: "Decidability", desc: "Some problems have no algorithm: the halting problem and diagonalization" },
+  { href: "/reading/theory-of-computation/toc-08/", title: "Complexity", desc: "P, NP, and the million-dollar question of whether brute force can always be beaten" }
+]} icon="🔀" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/">MIT 6.045J Automata, Computability, and Complexity</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/">🔑 Logic</a> — Gödel's incompleteness theorems are the theoretical ceiling</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> — NP-completeness connects complexity to algorithm design</li>
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> — formal grammars use combinatorial objects</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> — computational hardness assumptions underlie modern crypto</li>
+    </ul>
+    </Neighbors>
+  </main>
+</Layout>

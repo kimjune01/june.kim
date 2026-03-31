@@ -1,0 +1,284 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="What Each Field Has — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>What Each Field Has</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 3 ·
+      <a href="https://arxiv.org/abs/2511.11092">Seely 2025</a> ·
+      <a href="https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2022.19">Bilò et al. 2022</a> ·
+      <a href="https://web.stanford.edu/class/ee398a/handouts/papers/Sullivan%20-%20RD%20Opt%20for%20Video.pdf">Sullivan &amp; Wiegand 1998</a>
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        R-D optimization, impossibility classes, Hodge decomposition. Nobody has all three.
+      </p>
+    </div>
+
+    <h3>Three inventories</h3>
+
+    <p>
+      The <a href="/reading/temporal-compression/ch-02/">previous chapter</a> showed
+      the one genuine parallel. Each field has tools the others lack, and the
+      <a href="/reading/temporal-compression/ch-04/">open problems</a> live in
+      the gaps.
+    </p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Video codecs have</th>
+            <th class="py-2 pr-4 text-left">TVG theory has</th>
+            <th class="py-2 text-left">Sheaf cohomology has</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top">
+              <strong>Rate-distortion optimization</strong><br/>
+              <span class="text-gray-400">min D + λR. Formal Lagrangian framework.</span>
+            </td>
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 align-top text-gray-500 italic">—</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top">
+              <strong>Error accumulation + reset</strong><br/>
+              <span class="text-gray-400">Quantization error grows through P-chains. I-frames reset.</span>
+            </td>
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 align-top">
+              <strong>Removable / irreducible split</strong><br/>
+              <span class="text-gray-400">Hodge decomposition: im D vs. ker Dᵀ.</span>
+            </td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top">
+              <strong>Graceful degradation</strong><br/>
+              <span class="text-gray-400">Error concealment approximates missing frames.</span>
+            </td>
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 align-top text-gray-500 italic">—</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 pr-4 align-top">
+              <strong>Journey optimality</strong><br/>
+              <span class="text-gray-400">Foremost, fastest, shortest — formally distinct.</span>
+            </td>
+            <td class="py-3 align-top text-gray-500 italic">—</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 pr-4 align-top">
+              <strong>Impossibility classes</strong><br/>
+              <span class="text-gray-400">13 classes. Some can't support certain operations.</span>
+            </td>
+            <td class="py-3 align-top text-gray-500 italic">—</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 pr-4 align-top">
+              <strong>Temporal spanners</strong><br/>
+              <span class="text-gray-400">Sparse subgraphs preserving journeys. Edge count, not bits.</span>
+            </td>
+            <td class="py-3 align-top text-gray-500 italic">—</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 align-top text-gray-500 italic pr-4">—</td>
+            <td class="py-3 align-top">
+              <strong>Max-flow / min-cut (sheaf)</strong><br/>
+              <span class="text-gray-400">H⁰ = flows. Duality gaps = exactness failures.</span>
+            </td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-3 pr-4 align-top text-gray-500 italic">—</td>
+            <td class="py-3 align-top text-gray-500 italic pr-4">—</td>
+            <td class="py-3 align-top">
+              <strong>Learning gradient factorization</strong><br/>
+              <span class="text-gray-400">∂E/∂W = (harmonic error) · (source activation)ᵀ</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The sheaf coboundary: prediction error, algebraically</h3>
+
+    <p>
+      <a href="https://arxiv.org/abs/2511.11092">Seely (2025)</a> constructs a
+      cellular sheaf over a computational graph. The coboundary operator
+      δ⁰: C⁰ → C¹ maps activations (0-cochains) to prediction errors (1-cochains):
+    </p>
+
+    <p style="text-align: center; font-family: ui-monospace, monospace;">
+      (δ⁰s)<sub>e</sub> = s<sub>v</sub> − W<sub>e</sub> s<sub>u</sub>
+    </p>
+
+    <p>
+      This has the same algebraic form as motion-compensated subtraction: current
+      frame minus predicted frame. The predictive-coding energy is
+      E = ½‖δ⁰s‖², and inference is gradient descent under the sheaf Laplacian.
+    </p>
+
+    <p>
+      With clamped inputs and outputs (known source, known target), the Hodge
+      decomposition splits the forcing vector into a removable component
+      (in im D — better encoder choices can eliminate it) and an irreducible
+      component (in ker Dᵀ — no choice of activations can remove it).
+      The irreducible part lives in H¹, the first cohomology group.
+    </p>
+
+    <h3>Temporal spanner: compressing for edge count</h3>
+
+    <p>
+      A temporal α-spanner removes edges while keeping journey distances
+      within a multiplicative stretch factor α. The objective is fewer edges,
+      not fewer bits. No encoding is specified, no bit budget is given.
+    </p>
+
+    <Repl client:load initialCode={`class TemporalGraph:
+    def __init__(self):
+        self.edges = []
+
+    def add_edge(self, u, v, t):
+        self.edges.append((u, v, t))
+
+    def journey_duration(self, start, end):
+        arrival = {start: 0}
+        for u, v, t in sorted(self.edges, key=lambda e: e[2]):
+            if u in arrival and t >= arrival[u]:
+                new_arrival = t + 1
+                if v not in arrival or new_arrival < arrival[v]:
+                    arrival[v] = new_arrival
+        return arrival.get(end, float('inf'))
+
+    def temporal_spanner(self, alpha):
+        kept = []
+        removed = []
+        test_edges = sorted(self.edges, key=lambda e: -e[2])
+        current = list(self.edges)
+
+        for edge in test_edges:
+            trial = [e for e in current if e != edge]
+            trial_g = TemporalGraph()
+            for e in trial:
+                trial_g.add_edge(*e)
+            full_g = TemporalGraph()
+            for e in current:
+                full_g.add_edge(*e)
+
+            nodes = set()
+            for u, v, t in current:
+                nodes.add(u)
+                nodes.add(v)
+
+            ok = True
+            for s in nodes:
+                for d in nodes:
+                    if s == d:
+                        continue
+                    orig = full_g.journey_duration(s, d)
+                    new = trial_g.journey_duration(s, d)
+                    if orig < float('inf') and new > alpha * orig:
+                        ok = False
+                        break
+                if not ok:
+                    break
+
+            if ok:
+                removed.append(edge)
+                current = trial
+            else:
+                kept.append(edge)
+
+        return sorted(kept, key=lambda e: e[2]), removed
+
+g = TemporalGraph()
+g.add_edge("A", "B", 1)
+g.add_edge("A", "C", 1)
+g.add_edge("B", "D", 2)
+g.add_edge("C", "D", 3)
+g.add_edge("B", "C", 2)
+g.add_edge("A", "D", 4)
+
+print(f"Original: {len(g.edges)} edges")
+kept, removed = g.temporal_spanner(2.0)
+print(f"Spanner (α=2.0): {len(kept)} kept, {len(removed)} removed")
+print("Kept:")
+for e in kept:
+    print(f"  {e[0]}→{e[1]} @ t={e[2]}")
+
+spanner_g = TemporalGraph()
+for e in kept:
+    spanner_g.add_edge(*e)
+
+nodes = ["A", "B", "C", "D"]
+print("\\nJourney durations (original → spanner):")
+for s in nodes:
+    for d in nodes:
+        if s != d:
+            orig = g.journey_duration(s, d)
+            new = spanner_g.journey_duration(s, d)
+            o = str(orig) if orig < float('inf') else "∞"
+            n = str(new) if new < float('inf') else "∞"
+            st = f" (×{new/orig:.1f})" if orig < float('inf') and new < float('inf') else ""
+            print(f"  {s}→{d}: {o} → {n}{st}")`} />
+
+    <h3>The invariance boundary</h3>
+
+    <p>
+      The <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792072/">temporal
+      state machines</a> paper establishes an invariance constraint for pure race
+      logic: any function must satisfy f(t₁+δ,...,tₙ+δ) = f(t₁,...,tₙ)+δ.
+      Compositions that break this symmetry require memory (state). Tropical
+      multiplication — adding two time codes — cannot be done in a single
+      stateless pass.
+    </p>
+
+    <p>
+      This draws a line between stateless temporal composition and stateful
+      computation that requires buffering. The two-phase protocol — store the
+      wavefront, then apply it — is suggestive of the I-frame/P-frame cycle
+      (write a checkpoint, then compute deltas), though that analogy is ours,
+      not the paper's.
+    </p>
+
+    <h3>The gaps</h3>
+
+    <p>
+      The spanner compresses by counting edges. The codec compresses by counting
+      bits. The sheaf separates removable from irreducible error but has no
+      temporal dynamics and no rate constraint. Each field has exactly what the
+      others are missing. The <a href="/reading/temporal-compression/ch-04/">next
+      chapter</a> states the open problems that live in those gaps.
+    </p>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Key references</p>
+      <ul class="neighbors">
+        <li><a href="https://arxiv.org/abs/2511.11092">Seely 2025</a> — coboundary, Hodge decomposition, learning gradient</li>
+        <li><a href="https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2022.19">Bilò et al. 2022</a> — temporal α-spanners</li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792072/">Temporal state machines</a> — invariance constraint</li>
+        <li><a href="https://web.stanford.edu/class/ee398a/handouts/papers/Sullivan%20-%20RD%20Opt%20for%20Video.pdf">Sullivan &amp; Wiegand 1998</a> — R-D optimization</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/temporal-compression/ch-02/", label: "Chain Fragility" }}
+      next={{ href: "/reading/temporal-compression/ch-04/", label: "The Open Problems" }}
+    />
+  </main>
+</Layout>

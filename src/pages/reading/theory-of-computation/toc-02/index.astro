@@ -1,0 +1,205 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.2 — Nondeterminism" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Nondeterminism</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 2 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>nondeterministic finite automaton</strong> (NFA) can be in multiple states at once. It guesses which path to take, and accepts if <em>any</em> path reaches an accepting state. NFAs are not more powerful than DFAs: the subset construction converts any NFA to an equivalent DFA.</p>
+    </div>
+
+    <!-- NFA definition -->
+    <h3>NFA: multiple paths at once</h3>
+    <p>An NFA is the same 5-tuple as a DFA, except the transition function maps to <em>sets</em> of states: &delta; : Q &times; (&Sigma; &cup; &#123;&epsilon;&#125;) &rarr; P(Q). At each step the machine can follow any transition, including &epsilon;-transitions that consume no input.</p>
+
+    <!-- SVG: NFA with branching and epsilon -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- q0 -->
+        <circle cx="60" cy="90" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="95" text-anchor="middle" fill="#60a5fa" font-size="13">q0</text>
+        <!-- Start -->
+        <line x1="10" y1="90" x2="35" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="36,90 28,85 28,95" fill="currentColor" fill-opacity="0.5"/>
+        <!-- q1 (upper branch) -->
+        <circle cx="200" cy="40" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="45" text-anchor="middle" fill="#f59e0b" font-size="13">q1</text>
+        <!-- q2 (lower branch) -->
+        <circle cx="200" cy="140" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="145" text-anchor="middle" fill="#f59e0b" font-size="13">q2</text>
+        <!-- q3 (accepting) -->
+        <circle cx="360" cy="90" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="360" cy="90" r="18" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="360" y="95" text-anchor="middle" fill="#34d399" font-size="13">q3</text>
+        <!-- q0 --a--> q1 -->
+        <line x1="78" y1="75" x2="182" y2="52" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="183,51 174,50 177,58" fill="currentColor" fill-opacity="0.5"/>
+        <text x="120" y="52" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">a</text>
+        <!-- q0 --epsilon--> q2 -->
+        <line x1="78" y1="105" x2="182" y2="128" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="183,129 174,122 177,130" fill="currentColor" fill-opacity="0.5"/>
+        <text x="120" y="132" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" font-style="italic">&epsilon;</text>
+        <!-- q1 --b--> q3 -->
+        <line x1="218" y1="52" x2="342" y2="78" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="343,79 334,74 336,82" fill="currentColor" fill-opacity="0.5"/>
+        <text x="280" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">b</text>
+        <!-- q2 --a--> q3 -->
+        <line x1="218" y1="128" x2="342" y2="102" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="343,101 334,98 336,106" fill="currentColor" fill-opacity="0.5"/>
+        <text x="280" y="128" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">a</text>
+        <!-- Caption -->
+        <text x="220" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">NFA: two branches from q0, one via epsilon-transition.</text>
+      </svg>
+    </div>
+
+    <!-- NFA simulation -->
+    <h3>Simulating an NFA</h3>
+    <p>Track all possible states simultaneously. The NFA accepts if the final set of states contains at least one accepting state.</p>
+
+    <SchemeRepl client:load initialCode={`; NFA that accepts "ab" or "a" (epsilon from q0 to q2)
+; States: q0=0, q1=1, q2=2, q3=3 (accept)
+; q0 --a--> q1, q0 --eps--> q2
+; q1 --b--> q3, q2 --a--> q3
+
+(define (epsilon-closure states)
+  ; q0 has epsilon to q2
+  (if (member 0 states)
+      (if (member 2 states) states (cons 2 states))
+      states))
+
+(define (nfa-step states symbol)
+  (define (transitions s)
+    (cond
+      ((and (= s 0) (equal? symbol "a")) (list 1))
+      ((and (= s 1) (equal? symbol "b")) (list 3))
+      ((and (= s 2) (equal? symbol "a")) (list 3))
+      (else (list))))
+  (let ((next (apply append (map transitions states))))
+    (epsilon-closure next)))
+
+(define (run-nfa input)
+  (define (step states i)
+    (if (= i (string-length input))
+        states
+        (step (nfa-step states (substring input i (+ i 1)))
+              (+ i 1))))
+  (let ((final (step (epsilon-closure (list 0)) 0)))
+    (not (null? (filter (lambda (s) (= s 3)) final)))))
+
+(display "ab: ") (display (run-nfa "ab")) (newline)
+(display "a:  ") (display (run-nfa "a")) (newline)
+(display "b:  ") (display (run-nfa "b")) (newline)
+(display "aa: ") (display (run-nfa "aa"))
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# NFA simulation: track all possible states
+def run_nfa(input_str):
+    def eps_closure(states):
+        s = set(states)
+        if 0 in s: s.add(2)  # epsilon: q0 -> q2
+        return s
+
+    transitions = {
+        (0, 'a'): {1}, (1, 'b'): {3}, (2, 'a'): {3},
+    }
+
+    states = eps_closure({0})
+    for ch in input_str:
+        next_states = set()
+        for s in states:
+            next_states |= transitions.get((s, ch), set())
+        states = eps_closure(next_states)
+    return 3 in states  # q3 is accepting
+
+for s in ["ab", "a", "b", "aa"]:
+    print(s + ": " + str(run_nfa(s)))
+`} />
+    </div>
+
+    <!-- Subset construction -->
+    <h3>Subset construction: NFA to DFA</h3>
+    <p>Every NFA can be converted to a DFA. Each DFA state represents a <em>set</em> of NFA states. The number of DFA states can be exponential (up to 2<sup>n</sup>), but in practice most subsets are unreachable.</p>
+
+    <SchemeRepl client:load initialCode={`; Subset construction: convert the NFA above to a DFA.
+; NFA states: 0,1,2,3. Accepting: 3.
+; Epsilon: 0 -> 2
+
+; DFA states are sets of NFA states.
+; Start: eps-closure(0) = (0,2)
+; (0,2) --a--> eps-closure(1,3) = (1,3) [accept]
+; (0,2) --b--> eps-closure() = () [dead]
+; (1,3) --a--> eps-closure() = () [dead]
+; (1,3) --b--> eps-closure(3) = (3) [accept]
+; (3) --a--> () [dead], (3) --b--> () [dead]
+
+(display "DFA states from subset construction:") (newline)
+(display "  start:       (0,2)") (newline)
+(display "  (0,2) --a--> (1,3) [accept]") (newline)
+(display "  (0,2) --b--> dead") (newline)
+(display "  (1,3) --b--> (3)   [accept]") (newline)
+(display "  (1,3) --a--> dead") (newline)
+(display "  (3) is a sink (no outgoing to live states)") (newline)
+(newline)
+(display "The NFA had 4 states.") (newline)
+(display "The DFA has 4 reachable states (including dead).")
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Subset construction: NFA to DFA (same NFA as above)
+# NFA: 0 --a--> 1, 0 --eps--> 2, 1 --b--> 3, 2 --a--> 3
+def eps_closure(states):
+    s = frozenset(states) | ({2} if 0 in states else set())
+    return s
+
+nfa_delta = {(0, 'a'): {1}, (1, 'b'): {3}, (2, 'a'): {3}}
+accepting = {3}
+
+start = eps_closure({0})
+worklist = [start]
+dfa_states = {}
+
+while worklist:
+    state_set = worklist.pop()
+    for symbol in ['a', 'b']:
+        next_nfa = set()
+        for s in state_set:
+            next_nfa |= nfa_delta.get((s, symbol), set())
+        next_set = eps_closure(next_nfa)
+        dfa_states[(state_set, symbol)] = next_set
+        if next_set not in [v for v in dfa_states.values()] and next_set not in worklist:
+            worklist.append(next_set)
+
+print("DFA transitions:")
+for (src, sym), dst in sorted(dfa_states.items(), key=lambda x: str(x)):
+    is_acc = " [accept]" if dst & accepting else ""
+    print(f"  {set(src)} --{sym}--> {set(dst)}{is_acc}")
+`} />
+    </div>
+
+    <!-- Equivalence -->
+    <h3>NFA = DFA in power</h3>
+    <p>The subset construction proves that NFAs and DFAs recognize the same class of languages: the regular languages. Nondeterminism is a convenience for design, not an increase in power. The trade-off is state count: the DFA may need exponentially more states.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/machine-learning/ml-10/">🤖 ML Ch.10</a> — sequence models: RNNs are nondeterministic automata trained by gradient descent</li>
+      <li><a href="/reading/category-theory/milewski-13/">🐱 Category Theory Ch.13</a> — the powerset monad models nondeterministic computation</li>
+      <li><a href="/reading/probability/grinstead-11/">🎰 Probability Ch.11</a> — Markov chains are probabilistic automata: states plus transition probabilities</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-01/", label: "Finite Automata" }} next={{ href: "/reading/theory-of-computation/toc-03/", label: "Regular Expressions" }} />
+
+  </main>
+</Layout>

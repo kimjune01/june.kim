@@ -1,0 +1,184 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.4 — Projective Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Projective Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Projective_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Projective geometry</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Add a <strong>point at infinity</strong> for every direction. Now parallel lines meet. The payoff: no special cases. Points and lines become interchangeable (duality), and perspective projection becomes a linear map.</p>
+    </div>
+
+    <!-- 1. Homogeneous coordinates -->
+    <h3>Homogeneous coordinates</h3>
+    <p>Represent a point (x, y) as a triple (X, Y, W) where x = X/W and y = Y/W. The triple (2, 4, 2) and (1, 2, 1) are the same point. When W = 0, you get a <strong>point at infinity</strong> in the direction (X, Y). This trick makes all of projective geometry work.</p>
+
+    <SchemeRepl client:load initialCode={`; Homogeneous coordinates
+; A point (x,y) becomes (X, Y, W) where x = X/W, y = Y/W
+
+(define (to-homogeneous x y)
+  (list x y 1))
+
+(define (from-homogeneous h)
+  (let ((w (caddr h)))
+    (if (= w 0)
+        (list 'infinity (car h) (cadr h))
+        (list (/ (car h) w) (/ (cadr h) w)))))
+
+(display "Point (3,4) in homogeneous: ")
+(display (to-homogeneous 3 4))
+(newline)
+
+(display "(6,8,2) back to Cartesian: ")
+(display (from-homogeneous (list 6 8 2)))
+(newline)
+
+(display "(3,4,0) is a point at infinity: ")
+(display (from-homogeneous (list 3 4 0)))
+(newline)
+
+; Scaling doesn't change the point
+(display "(9,12,3) = same as (3,4,1): ")
+(display (from-homogeneous (list 9 12 3)))
+`} />
+
+    <!-- 2. Lines and intersection -->
+    <h3>Lines, intersection, and the cross product trick</h3>
+    <p>In homogeneous coordinates, a line is also a triple (a, b, c) where ax + by + c = 0. The line through two points is their cross product. The intersection of two lines is also their cross product. Parallel lines intersect at a point at infinity.</p>
+
+    <SchemeRepl client:load initialCode={`; Cross product of two homogeneous triples
+(define (cross p q)
+  (list (- (* (cadr p) (caddr q)) (* (caddr p) (cadr q)))
+        (- (* (caddr p) (car q)) (* (car p) (caddr q)))
+        (- (* (car p) (cadr q)) (* (cadr p) (car q)))))
+
+; Line through two points
+(define (line-through p1 p2) (cross p1 p2))
+
+; Intersection of two lines
+(define (intersect l1 l2) (cross l1 l2))
+
+; Two points: (1,0) and (0,1)
+(define p1 (list 1 0 1))
+(define p2 (list 0 1 1))
+(define line1 (line-through p1 p2))
+(display "Line through (1,0) and (0,1): ")
+(display line1)
+(newline)
+
+; Parallel lines: y=1 is (0,1,-1), y=2 is (0,1,-2)
+(define l1 (list 0 1 -1))
+(define l2 (list 0 1 -2))
+(define meeting (intersect l1 l2))
+(display "Parallel lines y=1, y=2 meet at: ")
+(display meeting)
+(newline)
+; W=0 means point at infinity (in x-direction)
+(display "That is a point at infinity")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def cross(p, q):
+    return (
+        p[1]*q[2] - p[2]*q[1],
+        p[2]*q[0] - p[0]*q[2],
+        p[0]*q[1] - p[1]*q[0],
+    )
+
+def from_homogeneous(h):
+    if h[2] == 0:
+        return f"point at infinity ({h[0]}, {h[1]})"
+    return (h[0]/h[2], h[1]/h[2])
+
+# Line through (1,0) and (0,1)
+line = cross((1,0,1), (0,1,1))
+print(f"Line through (1,0) and (0,1): {line}")
+
+# Parallel lines y=1 and y=2 meet at infinity
+meeting = cross((0,1,-1), (0,1,-2))
+print(f"Parallel lines meet at: {from_homogeneous(meeting)}")
+`} />
+    </div>
+
+    <!-- 3. Duality -->
+    <h3>Duality</h3>
+    <p>In projective geometry, every theorem about points and lines has a <strong>dual</strong> theorem where you swap "point" and "line." Two points determine a line; dually, two lines determine a point. This is because points and lines are both represented as triples, and the incidence relation (a point lies on a line) is symmetric: p . l = 0 iff l . p = 0.</p>
+
+    <!-- SVG: Parallel lines meeting at a vanishing point -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 250" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Vanishing point -->
+        <circle cx="200" cy="50" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="200" y="38" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">vanishing point</text>
+        <!-- Parallel lines converging to vanishing point -->
+        <line x1="20" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="80" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="140" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="200" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="260" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="320" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="380" y1="230" x2="200" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Horizon line -->
+        <line x1="20" y1="50" x2="380" y2="50" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <!-- Cross ties (horizontal lines showing perspective) -->
+        <line x1="50" y1="200" x2="350" y2="200" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="80" y1="170" x2="320" y2="170" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="110" y1="140" x2="290" y2="140" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="130" y1="115" x2="270" y2="115" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="150" y1="90" x2="250" y2="90" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Caption -->
+        <text x="200" y="248" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Parallel lines meet at the vanishing point (point at infinity).</text>
+      </svg>
+    </div>
+
+    <!-- 4. Cross-ratio -->
+    <h3>Cross-ratio</h3>
+    <p>The <strong>cross-ratio</strong> of four collinear points A, B, C, D is (AC * BD) / (BC * AD). It is the fundamental invariant of projective geometry: preserved under all projective transformations. Distances and angles change, but cross-ratios don't.</p>
+
+    <SchemeRepl client:load initialCode={`; Cross-ratio of four collinear points (using their coordinates on the line)
+(define (cross-ratio a b c d)
+  (/ (* (- a c) (- b d))
+     (* (- b c) (- a d))))
+
+; Points on a line: 1, 2, 3, 5
+(display "Cross-ratio of (1,2,3,5): ")
+(display (cross-ratio 1 2 3 5))
+(newline)
+
+; Projective transformation: f(x) = (2x+1)/(x+1)
+(define (proj x) (/ (+ (* 2 x) 1) (+ x 1)))
+
+(display "After projective transform: ")
+(display (cross-ratio (proj 1) (proj 2) (proj 3) (proj 5)))
+(newline)
+
+; Cross-ratio is preserved!
+(display "Preserved? ")
+(display (= (cross-ratio 1 2 3 5)
+            (cross-ratio (proj 1) (proj 2) (proj 3) (proj 5))))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Projective_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Projective geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Homogeneous_coordinates"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Homogeneous coordinates</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cross-ratio"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cross-ratio</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Duality_(projective_geometry)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Duality (projective geometry)</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-03/", label: "Transformations" }} next={{ href: "/reading/geometry/geom-05/", label: "Non-Euclidean Geometry" }} />
+
+  </main>
+</Layout>

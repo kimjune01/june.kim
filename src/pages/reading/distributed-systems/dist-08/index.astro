@@ -1,0 +1,168 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.8 — Distributed Transactions" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Distributed Transactions</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Two-phase commit</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Two-phase commit (2PC)</strong> ensures all-or-nothing across multiple nodes. Phase 1: coordinator asks participants to prepare (vote yes/no). Phase 2: if all vote yes, coordinator commits; otherwise aborts. The weakness: if the coordinator crashes after prepare, participants are stuck waiting. Sagas offer an alternative: execute steps with compensating actions for rollback.</p>
+    </div>
+
+    <!-- SVG: 2PC coordinator/participant protocol -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Coordinator timeline -->
+        <line x1="100" y1="30" x2="100" y2="260" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="100" y="20" text-anchor="middle" fill="#60a5fa" font-size="11">Coordinator</text>
+        <!-- Participant 1 timeline -->
+        <line x1="250" y1="30" x2="250" y2="260" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="250" y="20" text-anchor="middle" fill="#34d399" font-size="11">Participant 1</text>
+        <!-- Participant 2 timeline -->
+        <line x1="360" y1="30" x2="360" y2="260" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="360" y="20" text-anchor="middle" fill="#f59e0b" font-size="11">Participant 2</text>
+        <!-- Phase 1: prepare -->
+        <text x="40" y="55" fill="currentColor" font-size="9" fill-opacity="0.5">Phase 1</text>
+        <line x1="104" y1="50" x2="246" y2="70" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="170" y="55" fill="currentColor" font-size="8" fill-opacity="0.5">prepare?</text>
+        <line x1="104" y1="50" x2="356" y2="75" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Vote yes -->
+        <line x1="246" y1="90" x2="104" y2="110" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="170" y="95" fill="#34d399" font-size="8" fill-opacity="0.7">yes</text>
+        <line x1="356" y1="95" x2="104" y2="115" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="230" y="100" fill="#f59e0b" font-size="8" fill-opacity="0.7">yes</text>
+        <!-- Phase 2: commit -->
+        <text x="40" y="150" fill="currentColor" font-size="9" fill-opacity="0.5">Phase 2</text>
+        <line x1="104" y1="145" x2="246" y2="165" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="170" y="150" fill="currentColor" font-size="8" fill-opacity="0.5">commit!</text>
+        <line x1="104" y1="145" x2="356" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Ack -->
+        <line x1="246" y1="185" x2="104" y2="205" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="170" y="192" fill="#34d399" font-size="8" fill-opacity="0.7">ack</text>
+        <line x1="356" y1="190" x2="104" y2="210" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="230" y="197" fill="#f59e0b" font-size="8" fill-opacity="0.7">ack</text>
+        <!-- Done -->
+        <circle cx="100" cy="230" r="3" fill="#34d399"/>
+        <text x="100" y="250" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">done</text>
+      </svg>
+    </div>
+
+    <!-- 1. 2PC -->
+    <h3>Two-phase commit</h3>
+
+    <SchemeRepl client:load initialCode={`; Two-phase commit simulation.
+; Phase 1: coordinator asks, participants vote.
+; Phase 2: if all yes, commit. Otherwise abort.
+
+(define (two-phase-commit votes)
+  (display "Phase 1: collecting votes") (newline)
+  (let loop ((v votes) (i 1))
+    (if (null? v) #t
+        (begin
+          (display "  Participant ") (display i) (display ": ")
+          (display (if (car v) "YES" "NO")) (newline)
+          (loop (cdr v) (+ i 1)))))
+
+  (display "Phase 2: ")
+  (let ((all-yes (let loop ((v votes))
+                   (if (null? v) #t
+                       (and (car v) (loop (cdr v)))))))
+    (if all-yes
+        (display "COMMIT")
+        (display "ABORT"))
+    (newline)))
+
+(display "--- All agree ---") (newline)
+(two-phase-commit (list #t #t #t))
+(newline)
+(display "--- One votes no ---") (newline)
+(two-phase-commit (list #t #f #t))
+`} />
+
+    <!-- 2. The blocking problem -->
+    <h3>The blocking problem</h3>
+    <p>If the coordinator crashes after sending prepare but before sending commit/abort, participants that voted yes are <strong>blocked</strong>. They cannot commit (the coordinator might abort) or abort (the coordinator might commit). They must wait. This is why 2PC is called a <strong>blocking protocol</strong>. Three-phase commit (3PC) adds a pre-commit phase to reduce blocking, but is more complex and still not partition-tolerant.</p>
+
+    <!-- 3. Saga pattern -->
+    <h3>Saga pattern</h3>
+    <p>A <strong>saga</strong> splits a distributed transaction into a sequence of local transactions. Each step has a <strong>compensating transaction</strong> that undoes its effects. If step 3 fails, run compensations for steps 2 and 1 in reverse. No coordinator lock. No blocking. The tradeoff: intermediate states are visible (no isolation).</p>
+
+    <SchemeRepl client:load initialCode={`; Saga pattern: forward steps + compensating actions.
+; If a step fails, run compensations in reverse.
+
+(define steps (list "reserve hotel" "book flight" "charge card"))
+(define compensations (list "cancel hotel" "cancel flight" "refund card"))
+
+(define (run-saga steps compensations fail-at)
+  (let loop ((s steps) (c compensations) (i 1) (done (list)))
+    (if (null? s)
+        (begin (display "Saga completed successfully") (newline))
+        (if (= i fail-at)
+            (begin
+              (display "Step ") (display i) (display " FAILED: ")
+              (display (car s)) (newline)
+              (display "Running compensations:") (newline)
+              (let undo ((d (reverse done)))
+                (if (null? d) #t
+                    (begin
+                      (display "  ") (display (car d)) (newline)
+                      (undo (cdr d))))))
+            (begin
+              (display "Step ") (display i) (display ": ")
+              (display (car s)) (newline)
+              (loop (cdr s) (cdr c) (+ i 1)
+                    (cons (car c) done)))))))
+
+(display "--- Success ---") (newline)
+(run-saga steps compensations 99)
+(newline)
+(display "--- Fail at step 3 ---") (newline)
+(run-saga steps compensations 3)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Saga pattern
+steps = ["reserve hotel", "book flight", "charge card"]
+compensations = ["cancel hotel", "cancel flight", "refund card"]
+
+def run_saga(fail_at=None):
+    done = []
+    for i, (step, comp) in enumerate(zip(steps, compensations)):
+        if i == fail_at:
+            print(f"Step {i+1} FAILED: {step}")
+            print("Running compensations:")
+            for c in reversed(done):
+                print(f"  {c}")
+            return
+        print(f"Step {i+1}: {step}")
+        done.append(comp)
+    print("Saga completed successfully")
+
+print("--- Success ---")
+run_saga()
+print("\\n--- Fail at step 3 ---")
+run_saga(fail_at=2)
+`} />
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/distributed-systems/dist-04/">&#x1F310; Ch.4 Consensus</a> — 2PC is a degenerate case where the coordinator is the single proposer</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-07/", label: "CAP Theorem" }} next={{ href: "/reading/distributed-systems/dist-09/", label: "Gossip Protocols" }} />
+
+  </main>
+</Layout>

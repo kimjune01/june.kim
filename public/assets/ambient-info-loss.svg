@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 200" font-family="system-ui, sans-serif">
+  <style>
+    .arr { stroke: #bbb; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+    .name { text-anchor: middle; font-size: 12px; font-weight: 600; }
+    .bits { text-anchor: middle; font-size: 10px; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
+  </defs>
+
+  <text x="430" y="20" text-anchor="middle" font-size="12" fill="#555" font-weight="500">F(f ∘ g) = F(f) + F(g) — information loss is additive under composition</text>
+
+  <!-- Perceive -->
+  <rect x="40" y="42" width="80" height="100" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2" rx="3"/>
+  <text class="name" x="80" y="160" fill="#2e7d32">Perceive</text>
+  <text class="bits" x="80" y="176" fill="#2e7d32">+bits</text>
+
+  <line class="arr" x1="120" y1="92" x2="155" y2="92"/>
+
+  <!-- Cache -->
+  <rect x="155" y="42" width="80" height="100" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.2" rx="3"/>
+  <text class="name" x="195" y="160" fill="#1565c0">Cache</text>
+  <text class="bits" x="195" y="176" fill="#1565c0">lossless</text>
+
+  <line class="arr" x1="235" y1="92" x2="275" y2="92"/>
+
+  <!-- Filter -->
+  <rect x="275" y="56" width="80" height="86" fill="#ffebee" stroke="#c62828" stroke-width="1.2" rx="3"/>
+  <text class="name" x="315" y="160" fill="#c62828">Filter</text>
+  <text class="bits" x="315" y="176" fill="#c62828">−bits</text>
+
+  <line class="arr" x1="355" y1="92" x2="395" y2="92"/>
+
+  <!-- Attend -->
+  <rect x="395" y="66" width="80" height="76" fill="#ffebee" stroke="#c62828" stroke-width="1.2" rx="3"/>
+  <text class="name" x="435" y="160" fill="#c62828">Attend</text>
+  <text class="bits" x="435" y="176" fill="#c62828">−bits</text>
+
+  <line class="arr" x1="475" y1="92" x2="515" y2="92"/>
+
+  <!-- Remember -->
+  <rect x="515" y="66" width="80" height="76" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.2" rx="3"/>
+  <text class="name" x="555" y="160" fill="#1565c0">Remember</text>
+  <text class="bits" x="555" y="176" fill="#1565c0">lossless</text>
+
+  <line class="arr" x1="595" y1="92" x2="635" y2="92"/>
+
+  <!-- Consolidate -->
+  <rect x="635" y="82" width="80" height="60" fill="#fff3e0" stroke="#e65100" stroke-width="1.2" rx="3"/>
+  <text class="name" x="675" y="160" fill="#e65100">Consolidate</text>
+  <text class="bits" x="675" y="176" fill="#e65100">→ policy</text>
+
+  <!-- Survival threshold -->
+  <line x1="38" y1="142" x2="718" y2="142" stroke="#888" stroke-width="0.8" stroke-dasharray="4,4"/>
+  <text x="770" y="146" font-size="10" fill="#888">survival threshold</text>
+
+  <!-- Bottom annotation -->
+  <text x="430" y="197" text-anchor="middle" font-size="11" fill="#555">Each loss ≥ 0  →  total loss only accumulates  →  DPI</text>
+</svg>

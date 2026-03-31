@@ -1,0 +1,233 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.2 — Time and Clocks" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Time and Clocks</h1>
+    <p class="text-gray-400 text-sm mb-6">Lamport 1978 &middot; Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Lamport_timestamp"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lamport timestamps</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Physical clocks drift. Logical clocks don't measure wall time; they capture <strong>causality</strong>. If event A could have influenced event B, then A's timestamp is less than B's. Lamport clocks give a total order consistent with causality. Vector clocks give the exact causal partial order.</p>
+    </div>
+
+    <!-- 1. Physical clocks -->
+    <h3>Physical clocks and drift</h3>
+    <p>Every computer has a quartz oscillator. It drifts by roughly 10-100 ppm (parts per million). Over a day, that is 1-10 seconds of error. NTP corrects this but cannot eliminate it. Two nodes will never agree on the exact time.</p>
+
+    <SchemeRepl client:load initialCode={`; Clock drift simulation.
+; Two clocks start synchronized, drift apart.
+
+(define drift-ppm 50)  ; 50 parts per million
+(define seconds-per-day 86400)
+
+; After one day, clock B is off by:
+(define drift-seconds
+  (/ (* drift-ppm seconds-per-day) 1000000))
+
+(display "Drift rate: ") (display drift-ppm) (display " ppm") (newline)
+(display "After 1 day, clocks differ by ")
+(display drift-seconds) (display " seconds") (newline)
+
+; After 1 week:
+(display "After 1 week: ")
+(display (* drift-seconds 7)) (display " seconds")
+`} />
+
+    <!-- 2. Happens-before -->
+    <h3>The happens-before relation</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Leslie_Lamport"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lamport</a> defined the <strong>happens-before</strong> relation: A happens-before B (written A &rarr; B) if A and B are on the same node and A came first, or if A is a send and B is the corresponding receive. The relation is transitive. Events that are not related by happens-before are <strong>concurrent</strong>: neither caused the other.</p>
+
+    <!-- SVG: space-time diagram with Lamport timestamps -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Process lines -->
+        <line x1="80" y1="30" x2="80" y2="240" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="200" y1="30" x2="200" y2="240" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="320" y1="30" x2="320" y2="240" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="80" y="22" text-anchor="middle" fill="#60a5fa" font-size="12">P1</text>
+        <text x="200" y="22" text-anchor="middle" fill="#34d399" font-size="12">P2</text>
+        <text x="320" y="22" text-anchor="middle" fill="#f59e0b" font-size="12">P3</text>
+        <!-- Events on P1 -->
+        <circle cx="80" cy="60" r="4" fill="#60a5fa"/>
+        <text x="65" y="63" text-anchor="end" fill="#60a5fa" font-size="10">1</text>
+        <circle cx="80" cy="140" r="4" fill="#60a5fa"/>
+        <text x="65" y="143" text-anchor="end" fill="#60a5fa" font-size="10">2</text>
+        <circle cx="80" cy="200" r="4" fill="#60a5fa"/>
+        <text x="65" y="203" text-anchor="end" fill="#60a5fa" font-size="10">5</text>
+        <!-- Events on P2 -->
+        <circle cx="200" cy="100" r="4" fill="#34d399"/>
+        <text x="210" y="95" fill="#34d399" font-size="10">2</text>
+        <circle cx="200" cy="180" r="4" fill="#34d399"/>
+        <text x="210" y="175" fill="#34d399" font-size="10">4</text>
+        <!-- Events on P3 -->
+        <circle cx="320" cy="80" r="4" fill="#f59e0b"/>
+        <text x="335" y="83" fill="#f59e0b" font-size="10">1</text>
+        <circle cx="320" cy="160" r="4" fill="#f59e0b"/>
+        <text x="335" y="163" fill="#f59e0b" font-size="10">3</text>
+        <!-- Message P1 -> P2 (send at t=1, receive at t=2) -->
+        <line x1="84" y1="62" x2="196" y2="98" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="194,94 198,100 192,100" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Message P3 -> P2 (send at t=3, receive at t=4) -->
+        <line x1="316" y1="162" x2="204" y2="178" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="206,174 202,180 208,180" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Message P2 -> P1 (send at t=4, receive at t=5) -->
+        <line x1="196" y1="182" x2="84" y2="198" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="86,194 82,200 88,200" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Time arrow -->
+        <text x="40" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3" transform="rotate(-90 40 150)">time</text>
+      </svg>
+    </div>
+
+    <!-- 3. Lamport clocks -->
+    <h3>Lamport clocks</h3>
+    <p>Each node keeps a counter. On each local event, increment. On send, increment and attach the counter. On receive, set your counter to max(yours, received) + 1. This gives a total order consistent with causality: if A &rarr; B then L(A) &lt; L(B). But the converse is not true: L(A) &lt; L(B) does not mean A caused B.</p>
+
+    <SchemeRepl client:load initialCode={`; Lamport clock implementation.
+; Each node maintains a counter.
+
+(define clock-p1 0)
+(define clock-p2 0)
+(define clock-p3 0)
+
+; Local event: increment
+(define (local-event clock)
+  (+ clock 1))
+
+; Send: increment, return (new-clock, message-timestamp)
+(define (send-event clock)
+  (let ((new-clock (+ clock 1)))
+    (list new-clock new-clock)))
+
+; Receive: max(local, received) + 1
+(define (receive-event local-clock msg-ts)
+  (+ (max local-clock msg-ts) 1))
+
+; Simulation: P1 sends to P2, P3 sends to P2, P2 sends to P1
+(set! clock-p1 (local-event clock-p1))     ; P1: event at 1
+(display "P1 local event: ") (display clock-p1) (newline)
+
+(let ((result (send-event clock-p1)))       ; P1 sends (clock=2)
+  (set! clock-p1 (car result))
+  (display "P1 sends, clock=") (display clock-p1) (newline)
+  (set! clock-p2 (receive-event clock-p2 (car (cdr result))))
+  (display "P2 receives, clock=") (display clock-p2) (newline))
+
+(set! clock-p3 (local-event clock-p3))      ; P3: event at 1
+(let ((result (send-event clock-p3)))       ; P3 sends (clock=2)
+  (set! clock-p3 (car result))
+  (set! clock-p2 (receive-event clock-p2 (car (cdr result))))
+  (display "P3 sends, P2 receives, P2 clock=") (display clock-p2) (newline))
+
+(let ((result (send-event clock-p2)))       ; P2 sends (clock=5)
+  (set! clock-p2 (car result))
+  (set! clock-p1 (receive-event clock-p1 (car (cdr result))))
+  (display "P2 sends, P1 receives, P1 clock=") (display clock-p1) (newline))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lamport clocks in Python
+class LamportClock:
+    def __init__(self, name):
+        self.name = name
+        self.time = 0
+
+    def local_event(self):
+        self.time += 1
+        return self.time
+
+    def send(self):
+        self.time += 1
+        return self.time  # attach to message
+
+    def receive(self, msg_ts):
+        self.time = max(self.time, msg_ts) + 1
+        return self.time
+
+p1, p2, p3 = LamportClock("P1"), LamportClock("P2"), LamportClock("P3")
+
+p1.local_event()
+print(f"P1 local event: {p1.time}")
+
+ts = p1.send()
+print(f"P1 sends, clock={p1.time}")
+p2.receive(ts)
+print(f"P2 receives, clock={p2.time}")
+
+p3.local_event()
+ts = p3.send()
+p2.receive(ts)
+print(f"P3 sends, P2 receives, P2 clock={p2.time}")
+
+ts = p2.send()
+p1.receive(ts)
+print(f"P2 sends, P1 receives, P1 clock={p1.time}")
+`} />
+    </div>
+
+    <!-- 4. Vector clocks -->
+    <h3>Vector clocks</h3>
+    <p>A vector clock is an array of counters, one per node. Node i increments its own entry on each event. On send, attach the whole vector. On receive, take the componentwise max, then increment your entry. Two events are concurrent if and only if neither vector dominates the other. Vector clocks capture the <strong>exact</strong> causal partial order.</p>
+
+    <SchemeRepl client:load initialCode={`; Vector clocks: one counter per node.
+; Dominance = componentwise <=, strict on at least one.
+
+(define (vc-increment vc i)
+  ; increment position i in vector vc
+  (let loop ((v vc) (j 0) (acc (list)))
+    (if (null? v) (reverse acc)
+        (loop (cdr v) (+ j 1)
+              (cons (if (= j i) (+ (car v) 1) (car v)) acc)))))
+
+(define (vc-merge vc1 vc2)
+  ; componentwise max
+  (let loop ((a vc1) (b vc2) (acc (list)))
+    (if (null? a) (reverse acc)
+        (loop (cdr a) (cdr b)
+              (cons (max (car a) (car b)) acc)))))
+
+(define (vc-before? a b)
+  ; a <= b componentwise, and a != b
+  (let loop ((x a) (y b) (all-leq #t) (strict #f))
+    (if (null? x) (and all-leq strict)
+        (loop (cdr x) (cdr y)
+              (and all-leq (<= (car x) (car y)))
+              (or strict (< (car x) (car y)))))))
+
+; Three nodes: indices 0, 1, 2
+(define vc-a (list 0 0 0))
+(define vc-b (list 0 0 0))
+
+; Node 0 does a local event
+(set! vc-a (vc-increment (list 0 0 0) 0))  ; (1 0 0)
+; Node 1 does a local event
+(set! vc-b (vc-increment (list 0 0 0) 1))  ; (0 1 0)
+
+(display "vc-a = ") (display vc-a) (newline)
+(display "vc-b = ") (display vc-b) (newline)
+(display "a before b? ") (display (vc-before? vc-a vc-b)) (newline)
+(display "b before a? ") (display (vc-before? vc-b vc-a)) (newline)
+(display "concurrent? ") (display (and (not (vc-before? vc-a vc-b))
+                                        (not (vc-before? vc-b vc-a))))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-07/">&#x1F511; Logic Ch.7</a> — partial orders: the mathematical structure behind happens-before</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-01/", label: "What Makes It Hard" }} next={{ href: "/reading/distributed-systems/dist-03/", label: "Replication" }} />
+
+  </main>
+</Layout>

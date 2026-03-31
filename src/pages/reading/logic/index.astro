@@ -1,0 +1,60 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Logic" favicon="🔑">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🔑 Logic</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">Craig DeLancey, "A Concise Introduction to Logic"</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">Propositions, proofs, and predicates. Translated into runnable code with diagrams. See also <a href="/reading/scientific-method/boole-1854/">🔬 Boole 1854</a> for the historical roots.</p>
+
+    <!-- SVG: Modus ponens proof tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Premises -->
+        <text x="70" y="40" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">P</text>
+        <text x="210" y="40" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">P &rarr; Q</text>
+        <!-- Inference line -->
+        <line x1="30" y1="55" x2="270" y2="55" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Rule label -->
+        <text x="285" y="60" text-anchor="start" fill="currentColor" font-size="10" fill-opacity="0.35">MP</text>
+        <!-- Conclusion -->
+        <text x="150" y="80" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">Q</text>
+        <!-- Caption -->
+        <text x="150" y="125" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Modus ponens: from P and P &rarr; Q, conclude Q.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/logic/logic-01/", title: "Arguments and Validity", desc: "What makes an argument valid, and why validity is not the same as truth" },
+  { href: "/reading/logic/logic-02/", title: "Propositional Logic Syntax", desc: "Propositions, connectives, and how to parse a well-formed formula" },
+  { href: "/reading/logic/logic-03/", title: "Truth Tables", desc: "Evaluating compound propositions to find tautologies, contradictions, and contingencies" },
+  { href: "/reading/logic/logic-04/", title: "Logical Equivalence", desc: "De Morgan, distribution, contrapositive, and simplification laws" },
+  { href: "/reading/logic/logic-05/", title: "Natural Deduction", desc: "Proof rules that build valid arguments step by step" },
+  { href: "/reading/logic/logic-06/", title: "Predicate Logic", desc: "Quantifiers, predicates, and translating English into formal logic" },
+  { href: "/reading/logic/logic-07/", title: "Predicate Logic Proofs", desc: "Instantiation and generalization rules for quantified statements" },
+  { href: "/reading/logic/logic-08/", title: "Identity and Functions", desc: "Equality, uniqueness, definite descriptions, and functions in logic" },
+  { href: "/reading/logic/logic-09/", title: "Mathematical Induction", desc: "Base case plus inductive step proves all cases" },
+  { href: "/reading/logic/logic-10/", title: "Soundness and Completeness", desc: "What proof systems can and cannot reach, ending with Godel" }
+]} icon="🔑" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/">MIT 6.042J Mathematics for Computer Science</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/proof-writing/">✎ Proofs</a> &mdash; logic is the language proofs are written in</li>
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> &mdash; symbolic logic and graph theory together</li>
+      <li><a href="/reading/theory-of-computation/">🔀 Theory of Computation</a> &mdash; decidability is logic made computational</li>
+      <li><a href="/reading/the-natural-framework-lean/">✏️ Lean Proofs</a> &mdash; type theory as a foundation for logic</li>
+      <li><a href="/reading/scientific-method/boole-1854/">🔬 Boole 1854</a> &mdash; the historical source of Boolean algebra</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

@@ -1,0 +1,233 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.8 — Electromagnetism" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Electromagnetism</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 8 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Changing electric fields create magnetic fields. Changing magnetic fields create electric fields. <strong>Maxwell's equations</strong> unify electricity and magnetism into a single theory, and predict that light is an electromagnetic wave.</p>
+    </div>
+
+    <!-- 1. Faraday's law -->
+    <h3>Faraday's law</h3>
+    <p>A changing magnetic flux through a loop induces an EMF (voltage). <strong>Faraday's law</strong>: EMF = -d(Phi)/dt. The minus sign is <a href="https://en.wikipedia.org/wiki/Lenz%27s_law"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lenz's law</a>: the induced current opposes the change that caused it. This is how generators, transformers, and induction cooktops work.</p>
+
+    <SchemeRepl client:load initialCode={`; Faraday's law: EMF = -dPhi/dt
+; For a loop in a changing field:
+; Phi(t) = B(t) * A * cos(theta)
+; If B changes linearly: EMF = -A * dB/dt
+
+(define pi 3.14159265)
+
+; Circular loop, radius 10 cm
+(define r 0.10)
+(define A (* pi r r))
+
+; Field changes from 0.5 T to 0.1 T in 0.2 seconds
+(define B1 0.5)
+(define B2 0.1)
+(define dt 0.2)
+(define dB (- B2 B1))
+
+(define EMF (* -1 A (/ dB dt)))
+
+(display "Loop area: ") (display A) (display " m^2") (newline)
+(display "dB/dt: ") (display (/ dB dt)) (display " T/s") (newline)
+(display "Induced EMF: ") (display EMF) (display " V") (newline)
+
+; With N turns, EMF is N times larger
+(define N 100)
+(display "EMF with ") (display N) (display " turns: ")
+(display (* N EMF)) (display " V")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+r = 0.10
+A = math.pi * r**2
+dB_dt = (0.1 - 0.5) / 0.2
+EMF = -A * dB_dt
+
+print(f"Loop area: {A:.4f} m^2")
+print(f"dB/dt: {dB_dt:.1f} T/s")
+print(f"Induced EMF: {EMF:.4f} V")
+print(f"EMF with 100 turns: {100*EMF:.2f} V")
+`} />
+    </div>
+
+
+    <!-- 2. Inductance -->
+    <h3>Inductance</h3>
+    <p>A coil's own changing current induces a back-EMF in itself. <strong>Inductance</strong> L measures how much flux a coil produces per amp of current: L = Phi/I. A solenoid of N turns, length l, area A has L = mu_0 * N^2 * A / l. The energy stored in an inductor is (1/2) * L * I^2.</p>
+
+    <SchemeRepl client:load initialCode={`; Inductance of a solenoid: L = mu0 * N^2 * A / length
+; Energy stored: U = 0.5 * L * I^2
+
+(define pi 3.14159265)
+(define mu0 (* 4 pi 1e-7))
+
+(define (solenoid-inductance N A length)
+  (/ (* mu0 N N A) length))
+
+(define (inductor-energy L I)
+  (* 0.5 L I I))
+
+; 1000-turn solenoid, 5 cm radius, 30 cm long
+(define N 1000)
+(define r 0.05)
+(define A (* pi r r))
+(define length 0.30)
+
+(define L (solenoid-inductance N A length))
+(display "Inductance: ") (display L) (display " H") (newline)
+(display "Inductance: ") (display (* L 1000)) (display " mH") (newline)
+
+; Energy at 2 A
+(define I 2.0)
+(define U (inductor-energy L I))
+(display "Energy at 2 A: ") (display U) (display " J")
+`} />
+
+
+    <!-- 3. Maxwell's equations -->
+    <h3>Maxwell's equations</h3>
+    <p>Four equations govern all of electromagnetism. Gauss's law for E: charges are sources of electric field. Gauss's law for B: there are no magnetic monopoles. Faraday's law: changing B creates E. Ampere-Maxwell law: currents and changing E create B. Maxwell added the displacement current term to Ampere's law, and the whole theory snapped shut.</p>
+
+    <!-- SVG: Maxwell's equations as four boxes with arrows between E and B -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- E field box (left) -->
+        <rect x="30" y="40" width="140" height="200" rx="8" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="30" text-anchor="middle" fill="#60a5fa" font-size="16" font-weight="bold" fill-opacity="0.8">E field</text>
+        <!-- Gauss E -->
+        <rect x="45" y="60" width="110" height="40" rx="4" fill="#60a5fa" fill-opacity="0.1"/>
+        <text x="100" y="76" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Gauss (E)</text>
+        <text x="100" y="92" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">div E = rho/eps0</text>
+        <!-- Faraday -->
+        <rect x="45" y="120" width="110" height="40" rx="4" fill="#60a5fa" fill-opacity="0.1"/>
+        <text x="100" y="136" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Faraday</text>
+        <text x="100" y="152" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">curl E = -dB/dt</text>
+
+        <!-- B field box (right) -->
+        <rect x="230" y="40" width="140" height="200" rx="8" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="300" y="30" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="bold" fill-opacity="0.8">B field</text>
+        <!-- Gauss B -->
+        <rect x="245" y="60" width="110" height="40" rx="4" fill="#f59e0b" fill-opacity="0.1"/>
+        <text x="300" y="76" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Gauss (B)</text>
+        <text x="300" y="92" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">div B = 0</text>
+        <!-- Ampere-Maxwell -->
+        <rect x="245" y="120" width="110" height="40" rx="4" fill="#f59e0b" fill-opacity="0.1"/>
+        <text x="300" y="136" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Ampere-Maxwell</text>
+        <text x="300" y="152" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">curl B = mu0*J + ...</text>
+
+        <!-- Arrow: Faraday: changing B -> E -->
+        <line x1="245" y1="155" x2="165" y2="145" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.6"/>
+        <polygon points="165,141 165,149 157,145" fill="#a78bfa" fill-opacity="0.6"/>
+        <text x="200" y="168" text-anchor="middle" fill="#a78bfa" font-size="9" fill-opacity="0.5">dB/dt creates E</text>
+
+        <!-- Arrow: Ampere-Maxwell: changing E -> B -->
+        <line x1="155" y1="135" x2="240" y2="125" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.6"/>
+        <polygon points="240,121 240,129 248,125" fill="#a78bfa" fill-opacity="0.6"/>
+        <text x="200" y="115" text-anchor="middle" fill="#a78bfa" font-size="9" fill-opacity="0.5">dE/dt creates B</text>
+
+        <!-- Bottom note -->
+        <text x="200" y="270" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">The mutual creation is what makes light possible.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Maxwell's equations predict electromagnetic waves.
+; The wave speed falls out of the constants:
+; c = 1 / sqrt(mu0 * eps0)
+
+(define pi 3.14159265)
+(define mu0 (* 4 pi 1e-7))
+(define eps0 8.854e-12)
+
+(define c (/ 1 (sqrt (* mu0 eps0))))
+
+(display "Speed of light from Maxwell's equations:") (newline)
+(display c) (display " m/s") (newline)
+(display "Actual speed of light: 299792458 m/s") (newline)
+(display "Ratio: ") (display (/ c 299792458))
+; Maxwell computed this in 1865 and recognized
+; that light is an electromagnetic wave.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+mu0 = 4 * math.pi * 1e-7
+eps0 = 8.854e-12
+c = 1 / math.sqrt(mu0 * eps0)
+
+print(f"Predicted c: {c:.0f} m/s")
+print(f"Actual c:    299792458 m/s")
+print(f"Ratio:       {c/299792458:.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Electromagnetic waves -->
+    <h3>Electromagnetic waves</h3>
+    <p>An oscillating charge creates oscillating E and B fields that propagate outward at speed c. E and B are perpendicular to each other and to the direction of travel. The wave carries energy: the intensity (power per area) is proportional to E^2. The electromagnetic spectrum, from radio to gamma rays, is all the same phenomenon at different frequencies.</p>
+
+    <SchemeRepl client:load initialCode={`; EM wave properties
+; E and B are related: E = c * B
+; Intensity: I = (1/2) * c * eps0 * E0^2
+; Energy density: u = eps0 * E^2
+
+(define c 3e8)
+(define eps0 8.854e-12)
+
+(define (em-intensity E0)
+  (* 0.5 c eps0 E0 E0))
+
+; Sunlight at Earth's surface: E0 ~ 870 V/m
+(define E0-sun 870)
+(define I-sun (em-intensity E0-sun))
+
+(display "Solar E field amplitude: ")
+(display E0-sun) (display " V/m") (newline)
+(display "Solar B field amplitude: ")
+(display (/ E0-sun c)) (display " T") (newline)
+(display "Solar intensity: ")
+(display I-sun) (display " W/m^2") (newline)
+(display "Expected ~1000 W/m^2 (the solar constant is 1361 W/m^2)")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-15/">Calculus Ch.15</a> — Green, Stokes, Divergence theorems: Maxwell's equations ARE these theorems applied to E and B</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Faraday%27s_law_of_induction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Faraday's law of induction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Inductance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Inductance</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Maxwell%27s_equations"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Maxwell's equations</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Electromagnetic_radiation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Electromagnetic radiation</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The differential forms of Maxwell's equations (div and curl) require vector calculus. The integral forms (Gauss, Faraday, Ampere) are more physical: they say what happens when you draw a closed surface or loop. Crowell develops both. Our code computes with the algebraic consequences rather than the calculus itself. The speed-of-light derivation is exact: Maxwell's prediction matched experiment to high precision.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-07/", label: "Magnetism" }} next={{ href: "/reading/physics/crowell-09/", label: "Optics" }} />
+
+  </main>
+</Layout>

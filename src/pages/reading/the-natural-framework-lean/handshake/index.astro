@@ -1,0 +1,110 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Handshake.lean — Stage N's guarantee = Stage N+1's assumption" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Handshake.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Handshake.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Formalizes <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the composition argument</a>: stage N's postcondition implies stage N+1's precondition, including the cross-cycle coupling where Consolidate writes policy that Attend reads next cycle.</p>
+    </div>
+
+    <h3>Handshake</h3>
+    <p>A handshake is a pair of contracts (postcondition of the preceding stage, precondition of the following stage) plus a proof that the postcondition implies the precondition. This is what makes adjacent stages compatible.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Handshake</span> (&beta; : Type) <span class="text-blue-300">where</span>
+  post : Contract &beta;
+  pre  : Contract &beta;
+  compatible : &forall; b : &beta;, post b &rarr; pre b</code></pre>
+
+    <h3>PipelineHandshake</h3>
+    <p>The full pipeline handshake: four forward handshakes (Perceive&rarr;Cache, Cache&rarr;Filter, Filter&rarr;Attend, Attend&rarr;Remember) plus one cross-cycle handshake (Consolidate&rarr;Attend). The cross-cycle one is special: what Consolidate guarantees at cycle k is what Attend requires at cycle k+1.</p>
+
+    <h3>cycle_preserves_policy</h3>
+    <p>The coupling lemma. This says: if Consolidate preserves its postcondition (for all policies and persisted states), then after one pipeline cycle, the output policy satisfies Attend's precondition for the next cycle.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">cycle_preserves_policy</span> [Monad M] [LawfulMonad M] [Support M]
+    (h : PipelineHandshake I) (p : Pipeline M I)
+    (hcon : &forall; (pol : I.policy) (per : I.persisted),
+      &forall; pol' : I.policy, Support.support (p.consolidate pol per) pol' &rarr;
+        h.consolidate_attend.post pol')
+    (policy : I.policy) (input : I.raw)
+    : &forall; result : I.policy &times; I.persisted,
+        Support.support (p.cycle input policy) result &rarr;
+        h.consolidate_attend.pre result.1</code></pre>
+    <p class="text-sm text-gray-500">The proof unfolds the cycle definition and peels apart each bind using <code>support_bind</code>. After extracting the forward stages, Remember, and Consolidate, it applies the handshake compatibility to convert the postcondition into the precondition.</p>
+
+    <Repl client:load initialCode={`# Handshake: post(stage N) implies pre(stage N+1)
+# If the guarantee breaks, the next stage can't trust its input.
+
+def perceive(raw):
+    return {"type": "encoded", "data": raw.upper()}
+
+def cache(encoded):
+    assert encoded["type"] == "encoded"  # pre: must be encoded
+    return {"type": "indexed", "key": hash(encoded["data"]),
+            "data": encoded["data"]}
+
+def filter_stage(indexed):
+    assert indexed["type"] == "indexed"  # pre: must be indexed
+    return {"type": "selected", "data": indexed["data"][:3]}
+
+# Each postcondition matches the next precondition:
+x = perceive("hello world")
+print(f"perceive post: type={x['type']}")
+
+y = cache(x)  # pre satisfied: type == 'encoded'
+print(f"cache post:    type={y['type']}")
+
+z = filter_stage(y)  # pre satisfied: type == 'indexed'
+print(f"filter post:   type={z['type']}")
+
+print("\\nAll handshakes hold — pipeline composes safely.")
+`} />
+
+    <h3>cycle_preserves_policy_at</h3>
+    <p>A weaker form: Consolidate's postcondition only needs to hold for the specific input policy (not all policies). Needed for up-induction on the fractal tower where we only know the postcondition for the starting policy.</p>
+
+    <h3>cycle_consolidate_support</h3>
+    <p>An extraction lemma: any output policy from a cycle came from Consolidate applied to the input policy. Useful for decomposing the tower construction.</p>
+
+    <h3>step_position_injective</h3>
+    <p>The six pipeline steps have a total order (positions 0-5). The mapping from step to position is injective &mdash; distinct steps have distinct positions.</p>
+
+    <h3>NonExpanding / StrictlyLossy</h3>
+    <p>Information monotonicity. A kernel is non-expanding if no output has more information than the input. Strictly lossy means at least one input sees a strict decrease. These formalize that information flows downhill through the pipeline.</p>
+
+    <h3>non_expanding_compose</h3>
+    <p>Composing two non-expanding kernels gives a non-expanding kernel. Information can only decrease, never increase, through composition.</p>
+
+    <h3>PipelineFunctor / def FunctorNatural</h3>
+    <p>A structure-preserving map between two pipeline instances. If domain A and domain B both implement six roles with compatible types, the mapping between them is a functor. Naturality means: mapping commutes with each role. The <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>framework lexicon</a> maps how this functor language translates across mathematical communities.</p>
+
+    <h3>TracedPipeline</h3>
+    <p>The feedback trace: Remember's output feeds back to Perceive's input. In the self-recursive case, <code>persisted = raw</code>. A traced pipeline can run autonomously, feeding each cycle's output into the next cycle's input.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; imported; handshakes apply to the Pipeline structure</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; imported; handshakes chain contracts</li>
+      <li><a href="/reading/the-natural-framework-lean/fractal/">Fractal.lean</a> &mdash; the coupling lemma is the key hypothesis for the recursive tower</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-comp/">Hoare/Comp.lean</a> &mdash; restates the handshake chain as Hoare triple composition</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-divergence/">Hoare/Divergence.lean</a> &mdash; NonExpanding characterized as threshold triples</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/kura-2026/">🍞 Kura 2026</a></li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/contracts/", label: "Contracts.lean · 5 of 25" }} next={{ href: "/reading/the-natural-framework-lean/boundary/", label: "Boundary.lean · 7 of 25" }} />
+  </main>
+</Layout>

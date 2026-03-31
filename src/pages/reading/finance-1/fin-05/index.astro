@@ -1,0 +1,270 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Portfolio Theory" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Portfolio Theory</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; MIT OCW 15.401 (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Diversification is the only free lunch in finance. By combining assets that don't move in lockstep, you can reduce portfolio risk below the weighted average of individual risks.</p>
+    </div>
+
+    <!-- SVG: Efficient frontier with individual assets -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="330" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="40" y1="170" x2="40" y2="15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="185" y="192" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Portfolio risk (&#963;_p)</text>
+        <text x="10" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90, 10, 95)">E[R_p]</text>
+        <!-- Feasible region (shaded) -->
+        <path d="M 80,150 Q 70,90 100,55 Q 160,20 280,25 Q 310,60 300,100 Q 280,140 200,155 Z" fill="#60a5fa" fill-opacity="0.05"/>
+        <!-- Efficient frontier (upper boundary) -->
+        <path d="M 80,150 Q 70,90 100,55 Q 160,20 280,25" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-opacity="0.7"/>
+        <!-- Inefficient portion (lower boundary, dimmer) -->
+        <path d="M 80,150 Q 140,165 200,155 Q 280,140 300,100 Q 310,60 280,25" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="4,3"/>
+        <!-- Asset A -->
+        <circle cx="160" cy="80" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="170" y="77" fill="#f59e0b" font-size="9" fill-opacity="0.7">A</text>
+        <!-- Asset B -->
+        <circle cx="250" cy="45" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="260" y="42" fill="#f59e0b" font-size="9" fill-opacity="0.7">B</text>
+        <!-- Minimum variance portfolio -->
+        <circle cx="80" cy="150" r="5" fill="#10b981" fill-opacity="0.7"/>
+        <text x="95" y="148" fill="#10b981" font-size="9" fill-opacity="0.7">MVP</text>
+        <!-- Caption -->
+        <text x="185" y="10" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Efficient frontier and minimum variance portfolio.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Two-Asset Portfolio Return and Risk -->
+    <h3>Two-asset portfolio return and risk</h3>
+    <p>A portfolio's expected return is the weighted average of its components. But portfolio <strong>variance</strong> depends on the covariance between assets. With weight w in asset A and (1-w) in asset B: &#963;&#xB2;_p = w&#xB2;&#963;&#xB2;_A + (1-w)&#xB2;&#963;&#xB2;_B + 2w(1-w)&#963;_A&#963;_B&#961;.</p>
+
+    <SchemeRepl client:load initialCode={`; Two-asset portfolio: return and risk
+; E[R_p] = w*E[R_A] + (1-w)*E[R_B]
+; Var_p = w^2*var_A + (1-w)^2*var_B + 2*w*(1-w)*sigma_A*sigma_B*rho
+
+(define (port-return w er-a er-b)
+  (+ (* w er-a) (* (- 1 w) er-b)))
+
+(define (port-risk w sig-a sig-b rho)
+  (sqrt (+ (* w w sig-a sig-a)
+           (* (- 1 w) (- 1 w) sig-b sig-b)
+           (* 2 w (- 1 w) sig-a sig-b rho))))
+
+(define er-a 0.10) (define sig-a 0.15)
+(define er-b 0.16) (define sig-b 0.25)
+(define rho 0.3)
+
+; 60% A, 40% B
+(define w 0.6)
+(display "E[R_p] = ") (display (port-return w er-a er-b)) (newline)
+(display "sigma_p = ") (display (port-risk w sig-a sig-b rho)) (newline)
+
+; Notice: sigma_p < weighted average of sigmas
+(define weighted-avg (+ (* w sig-a) (* (- 1 w) sig-b)))
+(display "Weighted avg sigma = ") (display weighted-avg) (newline)
+(display "Diversification benefit!")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def port_return(w, er_a, er_b):
+    return w * er_a + (1 - w) * er_b
+
+def port_risk(w, sig_a, sig_b, rho):
+    var_p = (w**2 * sig_a**2 + (1-w)**2 * sig_b**2
+             + 2 * w * (1-w) * sig_a * sig_b * rho)
+    return math.sqrt(var_p)
+
+er_a, sig_a = 0.10, 0.15
+er_b, sig_b = 0.16, 0.25
+rho = 0.3
+
+w = 0.6  # 60% A, 40% B
+print(f"E[R_p]  = {port_return(w, er_a, er_b):.4f}")
+print(f"sigma_p = {port_risk(w, sig_a, sig_b, rho):.4f}")
+print(f"Weighted avg sigma = {w*sig_a + (1-w)*sig_b:.4f}")
+print("Diversification benefit!")
+`} />
+    </div>
+
+
+    <!-- 2. Correlation and Diversification -->
+    <h3>Correlation and diversification</h3>
+    <p>When correlation &#961; = +1, diversification does nothing. When &#961; = -1, a zero-variance portfolio is possible at the right weights. Real-world correlations fall between, so diversification reduces but doesn't eliminate risk. The lower the correlation, the bigger the benefit.</p>
+
+    <SchemeRepl client:load initialCode={`; Effect of correlation on portfolio risk
+; Same assets, vary rho from -1 to +1
+
+(define (port-risk w sig-a sig-b rho)
+  (sqrt (+ (* w w sig-a sig-a)
+           (* (- 1 w) (- 1 w) sig-b sig-b)
+           (* 2 w (- 1 w) sig-a sig-b rho))))
+
+(define sig-a 0.15)
+(define sig-b 0.25)
+(define w 0.5)
+
+(define (show-rho rho)
+  (display "rho=") (display rho)
+  (display "  sigma_p=")
+  (display (port-risk w sig-a sig-b rho))
+  (newline))
+
+(show-rho  1.0)   ; no diversification benefit
+(show-rho  0.5)
+(show-rho  0.0)
+(show-rho -0.5)
+(show-rho -1.0)   ; zero-variance portfolio possible
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def port_risk(w, sa, sb, rho):
+    return math.sqrt(w**2*sa**2 + (1-w)**2*sb**2 + 2*w*(1-w)*sa*sb*rho)
+
+sig_a, sig_b, w = 0.15, 0.25, 0.5
+
+for rho in [1.0, 0.5, 0.0, -0.5, -1.0]:
+    print(f"rho={rho:+.1f}  sigma_p={port_risk(w, sig_a, sig_b, rho):.4f}")
+`} />
+    </div>
+
+
+    <!-- 3. Efficient Frontier -->
+    <h3>Efficient frontier</h3>
+    <p>The <strong>efficient frontier</strong> is the set of portfolios offering the highest return for each level of risk. Any portfolio below the frontier is dominated: you can get more return for the same risk, or less risk for the same return.</p>
+
+    <SchemeRepl client:load initialCode={`; Trace the efficient frontier by varying weights
+(define (port-return w er-a er-b)
+  (+ (* w er-a) (* (- 1 w) er-b)))
+
+(define (port-risk w sig-a sig-b rho)
+  (sqrt (+ (* w w sig-a sig-a)
+           (* (- 1 w) (- 1 w) sig-b sig-b)
+           (* 2 w (- 1 w) sig-a sig-b rho))))
+
+(define er-a 0.10) (define sig-a 0.15)
+(define er-b 0.16) (define sig-b 0.25)
+(define rho 0.3)
+
+(define (show-port w)
+  (let ((ret (port-return w er-a er-b))
+        (risk (port-risk w sig-a sig-b rho)))
+    (display "w=") (display w)
+    (display "  E[R]=") (display ret)
+    (display "  sigma=") (display risk)
+    (newline)))
+
+(display "--- Frontier (w = weight in A) ---") (newline)
+(show-port 1.0)
+(show-port 0.8)
+(show-port 0.6)
+(show-port 0.4)
+(show-port 0.2)
+(show-port 0.0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def port_return(w, era, erb): return w*era + (1-w)*erb
+def port_risk(w, sa, sb, rho):
+    return math.sqrt(w**2*sa**2 + (1-w)**2*sb**2 + 2*w*(1-w)*sa*sb*rho)
+
+era, sa = 0.10, 0.15
+erb, sb = 0.16, 0.25
+rho = 0.3
+
+print("--- Frontier (w = weight in A) ---")
+for w_pct in range(0, 101, 20):
+    w = w_pct / 100
+    ret = port_return(w, era, erb)
+    risk = port_risk(w, sa, sb, rho)
+    print(f"w={w:.1f}  E[R]={ret:.4f}  sigma={risk:.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Minimum Variance Portfolio -->
+    <h3>Minimum variance portfolio</h3>
+    <p>The <strong>minimum variance portfolio</strong> (MVP) has the lowest possible risk. For two assets, the optimal weight in A is: w* = (&#963;&#xB2;_B - &#963;_A&#963;_B&#961;) / (&#963;&#xB2;_A + &#963;&#xB2;_B - 2&#963;_A&#963;_B&#961;). This is a closed-form solution from setting the derivative of portfolio variance to zero.</p>
+
+    <SchemeRepl client:load initialCode={`; Minimum variance portfolio: closed-form weight
+; w* = (sig_B^2 - sig_A*sig_B*rho) / (sig_A^2 + sig_B^2 - 2*sig_A*sig_B*rho)
+
+(define (mvp-weight sig-a sig-b rho)
+  (/ (- (* sig-b sig-b) (* sig-a sig-b rho))
+     (+ (* sig-a sig-a) (* sig-b sig-b) (* -2 sig-a sig-b rho))))
+
+(define (port-risk w sig-a sig-b rho)
+  (sqrt (+ (* w w sig-a sig-a)
+           (* (- 1 w) (- 1 w) sig-b sig-b)
+           (* 2 w (- 1 w) sig-a sig-b rho))))
+
+(define (port-return w er-a er-b)
+  (+ (* w er-a) (* (- 1 w) er-b)))
+
+(define sig-a 0.15) (define sig-b 0.25) (define rho 0.3)
+(define er-a 0.10) (define er-b 0.16)
+
+(define w* (mvp-weight sig-a sig-b rho))
+(display "MVP weight in A: ") (display w*) (newline)
+(display "MVP weight in B: ") (display (- 1 w*)) (newline)
+(display "MVP return: ") (display (port-return w* er-a er-b)) (newline)
+(display "MVP risk:   ") (display (port-risk w* sig-a sig-b rho))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def mvp_weight(sa, sb, rho):
+    return (sb**2 - sa*sb*rho) / (sa**2 + sb**2 - 2*sa*sb*rho)
+
+def port_risk(w, sa, sb, rho):
+    return math.sqrt(w**2*sa**2 + (1-w)**2*sb**2 + 2*w*(1-w)*sa*sb*rho)
+
+def port_return(w, era, erb):
+    return w*era + (1-w)*erb
+
+sa, sb, rho = 0.15, 0.25, 0.3
+era, erb = 0.10, 0.16
+
+w_star = mvp_weight(sa, sb, rho)
+print(f"MVP weight in A: {w_star:.4f}")
+print(f"MVP weight in B: {1 - w_star:.4f}")
+print(f"MVP return: {port_return(w_star, era, erb):.4f}")
+print(f"MVP risk:   {port_risk(w_star, sa, sb, rho):.4f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-04/">&#x1F4C8; Risk and Return</a> &mdash; individual asset risk concepts that portfolio theory builds on</li>
+      <li><a href="/reading/finance-1/fin-06/">&#x1F4C8; CAPM and APT</a> &mdash; equilibrium pricing models that follow from portfolio theory</li>
+      <li><a href="/reading/probability/">&#x1F3B0; Probability</a> &mdash; covariance and correlation are the mathematical engine here</li>
+      <li><a href="/reading/statistics/">&#x1F4CA; Statistics</a> &mdash; estimating covariance matrices from historical data</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-04/", label: "Risk and Return · 4 of 12" }}
+      next={{ href: "/reading/finance-1/fin-06/", label: "CAPM and APT · 6 of 12" }}
+    />
+
+  </main>
+</Layout>

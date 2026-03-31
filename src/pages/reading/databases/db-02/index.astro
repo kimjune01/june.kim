@@ -1,0 +1,232 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.2 — Relational Algebra" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Relational Algebra</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Relational_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Relational algebra</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Relational algebra</strong> is a set of operations on relations that produce new relations. Six fundamental operations: select (filter rows), project (pick columns), union, difference, Cartesian product, and rename. Join is derived from these. Every SQL query compiles down to a relational algebra expression.</p>
+    </div>
+
+    <!-- SVG: Two tables joining on a shared column -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left table -->
+        <rect x="20" y="20" width="120" height="90" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <rect x="20" y="20" width="120" height="22" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="50" y="36" fill="currentColor" font-size="9" fill-opacity="0.7">id</text>
+        <text x="100" y="36" fill="currentColor" font-size="9" fill-opacity="0.7">name</text>
+        <text x="50" y="56" fill="#60a5fa" font-size="9">1</text>
+        <text x="100" y="56" fill="currentColor" font-size="9" fill-opacity="0.6">Alice</text>
+        <text x="50" y="72" fill="#60a5fa" font-size="9">2</text>
+        <text x="100" y="72" fill="currentColor" font-size="9" fill-opacity="0.6">Bob</text>
+        <text x="50" y="88" fill="#60a5fa" font-size="9">3</text>
+        <text x="100" y="88" fill="currentColor" font-size="9" fill-opacity="0.6">Carol</text>
+
+        <!-- Right table -->
+        <rect x="280" y="20" width="120" height="90" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <rect x="280" y="20" width="120" height="22" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="310" y="36" fill="currentColor" font-size="9" fill-opacity="0.7">uid</text>
+        <text x="360" y="36" fill="currentColor" font-size="9" fill-opacity="0.7">item</text>
+        <text x="310" y="56" fill="#f59e0b" font-size="9">1</text>
+        <text x="360" y="56" fill="currentColor" font-size="9" fill-opacity="0.6">book</text>
+        <text x="310" y="72" fill="#f59e0b" font-size="9">3</text>
+        <text x="360" y="72" fill="currentColor" font-size="9" fill-opacity="0.6">pen</text>
+        <text x="310" y="88" fill="#f59e0b" font-size="9">1</text>
+        <text x="360" y="88" fill="currentColor" font-size="9" fill-opacity="0.6">lamp</text>
+
+        <!-- Join arrow -->
+        <path d="M 140 60 Q 210 30 280 60" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="278,56 286,60 278,64" fill="#34d399" fill-opacity="0.6"/>
+        <text x="210" y="25" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.7">JOIN on id = uid</text>
+
+        <!-- Caption -->
+        <text x="210" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Join: combine rows where keys match.</text>
+      </svg>
+    </div>
+
+
+    <!-- Select -->
+    <h3>Select (sigma) — filter rows</h3>
+    <p>Selection picks tuples that satisfy a predicate. It does not change the schema, only the cardinality. In SQL this is the WHERE clause.</p>
+
+    <SchemeRepl client:load initialCode={`; Select: filter tuples by a predicate
+; sigma_{age > 25}(people)
+
+(define people
+  (list
+    (list (cons "name" "Alice") (cons "age" 30))
+    (list (cons "name" "Bob")   (cons "age" 22))
+    (list (cons "name" "Carol") (cons "age" 28))))
+
+(define (get-attr tuple attr) (cdr (assoc attr tuple)))
+
+(define (rel-select predicate relation)
+  (filter predicate relation))
+
+(define over-25
+  (rel-select
+    (lambda (t) (> (get-attr t "age") 25))
+    people))
+
+(for-each
+  (lambda (t)
+    (display (get-attr t "name"))
+    (display " age ")
+    (display (get-attr t "age"))
+    (newline))
+  over-25)
+`} />
+
+
+    <!-- Project -->
+    <h3>Project (pi) — pick columns</h3>
+    <p>Projection picks a subset of attributes from each tuple. Duplicates are removed (relations are sets). In SQL this is the SELECT column list.</p>
+
+    <SchemeRepl client:load initialCode={`; Project: keep only specified attributes
+; pi_{name}(people)
+
+(define people
+  (list
+    (list (cons "name" "Alice") (cons "age" 30))
+    (list (cons "name" "Bob")   (cons "age" 22))
+    (list (cons "name" "Carol") (cons "age" 28))))
+
+(define (project attrs tuple)
+  (filter (lambda (pair) (member (car pair) attrs)) tuple))
+
+(define (rel-project attrs relation)
+  (map (lambda (t) (project attrs t)) relation))
+
+(define names-only (rel-project (list "name") people))
+
+(for-each
+  (lambda (t)
+    (display (cdar t))
+    (newline))
+  names-only)
+`} />
+
+
+    <!-- Join -->
+    <h3>Join — combine on matching values</h3>
+    <p>A <strong>natural join</strong> pairs tuples from two relations that agree on shared attribute names. An <strong>equi-join</strong> matches on a specified condition. The join is the workhorse of relational queries: it reconstructs information that normalization split across tables.</p>
+
+    <SchemeRepl client:load initialCode={`; Join: combine tuples where keys match
+
+(define users
+  (list
+    (list (cons "id" 1) (cons "name" "Alice"))
+    (list (cons "id" 2) (cons "name" "Bob"))))
+
+(define orders
+  (list
+    (list (cons "uid" 1) (cons "item" "book"))
+    (list (cons "uid" 2) (cons "item" "pen"))
+    (list (cons "uid" 1) (cons "item" "lamp"))))
+
+(define (get-attr tuple attr) (cdr (assoc attr tuple)))
+
+(define (join r1 key1 r2 key2)
+  (apply append
+    (map (lambda (t1)
+      (filter (lambda (x) x)
+        (map (lambda (t2)
+          (if (equal? (get-attr t1 key1) (get-attr t2 key2))
+            (append t1 t2)
+            #f))
+          r2)))
+      r1)))
+
+(define result (join users "id" orders "uid"))
+
+(for-each
+  (lambda (t)
+    (display (get-attr t "name"))
+    (display " -> ")
+    (display (get-attr t "item"))
+    (newline))
+  result)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Join in Python
+users = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
+orders = [{"uid": 1, "item": "book"}, {"uid": 2, "item": "pen"}, {"uid": 1, "item": "lamp"}]
+
+result = [
+    {**u, **o}
+    for u in users
+    for o in orders
+    if u["id"] == o["uid"]
+]
+
+for r in result:
+    print(r['name'] + " -> " + r['item'])
+`} />
+    </div>
+
+
+    <!-- Union and Difference -->
+    <h3>Union and difference — set operations</h3>
+    <p><strong>Union</strong> combines tuples from two union-compatible relations (same schema). <strong>Difference</strong> returns tuples in the first relation but not the second. Both require matching attribute names and domains.</p>
+
+    <SchemeRepl client:load initialCode={`; Union and difference on relations
+
+(define r1
+  (list (list (cons "x" 1)) (list (cons "x" 2)) (list (cons "x" 3))))
+(define r2
+  (list (list (cons "x" 2)) (list (cons "x" 3)) (list (cons "x" 4))))
+
+(define (rel-union a b)
+  (let loop ((result a) (remaining b))
+    (if (null? remaining) result
+      (if (member (car remaining) result)
+        (loop result (cdr remaining))
+        (loop (append result (list (car remaining))) (cdr remaining))))))
+
+(define (rel-difference a b)
+  (filter (lambda (t) (not (member t b))) a))
+
+(define (show label rel)
+  (display label)
+  (for-each (lambda (t) (display " ") (display (cdar t))) rel)
+  (newline))
+
+(show "R1:        " r1)
+(show "R2:        " r2)
+(show "Union:     " (rel-union r1 r2))
+(show "Difference:" (rel-difference r1 r2))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-06/">🔑 Logic Ch.6</a> — predicate logic: queries are predicates over tuples</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Relational_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Relational algebra</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Join_(SQL)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Join (SQL)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Projection_(relational_algebra)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Projection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-01/", label: "The Relational Model" }} next={{ href: "/reading/databases/db-03/", label: "SQL Basics" }} />
+
+  </main>
+</Layout>

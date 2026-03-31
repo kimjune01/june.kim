@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 180" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <style>
+    .box{fill:#fff;stroke:#bbb;stroke-width:1.2;rx:8}
+    .box-green{fill:#f0faf0;stroke:#2e7d32;stroke-width:1.5;rx:8}
+    .box-dim{fill:#fafafa;stroke:#d1d5db;stroke-width:1;rx:8}
+    .label{text-anchor:middle;dominant-baseline:central;font-weight:600;font-size:13px;fill:#1f2937}
+    .sub{text-anchor:middle;font-size:10px;fill:#6b7280}
+    .arrow{stroke:#bbb;stroke-width:1.2;fill:none;marker-end:url(#a)}
+    .arrow-green{stroke:#2e7d32;stroke-width:1.5;fill:none;marker-end:url(#ag)}
+    .arrow-dim{stroke:#d1d5db;stroke-width:1;fill:none;marker-end:url(#ad)}
+    .section{font-weight:600;font-size:10px;fill:#9ca3af;text-transform:uppercase;letter-spacing:2px}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#bbb"/></marker>
+    <marker id="ag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2e7d32"/></marker>
+    <marker id="ad" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#d1d5db"/></marker>
+  </defs>
+
+  <text class="section" x="450" y="16">Episodic discrimination (DPP gate)</text>
+
+  <!-- Decision cycle -->
+  <rect class="box" x="20" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="100" y="52">decision cycle</text>
+  <text class="sub" x="100" y="68">new state</text>
+
+  <line class="arrow" x1="180" y1="59" x2="220" y2="59"/>
+
+  <!-- Importance scorer -->
+  <rect class="box" x="220" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="300" y="52">importance</text>
+  <text class="sub" x="300" y="68">reward · impasse · novelty</text>
+
+  <line class="arrow" x1="380" y1="59" x2="420" y2="59"/>
+
+  <!-- DPP gate -->
+  <rect class="box" x="420" y="34" width="160" height="50" rx="8"/>
+  <text class="label" x="500" y="52">DPP gate</text>
+  <text class="sub" x="500" y="68">diverse + important?</text>
+
+  <!-- High importance path -->
+  <line class="arrow-green" x1="580" y1="46" x2="640" y2="46"/>
+  <rect class="box-green" x="640" y="28" width="180" height="40" rx="8"/>
+  <text class="label" x="730" y="44" style="fill:#2e7d32">full fidelity</text>
+  <text class="sub" x="730" y="58" style="fill:#2e7d32">→ EPMEM</text>
+
+  <!-- Low importance path -->
+  <line class="arrow-dim" x1="580" y1="72" x2="640" y2="72"/>
+  <rect class="box-dim" x="640" y="76" width="180" height="40" rx="8"/>
+  <text class="label" x="730" y="92" style="fill:#9ca3af">skip / compress</text>
+  <text class="sub" x="730" y="106" style="fill:#9ca3af">routine</text>
+
+  <!-- Labels -->
+  <text class="sub" x="610" y="42" style="fill:#2e7d32;font-weight:600">novel</text>
+  <text class="sub" x="610" y="78" style="fill:#9ca3af;font-weight:600">routine</text>
+
+  <!-- Feedback to consolidation -->
+  <path d="M730,68 L730,148 Q730,158 720,158 L110,158 Q100,158 100,148 L100,84" class="arrow" style="stroke-dasharray:4,3"/>
+  <text class="sub" x="420" y="168">fewer, better episodes → faster consolidation</text>
+</svg>

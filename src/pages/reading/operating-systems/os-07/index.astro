@@ -1,0 +1,178 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.7 — Virtual Memory" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Virtual Memory</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Virtual_memory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Virtual memory</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Virtual memory</strong> lets a process use more memory than physically exists. Pages live on disk until needed, then get loaded into frames on demand. When physical memory is full, the OS picks a victim page to evict. The choice of victim is the <strong>page replacement algorithm</strong>.</p>
+    </div>
+
+    <h3>Demand paging</h3>
+    <p>Pages are not loaded until accessed. The first access triggers a <strong>page fault</strong>: the OS loads the page from disk into a free frame, updates the page table, and resumes the instruction. Most programs exhibit locality, so page faults are rare after warmup.</p>
+
+    <h3>Page replacement algorithms</h3>
+    <p><strong>FIFO</strong>: evict the oldest page. Simple but suffers <a href="https://en.wikipedia.org/wiki/B%C3%A9l%C3%A1dy%27s_anomaly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Belady's anomaly</a> (more frames can mean more faults). <strong>LRU</strong>: evict the least recently used page. Good performance but expensive to track precisely. <strong>Optimal</strong>: evict the page that will not be used for the longest time. Impossible to implement (requires future knowledge) but useful as a benchmark.</p>
+
+    <!-- SVG: Page replacement sequence with hits/faults marked -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 150" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="10" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">FIFO replacement (3 frames)</text>
+        <text x="10" y="30" fill="currentColor" font-size="9" fill-opacity="0.35">Reference string: 7 0 1 2 0 3 0 4</text>
+
+        <!-- Column headers -->
+        <text x="60" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">7</text>
+        <text x="115" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+        <text x="170" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">1</text>
+        <text x="225" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">2</text>
+        <text x="280" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+        <text x="335" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">3</text>
+        <text x="390" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+        <text x="445" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">4</text>
+
+        <!-- Frame contents per step -->
+        <!-- Step 1: [7,-,-] fault -->
+        <text x="60" y="70" text-anchor="middle" fill="#f87171" font-size="9">7</text>
+        <text x="60" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="60" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="60" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 2: [7,0,-] fault -->
+        <text x="115" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">7</text>
+        <text x="115" y="85" text-anchor="middle" fill="#f87171" font-size="9">0</text>
+        <text x="115" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="115" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 3: [7,0,1] fault -->
+        <text x="170" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">7</text>
+        <text x="170" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <text x="170" y="100" text-anchor="middle" fill="#f87171" font-size="9">1</text>
+        <text x="170" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 4: [2,0,1] fault (evict 7) -->
+        <text x="225" y="70" text-anchor="middle" fill="#f87171" font-size="9">2</text>
+        <text x="225" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <text x="225" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">1</text>
+        <text x="225" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 5: [2,0,1] hit -->
+        <text x="280" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">2</text>
+        <text x="280" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <text x="280" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">1</text>
+        <text x="280" y="115" text-anchor="middle" fill="#34d399" font-size="8">H</text>
+
+        <!-- Step 6: [2,3,1] fault (evict 0) -->
+        <text x="335" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">2</text>
+        <text x="335" y="85" text-anchor="middle" fill="#f87171" font-size="9">3</text>
+        <text x="335" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">1</text>
+        <text x="335" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 7: [0,3,1] fault (evict 2... wait, FIFO evicts oldest=1) actually let me redo -->
+        <!-- FIFO order: inserted 2,0,1. Oldest is 0 (entered at step 2 originally, but 2 replaced 7's slot). Let me use correct FIFO. Queue: 2(pos0),0(pos1),1(pos2). Evict pos1(0) for 3. Now queue: 2,3,1. Next evict 1(oldest remaining). -->
+        <text x="390" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">2</text>
+        <text x="390" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">3</text>
+        <text x="390" y="100" text-anchor="middle" fill="#f87171" font-size="9">0</text>
+        <text x="390" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Step 8: [4,3,0] fault (evict 2) -->
+        <text x="445" y="70" text-anchor="middle" fill="#f87171" font-size="9">4</text>
+        <text x="445" y="85" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">3</text>
+        <text x="445" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">0</text>
+        <text x="445" y="115" text-anchor="middle" fill="#f87171" font-size="8">F</text>
+
+        <!-- Legend -->
+        <text x="250" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">F = page fault, H = hit. FIFO: 7 faults out of 8 references.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; FIFO page replacement simulation
+
+(define (fifo-replace refs num-frames)
+  (define frames '())
+  (define faults 0)
+
+  (define (step refs)
+    (if (null? refs)
+        faults
+        (let ((page (car refs)))
+          (if (member page frames)
+              (begin
+                (display page) (display ":hit ")
+                (step (cdr refs)))
+              (begin
+                (set! faults (+ faults 1))
+                (if (< (length frames) num-frames)
+                    (set! frames (append frames (list page)))
+                    (set! frames (append (cdr frames) (list page))))
+                (display page) (display ":FAULT ")
+                (step (cdr refs)))))))
+
+  (let ((total (step refs)))
+    (newline)
+    (display "Total faults: ") (display total) (newline)
+    (display "Total refs: ") (display (length refs))))
+
+(fifo-replace '(7 0 1 2 0 3 0 4) 3)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# LRU page replacement
+from collections import OrderedDict
+
+def lru_replace(refs, num_frames):
+    frames = OrderedDict()
+    faults = 0
+    log = []
+    for page in refs:
+        if page in frames:
+            frames.move_to_end(page)
+            log.append(f"{page}:hit")
+        else:
+            faults += 1
+            if len(frames) >= num_frames:
+                frames.popitem(last=False)  # evict LRU
+            frames[page] = True
+            log.append(f"{page}:FAULT")
+    print(" ".join(log))
+    print(f"Total faults: {faults}/{len(refs)}")
+
+lru_replace([7, 0, 1, 2, 0, 3, 0, 4], 3)
+`} />
+    </div>
+
+    <h3>Thrashing</h3>
+    <p>When a process has too few frames, it faults on almost every access. The OS spends more time swapping pages than executing instructions. This is <strong>thrashing</strong>. The fix: give the process more frames, or reduce the degree of multiprogramming.</p>
+
+    <h3>Working set</h3>
+    <p>The <strong>working set</strong> is the set of pages a process has referenced in the last N memory accesses. If the OS keeps the working set in memory, page faults stay low. The working set model prevents thrashing by refusing to run more processes than memory can support.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-04/">⚙ Algorithms Ch.4</a> — B-trees and page replacement: TLB misses trigger page table walks analogous to B-tree lookups</li>
+      <li><a href="/reading/probability/grinstead-11/">🎰 Probability Ch.11</a> — Markov chains and LRU: page replacement policies (LRU, Clock) are analyzed as Markov chains over access patterns</li>
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Discrete Math Ch.4</a> — graph theory: the working set model uses a recency graph over page references</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Virtual_memory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Virtual memory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Page replacement algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Thrashing_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thrashing</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-06/", label: "Memory Management" }} next={{ href: "/reading/operating-systems/os-08/", label: "File Systems" }} />
+
+  </main>
+</Layout>

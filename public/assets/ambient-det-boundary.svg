@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 260" font-family="system-ui, sans-serif">
+  <style>
+    .outer { fill: #fafafa; stroke: #999; stroke-width: 1.5; rx: 12; }
+    .inner { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1.5; rx: 10; }
+    .role-box { rx: 4; stroke-width: 1.5; }
+    .label { font-size: 12px; font-weight: 600; }
+    .sublabel { font-size: 10px; fill: #888; }
+    .eq { font-size: 11px; font-family: "Times New Roman", serif; }
+  </style>
+
+  <!-- Outer: full category C -->
+  <rect class="outer" x="30" y="20" width="640" height="220"/>
+  <text class="label" x="60" y="45" fill="#666">C  (Markov category)</text>
+  <text class="sublabel" x="60" y="60">stochastic morphisms</text>
+
+  <!-- Inner: C_det -->
+  <rect class="inner" x="60" y="80" width="310" height="140"/>
+  <text class="label" x="80" y="102" fill="#1565c0">C<tspan font-size="8" baseline-shift="sub">det</tspan>  (cartesian subcategory)</text>
+  <text class="sublabel" x="80" y="117" fill="#1565c0">deterministic morphisms — closed under composition</text>
+
+  <!-- Filter box inside C_det -->
+  <rect class="role-box" x="100" y="135" width="120" height="60" fill="#bbdefb" stroke="#1565c0"/>
+  <text x="160" y="160" text-anchor="middle" font-size="13" font-weight="600" fill="#1565c0">Filter</text>
+  <text x="160" y="177" text-anchor="middle" font-size="10" fill="#1565c0" font-style="italic">gated</text>
+
+  <!-- Copy equation (holds) -->
+  <text class="eq" x="240" y="160" fill="#1565c0">copy ∘ f = (f⊗f) ∘ copy</text>
+  <text x="240" y="178" font-size="10" fill="#1565c0" font-weight="600">✓ holds</text>
+
+  <!-- Attend box outside C_det -->
+  <rect class="role-box" x="440" y="135" width="120" height="60" fill="#fff3e0" stroke="#e65100"/>
+  <text x="500" y="160" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">Attend</text>
+  <text x="500" y="177" text-anchor="middle" font-size="10" fill="#e65100" font-style="italic">ranked</text>
+
+  <!-- Copy equation (fails) -->
+  <text class="eq" x="440" y="110" fill="#e65100">copy ∘ f ≠ (f⊗f) ∘ copy</text>
+  <text x="440" y="128" font-size="10" fill="#e65100" font-weight="600">✗ fails — each copy samples fresh</text>
+
+  <!-- Arrow crossing the boundary -->
+  <line x1="370" y1="165" x2="437" y2="165" stroke="#e65100" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="404" y="155" text-anchor="middle" font-size="9" fill="#e65100">crosses</text>
+
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#e65100"/></marker>
+  </defs>
+</svg>

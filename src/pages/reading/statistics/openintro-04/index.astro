@@ -1,0 +1,195 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.4 — Distributions" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Distributions</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 4 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>distribution</strong> describes how values are spread across possible outcomes. The <strong>normal distribution</strong> is the workhorse of statistics: most sample means converge to it. Other distributions (binomial, Poisson, geometric) model counting, rare events, and waiting times.</p>
+    </div>
+
+    <!-- 1. Normal Distribution -->
+    <h3>The normal distribution and Z-scores</h3>
+    <p>The normal distribution is symmetric, bell-shaped, and fully described by its mean (&mu;) and standard deviation (&sigma;). A <strong>Z-score</strong> standardizes any value: Z = (x - &mu;) / &sigma;. A Z-score of 2 means the value is 2 standard deviations above the mean.</p>
+
+    <!-- SVG: Normal curve with Z-score shading -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="140" x2="370" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Bell curve -->
+        <path d="M 30,140 Q 60,138 80,135 Q 100,128 120,115 Q 140,92 160,65 Q 180,35 200,25 Q 220,35 240,65 Q 260,92 280,115 Q 300,128 320,135 Q 340,138 370,140" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Shaded region: Z > 1 (right tail) -->
+        <path d="M 270,115 Q 280,115 300,128 Q 320,135 340,138 Q 355,139 370,140 L 370,140 L 270,140 Z" fill="#ef4444" fill-opacity="0.25"/>
+        <!-- Shaded region: Z < -1 (left tail) -->
+        <path d="M 30,140 Q 45,139 60,138 Q 80,135 100,128 Q 120,115 130,115 L 130,140 L 30,140 Z" fill="#ef4444" fill-opacity="0.25"/>
+        <!-- Center region shaded -->
+        <path d="M 130,115 Q 140,92 160,65 Q 180,35 200,25 Q 220,35 240,65 Q 260,92 270,115 L 270,140 L 130,140 Z" fill="#3b82f6" fill-opacity="0.15"/>
+        <!-- Z-score markers -->
+        <line x1="130" y1="115" x2="130" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.4"/>
+        <line x1="200" y1="25" x2="200" y2="140" stroke="#71717a" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+        <line x1="270" y1="115" x2="270" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="130" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Z = -1</text>
+        <text x="200" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Z = 0</text>
+        <text x="270" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Z = 1</text>
+        <text x="200" y="105" text-anchor="middle" fill="#3b82f6" font-size="11" fill-opacity="0.6">68%</text>
+        <text x="80" y="135" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.5">16%</text>
+        <text x="320" y="135" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.5">16%</text>
+        <!-- Caption -->
+        <text x="200" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">68-95-99.7 rule: 68% within 1 SD, 95% within 2, 99.7% within 3</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Z-scores: standardize values
+; Z = (x - mean) / sd
+
+(define (z-score x mean sd)
+  (/ (- x mean) sd))
+
+; SAT scores: mean=1060, sd=195
+(define sat-mean 1060)
+(define sat-sd 195)
+
+(define score-1 1250)
+(define score-2 900)
+
+(display "SAT score 1250, Z = ")
+(display (exact->inexact (z-score score-1 sat-mean sat-sd)))
+(newline)
+
+(display "SAT score 900, Z = ")
+(display (exact->inexact (z-score score-2 sat-mean sat-sd)))
+(newline)
+
+; Reverse: what score is at Z = 2?
+(define (from-z z mean sd) (+ mean (* z sd)))
+(display "Score at Z=2: ")
+(display (from-z 2 sat-mean sat-sd))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Z-scores in Python
+def z_score(x, mean, sd):
+    return (x - mean) / sd
+
+sat_mean, sat_sd = 1060, 195
+
+print(f"SAT 1250, Z = {z_score(1250, sat_mean, sat_sd):.2f}")
+print(f"SAT 900,  Z = {z_score(900, sat_mean, sat_sd):.2f}")
+print(f"Score at Z=2: {sat_mean + 2 * sat_sd}")
+`} />
+    </div>
+
+
+    <!-- 2. Binomial Distribution -->
+    <h3>Binomial distribution</h3>
+    <p>The <strong>binomial distribution</strong> counts successes in n independent trials, each with probability p. P(X = k) = C(n,k) * p^k * (1-p)^(n-k). Mean = np, standard deviation = sqrt(np(1-p)).</p>
+
+    <SchemeRepl client:load initialCode={`; Binomial distribution: n trials, probability p
+; P(X = k) = C(n,k) * p^k * (1-p)^(n-k)
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (choose n k)
+  (/ (factorial n) (* (factorial k) (factorial (- n k)))))
+
+(define (binomial-pmf n p k)
+  (* (choose n k)
+     (expt p k)
+     (expt (- 1 p) (- n k))))
+
+; Example: 10 coin flips, P(exactly 7 heads)
+(define n 10)
+(define p 0.5)
+
+(display "P(7 heads in 10 flips) = ")
+(display (exact->inexact (binomial-pmf n p 7))) (newline)
+
+; Distribution of successes
+(display "Full distribution:") (newline)
+(let loop ((k 0))
+  (when (<= k n)
+    (display "  P(X=") (display k) (display ") = ")
+    (display (exact->inexact (binomial-pmf n p k)))
+    (newline)
+    (loop (+ k 1))))
+`} />
+
+
+    <!-- 3. Poisson and Geometric -->
+    <h3>Poisson and geometric</h3>
+    <p>The <strong>Poisson distribution</strong> models rare events per unit time: P(X = k) = e^(-&lambda;) * &lambda;^k / k!. The <strong>geometric distribution</strong> models waiting time until first success: P(X = k) = (1-p)^(k-1) * p.</p>
+
+    <SchemeRepl client:load initialCode={`; Poisson: events per unit time
+; P(X = k) = e^(-lambda) * lambda^k / k!
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define e 2.718281828)
+
+(define (poisson-pmf lam k)
+  (* (expt e (- lam))
+     (/ (expt lam k) (factorial k))))
+
+; Average 3 emails per hour. P(exactly 5)?
+(display "Poisson(lambda=3):") (newline)
+(display "  P(X=5) = ")
+(display (poisson-pmf 3 5)) (newline)
+(display "  P(X=0) = ")
+(display (poisson-pmf 3 0)) (newline)
+
+; Geometric: trials until first success
+; P(X = k) = (1-p)^(k-1) * p
+(define (geometric-pmf p k)
+  (* (expt (- 1 p) (- k 1)) p))
+
+; P(first success on 4th trial), p=0.2
+(newline)
+(display "Geometric(p=0.2):") (newline)
+(display "  P(first success on trial 4) = ")
+(display (geometric-pmf 0.2 4))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-05/">🎰 Grinstead Ch.5</a> &mdash; important distributions derived from first principles</li>
+      <li><a href="/reading/probability/grinstead-09/">🎰 Grinstead Ch.9</a> &mdash; the Central Limit Theorem, why means converge to normal</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Normal_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Normal distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Binomial_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Binomial distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Poisson_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Poisson distribution</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>OpenIntro devotes significant space to normal probability tables and calculator use. We compute Z-scores and probabilities directly. The 68-95-99.7 rule (empirical rule) is the key heuristic for the normal distribution. For the Central Limit Theorem that justifies the normal's dominance, see Grinstead Ch. 9.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-03/", label: "Probability" }} next={{ href: "/reading/statistics/openintro-05/", label: "Foundations for Inference" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,130 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Number Theory Ch.3 — Congruences" favicon="#">
+  <main>
+
+    <a href="/reading/number-theory/" class="text-sm mb-4 inline-block">&larr; back to Number Theory</a>
+
+    <h1>Congruences</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon &middot; Elementary Number Theory &middot; <a href="https://jheffero.w3.uvm.edu/numbertheory/">Ch. 3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two integers are <strong>congruent mod n</strong> if they have the same remainder when divided by n. This single equivalence relation turns the integers into a finite arithmetic system where addition, subtraction, and multiplication all work.</p>
+    </div>
+
+    <!-- 1. Modular arithmetic -->
+    <h3>Modular arithmetic</h3>
+    <p>We write a &#x2261; b (mod n) when n divides (a - b). The integers split into n congruence classes: [0], [1], ..., [n-1]. Arithmetic on these classes is well-defined: you can add, subtract, and multiply representatives and the class of the result does not depend on which representatives you chose.</p>
+
+    <!-- SVG: Clock arithmetic mod 12 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 260 260" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <text x="130" y="20" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Clock arithmetic: mod 12</text>
+        <!-- Clock circle -->
+        <circle cx="130" cy="140" r="100" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Numbers 0-11 around the clock -->
+        <text x="130" y="52" text-anchor="middle" fill="#facc15" font-size="14">0</text>
+        <text x="180" y="58" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">1</text>
+        <text x="218" y="88" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">2</text>
+        <text x="237" y="145" text-anchor="middle" fill="#60a5fa" font-size="14">3</text>
+        <text x="218" y="198" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">4</text>
+        <text x="180" y="228" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">5</text>
+        <text x="130" y="240" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">6</text>
+        <text x="80" y="228" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">7</text>
+        <text x="42" y="198" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">8</text>
+        <text x="23" y="145" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">9</text>
+        <text x="42" y="88" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">10</text>
+        <text x="80" y="58" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">11</text>
+        <!-- Arrow showing 7+8=15=3 mod 12 -->
+        <path d="M 60 210 A 90 90 0 0 1 220 100" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="218,104 224,96 214,96" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="130" y="258" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">7 + 8 = 15 &#x2261; 3 (mod 12)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Modular arithmetic
+(define (mod-add a b n) (modulo (+ a b) n))
+(define (mod-mul a b n) (modulo (* a b) n))
+
+(display "7 + 8 mod 12 = ") (display (mod-add 7 8 12)) (newline)
+(display "5 * 7 mod 12 = ") (display (mod-mul 5 7 12)) (newline)
+
+; Congruence classes mod 5:
+; [0] = ..., -10, -5, 0, 5, 10, ...
+; [1] = ..., -9, -4, 1, 6, 11, ...
+; [2] = ..., -8, -3, 2, 7, 12, ...
+; [3] = ..., -7, -2, 3, 8, 13, ...
+; [4] = ..., -6, -1, 4, 9, 14, ...
+(display "17 mod 5 = ") (display (modulo 17 5)) (newline)
+(display "17 and 7 congruent mod 5? ")
+(display (= (modulo 17 5) (modulo 7 5)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Modular arithmetic
+def mod_add(a, b, n): return (a + b) % n
+def mod_mul(a, b, n): return (a * b) % n
+
+print(f"7 + 8 mod 12 = {mod_add(7, 8, 12)}")
+print(f"5 * 7 mod 12 = {mod_mul(5, 7, 12)}")
+print(f"17 mod 5 = {17 % 5}")
+print(f"17 and 7 congruent mod 5? {17 % 5 == 7 % 5}")
+`} />
+    </div>
+
+
+    <!-- 2. Solving linear congruences -->
+    <h3>Solving linear congruences</h3>
+    <p>The equation ax &#x2261; b (mod n) has a solution if and only if gcd(a, n) divides b. When it does, the extended Euclidean algorithm finds x. If gcd(a, n) = 1, then a has a multiplicative inverse mod n.</p>
+
+    <SchemeRepl client:load initialCode={`; Solve ax = b (mod n) using extended GCD
+(define (extended-gcd a b)
+  (if (= b 0)
+      (list a 1 0)
+      (let* ((result (extended-gcd b (modulo a b)))
+             (g (car result))
+             (x1 (cadr result))
+             (y1 (caddr result)))
+        (list g y1 (- x1 (* (quotient a b) y1))))))
+
+(define (solve-congruence a b n)
+  (let* ((result (extended-gcd a n))
+         (g (car result))
+         (x0 (cadr result)))
+    (if (= 0 (modulo b g))
+        (modulo (* x0 (quotient b g)) n)
+        #f)))  ; no solution
+
+; Solve 3x = 1 (mod 7) -- find inverse of 3 mod 7
+(display "3x = 1 (mod 7): x = ")
+(display (solve-congruence 3 1 7)) (newline)
+; Check: 3*5 = 15 = 2*7 + 1
+
+; Solve 4x = 2 (mod 6)
+(display "4x = 2 (mod 6): x = ")
+(display (solve-congruence 4 2 6)) (newline)
+
+; Solve 6x = 3 (mod 9)
+(display "6x = 3 (mod 9): x = ")
+(display (solve-congruence 6 3 9))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-01/">&rarr; Abstract Algebra Ch.1</a> — the integers mod n form a group under addition (and a ring under addition and multiplication)</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/number-theory/numthy-02/", label: "Primes" }} next={{ href: "/reading/number-theory/numthy-04/", label: "Euler and Fermat" }} />
+
+  </main>
+</Layout>

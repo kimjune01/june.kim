@@ -1,0 +1,301 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Derivative Rules" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Derivative Rules</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Five rules make differentiation mechanical: <strong>power</strong>, <strong>product</strong>, <strong>quotient</strong>, <strong>chain</strong>, and <strong>implicit</strong>. Once you know them, you never need the limit definition again for standard functions.</p>
+    </div>
+
+    <!-- SVG: chain rule composition diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- x -->
+        <circle cx="50" cy="60" r="20" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="50" y="65" text-anchor="middle" fill="#60a5fa" font-size="14">x</text>
+        <!-- g(x) -->
+        <circle cx="200" cy="60" r="20" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="65" text-anchor="middle" fill="#f59e0b" font-size="14">u</text>
+        <!-- f(g(x)) -->
+        <circle cx="350" cy="60" r="20" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="350" y="65" text-anchor="middle" fill="#a78bfa" font-size="14">y</text>
+        <!-- Arrow g -->
+        <line x1="75" y1="60" x2="175" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="175,56 183,60 175,64" fill="currentColor" fill-opacity="0.4"/>
+        <text x="125" y="48" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">g: du/dx</text>
+        <!-- Arrow f -->
+        <line x1="225" y1="60" x2="325" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="325,56 333,60 325,64" fill="currentColor" fill-opacity="0.4"/>
+        <text x="275" y="48" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f: dy/du</text>
+        <!-- Composite arrow below -->
+        <path d="M 75 78 Q 200 130 325 78" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.4"/>
+        <polygon points="323,82 331,76 325,72" fill="#a78bfa" fill-opacity="0.4"/>
+        <text x="200" y="118" text-anchor="middle" fill="#a78bfa" font-size="11" fill-opacity="0.5">dy/dx = dy/du &#xB7; du/dx</text>
+      </svg>
+    </div>
+
+    <!-- 1. Power rule -->
+    <h3>Power rule</h3>
+    <p>d/dx [x&#x207F;] = n x&#x207F;&#x207B;&#xB9;. This handles every polynomial. Combined with linearity (derivative of a sum is the sum of derivatives, constants pull out), it covers all polynomials instantly.</p>
+
+    <SchemeRepl client:load initialCode={`; Power rule: d/dx[x^n] = n * x^(n-1)
+; Numerical derivative for verification
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x) (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; f(x) = x^3, f'(x) = 3x^2
+(define (f x) (* x x x))
+(define (f-prime x) (* 3 x x))  ; power rule
+
+(define f-numerical (deriv f))
+
+(display "f'(2) power rule: ") (display (f-prime 2)) (newline)    ; 12
+(display "f'(2) numerical:  ") (display (/ (round (* (f-numerical 2) 1000)) 1000)) (newline)
+
+; g(x) = 5x^4 - 3x^2 + 7, g'(x) = 20x^3 - 6x
+(define (g x) (+ (- (* 5 (expt x 4)) (* 3 x x)) 7))
+(define (g-prime x) (- (* 20 (expt x 3)) (* 6 x)))
+
+(define g-numerical (deriv g))
+
+(display "g'(1) power rule: ") (display (g-prime 1)) (newline)    ; 14
+(display "g'(1) numerical:  ") (display (/ (round (* (g-numerical 1) 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Power rule: d/dx[x^n] = n * x^(n-1)
+def deriv(f, x, h=1e-5):
+    return (f(x+h) - f(x-h)) / (2*h)
+
+# f(x) = x^3, f'(x) = 3x^2
+f = lambda x: x**3
+print("f'(2) power rule:", 3 * 2**2)          # 12
+print("f'(2) numerical: {:.3f}".format(deriv(f, 2)))
+
+# g(x) = 5x^4 - 3x^2 + 7, g'(x) = 20x^3 - 6x
+g = lambda x: 5*x**4 - 3*x**2 + 7
+g_prime = lambda x: 20*x**3 - 6*x
+print("g'(1) power rule:", g_prime(1))         # 14
+print("g'(1) numerical: {:.3f}".format(deriv(g, 1)))
+`} />
+    </div>
+
+
+    <!-- 2. Product rule -->
+    <h3>Product rule</h3>
+    <p>d/dx [f(x) g(x)] = f'(x) g(x) + f(x) g'(x). The derivative of a product is not the product of the derivatives. Both functions contribute to the rate of change.</p>
+
+    <SchemeRepl client:load initialCode={`; Product rule: (f*g)' = f'g + fg'
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x) (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; f(x) = x^2, g(x) = sin(x)
+; (f*g)' = 2x*sin(x) + x^2*cos(x)
+(define (f x) (* x x))
+(define (g x) (sin x))
+(define (product x) (* (f x) (g x)))
+
+(define (product-prime x)
+  (+ (* (* 2 x) (sin x)) (* (* x x) (cos x))))
+
+(define product-numerical (deriv product))
+
+(display "At x=1:") (newline)
+(display "Product rule: ") (display (/ (round (* (product-prime 1) 10000)) 10000)) (newline)
+(display "Numerical:    ") (display (/ (round (* (product-numerical 1) 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Product rule: (f*g)' = f'g + fg'
+# f(x) = x^2, g(x) = sin(x)
+# (f*g)' = 2x*sin(x) + x^2*cos(x)
+def deriv(f, x, h=1e-5):
+    return (f(x+h) - f(x-h)) / (2*h)
+
+product = lambda x: x**2 * math.sin(x)
+product_prime = lambda x: 2*x*math.sin(x) + x**2*math.cos(x)
+
+print("At x=1:")
+print("Product rule: {:.4f}".format(product_prime(1)))
+print("Numerical:    {:.4f}".format(deriv(product, 1)))
+`} />
+    </div>
+
+
+    <!-- 3. Chain rule -->
+    <h3>Chain rule</h3>
+    <p>d/dx [f(g(x))] = f'(g(x)) &#xB7; g'(x). The derivative of a composition is the product of the derivatives, each evaluated at the right point. This is the most used rule in practice.</p>
+
+    <SchemeRepl client:load initialCode={`; Chain rule: d/dx[f(g(x))] = f'(g(x)) * g'(x)
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x) (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; h(x) = sin(x^2)
+; h'(x) = cos(x^2) * 2x  (chain rule)
+(define (h x) (sin (* x x)))
+
+(define (h-prime x) (* (cos (* x x)) (* 2 x)))
+
+(define h-numerical (deriv h))
+
+(display "At x=1:") (newline)
+(display "Chain rule: ") (display (/ (round (* (h-prime 1) 10000)) 10000)) (newline)
+(display "Numerical:  ") (display (/ (round (* (h-numerical 1) 10000)) 10000)) (newline)
+
+(display "At x=2:") (newline)
+(display "Chain rule: ") (display (/ (round (* (h-prime 2) 10000)) 10000)) (newline)
+(display "Numerical:  ") (display (/ (round (* (h-numerical 2) 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Chain rule: d/dx[sin(x^2)] = cos(x^2) * 2x
+def h(x): return math.sin(x**2)
+def h_prime(x): return math.cos(x**2) * 2 * x
+
+def numerical_deriv(f, x, eps=1e-5):
+    return (f(x + eps) - f(x - eps)) / (2 * eps)
+
+for x in [1, 2]:
+    print(f"x={x}: chain={h_prime(x):.6f}  numerical={numerical_deriv(h, x):.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Quotient rule -->
+    <h3>Quotient rule</h3>
+    <p>d/dx [f(x)/g(x)] = [f'(x) g(x) - f(x) g'(x)] / [g(x)]&#xB2;. Low d-high minus high d-low, over the square of what's below.</p>
+
+    <SchemeRepl client:load initialCode={`; Quotient rule: (f/g)' = (f'g - fg') / g^2
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x) (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; q(x) = sin(x) / x
+; q'(x) = (cos(x)*x - sin(x)*1) / x^2
+(define (q x) (/ (sin x) x))
+
+(define (q-prime x)
+  (/ (- (* (cos x) x) (sin x)) (* x x)))
+
+(define q-numerical (deriv q))
+
+(display "At x=1:") (newline)
+(display "Quotient rule: ") (display (/ (round (* (q-prime 1) 10000)) 10000)) (newline)
+(display "Numerical:     ") (display (/ (round (* (q-numerical 1) 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Quotient rule: (f/g)' = (f'g - fg') / g^2
+# q(x) = sin(x)/x, q'(x) = (cos(x)*x - sin(x)) / x^2
+def deriv(f, x, h=1e-5):
+    return (f(x+h) - f(x-h)) / (2*h)
+
+q = lambda x: math.sin(x) / x
+q_prime = lambda x: (math.cos(x)*x - math.sin(x)) / x**2
+
+print("At x=1:")
+print("Quotient rule: {:.4f}".format(q_prime(1)))
+print("Numerical:     {:.4f}".format(deriv(q, 1)))
+`} />
+    </div>
+
+
+    <!-- 5. Implicit differentiation -->
+    <h3>Implicit differentiation</h3>
+    <p>When y is defined implicitly by an equation like x&#xB2; + y&#xB2; = 1, differentiate both sides with respect to x, treating y as a function of x. Then solve for dy/dx. For the circle: 2x + 2y(dy/dx) = 0, so dy/dx = -x/y.</p>
+
+    <SchemeRepl client:load initialCode={`; Implicit differentiation: x^2 + y^2 = 1 (unit circle)
+; dy/dx = -x/y
+
+; At the point (3/5, 4/5) on the circle:
+(define x 0.6)  ; 3/5
+(define y 0.8)  ; 4/5
+
+(display "x^2 + y^2 = ") (display (+ (* x x) (* y y))) (newline) ; 1.0
+(display "dy/dx = -x/y = ") (display (/ (- x) y)) (newline) ; -0.75
+
+; Verify numerically: y = sqrt(1 - x^2)
+(define (y-explicit x) (sqrt (- 1 (* x x))))
+
+(define h 0.00001)
+(define numerical-slope
+  (/ (- (y-explicit (+ x h)) (y-explicit (- x h))) (* 2 h)))
+
+(display "Numerical dy/dx = ") (display (/ (round (* numerical-slope 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Implicit differentiation: x^2 + y^2 = 1
+# dy/dx = -x/y
+x, y = 0.6, 0.8  # point on unit circle
+
+print("x^2 + y^2 =", x**2 + y**2)
+print("dy/dx = -x/y =", -x/y)
+
+# Verify numerically: y = sqrt(1 - x^2)
+y_explicit = lambda x: math.sqrt(1 - x**2)
+h = 1e-5
+numerical = (y_explicit(x+h) - y_explicit(x-h)) / (2*h)
+print("Numerical dy/dx = {:.4f}".format(numerical))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Rule</th>
+            <th class="py-2 pr-4">Formula</th>
+            <th class="py-2">When to use</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Power</td><td class="pr-4 text-green-300">nx&#x207F;&#x207B;&#xB9;</td><td class="font-sans">x raised to a constant</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Product</td><td class="pr-4 text-green-300">f'g + fg'</td><td class="font-sans">Two functions multiplied</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Quotient</td><td class="pr-4 text-green-300">(f'g - fg')/g&#xB2;</td><td class="font-sans">One function over another</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Chain</td><td class="pr-4 text-green-300">f'(g(x)) &#xB7; g'(x)</td><td class="font-sans">Function of a function</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Implicit</td><td class="pr-4 text-green-300">differentiate both sides, solve for dy/dx</td><td class="font-sans">y defined by an equation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-04/">∫ Ch.4 The Derivative</a> — what these rules are shortcuts for</li>
+      <li><a href="/reading/calculus/calc-06/">∫ Ch.6 Applications</a> — using derivatives to optimize and sketch curves</li>
+      <li><a href="/reading/calculus/calc-02/">∫ Ch.2 Trigonometry</a> — trig derivatives: (sin x)' = cos x, (cos x)' = -sin x</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — the chain rule as lens composition: backprop is the backward pass of a categorical optic</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> — the chain rule is the core of backpropagation in neural networks</li>
+      <li><a href="/reading/real-analysis/lebl-05/">∞ Real Analysis Ch.5</a> — the mean value theorem is the rigorous foundation for derivative rules</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-04/", label: "The Derivative" }} next={{ href: "/reading/calculus/calc-06/", label: "Applications of Derivatives" }} />
+
+  </main>
+</Layout>

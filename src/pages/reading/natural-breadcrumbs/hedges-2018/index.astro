@@ -1,0 +1,479 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hedges 2018 — Compositional Game Theory" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Compositional Game Theory</h1>
+    <p class="text-gray-400 text-sm mb-6">Ghani, Hedges, Kupke, Forsberg · 2018 · <a href="https://arxiv.org/abs/1603.04641"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1603.04641</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (composition of programs). 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash equilibrium</a> is a <strong>compositional predicate</strong>: if each sub-game is in equilibrium given its context, the whole game is in equilibrium. Games compose like programs.</p>
+    </div>
+
+    <!-- 1. Open games -->
+    <h3>Open games — games with interfaces</h3>
+    <p>An <strong>open game</strong> has inputs (what the player observes) and outputs (what the player does), plus a coplay channel that carries consequences back. Think of it as a function with a feedback wire. Games compose by wiring outputs to inputs, the same pattern as sequential composition of programs.</p>
+
+    <!-- SVG: Single open game — right-pointing triangle: base left (input), tip right (output) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Player triangle (right-pointing equilateral: base on left, tip on right) -->
+        <polygon points="80,15 80,115 230,65" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="120" y="70" text-anchor="middle" fill="currentColor" font-size="16">P</text>
+        <!-- Input wire: X — enters at base upper -->
+        <line x1="10" y1="40" x2="80" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <text x="10" y="33" fill="currentColor" font-size="11" fill-opacity="0.5">X</text>
+        <circle cx="80" cy="40" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Output wire: Y — exits at tip -->
+        <line x1="230" y1="65" x2="330" y2="65" stroke="currentColor" stroke-width="1.5"/>
+        <text x="325" y="57" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.5">Y</text>
+        <circle cx="230" cy="65" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Coplay wire: R — enters at base lower, dashed -->
+        <line x1="10" y1="90" x2="80" y2="90" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="10" y="103" fill="currentColor" font-size="11" fill-opacity="0.5">R</text>
+        <circle cx="80" cy="90" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="42" y="33" fill="currentColor" font-size="9" fill-opacity="0.35">observation</text>
+        <text x="275" y="57" fill="currentColor" font-size="9" fill-opacity="0.35">action</text>
+        <text x="42" y="103" fill="currentColor" font-size="9" fill-opacity="0.35">coplay</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; An open game: (play coplay)
+; play: observation -> action
+; coplay: (observation, action, utility) -> ()
+; The game is "open" because utility comes from outside.
+
+(define (make-game name play)
+  (list name play))
+
+(define (game-play g observation)
+  ((cadr g) observation))
+
+; Player 1: sees a price, decides to buy or not
+(define buyer
+  (make-game 'buyer
+    (lambda (price)
+      (if (< price 50) 'buy 'pass))))
+
+; Player 2: sets a price
+(define seller
+  (make-game 'seller
+    (lambda (demand)
+      (if (eq? demand 'high) 70 30))))
+
+(display "buyer at price 30: ")
+(display (game-play buyer 30)) (newline)
+(display "buyer at price 70: ")
+(display (game-play buyer 70)) (newline)
+(display "seller at demand high: ")
+(display (game-play seller 'high)) (newline)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Open games in Python
+def buyer(price):
+    return "buy" if price < 50 else "pass"
+
+def seller(demand):
+    return 70 if demand == "high" else 30
+
+print(f"buyer(30) = {buyer(30)}")
+print(f"buyer(70) = {buyer(70)}")
+print(f"seller('high') = {seller('high')}")
+`} />
+    </div>
+
+    <!-- 2. Selection functions -->
+    <h3>Selection functions</h3>
+    <p>A <strong>selection function</strong> picks the "best" element from a set, given a valuation (how good each element is). It's the decision-making core of an open game. The classic example: argmax picks the action that maximizes utility.</p>
+
+    <!-- SVG: Selection function inside the player triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Player triangle -->
+        <polygon points="80,10 80,130 250,70" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="115" y="45" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">P</text>
+        <!-- Selection function box inside, highlighted -->
+        <rect x="100" y="52" width="80" height="30" rx="4" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="140" y="72" text-anchor="middle" fill="#60a5fa" font-size="11">argmax</text>
+        <!-- Valuation arrow: utility feeds into selection -->
+        <line x1="80" y1="105" x2="100" y2="80" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <text x="68" y="112" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.7">valuation</text>
+        <!-- Actions in -->
+        <text x="100" y="48" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">low, med, high</text>
+        <!-- Output: best action -->
+        <line x1="180" y1="67" x2="250" y2="70" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="250" y1="70" x2="370" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <text x="365" y="62" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.5">best action</text>
+        <!-- Input X -->
+        <line x1="10" y1="40" x2="80" y2="40" stroke="currentColor" stroke-width="1.2"/>
+        <text x="10" y="33" fill="currentColor" font-size="9" fill-opacity="0.5">X</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Selection function: choose best action given a valuation
+; epsilon : (X -> R) -> X
+; "Given how good each action is, which one do you pick?"
+
+(define (argmax actions valuation)
+  (let loop ((best (car actions))
+             (best-val (valuation (car actions)))
+             (rest (cdr actions)))
+    (if (null? rest) best
+        (let ((v (valuation (car rest))))
+          (if (> v best-val)
+              (loop (car rest) v (cdr rest))
+              (loop best best-val (cdr rest)))))))
+
+; Player values actions by profit
+(define actions '(low medium high))
+(define (profit action)
+  (cond ((eq? action 'low) 10)
+        ((eq? action 'medium) 25)
+        ((eq? action 'high) 15)))
+
+(display "best action: ")
+(display (argmax actions profit)) (newline)
+; medium — highest profit
+
+; Change the valuation, choice changes
+(define (risk-averse action)
+  (cond ((eq? action 'low) 10)
+        ((eq? action 'medium) 8)
+        ((eq? action 'high) 3)))
+
+(display "risk-averse: ")
+(display (argmax actions risk-averse))
+; low — safe choice
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Exact.</strong> argmax is the canonical selection function from the paper.</p>
+
+    <!-- 3. Composing games -->
+    <h3>Composing games — sequential play</h3>
+    <p>Two open games compose when the first player's action becomes the second player's observation. The composite game's equilibrium condition: each player plays optimally given what they observe.</p>
+
+    <!-- SVG: Two composition modes side by side -->
+    <div class="flex justify-center my-6 gap-8 flex-wrap">
+      <!-- Monoidal product: P₁ ⊗ P₂ — stacked, tips merge -->
+      <div class="text-center">
+        <svg viewBox="0 0 320 220" class="w-full" style="max-width:300px; font-family: ui-monospace, monospace;">
+          <!-- P₁ right-pointing triangle (top) -->
+          <polygon points="60,10 60,80 170,45" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <text x="90" y="50" text-anchor="middle" fill="currentColor" font-size="12">P1</text>
+          <!-- P₂ right-pointing triangle (bottom) -->
+          <polygon points="60,120 60,190 170,155" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <text x="90" y="160" text-anchor="middle" fill="currentColor" font-size="12">P2</text>
+          <!-- Input wires X — enter at bases -->
+          <line x1="10" y1="30" x2="60" y2="30" stroke="currentColor" stroke-width="1.2"/>
+          <text x="10" y="23" fill="currentColor" font-size="9" fill-opacity="0.5">X</text>
+          <line x1="10" y1="140" x2="60" y2="140" stroke="currentColor" stroke-width="1.2"/>
+          <text x="10" y="133" fill="currentColor" font-size="9" fill-opacity="0.5">X</text>
+          <!-- Tips merge → utility box -->
+          <line x1="170" y1="45" x2="230" y2="45" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="170" y1="155" x2="230" y2="155" stroke="currentColor" stroke-width="1.2"/>
+          <!-- Utility box U -->
+          <rect x="230" y="30" width="50" height="140" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+          <text x="255" y="105" text-anchor="middle" fill="currentColor" font-size="13">U</text>
+          <!-- Output from U -->
+          <line x1="280" y1="75" x2="310" y2="75" stroke="currentColor" stroke-width="1.2"/>
+          <!-- Coplay R back from U -->
+          <line x1="310" y1="125" x2="280" y2="125" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="310" y="137" fill="currentColor" font-size="9" fill-opacity="0.5">R</text>
+          <!-- Label -->
+          <text x="160" y="212" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">P1 &#x2297; P2 (simultaneous)</text>
+        </svg>
+      </div>
+
+      <!-- Sequential composition: P₁ ; P₂ — tip feeds base -->
+      <div class="text-center">
+        <svg viewBox="0 0 420 160" class="w-full" style="max-width:400px; font-family: ui-monospace, monospace;">
+          <!-- P₁ right-pointing triangle (left) -->
+          <polygon points="50,20 50,110 150,65" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <text x="78" y="70" text-anchor="middle" fill="currentColor" font-size="12">P1</text>
+          <!-- P₂ right-pointing triangle (right) -->
+          <polygon points="230,20 230,110 330,65" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <text x="258" y="70" text-anchor="middle" fill="currentColor" font-size="12">P2</text>
+          <!-- Input X — enters P₁ base -->
+          <line x1="10" y1="45" x2="50" y2="45" stroke="currentColor" stroke-width="1.2"/>
+          <text x="10" y="38" fill="currentColor" font-size="9" fill-opacity="0.5">X</text>
+          <!-- Wire Y: P₁ tip → P₂ base (horizontal) -->
+          <line x1="150" y1="65" x2="230" y2="45" stroke="currentColor" stroke-width="1.2"/>
+          <text x="190" y="46" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Y</text>
+          <circle cx="150" cy="65" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+          <circle cx="230" cy="45" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+          <!-- Output Z from P₂ tip -->
+          <line x1="330" y1="65" x2="410" y2="65" stroke="currentColor" stroke-width="1.5"/>
+          <text x="405" y="57" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">Z</text>
+          <circle cx="330" cy="65" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+          <!-- Coplay R flowing back below — dashed -->
+          <line x1="410" y1="130" x2="330" y2="130" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="230" y1="90" x2="150" y2="130" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="50" y1="90" x2="10" y2="90" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <circle cx="230" cy="90" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+          <circle cx="50" cy="90" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+          <!-- R labels -->
+          <text x="405" y="142" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">R</text>
+          <text x="10" y="102" fill="currentColor" font-size="9" fill-opacity="0.5">R</text>
+          <!-- Label -->
+          <text x="210" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">P1 ; P2 (sequential)</text>
+        </svg>
+      </div>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Composing two games: player 1's action = player 2's observation
+; Like COMP: {P} c1 {R}, {R} c2 {Q} => {P} c1;c2 {Q}
+
+(define (compose-games g1 g2)
+  (lambda (observation)
+    (let* ((action1 ((cadr g1) observation))
+           (action2 ((cadr g2) action1)))
+      (list action1 action2))))
+
+; Leader sets price, follower decides quantity
+(define leader
+  (make-game 'leader (lambda (market) (if (eq? market 'boom) 100 40))))
+
+(define follower
+  (make-game 'follower (lambda (price) (if (< price 60) 'buy-lots 'buy-few))))
+
+(define market-game (compose-games leader follower))
+
+(display "boom market: ") (display (market-game 'bust)) (newline)
+(display "bust market: ") (display (market-game 'boom)) (newline)
+; Actions chain through the interface — same as program composition
+`} />
+
+    <!-- 4. Nash equilibrium as predicate -->
+    <h3>Nash equilibrium as a compositional predicate</h3>
+    <p>Here's the punchline. An equilibrium is a <strong>predicate on strategy profiles</strong>: "no player can improve by deviating" (<a href="/reading/game-theory/nordstrom-06/">🎲 what is Nash equilibrium?</a>). Hedges shows this predicate is compositional: if each sub-game satisfies it given its context, the whole game does too. Equilibrium is a postcondition.</p>
+
+    <!-- SVG: Nash equilibrium — deviation check -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 170" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Player 1 triangle -->
+        <polygon points="40,15 40,75 110,45" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <text x="58" y="50" text-anchor="middle" fill="currentColor" font-size="11">P1</text>
+        <!-- Player 2 triangle -->
+        <polygon points="40,85 40,145 110,115" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <text x="58" y="120" text-anchor="middle" fill="currentColor" font-size="11">P2</text>
+        <!-- Actions: D, D -->
+        <line x1="110" y1="45" x2="170" y2="45" stroke="currentColor" stroke-width="1.2"/>
+        <text x="140" y="38" text-anchor="middle" fill="currentColor" font-size="10">D</text>
+        <line x1="110" y1="115" x2="170" y2="115" stroke="currentColor" stroke-width="1.2"/>
+        <text x="140" y="108" text-anchor="middle" fill="currentColor" font-size="10">D</text>
+        <!-- Utility box -->
+        <rect x="170" y="30" width="50" height="100" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="195" y="85" text-anchor="middle" fill="currentColor" font-size="10">U</text>
+        <!-- Payoffs -->
+        <line x1="220" y1="55" x2="260" y2="55" stroke="currentColor" stroke-width="1.2"/>
+        <text x="270" y="59" fill="currentColor" font-size="10">1, 1</text>
+        <!-- Deviation arrow — P1 tries C instead (highlighted red) -->
+        <path d="M 58,15 C 58,-5 130,-5 130,25" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="95" y="-2" fill="#ef4444" font-size="9">deviate to C?</text>
+        <!-- Deviation payoff -->
+        <text x="310" y="30" fill="#ef4444" font-size="9">0, 5 — worse for P1</text>
+        <!-- Checkmark on current -->
+        <text x="310" y="59" fill="#4ade80" font-size="12">&#x2713; equilibrium</text>
+        <!-- Caption -->
+        <text x="200" y="165" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">no player improves by deviating = Nash equilibrium</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Nash equilibrium: no player can improve by deviating
+; Check each player: is their action optimal given others' actions?
+
+; BiwaScheme helpers
+(define (any pred lst) (if (null? lst) #f (if (pred (car lst)) #t (any pred (cdr lst)))))
+(define (take lst n) (if (or (null? lst) (= n 0)) '() (cons (car lst) (take (cdr lst) (- n 1)))))
+(define (drop lst n) (if (or (null? lst) (= n 0)) lst (drop (cdr lst) (- n 1))))
+
+(define (nash-eq? strategies utility-fns action-spaces)
+  (let loop ((i 0) (result #t))
+    (if (>= i (length strategies)) result
+        (let* ((current (list-ref strategies i))
+               (util-fn (list-ref utility-fns i))
+               (current-util (util-fn strategies))
+               (can-improve
+                (any (lambda (alt)
+                  (let ((alt-strats (append (take strategies i)
+                                           (list alt)
+                                           (drop strategies (+ i 1)))))
+                    (> (util-fn alt-strats) current-util)))
+                (list-ref action-spaces i))))
+          (loop (+ i 1) (and result (not can-improve)))))))
+
+; Prisoner's dilemma
+(define (u1 s) (let ((a (car s)) (b (cadr s)))
+  (cond ((and (eq? a 'C) (eq? b 'C)) 3)
+        ((and (eq? a 'C) (eq? b 'D)) 0)
+        ((and (eq? a 'D) (eq? b 'C)) 5)
+        (else 1))))
+
+(define (u2 s) (let ((a (car s)) (b (cadr s)))
+  (cond ((and (eq? a 'C) (eq? b 'C)) 3)
+        ((and (eq? a 'C) (eq? b 'D)) 5)
+        ((and (eq? a 'D) (eq? b 'C)) 0)
+        (else 1))))
+
+(display "(D,D) equilibrium? ")
+(display (nash-eq? '(D D) (list u1 u2) '((C D) (C D)))) (newline)
+(display "(C,C) equilibrium? ")
+(display (nash-eq? '(C C) (list u1 u2) '((C D) (C D))))
+; (D,D) is Nash. (C,C) is not — each player can improve by defecting.
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Pure strategies over finite games. The paper works with mixed strategies and continuous action spaces.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Nash equilibrium check in Python
+def is_nash(strategies, utility_fns, action_spaces):
+    for i in range(len(strategies)):
+        current_util = utility_fns[i](strategies)
+        for alt in action_spaces[i]:
+            alt_s = strategies[:i] + [alt] + strategies[i+1:]
+            if utility_fns[i](alt_s) > current_util:
+                return False
+    return True
+
+# Prisoner's dilemma
+u1 = lambda s: {("C","C"):3, ("C","D"):0, ("D","C"):5, ("D","D"):1}[tuple(s)]
+u2 = lambda s: {("C","C"):3, ("C","D"):5, ("D","C"):0, ("D","D"):1}[tuple(s)]
+
+print(f"(D,D) Nash? {is_nash(['D','D'], [u1,u2], [['C','D'],['C','D']])}")
+print(f"(C,C) Nash? {is_nash(['C','C'], [u1,u2], [['C','D'],['C','D']])}")
+`} />
+    </div>
+
+    <!-- 5. Why compositionality matters -->
+    <h3>Why compositionality matters for games</h3>
+    <p>Classical game theory checks equilibrium over the entire strategy profile at once. Hedges decomposes it: each sub-game checks locally, given its interface. Wire the sub-games together and the local checks compose into a global guarantee.</p>
+
+    <!-- SVG: Compositional equilibrium — local checks compose -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 450 130" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Sub-game 1 with green check -->
+        <polygon points="40,15 40,95 120,55" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="62" y="60" text-anchor="middle" fill="currentColor" font-size="11">Firm</text>
+        <text x="62" y="75" text-anchor="middle" fill="#4ade80" font-size="14">&#x2713;</text>
+        <!-- Wire: price -->
+        <line x1="120" y1="55" x2="190" y2="55" stroke="currentColor" stroke-width="1.2"/>
+        <text x="155" y="47" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">price</text>
+        <circle cx="120" cy="55" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="190" cy="55" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Sub-game 2 with green check -->
+        <polygon points="190,15 190,95 270,55" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="212" y="60" text-anchor="middle" fill="currentColor" font-size="11">Buyer</text>
+        <text x="212" y="75" text-anchor="middle" fill="#4ade80" font-size="14">&#x2713;</text>
+        <!-- Output -->
+        <line x1="270" y1="55" x2="310" y2="55" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="270" cy="55" r="2.5" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Equals sign -->
+        <text x="330" y="60" text-anchor="middle" fill="currentColor" font-size="18">=</text>
+        <!-- Composite game with green check -->
+        <polygon points="350,15 350,95 440,55" fill="#4ade80" fill-opacity="0.12" stroke="#4ade80" stroke-width="2" stroke-linejoin="round"/>
+        <text x="375" y="52" text-anchor="middle" fill="currentColor" font-size="10">Firm;</text>
+        <text x="375" y="65" text-anchor="middle" fill="currentColor" font-size="10">Buyer</text>
+        <text x="375" y="82" text-anchor="middle" fill="#4ade80" font-size="16">&#x2713;</text>
+        <!-- Caption -->
+        <text x="225" y="122" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">local equilibria compose into global equilibrium</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Compositional equilibrium: check locally, compose globally
+; Each sub-game has a best-response predicate
+
+(define (every pred lst) (if (null? lst) #t (if (pred (car lst)) (every pred (cdr lst)) #f)))
+
+(define (best-response? player action context util-fn alternatives)
+  (let ((current-util (util-fn action context)))
+    (every (lambda (alt) (>= current-util (util-fn alt context)))
+           alternatives)))
+
+; Sub-game 1: firm sets price given market
+(define (firm-util price market)
+  (if (eq? market 'good) (* price 2) price))
+
+; Sub-game 2: consumer buys given price
+(define (consumer-util choice price)
+  (if (eq? choice 'buy) (- 100 price) 0))
+
+; Check locally
+(define firm-ok (best-response? 'firm 'high 'good firm-util '(low high)))
+(define cons-ok (best-response? 'consumer 'buy 30 consumer-util '(buy pass)))
+
+(display "Firm best-responding?    ") (display firm-ok) (newline)
+(display "Consumer best-responding? ") (display cons-ok) (newline)
+(display "Both local => global equilibrium: ")
+(display (and firm-ok cons-ok))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ε : (X → R) → X</td><td class="pr-4 text-green-300">(argmax actions valuation)</td><td class="font-sans">Selection function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">G : (X, S) → (Y, R)</td><td class="pr-4 text-green-300">(make-game name play)</td><td class="font-sans">Open game</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">G₁ ⊗ G₂</td><td class="pr-4 text-green-300">(compose-games g1 g2)</td><td class="font-sans">Sequential composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">NE(σ)</td><td class="pr-4 text-green-300">(nash-eq? strategies ...)</td><td class="font-sans">Nash equilibrium predicate</td></tr>
+          <tr><td class="py-2 pr-4">BR(σ)</td><td class="pr-4 text-green-300">(best-response? ...)</td><td class="font-sans">Best response</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/capucci-2021/">🍞 Capucci 2021</a> — cybernetics generalizes open games with parametrised optics</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — the COMP rule is the same composition pattern</li>
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category where stochastic games live</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash equilibrium</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Game_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Game theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Best_response"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Best response</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use pure strategies over finite action spaces. The paper works with mixed strategies, continuous spaces, and open games as morphisms in a <a href="https://en.wikipedia.org/wiki/Symmetric_monoidal_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>symmetric monoidal category</a> with a coplay (contravariant) channel. For example: the Nash equilibrium check on this page iterates over two players with two actions each. In the paper, the same construction applies to a network of open games composed via <a href="https://en.wikipedia.org/wiki/String_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>string diagrams</a> — where equilibrium is verified by checking each node's selection function against the continuation induced by all downstream nodes. The compositionality is identical. The string-diagrammatic machinery is not.</p>
+
+    <h3>Watch</h3>
+    <p class="text-gray-400 text-sm mb-4">Bartosz Milewski explains open games and compositional game theory:</p>
+    <div class="flex justify-center mb-8">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/5Qny8YmLUzk" title="Compositional Game Theory — Bartosz Milewski" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="max-width:100%;border-radius:8px;"></iframe>
+    </div>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/1603.04641"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for open games, §5 for the compositionality theorem.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/kura-2026/", label: "Kura 2026 · 5 of 21" }} next={{ href: "/reading/natural-breadcrumbs/capucci-2021/", label: "Capucci 2021 · 7 of 21" }} />
+  </main>
+</Layout>

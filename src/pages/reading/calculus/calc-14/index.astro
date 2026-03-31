@@ -1,0 +1,247 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.14 — Line and Surface Integrals" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Line and Surface Integrals</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus &middot; CC BY-SA &middot; <a href="https://activecalculus.org">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Integration along curves and over surfaces. A <strong>scalar line integral</strong> measures total mass along a wire. A <strong>vector line integral</strong> (work integral) measures how much a vector field pushes along a path. <strong>Surface integrals</strong> measure flux: how much of the field passes through a surface.</p>
+    </div>
+
+    <!-- Scalar line integrals -->
+    <h3>Scalar line integrals</h3>
+    <p>If you have a scalar function f and a curve C parametrized by r(t), the line integral &int;_C f ds integrates f along the curve, weighted by arc length. Think: total mass of a wire with varying density.</p>
+
+    <SchemeRepl client:load initialCode={`; Scalar line integral of f(x,y) = x + y along the unit circle
+; r(t) = (cos(t), sin(t)), t in [0, 2*pi]
+; |r'(t)| = 1 (unit speed)
+; integral = integral from 0 to 2*pi of (cos(t)+sin(t))*1 dt = 0
+
+(define pi 3.141592653589793)
+
+(define (integrate fn a b n)
+  (let* ((dt (/ (- b a) n)))
+    (do ((i 0 (+ i 1))
+         (sum 0 (+ sum (fn (+ a (* dt (+ i 0.5)))))))
+        ((= i n) (* sum dt)))))
+
+(define result
+  (integrate
+    (lambda (t)
+      (let ((x (cos t)) (y (sin t)))
+        ; f(x,y) * |r'(t)| = (x+y) * 1
+        (+ x y)))
+    0 (* 2 pi) 1000))
+
+(display "Scalar line integral of (x+y) on unit circle = ")
+(display result) (newline)
+(display "Exact: 0 (symmetry: positive and negative cancel)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Scalar line integral of f(x,y) = x+y along unit circle
+import math
+
+n = 10000
+dt = 2 * math.pi / n
+total = 0.0
+for i in range(n):
+    t = dt * (i + 0.5)
+    x, y = math.cos(t), math.sin(t)
+    total += (x + y)  # |r'(t)| = 1
+result = total * dt
+print("Scalar line integral of (x+y) on unit circle = " + format(result, ".6f"))
+print("Exact: 0 (symmetry: positive and negative cancel)")
+`} />
+    </div>
+
+
+    <!-- Vector line integrals (work) -->
+    <h3>Vector line integrals</h3>
+    <p>The work done by a force field F along a path C is &int;_C F &middot; dr. Parametrize the curve, compute F(r(t)) &middot; r'(t), and integrate. If F is conservative (F = grad(f)), the integral depends only on endpoints.</p>
+
+    <!-- SVG: Vector field with a path through it -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Vector field arrows (uniform-ish field pointing right and up) -->
+        <line x1="40" y1="60" x2="60" y2="50" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="58,46 64,48 58,52" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="120" y1="60" x2="140" y2="50" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="138,46 144,48 138,52" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="200" y1="60" x2="220" y2="50" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="218,46 224,48 218,52" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="40" y1="130" x2="60" y2="120" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="58,116 64,118 58,122" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="120" y1="130" x2="140" y2="120" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="138,116 144,118 138,122" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="200" y1="130" x2="220" y2="120" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="218,116 224,118 218,122" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="40" y1="200" x2="60" y2="190" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="58,186 64,188 58,192" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="120" y1="200" x2="140" y2="190" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="138,186 144,188 138,192" fill="currentColor" fill-opacity="0.2"/>
+        <line x1="200" y1="200" x2="220" y2="190" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <polygon points="218,186 224,188 218,192" fill="currentColor" fill-opacity="0.2"/>
+        <!-- Path C through the field -->
+        <path d="M 50 220 Q 100 160 150 140 Q 200 120 260 50" fill="none" stroke="currentColor" stroke-width="2.5" stroke-opacity="0.7"/>
+        <!-- Arrowhead on path -->
+        <polygon points="256,56 264,46 260,58" fill="currentColor" fill-opacity="0.7"/>
+        <!-- Start and end points -->
+        <circle cx="50" cy="220" r="4" fill="currentColor" fill-opacity="0.6"/>
+        <circle cx="260" cy="50" r="4" fill="currentColor" fill-opacity="0.6"/>
+        <text x="35" y="240" fill="currentColor" font-size="11" fill-opacity="0.5">A</text>
+        <text x="268" y="48" fill="currentColor" font-size="11" fill-opacity="0.5">B</text>
+        <!-- Labels -->
+        <text x="280" y="130" fill="currentColor" font-size="11" fill-opacity="0.3">F</text>
+        <text x="130" y="175" fill="currentColor" font-size="12" fill-opacity="0.5">C</text>
+        <text x="160" y="250" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">work = &int;_C F &middot; dr</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Work integral: F = (y, x), path r(t) = (t, t^2) for t in [0, 1]
+; r'(t) = (1, 2t)
+; F(r(t)) = (t^2, t)
+; F . r' = t^2*1 + t*2t = t^2 + 2t^2 = 3t^2
+; integral from 0 to 1 of 3t^2 dt = 1
+
+(define (integrate fn a b n)
+  (let* ((dt (/ (- b a) n)))
+    (do ((i 0 (+ i 1))
+         (sum 0 (+ sum (fn (+ a (* dt (+ i 0.5)))))))
+        ((= i n) (* sum dt)))))
+
+(define work
+  (integrate
+    (lambda (t)
+      (let ((x t) (y (* t t)))
+        ; F = (y, x) = (t^2, t)
+        ; r' = (1, 2t)
+        ; dot product
+        (+ (* y 1) (* x (* 2 t)))))
+    0 1 1000))
+
+(display "Work = integral of F.dr = ") (display work) (newline)
+(display "Exact: 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+t = np.linspace(0, 1, 10000)
+dt = t[1] - t[0]
+
+# F = (y, x) = (t^2, t), r' = (1, 2t)
+integrand = t**2 * 1 + t * 2*t  # F.r' = 3t^2
+work = np.sum(integrand * dt)
+print(f"Work = {work:.4f}, exact = 1.0")
+`} />
+    </div>
+
+
+    <!-- Surface integrals -->
+    <h3>Surface integrals and flux</h3>
+    <p>A surface integral &int;&int;_S F &middot; dS measures the total flux of a vector field through a surface. dS = n dA where n is the unit normal. Flux is the amount of "stuff" flowing through the surface per unit time.</p>
+
+    <SchemeRepl client:load initialCode={`; Flux of F = (0, 0, z) through the top of the unit cube z=1, x in [0,1], y in [0,1]
+; Normal n = (0, 0, 1) (pointing up)
+; F . n = z = 1 on the surface z=1
+; Flux = integral of 1 dA over [0,1]x[0,1] = 1
+
+(define (double-integrate f n)
+  (let* ((dx (/ 1.0 n)) (sum 0))
+    (do ((i 0 (+ i 1))) ((= i n) (* sum dx dx))
+      (do ((j 0 (+ j 1))) ((= j n))
+        (let ((x (* dx (+ i 0.5)))
+              (y (* dx (+ j 0.5))))
+          (set! sum (+ sum (f x y))))))))
+
+; On z=1 surface: F.n = 1
+(define flux
+  (double-integrate (lambda (x y) 1) 100))
+
+(display "Flux of (0,0,z) through top of unit cube = ")
+(display flux) (newline)
+(display "Exact: 1") (newline)
+
+; More interesting: F = (0, 0, x+y), same surface
+(define flux2
+  (double-integrate (lambda (x y) (+ x y)) 200))
+(display "Flux of (0,0,x+y) through top = ")
+(display flux2) (newline)
+(display "Exact: 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Surface integrals: flux through top of unit cube
+# F = (0,0,z), surface z=1, normal = (0,0,1)
+# F.n = 1 on z=1
+
+n = 100
+dx = 1.0 / n
+flux = sum(1 * dx * dx for i in range(n) for j in range(n))
+print("Flux of (0,0,z) through top of unit cube = " + format(flux, ".4f"))
+print("Exact: 1")
+
+# F = (0,0,x+y), same surface
+flux2 = sum((dx*(i+0.5) + dx*(j+0.5)) * dx * dx for i in range(n) for j in range(n))
+print("Flux of (0,0,x+y) through top = " + format(flux2, ".4f"))
+print("Exact: 1")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 pr-4 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;_C f ds</td><td class="font-sans">Scalar line integral (arc length weighted)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;_C F &middot; dr</td><td class="font-sans">Vector line integral (work)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;&int;_S f dS</td><td class="font-sans">Scalar surface integral</td></tr>
+          <tr><td class="py-2 pr-4">&int;&int;_S F &middot; dS</td><td class="font-sans">Flux integral</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Calculus sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-13/">Ch.13 Multiple Integrals</a></li>
+      <li><a href="/reading/calculus/calc-15/">Ch.15 Fundamental Theorems</a></li>
+    </ul>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-06/">📐 Geometry Ch.6</a> — differential forms are the coordinate-free version of line and surface integrals</li>
+      <li><a href="/reading/physics/crowell-08/">⚛ Physics Ch.8</a> — Maxwell's equations are written in terms of line and surface integrals</li>
+      <li><a href="/reading/real-analysis/lebl-08/">∞ Real Analysis Ch.8</a> — Stokes' theorem and Green's theorem generalize the fundamental theorem of calculus</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Line_integral"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Line integral</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Surface_integral"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Surface integral</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Flux"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Flux</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-13/", label: "Multiple Integrals" }} next={{ href: "/reading/calculus/calc-15/", label: "Fundamental Theorems · 15 of 15" }} />
+
+  </main>
+</Layout>

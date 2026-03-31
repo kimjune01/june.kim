@@ -1,0 +1,323 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.2 — Trigonometry" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Trigonometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>unit circle</strong> defines sine and cosine as coordinates. Every trig identity follows from the fact that the point (cos&#x3B8;, sin&#x3B8;) sits on a circle of radius 1. Trig functions are periodic: they repeat every 2&#x3C0;.</p>
+    </div>
+
+    <!-- SVG: interactive unit circle — drag the point -->
+    <div class="flex justify-center my-6">
+      <svg id="unit-circle" viewBox="0 0 300 320" class="w-full max-w-xs" style="font-family: ui-monospace, monospace; cursor: pointer;">
+        <!-- Axes -->
+        <line x1="20" y1="150" x2="280" y2="150" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="150" y1="20" x2="150" y2="280" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Unit circle -->
+        <circle cx="150" cy="150" r="110" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Angle arc -->
+        <path id="uc-arc" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <text id="uc-theta-label" fill="#f59e0b" font-size="10" fill-opacity="0.6"></text>
+        <!-- Radius to point -->
+        <line id="uc-radius" x1="150" y1="150" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Projections -->
+        <line id="uc-proj-v" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <line id="uc-proj-h" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Draggable point -->
+        <circle id="uc-dot" r="6" fill="#f59e0b" fill-opacity="0.8" style="cursor: grab;"/>
+        <!-- Labels -->
+        <text id="uc-cos-label" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6"></text>
+        <text id="uc-sin-label" fill="#60a5fa" font-size="10" fill-opacity="0.6"></text>
+        <text id="uc-coord-label" fill="currentColor" font-size="9" fill-opacity="0.5"></text>
+        <!-- Readout -->
+        <text id="uc-readout" x="150" y="310" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4"></text>
+      </svg>
+    </div>
+    <script is:inline>
+    (function() {
+      var CX = 150, CY = 150, R = 110;
+      var theta = Math.PI / 6;
+      var svg = document.getElementById('unit-circle');
+      var dot = document.getElementById('uc-dot');
+      var radius = document.getElementById('uc-radius');
+      var projV = document.getElementById('uc-proj-v');
+      var projH = document.getElementById('uc-proj-h');
+      var arc = document.getElementById('uc-arc');
+      var thetaLabel = document.getElementById('uc-theta-label');
+      var cosLabel = document.getElementById('uc-cos-label');
+      var sinLabel = document.getElementById('uc-sin-label');
+      var coordLabel = document.getElementById('uc-coord-label');
+      var readout = document.getElementById('uc-readout');
+
+      function update() {
+        var px = CX + R * Math.cos(theta);
+        var py = CY - R * Math.sin(theta);
+        dot.setAttribute('cx', px);
+        dot.setAttribute('cy', py);
+        radius.setAttribute('x2', px);
+        radius.setAttribute('y2', py);
+        projV.setAttribute('x1', px); projV.setAttribute('y1', py);
+        projV.setAttribute('x2', px); projV.setAttribute('y2', CY);
+        projH.setAttribute('x1', CX); projH.setAttribute('y1', CY);
+        projH.setAttribute('x2', px); projH.setAttribute('y2', CY);
+        // Arc
+        var ar = 20;
+        var ax = CX + ar * Math.cos(theta);
+        var ay = CY - ar * Math.sin(theta);
+        var large = Math.abs(theta) > Math.PI ? 1 : 0;
+        var sweep = theta > 0 ? 0 : 1;
+        arc.setAttribute('d', 'M ' + (CX + ar) + ' ' + CY + ' A ' + ar + ' ' + ar + ' 0 ' + large + ' ' + sweep + ' ' + ax.toFixed(1) + ' ' + ay.toFixed(1));
+        // Labels
+        var midX = (CX + px) / 2;
+        thetaLabel.setAttribute('x', CX + 28 * Math.cos(theta / 2));
+        thetaLabel.setAttribute('y', CY - 28 * Math.sin(theta / 2) + 4);
+        thetaLabel.textContent = '\u03B8';
+        cosLabel.setAttribute('x', midX);
+        cosLabel.setAttribute('y', CY + 15);
+        cosLabel.setAttribute('text-anchor', 'middle');
+        cosLabel.textContent = 'cos \u03B8 = ' + Math.cos(theta).toFixed(2);
+        var sinOnRight = px > CX;
+        sinLabel.setAttribute('x', sinOnRight ? Math.min(px + 8, 220) : Math.max(px - 8, 80));
+        sinLabel.setAttribute('y', (py + CY) / 2 + 4);
+        sinLabel.setAttribute('text-anchor', sinOnRight ? 'start' : 'end');
+        sinLabel.textContent = 'sin \u03B8 = ' + Math.sin(theta).toFixed(2);
+        var coordX = px > 200 ? px - 8 : px + 8;
+        coordLabel.setAttribute('x', coordX);
+        coordLabel.setAttribute('y', py - 10);
+        coordLabel.setAttribute('text-anchor', px > 200 ? 'end' : 'start');
+        coordLabel.textContent = '(' + Math.cos(theta).toFixed(2) + ', ' + Math.sin(theta).toFixed(2) + ')';
+        var deg = (theta * 180 / Math.PI);
+        if (deg < 0) deg += 360;
+        readout.textContent = '\u03B8 = ' + deg.toFixed(0) + '\u00B0 = ' + (theta < 0 ? theta + 2 * Math.PI : theta).toFixed(2) + ' rad';
+      }
+
+      function getTheta(e) {
+        var pt = svg.createSVGPoint();
+        var ctm = svg.getScreenCTM();
+        if (e.touches) e = e.touches[0];
+        pt.x = e.clientX; pt.y = e.clientY;
+        pt = pt.matrixTransform(ctm.inverse());
+        return Math.atan2(CY - pt.y, pt.x - CX);
+      }
+
+      var dragging = false;
+      function onDown(e) { dragging = true; theta = getTheta(e); update(); e.preventDefault(); }
+      function onMove(e) { if (!dragging) return; theta = getTheta(e); update(); e.preventDefault(); }
+      function onUp() { dragging = false; }
+
+      svg.addEventListener('mousedown', onDown);
+      svg.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+      svg.addEventListener('touchstart', onDown, {passive: false});
+      svg.addEventListener('touchmove', onMove, {passive: false});
+      window.addEventListener('touchend', onUp);
+
+      update();
+    })();
+    </script>
+
+    <!-- 1. Unit Circle -->
+    <h3>The unit circle</h3>
+    <p>Place a point on the unit circle at angle &#x3B8; from the positive x-axis. Its x-coordinate is <strong>cos&#x3B8;</strong>, its y-coordinate is <strong>sin&#x3B8;</strong>. Since the point is on a circle of radius 1, cos&#xB2;&#x3B8; + sin&#xB2;&#x3B8; = 1. This is the Pythagorean identity.</p>
+
+    <SchemeRepl client:load initialCode={`; Unit circle: cos^2(theta) + sin^2(theta) = 1
+; BiwaScheme has sin, cos built in
+
+(define pi 3.141592653589793)
+
+; Key angles in radians
+(define angles (list 0 (/ pi 6) (/ pi 4) (/ pi 3) (/ pi 2) pi))
+(define names  (list "0" "pi/6" "pi/4" "pi/3" "pi/2" "pi"))
+
+(define (show-angle name theta)
+  (let ((c (cos theta)) (s (sin theta)))
+    (display name) (display ": cos=")
+    (display (/ (round (* c 1000)) 1000))
+    (display " sin=")
+    (display (/ (round (* s 1000)) 1000))
+    (display " sum=")
+    (display (/ (round (* (+ (* c c) (* s s)) 1000)) 1000))
+    (newline)))
+
+(for-each show-angle names angles)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+angles = [0, math.pi/6, math.pi/4, math.pi/3, math.pi/2, math.pi]
+names = ["0", "pi/6", "pi/4", "pi/3", "pi/2", "pi"]
+
+for name, theta in zip(names, angles):
+    c, s = math.cos(theta), math.sin(theta)
+    print("{}: cos={:.3f} sin={:.3f} sum={:.3f}".format(name, c, s, c**2 + s**2))
+`} />
+    </div>
+
+
+    <!-- 2. sin, cos, tan -->
+    <h3>Sine, cosine, tangent</h3>
+    <p><strong>tan&#x3B8; = sin&#x3B8;/cos&#x3B8;</strong>. It is undefined when cos&#x3B8; = 0 (at &#x3C0;/2, 3&#x3C0;/2). Sine is odd, cosine is even. All three functions are periodic.</p>
+
+    <SchemeRepl client:load initialCode={`; sin, cos, tan relationships
+(define pi 3.141592653589793)
+
+(define (my-tan x) (/ (sin x) (cos x)))
+
+; Verify tan = sin/cos
+(display "tan(pi/4) = ") (display (/ (round (* (my-tan (/ pi 4)) 1000)) 1000)) (newline)
+; Should be 1.0
+
+; sin is odd: sin(-x) = -sin(x)
+(display "sin(pi/3) = ") (display (/ (round (* (sin (/ pi 3)) 1000)) 1000)) (newline)
+(display "sin(-pi/3) = ") (display (/ (round (* (sin (- (/ pi 3))) 1000)) 1000)) (newline)
+
+; cos is even: cos(-x) = cos(x)
+(display "cos(pi/3) = ") (display (/ (round (* (cos (/ pi 3)) 1000)) 1000)) (newline)
+(display "cos(-pi/3) = ") (display (/ (round (* (cos (- (/ pi 3))) 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# tan = sin/cos
+print("tan(pi/4) = {:.3f}".format(math.tan(math.pi/4)))  # 1.0
+
+# sin is odd: sin(-x) = -sin(x)
+print("sin(pi/3) = {:.3f}".format(math.sin(math.pi/3)))
+print("sin(-pi/3) = {:.3f}".format(math.sin(-math.pi/3)))
+
+# cos is even: cos(-x) = cos(x)
+print("cos(pi/3) = {:.3f}".format(math.cos(math.pi/3)))
+print("cos(-pi/3) = {:.3f}".format(math.cos(-math.pi/3)))
+`} />
+    </div>
+
+
+    <!-- 3. Identities -->
+    <h3>Key identities</h3>
+    <p>The Pythagorean identity generates the rest. Angle-sum formulas let you expand sin(a+b) and cos(a+b). Double-angle formulas are a special case. These are not arbitrary: they all follow from the geometry of the circle.</p>
+
+    <SchemeRepl client:load initialCode={`; Angle-sum identities:
+; sin(a+b) = sin(a)cos(b) + cos(a)sin(b)
+; cos(a+b) = cos(a)cos(b) - sin(a)sin(b)
+
+(define pi 3.141592653589793)
+(define a (/ pi 6))  ; 30 degrees
+(define b (/ pi 4))  ; 45 degrees
+
+; Verify sin(a+b)
+(define lhs-sin (sin (+ a b)))
+(define rhs-sin (+ (* (sin a) (cos b)) (* (cos a) (sin b))))
+(display "sin(a+b) direct: ") (display (/ (round (* lhs-sin 10000)) 10000)) (newline)
+(display "sin(a+b) formula: ") (display (/ (round (* rhs-sin 10000)) 10000)) (newline)
+
+; Double-angle: sin(2a) = 2 sin(a) cos(a)
+(define lhs-double (sin (* 2 a)))
+(define rhs-double (* 2 (sin a) (cos a)))
+(display "sin(2a) direct: ") (display (/ (round (* lhs-double 10000)) 10000)) (newline)
+(display "sin(2a) formula: ") (display (/ (round (* rhs-double 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+a, b = math.pi/6, math.pi/4
+
+# Angle sum: sin(a+b) = sin(a)cos(b) + cos(a)sin(b)
+lhs = math.sin(a + b)
+rhs = math.sin(a)*math.cos(b) + math.cos(a)*math.sin(b)
+print(f"sin(a+b) direct:  {lhs:.6f}")
+print(f"sin(a+b) formula: {rhs:.6f}")
+
+# Double angle: sin(2a) = 2 sin(a) cos(a)
+print(f"sin(2a) direct:  {math.sin(2*a):.6f}")
+print(f"sin(2a) formula: {2*math.sin(a)*math.cos(a):.6f}")
+`} />
+    </div>
+
+
+    <!-- 4. Inverse trig -->
+    <h3>Inverse trig functions</h3>
+    <p>arcsin, arccos, arctan undo sin, cos, tan on restricted domains. arcsin maps [-1,1] to [-&#x3C0;/2, &#x3C0;/2]. arctan maps all reals to (-&#x3C0;/2, &#x3C0;/2). These are essential for integration later.</p>
+
+    <SchemeRepl client:load initialCode={`; Inverse trig: asin, acos, atan
+(define pi 3.141592653589793)
+
+; asin(sin(x)) = x for x in [-pi/2, pi/2]
+(display "asin(sin(pi/6)) = ") (display (/ (round (* (asin (sin (/ pi 6))) 10000)) 10000)) (newline)
+; Should be pi/6 = 0.5236
+
+; atan(1) = pi/4 (since tan(pi/4) = 1)
+(display "atan(1) = ") (display (/ (round (* (atan 1) 10000)) 10000)) (newline)
+; Should be pi/4 = 0.7854
+
+; atan2 handles all four quadrants
+(display "atan2(1, 1) = ") (display (/ (round (* (atan 1 1) 10000)) 10000)) (newline)
+(display "atan2(-1, -1) = ") (display (/ (round (* (atan -1 -1) 10000)) 10000))
+; -3pi/4 = -2.3562
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# asin(sin(x)) = x for x in [-pi/2, pi/2]
+print("asin(sin(pi/6)) = {:.4f}".format(math.asin(math.sin(math.pi/6))))
+# Should be pi/6 = 0.5236
+
+# atan(1) = pi/4
+print("atan(1) = {:.4f}".format(math.atan(1)))  # 0.7854
+
+# atan2 handles all four quadrants
+print("atan2(1, 1) = {:.4f}".format(math.atan2(1, 1)))
+print("atan2(-1, -1) = {:.4f}".format(math.atan2(-1, -1)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">sin &#x3B8;</td><td class="pr-4 text-green-300">(sin x)</td><td class="pr-4 text-blue-300">math.sin(x)</td><td class="font-sans">Sine (radians)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">cos &#x3B8;</td><td class="pr-4 text-green-300">(cos x)</td><td class="pr-4 text-blue-300">math.cos(x)</td><td class="font-sans">Cosine</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">tan &#x3B8;</td><td class="pr-4 text-green-300">(/ (sin x) (cos x))</td><td class="pr-4 text-blue-300">math.tan(x)</td><td class="font-sans">Tangent</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">arcsin x</td><td class="pr-4 text-green-300">(asin x)</td><td class="pr-4 text-blue-300">math.asin(x)</td><td class="font-sans">Inverse sine</td></tr>
+          <tr><td class="py-2 pr-4">&#x3C0;</td><td class="pr-4 text-green-300">3.14159...</td><td class="pr-4 text-blue-300">math.pi</td><td class="font-sans">Half the circumference of a unit circle</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-05/">∫ Ch.5 Derivative Rules</a> — derivatives of trig functions use these identities</li>
+      <li><a href="/reading/calculus/calc-08/">∫ Ch.8 Integration Techniques</a> — trig substitution requires inverse trig</li>
+      <li><a href="/reading/geometry/geom-01/">📐 Geometry Ch.1</a> — angles, arcs, and circles as the geometric source of trigonometric functions</li>
+      <li><a href="/reading/physics/crowell-01/">⚛ Physics Ch.1</a> — trigonometry is the language of vectors and waves</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-01/", label: "Functions and Graphs" }} next={{ href: "/reading/calculus/calc-03/", label: "Limits and Continuity · 3 of 15" }} />
+
+  </main>
+</Layout>

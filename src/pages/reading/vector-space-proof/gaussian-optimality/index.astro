@@ -1,0 +1,70 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="GaussianOptimality.lean — Welfare-optimal ∧ strategyproof ∧ efficient" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>GaussianOptimality.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/GaussianOptimality.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The capstone. Under Gaussian valuations in any finite-dimensional real inner product space, the VCG score-argmax allocation is simultaneously welfare-optimal, strategyproof at the truthful profile, and equilibrium-efficient &mdash; within this model. (Full <a href="https://en.wikipedia.org/wiki/Incentive_compatibility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>DSIC</a>, where only player <code>i</code> needs to be truthful, is proved in <a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a>.)</p>
+    </div>
+
+    <h3>trueVal_positive</h3>
+    <p>The Gaussian value function is strictly positive everywhere: <code>trueValue &gt; 0</code> (the valuation peak) and <code>exp(&middot;) &gt; 0</code> make the product positive. A small lemma, but it confirms the model stays in the positive reals where log is well-defined.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">trueVal_positive</span> (v : Valuation E) (x : E) :
+    0 &lt; trueVal v x</code></pre>
+
+    <h3>gaussian_optimality</h3>
+    <p>Under truthful reporting, the VCG allocation maximizes integrated welfare over all allocation rules. This is a direct application of <code>integral_efficiency</code> &mdash; the Gaussian-specific content is already baked into the definitions.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">gaussian_optimality</span>
+    (auc : Auction ι E) (μ : QueryMeasure E)
+    (htruth : allTruthful auc) :
+    ∀ (rule : E → ι),
+      welfareOfRule auc (fun x => winner auc x) μ ≥
+        welfareOfRule auc rule μ</code></pre>
+
+    <h3>gaussian_vcg_weakly_dominates</h3>
+    <p>The headline result, bundling three properties in one conjunction:</p>
+    <ol style="list-style:decimal;padding-left:1.5em">
+      <li><strong>Welfare-optimality</strong>: no allocation rule achieves higher integrated welfare.</li>
+      <li><strong>No profitable deviation at the truthful profile</strong>: when all players are truthful, no single player benefits from deviating. This is weaker than full DSIC (which only requires player <code>i</code> to be truthful &mdash; see <code>vcg_dsic</code> in <a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a>), but stronger than standard <a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash</a> because it quantifies over all report deviations without depending on a continuation.</li>
+      <li><strong>Allocation efficiency</strong>: the equilibrium allocation is pointwise welfare-maximizing.</li>
+    </ol>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">gaussian_vcg_weakly_dominates</span>
+    (auc : Auction ι E) (μ : QueryMeasure E)
+    (htruth : allTruthful auc) :
+    <span class="text-gray-500">-- 1. No allocation rule does better</span>
+    (∀ rule, welfareOfRule auc (winner auc) μ ≥
+             welfareOfRule auc rule μ) ∧
+    <span class="text-gray-500">-- 2. No advertiser benefits from deviating</span>
+    (∀ i x r', playerUtility auc i x ≥
+               playerUtility (auc.withReport i r') i x) ∧
+    <span class="text-gray-500">-- 3. Equilibrium allocation is pointwise optimal</span>
+    (∀ x j, trueVal (auc.valuation (winner auc x)) x ≥
+            trueVal (auc.valuation j) x)</code></pre>
+    <p>Together: the allocation is optimal within the model, the equilibrium achieves it, and no player wants to deviate.</p>
+
+    <h3>What's Gaussian-specific vs. inherited</h3>
+    <p>Most of the heavy lifting is already done in earlier files. The Gaussian-specific content here is narrow: <code>trueVal_positive</code> confirms the model stays in positive reals (where log is monotone), and the capstone bundles results that were proved generically. The Gaussian valuation shape matters because it makes score = log(value) a clean algebraic identity &mdash; a different valuation model would need a different bridge theorem in <a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a>.</p>
+
+    <h3>Why this matters for economists</h3>
+    <p>The Gaussian decay model is the natural choice when relevance decreases with distance in embedding space, the rate of decrease is advertiser-specific, and willingness to pay scales the whole curve. Under these assumptions, no allocation rule within the model can achieve higher integrated welfare. The only room for improvement is in the choice of embedding space itself, which is outside the auction's scope. For the economic argument, see the <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> series.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/integral-efficiency/">IntegralEfficiency.lean</a> &mdash; supplies welfare-optimality</li>
+      <li><a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a> &mdash; supplies DSIC</li>
+      <li><a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a> &mdash; supplies pointwise welfare maximization</li>
+      <li><a href="/reading/vector-space-proof/open-game/">OpenGame.lean</a> &mdash; the compositional game theory connection</li>
+      <li><a href="https://doi.org/10.2307/1914085">Groves (1973)</a> &mdash; efficient choice rule = argmax of values</li>
+      <li><a href="https://doi.org/10.2307/1914237">Green &amp; Laffont (1977)</a> &mdash; VCG is the only efficient DSIC mechanism</li>
+      <li><a href="https://doi.org/10.1137/0216006">Aurenhammer (1987)</a> &mdash; power diagram geometry</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/integral-efficiency/", label: "IntegralEfficiency.lean · 5 of 7" }} next={{ href: "/reading/vector-space-proof/open-game/", label: "OpenGame.lean · 7 of 7" }} />
+  </main>
+</Layout>

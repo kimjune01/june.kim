@@ -1,0 +1,143 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.9 — Kalman Filter" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Kalman Filter</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Kalman_filter"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kalman filter</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Kalman filter</strong> estimates the state of a linear system from noisy measurements. Each step has two phases: <strong>predict</strong> (use the model to forecast the next state) and <strong>update</strong> (correct the forecast using the measurement). It is optimal in the least-squares sense for Gaussian noise.</p>
+    </div>
+
+    <h3>Prediction and update</h3>
+    <p><strong>Predict</strong>: propagate the state estimate forward using the system model. The uncertainty grows. <strong>Update</strong>: incorporate the new measurement. The Kalman gain weights how much to trust the measurement versus the prediction. If the measurement is precise (low noise), the gain is high and you trust the sensor. If the model is precise (low process noise), the gain is low and you trust the prediction.</p>
+
+    <!-- SVG: Noisy measurements converging to true state -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="190" x2="420" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="20" x2="40" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="420" y="205" fill="currentColor" font-size="11" fill-opacity="0.4">t</text>
+        <text x="25" y="20" fill="currentColor" font-size="11" fill-opacity="0.4">x</text>
+        <!-- True state (straight line) -->
+        <line x1="40" y1="100" x2="420" y2="100" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="425" y="104" fill="#22c55e" font-size="9" fill-opacity="0.6">true</text>
+        <!-- Noisy measurements (scattered dots) -->
+        <circle cx="60" cy="65" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="90" cy="130" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="120" cy="75" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="150" cy="140" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="180" cy="85" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="210" cy="120" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="240" cy="90" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="270" cy="115" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="300" cy="95" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="330" cy="108" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="360" cy="97" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <circle cx="390" cy="103" r="3" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="395" y="125" fill="#ef4444" font-size="9" fill-opacity="0.6">noisy</text>
+        <!-- Kalman estimate (converging to true) -->
+        <path d="M 60 65 L 90 100 L 120 85 L 150 110 L 180 95 L 210 107 L 240 98 L 270 106 L 300 100 L 330 103 L 360 100 L 390 101" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <text x="395" y="90" fill="#60a5fa" font-size="9" fill-opacity="0.6">estimate</text>
+        <!-- Uncertainty envelope (narrows over time) -->
+        <path d="M 60 30 Q 150 55 240 80 Q 330 92 390 95" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3,2"/>
+        <path d="M 60 135 Q 150 130 240 118 Q 330 108 390 106" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3,2"/>
+        <text x="80" y="45" fill="#60a5fa" font-size="8" fill-opacity="0.3">uncertainty</text>
+      </svg>
+    </div>
+
+    <h3>The Kalman gain</h3>
+    <p>K = P_predicted * H' * (H * P_predicted * H' + R)^(-1). Here P is the error covariance, H is the measurement matrix, and R is the measurement noise covariance. When R is large (noisy sensor), K is small and the filter mostly trusts the model. When P is large (uncertain model), K is large and the filter mostly trusts the measurement. Over time, P shrinks and the estimate converges.</p>
+
+    <SchemeRepl client:load initialCode={`; Scalar Kalman filter: estimate a constant from noisy measurements
+; True value: 42.0
+; Measurement noise variance R = 25.0
+
+(define true-value 42.0)
+(define R 25.0)  ; measurement noise variance
+(define Q 0.01)  ; process noise variance (small, nearly constant)
+
+(define (kalman x-est P measurement)
+  (let* (;; Predict (constant model: x-predicted = x-est)
+         (x-pred x-est)
+         (P-pred (+ P Q))
+         ;; Update
+         (K (/ P-pred (+ P-pred R)))
+         (innovation (- measurement x-pred))
+         (x-new (+ x-pred (* K innovation)))
+         (P-new (* (- 1.0 K) P-pred)))
+    (list x-new P-new K)))
+
+; Simulate noisy measurements around true value
+(define measurements
+  (list 47 38 51 35 44 39 48 36 43 41 45 40 42 38 44))
+
+(define (run-filter measurements x-est P step)
+  (if (null? measurements)
+    (begin (display "Final estimate: ") (display x-est)
+           (display " (true: ") (display true-value) (display ")") (newline))
+    (let* ((z (car measurements))
+           (result (kalman x-est P z))
+           (new-x (car result))
+           (new-P (car (cdr result)))
+           (K (car (cdr (cdr result)))))
+      (display "  z=") (display z)
+      (display "  est=") (display new-x)
+      (display "  K=") (display K) (newline)
+      (run-filter (cdr measurements) new-x new-P (+ step 1)))))
+
+(display "Kalman filter (true=42):") (newline)
+(run-filter measurements 50.0 100.0 0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Scalar Kalman filter
+true_value = 42.0
+R = 25.0   # measurement noise variance
+Q = 0.01   # process noise variance
+
+measurements = [47, 38, 51, 35, 44, 39, 48, 36, 43, 41, 45, 40, 42, 38, 44]
+
+x_est = 50.0  # initial guess
+P = 100.0     # initial uncertainty
+
+print("Kalman filter (true=42):")
+for i, z in enumerate(measurements):
+    # Predict
+    P_pred = P + Q
+    # Update
+    K = P_pred / (P_pred + R)
+    x_est = x_est + K * (z - x_est)
+    P = (1 - K) * P_pred
+    print(f"  step={i:2d}  z={z}  est={x_est:.2f}  K={K:.3f}  P={P:.2f}")
+
+print(f"Final estimate: {x_est:.2f} (true: {true_value})")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/statistics/openintro-05/">&#x1F4CA; OpenIntro Ch. 5 — Inference</a> &#x2014; the Kalman update is Bayesian inference with Gaussian priors</li>
+      <li><a href="/reading/probability/grinstead-06/">&#x1F3B0; Grinstead Ch. 6 — Expected Value</a> &#x2014; the Kalman filter minimizes expected squared error</li>
+    
+      <li><a href="/reading/probability/grinstead-04/">🎰 Probability Ch.4</a> &mdash; the Kalman filter is Bayesian updating for Gaussian models</li>
+      <li><a href="/reading/linear-algebra/hefferon-05/">📐 Linear Algebra Ch.5</a> &mdash; eigenvalues of the covariance matrix determine filter gain</li>
+      <li><a href="/reading/machine-learning/ml-07/">🤖 ML Ch.7</a> &mdash; Gaussian processes are infinite-dimensional Kalman filters</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-08/", label: "Optimal Control" }} next={{ href: "/reading/control/ctrl-10/", label: "Lyapunov Stability" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,194 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 7 — Channels and Capacity" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to information theory</a>
+
+    <h1>Channels and Capacity</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <a href="https://en.wikipedia.org/wiki/Channel_(communications)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>channel</a> is a conditional distribution P(Y|X). <strong>Channel capacity</strong> C = max<sub>P(X)</sub> I(X;Y) is the highest rate at which you can send information reliably. Shannon's noisy channel theorem: reliable communication at rate R &lt; C is possible; at R &gt; C it is not.</p>
+    </div>
+
+    <!-- 1. What is a channel -->
+    <h3>What is a channel</h3>
+    <p>A channel takes an input X and produces an output Y according to a conditional probability P(Y|X). The input is what you send. The output is what arrives. The channel adds noise. A perfect channel copies X to Y unchanged. A useless channel ignores X and outputs random noise. In the categorical view, channels are morphisms in <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the Stoch category</a>, where the Giry monad formalizes the probability distributions that define them.</p>
+
+    <!-- SVG: Channel diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Input X -->
+        <text x="30" y="80" text-anchor="middle" fill="currentColor" font-size="18">X</text>
+        <line x1="50" y1="75" x2="120" y2="75" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="115,71 125,75 115,79" fill="currentColor"/>
+
+        <!-- Channel box -->
+        <rect x="125" y="45" width="140" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" fill="currentColor" font-size="14">P(Y|X)</text>
+
+        <!-- Noise arrow from above -->
+        <line x1="195" y1="10" x2="195" y2="45" stroke="#ef4444" stroke-width="1.5"/>
+        <polygon points="191,40 195,50 199,40" fill="#ef4444"/>
+        <text x="195" y="8" text-anchor="middle" fill="#ef4444" font-size="11" fill-opacity="0.7">noise</text>
+
+        <!-- Output Y -->
+        <line x1="265" y1="75" x2="340" y2="75" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="335,71 345,75 335,79" fill="currentColor"/>
+        <text x="365" y="80" text-anchor="middle" fill="currentColor" font-size="18">Y</text>
+
+        <!-- Caption -->
+        <text x="195" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">input X enters, noise corrupts, output Y exits</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A channel is a conditional distribution P(Y|X)
+; Represented as a function: input -> list of (output . probability)
+
+(define (binary-symmetric-channel x flip-prob)
+  ; BSC: flips the input bit with probability flip-prob
+  (let ((keep (- 1.0 flip-prob)))
+    (list (cons x keep)
+          (cons (if (= x 0) 1 0) flip-prob))))
+
+(display "Send 0, flip=0.1: ")
+(display (binary-symmetric-channel 0 0.1)) (newline)
+(display "Send 1, flip=0.1: ")
+(display (binary-symmetric-channel 1 0.1)) (newline)
+(display "Send 0, flip=0.5: ")
+(display (binary-symmetric-channel 0 0.5)) (newline)
+; flip=0.5 is useless: output is independent of input
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def bsc(x, flip_prob):
+    """Binary symmetric channel: flips bit with given probability."""
+    return {x: 1 - flip_prob, 1 - x: flip_prob}
+
+print(f"Send 0, flip=0.1: {bsc(0, 0.1)}")
+print(f"Send 1, flip=0.1: {bsc(1, 0.1)}")
+print(f"Send 0, flip=0.5: {bsc(0, 0.5)}")
+print("flip=0.5: output independent of input (useless channel)")
+`} />
+    </div>
+
+    <!-- 2. Channel capacity -->
+    <h3>Channel capacity</h3>
+    <p>Channel capacity C = max<sub>P(X)</sub> I(X;Y). You choose the input distribution P(X) to maximize mutual information. For the <a href="https://en.wikipedia.org/wiki/Binary_symmetric_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>binary symmetric channel</a> with flip probability p, the capacity is C = 1 - H(p), achieved by a uniform input.</p>
+
+    <SchemeRepl client:load initialCode={`; Channel capacity of the binary symmetric channel
+; C = 1 - H(p) where H(p) = -p*log2(p) - (1-p)*log2(1-p)
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (binary-entropy p)
+  (if (or (<= p 0) (>= p 1)) 0
+    (- (+ (* p (log2 p)) (* (- 1 p) (log2 (- 1 p)))))))
+
+(define (bsc-capacity flip-prob)
+  (- 1 (binary-entropy flip-prob)))
+
+(display "flip=0.0:  C = ") (display (bsc-capacity 0.0)) (newline)
+(display "flip=0.01: C = ") (display (bsc-capacity 0.01)) (newline)
+(display "flip=0.1:  C = ") (display (bsc-capacity 0.1)) (newline)
+(display "flip=0.25: C = ") (display (bsc-capacity 0.25)) (newline)
+(display "flip=0.5:  C = ") (display (bsc-capacity 0.5)) (newline)
+; flip=0 -> perfect channel (1 bit). flip=0.5 -> useless (0 bits).
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def binary_entropy(p):
+    if p <= 0 or p >= 1: return 0
+    return -(p * math.log2(p) + (1-p) * math.log2(1-p))
+
+def bsc_capacity(flip_prob):
+    return 1 - binary_entropy(flip_prob)
+
+for p in [0.0, 0.01, 0.1, 0.25, 0.5]:
+    print(f"flip={p:.2f}: C = {bsc_capacity(p):.4f} bits/use")
+`} />
+    </div>
+
+    <!-- 3. Noisy channel theorem -->
+    <h3>Shannon's noisy channel theorem</h3>
+    <p>The noisy channel theorem has two parts. The <strong>achievability</strong> part: for any rate R &lt; C, there exists a coding scheme that achieves arbitrarily low error probability. The <strong>converse</strong>: for R &gt; C, errors are unavoidable. The boundary is sharp. Shannon proved existence but did not construct the codes. That took another 50 years.</p>
+
+    <SchemeRepl client:load initialCode={`; Noisy channel theorem (statement, not proof)
+; R < C => reliable communication possible
+; R > C => errors unavoidable
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (binary-entropy p)
+  (if (or (<= p 0) (>= p 1)) 0
+    (- (+ (* p (log2 p)) (* (- 1 p) (log2 (- 1 p)))))))
+
+(define (bsc-capacity flip-prob) (- 1 (binary-entropy flip-prob)))
+
+(define capacity (bsc-capacity 0.1))
+
+(define (check-rate r c)
+  (display "  Rate ") (display r)
+  (if (< r c)
+    (display " < C: reliable (codes exist)")
+    (display " > C: unreliable (errors forced)"))
+  (newline))
+
+(display "BSC capacity (p=0.1): ") (display capacity) (newline)
+(check-rate 0.3 capacity)
+(check-rate 0.5 capacity)
+(check-rate 0.6 capacity)
+; The theorem guarantees a sharp boundary at C.
+; Below C: error -> 0 as block length -> infinity.
+; Above C: error bounded away from 0.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(Y|X)</td><td class="pr-4 text-green-300">(bsc x flip-prob)</td><td class="font-sans">Channel (conditional distribution)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C = max I(X;Y)</td><td class="pr-4 text-green-300">(bsc-capacity p)</td><td class="font-sans">Channel capacity</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(p)</td><td class="pr-4 text-green-300">(binary-entropy p)</td><td class="font-sans">Binary entropy function</td></tr>
+          <tr><td class="py-2 pr-4">R &lt; C</td><td class="pr-4 text-green-300">(&lt; r c)</td><td class="font-sans">Rate below capacity: reliable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-06/">📡 Data processing inequality</a> &mdash; constrains what channels can transmit</li>
+      <li><a href="/reading/information-theory/shannon-08/">📡 Entropy as functor</a> &mdash; why capacity is a categorical invariant</li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> &mdash; Markov kernels are channels in categorical language</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> &mdash; forward and backward channels in cybernetic systems</li>
+      <li><a href="https://en.wikipedia.org/wiki/Channel_capacity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Channel capacity</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Binary_symmetric_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Binary symmetric channel</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use the binary symmetric channel, the simplest non-trivial channel. Shannon's theorem applies to arbitrary discrete memoryless channels with finite alphabets, and extends to continuous channels (Gaussian channel, AWGN) with integral formulas. The capacity formula C = 1 - H(p) is specific to the BSC. The general formula C = max I(X;Y) requires optimization over all input distributions, which for most channels has no closed-form solution.</p>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-06/", label: "Data Processing" }} next={{ href: "/reading/information-theory/shannon-08/", label: "Entropy as Functor" }} />
+
+  </main>
+</Layout>

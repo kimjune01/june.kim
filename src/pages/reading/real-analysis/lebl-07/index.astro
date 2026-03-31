@@ -1,0 +1,203 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.7 — Sequences of Functions" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Sequences of Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 7</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Pointwise convergence</strong> is not enough: the limit of continuous functions can be discontinuous, and you can't always interchange limits with integrals or derivatives. <strong>Uniform convergence</strong> is the fix. It preserves continuity, and the Weierstrass M-test detects it for series.</p>
+    </div>
+
+    <!-- SVG: Sequence of functions converging uniformly -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="380" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="170" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="380" y="185" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">x</text>
+        <!-- Limit function f (bold) -->
+        <path d="M 60 150 Q 150 80 240 60 Q 320 48 370 45" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.7"/>
+        <text x="375" y="42" fill="#f59e0b" font-size="10" fill-opacity="0.6">f</text>
+        <!-- f_1 (far from limit) -->
+        <path d="M 60 130 Q 150 120 240 110 Q 320 100 370 95" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="375" y="92" fill="#60a5fa" font-size="9" fill-opacity="0.3">f_1</text>
+        <!-- f_2 -->
+        <path d="M 60 140 Q 150 100 240 82 Q 320 70 370 67" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.35"/>
+        <text x="375" y="64" fill="#60a5fa" font-size="9" fill-opacity="0.4">f_2</text>
+        <!-- f_3 (close to limit) -->
+        <path d="M 60 146 Q 150 88 240 68 Q 320 55 370 52" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="375" y="49" fill="#60a5fa" font-size="9" fill-opacity="0.5">f_3</text>
+        <!-- Epsilon tube around f -->
+        <path d="M 60 143 Q 150 73 240 53 Q 320 41 370 38" fill="none" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="3,3" stroke-opacity="0.3"/>
+        <path d="M 60 157 Q 150 87 240 67 Q 320 55 370 52" fill="none" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="3,3" stroke-opacity="0.3"/>
+        <!-- Caption -->
+        <text x="200" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Uniform convergence: all f_n eventually fit inside the ε-tube around f.</text>
+      </svg>
+    </div>
+
+    <h3>Pointwise vs uniform convergence</h3>
+    <p>A sequence f_n converges <strong>pointwise</strong> to f if for each x, f_n(x) &rarr; f(x). It converges <strong>uniformly</strong> if sup_x |f_n(x) - f(x)| &rarr; 0. Uniform convergence means the entire graph of f_n gets close to f, not just individual points. The classic counterexample: f_n(x) = x^n on [0, 1] converges pointwise to a discontinuous function but not uniformly.</p>
+
+    <SchemeRepl client:load initialCode={`; Pointwise but NOT uniform convergence
+; f_n(x) = x^n on [0, 1]
+; Pointwise limit: f(x) = 0 for x in [0,1), f(1) = 1
+; Not uniform: sup |f_n(x) - f(x)| does not -> 0
+
+(define (f-n x n) (expt x n))
+
+(display "Pointwise: f_n(0.5) as n grows:") (newline)
+(for-each (lambda (n)
+  (display "  f_") (display n) (display "(0.5) = ")
+  (display (f-n 0.5 n)) (newline))
+  (list 1 5 10 50 100))
+
+(display "Pointwise: f_n(0.99) as n grows:") (newline)
+(for-each (lambda (n)
+  (display "  f_") (display n) (display "(0.99) = ")
+  (display (f-n 0.99 n)) (newline))
+  (list 1 10 100 1000))
+
+; sup |f_n(x) - f(x)| on [0,1) is always close to 1
+; (take x = (1-1/n)^(1/n) which is close to 1/e)
+(display "sup error on [0,1): always near ")
+(display (/ 1.0 (exp 1)))
+(display " (not -> 0)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# x^n on [0,1]: pointwise but not uniform convergence
+import math
+
+for x in [0.5, 0.99, 0.999]:
+    vals = [(n, x**n) for n in [1, 10, 100, 1000]]
+    print(f"x={x}: " + ", ".join(f"f_{n}={v:.6f}" for n,v in vals))
+
+# The sup of f_n on [0,1) approaches 1/e, not 0
+print(f"sup |f_n - f| ~ 1/e = {1/math.e:.4f}")
+`} />
+    </div>
+
+    <h3>Uniform convergence preserves continuity</h3>
+    <p>If each f_n is continuous and f_n &rarr; f uniformly, then f is continuous. This fails for pointwise convergence: the x^n example gives a discontinuous limit. Uniform convergence also allows interchanging limits with integrals: &int; lim f_n = lim &int; f_n.</p>
+
+    <SchemeRepl client:load initialCode={`; Uniform convergence: f_n(x) = sin(x)/n -> 0 uniformly
+; Each f_n is continuous, limit f(x)=0 is continuous
+; sup |f_n(x) - 0| = 1/n -> 0
+
+(define (f-n x n) (/ (sin x) n))
+
+(display "sup |f_n(x)| = 1/n:") (newline)
+(for-each (lambda (n)
+  (display "  n=") (display n)
+  (display ": sup = ") (display (/ 1.0 n)) (newline))
+  (list 1 5 10 100 1000))
+
+; Interchange of limit and integral works:
+; integral of sin(x)/n from 0 to pi = 2/n -> 0
+; integral of limit (0) from 0 to pi = 0
+(display "Integral of f_n on [0,pi]: 2/n -> 0") (newline)
+(display "Integral of limit on [0,pi]: 0") (newline)
+(display "They match because convergence is uniform")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+print("sup |f_n(x)| = 1/n:")
+for n in [1, 5, 10, 100, 1000]:
+    print("  n=" + str(n) + ": sup =", 1/n)
+
+print("Integral of f_n on [0,pi]: 2/n -> 0")
+print("Integral of limit on [0,pi]: 0")
+print("They match because convergence is uniform")
+`} />
+    </div>
+
+    <h3>Weierstrass M-test</h3>
+    <p>If |f_n(x)| &le; M_n for all x, and &Sigma; M_n converges, then &Sigma; f_n converges uniformly (and absolutely). The M_n are constants that bound each term independently of x.</p>
+
+    <SchemeRepl client:load initialCode={`; Weierstrass M-test
+; sum sin(nx)/n^2 converges uniformly on all of R
+; |sin(nx)/n^2| <= 1/n^2 = M_n
+; sum 1/n^2 = pi^2/6 converges
+
+(define (partial-series x n-terms)
+  (let loop ((n 1) (s 0.0))
+    (if (> n n-terms) s
+      (loop (+ n 1) (+ s (/ (sin (* n x)) (* n n)))))))
+
+(display "sum sin(nx)/n^2 at various x:") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display ": S_100 = ")
+  (display (partial-series x 100)) (newline))
+  (list 0.5 1.0 2.0 3.0))
+
+(display "Bound: sum 1/n^2 = pi^2/6 = ")
+(display (/ (* 3.141592653589793 3.141592653589793) 6.0)) (newline)
+(display "Convergence is uniform because the bound is x-independent")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def partial_series(x, n_terms):
+    return sum(math.sin(n * x) / (n * n) for n in range(1, n_terms + 1))
+
+print("sum sin(nx)/n^2 at various x:")
+for x in [0.5, 1.0, 2.0, 3.0]:
+    print("  x=" + str(x) + ": S_100 =", partial_series(x, 100))
+
+print("Bound: sum 1/n^2 = pi^2/6 =", math.pi**2 / 6)
+print("Convergence is uniform because the bound is x-independent")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f_n &rarr; f pointwise</td><td class="pr-4 text-green-300">f_n(x) &rarr; f(x) each x</td><td class="font-sans">Pointwise convergence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f_n &rArr; f</td><td class="pr-4 text-green-300">sup|f_n - f| &rarr; 0</td><td class="font-sans">Uniform convergence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">M_n</td><td class="pr-4 text-green-300">bound on |f_n|</td><td class="font-sans">Weierstrass M-test bound</td></tr>
+          <tr><td class="py-2 pr-4">&Sigma; M_n &lt; &infin;</td><td class="pr-4 text-green-300">convergent bound series</td><td class="font-sans">Implies uniform convergence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-02/">Ch. 2: Sequences</a> — sequences of numbers vs sequences of functions</li>
+      <li><a href="/reading/real-analysis/lebl-03/">Ch. 3: Series</a> — power series are the main application</li>
+      <li><a href="/reading/real-analysis/lebl-04/">Ch. 4: Continuous Functions</a> — uniform convergence preserves continuity</li>
+      <li><a href="/reading/probability/grinstead-09/">🎰 Probability Ch.9</a> — CLT as convergence in distribution: a limit theorem for random functions</li>
+      <li><a href="/reading/machine-learning/ml-07/">🤖 ML Ch.7</a> — Gaussian processes are distributions over functions, where convergence questions arise</li>
+      <li><a href="/reading/control/ctrl-07/">🎛 Control Ch.7</a> — Fourier series: trigonometric function sequences and their convergence behavior</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The x^n example is the canonical counterexample in every analysis course. Our numerical evaluation shows pointwise convergence (each x^n &rarr; 0 for x &lt; 1), but the lack of uniform convergence is a theoretical fact about the supremum, not something a finite computation proves.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-06/", label: "The Riemann Integral" }} next={{ href: "/reading/real-analysis/lebl-08/", label: "Metric Spaces" }} />
+
+  </main>
+</Layout>

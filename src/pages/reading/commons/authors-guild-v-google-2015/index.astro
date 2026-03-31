@@ -1,0 +1,86 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Authors Guild v. Google 2015 — Indexing Is Fair Use" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>Indexing Is Fair Use</h1>
+    <p class="text-gray-400 text-sm mb-6">804 F.3d 202 (2d Cir. 2015) &middot; <a href="https://law.justia.com/cases/federal/appellate-courts/ca2/13-4829/13-4829-2015-10-16.html">Read the opinion (Justia)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Google scanned twenty million books, built a full-text search index, and displayed short snippets in results. The Authors Guild called it infringement. The Second Circuit called it <strong>fair use</strong>. The reasoning: the purpose of a book is to be read; the purpose of an index is to be searched. Different purpose, different analysis.</p>
+    </div>
+
+    <!-- 1. The facts -->
+    <h3>Twenty million books</h3>
+
+    <p>Starting in 2004, Google partnered with major research libraries — Michigan, Harvard, Stanford, Oxford, the New York Public Library — to scan their collections. By the time of the lawsuit, Google had digitized roughly twenty million volumes, the majority under copyright. The scans were not published. They fed a search index. A user who searched for a phrase would see which books contained it, along with a short "snippet" in context. Three snippets per page, never more than an eighth of any page.</p>
+
+    <p>The Authors Guild sued in 2005, claiming mass infringement. The case wound through courts for a decade. A proposed settlement — a comprehensive digital library with revenue sharing — was rejected in 2011. The case went to trial on the fair use question alone.</p>
+
+    <!-- 2. The holding -->
+    <h3>Different purpose, different analysis</h3>
+
+    <p>The Second Circuit affirmed the district court: Google Books is fair use. The opinion, written by Judge Leval, rested on a single analytical move. Copying an entire book to build a search index is <em>transformative</em> because the copy serves a fundamentally different purpose than the original.</p>
+
+    <blockquote>
+      <p>Google's making of a digital copy to provide a search function is a transformative use, which augments public knowledge by making available information about Plaintiffs' books without providing the public with a substantial substitute for matter protected by the Plaintiffs' copyright interests.</p>
+    </blockquote>
+
+    <p>The word "transformative" carried the analysis. Google did not alter the books. It did not add commentary. It copied them wholesale. But the <em>purpose</em> of the copy was different from the purpose of the original. A book is written to be read. An index is built to be searched. The transformation was not in the content but in the function.</p>
+
+    <!-- 3. The four factors -->
+    <h3>The four-factor analysis</h3>
+
+    <p><strong>Factor 1: Purpose and character of the use.</strong> Transformative. Google's use "communicates something new and different from the original" by enabling search across a corpus no human could survey. The commercial nature of Google's enterprise did not defeat the claim. Transformative purpose can outweigh commercial motive.</p>
+
+    <p><strong>Factor 2: Nature of the copyrighted works.</strong> The books were published, creative works. This factor slightly favored the plaintiffs, but the court gave it little weight. When the use is transformative, the nature of the original matters less.</p>
+
+    <p><strong>Factor 3: Amount and substantiality of the portion used.</strong> Google copied entire books. Ordinarily fatal. But the court held that copying the whole work was <em>necessary</em> for the transformative purpose. You cannot build a search index from partial copies. The amount used was justified by the function it served.</p>
+
+    <p><strong>Factor 4: Effect on the market.</strong> No evidence that snippet display substituted for buying books. The court found that Google Books might actually increase book sales by helping readers discover works they would not otherwise have found. The snippet view was too fragmentary to serve as a replacement for reading.</p>
+
+    <blockquote>
+      <p>Google's provision of snippet view is not a "market substitute" because Google does not provide a substantial enough portion of the protected text to threaten the rights-holders' interest.</p>
+    </blockquote>
+
+    <!-- 4. HathiTrust -->
+    <h3>HathiTrust: the companion case</h3>
+
+    <p>A year earlier, the same circuit decided <em>Authors Guild v. HathiTrust</em> (755 F.3d 87, 2d Cir. 2014). HathiTrust was a consortium of research libraries that received digital copies from Google and used them for full-text search and accessibility services for the visually impaired. The Second Circuit ruled both uses were fair use.</p>
+
+    <p>Together, the two cases established a pattern. Digitizing copyrighted works for search and accessibility is fair use when the purpose is transformative and the display is limited. The library's traditional role&mdash;making knowledge findable&mdash;survived the transition from card catalogs to full-text indexes. The legal framework bent to accommodate the new technology rather than breaking it.</p>
+
+    <!-- 5. The open question -->
+    <h3>The open question</h3>
+
+    <p>The court said copying for indexing is fair use because indexing serves a different purpose than reading. But the opinion's logic does not stop at search indexes. If copying for <em>indexing</em> is transformative, what about copying for <em>embedding</em>? For <em>training</em>?</p>
+
+    <p>An embedding model converts text into a vector. The vector preserves semantic relationships but cannot reconstruct the original text. The transformation is arguably more radical than an index: an index still contains the original words; an embedding contains none of them. If different purpose justifies copying whole works, and embeddings serve a more different purpose than indexes do, the opinion's logic points in a clear direction.</p>
+
+    <p>The courts have not reached that question yet. The pending cases&mdash;New York Times v. OpenAI, Thomson Reuters v. Ross Intelligence, and others&mdash;will test whether the "transformative purpose" doctrine extends to machine learning. The Second Circuit built the framework. Whether it holds under the weight of generative AI is the next chapter of this story.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Authors_Guild,_Inc._v._Google,_Inc."><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Authors Guild v. Google</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Authors_Guild,_Inc._v._HathiTrust"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Authors Guild v. HathiTrust</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Google_Books"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Google Books</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fair_use"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Fair use</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Transformative_use"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Transformative use</a></li>
+      <li><a href="/reading/logic/">&#x1F511; Logic</a> &mdash; the legal reasoning structure: if indexing is transformative, and embedding is more transformative than indexing, then the doctrine extends&mdash;unless the court draws a line the opinion does not contain</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mt-6">Blog connection: The court said indexing is fair use because it serves a different purpose. Canon indexes copyleft works by meaning. The derivative-work question&mdash;does compiled output carry the prose's copyleft obligation?&mdash;is the frontier the courts have not reached. <a href="https://june.kim/canon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Canon</a></p>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/commons/lessig-2004/", label: "Lessig 2004 · 6 of 8" }} next={{ href: "/reading/commons/mikolov-2013/", label: "Mikolov 2013 · 8 of 8" }} />
+
+  </main>
+</Layout>

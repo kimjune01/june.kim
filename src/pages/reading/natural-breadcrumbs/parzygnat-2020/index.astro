@@ -1,0 +1,251 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Parzygnat 2020 — Quantum Markov Categories" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Quantum Markov Categories</h1>
+    <p class="text-gray-400 text-sm mb-6">Arthur J. Parzygnat · 2020 · <a href="https://arxiv.org/abs/2001.08375"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2001.08375</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, copy, determinism). Some comfort with matrix multiplication helps.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Quantum channels form a Markov category with a <strong>dagger</strong> — a canonical way to reverse any morphism. Bayesian inversion becomes adjunction. The <a href="https://en.wikipedia.org/wiki/No-cloning_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-cloning theorem</a> says copy doesn't exist for quantum states — the very operation that detects determinism in Fritz's setup.</p>
+    </div>
+
+    <h3>Quantum channels as morphisms</h3>
+    <p>A <a href="https://en.wikipedia.org/wiki/Quantum_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>quantum channel</a> maps density matrices to density matrices — the quantum analogue of a stochastic matrix. It's completely positive and trace-preserving (CPTP). In the classical limit, density matrices reduce to probability distributions and quantum channels reduce to Markov kernels.</p>
+
+    <SchemeRepl client:load initialCode={`; Classical analogue: a stochastic channel as a matrix
+; Quantum: density matrices instead of distributions
+
+; A 2x2 stochastic matrix (classical channel)
+(define channel '((0.7 0.3) (0.2 0.8)))
+
+; Apply to a distribution (classical state)
+(define (apply-channel chan state)
+  (map (lambda (row)
+    (apply + (map * row state)))
+  chan))
+
+(define prior '(0.6 0.4))
+(define posterior (apply-channel channel prior))
+
+(display "prior:     ") (display prior) (newline)
+(display "posterior: ") (display posterior) (newline)
+; Classical channels are the commutative special case.
+; Quantum channels: replace distributions with density
+; matrices, stochastic matrices with CPTP maps.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Classical channel (stochastic matrix)
+import numpy as np
+
+channel = np.array([[0.7, 0.3], [0.2, 0.8]])
+prior = np.array([0.6, 0.4])
+posterior = channel @ prior
+
+print(f"prior:     {prior}")
+print(f"posterior: {posterior}")
+print("Quantum version: replace vectors with density matrices.")
+`} />
+    </div>
+
+    <h3>The dagger — reversing channels</h3>
+    <p>A dagger category has an involution † that reverses morphisms: if f: A → B then f†: B → A. For quantum channels, the dagger is the adjoint (conjugate transpose). For classical channels with a reference state, the dagger recovers Bayesian inversion.</p>
+
+    <div class="overflow-x-auto my-4">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Level</th>
+            <th class="py-2 pr-4">Structure</th>
+            <th class="py-2">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Bayesian inversion</td><td class="pr-4">a.e. inverse</td><td>classical Bayes</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Dagger</td><td class="pr-4">exact inverse</td><td>unitary quantum</td></tr>
+          <tr><td class="py-2 pr-4">Conjugation</td><td class="pr-4">up to automorphism</td><td>modular theory</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SVG: Bayesian inversion — forward f and backward f† -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object A -->
+        <circle cx="60" cy="60" r="28" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="65" text-anchor="middle" fill="currentColor" font-size="15">A</text>
+        <!-- Object B -->
+        <circle cx="300" cy="60" r="28" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="65" text-anchor="middle" fill="currentColor" font-size="15">B</text>
+        <!-- Forward arrow f: A -> B (top) -->
+        <line x1="88" y1="42" x2="265" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="265,38 273,42 265,46" fill="currentColor"/>
+        <text x="180" y="35" text-anchor="middle" fill="currentColor" font-size="12">f</text>
+        <text x="180" y="22" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">prior &#x2192; posterior</text>
+        <!-- Backward dagger arrow f†: B -> A (bottom, highlighted) -->
+        <line x1="272" y1="78" x2="95" y2="78" stroke="#ef4444" stroke-width="2"/>
+        <polygon points="95,74 87,78 95,82" fill="#ef4444"/>
+        <text x="180" y="92" text-anchor="middle" fill="#ef4444" font-size="12">f&#x2020;</text>
+        <text x="180" y="108" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">Bayesian inverse</text>
+        <!-- Caption -->
+        <text x="180" y="128" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the dagger reverses the channel</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Dagger: transpose of a matrix (classical analogue)
+; For quantum: conjugate transpose of the channel
+
+(define (transpose mat)
+  (apply map list mat))
+
+(define channel '((0.7 0.3) (0.2 0.8)))
+(define dagger (transpose channel))
+
+(display "channel:  ") (display channel) (newline)
+(display "dagger:   ") (display dagger) (newline)
+; In the quantum case, dagger is the unique
+; adjoint with respect to the Hilbert-Schmidt
+; inner product. Bayesian inversion is a special case.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Dagger = transpose (classical), conjugate transpose (quantum)
+import numpy as np
+
+channel = np.array([[0.7, 0.3], [0.2, 0.8]])
+dagger = channel.T
+
+print(f"channel:\\n{channel}")
+print(f"dagger (transpose):\\n{dagger}")
+`} />
+    </div>
+
+    <h3>Bayesian inversion from the dagger</h3>
+    <p>Given a prior state π and a channel f, the Bayesian inverse f†_π is the unique channel such that the joint distribution factors correctly: π ⊗ f = f†_π ⊗ (f applied to π). In the quantum case, this is <a href="https://en.wikipedia.org/wiki/Petz_recovery_map"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Petz recovery</a>.</p>
+
+    <SchemeRepl client:load initialCode={`; Bayesian inversion via dagger and prior
+; f†_π(b) = Bayes' rule with prior π
+
+(define (bayes-inverse channel prior)
+  ; For a 2x2 classical channel:
+  ; f†_π(j|i) = f(i|j) * π(j) / Σ_k f(i|k) * π(k)
+  (let* ((n (length prior))
+         (marginal (map (lambda (row)
+           (apply + (map * row prior)))
+           channel)))
+    (let build-rows ((i 0) (rows '()))
+      (if (= i n) (reverse rows)
+        (build-rows (+ i 1)
+          (cons
+            (let build-cols ((j 0) (cols '()))
+              (if (= j n) (reverse cols)
+                (build-cols (+ j 1)
+                  (cons
+                    (let ((f-ij (list-ref (list-ref channel i) j))
+                          (pi-j (list-ref prior j))
+                          (marg-i (list-ref marginal i)))
+                      (if (> marg-i 0)
+                        (/ (* f-ij pi-j) marg-i)
+                        0))
+                    cols))))
+            rows))))))
+
+(define channel '((0.9 0.1) (0.2 0.8)))
+(define prior '(0.3 0.7))
+(define inv (bayes-inverse channel prior))
+
+(display "channel: ") (display channel) (newline)
+(display "prior: ") (display prior) (newline)
+(display "Bayes inverse: ") (display inv)
+`} />
+
+    <h3>No-broadcasting theorem</h3>
+    <p>Classical distributions can be copied (broadcast to multiple receivers without distortion). Quantum states cannot — the <a href="https://en.wikipedia.org/wiki/No-broadcasting_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-broadcasting theorem</a>. In Fritz's framework, copy ν detects determinism. In the quantum version, copy doesn't exist for non-commutative states. This is the categorical manifestation of quantum weirdness.</p>
+
+    <SchemeRepl client:load initialCode={`; Classical: copy works — broadcast a distribution
+(define (copy-classical dist)
+  ; (p, q) -> joint where both marginals equal (p, q)
+  (let ((n (length dist)))
+    (let build-rows ((i 0) (rows '()))
+      (if (= i n) (reverse rows)
+        (build-rows (+ i 1)
+          (cons
+            (let build-cols ((j 0) (cols '()))
+              (if (= j n) (reverse cols)
+                (build-cols (+ j 1)
+                  (cons (if (= i j) (list-ref dist i) 0) cols))))
+            rows))))))
+
+(define dist '(0.3 0.7))
+(define copied (copy-classical dist))
+
+(display "original: ") (display dist) (newline)
+(display "copied (joint): ") (display copied) (newline)
+(display "marginal 1: ")
+(display (map (lambda (row) (apply + row)) copied)) (newline)
+; Both marginals equal the original.
+; Quantum: this construction FAILS for non-diagonal
+; density matrices. No copy = no broadcasting.
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f†</td><td class="pr-4 text-green-300">(transpose channel)</td><td class="font-sans">Dagger (adjoint/reverse)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f†_π</td><td class="pr-4 text-green-300">(bayes-inverse f π)</td><td class="font-sans">Bayesian inverse given prior π</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">CPTP</td><td class="pr-4 text-green-300">; completely positive, trace-preserving</td><td class="font-sans">Quantum channel</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ν</td><td class="pr-4 text-green-300">(copy-classical ...)</td><td class="font-sans">Copy (exists classically, not quantum)</td></tr>
+          <tr><td class="py-2 pr-4">ρ</td><td class="pr-4 text-green-300">'(0.3 0.7)</td><td class="font-sans">State (distribution or density matrix)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the classical Markov category (copy exists everywhere)</li>
+      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — effectus theory (Born rule, quantum-classical bridge)</li>
+      <li><a href="/reading/natural-breadcrumbs/smithe-2021/">🍞 Smithe 2021</a> — Bayesian lenses (uses the same inversion structure)</li>
+      <li><a href="/reading/natural-breadcrumbs/di-lavore-2025/">🍞 Di Lavore 2025</a> — partial Markov categories (observations and restrictions)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Quantum_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quantum channel</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/No-cloning_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>No-cloning theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/No-broadcasting_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>No-broadcasting theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Dagger_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dagger category</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>All examples use classical stochastic matrices as stand-ins for quantum channels. The paper works with completely positive trace-preserving maps on matrix algebras, where the dagger is the Hilbert-Schmidt adjoint and Bayesian inversion is Petz recovery. For example: the Bayesian inverse on this page computes Bayes' rule for a 2×2 stochastic matrix. In the paper, the same construction works for arbitrary CPTP maps on C*-algebras — the inverse involves the modular automorphism group and recovers the Petz recovery map. The factorization structure (joint = forward × backward) is identical. The operator algebra is not.</p>
+    <p>Every example is <strong class="text-green-400">Analogy</strong> — classical stand-ins for quantum constructions.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2001.08375"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for quantum Markov categories, §5 for Bayesian inversion and the dagger, §7 for no-broadcasting.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/smithe-2021/", label: "Smithe 2021 · 15 of 21" }} next={{ href: "/reading/natural-breadcrumbs/di-lavore-2025/", label: "Di Lavore 2025 · 17 of 21" }} />
+  </main>
+</Layout>

@@ -1,0 +1,203 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.1 — Euclidean Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Euclidean Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Euclidean_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Euclidean geometry</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Euclid's <em>Elements</em> starts from five axioms and builds all of plane geometry with compass and straightedge. Two thousand years later, the axioms still work. The fifth one (the parallel postulate) is the only one anyone argues about.</p>
+    </div>
+
+    <!-- 1. The five axioms -->
+    <h3>The five axioms</h3>
+    <p>Euclid's postulates define what you can do on a flat plane:</p>
+    <ol class="list-decimal ml-6 mb-4 text-gray-300">
+      <li>A straight line can be drawn between any two points.</li>
+      <li>A straight line can be extended indefinitely.</li>
+      <li>A circle can be drawn with any center and radius.</li>
+      <li>All right angles are equal.</li>
+      <li><strong>Parallel postulate:</strong> Given a line and a point not on it, exactly one line through the point is parallel to the given line.</li>
+    </ol>
+    <p>The first four feel obvious. The fifth is the interesting one: it's equivalent to saying the angles of a triangle sum to 180 degrees. Drop it, and you get non-Euclidean geometry (Chapter 5).</p>
+
+    <!-- 2. Compass and straightedge constructions -->
+    <h3>Compass and straightedge constructions</h3>
+    <p>The only tools: an unmarked ruler (straightedge) and a compass. No measuring. You can construct midpoints, perpendiculars, angle bisectors, and regular polygons. Some things you cannot construct: trisecting an arbitrary angle, doubling a cube, squaring a circle. Those impossibilities took two millennia to prove.</p>
+
+    <SchemeRepl client:load initialCode={`; Midpoint construction
+; Given two points, the midpoint is their average.
+; Compass-and-straightedge achieves this by intersecting
+; two circles of equal radius.
+
+(define (midpoint x1 y1 x2 y2)
+  (list (/ (+ x1 x2) 2)
+        (/ (+ y1 y2) 2)))
+
+(display "Midpoint of (0,0) and (6,4): ")
+(display (midpoint 0 0 6 4))
+(newline)
+
+; Distance between two points (Pythagorean theorem)
+(define (distance x1 y1 x2 y2)
+  (sqrt (+ (* (- x2 x1) (- x2 x1))
+           (* (- y2 y1) (- y2 y1)))))
+
+(display "Distance from (0,0) to (3,4): ")
+(display (distance 0 0 3 4))
+(newline)
+
+; Perpendicular bisector passes through the midpoint
+; and is perpendicular to the segment.
+(display "Midpoint of (1,1) and (5,3): ")
+(display (midpoint 1 1 5 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def midpoint(x1, y1, x2, y2):
+    return ((x1 + x2) / 2, (y1 + y2) / 2)
+
+def distance(x1, y1, x2, y2):
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+print(f"Midpoint of (0,0) and (6,4): {midpoint(0, 0, 6, 4)}")
+print(f"Distance from (0,0) to (3,4): {distance(0, 0, 3, 4)}")
+print(f"Midpoint of (1,1) and (5,3): {midpoint(1, 1, 5, 3)}")
+`} />
+    </div>
+
+    <!-- 3. Congruence and similarity -->
+    <h3>Congruence and similarity</h3>
+    <p><strong>Congruent</strong> triangles have the same shape and size. Tests: SSS (three sides), SAS (two sides and included angle), ASA (two angles and included side). <strong>Similar</strong> triangles have the same shape but possibly different size. Test: AA (two angles match). Similar triangles give you proportional sides, which is the engine behind trigonometry.</p>
+
+    <SchemeRepl client:load initialCode={`; Triangle similarity: if two angles match,
+; the triangles are similar and sides are proportional.
+
+; Triangle 1: sides 3, 4, 5 (right triangle)
+; Triangle 2: sides 6, 8, 10 (scaled by 2)
+
+(define (similar? a1 b1 c1 a2 b2 c2)
+  ; Check if ratios of sorted sides are equal
+  (let ((s1 (sort (list a1 b1 c1) <))
+        (s2 (sort (list a2 b2 c2) <)))
+    (let ((r1 (/ (cadr s1) (car s1)))
+          (r2 (/ (cadr s2) (car s2)))
+          (r3 (/ (caddr s1) (car s1)))
+          (r4 (/ (caddr s2) (car s2))))
+      (and (= r1 r2) (= r3 r4)))))
+
+(display "3-4-5 similar to 6-8-10? ")
+(display (similar? 3 4 5 6 8 10))
+(newline)
+
+(display "3-4-5 similar to 5-12-13? ")
+(display (similar? 3 4 5 5 12 13))
+`} />
+
+    <!-- SVG: Right triangle with squares on each side (Pythagorean theorem) -->
+    <h3>The Pythagorean theorem</h3>
+    <p>In a right triangle with legs a, b and hypotenuse c: <strong>a&#178; + b&#178; = c&#178;</strong>. The diagram shows it literally: the area of the square on the hypotenuse equals the sum of the areas of the squares on the legs.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 340" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Right triangle: vertices at (120,260), (120,140), (240,260) -->
+        <!-- leg a = 120 (vertical), leg b = 120 (horizontal), hypotenuse c -->
+        <polygon points="120,260 120,140 240,260" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Right angle mark -->
+        <polyline points="120,245 135,245 135,260" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Square on leg a (left side, vertical) -->
+        <rect x="0" y="140" width="120" height="120" fill="#60a5fa" fill-opacity="0.08" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="60" y="205" text-anchor="middle" fill="#60a5fa" font-size="14" fill-opacity="0.6">a&#178;</text>
+        <!-- Square on leg b (bottom) -->
+        <rect x="120" y="260" width="120" height="120" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="180" y="325" text-anchor="middle" fill="#f59e0b" font-size="14" fill-opacity="0.6">b&#178;</text>
+        <!-- Square on hypotenuse (tilted) -->
+        <!-- Hypotenuse from (120,140) to (240,260), length = 120*sqrt(2) ~= 170 -->
+        <!-- Square vertices: (120,140), (240,260), (360,140), (240,20) -->
+        <polygon points="120,140 240,260 360,140 240,20" fill="#34d399" fill-opacity="0.06" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="240" y="145" text-anchor="middle" fill="#34d399" font-size="14" fill-opacity="0.6">c&#178;</text>
+        <!-- Labels on sides -->
+        <text x="108" y="200" text-anchor="end" fill="#60a5fa" font-size="12" fill-opacity="0.5" font-style="italic">a</text>
+        <text x="180" y="275" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.5" font-style="italic">b</text>
+        <text x="188" y="190" text-anchor="start" fill="#34d399" font-size="12" fill-opacity="0.5" font-style="italic">c</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Pythagorean theorem: a^2 + b^2 = c^2
+
+(define (hypotenuse a b)
+  (sqrt (+ (* a a) (* b b))))
+
+(display "3-4-? triangle: c = ")
+(display (hypotenuse 3 4))
+(newline)
+
+(display "5-12-? triangle: c = ")
+(display (hypotenuse 5 12))
+(newline)
+
+(display "8-15-? triangle: c = ")
+(display (hypotenuse 8 15))
+(newline)
+
+; Verify: is 3-4-5 a right triangle?
+(define (right-triangle? a b c)
+  (= (* c c) (+ (* a a) (* b b))))
+
+(display "Is 3-4-5 a right triangle? ")
+(display (right-triangle? 3 4 5))
+(newline)
+
+(display "Is 3-4-6 a right triangle? ")
+(display (right-triangle? 3 4 6))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def hypotenuse(a, b):
+    return math.sqrt(a**2 + b**2)
+
+print(f"3-4-? triangle: c = {hypotenuse(3, 4)}")
+print(f"5-12-? triangle: c = {hypotenuse(5, 12)}")
+print(f"8-15-? triangle: c = {hypotenuse(8, 15)}")
+
+def is_right_triangle(a, b, c):
+    return c**2 == a**2 + b**2
+
+print(f"Is 3-4-5 a right triangle? {is_right_triangle(3, 4, 5)}")
+print(f"Is 3-4-6 a right triangle? {is_right_triangle(3, 4, 6)}")
+`} />
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-01/">🔑 Logic Ch.1</a> — axiomatic reasoning: Euclid's method is the prototype</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Euclidean_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Euclidean geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Compass-and-straightedge_construction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Compass-and-straightedge construction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pythagorean_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pythagorean theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Congruence_(geometry)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Congruence</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/geometry/geom-02/", label: "Coordinate Geometry" }} />
+
+  </main>
+</Layout>

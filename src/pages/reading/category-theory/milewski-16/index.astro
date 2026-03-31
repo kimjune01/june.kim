@@ -1,0 +1,475 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.16 — Adjunctions" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Adjunctions</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2016 · <a href="https://bartoszmilewski.com/2016/04/18/adjunctions/">Category Theory for Programmers, Ch. 16</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-10/">🍞 Ch10 (Natural Transformations)</a>, <a href="/reading/category-theory/milewski-09/">🍞 Ch9 (Function Types)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An adjunction <strong>L &#8866; R</strong> says two functors are "almost inverse": <code>Hom(L(a), b) &cong; Hom(a, R(b))</code> naturally. The unit &eta; embeds into the round trip; the counit &epsilon; collapses it. Every adjunction gives rise to a monad (R&#8728;L), and every monad factors through one. Adjunctions are the engine behind free constructions, currying, and monads.</p>
+    </div>
+
+    <!-- 1. The hom-set isomorphism -->
+    <h3>The hom-set isomorphism</h3>
+    <p>Two functors L : D &rarr; C and R : C &rarr; D form an adjunction L &#8866; R when there is a natural isomorphism between hom-sets: <code>C(L(a), b) &cong; D(a, R(b))</code>. "Natural" means the bijection commutes with pre- and post-composition. In programming: every function <code>L(a) &rarr; b</code> corresponds to exactly one function <code>a &rarr; R(b)</code>, and vice versa.</p>
+
+    <!-- SVG: Adjunction hom-set isomorphism -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Category D box -->
+        <rect x="20" y="10" width="150" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="95" y="40" text-anchor="middle" fill="currentColor" font-size="13">Hom(L(a), b)</text>
+        <text x="95" y="8" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">category D</text>
+
+        <!-- Double-headed arrow with ≅ -->
+        <line x1="180" y1="35" x2="260" y2="35" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="176,35 183,31 183,39" fill="currentColor"/>
+        <polygon points="264,35 257,31 257,39" fill="currentColor"/>
+        <text x="220" y="28" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">&#x2245;</text>
+
+        <!-- Category C box -->
+        <rect x="270" y="10" width="150" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="345" y="40" text-anchor="middle" fill="currentColor" font-size="13">Hom(a, R(b))</text>
+        <text x="345" y="8" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">category C</text>
+
+        <!-- L arrow: left to right, labeled "free" -->
+        <line x1="120" y1="95" x2="300" y2="95" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="300,95 293,91 293,99" fill="currentColor"/>
+        <text x="210" y="88" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">L (free)</text>
+
+        <!-- R arrow: right to left, labeled "forgetful" -->
+        <line x1="300" y1="115" x2="120" y2="115" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="120,115 127,111 127,119" fill="currentColor"/>
+        <text x="210" y="132" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">R (forgetful)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; The adjunction isomorphism: two ways to say the same thing.
+; leftAdjunct  : (L(a) -> b) -> (a -> R(b))
+; rightAdjunct : (a -> R(b)) -> (L(a) -> b)
+;
+; Curry/uncurry is the canonical example.
+; L = (- x s)  "pair with s"
+; R = (s => -)  "function from s"
+; C((a, s) -> b) ≅ C(a -> (s -> b))
+
+(define (left-adjunct f)
+  ; f : (pair a s) -> b
+  ; returns: a -> s -> b
+  (lambda (a)
+    (lambda (s)
+      (f (cons a s)))))
+
+(define (right-adjunct g)
+  ; g : a -> s -> b
+  ; returns: (pair a s) -> b
+  (lambda (pair)
+    ((g (car pair)) (cdr pair))))
+
+; Round-trip test: right then left recovers the original
+(define (add-pair p) (+ (car p) (cdr p)))
+
+(define curried (left-adjunct add-pair))
+(display "curried 3 then 4: ")
+(display ((curried 3) 4)) (newline)
+
+(define uncurried (right-adjunct curried))
+(display "uncurried (3 . 4): ")
+(display (uncurried (cons 3 4)))
+; Both give 7. The isomorphism is curry/uncurry.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Curry/uncurry: the product ⊣ exponential adjunction
+def left_adjunct(f):
+    """(a, s) -> b  becomes  a -> s -> b"""
+    return lambda a: lambda s: f((a, s))
+
+def right_adjunct(g):
+    """a -> s -> b  becomes  (a, s) -> b"""
+    return lambda pair: g(pair[0])(pair[1])
+
+def add_pair(p): return p[0] + p[1]
+
+curried = left_adjunct(add_pair)
+print(f"curried(3)(4) = {curried(3)(4)}")
+
+uncurried = right_adjunct(curried)
+print(f"uncurried((3,4)) = {uncurried((3, 4))}")
+`} />
+    </div>
+
+
+    <!-- 2. Unit and counit -->
+    <h3>Unit and counit</h3>
+    <p>The adjunction is equivalently defined by two natural transformations. The <strong>unit</strong> &eta; : Id &rarr; R&#8728;L embeds a value into the round trip. The <strong>counit</strong> &epsilon; : L&#8728;R &rarr; Id collapses it back. They satisfy the triangular identities: &epsilon;&#8728;L &middot; L&#8728;&eta; = id and R&#8728;&epsilon; &middot; &eta;&#8728;R = id.</p>
+
+    <!-- SVG: Unit and counit triangle identities -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 150" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Left triangle: L → LRL → L -->
+        <text x="110" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">left triangle</text>
+
+        <!-- L at top-left -->
+        <text x="40" y="45" text-anchor="middle" fill="currentColor" font-size="14">L</text>
+        <!-- LRL at top-right -->
+        <text x="180" y="45" text-anchor="middle" fill="currentColor" font-size="14">LRL</text>
+        <!-- L at bottom -->
+        <text x="110" y="130" text-anchor="middle" fill="currentColor" font-size="14">L</text>
+
+        <!-- Arrow L → LRL (top, labeled L&#951;) -->
+        <line x1="55" y1="40" x2="155" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="155,40 148,36 148,44" fill="currentColor"/>
+        <text x="105" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">L&#x03B7;</text>
+
+        <!-- Arrow LRL → L (right side, labeled &#949;L) -->
+        <line x1="185" y1="55" x2="125" y2="120" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="125,120 133,117 129,110" fill="currentColor"/>
+        <text x="168" y="92" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03B5;L</text>
+
+        <!-- Arrow L → L (left side, labeled id) -->
+        <line x1="45" y1="55" x2="98" y2="120" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="98,120 91,115 96,108" fill="currentColor" fill-opacity="0.4"/>
+        <text x="58" y="92" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">id</text>
+
+        <!-- Right triangle: R → RLR → R -->
+        <text x="350" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">right triangle</text>
+
+        <!-- R at top-left -->
+        <text x="280" y="45" text-anchor="middle" fill="currentColor" font-size="14">R</text>
+        <!-- RLR at top-right -->
+        <text x="420" y="45" text-anchor="middle" fill="currentColor" font-size="14">RLR</text>
+        <!-- R at bottom -->
+        <text x="350" y="130" text-anchor="middle" fill="currentColor" font-size="14">R</text>
+
+        <!-- Arrow R → RLR (top, labeled &#951;R) -->
+        <line x1="295" y1="40" x2="395" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="395,40 388,36 388,44" fill="currentColor"/>
+        <text x="345" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03B7;R</text>
+
+        <!-- Arrow RLR → R (right side, labeled R&#949;) -->
+        <line x1="425" y1="55" x2="365" y2="120" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="365,120 373,117 369,110" fill="currentColor"/>
+        <text x="408" y="92" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">R&#x03B5;</text>
+
+        <!-- Arrow R → R (left side, labeled id) -->
+        <line x1="285" y1="55" x2="338" y2="120" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="338,120 331,115 336,108" fill="currentColor" fill-opacity="0.4"/>
+        <text x="298" y="92" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">id</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Unit η : a -> R(L(a))
+; For product ⊣ exponential with a fixed type s:
+;   L(a) = (a, s)    R(b) = s -> b
+;   η(a) = a -> (s -> (a, s))
+;         = a -> (λs. (a, s))
+
+(define (unit a)
+  (lambda (s) (cons a s)))
+
+; Counit ε : L(R(b)) -> b
+; L(R(b)) = (s -> b, s)
+; ε((f, s)) = f(s)    "evaluate"
+
+(define (counit pair)
+  ((car pair) (cdr pair)))
+
+; η embeds, ε collapses
+(display "unit(42) applied to 'hello: ")
+(display ((unit 42) "hello")) (newline)
+; => (42 . "hello")
+
+(display "counit((add1, 9)): ")
+(display (counit (cons (lambda (x) (+ x 1)) 9))) (newline)
+; => 10
+
+; Triangular identity: counit . L(unit) = id
+; L(unit)(a, s) = (unit(a), s) = ((λs'. (a, s')), s)
+; counit of that = (λs'. (a, s'))(s) = (a, s) ✓
+(define (round-trip pair)
+  (counit (cons (unit (car pair)) (cdr pair))))
+
+(display "triangle (3 . 7): ")
+(display (round-trip (cons 3 7)))
+; => (3 . 7) — identity recovered
+`} />
+
+
+    <!-- 3. Free monoid / forgetful adjunction -->
+    <h3>Free/forgetful: the free monoid adjunction</h3>
+    <p>The <strong>free functor</strong> L takes a set and builds the simplest monoid on it (the list, with concatenation). The <strong>forgetful functor</strong> R takes a monoid and forgets the operation, leaving just the underlying set. They form an adjunction: L &#8866; R. A monoid homomorphism from the free monoid <code>List(a)</code> to any monoid <code>m</code> corresponds to a plain function from <code>a</code> to the underlying set of <code>m</code>. The unit &eta; wraps a single element into a one-element list.</p>
+
+    <SchemeRepl client:load initialCode={`; Free monoid ⊣ Forgetful
+; L(a) = List(a)  with append as the monoid operation
+; R(m) = underlying set of m (forget the operation)
+;
+; Hom_Mon(List(a), m) ≅ Hom_Set(a, R(m))
+; A monoid homomorphism from lists is determined
+; by where you send each element.
+
+; Unit η : a -> List(a)  (singleton list)
+(define (free-unit x) (list x))
+
+; Given f : a -> m, extend to a monoid homomorphism List(a) -> m
+; This is the left adjunct: folds the list using m's operation.
+(define (extend f op identity)
+  (lambda (lst)
+    (fold-right (lambda (x acc) (op (f x) acc))
+                identity
+                lst)))
+
+; Example: sum is determined by sending each number to itself
+(define sum-hom (extend (lambda (x) x) + 0))
+(display "sum [1,2,3,4]: ")
+(display (sum-hom '(1 2 3 4))) (newline)
+
+; Product is determined by sending each number to itself
+(define prod-hom (extend (lambda (x) x) * 1))
+(display "product [1,2,3,4]: ")
+(display (prod-hom '(1 2 3 4))) (newline)
+
+; String concat: send each char to a singleton string
+(define concat-hom (extend (lambda (c) (string c)) string-append ""))
+(display "concat [h,e,l,l,o]: ")
+(display (concat-hom '(#\\h #\\e #\\l #\\l #\\o)))
+; The homomorphism is fully determined by f. That's the adjunction.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Free monoid ⊣ Forgetful
+from functools import reduce
+
+def free_unit(x):
+    """η: a -> [a]"""
+    return [x]
+
+def extend(f, op, identity):
+    """Lift f: a -> m to a monoid homomorphism [a] -> m"""
+    return lambda lst: reduce(lambda acc, x: op(acc, f(x)), lst, identity)
+
+sum_hom = extend(lambda x: x, lambda a, b: a + b, 0)
+print(f"sum [1,2,3,4]: {sum_hom([1,2,3,4])}")
+
+prod_hom = extend(lambda x: x, lambda a, b: a * b, 1)
+print(f"product [1,2,3,4]: {prod_hom([1,2,3,4])}")
+
+concat_hom = extend(lambda c: c, lambda a, b: a + b, "")
+print(f"concat ['h','e','l','l','o']: {concat_hom(['h','e','l','l','o'])}")
+`} />
+    </div>
+
+
+    <!-- 4. From adjunctions to monads -->
+    <h3>From adjunctions to monads</h3>
+    <p>Every adjunction L &#8866; R gives a monad T = R&#8728;L. The monad's <code>return</code> is the unit &eta;. The monad's <code>join</code> is R&#8728;&epsilon;&#8728;L (apply the counit in the middle). For the free/forgetful adjunction, R&#8728;L sends a set to the list of its elements: the <strong>list monad</strong>. <code>return</code> = singleton list, <code>join</code> = flatten.</p>
+
+    <SchemeRepl client:load initialCode={`; Every adjunction L ⊣ R gives a monad T = R∘L.
+; Free/forgetful gives the list monad.
+;
+; T(a) = R(L(a)) = List(a)
+; return = η : a -> [a]       (singleton)
+; join = R(ε(L)) : [[a]] -> [a]  (flatten)
+
+(define (monad-return x) (list x))
+
+(define (monad-join xss)
+  (apply append xss))
+
+; bind = join . fmap f
+(define (monad-bind xs f)
+  (monad-join (map f xs)))
+
+(display "return 5: ")
+(display (monad-return 5)) (newline)
+
+(display "join [[1,2],[3],[4,5]]: ")
+(display (monad-join '((1 2) (3) (4 5)))) (newline)
+
+; bind: each element spawns a list, then flatten
+(display "bind [1,2,3] (x -> [x, x*10]): ")
+(display (monad-bind '(1 2 3) (lambda (x) (list x (* x 10))))) (newline)
+; [1, 10, 2, 20, 3, 30]
+
+; Monad laws hold because triangular identities hold.
+; join . return = id
+(display "join . return [1,2]: ")
+(display (monad-join (monad-return '(1 2)))) (newline)
+; [1, 2]
+
+; join . fmap return = id
+(display "join . map return [1,2]: ")
+(display (monad-join (map monad-return '(1 2))))
+; [1, 2]
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# List monad from the free/forgetful adjunction
+def monad_return(x):
+    return [x]
+
+def monad_join(xss):
+    return [x for xs in xss for x in xs]
+
+def monad_bind(xs, f):
+    return monad_join([f(x) for x in xs])
+
+print(f"return 5: {monad_return(5)}")
+print(f"join [[1,2],[3],[4,5]]: {monad_join([[1,2],[3],[4,5]])}")
+print(f"bind [1,2,3] (x->[x,x*10]): {monad_bind([1,2,3], lambda x: [x, x*10])}")
+
+# Monad laws
+print(f"join . return [1,2]: {monad_join(monad_return([1,2]))}")
+print(f"join . map(return) [1,2]: {monad_join([monad_return(x) for x in [1,2]])}")
+`} />
+    </div>
+
+
+    <!-- 5. Curry/uncurry as adjunction, state monad -->
+    <h3>The state monad from the curry/uncurry adjunction</h3>
+    <p>The product &#8866; exponential adjunction (curry/uncurry) gives the <strong>state monad</strong>. L(a) = (a, s), R(b) = s &rarr; b. The monad T = R&#8728;L sends a to <code>s &rarr; (a, s)</code>: a stateful computation. <code>return</code> pairs the value with unchanged state. <code>bind</code> threads the state through.</p>
+
+    <SchemeRepl client:load initialCode={`; Product ⊣ Exponential gives the State monad.
+; T(a) = R(L(a)) = s -> (a, s)
+;
+; return a = λs. (a, s)
+; bind m f = λs. let (a, s') = m(s) in f(a)(s')
+
+(define (state-return a)
+  (lambda (s) (cons a s)))
+
+(define (state-bind m f)
+  (lambda (s)
+    (let* ((result (m s))
+           (a (car result))
+           (s2 (cdr result)))
+      ((f a) s2))))
+
+; get: read the state
+(define get (lambda (s) (cons s s)))
+
+; put: replace the state
+(define (put new-s) (lambda (s) (cons '() new-s)))
+
+; A stateful computation: increment counter, return old value
+(define (tick)
+  (state-bind get
+    (lambda (n)
+      (state-bind (put (+ n 1))
+        (lambda (_)
+          (state-return n))))))
+
+(display "tick from state 0: ")
+(display ((tick) 0)) (newline)
+; (0 . 1) — returned 0, state became 1
+
+; Run tick twice
+(define two-ticks
+  (state-bind (tick)
+    (lambda (first)
+      (state-bind (tick)
+        (lambda (second)
+          (state-return (list first second)))))))
+
+(display "two ticks from 0: ")
+(display (two-ticks 0))
+; ((0 1) . 2) — got 0 then 1, final state 2
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# State monad from product ⊣ exponential
+def state_return(a):
+    return lambda s: (a, s)
+
+def state_bind(m, f):
+    return lambda s: (lambda r: f(r[0])(r[1]))(m(s))
+
+get = lambda s: (s, s)
+def put(new_s): return lambda s: (None, new_s)
+
+def tick():
+    return state_bind(get, lambda n:
+        state_bind(put(n + 1), lambda _:
+            state_return(n)))
+
+print(f"tick from 0: {tick()(0)}")
+
+two_ticks = state_bind(tick(), lambda a:
+    state_bind(tick(), lambda b:
+        state_return([a, b])))
+print(f"two ticks from 0: {two_ticks(0)}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">L &#8866; R</td><td class="pr-4 text-green-300">left-adjunct / right-adjunct</td><td class="font-sans">Adjunction: L is left adjoint to R</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&eta; : Id &rarr; R&#8728;L</td><td class="pr-4 text-green-300">(unit x)</td><td class="font-sans">Unit: embed into the round trip</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&epsilon; : L&#8728;R &rarr; Id</td><td class="pr-4 text-green-300">(counit pair)</td><td class="font-sans">Counit: collapse the round trip</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">leftAdjunct f = R f . &eta;</td><td class="pr-4 text-green-300">(left-adjunct f)</td><td class="font-sans">Transpose L(a)&rarr;b to a&rarr;R(b)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">rightAdjunct g = &epsilon; . L g</td><td class="pr-4 text-green-300">(right-adjunct g)</td><td class="font-sans">Transpose a&rarr;R(b) to L(a)&rarr;b</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Free monoid &#8866; U</td><td class="pr-4 text-green-300">(extend f op id)</td><td class="font-sans">Free/forgetful adjunction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">T = R&#8728;L</td><td class="pr-4 text-green-300">monad-return / monad-bind</td><td class="font-sans">Monad from adjunction</td></tr>
+          <tr><td class="py-2 pr-4">State s a = s &rarr; (a, s)</td><td class="pr-4 text-green-300">(state-return x)</td><td class="font-sans">State monad from product &#8866; exponential</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-10/">🍞 Chapter 10</a> — Natural Transformations</li>
+      <li><a href="/reading/category-theory/milewski-09/">🍞 Chapter 9</a> — Function Types (exponentials)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — open games compose via string diagrams in a monoidal category</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — parametrised optics generalize adjunctions between lenses and prisms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Adjoint_functors"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Adjoint functors</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Free_object"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Free object</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad (category theory)</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell's <code>Adjunction</code> typeclass with functional dependencies. This page uses plain Scheme functions, since Scheme has no type system to enforce the adjunction laws. The Haskell formulation defines <code>unit</code>, <code>counit</code>, <code>leftAdjunct</code>, and <code>rightAdjunct</code> with default implementations in terms of each other. Here we define them independently for each example to make the mechanics visible. The blog post also covers products as adjunctions to the diagonal functor (&Delta; &#8866; &times;) and derives the general recipe for extracting a monad from any adjunction. The state monad derivation on this page follows that recipe for the product/exponential case. One important point from the blog post: every monad can be factored into an adjunction, but the factorization is not unique. The Kleisli and Eilenberg-Moore categories give the two extreme decompositions.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2016/04/18/adjunctions/">Read the blog post</a>. Start with the hom-set definition, then trace how the unit/counit formulation is equivalent.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-15/", label: "Yoneda Embedding" }} next={{ href: "/reading/category-theory/milewski-17/", label: "Monads" }} />
+
+  </main>
+</Layout>

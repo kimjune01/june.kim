@@ -1,0 +1,54 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/WP.lean — Weakest precondition" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/WP.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/WP.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Defines the weakest precondition transformer for monadic kernels &mdash; the largest set of inputs for which every reachable output satisfies a given postcondition.</p>
+    </div>
+
+    <h3>wp</h3>
+    <p>The weakest precondition of kernel f with respect to postcondition Q. An input a is in <code>wp f Q</code> if every reachable output of <code>f a</code> satisfies Q. This is the most permissive precondition that still guarantees Q.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">wp</span> [Monad M] [Support M]
+    (f : Kernel M &alpha; &beta;) (Q : &beta; &rarr; Prop) : &alpha; &rarr; Prop :=
+  <span class="text-blue-300">fun</span> a =&gt; &forall; b, Support.support (f a) b &rarr; Q b</code></pre>
+
+    <h3>triple_iff_wp</h3>
+    <p>A Hoare triple <code>&#123;P&#125; f &#123;Q&#125;</code> holds if and only if P implies <code>wp f Q</code> pointwise. This says: triples are exactly precondition entailment into the weakest precondition.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">triple_iff_wp</span> [Monad M] [Support M]
+    &#123;P : &alpha; &rarr; Prop&#125; &#123;f : Kernel M &alpha; &beta;&#125; &#123;Q : &beta; &rarr; Prop&#125;
+    : Triple P f Q &harr; &forall; a, P a &rarr; wp f Q a</code></pre>
+    <p class="text-sm text-gray-500">Both directions are definitional &mdash; Triple and wp unfold to the same universal quantifier.</p>
+
+    <h3>wp_comp</h3>
+    <p>The weakest precondition distributes over Kleisli composition: <code>wp (f;g) Q = wp f (wp g Q)</code>. To guarantee Q after running f then g, you need to guarantee <code>wp g Q</code> after running f.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">wp_comp</span> [Monad M] [LawfulMonad M] [Support M]
+    (f : Kernel M &alpha; &beta;) (k : Kernel M &beta; &gamma;) (Q : &gamma; &rarr; Prop)
+    : wp (Kernel.comp f k) Q = wp f (wp k Q)</code></pre>
+
+    <h3>wp_id</h3>
+    <p>The weakest precondition of the identity kernel is the postcondition itself: <code>wp id Q = Q</code>. Since the identity just returns its input, guaranteeing Q on the output is the same as requiring Q on the input.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; imported; wp is the semantic dual of Triple</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-comp/">Hoare/Comp.lean</a> &mdash; uses wp_comp implicitly through the chain of triple_comp calls</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/jacobs-2014/">🍞 Jacobs 2014</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-core/", label: "Hoare/Core.lean · 15 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-bridge/", label: "Hoare/Bridge.lean · 17 of 25" }} />
+  </main>
+</Layout>

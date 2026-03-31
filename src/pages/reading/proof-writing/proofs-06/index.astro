@@ -1,0 +1,196 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.6 — Functions" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>function</strong> from A to B assigns exactly one element of B to each element of A. Three properties matter: <strong>injective</strong> (one-to-one), <strong>surjective</strong> (onto), and <strong>bijective</strong> (both). A function has an inverse if and only if it is bijective.</p>
+    </div>
+
+    <!-- SVG: Three diagrams showing injection, surjection, bijection -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Injection -->
+        <ellipse cx="50" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <ellipse cx="120" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="50" cy="60" r="3" fill="#60a5fa"/>
+        <circle cx="50" cy="80" r="3" fill="#60a5fa"/>
+        <circle cx="120" cy="55" r="3" fill="#f59e0b"/>
+        <circle cx="120" cy="75" r="3" fill="#f59e0b"/>
+        <circle cx="120" cy="95" r="3" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="53" y1="60" x2="117" y2="55" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="53" y1="80" x2="117" y2="75" stroke="#60a5fa" stroke-width="1"/>
+        <text x="85" y="145" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">injective</text>
+        <text x="85" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">(no sharing)</text>
+
+        <!-- Surjection -->
+        <ellipse cx="210" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <ellipse cx="280" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="210" cy="55" r="3" fill="#60a5fa"/>
+        <circle cx="210" cy="75" r="3" fill="#60a5fa"/>
+        <circle cx="210" cy="95" r="3" fill="#60a5fa"/>
+        <circle cx="280" cy="65" r="3" fill="#f59e0b"/>
+        <circle cx="280" cy="85" r="3" fill="#f59e0b"/>
+        <line x1="213" y1="55" x2="277" y2="65" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="213" y1="75" x2="277" y2="65" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="213" y1="95" x2="277" y2="85" stroke="#60a5fa" stroke-width="1"/>
+        <text x="245" y="145" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">surjective</text>
+        <text x="245" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">(everything hit)</text>
+
+        <!-- Bijection -->
+        <ellipse cx="370" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <ellipse cx="440" cy="80" rx="30" ry="50" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="370" cy="60" r="3" fill="#60a5fa"/>
+        <circle cx="370" cy="80" r="3" fill="#60a5fa"/>
+        <circle cx="370" cy="100" r="3" fill="#60a5fa"/>
+        <circle cx="440" cy="60" r="3" fill="#f59e0b"/>
+        <circle cx="440" cy="80" r="3" fill="#f59e0b"/>
+        <circle cx="440" cy="100" r="3" fill="#f59e0b"/>
+        <line x1="373" y1="60" x2="437" y2="60" stroke="#4ade80" stroke-width="1"/>
+        <line x1="373" y1="80" x2="437" y2="80" stroke="#4ade80" stroke-width="1"/>
+        <line x1="373" y1="100" x2="437" y2="100" stroke="#4ade80" stroke-width="1"/>
+        <text x="405" y="145" text-anchor="middle" fill="#4ade80" font-size="10" fill-opacity="0.7">bijective</text>
+        <text x="405" y="155" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.5">(perfect pairing)</text>
+      </svg>
+    </div>
+
+    <!-- 1. Injective -->
+    <h3>Injective (one-to-one)</h3>
+    <p>A function f is <strong>injective</strong> if f(a) = f(b) implies a = b. No two inputs map to the same output. To prove injectivity: assume f(a) = f(b), then show a = b.</p>
+
+    <SchemeRepl client:load initialCode={`; Injective: f(a) = f(b) implies a = b
+; f(x) = 2x + 1 is injective.
+; Proof: 2a + 1 = 2b + 1 => 2a = 2b => a = b. QED.
+
+(define (f x) (+ (* 2 x) 1))
+
+; g(x) = x^2 is NOT injective on all integers: g(2) = g(-2) = 4
+
+(define (g x) (* x x))
+
+(display "f(3) = ") (display (f 3)) (newline)
+(display "f(5) = ") (display (f 5)) (newline)
+(display "f injective? Different outputs: ") (display (not (= (f 3) (f 5)))) (newline)
+(newline)
+(display "g(2) = ") (display (g 2)) (newline)
+(display "g(-2) = ") (display (g -2)) (newline)
+(display "g injective? Same output: ") (display (= (g 2) (g -2)))
+; g is not injective: two different inputs, same output.
+`} />
+
+    <!-- 2. Surjective -->
+    <h3>Surjective (onto)</h3>
+    <p>A function f: A to B is <strong>surjective</strong> if every element of B is hit. For every b in B, there exists an a in A with f(a) = b. To prove surjectivity: given arbitrary b in B, find an explicit a.</p>
+
+    <SchemeRepl client:load initialCode={`; Surjective: f(x) = 2x + 1 from Z to odd integers is surjective.
+; Given any odd integer b, solve: 2x + 1 = b => x = (b-1)/2.
+; Since b is odd, (b-1) is even, so (b-1)/2 is an integer. QED.
+
+(define (f x) (+ (* 2 x) 1))
+(define (f-preimage b) (/ (- b 1) 2))
+
+(display "Target b=7: preimage = ") (display (f-preimage 7))
+(display ", f(preimage) = ") (display (f (f-preimage 7))) (newline)
+
+(display "Target b=13: preimage = ") (display (f-preimage 13))
+(display ", f(preimage) = ") (display (f (f-preimage 13))) (newline)
+
+; f(x) = x^2 from Z to Z is NOT surjective: no integer squares to -1.
+(display "Is -1 a perfect square? No.")
+`} />
+
+    <!-- 3. Bijective and inverse -->
+    <h3>Bijective and inverse functions</h3>
+    <p>A function is <strong>bijective</strong> if it is both injective and surjective. Bijections have inverses: f-inverse(b) is the unique a with f(a) = b. Composition of bijections is a bijection.</p>
+
+    <SchemeRepl client:load initialCode={`; Bijection: f(x) = 2x + 1 is a bijection from Z to odd Z.
+; Its inverse: f^{-1}(y) = (y - 1) / 2
+
+(define (f x) (+ (* 2 x) 1))
+(define (f-inv y) (/ (- y 1) 2))
+
+; Verify: f(f^{-1}(y)) = y and f^{-1}(f(x)) = x
+(display "f(f-inv(7)) = ") (display (f (f-inv 7))) (newline)
+(display "f-inv(f(3)) = ") (display (f-inv (f 3))) (newline)
+
+; Composition of bijections
+(define (g x) (+ (* 3 x) 2))
+(define (g-inv y) (/ (- y 2) 3))
+
+(define (compose h k) (lambda (x) (h (k x))))
+
+(define gf (compose g f))
+(define gf-inv (compose f-inv g-inv))
+
+(display "g(f(4)) = ") (display (gf 4)) (newline)
+(display "gf-inv(29) = ") (display (gf-inv 29))
+; g(f(4)) = g(9) = 29. gf-inv(29) = f-inv(g-inv(29)) = f-inv(9) = 4.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bijection and inverse in Python
+f = lambda x: 2 * x + 1
+f_inv = lambda y: (y - 1) // 2
+
+# Round-trip
+for x in range(-3, 4):
+    y = f(x)
+    back = f_inv(y)
+    print(f"f({x:2d}) = {y:3d}, f_inv({y:3d}) = {back:2d}, round-trip: {back == x}")
+`} />
+    </div>
+
+    <!-- 4. Composition -->
+    <h3>Composition</h3>
+    <p>If f: A to B and g: B to C, then g composed with f: A to C. Composition preserves injectivity and surjectivity. If g composed with f is injective, then f is injective. If g composed with f is surjective, then g is surjective.</p>
+
+    <SchemeRepl client:load initialCode={`; Composition preserves properties.
+; If g . f is injective, f must be injective.
+; Proof: suppose f(a) = f(b). Then g(f(a)) = g(f(b)).
+; Since g.f is injective, a = b. So f is injective. QED.
+
+(define (compose g f) (lambda (x) (g (f x))))
+
+(define (f x) (* 2 x))        ; injective
+(define (g x) (+ x 1))        ; injective
+
+(define gf (compose g f))
+
+; gf(3) = g(f(3)) = g(6) = 7
+; gf(4) = g(f(4)) = g(8) = 9
+(display "gf(3) = ") (display (gf 3)) (newline)
+(display "gf(4) = ") (display (gf 4)) (newline)
+(display "Different? ") (display (not (= (gf 3) (gf 4))))
+; Both injective, so composition is injective.
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-02/">🐱 Milewski Ch.2</a> — types and functions as objects and arrows</li>
+      <li><a href="/reading/linear-algebra/hefferon-03/">📐 Linear Algebra Ch.3</a> — linear maps are functions preserving structure</li>
+    
+      <li><a href="/reading/category-theory/milewski-02/">🐱 Category Theory Ch.2</a> &mdash; functions as morphisms between types</li>
+      <li><a href="/reading/calculus/calc-01/">∫ Calculus Ch.1</a> &mdash; functions and graphs: the same objects used in calculus</li>
+      <li><a href="/reading/abstract-algebra/judson-03/">🔗 Abstract Algebra Ch.3</a> &mdash; homomorphisms are structure-preserving functions</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-05/", label: "Sets" }} next={{ href: "/reading/proof-writing/proofs-07/", label: "Relations" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,390 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Practice — Prose Writing" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Practice</h1>
+    <p class="text-gray-400 mb-6">Paste your writing. The tool highlights what to look at. You decide what to change. Everything runs in your browser — nothing leaves this page.</p>
+
+    <div id="practice-app">
+      <textarea id="practice-input" rows="10" placeholder="Paste a paragraph here..."
+        style="width:100%; font-family:inherit; font-size:1rem; line-height:1.5; padding:1rem; background:var(--repl-bg); color:inherit; border:1px solid #52525b; border-radius:6px; resize:vertical;"></textarea>
+
+      <div class="flex flex-wrap gap-2 mt-3 mb-3">
+        <label class="practice-toggle"><input type="checkbox" checked data-check="passive"> <span class="dot" style="background:#f59e0b"></span> Passive voice</label>
+        <label class="practice-toggle"><input type="checkbox" checked data-check="nominalization"> <span class="dot" style="background:#a78bfa"></span> Nominalizations</label>
+        <label class="practice-toggle"><input type="checkbox" checked data-check="longword"> <span class="dot" style="background:#60a5fa"></span> Long words</label>
+        <label class="practice-toggle"><input type="checkbox" checked data-check="filler"> <span class="dot" style="background:#f87171"></span> Filler phrases</label>
+      </div>
+
+      <div id="practice-output" class="bg-zinc-800 rounded-lg p-5 mb-4" style="min-height:6rem; line-height:1.6; display:none">
+      </div>
+
+      <div class="flex justify-between items-center text-sm text-gray-500">
+        <span id="practice-stats"></span>
+        <button id="practice-copy" style="font-family:ui-monospace,monospace; font-size:0.8rem; padding:0.3em 0.7em; border:1px solid #52525b; border-radius:4px; background:transparent; color:inherit; cursor:pointer; display:none;">Copy clean text</button>
+      </div>
+    </div>
+
+    <div id="practice-legend" class="mt-6" style="display:none">
+      <h3>What the highlights mean</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <tbody>
+            <tr class="border-b border-zinc-800">
+              <td class="py-2 pr-3"><span style="background:rgba(245,158,11,0.2); padding:0.1em 0.3em; border-radius:2px; color:#f59e0b">passive voice</span></td>
+              <td class="text-gray-400">The subject receives the action instead of doing it. "The report was written" hides who wrote it. Ask: who is doing what? <a href="/reading/prose-writing/orwell-1946/">Orwell, Rule 4</a></td>
+            </tr>
+            <tr class="border-b border-zinc-800">
+              <td class="py-2 pr-3"><span style="background:rgba(167,139,250,0.2); padding:0.1em 0.3em; border-radius:2px; color:#a78bfa">nominalization</span></td>
+              <td class="text-gray-400">A verb hiding inside a noun. "Implementation" = "implement." "Reduction" = "reduce." Extract the verb, find the actor. <a href="/reading/prose-writing/williams-1981/">Williams</a></td>
+            </tr>
+            <tr class="border-b border-zinc-800">
+              <td class="py-2 pr-3"><span style="background:rgba(96,165,250,0.2); padding:0.1em 0.3em; border-radius:2px; color:#60a5fa">long word</span></td>
+              <td class="text-gray-400">A Latinate word where a short one exists. "Utilize" → "use." "Facilitate" → "help." "Commence" → "start." <a href="/reading/prose-writing/orwell-1946/">Orwell, Rule 2</a></td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3"><span style="background:rgba(248,113,113,0.2); padding:0.1em 0.3em; border-radius:2px; color:#f87171">filler</span></td>
+              <td class="text-gray-400">Words that add no meaning. "In order to" → "to." "Due to the fact that" → "because." "It is important to note that" → delete. <a href="/reading/prose-writing/strunk-1918/">Strunk</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <style>
+      .practice-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+        font-size: 0.8rem;
+        font-family: ui-monospace, monospace;
+        cursor: pointer;
+        color: #a1a1aa;
+      }
+      .practice-toggle input { display: none; }
+      .practice-toggle .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+      .practice-toggle input:not(:checked) + .dot { opacity: 0.2; }
+      :root.light .practice-toggle { color: #52525b; }
+      :root.light #practice-input { border-color: #d6d3d1; }
+      :root.light .bg-zinc-800 { background: #f5f5f4 !important; }
+      .hl-passive { background: rgba(245,158,11,0.2); border-radius: 2px; padding: 0 2px; }
+      .hl-nominalization { background: rgba(167,139,250,0.2); border-radius: 2px; padding: 0 2px; }
+      .hl-longword { background: rgba(96,165,250,0.2); border-radius: 2px; padding: 0 2px; }
+      .hl-filler { background: rgba(248,113,113,0.2); border-radius: 2px; padding: 0 2px; }
+    </style>
+
+    <script is:inline>
+    (function() {
+      var input = document.getElementById('practice-input');
+      var output = document.getElementById('practice-output');
+      var stats = document.getElementById('practice-stats');
+      var legend = document.getElementById('practice-legend');
+      var copyBtn = document.getElementById('practice-copy');
+      var checks = {};
+
+      // --- Pattern databases ---
+
+      // Passive voice: "was/were/is/are/been/being + past participle"
+      var passiveRe = /\b(is|are|was|were|be|been|being)\s+(\w+ed|written|made|taken|given|done|seen|known|found|shown|built|held|kept|told|sent|left|run|set|cut|put|read|thought|called|born|broken|chosen|drawn|driven|eaten|fallen|flown|forgotten|frozen|gotten|grown|hidden|hurt|laid|led|lost|meant|paid|proven|rid|risen|shaken|shot|shrunk|shut|spoken|spent|spun|stolen|struck|stuck|stung|strung|swept|swum|sworn|thrown|torn|understood|woken|worn|wound|woven|wrung)\b/gi;
+
+      // Nominalizations: common suffixes
+      var nomSuffixes = ['tion', 'sion', 'ment', 'ness', 'ance', 'ence', 'ity', 'ism'];
+      var nomExceptions = new Set(['question', 'mention', 'attention', 'position', 'section', 'condition', 'situation', 'nation', 'station', 'information', 'action', 'education', 'population', 'generation', 'election', 'direction', 'connection', 'addition', 'tradition', 'collection', 'emotion', 'opinion', 'vision', 'mission', 'passion', 'session', 'version', 'tension', 'pension', 'mansion', 'fashion', 'occasion', 'moment', 'comment', 'element', 'argument', 'document', 'apartment', 'department', 'equipment', 'experiment', 'government', 'instrument', 'environment', 'statement', 'agreement', 'movement', 'treatment', 'judgment', 'payment', 'management', 'development', 'business', 'darkness', 'illness', 'fitness', 'witness', 'happiness', 'kindness', 'weakness', 'awareness', 'distance', 'instance', 'substance', 'performance', 'importance', 'insurance', 'assistance', 'balance', 'entrance', 'appearance', 'sentence', 'silence', 'violence', 'absence', 'presence', 'patience', 'audience', 'influence', 'evidence', 'experience', 'reference', 'difference', 'conference', 'preference', 'consequence', 'intelligence', 'independence', 'existence', 'confidence', 'competence', 'excellence', 'community', 'opportunity', 'university', 'security', 'activity', 'reality', 'quality', 'ability', 'possibility', 'personality', 'responsibility', 'authority', 'majority', 'identity', 'city', 'society', 'variety', 'anxiety', 'curiosity', 'electricity', 'priority', 'quantity']);
+
+      // Long words with short alternatives
+      var longWords = {
+        'utilize': 'use', 'utilization': 'use', 'facilitate': 'help', 'implementation': 'start',
+        'implement': 'start', 'commence': 'start', 'terminate': 'end', 'sufficient': 'enough',
+        'approximately': 'about', 'numerous': 'many', 'purchase': 'buy', 'regarding': 'about',
+        'additional': 'more', 'demonstrate': 'show', 'assistance': 'help', 'endeavor': 'try',
+        'subsequently': 'then', 'previously': 'before', 'methodology': 'method',
+        'accommodate': 'fit', 'accomplish': 'do', 'accumulate': 'gather',
+        'advantageous': 'helpful', 'communicate': 'tell', 'compensation': 'pay',
+        'component': 'part', 'consequently': 'so', 'considerable': 'big',
+        'constitutes': 'is', 'determine': 'find', 'discontinue': 'stop',
+        'disseminate': 'spread', 'eliminate': 'cut', 'endeavour': 'try',
+        'equivalent': 'equal', 'establish': 'set up', 'excessive': 'too much',
+        'expenditure': 'cost', 'expenditures': 'costs', 'fundamental': 'basic',
+        'generate': 'make', 'illustrate': 'show', 'indication': 'sign',
+        'individual': 'person', 'initiate': 'start', 'magnitude': 'size',
+        'modification': 'change', 'necessitate': 'need', 'notification': 'notice',
+        'obtain': 'get', 'participate': 'join', 'percentage': 'part',
+        'perpetuate': 'keep', 'prioritize': 'rank', 'proficiency': 'skill',
+        'prohibit': 'ban', 'reimburse': 'pay back', 'remainder': 'rest',
+        'remuneration': 'pay', 'requirement': 'need', 'residence': 'home',
+        'subsequent': 'next', 'substantiate': 'prove', 'supplement': 'add to',
+        'transformation': 'change', 'transmit': 'send', 'verification': 'proof',
+        'whereas': 'while', 'aforementioned': '[cut]', 'hereinafter': '[cut]'
+      };
+
+      // Filler phrases
+      var fillers = [
+        'in order to', 'due to the fact that', 'it is important to note that',
+        'it should be noted that', 'it is worth noting that', 'it is worth mentioning that',
+        'as a matter of fact', 'at the end of the day', 'in the event that',
+        'for the purpose of', 'in the process of', 'on the basis of',
+        'with regard to', 'with respect to', 'in regard to', 'in terms of',
+        'at this point in time', 'at the present time', 'in the near future',
+        'has the ability to', 'is able to', 'in a timely manner',
+        'a large number of', 'the vast majority of', 'in light of the fact that',
+        'despite the fact that', 'owing to the fact that', 'on account of the fact that',
+        'it is our opinion that', 'it is our considered opinion that',
+        'it is anticipated that', 'it is expected that', 'it is believed that',
+        'there is no doubt that', 'it goes without saying that',
+        'needless to say', 'as previously stated', 'as mentioned above'
+      ];
+
+      function escapeHtml(s) {
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+
+      function analyze(text) {
+        if (!text.trim()) return { html: '', counts: {}, words: 0 };
+
+        var words = text.trim().split(/\s+/).length;
+        var counts = { passive: 0, nominalization: 0, longword: 0, filler: 0 };
+        var html = escapeHtml(text);
+
+        // Filler phrases (longest first to avoid partial matches)
+        if (checks.filler) {
+          var sortedFillers = fillers.slice().sort(function(a,b) { return b.length - a.length; });
+          sortedFillers.forEach(function(f) {
+            var re = new RegExp(escapeHtml(f).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            html = html.replace(re, function(m) { counts.filler++; return '<span class="hl-filler">' + m + '</span>'; });
+          });
+        }
+
+        // Long words
+        if (checks.longword) {
+          Object.keys(longWords).forEach(function(w) {
+            var re = new RegExp('\\b' + w + '\\b', 'gi');
+            html = html.replace(re, function(m) {
+              if (m.indexOf('hl-') !== -1) return m; // skip already highlighted
+              counts.longword++;
+              return '<span class="hl-longword" title="→ ' + longWords[w.toLowerCase()] + '">' + m + '</span>';
+            });
+          });
+        }
+
+        // Passive voice
+        if (checks.passive) {
+          html = html.replace(passiveRe, function(m) {
+            if (m.indexOf('hl-') !== -1) return m;
+            counts.passive++;
+            return '<span class="hl-passive">' + m + '</span>';
+          });
+        }
+
+        // Nominalizations
+        if (checks.nominalization) {
+          html = html.replace(/\b[a-z]{6,}\b/gi, function(m) {
+            if (m.indexOf('hl-') !== -1) return m;
+            var lower = m.toLowerCase();
+            if (nomExceptions.has(lower)) return m;
+            for (var i = 0; i < nomSuffixes.length; i++) {
+              if (lower.endsWith(nomSuffixes[i]) && lower.length > nomSuffixes[i].length + 3) {
+                counts.nominalization++;
+                return '<span class="hl-nominalization">' + m + '</span>';
+              }
+            }
+            return m;
+          });
+        }
+
+        return { html: html, counts: counts, words: words };
+      }
+
+      function update() {
+        var text = input.value;
+        if (!text.trim()) {
+          output.style.display = 'none';
+          legend.style.display = 'none';
+          copyBtn.style.display = 'none';
+          stats.textContent = '';
+          return;
+        }
+
+        // Read toggle states
+        document.querySelectorAll('[data-check]').forEach(function(cb) {
+          checks[cb.getAttribute('data-check')] = cb.checked;
+        });
+
+        var result = analyze(text);
+        output.innerHTML = result.html;
+        output.style.display = 'block';
+        legend.style.display = 'block';
+        copyBtn.style.display = 'inline-block';
+
+        var total = result.counts.passive + result.counts.nominalization + result.counts.longword + result.counts.filler;
+        var parts = [result.words + ' words'];
+        if (total > 0) parts.push(total + ' highlight' + (total === 1 ? '' : 's'));
+        if (result.counts.passive) parts.push(result.counts.passive + ' passive');
+        if (result.counts.nominalization) parts.push(result.counts.nominalization + ' nominalization' + (result.counts.nominalization === 1 ? '' : 's'));
+        if (result.counts.longword) parts.push(result.counts.longword + ' long word' + (result.counts.longword === 1 ? '' : 's'));
+        if (result.counts.filler) parts.push(result.counts.filler + ' filler' + (result.counts.filler === 1 ? '' : 's'));
+        stats.textContent = parts.join(' · ');
+      }
+
+      input.addEventListener('input', update);
+      document.querySelectorAll('[data-check]').forEach(function(cb) {
+        cb.addEventListener('change', update);
+      });
+
+      copyBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(input.value).then(function() {
+          copyBtn.textContent = 'Copied';
+          setTimeout(function() { copyBtn.textContent = 'Copy clean text'; }, 1500);
+        });
+      });
+    })();
+    </script>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Read this</h2>
+    <p class="text-gray-400 mb-4">Great prose teaches by contact. Read the passage first. Form your own impression. Then click "annotate" to see what the rules would say.</p>
+
+    <!-- Passage 1: Lincoln -->
+    <div class="passage-block mb-8">
+      <p class="text-gray-500 text-xs uppercase tracking-wide mb-2">Abraham Lincoln · Gettysburg Address · 1863 · 272 words</p>
+      <blockquote class="passage-text">
+        Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.<br><br>
+        Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battlefield of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this.<br><br>
+        But, in a larger sense, we can not dedicate — we can not consecrate — we can not hallow — this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here.
+      </blockquote>
+      <button class="annotate-btn" data-target="lincoln-notes">annotate</button>
+      <div id="lincoln-notes" class="annotations" style="display:none">
+        <p><strong>Compression.</strong> 272 words for the most consequential speech in American history. Lincoln was preceded by Edward Everett, who spoke for two hours. Nobody remembers what Everett said. <a href="/reading/prose-writing/strunk-1918/">Strunk</a> in action, sixty years early.</p>
+        <p><strong>Given-new chain.</strong> "A new nation" (new) → "that nation" (given) → "that nation might live" (given) → "this ground" (new) → "consecrated it" (new). Each sentence picks up where the last one left. <a href="/reading/prose-writing/williams-1981/">Williams</a> would approve.</p>
+        <p><strong>The triple.</strong> "We can not dedicate — we can not consecrate — we can not hallow." Three parallel clauses, each one escalating. This triple earns its place because each verb is stronger than the last. Dedicate &lt; consecrate &lt; hallow. The form matches the crescendo.</p>
+        <p><strong>The pivot.</strong> "But, in a larger sense" — one pivot word ("but") flips the entire speech. Everything before it says "we are here to honor the dead." Everything after says "we can't — they already did what we never could." The audience's expectation is set up and broken in four words.</p>
+        <p><strong>Fresh metaphor.</strong> "The world will little note, nor long remember what we say here." He was wrong, and the wrongness is the proof. The sentence survived because it was concrete, specific, and honest. <a href="/reading/prose-writing/orwell-1946/">Orwell, Rule 1</a>: no dying metaphors. Lincoln didn't need them.</p>
+      </div>
+    </div>
+
+    <!-- Passage 2: Douglass -->
+    <div class="passage-block mb-8">
+      <p class="text-gray-500 text-xs uppercase tracking-wide mb-2">Frederick Douglass · Narrative of the Life · 1845</p>
+      <blockquote class="passage-text">
+        Very soon after I went to live with Mr. and Mrs. Auld, she very kindly commenced to teach me the A, B, C. After I had learned this, she assisted me in learning to spell words of three or four letters. Just at this point of my progress, Mr. Auld found out what was going on, and at once forbade Mrs. Auld to instruct me further, telling her, among other things, that it was unlawful, as well as unsafe, to teach a slave to read.<br><br>
+        "If you give a nigger an inch, he will take an ell. A nigger should know nothing but to obey his master — to do as he is told to do. Learning would spoil the best nigger in the world."<br><br>
+        These words sank deep into my heart, stirred up sentiments within me which may be said to have then slumbered, and called into existence an entirely new train of thought. It was a new and special revelation, explaining dark and mysterious things, with which my youthful understanding had struggled, but struggled in vain. I now understood what had been to me a most perplexing difficulty — to wit, the white man's power to enslave the black man. It was a grand achievement, and I prized it highly. From that moment, I understood the pathway from slavery to freedom.
+      </blockquote>
+      <button class="annotate-btn" data-target="douglass-notes">annotate</button>
+      <div id="douglass-notes" class="annotations" style="display:none">
+        <p><strong>All three modes.</strong> Ethos: Douglass narrates from lived experience — the authority is unchallengeable. Pathos: a child learning the alphabet, a man forbidding it. Logos: Douglass draws the inference that Auld accidentally revealed. Three modes, balanced. <a href="/reading/prose-writing/aristotle/">Aristotle</a>'s framework in action.</p>
+        <p><strong>The enemy speaks.</strong> Douglass quotes Auld's own words. He doesn't paraphrase, doesn't soften, doesn't editorialize. The slaveowner's logic is more damning in his own words than in any summary. This is <a href="/reading/prose-writing/orwell-1946/">Orwell</a>'s lesson inverted: sometimes the clearest thing you can do is let the obscenity speak for itself.</p>
+        <p><strong>The turn.</strong> "These words sank deep into my heart" — the passage pivots from Auld's prohibition to Douglass's revelation. The master intended to close a door. Douglass walked through it. The structure of the paragraph mirrors the reversal: the first half is Auld's power, the second half is Douglass's.</p>
+        <p><strong>The closing sentence.</strong> "From that moment, I understood the pathway from slavery to freedom." Twelve words. No metaphor, no ornament. The most important sentence in the passage is the shortest. <a href="/reading/prose-writing/strunk-1918/">Strunk</a>: omit needless words. Douglass didn't need the rule. He had the instinct.</p>
+      </div>
+    </div>
+
+    <!-- Passage 3: Darwin -->
+    <div class="passage-block mb-8">
+      <p class="text-gray-500 text-xs uppercase tracking-wide mb-2">Charles Darwin · On the Origin of Species · 1859 · closing paragraph</p>
+      <blockquote class="passage-text">
+        It is interesting to contemplate an entangled bank, clothed with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms crawling through the damp earth, and to reflect that these elaborately constructed forms, so different from each other, and dependent on each other in so complex a manner, have all been produced by laws acting around us. These laws, taken in the largest sense, being Growth with Reproduction; Inheritance which is almost implied by reproduction; Variability from the indirect and direct action of the external conditions of life, and from use and disuse; a Ratio of Increase so high as to lead to a Struggle for Life, and as a consequence to Natural Selection, entailing Divergence of Character and the Extinction of less-improved forms. Thus, from the war of nature, from famine and death, the most exalted object which we are capable of conceiving, namely, the life of a higher animal, directly follows. There is grandeur in this view of life, with its several powers, having been originally breathed into a few forms or into one; and that, whilst this planet has gone cycling on according to the fixed law of gravity, from so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved.
+      </blockquote>
+      <button class="annotate-btn" data-target="darwin-notes">annotate</button>
+      <div id="darwin-notes" class="annotations" style="display:none">
+        <p><strong>One sentence does the work of a book.</strong> The final sentence summarizes the entire argument of the Origin. "From so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved." The theory of evolution in 22 words. The rest of the paragraph is the setup; this sentence is the payoff.</p>
+        <p><strong>Concrete to abstract.</strong> Darwin starts with an entangled bank — worms, birds, insects, damp earth. Physical, sensory, specific. Then he zooms out to "laws acting around us," then to "the war of nature, from famine and death," then to "grandeur." <a href="/reading/prose-writing/bacon-1597/">Bacon</a>'s technique: reach for the physical example first, let the abstraction emerge.</p>
+        <p><strong>The stress position.</strong> The paragraph ends on "evolved." The most important word in the book lands at the end of the last sentence. <a href="/reading/prose-writing/williams-1981/">Williams</a>: the end of a sentence carries the most emphasis. Darwin put the most important word of his career in the strongest possible position.</p>
+        <p><strong>Breaking Strunk.</strong> This is not short prose. The sentences are long, nested, Ciceronian. Strunk would flag it. <a href="/reading/prose-writing/orwell-1946/">Orwell, Rule 6</a>: break any rule sooner than say anything barbarous. The length earns its place here because Darwin is building a single unbroken chain from the worm in the dirt to the grandeur of life. Cutting it would break the chain.</p>
+      </div>
+    </div>
+
+    <!-- Passage 4: Twain -->
+    <div class="passage-block mb-8">
+      <p class="text-gray-500 text-xs uppercase tracking-wide mb-2">Mark Twain · Letter to George Bainton · 1888</p>
+      <blockquote class="passage-text">
+        The difference between the almost right word and the right word is really a large matter — it's the difference between the lightning bug and the lightning.
+      </blockquote>
+      <button class="annotate-btn" data-target="twain-notes">annotate</button>
+      <div id="twain-notes" class="annotations" style="display:none">
+        <p><strong>The sentence practices what it preaches.</strong> Twain could have written "word choice matters greatly." Instead he found the right word — "lightning" — and the almost-right word — "lightning bug" — and let the difference do the arguing. The example IS the argument.</p>
+        <p><strong>Fresh metaphor.</strong> Not a dead metaphor reheated. Not "the pen is mightier than the sword." A metaphor nobody had used before, specific enough to visualize, surprising enough to remember. <a href="/reading/prose-writing/orwell-1946/">Orwell, Rule 1</a>: if you use a metaphor, make it yours.</p>
+        <p><strong>Compression.</strong> One sentence. Twenty-nine words. The entire case for careful word choice, with proof, in a single breath. <a href="/reading/prose-writing/strunk-1918/">Strunk</a> would have nothing to cut.</p>
+      </div>
+    </div>
+
+    <style>
+      .passage-block blockquote { font-style: normal; }
+      .annotate-btn {
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+        padding: 0.3em 0.7em;
+        border: 1px solid #52525b;
+        border-radius: 4px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        margin-top: 0.5rem;
+      }
+      .annotate-btn:hover { background: #27272a; }
+      .annotate-btn.open { border-color: #34d399; color: #34d399; }
+      :root.light .annotate-btn:hover { background: #f5f5f4; }
+      :root.light .annotate-btn.open { border-color: #059669; color: #059669; }
+      .annotations { margin-top: 0.75rem; padding-left: 1rem; border-left: 2px solid #34d399; }
+      .annotations p { font-size: 0.9rem; color: #a1a1aa; }
+      :root.light .annotations p { color: #52525b; }
+    </style>
+
+    <script is:inline>
+    (function() {
+      document.querySelectorAll('.annotate-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var target = document.getElementById(btn.getAttribute('data-target'));
+          var open = target.style.display !== 'none';
+          target.style.display = open ? 'none' : 'block';
+          btn.textContent = open ? 'annotate' : 'hide annotations';
+          btn.classList.toggle('open', !open);
+        });
+      });
+    })();
+    </script>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Reading list</h2>
+    <p class="text-gray-400 mb-4">Prose that trains your ear. Read any of these for craft, not just content.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://www.gutenberg.org/ebooks/1322">Leaves of Grass</a></td><td class="text-gray-400">Whitman (1855). Long breath, parallel structure, rhythmic accumulation. The opposite of Strunk, and it works.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://www.gutenberg.org/ebooks/23">Narrative of the Life</a></td><td class="text-gray-400">Douglass (1845). Every sentence carries moral weight. Teaches you that clarity is an ethical act.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://archive.org/details/essaysoffrancisb00baco">Essays</a></td><td class="text-gray-400">Bacon (1597). Maximum meaning per sentence. Read "Of Studies" and count the wasted words. There are none.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://www.gutenberg.org/ebooks/4300">Huckleberry Finn</a></td><td class="text-gray-400">Twain (1884). American English unchained. The voice is the argument.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://www.gutenberg.org/ebooks/2600">War and Peace</a></td><td class="text-gray-400">Tolstoy (1869, Garnett trans.). Scene-level clarity at novel scale. Every battlefield, every drawing room, every death — concrete.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300"><a href="https://www.gutenberg.org/ebooks/37134">The Elements of Style</a></td><td class="text-gray-400">Strunk (1918). Read it once a year. Forty-three pages.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Collected Essays</td><td class="text-gray-400">Orwell, Baldwin, Didion. The twentieth-century essay at its best. Copyrighted — find them in libraries.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-2 mt-8">From the blog</p>
+    <ul class="text-sm">
+      <li><a href="https://june.kim/skills-over-sdks"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Skills over SDKs</a> — the highlights above are the same checks as the <a href="https://june.kim/writing-with-claude"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>humanize and readability skills</a>, written as prose</li>
+      <li><a href="https://june.kim/double-loop"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Double Loop</a> — the editorial process this tool automates one piece of</li>
+    </ul>
+
+    <p class="text-gray-500 text-sm mt-4"><a href="/reading/prose-writing/">back to prose writing</a></p>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/google-2017/", label: "Google 2017 · 9 of 10" }} />
+
+  </main>
+</Layout>

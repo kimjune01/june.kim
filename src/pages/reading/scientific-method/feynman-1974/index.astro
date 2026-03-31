@@ -1,0 +1,156 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Feynman 1974 — Cargo Cult Science" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Cargo Cult Science</h1>
+    <p class="text-gray-400 text-sm mb-6">Richard P. Feynman · 1974 · Caltech Commencement Address · <a href="https://caltech.edu/about/news/cargo-cult-science-702">Caltech transcript</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The first principle is that you must not fool yourself, and you are the easiest person to fool.</p>
+    </div>
+
+    <!-- SVG: Cargo cult vs. real science -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left: Cargo cult -->
+        <text x="120" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">cargo cult science</text>
+
+        <!-- Wooden runway -->
+        <rect x="40" y="40" width="160" height="8" rx="2" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Runway markings -->
+        <line x1="70" y1="44" x2="90" y2="44" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <line x1="110" y1="44" x2="130" y2="44" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <line x1="150" y1="44" x2="170" y2="44" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+
+        <!-- Wooden control tower -->
+        <rect x="95" y="58" width="50" height="40" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="100" y="63" width="16" height="12" rx="1" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <rect x="124" y="63" width="16" height="12" rx="1" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="120" y="92" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">wood + bamboo</text>
+
+        <!-- Coconut headphones -->
+        <circle cx="120" cy="115" r="10" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <path d="M 110,115 C 110,105 130,105 130,115" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="120" y="138" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">coconut headphones</text>
+
+        <!-- No planes -->
+        <text x="120" y="165" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.5">no planes land</text>
+
+        <!-- Rituals list -->
+        <text x="120" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">lab coats</text>
+        <text x="120" y="196" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">p-values</text>
+        <text x="120" y="207" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">peer review</text>
+
+        <!-- Divider -->
+        <line x1="240" y1="15" x2="240" y2="210" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Right: Real science -->
+        <text x="360" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">real science</text>
+
+        <!-- Real runway -->
+        <rect x="280" y="40" width="160" height="8" rx="2" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <line x1="310" y1="44" x2="330" y2="44" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+        <line x1="350" y1="44" x2="370" y2="44" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+        <line x1="390" y1="44" x2="410" y2="44" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+
+        <!-- Real tower -->
+        <rect x="335" y="58" width="50" height="40" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <rect x="340" y="63" width="16" height="12" rx="1" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>
+        <rect x="364" y="63" width="16" height="12" rx="1" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>
+        <text x="360" y="92" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">real electronics</text>
+
+        <!-- Real radio -->
+        <circle cx="360" cy="115" r="10" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <path d="M 350,115 C 350,105 370,105 370,115" fill="none" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5"/>
+        <!-- Signal waves -->
+        <path d="M 375,110 C 380,105 380,120 385,115" fill="none" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.3"/>
+        <path d="M 385,108 C 390,103 390,122 395,117" fill="none" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.2"/>
+        <text x="360" y="138" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">actual radio contact</text>
+
+        <!-- Planes land -->
+        <text x="360" y="165" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.6">planes land</text>
+
+        <!-- Substance list -->
+        <text x="360" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">report failures</text>
+        <text x="360" y="196" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">mention doubts</text>
+        <text x="360" y="207" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">list alternatives</text>
+      </svg>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p>Feynman opens with the South Seas islanders. During World War II, cargo planes landed on their islands bringing supplies. After the war, the planes stopped. The islanders built wooden runways, lit signal fires, carved coconut-shell headphones, sat in bamboo control towers, and waited. They had the form exactly right. They were missing the substance.</p>
+
+    <p>Science can fail the same way. A researcher wears the lab coat, follows the protocol, runs the statistics, publishes in the journal. Everything looks correct. But the core honesty is missing. The experiments are not designed to catch the researcher being wrong. The negative results go unreported. The alternative explanations go unmentioned. The form of science is present. The substance is not.</p>
+
+    <p>Feynman does not blame fraud. Fraud is rare and obvious. The problem is subtler. Researchers fool themselves without knowing it. They design experiments that confirm rather than discriminate. They remember the successes and forget the failures. They interpret ambiguous results in favor of their hypothesis. None of this requires dishonesty in the ordinary sense. It requires only the absence of a specific, deliberate, uncomfortable practice: trying to prove yourself wrong.</p>
+
+    <h2>What Feynman says integrity requires</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Requirement</th>
+            <th class="text-left py-2 text-gray-400">What it means in practice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Report what didn't work</td><td class="text-gray-400">Every failed attempt, every dead end, every surprising null result. Others need to know what has already been tried.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Mention what might be wrong</td><td class="text-gray-400">If you can think of something that could invalidate your result, say so. Do not wait for a reviewer to catch it. Do not hope nobody notices.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">List alternative explanations</td><td class="text-gray-400">If your data is consistent with a hypothesis you dislike, mention it. Do not present only the explanation you prefer.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Credit previous work</td><td class="text-gray-400">Even work that contradicts you. Especially work that contradicts you. The reader deserves to know the full picture, not the picture that supports your conclusion.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each of these is individually obvious. Together they constitute a practice that most published research does not follow. Feynman knew this in 1974. <a href="/reading/scientific-method/">Ioannidis</a> quantified it in 2005.</p>
+
+    <h2>The examples</h2>
+
+    <p>Feynman gives three cases. Each one shows the same failure: the form of science without the substance of self-correction.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Robert_Andrews_Millikan"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Millikan</a> measured the charge of the electron using oil drops. His published value was slightly wrong because of an incorrect value for the viscosity of air. Later experimenters who got values closer to the modern value but far from Millikan's threw out their results, assuming they had made an error. They crept toward the correct value slowly, always anchored to Millikan's number. Nobody published a dramatic correction. The field inched its way to the truth, discarding good data along the way because it did not match the authority.</p>
+
+    <p>Rat-running experiments in psychology showed a persistent pattern. Each experimenter who ran rats through mazes discovered specific confounds: the rats could smell the food, hear the experimenter's breathing, feel the floor texture. Each time, the confound was documented, and the next experimenter ignored the documentation and repeated the same mistakes. No cumulative learning. No institutional memory of what goes wrong.</p>
+
+    <p>Educational research tested new teaching methods by giving tests before and after. But the tests were not controlled for what students would have learned anyway. No comparison group. No blinding. No attempt to distinguish "this method works" from "students learn over time regardless." The form of experiment was present. The content was absent.</p>
+
+    <h2>Discussion</h2>
+
+    <p><a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin</a> anticipated the core problem. Holding multiple hypotheses prevents the "ruling theory" from becoming a "ruling passion." Feynman's integrity requirements are what multiple working hypotheses look like in practice. You cannot list alternative explanations if you have not entertained them. You cannot mention what might be wrong if you have only looked for what confirms your expectation.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis</a> (2005) showed that the cargo cult was not anecdotal. Most published research findings in medicine are false. The reasons are structural: small samples, small effects, large numbers of tested hypotheses, flexible designs, financial incentives, and the absence of replication. Everything Feynman warned about, measured at scale.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">🔬 Mayo</a> built the statistical framework for catching self-deception. Her severe testing criterion says: a test provides evidence for a claim only if the test had a high probability of detecting the claim's falsity, were it false. This is Feynman's integrity principle translated into statistical theory. A test that cannot fail is not a test. An experiment that confirms regardless of outcome is cargo cult science with a p-value attached.</p>
+
+    <p><a href="/reading/scientific-method/platt-1964/">Platt's</a> strong inference is the daily practice that makes Feynman's integrity operational. Devise alternatives, design crucial experiments, eliminate hypotheses. Each round of elimination is an act of self-honesty. You designed the experiment to kill your idea if it deserves killing. That is the difference between a runway that lands planes and a runway made of bamboo.</p>
+
+    <h2>Why this is the integrity centerpiece</h2>
+
+    <p>Every other work in this collection describes a method, a logic, a protocol. Feynman describes a character trait. The methods can be followed mechanically. Integrity cannot. You can run a randomized controlled trial and still fool yourself about what it means. You can practice strong inference and still suppress the alternative you find threatening. The first principle is about you, not your protocol.</p>
+
+    <p>That is what makes it harder than the others. Chamberlin gives you a checklist: write down multiple hypotheses. Platt gives you a workflow: design experiments that discriminate. Popper gives you a criterion: a theory must be falsifiable. Feynman gives you a mirror. You must not fool yourself. The rest is commentary.</p>
+
+    <p>The lecture is four thousand words. It was delivered to graduating seniors who were about to enter careers in science and engineering. Feynman could have talked about the excitement of discovery or the importance of curiosity. He chose to talk about honesty. Not honesty toward others. Honesty toward yourself. That choice says everything about what he thought science needed most.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/kuhn-1962/">Kuhn 1962</a></li>
+      <li><a href="/reading/scientific-method/platt-1964/">Platt 1964</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/platt-1964/", label: "Platt 1964 · 11 of 17" }} next={{ href: "/reading/scientific-method/ioannidis-2005/", label: "Ioannidis 2005 · 13 of 17" }} />
+  </main>
+</Layout>

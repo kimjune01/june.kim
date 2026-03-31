@@ -1,0 +1,94 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Boole 1854 — The Laws of Thought" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>An Investigation of the Laws of Thought</h1>
+    <p class="text-gray-400 text-sm mb-6">George Boole · 1854 · <a href="https://www.gutenberg.org/ebooks/15114">Project Gutenberg</a><br/>Full title: <em>An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities.</em></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Reduced logic to algebra. Propositions become equations, reasoning becomes calculation. Every circuit, every if-statement, every formal proof descends from this book.</p>
+    </div>
+
+    <h2>Logic as algebra</h2>
+
+    <p>Boole's insight was that logical propositions obey the same laws as algebraic equations. "All X are Y" becomes x(1-y) = 0. "Some X are Y" becomes xy ≠ 0. Syllogisms that Aristotle resolved by pattern-matching, Boole resolved by solving equations. The move sounds simple. It changed everything.</p>
+
+    <!-- SVG: Boolean operations -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 190" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- AND -->
+        <text x="77" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">AND</text>
+        <circle cx="60" cy="70" r="30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <circle cx="95" cy="70" r="30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <!-- Intersection highlight -->
+        <path d="M77.5,44.5 A30,30 0 0,1 77.5,95.5 A30,30 0 0,1 77.5,44.5" fill="#60a5fa" fill-opacity="0.15"/>
+        <text x="40" y="74" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">x</text>
+        <text x="115" y="74" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">y</text>
+        <text x="77" y="115" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">x · y</text>
+
+        <!-- OR -->
+        <text x="230" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">OR</text>
+        <circle cx="213" cy="70" r="30" fill="#60a5fa" fill-opacity="0.1" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <circle cx="248" cy="70" r="30" fill="#60a5fa" fill-opacity="0.1" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="193" y="74" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">x</text>
+        <text x="268" y="74" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">y</text>
+        <text x="230" y="115" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">x + y</text>
+
+        <!-- NOT -->
+        <text x="383" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">NOT</text>
+        <rect x="343" y="40" width="80" height="60" rx="4" fill="#60a5fa" fill-opacity="0.1" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <circle cx="383" cy="70" r="22" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="383" y="74" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">x</text>
+        <text x="360" y="58" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">1-x</text>
+        <text x="383" y="115" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">1 - x</text>
+
+        <!-- Bottom caption -->
+        <text x="230" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the universe is 1, a class is a variable, complement is subtraction</text>
+        <text x="230" y="160" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">idempotence: x · x = x (selecting a class twice gives the same class)</text>
+        <text x="230" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">this single law distinguishes Boolean algebra from ordinary algebra</text>
+      </svg>
+    </div>
+
+    <h2>What it enabled</h2>
+
+    <p>Boole published in 1854. Eighty years later, <a href="https://en.wikipedia.org/wiki/Claude_Shannon"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Claude Shannon</a> showed in his 1937 master's thesis that Boolean algebra maps directly to electrical switching circuits. AND becomes a series circuit. OR becomes a parallel circuit. NOT becomes an inverter. Every digital computer is a physical instantiation of Boole's algebra. The gap between "logic is algebra" and "logic is hardware" turned out to be one engineering thesis.</p>
+
+    <p>Programming inherited the same structure. Every conditional branch, every logical operator, every type-checker evaluates Boolean expressions. When you write <code>if (x && !y)</code>, you are writing Boole's notation with different symbols. The abstraction has survived 170 years without modification because it was right the first time.</p>
+
+    <p>Formal verification rests on the same foundation. To prove a program correct, you express its specification as logical propositions and its behavior as logical propositions, then check that the behavior implies the specification. The checking is algebraic manipulation of Boolean expressions. Boole did not anticipate computers, but he built the algebra they would need.</p>
+
+    <h2>Connections</h2>
+
+    <p>Peirce extended Boole's propositional logic into predicate logic and quantification, adding "for all" and "there exists" to Boolean "and," "or," and "not." Without that extension, Boole's system could handle classes but not relations. Peirce also drew the link between logic and pragmatism: if reasoning is computation, then the meaning of a proposition is the set of operations it licenses.</p>
+
+    <p>Popper's falsifiability depends on formal logic in a specific way. A scientific theory is falsifiable when its negation is satisfiable: there exists some observation that would make the theory false. Expressing this precisely requires the machinery Boole built. Popper could not have drawn his demarcation line without a formal account of negation and logical consequence.</p>
+
+    <p>The <a href="/reading/logic/">logic</a> section of this reading site traces the line forward from Boole through Frege, Russell, Godel, and Turing. Boole is the first step. Every subsequent development either extends his algebra or discovers its limits.</p>
+
+    <h2>The integrity angle</h2>
+
+    <p>Boole's contribution to intellectual integrity is underappreciated. Before Boolean algebra, logical arguments were evaluated by intuition, rhetorical skill, and pattern-matching against Aristotle's syllogistic forms. A clever sophist could construct arguments that felt valid but were not. Boole made validity checkable. Reduce the argument to algebra, solve the equations, and the answer is mechanical. No room for persuasion to override proof.</p>
+
+    <p>This matters for science because scientific reasoning is a chain of inferences. If any link in the chain is invalid, the conclusion does not follow. Boole gave scientists a way to audit their own reasoning by translating it into a form where errors become visible. Mill gave them methods for extracting causes from observations. Boole gave them methods for checking whether their conclusions actually follow from their premises.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">scientific method</a></li>
+      <li><a href="/reading/scientific-method/mill-1843/">Mill 1843</a></li>
+      <li><a href="/reading/scientific-method/peirce-1878/">Peirce 1878</a></li>
+      <li><a href="/reading/logic/">logic</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/mill-1843/", label: "Mill 1843 · 4 of 17" }} next={{ href: "/reading/scientific-method/peirce-1878/", label: "Peirce 1878 · 6 of 17" }} />
+  </main>
+</Layout>

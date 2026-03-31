@@ -1,0 +1,318 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.7 — Elliptic Curves" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>Elliptic Curves</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Elliptic-curve_cryptography"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Elliptic-curve cryptography</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>elliptic curve</strong> is defined by y&#xB2; = x&#xB3; + ax + b. Points on the curve form a group under geometric addition. Scalar multiplication in this group is easy; reversing it (the discrete log) is hard. This one-way door gives us public-key cryptography with keys 10x shorter than RSA.</p>
+    </div>
+
+    <!-- 1. The curve equation -->
+    <h3>The curve equation</h3>
+    <p>An elliptic curve over the reals is the set of points (x, y) satisfying y&#xB2; = x&#xB3; + ax + b, plus a special "point at infinity" that acts as the identity element. The curve must be non-singular: 4a&#xB3; + 27b&#xB2; &#x2260; 0.</p>
+
+    <!-- SVG: Elliptic curve with point addition -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 360" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="380" y2="180" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+        <line x1="160" y1="20" x2="160" y2="340" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+        <!-- Curve y^2 = x^3 - x + 1 (a=-1, b=1) approximation -->
+        <path d="M 90,180 Q 100,100 140,60 Q 170,30 200,40 Q 240,50 270,80 Q 310,120 340,50" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <path d="M 90,180 Q 100,260 140,300 Q 170,330 200,320 Q 240,310 270,280 Q 310,240 340,310" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Point P -->
+        <circle cx="140" cy="60" r="5" fill="#4ade80"/>
+        <text x="125" y="50" fill="#4ade80" font-size="13">P</text>
+        <!-- Point Q -->
+        <circle cx="230" cy="55" r="5" fill="#60a5fa"/>
+        <text x="238" y="52" fill="#60a5fa" font-size="13">Q</text>
+        <!-- Line through P and Q -->
+        <line x1="100" y1="72" x2="330" y2="28" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Point R (intersection) -->
+        <circle cx="300" cy="38" r="4" fill="currentColor" fill-opacity="0.3"/>
+        <text x="308" y="35" fill="currentColor" fill-opacity="0.5" font-size="11">R</text>
+        <!-- Vertical line from R to -R -->
+        <line x1="300" y1="38" x2="300" y2="295" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Point P+Q (reflection of R) -->
+        <circle cx="300" cy="295" r="5" fill="#f472b6"/>
+        <text x="308" y="298" fill="#f472b6" font-size="13">P+Q</text>
+        <!-- Label -->
+        <text x="200" y="350" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="11">Line through P,Q hits curve at R. Reflect to get P+Q.</text>
+      </svg>
+    </div>
+
+    <!-- 2. Point addition -->
+    <h3>Point addition geometrically</h3>
+    <p>To add points P and Q: draw a line through them. It intersects the curve at a third point R. Reflect R across the x-axis to get P+Q. When P = Q, use the tangent line instead. This operation is associative and commutative, making the points a group.</p>
+
+    <SchemeRepl client:load initialCode={`; Elliptic curve point addition over a finite field
+; Curve: y^2 = x^3 + ax + b (mod p)
+; We use a = 0, b = 7 (secp256k1, Bitcoin's curve), small p for demo
+
+(define p 97)  ; small prime field
+(define a 0)
+(define b 7)
+
+; Modular inverse via extended Euclidean algorithm
+(define (mod-inv x m)
+  (define (egcd a b)
+    (if (= a 0)
+        (list b 0 1)
+        (let ((r (egcd (modulo b a) a)))
+          (list (car r)
+                (- (caddr r) (* (quotient b a) (cadr r)))
+                (cadr r)))))
+  (let ((r (egcd (modulo x m) m)))
+    (modulo (cadr r) m)))
+
+; Point addition (points as lists (x y) or "inf")
+(define (ec-add P Q)
+  (cond
+    ((equal? P "inf") Q)
+    ((equal? Q "inf") P)
+    ((and (= (car P) (car Q))
+          (= (modulo (+ (cadr P) (cadr Q)) p) 0))
+     "inf")
+    (else
+      (let* ((x1 (car P)) (y1 (cadr P))
+             (x2 (car Q)) (y2 (cadr Q))
+             (s (if (and (= x1 x2) (= y1 y2))
+                    (modulo (* (+ (* 3 x1 x1) a)
+                               (mod-inv (* 2 y1) p)) p)
+                    (modulo (* (- y2 y1)
+                               (mod-inv (- x2 x1) p)) p)))
+             (x3 (modulo (- (* s s) x1 x2) p))
+             (y3 (modulo (- (* s (- x1 x3)) y1) p)))
+        (list x3 y3)))))
+
+; Generator point on y^2 = x^3 + 7 (mod 97)
+(define G (list 3 6))
+
+; Verify G is on the curve
+(display "G on curve? ")
+(display (= (modulo (* 6 6) p)
+            (modulo (+ (* 3 3 3) 7) p)))
+(newline)
+
+; Add G + G
+(define G2 (ec-add G G))
+(display "2G = ") (display G2) (newline)
+
+; Add G + 2G = 3G
+(define G3 (ec-add G G2))
+(display "3G = ") (display G3)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Elliptic curve arithmetic over a finite field
+# Curve: y^2 = x^3 + 7 (mod 97) — tiny secp256k1
+
+p = 97
+a, b = 0, 7
+
+def mod_inv(x, m):
+    """Extended Euclidean algorithm"""
+    g, x1, _ = extended_gcd(x % m, m)
+    return x1 % m
+
+def extended_gcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    g, x1, y1 = extended_gcd(b % a, a)
+    return g, y1 - (b // a) * x1, x1
+
+def ec_add(P, Q):
+    if P == "inf": return Q
+    if Q == "inf": return P
+    x1, y1 = P
+    x2, y2 = Q
+    if x1 == x2 and (y1 + y2) % p == 0:
+        return "inf"
+    if P == Q:
+        s = (3 * x1 * x1 + a) * mod_inv(2 * y1, p) % p
+    else:
+        s = (y2 - y1) * mod_inv(x2 - x1, p) % p
+    x3 = (s * s - x1 - x2) % p
+    y3 = (s * (x1 - x3) - y1) % p
+    return (x3, y3)
+
+G = (3, 6)
+print(f"G on curve? {(6*6) % p == (3**3 + 7) % p}")
+G2 = ec_add(G, G)
+print(f"2G = {G2}")
+G3 = ec_add(G, G2)
+print(f"3G = {G3}")
+`} />
+    </div>
+
+    <!-- 3. Scalar multiplication -->
+    <h3>Scalar multiplication</h3>
+    <p>Scalar multiplication means adding a point to itself n times: nP = P + P + ... + P. Using double-and-add, this takes O(log n) steps. The reverse problem, finding n given P and nP, is the <strong>elliptic curve discrete logarithm problem</strong> (ECDLP). No efficient algorithm is known.</p>
+
+    <SchemeRepl client:load initialCode={`; Scalar multiplication via double-and-add
+; nP = P added to itself n times
+
+(define p 97)
+(define a 0)
+
+(define (mod-inv x m)
+  (define (egcd a b)
+    (if (= a 0)
+        (list b 0 1)
+        (let ((r (egcd (modulo b a) a)))
+          (list (car r)
+                (- (caddr r) (* (quotient b a) (cadr r)))
+                (cadr r)))))
+  (modulo (cadr (egcd (modulo x m) m)) m))
+
+(define (ec-add P Q)
+  (cond
+    ((equal? P "inf") Q)
+    ((equal? Q "inf") P)
+    ((and (= (car P) (car Q))
+          (= (modulo (+ (cadr P) (cadr Q)) p) 0))
+     "inf")
+    (else
+      (let* ((x1 (car P)) (y1 (cadr P))
+             (x2 (car Q)) (y2 (cadr Q))
+             (s (if (and (= x1 x2) (= y1 y2))
+                    (modulo (* (+ (* 3 x1 x1) a)
+                               (mod-inv (* 2 y1) p)) p)
+                    (modulo (* (- y2 y1)
+                               (mod-inv (- x2 x1) p)) p)))
+             (x3 (modulo (- (* s s) x1 x2) p))
+             (y3 (modulo (- (* s (- x1 x3)) y1) p)))
+        (list x3 y3)))))
+
+; Double-and-add
+(define (scalar-mult n P)
+  (cond
+    ((= n 0) "inf")
+    ((= n 1) P)
+    ((even? n) (scalar-mult (/ n 2) (ec-add P P)))
+    (else (ec-add P (scalar-mult (- n 1) P)))))
+
+(define G (list 3 6))
+(display "5G  = ") (display (scalar-mult 5 G)) (newline)
+(display "10G = ") (display (scalar-mult 10 G)) (newline)
+(display "20G = ") (display (scalar-mult 20 G))
+`} />
+
+    <!-- 4. ECDH key exchange -->
+    <h3>ECDH key exchange</h3>
+    <p>Elliptic Curve Diffie-Hellman works the same way as classical DH, but in the elliptic curve group. Alice picks secret a, publishes aG. Bob picks secret b, publishes bG. Both compute abG = baG. An eavesdropper sees G, aG, bG but cannot compute abG without solving ECDLP.</p>
+
+    <SchemeRepl client:load initialCode={`; ECDH key exchange simulation
+; Same curve setup as above (y^2 = x^3 + 7 mod 97)
+
+(define p 97)
+(define a-coeff 0)
+
+(define (mod-inv x m)
+  (define (egcd a b)
+    (if (= a 0) (list b 0 1)
+        (let ((r (egcd (modulo b a) a)))
+          (list (car r) (- (caddr r) (* (quotient b a) (cadr r))) (cadr r)))))
+  (modulo (cadr (egcd (modulo x m) m)) m))
+
+(define (ec-add P Q)
+  (cond
+    ((equal? P "inf") Q) ((equal? Q "inf") P)
+    ((and (= (car P) (car Q)) (= (modulo (+ (cadr P) (cadr Q)) p) 0)) "inf")
+    (else
+      (let* ((x1 (car P)) (y1 (cadr P)) (x2 (car Q)) (y2 (cadr Q))
+             (s (if (and (= x1 x2) (= y1 y2))
+                    (modulo (* (+ (* 3 x1 x1) a-coeff) (mod-inv (* 2 y1) p)) p)
+                    (modulo (* (- y2 y1) (mod-inv (- x2 x1) p)) p)))
+             (x3 (modulo (- (* s s) x1 x2) p))
+             (y3 (modulo (- (* s (- x1 x3)) y1) p)))
+        (list x3 y3)))))
+
+(define (scalar-mult n P)
+  (cond ((= n 0) "inf") ((= n 1) P)
+        ((even? n) (scalar-mult (/ n 2) (ec-add P P)))
+        (else (ec-add P (scalar-mult (- n 1) P)))))
+
+(define G (list 3 6))
+
+; Alice's secret and public key
+(define alice-secret 15)
+(define alice-public (scalar-mult alice-secret G))
+(display "Alice public (15G): ") (display alice-public) (newline)
+
+; Bob's secret and public key
+(define bob-secret 22)
+(define bob-public (scalar-mult bob-secret G))
+(display "Bob public (22G):   ") (display bob-public) (newline)
+
+; Shared secret: Alice computes a*bG, Bob computes b*aG
+(define alice-shared (scalar-mult alice-secret bob-public))
+(define bob-shared (scalar-mult bob-secret alice-public))
+(display "Alice shared: ") (display alice-shared) (newline)
+(display "Bob shared:   ") (display bob-shared) (newline)
+(display "Match? ") (display (equal? alice-shared bob-shared))
+`} />
+
+    <!-- 5. Why ECC beats RSA -->
+    <h3>Why ECC is more efficient than RSA</h3>
+    <p>A 256-bit ECC key provides roughly the same security as a 3072-bit RSA key. Shorter keys mean faster computation, less bandwidth, and smaller certificates. The reason: the best known attack on ECDLP (Pollard's rho) runs in O(&#x221A;n) time, while the best attack on RSA's factoring problem (number field sieve) runs in sub-exponential time. ECC's problem is harder per bit.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Security level</th>
+            <th class="py-2 pr-4">RSA key size</th>
+            <th class="py-2 pr-4">ECC key size</th>
+            <th class="py-2">Ratio</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">80 bit</td><td class="pr-4">1024</td><td class="pr-4">160</td><td>6:1</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">128 bit</td><td class="pr-4">3072</td><td class="pr-4">256</td><td>12:1</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">192 bit</td><td class="pr-4">7680</td><td class="pr-4">384</td><td>20:1</td></tr>
+          <tr><td class="py-2 pr-4">256 bit</td><td class="pr-4">15360</td><td class="pr-4">512</td><td>30:1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-06/">&#8592; Ch.6</a></li>
+      <li><a href="/reading/cryptography/crypto-08/">Ch.8 — Digital Signatures &#8594;</a></li>
+    
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> &mdash; elliptic curves form an abelian group under point addition</li>
+      <li><a href="/reading/number-theory/numthy-07/">&#35; Number Theory Ch.7</a> &mdash; the discrete logarithm problem on an elliptic curve group</li>
+      <li><a href="/reading/geometry/geom-02/">△ Geometry Ch.2</a> &mdash; elliptic curves are algebraic curves in coordinate geometry</li>
+    </ul>
+    <ul>
+      <li><a href="/reading/calculus/calc-11/">Calculus Ch.11</a> — curves in multiple dimensions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Elliptic-curve_cryptography"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Elliptic-curve cryptography</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Elliptic_curve"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Elliptic curve</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ECDH</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-06/", label: "Public-Key Cryptography" }} next={{ href: "/reading/cryptography/crypto-08/", label: "Digital Signatures" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,134 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.8 — Geometric Algorithms" favicon="⚙">
+  <main>
+
+    <a href="/reading/algorithms/" class="text-sm mb-4 inline-block">&larr; back to algorithms</a>
+
+    <h1>Geometric Algorithms</h1>
+    <p class="text-gray-400 text-sm mb-6">Nievergelt &amp; Hinrichs &middot; Ch. 8 &middot; <a href="https://textbookequity.org/algorithms-and-data-structures/">Algorithms and Data Structures</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Convex hull</strong> wraps a point set in the smallest convex polygon. Graham scan does it in O(n log n). <strong>Line intersection</strong>, <strong>closest pair</strong>, and <strong>Voronoi diagrams</strong> extend these ideas to richer geometric problems.</p>
+    </div>
+
+    <!-- SVG: Convex hull around a point set -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Convex hull polygon -->
+        <polygon points="60,200 80,80 180,40 320,60 350,150 300,220 140,230"
+                 fill="none" stroke="#34d399" stroke-width="2" stroke-opacity="0.5"/>
+        <!-- Interior points (not on hull) -->
+        <circle cx="150" cy="120" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="200" cy="150" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="250" cy="130" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="180" cy="180" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="120" cy="160" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="270" cy="170" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="220" cy="100" r="4" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Hull vertices -->
+        <circle cx="60" cy="200" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="80" cy="80" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="180" cy="40" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="320" cy="60" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="350" cy="150" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="300" cy="220" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <circle cx="140" cy="230" r="5" fill="#34d399" fill-opacity="0.7"/>
+        <!-- Caption -->
+        <text x="200" y="255" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Convex hull: the rubber band around the nails</text>
+      </svg>
+    </div>
+
+    <h3>Cross product orientation test</h3>
+    <p>The foundation of computational geometry. Given three points P, Q, R: the cross product (Q-P) x (R-P) tells you whether R is left of, right of, or on the line PQ. Positive = left turn, negative = right turn, zero = collinear.</p>
+
+    <SchemeRepl client:load initialCode={`; Cross product: orientation test
+; (Q-P) x (R-P) > 0 means left turn (counterclockwise)
+
+(define (cross px py qx qy rx ry)
+  (- (* (- qx px) (- ry py))
+     (* (- qy py) (- rx px))))
+
+; Three points: P=(0,0), Q=(1,0), R=(0,1)
+(display "P(0,0) Q(1,0) R(0,1): ")
+(display (cross 0 0 1 0 0 1)) (newline)  ; positive = left turn
+
+(display "P(0,0) Q(1,0) R(0,-1): ")
+(display (cross 0 0 1 0 0 -1)) (newline)  ; negative = right turn
+
+(display "P(0,0) Q(1,0) R(2,0): ")
+(display (cross 0 0 1 0 2 0))  ; zero = collinear
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cross product orientation test
+def cross(p, q, r):
+    return (q[0]-p[0]) * (r[1]-p[1]) - (q[1]-p[1]) * (r[0]-p[0])
+
+print(f"Left turn:  {cross((0,0), (1,0), (0,1))}")   # positive
+print(f"Right turn: {cross((0,0), (1,0), (0,-1))}")   # negative
+print(f"Collinear:  {cross((0,0), (1,0), (2,0))}")    # zero
+`} />
+    </div>
+
+    <h3>Graham scan</h3>
+    <p>Sort points by polar angle around the lowest point. Walk through the sorted points, keeping only left turns. O(n log n) for the sort, O(n) for the scan.</p>
+
+    <SchemeRepl client:load initialCode={`; Graham scan: convex hull in O(n log n)
+; Simplified version using sorted-by-x approach
+
+(define points
+  (list (list 0 0) (list 1 3) (list 2 1) (list 3 4)
+        (list 4 2) (list 5 0) (list 2 2) (list 3 1)))
+
+(define (cross-val p q r)
+  (- (* (- (car q) (car p)) (- (cadr r) (cadr p)))
+     (* (- (cadr q) (cadr p)) (- (car r) (car p)))))
+
+; Sort by x, then y
+(define sorted
+  (sort points (lambda (a b)
+    (or (< (car a) (car b))
+        (and (= (car a) (car b)) (< (cadr a) (cadr b)))))))
+
+; Build upper and lower hulls
+(define (build-half pts)
+  (fold-left
+    (lambda (hull p)
+      (let loop ((h hull))
+        (if (and (>= (length h) 2)
+                 (<= (cross-val (list-ref h (- (length h) 2))
+                                (list-ref h (- (length h) 1))
+                                p) 0))
+            (loop (reverse (cdr (reverse h))))
+            (append h (list p)))))
+    (list) pts))
+
+(define upper (build-half sorted))
+(define lower (build-half (reverse sorted)))
+
+(define hull (append (reverse (cdr (reverse upper)))
+                     (reverse (cdr (reverse lower)))))
+
+(display "Hull: ") (display hull)
+`} />
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-10/">&#x222B; Calculus Ch.10</a> &mdash; vectors: the linear algebra behind cross products and projections</li>
+      <li><a href="https://june.kim/power-diagrams-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/power-diagrams-ad-auctions</a> &mdash; Voronoi diagrams with weighted sites partition embedding space for ad targeting</li>
+      <li><a href="https://june.kim/keywords-are-tiny-circles"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/keywords-are-tiny-circles</a> &mdash; keywords as degenerate Voronoi cells in continuous space</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/algorithms/algo-07/", label: "Shortest Paths" }} next={{ href: "/reading/algorithms/algo-09/", label: "Dynamic Programming" }} />
+
+  </main>
+</Layout>

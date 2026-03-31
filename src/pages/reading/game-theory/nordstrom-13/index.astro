@@ -1,0 +1,197 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="🍞 Volunteer's Dilemma" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Volunteer's Dilemma</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> · <a href="https://nordstrommath.com/IntroGameTheory/S_VolunteerDil.html">Section 4.3</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">N players, everyone benefits if at least one person volunteers, but volunteering is costly. As N grows, each individual is less likely to act, and the probability that <strong>nobody</strong> volunteers increases. Also called "class-wide Chicken."</p>
+    </div>
+
+    <!-- SVG: N players with arrows to central volunteer decision -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Central decision node -->
+        <circle cx="200" cy="130" r="30" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="200" y="126" text-anchor="middle" fill="currentColor" font-size="9">volunteer</text>
+        <text x="200" y="138" text-anchor="middle" fill="currentColor" font-size="9">?</text>
+
+        <!-- Player 1 (top-left) — the volunteer, highlighted -->
+        <circle cx="80" cy="40" r="18" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="80" y="44" text-anchor="middle" fill="#4ade80" font-size="11">P1</text>
+        <line x1="95" y1="53" x2="175" y2="108" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="175,108 168,100 163,110" fill="#4ade80"/>
+        <text x="115" y="68" fill="#4ade80" font-size="8">yes (+1)</text>
+
+        <!-- Player 2 (top-right) -->
+        <circle cx="320" cy="40" r="18" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="320" y="44" text-anchor="middle" fill="currentColor" font-size="11">P2</text>
+        <line x1="305" y1="53" x2="225" y2="108" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="225,108 232,100 237,110" fill="currentColor" fill-opacity="0.4"/>
+        <text x="285" y="68" fill="currentColor" font-size="8" fill-opacity="0.5">no (+5)</text>
+
+        <!-- Player 3 (bottom-left) -->
+        <circle cx="80" cy="220" r="18" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="80" y="224" text-anchor="middle" fill="currentColor" font-size="11">P3</text>
+        <line x1="95" y1="207" x2="175" y2="152" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="175,152 168,160 163,150" fill="currentColor" fill-opacity="0.4"/>
+        <text x="115" y="198" fill="currentColor" font-size="8" fill-opacity="0.5">no (+5)</text>
+
+        <!-- Player N (bottom-right) -->
+        <circle cx="320" cy="220" r="18" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="320" y="224" text-anchor="middle" fill="currentColor" font-size="11">PN</text>
+        <line x1="305" y1="207" x2="225" y2="152" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="225,152 232,160 237,150" fill="currentColor" fill-opacity="0.4"/>
+        <text x="285" y="198" fill="currentColor" font-size="8" fill-opacity="0.5">no (+5)</text>
+
+        <!-- Dots for "..." between P3 and PN -->
+        <text x="200" y="240" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.4">...</text>
+
+        <!-- Caption -->
+        <text x="200" y="258" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">volunteer gets 1 point; free-riders get 5; if nobody volunteers: all get 0</text>
+      </svg>
+    </div>
+
+    <h3>The payoff structure</h3>
+    <p>Each player independently chooses: volunteer (cost = take 1 point) or don't (take 5 points). If at least one player volunteers, everyone gets their chosen amount. If nobody volunteers, everyone gets 0. Volunteering is individually costly but socially necessary.</p>
+
+    <SchemeRepl client:load initialCode={`; Volunteer's Dilemma: N players choose to volunteer (1 pt) or not (5 pt)
+; If at least one volunteers, all get their chosen amount
+; If nobody volunteers, all get 0
+
+(define (volunteer-payoffs choices)
+  (let ((any-vol (memq 'vol choices)))
+    (map (lambda (c)
+           (cond
+             ((not any-vol) 0)
+             ((eq? c 'vol) 1)
+             (else 5)))
+         choices)))
+
+; 3 players: one volunteers, two don't
+(display "1 vol, 2 free-ride: ")
+(display (volunteer-payoffs '(vol no no)))
+(newline)
+
+; Nobody volunteers
+(display "nobody volunteers:  ")
+(display (volunteer-payoffs '(no no no)))
+(newline)
+
+; All volunteer
+(display "all volunteer:      ")
+(display (volunteer-payoffs '(vol vol vol)))
+(newline)
+
+; The dilemma: free-riding gives 5 > 1 if someone else volunteers
+; But if everyone reasons this way, nobody volunteers -> all get 0
+`} />
+
+    <h3>The diffusion of responsibility</h3>
+    <p>In a mixed-strategy Nash equilibrium, each player volunteers with some probability p. As N grows, each player's p shrinks: "surely someone else will do it." But the probability that nobody volunteers is (1-p) raised to the Nth power, which can increase even as N grows. More bystanders, less action.</p>
+
+    <SchemeRepl client:load initialCode={`; As N grows, what happens to the probability nobody volunteers?
+; In equilibrium, each player mixes. The indifference condition:
+; payoff(vol) = payoff(no) => 1 = 5 * (1 - (1-p)^(N-1))
+; Solving: (1-p)^(N-1) = 4/5
+; So: p = 1 - (4/5)^(1/(N-1))
+
+(define (equil-p n)
+  (- 1.0 (expt 0.8 (/ 1.0 (- n 1)))))
+
+(define (prob-nobody-volunteers n)
+  (expt (- 1.0 (equil-p n)) n))
+
+; Show how probability of no volunteer changes with N
+(define (show-diffusion n)
+  (if (<= n 10)
+    (begin
+      (display "N=")
+      (display n)
+      (display "  p(each)=")
+      (display (number->string (equil-p n) 3))
+      (display "  p(nobody)=")
+      (display (number->string (prob-nobody-volunteers n) 3))
+      (newline)
+      (show-diffusion (+ n 1)))))
+
+(show-diffusion 2)
+; As N rises, individual p drops, but p(nobody) rises
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Volunteer's Dilemma: diffusion of responsibility
+def volunteer_payoffs(choices):
+    any_vol = "vol" in choices
+    return [1 if c == "vol" else (5 if any_vol else 0) for c in choices]
+
+print("1 vol, 2 free-ride:", volunteer_payoffs(["vol", "no", "no"]))
+print("nobody volunteers: ", volunteer_payoffs(["no", "no", "no"]))
+
+# Equilibrium mixing probability
+# 1 = 5 * (1 - (1-p)^(N-1))  =>  (1-p)^(N-1) = 4/5
+for n in range(2, 11):
+    p = 1 - (4/5) ** (1/(n-1))
+    p_nobody = (1 - p) ** n
+    print(f"N={n:2d}  p(each)={p:.3f}  p(nobody)={p_nobody:.3f}")
+`} />
+    </div>
+
+    <h3>Connection to Chicken</h3>
+    <p>With N=2, the Volunteer's Dilemma reduces to Chicken. Volunteering is swerving: costly but safe. Not volunteering is going straight: you win big if someone else swerves, but if nobody does, everyone crashes. Nordstrom calls it "class-wide Chicken" for good reason.</p>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 pr-4 text-left">Scheme</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Volunteer</td><td class="pr-4 text-green-300">'vol</td><td class="font-sans">Accept cost (1 pt) to benefit group</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Free-ride</td><td class="pr-4 text-green-300">'no</td><td class="font-sans">Take 5 pts if someone else volunteers</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Diffusion</td><td class="pr-4 text-green-300">(expt (- 1 p) n)</td><td class="font-sans">Probability nobody acts, rises with N</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Mixed equilibrium</td><td class="pr-4 text-green-300">(equil-p n)</td><td class="font-sans">Each player's indifference probability</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Game theory foundations</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-12/">🎲 Nordstrom 12</a> — Prisoner's Dilemma and Chicken (the 2-player cases)</li>
+      <li><a href="/reading/game-theory/nordstrom-14/">🎲 Nordstrom 14</a> — Repeated Prisoner's Dilemma</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Volunteer%27s_dilemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Volunteer's dilemma</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bystander_effect"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bystander effect</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Diffusion_of_responsibility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diffusion of responsibility</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The equilibrium mixing calculation assumes symmetric players and the specific 1/5 payoff ratio from Nordstrom. Different payoffs shift the equilibrium probability but the qualitative result holds: more players, lower individual probability of volunteering, and the group failure probability can increase with group size.</p>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-12/", label: "Prisoner's Dilemma" }} next={{ href: "/reading/game-theory/nordstrom-14/", label: "Repeated Prisoner's" }} />
+
+  </main>
+</Layout>

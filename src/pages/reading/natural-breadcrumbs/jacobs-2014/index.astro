@@ -1,0 +1,311 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Jacobs 2014 — Weakest Preconditions in Fibrations" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Weakest Preconditions in Fibrations</h1>
+    <p class="text-gray-400 text-sm mb-6">Bart Jacobs · 2014 · <a href="https://arxiv.org/abs/1412.6"; class="inline">preprint</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples, weakest precondition). <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Kleisli categories) helps.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Weakest preconditions arise automatically from a <a href="https://en.wikipedia.org/wiki/Fibred_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>fibration</a> over a Kleisli category. The poset of predicates sitting above each type is the fiber; lifting a morphism through the fibration computes wp.</p>
+    </div>
+
+    <!-- SVG: Fibration — predicates over types, wp lifting -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <defs>
+          <marker id="arrowJ" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+          </marker>
+          <marker id="arrowGrnJ" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#4ade80" stroke-width="1" stroke-opacity="0.5"/>
+          </marker>
+          <marker id="arrowBluJ" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+          </marker>
+        </defs>
+
+        <!-- Base category: types X, Y -->
+        <text x="240" y="292" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">base category (Kleisli)</text>
+
+        <!-- Dividing line between base and fiber -->
+        <line x1="40" y1="230" x2="440" y2="230" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="455" y="234" fill="currentColor" font-size="9" fill-opacity="0.25">p</text>
+
+        <!-- Type X (bottom-left) -->
+        <text x="120" y="265" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">X</text>
+
+        <!-- Type Y (bottom-right) -->
+        <text x="360" y="265" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">Y</text>
+
+        <!-- Morphism f: X -> D(Y) in base -->
+        <line x1="145" y1="258" x2="335" y2="258" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.35" marker-end="url(#arrowJ)"/>
+        <text x="240" y="253" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f : X &rarr; D(Y)</text>
+
+        <!-- Fiber over Y (right side, above) -->
+        <ellipse cx="360" cy="140" rx="55" ry="70" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="360" y="60" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Pred(Y)</text>
+
+        <!-- Predicates in fiber over Y -->
+        <text x="360" y="105" text-anchor="middle" fill="#4ade80" font-size="11" fill-opacity="0.7">Q</text>
+        <circle cx="360" cy="110" r="3" fill="#4ade80" fill-opacity="0.5"/>
+        <text x="360" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">y &gt; 0</text>
+        <circle cx="360" cy="155" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+        <text x="360" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.25">true</text>
+        <circle cx="360" cy="190" r="2.5" fill="#a1a1aa" fill-opacity="0.18"/>
+        <!-- Ordering lines in fiber -->
+        <line x1="360" y1="115" x2="360" y2="145" stroke="#71717a" stroke-width="0.7" stroke-opacity="0.45"/>
+        <line x1="360" y1="160" x2="360" y2="183" stroke="#71717a" stroke-width="0.7" stroke-opacity="0.45"/>
+
+        <!-- Fiber over X (left side, above) -->
+        <ellipse cx="120" cy="140" rx="55" ry="70" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="120" y="60" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Pred(X)</text>
+
+        <!-- wp(f,Q) in fiber over X -->
+        <text x="120" y="105" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">wp(f,Q)</text>
+        <circle cx="120" cy="110" r="3" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="120" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">x &gt; 1</text>
+        <circle cx="120" cy="155" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+
+        <!-- wp lifting arrow: Q back to wp(f,Q) -->
+        <path d="M 340,100 Q 240,55 140,100" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="5,3" marker-end="url(#arrowBluJ)"/>
+        <text x="240" y="42" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.6">wp lift</text>
+
+        <!-- Projection lines fiber -> base -->
+        <line x1="120" y1="212" x2="120" y2="248" stroke="#71717a" stroke-width="0.7" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="360" y1="212" x2="360" y2="248" stroke="#71717a" stroke-width="0.7" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+      </svg>
+    </div>
+
+    <h3>Predicates as a poset fibration</h3>
+    <p>Above each type X sits a poset of predicates on X — propositions ordered by implication. "x > 5" implies "x > 0", so "x > 5" sits above "x > 0" in the fiber over integers. A fibration is this layered structure: types on the bottom, predicates stacked above, ordered by strength.</p>
+
+    <SchemeRepl client:load initialCode={`; Fiber over integers: predicates ordered by implication
+; P ≤ Q means P implies Q (P is stronger)
+
+(define (implies? P Q domain)
+  (every (lambda (x) (or (not (P x)) (Q x))) domain))
+
+(define P (lambda (x) (> x 5)))
+(define Q (lambda (x) (> x 0)))
+(define R (lambda (x) (> x 10)))
+
+(define dom '(-3 0 1 5 6 10 11 20))
+
+(display "P(x>5) => Q(x>0)? ")
+(display (implies? P Q dom)) (newline)
+(display "R(x>10) => P(x>5)? ")
+(display (implies? R P dom)) (newline)
+(display "Q(x>0) => P(x>5)? ")
+(display (implies? Q P dom)) (newline)
+; R ≤ P ≤ Q in the fiber — stronger to weaker
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Predicate fiber over integers
+P = lambda x: x > 5
+Q = lambda x: x > 0
+R = lambda x: x > 10
+
+domain = range(-5, 25)
+
+def implies(P, Q, dom):
+    return all(not P(x) or Q(x) for x in dom)
+
+print(f"P(x>5) => Q(x>0)? {implies(P, Q, domain)}")
+print(f"R(x>10) => P(x>5)? {implies(R, P, domain)}")
+print(f"Q(x>0) => P(x>5)? {implies(Q, P, domain)}")
+`} />
+    </div>
+
+    <h3>Lifting through the Kleisli category</h3>
+    <p>A stochastic function f: X → D(Y) lives in the <a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a> of the distribution monad. To compute wp(f, Q), you lift the predicate Q on Y back through f: for each input x, check whether <em>every</em> possible output satisfies Q.</p>
+
+    <SchemeRepl client:load initialCode={`; wp(f, Q)(x) = for all y in support(f(x)), Q(y)
+; Lifting Q backwards through the Kleisli morphism f
+
+(define (wp f Q)
+  (lambda (x)
+    (every (lambda (pair) (Q (car pair)))
+           (filter (lambda (pair) (> (cdr pair) 0))
+                   (f x)))))
+
+; f: x -> {x-1: 0.5, x+1: 0.5}
+(define (f x)
+  (list (cons (- x 1) 0.5) (cons (+ x 1) 0.5)))
+
+(define Q (lambda (y) (>= y 0)))
+
+(define P (wp f Q))
+
+(display "wp(f, y>=0):") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display " -> ") (display (P x)) (newline))
+  '(-1 0 1 2 3))
+; x=0 is false: f(0) can produce -1
+; x=1 is true: f(1) produces {0, 2}, both >= 0
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# wp via Kleisli lifting
+def f(x):
+    return {x - 1: 0.5, x + 1: 0.5}
+
+Q = lambda y: y >= 0
+
+def wp(f, Q):
+    return lambda x: all(Q(y) for y, p in f(x).items() if p > 0)
+
+P = wp(f, Q)
+for x in range(-1, 4):
+    print(f"  x={x}: wp={P(x)}, support(f)={list(f(x).keys())}")
+`} />
+    </div>
+
+    <h3>Order enrichment makes wp monotone</h3>
+    <p>The fibers are posets (predicates ordered by implication). The wp functor is monotone: if Q₁ implies Q₂, then wp(f, Q₁) implies wp(f, Q₂). Stronger postconditions give stronger preconditions. This monotonicity comes for free from the order-enriched Kleisli structure.</p>
+
+    <SchemeRepl client:load initialCode={`; Monotonicity: Q1 => Q2 implies wp(f,Q1) => wp(f,Q2)
+
+(define (wp f Q)
+  (lambda (x)
+    (every (lambda (pair) (Q (car pair)))
+           (filter (lambda (pair) (> (cdr pair) 0))
+                   (f x)))))
+
+(define (f x) (list (cons (- x 1) 0.5) (cons (+ x 1) 0.5)))
+
+; Q1 is stronger than Q2
+(define Q1 (lambda (y) (> y 5)))
+(define Q2 (lambda (y) (> y 0)))
+
+(define P1 (wp f Q1))
+(define P2 (wp f Q2))
+
+(display "monotonicity check:") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display " P1=") (display (P1 x))
+  (display " P2=") (display (P2 x))
+  (display (if (and (P1 x) (not (P2 x))) " VIOLATION" ""))
+  (newline))
+  '(0 1 3 5 6 7 8))
+; P1(x) => P2(x) always — no violations
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Monotonicity of wp
+def f(x):
+    return {x - 1: 0.5, x + 1: 0.5}
+
+def wp(f, Q):
+    return lambda x: all(Q(y) for y, p in f(x).items() if p > 0)
+
+Q1 = lambda y: y > 5  # stronger
+Q2 = lambda y: y > 0  # weaker
+
+P1, P2 = wp(f, Q1), wp(f, Q2)
+for x in range(0, 9):
+    ok = "ok" if not P1(x) or P2(x) else "VIOLATION"
+    print(f"  x={x}: P1={P1(x)}, P2={P2(x)} {ok}")
+`} />
+    </div>
+
+    <h3>Composition of wp via Kleisli composition</h3>
+    <p>wp(f;g, Q) = wp(f, wp(g, Q)). Composing two stochastic functions and computing wp in one step gives the same result as computing wp for g first, then using that as the postcondition for f. The fibration structure guarantees this — it's not a coincidence, it's functoriality.</p>
+
+    <SchemeRepl client:load initialCode={`; wp(f;g, Q) = wp(f, wp(g, Q))
+; Functoriality of the fibration
+
+(define (wp f Q)
+  (lambda (x)
+    (every (lambda (pair) (Q (car pair)))
+           (filter (lambda (pair) (> (cdr pair) 0))
+                   (f x)))))
+
+(define (kleisli f g)
+  (lambda (x)
+    (apply append
+      (map (lambda (pair)
+        (let ((y (car pair)) (py (cdr pair)))
+          (map (lambda (qp) (cons (car qp) (* py (cdr qp))))
+               (g y))))
+      (f x)))))
+
+(define (f x) (list (cons (+ x 1) 0.5) (cons (+ x 2) 0.5)))
+(define (g y) (list (cons (* y 2) 1.0)))
+(define Q (lambda (z) (> z 5)))
+
+(define direct (wp (kleisli f g) Q))
+(define staged (wp f (wp g Q)))
+
+(display "wp(f;g, Q) = wp(f, wp(g, Q)):") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display " direct=") (display (direct x))
+  (display " staged=") (display (staged x)) (newline))
+  '(0 1 2 3 4))
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pred(X)</td><td class="pr-4 text-green-300">(lambda (x) ...)</td><td class="font-sans">Fiber: predicates on X</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P ≤ Q</td><td class="pr-4 text-green-300">(implies? P Q dom)</td><td class="font-sans">P implies Q (stronger precondition)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">wp(f, Q)</td><td class="pr-4 text-green-300">(wp f Q)</td><td class="font-sans">Weakest precondition via lifting</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Kl(D)</td><td class="pr-4 text-green-300">; Kleisli(Distribution)</td><td class="font-sans">Kleisli category of distribution monad</td></tr>
+          <tr><td class="py-2 pr-4">p*</td><td class="pr-4 text-green-300">(wp f ...)</td><td class="font-sans">Reindexing functor (pullback along f)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare rules as theorems in imperative categories (uses wp)</li>
+      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — effectus theory (same author, predicates as effects)</li>
+      <li><a href="/reading/natural-breadcrumbs/ho-wu-2026/">🍞 Ho, Wu 2026</a> — Bayesian separation logic (wp for probabilistic programs)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Fibred_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fibred category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Weakest_precondition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Weakest precondition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Predicate_transformer_semantics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Predicate transformer semantics</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>All examples use finite distributions and boolean predicates. Jacobs works with order-enriched categories, where predicates form complete lattices and the fibration carries a rich adjunction structure (left and right adjoints to reindexing). For example: the wp computation on this page checks all elements of a small support set. In the paper, wp is a right adjoint to substitution in the fibration — a universal construction that works over arbitrary effect monads, not just distributions. The pointwise "for all y" check is the same; the categorical machinery that guarantees it exists is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Start at §3 for the fibration of predicates over Kleisli categories, §5 for the wp-semantics.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The fibration-based wp construction is the theoretical backbone for computing weakest preconditions in the Natural Framework's ambient Kleisli category. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/spivak-2013/", label: "Spivak 2013 · 11 of 21" }} next={{ href: "/reading/natural-breadcrumbs/kidney-wu-2021/", label: "Kidney, Wu 2021 · 13 of 21" }} />
+  </main>
+</Layout>

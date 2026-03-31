@@ -1,0 +1,256 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.8 — Recovery" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Recovery</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Write-ahead_logging"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Write-ahead logging</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Recovery</strong> restores the database to a consistent state after a crash. The key mechanism is <strong>write-ahead logging</strong> (WAL): before any data page is modified on disk, the change is first recorded in a log. On crash recovery, the log replays committed changes (redo) and undoes uncommitted ones (undo).</p>
+    </div>
+
+    <!-- SVG: Log entries with LSN, before/after images -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 170" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Log box -->
+        <rect x="30" y="15" width="340" height="120" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="200" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">WAL (Write-Ahead Log)</text>
+
+        <!-- Header -->
+        <rect x="30" y="15" width="340" height="20" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="60" y="29" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">LSN</text>
+        <text x="110" y="29" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">Txn</text>
+        <text x="170" y="29" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">Op</text>
+        <text x="240" y="29" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">Before</text>
+        <text x="320" y="29" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">After</text>
+
+        <!-- Log entries -->
+        <text x="60" y="50" text-anchor="middle" fill="#60a5fa" font-size="9">001</text>
+        <text x="110" y="50" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">T1</text>
+        <text x="170" y="50" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">W(A)</text>
+        <text x="240" y="50" text-anchor="middle" fill="#f87171" font-size="9">100</text>
+        <text x="320" y="50" text-anchor="middle" fill="#34d399" font-size="9">80</text>
+
+        <text x="60" y="68" text-anchor="middle" fill="#60a5fa" font-size="9">002</text>
+        <text x="110" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">T1</text>
+        <text x="170" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">W(B)</text>
+        <text x="240" y="68" text-anchor="middle" fill="#f87171" font-size="9">50</text>
+        <text x="320" y="68" text-anchor="middle" fill="#34d399" font-size="9">70</text>
+
+        <text x="60" y="86" text-anchor="middle" fill="#60a5fa" font-size="9">003</text>
+        <text x="110" y="86" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">T1</text>
+        <text x="170" y="86" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">COMMIT</text>
+        <text x="240" y="86" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+        <text x="320" y="86" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">-</text>
+
+        <text x="60" y="104" text-anchor="middle" fill="#60a5fa" font-size="9">004</text>
+        <text x="110" y="104" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">T2</text>
+        <text x="170" y="104" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">W(A)</text>
+        <text x="240" y="104" text-anchor="middle" fill="#f87171" font-size="9">80</text>
+        <text x="320" y="104" text-anchor="middle" fill="#34d399" font-size="9">60</text>
+
+        <text x="60" y="122" text-anchor="middle" fill="#f87171" font-size="9">005</text>
+        <text x="200" y="122" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">*** CRASH ***</text>
+
+        <!-- Caption -->
+        <text x="200" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Redo T1 (committed), undo T2 (not committed).</text>
+      </svg>
+    </div>
+
+
+    <!-- WAL -->
+    <h3>Write-ahead logging (WAL)</h3>
+    <p>The WAL protocol: (1) before modifying a data page, write the log record to stable storage. (2) Before committing, flush all log records for that transaction. This guarantees that if the database crashes, the log contains enough information to reconstruct the committed state and undo uncommitted changes.</p>
+
+    <SchemeRepl client:load initialCode={`; WAL simulation: log writes before applying them.
+
+(define wal (list))   ; log entries
+(define db (list (cons "A" 100) (cons "B" 50)))
+(define lsn 0)
+
+(define (get key) (cdr (assoc key db)))
+
+(define (wal-write txn key new-val)
+  (let ((old-val (get key)))
+    (set! lsn (+ lsn 1))
+    ; Write to log first (WAL rule)
+    (set! wal (append wal
+      (list (list lsn txn "W" key old-val new-val))))
+    ; Then apply to database
+    (set! db (map (lambda (p)
+      (if (string=? (car p) key) (cons key new-val) p)) db))
+    (display "LSN ") (display lsn)
+    (display ": ") (display txn)
+    (display " W(") (display key) (display ") ")
+    (display old-val) (display "->") (display new-val) (newline)))
+
+(define (wal-commit txn)
+  (set! lsn (+ lsn 1))
+  (set! wal (append wal (list (list lsn txn "COMMIT"))))
+  (display "LSN ") (display lsn) (display ": ") (display txn)
+  (display " COMMIT") (newline))
+
+(wal-write "T1" "A" 80)
+(wal-write "T1" "B" 70)
+(wal-commit "T1")
+(wal-write "T2" "A" 60)
+; T2 crashes before commit
+(newline)
+(display "Log has ") (display (length wal)) (display " entries")
+(newline)
+(display "DB state: ") (display db)
+`} />
+
+
+    <!-- Checkpoints -->
+    <h3>Checkpoints</h3>
+    <p>A <strong>checkpoint</strong> flushes all dirty pages to disk and records which transactions are active. On recovery, the system only needs to scan the log from the last checkpoint, not from the beginning. This bounds recovery time.</p>
+
+    <Repl client:load initialCode={`# Checkpoint and recovery simulation
+
+class WALDatabase:
+    def __init__(self):
+        self.db = {"A": 100, "B": 50, "C": 200}
+        self.log = []
+        self.lsn = 0
+        self.checkpoint_lsn = 0
+
+    def write(self, txn, key, new_val):
+        self.lsn += 1
+        old_val = self.db[key]
+        self.log.append((self.lsn, txn, "W", key, old_val, new_val))
+        self.db[key] = new_val
+
+    def commit(self, txn):
+        self.lsn += 1
+        self.log.append((self.lsn, txn, "COMMIT"))
+
+    def checkpoint(self):
+        self.checkpoint_lsn = self.lsn
+        self.lsn += 1
+        self.log.append((self.lsn, None, "CHECKPOINT"))
+        print("Checkpoint at LSN " + str(self.checkpoint_lsn))
+
+    def recover(self):
+        """Redo committed, undo uncommitted from last checkpoint."""
+        committed = set()
+        # Find committed transactions
+        for entry in self.log:
+            if entry[2] == "COMMIT":
+                committed.add(entry[1])
+
+        # Scan from checkpoint
+        start = 0
+        for i, entry in enumerate(self.log):
+            if entry[2] == "CHECKPOINT":
+                start = i
+
+        print("Recovery from LSN " + str(self.log[start][0]) + ":")
+        for entry in self.log[start:]:
+            if entry[2] == "W":
+                _, txn, _, key, old, new = entry
+                if txn in committed:
+                    print("  REDO: " + str(txn) + " " + str(key) + "=" + str(new))
+                else:
+                    print("  UNDO: " + str(txn) + " " + str(key) + "=" + str(old))
+                    self.db[key] = old
+
+db = WALDatabase()
+db.write("T1", "A", 80)
+db.commit("T1")
+db.checkpoint()
+db.write("T2", "B", 999)   # not committed
+db.write("T3", "C", 150)
+db.commit("T3")
+# Crash! T2 never committed.
+print()
+db.recover()
+print("Final state: " + str(db.db))
+`} />
+
+
+    <!-- ARIES -->
+    <h3>ARIES algorithm</h3>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Algorithms_for_Recovery_and_Isolation_Exploiting_Semantics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ARIES</a></strong> (Algorithms for Recovery and Isolation Exploiting Semantics) is the industry-standard recovery algorithm. Three phases: (1) Analysis: scan the log to determine which transactions were active at crash time. (2) Redo: replay all logged actions from the last checkpoint. (3) Undo: reverse actions of uncommitted transactions, working backward. ARIES uses LSNs (Log Sequence Numbers) to avoid redundant work.</p>
+
+    <SchemeRepl client:load initialCode={`; ARIES three phases: Analysis, Redo, Undo.
+; Simplified demonstration.
+
+(define log
+  (list
+    (list 1 "T1" "W" "A" 100 80)
+    (list 2 "T1" "COMMIT")
+    (list 3 "CHECKPOINT")
+    (list 4 "T2" "W" "B" 50 999)
+    (list 5 "T3" "W" "C" 200 150)
+    (list 6 "T3" "COMMIT")))
+    ; T2 never committed -> CRASH
+
+; Phase 1: Analysis - find committed and active transactions
+(display "=== Analysis ===") (newline)
+(define committed (list))
+(define all-txns (list))
+(for-each
+  (lambda (entry)
+    (cond
+      ((and (> (length entry) 2) (string=? (caddr entry) "COMMIT"))
+       (set! committed (cons (cadr entry) committed)))
+      ((and (> (length entry) 2) (string=? (caddr entry) "W"))
+       (if (not (member (cadr entry) all-txns))
+         (set! all-txns (cons (cadr entry) all-txns))))))
+  log)
+(display "Committed: ") (display committed) (newline)
+(define losers (filter (lambda (t) (not (member t committed))) all-txns))
+(display "Losers (undo): ") (display losers) (newline)
+
+; Phase 2: Redo
+(display "=== Redo ===") (newline)
+(for-each
+  (lambda (entry)
+    (if (and (> (length entry) 5) (string=? (caddr entry) "W"))
+      (begin
+        (display "  Redo LSN ") (display (car entry))
+        (display ": ") (display (cadr entry))
+        (display " W(") (display (cadddr entry))
+        (display ")=") (display (list-ref entry 5)) (newline))))
+  log)
+
+; Phase 3: Undo (reverse order for losers)
+(display "=== Undo ===") (newline)
+(for-each
+  (lambda (entry)
+    (if (and (> (length entry) 5) (string=? (caddr entry) "W")
+             (member (cadr entry) losers))
+      (begin
+        (display "  Undo LSN ") (display (car entry))
+        (display ": ") (display (cadr entry))
+        (display " W(") (display (cadddr entry))
+        (display ")=") (display (list-ref entry 4)) (newline))))
+  (reverse log))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Write-ahead_logging"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Write-ahead logging</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Algorithms_for_Recovery_and_Isolation_Exploiting_Semantics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ARIES</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Database_checkpoint"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Checkpoint</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-07/", label: "Concurrency Control" }} next={{ href: "/reading/databases/db-09/", label: "Query Processing" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,177 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.8 — Identity and Functions" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Identity and Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 8 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Identity</strong> (=) lets us say two names refer to the same object. Combined with quantifiers, it expresses uniqueness ("there is exactly one") and definite descriptions ("the x such that"). <strong>Functions</strong> in logic map each input to exactly one output.</p>
+    </div>
+
+    <!-- SVG: Elements mapped by a function with identity highlighted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Domain -->
+        <ellipse cx="90" cy="90" rx="60" ry="70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="90" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Domain</text>
+        <!-- Codomain -->
+        <ellipse cx="250" cy="90" rx="60" ry="70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="250" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Codomain</text>
+        <!-- Domain elements -->
+        <circle cx="80" cy="55" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="68" y="58" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">a</text>
+        <circle cx="90" cy="90" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="78" y="93" text-anchor="end" fill="#f59e0b" font-size="10">b</text>
+        <circle cx="80" cy="125" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="68" y="128" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">c</text>
+        <!-- Codomain elements -->
+        <circle cx="240" cy="55" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="255" y="58" fill="currentColor" font-size="10" fill-opacity="0.5">1</text>
+        <circle cx="250" cy="90" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="265" y="93" fill="#f59e0b" font-size="10">2</text>
+        <circle cx="240" cy="125" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="255" y="128" fill="currentColor" font-size="10" fill-opacity="0.5">3</text>
+        <!-- Arrows -->
+        <line x1="84" y1="55" x2="236" y2="55" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="236,52 240,55 236,58" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="94" y1="90" x2="246" y2="90" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="246,87 250,90 246,93" fill="#f59e0b" fill-opacity="0.5"/>
+        <line x1="84" y1="125" x2="236" y2="125" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="236,122 240,125 236,128" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Identity highlight: f(b) = 2, b maps to exactly one thing -->
+        <text x="170" y="82" text-anchor="middle" fill="#f59e0b" font-size="10">f(b) = 2</text>
+      </svg>
+    </div>
+
+    <h3>Equality</h3>
+    <p>The identity predicate x = y means x and y are the same object. It obeys reflexivity (a = a), symmetry (if a = b then b = a), and transitivity (if a = b and b = c then a = c). It also obeys <strong>substitution</strong>: if a = b, then anything true of a is true of b.</p>
+
+    <SchemeRepl client:load initialCode={`; Identity: reflexive, symmetric, transitive, substitutive
+
+; Reflexivity
+(display "a = a: ") (display (= 5 5)) (newline)
+
+; Symmetry
+(display "a = b implies b = a: ")
+(let ((a 5) (b 5))
+  (display (equal? (= a b) (= b a)))) (newline)
+
+; Transitivity
+(display "a=b and b=c implies a=c: ")
+(let ((a 5) (b 5) (c 5))
+  (display (and (= a b) (= b c) (= a c)))) (newline)
+
+; Substitution: if a = b and P(a), then P(b)
+(define (even? n) (= 0 (modulo n 2)))
+(let ((a 4) (b 4))
+  (display "a=b and even(a) implies even(b): ")
+  (display (and (= a b) (even? a) (even? b))))
+`} />
+
+    <h3>Uniqueness: "there exists exactly one"</h3>
+    <p>&exist;!x P(x) means "there exists exactly one x such that P(x)." It is defined as: &exist;x(P(x) &and; &forall;y(P(y) &rarr; y = x)). There is a witness, and anything else satisfying P must be that same witness.</p>
+
+    <SchemeRepl client:load initialCode={`; "There exists exactly one" = exists + unique
+
+(define (exists-unique pred domain)
+  ; Find all elements satisfying pred
+  (let loop ((d domain) (witnesses (list)))
+    (if (null? d)
+      (= (length witnesses) 1)
+      (loop (cdr d)
+            (if (pred (car d))
+              (cons (car d) witnesses)
+              witnesses)))))
+
+(define domain (list 1 2 3 4 5 6 7 8 9 10))
+(define (is-five? x) (= x 5))
+(define (even? x) (= 0 (modulo x 2)))
+
+(display "Exists unique x=5 in 1..10: ")
+(display (exists-unique is-five? domain)) (newline)
+
+(display "Exists unique even in 1..10: ")
+(display (exists-unique even? domain))
+(display " (multiple evens exist)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Exists-unique
+domain = list(range(1, 11))
+
+def exists_unique(pred, domain):
+    witnesses = [x for x in domain if pred(x)]
+    return len(witnesses) == 1
+
+print(f"Unique x=5: {exists_unique(lambda x: x == 5, domain)}")
+print(f"Unique even: {exists_unique(lambda x: x % 2 == 0, domain)}")
+`} />
+    </div>
+
+    <h3>Definite descriptions</h3>
+    <p>"The x such that P(x)" presupposes exactly one such x exists. In logic, "the even prime" means &exist;!x(even(x) &and; prime(x)), and the description refers to that unique witness.</p>
+
+    <SchemeRepl client:load initialCode={`; Definite description: "the x such that P(x)"
+; Only meaningful when exactly one x satisfies P
+
+(define (the pred domain)
+  (let loop ((d domain) (found #f))
+    (cond
+      ((null? d)
+       (if found found "undefined: no element found"))
+      ((pred (car d))
+       (if found
+         "undefined: not unique"
+         (loop (cdr d) (car d))))
+      (else (loop (cdr d) found)))))
+
+(define (prime? n)
+  (if (< n 2) #f
+    (let loop ((d 2))
+      (cond ((> (* d d) n) #t)
+            ((= 0 (modulo n d)) #f)
+            (else (loop (+ d 1)))))))
+
+(define domain (list 1 2 3 4 5 6 7 8 9 10))
+
+(display "The even prime: ")
+(display (the (lambda (x) (and (= 0 (modulo x 2)) (prime? x))) domain)) (newline)
+
+(display "The prime > 5 and < 10: ")
+(display (the (lambda (x) (and (prime? x) (> x 5) (< x 10))) domain))
+`} />
+
+    <h3>Functions in logic</h3>
+    <p>A function f from domain D to codomain C assigns each element of D exactly one element of C. In predicate logic: &forall;x &exist;!y f(x) = y. Every input has exactly one output.</p>
+
+    <SchemeRepl client:load initialCode={`; A function: every input maps to exactly one output
+; We verify this property
+
+(define (f x) (* x x))  ; f(x) = x^2
+
+; Check: for each x, f(x) is well-defined (always returns one value)
+(define inputs (list -3 -2 -1 0 1 2 3))
+
+(display "f(x) = x^2 outputs: ")
+(display (map f inputs)) (newline)
+
+; Is f injective (one-to-one)? forall x,y: f(x)=f(y) -> x=y
+; No: f(-2) = f(2) = 4
+(display "f(-2) = ") (display (f -2)) (newline)
+(display "f(2) = ") (display (f 2)) (newline)
+(display "f(-2) = f(2) but -2 != 2: not injective")
+`} />
+
+    <PrevNext prev={{ href: "/reading/logic/logic-07/", label: "Predicate Logic Proofs" }} next={{ href: "/reading/logic/logic-09/", label: "Mathematical Induction" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,111 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Core.lean — Triples, COMP, AND, OR, consequence" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Core.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Core.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Defines Hoare triples for monadic kernels and proves the core proof rules: consequence, sequential composition, skip, conjunction, and disjunction.</p>
+    </div>
+
+    <h3>Triple</h3>
+    <p>A Hoare triple <code>&#123;P&#125; f &#123;Q&#125;</code> means: for every input satisfying P, every possible output of f satisfies Q. The quantification is over the support &mdash; the same possibilistic (reachability-based) layer used throughout the framework. Think of it as a contract with a precondition.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">Triple</span> [Monad M] [Support M]
+    (P : &alpha; &rarr; Prop) (f : Kernel M &alpha; &beta;) (Q : &beta; &rarr; Prop) : Prop :=
+  &forall; a : &alpha;, P a &rarr; &forall; b : &beta;, Support.support (f a) b &rarr; Q b</code></pre>
+
+    <Repl client:load initialCode={`# Hoare triple: {P} f {Q}
+# "If input satisfies P, every possible output satisfies Q"
+
+def triple_holds(P, f, Q, test_inputs):
+    """Check {P} f {Q} over test inputs"""
+    for x in test_inputs:
+        if P(x):
+            y = f(x)
+            if not Q(y):
+                return False, x, y
+    return True, None, None
+
+# {x > 0} double {y > 0}  -- should hold
+P = lambda x: x > 0
+Q = lambda y: y > 0
+f = lambda x: x * 2
+
+ok, _, _ = triple_holds(P, f, Q, range(-5, 10))
+print(f"{{x > 0}} double {{y > 0}}: {ok}")
+
+# {x > 0} negate {y > 0}  -- should FAIL
+g = lambda x: -x
+ok, cx, cy = triple_holds(P, g, Q, range(-5, 10))
+print(f"{{x > 0}} negate {{y > 0}}: {ok}")
+print(f"  counterexample: P({cx})=True, but Q({cy})=False")
+`} />
+
+    <h3>triple_consequence</h3>
+    <p>Rule of consequence: you can weaken the precondition (accept more inputs) and strengthen the postcondition (promise less about outputs). If the original triple holds, the weakened one does too.</p>
+
+    <h3>triple_comp</h3>
+    <p>Sequential composition (the COMP rule): if <code>&#123;P&#125; f &#123;R&#125;</code> and <code>&#123;R&#125; g &#123;Q&#125;</code>, then <code>&#123;P&#125; f;g &#123;Q&#125;</code>. Uses <code>support_bind</code> to decompose the composite's support into an intermediate value.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">triple_comp</span> [Monad M] [LawfulMonad M] [Support M]
+    &#123;P : &alpha; &rarr; Prop&#125; &#123;R : &beta; &rarr; Prop&#125; &#123;Q : &gamma; &rarr; Prop&#125;
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;g : Kernel M &beta; &gamma;&#125;
+    (hf : Triple P f R) (hg : Triple R g Q)
+    : Triple P (Kernel.comp f g) Q</code></pre>
+
+    <Repl client:load initialCode={`# COMP rule: {P} f {R} and {R} g {Q}  =>  {P} f;g {Q}
+# The intermediate predicate R bridges the two stages.
+
+P = lambda x: x >= 0          # non-negative input
+R = lambda y: y >= 0 and y <= 50  # intermediate: bounded
+Q = lambda z: z % 2 == 0      # final output is even
+
+f = lambda x: min(x, 50)      # clamp to [0,50]
+g = lambda y: y * 2            # double
+
+# Check each triple individually:
+inputs = list(range(0, 100))
+pf = all(R(f(x)) for x in inputs if P(x))
+rg = all(Q(g(y)) for y in range(51) if R(y))
+comp = all(Q(g(f(x))) for x in inputs if P(x))
+
+print(f"{{P}} clamp {{R}}: {pf}")
+print(f"{{R}} double {{Q}}: {rg}")
+print(f"{{P}} clamp;double {{Q}}: {comp}  (by COMP)")
+`} />
+
+    <h3>triple_skip</h3>
+    <p>The skip rule: the identity kernel preserves any predicate. Uses <code>support_pure</code> to show the only possible output is the input itself.</p>
+
+    <h3>triple_post_and</h3>
+    <p>AND rule: if f preserves Q and R separately, it preserves both simultaneously.</p>
+
+    <h3>triple_pre_or</h3>
+    <p>OR rule: if the triple holds from precondition P1 and from P2, it holds from their disjunction.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; imported; triples are built on top of the contract/kernel infrastructure</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-wp/">Hoare/WP.lean</a> &mdash; weakest precondition transformer, equivalent to triples</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-bridge/">Hoare/Bridge.lean</a> &mdash; connects triples to ContractPreserving</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-comp/">Hoare/Comp.lean</a> &mdash; chains the full pipeline through COMP</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-graded/">Hoare/Graded.lean</a> &mdash; adds cost bounds (grades) to triples</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/fractal/", label: "Fractal.lean · 14 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-wp/", label: "Hoare/WP.lean · 16 of 25" }} />
+  </main>
+</Layout>

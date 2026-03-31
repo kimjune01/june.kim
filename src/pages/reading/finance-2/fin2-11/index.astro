@@ -1,0 +1,299 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.11 — Value at Risk" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Value at Risk</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Value at Risk (VaR)</strong> answers one question: what is the worst loss you can expect over a given horizon at a given confidence level? Expected Shortfall (CVaR) asks the harder follow-up: given that you exceed VaR, how bad is it on average?</p>
+    </div>
+
+    <!-- SVG: VaR / CVaR on a loss distribution -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="160" x2="400" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="160" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="220" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Portfolio Return</text>
+        <text x="15" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4" transform="rotate(-90,15,90)">Frequency</text>
+        <!-- Bell curve (simplified) -->
+        <path d="M60,158 Q100,155 140,140 Q180,100 220,50 Q260,100 300,140 Q340,155 380,158" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <!-- VaR line -->
+        <line x1="120" y1="25" x2="120" y2="160" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="4,3"/>
+        <text x="120" y="18" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">VaR (95%)</text>
+        <!-- Shaded tail area -->
+        <path d="M60,158 Q80,157 100,153 Q110,148 120,143 L120,160 Z" fill="#ef4444" fill-opacity="0.15"/>
+        <!-- CVaR marker -->
+        <line x1="85" y1="140" x2="85" y2="160" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="85" y="135" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">E[Loss|Loss&gt;VaR]</text>
+        <text x="85" y="175" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.5">CVaR</text>
+        <!-- 95% label -->
+        <text x="250" y="80" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.4">95% of outcomes</text>
+        <path d="M135,85 L250,85" stroke="#60a5fa" stroke-width="0.5" stroke-opacity="0.3"/>
+        <polygon points="135,83 140,85 135,87" fill="#60a5fa" fill-opacity="0.3"/>
+      </svg>
+    </div>
+
+    <!-- 1. Historical Simulation VaR -->
+    <h3>Historical simulation VaR</h3>
+    <p>The simplest VaR method: sort historical returns, find the percentile. No distributional assumptions. The 95% VaR is the 5th percentile of the return distribution. Strengths: captures fat tails and skewness. Weakness: assumes the past is representative of the future.</p>
+
+    <SchemeRepl client:load initialCode={`; Historical simulation VaR
+; Sort returns, pick the alpha-percentile
+
+(define returns '(-0.05 -0.03 -0.02 -0.01 -0.008
+                  0.001 0.005 0.01 0.015 0.02
+                  0.025 0.03 0.035 0.04 0.05
+                  0.06 0.07 0.08 0.09 0.10))
+
+(define (list-sort lst)
+  (if (or (null? lst) (null? (cdr lst))) lst
+      (let* ((pivot (car lst))
+             (rest (cdr lst))
+             (lo (filter (lambda (x) (< x pivot)) rest))
+             (hi (filter (lambda (x) (>= x pivot)) rest)))
+        (append (list-sort lo) (list pivot) (list-sort hi)))))
+
+(define (nth lst n)
+  (if (= n 0) (car lst) (nth (cdr lst) (- n 1))))
+
+(define (historical-var returns alpha)
+  (let* ((sorted (list-sort returns))
+         (n (length sorted))
+         (idx (- (ceiling (* alpha n)) 1)))
+    (- (nth sorted idx))))
+
+(define var-95 (historical-var returns 0.05))
+(display "95% VaR: ") (display (* var-95 100)) (display "%") (newline)
+
+(define var-99 (historical-var returns 0.01))
+(display "99% VaR: ") (display (* var-99 100)) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Historical simulation VaR
+returns = [-0.05, -0.03, -0.02, -0.01, -0.008,
+           0.001, 0.005, 0.01, 0.015, 0.02,
+           0.025, 0.03, 0.035, 0.04, 0.05,
+           0.06, 0.07, 0.08, 0.09, 0.10]
+
+import math
+
+def historical_var(returns, alpha):
+    sorted_r = sorted(returns)
+    idx = int(math.ceil(alpha * len(sorted_r))) - 1
+    return -sorted_r[idx]
+
+var_95 = historical_var(returns, 0.05)
+var_99 = historical_var(returns, 0.01)
+print(f"95% VaR: {var_95*100:.1f}%")
+print(f"99% VaR: {var_99*100:.1f}%")
+`} />
+    </div>
+
+
+    <!-- 2. Parametric VaR -->
+    <h3>Parametric (variance-covariance) VaR</h3>
+    <p>Assume returns are normally distributed. Then VaR = &mu; &minus; z<sub>&alpha;</sub> &times; &sigma;. Fast to compute and extends naturally to portfolios via the covariance matrix. The catch: real returns have fat tails, so parametric VaR systematically underestimates extreme losses.</p>
+
+    <SchemeRepl client:load initialCode={`; Parametric VaR under normality
+; VaR = -(mu - z_alpha * sigma)
+
+; z-scores for common confidence levels
+(define z-95 1.645)
+(define z-99 2.326)
+
+(define (parametric-var mu sigma z)
+  (- (* z sigma) mu))
+
+; Portfolio: mean daily return 0.05%, volatility 1.5%
+(define mu 0.0005)
+(define sigma 0.015)
+
+(define var95 (parametric-var mu sigma z-95))
+(display "95% parametric VaR: ")
+(display (* var95 100)) (display "%") (newline)
+
+(define var99 (parametric-var mu sigma z-99))
+(display "99% parametric VaR: ")
+(display (* var99 100)) (display "%") (newline)
+
+; Scale to 10-day horizon (sqrt-time rule)
+(define var99-10d (* var99 (sqrt 10)))
+(display "99% 10-day VaR: ")
+(display (* var99-10d 100)) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Parametric VaR
+import math
+
+z_95 = 1.645
+z_99 = 2.326
+
+def parametric_var(mu, sigma, z):
+    return -(mu - z * sigma)
+
+mu, sigma = 0.0005, 0.015
+
+var95 = parametric_var(mu, sigma, z_95)
+var99 = parametric_var(mu, sigma, z_99)
+
+print(f"95% parametric VaR: {var95*100:.3f}%")
+print(f"99% parametric VaR: {var99*100:.3f}%")
+
+# 10-day horizon
+var99_10d = var99 * math.sqrt(10)
+print(f"99% 10-day VaR: {var99_10d*100:.3f}%")
+`} />
+    </div>
+
+
+    <!-- 3. Expected Shortfall -->
+    <h3>Expected shortfall (CVaR)</h3>
+    <p>VaR tells you the threshold; <strong>expected shortfall</strong> tells you the average loss beyond that threshold. ES is always larger than VaR and is a <em>coherent</em> risk measure (it satisfies subadditivity, meaning diversification always reduces measured risk). Basel III requires banks to use ES rather than VaR.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected Shortfall from historical data
+; Average of all losses beyond VaR
+
+(define returns '(-0.05 -0.03 -0.02 -0.01 -0.008
+                  0.001 0.005 0.01 0.015 0.02
+                  0.025 0.03 0.035 0.04 0.05
+                  0.06 0.07 0.08 0.09 0.10))
+
+(define (list-sort lst)
+  (if (or (null? lst) (null? (cdr lst))) lst
+      (let* ((pivot (car lst))
+             (rest (cdr lst))
+             (lo (filter (lambda (x) (< x pivot)) rest))
+             (hi (filter (lambda (x) (>= x pivot)) rest)))
+        (append (list-sort lo) (list pivot) (list-sort hi)))))
+
+(define (expected-shortfall returns alpha)
+  (let* ((sorted (list-sort returns))
+         (n (length sorted))
+         (cutoff (ceiling (* alpha n)))
+         (tail (let loop ((lst sorted) (i 0) (acc '()))
+                 (if (= i cutoff) acc
+                     (loop (cdr lst) (+ i 1) (cons (car lst) acc))))))
+    (- (/ (apply + tail) (length tail)))))
+
+(define es-95 (expected-shortfall returns 0.05))
+(display "95% Expected Shortfall: ")
+(display (* es-95 100)) (display "%") (newline)
+
+; Compare: VaR < ES always
+(display "95% VaR: 5.0%") (newline)
+(display "ES captures how bad the tail really is")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected Shortfall (CVaR)
+import math
+
+returns = [-0.05, -0.03, -0.02, -0.01, -0.008,
+           0.001, 0.005, 0.01, 0.015, 0.02,
+           0.025, 0.03, 0.035, 0.04, 0.05,
+           0.06, 0.07, 0.08, 0.09, 0.10]
+
+def expected_shortfall(returns, alpha):
+    sorted_r = sorted(returns)
+    cutoff = int(math.ceil(alpha * len(sorted_r)))
+    tail = sorted_r[:cutoff]
+    return -sum(tail) / len(tail)
+
+es_95 = expected_shortfall(returns, 0.05)
+print(f"95% Expected Shortfall: {es_95*100:.1f}%")
+print("ES captures how bad the tail really is")
+`} />
+    </div>
+
+
+    <!-- 4. Backtesting -->
+    <h3>Backtesting and model validation</h3>
+    <p>A 95% VaR model should be violated about 5% of the time. Too many violations means the model underestimates risk. Too few means capital is wasted. The <strong>Kupiec test</strong> checks whether the observed violation rate is statistically consistent with the model's confidence level. Regulators use a traffic-light system: green (0&ndash;4 violations in 250 days), yellow (5&ndash;9), red (10+).</p>
+
+    <SchemeRepl client:load initialCode={`; Kupiec backtest: likelihood ratio test for VaR violations
+
+(define (kupiec-lr n violations alpha)
+  ; Expected violation rate = alpha
+  ; Observed violation rate = violations / n
+  (let* ((p-hat (/ violations n))
+         (p0 alpha)
+         ; LR = -2 * ln[(p0^v * (1-p0)^(n-v)) / (p-hat^v * (1-p-hat)^(n-v))]
+         (log-lr (* -2
+                    (- (+ (* violations (log p0))
+                          (* (- n violations) (log (- 1 p0))))
+                       (+ (* violations (log p-hat))
+                          (* (- n violations) (log (- 1 p-hat))))))))
+    log-lr))
+
+; 250 trading days, 95% VaR
+(define n 250)
+(define alpha 0.05)
+
+; Expected: ~12.5 violations
+(display "Expected violations: ") (display (* n alpha)) (newline)
+
+; Test with 8 violations (acceptable)
+(define lr-8 (kupiec-lr n 8 alpha))
+(display "LR stat (8 violations): ") (display lr-8) (newline)
+
+; Test with 20 violations (model failure)
+(define lr-20 (kupiec-lr n 20 alpha))
+(display "LR stat (20 violations): ") (display lr-20) (newline)
+(display "Critical value (chi2, 1df, 5%): 3.84")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Kupiec backtest for VaR model validation
+import math
+
+def kupiec_lr(n, violations, alpha):
+    p_hat = violations / n
+    log_lr = -2 * (
+        (violations * math.log(alpha) + (n - violations) * math.log(1 - alpha))
+        - (violations * math.log(p_hat) + (n - violations) * math.log(1 - p_hat))
+    )
+    return log_lr
+
+n = 250
+alpha = 0.05
+print(f"Expected violations: {n * alpha}")
+
+lr_8 = kupiec_lr(n, 8, alpha)
+print(f"LR stat (8 violations): {lr_8:.3f}")
+
+lr_20 = kupiec_lr(n, 20, alpha)
+print(f"LR stat (20 violations): {lr_20:.3f}")
+print(f"Critical value (chi2, 1df, 5%): 3.84")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-10/">📉 Finance II Ch.10</a> &mdash; credit derivatives create the tail risk VaR tries to measure</li>
+      <li><a href="/reading/finance-2/fin2-12/">📉 Finance II Ch.12</a> &mdash; dynamic portfolio choice uses risk measures to set constraints</li>
+      <li><a href="/reading/probability/prob-05/">🎲 Probability Ch.5</a> &mdash; normal distribution and tail probabilities underpin parametric VaR</li>
+      <li><a href="/reading/statistics/stats-07/">📊 Statistics Ch.7</a> &mdash; hypothesis testing drives the Kupiec backtest</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-10/", label: "Credit Derivatives · 10 of 12" }}
+      next={{ href: "/reading/finance-2/fin2-12/", label: "Dynamic Portfolio Choice · 12 of 12" }}
+    />
+
+  </main>
+</Layout>

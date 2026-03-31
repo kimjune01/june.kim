@@ -1,0 +1,234 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 6 — Data Processing Inequality" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to information theory</a>
+
+    <h1>Data Processing Inequality</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">If X &rarr; Y &rarr; Z is a <a href="https://en.wikipedia.org/wiki/Markov_chain"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Markov chain</a>, then I(X;Z) &le; I(X;Y). <strong>Processing cannot create information.</strong> Every step in a pipeline can only lose information or preserve it, never gain it. Equivalently: functors can't increase information.</p>
+    </div>
+
+    <!-- 1. The chain -->
+    <h3>The Markov chain condition</h3>
+    <p>X &rarr; Y &rarr; Z means Z depends on X only through Y. Given Y, Z is conditionally independent of X. Whatever Y forgets about X is gone forever. No downstream processing of Y can recover it.</p>
+
+    <!-- SVG: Three nodes in a chain with shrinking MI bars -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Node X -->
+        <circle cx="60" cy="60" r="28" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="65" text-anchor="middle" fill="currentColor" font-size="18">X</text>
+        <!-- Arrow X -> Y -->
+        <line x1="88" y1="60" x2="172" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="167,56 177,60 167,64" fill="currentColor"/>
+        <text x="130" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">channel</text>
+        <!-- Node Y -->
+        <circle cx="200" cy="60" r="28" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="200" y="65" text-anchor="middle" fill="currentColor" font-size="18">Y</text>
+        <!-- Arrow Y -> Z -->
+        <line x1="228" y1="60" x2="312" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="307,56 317,60 307,64" fill="currentColor"/>
+        <text x="270" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">processing</text>
+        <!-- Node Z -->
+        <circle cx="340" cy="60" r="28" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="340" y="65" text-anchor="middle" fill="currentColor" font-size="18">Z</text>
+
+        <!-- Mutual information bars below -->
+        <!-- I(X;Y) bar — tall -->
+        <rect x="100" y="110" width="60" height="50" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+        <text x="130" y="140" text-anchor="middle" fill="#60a5fa" font-size="11">I(X;Y)</text>
+
+        <!-- I(X;Z) bar — shorter -->
+        <rect x="240" y="130" width="60" height="30" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+        <text x="270" y="150" text-anchor="middle" fill="#60a5fa" font-size="11">I(X;Z)</text>
+
+        <!-- Inequality -->
+        <text x="195" y="145" text-anchor="middle" fill="currentColor" font-size="16">&ge;</text>
+
+        <!-- Caption -->
+        <text x="230" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">information about X can only shrink along the chain</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Data Processing Inequality: I(X;Z) <= I(X;Y) when X->Y->Z
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; X = fair coin: H T with equal probability
+; Y = noisy copy: flips X with 10% probability
+; Z = very noisy copy of Y: flips Y with 30% probability
+
+; Joint P(X,Y): rows = X, cols = Y
+; P(X=H) = 0.5
+;   P(Y=H|X=H) = 0.9, P(Y=T|X=H) = 0.1
+; P(X=T) = 0.5
+;   P(Y=H|X=T) = 0.1, P(Y=T|X=T) = 0.9
+
+(define pxy '(0.45 0.05 0.05 0.45))  ; HH HT TH TT
+(define px  '(0.5 0.5))
+(define py  '(0.5 0.5))
+
+; I(X;Y) = H(X) + H(Y) - H(X,Y)
+(define ixy (+ (entropy px) (entropy py) (- (entropy pxy))))
+
+; Z = noisy copy of Y (30% flip)
+; P(X,Z) marginalizing over Y
+(define pxz '(0.38 0.12 0.12 0.38))  ; computed from chain
+(define pz  '(0.5 0.5))
+(define ixz (+ (entropy px) (entropy pz) (- (entropy pxz))))
+
+(display "I(X;Y) = ") (display ixy) (newline)
+(display "I(X;Z) = ") (display ixz) (newline)
+(display "I(X;Z) <= I(X;Y)? ") (display (<= ixz ixy))
+; Processing Y->Z lost more information about X.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+# X = fair coin, Y = 10% noise, Z = 30% noise on Y
+pxy = [0.45, 0.05, 0.05, 0.45]
+pxz = [0.38, 0.12, 0.12, 0.38]
+px = py = pz = [0.5, 0.5]
+
+ixy = entropy(px) + entropy(py) - entropy(pxy)
+ixz = entropy(px) + entropy(pz) - entropy(pxz)
+
+print(f"I(X;Y) = {ixy:.4f}")
+print(f"I(X;Z) = {ixz:.4f}")
+print(f"I(X;Z) <= I(X;Y)? {ixz <= ixy}")
+`} />
+    </div>
+
+    <!-- 2. Why it matters -->
+    <h3>Why it matters</h3>
+    <p>DPI is the reason compression and summarization are lossy. If your pipeline is X &rarr; Y &rarr; Z, then Z cannot know more about X than Y does. No clever algorithm applied to Y can recover what Y already lost. This bounds every learning algorithm, every codec, every statistical estimator. It also constrains <a href="https://june.kim/embedding-pipe"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>multi-stage embedding pipelines</a>: each stage in the chain can only preserve or destroy information, never create it.</p>
+
+    <SchemeRepl client:load initialCode={`; DPI in action: a pipeline of lossy steps
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; Original signal: 8 equiprobable symbols = 3 bits
+(define h0 (entropy '(0.125 0.125 0.125 0.125
+                      0.125 0.125 0.125 0.125)))
+
+; Step 1: quantize to 4 levels (merge pairs)
+(define h1 (entropy '(0.25 0.25 0.25 0.25)))
+
+; Step 2: quantize to 2 levels (merge pairs again)
+(define h2 (entropy '(0.5 0.5)))
+
+; Step 3: threshold to 1 level (everything maps to same bin)
+(define h3 (entropy '(1.0)))
+
+(display "H(original) = ") (display h0) (newline)
+(display "H(step 1)   = ") (display h1) (newline)
+(display "H(step 2)   = ") (display h2) (newline)
+(display "H(step 3)   = ") (display h3) (newline)
+; 3 >= 2 >= 1 >= 0. Each step loses bits. None gains.
+`} />
+
+    <!-- 3. Functorial view -->
+    <h3>The functorial perspective</h3>
+    <p>In categorical terms, a deterministic function f : X &rarr; Y is a functor. DPI says this functor cannot increase mutual information. Baez-Fritz-Leinster proved that entropy is the unique such functor. DPI is the axiom that makes this characterization work.</p>
+
+    <SchemeRepl client:load initialCode={`; Functors can't increase information
+; If f: X -> Y is a function (deterministic channel),
+; then H(f(X)) <= H(X).
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; X has 4 outcomes
+(define hx (entropy '(0.1 0.2 0.3 0.4)))
+
+; f maps outcomes: 1->A, 2->A, 3->B, 4->B (merging)
+; P(A) = 0.1+0.2 = 0.3, P(B) = 0.3+0.4 = 0.7
+(define hfx (entropy '(0.3 0.7)))
+
+(display "H(X)    = ") (display hx) (newline)
+(display "H(f(X)) = ") (display hfx) (newline)
+(display "Lost    = ") (display (- hx hfx)) (newline)
+(display "H(f(X)) <= H(X)? ") (display (<= hfx hx))
+; The function f can only destroy information.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+hx = entropy([0.1, 0.2, 0.3, 0.4])
+hfx = entropy([0.3, 0.7])  # f merges 1,2 -> A and 3,4 -> B
+
+print(f"H(X)    = {hx:.4f}")
+print(f"H(f(X)) = {hfx:.4f}")
+print(f"Lost    = {hx - hfx:.4f} bits")
+print(f"Functor can't increase: {hfx <= hx}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">X &rarr; Y &rarr; Z</td><td class="pr-4 text-green-300">chain of channels</td><td class="font-sans">Markov chain</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I(X;Z) &le; I(X;Y)</td><td class="pr-4 text-green-300">(&lt;= ixz ixy)</td><td class="font-sans">Data processing inequality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(f(X)) &le; H(X)</td><td class="pr-4 text-green-300">(&lt;= hfx hx)</td><td class="font-sans">Entropy can't increase under functions</td></tr>
+          <tr><td class="py-2 pr-4">f : X &rarr; Y</td><td class="pr-4 text-green-300">(lambda (x) ...)</td><td class="font-sans">Deterministic channel (functor)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-04/">📡 Mutual information</a> &mdash; the quantity that DPI bounds</li>
+      <li><a href="/reading/information-theory/shannon-07/">📡 Channels and capacity</a> &mdash; DPI constrains what channels can transmit</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> &mdash; DPI is the key axiom in their characterization</li>
+      <li><a href="/reading/panangaden-2009/">🍞 Panangaden 2009</a> &mdash; labelled Markov processes and information flow</li>
+      <li><a href="https://en.wikipedia.org/wiki/Data_processing_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Data processing inequality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Markov_chain"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Markov chain</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use discrete finite distributions. The data processing inequality holds for continuous distributions, Markov kernels, and general measurable spaces. The inequality is tight (equality) when Y is a sufficient statistic for X with respect to Z. Every example computes entropy directly from probability vectors rather than simulating the Markov chain.</p>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-05/", label: "KL Divergence" }} next={{ href: "/reading/information-theory/shannon-07/", label: "Channels" }} />
+
+  </main>
+</Layout>

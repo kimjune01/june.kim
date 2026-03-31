@@ -1,0 +1,159 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.8 — Complexity" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Complexity</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 8 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>P</strong> is the class of problems solvable in polynomial time. <strong>NP</strong> is the class whose solutions can be <em>verified</em> in polynomial time. Whether P = NP is the central open question. The <strong>Cook-Levin theorem</strong> proves that SAT is NP-complete: every NP problem reduces to it in polynomial time.</p>
+    </div>
+
+    <!-- SVG: P inside NP -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- NP (outer) -->
+        <ellipse cx="200" cy="140" rx="170" ry="120" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="268" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.6">NP</text>
+        <!-- P (inner) -->
+        <ellipse cx="160" cy="140" rx="90" ry="70" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="140" y="145" text-anchor="middle" fill="#34d399" font-size="13" fill-opacity="0.7">P</text>
+        <!-- P examples -->
+        <text x="140" y="165" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">sorting, shortest path</text>
+        <text x="140" y="178" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">matching, primality</text>
+        <!-- NP-complete (on boundary) -->
+        <ellipse cx="310" cy="140" rx="50" ry="60" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="4,3"/>
+        <text x="310" y="130" text-anchor="middle" fill="#ef4444" font-size="11" fill-opacity="0.6">NP-complete</text>
+        <text x="310" y="148" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">SAT, 3-COL</text>
+        <text x="310" y="163" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">TSP, Clique</text>
+        <!-- Question mark -->
+        <text x="235" y="95" text-anchor="middle" fill="currentColor" font-size="18" fill-opacity="0.25">P = NP ?</text>
+      </svg>
+    </div>
+
+    <!-- P and NP -->
+    <h3>P: efficiently solvable</h3>
+    <p><strong>P</strong> contains problems where an algorithm runs in O(n<sup>k</sup>) time for some constant k. Sorting, shortest path, matching, primality testing: all in P.</p>
+
+    <h3>NP: efficiently verifiable</h3>
+    <p><strong>NP</strong> contains problems where a proposed solution (certificate) can be <em>checked</em> in polynomial time. Finding a solution may be hard, but verifying one is fast. Every problem in P is also in NP (just solve it and check).</p>
+
+    <SchemeRepl client:load initialCode={`; SAT: given a boolean formula, is there an assignment
+; that makes it true?
+; Checking a given assignment is easy (polynomial).
+; Finding one may require exponential search.
+
+; Formula: (x1 OR x2) AND (NOT x1 OR x3) AND (NOT x2 OR NOT x3)
+; This is in conjunctive normal form (CNF).
+
+(define (eval-clause clause assignment)
+  ; clause is list of (var . positive?)
+  (define (eval-lit lit)
+    (let ((val (list-ref assignment (car lit))))
+      (if (cdr lit) val (not val))))
+  (not (null? (filter eval-lit clause))))
+
+(define (eval-cnf clauses assignment)
+  (null? (filter (lambda (c) (not (eval-clause c assignment)))
+                 clauses)))
+
+; (x1 OR x2) AND (NOT x1 OR x3) AND (NOT x2 OR NOT x3)
+(define formula
+  (list
+    (list (cons 0 #t) (cons 1 #t))        ; x1 OR x2
+    (list (cons 0 #f) (cons 2 #t))        ; NOT x1 OR x3
+    (list (cons 1 #f) (cons 2 #f))))      ; NOT x2 OR NOT x3
+
+; Try all 8 assignments for 3 variables
+(define (try-all n)
+  (if (= n 8) (display "No satisfying assignment found.")
+      (let ((a (list (> (modulo n 4) 1)
+                     (> (modulo (modulo n 4) 2) 0)
+                     (odd? n))))
+        (if (eval-cnf formula a)
+            (begin (display "SAT! Assignment: ") (display a))
+            (try-all (+ n 1))))))
+
+(display "Formula: (x1|x2) & (!x1|x3) & (!x2|!x3)") (newline)
+(try-all 0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# SAT solver: brute force all assignments
+from itertools import product
+
+# (x1 OR x2) AND (NOT x1 OR x3) AND (NOT x2 OR NOT x3)
+def check(x1, x2, x3):
+    return ((x1 or x2) and
+            (not x1 or x3) and
+            (not x2 or not x3))
+
+print("Formula: (x1|x2) & (!x1|x3) & (!x2|!x3)")
+for x1, x2, x3 in product([False, True], repeat=3):
+    if check(x1, x2, x3):
+        print("SAT! x1=" + str(x1) + ", x2=" + str(x2) + ", x3=" + str(x3))
+        break
+`} />
+    </div>
+
+
+    <!-- Polynomial-time reductions -->
+    <h3>Polynomial-time reductions</h3>
+    <p>Problem A <strong>reduces</strong> to problem B (A &le;<sub>P</sub> B) if instances of A can be transformed to instances of B in polynomial time. If B is in P and A reduces to B, then A is in P too. Reductions let us compare hardness.</p>
+
+
+    <!-- NP-completeness -->
+    <h3>NP-completeness</h3>
+    <p>A problem is <strong>NP-complete</strong> if it is in NP and every NP problem reduces to it. NP-complete problems are the hardest in NP. If any one of them is in P, then P = NP and all of them are in P.</p>
+
+    <!-- Cook-Levin -->
+    <h3>Cook-Levin theorem</h3>
+    <p>The <strong><a href="https://en.wikipedia.org/wiki/Cook%E2%80%93Levin_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cook-Levin theorem</a></strong> (1971) proves that SAT (boolean satisfiability) is NP-complete. The proof encodes the computation of any NP Turing machine as a boolean formula. Every step, state, and tape cell becomes a variable. The formula is satisfiable if and only if the machine accepts. Since any NP problem can be encoded this way, SAT is the universal NP-complete problem.</p>
+
+    <SchemeRepl client:load initialCode={`; The zoo of NP-complete problems: all are equivalent
+; under polynomial-time reductions.
+;
+; SAT (Cook-Levin, 1971)
+;   |-- 3-SAT (restrict to 3 literals per clause)
+;   |     |-- 3-COLORING (color graph with 3 colors)
+;   |     |-- CLIQUE (find complete subgraph of size k)
+;   |     |-- VERTEX-COVER
+;   |     |-- SUBSET-SUM
+;   |           |-- KNAPSACK
+;   |
+;   |-- CIRCUIT-SAT
+;         |-- HAMILTONIAN-PATH
+;               |-- TSP (Traveling Salesman)
+
+(display "If you solve one in polynomial time,") (newline)
+(display "you solve them ALL in polynomial time.") (newline)
+(display "That is what NP-completeness means.") (newline)
+(newline)
+(display "Known NP-complete problems: ~10,000+") (newline)
+(display "Known to be in P: 0 of them (so far).")
+`} />
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-10/">⚙ Algorithms Ch.10</a> — NP-completeness in the algorithms context</li>
+      <li><a href="/reading/discrete-math/dm-03/">🔢 Discrete Math Ch.3</a> — propositional logic and SAT</li>
+      <li><a href="/reading/algorithms/algo-01/">⚙ Algorithms Ch.1</a> — complexity classes in practice: O(n log n) sorting, O(n²) dynamic programming</li>
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Discrete Math Ch.4</a> — graph theory: Hamilton path is the canonical NP-complete problem</li>
+      <li><a href="/reading/cryptography/crypto-01/">🔐 Cryptography Ch.1</a> — cryptographic security assumes P ≠ NP: factoring is believed hard</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-07/", label: "Decidability" }} />
+
+  </main>
+</Layout>

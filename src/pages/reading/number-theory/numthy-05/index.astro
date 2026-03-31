@@ -1,0 +1,171 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Number Theory Ch.5 — Chinese Remainder Theorem" favicon="#">
+  <main>
+
+    <a href="/reading/number-theory/" class="text-sm mb-4 inline-block">&larr; back to Number Theory</a>
+
+    <h1>Chinese Remainder Theorem</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon &middot; Elementary Number Theory &middot; <a href="https://jheffero.w3.uvm.edu/numbertheory/">Ch. 5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">If moduli are pairwise coprime, a system of congruences has a unique solution mod their product. The <strong>Chinese Remainder Theorem</strong> gives a constructive algorithm to find it.</p>
+    </div>
+
+    <!-- SVG: Overlapping cycles -->
+    <h3>Overlapping cycles</h3>
+    <p>Think of CRT as synchronizing clocks with different periods. A cycle of length 3 and a cycle of length 5 meet every 15 steps. The meeting point is the unique solution.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="200" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Cycles of length 3 and 5 synchronize at position 2</text>
+        <!-- Cycle of 3 -->
+        <text x="10" y="55" fill="currentColor" font-size="10" fill-opacity="0.4">mod 3:</text>
+        <text x="70" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="100" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <rect x="118" y="38" width="24" height="24" rx="3" fill="#60a5fa" fill-opacity="0.2"/>
+        <text x="130" y="55" text-anchor="middle" fill="#60a5fa" font-size="12">2</text>
+        <text x="160" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="190" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <rect x="208" y="38" width="24" height="24" rx="3" fill="#60a5fa" fill-opacity="0.2"/>
+        <text x="220" y="55" text-anchor="middle" fill="#60a5fa" font-size="12">2</text>
+        <text x="250" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="280" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <rect x="298" y="38" width="24" height="24" rx="3" fill="#60a5fa" fill-opacity="0.2"/>
+        <text x="310" y="55" text-anchor="middle" fill="#60a5fa" font-size="12">2</text>
+        <text x="340" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="370" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <!-- Cycle of 5 -->
+        <text x="10" y="95" fill="currentColor" font-size="10" fill-opacity="0.4">mod 5:</text>
+        <text x="70" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="100" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <rect x="118" y="78" width="24" height="24" rx="3" fill="#f59e0b" fill-opacity="0.2"/>
+        <text x="130" y="95" text-anchor="middle" fill="#f59e0b" font-size="12">2</text>
+        <text x="160" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">3</text>
+        <text x="190" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">4</text>
+        <text x="220" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <text x="250" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">1</text>
+        <rect x="268" y="78" width="24" height="24" rx="3" fill="#f59e0b" fill-opacity="0.2"/>
+        <text x="280" y="95" text-anchor="middle" fill="#f59e0b" font-size="12">2</text>
+        <text x="310" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">3</text>
+        <text x="340" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">4</text>
+        <text x="370" y="95" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">0</text>
+        <!-- Position labels -->
+        <text x="70" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">0</text>
+        <text x="100" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">1</text>
+        <text x="130" y="125" text-anchor="middle" fill="#facc15" font-size="10">2</text>
+        <text x="160" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">3</text>
+        <text x="190" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">4</text>
+        <text x="220" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">5</text>
+        <text x="250" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">6</text>
+        <text x="280" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">7</text>
+        <text x="310" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">8</text>
+        <text x="340" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">9</text>
+        <text x="370" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">10</text>
+        <!-- Vertical highlight at position 2 -->
+        <line x1="130" y1="30" x2="130" y2="120" stroke="#facc15" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- Constructive algorithm -->
+    <h3>The algorithm</h3>
+    <p>Given x &#x2261; a1 (mod n1), x &#x2261; a2 (mod n2), ..., with pairwise coprime ni: compute N = n1 n2 ... nk. For each i, let Ni = N/ni. Find yi such that Ni yi &#x2261; 1 (mod ni) using extended GCD. Then x &#x2261; sum of ai Ni yi (mod N).</p>
+
+    <SchemeRepl client:load initialCode={`; Chinese Remainder Theorem
+(define (extended-gcd a b)
+  (if (= b 0)
+      (list a 1 0)
+      (let* ((result (extended-gcd b (modulo a b)))
+             (g (car result))
+             (x1 (cadr result))
+             (y1 (caddr result)))
+        (list g y1 (- x1 (* (quotient a b) y1))))))
+
+(define (crt remainders moduli)
+  (let* ((big-n (apply * moduli))
+         (terms
+          (map (lambda (ai ni)
+                 (let* ((big-ni (quotient big-n ni))
+                        (result (extended-gcd big-ni ni))
+                        (yi (cadr result)))
+                   (* ai big-ni yi)))
+               remainders moduli)))
+    (modulo (apply + terms) big-n)))
+
+; x = 2 mod 3, x = 3 mod 5
+(display "x = 2 mod 3, x = 3 mod 5: x = ")
+(display (crt (list 2 3) (list 3 5))) (newline)
+; Answer: 8.  8 mod 3 = 2, 8 mod 5 = 3
+
+; x = 1 mod 3, x = 2 mod 5, x = 3 mod 7
+(display "x = 1 mod 3, x = 2 mod 5, x = 3 mod 7: x = ")
+(display (crt (list 1 2 3) (list 3 5 7)))
+; Answer: 52.  52 mod 3 = 1, 52 mod 5 = 2, 52 mod 7 = 3
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Chinese Remainder Theorem
+def extended_gcd(a, b):
+    if b == 0: return a, 1, 0
+    g, x, y = extended_gcd(b, a % b)
+    return g, y, x - (a // b) * y
+
+def crt(remainders, moduli):
+    N = 1
+    for n in moduli: N *= n
+    x = 0
+    for ai, ni in zip(remainders, moduli):
+        Ni = N // ni
+        _, yi, _ = extended_gcd(Ni, ni)
+        x += ai * Ni * yi
+    return x % N
+
+print(f"x=2 mod 3, x=3 mod 5: x = {crt([2,3], [3,5])}")
+print(f"x=1 mod 3, x=2 mod 5, x=3 mod 7: x = {crt([1,2,3], [3,5,7])}")
+`} />
+    </div>
+
+
+    <!-- Applications -->
+    <h3>Applications</h3>
+    <p>CRT speeds up RSA by splitting computation mod p and mod q separately (smaller numbers, then recombine). It also explains why calendar cycles repeat: the day-of-week cycle (7) and day-of-month cycle interact via CRT.</p>
+
+    <SchemeRepl client:load initialCode={`; Application: what day is it?
+; A day is simultaneously at position d mod 7 (weekday)
+; and d mod 30 (roughly, day of month).
+; If today is Wednesday (day 3) and the 17th:
+; what is the next day that is both Wednesday and the 17th?
+; CRT: x = 3 mod 7, x = 17 mod 30.
+
+(define (extended-gcd a b)
+  (if (= b 0) (list a 1 0)
+      (let* ((r (extended-gcd b (modulo a b)))
+             (g (car r)) (x (cadr r)) (y (caddr r)))
+        (list g y (- x (* (quotient a b) y))))))
+
+(define (crt remainders moduli)
+  (let* ((big-n (apply * moduli))
+         (terms (map (lambda (ai ni)
+                       (let* ((big-ni (quotient big-n ni))
+                              (r (extended-gcd big-ni ni))
+                              (yi (cadr r)))
+                         (* ai big-ni yi)))
+                     remainders moduli)))
+    (modulo (apply + terms) big-n)))
+
+(let ((day (crt (list 3 17) (list 7 30))))
+  (display "Next Wednesday the 17th: day ")
+  (display day)
+  (display " in a 210-day cycle"))
+`} />
+
+
+    <PrevNext prev={{ href: "/reading/number-theory/numthy-04/", label: "Euler and Fermat" }} next={{ href: "/reading/number-theory/numthy-06/", label: "Quadratic Residues" }} />
+
+  </main>
+</Layout>

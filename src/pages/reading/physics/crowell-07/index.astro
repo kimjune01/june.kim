@@ -1,0 +1,269 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.7 — Magnetism" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Magnetism</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 7 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Moving charges create <strong>magnetic fields</strong>. Magnetic forces are always perpendicular to velocity, so they change direction without changing speed. Ampere's law relates the field around a wire to the current through it.</p>
+    </div>
+
+    <!-- 1. Magnetic field -->
+    <h3>The magnetic field</h3>
+    <p>Electric charges at rest create electric fields. Electric charges in motion also create <strong>magnetic fields</strong>. The magnetic field B is a vector field measured in teslas (T). Unlike electric field lines that start and end on charges, magnetic field lines always form closed loops.</p>
+
+    <!-- SVG: Magnetic field lines around a wire -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 300" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Wire cross-section (current coming out of page) -->
+        <circle cx="150" cy="150" r="10" fill="#60a5fa" fill-opacity="0.6"/>
+        <circle cx="150" cy="150" r="3" fill="#60a5fa"/>
+        <!-- Dot indicating current out of page -->
+        <text x="150" y="155" text-anchor="middle" fill="white" font-size="14" font-weight="bold">&#x2022;</text>
+        <!-- Concentric field lines -->
+        <circle cx="150" cy="150" r="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="150" cy="150" r="70" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="150" cy="150" r="100" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <circle cx="150" cy="150" r="130" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Direction arrows on inner ring (counterclockwise = right-hand rule) -->
+        <polygon points="190,148 190,152 196,150" fill="currentColor" fill-opacity="0.5"/>
+        <polygon points="110,148 110,152 104,150" fill="currentColor" fill-opacity="0.5"/>
+        <polygon points="148,110 152,110 150,104" fill="currentColor" fill-opacity="0.5"/>
+        <polygon points="148,190 152,190 150,196" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Direction arrows on middle ring -->
+        <polygon points="220,148 220,152 226,150" fill="currentColor" fill-opacity="0.4"/>
+        <polygon points="80,148 80,152 74,150" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="150" y="25" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">B field lines (closed loops)</text>
+        <text x="150" y="280" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Current I out of page</text>
+        <text x="210" y="130" fill="currentColor" font-size="12" fill-opacity="0.4" font-style="italic">B</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Magnetic field of a long straight wire
+; B = mu_0 * I / (2 * pi * r)
+; mu_0 = 4*pi*1e-7 T*m/A (permeability of free space)
+
+(define pi 3.14159265)
+(define mu0 (* 4 pi 1e-7))
+
+(define (B-wire I r)
+  (/ (* mu0 I) (* 2 pi r)))
+
+; 10 A current, field at various distances
+(display "B at 1 cm: ")
+(display (B-wire 10 0.01))
+(display " T") (newline)
+
+(display "B at 5 cm: ")
+(display (B-wire 10 0.05))
+(display " T") (newline)
+
+(display "B at 10 cm: ")
+(display (B-wire 10 0.10))
+(display " T") (newline)
+
+; Field falls off as 1/r
+(display "Ratio B(1cm)/B(10cm): ")
+(display (/ (B-wire 10 0.01) (B-wire 10 0.10)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+mu0 = 4 * math.pi * 1e-7
+
+def B_wire(I, r):
+    return mu0 * I / (2 * math.pi * r)
+
+for r in [0.01, 0.05, 0.10]:
+    print(f"B at {r*100:.0f} cm: {B_wire(10, r):.6e} T")
+
+print(f"Ratio B(1cm)/B(10cm): {B_wire(10, 0.01)/B_wire(10, 0.10):.1f}")
+`} />
+    </div>
+
+
+    <!-- 2. Lorentz force -->
+    <h3>The Lorentz force</h3>
+    <p>A charge q moving with velocity v through a magnetic field B feels a force <strong>F = qv x B</strong>. The cross product means the force is perpendicular to both the velocity and the field. A positive charge moving right in a field pointing into the page curves upward. This perpendicularity means magnetic forces do no work: they steer, but never speed up or slow down.</p>
+
+    <SchemeRepl client:load initialCode={`; Lorentz force: F = q * v * B * sin(theta)
+; For a charge moving perpendicular to B (theta = 90 deg):
+; F = qvB, and the charge moves in a circle.
+; Radius of circular motion: r = mv / (qB)
+
+(define (lorentz-force q v B theta)
+  (* q v B (sin theta)))
+
+(define (cyclotron-radius m v q B)
+  (/ (* m v) (* q B)))
+
+; Proton in Earth's magnetic field (~50 microT)
+(define q-proton 1.6e-19)    ; C
+(define m-proton 1.67e-27)   ; kg
+(define v-proton 1e6)        ; m/s (1000 km/s)
+(define B-earth 50e-6)       ; T
+
+(define F (lorentz-force q-proton v-proton B-earth (/ 3.14159 2)))
+(display "Force on proton: ")
+(display F) (display " N") (newline)
+
+(define r (cyclotron-radius m-proton v-proton q-proton B-earth))
+(display "Cyclotron radius: ")
+(display r) (display " m") (newline)
+(display "That's about ")
+(display (/ r 1000))
+(display " km")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def lorentz_force(q, v, B, theta):
+    return q * v * B * math.sin(theta)
+
+def cyclotron_radius(m, v, q, B):
+    return m * v / (q * B)
+
+q = 1.6e-19     # proton charge (C)
+m = 1.67e-27    # proton mass (kg)
+v = 1e6         # speed (m/s)
+B = 50e-6       # Earth's field (T)
+
+F = lorentz_force(q, v, B, math.pi/2)
+r = cyclotron_radius(m, v, q, B)
+
+print(f"Force: {F:.2e} N")
+print(f"Cyclotron radius: {r:.1f} m ({r/1000:.1f} km)")
+`} />
+    </div>
+
+
+    <!-- 3. Ampere's law -->
+    <h3>Ampere's law</h3>
+    <p>Ampere's law says the line integral of B around any closed loop equals mu_0 times the current passing through the loop. In symbols: the integral of B dot dl around a closed path = mu_0 * I_enclosed. This is the magnetic analog of Gauss's law. It's most useful when symmetry lets you pull B out of the integral.</p>
+
+    <SchemeRepl client:load initialCode={`; Ampere's law: integral of B . dl = mu0 * I_enclosed
+; For a circular Amperian loop around a wire:
+;   B * 2*pi*r = mu0 * I
+;   B = mu0*I / (2*pi*r)  -- same result as before!
+
+(define pi 3.14159265)
+(define mu0 (* 4 pi 1e-7))
+
+; Verify: line integral of B around a circle of radius r
+(define (ampere-check I r)
+  (let ((B (/ (* mu0 I) (* 2 pi r))))
+    (* B 2 pi r)))
+
+; Should equal mu0 * I regardless of r
+(define I 5.0)
+(display "mu0 * I = ") (display (* mu0 I)) (newline)
+(display "Loop integral (r=0.01): ") (display (ampere-check I 0.01)) (newline)
+(display "Loop integral (r=0.10): ") (display (ampere-check I 0.10)) (newline)
+(display "Loop integral (r=1.00): ") (display (ampere-check I 1.00)) (newline)
+(display "All equal: Ampere's law confirmed.")
+`} />
+
+
+    <!-- 4. Solenoids -->
+    <h3>Solenoids</h3>
+    <p>A <strong>solenoid</strong> is a coil of wire. Inside a long solenoid the field is uniform and parallel to the axis: B = mu_0 * n * I, where n is the number of turns per meter. Outside, the field is nearly zero. Solenoids are how we make controllable, uniform magnetic fields.</p>
+
+    <SchemeRepl client:load initialCode={`; Solenoid: B = mu0 * n * I
+; n = N/L (turns per meter)
+
+(define pi 3.14159265)
+(define mu0 (* 4 pi 1e-7))
+
+(define (B-solenoid n I)
+  (* mu0 n I))
+
+; 500 turns over 0.2 m, carrying 3 A
+(define N 500)
+(define L 0.2)
+(define n (/ N L))
+(define I 3.0)
+
+(display "Turns per meter: ") (display n) (newline)
+(display "B inside solenoid: ")
+(display (B-solenoid n I))
+(display " T") (newline)
+
+; Compare to Earth's field
+(display "Times stronger than Earth's field: ")
+(display (/ (B-solenoid n I) 50e-6))
+`} />
+
+
+    <!-- 5. Magnetic flux -->
+    <h3>Magnetic flux</h3>
+    <p><strong>Magnetic flux</strong> through a surface is the integral of B dot dA. For a uniform field through a flat loop: Phi = B * A * cos(theta). Flux is measured in webers (Wb = T * m^2). Gauss's law for magnetism says the total flux through any closed surface is zero. There are no magnetic monopoles: every field line that enters a surface also exits.</p>
+
+    <SchemeRepl client:load initialCode={`; Magnetic flux: Phi = B * A * cos(theta)
+; Gauss's law for magnetism: total flux through closed surface = 0
+
+(define pi 3.14159265)
+
+(define (magnetic-flux B A theta)
+  (* B A (cos theta)))
+
+; Circular loop of radius 5 cm in a 0.1 T field
+(define r 0.05)
+(define A (* pi r r))
+(define B 0.1)
+
+; Flux at various angles
+(display "Flux at 0 deg (face-on): ")
+(display (magnetic-flux B A 0))
+(display " Wb") (newline)
+
+(display "Flux at 45 deg: ")
+(display (magnetic-flux B A (/ pi 4)))
+(display " Wb") (newline)
+
+(display "Flux at 90 deg (edge-on): ")
+(display (magnetic-flux B A (/ pi 2)))
+(display " Wb") (newline)
+
+; At 90 degrees, no field lines pass through
+(display "Edge-on flux is zero: ")
+(display (< (abs (magnetic-flux B A (/ pi 2))) 1e-15))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-14/">Calculus Ch.14</a> — line integrals: the math behind Ampere's law</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Magnetic_field"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Magnetic field</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lorentz_force"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lorentz force</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Amp%C3%A8re%27s_circuital_law"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ampere's circuital law</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Solenoid"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Solenoid</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All formulas assume SI units. The cross product in the Lorentz force is computed as a scalar magnitude here (q*v*B*sin theta) since our Scheme REPL lacks vector operations. Crowell develops the vector form in detail. The solenoid formula assumes an ideal infinite solenoid; real solenoids have fringe fields at the ends.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-06/", label: "Electricity" }} next={{ href: "/reading/physics/crowell-08/", label: "Electromagnetism" }} />
+
+  </main>
+</Layout>

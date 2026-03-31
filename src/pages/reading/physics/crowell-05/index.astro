@@ -1,0 +1,187 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.5 — Waves" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Waves</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Waves <strong>superpose</strong>: two waves in the same place add up. This gives <strong>interference</strong> (constructive and destructive), <strong>standing waves</strong> (nodes that don't move), <strong>Fourier decomposition</strong> (any wave is a sum of sines), and <strong>resonance</strong> (drive at the natural frequency and the amplitude explodes).</p>
+    </div>
+
+    <!-- SVG: Two waves superposing -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Wave 1 -->
+        <text x="15" y="40" fill="#60a5fa" font-size="10" fill-opacity="0.6">wave 1</text>
+        <path d="M 60 45 Q 85 20 110 45 Q 135 70 160 45 Q 185 20 210 45 Q 235 70 260 45 Q 285 20 310 45 Q 335 70 360 45" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Wave 2 -->
+        <text x="15" y="95" fill="#34d399" font-size="10" fill-opacity="0.6">wave 2</text>
+        <path d="M 60 100 Q 95 75 130 100 Q 165 125 200 100 Q 235 75 270 100 Q 305 125 340 100" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Plus sign -->
+        <text x="30" y="130" fill="currentColor" font-size="14" fill-opacity="0.3">+</text>
+        <!-- Equals line -->
+        <line x1="50" y1="140" x2="370" y2="140" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+
+        <!-- Superposition (sum) -->
+        <text x="15" y="170" fill="#f59e0b" font-size="10" fill-opacity="0.6">sum</text>
+        <path d="M 60 175 Q 75 140 90 155 Q 105 170 120 150 Q 135 130 150 160 Q 165 190 180 165 Q 195 140 210 160 Q 225 180 240 155 Q 255 130 270 160 Q 285 190 300 170 Q 315 150 330 165 Q 345 180 360 170" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.6"/>
+
+        <!-- Caption -->
+        <text x="200" y="215" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Superposition: the sum of two waves is a wave.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Superposition -->
+    <h3>Superposition</h3>
+    <p>When two waves overlap, the displacement at each point is the sum of the individual displacements. This is the superposition principle, and it holds for all linear wave equations. Sound waves in air, waves on a string, electromagnetic waves: they all superpose.</p>
+
+    <SchemeRepl client:load initialCode={`; Superposition: y_total(x,t) = y1(x,t) + y2(x,t)
+
+(define pi 3.14159265)
+
+(define (wave1 x t)
+  (sin (* 2 pi (- (/ x 1.0) (* 2 t)))))
+
+(define (wave2 x t)
+  (* 0.7 (sin (* 2 pi (- (/ x 0.8) (* 2.5 t))))))
+
+(define (superposition x t)
+  (+ (wave1 x t) (wave2 x t)))
+
+; Sample at t=0, different positions
+(display "x=0.0: ") (display (round (* 100 (superposition 0.0 0)))) (newline)
+(display "x=0.2: ") (display (round (* 100 (superposition 0.2 0)))) (newline)
+(display "x=0.4: ") (display (round (* 100 (superposition 0.4 0)))) (newline)
+(display "x=0.6: ") (display (round (* 100 (superposition 0.6 0)))) (newline)
+(display "x=0.8: ") (display (round (* 100 (superposition 0.8 0)))) (newline)
+(display "x=1.0: ") (display (round (* 100 (superposition 1.0 0)))) (newline)
+(display "(values are 100x displacement)")
+`} />
+
+
+    <!-- 2. Interference -->
+    <h3>Interference</h3>
+    <p><strong>Constructive</strong> interference: waves in phase add to a bigger wave. <strong>Destructive</strong> interference: waves half a wavelength apart cancel. Noise-cancelling headphones emit a wave exactly out of phase with ambient noise.</p>
+
+    <SchemeRepl client:load initialCode={`; Constructive and destructive interference
+(define pi 3.14159265)
+
+(define (wave amp freq phase x)
+  (* amp (sin (+ (* 2 pi freq x) phase))))
+
+; Two waves, same frequency
+(define A 1) (define f 1)
+
+; Constructive: same phase
+(define (constructive x)
+  (+ (wave A f 0 x) (wave A f 0 x)))
+
+; Destructive: phase difference = pi
+(define (destructive x)
+  (+ (wave A f 0 x) (wave A f pi x)))
+
+(display "Constructive (in phase):") (newline)
+(display "  x=0.25: ") (display (constructive 0.25)) (newline)
+
+(display "Destructive (out of phase):") (newline)
+(display "  x=0.25: ") (display (round (* 1000 (destructive 0.25)))) (display "/1000") (newline)
+; Should be zero (or very close)
+
+(display "Peak constructive amplitude: 2A = ")
+(display (constructive 0.25))
+`} />
+
+
+    <!-- 3. Standing waves -->
+    <h3>Standing waves and resonance</h3>
+    <p>A standing wave is two traveling waves going in opposite directions. The nodes never move; the antinodes oscillate maximally. A guitar string fixed at both ends can only sustain wavelengths that fit: lambda = 2L/n. These are the harmonics. Driving a system at its resonant frequency pumps energy in efficiently.</p>
+
+    <SchemeRepl client:load initialCode={`; Standing waves on a string of length L
+; Allowed wavelengths: lambda_n = 2L/n
+; Frequencies: f_n = n * v / (2L)
+
+(define L 0.65)  ; guitar string, meters
+(define v 250)   ; wave speed, m/s
+
+(define (harmonic-freq n) (/ (* n v) (* 2 L)))
+(define (harmonic-wavelength n) (/ (* 2 L) n))
+
+(display "Guitar string harmonics (L=0.65m, v=250m/s):") (newline)
+(let loop ((n 1))
+  (if (> n 6) (newline)
+    (begin
+      (display "  n=") (display n)
+      (display "  lambda=") (display (round (* 1000 (harmonic-wavelength n)))) (display "mm")
+      (display "  f=") (display (round (harmonic-freq n))) (display "Hz")
+      (newline)
+      (loop (+ n 1)))))
+(display "Fundamental (n=1) is the pitch you hear.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Standing wave harmonics
+L, v = 0.65, 250  # m, m/s
+
+print("Guitar string harmonics:")
+for n in range(1, 7):
+    lam = 2*L/n
+    f = n*v/(2*L)
+    print(f"  n={n}  lambda={lam*1000:.0f}mm  f={f:.0f}Hz")
+`} />
+    </div>
+
+
+    <!-- 4. Fourier -->
+    <h3>Fourier decomposition</h3>
+    <p>Any periodic wave can be written as a sum of sines and cosines. A square wave is an infinite series of odd harmonics. <a href="https://en.wikipedia.org/wiki/Fourier_analysis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fourier analysis</a> is the reason we can separate instruments in a chord: each instrument has a different harmonic spectrum. The math is the same whether the wave is sound, light, or a quantum wavefunction.</p>
+
+    <SchemeRepl client:load initialCode={`; Fourier series: square wave from odd harmonics
+; f(x) = (4/pi) * sum_{n=1,3,5,...} sin(n*x)/n
+
+(define pi 3.14159265)
+
+(define (square-wave-approx x n-terms)
+  (let loop ((n 1) (sum 0) (count 0))
+    (if (>= count n-terms) (* (/ 4 pi) sum)
+      (loop (+ n 2)
+            (+ sum (/ (sin (* n x)) n))
+            (+ count 1)))))
+
+(define x (/ pi 4))  ; sample point
+(display "Square wave at x=pi/4:") (newline)
+(display "  1 term:   ") (display (square-wave-approx x 1)) (newline)
+(display "  3 terms:  ") (display (square-wave-approx x 3)) (newline)
+(display "  10 terms: ") (display (square-wave-approx x 10)) (newline)
+(display "  50 terms: ") (display (square-wave-approx x 50)) (newline)
+(display "Converges to 1.0 (the square wave value).")
+`} />
+
+
+    <!-- Cross-links -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/boelkins-15/">&#x222B; Calculus Ch. 15</a> &mdash; Stokes' theorem connects wave equations to boundary conditions</li>
+      <li><a href="/reading/physics/crowell-04/">&#x2190; Ch. 4: Thermodynamics</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-04/", label: "Thermodynamics" }} next={{ href: "/reading/physics/crowell-06/", label: "Electricity" }} />
+
+  </main>
+</Layout>

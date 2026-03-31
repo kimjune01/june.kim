@@ -1,0 +1,118 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.3 — PID Control" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>PID Control</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/PID_controller"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>PID controller</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>PID controller</strong> computes three terms from the error signal: proportional (present), integral (past), derivative (future). Tuning the three gains trades off speed, stability, and steady-state accuracy. Most industrial controllers are PID.</p>
+    </div>
+
+    <h3>The three terms</h3>
+    <p><strong>P (proportional)</strong>: output proportional to the current error. Large error, large correction. But P alone leaves a steady-state offset: the system settles near but not at the setpoint. <strong>I (integral)</strong>: output proportional to the accumulated error over time. Eliminates the offset but can cause overshoot and oscillation. <strong>D (derivative)</strong>: output proportional to the rate of change of error. Damps oscillation by anticipating where the error is heading. Too much D amplifies noise.</p>
+
+    <!-- SVG: Three response curves -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="190" x2="420" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="15" x2="50" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="420" y="205" fill="currentColor" font-size="11" fill-opacity="0.4">t</text>
+        <text x="35" y="15" fill="currentColor" font-size="11" fill-opacity="0.4">y</text>
+        <!-- Setpoint -->
+        <line x1="50" y1="50" x2="420" y2="50" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="425" y="54" fill="currentColor" font-size="9" fill-opacity="0.3">setpoint</text>
+        <!-- P only: offset -->
+        <path d="M 50 190 L 70 190 Q 110 190 140 80 Q 155 55 180 70 Q 200 78 220 72 Q 240 68 260 70 L 420 70" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="360" y="82" fill="#ef4444" font-size="10" fill-opacity="0.7">P only (offset)</text>
+        <!-- PI: oscillation -->
+        <path d="M 50 190 L 70 190 Q 100 190 120 30 Q 135 10 155 45 Q 175 80 195 40 Q 210 20 230 48 Q 250 60 270 50 Q 290 45 310 50 L 420 50" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="340" y="42" fill="#f59e0b" font-size="10" fill-opacity="0.7">PI (oscillation)</text>
+        <!-- PID: smooth -->
+        <path d="M 50 190 L 70 190 Q 105 190 130 60 Q 145 30 170 48 Q 190 55 210 50 Q 230 48 250 50 L 420 50" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="340" y="17" fill="#22c55e" font-size="10" fill-opacity="0.7">PID (smooth)</text>
+      </svg>
+    </div>
+
+    <h3>Ziegler-Nichols tuning</h3>
+    <p>Set I and D gains to zero. Increase the P gain until the system oscillates with constant amplitude. Record this <strong>ultimate gain</strong> Ku and the <strong>oscillation period</strong> Tu. Then set: Kp = 0.6*Ku, Ki = 2*Kp/Tu, Kd = Kp*Tu/8. This is a starting point, not an optimal solution. It often produces aggressive response that needs manual refinement.</p>
+
+    <h3>Simulate a PID controller</h3>
+
+    <SchemeRepl client:load initialCode={`; PID controller simulation
+; Plant: simple integrator (velocity -> position)
+; Setpoint: 10.0
+
+(define setpoint 10.0)
+(define kp 0.5)   ; proportional gain
+(define ki 0.05)  ; integral gain
+(define kd 0.3)   ; derivative gain
+(define dt 0.1)
+
+(define (pid-step temp integral prev-error steps)
+  (if (= steps 0)
+    (begin (display "Done. Final: ") (display temp) (newline))
+    (let* ((error (- setpoint temp))
+           (new-integral (+ integral (* error dt)))
+           (derivative (/ (- error prev-error) dt))
+           (output (+ (* kp error)
+                      (* ki new-integral)
+                      (* kd derivative)))
+           (new-temp (+ temp (* output dt))))
+      (if (= 0 (modulo steps 5))
+        (begin
+          (display "  temp=") (display new-temp)
+          (display "  error=") (display error)
+          (newline))
+        'skip)
+      (pid-step new-temp new-integral error (- steps 1)))))
+
+(display "PID controller (Kp=0.5, Ki=0.05, Kd=0.3):") (newline)
+(pid-step 0.0 0.0 0.0 100)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# PID controller simulation
+setpoint = 10.0
+kp, ki, kd = 0.5, 0.05, 0.3
+dt = 0.1
+
+temp = 0.0
+integral = 0.0
+prev_error = 0.0
+
+print("PID controller (Kp=0.5, Ki=0.05, Kd=0.3):")
+for step in range(100):
+    error = setpoint - temp
+    integral += error * dt
+    derivative = (error - prev_error) / dt
+    output = kp * error + ki * integral + kd * derivative
+    temp += output * dt
+    prev_error = error
+    if step % 10 == 0:
+        print(f"  step={step:3d}  temp={temp:.3f}  error={error:+.3f}")
+
+print(f"Final: {temp:.3f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ziegler-Nichols method</a> &#x2014; the classic PID tuning procedure</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-02/", label: "Transfer Functions" }} next={{ href: "/reading/control/ctrl-04/", label: "Stability" }} />
+
+  </main>
+</Layout>

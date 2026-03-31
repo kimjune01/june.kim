@@ -1,0 +1,189 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.7 — Predicate Logic Proofs" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Predicate Logic Proofs</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 7 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Predicate logic proofs add four quantifier rules to natural deduction: <strong>universal instantiation</strong> (plug in a specific value), <strong>universal generalization</strong> (prove for arbitrary, conclude for all), <strong>existential instantiation</strong> (name the witness), and <strong>existential generalization</strong> (from a specific case, conclude something exists).</p>
+    </div>
+
+    <!-- SVG: Proof tree with quantifier rules -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Main proof -->
+        <line x1="30" y1="15" x2="30" y2="200" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="40" y="30" fill="currentColor" font-size="12" fill-opacity="0.7">1. &forall;x (P(x) &rarr; Q(x))</text>
+        <text x="270" y="30" fill="currentColor" font-size="10" fill-opacity="0.35">premise</text>
+        <text x="40" y="52" fill="currentColor" font-size="12" fill-opacity="0.7">2. P(a)</text>
+        <text x="270" y="52" fill="currentColor" font-size="10" fill-opacity="0.35">premise</text>
+        <line x1="30" y1="60" x2="310" y2="60" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="40" y="82" fill="currentColor" font-size="12" fill-opacity="0.7">3. P(a) &rarr; Q(a)</text>
+        <text x="270" y="82" fill="#60a5fa" font-size="10">&forall;E 1</text>
+        <text x="40" y="104" fill="currentColor" font-size="12" fill-opacity="0.7">4. Q(a)</text>
+        <text x="270" y="104" fill="currentColor" font-size="10" fill-opacity="0.35">&rarr;E 3,2</text>
+        <text x="40" y="126" fill="#f59e0b" font-size="12">5. &exist;x Q(x)</text>
+        <text x="270" y="126" fill="#f59e0b" font-size="10">&exist;I 4</text>
+        <!-- Caption -->
+        <text x="170" y="200" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">From "all P imply Q" and "P(a)", derive "something is Q"</text>
+      </svg>
+    </div>
+
+    <h3>Universal instantiation (&forall;E)</h3>
+    <p>From &forall;x P(x), conclude P(c) for any constant c. If something holds for everything, it holds for any particular thing.</p>
+
+    <SchemeRepl client:load initialCode={`; Universal instantiation: from "for all x, P(x)" derive P(c)
+; A universally quantified statement is a function from any value to a proof
+
+(define domain (list 1 2 3 4 5))
+
+; "For all x in domain, x > 0"
+(define (forall-positive x) (> x 0))
+
+; Universal instantiation: apply to specific value
+(display "forall x>0, instantiate at x=3: ")
+(display (forall-positive 3)) (newline)
+
+(display "forall x>0, instantiate at x=5: ")
+(display (forall-positive 5))
+`} />
+
+    <h3>Universal generalization (&forall;I)</h3>
+    <p>To prove &forall;x P(x), take an arbitrary element c (with no special assumptions about it) and prove P(c). Since c was arbitrary, the proof works for everything.</p>
+
+    <SchemeRepl client:load initialCode={`; Universal generalization: prove for arbitrary c, conclude forall
+; The restriction: c must be truly arbitrary (no assumptions about it)
+
+; Prove: forall x. (x + 0 = x)
+; Take arbitrary c. c + 0 = c by arithmetic. Done.
+
+(define (plus-zero-identity c) (= (+ c 0) c))
+
+; Test with several values (standing in for "arbitrary")
+(display "(c + 0 = c) for c=0: ") (display (plus-zero-identity 0)) (newline)
+(display "(c + 0 = c) for c=7: ") (display (plus-zero-identity 7)) (newline)
+(display "(c + 0 = c) for c=-3: ") (display (plus-zero-identity -3)) (newline)
+(display "Since c was arbitrary: forall x. x + 0 = x")
+`} />
+
+    <h3>Existential instantiation (&exist;E)</h3>
+    <p>From &exist;x P(x), introduce a new name c and assume P(c). The name must be fresh: not used elsewhere. You cannot pick which element it is.</p>
+
+    <SchemeRepl client:load initialCode={`; Existential instantiation: name the witness
+; "There exists an even prime" -> call it c, c is even and prime
+
+(define (prime? n)
+  (if (< n 2) #f
+    (let loop ((d 2))
+      (cond ((> (* d d) n) #t)
+            ((= 0 (modulo n d)) #f)
+            (else (loop (+ d 1)))))))
+
+(define (even? n) (= 0 (modulo n 2)))
+
+; Find a witness: exists x. even?(x) and prime?(x)
+(define domain (list 2 3 4 5 6 7 8 9 10))
+(define witness #f)
+
+(for-each
+  (lambda (x)
+    (if (and (even? x) (prime? x) (not witness))
+      (set! witness x)))
+  domain)
+
+(display "Witness for 'exists even prime': ")
+(display witness) (newline)
+(display "Is it even? ") (display (even? witness)) (newline)
+(display "Is it prime? ") (display (prime? witness))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Existential instantiation
+def is_prime(n):
+    if n < 2: return False
+    return all(n % d != 0 for d in range(2, int(n**0.5) + 1))
+
+domain = range(2, 20)
+witness = next(x for x in domain if x % 2 == 0 and is_prime(x))
+print(f"Witness for 'exists even prime': {witness}")
+print(f"Even? {witness % 2 == 0}, Prime? {is_prime(witness)}")
+`} />
+    </div>
+
+    <h3>Existential generalization (&exist;I)</h3>
+    <p>From P(c) for some specific c, conclude &exist;x P(x). If a particular thing has a property, then something has that property.</p>
+
+    <SchemeRepl client:load initialCode={`; Existential generalization: from P(c), derive exists x. P(x)
+
+; We know 2 is even and prime
+(define (even? n) (= 0 (modulo n 2)))
+(define (prime? n)
+  (if (< n 2) #f
+    (let loop ((d 2))
+      (cond ((> (* d d) n) #t)
+            ((= 0 (modulo n d)) #f)
+            (else (loop (+ d 1)))))))
+
+(display "2 is even: ") (display (even? 2)) (newline)
+(display "2 is prime: ") (display (prime? 2)) (newline)
+(display "Therefore: exists x. even(x) and prime(x)")
+`} />
+
+    <h3>Quantifier negation</h3>
+    <p>&not;&forall;x P(x) &equiv; &exist;x &not;P(x). "Not everything is P" means "something is not P." &not;&exist;x P(x) &equiv; &forall;x &not;P(x). "Nothing is P" means "everything is not P."</p>
+
+    <SchemeRepl client:load initialCode={`; Quantifier negation equivalences
+(define domain (list 1 2 3 4 5))
+(define (even? n) (= 0 (modulo n 2)))
+
+(define (forall pred d)
+  (cond ((null? d) #t) ((not (pred (car d))) #f) (else (forall pred (cdr d)))))
+(define (exists pred d)
+  (cond ((null? d) #f) ((pred (car d)) #t) (else (exists pred (cdr d)))))
+
+; not (forall x. even(x)) should equal exists x. not even(x)
+(display "not forall even: ")
+(display (not (forall even? domain))) (newline)
+(display "exists not-even: ")
+(display (exists (lambda (x) (not (even? x))) domain)) (newline)
+
+; not (exists x. > 10) should equal forall x. not (> 10)
+(display "not exists >10: ")
+(display (not (exists (lambda (x) (> x 10)) domain))) (newline)
+(display "forall <=10: ")
+(display (forall (lambda (x) (<= x 10)) domain))
+`} />
+
+    <h3>Quantifier rules reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Rule</th>
+            <th class="py-2 pr-4">From</th>
+            <th class="py-2 pr-4">Conclude</th>
+            <th class="py-2">Restriction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&forall;E</td><td class="pr-4 font-mono">&forall;x P(x)</td><td class="pr-4 font-mono">P(c)</td><td>any c</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&forall;I</td><td class="pr-4 font-mono">P(c) for arbitrary c</td><td class="pr-4 font-mono">&forall;x P(x)</td><td>c must be arbitrary</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&exist;E</td><td class="pr-4 font-mono">&exist;x P(x)</td><td class="pr-4 font-mono">P(c) (name witness)</td><td>c must be fresh</td></tr>
+          <tr><td class="py-2 pr-4">&exist;I</td><td class="pr-4 font-mono">P(c)</td><td class="pr-4 font-mono">&exist;x P(x)</td><td>none</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <PrevNext prev={{ href: "/reading/logic/logic-06/", label: "Predicate Logic" }} next={{ href: "/reading/logic/logic-08/", label: "Identity and Functions" }} />
+
+  </main>
+</Layout>

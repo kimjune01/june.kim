@@ -1,0 +1,214 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.2 — Scheduling" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Scheduling</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Scheduling_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Scheduling (computing)</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>scheduler</strong> decides which process gets the CPU next. The algorithm determines fairness, throughput, and response time. There is no single best policy: every choice is a tradeoff.</p>
+    </div>
+
+    <h3>First-Come, First-Served (FCFS)</h3>
+    <p>The simplest policy: processes run in arrival order. No preemption. Problem: a long job blocks everyone behind it (the convoy effect).</p>
+
+    <h3>Shortest Job First (SJF)</h3>
+    <p>Run the process with the shortest burst time next. Optimal for minimizing average waiting time, but requires knowing burst lengths in advance. In practice, the OS estimates them.</p>
+
+    <h3>Round-Robin</h3>
+    <p>Each process gets a fixed time quantum. When the quantum expires, the process goes to the back of the ready queue. Good for time-sharing. Small quantum means more context switches. Large quantum degrades to FCFS.</p>
+
+    <!-- SVG: Gantt chart showing round-robin -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 120" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="10" y="20" fill="currentColor" font-size="10" fill-opacity="0.5">Round-Robin (quantum = 2)</text>
+
+        <!-- Time axis -->
+        <line x1="30" y1="80" x2="460" y2="80" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- P1 blocks (blue) -->
+        <rect x="30" y="40" width="60" height="35" rx="3" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="60" y="62" text-anchor="middle" fill="#60a5fa" font-size="11">P1</text>
+
+        <rect x="210" y="40" width="60" height="35" rx="3" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="240" y="62" text-anchor="middle" fill="#60a5fa" font-size="11">P1</text>
+
+        <!-- P2 blocks (amber) -->
+        <rect x="90" y="40" width="60" height="35" rx="3" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="120" y="62" text-anchor="middle" fill="#f59e0b" font-size="11">P2</text>
+
+        <rect x="270" y="40" width="60" height="35" rx="3" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="300" y="62" text-anchor="middle" fill="#f59e0b" font-size="11">P2</text>
+
+        <!-- P3 blocks (green) -->
+        <rect x="150" y="40" width="60" height="35" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="180" y="62" text-anchor="middle" fill="#34d399" font-size="11">P3</text>
+
+        <rect x="330" y="40" width="60" height="35" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="360" y="62" text-anchor="middle" fill="#34d399" font-size="11">P3</text>
+
+        <!-- Time labels -->
+        <text x="30" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="90" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">2</text>
+        <text x="150" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">4</text>
+        <text x="210" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">6</text>
+        <text x="270" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">8</text>
+        <text x="330" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">10</text>
+        <text x="390" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">12</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Round-robin timeline with quantum labels -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 130" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline axis -->
+        <line x1="30" y1="70" x2="370" y2="70" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Process blocks: P1 P2 P3 P1 P2 P3 -->
+        <rect x="30" y="30" width="50" height="35" rx="3" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <text x="55" y="52" text-anchor="middle" fill="#60a5fa" font-size="11">P1</text>
+        <rect x="85" y="30" width="50" height="35" rx="3" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1"/>
+        <text x="110" y="52" text-anchor="middle" fill="#f59e0b" font-size="11">P2</text>
+        <rect x="140" y="30" width="50" height="35" rx="3" fill="#34d399" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+        <text x="165" y="52" text-anchor="middle" fill="#34d399" font-size="11">P3</text>
+        <rect x="195" y="30" width="50" height="35" rx="3" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <text x="220" y="52" text-anchor="middle" fill="#60a5fa" font-size="11">P1</text>
+        <rect x="250" y="30" width="50" height="35" rx="3" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1"/>
+        <text x="275" y="52" text-anchor="middle" fill="#f59e0b" font-size="11">P2</text>
+        <rect x="305" y="30" width="50" height="35" rx="3" fill="#34d399" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+        <text x="330" y="52" text-anchor="middle" fill="#34d399" font-size="11">P3</text>
+        <!-- Quantum bracket -->
+        <line x1="30" y1="15" x2="30" y2="25" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="80" y1="15" x2="80" y2="25" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="30" y1="18" x2="80" y2="18" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="55" y="12" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">quantum</text>
+        <!-- Time ticks -->
+        <text x="30" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">0</text>
+        <text x="80" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">q</text>
+        <text x="140" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">2q</text>
+        <text x="195" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">3q</text>
+        <text x="250" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">4q</text>
+        <text x="305" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">5q</text>
+        <text x="355" y="83" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">6q</text>
+        <!-- Arrow showing cycle -->
+        <path d="M355,45 Q375,45 375,70 Q375,95 200,95 Q30,95 30,70" fill="none" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <!-- Caption -->
+        <text x="200" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">each process gets a fixed time slice — fair but not optimal</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Round-robin scheduling simulation
+; Each process: (name . burst-remaining)
+
+(define (round-robin procs quantum)
+  (define (step queue time log)
+    (if (null? queue)
+        log
+        (let* ((proc (car queue))
+               (name (car proc))
+               (burst (cdr proc))
+               (run (min burst quantum))
+               (remaining (- burst run))
+               (new-time (+ time run))
+               (entry (string-append name ":["
+                        (number->string time) "-"
+                        (number->string new-time) "]")))
+          (if (> remaining 0)
+              (step (append (cdr queue) (list (cons name remaining)))
+                    new-time
+                    (append log (list entry)))
+              (step (cdr queue)
+                    new-time
+                    (append log (list entry)))))))
+  (step procs 0 '()))
+
+(define procs (list (cons "P1" 4) (cons "P2" 3) (cons "P3" 5)))
+
+(display "Round-Robin (quantum=2):") (newline)
+(for-each (lambda (e) (display "  ") (display e) (newline))
+          (round-robin procs 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Round-robin scheduling
+from collections import deque
+
+def round_robin(processes, quantum):
+    queue = deque([(name, burst) for name, burst in processes])
+    time = 0
+    log = []
+    while queue:
+        name, burst = queue.popleft()
+        run = min(burst, quantum)
+        log.append(f"{name}:[{time}-{time+run}]")
+        time += run
+        if burst - run > 0:
+            queue.append((name, burst - run))
+    return log
+
+procs = [("P1", 4), ("P2", 3), ("P3", 5)]
+for entry in round_robin(procs, 2):
+    print(f"  {entry}")
+`} />
+    </div>
+
+    <h3>Priority scheduling</h3>
+    <p>Each process has a priority. Highest priority runs first. Risk: <strong>starvation</strong> of low-priority processes. Solution: <strong>aging</strong>, which gradually increases priority of waiting processes.</p>
+
+    <h3>Multilevel queues</h3>
+    <p>Multiple ready queues, each with its own scheduling algorithm. Foreground processes get round-robin. Background processes get FCFS. A multilevel feedback queue lets processes move between queues based on behavior.</p>
+
+    <h3>Metrics</h3>
+    <p><strong>Turnaround time</strong> = completion time minus arrival time. <strong>Waiting time</strong> = turnaround time minus burst time. <strong>Response time</strong> = first run minus arrival time. Good schedulers minimize all three, but tradeoffs are inevitable.</p>
+
+    <SchemeRepl client:load initialCode={`; FCFS vs SJF: compare average waiting times
+; Processes: (name burst-time)
+
+(define (avg-wait-fcfs bursts)
+  (define (helper bs wait total count)
+    (if (null? bs)
+        (/ total count)
+        (helper (cdr bs) (+ wait (car bs))
+                (+ total wait) (+ count 1))))
+  (helper bursts 0 0 0))
+
+(define (avg-wait-sjf bursts)
+  (avg-wait-fcfs (sort bursts <)))
+
+(define bursts '(6 2 8 3))
+
+(display "Bursts: ") (display bursts) (newline)
+(display "FCFS avg wait: ") (display (avg-wait-fcfs bursts)) (newline)
+(display "SJF  avg wait: ") (display (avg-wait-sjf bursts))
+; SJF always wins on average waiting time
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-03/">&#x2699; Sorting</a> — scheduling is sorting by priority, burst time, or arrival</li>
+      <li><a href="/reading/control/ctrl-03/">🎛 Control Ch.3</a> — PID control: CPU schedulers like CFS use feedback from CPU utilization to adjust time-slice allocation</li>
+      <li><a href="/reading/game-theory/nordstrom-13/">♟ Game Theory Ch.13</a> — volunteer's dilemma and priority: scheduler priority queues solve a coordination game about who runs first</li>
+      <li><a href="/reading/algorithms/algo-07/">⚙ Algorithms Ch.7</a> — greedy and priority-queue algorithms: EDF and priority scheduling are greedy algorithms on a priority queue</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Scheduling_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Scheduling (computing)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Round-robin_scheduling"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Round-robin scheduling</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Shortest_job_next"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shortest job next</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-01/", label: "Processes" }} next={{ href: "/reading/operating-systems/os-03/", label: "Threads and Concurrency" }} />
+
+  </main>
+</Layout>

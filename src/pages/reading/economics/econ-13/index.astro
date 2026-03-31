@@ -1,0 +1,210 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.13 — Oligopoly" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Oligopoly</h1>
+    <p class="text-gray-400 text-sm mb-6">Antoine Augustin Cournot · 1838 / Joseph Bertrand · 1883 · <a href="https://en.wikipedia.org/wiki/Oligopoly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Oligopoly</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>oligopoly</strong> is a market with a few firms, each large enough to affect the price. Unlike monopoly (one firm) or competition (many firms), oligopolists must consider rivals' reactions. This makes oligopoly inherently game-theoretic. Cournot modeled quantity competition. Bertrand modeled price competition. Both arrive at outcomes between monopoly and perfect competition.</p>
+    </div>
+
+    <!-- 1. Cournot duopoly -->
+    <h3>Cournot duopoly: quantity competition</h3>
+    <p>Two firms simultaneously choose how much to produce. Market price depends on total output. Each firm's best response depends on the other's quantity. The Nash equilibrium (Cournot equilibrium) is where both reaction curves intersect: neither firm wants to change its output given the other's choice.</p>
+
+    <!-- SVG: Reaction curves intersecting at Cournot equilibrium -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 380" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="320" x2="360" y2="320" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="60" y1="320" x2="60" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="210" y="355" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Firm 1 quantity (q1)</text>
+        <text x="25" y="175" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 25, 175)">Firm 2 quantity (q2)</text>
+
+        <!-- Firm 1's reaction curve: q1 = (a-c)/2b - q2/2 -->
+        <!-- Maps to: starts at (0, high) goes to (high, 0) -->
+        <line x1="60" y1="80" x2="310" y2="320" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+        <text x="315" y="310" fill="currentColor" font-size="11" fill-opacity="0.5">R1(q2)</text>
+
+        <!-- Firm 2's reaction curve -->
+        <line x1="60" y1="320" x2="310" y2="80" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+        <text x="315" y="75" fill="currentColor" font-size="11" fill-opacity="0.5">R2(q1)</text>
+
+        <!-- Cournot equilibrium (intersection) -->
+        <circle cx="185" cy="200" r="5" fill="currentColor" fill-opacity="0.8"/>
+        <text x="210" y="195" fill="currentColor" font-size="11" fill-opacity="0.7">Cournot eq.</text>
+        <text x="210" y="210" fill="currentColor" font-size="10" fill-opacity="0.4">(q1*, q2*)</text>
+
+        <!-- Dashed lines to axes -->
+        <line x1="185" y1="200" x2="185" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <line x1="185" y1="200" x2="60" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <text x="185" y="338" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">q1*</text>
+        <text x="45" y="204" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">q2*</text>
+
+        <!-- Monopoly point -->
+        <circle cx="120" cy="120" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <text x="105" y="115" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">Cartel</text>
+
+        <!-- Competitive point -->
+        <circle cx="230" cy="260" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <text x="255" y="265" fill="currentColor" font-size="9" fill-opacity="0.4">Competitive</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Cournot duopoly
+; Demand: P = 100 - Q, where Q = q1 + q2
+; Each firm has MC = 10
+
+(define a 100)  ; demand intercept
+(define c 10)   ; marginal cost
+
+; Reaction function: q_i = (a - c - q_j) / 2
+(define (reaction q-other)
+  (/ (- a c q-other) 2))
+
+; Cournot equilibrium: both on their reaction curves
+; q1 = (a-c)/3, q2 = (a-c)/3
+(define q-cournot (/ (- a c) 3))
+(define p-cournot (- a (* 2 q-cournot)))
+(define profit-cournot (* q-cournot (- p-cournot c)))
+
+(display "Cournot equilibrium:") (newline)
+(display "  q1 = q2 = ") (display q-cournot) (newline)
+(display "  Total Q = ") (display (* 2 q-cournot)) (newline)
+(display "  Price = $") (display p-cournot) (newline)
+(display "  Each firm's profit = $") (display profit-cournot) (newline)
+
+; Compare to monopoly (one firm, Q = (a-c)/2)
+(define q-monopoly (/ (- a c) 2))
+(define p-monopoly (- a q-monopoly))
+(display "Monopoly: Q=") (display q-monopoly)
+(display ", P=$") (display p-monopoly) (newline)
+
+; Compare to competition (P = MC)
+(define q-competitive (- a c))
+(display "Competition: Q=") (display q-competitive)
+(display ", P=$") (display c)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cournot duopoly
+a, c = 100, 10  # demand intercept, marginal cost
+
+# Reaction function
+reaction = lambda q_other: (a - c - q_other) / 2
+
+# Iterate to find equilibrium
+q1, q2 = 20, 20  # initial guess
+for _ in range(10):
+    q1 = reaction(q2)
+    q2 = reaction(q1)
+
+total_q = q1 + q2
+price = a - total_q
+profit = q1 * (price - c)
+
+print("Cournot: q1=" + str(round(q1,1)) + ", q2=" + str(round(q2,1)) + ", Q=" + str(round(total_q,1)))
+print("Price: $" + str(round(price,1)) + ", Each profit: $" + str(round(profit,1)))
+print("Monopoly: Q=" + str((a-c)/2) + ", P=$" + str(a-(a-c)/2))
+print("Competition: Q=" + str(a-c) + ", P=$" + str(c))
+`} />
+    </div>
+
+
+    <!-- 2. Bertrand competition -->
+    <h3>Bertrand competition: price wars</h3>
+    <p>If firms compete on price instead of quantity, the logic changes dramatically. With identical products, the firm with the lower price captures the entire market. Each firm undercuts the other until price equals marginal cost. The Bertrand paradox: just two firms produce the perfectly competitive outcome.</p>
+
+    <SchemeRepl client:load initialCode={`; Bertrand competition: price undercutting
+; With identical products, price falls to MC
+
+(define mc 10)
+
+; Simulate price war
+(define (bertrand-war p1 p2 rounds)
+  (if (= rounds 0)
+      (begin (display "Final: p1=$") (display p1)
+             (display ", p2=$") (display p2) (newline))
+      (let* ((new-p1 (if (> p1 p2) (- p2 1) p1))
+             (new-p2 (if (> p2 new-p1) (- new-p1 1) p2))
+             (new-p1 (max mc new-p1))
+             (new-p2 (max mc new-p2)))
+        (display "Round ") (display (- 6 rounds))
+        (display ": p1=$") (display new-p1)
+        (display ", p2=$") (display new-p2) (newline)
+        (bertrand-war new-p1 new-p2 (- rounds 1)))))
+
+(display "Bertrand price war (MC=$10):") (newline)
+(bertrand-war 50 48 5)
+(newline)
+(display "Bertrand paradox: 2 firms => competitive price")
+`} />
+
+
+    <!-- 3. Cartels -->
+    <h3>Cartels: collusion and its instability</h3>
+    <p>Firms can collectively profit by acting as a monopoly: restrict output and raise prices. But each member has an incentive to cheat by producing more at the high cartel price. Cartels are unstable for the same reason the prisoner's dilemma is: individual rationality undermines collective benefit.</p>
+
+    <SchemeRepl client:load initialCode={`; Cartel instability
+; Two firms agree to split monopoly output
+
+(define a 100) (define c 10)
+(define monopoly-q (/ (- a c) 2))  ; total monopoly quantity
+(define cartel-share (/ monopoly-q 2))  ; each firm's agreed share
+
+(define (price total-q) (- a total-q))
+(define (profit q total-q) (* q (- (price total-q) c)))
+
+; Both cooperate
+(define coop-profit (profit cartel-share monopoly-q))
+(display "Both cooperate (cartel):") (newline)
+(display "  Each produces: ") (display cartel-share) (newline)
+(display "  Each earns: $") (display coop-profit) (newline)
+
+; One firm cheats (produces Cournot best response)
+(define cheat-q (/ (- a c cartel-share) 2))
+(define total-if-cheat (+ cheat-q cartel-share))
+(define cheater-profit (profit cheat-q total-if-cheat))
+(define sucker-profit (profit cartel-share total-if-cheat))
+
+(display "One cheats:") (newline)
+(display "  Cheater produces: ") (display cheat-q)
+(display ", earns: $") (display cheater-profit) (newline)
+(display "  Loyal firm earns: $") (display sucker-profit) (newline)
+(display "  Cheating pays: $")
+(display (- cheater-profit coop-profit)) (display " more")
+`} />
+
+
+    <!-- Cross-reference -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-06/">Game Theory Ch.6: Nash Equilibrium</a> — the solution concept underlying Cournot and Bertrand</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Oligopoly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Oligopoly</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cournot_competition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cournot competition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bertrand_competition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bertrand competition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cartel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cartel</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-12/", label: "Monopoly and Competition" }} next={{ href: "/reading/economics/econ-14/", label: "Information Asymmetry" }} />
+
+  </main>
+</Layout>

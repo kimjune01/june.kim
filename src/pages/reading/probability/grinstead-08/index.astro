@@ -1,0 +1,244 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 8 — Law of Large Numbers" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Law of Large Numbers</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>law of large numbers</strong> says: the sample mean converges to the true mean as the sample grows. Flip a fair coin a million times. The fraction of heads will be close to 0.5. Not because outcomes balance out, but because the noise gets drowned by the signal.</p>
+    </div>
+
+    <!-- 1. Chebyshev's inequality -->
+    <h3>Chebyshev's inequality</h3>
+    <p>Before proving the LLN, Grinstead and Snell establish the key tool: <strong>Chebyshev's inequality</strong>. For any random variable X with mean mu and variance sigma^2: P(|X - mu| &ge; k sigma) &le; 1/k^2. The probability of being far from the mean is bounded by the variance. No distributional assumptions needed.</p>
+
+    <!-- SVG: Multiple sample-mean trajectories converging -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 240" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="210" x2="460" y2="210" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="210" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Y-axis labels -->
+        <text x="45" y="120" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.5">&#x03BC;</text>
+        <text x="45" y="40" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.3">1.0</text>
+        <text x="45" y="210" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.3">0.0</text>
+        <!-- X-axis label -->
+        <text x="255" y="235" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">n (sample size)</text>
+        <!-- X-axis ticks -->
+        <text x="90" y="225" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">10</text>
+        <text x="180" y="225" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">100</text>
+        <text x="320" y="225" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">1000</text>
+        <text x="440" y="225" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">10000</text>
+        <!-- True mean line (mu = 0.5 for fair coin, at y=115) -->
+        <line x1="50" y1="115" x2="460" y2="115" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="465" y="113" fill="#f59e0b" font-size="10">&#x03BC; = 0.5</text>
+        <!-- Trajectory 1 (blue) — starts wild, converges -->
+        <polyline points="60,60 80,150 100,90 120,130 150,100 180,108 220,118 260,112 300,114 340,116 380,115 420,115 450,115" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Trajectory 2 (green) — starts wild, converges -->
+        <polyline points="60,170 80,80 100,140 120,105 150,125 180,120 220,113 260,117 300,116 340,115 380,115 420,115 450,115" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Trajectory 3 (red) — starts wild, converges -->
+        <polyline points="60,40 80,160 100,70 120,95 150,108 180,122 220,110 260,113 300,114 340,115 380,115 420,115 450,115" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Trajectory 4 (purple) — starts wild, converges -->
+        <polyline points="60,180 80,50 100,155 120,100 150,130 180,112 220,119 260,116 300,115 340,115 380,115 420,115 450,115" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Convergence annotation -->
+        <text x="350" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">all paths converge to &#x03BC;</text>
+        <line x1="350" y1="35" x2="350" y2="105" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="2,2"/>
+        <!-- Title -->
+        <text x="255" y="15" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Sample mean trajectories (fair coin)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Chebyshev's inequality: P(|X - mu| >= k*sigma) <= 1/k^2
+; No assumption about the shape of the distribution.
+
+(define (chebyshev-bound k)
+  ; At most 1/k^2 probability of being k standard deviations away
+  (/ 1.0 (* k k)))
+
+(display "Chebyshev bounds:") (newline)
+(display "P(|X-mu| >= 2*sigma) <= ") (display (chebyshev-bound 2)) (newline)
+(display "P(|X-mu| >= 3*sigma) <= ") (display (chebyshev-bound 3)) (newline)
+(display "P(|X-mu| >= 5*sigma) <= ") (display (chebyshev-bound 5)) (newline)
+(display "P(|X-mu| >= 10*sigma) <= ") (display (chebyshev-bound 10)) (newline)
+
+; For the sample mean of n coin flips:
+; Var(sample mean) = Var(X)/n = 0.25/n
+; sigma(sample mean) = 0.5/sqrt(n)
+; As n grows, sigma -> 0, so the bound tightens.
+(display "sigma(mean) for n=100: ") (display (/ 0.5 (sqrt 100))) (newline)
+(display "sigma(mean) for n=10000: ") (display (/ 0.5 (sqrt 10000)))
+`} />
+
+    <!-- 2. Weak law of large numbers -->
+    <h3>Weak law of large numbers</h3>
+    <p>Let X_1, X_2, ..., X_n be independent with the same distribution, mean mu, and finite variance sigma^2. The sample mean S_n/n satisfies: for any epsilon &gt; 0, P(|S_n/n - mu| &ge; epsilon) &le; sigma^2 / (n epsilon^2). As n grows, this bound goes to zero. The sample mean converges in probability to the true mean.</p>
+
+    <SchemeRepl client:load initialCode={`; Weak LLN: P(|S_n/n - mu| >= eps) <= sigma^2 / (n * eps^2)
+; The bound shrinks as n grows.
+
+(define (lln-bound sigma-sq n eps)
+  (/ sigma-sq (* n eps eps)))
+
+; Fair coin: sigma^2 = 0.25
+(define sigma-sq 0.25)
+(define eps 0.05)  ; within 5% of true mean
+
+(display "P(|mean - 0.5| >= 0.05):") (newline)
+(display "  n=100:   <= ") (display (lln-bound sigma-sq 100 eps)) (newline)
+(display "  n=1000:  <= ") (display (lln-bound sigma-sq 1000 eps)) (newline)
+(display "  n=10000: <= ") (display (lln-bound sigma-sq 10000 eps)) (newline)
+(display "  n=100000:<= ") (display (lln-bound sigma-sq 100000 eps)) (newline)
+
+; At n=10000, probability of being off by 5% is at most 1%.
+; The bound is loose (actual probability much smaller)
+; but it proves convergence for ANY distribution with finite variance.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Weak LLN bound vs simulation
+import random
+
+def lln_bound(var, n, eps):
+    return var / (n * eps**2)
+
+# Fair coin
+var, eps = 0.25, 0.05
+for n in [100, 1000, 10000]:
+    # Chebyshev bound
+    bound = lln_bound(var, n, eps)
+    # Simulate: fraction of times |mean - 0.5| >= eps
+    trials = 1000
+    violations = 0
+    for _ in range(trials):
+        flips = [random.randint(0, 1) for _ in range(n)]
+        if abs(sum(flips)/n - 0.5) >= eps:
+            violations += 1
+    actual = violations / trials
+    print(f"n={n:5d}: bound={bound:.4f}, actual~{actual:.4f}")
+`} />
+    </div>
+
+    <!-- 3. Bernoulli's theorem -->
+    <h3>Bernoulli's theorem</h3>
+    <p>The LLN was first proved by Jacob Bernoulli in 1713, specifically for coin flips. His version: the fraction of heads in n flips of a coin with probability p converges to p. This is the special case of the weak LLN applied to Bernoulli trials (Ch 5). Bernoulli called it the "golden theorem." It took him twenty years to prove.</p>
+
+    <SchemeRepl client:load initialCode={`; Bernoulli's theorem: special case of LLN for coin flips
+; Fraction of heads -> p as n -> infinity
+
+; Simulate convergence by computing running averages
+; (We use a deterministic "pseudo-random" sequence for reproducibility)
+
+(define (pseudo-flip seed p)
+  ; Simple hash-based pseudo-random: returns 0 or 1
+  (let ((hash (- (* seed 1103515245) (* seed seed) -12345)))
+    (if (< (abs (remainder hash 1000)) (* p 1000)) 1 0)))
+
+(define (running-mean p n-max)
+  (let loop ((i 1) (sum 0))
+    (if (> i n-max) 'done
+        (let* ((flip (pseudo-flip i p))
+               (new-sum (+ sum flip))
+               (mean (/ (* 1.0 new-sum) i)))
+          (if (= (remainder i (/ n-max 5)) 0)
+              (begin
+                (display "n=") (display i)
+                (display "  mean=") (display mean)
+                (display "  |error|=") (display (abs (- mean p)))
+                (newline)))
+          (loop (+ i 1) new-sum)))))
+
+(display "Bernoulli trials, p=0.3:") (newline)
+(running-mean 0.3 500)
+; Error shrinks as n grows -- Bernoulli's theorem in action
+`} />
+
+    <!-- 4. What LLN does NOT say -->
+    <h3>What LLN does not say</h3>
+    <p>The LLN does not say outcomes "balance out." After 10 heads in a row, the next flip is still 50/50. What happens is dilution: those 10 heads become a smaller fraction of the total as n grows. The law works by addition, not correction. The <a href="https://en.wikipedia.org/wiki/Gambler%27s_fallacy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>gambler's fallacy</a> confuses these two.</p>
+
+    <SchemeRepl client:load initialCode={`; The gambler's fallacy: outcomes don't "correct" themselves
+; After 10 heads, the coin is still fair.
+
+; Suppose we start with 10 heads in a row.
+; Track how the running proportion evolves.
+
+(define (dilution initial-heads fair-flips)
+  ; initial-heads out of initial-heads trials already happened
+  ; Then flip a fair coin fair-flips more times (assume exactly half heads)
+  (let* ((total-n (+ initial-heads fair-flips))
+         (total-heads (+ initial-heads (/ fair-flips 2)))
+         (proportion (/ (* 1.0 total-heads) total-n)))
+    proportion))
+
+(display "Start: 10 heads in 10 flips = ")
+(display (dilution 10 0)) (newline)
+(display "After 10 more fair flips: ")
+(display (dilution 10 10)) (newline)
+(display "After 100 more: ")
+(display (dilution 10 100)) (newline)
+(display "After 1000 more: ")
+(display (dilution 10 1000)) (newline)
+(display "After 10000 more: ")
+(display (dilution 10 10000)) (newline)
+; Proportion approaches 0.5 by dilution, not correction
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Notation</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S_n / n</td><td class="pr-4 text-green-300">(/ sum n)</td><td class="font-sans">Sample mean</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(|X-&#x03BC;| &ge; k&#x03C3;) &le; 1/k&sup2;</td><td class="pr-4 text-green-300">(chebyshev-bound k)</td><td class="font-sans">Chebyshev's inequality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x03C3;&sup2;/(n&#x03B5;&sup2;)</td><td class="pr-4 text-green-300">(lln-bound var n eps)</td><td class="font-sans">Weak LLN convergence bound</td></tr>
+          <tr><td class="py-2 pr-4">X_n &rarr; &#x03BC; in probability</td><td class="pr-4 text-green-300">bound &rarr; 0 as n &rarr; &infin;</td><td class="font-sans">Convergence in probability</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-07/">&#x1F3B0; Ch 7</a> &mdash; sums of random variables (the machinery behind LLN)</li>
+      <li><a href="/reading/probability/grinstead-06/">&#x1F3B0; Ch 6</a> &mdash; expected value and variance (the quantities LLN connects)</li>
+      <li><a href="/reading/probability/grinstead-05/">&#x1F3B0; Ch 5</a> &mdash; Bernoulli distribution (the original LLN setting)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Law_of_large_numbers"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Law of large numbers</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Chebyshev%27s_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chebyshev's inequality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gambler%27s_fallacy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gambler's fallacy</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Grinstead &amp; Snell</a>, Chapter 8.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-07/", label: "Sums of Variables" }} next={{ href: "/reading/probability/grinstead-09/", label: "Central Limit Theorem" }} />
+
+  </main>
+</Layout>

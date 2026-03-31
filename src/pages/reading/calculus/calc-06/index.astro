@@ -1,0 +1,271 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.6 — Applications of Derivatives" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Applications of Derivatives</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Derivatives answer practical questions: Where is the maximum? How fast is something changing? What does the curve look like? <strong>Optimization</strong> finds extrema where f'(x) = 0. <strong>L'Hopital's rule</strong> evaluates indeterminate limits. <strong>Newton's method</strong> finds roots by chasing tangent lines.</p>
+    </div>
+
+    <!-- SVG: max/min on a curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Curve with local max and min -->
+        <path d="M 40 120 Q 80 30 140 50 Q 200 70 220 110 Q 240 150 300 40" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Local max -->
+        <circle cx="125" cy="47" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="125" y="35" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">local max</text>
+        <!-- Horizontal tangent at max -->
+        <line x1="85" y1="47" x2="165" y2="47" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Local min -->
+        <circle cx="230" cy="118" r="4" fill="#a78bfa" fill-opacity="0.8"/>
+        <text x="230" y="140" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.6">local min</text>
+        <!-- Horizontal tangent at min -->
+        <line x1="190" y1="118" x2="270" y2="118" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <!-- Caption -->
+        <text x="190" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">f'(x) = 0 at extrema: tangent line is horizontal</text>
+      </svg>
+    </div>
+
+    <!-- 1. Optimization -->
+    <h3>Finding maxima and minima</h3>
+    <p>Critical points are where f'(x) = 0 or f'(x) is undefined. To classify them: f''(x) &gt; 0 means local minimum, f''(x) &lt; 0 means local maximum. This is the <strong>second derivative test</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Find extrema of f(x) = x^3 - 3x + 1
+; f'(x) = 3x^2 - 3 = 3(x^2 - 1) = 0 at x = +-1
+; f''(x) = 6x
+
+(define (f x) (+ (- (* x x x) (* 3 x)) 1))
+(define (f-prime x) (- (* 3 x x) 3))
+(define (f-double-prime x) (* 6 x))
+
+; Critical points
+(display "f'(-1) = ") (display (f-prime -1)) (newline)  ; 0
+(display "f'(1)  = ") (display (f-prime 1)) (newline)   ; 0
+
+; Second derivative test
+(display "f''(-1) = ") (display (f-double-prime -1))
+(display " < 0: LOCAL MAX") (newline)
+(display "f''(1)  = ") (display (f-double-prime 1))
+(display " > 0: LOCAL MIN") (newline)
+
+; Values
+(display "f(-1) = ") (display (f -1)) (newline)  ; 3 (max value)
+(display "f(1)  = ") (display (f 1))              ; -1 (min value)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Find extrema of f(x) = x^3 - 3x + 1
+f = lambda x: x**3 - 3*x + 1
+fp = lambda x: 3*x**2 - 3
+fpp = lambda x: 6*x
+
+for x in [-1, 1]:
+    kind = "MAX" if fpp(x) < 0 else "MIN"
+    print(f"x={x}: f={f(x)}, f'={fp(x)}, f''={fpp(x)} -> {kind}")
+`} />
+    </div>
+
+
+    <!-- 2. Related rates -->
+    <h3>Related rates</h3>
+    <p>If two quantities are related by an equation and both change with time, differentiate the equation with respect to t. You get a relationship between their rates. Classic example: a balloon inflating, how fast does the radius grow when the volume grows at a known rate?</p>
+
+    <SchemeRepl client:load initialCode={`; Related rates: sphere volume V = (4/3) pi r^3
+; dV/dt = 4 pi r^2 (dr/dt)
+; Given dV/dt = 100 cm^3/s, find dr/dt when r = 5
+
+(define pi 3.141592653589793)
+(define r 5)
+(define dV-dt 100)
+
+; dr/dt = dV/dt / (4 pi r^2)
+(define dr-dt (/ dV-dt (* 4 pi r r)))
+
+(display "When r = 5 and dV/dt = 100:") (newline)
+(display "dr/dt = ") (display (/ (round (* dr-dt 10000)) 10000))
+(display " cm/s")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Related rates: sphere V = (4/3) pi r^3
+# dV/dt = 4 pi r^2 (dr/dt)
+# Solve for dr/dt
+r = 5
+dV_dt = 100
+dr_dt = dV_dt / (4 * math.pi * r**2)
+
+print("When r = 5 and dV/dt = 100:")
+print("dr/dt = {:.4f} cm/s".format(dr_dt))
+`} />
+    </div>
+
+
+    <!-- 3. L'Hopital's Rule -->
+    <h3>L'Hopital's rule</h3>
+    <p>If lim f(x)/g(x) is 0/0 or &#x221E;/&#x221E;, then it equals lim f'(x)/g'(x) (when that limit exists). This resolves indeterminate forms mechanically.</p>
+
+    <SchemeRepl client:load initialCode={`; L'Hopital: lim(x->0) sin(x)/x = lim(x->0) cos(x)/1 = 1
+; Both numerator and denominator approach 0 at x=0
+
+(define (f x) (sin x))
+(define (g x) x)
+
+; Direct evaluation near 0
+(display "sin(0.001)/0.001 = ") (display (/ (sin 0.001) 0.001)) (newline)
+
+; L'Hopital: f'(x)/g'(x) = cos(x)/1
+(display "cos(0) = ") (display (cos 0)) (newline)
+(display "Limit = 1") (newline) (newline)
+
+; Another: lim(x->0) (e^x - 1)/x = lim(x->0) e^x/1 = 1
+(display "(e^0.001 - 1)/0.001 = ")
+(display (/ (- (exp 0.001) 1) 0.001)) (newline)
+(display "e^0 = ") (display (exp 0)) (newline)
+(display "Limit = 1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# L'Hopital: lim(x->0) sin(x)/x = cos(0)/1 = 1
+print("sin(0.001)/0.001 =", math.sin(0.001)/0.001)
+print("cos(0) =", math.cos(0))
+print("Limit = 1")
+print()
+
+# lim(x->0) (e^x - 1)/x = e^0/1 = 1
+print("(e^0.001 - 1)/0.001 =", (math.exp(0.001) - 1)/0.001)
+print("e^0 =", math.exp(0))
+print("Limit = 1")
+`} />
+    </div>
+
+
+    <!-- 4. Newton's Method -->
+    <h3>Newton's method</h3>
+    <p>To find a root of f(x) = 0, <a href="https://en.wikipedia.org/wiki/Newton%27s_method"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Newton's method</a> starts with a guess x&#x2080; and iterates: x&#x2099;&#x208A;&#xB9; = x&#x2099; - f(x&#x2099;)/f'(x&#x2099;). Each step follows the tangent line to the x-axis. Convergence is quadratic when it works.</p>
+
+    <SchemeRepl client:load initialCode={`; Newton's method: find sqrt(2) by solving x^2 - 2 = 0
+; f(x) = x^2 - 2, f'(x) = 2x
+; x_next = x - f(x)/f'(x) = x - (x^2-2)/(2x)
+
+(define (f x) (- (* x x) 2))
+(define (f-prime x) (* 2 x))
+
+(define (newton x n)
+  (display "x_") (display n) (display " = ") (display x)
+  (display "  f(x) = ") (display (/ (round (* (f x) 1000000)) 1000000))
+  (newline)
+  (if (= n 6) x
+      (newton (- x (/ (f x) (f-prime x))) (+ n 1))))
+
+(newton 2.0 0)
+; Converges to sqrt(2) = 1.41421356...
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Newton's method: find sqrt(2) by solving x^2 - 2 = 0
+f = lambda x: x**2 - 2
+fp = lambda x: 2*x
+
+x = 2.0
+for n in range(7):
+    print("x_{} = {:.10f}  f(x) = {:.10f}".format(n, x, f(x)))
+    x = x - f(x)/fp(x)
+# Converges to sqrt(2) = 1.41421356...
+`} />
+    </div>
+
+
+    <!-- 5. Curve sketching -->
+    <h3>Curve sketching</h3>
+    <p>The first derivative tells you where f is increasing (f' &gt; 0) or decreasing (f' &lt; 0). The second derivative tells you concavity: concave up (f'' &gt; 0) or concave down (f'' &lt; 0). Inflection points are where concavity changes.</p>
+
+    <SchemeRepl client:load initialCode={`; Curve sketching: f(x) = x^3 - 3x
+; f'(x) = 3x^2 - 3: zero at x = -1, 1
+; f''(x) = 6x: zero at x = 0 (inflection point)
+
+(define (f x) (- (* x x x) (* 3 x)))
+(define (fp x) (- (* 3 x x) 3))
+(define (fpp x) (* 6 x))
+
+(define (describe x)
+  (display "x=") (display x)
+  (display " f=") (display (f x))
+  (display " f'=") (display (fp x))
+  (display (cond ((> (fp x) 0) " increasing")
+                 ((< (fp x) 0) " decreasing")
+                 (else " critical")))
+  (display " f''=") (display (fpp x))
+  (display (cond ((> (fpp x) 0) " concave up")
+                 ((< (fpp x) 0) " concave down")
+                 (else " inflection")))
+  (newline))
+
+(for-each describe (list -2 -1 0 1 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Curve sketching: f(x) = x^3 - 3x
+f = lambda x: x**3 - 3*x
+fp = lambda x: 3*x**2 - 3
+fpp = lambda x: 6*x
+
+for x in [-2, -1, 0, 1, 2]:
+    slope = "increasing" if fp(x) > 0 else ("decreasing" if fp(x) < 0 else "critical")
+    curve = "concave up" if fpp(x) > 0 else ("concave down" if fpp(x) < 0 else "inflection")
+    print("x={} f={} f'={} {} f''={} {}".format(x, f(x), fp(x), slope, fpp(x), curve))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2 pr-4">Test</th>
+            <th class="py-2">Conclusion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Critical point</td><td class="pr-4 text-green-300">f'(x) = 0</td><td>Candidate for max/min</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Local max</td><td class="pr-4 text-green-300">f''(x) &lt; 0</td><td>Concave down at critical point</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Local min</td><td class="pr-4 text-green-300">f''(x) &gt; 0</td><td>Concave up at critical point</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Inflection</td><td class="pr-4 text-green-300">f''(x) = 0, sign changes</td><td>Concavity switches</td></tr>
+          <tr><td class="py-2 pr-4">Newton step</td><td class="pr-4 text-green-300">x - f(x)/f'(x)</td><td>Next approximation to root</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-05/">∫ Ch.5 Derivative Rules</a> — the rules that make these applications possible</li>
+      <li><a href="/reading/calculus/calc-07/">∫ Ch.7 The Integral</a> — the other half of calculus</li>
+      <li><a href="/reading/game-theory/">&#x1F3B2; Game Theory</a> — optimization under strategic constraints</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> — gradient descent applies derivative-based optimization at scale</li>
+      <li><a href="/reading/economics/econ-06/">💰 Economics Ch.6</a> — constrained optimization via Lagrange multipliers in utility theory</li>
+      <li><a href="/reading/control/ctrl-08/">🎛 Control Ch.8</a> — optimal control is constrained optimization over trajectories</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-05/", label: "Derivative Rules" }} next={{ href: "/reading/calculus/calc-07/", label: "The Integral · 7 of 15" }} />
+
+  </main>
+</Layout>

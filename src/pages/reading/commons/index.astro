@@ -1,0 +1,92 @@
+---
+import Layout from '../../../layouts/Base.astro';
+---
+
+<Layout title="The Commons" favicon="⚖">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1 class="text-3xl font-bold mb-2">⚖ The Commons</h1>
+
+    <p class="text-sm text-gray-500 mb-6">Who owns knowledge, how that question got answered at each technological inflection, and what happens when the answers stop working.</p>
+
+    <!-- SVG: Arc diagram — Vision → Bargain → Commons → Enclosure → Fair Use → Geometry → Defense -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 700 70" class="w-full max-w-2xl" style="font-family: ui-monospace, monospace;">
+        <!-- Vision -->
+        <rect x="0" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="38" y="38" text-anchor="middle" fill="currentColor" font-size="10">Vision</text>
+        <!-- Arrow -->
+        <line x1="76" y1="33" x2="96" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="93,29 100,33 93,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Bargain -->
+        <rect x="100" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="138" y="38" text-anchor="middle" fill="currentColor" font-size="10">Bargain</text>
+        <!-- Arrow -->
+        <line x1="176" y1="33" x2="196" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="193,29 200,33 193,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Commons -->
+        <rect x="200" y="15" width="76" height="36" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="238" y="38" text-anchor="middle" fill="#60a5fa" font-size="10">Commons</text>
+        <!-- Arrow -->
+        <line x1="276" y1="33" x2="296" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="293,29 300,33 293,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Enclosure -->
+        <rect x="300" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="338" y="38" text-anchor="middle" fill="currentColor" font-size="10">Enclosure</text>
+        <!-- Arrow -->
+        <line x1="376" y1="33" x2="396" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="393,29 400,33 393,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Fair Use -->
+        <rect x="400" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="438" y="38" text-anchor="middle" fill="currentColor" font-size="10">Fair Use</text>
+        <!-- Arrow -->
+        <line x1="476" y1="33" x2="496" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="493,29 500,33 493,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Geometry -->
+        <rect x="500" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="538" y="38" text-anchor="middle" fill="currentColor" font-size="10">Geometry</text>
+        <!-- Arrow -->
+        <line x1="576" y1="33" x2="596" y2="33" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="593,29 600,33 593,37" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Defense -->
+        <rect x="600" y="15" width="76" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="638" y="38" text-anchor="middle" fill="currentColor" font-size="10">Defense</text>
+      </svg>
+    </div>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Papers</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Paper</th>
+            <th class="text-left py-2 pr-3 text-gray-400">One sentence</th>
+            <th class="text-left py-2 text-gray-400"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/bush-1945/">Bush 1945</a></td><td class="pr-3 text-gray-400">The memex: a machine for following trails through all recorded knowledge</td><td><a href="/reading/commons/bush-1945/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/statute-of-anne-1710/">Statute of Anne 1710</a></td><td class="pr-3 text-gray-400">The original bargain: fourteen years of monopoly for public benefit</td><td><a href="/reading/commons/statute-of-anne-1710/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/berners-lee-1989/">Berners-Lee 1989 + CERN 1993</a></td><td class="pr-3 text-gray-400">A memo about document management accidentally created a commons</td><td><a href="/reading/commons/berners-lee-1989/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/brin-page-1998/">Brin &amp; Page 1998</a></td><td class="pr-3 text-gray-400">PageRank — and Appendix A, which predicted the enclosure</td><td><a href="/reading/commons/brin-page-1998/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/boyle-2003/">Boyle 2003</a></td><td class="pr-3 text-gray-400">The second enclosure movement: the pattern named</td><td><a href="/reading/commons/boyle-2003/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/lessig-2004/">Lessig 2004</a></td><td class="pr-3 text-gray-400">How fourteen years became forever</td><td><a href="/reading/commons/lessig-2004/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/authors-guild-v-google-2015/">Authors Guild v. Google 2015</a></td><td class="pr-3 text-gray-400">Indexing twenty million books is fair use</td><td><a href="/reading/commons/authors-guild-v-google-2015/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/commons/mikolov-2013/">Mikolov 2013</a></td><td class="pr-3 text-gray-400">Meaning becomes geometry: retrieval without reproduction</td><td><a href="/reading/commons/mikolov-2013/" class="text-cyan-300 hover:text-cyan-200">⚖</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.ted.com/talks/lawrence_lessig_laws_that_choke_creativity">Lessig: Laws that Choke Creativity (TED)</a> · <a href="https://www.nobelprize.org/prizes/economic-sciences/2009/ostrom/lecture/">Ostrom: Nobel Lecture on Governing the Commons</a></p>
+
+    <hr class="border-zinc-700 my-8"/>
+    <p class="text-gray-500 text-sm mt-6">These authors described the problem. <a href="https://june.kim/pageleft-manifesto"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The manifesto</a> describes a solution.</p>
+    <p class="text-gray-600 text-xs mt-1"><a href="https://june.kim" class="underline hover:text-gray-400">june.kim</a></p>
+
+  </main>
+</Layout>

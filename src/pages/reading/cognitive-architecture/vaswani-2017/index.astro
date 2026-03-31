@@ -1,0 +1,203 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Vaswani et al. 2017 — Attention Is All You Need" favicon="🏛️">
+  <main>
+
+    <a href="/reading/cognitive-architecture/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Attention Is All You Need</h1>
+    <p class="text-gray-400 text-sm mb-6">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin · 2017 · <a href="https://arxiv.org/abs/1706.03762"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1706.03762</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Replace recurrence with self-attention. Every position attends to every other position in constant depth. The architecture that made scale possible.</p>
+    </div>
+
+    <!-- SVG: Scaled dot-product attention -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 210" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Q, K, V inputs -->
+        <text x="60" y="25" text-anchor="middle" fill="#60a5fa" font-size="13">Q</text>
+        <text x="160" y="25" text-anchor="middle" fill="#f59e0b" font-size="13">K</text>
+        <text x="340" y="25" text-anchor="middle" fill="#34d399" font-size="13">V</text>
+
+        <!-- Q and K down arrows -->
+        <line x1="60" y1="32" x2="60" y2="55" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="160" y1="32" x2="160" y2="55" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+
+        <!-- MatMul box -->
+        <rect x="60" y="55" width="150" height="28" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="135" y="74" text-anchor="middle" fill="currentColor" font-size="11">QK&#x1D40;</text>
+
+        <!-- Scale -->
+        <line x1="135" y1="83" x2="135" y2="100" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <rect x="85" y="100" width="100" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="135" y="116" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">&#xF7; &#x221A;d&#x2096;</text>
+
+        <!-- Softmax -->
+        <line x1="135" y1="124" x2="135" y2="140" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <rect x="85" y="140" width="100" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="135" y="157" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">softmax</text>
+
+        <!-- V down arrow to final matmul -->
+        <line x1="340" y1="32" x2="340" y2="168" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+
+        <!-- Final matmul -->
+        <line x1="135" y1="164" x2="135" y2="175" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <line x1="135" y1="175" x2="260" y2="175" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <rect x="260" y="161" width="120" height="28" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="320" y="180" text-anchor="middle" fill="currentColor" font-size="11">&#xD7; V</text>
+
+        <!-- Output -->
+        <line x1="320" y1="183" x2="320" y2="197" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="316,195 320,203 324,195" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Caption -->
+        <text x="220" y="16" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">scaled dot-product attention</text>
+      </svg>
+    </div>
+
+    <h2>The problem</h2>
+
+    <p>Recurrent networks process sequences one step at a time. Each step depends on the previous step's output. This sequential dependency makes parallelization impossible during training and creates a bottleneck: information from early positions must survive through every intermediate step to reach late positions.</p>
+
+    <p>Convolutional approaches can parallelize but need many layers to connect distant positions — the receptive field grows linearly or logarithmically with depth.</p>
+
+    <p>Self-attention connects every position to every other position in a single layer. Constant path length. Full parallelization. The cost is quadratic in sequence length. That tradeoff proved worth making.</p>
+
+    <h2>The architecture</h2>
+
+    <h3>Encoder-decoder</h3>
+    <p>Six identical layers in each stack. Every layer has two sub-layers (encoder) or three (decoder), each wrapped in a residual connection and layer normalization.</p>
+
+    <p><strong>Encoder layer:</strong> (1) multi-head self-attention, (2) position-wise feed-forward network.</p>
+    <p><strong>Decoder layer:</strong> (1) masked multi-head self-attention, (2) multi-head cross-attention over encoder output, (3) position-wise feed-forward network. The mask prevents attending to future positions: the decoder can only see what it has already generated.</p>
+
+    <h3>Scaled dot-product attention</h3>
+
+    <p>The core operation. Three inputs: queries Q, keys K, values V. Compute similarity between each query and all keys, normalize, use the result to weight values.</p>
+
+    <pre class="bg-zinc-900 p-4 rounded text-sm mb-4"><code class="text-green-300">Attention(Q, K, V) = softmax(Q K^T / sqrt(d_k)) V</code></pre>
+
+    <p>The <code>1/sqrt(d_k)</code> scaling prevents dot products from growing large enough to push softmax into near-zero gradient regions. Without it, attention becomes approximately one-hot for large dimensions — the model stops learning.</p>
+
+    <h3>Multi-head attention</h3>
+
+    <!-- SVG: Multi-head attention -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 150" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Input -->
+        <text x="220" y="16" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Q, K, V</text>
+        <line x1="220" y1="22" x2="220" y2="35" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+
+        <!-- Fan out -->
+        <line x1="220" y1="35" x2="60" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="220" y1="35" x2="140" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="220" y1="35" x2="220" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="220" y1="35" x2="300" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="220" y1="35" x2="380" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Heads -->
+        <rect x="35" y="50" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="60" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.8">head₁</text>
+        <rect x="115" y="50" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="140" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.8">head₂</text>
+        <rect x="195" y="50" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="220" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.6">···</text>
+        <rect x="275" y="50" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="300" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.8">head₇</text>
+        <rect x="355" y="50" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="380" y="67" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.8">head₈</text>
+
+        <!-- Fan in to concat -->
+        <line x1="60" y1="76" x2="220" y2="95" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="140" y1="76" x2="220" y2="95" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="220" y1="76" x2="220" y2="95" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="300" y1="76" x2="220" y2="95" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="380" y1="76" x2="220" y2="95" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Concat + project -->
+        <rect x="160" y="95" width="120" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="220" y="111" text-anchor="middle" fill="currentColor" font-size="10">Concat · W&#x1D3C;</text>
+
+        <!-- Output -->
+        <line x1="220" y1="119" x2="220" y2="132" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="216,130 220,138 224,130" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Caption -->
+        <text x="220" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">8 heads × 64 dims ≈ 1 head × 512 dims, but each head learns a different pattern</text>
+      </svg>
+    </div>
+
+    <p>Instead of one attention function over the full dimension, project Q, K, V into h smaller subspaces, run attention in parallel, concatenate, project back.</p>
+
+    <pre class="bg-zinc-900 p-4 rounded text-sm mb-4"><code class="text-green-300">MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W_O
+where head_i = Attention(Q W_i^Q, K W_i^K, V W_i^V)</code></pre>
+
+    <p>Eight heads, each with d_k = d_v = 64, total cost comparable to single-head attention at d_model = 512. Each head can learn a different attention pattern: one head tracks syntactic dependencies, another tracks semantic similarity, another tracks positional proximity.</p>
+
+    <h3>Position-wise feed-forward network</h3>
+
+    <p>A two-layer MLP applied identically to each position. The hidden dimension (2048) is four times the model dimension (512). This is where per-position computation happens. Attention handles cross-position communication.</p>
+
+    <pre class="bg-zinc-900 p-4 rounded text-sm mb-4"><code class="text-green-300">FFN(x) = max(0, x W_1 + b_1) W_2 + b_2</code></pre>
+
+    <h3>Positional encoding</h3>
+
+    <p>Attention is permutation-equivariant. It does not know position. Position information is injected by adding sinusoidal signals to the input embeddings:</p>
+
+    <pre class="bg-zinc-900 p-4 rounded text-sm mb-4"><code class="text-green-300">PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))</code></pre>
+
+    <p>The key property: <code>PE(pos + k)</code> is a linear function of <code>PE(pos)</code> for any fixed offset k. The model can learn relative-position attention from absolute-position encodings. Sinusoidal encodings also extrapolate to sequence lengths not seen during training.</p>
+
+    <h2>Training recipe</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Component</th>
+            <th class="text-left py-2 text-gray-400">Specification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Warmup + decay schedule</td><td class="text-gray-400">Linear warmup for 4000 steps, then inverse square root decay. Widely adopted.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Label smoothing</td><td class="text-gray-400">epsilon = 0.1. Hurts perplexity, improves BLEU. The model learns to be less confident.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Residual dropout</td><td class="text-gray-400">P = 0.1 on sub-layer outputs and on summed embeddings + positional encoding.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Weight sharing</td><td class="text-gray-400">Same matrix for encoder embeddings, decoder embeddings, and pre-softmax linear. Fewer parameters, works.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What this architecture gives you</h2>
+
+    <p>Attention is Attend. Scaled dot-product attention is a soft lookup: query a key-value store with continuous keys, get a weighted blend of values. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> staged preferences do the same job with discrete operators (reject first, rank survivors). The transformer version is differentiable; Soar's is interpretable; <a href="/reading/cognitive-architecture/minsky-1986/">Minsky's</a> cross-exclusion is the simplest: winner takes all.</p>
+
+    <p>Multi-head projection is <a href="/reading/cognitive-architecture/minsky-1986/">polyneme broadcast</a> made precise. Each head projects Q, K, V into a 64-dimensional subspace. One head learns syntax, another semantics, another positional proximity. Minsky described polynemes as signals that activate partial states across many agencies at once. Same idea, learned projections instead of hand-wired connections.</p>
+
+    <p>Causal masking is the simplest possible Filter. Prevent information flow from future to past. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> truth maintenance is richer: auto-retract any structure whose justification no longer holds. <a href="/reading/cognitive-architecture/arunkumar-2026/">MemAgent</a> learns <em>which</em> information to mask. Causal masking doesn't learn. It enforces a static constraint. But it's the one that enabled everything else.</p>
+
+    <p>Residual connections are what make depth survivable. Without them, gradients vanish. With them, 96 layers. This is a Cache operation: preserve the input alongside whatever the layer computes. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> working memory serves the same function. The central hub that every module reads from and writes to, never overwritten, always available.</p>
+
+    <h2>The frozen forward pass</h2>
+
+    <p>The transformer as described here runs one direction. No memory beyond the context window. No learning at inference time. No mechanism to update its own weights. <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> has all three: episodic memory, chunking, and RL update the architecture as it runs.</p>
+
+    <p>Everything that makes modern LLMs useful (<a href="/reading/cognitive-architecture/zhao-2023/">pre-training, RLHF, in-context learning</a>, <a href="/reading/cognitive-architecture/arunkumar-2026/">agent loops with tools and memory</a>) is built on top of this paper's foundation. The foundation itself is a single forward pass. What came next is the story of bolting on the missing pieces.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/consolidation"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>consolidation (blog)</a></li>
+      <li><a href="/reading/cognitive-architecture/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/cognitive-architecture/minsky-1986/", label: "Minsky 1986 · 1 of 5" }} next={{ href: "/reading/cognitive-architecture/laird-2022/", label: "Laird 2022 · 3 of 5" }} />
+
+  </main>
+</Layout>

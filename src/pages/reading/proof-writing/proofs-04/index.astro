@@ -1,0 +1,176 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Proofs Ch.4 — Mathematical Induction" favicon="✎">
+  <main>
+
+    <a href="/reading/proof-writing/" class="text-sm mb-4 inline-block">← back to proofs</a>
+
+    <h1>Mathematical Induction</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/">Introduction to Proofs</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Mathematical induction</strong> proves a statement for all natural numbers. Prove it for n=0 (the base case). Then prove: if it holds for n=k, it holds for n=k+1 (the inductive step). The two together guarantee it holds everywhere.</p>
+    </div>
+
+    <!-- SVG: Domino chain -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Domino 0 (falling) -->
+        <rect x="30" y="20" width="16" height="60" rx="2" fill="none" stroke="#4ade80" stroke-width="1.5" transform="rotate(15, 38, 80)"/>
+        <text x="38" y="95" text-anchor="middle" fill="#4ade80" font-size="10">base</text>
+        <!-- Domino 1 -->
+        <rect x="80" y="20" width="16" height="60" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" transform="rotate(10, 88, 80)"/>
+        <text x="88" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">k=1</text>
+        <!-- Domino 2 -->
+        <rect x="130" y="20" width="16" height="60" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" transform="rotate(5, 138, 80)"/>
+        <text x="138" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">k=2</text>
+        <!-- Domino 3 -->
+        <rect x="180" y="20" width="16" height="60" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="188" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">k=3</text>
+        <!-- Domino 4 -->
+        <rect x="230" y="20" width="16" height="60" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Domino 5 -->
+        <rect x="280" y="20" width="16" height="60" rx="2" fill="none" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <!-- Dots -->
+        <text x="340" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.3">...</text>
+        <!-- Arrow from base -->
+        <path d="M 50 40 Q 65 30 78 35" fill="none" stroke="#4ade80" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="76,32 82,35 77,39" fill="#4ade80" fill-opacity="0.5"/>
+        <!-- Caption -->
+        <text x="200" y="115" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Each domino knocks down the next. The base case starts the chain.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Sum formula -->
+    <h3>Example: sum of first n natural numbers</h3>
+    <p>Claim: 1 + 2 + ... + n = n(n+1)/2 for all n at least 1. Base case: n=1 gives 1 = 1*2/2, which checks. Inductive step: assume it holds for k, then 1 + ... + k + (k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2. Done.</p>
+
+    <SchemeRepl client:load initialCode={`; Induction: 1 + 2 + ... + n = n(n+1)/2
+
+(define (sum-to n)
+  (if (= n 0) 0
+      (+ n (sum-to (- n 1)))))
+
+(define (formula n) (/ (* n (+ n 1)) 2))
+
+; Verify for many values of n
+(define (verify n)
+  (display "n=") (display n)
+  (display "  sum=") (display (sum-to n))
+  (display "  formula=") (display (formula n))
+  (display "  match? ") (display (= (sum-to n) (formula n)))
+  (newline))
+
+(verify 1)
+(verify 5)
+(verify 10)
+(verify 50)
+(verify 100)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Induction: 1 + 2 + ... + n = n*(n+1)//2
+for n in [1, 5, 10, 50, 100]:
+    actual = sum(range(1, n + 1))
+    formula = n * (n + 1) // 2
+    print(f"n={n:3d}  sum={actual:5d}  formula={formula:5d}  match={actual == formula}")
+`} />
+    </div>
+
+    <!-- 2. Inequality -->
+    <h3>Example: 2^n > n for all n at least 0</h3>
+    <p>Base case: 2^0 = 1 > 0. Inductive step: assume 2^k > k. Then 2^(k+1) = 2 * 2^k > 2k = k + k. For k at least 1, k at least 1, so k + k at least k + 1. So 2^(k+1) > k+1.</p>
+
+    <SchemeRepl client:load initialCode={`; Induction: 2^n > n for all n >= 0.
+
+(define (pow2 n)
+  (if (= n 0) 1 (* 2 (pow2 (- n 1)))))
+
+(define (check n)
+  (display "2^") (display n) (display " = ") (display (pow2 n))
+  (display " > ") (display n) (display "? ")
+  (display (> (pow2 n) n))
+  (newline))
+
+(check 0)
+(check 1)
+(check 5)
+(check 10)
+(check 20)
+`} />
+
+    <!-- 3. Divisibility -->
+    <h3>Example: 3 divides n^3 - n</h3>
+    <p>Base case: 0^3 - 0 = 0, and 3 divides 0. Inductive step: assume 3 divides k^3 - k. Then (k+1)^3 - (k+1) = k^3 + 3k^2 + 3k + 1 - k - 1 = (k^3 - k) + 3k^2 + 3k = (k^3 - k) + 3(k^2 + k). The first term is divisible by 3 (inductive hypothesis), the second is clearly divisible by 3. Done.</p>
+
+    <SchemeRepl client:load initialCode={`; Induction: 3 divides n^3 - n for all n >= 0.
+
+(define (cube n) (* n n n))
+
+(define (check n)
+  (let ((val (- (cube n) n)))
+    (display "n=") (display n)
+    (display "  n^3-n=") (display val)
+    (display "  div by 3? ") (display (= 0 (modulo val 3)))
+    (newline)))
+
+(check 0)
+(check 1)
+(check 2)
+(check 5)
+(check 10)
+(check 17)
+`} />
+
+    <!-- 4. Strong induction -->
+    <h3>Strong induction</h3>
+    <p>In <strong>strong induction</strong>, the inductive hypothesis assumes the statement holds for all values up to k, not just k. Useful when the step from k to k+1 depends on earlier values. Example: every integer at least 2 has a prime factorization. If n is prime, done. If composite, n = a*b where a, b are less than n and at least 2. By strong induction, each has a prime factorization. Combining them gives one for n.</p>
+
+    <SchemeRepl client:load initialCode={`; Strong induction: every integer >= 2 has a prime factorization.
+
+(define (factorize n)
+  (define (go n d)
+    (cond ((<= n 1) (list))
+          ((= 0 (modulo n d)) (cons d (go (/ n d) d)))
+          (else (go n (+ d 1)))))
+  (go n 2))
+
+(define (check n)
+  (display n) (display " = ")
+  (display (factorize n))
+  (newline))
+
+(check 2)
+(check 12)
+(check 30)
+(check 97)
+(check 360)
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-09/">🔑 Logic Ch.9</a> — formal treatment of induction in predicate logic</li>
+      <li><a href="/reading/discrete-math/levin-02/">🔢 Discrete Math Ch.2</a> — sequences and induction</li>
+      <li><a href="/reading/category-theory/milewski-19/">🐱 Milewski Ch.19</a> — F-algebras: induction as initial algebra</li>
+    
+      <li><a href="/reading/logic/logic-09/">🔑 Logic Ch.9</a> &mdash; mathematical induction in formal logic</li>
+      <li><a href="/reading/discrete-math/levin-02/">🔢 Discrete Math Ch.2</a> &mdash; sequences and recurrences proved by induction</li>
+      <li><a href="/reading/the-natural-framework-lean/induction/">✏️ Induction.lean</a> &mdash; machine-checked induction proofs</li>
+      <li><a href="/reading/algorithms/algo-02/">⚙ Algorithms Ch.2</a> &mdash; recursion uses the same inductive structure</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext prev={{ href: "/reading/proof-writing/proofs-03/", label: "Contrapositive and Contradiction" }} next={{ href: "/reading/proof-writing/proofs-05/", label: "Sets" }} />
+
+  </main>
+</Layout>

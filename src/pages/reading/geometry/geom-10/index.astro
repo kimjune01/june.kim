@@ -1,0 +1,213 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.10 — Delaunay Triangulation" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">&larr; back to geometry</a>
+
+    <h1>Delaunay Triangulation</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (<a href="https://en.wikipedia.org/wiki/Delaunay_triangulation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Delaunay triangulation</a>) &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Delaunay triangulation</strong> of a point set is the triangulation where no point lies inside the circumcircle of any triangle. It is the dual graph of the Voronoi diagram. It maximizes the minimum angle across all possible triangulations, avoiding thin, degenerate triangles.</p>
+    </div>
+
+    <!-- 1. Circumcircle property -->
+    <h3>The circumcircle property</h3>
+    <p>A triangulation is Delaunay if and only if for every triangle, the circumscribed circle contains no other points from the set. This "empty circle" property is the defining criterion. When it fails, you can fix it by flipping the shared edge of two adjacent triangles.</p>
+
+    <SchemeRepl client:load initialCode={`; Check if point d is inside the circumcircle of triangle abc
+; Uses the determinant test (positive = inside for CCW triangles)
+
+(define (in-circumcircle? ax ay bx by cx cy dx dy)
+  (let* ((adx (- ax dx)) (ady (- ay dy))
+         (bdx (- bx dx)) (bdy (- by dy))
+         (cdx (- cx dx)) (cdy (- cy dy))
+         (det (+ (* adx (- (* bdy (+ (* cdx cdx) (* cdy cdy)))
+                            (* cdy (+ (* bdx bdx) (* bdy bdy)))))
+                 (- (* ady (- (* bdx (+ (* cdx cdx) (* cdy cdy)))
+                              (* cdx (+ (* bdx bdx) (* bdy bdy))))))
+                 (* (+ (* adx adx) (* ady ady))
+                    (- (* bdx cdy) (* bdy cdx))))))
+    (> det 0)))
+
+; Triangle (0,0), (4,0), (2,3) — check if (2,1) is inside its circumcircle
+(display "Point (2,1) inside circumcircle of triangle? ")
+(display (in-circumcircle? 0 0 4 0 2 3 2 1)) (newline)
+
+; Point far away should be outside
+(display "Point (10,10) inside circumcircle? ")
+(display (in-circumcircle? 0 0 4 0 2 3 10 10))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def in_circumcircle(ax, ay, bx, by, cx, cy, dx, dy):
+    """Returns True if (dx,dy) is inside circumcircle of (a,b,c) in CCW order."""
+    adx, ady = ax - dx, ay - dy
+    bdx, bdy = bx - dx, by - dy
+    cdx, cdy = cx - dx, cy - dy
+    det = (adx * (bdy * (cdx**2 + cdy**2) - cdy * (bdx**2 + bdy**2))
+         - ady * (bdx * (cdx**2 + cdy**2) - cdx * (bdx**2 + bdy**2))
+         + (adx**2 + ady**2) * (bdx * cdy - bdy * cdx))
+    return det > 0
+
+print(f"(2,1) inside circumcircle? {in_circumcircle(0,0, 4,0, 2,3, 2,1)}")
+print(f"(10,10) inside circumcircle? {in_circumcircle(0,0, 4,0, 2,3, 10,10)}")
+`} />
+    </div>
+
+
+    <!-- 2. Maximizes minimum angle -->
+    <h3>Maximizes minimum angle</h3>
+    <p>Among all triangulations of the same point set, the Delaunay triangulation has the <strong>largest minimum angle</strong>. This makes it ideal for finite element methods, terrain modeling, and mesh generation, where skinny triangles cause numerical instability.</p>
+
+    <SchemeRepl client:load initialCode={`; Compute angles of a triangle from its vertices
+; Uses the law of cosines: cos(C) = (a^2 + b^2 - c^2) / (2ab)
+
+(define pi 3.141592653589793)
+
+(define (dist-sq p q)
+  (+ (* (- (car p) (car q)) (- (car p) (car q)))
+     (* (- (cadr p) (cadr q)) (- (cadr p) (cadr q)))))
+
+(define (angle-at a b c)
+  ; Angle at vertex a, opposite side bc
+  (let* ((ab2 (dist-sq a b))
+         (ac2 (dist-sq a c))
+         (bc2 (dist-sq b c))
+         (cos-a (/ (+ ab2 ac2 (- bc2))
+                   (* 2 (sqrt ab2) (sqrt ac2)))))
+    (* (/ 180 pi) (acos (max -1 (min 1 cos-a))))))
+
+(define (min-angle a b c)
+  (min (angle-at a b c) (angle-at b a c) (angle-at c a b)))
+
+; Good triangle (Delaunay-like): equilateral-ish
+(define t1-a (list 0 0)) (define t1-b (list 4 0)) (define t1-c (list 2 3))
+(display "Good triangle min angle: ")
+(display (min-angle t1-a t1-b t1-c)) (newline)
+
+; Bad triangle (skinny): nearly degenerate
+(define t2-a (list 0 0)) (define t2-b (list 10 0)) (define t2-c (list 5 0.5))
+(display "Skinny triangle min angle: ")
+(display (min-angle t2-a t2-b t2-c)) (newline)
+
+(display "Delaunay avoids skinny triangles.")
+`} />
+
+
+    <!-- SVG: Delaunay triangulation of the same points as Voronoi ch9 -->
+    <h3>The dual of Voronoi</h3>
+    <p>Connect two sites with an edge whenever their Voronoi cells share a boundary. The result is the Delaunay triangulation. Every Voronoi vertex (where three cells meet) becomes a Delaunay triangle. Every Voronoi edge (between two cells) becomes a Delaunay edge. The two structures encode the same spatial information from dual perspectives.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Same sites as ch9 Voronoi: A(50,250), B(200,200), C(100,50), D(300,100) -->
+
+        <!-- Voronoi edges (faint, from ch9) -->
+        <line x1="100" y1="100" x2="175" y2="175" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="175" y1="175" x2="250" y2="150" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="250" y1="150" x2="200" y2="80" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="0" y1="150" x2="100" y2="100" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="200" y1="80" x2="200" y2="0" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="175" y1="175" x2="150" y2="300" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="250" y1="150" x2="350" y2="200" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+
+        <!-- Delaunay edges (solid) -->
+        <!-- A-B -->
+        <line x1="50" y1="250" x2="200" y2="200" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- A-C -->
+        <line x1="50" y1="250" x2="100" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- B-C -->
+        <line x1="200" y1="200" x2="100" y2="50" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- B-D -->
+        <line x1="200" y1="200" x2="300" y2="100" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- C-D -->
+        <line x1="100" y1="50" x2="300" y2="100" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+
+        <!-- Sites -->
+        <circle cx="50" cy="250" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="35" y="268" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">A</text>
+
+        <circle cx="200" cy="200" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="215" y="218" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">B</text>
+
+        <circle cx="100" cy="50" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="100" y="38" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">C</text>
+
+        <circle cx="300" cy="100" r="5" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="315" y="95" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">D</text>
+
+        <!-- Voronoi vertices as small dots -->
+        <circle cx="100" cy="100" r="2" fill="currentColor" fill-opacity="0.2"/>
+        <circle cx="175" cy="175" r="2" fill="currentColor" fill-opacity="0.2"/>
+        <circle cx="250" cy="150" r="2" fill="currentColor" fill-opacity="0.2"/>
+        <circle cx="200" cy="80" r="2" fill="currentColor" fill-opacity="0.2"/>
+
+        <text x="200" y="295" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Delaunay triangulation (solid) with Voronoi edges (dashed)</text>
+      </svg>
+    </div>
+
+
+    <!-- 4. Lifting to one higher dimension -->
+    <h3>Convex hull in one higher dimension</h3>
+    <p>A remarkable connection: lift each 2D point (x, y) to 3D as (x, y, x&sup2; + y&sup2;), placing it on a paraboloid. The lower convex hull of these lifted points, projected back to 2D, gives the Delaunay triangulation. This means any convex hull algorithm in (d+1) dimensions gives you a Delaunay triangulation in d dimensions for free.</p>
+
+    <SchemeRepl client:load initialCode={`; Lifting trick: 2D point (x,y) -> 3D point (x, y, x^2 + y^2)
+; The Delaunay triangulation in 2D = lower convex hull in 3D
+
+(define (lift-to-paraboloid p)
+  (let ((x (car p)) (y (cadr p)))
+    (list x y (+ (* x x) (* y y)))))
+
+(define points (list (list 0 0) (list 3 0) (list 1 2) (list 4 3)))
+
+(display "Original 2D points:") (newline)
+(for-each (lambda (p) (display "  ") (display p) (newline)) points)
+
+(display "Lifted to paraboloid:") (newline)
+(for-each (lambda (p)
+            (display "  ") (display (lift-to-paraboloid p)) (newline))
+          points)
+
+(display "Lower convex hull of lifted points") (newline)
+(display "projected back to 2D = Delaunay triangulation")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Geometry chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-09/">&#9651; Chapter 9</a> &mdash; Voronoi Diagrams (the dual)</li>
+      <li><a href="/reading/geometry/geom-11/">&#9651; Chapter 11</a> &mdash; Power Diagrams (weighted generalization)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/discrete-math/levin-04/">&#9651; Discrete Math Ch.4</a> &mdash; graph theory (Delaunay graphs are planar)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Delaunay_triangulation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Delaunay triangulation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Circumscribed_circle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Circumscribed circle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Convex_hull"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Convex hull</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The in-circumcircle test uses a 4x4 determinant reduced to a 3x3 form. The sign convention assumes counter-clockwise vertex ordering; swap any two vertices and the sign flips. The lifting-to-paraboloid construction is exact: the lower convex hull facets in 3D correspond bijectively to Delaunay triangles in 2D. This is the basis of the fastest known Delaunay algorithms (via 3D convex hull in expected O(n log n)).</p>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-09/", label: "Voronoi Diagrams" }} next={{ href: "/reading/geometry/geom-11/", label: "Power Diagrams" }} />
+
+  </main>
+</Layout>

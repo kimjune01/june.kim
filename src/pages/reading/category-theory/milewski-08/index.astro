@@ -1,0 +1,473 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.8 — Functoriality" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Functoriality</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/02/03/functoriality/">Category Theory for Programmers, Ch. 8</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>. 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Every algebraic data type you build from products, coproducts, and function types is <strong>automatically functorial</strong>. The functor instance writes itself because <code>bimap</code> distributes over sums and products, <code>contramap</code> handles the input side of functions, and <code>dimap</code> handles both sides at once.</p>
+    </div>
+
+    <!-- SVG: Bifunctor C x D -> E -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Category C -->
+        <rect x="20" y="30" width="70" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="55" y="60" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">C</text>
+        <!-- Category D -->
+        <rect x="100" y="30" width="70" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="135" y="60" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">D</text>
+        <!-- x symbol -->
+        <text x="92" y="60" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.5">&#x00D7;</text>
+        <!-- Arrow to E -->
+        <line x1="178" y1="55" x2="260" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="260,51 268,55 260,59" fill="currentColor"/>
+        <text x="220" y="48" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F</text>
+        <!-- Category E -->
+        <rect x="275" y="30" width="70" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="310" y="60" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">E</text>
+        <!-- Label -->
+        <text x="190" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">bifunctor: two inputs, one output</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Contravariant functor — arrow reversal -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Covariant -->
+        <text x="10" y="30" fill="currentColor" font-size="11" fill-opacity="0.5">covariant:</text>
+        <circle cx="100" cy="30" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="100" y="22" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">a</text>
+        <circle cx="180" cy="30" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="22" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">b</text>
+        <line x1="107" y1="30" x2="172" y2="30" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="172,27 178,30 172,33" fill="currentColor"/>
+        <text x="140" y="25" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">f</text>
+        <!-- Arrow -->
+        <text x="210" y="33" fill="currentColor" font-size="14" fill-opacity="0.4">&#x21A6;</text>
+        <!-- F(a) -> F(b) -->
+        <circle cx="250" cy="30" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="250" y="22" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">F(a)</text>
+        <circle cx="340" cy="30" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="340" y="22" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">F(b)</text>
+        <line x1="260" y1="30" x2="330" y2="30" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="330,27 336,30 330,33" fill="currentColor"/>
+
+        <!-- Contravariant -->
+        <text x="10" y="90" fill="currentColor" font-size="11" fill-opacity="0.5">contravariant:</text>
+        <circle cx="100" cy="90" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="100" y="82" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">a</text>
+        <circle cx="180" cy="90" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="82" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">b</text>
+        <line x1="107" y1="90" x2="172" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="172,87 178,90 172,93" fill="currentColor"/>
+        <text x="140" y="85" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">f</text>
+        <!-- Arrow -->
+        <text x="210" y="93" fill="currentColor" font-size="14" fill-opacity="0.4">&#x21A6;</text>
+        <!-- F(b) -> F(a)  REVERSED -->
+        <circle cx="250" cy="90" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="250" y="82" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">F(a)</text>
+        <circle cx="340" cy="90" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="340" y="82" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">F(b)</text>
+        <line x1="330" y1="90" x2="260" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="260,87 254,90 260,93" fill="currentColor"/>
+        <!-- Label -->
+        <text x="295" y="115" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">arrow reversed</text>
+      </svg>
+    </div>
+
+    <!-- 1. Bifunctors -->
+    <h3>Bifunctors: functors of two arguments</h3>
+    <p>A <strong>bifunctor</strong> maps two categories into a third. In programming, that means a type constructor with two type parameters, where you can map over both independently. The canonical example: the pair type <code>(a, b)</code>. Apply one function to the first component, another to the second.</p>
+
+    <SchemeRepl client:load initialCode={`; A bifunctor maps two arguments covariantly.
+; bimap : (a -> c) -> (b -> d) -> F(a,b) -> F(c,d)
+
+; Pair bifunctor: apply f to first, g to second
+(define (bimap-pair f g pair)
+  (cons (f (car pair)) (g (cdr pair))))
+
+; Example: double the first, negate the second
+(define p (cons 3 7))
+(display "original: ") (display p) (newline)
+(display "bimap:    ")
+(display (bimap-pair (lambda (x) (* x 2))
+                     (lambda (x) (- 0 x))
+                     p))
+(newline)
+
+; bimap id id = id  (functor law)
+(display "bimap id id: ")
+(display (bimap-pair (lambda (x) x) (lambda (x) x) p))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bifunctor for pairs
+def bimap_pair(f, g, pair):
+    return (f(pair[0]), g(pair[1]))
+
+p = (3, 7)
+print(f"original: {p}")
+print(f"bimap:    {bimap_pair(lambda x: x*2, lambda x: -x, p)}")
+print(f"bimap id: {bimap_pair(lambda x: x, lambda x: x, p)}")
+`} />
+    </div>
+
+
+    <!-- 2. Either bifunctor -->
+    <h3>Coproduct as a bifunctor</h3>
+    <p>The coproduct (tagged union / Either) is also a bifunctor. <code>bimap</code> applies one function to the Left case, the other to the Right case. Together with the product bifunctor, these two give you the building blocks for all algebraic data types.</p>
+
+    <SchemeRepl client:load initialCode={`; Either as a bifunctor
+; Represent Either as tagged: (left . value) or (right . value)
+
+(define (make-left x) (cons 'left x))
+(define (make-right x) (cons 'right x))
+(define (left? e) (eq? (car e) 'left))
+
+(define (bimap-either f g e)
+  (if (left? e)
+      (make-left (f (cdr e)))
+      (make-right (g (cdr e)))))
+
+; Apply different transforms to each branch
+(define e1 (make-left 42))
+(define e2 (make-right 7))
+
+(display "left:  ") (display (bimap-either (lambda (x) (* x 2))
+                                           (lambda (x) (+ x 100)) e1)) (newline)
+(display "right: ") (display (bimap-either (lambda (x) (* x 2))
+                                           (lambda (x) (+ x 100)) e2))
+; Left maps the first function. Right maps the second.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Either bifunctor in Python
+class Left:
+    def __init__(self, v): self.v = v
+    def __repr__(self): return f"Left({self.v!r})"
+
+class Right:
+    def __init__(self, v): self.v = v
+    def __repr__(self): return f"Right({self.v!r})"
+
+def bimap_either(f, g, e):
+    if isinstance(e, Left):
+        return Left(f(e.v))
+    return Right(g(e.v))
+
+print(bimap_either(lambda x: x*2, lambda x: x+100, Left(42)))
+print(bimap_either(lambda x: x*2, lambda x: x+100, Right(7)))
+`} />
+    </div>
+
+    <!-- 3. Maybe from bifunctors -->
+    <h3>Maybe from bifunctors: algebraic data types are functorial</h3>
+    <p><code>Maybe a = Either () a</code>. The <code>()</code> is a constant (the Const functor), and <code>a</code> is the identity functor. Since Either is a bifunctor and both Const and Identity are functors, the composite is automatically a functor. Every ADT built from sums and products inherits its functor instance for free.</p>
+
+    <SchemeRepl client:load initialCode={`; Maybe = Either(Const(()), Identity(a))
+; Nothing = Left(())    Just(x) = Right(x)
+
+(define nothing (cons 'left '()))
+(define (just x) (cons 'right x))
+(define (nothing? m) (and (pair? m) (eq? (car m) 'left)))
+
+; fmap for Maybe comes from bimap-either + const + identity
+(define (fmap-maybe f m)
+  (if (nothing? m)
+      nothing
+      (just (f (cdr m)))))
+
+(display "fmap (*2) Just(5):   ") (display (fmap-maybe (lambda (x) (* x 2)) (just 5))) (newline)
+(display "fmap (*2) Nothing:   ") (display (fmap-maybe (lambda (x) (* x 2)) nothing)) (newline)
+
+; The functor instance writes itself: bimap id f on Either () a
+; Const ignores f. Identity applies f. Sum picks the branch.
+`} />
+
+
+    <!-- 4. Contravariant functors -->
+    <h3>Contravariant functors: reversing the arrows</h3>
+    <p>A <strong>contravariant functor</strong> is a functor from the opposite category. Instead of <code>fmap : (a -> b) -> F a -> F b</code>, you get <code>contramap : (b -> a) -> F a -> F b</code>. The arrows reverse. The canonical example: predicates. If you have a predicate on strings and a function <code>int -> string</code>, you can build a predicate on ints by converting first, then testing.</p>
+
+    <SchemeRepl client:load initialCode={`; Contravariant functor: contramap reverses the arrow.
+; contramap : (b -> a) -> F(a) -> F(b)
+;
+; Predicate on a = a -> Bool
+; Given (b -> a) and (a -> Bool), get (b -> Bool)
+; Just pre-compose!
+
+(define (contramap-pred f pred)
+  (lambda (x) (pred (f x))))
+
+; A predicate on strings: is it long?
+(define (long? s) (> (string-length s) 5))
+
+; A function: number -> string
+(define (show n) (number->string n))
+
+; Contramapped: is the number's string representation long?
+(define long-number? (contramap-pred show long?))
+
+(display "long?(\"hi\"):     ") (display (long? "hi")) (newline)
+(display "long?(\"category\"): ") (display (long? "category")) (newline)
+(display "long-number?(7):      ") (display (long-number? 7)) (newline)
+(display "long-number?(1000000): ") (display (long-number? 1000000))
+; 7 -> "7" -> not long.  1000000 -> "1000000" -> long.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Contravariant functor: predicates
+def contramap_pred(f, pred):
+    return lambda x: pred(f(x))
+
+long = lambda s: len(s) > 5
+show = lambda n: str(n)
+
+long_number = contramap_pred(show, long)
+
+print(f"long('hi'):       {long('hi')}")
+print(f"long('category'): {long('category')}")
+print(f"long_number(7):       {long_number(7)}")
+print(f"long_number(1000000): {long_number(1000000)}")
+`} />
+    </div>
+
+
+    <!-- 5. Comparators as contravariant functors -->
+    <h3>Comparators: another contravariant functor</h3>
+    <p>Comparators are contravariant too. If you can compare strings, and you have a function <code>person -> string</code> that extracts a name, you can compare people by name. You pull back the comparison through the extraction function.</p>
+
+    <SchemeRepl client:load initialCode={`; Comparators are contravariant.
+; Comparator on a = a -> a -> ordering
+; contramap: (b -> a) -> Cmp(a) -> Cmp(b)
+
+(define (contramap-cmp f cmp)
+  (lambda (x y) (cmp (f x) (f y))))
+
+; Compare strings alphabetically
+(define (string-cmp a b)
+  (cond ((string<? a b) 'lt)
+        ((string>? a b) 'gt)
+        (else 'eq)))
+
+; People as (name . age) pairs
+(define (person-name p) (car p))
+
+; Compare people by name — pulled back through person-name
+(define name-cmp (contramap-cmp person-name string-cmp))
+
+(display (name-cmp (cons "Alice" 30) (cons "Bob" 25))) (newline)
+(display (name-cmp (cons "Charlie" 40) (cons "Alice" 35)))
+; Alice < Bob, Charlie > Alice
+`} />
+
+    <!-- 6. Profunctors -->
+    <h3>Profunctors: contra in first, co in second</h3>
+    <p>The function arrow <code>a -> b</code> is contravariant in <code>a</code> (the input) and covariant in <code>b</code> (the output). A type that behaves this way is a <strong>profunctor</strong>. The operation <code>dimap</code> takes two functions: one to pre-process the input (going backwards), one to post-process the output (going forwards).</p>
+
+    <SchemeRepl client:load initialCode={`; Profunctor: contravariant in first arg, covariant in second.
+; dimap : (a' -> a) -> (b -> b') -> P(a,b) -> P(a',b')
+;
+; For functions: dimap f g h = g . h . f
+; f adapts the input (contra), g adapts the output (co).
+
+(define (dimap f g h)
+  (lambda (x) (g (h (f x)))))
+
+; A function: string -> number (count chars)
+(define (char-count s) (string-length s))
+
+; Pre-process: number -> string (show it first)
+; Post-process: number -> string (format the result)
+(define adapted
+  (dimap number->string
+         (lambda (n) (string-append "length=" (number->string n)))
+         char-count))
+
+(display (adapted 42)) (newline)
+; 42 -> "42" -> 2 -> "length=2"
+
+(display (adapted 1000000)) (newline)
+; 1000000 -> "1000000" -> 7 -> "length=7"
+
+; dimap id id h = h  (identity law)
+(define same (dimap (lambda (x) x) (lambda (x) x) char-count))
+(display "dimap id id: ") (display (same "hello"))
+; 5 — unchanged
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Profunctor: dimap for functions
+def dimap(f, g, h):
+    return lambda x: g(h(f(x)))
+
+char_count = len
+
+adapted = dimap(str,
+                lambda n: f"length={n}",
+                char_count)
+
+print(adapted(42))       # 42 -> "42" -> 2 -> "length=2"
+print(adapted(1000000))  # 1000000 -> "1000000" -> 7 -> "length=7"
+
+# dimap id id h = h
+same = dimap(lambda x: x, lambda x: x, char_count)
+print(f"dimap id id: {same('hello')}")  # 5
+`} />
+    </div>
+
+
+    <!-- 7. The Const functor -->
+    <h3>The Const functor</h3>
+    <p>The <strong>Const functor</strong> ignores its second type parameter. <code>Const c a</code> always holds a <code>c</code>, regardless of <code>a</code>. Its <code>fmap</code> does nothing: the value doesn't depend on the type parameter, so there's nothing to transform. Const is the "zero" in the algebra of functors. It shows up everywhere in the automatic derivation of functor instances for ADTs.</p>
+
+    <SchemeRepl client:load initialCode={`; Const functor: holds a fixed value, ignores the type parameter.
+; Const c a = c  (a is phantom)
+; fmap f (Const c) = Const c  (f is never applied)
+
+(define (make-const c) (cons 'const c))
+(define (const-val c) (cdr c))
+
+(define (fmap-const f c)
+  c)  ; ignore f entirely
+
+(define c (make-const 42))
+(display "original:   ") (display c) (newline)
+(display "fmap (*2):  ") (display (fmap-const (lambda (x) (* x 2)) c)) (newline)
+(display "fmap str:   ") (display (fmap-const number->string c)) (newline)
+; All three are the same. The Const functor is inert.
+
+; Why does this matter? It's a building block.
+; Maybe a = Either (Const () a) (Identity a)
+; Nothing carries Const () — fmap can't touch it.
+; Just carries Identity — fmap goes straight through.
+`} />
+
+
+    <!-- 8. Putting it together -->
+    <h3>Putting it together: the functoriality of ADTs</h3>
+    <p>Every algebraic data type is a nested composition of sums (Either), products (pairs), Const, and Identity. Since all of these are functorial, their compositions are too. This is why Haskell can auto-derive <code>Functor</code>: the compiler walks the type structure and assembles <code>fmap</code> from <code>bimap</code>, <code>contramap</code>, and the identity. The only catch: the type parameter must appear in covariant (positive) position. If it appears in a function argument (negative position), you need <code>Contravariant</code> or <code>Profunctor</code> instead.</p>
+
+    <SchemeRepl client:load initialCode={`; Summary: the algebra of functors
+; bimap  handles products and coproducts (two covariant args)
+; fmap   handles single covariant arg (ordinary functor)
+; contramap handles single contravariant arg (function input)
+; dimap  handles one contra + one co (profunctor)
+
+; A tree is an ADT: Leaf(a) | Branch(Tree(a), Tree(a))
+; = Either(Identity(a), Pair(Tree(a), Tree(a)))
+; fmap follows the structure:
+
+(define (make-leaf x) (list 'leaf x))
+(define (make-branch l r) (list 'branch l r))
+(define (leaf? t) (eq? (car t) 'leaf))
+
+(define (fmap-tree f t)
+  (if (leaf? t)
+      (make-leaf (f (cadr t)))                    ; Identity: apply f
+      (make-branch (fmap-tree f (cadr t))         ; recurse left
+                   (fmap-tree f (caddr t)))))     ; recurse right
+
+(define tree
+  (make-branch (make-leaf 1)
+               (make-branch (make-leaf 2)
+                            (make-leaf 3))))
+
+(display "original: ") (display tree) (newline)
+(display "doubled:  ") (display (fmap-tree (lambda (x) (* x 2)) tree))
+; The functor instance follows the sum/product structure automatically.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tree functor — follows the ADT structure
+class Leaf:
+    def __init__(self, v): self.v = v
+    def __repr__(self): return f"Leaf({self.v})"
+
+class Branch:
+    def __init__(self, l, r): self.l, self.r = l, r
+    def __repr__(self): return f"Branch({self.l}, {self.r})"
+
+def fmap_tree(f, t):
+    if isinstance(t, Leaf):
+        return Leaf(f(t.v))
+    return Branch(fmap_tree(f, t.l), fmap_tree(f, t.r))
+
+tree = Branch(Leaf(1), Branch(Leaf(2), Leaf(3)))
+print(f"original: {tree}")
+print(f"doubled:  {fmap_tree(lambda x: x*2, tree)}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">bimap f g</td><td class="pr-4 text-green-300">(bimap-pair f g p)</td><td class="font-sans">Map both components of a bifunctor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">first f = bimap f id</td><td class="pr-4 text-green-300">(bimap-pair f (lambda (x) x) p)</td><td class="font-sans">Map only the first component</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">second g = bimap id g</td><td class="pr-4 text-green-300">(bimap-pair (lambda (x) x) g p)</td><td class="font-sans">Map only the second component</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">contramap f</td><td class="pr-4 text-green-300">(contramap-pred f pred)</td><td class="font-sans">Pre-compose: reverse the input arrow</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">dimap f g h</td><td class="pr-4 text-green-300">(dimap f g h)</td><td class="font-sans">Pre-compose f, post-compose g</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Const c a</td><td class="pr-4 text-green-300">(make-const c)</td><td class="font-sans">Ignores type parameter a</td></tr>
+          <tr><td class="py-2 pr-4">Identity a</td><td class="pr-4 text-green-300">a</td><td class="font-sans">Passes type parameter through</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Chapter 7</a> — Functors: structure-preserving maps</li>
+      <li>(next) <a href="/reading/category-theory/milewski-09/">Chapter 9</a> — Function Types: exponentials</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — open games use profunctors (contravariant coplay channel)</li>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — parametrised optics generalize profunctors</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Functor#Bifunctors_and_multifunctors"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bifunctor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Functor#Covariance_and_contravariance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Contravariant functor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Profunctor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Profunctor</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell typeclasses (<code>Bifunctor</code>, <code>Contravariant</code>, <code>Profunctor</code>) and C++ templates. This page uses plain Scheme functions, since Scheme has no type system to enforce the laws. The automatic derivation of functor instances for ADTs, which Milewski shows via <code>Const</code> and <code>Identity</code> composition, is demonstrated here by manually following the same decomposition for Maybe and Tree. The blog post also discusses the Writer functor's derivation from Kleisli composition. That's covered in <a href="/reading/category-theory/milewski-04/">Chapter 4</a>. One subtlety from the blog post worth noting: separate functoriality in each argument is not enough to prove joint functoriality. The commutativity condition (applying <code>first</code> then <code>second</code> equals applying <code>second</code> then <code>first</code>) is required. Categories that violate this are called premonoidal.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/02/03/functoriality/">Read the blog post</a>. Start with the bifunctor section, then trace how Maybe decomposes into Const + Identity.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-07/", label: "Functors" }} next={{ href: "/reading/category-theory/milewski-09/", label: "Function Types" }} />
+
+  </main>
+</Layout>

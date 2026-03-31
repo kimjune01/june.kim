@@ -1,0 +1,186 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.1 — Introduction to Data" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Introduction to Data</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 1 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Statistics begins with <strong>data</strong>. Every dataset is a collection of <strong>observations</strong> (rows) described by <strong>variables</strong> (columns). The type of variable and the way data was collected determine which methods apply.</p>
+    </div>
+
+    <!-- 1. Observations and Variables -->
+    <h3>Observations and variables</h3>
+    <p>An <strong>observation</strong> (or case) is a single unit in the dataset: one person, one transaction, one experiment. A <strong>variable</strong> is a characteristic measured on each observation. Variables are either <strong>numerical</strong> (quantitative) or <strong>categorical</strong> (qualitative).</p>
+
+    <!-- SVG: Scatter plot of two variables -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="200" x2="340" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="200" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Axis labels -->
+        <text x="195" y="225" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Variable X (numerical)</text>
+        <text x="15" y="110" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 15, 110)">Variable Y</text>
+        <!-- Data points (scattered with positive trend) -->
+        <circle cx="80" cy="175" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="95" cy="160" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="110" cy="168" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="130" cy="145" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="145" cy="140" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="160" cy="128" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="175" cy="135" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="195" cy="110" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="210" cy="105" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="230" cy="90" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="250" cy="85" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="265" cy="70" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="280" cy="65" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="300" cy="50" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <circle cx="315" cy="45" r="3.5" fill="#3b82f6" fill-opacity="0.6"/>
+        <!-- Trend line -->
+        <line x1="70" y1="180" x2="325" y2="40" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="5,3"/>
+        <!-- Caption -->
+        <text x="195" y="238" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">Each dot is one observation. Two numerical variables.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Variable types
+; Numerical: discrete (counts) or continuous (measurements)
+; Categorical: nominal (no order) or ordinal (ordered)
+
+(define dataset
+  '(("Alice" 28 "Engineer" 72000)
+    ("Bob"   35 "Teacher"  55000)
+    ("Carol" 42 "Engineer" 88000)
+    ("Dave"  31 "Designer" 61000)))
+
+; Each row is an observation
+(display "Observations: ")
+(display (length dataset)) (newline)
+
+; Variables: name (categorical), age (numerical),
+;            job (categorical), salary (numerical)
+(display "Variables: name, age, job, salary") (newline)
+
+; Numerical variable: compute mean age
+(define ages (map cadr dataset))
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+(display "Mean age: ")
+(display (exact->inexact (mean ages)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Variable types in Python
+dataset = [
+    {"name": "Alice", "age": 28, "job": "Engineer", "salary": 72000},
+    {"name": "Bob",   "age": 35, "job": "Teacher",  "salary": 55000},
+    {"name": "Carol", "age": 42, "job": "Engineer", "salary": 88000},
+    {"name": "Dave",  "age": 31, "job": "Designer", "salary": 61000},
+]
+
+print(f"Observations: {len(dataset)}")
+print(f"Variables: {list(dataset[0].keys())}")
+
+# Numerical: age, salary
+# Categorical: name, job
+ages = [d["age"] for d in dataset]
+print(f"Mean age: {sum(ages) / len(ages)}")
+`} />
+    </div>
+
+
+    <!-- 2. Study Design -->
+    <h3>Study design: observational vs. experimental</h3>
+    <p>An <strong>observational study</strong> records data without intervening. An <strong>experiment</strong> assigns treatments to subjects. Only experiments can establish <strong>causation</strong>. Observational studies show association. The distinction matters: if you observe that coffee drinkers live longer, that does not mean coffee causes longevity.</p>
+
+    <SchemeRepl client:load initialCode={`; Observational: measure what exists
+; Experimental: assign treatment, measure outcome
+
+; Simulate an experiment: randomize to treatment/control
+(define subjects '(1 2 3 4 5 6 7 8 9 10))
+
+; Simple random assignment
+(define (assign-group id)
+  (if (< (modulo (* id 7) 10) 5) "treatment" "control"))
+
+(for-each
+  (lambda (id)
+    (display "Subject ")
+    (display id)
+    (display ": ")
+    (display (assign-group id))
+    (newline))
+  subjects)
+
+; Key question: was treatment randomly assigned?
+; Yes -> experiment -> can infer causation
+; No  -> observational -> association only
+`} />
+
+
+    <!-- 3. Sampling -->
+    <h3>Sampling strategies</h3>
+    <p>The <strong>population</strong> is everyone you want to study. The <strong>sample</strong> is who you actually measure. Good sampling avoids <strong>bias</strong>: simple random sampling, stratified sampling (split into groups first), and cluster sampling (randomly select entire groups). Convenience samples are cheap but unreliable.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple random sample: every member equally likely
+(define population '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
+
+; Pseudo-random selection using modular arithmetic
+(define (simple-random-sample pop size seed)
+  (let loop ((remaining pop) (selected '()) (s seed) (count 0))
+    (if (or (= count size) (null? remaining))
+      (reverse selected)
+      (if (< (modulo (* s 13) 17) 8)
+        (loop (cdr remaining) (cons (car remaining) selected) (+ s 3) (+ count 1))
+        (loop (cdr remaining) selected (+ s 7) count)))))
+
+(display "Population: ")
+(display population) (newline)
+
+(define sample (simple-random-sample population 5 3))
+(display "Random sample of 5: ")
+(display sample) (newline)
+(display "Sample size: ")
+(display (length sample))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-01/">🎰 Grinstead Ch.1</a> &mdash; discrete probability spaces, the mathematical foundation beneath sampling</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Observational_study"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Observational study</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Experiment"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Experiment</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sampling_(statistics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Sampling</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>OpenIntro introduces data with the county and email datasets. We use small inline datasets instead to keep examples self-contained. The original covers data matrices, scatterplots, and data collection pitfalls in more detail. The sampling code here is deterministic for reproducibility; real sampling uses proper random number generators.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 1</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/statistics/openintro-02/", label: "Summarizing Data" }} />
+
+  </main>
+</Layout>

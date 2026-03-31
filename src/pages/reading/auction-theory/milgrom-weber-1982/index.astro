@@ -1,0 +1,145 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milgrom & Weber 1982 — A Theory of Auctions and Competitive Bidding" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>A Theory of Auctions and Competitive Bidding</h1>
+    <p class="text-gray-400 text-sm mb-6">Milgrom &amp; Weber &middot; 1982 &middot; <a href="https://doi.org/10.2307/1911865">doi:10.2307/1911865</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When bidders' values are <strong>affiliated</strong> (positively correlated), the auctioneer's <strong>linkage principle</strong> holds: revealing more information raises expected revenue. The English auction beats second-price, which beats first-price.</p>
+    </div>
+
+    <h3>The revenue ranking</h3>
+    <p>With affiliated values, auction formats rank by expected revenue. More transparent formats let bidders update their estimates from observed behavior, reducing the winner's curse and encouraging higher bids.</p>
+
+    <!-- SVG: Four auction types ranked by expected revenue -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Revenue axis -->
+        <line x1="40" y1="150" x2="440" y2="150" stroke="currentColor" stroke-width="1.2"/>
+        <text x="240" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">expected revenue &rarr;</text>
+
+        <!-- First-price sealed -->
+        <rect x="60" y="90" width="80" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="100" y="112" text-anchor="middle" fill="currentColor" font-size="10">First-price</text>
+        <text x="100" y="127" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">sealed</text>
+
+        <!-- Dutch -->
+        <rect x="160" y="80" width="70" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="195" y="107" text-anchor="middle" fill="currentColor" font-size="10">Dutch</text>
+        <text x="195" y="122" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">=first-price</text>
+
+        <!-- Second-price / Vickrey -->
+        <rect x="260" y="65" width="80" height="75" rx="6" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="300" y="95" text-anchor="middle" fill="#60a5fa" font-size="10">Second-price</text>
+        <text x="300" y="112" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">sealed</text>
+
+        <!-- English (ascending) -->
+        <rect x="370" y="45" width="70" height="95" rx="6" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="405" y="80" text-anchor="middle" fill="#4ade80" font-size="10">English</text>
+        <text x="405" y="97" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">ascending</text>
+        <text x="405" y="125" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">highest</text>
+
+        <!-- Inequality signs -->
+        <text x="145" y="115" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.4">=</text>
+        <text x="245" y="115" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.6">&le;</text>
+        <text x="350" y="100" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.6">&le;</text>
+
+        <!-- Caption -->
+        <text x="240" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">revenue ranking under affiliated values</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Revenue ranking under affiliated values
+; More transparency => higher revenue (linkage principle)
+
+; Simulate: bidders with correlated values
+; Each bidder's value = common component + private signal
+(define (make-values common-value signals)
+  (map (lambda (s) (+ common-value s)) signals))
+
+; First-price: bidders shade their bids
+(define (first-price-bids values shade)
+  (map (lambda (v) (- v shade)) values))
+
+; Second-price: bid truthfully, pay second-highest
+(define (second-price-revenue values)
+  (let ((sorted (sort values >)))
+    (cadr sorted)))
+
+; English: price rises until second-to-last drops out
+; With affiliation, remaining bidders update upward
+(define (english-revenue values affiliation-boost)
+  (let* ((sorted (sort values >))
+         (second (cadr sorted)))
+    ;; In English auction, bidders observe others staying in
+    ;; and revise upward => second price is higher
+    (+ second affiliation-boost)))
+
+(define values (make-values 50 '(10 5 2)))
+(display "Values: ") (display values) (newline)
+
+(define fp-bids (first-price-bids values 8))
+(display "First-price bids (shaded): ") (display fp-bids) (newline)
+(display "First-price revenue: ") (display (apply max fp-bids)) (newline)
+
+(display "Second-price revenue: ") (display (second-price-revenue values)) (newline)
+(display "English revenue (affiliation boost +3): ")
+(display (english-revenue values 3))
+; English >= Second-price >= First-price
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Revenue ranking simulation
+import random
+
+def simulate_revenues(n_bidders=5, common=50, n_trials=1000):
+    fp_rev, sp_rev, eng_rev = 0, 0, 0
+    for _ in range(n_trials):
+        signals = [random.gauss(0, 10) for _ in range(n_bidders)]
+        values = [common + s for s in signals]
+        s = sorted(values, reverse=True)
+
+        # First-price: optimal shade ~ (v - E[2nd | win])
+        fp_rev += s[0] - (s[0] - s[1]) * 0.5
+        # Second-price: pays 2nd highest
+        sp_rev += s[1]
+        # English: affiliation boost (bidders update from observed behavior)
+        eng_rev += s[1] + abs(signals[0] - signals[1]) * 0.1
+
+    print("First-price avg:  $" + str(round(fp_rev/n_trials, 1)))
+    print("Second-price avg: $" + str(round(sp_rev/n_trials, 1)))
+    print("English avg:      $" + str(round(eng_rev/n_trials, 1)))
+
+simulate_revenues()
+`} />
+    </div>
+
+    <h3>The linkage principle</h3>
+    <p>Publicly revealing information that is affiliated with bidders' values raises expected revenue. The seller benefits from transparency because it reduces the information advantage of the winner (the <a href="https://en.wikipedia.org/wiki/Winner%27s_curse"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>winner's curse</a>), causing all bidders to bid more aggressively. In ad auctions, this means showing advertisers their relevance scores and competitor density. <a href="https://june.kim/transparency-is-irreversible"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Transparency is irreversible</a>: once you reveal the signal, you cannot credibly un-reveal it, which commits the platform to the higher-revenue equilibrium.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/transparency-is-irreversible"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/transparency-is-irreversible</a> &mdash; the linkage principle in ad auctions</li>
+      <li><a href="/reading/auction-theory/vickrey-1961/">💎 Vickrey 1961</a> &mdash; second-price as a special case (independent private values)</li>
+      <li><a href="/reading/auction-theory/gsp-2007/">💎 GSP 2007</a> &mdash; how search engines chose between formats</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://doi.org/10.2307/1911865">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/gsp-2007/", label: "GSP 2007 · 3 of 8" }} next={{ href: "/reading/auction-theory/aurenhammer-1987/", label: "Aurenhammer 1987 · 5 of 8" }} />
+
+  </main>
+</Layout>

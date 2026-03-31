@@ -1,0 +1,253 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.12 — Optimization" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Optimization</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus &middot; CC BY-SA &middot; <a href="https://activecalculus.org">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Find the best point. <strong>Critical points</strong> are where the gradient vanishes. The <strong>second derivative test</strong> classifies them as maxima, minima, or saddle points. <strong>Lagrange multipliers</strong> handle optimization with constraints: find the best point on a surface, not just in open space.</p>
+    </div>
+
+    <!-- Critical points -->
+    <h3>Critical points in several variables</h3>
+    <p>A critical point of f(x, y) is where both partial derivatives are zero: grad(f) = (0, 0). These are the only candidates for local maxima and minima in the interior of the domain.</p>
+
+    <SchemeRepl client:load initialCode={`; Find critical points of f(x,y) = x^2 + y^2 - 2x - 4y + 5
+; grad(f) = (2x - 2, 2y - 4) = (0, 0)
+; => x = 1, y = 2
+
+(define (f x y)
+  (+ (* x x) (* y y) (* -2 x) (* -4 y) 5))
+
+(define h 0.0001)
+(define (df/dx x y) (/ (- (f (+ x h) y) (f x y)) h))
+(define (df/dy x y) (/ (- (f x (+ y h)) (f x y)) h))
+
+; Check gradient at (1, 2)
+(display "grad(f) at (1,2) = (")
+(display (df/dx 1.0 2.0)) (display ", ")
+(display (df/dy 1.0 2.0)) (display ")") (newline)
+; Both near zero: critical point
+
+(display "f(1, 2) = ") (display (f 1 2)) (newline)  ; 0 (minimum)
+(display "f(0, 0) = ") (display (f 0 0)) (newline)  ; 5
+(display "f(2, 4) = ") (display (f 2 4))             ; 1
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Critical points of f(x,y) = x^2 + y^2 - 2x - 4y + 5
+def f(x, y):
+    return x**2 + y**2 - 2*x - 4*y + 5
+
+h = 1e-7
+dfdx = lambda x, y: (f(x+h, y) - f(x, y)) / h
+dfdy = lambda x, y: (f(x, y+h) - f(x, y)) / h
+
+# Check gradient at (1, 2)
+print("grad(f) at (1,2) = (" + format(dfdx(1.0, 2.0), ".6f") + ", " + format(dfdy(1.0, 2.0), ".6f") + ")")
+print("f(1, 2) = " + str(f(1, 2)))
+print("f(0, 0) = " + str(f(0, 0)))
+print("f(2, 4) = " + str(f(2, 4)))
+`} />
+    </div>
+
+
+    <!-- Second derivative test -->
+    <h3>Second derivative test</h3>
+    <p>At a critical point, compute the Hessian determinant D = f_xx*f_yy &minus; (f_xy)^2. If D &gt; 0 and f_xx &gt; 0, it is a local minimum. If D &gt; 0 and f_xx &lt; 0, a local maximum. If D &lt; 0, a saddle point.</p>
+
+    <SchemeRepl client:load initialCode={`; Second derivative test for f(x,y) = x^3 - 3xy + y^3
+; Critical points: grad = (3x^2-3y, -3x+3y^2) = (0,0)
+; => x^2 = y and x = y^2 => x = 0,y=0 or x=1,y=1
+
+(define (f x y) (+ (* x x x) (* -3 x y) (* y y y)))
+(define h 0.001)
+
+(define (fxx x y)
+  (/ (+ (f (+ x h) y) (f (- x h) y) (* -2 (f x y))) (* h h)))
+(define (fyy x y)
+  (/ (+ (f x (+ y h)) (f x (- y h)) (* -2 (f x y))) (* h h)))
+(define (fxy x y)
+  (/ (- (f (+ x h) (+ y h)) (f (+ x h) y)
+        (f x (+ y h)) (- (f x y)))
+     (* h h)))
+
+; Test at (0, 0)
+(let ((d (- (* (fxx 0.0 0.0) (fyy 0.0 0.0))
+             (* (fxy 0.0 0.0) (fxy 0.0 0.0)))))
+  (display "At (0,0): D = ") (display d) (newline)
+  (display "  => saddle point (D < 0)") (newline))
+
+; Test at (1, 1)
+(let ((d (- (* (fxx 1.0 1.0) (fyy 1.0 1.0))
+             (* (fxy 1.0 1.0) (fxy 1.0 1.0)))))
+  (display "At (1,1): D = ") (display d) (newline)
+  (display "  fxx = ") (display (fxx 1.0 1.0)) (newline)
+  (display "  => local minimum (D > 0, fxx > 0)"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+def f(x, y): return x**3 - 3*x*y + y**3
+
+h = 1e-5
+fxx = lambda x, y: (f(x+h,y) - 2*f(x,y) + f(x-h,y)) / h**2
+fyy = lambda x, y: (f(x,y+h) - 2*f(x,y) + f(x,y-h)) / h**2
+fxy = lambda x, y: (f(x+h,y+h) - f(x+h,y) - f(x,y+h) + f(x,y)) / h**2
+
+for pt in [(0,0), (1,1)]:
+    x, y = pt
+    D = fxx(x,y)*fyy(x,y) - fxy(x,y)**2
+    print(f"At {pt}: D={D:.2f}, fxx={fxx(x,y):.2f}")
+    if D < 0: print("  => saddle point")
+    elif fxx(x,y) > 0: print("  => local minimum")
+    else: print("  => local maximum")
+`} />
+    </div>
+
+
+    <!-- SVG: Contour plot with gradient arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 300" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Contour lines (concentric ellipses around maximum at center) -->
+        <ellipse cx="160" cy="130" rx="120" ry="110" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <ellipse cx="160" cy="130" rx="90" ry="82" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <ellipse cx="160" cy="130" rx="60" ry="55" fill="none" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <ellipse cx="160" cy="130" rx="30" ry="27" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <ellipse cx="160" cy="130" rx="8" ry="7" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <!-- Maximum point -->
+        <circle cx="160" cy="130" r="3" fill="currentColor" fill-opacity="0.8"/>
+        <text x="170" y="125" fill="currentColor" font-size="11" fill-opacity="0.6">max</text>
+        <!-- Gradient arrows pointing toward max -->
+        <line x1="50" y1="130" x2="68" y2="130" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="68,127 74,130 68,133" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="160" y1="250" x2="160" y2="232" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="157,232 160,226 163,232" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="270" y1="130" x2="252" y2="130" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="252,127 246,130 252,133" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="160" y1="20" x2="160" y2="38" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="157,38 160,44 163,38" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Diagonal arrows -->
+        <line x1="70" y1="40" x2="86" y2="54" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="84,48 92,56 84,58" fill="currentColor" fill-opacity="0.4"/>
+        <line x1="250" y1="220" x2="234" y2="206" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="236,212 228,204 236,202" fill="currentColor" fill-opacity="0.4"/>
+        <line x1="250" y1="40" x2="234" y2="54" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="236,48 228,56 236,58" fill="currentColor" fill-opacity="0.4"/>
+        <line x1="70" y1="220" x2="86" y2="206" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="84,212 92,204 84,202" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Labels -->
+        <text x="150" y="290" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">contour plot with gradient arrows</text>
+        <text x="30" y="130" fill="currentColor" font-size="10" fill-opacity="0.3">&nabla;f</text>
+      </svg>
+    </div>
+
+
+    <!-- Lagrange multipliers -->
+    <h3>Lagrange multipliers</h3>
+    <p>To optimize f(x, y) subject to a constraint g(x, y) = 0, find points where grad(f) = lambda * grad(g). At the optimum, the gradient of the objective is parallel to the gradient of the constraint. Lambda is the Lagrange multiplier: it measures how much the constraint costs you.</p>
+
+    <SchemeRepl client:load initialCode={`; Maximize f(x,y) = xy subject to x^2 + y^2 = 1
+; grad(f) = (y, x), grad(g) = (2x, 2y)
+; y = 2*lambda*x and x = 2*lambda*y
+; => x^2 = y^2 => x = +/- y
+; With constraint: 2x^2 = 1 => x = 1/sqrt(2)
+
+; Verify numerically: search on the unit circle
+(define pi 3.141592653589793)
+
+(define (f x y) (* x y))
+
+(define best-val -999)
+(define best-t 0)
+
+(do ((i 0 (+ i 1)))
+    ((= i 1000))
+  (let* ((t (* 2 pi (/ i 1000.0)))
+         (x (cos t))
+         (y (sin t))
+         (val (f x y)))
+    (if (> val best-val)
+      (begin (set! best-val val)
+             (set! best-t t)))))
+
+(display "Max of xy on unit circle:") (newline)
+(display "  x = ") (display (cos best-t)) (newline)
+(display "  y = ") (display (sin best-t)) (newline)
+(display "  f = ") (display best-val) (newline)
+(display "Exact: x=y=1/sqrt(2), f=1/2 = ")
+(display 0.5)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+# Maximize f(x,y) = xy on unit circle
+theta = np.linspace(0, 2*np.pi, 10000)
+x, y = np.cos(theta), np.sin(theta)
+vals = x * y
+i = np.argmax(vals)
+print(f"Max at x={x[i]:.4f}, y={y[i]:.4f}, f={vals[i]:.4f}")
+print(f"Exact: x=y=1/sqrt(2)={1/np.sqrt(2):.4f}, f=0.5")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 pr-4 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&nabla;f = 0</td><td class="font-sans">Critical point condition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D = f_xx f_yy &minus; f_xy&sup2;</td><td class="font-sans">Hessian determinant</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&nabla;f = &lambda;&nabla;g</td><td class="font-sans">Lagrange condition</td></tr>
+          <tr><td class="py-2 pr-4">&lambda;</td><td class="font-sans">Lagrange multiplier (shadow price of constraint)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Calculus sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-11/">Ch.11 Partial Derivatives</a></li>
+      <li><a href="/reading/calculus/calc-13/">Ch.13 Multiple Integrals</a></li>
+    </ul>
+    <ul class="neighbors">
+      <li><a href="https://arxiv.org/abs/1603.04641">Hedges 2018</a> &mdash; selection functions are the categorical structure behind optimization</li>
+      <li><a href="/reading/linear-algebra/hefferon-04/">📐 Hefferon Ch.4 Determinants</a> &mdash; the Jacobian determinant measures how gradients scale under change of variables</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> — optimization via gradient descent, the ML workhorse</li>
+      <li><a href="/reading/linear-algebra/hefferon-05/">📐 Linear Algebra Ch.5</a> — eigenvalues determine whether a critical point is a minimum</li>
+      <li><a href="/reading/economics/econ-06/">💰 Economics Ch.6</a> — marginal utility maximization uses the same Lagrangian tools</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Second_partial_derivative_test"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Second derivative test</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lagrange_multiplier"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lagrange multiplier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Saddle_point"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Saddle point</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-11/", label: "Partial Derivatives" }} next={{ href: "/reading/calculus/calc-13/", label: "Multiple Integrals · 13 of 15" }} />
+
+  </main>
+</Layout>

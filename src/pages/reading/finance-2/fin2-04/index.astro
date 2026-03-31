@@ -1,0 +1,316 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.4 — Monte Carlo Methods" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance 2</a>
+
+    <h1>Monte Carlo Methods</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Monte Carlo methods price derivatives by simulating thousands of random paths for the underlying asset, then averaging the discounted payoffs. The law of large numbers guarantees convergence; variance reduction makes it practical.</p>
+    </div>
+
+    <!-- SVG: simulated price paths fanning out from a single point -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="380" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="20" x2="40" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Time</text>
+        <text x="15" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90,15,100)">Price</text>
+        <!-- Starting point -->
+        <circle cx="40" cy="100" r="3" fill="#60a5fa" fill-opacity="0.8"/>
+        <!-- Simulated paths -->
+        <polyline points="40,100 100,85 160,70 220,55 280,40 340,30" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <polyline points="40,100 100,110 160,95 220,80 280,75 340,60" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <polyline points="40,100 100,95 160,105 220,100 280,95 340,90" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <polyline points="40,100 100,105 160,115 220,120 280,130 340,125" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <polyline points="40,100 100,115 160,130 220,140 280,150 340,160" fill="none" stroke="#f87171" stroke-width="1" stroke-opacity="0.4"/>
+        <polyline points="40,100 100,90 160,100 220,115 280,105 340,110" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <polyline points="40,100 100,108 160,120 220,110 280,120 340,140" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Strike line -->
+        <line x1="40" y1="100" x2="380" y2="100" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+        <text x="385" y="103" fill="#f59e0b" font-size="9" fill-opacity="0.5">K</text>
+        <!-- Labels -->
+        <text x="40" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">S&#x2080;</text>
+        <text x="340" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">S&#x1D40;</text>
+      </svg>
+    </div>
+
+    <!-- 1. Simulating random paths -->
+    <h3>Simulating random paths</h3>
+    <p>Under geometric Brownian motion, a stock price evolves as S(t+dt) = S(t) * exp((mu - sigma^2/2)*dt + sigma*sqrt(dt)*Z), where Z is a standard normal draw. Each simulation traces one possible future. Run enough of them and you map the distribution.</p>
+
+    <SchemeRepl client:load initialCode={`; Geometric Brownian Motion path simulation
+; Using Box-Muller transform for normal random numbers
+
+(define (box-muller u1 u2)
+  (* (sqrt (* -2 (log u1)))
+     (cos (* 2 3.141592653589793 u2))))
+
+; Simulate one GBM step
+; S(t+dt) = S(t) * exp((mu - sigma^2/2)*dt + sigma*sqrt(dt)*Z)
+(define (gbm-step s mu sigma dt z)
+  (* s (exp (+ (* (- mu (* 0.5 sigma sigma)) dt)
+               (* sigma (sqrt dt) z)))))
+
+; Simulate a path of n steps
+(define (gbm-path s0 mu sigma dt n seed)
+  (define (go s i acc seed-val)
+    (if (= i n) (reverse acc)
+        (let* ((u1 (/ (modulo (* seed-val 16807) 2147483647) 2147483647.0))
+               (u2 (/ (modulo (* (+ seed-val 12345) 16807) 2147483647) 2147483647.0))
+               (z (box-muller u1 u2))
+               (s-new (gbm-step s mu sigma dt z)))
+          (go s-new (+ i 1) (cons s-new acc) (modulo (* seed-val 16807) 2147483647)))))
+  (go s0 0 (list s0) seed))
+
+(define path (gbm-path 100 0.05 0.2 0.25 4 42))
+(display "GBM path (S0=100, mu=5%, sigma=20%, quarterly): ")
+(newline)
+(for-each (lambda (p) (display (/ (round (* p 100)) 100)) (display " ")) path)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math, random
+
+def gbm_path(s0, mu, sigma, dt, n, seed=42):
+    random.seed(seed)
+    path = [s0]
+    s = s0
+    for _ in range(n):
+        z = random.gauss(0, 1)
+        s = s * math.exp((mu - 0.5*sigma**2)*dt + sigma*math.sqrt(dt)*z)
+        path.append(s)
+    return path
+
+path = gbm_path(100, 0.05, 0.2, 0.25, 4)
+print("GBM path (S0=100, mu=5%, sigma=20%, quarterly):")
+print([round(p, 2) for p in path])
+`} />
+    </div>
+
+
+    <!-- 2. Pricing European options by simulation -->
+    <h3>Pricing European options by simulation</h3>
+    <p>A European call pays max(S_T - K, 0) at expiry. Simulate many terminal prices under the risk-neutral measure (replace mu with r), compute each payoff, discount back, and average. With enough paths, the Monte Carlo estimate converges to the Black-Scholes price.</p>
+
+    <SchemeRepl client:load initialCode={`; Monte Carlo European call pricing
+; Risk-neutral: use r instead of mu
+
+(define (box-muller u1 u2)
+  (* (sqrt (* -2 (log u1)))
+     (cos (* 2 3.141592653589793 u2))))
+
+(define (mc-european-call s0 k r sigma t n-paths seed)
+  (define (simulate i sum-payoff seed-val)
+    (if (= i n-paths)
+        (* (exp (* (- r) t)) (/ sum-payoff n-paths))
+        (let* ((u1 (/ (modulo (* seed-val 16807) 2147483647) 2147483647.0))
+               (u2 (/ (modulo (* (+ seed-val 99991) 16807) 2147483647) 2147483647.0))
+               (z (box-muller u1 u2))
+               (st (* s0 (exp (+ (* (- r (* 0.5 sigma sigma)) t)
+                                  (* sigma (sqrt t) z)))))
+               (payoff (max 0 (- st k))))
+          (simulate (+ i 1) (+ sum-payoff payoff)
+                    (modulo (* seed-val 16807) 2147483647)))))
+  (simulate 0 0.0 seed))
+
+(define price (mc-european-call 100 105 0.05 0.2 1.0 10000 42))
+(display "MC European call price (10k paths): ")
+(display (/ (round (* price 100)) 100))
+(newline)
+(display "Black-Scholes analytical: ~8.02")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math, random
+
+def mc_european_call(s0, k, r, sigma, t, n_paths, seed=42):
+    random.seed(seed)
+    payoffs = []
+    for _ in range(n_paths):
+        z = random.gauss(0, 1)
+        st = s0 * math.exp((r - 0.5*sigma**2)*t + sigma*math.sqrt(t)*z)
+        payoffs.append(max(0, st - k))
+    return math.exp(-r*t) * sum(payoffs) / n_paths
+
+price = mc_european_call(100, 105, 0.05, 0.2, 1.0, 10000)
+print(f"MC European call price (10k paths): {price:.2f}")
+print("Black-Scholes analytical: ~8.02")
+`} />
+    </div>
+
+
+    <!-- 3. Variance reduction techniques -->
+    <h3>Variance reduction techniques</h3>
+    <p><strong>Antithetic variates</strong>: for every normal draw Z, also use -Z. The two paths are negatively correlated, so their average has lower variance than two independent draws. This cuts the standard error roughly in half for free.</p>
+
+    <SchemeRepl client:load initialCode={`; Antithetic variates: pair each Z with -Z
+; Reduces variance by inducing negative correlation
+
+(define (box-muller u1 u2)
+  (* (sqrt (* -2 (log u1)))
+     (cos (* 2 3.141592653589793 u2))))
+
+(define (mc-call-antithetic s0 k r sigma t n-pairs seed)
+  (define (simulate i sum-payoff seed-val)
+    (if (= i n-pairs)
+        (* (exp (* (- r) t)) (/ sum-payoff (* 2 n-pairs)))
+        (let* ((u1 (/ (modulo (* seed-val 16807) 2147483647) 2147483647.0))
+               (u2 (/ (modulo (* (+ seed-val 99991) 16807) 2147483647) 2147483647.0))
+               (z (box-muller u1 u2))
+               (st1 (* s0 (exp (+ (* (- r (* 0.5 sigma sigma)) t) (* sigma (sqrt t) z)))))
+               (st2 (* s0 (exp (+ (* (- r (* 0.5 sigma sigma)) t) (* sigma (sqrt t) (- z))))))
+               (payoff (+ (max 0 (- st1 k)) (max 0 (- st2 k)))))
+          (simulate (+ i 1) (+ sum-payoff payoff)
+                    (modulo (* seed-val 16807) 2147483647)))))
+  (simulate 0 0.0 seed))
+
+(define price (mc-call-antithetic 100 105 0.05 0.2 1.0 5000 42))
+(display "Antithetic MC call (5k pairs = 10k paths): ")
+(display (/ (round (* price 100)) 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math, random
+
+def mc_call_antithetic(s0, k, r, sigma, t, n_pairs, seed=42):
+    random.seed(seed)
+    payoffs = []
+    for _ in range(n_pairs):
+        z = random.gauss(0, 1)
+        st1 = s0 * math.exp((r - 0.5*sigma**2)*t + sigma*math.sqrt(t)*z)
+        st2 = s0 * math.exp((r - 0.5*sigma**2)*t + sigma*math.sqrt(t)*(-z))
+        payoffs.append((max(0, st1-k) + max(0, st2-k)) / 2)
+    return math.exp(-r*t) * sum(payoffs) / n_pairs
+
+price = mc_call_antithetic(100, 105, 0.05, 0.2, 1.0, 5000)
+print(f"Antithetic MC call (5k pairs = 10k paths): {price:.2f}")
+`} />
+    </div>
+
+
+    <!-- 4. Path-dependent options -->
+    <h3>Path-dependent options</h3>
+    <p>An <strong>Asian option</strong> pays based on the average price along the path, not just the terminal price. A <strong>barrier option</strong> knocks in or out if the price crosses a threshold. Both require simulating the full path, not just the endpoint.</p>
+
+    <SchemeRepl client:load initialCode={`; Asian call option: payoff = max(0, avg(S) - K)
+; Must simulate the full path to compute the average
+
+(define (box-muller u1 u2)
+  (* (sqrt (* -2 (log u1)))
+     (cos (* 2 3.141592653589793 u2))))
+
+(define (asian-call-path s0 k r sigma t n-steps seed)
+  (let ((dt (/ t n-steps)))
+    (define (go i s sum-s seed-val)
+      (if (= i n-steps)
+          (let ((avg (/ sum-s n-steps)))
+            (max 0 (- avg k)))
+          (let* ((u1 (/ (modulo (* seed-val 16807) 2147483647) 2147483647.0))
+                 (u2 (/ (modulo (* (+ seed-val 77773) 16807) 2147483647) 2147483647.0))
+                 (z (box-muller u1 u2))
+                 (s-new (* s (exp (+ (* (- r (* 0.5 sigma sigma)) dt)
+                                     (* sigma (sqrt dt) z))))))
+            (go (+ i 1) s-new (+ sum-s s-new)
+                (modulo (* seed-val 16807) 2147483647)))))
+    (go 0 s0 0.0 seed)))
+
+; Single path example
+(define payoff (asian-call-path 100 100 0.05 0.2 1 12 42))
+(display "Asian call payoff (one path, 12 monthly steps): ")
+(display (/ (round (* payoff 100)) 100))
+(newline)
+(display "Asian options are cheaper than European — averaging reduces volatility")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math, random
+
+def mc_asian_call(s0, k, r, sigma, t, n_steps, n_paths, seed=42):
+    random.seed(seed)
+    dt = t / n_steps
+    payoffs = []
+    for _ in range(n_paths):
+        s = s0
+        path_sum = 0
+        for _ in range(n_steps):
+            z = random.gauss(0, 1)
+            s = s * math.exp((r - 0.5*sigma**2)*dt + sigma*math.sqrt(dt)*z)
+            path_sum += s
+        avg = path_sum / n_steps
+        payoffs.append(max(0, avg - k))
+    return math.exp(-r*t) * sum(payoffs) / n_paths
+
+price = mc_asian_call(100, 100, 0.05, 0.2, 1.0, 12, 10000)
+print(f"Asian call price (10k paths, 12 steps): {price:.2f}")
+print("Asian < European because averaging reduces effective volatility")
+`} />
+    </div>
+
+
+    <!-- 5. Convergence -->
+    <h3>Convergence and standard error</h3>
+    <p>Monte Carlo converges at rate 1/sqrt(N) regardless of dimension. Double the paths, cut the error by sqrt(2). The standard error of the estimate is the sample standard deviation divided by sqrt(N). This tells you how many paths you need for a given precision.</p>
+
+    <SchemeRepl client:load initialCode={`; Standard error decreases as 1/sqrt(N)
+; SE = stdev / sqrt(N)
+
+(define (standard-error stdev n)
+  (/ stdev (sqrt n)))
+
+; If sample stdev of payoffs is 20:
+(define stdev 20.0)
+
+(display "Paths    Std Error") (newline)
+(display "-----    ---------") (newline)
+(for-each
+  (lambda (n)
+    (display n) (display "    ")
+    (display (/ (round (* (standard-error stdev n) 10000)) 10000))
+    (newline))
+  (list 100 1000 10000 100000))
+
+(newline)
+(display "10x more paths => ~3.16x smaller error (sqrt(10) = 3.16)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+stdev = 20.0  # sample stdev of payoffs
+
+print("Paths      Std Error")
+print("-----      ---------")
+for n in [100, 1000, 10000, 100000]:
+    se = stdev / math.sqrt(n)
+    print(f"{n:<10} {se:.4f}")
+
+print(f"\n10x more paths => ~{math.sqrt(10):.2f}x smaller error")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/prob-04/">&#x1F3B2; Probability Ch.4</a> — law of large numbers underpins MC convergence</li>
+      <li><a href="/reading/finance-2/fin2-03/">&#x1F4C9; Finance 2 Ch.3</a> — Black-Scholes gives the analytical benchmark</li>
+      <li><a href="/reading/statistics/stats-03/">&#x1F4CA; Statistics Ch.3</a> — sampling distributions and standard error</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-03/", label: "Derivatives Pricing · 3" }}
+      next={{ href: "/reading/finance-2/fin2-05/", label: "Volatility Modeling · 5" }} />
+
+  </main>
+</Layout>

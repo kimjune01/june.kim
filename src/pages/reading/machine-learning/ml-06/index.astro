@@ -1,0 +1,270 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.6 — PCA" favicon="📊">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>PCA</h1>
+    <p class="text-gray-400 text-sm mb-6">Machine Learning · Ch.6 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Find the directions of maximum variance. Project the data onto those directions. The <strong>principal components</strong> are eigenvectors of the covariance matrix.</p>
+    </div>
+
+    <!-- SVG: 2D point cloud with two principal component arrows -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg viewBox="0 0 380 280" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axes -->
+          <line x1="40" y1="250" x2="360" y2="250" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="40" y1="20" x2="40" y2="255" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <!-- Point cloud (elliptical, tilted ~30 deg) -->
+          <circle cx="120" cy="180" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="135" cy="170" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="150" cy="165" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="160" cy="155" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="175" cy="145" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="185" cy="140" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="190" cy="130" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="200" cy="125" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="210" cy="120" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="220" cy="110" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="230" cy="105" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="245" cy="95" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="260" cy="85" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="270" cy="80" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <!-- Scatter around the line -->
+          <circle cx="140" cy="160" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="155" cy="175" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="170" cy="155" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="195" cy="115" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="205" cy="135" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="235" cy="115" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="250" cy="75" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <circle cx="165" cy="135" r="3" fill="#a78bfa" fill-opacity="0.5"/>
+          <!-- Center point -->
+          <circle cx="195" cy="130" r="4" fill="white" fill-opacity="0.8"/>
+          <!-- PC1: long blue arrow (direction of max variance) -->
+          <line x1="120" y1="180" x2="270" y2="80" stroke="#60a5fa" stroke-width="2.5" stroke-opacity="0.9"/>
+          <polygon points="270,80 260,88 264,82" fill="#60a5fa" fill-opacity="0.9"/>
+          <text x="275" y="78" fill="#60a5fa" font-size="11" fill-opacity="0.8">PC1</text>
+          <!-- PC2: short amber arrow (perpendicular) -->
+          <line x1="170" y1="105" x2="220" y2="155" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.9"/>
+          <polygon points="220,155 212,150 218,148" fill="#f59e0b" fill-opacity="0.9"/>
+          <text x="224" y="160" fill="#f59e0b" font-size="11" fill-opacity="0.8">PC2</text>
+          <!-- Labels -->
+          <text x="190" y="270" fill="currentColor" font-size="10" fill-opacity="0.4" text-anchor="middle">PC1 captures most variance &mdash; PC2 is orthogonal</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1. Covariance matrix -->
+    <h3>Covariance matrix</h3>
+    <p>The covariance matrix C measures how pairs of features vary together. C[i,j] = E[(x_i - mean_i)(x_j - mean_j)]. Diagonal entries are variances; off-diagonal entries are covariances. PCA finds the eigenvectors of this matrix.</p>
+
+    <SchemeRepl client:load initialCode={`; Covariance matrix of 2D data
+; C[i,j] = (1/n) * sum((x_i - mean_i)(x_j - mean_j))
+
+(define data (list (list 1 2) (list 3 4) (list 5 6)
+                   (list 2 3) (list 4 5)))
+
+(define (mean lst)
+  (/ (let loop ((l lst) (s 0))
+       (if (null? l) s (loop (cdr l) (+ s (car l)))))
+     (length lst)))
+
+(define (col data j)
+  (map (lambda (row) (list-ref row j)) data))
+
+(define (cov xs ys)
+  (let ((mx (mean xs)) (my (mean ys)) (n (length xs)))
+    (/ (let loop ((xs xs) (ys ys) (s 0))
+         (if (null? xs) s
+             (loop (cdr xs) (cdr ys)
+                   (+ s (* (- (car xs) mx)
+                           (- (car ys) my))))))
+       n)))
+
+(define x (col data 0))
+(define y (col data 1))
+
+(display "Cov matrix:") (newline)
+(display "  [") (display (cov x x)) (display "  ")
+(display (cov x y)) (display "]") (newline)
+(display "  [") (display (cov y x)) (display "  ")
+(display (cov y y)) (display "]")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Covariance matrix of 2D data
+data = [[1,2],[3,4],[5,6],[2,3],[4,5]]
+
+def mean(lst):
+    return sum(lst) / len(lst)
+
+def cov(xs, ys):
+    mx, my = mean(xs), mean(ys)
+    return sum((x-mx)*(y-my) for x,y in zip(xs,ys)) / len(xs)
+
+x = [row[0] for row in data]
+y = [row[1] for row in data]
+
+print("Cov matrix:")
+print("  [{:.2f}  {:.2f}]".format(cov(x,x), cov(x,y)))
+print("  [{:.2f}  {:.2f}]".format(cov(y,x), cov(y,y)))
+`} />
+    </div>
+
+
+    <!-- 2. Eigendecomposition -->
+    <h3>Eigendecomposition</h3>
+    <p>The eigenvectors of the covariance matrix point in the directions of maximum variance. The eigenvalues tell you how much variance each direction captures. For a 2x2 matrix, we can solve the characteristic equation directly: det(C - lambda*I) = 0.</p>
+
+    <SchemeRepl client:load initialCode={`; Eigenvalues of 2x2 matrix [[a,b],[c,d]]
+; Characteristic equation: lambda^2 - (a+d)*lambda + (a*d - b*c) = 0
+
+(define (eigen-2x2 a b c d)
+  (let* ((trace (+ a d))
+         (det (- (* a d) (* b c)))
+         (disc (sqrt (- (* trace trace) (* 4 det))))
+         (l1 (/ (+ trace disc) 2))
+         (l2 (/ (- trace disc) 2)))
+    (list l1 l2)))
+
+; Covariance matrix from above: [[2.0, 2.0], [2.0, 2.0]]
+(define evals (eigen-2x2 2.0 2.0 2.0 2.0))
+
+(display "eigenvalue 1: ") (display (car evals)) (newline)
+(display "eigenvalue 2: ") (display (cadr evals)) (newline)
+
+; Eigenvector for l1: (C - l1*I)v = 0
+; For [[2-4, 2],[2, 2-4]] = [[-2,2],[2,-2]]
+; v1 = [1, 1] (normalized: [0.707, 0.707])
+(display "PC1 direction: [0.707, 0.707]") (newline)
+(display "PC2 direction: [0.707, -0.707]") (newline)
+(display "Variance explained by PC1: ")
+(display (* 100 (/ (car evals) (+ (car evals) (cadr evals)))))
+(display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Eigenvalues of 2x2 matrix [[a,b],[c,d]]
+def eigen_2x2(a, b, c, d):
+    trace = a + d
+    det = a*d - b*c
+    disc = math.sqrt(trace**2 - 4*det)
+    return (trace + disc) / 2, (trace - disc) / 2
+
+# Covariance matrix [[2.0, 2.0], [2.0, 2.0]]
+l1, l2 = eigen_2x2(2.0, 2.0, 2.0, 2.0)
+print("eigenvalue 1:", l1)
+print("eigenvalue 2:", l2)
+print("PC1 direction: [0.707, 0.707]")
+print("PC2 direction: [0.707, -0.707]")
+print("Variance explained by PC1: {:.0f}%".format(100 * l1 / (l1 + l2)))
+`} />
+    </div>
+
+
+    <!-- 3. Projecting data -->
+    <h3>Projecting data</h3>
+    <p>To reduce dimensionality, project each data point onto the top k principal components. The projection is a dot product with each eigenvector. This gives a k-dimensional representation that preserves the most variance from the original data.</p>
+
+    <SchemeRepl client:load initialCode={`; Project 2D data onto PC1 = [0.707, 0.707]
+; This reduces 2D -> 1D while keeping max variance
+
+(define (dot xs ys)
+  (let loop ((xs xs) (ys ys) (s 0))
+    (if (null? xs) s
+        (loop (cdr xs) (cdr ys)
+              (+ s (* (car xs) (car ys)))))))
+
+(define pc1 (list 0.7071 0.7071))
+
+(define data (list (list 1 2) (list 3 4) (list 5 6)
+                   (list 2 3) (list 4 5)))
+
+; Center the data first
+(define mean-x 3.0)
+(define mean-y 4.0)
+
+(define (center pt)
+  (list (- (car pt) mean-x) (- (cadr pt) mean-y)))
+
+(define (project pt)
+  (dot (center pt) pc1))
+
+(display "Projections onto PC1:") (newline)
+(for-each (lambda (pt)
+  (display "  ") (display pt) (display " -> ")
+  (display (/ (round (* (project pt) 1000)) 1000))
+  (newline))
+  data)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Project 2D data onto PC1 = [0.707, 0.707]
+data = [[1,2],[3,4],[5,6],[2,3],[4,5]]
+mean_x, mean_y = 3.0, 4.0
+pc1 = [0.7071, 0.7071]
+
+def project(pt):
+    centered = [pt[0]-mean_x, pt[1]-mean_y]
+    return sum(a*b for a,b in zip(centered, pc1))
+
+print("Projections onto PC1:")
+for pt in data:
+    print("  {} -> {:.3f}".format(pt, project(pt)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C = X<sup>T</sup>X / n</td><td class="pr-4 text-green-300">(cov x y)</td><td class="font-sans">Covariance matrix</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&lambda;</td><td class="pr-4 text-green-300">l1, l2</td><td class="font-sans">Eigenvalue (variance along PC)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">v &middot; x</td><td class="pr-4 text-green-300">(dot v x)</td><td class="font-sans">Projection onto eigenvector</td></tr>
+          <tr><td class="py-2 pr-4">&lambda;<sub>1</sub> / &Sigma;&lambda;</td><td class="pr-4 text-green-300">(/ l1 (+ l1 l2))</td><td class="font-sans">Fraction of variance explained</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">PCA is a change of basis that diagonalizes the covariance matrix. The principal components form an orthonormal basis aligned with the data's natural axes. Dimensionality reduction is projection onto a subspace -- the same operation as in linear algebra, but chosen to maximize information retention. The <a href="https://june.kim/embedding-gap"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>embedding gap</a> explores what happens when this kind of projection fails to capture the structure that matters.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-04/">Linear Algebra Ch.4</a> — determinants and eigenvalues: the math behind PCA</li>
+      <li><a href="/reading/machine-learning/ml-05/">ML Ch.5 Kernel Methods</a> — kernel PCA extends this to nonlinear structure</li>
+    </ul>
+
+    <!-- Ready for the real thing? -->
+    </Neighbors>
+    <h3>Ready for the real thing?</h3>
+    <p class="text-sm text-gray-400">This chapter covers the 2D intuition. For high-dimensional PCA, SVD-based computation, and connections to factor analysis, see Shalev-Shwartz & Ben-David Ch.23 or Bishop Ch.12.</p>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-05/", label: "Kernel Methods" }} next={{ href: "/reading/machine-learning/ml-07/", label: "Gaussian Processes" }} fin="PCA · 7 of 12" />
+
+  </main>
+</Layout>

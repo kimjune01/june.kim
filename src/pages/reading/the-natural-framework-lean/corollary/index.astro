@@ -1,0 +1,48 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Corollary.lean — Competitive core, control/data split" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Corollary.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Corollary.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Three corollaries: the competitive core exists (Filter is forced), control must separate from data (shared pools kill policy), and both read and write interfaces are forced.</p>
+    </div>
+
+    <h3>competitive_core_removes (Corollary 1)</h3>
+    <p>Bounded storage forces selection. Selection on a set produces a proper subset. After k cycles, at least k items are removed. This is the competitive core: winners persist, losers are discarded.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">competitive_core_removes</span>
+    (input_count output_count k : Nat)
+    (hsel : output_count &lt; input_count)
+    : k * (input_count - output_count) &ge; k</code></pre>
+
+    <h3>policy_evicted_in_shared_pool (Corollary 2)</h3>
+    <p>If policy and data share a bounded pool, and data arrives faster than free capacity allows, data overflows and evicts policy. This is not tautological &mdash; it derives eviction from bounded capacity, unequal arrival rates, and first-in eviction under pressure.</p>
+
+    <h3>shared_pool_kills_policy</h3>
+    <p>After enough cycles, all policy slots can be overwritten by data. This forces type separation: policy and data must live in different stores. That is why Attend (read policy) and Consolidate (write policy) are separate interfaces.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">shared_pool_kills_policy</span>
+    (capacity data_rate policy_slots : Nat)
+    (hoverflow : data_rate &gt; capacity - policy_slots)
+    : policy_slots * (data_rate + policy_slots - capacity) &ge; policy_slots</code></pre>
+
+    <h3>SeparatePolicyStore (Corollary 3)</h3>
+    <p>A separate policy store needs both interfaces: read (apply policy to data &mdash; Attend) and write (update policy from outcomes &mdash; Consolidate). Without read, policy exists but is never applied. Without write, policy is static and cannot adapt.</p>
+
+    <h3>static_policy_fails</h3>
+    <p>A static policy in a non-stationary environment eventually mismatches the required behavior. If the optimal policy changes over time and different policies produce different outputs, the fixed policy fails on some input at some time.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> &mdash; imported; capacity_bound and rate_mismatch drive the corollaries</li>
+      <li><a href="/reading/the-natural-framework-lean/boundary/">Boundary.lean</a> &mdash; the boundary arguments that these corollaries extend</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; the full removal table includes the shared-pool test</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/variational/", label: "Variational.lean · 23 of 25" }} next={{ href: "/reading/the-natural-framework-lean/supportmonadmorphism/", label: "SupportMonadMorphism.lean · 25 of 25" }} />
+  </main>
+</Layout>

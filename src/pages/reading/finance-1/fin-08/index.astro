@@ -1,0 +1,294 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.8 — Options" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Options</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>option</strong> gives the holder the right &mdash; but not the obligation &mdash; to buy or sell at a fixed strike price. This asymmetry is what you pay the premium for. Put-call parity ties calls, puts, forwards, and bonds into one equation.</p>
+    </div>
+
+    <!-- SVG: Call and put payoff diagrams -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left: Long Call -->
+        <line x1="20" y1="130" x2="180" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="100" y1="30" x2="100" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Payoff line: flat at 0 then rising -->
+        <line x1="30" y1="130" x2="100" y2="130" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <line x1="100" y1="130" x2="170" y2="60" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="100" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">K</text>
+        <text x="100" y="20" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.7">Long Call</text>
+        <!-- Right: Long Put -->
+        <line x1="220" y1="130" x2="380" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="300" y1="30" x2="300" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Payoff line: falling then flat at 0 -->
+        <line x1="230" y1="60" x2="300" y2="130" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <line x1="300" y1="130" x2="370" y2="130" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="300" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">K</text>
+        <text x="300" y="20" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">Long Put</text>
+        <!-- Common labels -->
+        <text x="200" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Option payoffs at expiration (before premium).</text>
+      </svg>
+    </div>
+
+    <!-- 1. Call and Put Payoffs -->
+    <h3>Call and put payoffs</h3>
+    <p>A <strong>call</strong> pays max(S&#x1D40; &minus; K, 0) at expiration: the payoff is positive when the stock finishes above the strike K; profit requires covering the premium paid. A <strong>put</strong> pays max(K &minus; S&#x1D40;, 0): you profit when the stock falls below K. The option buyer's loss is capped at the premium paid. The seller's loss is potentially unlimited (for calls) or capped at K (for puts).</p>
+
+    <SchemeRepl client:load initialCode={`; Option payoffs at expiration
+(define (call-payoff S K) (max (- S K) 0))
+(define (put-payoff S K) (max (- K S) 0))
+
+; Profit = payoff - premium
+(define (call-profit S K premium) (- (call-payoff S K) premium))
+(define (put-profit S K premium) (- (put-payoff S K) premium))
+
+(define K 100)
+(define call-premium 8)
+(define put-premium 5)
+
+(display "=== Call (K=100, premium=8) ===" ) (newline)
+(for-each (lambda (S)
+  (display "S=") (display S)
+  (display "  payoff=") (display (call-payoff S K))
+  (display "  profit=") (display (call-profit S K call-premium))
+  (newline))
+  '(80 90 100 108 120))
+
+(newline)
+(display "=== Put (K=100, premium=5) ===" ) (newline)
+(for-each (lambda (S)
+  (display "S=") (display S)
+  (display "  payoff=") (display (put-payoff S K))
+  (display "  profit=") (display (put-profit S K put-premium))
+  (newline))
+  '(80 90 95 100 110))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Option payoffs at expiration
+def call_payoff(S, K): return max(S - K, 0)
+def put_payoff(S, K): return max(K - S, 0)
+
+K = 100
+call_premium, put_premium = 8, 5
+
+print("=== Call (K=100, premium=8) ===")
+for S in [80, 90, 100, 108, 120]:
+    print(f"S={S:>3}  payoff={call_payoff(S,K):>3}  profit={call_payoff(S,K)-call_premium:>+4}")
+
+print("\\n=== Put (K=100, premium=5) ===")
+for S in [80, 90, 95, 100, 110]:
+    print(f"S={S:>3}  payoff={put_payoff(S,K):>3}  profit={put_payoff(S,K)-put_premium:>+4}")
+`} />
+    </div>
+
+
+    <!-- 2. Put-Call Parity -->
+    <h3>Put-call parity</h3>
+    <p>For European options on the same underlying with the same strike and expiration: <strong>C &minus; P = S&#x2080; &minus; K&middot;e&#x207B;&#x72;&#x1D40;</strong>. This is an arbitrage relationship, not a model. It holds regardless of your view on volatility or the stock's direction. Violations are free money.</p>
+
+    <SchemeRepl client:load initialCode={`; Put-call parity: C - P = S0 - K * e^(-rT)
+; Rearranged: P = C - S0 + K * e^(-rT)
+
+(define (parity-put C S0 K r T)
+  (+ (- C S0) (* K (exp (* -1 r T)))))
+
+(define (parity-call P S0 K r T)
+  (+ P S0 (* -1 K (exp (* -1 r T)))))
+
+; Example: S0=100, K=100, r=5%, T=1yr, C=12
+(define S0 100) (define K 100)
+(define r 0.05) (define T 1)
+(define C 12)
+
+(define P-implied (parity-put C S0 K r T))
+(display "Given C=12, implied P = ")
+(display (round (* P-implied 100)))  ; display cents
+(display " cents... P = $")
+(display (/ (round (* P-implied 100)) 100)) (newline)
+
+; Verify: C - P should equal S0 - K*e^(-rT)
+(define lhs (- C P-implied))
+(define rhs (- S0 (* K (exp (* -1 r T)))))
+(display "C - P = ") (display (/ (round (* lhs 100)) 100)) (newline)
+(display "S - Ke^(-rT) = ") (display (/ (round (* rhs 100)) 100)) (newline)
+(display "Parity holds: ") (display (< (abs (- lhs rhs)) 0.001))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def parity_put(C, S0, K, r, T):
+    """Implied put price from put-call parity."""
+    return C - S0 + K * math.exp(-r * T)
+
+def parity_call(P, S0, K, r, T):
+    """Implied call price from put-call parity."""
+    return P + S0 - K * math.exp(-r * T)
+
+S0, K, r, T = 100, 100, 0.05, 1.0
+C = 12
+
+P = parity_put(C, S0, K, r, T)
+print(f"Given C=\${C}, implied P = \${P:.2f}")
+
+lhs = C - P
+rhs = S0 - K * math.exp(-r * T)
+print(f"C - P = {lhs:.4f}")
+print(f"S - Ke^(-rT) = {rhs:.4f}")
+print(f"Parity holds: {abs(lhs - rhs) < 0.001}")
+`} />
+    </div>
+
+
+    <!-- 3. Intrinsic vs Time Value -->
+    <h3>Intrinsic vs time value</h3>
+    <p>An option's price has two parts. <strong>Intrinsic value</strong> is the payoff if exercised right now: max(S &minus; K, 0) for a call. <strong>Time value</strong> is the rest: the premium minus intrinsic value. Time value reflects the probability that the option will become more valuable before expiration. It decays as expiration approaches &mdash; this is <strong>theta decay</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Intrinsic value vs time value
+(define (intrinsic-call S K) (max (- S K) 0))
+(define (intrinsic-put S K) (max (- K S) 0))
+
+(define (time-value premium intrinsic)
+  (- premium intrinsic))
+
+; Call option: S=105, K=100, market price=9
+(define S 105) (define K 100) (define call-price 9)
+(define iv (intrinsic-call S K))
+(define tv (time-value call-price iv))
+(display "Call: S=105, K=100, price=$9") (newline)
+(display "  Intrinsic: $") (display iv) (newline)
+(display "  Time value: $") (display tv) (newline)
+
+; OTM option: S=95, K=100, market price=3
+(newline)
+(define S2 95) (define call-price2 3)
+(define iv2 (intrinsic-call S2 K))
+(define tv2 (time-value call-price2 iv2))
+(display "Call: S=95, K=100, price=$3") (newline)
+(display "  Intrinsic: $") (display iv2) (newline)
+(display "  Time value: $") (display tv2) (newline)
+(display "  Status: entirely time value (out-of-the-money)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Intrinsic value vs time value
+def intrinsic_call(S, K): return max(S - K, 0)
+
+# ITM call: S=105, K=100, price=9
+S, K, price = 105, 100, 9
+iv = intrinsic_call(S, K)
+tv = price - iv
+print(f"Call: S={S}, K={K}, price=\${price}")
+print(f"  Intrinsic: \${iv}  Time value: \${tv}")
+
+# OTM call: S=95, K=100, price=3
+S2, price2 = 95, 3
+iv2 = intrinsic_call(S2, K)
+tv2 = price2 - iv2
+print(f"\\nCall: S={S2}, K={K}, price=\${price2}")
+print(f"  Intrinsic: \${iv2}  Time value: \${tv2}")
+print(f"  Status: entirely time value (out-of-the-money)")
+`} />
+    </div>
+
+
+    <!-- 4. Black-Scholes -->
+    <h3>Black-Scholes formula</h3>
+    <p>The Black-Scholes model prices European options under specific assumptions: log-normal stock prices, constant volatility, no dividends, continuous trading. The formula: C = S&#x2080;&middot;N(d&#x2081;) &minus; K&middot;e&#x207B;&#x72;&#x1D40;&middot;N(d&#x2082;), where d&#x2081; and d&#x2082; depend on S, K, r, T, and volatility &#x3C3;. Derivation is Finance II &mdash; here we use it as a pricing tool.</p>
+
+    <SchemeRepl client:load initialCode={`; Black-Scholes European call price
+; Uses rational approximation for N(x) (CDF of standard normal)
+
+(define pi 3.141592653589793)
+
+; Standard normal PDF
+(define (norm-pdf x)
+  (* (/ 1 (sqrt (* 2 pi))) (exp (* -0.5 x x))))
+
+; Standard normal CDF (Abramowitz & Stegun approximation)
+(define (norm-cdf x)
+  (if (< x 0)
+      (- 1 (norm-cdf (- x)))
+      (let* ((b1 0.319381530) (b2 -0.356563782)
+             (b3 1.781477937) (b4 -1.821255978) (b5 1.330274429)
+             (t (/ 1 (+ 1 (* 0.2316419 x))))
+             (poly (+ (* b1 t) (* b2 t t) (* b3 t t t)
+                      (* b4 t t t t) (* b5 t t t t t))))
+        (- 1 (* (norm-pdf x) poly)))))
+
+(define (black-scholes S K r T sigma)
+  (let* ((d1 (/ (+ (log (/ S K)) (* (+ r (* 0.5 sigma sigma)) T))
+               (* sigma (sqrt T))))
+         (d2 (- d1 (* sigma (sqrt T))))
+         (call (- (* S (norm-cdf d1))
+                  (* K (exp (* -1 r T)) (norm-cdf d2))))
+         (put (+ (- call S) (* K (exp (* -1 r T))))))
+    (list call put)))
+
+; Price options: S=100, K=100, r=5%, T=1yr, sigma=20%
+(define result (black-scholes 100 100 0.05 1 0.20))
+(display "Call: $") (display (/ (round (* (car result) 100)) 100)) (newline)
+(display "Put:  $") (display (/ (round (* (cadr result) 100)) 100)) (newline)
+
+; Higher volatility: sigma=40%
+(define result2 (black-scholes 100 100 0.05 1 0.40))
+(display "Call (vol=40%): $") (display (/ (round (* (car result2) 100)) 100)) (newline)
+(display "Put  (vol=40%): $") (display (/ (round (* (cadr result2) 100)) 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def norm_cdf(x):
+    """Standard normal CDF (Abramowitz & Stegun)."""
+    if x < 0: return 1 - norm_cdf(-x)
+    b = [0.319381530, -0.356563782, 1.781477937, -1.821255978, 1.330274429]
+    t = 1 / (1 + 0.2316419 * x)
+    pdf = math.exp(-0.5 * x * x) / math.sqrt(2 * math.pi)
+    poly = sum(b[i] * t**(i+1) for i in range(5))
+    return 1 - pdf * poly
+
+def black_scholes(S, K, r, T, sigma):
+    d1 = (math.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*math.sqrt(T))
+    d2 = d1 - sigma * math.sqrt(T)
+    call = S * norm_cdf(d1) - K * math.exp(-r*T) * norm_cdf(d2)
+    put = call - S + K * math.exp(-r*T)  # put-call parity
+    return call, put
+
+# S=100, K=100, r=5%, T=1yr
+for sigma in [0.20, 0.40]:
+    c, p = black_scholes(100, 100, 0.05, 1, sigma)
+    print(f"sigma={sigma:.0%}: Call=\${c:.2f}, Put=\${p:.2f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-07/">📈 Forwards and Futures</a> &mdash; linear payoffs; options add the nonlinear kink</li>
+      <li><a href="/reading/finance-1/fin-09/">📈 Efficient Markets</a> &mdash; if markets are efficient, option prices reflect all information</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; normal distribution and expected values behind Black-Scholes</li>
+      <li><a href="/reading/calculus/">&#x222B; Calculus</a> &mdash; the differential equations behind option pricing</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-07/", label: "Forwards and Futures · 7 of 12" }}
+      next={{ href: "/reading/finance-1/fin-09/", label: "Efficient Markets · 9 of 12" }}
+    />
+
+  </main>
+</Layout>

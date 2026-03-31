@@ -1,0 +1,200 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.8 — Digital Signatures" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&#8592; back to crypto</a>
+
+    <h1>Digital Signatures</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (CC BY-SA 4.0) · <a href="https://en.wikipedia.org/wiki/Digital_signature"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Digital signature</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>digital signature</strong> proves that a message came from the holder of a private key, and that it was not altered in transit. Anyone with the corresponding public key can verify it. Signatures enable trust without trusted third parties.</p>
+    </div>
+
+    <!-- SVG: Sign and verify flow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Document -->
+        <rect x="20" y="70" width="80" height="60" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="60" y="95" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">Document</text>
+        <line x1="35" y1="108" x2="85" y2="108" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+        <line x1="35" y1="118" x2="75" y2="118" stroke="#71717a" stroke-opacity="0.45" stroke-width="1"/>
+
+        <!-- Arrow to sign -->
+        <line x1="105" y1="100" x2="155" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="155,96 163,100 155,104" fill="currentColor"/>
+
+        <!-- Sign box -->
+        <rect x="165" y="75" width="90" height="50" rx="6" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="210" y="97" text-anchor="middle" fill="#4ade80" font-size="12">Sign</text>
+        <text x="210" y="112" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7">(private key)</text>
+
+        <!-- Arrow to signature -->
+        <line x1="260" y1="100" x2="295" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="295,96 303,100 295,104" fill="currentColor"/>
+
+        <!-- Signature blob -->
+        <rect x="305" y="80" width="70" height="40" rx="4" fill="none" stroke="#f472b6" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="340" y="105" text-anchor="middle" fill="#f472b6" font-size="11">Signature</text>
+
+        <!-- Arrow to verify -->
+        <line x1="380" y1="100" x2="410" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="410,96 418,100 410,104" fill="currentColor"/>
+
+        <!-- Verify box -->
+        <rect x="420" y="75" width="80" height="50" rx="6" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="460" y="97" text-anchor="middle" fill="#60a5fa" font-size="12">Verify</text>
+        <text x="460" y="112" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">(public key)</text>
+
+        <!-- Result -->
+        <text x="460" y="150" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">&#x2713; valid / &#x2717; invalid</text>
+
+        <!-- Document also goes to verify -->
+        <path d="M 60 135 Q 60 170 460 165" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <text x="260" y="180" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="10">verifier also needs the original document</text>
+      </svg>
+    </div>
+
+    <!-- 1. How signing works -->
+    <h3>How signing works</h3>
+    <p>The signer hashes the message to get a fixed-size digest, then encrypts the digest with their private key. The result is the signature. To verify, the recipient decrypts the signature with the signer's public key and compares it to their own hash of the message. If they match, the signature is valid.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified RSA signature demo
+; In real RSA, we sign the hash of the message.
+; Here we sign small numbers directly.
+
+(define (mod-exp base exp mod)
+  (cond
+    ((= exp 0) 1)
+    ((even? exp)
+     (let ((half (mod-exp base (/ exp 2) mod)))
+       (modulo (* half half) mod)))
+    (else
+     (modulo (* base (mod-exp base (- exp 1) mod)) mod))))
+
+; RSA key generation (tiny primes for demo)
+(define p-prime 61)
+(define q-prime 53)
+(define n (* p-prime q-prime))     ; 3233
+(define phi (* (- p-prime 1) (- q-prime 1)))  ; 3120
+(define e 17)                       ; public exponent
+(define d 2753)                     ; private exponent (d*e mod phi = 1)
+
+; Sign: signature = message^d mod n
+(define message 42)
+(define signature (mod-exp message d n))
+(display "Message:   ") (display message) (newline)
+(display "Signature: ") (display signature) (newline)
+
+; Verify: recovered = signature^e mod n
+(define recovered (mod-exp signature e n))
+(display "Recovered: ") (display recovered) (newline)
+(display "Valid?     ") (display (= recovered message))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# RSA signature (tiny keys for demo)
+p, q = 61, 53
+n = p * q           # 3233
+phi = (p-1) * (q-1) # 3120
+e = 17               # public exponent
+d = 2753             # private exponent
+
+message = 42
+signature = pow(message, d, n)
+print(f"Message:   {message}")
+print(f"Signature: {signature}")
+
+recovered = pow(signature, e, n)
+print(f"Recovered: {recovered}")
+print(f"Valid?     {recovered == message}")
+`} />
+    </div>
+
+    <!-- 2. ECDSA -->
+    <h3>ECDSA</h3>
+    <p>The Elliptic Curve Digital Signature Algorithm uses the same curve group from Ch.7. The signer picks a random nonce k, computes kG, and derives the signature (r, s) from the nonce point's x-coordinate, the message hash, and the private key. Verification uses the public key to check the equation. ECDSA signatures are half the size of RSA signatures at equivalent security.</p>
+
+    <SchemeRepl client:load initialCode={`; ECDSA conceptual walkthrough (not full implementation)
+; The key insight: the signature binds the message
+; to the signer's private key via a random nonce.
+
+; Steps (simplified):
+; 1. Hash the message: h = hash(msg)
+; 2. Pick random nonce k
+; 3. Compute R = kG (a point on the curve)
+; 4. r = R.x mod n (the order of the curve)
+; 5. s = k^(-1) * (h + r * private_key) mod n
+; 6. Signature is (r, s)
+
+; Verification:
+; 1. Compute w = s^(-1) mod n
+; 2. u1 = h * w mod n
+; 3. u2 = r * w mod n
+; 4. Compute point u1*G + u2*PublicKey
+; 5. Check that its x-coordinate equals r
+
+(display "ECDSA sign:") (newline)
+(display "  sig = (r, s) where") (newline)
+(display "  r = (kG).x mod n") (newline)
+(display "  s = k^-1 * (hash + r * privkey) mod n") (newline)
+(newline)
+(display "ECDSA verify:") (newline)
+(display "  w = s^-1 mod n") (newline)
+(display "  check (hash*w*G + r*w*PubKey).x == r")
+`} />
+
+    <!-- 3. Certificate chains -->
+    <h3>Certificate chains</h3>
+    <p>A <strong>certificate</strong> binds a public key to an identity (e.g., "example.com"). A <strong>certificate authority</strong> (CA) signs this binding with its own private key. Your browser trusts a set of root CAs. Each root CA can sign intermediate CAs, which sign end-entity certificates. This chain of signatures is the <strong>certificate chain</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Certificate chain as nested signatures
+; Root CA signs Intermediate CA, which signs the site cert.
+
+(display "Certificate chain:") (newline)
+(display "  Root CA (trusted by your browser)") (newline)
+(display "    signs -> Intermediate CA cert") (newline)
+(display "      signs -> example.com cert") (newline)
+(newline)
+(display "Verification walks the chain:") (newline)
+(display "  1. Check example.com cert signature") (newline)
+(display "     using Intermediate CA public key") (newline)
+(display "  2. Check Intermediate CA cert signature") (newline)
+(display "     using Root CA public key") (newline)
+(display "  3. Root CA is in the trust store") (newline)
+(newline)
+(display "If any link breaks, the chain fails.")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">This series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-07/">&#8592; Ch.7 — Elliptic Curves</a></li>
+      <li><a href="/reading/cryptography/crypto-09/">Ch.9 — Zero-Knowledge Proofs &#8594;</a></li>
+    </ul>
+    <ul>
+      <li><a href="/reading/economics/econ-20/">Economics Ch.20</a> — mechanism design: signatures enable trust without trusted third parties</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Digital_signature"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Digital signature</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ECDSA</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Certificate_authority"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Certificate authority</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Chain_of_trust"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chain of trust</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-07/", label: "Elliptic Curves" }} next={{ href: "/reading/cryptography/crypto-09/", label: "Zero-Knowledge Proofs" }} />
+
+  </main>
+</Layout>

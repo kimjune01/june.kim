@@ -1,0 +1,167 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.8 — File Systems" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>File Systems</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/File_system"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>File system</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>file system</strong> organizes persistent data on disk into files and directories. The key abstraction: a file is a named sequence of bytes. The file system maps names to blocks on disk, tracks free space, and (in modern systems) journals writes for crash recovery.</p>
+    </div>
+
+    <h3>Files and directories</h3>
+    <p>A <strong>file</strong> has data (the bytes) and metadata (name, size, permissions, timestamps). A <strong>directory</strong> is a file that maps names to file references. The directory tree gives every file a unique path.</p>
+
+    <h3>Inodes</h3>
+    <p>In Unix file systems, an <strong>inode</strong> stores all metadata about a file except its name. The directory maps names to inode numbers. An inode contains pointers to the data blocks on disk. For large files, indirect pointers add extra levels of indirection.</p>
+
+    <!-- SVG: Inode structure pointing to data blocks -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Inode box -->
+        <rect x="20" y="20" width="140" height="180" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="90" y="40" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Inode 42</text>
+        <text x="30" y="60" fill="currentColor" font-size="9" fill-opacity="0.4">size: 13KB</text>
+        <text x="30" y="75" fill="currentColor" font-size="9" fill-opacity="0.4">perms: rw-r--r--</text>
+        <text x="30" y="90" fill="currentColor" font-size="9" fill-opacity="0.4">links: 1</text>
+        <line x1="30" y1="98" x2="150" y2="98" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <text x="30" y="112" fill="currentColor" font-size="9" fill-opacity="0.5">direct[0]</text>
+        <text x="30" y="128" fill="currentColor" font-size="9" fill-opacity="0.5">direct[1]</text>
+        <text x="30" y="144" fill="currentColor" font-size="9" fill-opacity="0.5">direct[2]</text>
+        <text x="30" y="160" fill="currentColor" font-size="9" fill-opacity="0.5">indirect</text>
+
+        <!-- Data blocks -->
+        <rect x="210" y="95" width="60" height="25" rx="3" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="240" y="112" text-anchor="middle" fill="#60a5fa" font-size="9">Block 8</text>
+
+        <rect x="210" y="125" width="60" height="25" rx="3" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="240" y="142" text-anchor="middle" fill="#60a5fa" font-size="9">Block 14</text>
+
+        <rect x="210" y="155" width="60" height="25" rx="3" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="240" y="172" text-anchor="middle" fill="#60a5fa" font-size="9">Block 23</text>
+
+        <!-- Indirect block -->
+        <rect x="300" y="30" width="60" height="60" rx="3" fill="none" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="330" y="48" text-anchor="middle" fill="#a78bfa" font-size="8" fill-opacity="0.6">Indirect</text>
+        <text x="330" y="62" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Blk 31</text>
+        <text x="330" y="76" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Blk 45</text>
+
+        <!-- More data blocks from indirect -->
+        <rect x="380" y="40" width="30" height="18" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>
+        <text x="395" y="53" text-anchor="middle" fill="#60a5fa" font-size="7">31</text>
+        <rect x="380" y="65" width="30" height="18" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>
+        <text x="395" y="78" text-anchor="middle" fill="#60a5fa" font-size="7">45</text>
+
+        <!-- Arrows: direct pointers to blocks -->
+        <line x1="160" y1="108" x2="208" y2="108" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="160" y1="124" x2="208" y2="137" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="160" y1="140" x2="208" y2="167" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Arrow: indirect pointer -->
+        <line x1="160" y1="156" x2="298" y2="55" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Arrows from indirect to data -->
+        <line x1="360" y1="55" x2="378" y2="50" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="360" y1="70" x2="378" y2="73" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Simulate an inode-based file system
+; Inode: (size permissions (direct-blocks ...) indirect-block)
+
+(define (make-inode size perms direct indirect)
+  (list size perms direct indirect))
+
+(define (inode-size i) (car i))
+(define (inode-direct i) (caddr i))
+(define (inode-indirect i) (cadddr i))
+
+; Directory: list of (name . inode-number)
+(define root-dir '(("readme.txt" . 42) ("src" . 15) ("data.bin" . 87)))
+
+; Inodes
+(define inode-table
+  (list (cons 42 (make-inode 13000 "rw-r--r--" '(8 14 23) '(31 45)))
+        (cons 15 (make-inode 4096 "rwxr-xr-x" '(5) '()))
+        (cons 87 (make-inode 50000 "rw-------" '(100 101 102) '(200 201 202 203)))))
+
+(define (lookup name)
+  (let ((entry (assoc name root-dir)))
+    (if entry
+        (let ((inode (cdr (assoc (cdr entry) inode-table))))
+          (display "File: ") (display name) (newline)
+          (display "  Inode: ") (display (cdr entry)) (newline)
+          (display "  Size: ") (display (inode-size inode)) (newline)
+          (display "  Direct blocks: ") (display (inode-direct inode)) (newline))
+        (display "File not found"))))
+
+(lookup "readme.txt")
+(newline)
+(lookup "data.bin")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Inode-based file system simulation
+class Inode:
+    def __init__(self, size, perms, direct, indirect=None):
+        self.size = size
+        self.perms = perms
+        self.direct = direct
+        self.indirect = indirect or []
+
+inodes = {
+    42: Inode(13000, "rw-r--r--", [8, 14, 23], [31, 45]),
+    15: Inode(4096, "rwxr-xr-x", [5]),
+    87: Inode(50000, "rw-------", [100, 101, 102], [200, 201, 202, 203]),
+}
+
+directory = {"readme.txt": 42, "src": 15, "data.bin": 87}
+
+def ls():
+    for name, ino in directory.items():
+        inode = inodes[ino]
+        blocks = len(inode.direct) + len(inode.indirect)
+        print(f"{inode.perms}  {inode.size:>6}  {blocks} blocks  {name}")
+
+ls()
+`} />
+    </div>
+
+    <h3>Allocation strategies</h3>
+    <p><strong>Contiguous</strong>: file occupies consecutive blocks. Fast reads, but causes fragmentation. <strong>Linked</strong>: each block has a pointer to the next. No fragmentation, but random access is slow. <strong>Indexed</strong>: an index block holds all pointers. Best of both, at the cost of index overhead. Unix inodes use indexed allocation with direct and indirect pointers.</p>
+
+    <h3>Free space management</h3>
+    <p>The file system tracks which blocks are free using a <strong>bitmap</strong> (one bit per block) or a <strong>free list</strong> (linked list of free blocks). Bitmaps are compact and support fast allocation of contiguous blocks.</p>
+
+    <h3>Journaling</h3>
+    <p>A <strong>journal</strong> (or log) records intended changes before applying them. If the system crashes mid-write, recovery replays or rolls back the journal. This turns a potentially corrupted file system into one that recovers in seconds instead of hours of fsck.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Discrete Math Ch.4</a> — directed graphs: file system directories are DAGs (hard links can create cycles, hence the restriction)</li>
+      <li><a href="/reading/databases/db-06/">💾 Databases Ch.6</a> — WAL and crash recovery: journaling filesystems use the same write-ahead logging technique as databases</li>
+      <li><a href="/reading/algorithms/algo-04/">⚙ Algorithms Ch.4</a> — B-trees: most filesystem metadata structures (ext4, NTFS, HFS+) are B-tree variants</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/File_system"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>File system</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Inode"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Inode</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Journaling_file_system"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Journaling file system</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-07/", label: "Virtual Memory" }} next={{ href: "/reading/operating-systems/os-09/", label: "I/O Systems" }} />
+
+  </main>
+</Layout>

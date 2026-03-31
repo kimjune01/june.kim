@@ -1,0 +1,204 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.3 — Transformations" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Transformations</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Geometric_transformation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Geometric transformation</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>transformation</strong> moves every point in the plane to a new position. The interesting ones preserve something: distances (isometries), angles (conformal maps), or straight lines (affine maps). The symmetries of a shape form a <strong>group</strong> under composition.</p>
+    </div>
+
+    <!-- 1. Translation -->
+    <h3>Translation</h3>
+    <p>Slide every point by the same vector (dx, dy). Distances and angles are preserved. No fixed points.</p>
+
+    <SchemeRepl client:load initialCode={`; Translation: shift every point by (dx, dy)
+(define (translate point dx dy)
+  (list (+ (car point) dx)
+        (+ (cadr point) dy)))
+
+(display "Translate (3,4) by (2,-1): ")
+(display (translate (list 3 4) 2 -1))
+(newline)
+
+; Compose two translations: just add the vectors
+(define (compose-translations dx1 dy1 dx2 dy2)
+  (list (+ dx1 dx2) (+ dy1 dy2)))
+
+(display "Translate by (2,3) then (1,-1): ")
+(display (compose-translations 2 3 1 -1))
+`} />
+
+    <!-- 2. Rotation -->
+    <h3>Rotation</h3>
+    <p>Rotate every point around the origin by angle theta. The formulas: x' = x cos(theta) - y sin(theta), y' = x sin(theta) + y cos(theta). Preserves distances and angles. One fixed point: the center.</p>
+
+    <SchemeRepl client:load initialCode={`; Rotation around the origin by angle theta (radians)
+(define pi 3.141592653589793)
+
+(define (rotate x y theta)
+  (let ((c (cos theta))
+        (s (sin theta)))
+    (list (- (* x c) (* y s))
+          (+ (* x s) (* y c)))))
+
+; Rotate (1,0) by 90 degrees (pi/2)
+(display "Rotate (1,0) by 90 deg: ")
+(display (rotate 1 0 (/ pi 2)))
+(newline)
+
+; Rotate (1,0) by 45 degrees
+(display "Rotate (1,0) by 45 deg: ")
+(display (rotate 1 0 (/ pi 4)))
+(newline)
+
+; Four 90-degree rotations return to start
+(let ((p (rotate 1 0 (/ pi 2))))
+  (let ((p2 (rotate (car p) (cadr p) (/ pi 2))))
+    (let ((p3 (rotate (car p2) (cadr p2) (/ pi 2))))
+      (let ((p4 (rotate (car p3) (cadr p3) (/ pi 2))))
+        (display "Four 90-deg rotations: ")
+        (display p4)))))
+`} />
+
+    <!-- 3. Reflection -->
+    <h3>Reflection</h3>
+    <p>Flip every point across a line. Reflection across the x-axis: (x, y) maps to (x, -y). Across the y-axis: (-x, y). Across y=x: (y, x). Reflections preserve distances but reverse orientation.</p>
+
+    <!-- SVG: Shape and its reflection/rotation -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Mirror line (vertical) -->
+        <line x1="200" y1="10" x2="200" y2="210" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="200" y="8" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">mirror</text>
+        <!-- Original triangle (left) -->
+        <polygon points="80,180 140,60 160,180" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="125" y="155" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.6">original</text>
+        <!-- Reflected triangle (right, mirrored across x=200) -->
+        <polygon points="320,180 260,60 240,180" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="275" y="155" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.6">reflected</text>
+        <!-- Rotation arrow (below) -->
+        <path d="M 140 195 A 60 20 0 0 1 260 195" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="258,191 264,197 254,197" fill="#34d399" fill-opacity="0.4"/>
+        <text x="200" y="215" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.4">180&#176; rotation = two reflections</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Reflections
+(define (reflect-x point)
+  (list (car point) (- (cadr point))))
+
+(define (reflect-y point)
+  (list (- (car point)) (cadr point)))
+
+(define (reflect-diagonal point)
+  (list (cadr point) (car point)))
+
+(display "Reflect (3,4) across x-axis: ")
+(display (reflect-x (list 3 4)))
+(newline)
+
+(display "Reflect (3,4) across y-axis: ")
+(display (reflect-y (list 3 4)))
+(newline)
+
+(display "Reflect (3,4) across y=x: ")
+(display (reflect-diagonal (list 3 4)))
+(newline)
+
+; Two reflections = a rotation
+; Reflect across x-axis, then y-axis = 180-degree rotation
+(define (reflect-both p)
+  (reflect-y (reflect-x p)))
+
+(display "Two reflections of (3,4): ")
+(display (reflect-both (list 3 4)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rotate(x, y, theta):
+    c, s = math.cos(theta), math.sin(theta)
+    return (x*c - y*s, x*s + y*c)
+
+def reflect_x(x, y): return (x, -y)
+def reflect_y(x, y): return (-x, y)
+
+print(f"Rotate (1,0) by 90 deg: {rotate(1, 0, math.pi/2)}")
+print(f"Reflect (3,4) across x-axis: {reflect_x(3, 4)}")
+print(f"Reflect (3,4) across y-axis: {reflect_y(3, 4)}")
+
+# Two reflections = 180-degree rotation
+rx, ry = reflect_x(3, 4)
+print(f"Two reflections of (3,4): {reflect_y(rx, ry)}")
+`} />
+    </div>
+
+    <!-- 4. Scaling and composition -->
+    <h3>Scaling and composition</h3>
+    <p><strong>Scaling</strong> multiplies coordinates by a factor. Uniform scaling (same factor for x and y) preserves angles but not distances. Transformations compose: applying rotation then translation is a new transformation. The set of all isometries of a shape forms its <strong>symmetry group</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Scaling
+(define (scale point factor)
+  (list (* (car point) factor)
+        (* (cadr point) factor)))
+
+(display "Scale (3,4) by 2: ")
+(display (scale (list 3 4) 2))
+(newline)
+
+; Composition: apply transformations in sequence
+(define (compose-transforms t1 t2)
+  (lambda (point) (t2 (t1 point))))
+
+; Rotate 90 degrees then translate by (5,0)
+(define pi 3.141592653589793)
+
+(define (rot90 p)
+  (list (- (cadr p)) (car p)))
+
+(define (shift-right p)
+  (list (+ (car p) 5) (cadr p)))
+
+(define rot-then-shift
+  (compose-transforms rot90 shift-right))
+
+(display "Rotate (1,0) 90 deg then shift right 5: ")
+(display (rot-then-shift (list 1 0)))
+(newline)
+
+; Symmetry group of a square: 4 rotations + 4 reflections = 8 elements
+(display "D4 symmetry group has 8 elements")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Abstract Algebra Ch.1</a> — groups: the symmetries of a shape form a group under composition</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Geometric_transformation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Geometric transformation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Isometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Isometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Symmetry_group"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Symmetry group</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Dihedral_group"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dihedral group</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-02/", label: "Coordinate Geometry" }} next={{ href: "/reading/geometry/geom-04/", label: "Projective Geometry" }} />
+
+  </main>
+</Layout>

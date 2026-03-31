@@ -1,0 +1,463 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Fritz 2020 — A Synthetic Approach to Markov Kernels" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>A Synthetic Approach to Markov Kernels</h1>
+    <p class="text-gray-400 text-sm mb-6">Tobias Fritz · 2020 · <a href="https://arxiv.org/abs/1908.07021"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1908.07021</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Stochastic functions form a <a href="https://en.wikipedia.org/wiki/Category_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>category</a> with copy and discard. Whether a function is deterministic or stochastic is detected by whether it commutes with copying.</p>
+    </div>
+
+    <!-- What's a Markov category -->
+    <h3>What's a Markov category</h3>
+
+    <!-- SVG: Copy and discard structural morphisms -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Copy: X splits into two X's (Y junction) -->
+        <text x="30" y="16" fill="currentColor" font-size="11" fill-opacity="0.5">copy</text>
+        <!-- input wire -->
+        <line x1="20" y1="55" x2="80" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <text x="20" y="48" fill="currentColor" font-size="11" fill-opacity="0.5">X</text>
+        <!-- fork point -->
+        <circle cx="80" cy="55" r="3.5" fill="currentColor"/>
+        <!-- upper branch -->
+        <line x1="80" y1="55" x2="160" y2="25" stroke="currentColor" stroke-width="1.5"/>
+        <text x="165" y="29" fill="currentColor" font-size="11" fill-opacity="0.5">X</text>
+        <!-- lower branch -->
+        <line x1="80" y1="55" x2="160" y2="85" stroke="currentColor" stroke-width="1.5"/>
+        <text x="165" y="89" fill="currentColor" font-size="11" fill-opacity="0.5">X</text>
+
+        <!-- Discard: X goes to a terminal dot -->
+        <text x="260" y="16" fill="currentColor" font-size="11" fill-opacity="0.5">discard</text>
+        <!-- input wire -->
+        <line x1="250" y1="55" x2="340" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <text x="250" y="48" fill="currentColor" font-size="11" fill-opacity="0.5">X</text>
+        <!-- terminal point (filled circle with cross) -->
+        <circle cx="340" cy="55" r="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="336" y1="51" x2="344" y2="59" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="344" y1="51" x2="336" y2="59" stroke="currentColor" stroke-width="1.2"/>
+
+        <!-- Caption -->
+        <text x="210" y="112" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">structural morphisms: every object can be copied and discarded</text>
+      </svg>
+    </div>
+
+    <p>A <a href="https://ncatlab.org/nlab/show/Markov+category">Markov category (nLab)</a> is three things:</p>
+    <ol style="padding-left:1.5em; list-style:decimal !important;">
+      <li><strong>Objects</strong> are types (finite sets, state spaces — the "what")</li>
+      <li><strong>Morphisms</strong> are stochastic functions: input → distribution over outputs (the "how")</li>
+      <li><strong>Structure</strong>: you can <strong>copy</strong> data (duplicate it) and <strong>discard</strong> data (throw it away)</li>
+    </ol>
+    <p>That's it. In Python: a morphism is a function that returns a dict. The keys are possible outputs. The values are probabilities. The dict IS the stochastic matrix.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 mb-4 font-mono text-sm text-green-300"><code># A morphism in FinStoch — it's just a dict
+weather_to_temp = {'{'}
+    "sunny":  {'{'}  "hot": 0.8, "cold": 0.2  {'}'},
+    "cloudy": {'{'}  "hot": 0.3, "cold": 0.7  {'}'},
+{'}'}
+# For each input (weather), a distribution over outputs (temperature).
+# That's a stochastic matrix. That's a morphism. That's FinStoch.</code></pre>
+
+    <SchemeRepl client:load initialCode={`; A Markov kernel: input -> distribution over outputs
+; Distribution = list of (value . probability) pairs
+
+(define (fair-coin x)
+  '((heads . 0.5) (tails . 0.5)))
+
+(define (biased-die x)
+  '((1 . 0.1) (2 . 0.1) (3 . 0.1)
+    (4 . 0.1) (5 . 0.1) (6 . 0.5)))
+
+(define (deterministic-double x)
+  (list (cons (* x 2) 1.0)))
+
+(display (fair-coin 'anything))   (newline)
+(display (biased-die 'anything))  (newline)
+(display (deterministic-double 3)) (newline)
+; All three are morphisms in FinStoch.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Markov kernels as Python dicts
+
+def fair_coin(x):
+    return {"heads": 0.5, "tails": 0.5}
+
+def deterministic_double(x):
+    return {x * 2: 1.0}
+
+print("fair_coin:", fair_coin(None))
+print("double(3):", deterministic_double(3))
+`} />
+    </div>
+
+    <!-- Copy and determinism -->
+    <h3>Copy detects determinism</h3>
+    <p>Every object in a Markov category has a <strong>copy</strong> morphism: ν(x) = (x, x). Fritz's insight: a morphism f is <strong>deterministic</strong> if and only if it commutes with copy. "Apply then copy" equals "copy then apply to both copies."</p>
+    <p>Stochastic functions fail this test. If you flip a coin and then copy the result, you get (heads, heads) or (tails, tails). If you copy first and then flip each independently, you can get (heads, tails). Different distributions — the function is stochastic.</p>
+
+    <!-- SVG: copy-naturality string diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left side: f ; ν (apply then copy) -->
+        <text x="120" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f ; ν</text>
+        <!-- input wire -->
+        <line x1="20" y1="55" x2="60" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <!-- box f -->
+        <rect x="60" y="35" width="50" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="85" y="60" text-anchor="middle" fill="currentColor" font-size="13">f</text>
+        <!-- wire from f to fork -->
+        <line x1="110" y1="55" x2="150" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Y-fork (copy) -->
+        <circle cx="150" cy="55" r="3" fill="currentColor"/>
+        <line x1="150" y1="55" x2="190" y2="35" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="150" y1="55" x2="190" y2="75" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Right side: ν ; (f⊗f) (copy then apply) -->
+        <text x="375" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">ν ; (f⊗f)</text>
+        <!-- input wire -->
+        <line x1="270" y1="55" x2="310" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Y-fork (copy) -->
+        <circle cx="310" cy="55" r="3" fill="currentColor"/>
+        <line x1="310" y1="55" x2="350" y2="35" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="310" y1="55" x2="350" y2="75" stroke="currentColor" stroke-width="1.5"/>
+        <!-- box f (top) -->
+        <rect x="350" y="15" width="50" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="375" y="40" text-anchor="middle" fill="currentColor" font-size="13">f</text>
+        <!-- box f (bottom) -->
+        <rect x="350" y="55" width="50" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="375" y="80" text-anchor="middle" fill="currentColor" font-size="13">f</text>
+        <!-- output wires -->
+        <line x1="400" y1="35" x2="440" y2="35" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="400" y1="75" x2="440" y2="75" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Equals sign in middle -->
+        <text x="230" y="59" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.4">?</text>
+
+        <!-- Deterministic label -->
+        <text x="120" y="130" text-anchor="middle" fill="currentColor" font-size="12">Deterministic:</text>
+        <text x="120" y="148" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">= (same)</text>
+
+        <!-- Stochastic label -->
+        <text x="375" y="130" text-anchor="middle" fill="currentColor" font-size="12">Stochastic:</text>
+        <text x="375" y="148" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">&#x2260; (different)</text>
+
+        <!-- Divider -->
+        <line x1="245" y1="115" x2="245" y2="155" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Copy-naturality: f is deterministic iff f;copy = copy;(f⊗f)
+; We work with distributions, not samples.
+
+; A deterministic morphism: double
+(define (double x) (list (cons (* x 2) 1.0)))
+
+; Copy the distribution: each output paired with itself
+(define (copy-dist dist)
+  (map (lambda (p) (cons (cons (car p) (car p)) (cdr p))) dist))
+
+; f;copy — apply double, then copy the result
+(define f-then-copy (copy-dist (double 5)))
+
+; copy;(f⊗f) — copy input, apply double to each independently
+; For deterministic f, both copies get the same result
+(define copy-then-f
+  (list (cons (cons 10 10) 1.0)))
+
+(display "f;copy     = ") (display f-then-copy) (newline)
+(display "copy;(f⊗f) = ") (display copy-then-f) (newline)
+(display "equal? ") (display (equal? f-then-copy copy-then-f))
+(newline) (newline)
+
+; A stochastic morphism: coin flip
+(define (coin x) (list (cons x 0.5) (cons (- x) 0.5)))
+
+; f;copy — flip once, copy the result
+(define coin-then-copy (copy-dist (coin 5)))
+
+; copy;(f⊗f) — copy input, flip each independently
+(define copy-then-coin
+  (list (cons (cons 5 5) 0.25) (cons (cons 5 -5) 0.25)
+        (cons (cons -5 5) 0.25) (cons (cons -5 -5) 0.25)))
+
+(display "coin;copy     = ") (display coin-then-copy) (newline)
+(display "copy;(coin⊗coin) = ") (display copy-then-coin) (newline)
+(display "equal? ") (display (equal? coin-then-copy copy-then-coin))
+; #f — stochastic! coin;copy has 2 outcomes, copy;coin⊗coin has 4
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Copy-naturality in Python (with randomness demo)
+import random
+
+copy = lambda x: (x, x)
+double = lambda x: x * 2
+
+# Deterministic: both paths agree
+print(f"double: {copy(double(5))} == {(double(5), double(5))}")
+
+# Stochastic: paths diverge
+def coin(x):
+    return x if random.random() > 0.5 else -x
+
+for _ in range(4):
+    a, b = coin(5), coin(5)
+    print(f"  coin: ({a}, {b}) — {'=' if a==b else '≠'}")
+`} />
+    </div>
+
+    <!-- Kleisli composition -->
+    <h3>Kleisli composition</h3>
+    <p>Morphisms in FinStoch compose via <a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli composition</a>: feed the output distribution of f into g, marginalizing over the intermediate. This is <code>>>=</code> (bind) from monads.</p>
+
+    <!-- SVG: Markov category composition with copy at B -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 150" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- input A -->
+        <line x1="15" y1="65" x2="60" y2="65" stroke="currentColor" stroke-width="1.5"/>
+        <text x="15" y="56" fill="currentColor" font-size="11" fill-opacity="0.5">A</text>
+        <!-- box f -->
+        <rect x="60" y="45" width="55" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="87" y="70" text-anchor="middle" fill="currentColor" font-size="14">f</text>
+        <!-- wire from f to copy point -->
+        <line x1="115" y1="65" x2="175" y2="65" stroke="currentColor" stroke-width="1.5"/>
+        <text x="145" y="56" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">B</text>
+        <!-- copy point at B (highlighted) -->
+        <circle cx="175" cy="65" r="3.5" fill="#60a5fa"/>
+        <!-- upper branch to g -->
+        <line x1="175" y1="65" x2="230" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <!-- lower branch (side channel) -->
+        <line x1="175" y1="65" x2="230" y2="110" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="255" y="115" fill="#60a5fa" font-size="9" fill-opacity="0.7">side channel</text>
+        <!-- box g -->
+        <rect x="230" y="20" width="55" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="257" y="45" text-anchor="middle" fill="currentColor" font-size="14">g</text>
+        <!-- output C -->
+        <line x1="285" y1="40" x2="340" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <text x="345" y="44" fill="currentColor" font-size="11" fill-opacity="0.5">C</text>
+        <!-- Caption -->
+        <text x="220" y="142" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">copy at B lets downstream g and a side channel both use the intermediate</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Kleisli composition string diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- input wire -->
+        <line x1="15" y1="95" x2="70" y2="95" stroke="currentColor" stroke-width="1.5"/>
+        <text x="35" y="82" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">x</text>
+
+        <!-- f box -->
+        <rect x="70" y="72" width="65" height="46" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="102" y="100" text-anchor="middle" fill="currentColor" font-size="14">f</text>
+
+        <!-- fan-out -->
+        <line x1="135" y1="95" x2="168" y2="95" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="168" cy="95" r="3" fill="currentColor"/>
+        <line x1="168" y1="95" x2="220" y2="35" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="168" y1="95" x2="220" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="168" y1="95" x2="220" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- g boxes — spaced -->
+        <rect x="220" y="14" width="65" height="42" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="252" y="40" text-anchor="middle" fill="currentColor" font-size="14">g</text>
+
+        <rect x="220" y="74" width="65" height="42" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="252" y="100" text-anchor="middle" fill="currentColor" font-size="14">g</text>
+
+        <rect x="220" y="134" width="65" height="42" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="252" y="160" text-anchor="middle" fill="currentColor" font-size="14">g</text>
+
+        <!-- merge -->
+        <line x1="285" y1="35" x2="340" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="285" y1="95" x2="340" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="285" y1="155" x2="340" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.45"/>
+        <circle cx="340" cy="95" r="3" fill="currentColor"/>
+
+        <!-- output wire -->
+        <line x1="340" y1="95" x2="420" y2="95" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- label -->
+        <text x="230" y="192" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">(f >=> g)(x) — marginalize over intermediate</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Kleisli composition: f >=> g
+; A distribution is a list of (value . probability) pairs.
+; Composition marginalizes the intermediate.
+
+(define (kleisli f g)
+  (lambda (x)
+    (apply append
+      (map (lambda (pair)
+        (let ((y (car pair)) (py (cdr pair)))
+          (map (lambda (qpair)
+            (cons (car qpair) (* py (cdr qpair))))
+          (g y))))
+      (f x)))))
+
+; f: 50% stay, 50% increment
+(define (f x) (list (cons x 0.5) (cons (+ x 1) 0.5)))
+
+; g: double with certainty
+(define (g y) (list (cons (* y 2) 1.0)))
+
+; Compose: (f >=> g)(3)
+(display ((kleisli f g) 3))
+; ((6 . 0.5) (8 . 0.5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Same thing in Python
+
+def f(x):
+    return {x: 0.5, x + 1: 0.5}
+
+def g(y):
+    return {y * 2: 1.0}
+
+def kleisli(f, g):
+    def composed(x):
+        result = {}
+        for y, py in f(x).items():
+            for z, pz in g(y).items():
+                result[z] = result.get(z, 0) + py * pz
+        return result
+    return composed
+
+print(f"(f >=> g)(3) = {kleisli(f, g)(3)}")
+`} />
+    </div>
+
+    <!-- Support -->
+    <h3>Support — which outputs are possible</h3>
+    <p>The <strong>support</strong> of a distribution is the set of outcomes with nonzero probability. Fritz uses support to define possibilistic reasoning — forget the probabilities, just ask "can this happen?"</p>
+    <p>This connects to <a href="/reading/natural-breadcrumbs/fritz-perrone-2021/">🍞 Fritz, Perrone, Rezagholi 2021</a>, where support becomes a monad morphism.</p>
+
+    <SchemeRepl client:load initialCode={`; Support: collapse probabilities to reachability
+; supp(dist) = the set of values with nonzero probability
+
+(define (support dist)
+  (map car (filter (lambda (p) (> (cdr p) 0)) dist)))
+
+(define (f x)
+  (list (cons x 0.7) (cons (+ x 1) 0.2) (cons (+ x 2) 0.1)))
+
+(display (support (f 5)))
+; (5 6 7) — these are the possible outputs
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Support in Python
+
+def f(x):
+    return {x: 0.7, x+1: 0.2, x+2: 0.1}
+
+def support(dist):
+    return {k for k, v in dist.items() if v > 0}
+
+print(f"f(5) = {f(5)}")
+print(f"support(f(5)) = {support(f(5))}")
+`} />
+    </div>
+
+    <!-- Informativeness -->
+    <h3>Informativeness preorder</h3>
+    <p>Fritz defines when one morphism is "more informative" than another: f ≤ g if g factors through f. If you can recover g's output from f's output via post-processing, then f is at least as informative. This is the categorical version of <a href="https://en.wikipedia.org/wiki/Sufficient_statistic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>sufficient statistics</a>.</p>
+
+    <SchemeRepl client:load initialCode={`; Informativeness: f ≤ g if g factors through f
+; "f is at least as informative as g"
+
+(define (full-data x) (list (cons (cons x (* x x)) 1.0)))
+(define (just-square x) (list (cons (* x x) 1.0)))
+(define (post-process pair) (list (cons (cdr (car pair)) 1.0)))
+
+; full-data(-3) = ((-3 . 9) . 1.0)
+; post-process recovers just-square
+(display (full-data -3)) (newline)
+(display (just-square -3)) (newline)
+; full-data ≥ just-square: you can post-process to recover the square
+; but not the reverse: just-square loses the sign
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Informativeness in Python
+full_data = lambda x: {(x, x**2): 1.0}
+just_square = lambda x: {x**2: 1.0}
+
+print(f"full_data(-3) = {full_data(-3)}")
+print(f"just_square(-3) = {just_square(-3)}")
+print("full_data ≥ just_square — recoverable")
+print("just_square loses the sign — not recoverable")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">FinStoch</td><td class="pr-4 text-green-300"># dicts as distributions</td><td class="font-sans">Category of finite stochastic matrices</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f >=> g</td><td class="pr-4 text-green-300">kleisli(f, g)</td><td class="font-sans">Kleisli composition (marginalize intermediate)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ν</td><td class="pr-4 text-green-300">lambda x: (x, x)</td><td class="font-sans">Copy morphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ε</td><td class="pr-4 text-green-300">lambda x: None</td><td class="font-sans">Discard morphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C_det</td><td class="pr-4 text-green-300"># functions where copy commutes</td><td class="font-sans">Deterministic subcategory</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">supp(f)</td><td class="pr-4 text-green-300">{`{k for k,v in d.items() if v>0}`}</td><td class="font-sans">Support — nonzero outcomes</td></tr>
+          <tr><td class="py-2 pr-4">f ≤ g</td><td class="pr-4 text-green-300"># g factors through f</td><td class="font-sans">Informativeness preorder</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare logic works in FinStoch because it's an imperative category</li>
+      <li><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> — entropy is the unique information loss measure in FinStoch</li>
+      <li><a href="/reading/natural-breadcrumbs/fritz-perrone-2021/">🍞 Fritz, Perrone, Rezagholi 2021</a> — support as a monad morphism</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://ncatlab.org/nlab/show/Markov+category">Markov category (nLab)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Stochastic_matrix"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Stochastic matrix</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sufficient_statistic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Sufficient statistic</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use finite dicts as distributions over small sets. Fritz's paper works over arbitrary measurable spaces, Borel categories, and continuous distributions. For example: the copy-naturality test on this page checks a function over a handful of integers. In the paper, the same test applies to a Gaussian process over ℝ — infinite-dimensional, continuous, and requiring measure theory to state. The structure (does copying commute?) is identical. The generality is not.</p>
+    <p>The informativeness preorder example is a simplified illustration — the full definition involves almost-sure factorization, not pointwise equality. Every example is <strong class="text-green-400">Simplified</strong> unless marked otherwise.</p>
+
+    <!-- Paper link -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/1908.07021"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §10 (p.48) for the deterministic/stochastic boundary, §16 (p.72) for the informativeness preorder.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: FinStoch is the ambient category for the Natural Framework pipeline; the copy-naturality test distinguishes deterministic stages from stochastic ones. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/staton-2025/", label: "Staton 2025 · 1 of 21" }} next={{ href: "/reading/natural-breadcrumbs/fritz-perrone-2021/", label: "Fritz, Perrone 2021 · 3 of 21" }} />
+  </main>
+</Layout>

@@ -1,0 +1,293 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.4 — Logistic Regression" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Logistic Regression</h1>
+    <p class="text-gray-400 text-sm mb-6">Deisenroth et al., <em>Mathematics for Machine Learning</em> (CC BY 4.0) &middot; <a href="https://mml-book.github.io/">mml-book.github.io</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Logistic regression squashes linear output through a <strong>sigmoid</strong> to get probabilities. <strong>Cross-entropy loss</strong> measures how wrong the probabilities are &mdash; it penalizes confident wrong answers heavily. <strong>Maximum likelihood</strong> estimation is equivalent to minimizing cross-entropy. The decision boundary is where the probability hits 0.5.</p>
+    </div>
+
+    <!-- SVG: interactive sigmoid curve -->
+    <div class="flex flex-col items-center my-6">
+      <svg id="sig-svg" viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="170" x2="330" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="180" y1="180" x2="180" y2="15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="335" y="174" fill="currentColor" font-size="10" fill-opacity="0.4">z</text>
+        <text x="175" y="12" fill="currentColor" font-size="10" fill-opacity="0.4">&sigma;</text>
+        <!-- Asymptote lines -->
+        <line x1="30" y1="30" x2="330" y2="30" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="4,4"/>
+        <text x="335" y="34" fill="currentColor" font-size="9" fill-opacity="0.3">1</text>
+        <text x="335" y="174" fill="currentColor" font-size="9" fill-opacity="0.3">0</text>
+        <!-- Sigmoid curve (computed polyline) -->
+        <polyline id="sig-curve" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <!-- Dynamic elements -->
+        <line id="sig-vline" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <line id="sig-hline" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <circle id="sig-dot" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <!-- Class labels -->
+        <text x="100" y="155" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">class 0</text>
+        <text x="260" y="55" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.5">class 1</text>
+        <!-- Readout -->
+        <text id="sig-readout" x="180" y="210" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7"></text>
+      </svg>
+      <input id="sig-slider" type="range" min="-60" max="60" value="0" step="1" class="w-full max-w-sm mt-2" style="accent-color: #60a5fa;" />
+    </div>
+    <script is:inline>
+    (function() {
+      var LEFT = 30, RIGHT = 330, TOP = 30, BOT = 170;
+      var ZMIN = -6, ZMAX = 6;
+      function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+      function zToX(z) { return LEFT + (z - ZMIN) / (ZMAX - ZMIN) * (RIGHT - LEFT); }
+      function sigToY(s) { return BOT - s * (BOT - TOP); }
+
+      // Draw static curve
+      var pts = [];
+      for (var i = -60; i <= 60; i++) {
+        var z = i / 10;
+        pts.push(zToX(z).toFixed(1) + "," + sigToY(sigmoid(z)).toFixed(1));
+      }
+      document.getElementById("sig-curve").setAttribute("points", pts.join(" "));
+
+      var slider = document.getElementById("sig-slider");
+      var dot = document.getElementById("sig-dot");
+      var vline = document.getElementById("sig-vline");
+      var hline = document.getElementById("sig-hline");
+      var readout = document.getElementById("sig-readout");
+
+      function update() {
+        var z = slider.value / 10;
+        var s = sigmoid(z);
+        var cx = zToX(z), cy = sigToY(s);
+        dot.setAttribute("cx", cx);
+        dot.setAttribute("cy", cy);
+        vline.setAttribute("x1", cx); vline.setAttribute("y1", cy);
+        vline.setAttribute("x2", cx); vline.setAttribute("y2", BOT);
+        hline.setAttribute("x1", LEFT); hline.setAttribute("y1", cy);
+        hline.setAttribute("x2", cx); hline.setAttribute("y2", cy);
+        var cls = s >= 0.5 ? 1 : 0;
+        readout.textContent = "z = " + z.toFixed(1) + " → σ(z) = " + s.toFixed(2) + " → class " + cls;
+      }
+      slider.addEventListener("input", update);
+      update();
+    })();
+    </script>
+
+    <!-- 1. Sigmoid function -->
+    <h3>Sigmoid function</h3>
+    <p>The sigmoid &sigma;(z) = 1 / (1 + e&#x207B;&#x1DBB;) maps any real number to (0, 1). Large positive inputs map near 1; large negative inputs map near 0. At z = 0, &sigma;(0) = 0.5.</p>
+
+    <SchemeRepl client:load initialCode={`; Sigmoid function: sigma(z) = 1 / (1 + e^(-z))
+
+(define (sigmoid z)
+  (/ 1 (+ 1 (exp (- z)))))
+
+; Test at key points
+(display "sigmoid(-5) = ") (display (sigmoid -5)) (newline)
+(display "sigmoid(-1) = ") (display (sigmoid -1)) (newline)
+(display "sigmoid(0)  = ") (display (sigmoid 0)) (newline)
+(display "sigmoid(1)  = ") (display (sigmoid 1)) (newline)
+(display "sigmoid(5)  = ") (display (sigmoid 5)) (newline)
+
+; Key property: sigma(-z) = 1 - sigma(z)
+(display "sigmoid(2) + sigmoid(-2) = ")
+(display (+ (sigmoid 2) (sigmoid -2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sigmoid function
+import math
+
+def sigmoid(z):
+    return 1 / (1 + math.exp(-z))
+
+for z in [-5, -1, 0, 1, 5]:
+    print("sigmoid({}) = {:.4f}".format(z, sigmoid(z)))
+
+# Key property: sigma(-z) = 1 - sigma(z)
+print("sigmoid(2) + sigmoid(-2) =", sigmoid(2) + sigmoid(-2))
+`} />
+    </div>
+
+    <!-- 2. Cross-entropy loss -->
+    <h3>Cross-entropy loss</h3>
+    <p>Cross-entropy measures the distance between the true label distribution and the predicted probabilities. For binary classification: L = -[y log(p) + (1-y) log(1-p)]. When the model is confident and <em>right</em>, loss is low. When confident and <em>wrong</em>, loss explodes.</p>
+
+    <SchemeRepl client:load initialCode={`; Cross-entropy loss for binary classification
+; L = -[y * log(p) + (1-y) * log(1-p)]
+
+(define (cross-entropy y p)
+  (- (+ (* y (log p))
+        (* (- 1 y) (log (- 1 p))))))
+
+; When model is right (y=1, p close to 1)
+(display "y=1, p=0.9:  L = ") (display (cross-entropy 1 0.9)) (newline)
+(display "y=1, p=0.99: L = ") (display (cross-entropy 1 0.99)) (newline)
+
+; When model is wrong (y=1, p close to 0)
+(display "y=1, p=0.5:  L = ") (display (cross-entropy 1 0.5)) (newline)
+(display "y=1, p=0.1:  L = ") (display (cross-entropy 1 0.1)) (newline)
+(display "y=1, p=0.01: L = ") (display (cross-entropy 1 0.01)) (newline)
+
+; Confident and wrong is heavily penalized
+(display "y=0, p=0.99: L = ") (display (cross-entropy 0 0.99))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cross-entropy loss
+import math
+
+def cross_entropy(y, p):
+    return -(y * math.log(p) + (1 - y) * math.log(1 - p))
+
+# Right answers: low loss
+print("y=1, p=0.9:  L =", round(cross_entropy(1, 0.9), 4))
+print("y=1, p=0.99: L =", round(cross_entropy(1, 0.99), 4))
+
+# Wrong answers: high loss
+print("y=1, p=0.5:  L =", round(cross_entropy(1, 0.5), 4))
+print("y=1, p=0.1:  L =", round(cross_entropy(1, 0.1), 4))
+print("y=1, p=0.01: L =", round(cross_entropy(1, 0.01), 4))
+
+# Confident and wrong: catastrophic
+print("y=0, p=0.99: L =", round(cross_entropy(0, 0.99), 4))
+`} />
+    </div>
+
+    <!-- 3. Gradient descent for logistic regression -->
+    <h3>Gradient descent for logistic regression</h3>
+    <p>The gradient of cross-entropy loss with respect to the weight is (p - y) &middot; x. Same update rule as linear regression, but p comes from the sigmoid. This elegance is not a coincidence &mdash; it falls out of the exponential family.</p>
+
+    <SchemeRepl client:load initialCode={`; Logistic regression via gradient descent
+; Dataset: (x, label) — 1D for clarity
+
+(define data '((1 0) (2 0) (3 0) (4 0)
+               (6 1) (7 1) (8 1) (9 1)))
+(define n (length data))
+(define lr 0.1)
+
+(define (sigmoid z) (/ 1 (+ 1 (exp (- z)))))
+
+(define (train w b steps)
+  (if (= steps 0)
+      (begin
+        (display "w = ") (display w) (newline)
+        (display "b = ") (display b) (newline)
+        ; Show predictions
+        (display "Predictions:") (newline)
+        (for-each
+          (lambda (point)
+            (let ((x (car point))
+                  (y (cadr point))
+                  (p (sigmoid (+ (* w (car point)) b))))
+              (display "  x=") (display x)
+              (display " true=") (display y)
+              (display " pred=") (display p) (newline)))
+          data))
+      (let* ((preds (map (lambda (pt)
+                           (sigmoid (+ (* w (car pt)) b)))
+                         data))
+             (labels (map cadr data))
+             (errors (map - preds labels))
+             (xs (map car data))
+             (dw (/ (apply + (map * errors xs)) n))
+             (db (/ (apply + errors) n)))
+        (train (- w (* lr dw))
+               (- b (* lr db))
+               (- steps 1)))))
+
+(display "Logistic regression on 1D data") (newline)
+(train 0 0 200)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Logistic regression via gradient descent
+import math
+
+data = [(1,0), (2,0), (3,0), (4,0),
+        (6,1), (7,1), (8,1), (9,1)]
+n = len(data)
+lr = 0.1
+
+def sigmoid(z):
+    return 1 / (1 + math.exp(-z))
+
+w, b = 0.0, 0.0
+for step in range(200):
+    preds = [sigmoid(w * x + b) for x, y in data]
+    labels = [y for x, y in data]
+    errors = [p - y for p, y in zip(preds, labels)]
+    xs = [x for x, y in data]
+    dw = sum(e * x for e, x in zip(errors, xs)) / n
+    db = sum(errors) / n
+    w -= lr * dw
+    b -= lr * db
+
+print("w =", round(w, 4))
+print("b =", round(b, 4))
+print("Predictions:")
+for x, y in data:
+    p = sigmoid(w * x + b)
+    print("  x={} true={} pred={:.3f}".format(x, y, p))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&sigma;(z)</td><td class="pr-4 text-green-300">(sigmoid z)</td><td class="pr-4 text-blue-300">sigmoid(z)</td><td class="font-sans">Sigmoid function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">-log p</td><td class="pr-4 text-green-300">(- (log p))</td><td class="pr-4 text-blue-300">-math.log(p)</td><td class="font-sans">Surprise / information</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(y, p)</td><td class="pr-4 text-green-300">(cross-entropy y p)</td><td class="pr-4 text-blue-300">cross_entropy(y, p)</td><td class="font-sans">Cross-entropy loss</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p&#x0302; = &sigma;(wx + b)</td><td class="pr-4 text-green-300">(sigmoid (+ (* w x) b))</td><td class="pr-4 text-blue-300">sigmoid(w*x + b)</td><td class="font-sans">Predicted probability</td></tr>
+          <tr><td class="py-2 pr-4">&part;L/&part;w = (p-y)x</td><td class="pr-4 text-green-300">dw</td><td class="pr-4 text-blue-300">dw</td><td class="font-sans">Gradient of loss w.r.t. weight</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The sigmoid is the bridge between linear models and probability. Scheme's <code>(exp z)</code> maps directly to Python's <code>math.exp(z)</code> &mdash; same function, same numerical behavior. The gradient (p - y) &middot; x looks identical to linear regression's gradient, but p is now the sigmoid output instead of the raw linear prediction. This unification is the power of the generalized linear model.</p>
+    <p class="mt-2">Cross-entropy is measured in nats here (natural log). Shannon's original formulation uses log base 2 (bits). The optimization is the same either way &mdash; only the scale changes. The connection between cross-entropy and information content runs deep: a <a href="https://june.kim/freshness-filter"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>freshness filter</a> uses exactly this measure of surprise to detect whether a signal carries substance or is just noise.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-01/">📡 Shannon Ch.1</a> &mdash; information and surprise: cross-entropy is the expected surprise under the wrong distribution</li>
+      <li><a href="/reading/probability/grinstead-04/">🎲 Grinstead Ch.4</a> &mdash; Bayes' theorem: the probabilistic foundation for maximum likelihood</li>
+    
+      <li><a href="/reading/information-theory/shannon-02/">📡 Information Theory Ch.2</a> &mdash; cross-entropy loss is KL divergence from the true distribution</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Probability Ch.4</a> &mdash; Bayes' theorem connects posterior probability to the logistic function</li>
+      <li><a href="/reading/statistics/openintro-05/">📊 Statistics Ch.5</a> &mdash; hypothesis testing applies the same maximum likelihood framework</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Read <a href="https://mml-book.github.io/">Mathematics for Machine Learning</a> Ch. 12 and <a href="https://d2l.ai/chapter_linear-classification/">D2L Ch. 4</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-03/", label: "Optimization" }} next={{ href: "/reading/machine-learning/ml-05/", label: "Kernel Methods · 5 of 12" }} />
+
+  </main>
+</Layout>

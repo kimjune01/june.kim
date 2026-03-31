@@ -1,0 +1,272 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Orwell 1946 — Politics and the English Language" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Politics and the English Language</h1>
+    <p class="text-gray-400 text-sm mb-6">George Orwell &middot; 1946 &middot; <a href="https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/">Orwell Foundation</a> (copyrighted, link only)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Bad prose is a political act. Orwell argued that vague, pretentious, abstract language doesn't happen by accident. It's how power hides what it's doing. "Pacification" means bombing villages. "Transfer of population" means deportation. The cure is six rules, and the last rule overrides all the others: break any of these rules sooner than say anything outright barbarous.</p>
+    </div>
+
+    <!-- SVG: Checklist — six rules with pass/fail examples -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 260" class="w-full max-w-2xl" style="font-family: ui-monospace, monospace;">
+        <!-- Rule boxes (left column) -->
+        <rect x="10" y="10" width="200" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="20" y="30" fill="currentColor" font-size="9" fill-opacity="0.7">1. no dying metaphors</text>
+
+        <rect x="10" y="50" width="200" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="20" y="70" fill="currentColor" font-size="9" fill-opacity="0.7">2. no long words</text>
+
+        <rect x="10" y="90" width="200" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="20" y="110" fill="currentColor" font-size="9" fill-opacity="0.7">3. cut if possible</text>
+
+        <rect x="10" y="130" width="200" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="20" y="150" fill="currentColor" font-size="9" fill-opacity="0.7">4. no passive voice</text>
+
+        <rect x="10" y="170" width="200" height="30" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="20" y="190" fill="currentColor" font-size="9" fill-opacity="0.7">5. no foreign phrases</text>
+
+        <rect x="10" y="210" width="200" height="30" rx="3" fill="#34d399" fill-opacity="0.08" stroke="#34d399" stroke-width="1" stroke-opacity="0.35"/>
+        <text x="20" y="230" fill="#34d399" font-size="9" fill-opacity="0.8">6. break any rule vs. barbarous</text>
+
+        <!-- Connector lines -->
+        <line x1="210" y1="25" x2="270" y2="35" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="210" y1="65" x2="270" y2="75" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="210" y1="105" x2="270" y2="115" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="210" y1="145" x2="270" y2="155" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+        <line x1="210" y1="185" x2="270" y2="195" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+
+        <!-- Examples (right column) — violations and clean prose -->
+        <!-- Rule 1 violation -->
+        <text x="280" y="30" fill="#ef4444" font-size="8.5" fill-opacity="0.7">&#x2717;</text>
+        <text x="295" y="30" fill="currentColor" font-size="8.5" fill-opacity="0.45">"toe the line"</text>
+        <text x="280" y="44" fill="#34d399" font-size="8.5" fill-opacity="0.7">&#x2713;</text>
+        <text x="295" y="44" fill="currentColor" font-size="8.5" fill-opacity="0.45">"conform"</text>
+
+        <!-- Rule 2 violation -->
+        <text x="280" y="70" fill="#ef4444" font-size="8.5" fill-opacity="0.7">&#x2717;</text>
+        <text x="295" y="70" fill="currentColor" font-size="8.5" fill-opacity="0.45">"utilize"</text>
+        <text x="280" y="84" fill="#34d399" font-size="8.5" fill-opacity="0.7">&#x2713;</text>
+        <text x="295" y="84" fill="currentColor" font-size="8.5" fill-opacity="0.45">"use"</text>
+
+        <!-- Rule 3 violation -->
+        <text x="280" y="110" fill="#ef4444" font-size="8.5" fill-opacity="0.7">&#x2717;</text>
+        <text x="295" y="110" fill="currentColor" font-size="8.5" fill-opacity="0.45">"at this point in time"</text>
+        <text x="280" y="124" fill="#34d399" font-size="8.5" fill-opacity="0.7">&#x2713;</text>
+        <text x="295" y="124" fill="currentColor" font-size="8.5" fill-opacity="0.45">"now"</text>
+
+        <!-- Rule 4 violation -->
+        <text x="280" y="150" fill="#ef4444" font-size="8.5" fill-opacity="0.7">&#x2717;</text>
+        <text x="295" y="150" fill="currentColor" font-size="8.5" fill-opacity="0.45">"mistakes were made"</text>
+        <text x="280" y="164" fill="#34d399" font-size="8.5" fill-opacity="0.7">&#x2713;</text>
+        <text x="295" y="164" fill="currentColor" font-size="8.5" fill-opacity="0.45">"we made mistakes"</text>
+
+        <!-- Rule 5 violation -->
+        <text x="280" y="190" fill="#ef4444" font-size="8.5" fill-opacity="0.7">&#x2717;</text>
+        <text x="295" y="190" fill="currentColor" font-size="8.5" fill-opacity="0.45">"cul de sac"</text>
+        <text x="280" y="204" fill="#34d399" font-size="8.5" fill-opacity="0.7">&#x2713;</text>
+        <text x="295" y="204" fill="currentColor" font-size="8.5" fill-opacity="0.45">"dead end"</text>
+
+        <!-- Rule 6 override note -->
+        <line x1="210" y1="225" x2="270" y2="225" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="280" y="228" fill="#34d399" font-size="8.5" fill-opacity="0.5">override: if breaking the rule sounds better</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Orwell wrote this essay in 1946, in the immediate aftermath of the Second World War. He had watched two totalitarian regimes weaponize language &mdash; not by lying outright, but by making the truth unsayable. Official language replaced concrete nouns with abstractions, active verbs with passive constructions, and specific claims with vague gestures. The result was prose that could mean anything and therefore committed to nothing.</p>
+
+    <p>The essay diagnoses a feedback loop: bad politics produces bad language, and bad language makes bad politics easier. When a government can describe the bombing of villages as "pacification" and mass deportation as "rectification of frontiers," it has already won the argument before the argument starts. The euphemism does the political work. Anyone who wants to challenge the policy must first undo the language, and by then the audience has moved on.</p>
+
+    <p>The examples are political, but the diagnosis applies everywhere: academic writing, corporate communications, legal language. Anywhere the writer benefits from the reader not understanding, you will find the same patterns. Pretentious diction, meaningless words, dying metaphors, passive constructions. These are moral failures, not style failures. The writer who hides behind bad prose is choosing not to be understood, and that choice has consequences.</p>
+
+    <h3>The six rules</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">#</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Rule</th>
+            <th class="text-left py-2 text-gray-400">What it prohibits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">1</td><td class="pr-3 text-gray-300">Never use a metaphor, simile, or other figure of speech which you are used to seeing in print</td><td class="text-gray-400">Dead metaphors: "toe the line", "Achilles' heel", "melting pot"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">2</td><td class="pr-3 text-gray-300">Never use a long word where a short one will do</td><td class="text-gray-400">Latinate inflation: "utilize" for "use", "facilitate" for "help"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">3</td><td class="pr-3 text-gray-300">If it is possible to cut a word out, always cut it</td><td class="text-gray-400">Padding and throat-clearing</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">4</td><td class="pr-3 text-gray-300">Never use the passive where you can use the active</td><td class="text-gray-400">Evasion of responsibility: "mistakes were made"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">5</td><td class="pr-3 text-gray-300">Never use a foreign phrase, a scientific word, or a jargon word if you can think of an everyday English equivalent</td><td class="text-gray-400">Pretension and gatekeeping</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">6</td><td class="pr-3 text-gray-300">Break any of these rules sooner than say anything outright barbarous</td><td class="text-gray-400">The escape hatch that makes the other five usable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The rules in action</h3>
+
+    <p>Read this sentence. What would you cut?</p>
+
+    <div id="orwell-editor" class="bg-zinc-800 rounded-lg p-5 mb-4">
+      <p id="orwell-text" class="text-lg leading-relaxed" style="max-width:none"></p>
+      <p id="orwell-count" class="text-gray-500 text-sm mt-3"></p>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <button class="orwell-rule-btn" data-rule="1">Rule 1: dying metaphors</button>
+      <button class="orwell-rule-btn" data-rule="2">Rule 2: long words</button>
+      <button class="orwell-rule-btn" data-rule="3">Rule 3: cut if possible</button>
+      <button class="orwell-rule-btn" data-rule="4">Rule 4: passive voice</button>
+      <button class="orwell-rule-btn" data-rule="5">Rule 5: jargon</button>
+      <button class="orwell-rule-btn" data-rule="reset">Reset</button>
+    </div>
+
+    <p id="orwell-note" class="text-gray-400 text-sm" style="min-height:3em"></p>
+
+    <p class="text-gray-400 mt-4"><strong>Rule 6</strong> — if this revision lost something the original genuinely needed, put it back. But only the part that earns its place.</p>
+
+    <style>
+      .orwell-rule-btn {
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+        padding: 0.3em 0.7em;
+        border: 1px solid #52525b;
+        border-radius: 4px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+      .orwell-rule-btn:hover { background: #27272a; }
+      .orwell-rule-btn.applied { border-color: #34d399; color: #34d399; }
+      .orwell-rule-btn[data-rule="reset"] { border-color: #71717a; }
+      .orwell-rule-btn[data-rule="reset"]:hover { border-color: #a1a1aa; }
+      :root.light .orwell-rule-btn { border-color: #d6d3d1; }
+      :root.light .orwell-rule-btn:hover { background: #f5f5f4; }
+      :root.light .orwell-rule-btn.applied { border-color: #059669; color: #059669; }
+      .cut { text-decoration: line-through; opacity: 0.35; transition: opacity 0.3s; }
+      .replace { color: #34d399; font-weight: 500; transition: opacity 0.3s; }
+      :root.light .replace { color: #059669; }
+    </style>
+
+    <script is:inline>
+    (function() {
+      // The original sentence, segmented for rule application
+      var segments = [
+        { text: "It is our considered opinion that ", rules: [3], note: "Throat-clearing. The opinion is implied by writing it." },
+        { text: "the ", rules: [] },
+        { text: "implementation", rules: [2], replace: "start", note: "Long word where a short one will do." },
+        { text: " of the proposed restructuring ", rules: [] },
+        { text: "initiative ", rules: [5], replace: "", note: '"Initiative" is jargon. The restructuring is the initiative.' },
+        { text: "will ", rules: [] },
+        { text: "facilitate", rules: [2], replace: "help", note: '"Facilitate" → "help." Half the syllables, same meaning.' },
+        { text: " the ", rules: [] },
+        { text: "optimization", rules: [2], replace: "improvement", note: '"Optimization" → "improvement." Still abstract, but shorter.' },
+        { text: " of ", rules: [] },
+        { text: "operational efficiency", rules: [5], replace: "faster turnaround", note: "What does 'operational efficiency' actually mean? Say that instead." },
+        { text: " ", rules: [] },
+        { text: "going forward", rules: [1], replace: "", note: 'Dead metaphor. Gestures at the future without saying anything about it.' },
+        { text: ", and ", rules: [] },
+        { text: "it is anticipated that ", rules: [3,4], note: "Padding + passive. Who anticipates? Flip it." },
+        { text: "the ", rules: [3] },
+        { text: "aforementioned", rules: [2], replace: "", note: "The reader knows which changes you mean." },
+        { text: " changes will result in a ", rules: [] },
+        { text: "not insignificant", rules: [3], replace: "significant", note: 'Double negative. "Not insignificant" = "significant." Better yet, use the number.' },
+        { text: " reduction in ", rules: [] },
+        { text: "overhead ", rules: [] },
+        { text: "expenditures", rules: [2], replace: "costs", note: '"Expenditures" → "costs."' },
+        { text: ".", rules: [] }
+      ];
+
+      var applied = {};
+      var textEl = document.getElementById('orwell-text');
+      var countEl = document.getElementById('orwell-count');
+      var noteEl = document.getElementById('orwell-note');
+
+      function render() {
+        var html = '';
+        var wordCount = 0;
+        var lastNote = '';
+        segments.forEach(function(seg) {
+          var hit = false;
+          for (var r in applied) {
+            if (applied[r] && seg.rules.indexOf(parseInt(r)) !== -1) { hit = true; break; }
+          }
+          if (hit) {
+            html += '<span class="cut">' + seg.text + '</span>';
+            if (seg.replace) html += '<span class="replace">' + seg.replace + ' </span>';
+          } else {
+            html += seg.text;
+          }
+          // Count visible words
+          var visible = hit ? (seg.replace || '') : seg.text;
+          var words = visible.trim().split(/\s+/).filter(function(w) { return w.length > 0; });
+          wordCount += words.length;
+        });
+        textEl.innerHTML = '"' + html.trim() + '"';
+        countEl.textContent = wordCount + ' words';
+      }
+
+      function updateButtons() {
+        var btns = document.querySelectorAll('.orwell-rule-btn');
+        btns.forEach(function(btn) {
+          var r = btn.getAttribute('data-rule');
+          if (r !== 'reset') btn.classList.toggle('applied', !!applied[r]);
+        });
+      }
+
+      document.querySelectorAll('.orwell-rule-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var r = btn.getAttribute('data-rule');
+          if (r === 'reset') {
+            applied = {};
+            noteEl.textContent = '';
+          } else {
+            applied[r] = !applied[r];
+            // Show note for the most recently applied rule
+            if (applied[r]) {
+              var notes = [];
+              segments.forEach(function(seg) {
+                if (seg.rules.indexOf(parseInt(r)) !== -1 && seg.note) notes.push(seg.note);
+              });
+              noteEl.textContent = notes.join(' ');
+            } else {
+              noteEl.textContent = '';
+            }
+          }
+          render();
+          updateButtons();
+        });
+      });
+
+      render();
+    })();
+    </script>
+
+    <h3>Discussion</h3>
+
+    <p>Rule 6 is what makes Orwell better than Strunk. Strunk's rules are absolute: always use active voice, always omit needless words. Orwell says: usually use active voice, but not if it makes the sentence worse. This is a checklist with an override. It acknowledges that rules are heuristics, not laws. A checklist that flags every passive sentence is useless when some sentences need to be passive. The override is what makes the checklist worth using.</p>
+
+    <p>The weakness is that Orwell doesn't say when the rules should be broken. He trusts the writer's judgment, which is exactly what bad writers lack. The writer who most needs Rule 3 ("cut if possible") is the writer least able to recognize what's cuttable. The rules are diagnostic: they tell you what's wrong. They are not generative: they don't tell you what's right. "Break any rule sooner than say anything barbarous" is an override with no condition. It says the rules can be wrong, but not how to tell.</p>
+
+    <p>The essay endures because the feedback loop it describes never stopped. Every generation produces its own euphemisms, its own pretentious diction, its own vague abstractions designed to insulate power from scrutiny. The specific examples change. The structure doesn't. That is why Orwell's rules still hold: they target the structure, not the examples.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Politics_and_the_English_Language"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></li>
+      <li><a href="https://june.kim/slop-detection"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Slop Detection</a> — Orwell's rules are what AI slop detection measures</li>
+      <li><a href="/reading/prose-writing/">back to prose writing</a></li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/strunk-1918/", label: "Strunk 1918 · 5 of 10" }} next={{ href: "/reading/prose-writing/zinsser-1976/", label: "Zinsser 1976 · 7 of 10" }} />
+
+  </main>
+</Layout>

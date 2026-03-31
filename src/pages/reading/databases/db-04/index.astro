@@ -1,0 +1,174 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.4 — Normalization" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Normalization</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Database_normalization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Database normalization</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Normalization</strong> eliminates redundancy by decomposing tables based on functional dependencies. Each normal form (1NF through BCNF) removes a specific kind of anomaly. The goal: every fact is stored exactly once, so updates cannot create inconsistencies.</p>
+    </div>
+
+    <!-- SVG: Redundant table decomposed into two -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Unnormalized table -->
+        <rect x="20" y="10" width="180" height="85" rx="3" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.6"/>
+        <rect x="20" y="10" width="180" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="50" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">sid</text>
+        <text x="85" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">sname</text>
+        <text x="130" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">dept</text>
+        <text x="170" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">dhead</text>
+        <text x="50" y="43" fill="currentColor" font-size="8" fill-opacity="0.5">1</text>
+        <text x="85" y="43" fill="currentColor" font-size="8" fill-opacity="0.5">Alice</text>
+        <text x="130" y="43" fill="#f87171" font-size="8" fill-opacity="0.8">CS</text>
+        <text x="170" y="43" fill="#f87171" font-size="8" fill-opacity="0.8">Turing</text>
+        <text x="50" y="58" fill="currentColor" font-size="8" fill-opacity="0.5">2</text>
+        <text x="85" y="58" fill="currentColor" font-size="8" fill-opacity="0.5">Bob</text>
+        <text x="130" y="58" fill="#f87171" font-size="8" fill-opacity="0.8">CS</text>
+        <text x="170" y="58" fill="#f87171" font-size="8" fill-opacity="0.8">Turing</text>
+        <text x="50" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">3</text>
+        <text x="85" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">Carol</text>
+        <text x="130" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">Math</text>
+        <text x="170" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">Gauss</text>
+        <!-- Redundancy highlight label -->
+        <text x="110" y="105" text-anchor="middle" fill="#f87171" font-size="9" fill-opacity="0.7">redundant: CS/Turing repeated</text>
+
+        <!-- Arrow -->
+        <line x1="210" y1="50" x2="240" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="240,46 248,50 240,54" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Normalized: Students -->
+        <rect x="260" y="10" width="160" height="75" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <rect x="260" y="10" width="160" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="290" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">sid</text>
+        <text x="330" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">sname</text>
+        <text x="385" y="25" fill="currentColor" font-size="8" fill-opacity="0.7">dept</text>
+        <text x="290" y="43" fill="currentColor" font-size="8" fill-opacity="0.5">1</text>
+        <text x="330" y="43" fill="currentColor" font-size="8" fill-opacity="0.5">Alice</text>
+        <text x="385" y="43" fill="currentColor" font-size="8" fill-opacity="0.5">CS</text>
+        <text x="290" y="58" fill="currentColor" font-size="8" fill-opacity="0.5">2</text>
+        <text x="330" y="58" fill="currentColor" font-size="8" fill-opacity="0.5">Bob</text>
+        <text x="385" y="58" fill="currentColor" font-size="8" fill-opacity="0.5">CS</text>
+        <text x="290" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">3</text>
+        <text x="330" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">Carol</text>
+        <text x="385" y="73" fill="currentColor" font-size="8" fill-opacity="0.5">Math</text>
+
+        <!-- Normalized: Departments -->
+        <rect x="290" y="110" width="130" height="55" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <rect x="290" y="110" width="130" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15"/>
+        <text x="330" y="125" fill="currentColor" font-size="8" fill-opacity="0.7">dept</text>
+        <text x="385" y="125" fill="currentColor" font-size="8" fill-opacity="0.7">dhead</text>
+        <text x="330" y="143" fill="currentColor" font-size="8" fill-opacity="0.5">CS</text>
+        <text x="385" y="143" fill="currentColor" font-size="8" fill-opacity="0.5">Turing</text>
+        <text x="330" y="158" fill="currentColor" font-size="8" fill-opacity="0.5">Math</text>
+        <text x="385" y="158" fill="currentColor" font-size="8" fill-opacity="0.5">Gauss</text>
+
+        <!-- Caption -->
+        <text x="220" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Decompose to eliminate redundancy.</text>
+      </svg>
+    </div>
+
+
+    <!-- Functional dependencies -->
+    <h3>Functional dependencies</h3>
+    <p>A <strong>functional dependency</strong> X -> Y means: if two tuples agree on attributes X, they must agree on Y. Example: student_id -> name (knowing the ID determines the name). Normalization decomposes tables so that each non-key attribute depends on the whole key and nothing but the key.</p>
+
+    <SchemeRepl client:load initialCode={`; Functional dependency: X -> Y
+; If two tuples agree on X, they must agree on Y.
+
+(define data
+  (list
+    (list (cons "sid" 1) (cons "name" "Alice") (cons "dept" "CS")   (cons "dhead" "Turing"))
+    (list (cons "sid" 2) (cons "name" "Bob")   (cons "dept" "CS")   (cons "dhead" "Turing"))
+    (list (cons "sid" 3) (cons "name" "Carol") (cons "dept" "Math") (cons "dhead" "Gauss"))))
+
+(define (get-attr t a) (cdr (assoc a t)))
+
+; Check: does dept -> dhead hold?
+(define (check-fd data x-attr y-attr)
+  (let loop ((pairs data) (ok #t))
+    (if (or (null? pairs) (not ok)) ok
+      (let ((rest (cdr pairs)))
+        (if (null? rest) ok
+          (let check-pair ((others rest) (still-ok ok))
+            (if (null? others) (loop rest still-ok)
+              (if (and (equal? (get-attr (car pairs) x-attr)
+                               (get-attr (car others) x-attr))
+                       (not (equal? (get-attr (car pairs) y-attr)
+                                    (get-attr (car others) y-attr))))
+                #f
+                (check-pair (cdr others) still-ok)))))))))
+
+(display "dept -> dhead? ")
+(display (check-fd data "dept" "dhead"))
+(newline)
+(display "sid -> name?   ")
+(display (check-fd data "sid" "name"))
+`} />
+
+
+    <!-- Normal forms -->
+    <h3>Normal forms: 1NF through BCNF</h3>
+    <p><strong>1NF</strong>: every cell holds an atomic value (no lists, no nested tables). <strong>2NF</strong>: no partial dependency (every non-key attribute depends on the entire primary key, not just part of it). <strong>3NF</strong>: no transitive dependency (non-key attributes do not depend on other non-key attributes). <strong>BCNF</strong>: for every functional dependency X -> Y, X is a superkey.</p>
+
+    <Repl client:load initialCode={`import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+
+# Unnormalized: dept and dhead are redundant
+c.execute("""CREATE TABLE students_bad (
+    sid INTEGER PRIMARY KEY, sname TEXT,
+    dept TEXT, dhead TEXT
+)""")
+for r in [(1,'Alice','CS','Turing'),(2,'Bob','CS','Turing'),(3,'Carol','Math','Gauss')]:
+    c.execute("INSERT INTO students_bad VALUES (?,?,?,?)", r)
+
+# Normalized: split into students and departments
+c.execute("CREATE TABLE departments (dept TEXT PRIMARY KEY, dhead TEXT)")
+c.execute("CREATE TABLE students (sid INTEGER PRIMARY KEY, sname TEXT, dept TEXT REFERENCES departments)")
+
+for d in [('CS','Turing'),('Math','Gauss')]:
+    c.execute("INSERT INTO departments VALUES (?,?)", d)
+for s in [(1,'Alice','CS'),(2,'Bob','CS'),(3,'Carol','Math')]:
+    c.execute("INSERT INTO students VALUES (?,?,?)", s)
+
+# Update anomaly: change dept head in one place
+c.execute("UPDATE departments SET dhead = 'Knuth' WHERE dept = 'CS'")
+
+print("After updating CS head to Knuth:")
+for row in c.execute("""
+    SELECT s.sname, d.dept, d.dhead
+    FROM students s JOIN departments d ON s.dept = d.dept
+"""):
+    print("  " + str(row[0]) + " in " + str(row[1]) + ", head = " + str(row[2]))
+print()
+print("One update, consistent everywhere. That is normalization.")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Database_normalization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Database normalization</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Functional_dependency"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Functional dependency</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Boyce%E2%80%93Codd_normal_form"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Boyce-Codd normal form</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-03/", label: "SQL Basics" }} next={{ href: "/reading/databases/db-05/", label: "Indexing" }} />
+
+  </main>
+</Layout>

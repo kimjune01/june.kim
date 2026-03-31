@@ -1,0 +1,252 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Kernel Methods & SVMs" favicon="🎯">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Kernel Methods & SVMs</h1>
+    <p class="text-gray-400 text-sm mb-6">Machine Learning · Ch.5 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Map data to a higher-dimensional space where it becomes linearly separable. The <strong>kernel trick</strong> computes the inner product in that space without ever visiting it. The <strong>SVM</strong> maximizes the margin between classes.</p>
+    </div>
+
+    <!-- SVG: 2D points with margin band and support vectors -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg viewBox="0 0 380 260" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axes -->
+          <line x1="40" y1="230" x2="360" y2="230" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="40" y1="20" x2="40" y2="235" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <!-- Margin band -->
+          <line x1="80" y1="20" x2="320" y2="220" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.8"/>
+          <line x1="60" y1="20" x2="300" y2="220" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 3"/>
+          <line x1="100" y1="20" x2="340" y2="220" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 3"/>
+          <!-- Margin fill -->
+          <polygon points="60,20 100,20 340,220 300,220" fill="#60a5fa" fill-opacity="0.06"/>
+          <!-- Class A points (blue circles) -->
+          <circle cx="90" cy="80" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <circle cx="70" cy="120" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <circle cx="110" cy="140" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <circle cx="80" cy="170" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <circle cx="60" cy="190" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <circle cx="130" cy="180" r="5" fill="#60a5fa" fill-opacity="0.6"/>
+          <!-- Class B points (amber circles) -->
+          <circle cx="270" cy="60" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <circle cx="300" cy="90" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <circle cx="250" cy="110" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <circle cx="310" cy="140" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <circle cx="280" cy="170" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <circle cx="330" cy="120" r="5" fill="#f59e0b" fill-opacity="0.6"/>
+          <!-- Support vectors (highlighted with rings) -->
+          <circle cx="130" cy="180" r="9" fill="none" stroke="#60a5fa" stroke-width="2"/>
+          <circle cx="110" cy="140" r="9" fill="none" stroke="#60a5fa" stroke-width="2"/>
+          <circle cx="250" cy="110" r="9" fill="none" stroke="#f59e0b" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="50" y="60" fill="#60a5fa" font-size="10" fill-opacity="0.6">class A</text>
+          <text x="290" y="50" fill="#f59e0b" font-size="10" fill-opacity="0.6">class B</text>
+          <text x="200" y="250" fill="currentColor" font-size="10" fill-opacity="0.4" text-anchor="middle">margin band &mdash; support vectors circled</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1. Polynomial kernel -->
+    <h3>Polynomial kernel</h3>
+    <p>A kernel k(x,y) computes the inner product in a feature space without explicitly mapping there. The polynomial kernel k(x,y) = (x&middot;y + c)<sup>d</sup> implicitly maps to all monomials up to degree d. Higher degree means a more flexible decision boundary.</p>
+
+    <SchemeRepl client:load initialCode={`; Polynomial kernel: k(x,y) = (dot(x,y) + c)^d
+; For d=2, this implicitly maps to a space
+; containing all degree-2 monomials
+
+(define (dot xs ys)
+  (let loop ((xs xs) (ys ys) (sum 0))
+    (if (null? xs) sum
+        (loop (cdr xs) (cdr ys)
+              (+ sum (* (car xs) (car ys)))))))
+
+(define (poly-kernel x y c d)
+  (expt (+ (dot x y) c) d))
+
+; Two 2D points
+(define x1 (list 1 2))
+(define x2 (list 3 4))
+
+(display "linear (d=1): ")
+(display (poly-kernel x1 x2 1 1)) (newline)
+
+(display "quadratic (d=2): ")
+(display (poly-kernel x1 x2 1 2)) (newline)
+
+(display "cubic (d=3): ")
+(display (poly-kernel x1 x2 1 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Polynomial kernel: k(x,y) = (dot(x,y) + c)^d
+import math
+
+def dot(xs, ys):
+    return sum(a*b for a,b in zip(xs, ys))
+
+def poly_kernel(x, y, c=1, d=2):
+    return (dot(x, y) + c) ** d
+
+x1 = [1, 2]
+x2 = [3, 4]
+for d in [1, 2, 3]:
+    print("d={}: {}".format(d, poly_kernel(x1, x2, c=1, d=d)))
+`} />
+    </div>
+
+
+    <!-- 2. RBF kernel -->
+    <h3>RBF kernel</h3>
+    <p>The radial basis function (RBF) kernel k(x,y) = exp(-gamma * ||x-y||<sup>2</sup>) maps to an infinite-dimensional space. It measures similarity: nearby points get kernel values close to 1, distant points approach 0. The parameter gamma controls the width of the Gaussian bump.</p>
+
+    <SchemeRepl client:load initialCode={`; RBF kernel: k(x,y) = exp(-gamma * ||x-y||^2)
+
+(define (sq-dist xs ys)
+  (let loop ((xs xs) (ys ys) (sum 0))
+    (if (null? xs) sum
+        (loop (cdr xs) (cdr ys)
+              (+ sum (expt (- (car xs) (car ys)) 2))))))
+
+(define (rbf-kernel x y gamma)
+  (exp (* (- gamma) (sq-dist x y))))
+
+(define a (list 0 0))
+(define b (list 1 0))
+(define c (list 5 5))
+
+(define gamma 0.5)
+
+(display "k(a,a) = ")
+(display (rbf-kernel a a gamma)) (newline)  ; 1.0
+
+(display "k(a,b) = ")
+(display (/ (round (* (rbf-kernel a b gamma) 10000)) 10000)) (newline)
+
+(display "k(a,c) = ")
+(display (/ (round (* (rbf-kernel a c gamma) 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rbf_kernel(x, y, gamma=0.5):
+    sq_dist = sum((a-b)**2 for a,b in zip(x, y))
+    return math.exp(-gamma * sq_dist)
+
+a = [0, 0]
+b = [1, 0]
+c = [5, 5]
+print("k(a,a) = {:.4f}".format(rbf_kernel(a, a)))  # 1.0
+print("k(a,b) = {:.4f}".format(rbf_kernel(a, b)))
+print("k(a,c) = {:.4f}".format(rbf_kernel(a, c)))
+`} />
+    </div>
+
+
+    <!-- 3. SVM decision boundary -->
+    <h3>SVM decision boundary via kernel</h3>
+    <p>The SVM decision function is f(x) = sign(sum of alpha_i * y_i * k(x_i, x) + b), where the sum runs over support vectors. Only a few training points (the support vectors) determine the boundary. This is classification without ever computing coordinates in feature space.</p>
+
+    <SchemeRepl client:load initialCode={`; Toy SVM: classify using support vectors + RBF kernel
+; Pre-trained alphas and bias for XOR-like data
+
+(define (rbf x y gamma)
+  (exp (* (- gamma)
+          (+ (expt (- (car x) (car y)) 2)
+             (expt (- (cadr x) (cadr y)) 2)))))
+
+; Support vectors, labels, alphas (pretrained)
+(define svs   (list (list 0 0) (list 1 1) (list 0 1) (list 1 0)))
+(define labels (list -1 -1 1 1))
+(define alphas (list 1.0 1.0 1.0 1.0))
+(define bias 0.0)
+(define gamma 2.0)
+
+(define (svm-predict x)
+  (let loop ((sv svs) (lb labels) (al alphas) (sum bias))
+    (if (null? sv) (if (>= sum 0) 1 -1)
+        (loop (cdr sv) (cdr lb) (cdr al)
+              (+ sum (* (car al) (car lb)
+                        (rbf x (car sv) gamma)))))))
+
+(display "predict (0,0): ") (display (svm-predict (list 0 0))) (newline)
+(display "predict (1,1): ") (display (svm-predict (list 1 1))) (newline)
+(display "predict (0,1): ") (display (svm-predict (list 0 1))) (newline)
+(display "predict (1,0): ") (display (svm-predict (list 1 0)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rbf(x, y, gamma=2.0):
+    return math.exp(-gamma * sum((a-b)**2 for a,b in zip(x, y)))
+
+# Pre-trained SVM for XOR-like data
+svs    = [[0,0], [1,1], [0,1], [1,0]]
+labels = [-1, -1, 1, 1]
+alphas = [1.0, 1.0, 1.0, 1.0]
+bias   = 0.0
+
+def svm_predict(x):
+    s = bias
+    for sv, y, a in zip(svs, labels, alphas):
+        s += a * y * rbf(x, sv)
+    return 1 if s >= 0 else -1
+
+for pt in [[0,0], [1,1], [0,1], [1,0]]:
+    print("predict {}: {}".format(pt, svm_predict(pt)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">k(x,y)</td><td class="pr-4 text-green-300">(kernel x y)</td><td class="font-sans">Kernel function (inner product in feature space)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(x&middot;y + c)<sup>d</sup></td><td class="pr-4 text-green-300">(expt (+ (dot x y) c) d)</td><td class="font-sans">Polynomial kernel</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">exp(-&gamma;||x-y||&sup2;)</td><td class="pr-4 text-green-300">(exp (* (- g) (sq-dist x y)))</td><td class="font-sans">RBF kernel</td></tr>
+          <tr><td class="py-2 pr-4">&alpha;<sub>i</sub> y<sub>i</sub></td><td class="pr-4 text-green-300">(* alpha label)</td><td class="font-sans">Support vector weight</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">The kernel trick is a functor in disguise: it maps from a data category to a feature-space category, preserving inner-product structure. The SVM optimization problem is convex, so gradient descent finds the global minimum. Support vectors are the critical points that pin the decision boundary.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-02/">Linear Algebra Ch.2</a> — vector spaces: the "higher-dimensional space" the kernel maps into</li>
+      <li><a href="/reading/category-theory/milewski-07/">Category Theory Ch.7</a> — functors as structure-preserving maps between spaces</li>
+    </ul>
+
+    <!-- Ready for the real thing? -->
+    </Neighbors>
+    <h3>Ready for the real thing?</h3>
+    <p class="text-sm text-gray-400">This chapter covers the geometric intuition. For the full optimization story (dual problem, KKT conditions, soft margins), see Bishop's <em>Pattern Recognition and Machine Learning</em> Ch.7 or Scholkopf & Smola's <em>Learning with Kernels</em>.</p>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-04/", label: "Logistic Regression" }} next={{ href: "/reading/machine-learning/ml-06/", label: "PCA" }} fin="Kernel Methods & SVMs · 6 of 12" />
+
+  </main>
+</Layout>

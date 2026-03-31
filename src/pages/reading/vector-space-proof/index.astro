@@ -1,0 +1,55 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Vector Space Proof — VCG on Gaussian Embeddings" favicon="📐">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>The Vector Space Proof, File by File</h1>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">This proof formalizes the core claim of the <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> blog series: <strong>VCG on Gaussian embedding auctions is welfare-optimal and DSIC</strong>. If you haven't read the series, start with <a href="https://june.kim/power-diagrams-for-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Power Diagrams for Ad Auctions</a> for the geometric intuition, then come back here for the machine-checked version.</p>
+    </div>
+
+    <p>The <a href="https://github.com/kimjune01/auction-proof"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>auction-proof</a> repo is ~800 lines of <a href="https://lean-lang.org">Lean 4</a>. Zero <code>sorry</code>. Uses <a href="https://leanprover-community.github.io/mathlib4_docs/">Mathlib</a> for real analysis. Seven pages below, one per file, in reading order.</p>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Definitions</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/vector-space-proof/auction/">Auction.lean</a> &mdash; reports, valuations, scoring, winner rule, Clarke pivot payment</li>
+      <li><a href="/reading/vector-space-proof/axioms/">Axioms.lean</a> &mdash; QueryMeasure: the sole axiom (integrals respect &ge;)</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Efficiency</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a> &mdash; score = log(value), winner maximizes welfare</li>
+      <li><a href="/reading/vector-space-proof/integral-efficiency/">IntegralEfficiency.lean</a> &mdash; pointwise &rarr; integrated welfare optimality</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Incentive compatibility</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a> &mdash; <a href="https://en.wikipedia.org/wiki/Incentive_compatibility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>DSIC</a>: four-case analysis, no player benefits from lying</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Capstone</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/vector-space-proof/gaussian-optimality/">GaussianOptimality.lean</a> &mdash; welfare-optimal &and; strategyproof &and; equilibrium-efficient</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Compositional games</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/vector-space-proof/open-game/">OpenGame.lean</a> &mdash; Hedges' open games, DSIC composition as open question</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> &mdash; the blog series this proof formalizes</li>
+      <li><a href="https://june.kim/power-diagrams-for-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Power Diagrams</a> &mdash; geometric intuition behind the scoring rule</li>
+      <li><a href="/reading/the-natural-framework-lean/">✏️ Natural Framework</a> &mdash; the other Lean proof on this site</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

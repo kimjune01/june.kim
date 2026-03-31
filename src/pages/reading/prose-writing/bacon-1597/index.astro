@@ -1,0 +1,100 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Bacon 1597 — Essays" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Essays</h1>
+    <p class="text-gray-400 text-sm mb-6">Francis Bacon &middot; 1597&ndash;1625 &middot; <a href="https://archive.org/details/essaysoffrancisb00baco">full text (Internet Archive, public domain)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Cicero built sentences like cathedrals &mdash; subordinate clause nested inside subordinate clause, the meaning suspended until the final verb. Bacon burned the cathedral. His essays are aphorisms: one sentence, one idea, maximum compression. &ldquo;Reading maketh a full man; conference a ready man; and writing an exact man.&rdquo; Three clauses, three facts, no decoration.</p>
+    </div>
+
+    <!-- SVG: Ciceronian period vs. Baconian aphorism -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 240" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+
+        <!-- Left: Ciceronian period — nested tree -->
+        <text x="130" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Ciceronian period</text>
+
+        <!-- Outer box -->
+        <rect x="20" y="35" width="220" height="180" rx="4" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="30" y="52" fill="currentColor" font-size="8" fill-opacity="0.4">main clause</text>
+
+        <!-- Level 1 subordinate -->
+        <rect x="35" y="60" width="190" height="140" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.2"/>
+        <text x="45" y="77" fill="currentColor" font-size="7" fill-opacity="0.35">subordinate clause</text>
+
+        <!-- Level 2 subordinate -->
+        <rect x="50" y="85" width="160" height="100" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.15"/>
+        <text x="60" y="102" fill="currentColor" font-size="7" fill-opacity="0.3">sub-subordinate</text>
+
+        <!-- Level 3 subordinate -->
+        <rect x="65" y="110" width="130" height="60" rx="3" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.1"/>
+        <text x="75" y="127" fill="currentColor" font-size="7" fill-opacity="0.25">sub-sub-subordinate</text>
+
+        <!-- The verb, finally -->
+        <text x="100" y="152" fill="#f59e0b" font-size="8" fill-opacity="0.5">...verb</text>
+
+        <text x="130" y="230" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">meaning suspended until the end</text>
+
+        <!-- Divider -->
+        <line x1="260" y1="15" x2="260" y2="230" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Right: Baconian aphorism — flat stacked boxes -->
+        <text x="390" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Baconian aphorism</text>
+
+        <!-- Box 1 -->
+        <rect x="290" y="40" width="200" height="40" rx="4" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="390" y="65" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">Reading maketh a full man</text>
+
+        <!-- Box 2 -->
+        <rect x="290" y="95" width="200" height="40" rx="4" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="390" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">conference a ready man</text>
+
+        <!-- Box 3 -->
+        <rect x="290" y="150" width="200" height="40" rx="4" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="390" y="175" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">writing an exact man</text>
+
+        <text x="390" y="230" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">flat, parallel, compressed</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Renaissance prose was Ciceronian. Sentences accumulated meaning through nested subordination: the main clause opened, subordinate clauses branched inward, and the reader held everything in working memory until the final verb resolved the structure. This was both aesthetic and political. Elaborate prose signaled learning and status. The difficulty was the point. If you could not parse the period, you did not belong in the conversation.</p>
+
+    <p>Bacon wrote 58 essays across three editions (1597, 1612, 1625), each one shorter and denser than contemporary convention allowed. The first edition had ten essays averaging under 500 words. Where his contemporaries wrote to display, Bacon wrote to deliver. He treated prose the way an engineer treats a specification: every word must carry load, and anything structural that does not bear weight gets removed.</p>
+
+    <p>Montaigne explored himself. Bacon compressed the world. &ldquo;Of Truth,&rdquo; &ldquo;Of Death,&rdquo; &ldquo;Of Revenge,&rdquo; &ldquo;Of Studies.&rdquo; Each title names a topic, and each essay delivers a compressed verdict on that topic in a few hundred words. The ambition was encyclopedic breadth at aphoristic density.</p>
+
+    <h3>The technique</h3>
+
+    <p><strong>Parallel structure.</strong> Bacon builds sentences from balanced clauses. &ldquo;Reading maketh a full man; conference a ready man; and writing an exact man.&rdquo; The verb is stated once and implied twice. The parallelism does the work that transitions would do in Ciceronian prose: it signals that the three items are co-equal without subordinating any of them.</p>
+
+    <p><strong>Omission of transitions.</strong> Bacon moves from idea to idea without connective tissue. &ldquo;Revenge is a kind of wild justice; which the more man&rsquo;s nature runs to, the more ought law to weed it out.&rdquo; No &ldquo;furthermore,&rdquo; no &ldquo;it follows that.&rdquo; The semicolon does the job. The reader infers the logical relationship from the content, not from a signpost.</p>
+
+    <p><strong>Concrete nouns over abstract.</strong> &ldquo;Houses are built to live in, and not to look on; therefore let use be preferred before uniformity.&rdquo; The argument is about architecture, but the principle is general. Bacon reaches for the physical example first and lets the abstraction emerge from it, rather than stating the abstraction and decorating it with examples.</p>
+
+    <p><strong>Balanced antithesis.</strong> &ldquo;He that hath wife and children hath given hostages to fortune; for they are impediments to great enterprises, either of virtue or mischief.&rdquo; The sentence pivots on the semicolon. The first half states the cost; the second half states the scope. No wasted motion.</p>
+
+    <h3>Discussion</h3>
+
+    <p>Bacon&rsquo;s compression anticipates Strunk by three centuries. &ldquo;Omit needless words&rdquo; is the principle; Bacon is the proof of concept. But the <em>Essays</em> also expose the limits of compression without a reader model. Bacon writes for the learned reader who can fill in the gaps. His aphorisms reward re-reading because the density demands it. For a reader without the background, the same density produces opacity, not clarity. The line between density and opacity is what <a href="https://june.kim/slop-detection"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>slop detection</a> tries to formalize: can you distinguish compression from confusion?</p>
+
+    <p>Blair later asked the question Bacon did not: who is this for? If prose is compressed beyond the reader&rsquo;s ability to decompress, the compression is wasted. Williams later asked a second question: in what order? Bacon&rsquo;s essays often read as collections of aphorisms without a governing argument. Each sentence is dense, but the arrangement is loose. The aphorism solves the density problem but creates the arrangement problem.</p>
+
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Essays_(Francis_Bacon)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></li>
+      <li><a href="/reading/prose-writing/">back to prose writing</a></li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/quintilian/", label: "Quintilian · 2 of 10" }} next={{ href: "/reading/prose-writing/blair-1783/", label: "Blair 1783 · 4 of 10" }} />
+
+  </main>
+</Layout>

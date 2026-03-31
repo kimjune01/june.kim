@@ -1,0 +1,189 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.5 — Raft" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Raft</h1>
+    <p class="text-gray-400 text-sm mb-6">Ongaro &amp; Ousterhout 2014 &middot; <a href="https://en.wikipedia.org/wiki/Raft_(algorithm)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Raft</strong> is a consensus algorithm designed to be understandable. It decomposes consensus into three subproblems: leader election, log replication, and safety. It provides the same guarantees as Paxos but with a clearer structure. One leader per term. The leader appends entries to its log and replicates them. An entry is committed when a majority of nodes have it.</p>
+    </div>
+
+    <!-- 1. Leader election -->
+    <h3>Leader election</h3>
+    <p>Nodes start as followers. If a follower receives no heartbeat from a leader within a timeout, it becomes a candidate and starts an election. It increments the term, votes for itself, and requests votes from others. A node wins if it gets a majority. If two candidates split the vote, a new election starts with a new term. Randomized timeouts prevent repeated ties.</p>
+
+    <SchemeRepl client:load initialCode={`; Raft leader election.
+; Nodes: follower -> candidate -> leader.
+; Need majority to win.
+
+(define num-nodes 5)
+(define majority (+ 1 (quotient num-nodes 2)))  ; 3
+
+(define (election candidate-id votes-received)
+  (display "Node ") (display candidate-id)
+  (display " got ") (display votes-received) (display " votes")
+  (display " (need ") (display majority) (display "): ")
+  (if (>= votes-received majority)
+      (display "ELECTED LEADER")
+      (display "election failed"))
+  (newline))
+
+(display "5 nodes, majority = ") (display majority) (newline)
+(election 0 3)  ; wins
+(election 1 2)  ; loses
+(election 2 4)  ; wins
+`} />
+
+    <!-- SVG: Raft log with committed and uncommitted entries -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Leader label -->
+        <text x="30" y="45" text-anchor="middle" fill="#60a5fa" font-size="11">Leader</text>
+        <!-- Follower 1 label -->
+        <text x="30" y="95" text-anchor="middle" fill="#34d399" font-size="11">F1</text>
+        <!-- Follower 2 label -->
+        <text x="30" y="145" text-anchor="middle" fill="#f59e0b" font-size="11">F2</text>
+        <!-- Leader log entries -->
+        <rect x="60" y="30" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="85" y="47" text-anchor="middle" fill="#34d399" font-size="10">x=1</text>
+        <rect x="115" y="30" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="140" y="47" text-anchor="middle" fill="#34d399" font-size="10">y=2</text>
+        <rect x="170" y="30" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="195" y="47" text-anchor="middle" fill="#34d399" font-size="10">x=3</text>
+        <rect x="225" y="30" width="50" height="25" rx="3" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="250" y="47" text-anchor="middle" fill="#f59e0b" font-size="10">z=4</text>
+        <!-- Follower 1 log -->
+        <rect x="60" y="80" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="85" y="97" text-anchor="middle" fill="#34d399" font-size="10">x=1</text>
+        <rect x="115" y="80" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="140" y="97" text-anchor="middle" fill="#34d399" font-size="10">y=2</text>
+        <rect x="170" y="80" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="195" y="97" text-anchor="middle" fill="#34d399" font-size="10">x=3</text>
+        <!-- Follower 2 log -->
+        <rect x="60" y="130" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="85" y="147" text-anchor="middle" fill="#34d399" font-size="10">x=1</text>
+        <rect x="115" y="130" width="50" height="25" rx="3" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="140" y="147" text-anchor="middle" fill="#34d399" font-size="10">y=2</text>
+        <!-- Commit line -->
+        <line x1="220" y1="20" x2="220" y2="170" stroke="#34d399" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+        <text x="220" y="175" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.7">commit index</text>
+        <!-- Legend -->
+        <rect x="300" y="30" width="12" height="12" rx="2" fill="#34d399" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+        <text x="318" y="40" fill="currentColor" font-size="9" fill-opacity="0.5">committed</text>
+        <rect x="300" y="50" width="12" height="12" rx="2" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="318" y="60" fill="currentColor" font-size="9" fill-opacity="0.5">uncommitted</text>
+      </svg>
+    </div>
+
+    <!-- 2. Log replication -->
+    <h3>Log replication</h3>
+    <p>The leader receives client requests and appends them to its log. It sends AppendEntries RPCs to all followers. Once a majority has the entry, the leader commits it and responds to the client. Followers apply committed entries to their state machines in log order. If a follower is behind, the leader sends missing entries.</p>
+
+    <SchemeRepl client:load initialCode={`; Raft log replication.
+; Leader appends, replicates, commits on majority.
+
+(define leader-log (list))
+(define f1-log (list))
+(define f2-log (list))
+(define commit-index 0)
+
+(define (append-entry entry)
+  (set! leader-log (append leader-log (list entry)))
+  (display "Leader appends: ") (display entry) (newline))
+
+(define (replicate-to-follower follower-name)
+  ; Send all entries after follower's last index
+  (cond
+    ((equal? follower-name "F1")
+     (set! f1-log leader-log))
+    ((equal? follower-name "F2")
+     (set! f2-log leader-log)))
+  (display "  Replicated to ") (display follower-name) (newline))
+
+(define (try-commit index)
+  ; Count how many have entry at this index
+  (let ((count (+ 1  ; leader always has it
+                 (if (>= (length f1-log) index) 1 0)
+                 (if (>= (length f2-log) index) 1 0))))
+    (if (>= count 2)
+        (begin (set! commit-index index)
+               (display "Committed index ") (display index) (newline))
+        (display "Not yet committed"))))
+
+(append-entry "x=1")
+(replicate-to-follower "F1")
+(replicate-to-follower "F2")
+(try-commit 1)
+
+(append-entry "y=2")
+(replicate-to-follower "F1")
+; F2 is slow, has not received y=2 yet
+(try-commit 2)  ; 2 of 3 have it -> committed
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Raft log replication
+class RaftNode:
+    def __init__(self, name):
+        self.name = name
+        self.log = []
+
+leader = RaftNode("Leader")
+followers = [RaftNode("F1"), RaftNode("F2")]
+commit_index = 0
+
+def append_entry(entry):
+    leader.log.append(entry)
+    print(f"Leader appends: {entry}")
+
+def replicate(follower):
+    follower.log = leader.log[:]
+    print(f"  Replicated to {follower.name}")
+
+def try_commit(index):
+    global commit_index
+    count = 1 + sum(1 for f in followers if len(f.log) >= index)
+    if count >= 2:
+        commit_index = index
+        print(f"Committed index {index}")
+    else:
+        print(f"Not yet committed (only {count}/3)")
+
+append_entry("x=1")
+for f in followers:
+    replicate(f)
+try_commit(1)
+
+append_entry("y=2")
+replicate(followers[0])  # F2 is slow
+try_commit(2)
+`} />
+    </div>
+
+    <!-- 3. Safety -->
+    <h3>Safety and liveness</h3>
+    <p><strong>Safety</strong>: if an entry is committed, no future leader will have a different entry at that index. Raft guarantees this via the election restriction: a candidate must have a log at least as up-to-date as a majority. <strong>Liveness</strong>: the system makes progress as long as a majority of nodes and the network are working. Randomized election timeouts prevent livelock.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/distributed-systems/dist-04/">&#x1F310; Ch.4 Consensus</a> — the general consensus problem and FLP impossibility</li>
+      <li><a href="/reading/distributed-systems/dist-06/">&#x1F310; Ch.6 Byzantine Fault Tolerance</a> — what happens when nodes can lie, not just crash</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-04/", label: "Consensus" }} next={{ href: "/reading/distributed-systems/dist-06/", label: "Byzantine Fault Tolerance" }} />
+
+  </main>
+</Layout>

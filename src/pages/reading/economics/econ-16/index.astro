@@ -1,0 +1,233 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.16 — Inflation" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Inflation</h1>
+    <p class="text-gray-400 text-sm mb-6">Irving Fisher · 1911 / Milton Friedman · 1963 · <a href="https://en.wikipedia.org/wiki/Inflation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Inflation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Inflation</strong> is a sustained increase in the general price level. The quantity theory of money (MV = PQ) says prices rise when money supply grows faster than output. Demand-pull inflation comes from too much spending. Cost-push comes from rising input costs. The Fisher effect links nominal interest rates to inflation expectations.</p>
+    </div>
+
+    <!-- 1. Quantity theory -->
+    <h3>Quantity theory of money: MV = PQ</h3>
+    <p>The equation of exchange: Money supply (M) times velocity (V, how often each dollar is spent) equals the price level (P) times real output (Q). If V and Q are roughly constant, then increasing M proportionally increases P. "Inflation is always and everywhere a monetary phenomenon" (Friedman).</p>
+
+    <!-- SVG: Price level rising as money supply expands -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="240" x2="380" y2="240" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="60" y1="240" x2="60" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="220" y="270" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Time</text>
+        <text x="25" y="135" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 25, 135)">Level</text>
+
+        <!-- Money supply line (rising steeply) -->
+        <polyline points="80,200 140,180 200,150 260,110 320,60" fill="none" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+        <text x="335" y="55" fill="currentColor" font-size="11" fill-opacity="0.5">M (money)</text>
+
+        <!-- Price level line (follows with lag) -->
+        <polyline points="80,200 140,195 200,170 260,135 320,85" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+        <text x="335" y="80" fill="currentColor" font-size="11" fill-opacity="0.5">P (prices)</text>
+
+        <!-- Real output (roughly flat) -->
+        <polyline points="80,200 140,195 200,192 260,188 320,185" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,4" opacity="0.4"/>
+        <text x="335" y="182" fill="currentColor" font-size="11" fill-opacity="0.4">Q (output)</text>
+
+        <!-- Gap annotation -->
+        <line x1="260" y1="110" x2="260" y2="135" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.3"/>
+        <text x="280" y="128" fill="currentColor" font-size="9" fill-opacity="0.4">lag</text>
+
+        <!-- MV = PQ label -->
+        <text x="200" y="250" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">MV = PQ: more money chasing same goods = higher prices</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Quantity theory of money: MV = PQ
+; If V and Q constant, doubling M doubles P
+
+(define V 5)   ; velocity (constant)
+(define Q 100) ; real output (constant)
+
+(define (price-level M) (/ (* M V) Q))
+
+(display "MV = PQ, with V=5, Q=100") (newline) (newline)
+
+(for-each
+  (lambda (M)
+    (display "  M=$") (display M)
+    (display " -> P=") (display (exact->inexact (price-level M)))
+    (newline))
+  '(100 200 400 800 1600))
+
+(newline)
+(display "Double the money, double the prices.")
+(newline)
+(display "Real output unchanged. Only prices adjust.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Quantity theory: MV = PQ
+V = 5   # velocity
+Q = 100 # real output
+
+for M in [100, 200, 400, 800, 1600]:
+    P = (M * V) / Q
+    print("M=$" + str(M) + " -> P=" + str(round(P, 1)))
+
+print("")
+print("Double M => double P (with V, Q constant)")
+`} />
+    </div>
+
+
+    <!-- 2. Demand-pull vs cost-push -->
+    <h3>Demand-pull vs cost-push</h3>
+    <p><strong>Demand-pull</strong>: too much money chasing too few goods. Government stimulus, credit expansion, or consumer confidence boosts spending beyond capacity. <strong>Cost-push</strong>: rising input costs (oil shocks, wage spirals) force firms to raise prices even without excess demand. Both produce inflation, but the policy response differs.</p>
+
+    <SchemeRepl client:load initialCode={`; Demand-pull: excess spending raises prices
+; Cost-push: rising costs raise prices
+
+(define capacity 100)
+
+; Demand-pull scenario
+(define (demand-pull-price spending)
+  (if (> spending capacity)
+      (+ 1.0 (* 0.02 (- spending capacity)))  ; prices rise
+      1.0))
+
+(display "Demand-pull inflation:") (newline)
+(for-each
+  (lambda (s)
+    (display "  Spending=") (display s)
+    (display ", Price level=")
+    (display (exact->inexact (demand-pull-price s)))
+    (newline))
+  '(80 100 110 120 150))
+
+(newline)
+
+; Cost-push scenario
+(define base-cost 10)
+(define markup 1.3)
+
+(define (cost-push-price input-cost)
+  (* input-cost markup))
+
+(display "Cost-push inflation (30% markup):") (newline)
+(for-each
+  (lambda (c)
+    (display "  Input cost=$") (display c)
+    (display ", Price=$")
+    (display (exact->inexact (cost-push-price c)))
+    (newline))
+  '(10 12 15 20 30))
+`} />
+
+
+    <!-- 3. Fisher effect -->
+    <h3>Fisher effect</h3>
+    <p>Irving Fisher's insight: the nominal interest rate equals the real interest rate plus expected inflation. If inflation is expected to be 5%, lenders demand 5% more to preserve real returns. The real rate is set by the supply and demand for loanable funds; the nominal rate adjusts one-for-one with inflation expectations.</p>
+
+    <SchemeRepl client:load initialCode={`; Fisher equation: i = r + expected inflation
+; i = nominal rate, r = real rate
+
+(define real-rate 0.03)  ; 3% real
+
+(display "Fisher effect: nominal = real + expected inflation")
+(newline) (newline)
+
+(for-each
+  (lambda (pi)
+    (let ((nominal (+ real-rate pi)))
+      (display "  Expected inflation=")
+      (display (exact->inexact (* pi 100))) (display "%")
+      (display " -> Nominal rate=")
+      (display (exact->inexact (* nominal 100))) (display "%")
+      (newline)))
+  '(0.0 0.02 0.05 0.10 0.20))
+
+(newline)
+(display "Real purchasing power preserved regardless of inflation")
+(newline)
+(display "(if expectations are correct)")
+`} />
+
+
+    <!-- 4. Hyperinflation -->
+    <h3>Hyperinflation</h3>
+    <p>When governments print money to cover deficits, inflation can spiral. Velocity increases as people spend money immediately, reinforcing the price rise. Historical examples: Weimar Germany (1923, prices doubled every few days), Zimbabwe (2008, monthly inflation of 79.6 billion percent), Venezuela (2018, annual rate above one million percent).</p>
+
+    <SchemeRepl client:load initialCode={`; Hyperinflation: compounding monthly inflation
+
+(define (hyperinflate monthly-rate months)
+  (let loop ((m 0) (price 1.0))
+    (if (= m months) price
+        (loop (+ m 1) (* price (+ 1 monthly-rate))))))
+
+(display "Starting price: $1.00") (newline) (newline)
+
+; Moderate: 2% monthly
+(display "2% monthly (moderate):") (newline)
+(display "  After 12 months: $")
+(display (exact->inexact (hyperinflate 0.02 12))) (newline)
+
+; High: 50% monthly (Cagan's threshold for hyperinflation)
+(display "50% monthly (hyperinflation):") (newline)
+(display "  After 12 months: $")
+(display (exact->inexact (hyperinflate 0.50 12))) (newline)
+
+; Extreme: 300% monthly (Zimbabwe-like)
+(display "300% monthly (extreme):") (newline)
+(display "  After 12 months: $")
+(display (exact->inexact (hyperinflate 3.00 12))) (newline)
+
+(display "Hyperinflation destroys money as a store of value")
+`} />
+
+
+    <!-- Key concepts -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Concept</th>
+            <th class="py-2 text-left">Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">MV = PQ</td><td>Money times velocity equals price times output</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Demand-pull</td><td>Inflation from excess aggregate demand</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Cost-push</td><td>Inflation from rising production costs</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Fisher effect</td><td>Nominal rate = real rate + expected inflation</td></tr>
+          <tr><td class="py-2 pr-4">Hyperinflation</td><td>Monthly inflation exceeding 50% (Cagan's definition)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Inflation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Inflation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Quantity_theory_of_money"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quantity theory of money</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fisher_equation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fisher equation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hyperinflation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hyperinflation</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-15/", label: "Money and Banking" }} />
+
+  </main>
+</Layout>

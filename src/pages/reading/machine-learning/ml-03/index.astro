@@ -1,0 +1,230 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.3 — Optimization" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Optimization</h1>
+    <p class="text-gray-400 text-sm mb-6">Deisenroth et al., <em>Mathematics for Machine Learning</em> (CC BY 4.0) &middot; <a href="https://mml-book.github.io/">mml-book.github.io</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Gradient descent</strong> follows the negative gradient downhill. The <strong>learning rate</strong> controls step size: too small and you crawl, too large and you overshoot. <strong>Convex</strong> functions have one minimum, so gradient descent always finds it. Non-convex functions have many minima, and you get whichever one you fall into.</p>
+    </div>
+
+    <!-- SVG: contour plot with gradient arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Contour ellipses (centered at 200, 140) -->
+        <ellipse cx="200" cy="140" rx="140" ry="100" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.15"/>
+        <ellipse cx="200" cy="140" rx="110" ry="78" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.2"/>
+        <ellipse cx="200" cy="140" rx="80" ry="56" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.25"/>
+        <ellipse cx="200" cy="140" rx="50" ry="35" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>
+        <ellipse cx="200" cy="140" rx="20" ry="14" fill="none" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.4"/>
+        <!-- Minimum point -->
+        <circle cx="200" cy="140" r="3" fill="#34d399" fill-opacity="0.7"/>
+        <text x="212" y="136" fill="#34d399" font-size="9" fill-opacity="0.6">min</text>
+        <!-- Gradient descent path -->
+        <circle cx="320" cy="80" r="3" fill="#f59e0b" fill-opacity="0.7"/>
+        <line x1="318" y1="82" x2="290" y2="100" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="290,100 296,94 298,102" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="288" cy="102" r="2.5" fill="#f59e0b" fill-opacity="0.6"/>
+        <line x1="286" y1="104" x2="262" y2="116" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="262,116 268,110 270,118" fill="#f59e0b" fill-opacity="0.4"/>
+        <circle cx="260" cy="118" r="2.5" fill="#f59e0b" fill-opacity="0.5"/>
+        <line x1="258" y1="120" x2="240" y2="128" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.35"/>
+        <polygon points="240,128 246,122 248,130" fill="#f59e0b" fill-opacity="0.35"/>
+        <circle cx="238" cy="130" r="2" fill="#f59e0b" fill-opacity="0.4"/>
+        <line x1="236" y1="132" x2="218" y2="136" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="218,136 224,130 226,138" fill="#f59e0b" fill-opacity="0.3"/>
+        <circle cx="216" cy="137" r="2" fill="#f59e0b" fill-opacity="0.35"/>
+        <!-- Labels -->
+        <text x="325" y="75" fill="#f59e0b" font-size="9" fill-opacity="0.6">start</text>
+        <!-- Caption -->
+        <text x="200" y="265" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Each step follows the negative gradient toward the minimum.</text>
+      </svg>
+    </div>
+
+    <!-- 1. 1D gradient descent -->
+    <h3>1D gradient descent</h3>
+    <p>Start simple: minimize f(x) = x&#xB2;. The gradient is 2x, so each step moves x toward zero. Watch the value shrink exponentially.</p>
+
+    <SchemeRepl client:load initialCode={`; 1D gradient descent on f(x) = x^2
+; Gradient: f'(x) = 2x
+
+(define (f x) (* x x))
+(define (df x) (* 2 x))
+(define lr 0.1)
+
+(define (descend x step)
+  (if (= step 10)
+      (begin (display "Final: x = ") (display x)
+             (display ", f(x) = ") (display (f x)))
+      (begin
+        (if (< step 5)
+            (begin (display "Step ") (display step)
+                   (display ": x = ") (display x)
+                   (display ", f(x) = ") (display (f x))
+                   (newline))
+            '())
+        (descend (- x (* lr (df x))) (+ step 1)))))
+
+(display "f(x) = x^2, starting at x = 5") (newline)
+(descend 5 0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# 1D gradient descent on f(x) = x^2
+def f(x): return x**2
+def df(x): return 2*x
+lr = 0.1
+
+x = 5.0
+print("f(x) = x^2, starting at x = 5")
+for step in range(10):
+    if step < 5:
+        print("Step {}: x = {:.4f}, f(x) = {:.4f}".format(step, x, f(x)))
+    x = x - lr * df(x)
+print("Final: x = {:.4f}, f(x) = {:.4f}".format(x, f(x)))
+`} />
+    </div>
+
+    <!-- 2. 2D gradient descent on a quadratic -->
+    <h3>2D gradient descent</h3>
+    <p>Now minimize f(x, y) = x&#xB2; + 2y&#xB2;. The gradient is (2x, 4y). Two dimensions, same idea: follow the negative gradient at each step.</p>
+
+    <SchemeRepl client:load initialCode={`; 2D gradient descent on f(x,y) = x^2 + 2y^2
+; Gradient: (2x, 4y)
+
+(define (f x y) (+ (* x x) (* 2 y y)))
+(define lr 0.1)
+
+(define (descend x y step)
+  (if (= step 20)
+      (begin (display "Final: (") (display x) (display ", ")
+             (display y) (display "), f = ") (display (f x y)))
+      (begin
+        (if (< step 6)
+            (begin (display "Step ") (display step)
+                   (display ": (") (display x) (display ", ")
+                   (display y) (display "), f = ")
+                   (display (f x y)) (newline))
+            '())
+        (descend (- x (* lr (* 2 x)))
+                 (- y (* lr (* 4 y)))
+                 (+ step 1)))))
+
+(display "f(x,y) = x^2 + 2y^2") (newline)
+(descend 4 3 0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# 2D gradient descent on f(x,y) = x^2 + 2y^2
+def f(x, y): return x**2 + 2*y**2
+lr = 0.1
+
+x, y = 4.0, 3.0
+print("f(x,y) = x^2 + 2y^2")
+for step in range(20):
+    if step < 6:
+        print("Step {}: ({:.3f}, {:.3f}), f = {:.4f}".format(step, x, y, f(x, y)))
+    x -= lr * 2 * x
+    y -= lr * 4 * y
+print("Final: ({:.4f}, {:.4f}), f = {:.6f}".format(x, y, f(x, y)))
+`} />
+    </div>
+
+    <!-- 3. Learning rate too large -->
+    <h3>Learning rate too large</h3>
+    <p>What happens when the learning rate is too big? The updates overshoot the minimum and the loss <em>increases</em> instead of decreasing. This is divergence.</p>
+
+    <SchemeRepl client:load initialCode={`; Divergence: learning rate too large
+; f(x) = x^2, but lr = 1.1 (too big!)
+
+(define (f x) (* x x))
+(define (df x) (* 2 x))
+(define lr 1.1)  ; too large!
+
+(define (descend x step)
+  (if (= step 8)
+      (begin (display "Diverged! x = ") (display x)
+             (display ", f(x) = ") (display (f x)))
+      (begin
+        (display "Step ") (display step)
+        (display ": x = ") (display x)
+        (display ", f(x) = ") (display (f x)) (newline)
+        (descend (- x (* lr (df x))) (+ step 1)))))
+
+(display "lr = 1.1 (too large!)") (newline)
+(descend 1 0)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Divergence: learning rate too large
+def f(x): return x**2
+def df(x): return 2*x
+lr = 1.1  # too large!
+
+x = 1.0
+print("lr = 1.1 (too large!)")
+for step in range(8):
+    print("Step {}: x = {:.2f}, f(x) = {:.2f}".format(step, x, f(x)))
+    x = x - lr * df(x)
+print("Diverged! x = {:.2f}, f(x) = {:.2f}".format(x, f(x)))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&nabla;f</td><td class="pr-4 text-green-300">(df x)</td><td class="pr-4 text-blue-300">df(x)</td><td class="font-sans">Gradient</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&eta;</td><td class="pr-4 text-green-300">lr</td><td class="pr-4 text-blue-300">lr</td><td class="font-sans">Learning rate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">x&#x2099;&#x208A;&#x2081; = x&#x2099; - &eta;&nabla;f</td><td class="pr-4 text-green-300">(- x (* lr (df x)))</td><td class="pr-4 text-blue-300">x -= lr * df(x)</td><td class="font-sans">Update rule</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">convex</td><td class="pr-4 text-green-300">&mdash;</td><td class="pr-4 text-blue-300">&mdash;</td><td class="font-sans">One global minimum</td></tr>
+          <tr><td class="py-2 pr-4">non-convex</td><td class="pr-4 text-green-300">&mdash;</td><td class="pr-4 text-blue-300">&mdash;</td><td class="font-sans">Multiple local minima</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Gradient descent is a natural fit for tail recursion: each call passes the updated state forward, and no work remains after the recursive call returns. The Scheme version makes this explicit &mdash; <code>descend</code> is a loop with no stack growth. Python's <code>for</code> loop achieves the same thing with mutable assignment.</p>
+    <p class="mt-2">The divergence example is the most important one. Learning rate selection is the first hyperparameter choice every practitioner faces, and the failure mode is dramatic: the loss explodes exponentially. In practice, learning rate schedules (decay, warmup) and adaptive methods (Adam, RMSProp) handle this automatically. Even with good optimization, <a href="https://june.kim/the-plateau"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>learning plateaus</a> emerge from the recursive structure of consolidation: the system cannot improve further until it reorganizes what it already knows.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-12/">∫ Calculus Ch.12</a> &mdash; gradient: the mathematical foundation for the direction of steepest descent</li>
+      <li><a href="/reading/real-analysis/lebl-04/">📏 Analysis Ch.4</a> &mdash; continuity: the smoothness conditions that make gradient descent work</li>
+    
+      <li><a href="/reading/calculus/calc-06/">∫ Calculus Ch.6</a> &mdash; applications of derivatives: gradient descent is optimization by following the derivative downhill</li>
+      <li><a href="/reading/linear-algebra/hefferon-05/">📐 Linear Algebra Ch.5</a> &mdash; eigenvalues determine convergence rates of gradient methods</li>
+      <li><a href="/reading/algorithms/algo-02/">⚙ Algorithms Ch.2</a> &mdash; dynamic programming shares the optimal substructure property with convex optimization</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Read <a href="https://mml-book.github.io/">Mathematics for Machine Learning</a> Ch. 7 and <a href="https://d2l.ai/chapter_optimization/">D2L Ch. 12</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-02/", label: "Linear Regression" }} next={{ href: "/reading/machine-learning/ml-04/", label: "Logistic Regression · 4 of 12" }} />
+
+  </main>
+</Layout>

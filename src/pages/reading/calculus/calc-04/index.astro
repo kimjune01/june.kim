@@ -1,0 +1,239 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.4 — The Derivative" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>The Derivative</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>derivative</strong> f'(a) is the slope of the tangent line at x = a. It is defined as the limit of the difference quotient: f'(a) = lim<sub>h&#x2192;0</sub> [f(a+h) - f(a)] / h. If this limit exists, f is differentiable at a.</p>
+    </div>
+
+    <!-- SVG: secant lines approaching tangent -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Curve f(x) = x^2 shape -->
+        <path d="M 40 170 Q 120 20 300 50" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Point of tangency -->
+        <circle cx="160" cy="70" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <!-- Secant lines getting closer (fading) -->
+        <line x1="60" y1="160" x2="280" y2="45" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.15"/>
+        <line x1="90" y1="120" x2="250" y2="48" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="120" y1="95" x2="220" y2="55" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.35"/>
+        <!-- Tangent line (the limit) -->
+        <line x1="80" y1="110" x2="260" y2="30" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Labels -->
+        <text x="270" y="28" fill="#f59e0b" font-size="10" fill-opacity="0.6">tangent</text>
+        <text x="285" y="50" fill="#60a5fa" font-size="10" fill-opacity="0.4">secants</text>
+        <text x="160" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">(a, f(a))</text>
+        <text x="180" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">secant slope &#x2192; tangent slope as h &#x2192; 0</text>
+      </svg>
+    </div>
+
+    <!-- 1. Difference quotient -->
+    <h3>The difference quotient</h3>
+    <p>The slope of the secant line through (a, f(a)) and (a+h, f(a+h)) is [f(a+h) - f(a)] / h. As h shrinks to zero, this secant slope approaches the tangent slope. That limit is the derivative.</p>
+
+    <SchemeRepl client:load initialCode={`; Difference quotient: [f(a+h) - f(a)] / h
+; f(x) = x^2, derivative should be 2x
+
+(define (f x) (* x x))
+(define a 3)
+
+(define (diff-quotient h)
+  (/ (- (f (+ a h)) (f a)) h))
+
+(display "h=1.0:    slope = ") (display (diff-quotient 1.0)) (newline)
+(display "h=0.1:    slope = ") (display (diff-quotient 0.1)) (newline)
+(display "h=0.01:   slope = ") (display (diff-quotient 0.01)) (newline)
+(display "h=0.001:  slope = ") (display (diff-quotient 0.001)) (newline)
+(display "h=0.0001: slope = ") (display (diff-quotient 0.0001)) (newline)
+(display "Limit = 6 = 2*3 = 2a")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Difference quotient approaching derivative
+f = lambda x: x**2
+a = 3
+
+for h in [1.0, 0.1, 0.01, 0.001, 0.0001]:
+    slope = (f(a + h) - f(a)) / h
+    print(f"h={h:<8} slope = {slope:.6f}")
+
+print("Limit = 6 = 2*3")
+`} />
+    </div>
+
+
+    <!-- 2. Derivative as a function -->
+    <h3>Derivative as a function</h3>
+    <p>We can compute f'(x) for every x, not just one point. The result is a new function. For f(x) = x&#xB2;, the derivative f'(x) = 2x. The derivative maps each input to the slope of f at that input.</p>
+
+    <SchemeRepl client:load initialCode={`; Numerical derivative: a function that returns slope at any x
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x)
+      (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; f(x) = x^2, f'(x) = 2x
+(define (f x) (* x x))
+(define f-prime (deriv f))
+
+(display "f'(1) = ") (display (/ (round (* (f-prime 1) 1000)) 1000)) (newline)  ; 2
+(display "f'(2) = ") (display (/ (round (* (f-prime 2) 1000)) 1000)) (newline)  ; 4
+(display "f'(3) = ") (display (/ (round (* (f-prime 3) 1000)) 1000)) (newline)  ; 6
+
+; g(x) = x^3, g'(x) = 3x^2
+(define (g x) (* x x x))
+(define g-prime (deriv g))
+
+(display "g'(2) = ") (display (/ (round (* (g-prime 2) 1000)) 1000)) (newline)  ; 12
+(display "g'(3) = ") (display (/ (round (* (g-prime 3) 1000)) 1000))            ; 27
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Numerical derivative as a function
+def deriv(f, h=1e-5):
+    return lambda x: (f(x+h) - f(x-h)) / (2*h)
+
+f = lambda x: x**2
+f_prime = deriv(f)
+print("f'(1) = {:.3f}".format(f_prime(1)))  # 2
+print("f'(2) = {:.3f}".format(f_prime(2)))  # 4
+print("f'(3) = {:.3f}".format(f_prime(3)))  # 6
+
+g = lambda x: x**3
+g_prime = deriv(g)
+print("g'(2) = {:.3f}".format(g_prime(2)))  # 12
+print("g'(3) = {:.3f}".format(g_prime(3)))  # 27
+`} />
+    </div>
+
+
+    <!-- 3. Differentiability -->
+    <h3>Differentiability</h3>
+    <p>A function is <strong>differentiable</strong> at a if the limit exists. Differentiable implies continuous, but not the other way around. |x| is continuous at 0 but not differentiable: the left and right slopes disagree.</p>
+
+    <SchemeRepl client:load initialCode={`; |x| is continuous at 0 but not differentiable
+; Left slope = -1, right slope = +1
+
+(define (abs-val x) (if (< x 0) (- x) x))
+
+; Approach from right (h > 0)
+(define (right-slope h)
+  (/ (- (abs-val h) (abs-val 0)) h))
+
+; Approach from left (h < 0)
+(define (left-slope h)
+  (/ (- (abs-val h) (abs-val 0)) h))
+
+(display "Right slopes:") (newline)
+(display "h=0.1:  ") (display (right-slope 0.1)) (newline)
+(display "h=0.01: ") (display (right-slope 0.01)) (newline)
+
+(display "Left slopes:") (newline)
+(display "h=-0.1:  ") (display (left-slope -0.1)) (newline)
+(display "h=-0.01: ") (display (left-slope -0.01)) (newline)
+
+(display "Left limit = -1, Right limit = +1") (newline)
+(display "Not equal: |x| is not differentiable at 0")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# |x| is continuous at 0 but not differentiable
+# Left slope = -1, right slope = +1
+
+print("Right slopes:")
+for h in [0.1, 0.01]:
+    print("  h={}: {}".format(h, abs(h) / h))
+
+print("Left slopes:")
+for h in [-0.1, -0.01]:
+    print("  h={}: {}".format(h, abs(h) / h))
+
+print("Left limit = -1, Right limit = +1")
+print("Not equal: |x| is not differentiable at 0")
+`} />
+    </div>
+
+
+    <!-- 4. Tangent line equation -->
+    <h3>Tangent line equation</h3>
+    <p>The tangent line at x = a is y = f(a) + f'(a)(x - a). This is the best linear approximation to f near a. It is the foundation of linearization, Newton's method, and Taylor series.</p>
+
+    <SchemeRepl client:load initialCode={`; Tangent line: y = f(a) + f'(a)(x - a)
+; f(x) = x^2 at a = 2: f(2) = 4, f'(2) = 4
+; Tangent: y = 4 + 4(x - 2) = 4x - 4
+
+(define (f x) (* x x))
+(define (f-prime x) (* 2 x))  ; known derivative
+
+(define a 2)
+(define (tangent x)
+  (+ (f a) (* (f-prime a) (- x a))))
+
+(display "x=1.5: f=") (display (f 1.5)) (display " tangent=") (display (tangent 1.5)) (newline)
+(display "x=2.0: f=") (display (f 2.0)) (display " tangent=") (display (tangent 2.0)) (newline)
+(display "x=2.5: f=") (display (f 2.5)) (display " tangent=") (display (tangent 2.5)) (newline)
+(display "x=3.0: f=") (display (f 3.0)) (display " tangent=") (display (tangent 3.0)) (newline)
+(display "Tangent approximation is good near a, worse far away")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tangent line: y = f(a) + f'(a)(x - a)
+# f(x) = x^2 at a = 2
+f = lambda x: x**2
+f_prime = lambda x: 2*x
+a = 2
+tangent = lambda x: f(a) + f_prime(a) * (x - a)
+
+for x in [1.5, 2.0, 2.5, 3.0]:
+    print("x={}: f={} tangent={}".format(x, f(x), tangent(x)))
+print("Tangent approximation is good near a, worse far away")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f'(x)</td><td class="pr-4 text-green-300">(f-prime x)</td><td class="font-sans">Derivative of f at x</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">dy/dx</td><td class="pr-4 text-green-300">(deriv f)</td><td class="font-sans">Leibniz notation for derivative</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[f(a+h)-f(a)]/h</td><td class="pr-4 text-green-300">(diff-quotient h)</td><td class="font-sans">Difference quotient</td></tr>
+          <tr><td class="py-2 pr-4">lim<sub>h&#x2192;0</sub></td><td class="pr-4 text-green-300">h = 0.00001</td><td class="font-sans">Limit (approximated numerically)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-03/">∫ Ch.3 Limits</a> — the derivative is defined as a limit</li>
+      <li><a href="/reading/calculus/calc-05/">∫ Ch.5 Derivative Rules</a> — shortcuts so you do not need the limit every time</li>
+      <li><a href="/reading/real-analysis/lebl-05/">∞ Real Analysis Ch.5</a> — the derivative defined rigorously with epsilon-delta</li>
+      <li><a href="/reading/physics/crowell-01/">⚛ Physics Ch.1</a> — derivatives as rates of change in mechanics</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> — gradient descent is iterative derivative-following</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-03/", label: "Limits and Continuity" }} next={{ href: "/reading/calculus/calc-05/", label: "Derivative Rules · 5 of 15" }} />
+
+  </main>
+</Layout>

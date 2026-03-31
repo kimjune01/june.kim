@@ -1,0 +1,279 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.2 — Fixed Income" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Fixed Income</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (CC BY 4.0) · MIT OCW 15.401 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A bond is a promise to pay known cash flows on known dates. Its price is the present value of those flows. Everything else &mdash; yield, duration, convexity &mdash; follows from that single idea.</p>
+    </div>
+
+    <!-- SVG: bond cash flow diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 150" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline -->
+        <line x1="40" y1="90" x2="400" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Price paid (downward arrow at t=0) -->
+        <line x1="60" y1="90" x2="60" y2="120" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="60,120 56,114 64,114" fill="#f87171" fill-opacity="0.6"/>
+        <text x="60" y="135" text-anchor="middle" fill="#f87171" font-size="9" fill-opacity="0.6">-P</text>
+        <text x="60" y="82" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <!-- Coupon arrows (upward) -->
+        <line x1="130" y1="90" x2="130" y2="60" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="130,60 126,66 134,66" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="130" y="52" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.6">C</text>
+        <text x="130" y="82" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+
+        <line x1="200" y1="90" x2="200" y2="60" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="200,60 196,66 204,66" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="200" y="52" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.6">C</text>
+        <text x="200" y="82" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">2</text>
+
+        <text x="260" y="86" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">...</text>
+
+        <!-- Final coupon + face value -->
+        <line x1="340" y1="90" x2="340" y2="35" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="340,35 336,41 344,41" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="340" y="27" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.6">C + F</text>
+        <text x="340" y="82" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">n</text>
+        <!-- Caption -->
+        <text x="220" y="148" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Bond cash flows: coupons and face value at maturity.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Bond Pricing -->
+    <h3>Bond pricing</h3>
+    <p>A bond pays periodic coupons C and returns face value F at maturity. Its price is the sum of discounted cash flows: P = &sum; C/(1+y)<sup>t</sup> + F/(1+y)<sup>n</sup>. This is just TVM applied to a fixed schedule.</p>
+
+    <SchemeRepl client:load initialCode={`(define (range a b) (if (> a b) '() (cons a (range (+ a 1) b))))
+
+; Bond price = PV of coupons + PV of face value
+(define (bond-price coupon face-value yield n)
+  (let ((pv-coupons
+         (apply + (map (lambda (t)
+                         (/ coupon (expt (+ 1 yield) t)))
+                       (range 1 n))))
+        (pv-face (/ face-value (expt (+ 1 yield) n))))
+    (+ pv-coupons pv-face)))
+
+; 10-year bond, $1000 face, 5% coupon, 5% yield = par
+(display "At par (5% coupon, 5% yield): $")
+(display (round (bond-price 50 1000 0.05 10)))
+(newline)
+
+; Same bond, yield rises to 6% -> price falls
+(display "Yield 6%: $")
+(display (round (bond-price 50 1000 0.06 10)))
+(newline)
+
+; Yield drops to 4% -> price rises
+(display "Yield 4%: $")
+(display (round (bond-price 50 1000 0.04 10)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bond pricing
+def bond_price(coupon, face, y, n):
+    pv_coupons = sum(coupon / (1 + y) ** t for t in range(1, n + 1))
+    pv_face = face / (1 + y) ** n
+    return pv_coupons + pv_face
+
+# 10-year, $1000 face, 5% coupon
+print(f"At par (5% coupon, 5% yield): \${bond_price(50, 1000, 0.05, 10):.2f}")
+print(f"Yield 6%: \${bond_price(50, 1000, 0.06, 10):.2f}")
+print(f"Yield 4%: \${bond_price(50, 1000, 0.04, 10):.2f}")
+`} />
+    </div>
+
+
+    <!-- 2. Yield to Maturity -->
+    <h3>Yield to maturity</h3>
+    <p><strong>Yield to maturity</strong> (YTM) is the single discount rate that makes the bond's price equal the PV of its cash flows. It is the bond's internal rate of return if held to maturity. Finding YTM requires solving P = &sum; C/(1+y)<sup>t</sup> + F/(1+y)<sup>n</sup> for y &mdash; no closed form, so we use bisection.</p>
+
+    <SchemeRepl client:load initialCode={`(define (range a b) (if (> a b) '() (cons a (range (+ a 1) b))))
+
+; Yield to maturity via bisection
+(define (bond-price c f y n)
+  (+ (apply + (map (lambda (t) (/ c (expt (+ 1 y) t)))
+                   (range 1 n)))
+     (/ f (expt (+ 1 y) n))))
+
+(define (find-ytm price c f n)
+  (let loop ((lo 0.001) (hi 0.5) (iter 0))
+    (let* ((mid (/ (+ lo hi) 2))
+           (p (bond-price c f mid n)))
+      (if (or (> iter 100) (< (abs (- p price)) 0.01))
+          mid
+          (if (> p price)
+              (loop mid hi (+ iter 1))
+              (loop lo mid (+ iter 1)))))))
+
+; Bond trading at $925, $1000 face, 5% coupon, 10 years
+(define ytm (find-ytm 925 50 1000 10))
+(display "YTM for bond at $925: ")
+(display (round (* ytm 10000)))
+(display " bps (")
+(display (* (round (* ytm 10000)) 0.01))
+(display "%)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Yield to maturity via bisection
+def bond_price(c, f, y, n):
+    return sum(c / (1 + y) ** t for t in range(1, n + 1)) + f / (1 + y) ** n
+
+def find_ytm(price, c, f, n, tol=0.0001):
+    lo, hi = 0.001, 0.5
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        p = bond_price(c, f, mid, n)
+        if abs(p - price) < tol:
+            return mid
+        if p > price:
+            lo = mid
+        else:
+            hi = mid
+    return mid
+
+ytm = find_ytm(925, 50, 1000, 10)
+print(f"YTM for bond at $925: {ytm:.4f} ({ytm*100:.2f}%)")
+`} />
+    </div>
+
+
+    <!-- 3. Duration -->
+    <h3>Duration and convexity</h3>
+    <p><strong>Macaulay duration</strong> is the weighted-average time to receive cash flows, weighted by present value. It measures interest rate sensitivity: a bond with duration D loses roughly D% in price for a 1% rise in yield. <strong>Convexity</strong> captures the curvature &mdash; the error in the linear duration approximation.</p>
+
+    <SchemeRepl client:load initialCode={`(define (range a b) (if (> a b) '() (cons a (range (+ a 1) b))))
+
+; Macaulay duration = sum(t * PV(CF_t)) / Price
+(define (bond-price c f y n)
+  (+ (apply + (map (lambda (t) (/ c (expt (+ 1 y) t)))
+                   (range 1 n)))
+     (/ f (expt (+ 1 y) n))))
+
+(define (macaulay-duration c f y n)
+  (let* ((price (bond-price c f y n))
+         (weighted-sum
+          (+ (apply + (map (lambda (t)
+                             (* t (/ c (expt (+ 1 y) t))))
+                           (range 1 n)))
+             (* n (/ f (expt (+ 1 y) n))))))
+    (/ weighted-sum price)))
+
+; Modified duration = Macaulay / (1+y)
+(define (modified-duration c f y n)
+  (/ (macaulay-duration c f y n) (+ 1 y)))
+
+; 10-year, 5% coupon, 6% yield
+(define dur (macaulay-duration 50 1000 0.06 10))
+(define mod-dur (modified-duration 50 1000 0.06 10))
+
+(display "Macaulay duration: ") (display (/ (round (* dur 100)) 100)) (display " years") (newline)
+(display "Modified duration: ") (display (/ (round (* mod-dur 100)) 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Duration
+def bond_price(c, f, y, n):
+    return sum(c / (1 + y) ** t for t in range(1, n + 1)) + f / (1 + y) ** n
+
+def macaulay_duration(c, f, y, n):
+    price = bond_price(c, f, y, n)
+    weighted = sum(t * c / (1 + y) ** t for t in range(1, n + 1))
+    weighted += n * f / (1 + y) ** n
+    return weighted / price
+
+def modified_duration(c, f, y, n):
+    return macaulay_duration(c, f, y, n) / (1 + y)
+
+dur = macaulay_duration(50, 1000, 0.06, 10)
+mod = modified_duration(50, 1000, 0.06, 10)
+print(f"Macaulay duration: {dur:.2f} years")
+print(f"Modified duration: {mod:.2f}")
+`} />
+    </div>
+
+
+    <!-- 4. Yield Curve -->
+    <h3>Yield curve shapes</h3>
+    <p>The <strong>yield curve</strong> plots yield against maturity. A normal curve slopes up: longer bonds demand higher yields for bearing more risk. An inverted curve (short rates above long rates) historically signals recession. A flat curve means the market sees no term premium.</p>
+
+    <SchemeRepl client:load initialCode={`; Spot rates for different maturities
+; Normal yield curve: rates increase with maturity
+(define normal-curve
+  (list (cons 1 0.03) (cons 2 0.035) (cons 5 0.04)
+        (cons 10 0.045) (cons 30 0.05)))
+
+; Price a zero-coupon bond using spot rate
+(define (zero-price face spot n)
+  (/ face (expt (+ 1 spot) n)))
+
+(display "--- Normal yield curve ---") (newline)
+(for-each (lambda (point)
+            (let ((mat (car point)) (rate (cdr point)))
+              (display mat) (display "yr spot: ")
+              (display (* 100 rate)) (display "%, ")
+              (display "$1000 zero = $")
+              (display (round (zero-price 1000 rate mat)))
+              (newline)))
+          normal-curve)
+
+; Forward rate between year 1 and year 2
+; (1+s2)^2 = (1+s1)(1+f_{1,2})
+(define s1 0.03)
+(define s2 0.035)
+(define f12 (- (/ (expt (+ 1 s2) 2) (+ 1 s1)) 1))
+(newline)
+(display "1yr forward rate (yr1->yr2): ")
+(display (/ (round (* f12 10000)) 100))
+(display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Yield curve and forward rates
+curve = [(1, 0.03), (2, 0.035), (5, 0.04), (10, 0.045), (30, 0.05)]
+
+def zero_price(face, spot, n):
+    return face / (1 + spot) ** n
+
+print("--- Normal yield curve ---")
+for mat, rate in curve:
+    p = zero_price(1000, rate, mat)
+    print(f"{mat}yr spot: {rate*100}%, $1000 zero = \${p:.2f}")
+
+# Forward rate from year 1 to year 2
+s1, s2 = 0.03, 0.035
+f12 = (1 + s2)**2 / (1 + s1) - 1
+print(f"\\n1yr forward rate (yr1->yr2): {f12*100:.2f}%")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-01/">&#x1F4C8; Finance Ch.1</a> &mdash; TVM provides the discounting machinery bonds depend on</li>
+      <li><a href="/reading/finance-1/fin-03/">&#x1F4C8; Finance Ch.3</a> &mdash; equity valuation uses the same discounting, but cash flows are uncertain</li>
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &mdash; exponentials and logarithms behind compound interest</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-01/", label: "Time Value of Money · 1 of 12" }}
+      next={{ href: "/reading/finance-1/fin-03/", label: "Equities · 3 of 12" }}
+    />
+
+  </main>
+</Layout>

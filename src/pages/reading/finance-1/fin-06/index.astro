@@ -1,0 +1,273 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.6 — CAPM and APT" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>CAPM and APT</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; MIT OCW 15.401 (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Only <strong>systematic risk</strong> is rewarded. The CAPM prices assets by their beta to the market. APT generalizes this to multiple risk factors. Both say: diversifiable risk earns no premium.</p>
+    </div>
+
+    <!-- SVG: Security Market Line -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="330" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="40" y1="170" x2="40" y2="15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="185" y="192" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Beta (&#946;)</text>
+        <text x="10" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90, 10, 95)">E[R]</text>
+        <!-- Beta axis labels -->
+        <text x="40" y="183" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="185" y="183" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1.0</text>
+        <text x="330" y="183" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">2.0</text>
+        <!-- Security Market Line -->
+        <line x1="40" y1="140" x2="330" y2="30" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Risk-free rate point -->
+        <circle cx="40" cy="140" r="4" fill="#10b981" fill-opacity="0.7"/>
+        <text x="55" y="145" fill="#10b981" font-size="9" fill-opacity="0.7">r_f</text>
+        <!-- Market portfolio (beta=1) -->
+        <circle cx="185" cy="85" r="5" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="200" y="82" fill="#60a5fa" font-size="9" fill-opacity="0.7">M</text>
+        <!-- Underpriced asset (above SML) -->
+        <circle cx="120" cy="85" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="105" y="80" fill="#f59e0b" font-size="9" fill-opacity="0.7">&#945; &gt; 0</text>
+        <!-- Overpriced asset (below SML) -->
+        <circle cx="260" cy="75" r="4" fill="#ef4444" fill-opacity="0.7"/>
+        <text x="245" y="70" fill="#ef4444" font-size="9" fill-opacity="0.7">&#945; &lt; 0</text>
+        <!-- Caption -->
+        <text x="185" y="10" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Security Market Line: E[R] = r_f + &#946;(E[R_m] - r_f)</text>
+      </svg>
+    </div>
+
+    <!-- 1. Beta Calculation -->
+    <h3>Beta calculation</h3>
+    <p><strong>Beta</strong> measures how much an asset moves with the market. &#946; = Cov(R_i, R_m) / Var(R_m). A beta of 1.5 means the asset amplifies market moves by 50%. A beta below 1 dampens them. Beta captures systematic risk only.</p>
+
+    <SchemeRepl client:load initialCode={`; Beta = Cov(R_i, R_m) / Var(R_m)
+; Using sample data
+
+(define (mean xs) (/ (apply + xs) (length xs)))
+
+(define (covariance xs ys)
+  (let ((mx (mean xs)) (my (mean ys)) (n (length xs)))
+    (/ (apply + (map (lambda (x y) (* (- x mx) (- y my))) xs ys))
+       (- n 1))))
+
+(define (variance xs)
+  (covariance xs xs))
+
+(define (beta asset-returns market-returns)
+  (/ (covariance asset-returns market-returns)
+     (variance market-returns)))
+
+; Monthly returns: asset vs market
+(define r-asset  '(0.05 -0.02 0.08 -0.04 0.06 0.03))
+(define r-market '(0.03 -0.01 0.05 -0.03 0.04 0.02))
+
+(display "Cov(R_i, R_m) = ") (display (covariance r-asset r-market)) (newline)
+(display "Var(R_m)       = ") (display (variance r-market)) (newline)
+(display "Beta           = ") (display (beta r-asset r-market))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Beta = Cov(R_i, R_m) / Var(R_m)
+def mean(xs): return sum(xs) / len(xs)
+
+def cov(xs, ys):
+    mx, my, n = mean(xs), mean(ys), len(xs)
+    return sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / (n - 1)
+
+def var(xs): return cov(xs, xs)
+
+def beta(asset, market): return cov(asset, market) / var(market)
+
+r_asset  = [0.05, -0.02, 0.08, -0.04, 0.06, 0.03]
+r_market = [0.03, -0.01, 0.05, -0.03, 0.04, 0.02]
+
+print(f"Cov(R_i, R_m) = {cov(r_asset, r_market):.6f}")
+print(f"Var(R_m)       = {var(r_market):.6f}")
+print(f"Beta           = {beta(r_asset, r_market):.4f}")
+`} />
+    </div>
+
+
+    <!-- 2. Security Market Line -->
+    <h3>Security market line</h3>
+    <p>The <strong>security market line</strong> (SML) is the CAPM equation graphed: E[R_i] = r_f + &#946;_i(E[R_m] - r_f). Under CAPM assumptions, expected returns should lie on this line. Assets above it are underpriced (positive alpha), assets below are overpriced (negative alpha).</p>
+
+    <SchemeRepl client:load initialCode={`; Security Market Line: E[R_i] = r_f + beta * (E[R_m] - r_f)
+(define (capm rf beta er-m)
+  (+ rf (* beta (- er-m rf))))
+
+(define rf 0.03)     ; risk-free rate 3%
+(define er-m 0.10)   ; market expected return 10%
+
+(display "--- CAPM Expected Returns ---") (newline)
+(display "beta=0.0: ") (display (capm rf 0.0 er-m)) (newline)  ; r_f
+(display "beta=0.5: ") (display (capm rf 0.5 er-m)) (newline)
+(display "beta=1.0: ") (display (capm rf 1.0 er-m)) (newline)  ; market
+(display "beta=1.5: ") (display (capm rf 1.5 er-m)) (newline)
+(display "beta=2.0: ") (display (capm rf 2.0 er-m)) (newline)
+
+; Alpha: actual return minus CAPM prediction
+(define actual 0.12)
+(define beta-i 1.2)
+(define predicted (capm rf beta-i er-m))
+(display "Predicted: ") (display predicted) (newline)
+(display "Actual:    ") (display actual) (newline)
+(display "Alpha:     ") (display (- actual predicted))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Security Market Line: E[R_i] = r_f + beta * (E[R_m] - r_f)
+def capm(rf, beta, er_m):
+    return rf + beta * (er_m - rf)
+
+rf, er_m = 0.03, 0.10
+
+print("--- CAPM Expected Returns ---")
+for b in [0.0, 0.5, 1.0, 1.5, 2.0]:
+    print(f"beta={b:.1f}: {capm(rf, b, er_m):.4f}")
+
+# Alpha = actual - predicted
+actual = 0.12
+beta_i = 1.2
+predicted = capm(rf, beta_i, er_m)
+print(f"Predicted: {predicted:.4f}")
+print(f"Actual:    {actual:.4f}")
+print(f"Alpha:     {actual - predicted:.4f}")
+`} />
+    </div>
+
+
+    <!-- 3. Capital Market Line -->
+    <h3>Capital market line</h3>
+    <p>The <strong>capital market line</strong> (CML) applies only to efficient portfolios (combinations of the risk-free asset and the market portfolio). E[R_p] = r_f + (E[R_m] - r_f) / &#963;_m * &#963;_p. The slope is the market's Sharpe ratio. The SML uses beta; the CML uses total risk.</p>
+
+    <SchemeRepl client:load initialCode={`; Capital Market Line: E[R_p] = r_f + ((E[R_m] - r_f) / sigma_m) * sigma_p
+; Only applies to efficient portfolios
+
+(define (cml rf er-m sig-m sig-p)
+  (+ rf (* (/ (- er-m rf) sig-m) sig-p)))
+
+(define rf 0.03)
+(define er-m 0.10)
+(define sig-m 0.18)   ; market std dev 18%
+
+(display "Market Sharpe ratio = ")
+(display (/ (- er-m rf) sig-m)) (newline)
+
+(display "--- CML: expected return by portfolio risk ---") (newline)
+(define (show-cml sig-p)
+  (display "sigma_p=") (display sig-p)
+  (display "  E[R_p]=") (display (cml rf er-m sig-m sig-p))
+  (newline))
+
+(show-cml 0.00)   ; 100% risk-free
+(show-cml 0.09)   ; 50/50 mix
+(show-cml 0.18)   ; 100% market
+(show-cml 0.27)   ; levered 150%
+(show-cml 0.36)   ; levered 200%
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Capital Market Line: E[R_p] = r_f + (Sharpe_m) * sigma_p
+def cml(rf, er_m, sig_m, sig_p):
+    return rf + ((er_m - rf) / sig_m) * sig_p
+
+rf, er_m, sig_m = 0.03, 0.10, 0.18
+
+sharpe_m = (er_m - rf) / sig_m
+print(f"Market Sharpe ratio = {sharpe_m:.4f}")
+
+print("--- CML: expected return by portfolio risk ---")
+for sig_p in [0.00, 0.09, 0.18, 0.27, 0.36]:
+    print(f"sigma_p={sig_p:.2f}  E[R_p]={cml(rf, er_m, sig_m, sig_p):.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Arbitrage Pricing Theory -->
+    <h3>Arbitrage pricing theory</h3>
+    <p>The <strong>APT</strong> generalizes CAPM from one factor (market) to multiple factors. E[R_i] = r_f + &#946;_1&#955;_1 + &#946;_2&#955;_2 + ... Each &#946; measures exposure to a factor; each &#955; is that factor's risk premium. No arbitrage means prices adjust until this holds.</p>
+
+    <SchemeRepl client:load initialCode={`; APT: E[R_i] = r_f + sum(beta_k * lambda_k)
+; Multi-factor model
+
+(define (apt rf betas lambdas)
+  (+ rf (apply + (map * betas lambdas))))
+
+(define rf 0.03)
+
+; Three factors: market, size, value
+(define factor-names '("Market" "Size" "Value"))
+(define lambdas '(0.06 0.03 0.04))  ; factor risk premiums
+
+; Stock A: high market beta, small, value
+(define betas-a '(1.2 0.8 0.5))
+(display "Stock A E[R] = ")
+(display (apt rf betas-a lambdas)) (newline)
+
+; Stock B: low market beta, large, growth
+(define betas-b '(0.7 -0.2 -0.3))
+(display "Stock B E[R] = ")
+(display (apt rf betas-b lambdas)) (newline)
+
+; Decompose Stock A's risk premium
+(display "--- Factor contributions (Stock A) ---") (newline)
+(for-each (lambda (name b l)
+            (display name) (display ": ")
+            (display (* b l)) (newline))
+          factor-names betas-a lambdas)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# APT: E[R_i] = r_f + sum(beta_k * lambda_k)
+def apt(rf, betas, lambdas):
+    return rf + sum(b * l for b, l in zip(betas, lambdas))
+
+rf = 0.03
+factor_names = ["Market", "Size", "Value"]
+lambdas = [0.06, 0.03, 0.04]  # factor risk premiums
+
+# Stock A: high market beta, small, value
+betas_a = [1.2, 0.8, 0.5]
+print(f"Stock A E[R] = {apt(rf, betas_a, lambdas):.4f}")
+
+# Stock B: low market beta, large, growth
+betas_b = [0.7, -0.2, -0.3]
+print(f"Stock B E[R] = {apt(rf, betas_b, lambdas):.4f}")
+
+print("--- Factor contributions (Stock A) ---")
+for name, b, l in zip(factor_names, betas_a, lambdas):
+    print(f"{name}: {b * l:.4f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-05/">&#x1F4C8; Portfolio Theory</a> &mdash; CAPM is the equilibrium result of Markowitz optimization</li>
+      <li><a href="/reading/finance-1/fin-04/">&#x1F4C8; Risk and Return</a> &mdash; beta decomposes total risk into systematic and idiosyncratic</li>
+      <li><a href="/reading/statistics/">&#x1F4CA; Statistics</a> &mdash; regression estimates beta from return data</li>
+      <li><a href="/reading/economics/">&#x1F4B0; Economics</a> &mdash; equilibrium pricing and no-arbitrage are economic principles</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-05/", label: "Portfolio Theory · 5 of 12" }}
+      next={{ href: "/reading/finance-1/fin-07/", label: "Forwards and Futures · 7 of 12" }}
+    />
+
+  </main>
+</Layout>

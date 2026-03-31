@@ -1,0 +1,454 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.18 — Comonads" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Comonads</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2017 · <a href="https://bartoszmilewski.com/2017/01/02/comonads/">Category Theory for Programmers, Ch. 18</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-16/">🍞 Ch16 (Adjunctions)</a>. 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>comonad</strong> is a value in context. Where a monad lets you <em>put</em> a value in a container (<code>return</code>) but not peek inside, a comonad lets you <em>extract</em> the focused value but not inject one from nothing. <code>extract</code> reads the focus, <code>duplicate</code> shifts attention to every position, and <code>extend</code> applies a local computation everywhere. Spreadsheets, cellular automata, and image kernels are all comonads: a current cell, plus the whole neighborhood.</p>
+    </div>
+
+    <!-- SVG: Comonad extract and extend, dual to return and bind -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Monad side -->
+        <text x="110" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Monad</text>
+        <!-- return: a -> m(a) -->
+        <circle cx="40" cy="45" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="40" y="37" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">a</text>
+        <rect x="110" y="33" width="55" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="137" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">m(a)</text>
+        <line x1="47" y1="45" x2="105" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="105,42 112,45 105,48" fill="currentColor"/>
+        <text x="76" y="39" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">return</text>
+
+        <!-- join: m(m(a)) -> m(a) -->
+        <rect x="20" y="78" width="75" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="57" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">m(m(a))</text>
+        <rect x="140" y="78" width="55" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="167" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">m(a)</text>
+        <line x1="100" y1="90" x2="135" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="135,87 142,90 135,93" fill="currentColor"/>
+        <text x="118" y="84" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">join</text>
+
+        <!-- Comonad side -->
+        <text x="330" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Comonad</text>
+        <!-- extract: w(a) -> a -->
+        <rect x="250" y="33" width="55" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="277" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">w(a)</text>
+        <circle cx="390" cy="45" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="390" y="37" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">a</text>
+        <line x1="310" y1="45" x2="383" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="383,42 390,45 383,48" fill="currentColor"/>
+        <text x="348" y="39" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">extract</text>
+
+        <!-- duplicate: w(a) -> w(w(a)) -->
+        <rect x="240" y="78" width="55" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="267" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">w(a)</text>
+        <rect x="345" y="78" width="75" height="24" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="382" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">w(w(a))</text>
+        <line x1="300" y1="90" x2="340" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="340,87 347,90 340,93" fill="currentColor"/>
+        <text x="320" y="84" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">duplicate</text>
+
+        <!-- Duality label -->
+        <text x="220" y="145" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">arrows reversed: dual operations</text>
+      </svg>
+    </div>
+
+    <!-- 1. The Comonad interface -->
+    <h3>Extract, duplicate, extend</h3>
+    <p><strong>extract</strong> (dual of <code>return</code>) pulls the focused value out. <strong>duplicate</strong> (dual of <code>join</code>) wraps the structure so that every position becomes the focus of its own copy. <strong>extend</strong> (dual of <code>bind</code>) takes a co-Kleisli arrow <code>w a &rarr; b</code> and applies it at every position. They satisfy three laws mirroring the monad laws: <code>extract . duplicate = id</code>, <code>fmap extract . duplicate = id</code>, and <code>duplicate . duplicate = fmap duplicate . duplicate</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Comonad interface:
+;   extract   : w a -> a           (dual of return)
+;   duplicate : w a -> w (w a)     (dual of join)
+;   extend    : (w a -> b) -> w a -> w b  (dual of bind)
+;
+; extend f = fmap f . duplicate
+; Comonad laws:
+;   extract . duplicate       = id
+;   fmap extract . duplicate  = id
+;   duplicate . duplicate     = fmap duplicate . duplicate
+
+; --- Stream comonad ---
+; A stream is an infinite list with a focus on the head.
+; Represented as (focus . thunk-of-rest)
+
+(define (make-stream head tail-thunk)
+  (cons head tail-thunk))
+
+(define (s-head s) (car s))
+(define (s-tail s) ((cdr s)))
+
+(define (s-take n s)
+  (if (<= n 0) '()
+      (cons (s-head s) (s-take (- n 1) (s-tail s)))))
+
+; Build a stream from a seed
+(define (s-iterate f seed)
+  (make-stream seed (lambda () (s-iterate f (f seed)))))
+
+; extract = head
+(define (s-extract s) (s-head s))
+
+; duplicate: stream of streams, each shifted one position
+(define (s-duplicate s)
+  (make-stream s (lambda () (s-duplicate (s-tail s)))))
+
+; extend: apply a co-Kleisli arrow at every position
+(define (s-extend f s)
+  (make-stream (f s) (lambda () (s-extend f (s-tail s)))))
+
+; Example: moving average (window size 3)
+(define nats (s-iterate (lambda (n) (+ n 1)) 1))
+
+(define (avg3 s)
+  (let* ((a (s-head s))
+         (b (s-head (s-tail s)))
+         (c (s-head (s-tail (s-tail s)))))
+    (/ (+ a b c) 3)))
+
+(display "nats:     ") (display (s-take 6 nats)) (newline)
+(display "avg3:     ") (display (s-take 6 (s-extend avg3 nats))) (newline)
+
+; Law check: extract . duplicate = id
+(display "extract(duplicate(nats)) = ")
+(display (s-extract (s-duplicate nats)))
+; Should equal nats itself (extract gives back the original stream)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Stream comonad in Python
+class Stream:
+    def __init__(self, head, tail_fn):
+        self.head = head
+        self._tail = tail_fn
+
+    def tail(self):
+        return self._tail()
+
+    def take(self, n):
+        s, out = self, []
+        for _ in range(n):
+            out.append(s.head)
+            s = s.tail()
+        return out
+
+def iterate(f, seed):
+    return Stream(seed, lambda: iterate(f, f(seed)))
+
+def extract(s):
+    return s.head
+
+def duplicate(s):
+    return Stream(s, lambda: duplicate(s.tail()))
+
+def extend(f, s):
+    return Stream(f(s), lambda: extend(f, s.tail()))
+
+# Moving average over 3 elements
+nats = iterate(lambda n: n + 1, 1)
+
+def avg3(s):
+    a = s.head
+    b = s.tail().head
+    c = s.tail().tail().head
+    return (a + b + c) / 3
+
+print(f"nats:  {nats.take(6)}")
+print(f"avg3:  {extend(avg3, nats).take(6)}")
+print(f"extract(duplicate(nats)).take(3) = {extract(duplicate(nats)).take(3)}")
+`} />
+    </div>
+
+
+    <!-- 2. The Store comonad -->
+    <h3>The Store comonad</h3>
+    <p>The <strong>Store comonad</strong> pairs a function <code>s &rarr; a</code> (a lookup table) with a current position <code>s</code>. Think of a spreadsheet: every cell has a value (the function maps positions to values), and one cell is focused (the current position). <code>extract</code> evaluates the function at the current position. <code>duplicate</code> creates a Store of Stores, where each position's Store is focused on that position. Store arises from the product/exponential adjunction, composed as L&#8728;R instead of R&#8728;L (which gives the State monad).</p>
+
+    <SchemeRepl client:load initialCode={`; Store comonad: (lookup-fn, position)
+; Store s a = (s -> a, s)
+;
+; extract (f, s) = f(s)
+; duplicate (f, s) = (Store f, s)
+;   i.e., a Store whose lookup returns "Store f focused at that position"
+; extend g (f, s) = (λs'. g(f, s'), s)
+
+(define (make-store f pos) (list f pos))
+(define (store-fn st) (car st))
+(define (store-pos st) (cadr st))
+
+(define (store-extract st)
+  ((store-fn st) (store-pos st)))
+
+(define (store-duplicate st)
+  (make-store
+    (lambda (new-pos) (make-store (store-fn st) new-pos))
+    (store-pos st)))
+
+(define (store-extend g st)
+  (make-store
+    (lambda (new-pos) (g (make-store (store-fn st) new-pos)))
+    (store-pos st)))
+
+; Example: a 1D grid of squared values, focused at position 3
+(define grid (make-store (lambda (i) (* i i)) 3))
+
+(display "extract grid: ") (display (store-extract grid)) (newline)
+; 9 — the value at position 3
+
+; Co-Kleisli arrow: sum of neighbors
+(define (sum-neighbors st)
+  (let ((f (store-fn st))
+        (s (store-pos st)))
+    (+ (f (- s 1)) (f s) (f (+ s 1)))))
+
+(display "sum-neighbors at 3: ") (display (sum-neighbors grid)) (newline)
+; 4 + 9 + 16 = 29
+
+; Extend applies sum-neighbors at every position
+(define blurred (store-extend sum-neighbors grid))
+
+(display "blurred at 3: ") (display (store-extract blurred)) (newline)
+; 29
+(display "blurred at 0: ")
+(display ((store-fn blurred) 0)) (newline)
+; 1 + 0 + 1 = 2
+(display "blurred at 5: ")
+(display ((store-fn blurred) 5)) (newline)
+; 16 + 25 + 36 = 77
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Store comonad in Python
+class Store:
+    def __init__(self, fn, pos):
+        self.fn = fn
+        self.pos = pos
+
+def extract(st):
+    return st.fn(st.pos)
+
+def duplicate(st):
+    return Store(lambda p: Store(st.fn, p), st.pos)
+
+def extend(g, st):
+    return Store(lambda p: g(Store(st.fn, p)), st.pos)
+
+# 1D grid: position -> position squared
+grid = Store(lambda i: i * i, 3)
+print(f"extract grid: {extract(grid)}")  # 9
+
+def sum_neighbors(st):
+    return st.fn(st.pos - 1) + st.fn(st.pos) + st.fn(st.pos + 1)
+
+print(f"sum_neighbors at 3: {sum_neighbors(grid)}")  # 29
+
+blurred = extend(sum_neighbors, grid)
+print(f"blurred at 3: {extract(blurred)}")       # 29
+print(f"blurred at 0: {blurred.fn(0)}")           # 2
+print(f"blurred at 5: {blurred.fn(5)}")           # 77
+`} />
+    </div>
+
+
+    <!-- 3. 1D cellular automaton -->
+    <h3>Cellular automaton via extend</h3>
+    <p>A cellular automaton is a co-Kleisli arrow: it reads the neighborhood (the comonadic context) and produces the next value. <code>extend</code> applies this rule everywhere at once. One step of the automaton is one call to <code>extend</code>. Iteration is composition of co-Kleisli arrows. Conway's Game of Life works the same way with a 2D Store. This extract-then-extend loop is the categorical shape of any system that reads its environment and updates: the same pattern appears in <a href="https://june.kim/general-intelligence"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>closed feedback loops</a> where perception feeds action feeds consolidation.</p>
+
+    <SchemeRepl client:load initialCode={`; 1D cellular automaton using Store comonad
+; Rule: a cell becomes 1 if exactly one neighbor is 1, else 0.
+; (This is elementary Rule 90 — produces Sierpinski triangle.)
+
+(define (make-store f pos) (list f pos))
+(define (store-fn st) (car st))
+(define (store-pos st) (cadr st))
+
+(define (store-extract st)
+  ((store-fn st) (store-pos st)))
+
+(define (store-extend g st)
+  (make-store
+    (lambda (new-pos) (g (make-store (store-fn st) new-pos)))
+    (store-pos st)))
+
+; Initial state: single 1 at position 0, 0 everywhere else
+(define (initial-grid pos)
+  (if (= pos 0) 1 0))
+
+(define automaton (make-store initial-grid 0))
+
+; Rule 90: XOR of left and right neighbors
+(define (rule90 st)
+  (let ((left  ((store-fn st) (- (store-pos st) 1)))
+        (right ((store-fn st) (+ (store-pos st) 1))))
+    (if (= (+ left right) 1) 1 0)))
+
+; Show a row: values at positions -4 to 4
+(define (show-row st)
+  (let loop ((i -4) (acc '()))
+    (if (> i 4) (reverse acc)
+        (loop (+ i 1)
+              (cons ((store-fn st) i) acc)))))
+
+; Run a few generations
+(display "gen 0: ") (display (show-row automaton)) (newline)
+
+(define gen1 (store-extend rule90 automaton))
+(display "gen 1: ") (display (show-row gen1)) (newline)
+
+(define gen2 (store-extend rule90 gen1))
+(display "gen 2: ") (display (show-row gen2)) (newline)
+
+(define gen3 (store-extend rule90 gen2))
+(display "gen 3: ") (display (show-row gen3)) (newline)
+
+(define gen4 (store-extend rule90 gen3))
+(display "gen 4: ") (display (show-row gen4))
+; Sierpinski triangle emerges
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# 1D cellular automaton (Rule 90) via Store comonad
+class Store:
+    def __init__(self, fn, pos):
+        self.fn = fn
+        self.pos = pos
+
+def extend(g, st):
+    return Store(lambda p: g(Store(st.fn, p)), st.pos)
+
+def show_row(st, r=4):
+    return [st.fn(i) for i in range(-r, r + 1)]
+
+# Initial: single 1 at origin
+automaton = Store(lambda p: 1 if p == 0 else 0, 0)
+
+# Rule 90: XOR of neighbors
+def rule90(st):
+    left = st.fn(st.pos - 1)
+    right = st.fn(st.pos + 1)
+    return 1 if (left + right) == 1 else 0
+
+state = automaton
+for gen in range(5):
+    row = show_row(state)
+    vis = "".join("█" if c else "·" for c in row)
+    print(f"gen {gen}: {vis}")
+    state = extend(rule90, state)
+`} />
+    </div>
+
+
+    <!-- 4. Duality table -->
+    <h3>Monad / comonad duality</h3>
+    <p>Every comonad operation is a monad operation with arrows reversed. If a monad arises from an adjunction L &#8866; R as R&#8728;L, the same adjunction gives a comonad as L&#8728;R. The State monad (<code>s &rarr; (a, s)</code>) and the Store comonad (<code>(s &rarr; a, s)</code>) both come from the product &#8866; exponential adjunction.</p>
+
+    <SchemeRepl client:load initialCode={`; Monad vs comonad duality
+;
+; Monad                  Comonad
+; return : a -> m a      extract : w a -> a
+; join : m (m a) -> m a  duplicate : w a -> w (w a)
+; bind : m a -> (a -> m b) -> m b
+;                        extend : w a -> (w a -> b) -> w b
+;
+; Adjunction L ⊣ R:
+;   Monad   = R ∘ L    (State  = (s ->) ∘ (-, s) = s -> (a, s))
+;   Comonad = L ∘ R    (Store  = (-, s) ∘ (s ->) = (s -> a, s))
+
+; The Store comonad is the dual of the State monad.
+; Both come from the same adjunction, composed in opposite order.
+
+; State: s -> (a, s)
+(define (state-return a) (lambda (s) (cons a s)))
+(define (state-bind m f)
+  (lambda (s)
+    (let* ((r (m s)) (a (car r)) (s2 (cdr r)))
+      ((f a) s2))))
+
+; Store: (s -> a, s)
+(define (store-extract st) ((car st) (cadr st)))
+(define (store-extend g st)
+  (list (lambda (p) (g (list (car st) p))) (cadr st)))
+
+; Same adjunction, dual operations
+(display "State return 42, run at s=0: ")
+(display ((state-return 42) 0)) (newline)
+; (42 . 0) — value injected, state unchanged
+
+(display "Store extract (x->x*x, 5): ")
+(display (store-extract (list (lambda (x) (* x x)) 5)))
+; 25 — value extracted from focus
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">extract :: w a &rarr; a</td><td class="pr-4 text-green-300">(s-extract s) / (store-extract st)</td><td class="font-sans">Pull the focused value out</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">duplicate :: w a &rarr; w (w a)</td><td class="pr-4 text-green-300">(s-duplicate s) / (store-duplicate st)</td><td class="font-sans">Shift focus to every position</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">extend :: (w a &rarr; b) &rarr; w a &rarr; w b</td><td class="pr-4 text-green-300">(s-extend f s) / (store-extend g st)</td><td class="font-sans">Apply co-Kleisli arrow everywhere</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Store s a = (s &rarr; a, s)</td><td class="pr-4 text-green-300">(make-store f pos)</td><td class="font-sans">Lookup function + current position</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Stream a = Cons a (Stream a)</td><td class="pr-4 text-green-300">(make-stream head tail-thunk)</td><td class="font-sans">Infinite stream focused on head</td></tr>
+          <tr><td class="py-2 pr-4">w a &rarr; b</td><td class="pr-4 text-green-300">(lambda (st) ...)</td><td class="font-sans">Co-Kleisli arrow</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> — Adjunctions (comonads arise from adjunctions composed as L&#8728;R)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — parametrised optics use comonadic contexts</li>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — open games have a coplay channel (comonadic feedback)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Comonad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Comonad</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cellular_automaton"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cellular automaton</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Conway's Game of Life</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post defines the Comonad typeclass in Haskell with <code>extract</code>, <code>duplicate</code>, and <code>extend</code>, where <code>duplicate</code> and <code>extend</code> have default implementations in terms of each other. This page implements both explicitly for clarity. The Stream comonad uses thunks for laziness, since Scheme is strict. The Store comonad is represented as a two-element list <code>(f pos)</code> rather than a Haskell data type. The blog post discusses Conway's Game of Life as the motivating example for a 2D Store comonad. This page uses Rule 90 (a 1D elementary cellular automaton) to keep the code short while preserving the core insight: a cellular automaton rule is a co-Kleisli arrow, and one generation is one call to <code>extend</code>. The lens connection (a coalgebra <code>a &rarr; Store s a</code> is a getter-setter pair) is mentioned in the blog post but omitted here.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/01/02/comonads/">Read the blog post</a>. Start with the Stream comonad, then see how Store models a spreadsheet.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-17/", label: "Monads" }} next={{ href: "/reading/category-theory/milewski-19/", label: "F-Algebras" }} />
+
+  </main>
+</Layout>

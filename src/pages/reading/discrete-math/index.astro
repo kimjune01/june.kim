@@ -1,0 +1,61 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Discrete Mathematics" favicon="🔢">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🔢 Discrete Mathematics</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://discrete.openmathbooks.org/">Oscar Levin's <em>Discrete Mathematics: An Open Introduction</em></a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">Counting, sequences, logic, and graphs. The toolkit that sits underneath algorithms, combinatorics, and formal verification.</p>
+
+    <!-- SVG: A small graph with 5 nodes and edges -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Edges -->
+        <line x1="150" y1="30" x2="60" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="150" y1="30" x2="240" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="60" y1="90" x2="100" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="240" y1="90" x2="200" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="100" y1="170" x2="200" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="60" y1="90" x2="240" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Nodes -->
+        <circle cx="150" cy="30" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="150" y="35" text-anchor="middle" fill="#60a5fa" font-size="13">a</text>
+        <circle cx="60" cy="90" r="14" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="95" text-anchor="middle" fill="#f59e0b" font-size="13">b</text>
+        <circle cx="240" cy="90" r="14" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="240" y="95" text-anchor="middle" fill="#34d399" font-size="13">c</text>
+        <circle cx="100" cy="170" r="14" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="100" y="175" text-anchor="middle" fill="#f472b6" font-size="13">d</text>
+        <circle cx="200" cy="170" r="14" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="175" text-anchor="middle" fill="#a78bfa" font-size="13">e</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/discrete-math/levin-01/", title: "Counting", desc: "Additive and multiplicative principles, binomial coefficients, stars and bars, inclusion-exclusion" },
+  { href: "/reading/discrete-math/levin-02/", title: "Sequences", desc: "Arithmetic and geometric sequences, recurrence relations, and proof by induction" },
+  { href: "/reading/discrete-math/levin-03/", title: "Symbolic Logic", desc: "Propositional connectives, predicates, quantifiers, and the structure of proofs" },
+  { href: "/reading/discrete-math/levin-04/", title: "Graph Theory", desc: "Graphs, trees, planarity, coloring, and Euler/Hamilton paths" },
+  { href: "/reading/discrete-math/levin-05/", title: "Additional Topics", desc: "Matching, Ramsey theory, and generating functions" }
+]} icon="🔢" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/">MIT 6.042J Mathematics for Computer Science</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/">🔑 Logic</a> &mdash; symbolic logic is one of the five chapters</li>
+      <li><a href="/reading/proof-writing/">✎ Proofs</a> &mdash; induction and set theory appear in both</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; graph theory connects directly to graph algorithms</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> &mdash; number theory and modular arithmetic underlie most crypto</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

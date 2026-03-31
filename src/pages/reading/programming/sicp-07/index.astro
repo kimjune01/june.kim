@@ -1,0 +1,384 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.7 — Multiple Representations" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Multiple Representations</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-17.html#%_sec_2.4">SICP §2.4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The same abstract data can have <strong>multiple concrete representations</strong>. Tagged data and dispatch tables let representations coexist without knowing about each other. This is the birth of extensibility: adding a new representation requires no changes to existing code.</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 185" class="w-full max-w-sm mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- grid lines -->
+      <line x1="95" y1="10" x2="95" y2="135" stroke="#888" stroke-width="0.8"/>
+      <line x1="185" y1="10" x2="185" y2="135" stroke="#888" stroke-width="0.8"/>
+      <line x1="30" y1="35" x2="270" y2="35" stroke="#888" stroke-width="0.8"/>
+      <line x1="30" y1="80" x2="270" y2="80" stroke="#888" stroke-width="0.8"/>
+      <line x1="30" y1="135" x2="270" y2="135" stroke="#888" stroke-width="0.8"/>
+      <!-- column headers -->
+      <text x="140" y="25" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="600">rectangular</text>
+      <text x="228" y="25" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">polar</text>
+      <!-- row headers -->
+      <text x="62" y="60" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">real-part</text>
+      <text x="62" y="112" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="600">magnitude</text>
+      <!-- cell contents: small function symbols -->
+      <text x="140" y="62" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12">car z</text>
+      <text x="228" y="62" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12">r cos &theta;</text>
+      <text x="140" y="114" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12">&radic;(x&sup2;+y&sup2;)</text>
+      <text x="228" y="114" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12">car z</text>
+      <!-- caption -->
+      <text x="140" y="158" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">dispatch table: operations &times; types</text>
+      <text x="140" y="171" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">&rarr; implementations</text>
+    </svg>
+
+    <!-- 1. Representations for complex numbers -->
+    <h3>Representations for complex numbers</h3>
+    <p>A complex number can be stored as rectangular (real, imaginary) or polar (magnitude, angle). Both are valid. The operations <code>real-part</code>, <code>imag-part</code>, <code>magnitude</code>, <code>angle</code> define the abstract interface. Two teams can implement independently.</p>
+
+    <SchemeRepl client:load initialCode={`; Two representations of complex numbers
+; Rectangular: (real-part, imag-part) stored directly
+(define (make-from-real-imag-rect x y) (cons x y))
+(define (real-part-rect z) (car z))
+(define (imag-part-rect z) (cdr z))
+(define (magnitude-rect z)
+  (sqrt (+ (* (real-part-rect z) (real-part-rect z))
+           (* (imag-part-rect z) (imag-part-rect z)))))
+
+; Polar: (magnitude, angle) stored directly
+(define (make-from-mag-ang-polar r a) (cons r a))
+(define (magnitude-polar z) (car z))
+(define (angle-polar z) (cdr z))
+(define (real-part-polar z) (* (magnitude-polar z) (cos (angle-polar z))))
+(define (imag-part-polar z) (* (magnitude-polar z) (sin (angle-polar z))))
+
+; Same number, two representations
+(define z-rect (make-from-real-imag-rect 3 4))
+(define z-polar (make-from-mag-ang-polar 5 0.9272952))
+
+(display "Rectangular: real=")
+(display (real-part-rect z-rect))
+(display " imag=") (display (imag-part-rect z-rect))
+(display " mag=") (display (magnitude-rect z-rect)) (newline)
+
+(display "Polar:       real=")
+(display (real-part-polar z-polar))
+(display " imag=") (display (imag-part-polar z-polar))
+(display " mag=") (display (magnitude-polar z-polar))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Rectangular representation
+class Rectangular:
+    def __init__(self, x, y): self.x, self.y = x, y
+    @property
+    def real_part(self): return self.x
+    @property
+    def imag_part(self): return self.y
+    @property
+    def magnitude(self): return math.sqrt(self.x**2 + self.y**2)
+
+# Polar representation
+class Polar:
+    def __init__(self, r, a): self.r, self.a = r, a
+    @property
+    def real_part(self): return self.r * math.cos(self.a)
+    @property
+    def imag_part(self): return self.r * math.sin(self.a)
+    @property
+    def magnitude(self): return self.r
+
+z_rect = Rectangular(3, 4)
+z_polar = Polar(5, 0.9272952)
+
+print("Rectangular: real=" + str(z_rect.real_part) + " imag=" + str(z_rect.imag_part) + " mag=" + str(z_rect.magnitude))
+print("Polar:       real=" + format(z_polar.real_part, '.6f') + " imag=" + format(z_polar.imag_part, '.6f') + " mag=" + str(z_polar.magnitude))
+`} />
+    </div>
+
+    <!-- 2. Tagged data -->
+    <h3>Tagged data</h3>
+    <p>Problem: both representations are just pairs. How does a generic operation know which one it's looking at? Answer: attach a type tag. <code>(attach-tag 'rectangular (cons 3 4))</code> produces <code>(rectangular 3 . 4)</code>. The generic operations dispatch on the tag.</p>
+
+    <SchemeRepl client:load initialCode={`; Tagged data: attach a type symbol to each datum
+(define (attach-tag type-tag contents)
+  (cons type-tag contents))
+(define (type-tag datum) (car datum))
+(define (contents datum) (cdr datum))
+
+; Tagged constructors
+(define (make-rect x y) (attach-tag 'rectangular (cons x y)))
+(define (make-polar r a) (attach-tag 'polar (cons r a)))
+
+; Generic selectors — dispatch on tag
+(define (real-part z)
+  (cond ((eq? (type-tag z) 'rectangular) (car (contents z)))
+        ((eq? (type-tag z) 'polar)
+         (* (car (contents z)) (cos (cdr (contents z)))))))
+
+(define (magnitude z)
+  (cond ((eq? (type-tag z) 'rectangular)
+         (sqrt (+ (* (car (contents z)) (car (contents z)))
+                  (* (cdr (contents z)) (cdr (contents z))))))
+        ((eq? (type-tag z) 'polar) (car (contents z)))))
+
+(define z1 (make-rect 3 4))
+(define z2 (make-polar 5 0.9272952))
+
+(display "z1 tag: ") (display (type-tag z1)) (newline)
+(display "z2 tag: ") (display (type-tag z2)) (newline)
+(display "z1 real-part: ") (display (real-part z1)) (newline)
+(display "z2 real-part: ") (display (real-part z2)) (newline)
+(display "z1 magnitude: ") (display (magnitude z1)) (newline)
+(display "z2 magnitude: ") (display (magnitude z2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Tagged data: dict with a 'type' key
+def make_rect(x, y):
+    return dict(type='rectangular', x=x, y=y)
+
+def make_polar(r, a):
+    return dict(type='polar', r=r, a=a)
+
+# Generic dispatch on tag
+def real_part(z):
+    if z.get('type') == 'rectangular': return z.get('x')
+    if z.get('type') == 'polar': return z.get('r') * math.cos(z.get('a'))
+
+def magnitude(z):
+    if z.get('type') == 'rectangular':
+        return math.sqrt(z.get('x')**2 + z.get('y')**2)
+    if z.get('type') == 'polar': return z.get('r')
+
+z1, z2 = make_rect(3, 4), make_polar(5, 0.9272952)
+tag1, tag2 = z1.get('type'), z2.get('type')
+rp1, rp2 = real_part(z1), real_part(z2)
+m1, m2 = magnitude(z1), magnitude(z2)
+print("z1 tag: " + tag1)
+print("z2 tag: " + tag2)
+print("z1 real_part: " + str(rp1))
+print("z2 real_part: " + format(rp2, '.6f'))
+print("z1 magnitude: " + str(m1))
+print("z2 magnitude: " + str(m2))
+`} />
+    </div>
+
+    <!-- 3. Data-directed programming -->
+    <h3>Data-directed programming</h3>
+    <p>The conditional dispatch above doesn't scale: adding a new representation means editing every generic operation. Data-directed programming uses a two-dimensional table indexed by (operation, type). Each representation installs its own procedures. The generic operation just looks up the table.</p>
+
+    <SchemeRepl client:load initialCode={`; Data-directed programming: a dispatch table
+; Simulated with an association list of ((op type) . proc)
+
+(define table '())
+
+(define (put op type proc)
+  (set! table (cons (list op type proc) table)))
+
+(define (get op type)
+  (define (lookup entries)
+    (cond ((null? entries) #f)
+          ((and (eq? (car (car entries)) op)
+                (eq? (cadr (car entries)) type))
+           (caddr (car entries)))
+          (else (lookup (cdr entries)))))
+  (lookup table))
+
+; Install rectangular package
+(put 'real-part 'rectangular (lambda (z) (car z)))
+(put 'imag-part 'rectangular (lambda (z) (cdr z)))
+(put 'magnitude 'rectangular
+  (lambda (z) (sqrt (+ (* (car z) (car z))
+                       (* (cdr z) (cdr z))))))
+
+; Install polar package
+(put 'real-part 'polar
+  (lambda (z) (* (car z) (cos (cdr z)))))
+(put 'imag-part 'polar
+  (lambda (z) (* (car z) (sin (cdr z)))))
+(put 'magnitude 'polar (lambda (z) (car z)))
+
+; Generic apply
+(define (apply-generic op datum)
+  (let ((proc (get op (car datum))))
+    (if proc
+        (proc (cdr datum))
+        (error "No method" op (car datum)))))
+
+; Use it
+(define z1 (cons 'rectangular (cons 3 4)))
+(define z2 (cons 'polar (cons 5 0.9272952)))
+
+(display "z1 real-part: ") (display (apply-generic 'real-part z1)) (newline)
+(display "z2 real-part: ") (display (apply-generic 'real-part z2)) (newline)
+(display "z1 magnitude: ") (display (apply-generic 'magnitude z1)) (newline)
+(display "z2 magnitude: ") (display (apply-generic 'magnitude z2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Dispatch table: dict of (op, type) -> function
+dispatch = {}
+
+def put(op, typ, fn):
+    dispatch[(op, typ)] = fn
+
+def get(op, typ):
+    return dispatch.get((op, typ))
+
+# Rectangular package
+put('real_part', 'rectangular', lambda z: z.get('x'))
+put('imag_part', 'rectangular', lambda z: z.get('y'))
+put('magnitude', 'rectangular',
+    lambda z: math.sqrt(z.get('x')**2 + z.get('y')**2))
+
+# Polar package
+put('real_part', 'polar', lambda z: z.get('r') * math.cos(z.get('a')))
+put('imag_part', 'polar', lambda z: z.get('r') * math.sin(z.get('a')))
+put('magnitude', 'polar', lambda z: z.get('r'))
+
+def apply_generic(op, datum):
+    fn = get(op, datum.get('type'))
+    return fn(datum) if fn else "No method: " + op
+
+z1 = dict(type='rectangular', x=3, y=4)
+z2 = dict(type='polar', r=5, a=0.9272952)
+
+print("z1 real_part: " + str(apply_generic('real_part', z1)))
+print("z2 real_part: " + format(apply_generic('real_part', z2), '.6f'))
+print("z1 magnitude: " + str(apply_generic('magnitude', z1)))
+print("z2 magnitude: " + str(apply_generic('magnitude', z2)))
+`} />
+    </div>
+
+    <!-- 4. Message passing -->
+    <h3>Message passing</h3>
+    <p>Instead of a central dispatch table, each object carries its own dispatch. You "send a message" (the operation name) to the object, and it returns the right value. This is what object-oriented programming looks like from first principles: an object is a closure that dispatches on a symbol.</p>
+
+    <SchemeRepl client:load initialCode={`; Message passing: the object IS the dispatch
+(define (make-from-real-imag x y)
+  (lambda (op)
+    (cond ((eq? op 'real-part) x)
+          ((eq? op 'imag-part) y)
+          ((eq? op 'magnitude)
+           (sqrt (+ (* x x) (* y y))))
+          ((eq? op 'angle) (atan y x))
+          (else (error "Unknown op" op)))))
+
+(define (make-from-mag-ang r a)
+  (lambda (op)
+    (cond ((eq? op 'magnitude) r)
+          ((eq? op 'angle) a)
+          ((eq? op 'real-part) (* r (cos a)))
+          ((eq? op 'imag-part) (* r (sin a)))
+          (else (error "Unknown op" op)))))
+
+; Generic apply = just call the object with the op
+(define (apply-generic op obj) (obj op))
+
+(define z1 (make-from-real-imag 3 4))
+(define z2 (make-from-mag-ang 5 0.9272952))
+
+(display "z1 real-part: ") (display (apply-generic 'real-part z1)) (newline)
+(display "z1 magnitude: ") (display (apply-generic 'magnitude z1)) (newline)
+(display "z2 real-part: ") (display (apply-generic 'real-part z2)) (newline)
+(display "z2 magnitude: ") (display (apply-generic 'magnitude z2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Message passing: object is a closure/dict
+def make_from_real_imag(x, y):
+    def dispatch(op):
+        if op == 'real_part': return x
+        if op == 'imag_part': return y
+        if op == 'magnitude': return math.sqrt(x**2 + y**2)
+        if op == 'angle': return math.atan2(y, x)
+    return dispatch
+
+def make_from_mag_ang(r, a):
+    def dispatch(op):
+        if op == 'magnitude': return r
+        if op == 'angle': return a
+        if op == 'real_part': return r * math.cos(a)
+        if op == 'imag_part': return r * math.sin(a)
+    return dispatch
+
+z1 = make_from_real_imag(3, 4)
+z2 = make_from_mag_ang(5, 0.9272952)
+
+print("z1 real_part: " + str(z1('real_part')))
+print("z1 magnitude: " + str(z1('magnitude')))
+print("z2 real_part: " + format(z2('real_part'), '.6f'))
+print("z2 magnitude: " + str(z2('magnitude')))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(attach-tag 'type data)</td><td class="pr-4">dict(type=..., ...)</td><td class="font-sans">Tag data with its type</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(type-tag datum)</td><td class="pr-4">datum.get('type')</td><td class="font-sans">Extract the type tag</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(contents datum)</td><td class="pr-4">datum (minus type key)</td><td class="font-sans">Extract the payload</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(put op type proc)</td><td class="pr-4">dispatch[(op, type)] = fn</td><td class="font-sans">Install in dispatch table</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(get op type)</td><td class="pr-4">dispatch.get((op, type))</td><td class="font-sans">Look up dispatch table</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(apply-generic op datum)</td><td class="pr-4">apply_generic(op, datum)</td><td class="font-sans">Dispatch on type tag</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The three dispatch strategies &mdash; explicit conditional, dispatch table, message passing &mdash; correspond directly to patterns in mainstream OOP. Explicit conditionals are <code>isinstance</code> checks. Dispatch tables are the visitor pattern. Message passing is virtual method dispatch. Python classes combine all three: <code>isinstance</code> for ad-hoc checks, <code>__init_subclass__</code> for registry patterns, and regular methods for message passing.</p>
+    <p class="mt-2">SICP's insight is that these are <em>all</em> the same mechanism (dispatch on type) organized differently. Data-directed programming is the most extensible: new types and new operations can be added independently. This is exactly the expression problem that haunts every language design.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">SICP chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-06/">🪄 Chapter 6</a> — Symbolic Data (pattern matching on expression types)</li>
+      <li><a href="/reading/programming/sicp-08/">🪄 Chapter 8</a> — Generic Operations (extending dispatch to arithmetic across types)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Multiple_dispatch"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Multiple dispatch</a> — generalizing single dispatch to multiple arguments</li>
+      <li><a href="https://en.wikipedia.org/wiki/Dynamic_dispatch"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dynamic dispatch</a> — runtime selection of method implementations</li>
+      <li><a href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Polymorphism</a> — the broader concept behind multiple representations</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-17.html#%_sec_2.4">Read SICP &sect;2.4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-06/", label: "Symbolic Data" }} next={{ href: "/reading/programming/sicp-08/", label: "Generic Operations · 8 of 22" }} />
+
+  </main>
+</Layout>

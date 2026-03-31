@@ -1,0 +1,501 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.22 — Compilation" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Compilation</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-35.html#%_sec_5.5">SICP &sect;5.5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A compiler translates Scheme to register machine code ahead of time. The compiled code is faster because decisions made at compile time don&rsquo;t repeat at runtime. The compiler itself is a Scheme program.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 420 110" class="w-full max-w-md" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Box 1: Scheme source -->
+        <rect x="10" y="22" width="95" height="34" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="57" y="36" text-anchor="middle" fill="#60a5fa" font-size="11">Scheme</text>
+        <text x="57" y="49" text-anchor="middle" fill="#60a5fa" font-size="11">source</text>
+
+        <!-- Arrow 1: compile -->
+        <line x1="105" y1="39" x2="148" y2="39" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow22)"/>
+        <text x="126" y="32" text-anchor="middle" fill="#f59e0b" font-size="10">compile</text>
+
+        <!-- Dotted box: compile-time decisions -->
+        <rect x="145" y="5" width="135" height="68" rx="6" fill="none" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="5,4"/>
+        <text x="212" y="18" text-anchor="middle" fill="#a78bfa" font-size="9">compile-time decisions</text>
+
+        <!-- Box 2: register code -->
+        <rect x="155" y="22" width="115" height="34" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1.5"/>
+        <text x="212" y="36" text-anchor="middle" fill="#34d399" font-size="11">register</text>
+        <text x="212" y="49" text-anchor="middle" fill="#34d399" font-size="11">code</text>
+
+        <!-- Arrow 2: execute -->
+        <line x1="270" y1="39" x2="313" y2="39" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow22)"/>
+        <text x="291" y="32" text-anchor="middle" fill="#f59e0b" font-size="10">execute</text>
+
+        <!-- Box 3: result -->
+        <rect x="315" y="22" width="95" height="34" rx="4" fill="#a78bfa" fill-opacity="0.12" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="362" y="44" text-anchor="middle" fill="#a78bfa" font-size="12">result</text>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow22" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="210" y="100" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">the compiler moves decisions from runtime to compile time</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Structure of the compiler -->
+    <h3>Structure of the compiler</h3>
+    <p>The compiler mirrors the evaluator&rsquo;s structure: dispatch on expression type, generate instructions for each case. But instead of <em>executing</em>, it returns a sequence of instructions to be executed later. The instruction sequences carry metadata: which registers they <strong>need</strong> and which they <strong>modify</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Instruction sequences: (needs modifies instructions)
+; The compiler tracks register usage for optimization.
+
+(define (make-instruction-seq needs modifies instructions)
+  (list needs modifies instructions))
+
+(define (registers-needed seq) (car seq))
+(define (registers-modified seq) (cadr seq))
+(define (instructions seq) (caddr seq))
+
+; A self-evaluating expression: needs nothing, modifies val
+(define seq1
+  (make-instruction-seq
+    '()           ; needs no registers
+    '(val)        ; modifies val
+    '((assign val (const 42)))))
+
+(display "needs: ") (display (registers-needed seq1)) (newline)
+(display "modifies: ") (display (registers-modified seq1)) (newline)
+(display "code: ") (display (instructions seq1)) (newline)
+
+; A variable lookup: needs env, modifies val
+(define seq2
+  (make-instruction-seq
+    '(env)
+    '(val)
+    '((assign val (op lookup) (reg env) (const x)))))
+
+(display "needs: ") (display (registers-needed seq2)) (newline)
+(display "modifies: ") (display (registers-modified seq2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Instruction sequences with register metadata
+from dataclasses import dataclass
+
+@dataclass
+class InstructionSeq:
+    needs: list
+    modifies: list
+    instructions: list
+
+# Self-evaluating: needs nothing, modifies val
+seq1 = InstructionSeq(
+    needs=[],
+    modifies=['val'],
+    instructions=[('assign', 'val', ('const', 42))]
+)
+print(f"needs: {seq1.needs}")
+print(f"modifies: {seq1.modifies}")
+print(f"code: {seq1.instructions}")
+
+# Variable lookup: needs env, modifies val
+seq2 = InstructionSeq(
+    needs=['env'],
+    modifies=['val'],
+    instructions=[('assign', 'val', ('op', 'lookup'), ('reg', 'env'), ('const', 'x'))]
+)
+print(f"needs: {seq2.needs}")
+print(f"modifies: {seq2.modifies}")
+`} />
+    </div>
+
+
+    <!-- 2. Compiling expressions -->
+    <h3>Compiling expressions</h3>
+    <p><code>compile</code> dispatches on expression type, just like <code>eval</code>. Each clause returns an instruction sequence. <code>compile-self-evaluating</code> loads a constant into <code>val</code>. <code>compile-variable</code> emits a lookup instruction. The <code>target</code> parameter says which register to put the result in &mdash; not always <code>val</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; compile: dispatch on expression type, return instruction list.
+
+(define (compile exp target)
+  (cond ((number? exp)  (compile-self-eval exp target))
+        ((string? exp)  (compile-self-eval exp target))
+        ((symbol? exp)  (compile-variable exp target))
+        ((pair? exp)
+         (let ((tag (car exp)))
+           (cond ((eq? tag 'quote)  (compile-quoted exp target))
+                 ((eq? tag 'if)     (compile-if exp target))
+                 (else              (compile-application exp target)))))
+        (else (list (list 'error "Unknown expression" exp)))))
+
+(define (compile-self-eval exp target)
+  (list (list 'assign target (list 'const exp))))
+
+(define (compile-variable exp target)
+  (list (list 'assign target (list 'op 'lookup-variable) (list 'const exp))))
+
+(define (compile-quoted exp target)
+  (list (list 'assign target (list 'const (cadr exp)))))
+
+(define (compile-if exp target)
+  (let ((pred (cadr exp))
+        (con  (caddr exp))
+        (alt  (cadddr exp)))
+    (append
+      (compile pred 'val)
+      (list '(test (op false?) (reg val)))
+      (list '(branch (label false-branch)))
+      (compile con target)
+      (list '(goto (label after-if)))
+      (list 'false-branch)
+      (compile alt target)
+      (list 'after-if))))
+
+(define (compile-application exp target) '((todo-application)))
+
+; Compile some expressions
+(display "--- compile 42 ---") (newline)
+(for-each (lambda (inst) (display "  ") (display inst) (newline))
+          (compile 42 'val))
+
+(display "--- compile x ---") (newline)
+(for-each (lambda (inst) (display "  ") (display inst) (newline))
+          (compile 'x 'val))
+
+(display "--- compile (if x 1 2) ---") (newline)
+(for-each (lambda (inst) (display "  ") (display inst) (newline))
+          (compile '(if x 1 2) 'val))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# compile: dispatch on expression type
+def compile_exp(exp, target='val'):
+    if isinstance(exp, (int, float)):
+        return compile_self_eval(exp, target)
+    if isinstance(exp, str) and not exp.startswith('('):
+        return compile_variable(exp, target)
+    if isinstance(exp, list):
+        tag = exp[0]
+        if tag == 'quote':
+            return [('assign', target, ('const', exp[1]))]
+        if tag == 'if':
+            return compile_if(exp, target)
+        return [('todo-application',)]
+    return [('error', 'unknown', exp)]
+
+def compile_self_eval(exp, target):
+    return [('assign', target, ('const', exp))]
+
+def compile_variable(exp, target):
+    return [('assign', target, ('op', 'lookup'), ('const', exp))]
+
+def compile_if(exp, target):
+    _, pred, con, alt = exp
+    code = compile_exp(pred, 'val')
+    code += [('test', ('op', 'false?'), ('reg', 'val'))]
+    code += [('branch', ('label', 'false-branch'))]
+    code += compile_exp(con, target)
+    code += [('goto', ('label', 'after-if'))]
+    code += ['false-branch']
+    code += compile_exp(alt, target)
+    code += ['after-if']
+    return code
+
+print("--- compile 42 ---")
+for inst in compile_exp(42):
+    print(f"  {inst}")
+
+print("--- compile 'x' ---")
+for inst in compile_exp('x'):
+    print(f"  {inst}")
+
+print("--- compile (if x 1 2) ---")
+for inst in compile_exp(['if', 'x', 1, 2]):
+    print(f"  {inst}")
+`} />
+    </div>
+
+
+    <!-- 3. Compiling combinations -->
+    <h3>Compiling combinations</h3>
+    <p>Compiling <code>(f a b)</code> means: compile the operator, compile each operand, then emit an <code>apply</code>. The compiler can see at compile time how many arguments there are and whether saves are needed &mdash; the evaluator figures this out fresh every time. This is where compilation wins.</p>
+
+    <SchemeRepl client:load initialCode={`; Compiling (f a b): operator + operands + apply.
+; The compiler decides at compile time what to save.
+
+(define (compile-application exp target)
+  (let ((operator (car exp))
+        (operands (cdr exp)))
+    (append
+      ; 1. Compile operator -> proc register
+      (compile-expr operator 'proc)
+      ; 2. Save proc if operands might clobber it
+      (if (not (null? operands))
+          '((save proc))
+          '())
+      ; 3. Compile each operand, building argl
+      (compile-operand-loop operands)
+      ; 4. Restore proc and apply
+      (if (not (null? operands))
+          '((restore proc))
+          '())
+      (list (list 'assign target '(op apply) '(reg proc) '(reg argl))))))
+
+(define (compile-expr exp target)
+  (cond ((number? exp) (list (list 'assign target (list 'const exp))))
+        ((symbol? exp) (list (list 'assign target (list 'op 'lookup) (list 'const exp))))
+        (else (list (list 'assign target (list 'compile exp))))))
+
+(define (compile-operand-loop operands)
+  (if (null? operands)
+      '((assign argl (const ())))
+      (let ((first (car operands))
+            (rest (cdr operands)))
+        (append
+          '((assign argl (const ())))
+          (compile-expr first 'val)
+          '((assign argl (op adjoin-arg) (reg val) (reg argl)))
+          (if (null? rest) '()
+              (append
+                (compile-expr (cadr operands) 'val)
+                '((assign argl (op adjoin-arg) (reg val) (reg argl)))))))))
+
+; Compile (+ 3 7)
+(display "--- compile (+ 3 7) ---") (newline)
+(for-each (lambda (inst) (display "  ") (display inst) (newline))
+          (compile-application '(+ 3 7) 'val))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compiling function application (f a b)
+def compile_application(exp, target='val'):
+    operator = exp[0]
+    operands = exp[1:]
+    code = []
+
+    # 1. Compile operator
+    code += compile_simple(operator, 'proc')
+
+    # 2. Save proc if needed
+    if operands:
+        code.append(('save', 'proc'))
+
+    # 3. Compile operands
+    code.append(('assign', 'argl', ('const', [])))
+    for operand in operands:
+        code += compile_simple(operand, 'val')
+        code.append(('assign', 'argl', ('op', 'adjoin-arg'), ('reg', 'val'), ('reg', 'argl')))
+
+    # 4. Restore and apply
+    if operands:
+        code.append(('restore', 'proc'))
+    code.append(('assign', target, ('op', 'apply'), ('reg', 'proc'), ('reg', 'argl')))
+    return code
+
+def compile_simple(exp, target):
+    if isinstance(exp, (int, float)):
+        return [('assign', target, ('const', exp))]
+    return [('assign', target, ('op', 'lookup'), ('const', exp))]
+
+print("--- compile (+ 3 7) ---")
+for inst in compile_application(['+', 3, 7]):
+    print(f"  {inst}")
+`} />
+    </div>
+
+
+    <!-- 4. Lexical addressing -->
+    <h3>Lexical addressing</h3>
+    <p>The compiler knows the structure of the environment at compile time. Instead of searching by name at runtime, it can emit a <strong>lexical address</strong>: (frame-number, offset). Frame 0 is the current frame, frame 1 is the enclosing one. This replaces a linear search with a direct index.</p>
+
+    <SchemeRepl client:load initialCode={`; Lexical addressing: compile-time variable resolution.
+; A variable's position is (frame-number . offset).
+
+(define (find-variable var compile-env)
+  (define (scan-frame frame offset)
+    (cond ((null? frame) #f)
+          ((eq? (car frame) var) offset)
+          (else (scan-frame (cdr frame) (+ offset 1)))))
+  (define (scan-env env depth)
+    (if (null? env)
+        (cons 'global var)  ; not found lexically
+        (let ((offset (scan-frame (car env) 0)))
+          (if offset
+              (cons depth offset)
+              (scan-env (cdr env) (+ depth 1))))))
+  (scan-env compile-env 0))
+
+; Compile-time environment: list of frames, each a list of variable names
+(define cenv '((x y)        ; frame 0: current lambda
+               (a b c)      ; frame 1: enclosing lambda
+               (top)))      ; frame 2: top-level
+
+(display "x -> ") (display (find-variable 'x cenv)) (newline)
+(display "y -> ") (display (find-variable 'y cenv)) (newline)
+(display "b -> ") (display (find-variable 'b cenv)) (newline)
+(display "top -> ") (display (find-variable 'top cenv)) (newline)
+(display "z -> ") (display (find-variable 'z cenv))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lexical addressing: compile-time variable lookup
+def find_variable(var, compile_env):
+    for depth, frame in enumerate(compile_env):
+        if var in frame:
+            return (depth, frame.index(var))
+    return ('global', var)
+
+# Compile-time environment
+cenv = [
+    ['x', 'y'],       # frame 0: current lambda
+    ['a', 'b', 'c'],  # frame 1: enclosing lambda
+    ['top'],           # frame 2: top-level
+]
+
+print(f"x -> {find_variable('x', cenv)}")
+print(f"y -> {find_variable('y', cenv)}")
+print(f"b -> {find_variable('b', cenv)}")
+print(f"top -> {find_variable('top', cenv)}")
+print(f"z -> {find_variable('z', cenv)}")
+`} />
+    </div>
+
+
+    <!-- 5. Interfacing compiled and interpreted code -->
+    <h3>Interfacing compiled code with the evaluator</h3>
+    <p>Compiled code and interpreted code must interoperate. The compiler produces register machine instructions that use the same register conventions as the explicit-control evaluator. A compiled procedure can call an interpreted one and vice versa. The entry point protocol &mdash; arguments in <code>argl</code>, result in <code>val</code> &mdash; is the interface contract.</p>
+
+    <SchemeRepl client:load initialCode={`; Compiled vs interpreted: same calling convention.
+; Both put arguments in argl, result in val.
+
+(define val 0)
+(define argl '())
+(define proc #f)
+
+; "Compiled" factorial — just a Scheme procedure
+; but using the register-machine calling convention
+(define (compiled-fact n)
+  (if (= n 0) 1 (* n (compiled-fact (- n 1)))))
+
+; "Interpreted" double — simulating the eval dispatch
+(define (interpreted-double x)
+  ; The evaluator would: look up 'double, eval args, apply
+  (* 2 x))
+
+; Interface: compiled calls interpreted
+(display "compiled fact(5) = ")
+(display (compiled-fact 5)) (newline)
+
+(display "interpreted double(21) = ")
+(display (interpreted-double 21)) (newline)
+
+; Mixed: compile a procedure that uses an interpreted helper
+(define (compiled-fact-double n)
+  (interpreted-double (compiled-fact n)))
+
+(display "compiled-fact-double(5) = ")
+(display (compiled-fact-double 5)) (newline)
+(display "compiled-fact-double(6) = ")
+(display (compiled-fact-double 6)) (newline)
+
+; The calling convention makes this seamless:
+; argl carries arguments, val carries results,
+; whether the callee was compiled or interpreted.
+(display "Interface: same registers, different execution paths")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compiled vs interpreted: same calling convention
+# In Python, both are just functions — the distinction is at the bytecode level
+
+def compiled_fact(n):
+    """Ahead-of-time compiled"""
+    return 1 if n == 0 else n * compiled_fact(n - 1)
+
+def interpreted_double(x):
+    """Interpreted via eval dispatch"""
+    return 2 * x
+
+print(f"compiled fact(5) = {compiled_fact(5)}")
+print(f"interpreted double(21) = {interpreted_double(21)}")
+
+# Mixed calls work because the calling convention is the same
+def compiled_fact_double(n):
+    return interpreted_double(compiled_fact(n))
+
+print(f"compiled_fact_double(5) = {compiled_fact_double(5)}")
+print(f"compiled_fact_double(6) = {compiled_fact_double(6)}")
+print("Interface: same calling convention, different execution")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme / SICP</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(compile exp target linkage)</td><td class="pr-4 text-blue-300">compile(ast) &rarr; bytecode</td><td class="font-sans">Translate expression to instructions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">target register</td><td class="pr-4 text-blue-300">destination variable</td><td class="font-sans">Where to put the result</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">linkage (next / return / goto)</td><td class="pr-4 text-blue-300">fall-through / return / jump</td><td class="font-sans">What to do after this code</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">lexical address (d . o)</td><td class="pr-4 text-blue-300">LOAD_FAST / LOAD_DEREF</td><td class="font-sans">Compile-time variable position</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">preserving</td><td class="pr-4 text-blue-300">register allocation</td><td class="font-sans">Save only if needed (optimization)</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">compiled-apply / interp-apply</td><td class="pr-4 text-blue-300">CALL_FUNCTION</td><td class="font-sans">Unified calling convention</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The SICP compiler targets the register machine from Ch.19. CPython&rsquo;s compiler targets the CPython VM bytecode. The structural parallel is exact: <code>compile_self_evaluating</code> emits <code>LOAD_CONST</code>, <code>compile_variable</code> emits <code>LOAD_NAME</code> or <code>LOAD_FAST</code>, <code>compile_application</code> emits <code>CALL_FUNCTION</code>. Lexical addressing in SICP is what CPython does with <code>LOAD_FAST</code> (local variables at known offsets). The <code>preserving</code> combinator &mdash; only save registers that the next sequence actually needs &mdash; is the simplest form of register allocation.</p>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-14/">SICP Ch.14</a> &mdash; the metacircular evaluator (source language)</li>
+      <li><a href="/reading/programming/sicp-21/">SICP Ch.21</a> &mdash; the explicit-control evaluator (target machine)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Compiler"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Compiler</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Just-in-time_compilation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Just-in-time compilation</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book.html">Read the full SICP text</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-21/", label: "Explicit-Control Evaluator" }} fin="fin · 22 of 22" />
+
+  </main>
+</Layout>

@@ -1,0 +1,136 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.9 — Gossip Protocols" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Gossip Protocols</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Gossip_protocol"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gossip protocol</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Gossip protocols</strong> spread information like an epidemic. Each node periodically picks a random peer and exchanges state. After O(log N) rounds, all N nodes have the information. No central coordinator, no single point of failure, and remarkably robust to node failures. The tradeoff: eventual consistency only, and bandwidth overhead from redundant messages.</p>
+    </div>
+
+    <!-- 1. Epidemic dissemination -->
+    <h3>Epidemic dissemination</h3>
+    <p>A node with new information "infects" a random peer each round. That peer infects another. The number of informed nodes doubles each round (approximately). After log2(N) rounds, everyone knows. Three styles: <strong>push</strong> (I send you my data), <strong>pull</strong> (I ask you for your data), <strong>push-pull</strong> (we exchange). Push-pull converges fastest.</p>
+
+    <!-- SVG: gossip spreading through a network over 4 time steps -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 120" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Round 0: 1 informed -->
+        <text x="55" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">t=0</text>
+        <circle cx="40" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="70" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="40" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="70" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="55" cy="105" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Round 1: 2 informed -->
+        <text x="165" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">t=1</text>
+        <circle cx="150" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="180" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="150" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="180" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="165" cy="105" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="148" y1="50" x2="172" y2="50" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Round 2: 4 informed -->
+        <text x="275" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">t=2</text>
+        <circle cx="260" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="290" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="260" cy="80" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="290" cy="80" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="275" cy="105" r="8" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Round 3: all informed -->
+        <text x="385" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">t=3</text>
+        <circle cx="370" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="400" cy="50" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="370" cy="80" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="400" cy="80" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <circle cx="385" cy="105" r="8" fill="#34d399" fill-opacity="0.6"/>
+        <!-- Arrows between rounds -->
+        <text x="110" y="70" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">&rarr;</text>
+        <text x="220" y="70" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">&rarr;</text>
+        <text x="330" y="70" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">&rarr;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Gossip simulation: each informed node infects one random peer.
+; Track how many rounds to reach all N nodes.
+
+(define N 16)
+
+(define (gossip-rounds n)
+  ; Approximate: each round, each informed node infects one new node
+  ; Informed doubles each round (roughly)
+  (let loop ((informed 1) (round 0))
+    (if (>= informed n)
+        (begin
+          (display "N=") (display n)
+          (display ", rounds=") (display round) (newline))
+        (loop (min n (* informed 2)) (+ round 1)))))
+
+(gossip-rounds 4)
+(gossip-rounds 8)
+(gossip-rounds 16)
+(gossip-rounds 64)
+(gossip-rounds 1024)
+(gossip-rounds 1000000)
+; O(log N) rounds to inform everyone
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gossip convergence time
+import math
+
+for n in [4, 8, 16, 64, 1024, 1_000_000]:
+    rounds = math.ceil(math.log2(n))
+    print(f"N={n:>10}, rounds to converge: {rounds}")
+`} />
+    </div>
+
+    <!-- 2. Failure detection -->
+    <h3>Failure detection with gossip</h3>
+    <p>Gossip can detect failures. Each node maintains a heartbeat counter that increments periodically. Nodes gossip heartbeats. If a node's heartbeat has not increased for long enough, it is suspected dead. The <strong>phi-accrual</strong> failure detector outputs a suspicion level (phi) rather than a binary dead/alive. Higher phi means more likely dead. This avoids premature declarations from temporary slowdowns.</p>
+
+    <SchemeRepl client:load initialCode={`; Phi-accrual failure detector (simplified).
+; phi = -log10(probability that heartbeat is just late).
+; Higher phi = more suspicious.
+
+(define (phi time-since-last-heartbeat mean-interval)
+  ; Simplified: exponential distribution assumption
+  ; P(late by t) = e^(-t/mean)
+  ; phi = -log10(P) = t / (mean * ln(10))
+  (/ time-since-last-heartbeat (* mean-interval 2.302585)))
+
+(define mean-hb 1.0)  ; average 1 second between heartbeats
+
+(display "Time since last HB | phi") (newline)
+(display "---") (newline)
+(let loop ((t 1))
+  (if (> t 10) #t
+      (begin
+        (display t) (display "s              | ")
+        (display (phi t mean-hb)) (newline)
+        (loop (+ t 1)))))
+; phi > 8 is typically "considered dead"
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-11/">&#x1F3B0; Probability Ch.11</a> — Markov chains: gossip spreading is a random process on a graph</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-08/", label: "Distributed Transactions" }} next={{ href: "/reading/distributed-systems/dist-10/", label: "CRDTs" }} />
+
+  </main>
+</Layout>

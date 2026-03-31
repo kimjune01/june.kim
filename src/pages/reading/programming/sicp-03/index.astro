@@ -1,0 +1,432 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.3 — Higher-Order Functions" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Higher-Order Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-12.html#%_sec_1.3">SICP &sect;1.3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Functions that take functions as arguments or return functions as values. This is the mechanism of <strong>abstraction</strong> &mdash; patterns become parameters.</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 120" class="w-full max-w-sm mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- boxes -->
+      <rect x="30" y="35" width="60" height="40" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="60" y="59" text-anchor="middle" fill="#60a5fa" font-size="16" font-weight="600">f</text>
+      <rect x="140" y="35" width="60" height="40" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="170" y="59" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="600">g</text>
+      <rect x="250" y="35" width="60" height="40" rx="4" fill="none" stroke="#34d399" stroke-width="1.5"/>
+      <text x="280" y="59" text-anchor="middle" fill="#34d399" font-size="16" font-weight="600">h</text>
+      <!-- arrows between boxes -->
+      <line x1="90" y1="55" x2="138" y2="55" stroke="#888" stroke-width="1.2" marker-end="url(#sicp03-arrow)"/>
+      <line x1="200" y1="55" x2="248" y2="55" stroke="#888" stroke-width="1.2" marker-end="url(#sicp03-arrow)"/>
+      <!-- input/output labels -->
+      <text x="10" y="59" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">in</text>
+      <line x1="18" y1="55" x2="28" y2="55" stroke="#888" stroke-width="1.2" marker-end="url(#sicp03-arrow)"/>
+      <text x="330" y="59" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">out</text>
+      <line x1="310" y1="55" x2="322" y2="55" stroke="#888" stroke-width="1.2" marker-end="url(#sicp03-arrow)"/>
+      <!-- compose arc -->
+      <path d="M18,35 Q18,8 170,8 Q322,8 322,35" fill="none" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="5,3"/>
+      <text x="170" y="20" text-anchor="middle" fill="#a78bfa" font-size="11" font-style="italic">compose</text>
+      <!-- caption -->
+      <text x="170" y="100" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">functions that take and return functions</text>
+      <text x="170" y="113" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">abstraction over patterns</text>
+      <defs><marker id="sicp03-arrow" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#888"/></marker></defs>
+    </svg>
+
+    <!-- 1. Procedures as arguments -->
+    <h3>Procedures as arguments &mdash; summation</h3>
+    <p>Three procedures &mdash; sum of integers, sum of cubes, sum of the pi series &mdash; share the same structure. The only difference is which function to apply and which term comes next. Extract the pattern: <code>sum</code> takes <code>term</code> and <code>next</code> as arguments.</p>
+
+    <SchemeRepl client:load initialCode={`; Summation as a higher-order procedure.
+; sum(term, a, next, b) = term(a) + term(a+1) + ... + term(b)
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a) (sum term (next a) next b))))
+
+(define (inc n) (+ n 1))
+(define (identity x) x)
+(define (cube x) (* x x x))
+
+; Sum of integers 1..10
+(display "sum(1..10) = ")
+(display (sum identity 1 inc 10)) (newline)
+
+; Sum of cubes 1..5
+(display "sum(1^3..5^3) = ")
+(display (sum cube 1 inc 5)) (newline)
+
+; Pi/8 series: 1/(1*3) + 1/(5*7) + 1/(9*11) + ...
+(define (pi-term x) (/ 1.0 (* x (+ x 2))))
+(define (pi-next x) (+ x 4))
+(display "pi approx = ")
+(display (* 8 (sum pi-term 1 pi-next 1000)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Summation as a higher-order function
+def summation(term, a, nxt, b):
+    total = 0
+    while a <= b:
+        total += term(a)
+        a = nxt(a)
+    return total
+
+inc = lambda n: n + 1
+identity = lambda x: x
+cube = lambda x: x ** 3
+
+print(f"sum(1..10)    = {summation(identity, 1, inc, 10)}")
+print(f"sum(1^3..5^3) = {summation(cube, 1, inc, 5)}")
+
+pi_term = lambda x: 1.0 / (x * (x + 2))
+pi_next = lambda x: x + 4
+print(f"pi approx     = {8 * summation(pi_term, 1, pi_next, 1000):.6f}")
+`} />
+    </div>
+
+
+    <!-- 2. Lambda -->
+    <h3>Lambda &mdash; anonymous procedures</h3>
+    <p>Sometimes naming a procedure is overkill. <code>lambda</code> creates a procedure without binding it to a name. It's the same mechanism as <code>define</code> &mdash; just without the name.</p>
+
+    <SchemeRepl client:load initialCode={`; Lambda: anonymous procedures.
+; (lambda (params) body)
+
+; Instead of (define (square x) (* x x)):
+(display "lambda square: ")
+(display ((lambda (x) (* x x)) 5)) (newline)
+
+; Use lambdas directly in higher-order calls:
+(define (sum term a next b)
+  (if (> a b) 0
+      (+ (term a) (sum term (next a) next b))))
+
+; Sum of squares, no need to define square separately:
+(display "sum of squares 1..5 = ")
+(display (sum (lambda (x) (* x x))
+              1
+              (lambda (x) (+ x 1))
+              5))
+; 1 + 4 + 9 + 16 + 25 = 55
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lambda in Python
+print(f"lambda square: {(lambda x: x * x)(5)}")
+
+def summation(term, a, nxt, b):
+    total = 0
+    while a <= b:
+        total += term(a)
+        a = nxt(a)
+    return total
+
+result = summation(lambda x: x * x, 1, lambda x: x + 1, 5)
+print(f"sum of squares 1..5 = {result}")  # 55
+`} />
+    </div>
+
+
+    <!-- 3. Let -->
+    <h3>Let &mdash; local bindings</h3>
+    <p><code>let</code> creates local variables. It's syntactic sugar for an immediately-applied lambda. The scope is the body of the let expression.</p>
+
+    <SchemeRepl client:load initialCode={`; let is syntactic sugar for ((lambda (vars) body) values)
+
+; f(x, y) = x(1+xy)^2 + y(1-y) + (1+xy)(1-y)
+; with a = 1+xy, b = 1-y:
+
+(define (f x y)
+  (let ((a (+ 1 (* x y)))
+        (b (- 1 y)))
+    (+ (* x (square a))
+       (* y b)
+       (* a b))))
+
+(define (square x) (* x x))
+
+(display "f(1, 2) = ")
+(display (f 1 2)) (newline)
+
+; let is literally: ((lambda (a b) body) (+ 1 (* x y)) (- 1 y))
+; The bindings are evaluated in the enclosing scope,
+; so a and b can't refer to each other.
+
+(display "f(3, 4) = ")
+(display (f 3 4))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Local bindings — Python just uses assignment
+def f(x, y):
+    a = 1 + x * y
+    b = 1 - y
+    return x * a**2 + y * b + a * b
+
+print(f"f(1, 2) = {f(1, 2)}")
+print(f"f(3, 4) = {f(3, 4)}")
+`} />
+    </div>
+
+
+    <!-- 4. Procedures as returned values -->
+    <h3>Procedures as returned values</h3>
+    <p>Functions that return functions are the other half of higher-order programming. <code>average-damp</code> takes a function and returns a smoothed version. This is the building block for Newton's method and fixed-point search.</p>
+
+    <SchemeRepl client:load initialCode={`; Returning procedures: average-damp and compose.
+
+(define (average x y) (/ (+ x y) 2))
+
+; average-damp takes a function, returns a smoothed version
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+
+; Square root via fixed-point of average-damped y -> x/y
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+(define (sqrt x)
+  (fixed-point (average-damp (lambda (y) (/ x y))) 1.0))
+
+(display "sqrt(2) = ") (display (sqrt 2)) (newline)
+(display "sqrt(9) = ") (display (sqrt 9)) (newline)
+
+; compose: (compose f g)(x) = f(g(x))
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+(define (square x) (* x x))
+(define (inc x) (+ x 1))
+(display "(square . inc)(6) = ")
+(display ((compose square inc) 6))
+; (6+1)^2 = 49
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Returning functions: average_damp, fixed_point, compose
+
+def average_damp(f):
+    return lambda x: (x + f(x)) / 2
+
+def fixed_point(f, first_guess, tolerance=1e-5):
+    guess = first_guess
+    while True:
+        nxt = f(guess)
+        if abs(guess - nxt) < tolerance:
+            return nxt
+        guess = nxt
+
+def sqrt(x):
+    return fixed_point(average_damp(lambda y: x / y), 1.0)
+
+print(f"sqrt(2) = {sqrt(2):.6f}")
+print(f"sqrt(9) = {sqrt(9):.6f}")
+
+def compose(f, g):
+    return lambda x: f(g(x))
+
+square = lambda x: x * x
+inc = lambda x: x + 1
+print(f"(square . inc)(6) = {compose(square, inc)(6)}")
+`} />
+    </div>
+
+
+    <!-- 5. Newton's method -->
+    <h3>Newton's method as abstraction</h3>
+    <p>Newton's method finds zeros of a function. Expressed as a fixed-point search on the Newton transform. The whole thing composes from pieces we already have: <code>fixed-point</code>, <code>average-damp</code>, the derivative. Each layer names one idea.</p>
+
+    <!-- SVG: Fixed-point iteration staircase -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="250" x2="300" y2="250" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="250" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="305" y="254" fill="currentColor" font-size="9" fill-opacity="0.4">x</text>
+        <text x="44" y="16" fill="currentColor" font-size="9" fill-opacity="0.4">y</text>
+        <!-- y = x line -->
+        <line x1="40" y1="250" x2="280" y2="10" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="275" y="22" fill="currentColor" font-size="9" fill-opacity="0.3">y = x</text>
+        <!-- y = f(x) curve (a concave-down curve that crosses y=x) -->
+        <path d="M40,200 Q100,30 280,60" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="280" y="52" fill="#60a5fa" font-size="9" fill-opacity="0.7">y = f(x)</text>
+        <!-- Fixed point (intersection) approximately at (175, 175) mapped to pixel coords -->
+        <!-- Using pixel mapping: x=40 is 0, x=280 is 1, y=250 is 0, y=10 is 1 -->
+        <!-- Staircase iteration starting from x0 -->
+        <!-- x0 on x-axis -->
+        <text x="80" y="264" text-anchor="middle" fill="#f59e0b" font-size="9">x&#x2080;</text>
+        <!-- Vertical to curve at x0 -->
+        <line x1="80" y1="250" x2="80" y2="155" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Horizontal to y=x -->
+        <line x1="80" y1="155" x2="135" y2="155" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- x1 label -->
+        <text x="135" y="264" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.6">x&#x2081;</text>
+        <!-- Vertical to curve at x1 -->
+        <line x1="135" y1="155" x2="135" y2="102" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Horizontal to y=x -->
+        <line x1="135" y1="102" x2="188" y2="102" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- x2 label -->
+        <text x="188" y="264" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.6">x&#x2082;</text>
+        <!-- Vertical to curve at x2 -->
+        <line x1="188" y1="102" x2="188" y2="78" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Horizontal to y=x -->
+        <line x1="188" y1="78" x2="222" y2="78" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Vertical to curve at x3 (converging) -->
+        <line x1="222" y1="78" x2="222" y2="68" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="222" y1="68" x2="232" y2="68" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Fixed point marker -->
+        <circle cx="240" cy="62" r="4" fill="#34d399" fill-opacity="0.4" stroke="#34d399" stroke-width="1.5"/>
+        <text x="255" y="58" fill="#34d399" font-size="9">x*</text>
+        <!-- Caption -->
+        <text x="170" y="270" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">fixed-point: iterate f until f(x) = x</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Newton's method: find x where g(x) = 0.
+; Newton transform: x -> x - g(x)/g'(x)
+; Then find the fixed point of the transform.
+
+(define tolerance 0.00001)
+(define dx 0.00001)
+
+(define (fixed-point f first-guess)
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (< (abs (- guess next)) tolerance)
+          next
+          (try next))))
+  (try first-guess))
+
+(define (deriv g)
+  (lambda (x) (/ (- (g (+ x dx)) (g x)) dx)))
+
+(define (newton-transform g)
+  (lambda (x) (- x (/ (g x) ((deriv g) x)))))
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+; sqrt(x) = find y where y^2 - x = 0
+(define (sqrt x)
+  (newtons-method (lambda (y) (- (* y y) x)) 1.0))
+
+(display "sqrt(2) = ") (display (sqrt 2)) (newline)
+(display "sqrt(25) = ") (display (sqrt 25)) (newline)
+
+; Cube root: find y where y^3 - x = 0
+(define (cbrt x)
+  (newtons-method (lambda (y) (- (* y y y) x)) 1.0))
+
+(display "cbrt(8) = ") (display (cbrt 8))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Newton's method in Python
+dx = 1e-5
+
+def fixed_point(f, guess, tol=1e-5):
+    while True:
+        nxt = f(guess)
+        if abs(guess - nxt) < tol:
+            return nxt
+        guess = nxt
+
+def deriv(g):
+    return lambda x: (g(x + dx) - g(x)) / dx
+
+def newton_transform(g):
+    return lambda x: x - g(x) / deriv(g)(x)
+
+def newtons_method(g, guess):
+    return fixed_point(newton_transform(g), guess)
+
+def sqrt(x):
+    return newtons_method(lambda y: y**2 - x, 1.0)
+
+def cbrt(x):
+    return newtons_method(lambda y: y**3 - x, 1.0)
+
+print(f"sqrt(2)  = {sqrt(2):.6f}")
+print(f"sqrt(25) = {sqrt(25):.6f}")
+print(f"cbrt(8)  = {cbrt(8):.6f}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(lambda (x) body)</td><td class="pr-4 text-blue-300">lambda x: body</td><td class="font-sans">Anonymous function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(let ((a v1) (b v2)) body)</td><td class="pr-4 text-blue-300">a = v1; b = v2; body</td><td class="font-sans">Local bindings</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(define (f g) (lambda (x) ...))</td><td class="pr-4 text-blue-300">def f(g): return lambda x: ...</td><td class="font-sans">Return a procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(compose f g)</td><td class="pr-4 text-blue-300">compose(f, g)</td><td class="font-sans">f after g</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(fixed-point f guess)</td><td class="pr-4 text-blue-300">fixed_point(f, guess)</td><td class="font-sans">Find x where f(x) = x</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-01/">Milewski Ch.1</a> &mdash; composition is a higher-order operation on morphisms</li>
+      <li><a href="/reading/programming/sicp-02/">SICP Ch.2 &mdash; Recursion &amp; Iteration</a> &mdash; the processes these functions generate</li>
+      <li><a href="/reading/programming/sicp-04/">SICP Ch.4 &mdash; Data Abstraction</a> &mdash; from procedure abstraction to data abstraction</li>
+    
+      <li><a href="/reading/category-theory/milewski-07/">🐱 Category Theory Ch.7</a> &mdash; functions as arguments are functors in disguise; map is a functor</li>
+      <li><a href="/reading/logic/logic-06/">🔑 Logic Ch.6</a> &mdash; higher-order functions correspond to second-order logic predicates</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Higher-order_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Higher-order function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Fixed-point_combinator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fixed-point combinator</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Newton%27s_method"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Newton's method</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Python's <code>lambda</code> is limited to single expressions; Scheme's <code>lambda</code> takes a full body. For multi-statement procedures-as-values, Python uses <code>def</code> inside <code>def</code>. The <code>let</code> form has no direct Python equivalent &mdash; Python uses sequential assignment, which allows later bindings to reference earlier ones (unlike <code>let</code>, where all bindings are evaluated in the enclosing scope). SICP also introduces <code>let*</code> for sequential binding, which matches Python's behavior more closely.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-12.html#%_sec_1.3">Read SICP &sect;1.3</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-02/", label: "Recursion & Iteration" }} next={{ href: "/reading/programming/sicp-04/", label: "Data Abstraction · 4 of 22" }} />
+
+  </main>
+</Layout>

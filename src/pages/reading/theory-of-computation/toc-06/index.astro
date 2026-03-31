@@ -1,0 +1,150 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.6 — Turing Machines" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Turing Machines</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 6 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>Turing machine</strong> has an infinite tape, a read/write head, and a finite set of states. It can move left or right, write symbols, and loop forever. This is the standard model of general computation. The <strong><a href="https://en.wikipedia.org/wiki/Church%E2%80%93Turing_thesis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Church-Turing thesis</a></strong> says that anything we'd call "computable" can be computed by a Turing machine.</p>
+    </div>
+
+    <!-- Definition -->
+    <h3>Definition</h3>
+    <p>A Turing machine is a 7-tuple (Q, &Sigma;, &Gamma;, &delta;, q<sub>0</sub>, q<sub>accept</sub>, q<sub>reject</sub>):</p>
+    <ul>
+      <li><strong>&Gamma;</strong> &mdash; tape alphabet (includes blank symbol &#x25a1;)</li>
+      <li><strong>&delta;</strong> &mdash; Q &times; &Gamma; &rarr; Q &times; &Gamma; &times; &#123;L, R&#125;</li>
+      <li>The machine halts when it enters q<sub>accept</sub> or q<sub>reject</sub></li>
+      <li>Or it may loop forever (never halt)</li>
+    </ul>
+
+    <!-- SVG: Tape with head -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Tape cells -->
+        <rect x="30" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="55" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.4">&#x25a1;</text>
+        <rect x="80" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="105" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.5">1</text>
+        <rect x="130" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="155" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.5">0</text>
+        <!-- Current cell (highlighted) -->
+        <rect x="180" y="30" width="50" height="40" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.8"/>
+        <text x="205" y="55" text-anchor="middle" fill="#f59e0b" font-size="16">1</text>
+        <rect x="230" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="255" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.5">1</text>
+        <rect x="280" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="305" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.4">&#x25a1;</text>
+        <rect x="330" y="30" width="50" height="40" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="355" y="55" text-anchor="middle" fill="currentColor" font-size="16" fill-opacity="0.3">&#x25a1;</text>
+        <!-- Ellipses -->
+        <text x="15" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">...</text>
+        <text x="395" y="55" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">...</text>
+        <!-- Head pointer -->
+        <polygon points="205,80 195,95 215,95" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="205" y="112" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.8">head (q3)</text>
+      </svg>
+    </div>
+
+    <!-- TM simulator -->
+    <h3>Simulating a Turing machine</h3>
+    <p>This TM recognizes a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>: cross off one a, one b, one c per pass. If all are crossed off evenly, accept.</p>
+
+    <SchemeRepl client:load initialCode={`; Turing machine for a^n b^n c^n
+; Strategy: repeatedly cross off one a, one b, one c.
+; Accept if all symbols are crossed off.
+
+(define (tm-anbncn input)
+  (define tape (make-vector (+ (string-length input) 1) "_"))
+  (let init ((i 0))
+    (when (< i (string-length input))
+      (vector-set! tape i (substring input i (+ i 1)))
+      (init (+ i 1))))
+
+  (define (find-and-cross ch start)
+    (let loop ((i start))
+      (cond
+        ((>= i (vector-length tape)) #f)
+        ((equal? (vector-ref tape i) ch)
+         (vector-set! tape i "x") i)
+        ((equal? (vector-ref tape i) "_") #f)
+        (else (loop (+ i 1))))))
+
+  (define (all-crossed?)
+    (let loop ((i 0))
+      (cond
+        ((>= i (vector-length tape)) #t)
+        ((equal? (vector-ref tape i) "x") (loop (+ i 1)))
+        ((equal? (vector-ref tape i) "_") #t)
+        (else #f))))
+
+  (let outer ()
+    (let ((a-pos (find-and-cross "a" 0)))
+      (if (not a-pos)
+          (all-crossed?)
+          (let ((b-pos (find-and-cross "b" (+ a-pos 1))))
+            (if (not b-pos) #f
+                (let ((c-pos (find-and-cross "c" (+ b-pos 1))))
+                  (if (not c-pos) #f
+                      (outer)))))))))
+
+(display "abc:       ") (display (tm-anbncn "abc")) (newline)
+(display "aabbcc:    ") (display (tm-anbncn "aabbcc")) (newline)
+(display "aaabbbccc: ") (display (tm-anbncn "aaabbbccc")) (newline)
+(display "aabbc:     ") (display (tm-anbncn "aabbc")) (newline)
+(display "ab:        ") (display (tm-anbncn "ab"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Turing machine for a^n b^n c^n
+def tm_anbncn(s):
+    tape = list(s) + ['_']
+    while True:
+        # Find and cross off one 'a'
+        a_pos = next((i for i, c in enumerate(tape) if c == 'a'), None)
+        if a_pos is None:
+            return all(c in ('x', '_') for c in tape)
+        tape[a_pos] = 'x'
+        # Find and cross off one 'b' after a
+        b_pos = next((i for i in range(a_pos+1, len(tape)) if tape[i] == 'b'), None)
+        if b_pos is None: return False
+        tape[b_pos] = 'x'
+        # Find and cross off one 'c' after b
+        c_pos = next((i for i in range(b_pos+1, len(tape)) if tape[i] == 'c'), None)
+        if c_pos is None: return False
+        tape[c_pos] = 'x'
+
+for s in ["abc", "aabbcc", "aaabbbccc", "aabbc", "ab"]:
+    print(s.ljust(10) + ": " + str(tm_anbncn(s)))
+`} />
+    </div>
+
+
+    <!-- Church-Turing thesis -->
+    <h3>The Church-Turing thesis</h3>
+    <p>Every model of computation that has been proposed (lambda calculus, recursive functions, register machines, your laptop) computes exactly the same class of functions as a Turing machine. This is not a theorem but a thesis: it cannot be proved because "computable" has no prior formal definition. It has never been refuted.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-04/">🪄 SICP Ch.4</a> — the metacircular evaluator is a universal Turing machine in disguise</li>
+      <li><a href="/reading/programming/sicp-18/">🪄 Programming Ch.18</a> — register machines are an implementation of Turing machines</li>
+      <li><a href="/reading/logic/logic-10/">🔑 Logic Ch.10</a> — Turing's halting problem and Gödel's incompleteness are equivalent</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">✏️ Hoare/Core.lean</a> — Hoare logic reasons about programs that Turing machines compute</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-05/", label: "Pushdown Automata" }} next={{ href: "/reading/theory-of-computation/toc-07/", label: "Decidability" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,428 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.19 — Register Machine Simulator" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Register Machine Simulator</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-32.html#%_sec_5.2">SICP &sect;5.2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A software simulator for register machines. The assembler translates symbolic instructions into executable procedures. Testing machines before building hardware.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 420 100" class="w-full max-w-md" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Box 1: symbolic instructions -->
+        <rect x="10" y="18" width="105" height="38" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="62" y="34" text-anchor="middle" fill="#60a5fa" font-size="11">symbolic</text>
+        <text x="62" y="48" text-anchor="middle" fill="#60a5fa" font-size="11">instructions</text>
+
+        <!-- Arrow 1 -->
+        <line x1="115" y1="37" x2="150" y2="37" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow19)"/>
+        <text x="132" y="30" text-anchor="middle" fill="#f59e0b" font-size="10">assemble</text>
+
+        <!-- Box 2: executable procedures -->
+        <rect x="152" y="18" width="105" height="38" rx="4" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1.5"/>
+        <text x="204" y="34" text-anchor="middle" fill="#34d399" font-size="11">executable</text>
+        <text x="204" y="48" text-anchor="middle" fill="#34d399" font-size="11">procedures</text>
+
+        <!-- Arrow 2 -->
+        <line x1="257" y1="37" x2="292" y2="37" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow19)"/>
+        <text x="274" y="30" text-anchor="middle" fill="#f59e0b" font-size="10">execute</text>
+
+        <!-- Box 3: machine state -->
+        <rect x="294" y="18" width="105" height="38" rx="4" fill="#a78bfa" fill-opacity="0.12" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="346" y="34" text-anchor="middle" fill="#a78bfa" font-size="11">machine</text>
+        <text x="346" y="48" text-anchor="middle" fill="#a78bfa" font-size="11">state</text>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow19" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="210" y="85" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">the assembler translates symbols into runnable procedures</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. The machine model -->
+    <h3>The machine model</h3>
+    <p>A register machine has named registers, a program counter, and a stack. The model stores register contents in an association list. Each register is a pair: a name and a mutable value. The machine dispatches on message type &mdash; <code>get</code>, <code>set</code>, <code>start</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; A register is a pair: name + mutable value.
+; make-register, get-contents, set-contents!
+
+(define (make-register name)
+  (let ((contents '*unassigned*))
+    (define (dispatch message)
+      (cond ((eq? message 'get) contents)
+            ((eq? message 'set)
+             (lambda (value) (set! contents value)))
+            (else
+             (error "Unknown request -- REGISTER" message))))
+    dispatch))
+
+(define r (make-register 'val))
+(display "initial: ") (display (r 'get)) (newline)
+
+((r 'set) 42)
+(display "after set: ") (display (r 'get)) (newline)
+
+((r 'set) 99)
+(display "after second set: ") (display (r 'get))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# A register as a simple class
+class Register:
+    def __init__(self, name):
+        self.name = name
+        self.contents = '*unassigned*'
+
+    def get(self):
+        return self.contents
+
+    def set(self, value):
+        self.contents = value
+
+r = Register('val')
+print(f"initial: {r.get()}")
+
+r.set(42)
+print(f"after set: {r.get()}")
+
+r.set(99)
+print(f"after second set: {r.get()}")
+`} />
+    </div>
+
+
+    <!-- 2. The assembler -->
+    <h3>The assembler &mdash; extract-labels</h3>
+    <p>The assembler walks the instruction sequence and separates <strong>labels</strong> (symbols marking positions) from <strong>instructions</strong> (lists to execute). <code>extract-labels</code> builds two parallel structures: a list of label/position pairs and a list of instruction procedures.</p>
+
+    <SchemeRepl client:load initialCode={`; extract-labels: separate labels from instructions.
+; Labels are symbols; instructions are lists.
+
+(define (extract-labels text)
+  (if (null? text)
+      (cons '() '())  ; (labels . instructions)
+      (let ((result (extract-labels (cdr text))))
+        (let ((labels (car result))
+              (insts (cdr result)))
+          (let ((next-inst (car text)))
+            (if (symbol? next-inst)
+                ; It's a label — record position
+                (cons (cons (cons next-inst insts) labels)
+                      insts)
+                ; It's an instruction — add to list
+                (cons labels
+                      (cons next-inst insts))))))))
+
+(define sample-text
+  '(start
+    (assign t (reg n))
+    (test (op =) (reg n) (const 0))
+    (branch (label done))
+    (assign n (op -) (reg n) (const 1))
+    (goto (label start))
+    done
+    (assign val (reg t))))
+
+(let ((result (extract-labels sample-text)))
+  (display "Labels: ")
+  (display (map car (car result)))
+  (newline)
+  (display "Instructions: ")
+  (display (length (cdr result)))
+  (display " instructions"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# extract_labels: separate labels from instructions
+def extract_labels(text):
+    labels = {}
+    instructions = []
+    for item in text:
+        if isinstance(item, str) and not item.startswith('('):
+            # It's a label
+            labels[item] = len(instructions)
+        else:
+            instructions.append(item)
+    return labels, instructions
+
+sample_text = [
+    'start',
+    ('assign', 't', ('reg', 'n')),
+    ('test', ('op', '='), ('reg', 'n'), ('const', 0)),
+    ('branch', ('label', 'done')),
+    ('assign', 'n', ('op', '-'), ('reg', 'n'), ('const', 1)),
+    ('goto', ('label', 'start')),
+    'done',
+    ('assign', 'val', ('reg', 't')),
+]
+
+labels, insts = extract_labels(sample_text)
+print(f"Labels: {list(labels.keys())}")
+print(f"{len(insts)} instructions")
+`} />
+    </div>
+
+
+    <!-- 3. Generating execution procedures -->
+    <h3>Generating execution procedures</h3>
+    <p>Each instruction type &mdash; <code>assign</code>, <code>test</code>, <code>branch</code>, <code>goto</code>, <code>perform</code> &mdash; gets a corresponding execution procedure. The procedure closes over the machine's registers and stack, so executing it is just a function call. No interpretation at runtime.</p>
+
+    <SchemeRepl client:load initialCode={`; Execution procedures for a tiny instruction set.
+; Each returns a thunk that performs the operation.
+
+(define (make-assign-proc reg-get reg-set value-fn)
+  (lambda ()
+    (reg-set (value-fn))
+    'done))
+
+(define (make-test-proc op-fn arg-fns)
+  (lambda ()
+    (apply op-fn (map (lambda (f) (f)) arg-fns))))
+
+; Simulate: assign val = 3 + 4
+(define val 0)
+(define set-val! (lambda (v) (set! val v)))
+(define get-val (lambda () val))
+
+(define exec-assign
+  (make-assign-proc
+    get-val
+    set-val!
+    (lambda () (+ 3 4))))
+
+(exec-assign)
+(display "val after assign: ") (display val) (newline)
+
+; Simulate: test (= val 7)
+(define exec-test
+  (make-test-proc = (list get-val (lambda () 7))))
+
+(display "test (= val 7): ") (display (exec-test))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Execution procedures as closures
+def make_assign_proc(get_reg, set_reg, value_fn):
+    def execute():
+        set_reg(value_fn())
+        return 'done'
+    return execute
+
+def make_test_proc(op_fn, arg_fns):
+    def execute():
+        args = [f() for f in arg_fns]
+        return op_fn(*args)
+    return execute
+
+# Simulate: assign val = 3 + 4
+val = [0]  # mutable container
+set_val = lambda v: val.__setitem__(0, v)
+get_val = lambda: val[0]
+
+exec_assign = make_assign_proc(get_val, set_val, lambda: 3 + 4)
+exec_assign()
+print(f"val after assign: {val[0]}")
+
+# Simulate: test (= val 7)
+exec_test = make_test_proc(lambda a, b: a == b, [get_val, lambda: 7])
+print(f"test (= val 7): {exec_test()}")
+`} />
+    </div>
+
+
+    <!-- 4. A complete mini-simulator -->
+    <h3>A complete mini-simulator</h3>
+    <p>Putting it together: a machine that computes factorial using registers, a stack, and a controller sequence. The simulator steps through instructions one at a time, dispatching on instruction type.</p>
+
+    <SchemeRepl client:load initialCode={`; Mini factorial machine using explicit registers.
+; Registers: n, val, continue. Stack for saving state.
+
+(define n 5)
+(define val 1)
+(define continue 'done)
+(define stack '())
+
+(define (push! v) (set! stack (cons v stack)))
+(define (pop!) (let ((top (car stack)))
+                 (set! stack (cdr stack)) top))
+
+; Factorial controller — iterative version
+(define (run-fact-machine)
+  (set! val 1)
+  (let loop ()
+    (cond ((= n 0)
+           (display "fact result: ") (display val))
+          (else
+           (set! val (* val n))
+           (set! n (- n 1))
+           (loop)))))
+
+(run-fact-machine)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Mini factorial machine with explicit registers
+n = 5
+val = 1
+stack = []
+
+def run_fact_machine():
+    global n, val
+    val = 1
+    while n != 0:
+        val = val * n
+        n = n - 1
+    print(f"fact result: {val}")
+
+run_fact_machine()
+`} />
+    </div>
+
+
+    <!-- 5. Monitoring machine performance -->
+    <h3>Monitoring machine performance</h3>
+    <p>Instrumenting the machine: count how many instructions execute, how deep the stack grows. These metrics reveal the complexity of the computation &mdash; iterative processes use constant stack depth, recursive ones grow linearly.</p>
+
+    <SchemeRepl client:load initialCode={`; Instrumented factorial: count steps and max stack depth.
+
+(define (fact-instrumented n)
+  (let ((steps 0)
+        (stack-depth 0)
+        (max-depth 0)
+        (val 1))
+    ; Iterative: no stack growth
+    (let loop ((i n))
+      (set! steps (+ steps 1))
+      (cond ((= i 0)
+             (display "n=") (display n)
+             (display " result=") (display val)
+             (display " steps=") (display steps)
+             (display " max-stack=") (display max-depth)
+             (newline))
+            (else
+             (set! val (* val i))
+             (loop (- i 1)))))))
+
+(fact-instrumented 5)
+(fact-instrumented 10)
+(fact-instrumented 20)
+
+; Recursive version would show stack growth:
+(define (fact-recursive-instrumented n)
+  (let ((steps 0) (max-depth 0))
+    (define (helper i depth)
+      (set! steps (+ steps 1))
+      (if (> depth max-depth) (set! max-depth depth))
+      (if (= i 0)
+          1
+          (* i (helper (- i 1) (+ depth 1)))))
+    (let ((result (helper n 0)))
+      (display "recursive n=") (display n)
+      (display " result=") (display result)
+      (display " steps=") (display steps)
+      (display " max-stack=") (display max-depth)
+      (newline))))
+
+(fact-recursive-instrumented 5)
+(fact-recursive-instrumented 10)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Instrumented factorial: iterative vs recursive
+def fact_iterative(n):
+    steps, val = 0, 1
+    for i in range(n, 0, -1):
+        steps += 1
+        val *= i
+    print(f"iterative n={n} result={val} steps={steps} max_stack=0")
+
+def fact_recursive(n):
+    steps = [0]
+    max_depth = [0]
+    def helper(i, depth):
+        steps[0] += 1
+        max_depth[0] = max(max_depth[0], depth)
+        if i == 0:
+            return 1
+        return i * helper(i - 1, depth + 1)
+    result = helper(n, 0)
+    print(f"recursive n={n} result={result} steps={steps[0]} max_stack={max_depth[0]}")
+
+fact_iterative(5)
+fact_iterative(10)
+fact_recursive(5)
+fact_recursive(10)
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme / Register Machine</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(assign reg (op f) ...)</td><td class="pr-4 text-blue-300">reg = f(...)</td><td class="font-sans">Assign result of operation to register</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(test (op =) (reg n) (const 0))</td><td class="pr-4 text-blue-300">flag = (n == 0)</td><td class="font-sans">Set condition flag</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(branch (label done))</td><td class="pr-4 text-blue-300">if flag: goto done</td><td class="font-sans">Conditional jump</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(goto (label start))</td><td class="pr-4 text-blue-300">goto start</td><td class="font-sans">Unconditional jump</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(save reg) / (restore reg)</td><td class="pr-4 text-blue-300">stack.push(reg) / reg = stack.pop()</td><td class="font-sans">Stack operations</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(perform (op display) ...)</td><td class="pr-4 text-blue-300">print(...)</td><td class="font-sans">Side effect (no assignment)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The register machine language is assembly-level: each instruction names an operation, its source registers, and its destination. The assembler closes over the machine state so that each instruction becomes a zero-argument procedure. This is the same trick interpreters use &mdash; compile once, execute many times. Python's equivalent is <code>compile()</code> turning source into bytecode objects.</p>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-18/">SICP Ch.18</a> &mdash; Register Machines (the design language this chapter simulates)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Emulator"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Emulator</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Assembly_language#Assembler"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Assembler (computing)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Virtual_machine"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Virtual machine</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-32.html#%_sec_5.2">Read SICP &sect;5.2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-18/", label: "Register Machines" }} next={{ href: "/reading/programming/sicp-20/", label: "Storage & Garbage Collection · 20 of 22" }} />
+
+  </main>
+</Layout>

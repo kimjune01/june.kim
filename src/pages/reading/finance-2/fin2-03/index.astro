@@ -1,0 +1,314 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.3 — Black-Scholes Derivation" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Black-Scholes Derivation</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Black-Scholes formula</strong> prices European options by constructing a riskless hedge. The key insight: if you can replicate an option's payoff with stock and bonds, the option must cost the same as the replicating portfolio. No arbitrage forces the price.</p>
+    </div>
+
+    <!-- SVG: replicating portfolio diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Option payoff curve -->
+        <text x="200" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Call option payoff at expiry</text>
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="370" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="30" x2="50" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="210" y="192" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Stock price S</text>
+        <text x="25" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4" transform="rotate(-90,25,100)">Payoff</text>
+        <!-- Strike price marker -->
+        <line x1="200" y1="165" x2="200" y2="175" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="185" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">K</text>
+        <!-- Payoff: max(S-K, 0) -->
+        <polyline points="50,170 200,170 350,50" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="330" y="45" fill="#60a5fa" font-size="10" fill-opacity="0.6">max(S-K, 0)</text>
+        <!-- Option price curve (before expiry) -->
+        <path d="M 50,168 Q 120,165 200,130 T 350,48" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <text x="140" y="125" fill="#34d399" font-size="10" fill-opacity="0.6">C(S,t) before expiry</text>
+        <!-- Delta tangent -->
+        <line x1="180" y1="148" x2="260" y2="108" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <text x="270" y="105" fill="#f59e0b" font-size="9" fill-opacity="0.5">&#x0394; = &#x2202;C/&#x2202;S</text>
+      </svg>
+    </div>
+
+    <!-- 1. Replicating Portfolio -->
+    <h3>The replicating portfolio argument</h3>
+    <p>Hold &#x0394; = &#x2202;C/&#x2202;S shares of stock and borrow the rest. This portfolio tracks the option's value instant by instant. By Ito's lemma, the portfolio's randomness (the dB term) cancels the option's randomness. What remains is deterministic, so it must earn the risk-free rate. This no-arbitrage condition gives the Black-Scholes PDE.</p>
+
+    <SchemeRepl client:load initialCode={`; Replicating portfolio: Delta shares of stock + bonds
+; Portfolio value V = Delta * S - B (borrowing B)
+;
+; At expiry, call payoff = max(S - K, 0)
+; Delta-hedging means adjusting Delta continuously
+
+(define (call-payoff S K) (max (- S K) 0))
+
+; Example: K = 100
+(define K 100)
+
+(display "Payoffs at expiry:") (newline)
+(for-each (lambda (S)
+            (display "  S = ") (display S)
+            (display "  payoff = ") (display (call-payoff S K))
+            (newline))
+          (list 80 90 100 110 120))
+
+; At expiry, Delta = 1 if S > K, else 0
+(define (delta-at-expiry S K)
+  (if (> S K) 1 0))
+
+(display "Delta at expiry:") (newline)
+(display "  S=110: ") (display (delta-at-expiry 110 K)) (newline)
+(display "  S=90:  ") (display (delta-at-expiry 90 K))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Replicating portfolio payoffs
+K = 100
+
+def call_payoff(S, K):
+    return max(S - K, 0)
+
+print("Payoffs at expiry:")
+for S in [80, 90, 100, 110, 120]:
+    print(f"  S = {S}  payoff = {call_payoff(S, K)}")
+
+# At expiry, delta is 0 or 1
+print("\\nDelta at expiry:")
+for S in [90, 100, 110]:
+    delta = 1 if S > K else 0
+    print(f"  S = {S}  delta = {delta}")
+`} />
+    </div>
+
+
+    <!-- 2. Risk-Neutral Valuation -->
+    <h3>Risk-neutral valuation</h3>
+    <p>Under the <strong>risk-neutral measure</strong>, all assets earn the risk-free rate r on average. The option price is the discounted expected payoff: C = e&#x207B;&#x02B3;&#x1D40; E&#x1D60;[max(S(T)-K, 0)]. We don't need to know the real drift &#x03BC;; we replace it with r. This works because the hedge eliminates all risk, so risk preferences don't matter.</p>
+
+    <SchemeRepl client:load initialCode={`; Risk-neutral pricing: C = e^(-rT) * E_Q[max(S_T - K, 0)]
+; Under Q: S_T = S0 * exp((r - 0.5*sigma^2)*T + sigma*sqrt(T)*Z)
+
+(define S0 100.0)
+(define K 100.0)
+(define r 0.05)
+(define sigma 0.2)
+(define T 1.0)
+
+; Price by averaging over scenarios
+(define (risk-neutral-price z)
+  ; z is a standard normal draw
+  (define S-T (* S0 (exp (+ (* (- r (* 0.5 sigma sigma)) T)
+                             (* sigma (sqrt T) z)))))
+  (max (- S-T K) 0))
+
+; Use z-values from standard normal: approximate E[payoff]
+(define z-values (list -2.0 -1.5 -1.0 -0.5 0.0 0.5 1.0 1.5 2.0))
+(define payoffs (map risk-neutral-price z-values))
+(define avg-payoff (/ (apply + payoffs) (length payoffs)))
+(define price (* (exp (* -1 r T)) avg-payoff))
+
+(display "Sample payoffs: ") (display payoffs) (newline)
+(display "Avg payoff: ") (display avg-payoff) (newline)
+(display "Discounted (approx C): ") (display price)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+import random
+
+S0, K, r, sigma, T = 100, 100, 0.05, 0.2, 1.0
+
+def monte_carlo_call(n_sims=100000):
+    random.seed(42)
+    total = 0
+    for _ in range(n_sims):
+        z = random.gauss(0, 1)
+        S_T = S0 * math.exp((r - 0.5*sigma**2)*T + sigma*math.sqrt(T)*z)
+        total += max(S_T - K, 0)
+    return math.exp(-r*T) * total / n_sims
+
+mc_price = monte_carlo_call()
+print(f"Monte Carlo call price: {mc_price:.4f}")
+print(f"(Black-Scholes exact:   10.4506)")
+`} />
+    </div>
+
+
+    <!-- 3. Black-Scholes PDE -->
+    <h3>The Black-Scholes PDE</h3>
+    <p>The no-arbitrage hedge argument yields a PDE: &#x2202;C/&#x2202;t + &#xBD;&#x03C3;&#xB2;S&#xB2; &#x2202;&#xB2;C/&#x2202;S&#xB2; + rS &#x2202;C/&#x2202;S - rC = 0. This is a backward heat equation. With the boundary condition C(S,T) = max(S-K, 0), its solution is the Black-Scholes formula involving two cumulative normal terms N(d1) and N(d2).</p>
+
+    <SchemeRepl client:load initialCode={`; Black-Scholes formula
+; C = S0*N(d1) - K*e^(-rT)*N(d2)
+; d1 = [ln(S/K) + (r + sigma^2/2)*T] / (sigma*sqrt(T))
+; d2 = d1 - sigma*sqrt(T)
+
+; Approximate cumulative normal using Abramowitz & Stegun
+; Phi(x) = 0.5 * (1 + erf(x / sqrt(2)))
+(define (phi x)
+  ; CDF of standard normal, accurate to ~0.0003
+  (define (erf-approx t)
+    ; Abramowitz & Stegun 7.1.26: erf approximation for t >= 0
+    (let* ((a1 0.254829592) (a2 -0.284496736) (a3 1.421413741)
+           (a4 -1.453152027) (a5 1.061405429) (p 0.3275911)
+           (u (/ 1.0 (+ 1.0 (* p (abs t)))))
+           (val (- 1.0 (* (+ (* (+ (* (+ (* (+ (* a5 u) a4) u) a3) u) a2) u) a1)
+                          u (exp (* -1 t t))))))
+      (if (>= t 0) val (- val))))
+  (* 0.5 (+ 1.0 (erf-approx (/ x (sqrt 2))))))
+
+(define (black-scholes S0 K r sigma T)
+  (define d1 (/ (+ (log (/ S0 K)) (* (+ r (* 0.5 sigma sigma)) T))
+               (* sigma (sqrt T))))
+  (define d2 (- d1 (* sigma (sqrt T))))
+  (- (* S0 (phi d1))
+     (* K (exp (* -1 r T)) (phi d2))))
+
+(display "BS Call Price: ")
+(display (black-scholes 100 100 0.05 0.2 1.0)) (newline)
+
+; Vary strike
+(for-each (lambda (K)
+            (display "  K=") (display K)
+            (display "  C=") (display (black-scholes 100 K 0.05 0.2 1.0))
+            (newline))
+          (list 90 95 100 105 110))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def phi(x):
+    """Cumulative standard normal distribution"""
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+def black_scholes(S, K, r, sigma, T):
+    d1 = (math.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*math.sqrt(T))
+    d2 = d1 - sigma*math.sqrt(T)
+    return S*phi(d1) - K*math.exp(-r*T)*phi(d2)
+
+price = black_scholes(100, 100, 0.05, 0.2, 1.0)
+print(f"BS Call Price: {price:.4f}")
+
+print("\\nVarying strike:")
+for K in [90, 95, 100, 105, 110]:
+    c = black_scholes(100, K, 0.05, 0.2, 1.0)
+    print(f"  K={K}  C={c:.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Greeks -->
+    <h3>Greeks as partial derivatives</h3>
+    <p>The <strong>Greeks</strong> measure how the option price changes with respect to each input. Delta (&#x0394;) = &#x2202;C/&#x2202;S, Gamma (&#x0393;) = &#x2202;&#xB2;C/&#x2202;S&#xB2;, Theta (&#x0398;) = &#x2202;C/&#x2202;t, Vega (&#x03BD;) = &#x2202;C/&#x2202;&#x03C3;, Rho (&#x03C1;) = &#x2202;C/&#x2202;r. Delta tells you how many shares to hold for the hedge. Gamma tells you how fast to rebalance. Together they quantify the risk landscape.</p>
+
+    <SchemeRepl client:load initialCode={`; Greeks via finite differences
+; Delta ≈ [C(S+h) - C(S-h)] / (2h)
+; Gamma ≈ [C(S+h) - 2C(S) + C(S-h)] / h^2
+
+(define (phi x)
+  ; Phi(x) = 0.5 * (1 + erf(x / sqrt(2)))
+  (define (erf-approx t)
+    (let* ((a1 0.254829592) (a2 -0.284496736) (a3 1.421413741)
+           (a4 -1.453152027) (a5 1.061405429) (p 0.3275911)
+           (u (/ 1.0 (+ 1.0 (* p (abs t)))))
+           (val (- 1.0 (* (+ (* (+ (* (+ (* (+ (* a5 u) a4) u) a3) u) a2) u) a1)
+                          u (exp (* -1 t t))))))
+      (if (>= t 0) val (- val))))
+  (* 0.5 (+ 1.0 (erf-approx (/ x (sqrt 2))))))
+
+(define (bs S K r sigma T)
+  (define d1 (/ (+ (log (/ S K)) (* (+ r (* 0.5 sigma sigma)) T))
+               (* sigma (sqrt T))))
+  (define d2 (- d1 (* sigma (sqrt T))))
+  (- (* S (phi d1)) (* K (exp (* -1 r T)) (phi d2))))
+
+(define S 100) (define K 100) (define r 0.05)
+(define sigma 0.2) (define T 1.0)
+(define h 0.01)
+
+; Delta
+(define delta (/ (- (bs (+ S h) K r sigma T)
+                    (bs (- S h) K r sigma T))
+                 (* 2 h)))
+(display "Delta: ") (display delta) (newline)
+
+; Gamma
+(define gamma (/ (+ (bs (+ S h) K r sigma T)
+                    (- (* 2 (bs S K r sigma T)))
+                    (bs (- S h) K r sigma T))
+                 (* h h)))
+(display "Gamma: ") (display gamma) (newline)
+
+; Vega (per 1% vol change)
+(define vega (/ (- (bs S K r (+ sigma 0.005) T)
+                   (bs S K r (- sigma 0.005) T))
+                0.01))
+(display "Vega:  ") (display vega)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def phi(x):
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+def npdf(x):
+    return math.exp(-0.5*x*x) / math.sqrt(2*math.pi)
+
+def bs(S, K, r, sigma, T):
+    d1 = (math.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*math.sqrt(T))
+    d2 = d1 - sigma*math.sqrt(T)
+    return S*phi(d1) - K*math.exp(-r*T)*phi(d2)
+
+S, K, r, sigma, T = 100, 100, 0.05, 0.2, 1.0
+
+# Analytic Greeks for BS call
+d1 = (math.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*math.sqrt(T))
+d2 = d1 - sigma*math.sqrt(T)
+
+delta = phi(d1)
+gamma = npdf(d1) / (S * sigma * math.sqrt(T))
+vega = S * npdf(d1) * math.sqrt(T) / 100  # per 1% vol
+theta = (-(S*npdf(d1)*sigma)/(2*math.sqrt(T))
+         - r*K*math.exp(-r*T)*phi(d2)) / 365  # per day
+rho = K * T * math.exp(-r*T) * phi(d2) / 100  # per 1% rate
+
+print(f"Delta: {delta:.4f}")
+print(f"Gamma: {gamma:.4f}")
+print(f"Vega:  {vega:.4f}  (per 1% vol)")
+print(f"Theta: {theta:.4f} (per day)")
+print(f"Rho:   {rho:.4f}  (per 1% rate)")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-2/fin2-02/">&#x1F4C9; Finance II Ch.2</a> &#x2014; Ito calculus is the mathematical engine behind the derivation</li>
+      <li><a href="/reading/finance-2/fin2-01/">&#x1F4C9; Finance II Ch.1</a> &#x2014; GBM and martingales are the building blocks</li>
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &#x2014; partial derivatives and the chain rule</li>
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; normal distribution powers the N(d1), N(d2) terms</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-02/", label: "Ito Calculus · 2" }}
+      next={{ href: "/reading/finance-2/fin2-04/", label: "Ch.4 · 4" }}
+    />
+
+  </main>
+</Layout>

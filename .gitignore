@@ -1,14 +1,14 @@
 .DS_Store
+node_modules/
+dist/
+.astro/
+.env
+.env.production
+
+# Legacy Jekyll
 .jekyll
 .jekyll-cache/
 .jekyll-metadata
 .bundle
 .sass-cache
-Gemfile
-Gemfile.lock
-node_modules
-package.json
 _site/
-.reading-deployed
-reading/
-.reading-deployed-hash

@@ -1,0 +1,102 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Contracts.lean — Postconditions on morphism outputs" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Contracts.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Contracts.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Each pipeline stage carries a contract &mdash; a structural guarantee on its output that every possible result must satisfy.</p>
+    </div>
+
+    <h3>Contract / ContractPreserving</h3>
+    <p>A contract is a predicate on outputs (<code>b &rarr; Prop</code>). A kernel is contract-preserving if every reachable output satisfies the contract, for every input. This quantifies over the support &mdash; all possible outputs, not just the likely ones.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">ContractPreserving</span> [Monad M] [Support M]
+    (f : Kernel M &alpha; &beta;) (contract : Contract &beta;) : Prop :=
+  &forall; a : &alpha;, &forall; b : &beta;, Support.support (f a) b &rarr; contract b</code></pre>
+
+    <h3>IterationStable</h3>
+    <p>A kernel is iteration-stable if its contract survives re-application. Sort a sorted list &mdash; still sorted. Run MMR on a diverse slate &mdash; still diverse. This is the loop invariant: the postcondition holds after any number of iterations.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">IterationStable</span> [Monad M] [Support M]
+    (f : Kernel M &alpha; &alpha;) (contract : Contract &alpha;) : Prop :=
+  &forall; a : &alpha;, contract a &rarr; &forall; b : &alpha;, Support.support (f a) b &rarr; contract b</code></pre>
+
+    <h3>FilterContract</h3>
+    <p>Filter's specific contract: every output is strictly smaller than the input. This is what forces information reduction &mdash; data gets smaller as it passes through Filter.</p>
+
+    <h3>AttendContract</h3>
+    <p>Attend's contract: outputs are bounded in size and diverse. The capacity bound limits how much Attend can produce; diversity prevents degenerate selections.</p>
+
+    <h3>ConsolidateContract</h3>
+    <p>Consolidate's contract: the operation is lossy. The output policy carries no more information than the input policy. Consolidate is the only procedure that writes procedures.</p>
+
+    <h3>RememberContract</h3>
+    <p>Remember's contract: lossless relative to its input. Every output equals the input &mdash; no additional information is lost at this step.</p>
+
+    <h3>contract_composition_base</h3>
+    <p>This says: when you compose two kernels, only the second kernel's contract matters for the final guarantee. The first kernel feeds intermediates; the postcondition is checked at the end.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">contract_composition_base</span> [Monad M] [LawfulMonad M] [Support M]
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;g : Kernel M &beta; &gamma;&#125;
+    &#123;cg : Contract &gamma;&#125;
+    (hg : ContractPreserving g cg)
+    : ContractPreserving (Kernel.comp f g) cg</code></pre>
+    <p class="text-sm text-gray-500">The proof decomposes the composite's support via <code>support_bind</code>: any output c came from some intermediate b, and since g preserves its contract, c satisfies it.</p>
+
+    <Repl client:load initialCode={`# ContractPreserving: every possible output satisfies the contract
+# IterationStable: the contract survives re-application
+
+import random
+
+def filter_stage(items):
+    """Filter contract: output is strictly smaller than input"""
+    return random.sample(items, k=max(1, len(items)//2))
+
+def is_sorted(lst):
+    return all(lst[i] <= lst[i+1] for i in range(len(lst)-1))
+
+def sort_stage(items):
+    return sorted(items)
+
+# ContractPreserving: every output of sort_stage is sorted
+data = [5, 2, 8, 1, 9, 3]
+result = sort_stage(data)
+print(f"sort({data}) = {result}")
+print(f"contract 'is_sorted' holds: {is_sorted(result)}")
+
+# IterationStable: sort a sorted list — still sorted
+result2 = sort_stage(result)
+print(f"sort(sort(data)) = {result2}")
+print(f"contract still holds: {is_sorted(result2)}")
+
+# Filter contract: output strictly smaller
+filtered = filter_stage(data)
+print(f"\\nfilter({data}) = {filtered}")
+print(f"len shrinks: {len(data)} -> {len(filtered)}")
+`} />
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; imported; contracts apply to pipeline stages</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; chains contracts between adjacent stages</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; shows removing each contract kills the system</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-bridge/">Hoare/Bridge.lean</a> &mdash; proves ContractPreserving is a Hoare triple with trivial precondition</li>
+      <li><a href="/reading/the-natural-framework-lean/variational/">Variational.lean</a> &mdash; derives contracts from optimization problems</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/pipeline/", label: "Pipeline.lean · 4 of 25" }} next={{ href: "/reading/the-natural-framework-lean/handshake/", label: "Handshake.lean · 6 of 25" }} />
+  </main>
+</Layout>

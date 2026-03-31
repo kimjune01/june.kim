@@ -1,0 +1,121 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Mikolov 2013 — Word2Vec" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>Meaning Becomes Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean &middot; Google &middot; 2013 &middot; <a href="https://arxiv.org/abs/1301.3781"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1301.3781</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Word2Vec learns a vector for every word such that words with similar meanings have similar vectors. The famous result: <em>king &minus; man + woman &approx; queen</em>. Meaning has geometric structure, and that structure makes a new kind of search possible.</p>
+    </div>
+
+    <!-- 1. The insight -->
+    <h3>Context is meaning</h3>
+
+    <p>Words that appear in similar contexts have similar meanings. "King" and "queen" both appear near "throne," "crown," "rule." "Cat" and "dog" both appear near "pet," "feed," "vet." Linguists called this the distributional hypothesis in the 1950s. Mikolov's team made it computable.</p>
+
+    <p>Word2Vec trains a shallow neural network on a simple task: given a word, predict the words around it (or vice versa). The network has a hidden layer of, say, 300 neurons. After training on billions of words of text, those 300 numbers for each word become its <em>embedding</em> -- a point in 300-dimensional space. Words that appear in similar contexts end up near each other. Words that don't, don't.</p>
+
+    <p>The model never sees a dictionary. It never reads a definition. It learns meaning entirely from patterns of co-occurrence. The geometry emerges from the statistics of language.</p>
+
+    <!-- 2. Meaning as arithmetic -->
+    <h3>Meaning as arithmetic</h3>
+
+    <p>The result that made the paper famous: take the vector for "king," subtract "man," add "woman," and the nearest vector is "queen." This is not a party trick. It means the model learned that "royalty" and "gender" are independent dimensions of meaning. The direction from "man" to "woman" is the same as the direction from "king" to "queen." Meaning has geometric structure.</p>
+
+    <!-- SVG: vector space parallelogram -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes (faint) -->
+        <line x1="50" y1="270" x2="370" y2="270" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+        <line x1="50" y1="270" x2="50" y2="30" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+        <text x="370" y="288" fill="currentColor" fill-opacity="0.3" font-size="10" text-anchor="end">gender</text>
+        <text x="56" y="38" fill="currentColor" fill-opacity="0.3" font-size="10">royalty</text>
+
+        <!-- Parallelogram edges (dashed) -->
+        <line x1="100" y1="230" x2="280" y2="230" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="100" y1="230" x2="140" y2="80" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="280" y1="230" x2="320" y2="80" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="140" y1="80" x2="320" y2="80" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4,4"/>
+
+        <!-- Gender arrow (man -> woman) -->
+        <line x1="108" y1="225" x2="270" y2="225" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="268,221 276,225 268,229" fill="#60a5fa" fill-opacity="0.7"/>
+
+        <!-- Royalty arrow (man -> king) -->
+        <line x1="105" y1="222" x2="136" y2="90" stroke="#34d399" stroke-width="1.5"/>
+        <polygon points="131,92 138,84 140,94" fill="#34d399" fill-opacity="0.7"/>
+
+        <!-- Points -->
+        <circle cx="100" cy="230" r="4" fill="#a1a1aa"/>
+        <text x="100" y="252" fill="currentColor" font-size="12" text-anchor="middle">man</text>
+
+        <circle cx="280" cy="230" r="4" fill="#a1a1aa"/>
+        <text x="280" y="252" fill="currentColor" font-size="12" text-anchor="middle">woman</text>
+
+        <circle cx="140" cy="80" r="4" fill="#fbbf24"/>
+        <text x="140" y="68" fill="currentColor" font-size="12" text-anchor="middle">king</text>
+
+        <circle cx="320" cy="80" r="4" fill="#fbbf24"/>
+        <text x="320" y="68" fill="currentColor" font-size="12" text-anchor="middle">queen</text>
+
+        <!-- Equation -->
+        <text x="200" y="290" fill="currentColor" fill-opacity="0.5" font-size="10" text-anchor="middle">king &minus; man + woman &approx; queen</text>
+      </svg>
+    </div>
+
+    <p>The same arithmetic works across many relationships. Paris &minus; France + Italy &approx; Rome. Walking &minus; walk + swim &approx; swimming. The model discovers analogies as parallel lines in vector space. Each consistent relationship -- capital-of, tense, gender, size -- carves out its own direction in the geometry.</p>
+
+    <!-- 3. Why this matters for search -->
+    <h3>Why this matters for search</h3>
+
+    <p>Traditional search matches keywords. If you search "heart attack" you won't find a page about "myocardial infarction" unless someone manually added synonyms. The two phrases point to the same thing, but keyword search can't see that. The vocabulary gap is the oldest problem in information retrieval.</p>
+
+    <p>Embedding-based search matches meaning. Embed the query. Embed the documents. Find the documents whose vectors are closest to the query's vector. Two people describing the same idea in different vocabularies can find each other, because their embeddings land in the same region of vector space.</p>
+
+    <p>This is <a href="/reading/commons/bush-1945/">Bush's associative trails</a>, realized as geometry. Bush wanted a machine that could link documents by association rather than index. Embeddings do exactly this -- but the associations are computed from the statistics of language, not hand-built by a researcher. The memex was personal. The embedding space is shared.</p>
+
+    <!-- 4. Retrieval without reproduction -->
+    <h3>Retrieval without reproduction</h3>
+
+    <p>An embedding is a lossy compression of meaning. You can't reconstruct the original text from its embedding -- information is destroyed in the transformation. A 300-dimensional vector cannot encode the full content of a paragraph, let alone a book. It encodes <em>what the text is about</em>, not <em>what the text says</em>.</p>
+
+    <p>This matters legally. In <a href="/reading/commons/authors-guild-v-google-2015/">Authors Guild v. Google</a>, the Second Circuit held that scanning and indexing twenty million books was fair use because Google's search results showed only snippets, not full text. The index was transformative: it turned books into a searchable database.</p>
+
+    <p>Embedding-based indexing is on even stronger ground. A snippet reproduces some of the original. An embedding reproduces none of it. The transformation is more complete, the copy more lossy, the purpose more clearly different from the original. If full-text indexing is fair use, then embedding-based indexing -- which contains strictly less of the original work -- should be too.</p>
+
+    <!-- 5. The commons implication -->
+    <h3>The commons implication</h3>
+
+    <p>Keyword search required centralized infrastructure. You need to crawl the entire web, build a massive inverted index, serve it from data centers that cost billions. Only a few companies can afford this. The technology dictates the structure: search engines became gatekeepers because the economics demanded scale.</p>
+
+    <p>Embedding search can be distributed. Anyone can embed their own content and contribute vectors to a shared index. The vectors are small -- a few hundred numbers per chunk of text. They don't reproduce the original. They don't require a centralized crawl. A community can build a search index the same way it builds a wiki: each contributor adds their own piece.</p>
+
+    <p>The technology doesn't require a gatekeeper. That is the fact that changes the game.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/commons/authors-guild-v-google-2015/">⚖ Authors Guild v. Google 2015</a> — previous in the Commons collection: the legal precedent that makes embedding-based indexing defensible</li>
+      <li><a href="/reading/info-theory/">📡 Info Theory</a> — embeddings are lossy compression: Shannon's rate-distortion theory explains how much meaning can be preserved in how few dimensions</li>
+      <li><a href="/reading/ml/">🤖 ML</a> — the architecture that made large-scale embeddings practical: Word2Vec proved meaning could be geometry, Transformers scaled it</li>
+      <li><a href="/reading/linear-algebra/la-02/">🔗 Linear Algebra Ch.2</a> — vector spaces and inner products: word vectors are elements of a high-dimensional vector space; cosine similarity is the inner product normalized by vector norms</li>
+      <li><a href="/reading/machine-learning/ml-04/">🤖 ML Ch.4</a> — neural networks and representation learning: Word2Vec's skip-gram model learns representations by predicting context — the geometry emerges from the prediction task</li>
+      <li><a href="/reading/information-theory/shannon-02/">📡 IT Ch.2</a> — mutual information: Word2Vec maximizes mutual information between a word and its context — the "meaning as geometry" is encoded mutual information</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mt-6">This is the technical fact that makes everything else in the collection actionable. Meaning as geometry means retrieval without reproduction. Copyleft + embeddings = a search engine that stays on the commons side. <a href="https://june.kim/pageleft-manifesto"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>PageLeft Manifesto</a></p>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/commons/authors-guild-v-google-2015/", label: "Authors Guild v. Google · 7 of 8" }} />
+
+  </main>
+</Layout>

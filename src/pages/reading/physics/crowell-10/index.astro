@@ -1,0 +1,218 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.10 — Relativity" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Relativity</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 10 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The speed of light is the same for all observers. This single fact forces us to abandon absolute time, absolute simultaneity, and the simple addition of velocities. Space and time merge into <strong>spacetime</strong>. Energy and mass are the same thing: E = mc<sup>2</sup>.</p>
+    </div>
+
+    <!-- 1. Special relativity postulates -->
+    <h3>The postulates</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Albert_Einstein"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Einstein</a>'s two postulates: (1) The laws of physics are the same in all inertial frames. (2) The speed of light in vacuum is the same for all observers, regardless of their motion. Everything else in special relativity follows from these two statements.</p>
+
+    <SchemeRepl client:load initialCode={`; The Lorentz factor: gamma = 1 / sqrt(1 - v^2/c^2)
+; This factor appears everywhere in special relativity.
+; gamma >= 1 always. gamma -> infinity as v -> c.
+
+(define c 3e8)  ; m/s
+
+(define (gamma v)
+  (/ 1 (sqrt (- 1 (/ (* v v) (* c c))))))
+
+(define (beta v) (/ v c))
+
+; gamma at various speeds
+(display "v = 0:        gamma = ") (display (gamma 0)) (newline)
+(display "v = 0.1c:     gamma = ") (display (gamma (* 0.1 c))) (newline)
+(display "v = 0.5c:     gamma = ") (display (gamma (* 0.5 c))) (newline)
+(display "v = 0.9c:     gamma = ") (display (gamma (* 0.9 c))) (newline)
+(display "v = 0.99c:    gamma = ") (display (gamma (* 0.99 c))) (newline)
+(display "v = 0.999c:   gamma = ") (display (gamma (* 0.999 c)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+c = 3e8
+
+def gamma(v):
+    return 1 / math.sqrt(1 - (v/c)**2)
+
+for frac in [0, 0.1, 0.5, 0.9, 0.99, 0.999]:
+    v = frac * c
+    print(f"v = {frac}c: gamma = {gamma(v):.4f}")
+`} />
+    </div>
+
+
+    <!-- 2. Time dilation and length contraction -->
+    <h3>Time dilation and length contraction</h3>
+    <p><strong>Time dilation</strong>: a moving clock runs slow by a factor of gamma. If a muon lives 2.2 microseconds in its rest frame, it lives gamma * 2.2 microseconds in ours. <strong>Length contraction</strong>: a moving object is shortened in the direction of motion by a factor of gamma. These are not illusions. They are real, measurable effects.</p>
+
+    <!-- SVG: Light cone diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 300" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="150" y1="280" x2="150" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="20" y1="150" x2="280" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="155" y="18" fill="currentColor" font-size="11" fill-opacity="0.5">time</text>
+        <text x="275" y="145" fill="currentColor" font-size="11" fill-opacity="0.5">space</text>
+        <!-- Future light cone -->
+        <line x1="150" y1="150" x2="30" y2="30" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="150" y1="150" x2="270" y2="30" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Past light cone -->
+        <line x1="150" y1="150" x2="30" y2="270" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="150" y1="150" x2="270" y2="270" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Fill future cone -->
+        <path d="M 150 150 L 30 30 L 270 30 Z" fill="#f59e0b" fill-opacity="0.04"/>
+        <!-- Fill past cone -->
+        <path d="M 150 150 L 30 270 L 270 270 Z" fill="#60a5fa" fill-opacity="0.04"/>
+        <!-- Event at origin -->
+        <circle cx="150" cy="150" r="4" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Labels -->
+        <text x="150" y="55" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">future</text>
+        <text x="150" y="255" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">past</text>
+        <text x="55" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">elsewhere</text>
+        <text x="245" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">elsewhere</text>
+        <text x="85" y="38" fill="#f59e0b" font-size="9" fill-opacity="0.4">v = c</text>
+        <text x="230" y="38" fill="#f59e0b" font-size="9" fill-opacity="0.4">v = c</text>
+        <text x="150" y="290" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Nothing outside the cone is reachable.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Time dilation: delta_t = gamma * delta_t0
+; Length contraction: L = L0 / gamma
+
+(define c 3e8)
+(define (gamma v) (/ 1 (sqrt (- 1 (/ (* v v) (* c c))))))
+
+; Muon example: rest-frame lifetime = 2.2 microseconds
+(define tau0 2.2e-6)  ; seconds
+(define v-muon (* 0.998 c))
+
+(define g (gamma v-muon))
+(define tau (* g tau0))
+
+(display "Muon at 0.998c:") (newline)
+(display "  gamma = ") (display g) (newline)
+(display "  rest lifetime = ") (display (* tau0 1e6)) (display " us") (newline)
+(display "  dilated lifetime = ") (display (* tau 1e6)) (display " us") (newline)
+
+; Distance traveled in lab frame
+(define d (* v-muon tau))
+(display "  distance in lab = ") (display d) (display " m") (newline)
+
+; Length contraction: the atmosphere is thinner in muon's frame
+(define L0 d)
+(define L (/ L0 g))
+(display "  atmosphere in muon frame = ") (display L) (display " m")
+`} />
+
+
+    <!-- 3. Lorentz transformations -->
+    <h3>Lorentz transformations</h3>
+    <p>The <strong>Lorentz transformation</strong> maps coordinates from one inertial frame to another. It replaces the Galilean transformation (x' = x - vt) with one that mixes space and time: x' = gamma * (x - v*t), t' = gamma * (t - v*x/c^2). This mixing is why simultaneity is relative.</p>
+
+    <SchemeRepl client:load initialCode={`; Lorentz transformation (1D):
+; x' = gamma * (x - v*t)
+; t' = gamma * (t - v*x/c^2)
+
+(define c 3e8)
+(define (gamma v) (/ 1 (sqrt (- 1 (/ (* v v) (* c c))))))
+
+(define (lorentz-x x t v)
+  (let ((g (gamma v)))
+    (* g (- x (* v t)))))
+
+(define (lorentz-t x t v)
+  (let ((g (gamma v)))
+    (* g (- t (/ (* v x) (* c c))))))
+
+; Spaceship at v = 0.6c
+; Event: x = 1e9 m, t = 2 s in lab frame
+(define v (* 0.6 c))
+(define x 1e9)
+(define t 2.0)
+
+(display "Lab frame:  x = ") (display x) (display " m, t = ")
+(display t) (display " s") (newline)
+
+(define xp (lorentz-x x t v))
+(define tp (lorentz-t x t v))
+(display "Ship frame: x' = ") (display xp) (display " m, t' = ")
+(display tp) (display " s")
+`} />
+
+
+    <!-- 4. E = mc^2 -->
+    <h3>E = mc<sup>2</sup></h3>
+    <p>The total energy of an object is E = gamma * m * c^2. At rest (gamma = 1), this is just E = mc^2: mass itself is a form of energy. The kinetic energy is (gamma - 1) * mc^2. At low speeds this reduces to (1/2)mv^2. At high speeds the energy diverges, which is why massive objects cannot reach the speed of light.</p>
+
+    <SchemeRepl client:load initialCode={`; E = gamma * m * c^2 (total energy)
+; KE = (gamma - 1) * m * c^2
+; At low v, KE ~ (1/2) m v^2
+
+(define c 3e8)
+(define (gamma v) (/ 1 (sqrt (- 1 (/ (* v v) (* c c))))))
+
+(define (relativistic-KE m v)
+  (* (- (gamma v) 1) m c c))
+
+(define (classical-KE m v)
+  (* 0.5 m v v))
+
+; 1 kg at various speeds
+(define m 1.0)
+
+(display "KE comparison (1 kg):") (newline)
+(display "v/c    Relativistic      Classical         Ratio") (newline)
+
+(define (compare frac)
+  (let* ((v (* frac c))
+         (KE-rel (relativistic-KE m v))
+         (KE-cls (classical-KE m v)))
+    (display frac) (display "c    ")
+    (display KE-rel) (display "  ")
+    (display KE-cls) (display "  ")
+    (display (/ KE-rel KE-cls)) (newline)))
+
+(for-each compare (list 0.01 0.1 0.5 0.9))
+
+; Rest energy of 1 kg
+(display "Rest energy of 1 kg: ")
+(display (* m c c)) (display " J")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Special_relativity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Special relativity</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lorentz_transformation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lorentz transformation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Time_dilation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Time dilation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Length_contraction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Length contraction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mass%E2%80%93energy_equivalence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mass-energy equivalence</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>We use natural units informally (v as a fraction of c) but compute in SI. The Lorentz transformation here is the standard 1+1 dimensional form (one space dimension plus time). The full 3+1 form involves velocity in an arbitrary direction and is more complex. Crowell develops the four-vector formalism. Our muon example uses real experimental parameters: cosmic-ray muons do reach the ground precisely because of time dilation.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-09/", label: "Optics" }} next={{ href: "/reading/physics/crowell-11/", label: "Quantum Mechanics" }} />
+
+  </main>
+</Layout>

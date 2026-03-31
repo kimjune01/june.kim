@@ -1,0 +1,162 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hajiaghayi et al. 2024 — Ad Auctions for LLMs via RAG" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>Ad Auctions for LLMs via Retrieval Augmented Generation</h1>
+    <p class="text-gray-400 text-sm mb-6">Hajiaghayi, Lahaie, Lubin, Shin &middot; 2024 &middot; <a href="https://arxiv.org/abs/2406.09459">arXiv:2406.09459</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>RAG-based ad insertion</strong> into LLM responses. Advertisers bid on relevance to user queries. The auction selects which ad context to inject into the retrieval step. The LLM generates a response that naturally incorporates the winning ad. This is the competition for embedding-space auctions.</p>
+    </div>
+
+    <h3>The RAG ad pipeline</h3>
+    <p>User sends a query. The system retrieves relevant documents AND ad candidates from an embedding index. An auction selects the winning ad. The ad context is injected into the LLM prompt alongside organic results. The LLM generates a unified response. The alternative architecture is a <a href="https://june.kim/vectorspace-adserver"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>dedicated vector-space ad server</a> that handles the auction before the retrieval step, keeping the ad selection independent of the LLM.</p>
+
+    <!-- SVG: RAG pipeline with ad injection point -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- User query -->
+        <rect x="10" y="80" width="70" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="45" y="105" text-anchor="middle" fill="currentColor" font-size="11">Query</text>
+
+        <!-- Arrow to retrieval -->
+        <line x1="80" y1="100" x2="120" y2="100" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="115,96 125,100 115,104" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- Retrieval box -->
+        <rect x="125" y="70" width="80" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="165" y="95" text-anchor="middle" fill="currentColor" font-size="10">Retrieve</text>
+        <text x="165" y="110" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">embed index</text>
+
+        <!-- Organic results -->
+        <line x1="205" y1="85" x2="260" y2="60" stroke="currentColor" stroke-width="1"/>
+        <rect x="260" y="40" width="70" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8"/>
+        <text x="295" y="60" text-anchor="middle" fill="currentColor" font-size="9">organic</text>
+
+        <!-- Ad candidates + auction -->
+        <line x1="205" y1="115" x2="240" y2="140" stroke="currentColor" stroke-width="1"/>
+        <rect x="240" y="120" width="80" height="50" rx="6" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="280" y="142" text-anchor="middle" fill="#fbbf24" font-size="10">Auction</text>
+        <text x="280" y="158" text-anchor="middle" fill="#fbbf24" font-size="9" fill-opacity="0.7">select ad</text>
+
+        <!-- Winning ad -->
+        <line x1="320" y1="145" x2="355" y2="115" stroke="#fbbf24" stroke-width="1.2"/>
+
+        <!-- LLM box -->
+        <rect x="350" y="65" width="80" height="60" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="390" y="90" text-anchor="middle" fill="#60a5fa" font-size="11">LLM</text>
+        <text x="390" y="108" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">generate</text>
+
+        <!-- Organic flows into LLM -->
+        <line x1="330" y1="55" x2="350" y2="80" stroke="currentColor" stroke-width="1"/>
+
+        <!-- Response -->
+        <line x1="430" y1="95" x2="470" y2="95" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="465,91 478,95 465,99" fill="currentColor" fill-opacity="0.5"/>
+        <text x="490" y="100" fill="currentColor" font-size="10">response</text>
+
+        <!-- Ad injection label -->
+        <text x="280" y="190" text-anchor="middle" fill="#fbbf24" font-size="9" fill-opacity="0.6">ad injected into context</text>
+
+        <!-- Caption -->
+        <text x="250" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">RAG pipeline with auction-selected ad context</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; RAG ad auction: score = relevance * bid
+; Retrieve top-k candidates, auction among them
+
+(define (dot-product a b)
+  (if (null? a) 0
+      (+ (* (car a) (car b))
+         (dot-product (cdr a) (cdr b)))))
+
+(define (rag-ad-auction query-embedding ads)
+  ;; Each ad: (name embedding bid)
+  ;; Score = relevance (cosine sim approx) * bid
+  (let* ((scored (map (lambda (ad)
+                        (let ((name (car ad))
+                              (emb (cadr ad))
+                              (bid (caddr ad)))
+                          (list name
+                                (dot-product query-embedding emb)
+                                bid
+                                (* (dot-product query-embedding emb) bid))))
+                      ads))
+         (ranked (sort scored (lambda (a b) (> (cadddr a) (cadddr b))))))
+    ranked))
+
+;; Simulated embeddings (2D for clarity)
+(define query '(0.8 0.6))
+
+(define ads
+  (list
+    (list 'shoe-ad '(0.9 0.5) 5)    ; relevant, medium bid
+    (list 'car-ad '(0.1 0.2) 20)    ; irrelevant, high bid
+    (list 'sneaker-ad '(0.85 0.55) 8))) ; relevant, high bid
+
+(define results (rag-ad-auction query ads))
+(display "Rankings (name, relevance, bid, score):") (newline)
+(for-each (lambda (r)
+  (display "  ") (display r) (newline))
+  results)
+; Sneaker-ad wins: high relevance AND high bid
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# RAG ad auction
+import numpy as np
+
+def rag_auction(query_emb, ads):
+    """Score = cosine_similarity * bid. Highest score wins."""
+    results = []
+    for name, emb, bid in ads:
+        q = np.array(query_emb)
+        e = np.array(emb)
+        relevance = np.dot(q, e) / (np.linalg.norm(q) * np.linalg.norm(e))
+        score = relevance * bid
+        results.append((name, round(relevance, 3), bid, round(score, 3)))
+    results.sort(key=lambda x: -x[3])
+    return results
+
+query = [0.8, 0.6]
+ads = [
+    ("shoe-ad",    [0.9, 0.5], 5),
+    ("car-ad",     [0.1, 0.2], 20),
+    ("sneaker-ad", [0.85, 0.55], 8),
+]
+
+for name, rel, bid, score in rag_auction(query, ads):
+    print(name.ljust(12) + "  rel=" + str(round(rel, 3)) + "  bid=$" + str(bid) + "  score=" + str(round(score, 3)))
+`} />
+    </div>
+
+    <h3>The design space</h3>
+    <p>Key questions: How to price (VCG on the embedding scores? GSP?). How to ensure ad quality (reserve on relevance?). How to prevent the LLM from distorting the ad. The paper proposes using the retrieval relevance score as the quality signal, combined with a second-price payment rule. This is the RAG approach to what <a href="https://june.kim/the-last-ad-layer"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the last ad layer</a> calls the serving problem: where in the stack does the ad get inserted, and who controls the context window?</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/vector-space</a> &mdash; the blog series this paper competes with</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> &mdash; crypto-12: TEE enclaves as alternative architecture for trusted ad serving</li>
+      <li><a href="/reading/auction-theory/aurenhammer-1987/">💎 Aurenhammer 1987</a> &mdash; geometric allocation via power diagrams</li>
+      <li><a href="/reading/auction-theory/gsp-2007/">💎 GSP 2007</a> &mdash; the pricing rule this paper adapts</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2406.09459">Read the paper</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/auction-theory/hartline-2023/", label: "Hartline 2023 · 7 of 8" }} />
+
+  </main>
+</Layout>

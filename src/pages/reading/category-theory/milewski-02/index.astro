@@ -1,0 +1,365 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.2 — Types and Functions" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">&larr; back to foundations</a>
+
+    <h1>Types and Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski &middot; 2014 &middot; <a href="https://bartoszmilewski.com/2014/11/24/types-and-functions/">Category Theory for Programmers, Ch. 2</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-01/">🍞 Chapter 1 (Category)</a>. 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Types are <a href="https://en.wikipedia.org/wiki/Set_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>sets</a>. Functions are morphisms between them. The category <strong>Hask</strong> has Haskell types as objects and pure functions as arrows. Every type is extended with <strong>bottom</strong> (&perp;), the value representing non-termination.</p>
+    </div>
+
+    <!-- SVG: Three objects — Void, Unit, Bool — with cardinality -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 260" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Void: empty set -->
+        <ellipse cx="80" cy="100" rx="45" ry="55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="80" y="175" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">Void</text>
+        <text x="80" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">|Void| = 0</text>
+
+        <!-- Unit: one dot -->
+        <ellipse cx="260" cy="100" rx="45" ry="55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <circle cx="260" cy="100" r="4" fill="#4ade80" fill-opacity="0.7"/>
+        <text x="260" y="90" text-anchor="middle" fill="#4ade80" font-size="9" fill-opacity="0.7" dy="-12">()</text>
+        <text x="260" y="175" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">Unit</text>
+        <text x="260" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">|Unit| = 1</text>
+
+        <!-- Bool: two dots -->
+        <ellipse cx="440" cy="100" rx="45" ry="55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <circle cx="440" cy="78" r="4" fill="#60a5fa" fill-opacity="0.7"/>
+        <text x="457" y="82" fill="#60a5fa" font-size="9" fill-opacity="0.7">T</text>
+        <circle cx="440" cy="122" r="4" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="457" y="126" fill="#f59e0b" font-size="9" fill-opacity="0.7">F</text>
+        <text x="440" y="175" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">Bool</text>
+        <text x="440" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">|Bool| = 2</text>
+
+        <!-- Morphism arrows -->
+        <!-- absurd: Void -> Unit (unique, vacuous) -->
+        <line x1="128" y1="88" x2="212" y2="92" stroke="currentColor" stroke-width="1" stroke-opacity="0.25" marker-end="url(#arrowM2)"/>
+        <text x="170" y="80" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">absurd</text>
+
+        <!-- unit: Bool -> Unit (unique) -->
+        <line x1="392" y1="88" x2="308" y2="92" stroke="currentColor" stroke-width="1" stroke-opacity="0.25" marker-end="url(#arrowM2)"/>
+        <text x="350" y="80" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">unit</text>
+
+        <!-- Functions from Unit to Bool: 2 arrows -->
+        <path d="M 300,85 Q 340,55 395,75" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.35" marker-end="url(#arrowBlueM2)"/>
+        <path d="M 300,115 Q 340,145 395,125" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.35" marker-end="url(#arrowAmberM2)"/>
+        <text x="345" y="50" text-anchor="middle" fill="#60a5fa" font-size="8" fill-opacity="0.5">const T</text>
+        <text x="345" y="158" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.5">const F</text>
+
+        <!-- Caption -->
+        <text x="260" y="225" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">|A &rarr; B| = |B|^|A|</text>
+        <text x="260" y="245" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">functions from Unit pick elements; functions to Unit are unique</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrowM2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          </marker>
+          <marker id="arrowBlueM2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+          </marker>
+          <marker id="arrowAmberM2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- 1. Types as sets -->
+    <h3>Types as sets</h3>
+    <p>A type is a set of values. <code>Bool</code> is the two-element set &lbrace;True, False&rbrace;. <code>Integer</code> is an infinite set. A function between types is a mapping between sets. This is the category <strong>Set</strong>: objects are sets, morphisms are functions. Programming types live in the same structure.</p>
+
+    <SchemeRepl client:load initialCode={`; Types are sets of values
+; Bool = {#t, #f} — a two-element set
+; A function from Bool picks two values from the target set
+
+(define (bool->string b)
+  (if b "yes" "no"))
+
+; This function IS a morphism in Set: {#t, #f} -> {"yes", "no"}
+(display "True  -> ") (display (bool->string #t)) (newline)
+(display "False -> ") (display (bool->string #f)) (newline)
+
+; How many functions from Bool to Bool?
+; Each of 2 inputs can map to 2 outputs: 2^2 = 4
+(define id-bool   (lambda (b) b))
+(define not-bool  (lambda (b) (not b)))
+(define always-t  (lambda (b) #t))
+(define always-f  (lambda (b) #f))
+
+(display "id:      ") (display (id-bool #t))  (display " ") (display (id-bool #f))  (newline)
+(display "not:     ") (display (not-bool #t)) (display " ") (display (not-bool #f)) (newline)
+(display "const-T: ") (display (always-t #t)) (display " ") (display (always-t #f)) (newline)
+(display "const-F: ") (display (always-f #t)) (display " ") (display (always-f #f))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Types are sets of values
+# bool = {True, False}
+
+def bool_to_string(b):
+    return "yes" if b else "no"
+
+print(f"True  -> {bool_to_string(True)}")
+print(f"False -> {bool_to_string(False)}")
+
+# All 4 functions from bool to bool
+fns = {
+    "id":      lambda b: b,
+    "not":     lambda b: not b,
+    "const-T": lambda b: True,
+    "const-F": lambda b: False,
+}
+
+for name, f in fns.items():
+    print(f"{name}: True->{f(True)}, False->{f(False)}")
+`} />
+    </div>
+
+
+    <!-- 2. Pure functions -->
+    <h3>Pure functions</h3>
+    <p>A <strong>pure function</strong> always produces the same output for the same input and has no side effects. Pure functions are the only kind that qualify as morphisms in a category. Impure functions (I/O, mutation, randomness) break composability: if f's output depends on hidden state, g &compfn; f is not determined by the types alone.</p>
+
+    <SchemeRepl client:load initialCode={`; Pure: same input, same output, no side effects
+; A pure function IS a morphism — it composes reliably
+
+(define (square x) (* x x))
+(define (add1 x) (+ x 1))
+
+; Composition works because both are pure
+(define (add1-then-square x) (square (add1 x)))
+(define (square-then-add1 x) (add1 (square x)))
+
+(display "square(5)           = ") (display (square 5)) (newline)
+(display "add1(5)             = ") (display (add1 5)) (newline)
+(display "add1-then-square(5) = ") (display (add1-then-square 5)) (newline)
+(display "square-then-add1(5) = ") (display (square-then-add1 5)) (newline)
+
+; Memoization test: a pure function can always be memoized
+; because calling it twice with the same input is identical
+(display "square(5) again     = ") (display (square 5))
+; Same answer, guaranteed. That's purity.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Pure functions compose reliably
+def square(x): return x * x
+def add1(x): return x + 1
+
+print(f"square(5)           = {square(5)}")
+print(f"add1(5)             = {add1(5)}")
+print(f"add1(square(5))     = {add1(square(5))}")
+print(f"square(add1(5))     = {square(add1(5))}")
+
+# Impure function — breaks composability
+counter = 0
+def impure_add(x):
+    global counter
+    counter += 1
+    return x + counter
+
+print(f"impure_add(5) = {impure_add(5)}")  # 6
+print(f"impure_add(5) = {impure_add(5)}")  # 7 — different!
+# Same input, different output. Not a morphism.
+`} />
+    </div>
+
+    <!-- 3. Bottom -->
+    <h3>Bottom &mdash; the value that never arrives</h3>
+    <p>Every Haskell type secretly includes one extra value: <strong>bottom</strong> (&perp;), representing non-termination. A function that loops forever or throws an exception returns bottom. This makes <strong>Hask</strong> different from <strong>Set</strong>: in Set, every function terminates. In Hask, a function <code>Bool &rarr; Bool</code> can return True, False, or &perp;. Functions that may return bottom are <strong>partial</strong>; those that always return a proper value are <strong>total</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Bottom: non-termination extends every type
+; In Hask, Bool = {#t, #f, ⊥}
+
+; A total function: always returns a value
+(define (safe-not b) (if b #f #t))
+
+; A partial function: sometimes returns bottom
+(define (partial-not b)
+  (if b #f
+      (let loop () (loop))))  ; infinite loop = bottom
+
+(display "safe-not(#t) = ") (display (safe-not #t)) (newline)
+(display "safe-not(#f) = ") (display (safe-not #f)) (newline)
+(display "partial-not(#t) = ") (display (partial-not #t)) (newline)
+; partial-not(#f) would loop forever — that's bottom
+(display "partial-not(#f) = ... (would never return)")
+`} />
+
+
+    <!-- 4. Void — the empty type -->
+    <h3>Void &mdash; the empty set</h3>
+    <p>The type <code>Void</code> has no values at all. It corresponds to the empty set. You cannot call a function that takes Void as input, because you have nothing to pass it. But you can <em>declare</em> one: <code>absurd :: Void &rarr; a</code>. From falsity, anything follows. This is the <a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curry-Howard correspondence</a> in action.</p>
+
+    <SchemeRepl client:load initialCode={`; Void: the empty type — no values exist
+; absurd : Void -> a (can be defined but never called)
+
+; We can't construct a Void value, so we simulate with a tag
+(define (absurd v)
+  (display "ERROR: absurd: Void has no values") (newline))
+
+; Functions FROM Void: you can declare them but never run them
+; Functions TO Void: impossible (no value to return)
+
+; The empty set has exactly one function to any set:
+; the empty function (vacuously defined on zero inputs)
+(display "Void is the empty set.") (newline)
+(display "There is exactly 1 function from {} to any set:") (newline)
+(display "  the empty function (maps nothing to nothing)") (newline)
+(display "|functions: Void -> A| = 1 for any A") (newline)
+(display "|functions: A -> Void| = 0 (unless A is also Void)")
+`} />
+
+    <!-- 5. Unit — the singleton -->
+    <h3>Unit &mdash; the singleton set</h3>
+    <p>The type <code>()</code> (unit) has exactly one value. Functions from unit to a type A are in one-to-one correspondence with elements of A: each such function "picks" one value. The function <code>unit :: a &rarr; ()</code> discards its argument and returns the single value. It is the unique morphism to the terminal object.</p>
+
+    <SchemeRepl client:load initialCode={`; Unit: the singleton set with one value
+; Functions from unit to A correspond to elements of A
+
+; In Scheme, we use 'unit as the single value
+(define unit-val 'unit)
+
+; A function () -> Integer just picks a number
+(define (f44 u) 44)
+(define (f0  u)  0)
+
+(display "f44(unit) = ") (display (f44 unit-val)) (newline)
+(display "f0(unit)  = ") (display (f0 unit-val))  (newline)
+
+; The function a -> () always returns unit (terminal morphism)
+(define (to-unit x) unit-val)
+
+(display "to-unit(42)      = ") (display (to-unit 42)) (newline)
+(display "to-unit(\"hello\") = ") (display (to-unit "hello")) (newline)
+(display "to-unit(#t)      = ") (display (to-unit #t)) (newline)
+
+; |functions: () -> A| = |A|  (one per element)
+; |functions: A -> ()| = 1   (the unique terminal morphism)
+(display "() is the terminal object in Set and Hask.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Unit type: Python has None as its unit value
+
+def f44(): return 44  # () -> int: picks 44
+def f0():  return 0   # () -> int: picks 0
+
+print(f"f44() = {f44()}")
+print(f"f0()  = {f0()}")
+
+# The function a -> () discards its argument
+def to_unit(x): return None
+
+print(f"to_unit(42)      = {to_unit(42)}")
+print(f"to_unit('hello') = {to_unit('hello')}")
+print(f"to_unit(True)    = {to_unit(True)}")
+# There's only one such function — it's the terminal morphism
+`} />
+    </div>
+
+
+    <!-- 6. Bool — the two-element set -->
+    <h3>Bool &mdash; the two-element set</h3>
+    <p>Bool has exactly two values. Functions <em>to</em> Bool are <strong>predicates</strong>: they classify inputs into true/false. Functions <em>from</em> Bool select a pair of values from the target type. Bool is the simplest interesting type: big enough to branch on, small enough to enumerate.</p>
+
+    <SchemeRepl client:load initialCode={`; Bool = {#t, #f} — the two-element set
+
+; Functions TO Bool are predicates
+(define (is-even? n) (= (remainder n 2) 0))
+(define (is-positive? n) (> n 0))
+
+(display "is-even?(4) = ") (display (is-even? 4)) (newline)
+(display "is-even?(7) = ") (display (is-even? 7)) (newline)
+
+; Functions FROM Bool select two values
+(define (bool->color b) (if b "red" "blue"))
+(define (bool->int b) (if b 1 0))
+
+(display "bool->color(#t) = ") (display (bool->color #t)) (newline)
+(display "bool->color(#f) = ") (display (bool->color #f)) (newline)
+
+; |functions: Bool -> A| = |A|^2 (pick two elements with replacement)
+; |functions: A -> Bool| = 2^|A| (every subset defines a predicate)
+(display "|Bool -> Bool| = 4") (newline)
+(display "|Bool -> {r,g,b}| = 9") (newline)
+(display "|{a,b,c} -> Bool| = 8")
+`} />
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Void</td><td class="pr-4 text-green-300">; (no values)</td><td class="pr-4 text-blue-300">NoReturn</td><td class="font-sans">Empty type (initial object)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">()</td><td class="pr-4 text-green-300">'unit</td><td class="pr-4 text-blue-300">None</td><td class="font-sans">Unit type (terminal object)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Bool</td><td class="pr-4 text-green-300">#t / #f</td><td class="pr-4 text-blue-300">True / False</td><td class="font-sans">Two-element set</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f :: a -&gt; b</td><td class="pr-4 text-green-300">(define (f x) ...)</td><td class="pr-4 text-blue-300">def f(x): ...</td><td class="font-sans">Morphism from a to b</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&perp; (bottom)</td><td class="pr-4 text-green-300">(let loop () (loop))</td><td class="pr-4 text-blue-300">while True: pass</td><td class="font-sans">Non-termination</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">absurd :: Void -&gt; a</td><td class="pr-4 text-green-300">(define (absurd v) ...)</td><td class="pr-4 text-blue-300">def absurd(v): ...</td><td class="font-sans">From falsity, anything</td></tr>
+          <tr><td class="py-2 pr-4">unit :: a -&gt; ()</td><td class="pr-4 text-green-300">(define (to-unit x) 'unit)</td><td class="pr-4 text-blue-300">def to_unit(x): None</td><td class="font-sans">Terminal morphism</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> &mdash; Category: the grand design</li>
+      <li><a href="/reading/category-theory/milewski-03/">🐱 Chapter 3</a> &mdash; Categories great and small</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related paper pages</p>
+    <ul>
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> &mdash; categories of types in databases</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> &mdash; programs as morphisms, same pattern</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Category_of_sets"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Category of sets (Set)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curry-Howard correspondence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bottom_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bottom type</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Unit_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Unit type</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use total functions in Scheme and Python. The bottom example simulates non-termination with an infinite loop but does not actually run it. Milewski's treatment works in Hask, where every type includes bottom and the category is technically a CPO-enriched category rather than Set. The examples on this page stay in Set (no bottom, no laziness). For example: the four Bool&rarr;Bool functions enumerated above are exactly the four morphisms in Set. In Hask, there are additional "functions" that return bottom on some inputs, bringing the count higher. The enumeration is exact for Set. The Hask subtlety is noted but not demonstrated.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2014/11/24/types-and-functions/">Read Chapter 2</a>. Start with "What Are Types?" for the sets-and-functions picture, then "Examples of Types" for Void, Unit, and Bool.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Types are the handshake between pipeline stages. The target type of one morphism must match the source type of the next. This is the composability constraint that the Natural Framework enforces at every stage boundary. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-01/", label: "Category" }} next={{ href: "/reading/category-theory/milewski-03/", label: "Great and Small" }} />
+
+  </main>
+</Layout>

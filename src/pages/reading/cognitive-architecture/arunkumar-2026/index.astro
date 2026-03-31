@@ -1,0 +1,359 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Arunkumar et al. 2026 — Agentic AI Architectures" favicon="🏛️">
+  <main>
+
+    <a href="/reading/cognitive-architecture/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Agentic AI: Architectures, Taxonomies, and Evaluation</h1>
+    <p class="text-gray-400 text-sm mb-6">Arunkumar V, Gangadharan G.R., Rajkumar Buyya · 2026 · <a href="https://arxiv.org/abs/2601.12560"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2601.12560</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">LLMs as cognitive controllers: perception, memory, planning, action, tool use, and collaboration. The full agent stack built on top of frozen weights.</p>
+    </div>
+
+    <!-- SVG: Agent control loop -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Environment -->
+        <rect x="10" y="90" width="80" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="50" y="115" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Environment</text>
+
+        <!-- Perceive -->
+        <rect x="110" y="90" width="70" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="145" y="108" text-anchor="middle" fill="currentColor" font-size="9">Perceive</text>
+        <text x="145" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Φ</text>
+
+        <!-- Memory -->
+        <rect x="200" y="40" width="80" height="35" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="240" y="55" text-anchor="middle" fill="currentColor" font-size="9">Memory</text>
+        <text x="240" y="67" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">μ</text>
+
+        <!-- Plan -->
+        <rect x="200" y="90" width="80" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="240" y="108" text-anchor="middle" fill="currentColor" font-size="9">Plan</text>
+        <text x="240" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Ψ</text>
+
+        <!-- Act -->
+        <rect x="300" y="90" width="70" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="335" y="108" text-anchor="middle" fill="currentColor" font-size="9">Act</text>
+        <text x="335" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">π</text>
+
+        <!-- Tools -->
+        <rect x="300" y="145" width="70" height="30" rx="5" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="335" y="164" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.8">Tools</text>
+
+        <!-- Collaborate -->
+        <rect x="390" y="90" width="80" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="430" y="108" text-anchor="middle" fill="currentColor" font-size="9">Collaborate</text>
+        <text x="430" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">other agents</text>
+
+        <!-- Arrows: flow -->
+        <line x1="90" y1="110" x2="110" y2="110" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="108,106 114,110 108,114" fill="currentColor" fill-opacity="0.3"/>
+
+        <line x1="180" y1="110" x2="200" y2="110" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="198,106 204,110 198,114" fill="currentColor" fill-opacity="0.3"/>
+
+        <line x1="280" y1="110" x2="300" y2="110" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="298,106 304,110 298,114" fill="currentColor" fill-opacity="0.3"/>
+
+        <line x1="370" y1="110" x2="390" y2="110" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="388,106 394,110 388,114" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Memory bidirectional -->
+        <line x1="240" y1="75" x2="240" y2="90" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="155" y1="90" x2="210" y2="75" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="325" y1="90" x2="270" y2="75" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Tool connection -->
+        <line x1="335" y1="130" x2="335" y2="145" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+
+        <!-- Feedback loop -->
+        <path d="M 335 130 Q 335 185 50 185 Q 20 185 20 130" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <text x="180" y="200" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.5">observation → next cycle</text>
+
+        <!-- Reflection loop -->
+        <path d="M 280 100 Q 290 80 270 75" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,2"/>
+        <text x="310" y="78" fill="#34d399" font-size="7" fill-opacity="0.5">reflect</text>
+
+        <!-- Caption -->
+        <text x="240" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the agentic control loop: Φ → μ → Ψ → π, with tool calls and feedback</text>
+      </svg>
+    </div>
+
+    <h2>What this covers</h2>
+
+    <p>Wrap an LLM in a loop with tools, memory, and feedback, and it stops being a text generator. It becomes a cognitive controller: perceive observations, update memory, plan next steps, select actions. The weights stay frozen. All adaptation happens through the context window, external memory, or verbal self-critique.</p>
+
+    <h2>The control loop</h2>
+
+    <p>Four named functions run each cycle:</p>
+
+    <ol class="text-gray-300 space-y-1 mb-4">
+      <li><strong>Φ (Perceive):</strong> ground multimodal input. Text, screenshots, DOM, coordinates, audio, video, point clouds.</li>
+      <li><strong>μ (Memory update):</strong> write observations to persistent state. Retrieval, structured storage, summarization, pruning.</li>
+      <li><strong>Ψ (Plan):</strong> reason about what to do next. Chain, tree, or hierarchical decomposition.</li>
+      <li><strong>π (Act):</strong> select and execute an action. API call, code execution, tool invocation, motor command.</li>
+    </ol>
+
+    <p>The cycle repeats. Each action produces an observation that feeds the next perception. Reflection can interrupt the cycle to revise the plan.</p>
+
+    <h2>Core components</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Component</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it does</th>
+            <th class="text-left py-2 text-gray-400">Parts bin cell</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Perception</td><td class="pr-3 text-gray-400">Multimodal grounding: text, vision, DOM, coordinates. Evolving from text-only to screenshots to video to 3D.</td><td class="text-gray-400">Perceive</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Memory</td><td class="pr-3 text-gray-400">Persistent state across episodes. Retrieval, structured storage, summarization, decay, pruning.</td><td class="text-gray-400">Cache + Remember</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Planning</td><td class="pr-3 text-gray-400">Reasoning topologies: linear chains (ReAct), branching trees (ToT), hierarchical decomposition, inference-time budgets.</td><td class="text-gray-400">Attend</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Action + Tools</td><td class="pr-3 text-gray-400">Execution: API calls → code-as-action → agent-computer interfaces → computer-use → embodied VLA.</td><td class="text-gray-400">Remember (output)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Reflection</td><td class="pr-3 text-gray-400">Self-critique without weight updates. Store natural-language lessons, condition future attempts.</td><td class="text-gray-400">Consolidate (verbal)</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Collaboration</td><td class="text-gray-400">Multi-agent coordination: chain, star, mesh topologies. Role-playing, debate, verification.</td><td class="text-gray-400">Attend (distributed)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Planning topologies</h2>
+
+    <!-- SVG: Planning evolution -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 120" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Linear chain -->
+        <text x="60" y="16" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">linear</text>
+        <circle cx="20" cy="40" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="25" y1="40" x2="45" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="50" cy="40" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="55" y1="40" x2="75" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="80" cy="40" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="85" y1="40" x2="95" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="93,37 99,40 93,43" fill="currentColor" fill-opacity="0.3"/>
+        <text x="60" y="60" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">ReAct</text>
+
+        <!-- Branching tree -->
+        <text x="190" y="16" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">branching</text>
+        <circle cx="190" cy="30" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="186" y1="34" x2="165" y2="48" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="194" y1="34" x2="215" y2="48" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="165" cy="52" r="4" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="215" cy="52" r="4" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="162" y1="55" x2="150" y2="68" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="168" y1="55" x2="180" y2="68" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="212" y1="55" x2="200" y2="68" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="218" y1="55" x2="230" y2="68" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <circle cx="150" cy="72" r="3" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <circle cx="180" cy="72" r="3" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <circle cx="200" cy="72" r="3" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <circle cx="230" cy="72" r="3" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="190" y="90" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">Tree of Thoughts</text>
+
+        <!-- Hierarchical -->
+        <text x="340" y="16" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">hierarchical</text>
+        <rect x="315" y="25" width="50" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="340" y="39" text-anchor="middle" fill="currentColor" font-size="7">goal</text>
+        <line x1="325" y1="45" x2="310" y2="55" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="340" y1="45" x2="340" y2="55" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="355" y1="45" x2="370" y2="55" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <rect x="295" y="55" width="30" height="16" rx="2" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <rect x="325" y="55" width="30" height="16" rx="2" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <rect x="355" y="55" width="30" height="16" rx="2" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <text x="310" y="66" text-anchor="middle" fill="currentColor" font-size="6" fill-opacity="0.3">sub₁</text>
+        <text x="340" y="66" text-anchor="middle" fill="currentColor" font-size="6" fill-opacity="0.3">sub₂</text>
+        <text x="370" y="66" text-anchor="middle" fill="currentColor" font-size="6" fill-opacity="0.3">sub₃</text>
+        <text x="340" y="90" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">decomposition</text>
+
+        <!-- Inference-time -->
+        <text x="440" y="16" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">internal</text>
+        <rect x="415" y="25" width="50" height="50" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="440" y="48" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">search</text>
+        <text x="440" y="58" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">inside</text>
+        <text x="440" y="68" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">model</text>
+        <text x="440" y="90" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">o1, o3</text>
+
+        <!-- Evolution arrow -->
+        <line x1="105" y1="105" x2="420" y2="105" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <polygon points="418,102 424,105 418,108" fill="#a1a1aa" fill-opacity="0.18"/>
+        <text x="260" y="118" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">increasing search depth</text>
+      </svg>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Topology</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Mechanism</th>
+            <th class="text-left py-2 text-gray-400">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Linear chain</td><td class="pr-3 text-gray-400">Interleave reasoning and action. One step at a time.</td><td class="text-gray-400">ReAct</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Branching tree</td><td class="pr-3 text-gray-400">Treat thoughts as search nodes. Explore alternatives, backtrack.</td><td class="text-gray-400">Tree of Thoughts</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Hierarchical</td><td class="pr-3 text-gray-400">Decompose goal into subgoals. Each subgoal gets its own plan.</td><td class="text-gray-400">HuggingGPT, TaskWeaver</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Internal search</td><td class="text-gray-400">Inference-time compute budgets. Search happens inside the model.</td><td class="text-gray-400">o1, o3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Action space evolution</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Paradigm</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What the agent can do</th>
+            <th class="text-left py-2 text-gray-400">Constraint level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">API-based</td><td class="pr-3 text-gray-400">Call predefined functions with typed arguments</td><td class="text-gray-400">Most constrained</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Code-as-action</td><td class="pr-3 text-gray-400">Generate and execute arbitrary code</td><td class="text-gray-400">Less constrained</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Agent-computer interface</td><td class="pr-3 text-gray-400">Curated shell: file system, terminal, browser</td><td class="text-gray-400">Moderate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Computer-use</td><td class="pr-3 text-gray-400">Mouse, keyboard, screenshots: the raw desktop</td><td class="text-gray-400">Minimal</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Embodied VLA</td><td class="text-gray-400">Continuous motor primitives from vision-language-action models</td><td class="text-gray-400">Unconstrained</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Memory architectures</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">System</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Mechanism</th>
+            <th class="text-left py-2 text-gray-400">Parts bin cell</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Generative Agents</td><td class="pr-3 text-gray-400">Natural language stream with reflection and summarization</td><td class="text-gray-400">Remember × sequence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">MemoryBank</td><td class="pr-3 text-gray-400">Hierarchical clusters with exponential decay</td><td class="text-gray-400">Cache × tree</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">ChatDB</td><td class="pr-3 text-gray-400">Symbolic SQL tables for structured state</td><td class="text-gray-400">Cache × graph</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">MemGPT</td><td class="pr-3 text-gray-400">Paged long-term memory with explicit controller-driven retrieval</td><td class="text-gray-400">Attend × sequence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">MemInsight</td><td class="pr-3 text-gray-400">Convert episodic traces into semantic insights via compression</td><td class="text-gray-400">Consolidate × sequence</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">MemAgent</td><td class="text-gray-400">Learn what to discard: policy-driven pruning</td><td class="text-gray-400">Filter × sequence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Multi-agent topologies</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Topology</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Pattern</th>
+            <th class="text-left py-2 text-gray-400">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Chain</td><td class="pr-3 text-gray-400">Sequential waterfall: each agent passes deliverables to the next</td><td class="text-gray-400">MetaGPT, ChatDev</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Star</td><td class="pr-3 text-gray-400">Hub-and-spoke: coordinator delegates to specialized workers</td><td class="text-gray-400">AutoGen, Swarm</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Mesh</td><td class="text-gray-400">Decentralized: agents communicate dynamically, debate, simulate</td><td class="text-gray-400">CAMEL, Generative Agents</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <h2>Reflection and feedback</h2>
+
+    <p>The frozen-weights constraint means agents cannot learn by updating parameters. Instead, they learn verbally:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Framework</th>
+            <th class="text-left py-2 text-gray-400">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">ReAct</td><td class="text-gray-400">Interleave reasoning traces with actions. Each observation feeds the next thought. Linear, no backtracking.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Reflexion</td><td class="text-gray-400">Store natural-language critiques of failures. Condition future attempts on these lessons. Verbal reinforcement.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Tree of Thoughts</td><td class="text-gray-400">Explore alternative reasoning paths. Evaluate and backtrack. Global search over thought space.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">MAKER</td><td class="text-gray-400">Hierarchical verification: verifier agents challenge worker outputs. Near-zero error on million-step chains.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Evaluation: the CLASS framework</summary>
+
+    <p>The paper argues that single success-rate metrics mask critical reliability issues. Their proposed replacement:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Dimension</th>
+            <th class="text-left py-2 text-gray-400">What to measure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Cost</td><td class="text-gray-400">Token spend, API calls, compute budget per task</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Latency</td><td class="text-gray-400">Time to first action, end-to-end task completion</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Accuracy</td><td class="text-gray-400">Task success, failure severity distribution (benign vs. catastrophic)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Security</td><td class="text-gray-400">Prompt injection resistance, trust boundaries, audit logging</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Stability</td><td class="text-gray-400">Run-to-run variance, infinite loop detection, error propagation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <h2>The memory problem</h2>
+
+    <p>Every memory system in this survey reinvents what <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> built architecturally.</p>
+
+    <p>MemGPT's paged memory is Soar's working memory + semantic memory, split into tiers. The controller pages facts in and out of the context window the way Soar's retrieval pulls from SMEM into WM. Soar's retrieval uses activation (recency + frequency + spreading from context). MemGPT uses the LLM itself to decide what to page in. One is a mechanism. The other is a hope.</p>
+
+    <p>The consolidation pipeline that Soar lacks and the <a href="https://june.kim/prescription-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>prescription</a> proposed? MemInsight already builds it. Read episodes, detect regularities, write compressed knowledge. MemInsight uses an LLM summarizer. The prescription uses temporal graph coarsening. Same problem: episodes accumulate, you need to extract what generalizes.</p>
+
+    <p>Then there's forgetting. MemAgent learns a pruning policy over memory entries, which is what <a href="/reading/cognitive-architecture/minsky-1986/">Minsky</a> called censors. Minsky's version suppresses the <em>thought preceding</em> a bad action. Soar's truth maintenance auto-retracts structures whose justification no longer holds. Three approaches to the same problem at increasing levels of architectural integration.</p>
+
+    <h2>Reasoning is search</h2>
+
+    <p>ReAct is <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> decision cycle, linearized. Observe, think, act, observe. Soar runs the same loop with parallel rule firing, staged preferences, and the impasse mechanism for recursive subgoaling. ReAct has none of that. The minimal viable agent loop: one thought, one action, no backtracking.</p>
+
+    <p>What about backtracking? Tree of Thoughts is MCTS for reasoning. Treat intermediate thoughts as search nodes. Evaluate. Backtrack. Explore alternatives. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> impasse mechanism does this natively: when the decision procedure can't select an operator, a substate opens and the same cycle runs recursively. ToT reimplements this in prompt space because the <a href="/reading/cognitive-architecture/vaswani-2017/">transformer</a> has no native backtracking.</p>
+
+    <p>And learning from failure? Reflexion is verbal chunking. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking backtraces a dependency chain and writes a production rule. Reflexion writes a natural-language critique and appends it to the prompt. Both compile deliberation into reusable knowledge. One produces executable rules. The other produces text that the LLM might or might not attend to. The gap between "compiles to code" and "appends to prompt" is the gap between architectural and verbal Consolidate.</p>
+
+    <p>Hierarchical verification (MAKER) takes <a href="/reading/cognitive-architecture/minsky-1986/">A-brain / B-brain</a> to scale. Worker agents act. Verifier agents challenge. Near-zero error on million-step chains. Minsky's reflection hierarchy, distributed across multiple agents. Also how <a href="/reading/cognitive-architecture/zhao-2023/">RLHF</a> works: one model generates, another judges. Minsky named the pattern forty years before anyone built it.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-architecture/zhao-2023/">Zhao et al. survey</a></li>
+      <li><a href="/reading/cognitive-architecture/laird-2022/">Soar</a></li>
+      <li><a href="https://june.kim/agents-standup"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Agents Stand-Up (blog)</a></li>
+      <li><a href="/reading/cognitive-architecture/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/cognitive-architecture/zhao-2023/", label: "Zhao 2023 · 4 of 5" }} />
+
+  </main>
+</Layout>

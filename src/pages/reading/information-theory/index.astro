@@ -1,0 +1,73 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Information Theory" favicon="📡">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>📡 Information Theory</h1>
+    <p class="text-gray-400 mb-2">Sources: Claude Shannon, <a href="https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf">"A Mathematical Theory of Communication"</a> (1948, public domain); <a href="https://en.wikipedia.org/wiki/Information_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a> (CC BY-SA 4.0).</p>
+    <p class="text-gray-400 mb-6">Entropy, divergence, and channels. If a paper page mentions "information loss" or "data processing inequality" and you want the definitions, start here.</p>
+
+    <!-- SVG: Entropy Venn diagram — visual map of information quantities -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 230" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <defs>
+          <clipPath id="idx-clip-x"><circle cx="155" cy="110" r="80"/></clipPath>
+          <clipPath id="idx-clip-y"><circle cx="245" cy="110" r="80"/></clipPath>
+        </defs>
+        <!-- H(X) circle -->
+        <circle cx="155" cy="110" r="80" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- H(Y) circle -->
+        <circle cx="245" cy="110" r="80" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Intersection -->
+        <circle cx="245" cy="110" r="80" clip-path="url(#idx-clip-x)" fill="#3b82f6" fill-opacity="0.18" stroke="none"/>
+        <!-- Region labels -->
+        <text x="110" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">H(X|Y)</text>
+        <text x="110" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">sec. 3</text>
+        <text x="290" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">H(Y|X)</text>
+        <text x="290" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">sec. 3</text>
+        <text x="200" y="100" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">I(X;Y)</text>
+        <text x="200" y="116" text-anchor="middle" fill="#60a5fa" font-size="9">sec. 4</text>
+        <!-- Outer labels -->
+        <text x="120" y="24" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.6">H(X)</text>
+        <text x="120" y="38" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">sec. 2</text>
+        <text x="280" y="24" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.6">H(Y)</text>
+        <text x="280" y="38" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">sec. 2</text>
+        <!-- H(X,Y) brace at bottom -->
+        <line x1="75" y1="203" x2="325" y2="203" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="75" y1="198" x2="75" y2="203" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="325" y1="198" x2="325" y2="203" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="218" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">H(X,Y) — sec. 3</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/information-theory/shannon-01/", title: "Surprise", desc: "I(x) = -log P(x): rare events carry more information" },
+  { href: "/reading/information-theory/shannon-02/", title: "Entropy", desc: "H(X) = expected surprise. Fair coin = 1 bit. Certainty = 0" },
+  { href: "/reading/information-theory/shannon-03/", title: "Joint and conditional", desc: "H(X|Y) = H(X,Y) - H(Y): knowing Y can only reduce uncertainty about X" },
+  { href: "/reading/information-theory/shannon-04/", title: "Mutual information", desc: "I(X;Y) = how much knowing one tells you about the other" },
+  { href: "/reading/information-theory/shannon-05/", title: "KL divergence", desc: "D(P||Q) = surprise of Q when the truth is P" },
+  { href: "/reading/information-theory/shannon-06/", title: "Data processing inequality", desc: "Processing cannot create information: X to Y to Z implies I(X;Z) &le; I(X;Y)" },
+  { href: "/reading/information-theory/shannon-07/", title: "Channels and capacity", desc: "A channel is P(Y|X). Capacity = max mutual information over inputs" },
+  { href: "/reading/information-theory/shannon-08/", title: "Entropy as functor", desc: "Shannon entropy is the unique information measure that respects composition" }
+]} icon="📡" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-441-information-theory-spring-2016/">MIT 6.441 Information Theory</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; entropy is defined over probability distributions</li>
+      <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> &mdash; cross-entropy loss, mutual information, and compression</li>
+      <li><a href="/reading/category-theory/">🐱 Category Theory</a> &mdash; entropy as a functor is the final chapter</li>
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; KL divergence bridges both fields</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

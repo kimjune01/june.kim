@@ -1,0 +1,171 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hume 1739 — A Treatise of Human Nature" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>A Treatise of Human Nature</h1>
+    <p class="text-gray-400 text-sm mb-6">David Hume · 1739 · <a href="https://www.gutenberg.org/ebooks/4705">Project Gutenberg</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">No amount of observed instances can logically guarantee a universal claim. Every inductive inference rests on a habit of the mind, not a chain of reasoning. Causation is something we feel, not something we prove.</p>
+    </div>
+
+    <!-- SVG: The problem of induction -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 520 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Observed instances (left cluster) -->
+        <circle cx="60" cy="80" r="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="90" cy="55" r="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="95" cy="100" r="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="125" cy="70" r="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="120" cy="105" r="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.2"/>
+        <text x="90" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">observed instances</text>
+
+        <!-- Arrow from instances toward universal claim -->
+        <line x1="150" y1="80" x2="225" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="225,75 235,80 225,85" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- The gap -->
+        <rect x="240" y="45" width="60" height="70" rx="6" fill="#ef4444" fill-opacity="0.08" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <text x="270" y="85" text-anchor="middle" fill="#ef4444" font-size="28">?</text>
+        <text x="270" y="140" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.7">the gap</text>
+
+        <!-- Arrow from gap toward universal claim -->
+        <line x1="305" y1="80" x2="360" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="360,75 370,80 360,85" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Universal claim (right) -->
+        <rect x="375" y="55" width="130" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="440" y="77" text-anchor="middle" fill="currentColor" font-size="11">universal claim</text>
+        <text x="440" y="92" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">"all swans are white"</text>
+
+        <!-- Caption -->
+        <text x="260" y="18" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">no logical bridge from finite observations to infinite generalization</text>
+      </svg>
+    </div>
+
+    <!-- The argument -->
+    <h3>The argument</h3>
+
+    <p>Hume starts with a simple observation. We see one billiard ball strike another, and the second moves. We call this causation. But what did we actually perceive? Two events in sequence. We never observe the force that supposedly links cause to effect.</p>
+
+    <p>From this, the problem of induction follows directly. Every time we generalize from past experience, we assume that the future will resemble the past. That assumption cannot itself be justified by experience, because any such justification would be circular: we would be using induction to prove induction.</p>
+
+    <p>Hume's resolution is psychological, not logical. We form causal beliefs through constant conjunction. When A has always been followed by B, the mind develops a habit of expecting B upon seeing A. Causation is a feeling of anticipation, not a logical deduction. Custom, not reason, is the great guide of human life.</p>
+
+    <p>This leaves us with three claims that have never been overturned:</p>
+    <ul>
+      <li>Observed regularities do not entail universal laws.</li>
+      <li>The assumption that nature is uniform cannot be proved without circularity.</li>
+      <li>Causal necessity is a projection of the mind, not a feature of the world.</li>
+    </ul>
+
+    <!-- What Hume destroyed -->
+    <h3>What Hume destroyed</h3>
+
+    <p>Francis Bacon's <em>Novum Organum</em> (1620) had built scientific method on inductive enumeration: gather enough instances, eliminate alternatives, and the truth emerges. Hume showed that no finite set of instances could ever be enough. The eliminative procedure might narrow the field, but it could never close it.</p>
+
+    <p>Descartes had placed certainty at the foundation of knowledge. His method of doubt was supposed to reach bedrock truths from which everything else could be deduced. Hume demonstrated that matters of fact, unlike relations of ideas, can never achieve certainty. You can be certain that a triangle has three sides. You cannot be certain that the sun will rise tomorrow. The entire empirical world sits on the wrong side of that divide.</p>
+
+    <p>Between them, Bacon and Descartes had given science two pillars: reliable induction and deductive certainty about the natural world. Hume pulled both away.</p>
+
+    <!-- The responses -->
+    <h3>Who tried to answer Hume</h3>
+
+    <p><a href="https://en.wikipedia.org/wiki/Immanuel_Kant"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kant</a> called Hume the thinker who woke him from his "dogmatic slumber." His response, the <em>Critique of Pure Reason</em> (1781), tried to save causation by moving it inside the mind. Causation is not a feature we discover in nature; it is a category the mind imposes on experience as a precondition for experience to be intelligible at all. Whether Kant succeeded depends on whether you accept that mental categories can be both subjective and universally binding. Many philosophers since have doubted it. (<a href="/reading/scientific-method/">See the timeline</a> for how the debate continued.)</p>
+
+    <p>Popper, writing two centuries later, accepted Hume completely. If induction cannot justify universal claims, then science should stop trying to verify them. Instead, scientists should propose conjectures and try to falsify them. A theory is scientific not because it has been confirmed by evidence but because it can, in principle, be refuted by evidence. <em>The Logic of Scientific Discovery</em> (1934) turned Hume's negative result into a positive methodology.</p>
+
+    <p>Mill took a different path. His <em>System of Logic</em> (1843) acknowledged that induction could not achieve certainty, then built practical methods for causal inference anyway. The Method of Agreement, the Method of Difference, the Method of Concomitant Variation. These are not proofs. They are disciplined procedures for making the best available guess. Mill's honesty about their limitations is what makes them useful: they work precisely because they do not pretend to be deductive.</p>
+
+    <!-- Failures of induction -->
+    <h3>Failures of induction</h3>
+
+    <p>Hume's argument is not merely philosophical. History provides the evidence.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Inductive claim</th>
+            <th class="py-2 pr-4 text-left">Evidence base</th>
+            <th class="py-2 text-left">What broke it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4">All swans are white</td>
+            <td class="pr-4">Thousands of European observations</td>
+            <td>Black swans found in Australia (1697)</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4">Newtonian gravity is exact</td>
+            <td class="pr-4">Two centuries of precise predictions</td>
+            <td>Mercury's perihelion; general relativity (1915)</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4">Energy is always continuous</td>
+            <td class="pr-4">All of classical physics</td>
+            <td>Blackbody radiation; quantum mechanics (1900)</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4">Euclidean geometry describes space</td>
+            <td class="pr-4">Two millennia of surveying</td>
+            <td>Curved spacetime near massive objects (1919)</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4">Species are fixed kinds</td>
+            <td class="pr-4">Linnaeus and centuries of taxonomy</td>
+            <td>Natural selection; <em>On the Origin of Species</em> (1859)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each row shows the same structure. An enormous body of evidence supported a universal claim. A single counterexample, or a more precise measurement, overturned it. The gap in the diagram above is not a technicality. It is the place where scientific revolutions happen.</p>
+
+    <!-- Integrity angle -->
+    <h3>The courage of uncertainty</h3>
+
+    <p>Hume was twenty-six when he published the <em>Treatise</em>. The book argues, with sustained rigor, that the most basic operation of human reasoning has no rational foundation. That takes a particular kind of intellectual courage: the willingness to follow an argument even when the conclusion is uncomfortable.</p>
+
+    <p>Science after Hume operates in a permanent state of provisionality. Every theory is a best-available approximation, never a final truth. The scientists who advanced our understanding most were those who took this seriously. Darwin hesitated for decades because he understood how much his evidence could not prove. Einstein overturned Newton not by gathering more confirmations but by finding the edge case where prediction and observation diverged.</p>
+
+    <p>Accepting that certainty is impossible is not defeatism. It is the precondition for honest inquiry. The alternative is dogma: treating provisional conclusions as settled facts and defending them against evidence. Hume showed, three centuries ago, that anyone who claims to have certain knowledge of how the world works has not thought carefully enough about what "certain" means.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">🔬 Scientific Method</a> — the full timeline from Bacon to Jaynes</li>
+      <li><a href="/reading/scientific-method/popper-1934/">Popper 1934</a> — falsifiability as Hume's answer: if induction can't be justified, replace it with falsification</li>
+      <li><a href="/reading/logic/logic-05/">🔑 Logic Ch.5</a> — natural deduction: Hume's problem of induction is the gap between the deductive rules and empirical generalization</li>
+      <li><a href="/reading/probability/grinstead-07/">🎰 Probability Ch.7</a> — Bayesian updating: the modern solution to Hume's induction problem is probabilistic conditioning</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Problem_of_induction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Problem of induction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/David_Hume"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>David Hume</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/A_Treatise_of_Human_Nature"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>A Treatise of Human Nature</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Causality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Causality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Falsifiability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Falsifiability</a> — Popper's answer to Hume</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read it yourself: <a href="https://www.gutenberg.org/ebooks/4705">Project Gutenberg</a> (full text, public domain). Book I, Part III is where the argument about causation lives.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/descartes-1637/", label: "Descartes 1637 · 2 of 17" }} next={{ href: "/reading/scientific-method/mill-1843/", label: "Mill 1843 · 4 of 17" }} />
+  </main>
+</Layout>

@@ -1,0 +1,238 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 11 — Markov Chains" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Markov Chains</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A Markov chain is a random process where the next state depends only on the current state, not the history. The transition matrix P encodes all the dynamics. Multiply P by itself to see the future. Ergodic chains converge to a unique stationary distribution.</p>
+    </div>
+
+    <!-- 1. Transition matrix -->
+    <h3>Transition matrix</h3>
+    <p>A Markov chain on states 1, &hellip;, n is defined by its <strong>transition matrix</strong> P, where P&#x1D62;&#x2C7C; = P(next state = j | current state = i). Each row sums to 1. The state after k steps: multiply the initial distribution by P&#x1D4F;.</p>
+
+    <!-- SVG: State diagram with labeled transition probabilities -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- State S (sunny) -->
+        <circle cx="100" cy="100" r="35" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="100" y="105" text-anchor="middle" fill="currentColor" font-size="16">S</text>
+        <!-- State R (rainy) -->
+        <circle cx="280" cy="100" r="35" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="280" y="105" text-anchor="middle" fill="currentColor" font-size="16">R</text>
+        <!-- S -> R arrow (top) -->
+        <path d="M 130,80 Q 190,30 250,80" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow-11)"/>
+        <text x="190" y="45" text-anchor="middle" fill="#facc15" font-size="12">0.3</text>
+        <!-- R -> S arrow (bottom) -->
+        <path d="M 250,120 Q 190,170 130,120" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow-11)"/>
+        <text x="190" y="165" text-anchor="middle" fill="#facc15" font-size="12">0.5</text>
+        <!-- S -> S self-loop -->
+        <path d="M 75,75 Q 50,30 100,65" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-11)"/>
+        <text x="55" y="45" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">0.7</text>
+        <!-- R -> R self-loop -->
+        <path d="M 305,75 Q 330,30 280,65" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#arrow-11)"/>
+        <text x="325" y="45" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">0.5</text>
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow-11" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <!-- Caption -->
+        <text x="190" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">weather Markov chain: sunny &#x2194; rainy</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Markov chain: transition matrix as list of rows
+; P[i][j] = probability of going from state i to state j
+
+; Weather: S=sunny(0), R=rainy(1)
+; P = [[0.7, 0.3],
+;      [0.5, 0.5]]
+
+(define P '((0.7 0.3)
+            (0.5 0.5)))
+
+; Matrix-vector multiply: next distribution from current
+(define (mat-vec-mul mat vec)
+  (map (lambda (row)
+    (let loop ((r row) (v vec) (s 0))
+      (if (null? r) s
+          (loop (cdr r) (cdr v) (+ s (* (car r) (car v)))))))
+    mat))
+
+; Transpose for left-multiply: dist * P = P^T * dist
+(define (transpose mat)
+  (apply map list mat))
+
+(define (step dist P)
+  (mat-vec-mul (transpose P) dist))
+
+; Start sunny, evolve
+(define d0 '(1.0 0.0))
+(define d1 (step d0 P))
+(define d2 (step d1 P))
+(define d10 (let loop ((d d0) (i 0))
+  (if (= i 10) d (loop (step d P) (+ i 1)))))
+
+(display "day 0: ") (display d0) (newline)
+(display "day 1: ") (display d1) (newline)
+(display "day 2: ") (display d2) (newline)
+(display "day 10: ") (display d10) (newline)
+; Converges to stationary distribution (5/8, 3/8)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+P = np.array([[0.7, 0.3],
+              [0.5, 0.5]])
+
+d = np.array([1.0, 0.0])
+for i in [1, 2, 5, 10, 50]:
+    d_i = d @ np.linalg.matrix_power(P, i)
+    print(f"day {i:>2}: [{d_i[0]:.4f}, {d_i[1]:.4f}]")
+# Converges to [0.625, 0.375]
+`} />
+    </div>
+
+    <!-- 2. Stationary distribution -->
+    <h3>Stationary distribution</h3>
+    <p>A distribution &pi; is <strong>stationary</strong> if &pi;P = &pi;. It is a left eigenvector of P with eigenvalue 1. For an ergodic chain (irreducible and aperiodic), the stationary distribution is unique, and every initial distribution converges to it. This is the <strong>ergodic theorem</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Find stationary distribution by solving pi * P = pi
+; For 2x2: pi = (p, 1-p) where p = P[1][0] / (P[0][1] + P[1][0])
+
+(define p01 0.3) ; S -> R
+(define p10 0.5) ; R -> S
+
+(define pi-sunny (/ p10 (+ p01 p10)))
+(define pi-rainy (/ p01 (+ p01 p10)))
+
+(display "stationary: (") (display pi-sunny)
+(display ", ") (display pi-rainy) (display ")") (newline)
+; (0.625, 0.375)
+
+; Verify: pi * P = pi
+(define (dot a b)
+  (let loop ((a a) (b b) (s 0))
+    (if (null? a) s (loop (cdr a) (cdr b) (+ s (* (car a) (car b)))))))
+
+(define pi-vec (list pi-sunny pi-rainy))
+(define col0 (list 0.7 0.5))
+(define col1 (list 0.3 0.5))
+(display "pi*P = (") (display (dot pi-vec col0))
+(display ", ") (display (dot pi-vec col1)) (display ")")
+; Should equal pi itself
+`} />
+
+    <!-- 3. Absorbing chains -->
+    <h3>Absorbing chains</h3>
+    <p>A state is <strong>absorbing</strong> if, once entered, the chain never leaves. An absorbing chain has at least one absorbing state and every state can reach one. The key question: starting from a transient state, how many steps until absorption? The <strong>fundamental matrix</strong> N = (I &minus; Q)&#x207B;&sup1; answers this, where Q is the submatrix of transitions among transient states.</p>
+
+    <SchemeRepl client:load initialCode={`; Absorbing chain: gambler with $2, wins or loses $1
+; States: 0 (broke=absorbing), 1, 2, 3 (rich=absorbing)
+; P(up) = P(down) = 0.5
+
+; Q = transitions among transient states (1 and 2)
+; Q = [[0, 0.5],
+;      [0.5, 0]]
+
+; N = (I - Q)^(-1) = fundamental matrix
+; I - Q = [[1, -0.5], [-0.5, 1]]
+; det = 1 - 0.25 = 0.75
+; N = (1/0.75) * [[1, 0.5], [0.5, 1]]
+
+(define det 0.75)
+(define N00 (/ 1 det))
+(define N01 (/ 0.5 det))
+(define N10 (/ 0.5 det))
+(define N11 (/ 1 det))
+
+; Expected steps to absorption = row sums of N
+(define from-1 (+ N00 N01))
+(define from-2 (+ N10 N11))
+
+(display "from state 1: ") (display from-1) (display " steps") (newline)
+(display "from state 2: ") (display from-2) (display " steps") (newline)
+; Both: 2 expected steps
+
+; Absorption probabilities: B = N * R
+; R = [[0.5, 0], [0, 0.5]] (prob of going to absorbing states)
+(define b10 (* N00 0.5))  ; from 1, absorbed at 0
+(define b13 (* N01 0.5))  ; from 1, absorbed at 3
+(display "from 1: P(ruin)=") (display b10)
+(display ", P(win)=") (display b13) (newline)
+; P(ruin from 1) = 2/3, P(win from 1) = 1/3
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P&#x1D62;&#x2C7C;</td><td class="pr-4 text-green-300">(list-ref (list-ref P i) j)</td><td class="font-sans">Transition probability i &rarr; j</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&pi;P = &pi;</td><td class="pr-4 text-green-300">(dot pi-vec col)</td><td class="font-sans">Stationary distribution</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">N = (I &minus; Q)&#x207B;&sup1;</td><td class="pr-4 text-green-300">fundamental matrix</td><td class="font-sans">Expected visits to transient states</td></tr>
+          <tr><td class="py-2 pr-4">P&#x1D4F;</td><td class="pr-4 text-green-300">(loop ... (step d P) ...)</td><td class="font-sans">k-step transition matrix</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-12/">🎰 Ch 12</a> &mdash; Random Walks (Markov chains on the integers)</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Ch 4</a> &mdash; Conditional Probability (the Markov property is a conditional independence statement)</li>
+    
+      <li><a href="/reading/machine-learning/ml-10/">🤖 ML Ch.10</a> &mdash; sequence models extend Markov chains with learned transitions</li>
+      <li><a href="/reading/cognitive-architecture/laird-2022/">🏛️ Soar</a> &mdash; cognitive cycles have a Markov structure</li>
+      <li><a href="/reading/algorithms/algo-07/">⚙ Algorithms Ch.7</a> &mdash; shortest paths on graphs generalize Markov chain state transitions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Connections</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> &mdash; Markov categories: the abstract structure where Markov chains live as morphisms</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> &mdash; probabilistic programming composes Markov kernels the same way</li>
+      <li><a href="https://www.cs.mcgill.ca/~prakMDash/Publications/labelled-markov-processes.pdf">Panangaden 2009</a> &mdash; labelled Markov processes: continuous-state generalization with bisimulation</li>
+      <li><a href="https://en.wikipedia.org/wiki/Markov_chain"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Markov chain</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Absorbing_Markov_chain"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Absorbing Markov chain</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The weather example is a 2-state ergodic chain. Real Markov chains can have hundreds of states, but the algebra is the same: matrix powers for multi-step transitions, eigenvector for stationary distribution. The absorbing chain computation uses the fundamental matrix, which the textbook derives via geometric series: N = I + Q + Q&sup2; + &hellip; = (I &minus; Q)&#x207B;&sup1;. Fritz 2020 shows that the Markov property (future independent of past given present) is exactly the composition law in a Markov category.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Chapter 11</a> of Grinstead &amp; Snell.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-10/", label: "Generating Functions" }} next={{ href: "/reading/probability/grinstead-12/", label: "Random Walks" }} />
+
+  </main>
+</Layout>

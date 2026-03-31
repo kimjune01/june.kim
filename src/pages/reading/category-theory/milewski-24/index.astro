@@ -1,0 +1,494 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.24 — Lawvere Theories" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Lawvere Theories</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2017 · <a href="https://bartoszmilewski.com/2017/08/26/lawvere-theories/">Category Theory for Programmers, Ch. 24</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-17/">🍞 Ch17 (Monads)</a>, <a href="/reading/category-theory/milewski-16/">🍞 Ch16 (Adjunctions)</a>. 12 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong><a href="https://en.wikipedia.org/wiki/Lawvere_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lawvere theory</a></strong> is a category whose objects are natural numbers (powers of a generic object) and whose morphisms are n-ary operations. A <strong>model</strong> is a product-preserving functor L &rarr; Set. Every algebraic structure (monoids, groups, rings) is a model of some Lawvere theory. Every finitary monad arises from a Lawvere theory, and every Lawvere theory induces a monad. Lawvere theories compose better than monads: they have coproducts and tensor products where monads have no generic composition recipe.</p>
+    </div>
+
+    <!-- SVG: Lawvere theory — objects as powers, morphisms as n-ary operations -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Objects: 0, 1, 2, 3 -->
+        <circle cx="60" cy="80" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="60" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">0</text>
+        <circle cx="150" cy="80" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="150" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">1</text>
+        <circle cx="240" cy="80" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="240" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">2</text>
+        <circle cx="330" cy="80" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="330" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">3</text>
+
+        <!-- eta: 0 -> 1 (nullary op = unit) -->
+        <line x1="68" y1="78" x2="142" y2="78" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="142,75 149,78 142,81" fill="currentColor"/>
+        <text x="105" y="73" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">&#x03B7;</text>
+
+        <!-- mu: 2 -> 1 (binary op) -->
+        <path d="M 236 76 Q 195 40 154 76" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="154,76 158,68 152,70" fill="currentColor"/>
+        <text x="195" y="45" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">&#x03BC;</text>
+
+        <!-- projections: 2 -> 1 (dashed, structural) -->
+        <path d="M 236 84 Q 195 110 154 84" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3"/>
+        <polygon points="154,84 158,91 152,88" fill="currentColor" fill-opacity="0.4"/>
+        <text x="195" y="115" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">projections (from F&#x1D52;&#x1D56;)</text>
+
+        <!-- 3 -> 1 (ternary composite, light) -->
+        <path d="M 326 75 Q 240 20 154 75" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3"/>
+        <polygon points="154,75 159,68 153,70" fill="currentColor" fill-opacity="0.3"/>
+        <text x="240" y="24" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">ternary ops</text>
+
+        <!-- Labels -->
+        <text x="60" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">unit</text>
+        <text x="150" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">generic</text>
+        <text x="240" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">pair</text>
+        <text x="330" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">triple</text>
+        <text x="200" y="148" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">morphisms n &#x2192; 1 are n-ary operations</text>
+      </svg>
+    </div>
+
+    <!-- 1. From universal algebra to categories -->
+    <h3>From universal algebra to categories</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Universal_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal algebra</a> describes algebraic structures by their <strong>operations</strong> and <strong>arities</strong>. A monoid has a binary operation (arity 2) and a unit (arity 0). A group adds a unary inverse (arity 1). Lawvere's insight: encode these arities categorically. Objects are natural numbers 0, 1, 2, 3, ... representing powers of a generic object. Morphisms n &rarr; 1 are n-ary operations. The whole theory lives in a single category.</p>
+
+    <SchemeRepl client:load initialCode={`; A Lawvere theory is built from F^op (opposite of finite sets).
+; Objects = natural numbers (0, 1, 2, 3, ...)
+; Object n = the n-fold product of a generic object.
+;
+; Morphisms n -> 1 are the n-ary operations.
+; Morphisms n -> m are m-tuples of n-ary operations.
+;
+; F^op already has projections (picking one of n inputs).
+; A Lawvere theory adds "interesting" morphisms on top.
+
+; Let's represent a theory as a list of named operations with arities.
+(define (make-theory name ops)
+  (list name ops))
+
+(define (theory-ops theory) (cadr theory))
+
+; The theory of monoids: one binary op, one nullary op
+(define monoid-theory
+  (make-theory 'monoid
+    '((mu  . 2)    ; binary operation: 2 -> 1
+      (eta . 0)))) ; unit element:     0 -> 1
+
+; The theory of groups: add a unary inverse
+(define group-theory
+  (make-theory 'group
+    '((mu    . 2)   ; binary operation
+      (eta   . 0)   ; unit
+      (inv   . 1)))) ; inverse: 1 -> 1
+
+(display "Monoid ops: ") (display (theory-ops monoid-theory)) (newline)
+(display "Group ops:  ") (display (theory-ops group-theory))
+; The arities are the morphisms n -> 1 that define the theory.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lawvere theory = collection of operations with arities
+def make_theory(name, ops):
+    return {"name": name, "ops": ops}
+
+monoid_theory = make_theory("monoid", {"mu": 2, "eta": 0})
+group_theory = make_theory("group", {"mu": 2, "eta": 0, "inv": 1})
+
+print(f"Monoid ops: {monoid_theory['ops']}")
+print(f"Group ops:  {group_theory['ops']}")
+`} />
+    </div>
+
+
+    <!-- 2. Models: interpreting the theory -->
+    <h3>Models &mdash; interpreting the theory in Set</h3>
+    <p>A <strong>model</strong> of a Lawvere theory L is a product-preserving functor M : L &rarr; Set. It maps the generic object 1 to some set <em>a</em>, and each n-ary operation n &rarr; 1 to a function a<sup>n</sup> &rarr; a. Product-preserving means M(n) = a<sup>n</sup>. Different models of the monoid theory give different monoids: integers under addition, strings under concatenation, booleans under AND.</p>
+
+    <SchemeRepl client:load initialCode={`; A model interprets each operation as a concrete function.
+; Model of the monoid theory = a set + a binary op + a unit.
+
+(define (make-model carrier mu eta)
+  (list carrier mu eta))
+
+(define (model-mu m) (cadr m))
+(define (model-eta m) (caddr m))
+
+; Model 1: integers under addition
+(define int-add-monoid
+  (make-model 'integers + 0))
+
+; Model 2: strings under concatenation
+(define string-monoid
+  (make-model 'strings string-append ""))
+
+; Model 3: lists under append
+(define list-monoid
+  (make-model 'lists append '()))
+
+; Each model maps the same theory to different concrete operations.
+(define (test-model m a b label)
+  (display label) (display ": ")
+  (display "mu(") (display a) (display ", ") (display b) (display ") = ")
+  (display ((model-mu m) a b))
+  (display "  eta = ") (display (model-eta m))
+  (newline))
+
+(test-model int-add-monoid 3 4 "int-add")
+(test-model string-monoid "foo" "bar" "string")
+(test-model list-monoid '(1 2) '(3 4) "list")
+; Same theory, three models. That's the functor at work.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# A model of the monoid theory: carrier set + binary op + unit
+class MonoidModel:
+    def __init__(self, name, mu, eta):
+        self.name = name
+        self.mu = mu
+        self.eta = eta
+
+int_add = MonoidModel("int-add", lambda a, b: a + b, 0)
+str_cat = MonoidModel("string", lambda a, b: a + b, "")
+lst_app = MonoidModel("list", lambda a, b: a + b, [])
+
+for m, a, b in [(int_add, 3, 4), (str_cat, "foo", "bar"), (lst_app, [1,2], [3,4])]:
+    print(f"{m.name}: mu({a}, {b}) = {m.mu(a, b)},  eta = {m.eta}")
+`} />
+    </div>
+
+
+    <!-- 3. The free monoid Lawvere theory -->
+    <h3>Building L<sub>Mon</sub> &mdash; the Lawvere theory for monoids</h3>
+    <p>The hom-set L<sub>Mon</sub>(n, 1) contains all n-ary operations you can build from the monoid axioms. For a free monoid on n generators, these are all distinct products of the generators. L<sub>Mon</sub>(2, 1) includes: the unit (ignore both inputs), the two projections (return one input), the product (combine both), and all longer expressions like aba, aab, bba, ... In a free monoid, each of these is a distinct morphism.</p>
+
+    <SchemeRepl client:load initialCode={`; L_Mon(2, 1): all binary operations in a free monoid.
+; With generators a, b, these are all words over {a, b}
+; including the empty word (unit).
+
+; Generate all words of length up to k over an alphabet
+(define (words-up-to alphabet k)
+  (if (= k 0) '(())
+      (let ((shorter (words-up-to alphabet (- k 1))))
+        (append shorter
+          (apply append
+            (map (lambda (w)
+              (if (= (length w) k) '()
+                  '())) ; only extend max-length words
+            shorter)
+          (map (lambda (w)
+            (apply append
+              (map (lambda (c) (list (append w (list c))))
+                   alphabet)))
+            (filter (lambda (w) (= (length w) (- k 1)))
+                    shorter))))))
+
+; Simpler: enumerate morphisms 2 -> 1 as words over {a, b}
+; Each word is a function (a, b) -> free-monoid
+(define (enumerate-ops max-len)
+  (define (go len)
+    (if (= len 0) '(())
+        (let ((prev (go (- len 1))))
+          (append prev
+            (apply append
+              (map (lambda (w)
+                (list (append w '(a))
+                      (append w '(b))))
+                (filter (lambda (w) (= (length w) (- len 1)))
+                        prev)))))))
+  (go max-len))
+
+(define ops (enumerate-ops 3))
+(display "L_Mon(2,1) up to length 3:") (newline)
+(for-each (lambda (w) (display "  ") (display w) (newline))
+  ops)
+(display "Count: ") (display (length ops))
+; () a b aa ab ba bb aaa aab aba abb baa bab bba bbb
+; Each word is a distinct morphism in the free monoid theory.
+`} />
+
+
+    <!-- 4. Natural transformations between models -->
+    <h3>Natural transformations between models</h3>
+    <p>A morphism between models is a <strong>natural transformation</strong>: a function between their carrier sets that commutes with every operation. For monoids, that is exactly a <strong>monoid homomorphism</strong>. The naturality square says: applying the operation then the function equals applying the function to each input then the operation.</p>
+
+    <SchemeRepl client:load initialCode={`; A natural transformation between models is a monoid homomorphism.
+; h : M1 -> M2 such that h(mu1(a, b)) = mu2(h(a), h(b))
+;                    and h(eta1) = eta2
+
+(define (homomorphism? h mu1 eta1 mu2 eta2 test-pairs)
+  (and
+    ; Preserves unit
+    (equal? (h eta1) eta2)
+    ; Preserves operation (check on test pairs)
+    (every (lambda (pair)
+      (equal? (h (mu1 (car pair) (cdr pair)))
+              (mu2 (h (car pair)) (h (cdr pair)))))
+      test-pairs)))
+
+; h : (integers, +, 0) -> (strings, string-append, "")
+; h(n) = n copies of "x"
+(define (int->string n)
+  (make-string (abs n) #\\x))
+
+(display "h(0) = eta? ")
+(display (equal? (int->string 0) "")) (newline)
+
+(display "h(3+4) = h(3) ++ h(4)? ")
+(display (equal? (int->string (+ 3 4))
+                 (string-append (int->string 3) (int->string 4))))
+(newline)
+
+; Length is a homomorphism: (strings, ++, "") -> (ints, +, 0)
+(display "len('') = 0? ")
+(display (= (string-length "") 0)) (newline)
+
+(display "len('foo' ++ 'bar') = len('foo') + len('bar')? ")
+(display (= (string-length (string-append "foo" "bar"))
+            (+ (string-length "foo") (string-length "bar"))))
+; Naturality = homomorphism. Same condition, categorical language.
+`} />
+
+
+    <!-- 5. From Lawvere theories to monads -->
+    <h3>From Lawvere theories to monads</h3>
+    <p>Every Lawvere theory L induces a monad via the free/forgetful adjunction on its models. The forgetful functor U sends each model to its carrier set. The free functor F builds the free model. The monad T = U&#8728;F is given by the coend formula: T(a) = &int;<sup>n</sup> a<sup>n</sup> &times; L(n, 1). For L<sub>Mon</sub>, this gives the <strong>list monad</strong>: T(a) = List(a). Each element of T(a) is a word over the alphabet a, which is exactly a list.</p>
+
+    <SchemeRepl client:load initialCode={`; The monad from the monoid Lawvere theory is the list monad.
+;
+; T(a) = ∫^n  a^n × L_Mon(n, 1)
+;
+; L_Mon(n, 1) is the free monoid on n generators.
+; An element of a^n × L_Mon(n, 1) is:
+;   - a choice of n elements from a (a tuple)
+;   - a word over n generators (a morphism)
+; The coend glues these together: the result is just
+; the word with generators replaced by the chosen elements.
+; That's a list of elements from a.
+
+; Concretely: T(a) = List(a), return = singleton, join = concat.
+
+(define (T-return x) (list x))
+(define (T-join xss) (apply append xss))
+(define (T-bind xs f) (T-join (map f xs)))
+
+; The coend in action:
+; Pick 3 elements from {10, 20, 30} and apply the word "aba"
+; a=10, b=20 -> word "aba" -> (10 20 10)
+(define (apply-word word bindings)
+  (map (lambda (gen) (list-ref bindings gen)) word))
+
+(display "word (0 1 0) with bindings (10 20): ")
+(display (apply-word '(0 1 0) '(10 20))) (newline)
+
+; The coend identifies: different (tuple, word) pairs that
+; produce the same list are equivalent.
+; (bindings (a b), word "ab") ~ (bindings (a b c), word "ab")
+; because generator c is unused.
+
+; The monad operations:
+(display "return 5: ") (display (T-return 5)) (newline)
+(display "join ((1 2) (3) (4 5)): ")
+(display (T-join '((1 2) (3) (4 5)))) (newline)
+(display "bind (1 2 3) x->(x x*10): ")
+(display (T-bind '(1 2 3) (lambda (x) (list x (* x 10)))))
+; List monad. Same as Ch. 16's free/forgetful result.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# The monad from L_Mon is the list monad.
+# T(a) = List(a), induced by the free/forgetful adjunction on Mon.
+
+def T_return(x):
+    return [x]
+
+def T_join(xss):
+    return [x for xs in xss for x in xs]
+
+def T_bind(xs, f):
+    return T_join([f(x) for x in xs])
+
+# The coend: pick elements, apply a word
+def apply_word(word, bindings):
+    return [bindings[g] for g in word]
+
+print(f"word [0,1,0] with (10,20): {apply_word([0,1,0], [10,20])}")
+print(f"return 5: {T_return(5)}")
+print(f"join [[1,2],[3],[4,5]]: {T_join([[1,2],[3],[4,5]])}")
+print(f"bind [1,2,3] x->[x,x*10]: {T_bind([1,2,3], lambda x: [x, x*10])}")
+`} />
+    </div>
+
+
+    <!-- 6. The exception theory: adding a nullary operation -->
+    <h3>Side effects as Lawvere theories: exceptions</h3>
+    <p>Adding a single nullary operation (0 &rarr; 1) to F<sup>op</sup> creates the theory of exceptions. The coend collapses to T(a) = a<sup>0</sup> + a<sup>1</sup> = 1 + a. In Haskell: <code>Maybe a</code>. A nullary operation means "produce a value from nothing" which is exactly throwing an exception (returning a default failure value). More nullary operations give more exception types.</p>
+
+    <SchemeRepl client:load initialCode={`; The Lawvere theory with one extra nullary operation: Maybe.
+; T(a) = 1 + a  (either Nothing or Just a)
+;
+; The single nullary op 0 -> 1 means:
+; "there's a way to produce a result from zero inputs"
+; = a default/failure value = Nothing.
+
+(define (maybe-return x) (list 'just x))
+(define nothing '(nothing))
+
+(define (maybe-bind m f)
+  (if (eq? (car m) 'nothing)
+      nothing
+      (f (cadr m))))
+
+; Safe division: nullary op = "divide by zero" exception
+(define (safe-div a b)
+  (if (= b 0) nothing
+      (maybe-return (/ a b))))
+
+(display "10 / 2: ") (display (safe-div 10 2)) (newline)
+(display "10 / 0: ") (display (safe-div 10 0)) (newline)
+
+; Chain: divide 100 by x, then divide result by y
+(define (chain-div x y)
+  (maybe-bind (safe-div 100 x)
+    (lambda (r) (safe-div r y))))
+
+(display "100/5/2: ") (display (chain-div 5 2)) (newline)
+(display "100/0/2: ") (display (chain-div 0 2)) (newline)
+(display "100/5/0: ") (display (chain-div 5 0))
+; Maybe monad from a Lawvere theory with one nullary operation.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maybe monad from the exception Lawvere theory
+def safe_div(a, b):
+    return ("just", a // b) if b != 0 else ("nothing",)
+
+def maybe_bind(m, f):
+    return f(m[1]) if m[0] == "just" else m
+
+print(f"10 / 2: {safe_div(10, 2)}")
+print(f"10 / 0: {safe_div(10, 0)}")
+print(f"100/5/2: {maybe_bind(safe_div(100, 5), lambda r: safe_div(r, 2))}")
+print(f"100/0/2: {maybe_bind(safe_div(100, 0), lambda r: safe_div(r, 2))}")
+print(f"100/5/0: {maybe_bind(safe_div(100, 5), lambda r: safe_div(r, 0))}")
+`} />
+    </div>
+
+
+    <!-- 7. Lawvere theories vs monads -->
+    <h3>Lawvere theories vs monads &mdash; when they diverge</h3>
+    <p>Every Lawvere theory gives a finitary monad. Every finitary monad comes from a Lawvere theory. But not every monad is finitary. The <strong>continuation monad</strong> (<code>r<sup>r<sup>a</sup></sup></code>) is the classic counterexample: it cannot be expressed as a Lawvere theory because it is not determined by its action on finite sets. The advantage of Lawvere theories: they compose via <strong>coproducts</strong> (combine operations from two theories) and <strong>tensor products</strong> (interleave operations). Monads have no generic composition recipe. This composability is what makes Lawvere theories a natural fit for <a href="https://june.kim/type-forcing"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>typed wiring diagrams</a>, where operations from different theories must plug together along typed interfaces.</p>
+
+    <SchemeRepl client:load initialCode={`; Finitary = determined by action on finite sets.
+; The list monad is finitary: a list is a finite sequence.
+; The continuation monad is NOT finitary.
+;
+; Cont r a = (a -> r) -> r
+; This quantifies over ALL functions a -> r, not just finite ones.
+
+(define (cont-return x)
+  (lambda (k) (k x)))
+
+(define (cont-bind m f)
+  (lambda (k) (m (lambda (a) ((f a) k)))))
+
+; callcc: capture the current continuation
+(define (callcc f)
+  (lambda (k) ((f (lambda (a) (lambda (_) (k a)))) k)))
+
+; Run: extract the value by passing identity
+(define (run-cont m) (m (lambda (x) x)))
+
+(display "return 5: ")
+(display (run-cont (cont-return 5))) (newline)
+
+(display "bind (return 3) (x -> return (x+1)): ")
+(display (run-cont
+  (cont-bind (cont-return 3)
+    (lambda (x) (cont-return (+ x 1)))))) (newline)
+
+; callcc: short-circuit with 42
+(display "callcc short-circuit: ")
+(display (run-cont
+  (cont-bind
+    (callcc (lambda (exit)
+      (cont-bind (exit 42)
+        (lambda (_) (cont-return 0)))))
+    (lambda (x) (cont-return (* x 10))))))
+; 420 — callcc jumps to exit, skips the (return 0)
+; This monad has no Lawvere theory. It's not finitary.
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F<sup>op</sup></td><td class="pr-4 text-green-300">n &rarr; m</td><td class="font-sans">Opposite of the skeleton of FinSet</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I<sub>L</sub> : F<sup>op</sup> &rarr; L</td><td class="pr-4 text-green-300">(make-theory name ops)</td><td class="font-sans">Embedding of F<sup>op</sup> into the Lawvere theory</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">L(n, 1)</td><td class="pr-4 text-green-300">(enumerate-ops k)</td><td class="font-sans">n-ary operations (hom-set)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">M : L &rarr; Set</td><td class="pr-4 text-green-300">(make-model carrier mu eta)</td><td class="font-sans">Model (product-preserving functor)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Nat(M, N)</td><td class="pr-4 text-green-300">(homomorphism? h ...)</td><td class="font-sans">Natural transformation = homomorphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">T<sub>L</sub> a = &int;<sup>n</sup> a<sup>n</sup> &times; L(n,1)</td><td class="pr-4 text-green-300">(T-return x) / (T-bind xs f)</td><td class="font-sans">Monad from Lawvere theory (coend)</td></tr>
+          <tr><td class="py-2 pr-4">Cont r a = (a &rarr; r) &rarr; r</td><td class="pr-4 text-green-300">(cont-return x) / (cont-bind m f)</td><td class="font-sans">Continuation monad (not finitary)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-17/">🍞 Chapter 17</a> &mdash; Monads (the standard approach Lawvere theories generalize)</li>
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> &mdash; Adjunctions (free/forgetful adjunction induces the monad)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> &mdash; operads generalize Lawvere theories to non-symmetric settings</li>
+      <li><a href="/reading/spivak-2013/">🍞 Spivak 2013</a> &mdash; databases as functors, same product-preserving pattern</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Lawvere_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lawvere theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Universal_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal algebra</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Finitary_functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Finitary functor</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post builds Lawvere theories in five steps: FinSet &rarr; its skeleton F &rarr; F<sup>op</sup> &rarr; the Lawvere theory L &rarr; models Mod(L, Set). This page collapses the first three steps and focuses on what the resulting category looks like (objects = arities, morphisms = operations). The coend formula T<sub>L</sub>(a) = &int;<sup>n</sup> a<sup>n</sup> &times; L(n, 1) is presented through the list monad example rather than in full generality. The blog post also discusses the category <strong>Law</strong> of Lawvere theories, where a morphism between theories is a product-preserving functor that commutes with the embedding from F<sup>op</sup>. We skip this level of abstraction. The key point preserved: Lawvere theories and finitary monads are equivalent descriptions of algebraic structure, but Lawvere theories compose (via coproducts and tensor products) where monads do not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/08/26/lawvere-theories/">Read the blog post</a>. Start with the five-step construction path, then trace how the coend formula recovers familiar monads.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-23/", label: "Topoi" }} fin="fin · 24 of 24" />
+
+  </main>
+</Layout>

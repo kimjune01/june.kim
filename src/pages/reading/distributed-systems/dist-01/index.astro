@@ -1,0 +1,169 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.1 — What Makes It Hard" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>What Makes It Hard</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; Cambridge Distributed Systems &middot; <a href="https://en.wikipedia.org/wiki/Distributed_computing"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Distributed computing</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A distributed system is one where a message between nodes can be lost, delayed, reordered, or duplicated. Nodes can fail independently. There is no shared clock. These four facts make everything else hard.</p>
+    </div>
+
+    <!-- 1. Network partitions -->
+    <h3>Network partitions</h3>
+    <p>A <strong>network partition</strong> splits nodes into groups that cannot communicate with each other. The network is working fine on each side. The problem is that neither side knows whether the other has crashed or is simply unreachable. You cannot distinguish "slow" from "dead."</p>
+
+    <!-- SVG: three nodes where one link is broken -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Node A -->
+        <circle cx="60" cy="80" r="20" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="85" text-anchor="middle" fill="#60a5fa" font-size="13">A</text>
+        <!-- Node B -->
+        <circle cx="200" cy="80" r="20" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="85" text-anchor="middle" fill="#34d399" font-size="13">B</text>
+        <!-- Node C -->
+        <circle cx="340" cy="80" r="20" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="340" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">C</text>
+        <!-- Link A-B (working) -->
+        <line x1="82" y1="80" x2="178" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Link B-C (broken) -->
+        <line x1="222" y1="80" x2="260" y2="80" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <line x1="280" y1="80" x2="318" y2="80" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- X mark on broken link -->
+        <text x="270" y="75" text-anchor="middle" fill="#ef4444" font-size="18" font-weight="bold">&#x2717;</text>
+        <!-- Labels -->
+        <text x="130" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">connected</text>
+        <text x="270" y="105" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">partitioned</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Simulating a network partition.
+; Node A can reach B, but not C.
+; Is C crashed or just unreachable? We cannot tell.
+
+(define nodes (list "A" "B" "C"))
+
+; adjacency: who can reach whom
+(define (can-reach? from to)
+  (cond
+    ((and (equal? from "A") (equal? to "B")) #t)
+    ((and (equal? from "B") (equal? to "A")) #t)
+    ; B-C link is down (partition)
+    ((and (equal? from "B") (equal? to "C")) #f)
+    ((and (equal? from "C") (equal? to "B")) #f)
+    ((and (equal? from "A") (equal? to "C")) #f)
+    ((and (equal? from "C") (equal? to "A")) #f)
+    (else #f)))
+
+(display "A -> B: ") (display (can-reach? "A" "B")) (newline)
+(display "A -> C: ") (display (can-reach? "A" "C")) (newline)
+(display "B -> C: ") (display (can-reach? "B" "C")) (newline)
+(display "Is C crashed or partitioned? Unknown.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Network partition simulation
+reachable = {
+    ("A", "B"): True, ("B", "A"): True,
+    ("B", "C"): False, ("C", "B"): False,  # partition
+    ("A", "C"): False, ("C", "A"): False,
+}
+
+for pair, ok in reachable.items():
+    print(f"{pair[0]} -> {pair[1]}: {'reachable' if ok else 'UNREACHABLE'}")
+
+print("Is C crashed or partitioned? Unknown.")
+`} />
+    </div>
+
+    <!-- 2. Partial failure -->
+    <h3>Partial failure</h3>
+    <p>In a single machine, either the whole thing works or the whole thing crashes. In a distributed system, some nodes can fail while others keep running. The system is in an <strong>indeterminate state</strong>: the request was sent, but did the other side process it before crashing? Maybe. There is no way to know without further communication, and communication might be broken.</p>
+
+    <SchemeRepl client:load initialCode={`; Partial failure: send a request, get no response.
+; Did the server crash before processing?
+; Or did it process but the response was lost?
+
+(define (send-request server)
+  ; simulate: server might crash at any point
+  (let ((crash-point (modulo (* server 7) 3)))
+    (cond
+      ((= crash-point 0) "crashed before processing")
+      ((= crash-point 1) "processed, but response lost")
+      ((= crash-point 2) "success"))))
+
+(display "Attempt 1: ") (display (send-request 1)) (newline)
+(display "Attempt 2: ") (display (send-request 2)) (newline)
+(display "Attempt 3: ") (display (send-request 3)) (newline)
+; From the client side, all three look the same: timeout.
+(display "Client sees: timeout, timeout, timeout")
+`} />
+
+    <!-- 3. No global clock -->
+    <h3>No global clock</h3>
+    <p>Each node has its own clock. Clocks drift. Even with NTP, you get milliseconds of skew. In special relativity, simultaneity is frame-dependent: two events that are "simultaneous" for one observer are ordered differently for another. Distributed systems have the same problem: there is no physical fact about which event happened first across nodes.</p>
+
+    <SchemeRepl client:load initialCode={`; Two nodes, two clocks, no agreement on "now."
+; Node A says event happened at t=100.
+; Node B says event happened at t=101.
+; Which was first? Depends on clock skew.
+
+(define clock-A 100)
+(define clock-B 101)
+(define skew 3)  ; B's clock is 3 ahead of real time
+
+(define real-time-A clock-A)           ; A is accurate
+(define real-time-B (- clock-B skew))  ; B reads 101 but real = 98
+
+(display "A's clock: ") (display clock-A) (newline)
+(display "B's clock: ") (display clock-B) (newline)
+(display "A's real time: ") (display real-time-A) (newline)
+(display "B's real time: ") (display real-time-B) (newline)
+(display "Clock order: B after A") (newline)
+(display "Real order:  B before A") (newline)
+(display "Clocks lie.")
+`} />
+
+    <!-- 4. Byzantine faults -->
+    <h3>Byzantine faults</h3>
+    <p>A <strong>Byzantine fault</strong> is when a node does not just crash but sends incorrect or contradictory messages. It might be compromised, buggy, or malicious. Crash faults are a special case: a crashed node sends no messages at all. Byzantine faults are strictly harder because the faulty node actively misleads.</p>
+
+    <SchemeRepl client:load initialCode={`; Byzantine fault: node sends different values to different peers.
+; A asks B for the value. B says 42.
+; C asks B for the value. B says 99.
+; B is Byzantine (lying / compromised).
+
+(define (byzantine-node requester)
+  (cond
+    ((equal? requester "A") 42)
+    ((equal? requester "C") 99)
+    (else 0)))
+
+(display "B tells A: ") (display (byzantine-node "A")) (newline)
+(display "B tells C: ") (display (byzantine-node "C")) (newline)
+(display "A and C disagree about B's value.") (newline)
+(display "Neither knows B is lying.")
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-10/">&#x26A1; Physics Ch.10</a> — relativity: no simultaneity, the physical root of "no global clock"</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/distributed-systems/dist-02/", label: "Time and Clocks" }} />
+
+  </main>
+</Layout>

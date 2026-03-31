@@ -1,0 +1,192 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.21 — Behavioral Economics" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Behavioral Economics</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Kahneman &amp; Tversky (1979), Prospect Theory</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">People are not rational maximizers. <strong>Prospect theory</strong> replaces expected utility with a value function that is concave for gains, convex for losses, and steeper on the loss side. Behavioral economics catalogs the systematic ways humans deviate from the rational-agent model.</p>
+    </div>
+
+    <!-- 1. Prospect Theory Value Function -->
+    <h3>The value function</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Daniel_Kahneman"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kahneman</a> and <a href="https://en.wikipedia.org/wiki/Amos_Tversky"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tversky's</a> value function has three properties. <strong>Reference dependence</strong>: outcomes are evaluated as gains or losses relative to a reference point, not absolute levels. <strong>Diminishing sensitivity</strong>: the function is concave for gains and convex for losses. <strong>Loss aversion</strong>: losses hurt roughly twice as much as equivalent gains feel good (the coefficient lambda is typically around 2.25).</p>
+
+    <!-- SVG: S-shaped value function -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="200" y1="280" x2="200" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="30" y1="150" x2="370" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="365" y="143" fill="currentColor" font-size="11" fill-opacity="0.5">outcome</text>
+        <text x="207" y="30" fill="currentColor" font-size="11" fill-opacity="0.5">value</text>
+        <!-- Labels -->
+        <text x="300" y="143" fill="currentColor" font-size="10" fill-opacity="0.4">gains</text>
+        <text x="100" y="163" fill="currentColor" font-size="10" fill-opacity="0.4">losses</text>
+        <!-- Reference point -->
+        <circle cx="200" cy="150" r="4" fill="#fbbf24"/>
+        <text x="215" y="167" fill="#fbbf24" font-size="9">reference</text>
+        <!-- Gains curve: concave, moderate slope -->
+        <path d="M 200 150 Q 250 100 300 85 Q 340 75 370 70" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+        <!-- Losses curve: convex, steeper slope -->
+        <path d="M 200 150 Q 150 215 100 240 Q 70 255 30 265" fill="none" stroke="#f87171" stroke-width="2.5"/>
+        <!-- Annotation: steeper for losses -->
+        <text x="55" y="210" fill="#f87171" font-size="10" fill-opacity="0.7">steeper</text>
+        <text x="55" y="222" fill="#f87171" font-size="10" fill-opacity="0.7">(loss aversion)</text>
+        <text x="310" y="110" fill="#4ade80" font-size="10" fill-opacity="0.7">concave</text>
+        <text x="310" y="122" fill="#4ade80" font-size="10" fill-opacity="0.7">(diminishing)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Prospect theory value function
+; v(x) = x^alpha           if x >= 0  (gains)
+; v(x) = -lambda * |x|^beta if x < 0  (losses)
+; Typical: alpha=0.88, beta=0.88, lambda=2.25
+
+(define alpha 0.88)
+(define beta 0.88)
+(define lambda-param 2.25)
+
+(define (value x)
+  (if (>= x 0)
+      (expt x alpha)
+      (* (- lambda-param) (expt (abs x) beta))))
+
+; Compare symmetric gains and losses
+(define amounts (list 10 50 100 500))
+
+(display "Amount | Gain value | Loss value | Ratio") (newline)
+(display "-------+------------+------------+------") (newline)
+(for-each
+  (lambda (x)
+    (let ((g (value x))
+          (l (value (- x))))
+      (display x) (display "    | ")
+      (display (/ (round (* g 100)) 100)) (display "      | ")
+      (display (/ (round (* l 100)) 100)) (display "     | ")
+      (display (/ (round (* (/ (abs l) g) 100)) 100))
+      (newline)))
+  amounts)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Prospect theory value function
+alpha, beta, lam = 0.88, 0.88, 2.25
+
+def value(x):
+    if x >= 0:
+        return x ** alpha
+    return -lam * abs(x) ** beta
+
+print(str('Amount') + " | " + str('Gain') + " | " + str('Loss') + " | " + str('Ratio'))
+print("-" * 42)
+for x in [10, 50, 100, 500]:
+    g, l = value(x), value(-x)
+    print(str(x) + " | " + str(round(g, 2)) + " | " + str(round(l, 2)) + " | " + str(round(abs(l)/g, 2)))
+`} />
+    </div>
+
+
+    <!-- 2. Loss Aversion and Framing -->
+    <h3>Loss aversion and framing</h3>
+    <p><strong>Loss aversion</strong> means people reject gambles that a rational agent would accept. A 50-50 bet to win $110 or lose $100 has positive expected value, but most people decline. <strong>Framing</strong> changes decisions by relabeling the same outcome: "90% survival rate" versus "10% mortality rate" triggers different choices despite identical information.</p>
+
+    <SchemeRepl client:load initialCode={`; Loss aversion: reject positive-EV gambles
+
+(define lambda-param 2.25)
+(define alpha 0.88)
+(define beta 0.88)
+
+(define (value x)
+  (if (>= x 0) (expt x alpha)
+      (* (- lambda-param) (expt (abs x) beta))))
+
+; 50-50 bet: win $110 or lose $100
+(define ev-monetary (* 0.5 (+ 110 (- 100))))
+(define ev-prospect (+ (* 0.5 (value 110)) (* 0.5 (value (- 100)))))
+
+(display "Monetary EV: $") (display ev-monetary) (newline)
+(display "Prospect value: ") (display (/ (round (* ev-prospect 100)) 100)) (newline)
+(display "Accept under EU theory? yes") (newline)
+(display "Accept under prospect theory? ")
+(display (if (> ev-prospect 0) "yes" "no")) (newline)
+
+; Framing effect
+(newline)
+(display "--- Framing ---") (newline)
+(display "Frame A: 200 of 600 people saved (certain)") (newline)
+(display "Frame B: 1/3 chance all 600 saved, 2/3 chance none saved") (newline)
+(display "Same expected outcome (200 saved).") (newline)
+(display "Most choose A when framed as gains, B when framed as losses.")
+`} />
+
+
+    <!-- 3. Anchoring and Nudges -->
+    <h3>Anchoring and nudges</h3>
+    <p><strong>Anchoring</strong>: initial exposure to a number biases subsequent estimates toward that number, even when it is irrelevant. Asking "Is the population of Chicago more or less than 10 million?" yields higher estimates than anchoring at 1 million. <strong>Nudges</strong> exploit these biases for good: changing default options (opt-out vs opt-in for retirement savings) dramatically changes behavior without restricting choice. This is <strong>libertarian paternalism</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Nudge: default effect on retirement savings
+; Opt-in: only ~40% of employees participate
+; Opt-out (auto-enrollment): ~90% participate
+; Same options, same freedom, different outcome
+
+(define employees 1000)
+(define opt-in-rate 0.40)
+(define opt-out-rate 0.90)
+(define annual-contribution 3000)
+(define years 30)
+(define rate 0.07)
+
+(define (future-value pmt r n)
+  ; Annuity FV = pmt * ((1+r)^n - 1) / r
+  (* pmt (/ (- (expt (+ 1 r) n) 1) r)))
+
+(define per-person-fv (future-value annual-contribution rate years))
+
+(display "Per-person retirement savings (30yr): $")
+(display (round per-person-fv)) (newline) (newline)
+
+(define total-optin (* employees opt-in-rate per-person-fv))
+(define total-optout (* employees opt-out-rate per-person-fv))
+
+(display "Opt-in system (40%): $")
+(display (round total-optin)) (newline)
+(display "Opt-out system (90%): $")
+(display (round total-optout)) (newline)
+(display "Difference from one default change: $")
+(display (round (- total-optout total-optin)))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-06/">Cogsci Ch.6</a> — decision making: the cognitive architecture behind biases</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Prospect_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prospect theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Loss_aversion"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Loss aversion</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Anchoring_(cognitive_bias)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Anchoring</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Nudge_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nudge theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Framing_effect_(psychology)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Framing effect</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-20/", label: "Mechanism Design" }} next={{ href: "/reading/economics/econ-22/", label: "Inequality and Distribution" }} />
+
+  </main>
+</Layout>

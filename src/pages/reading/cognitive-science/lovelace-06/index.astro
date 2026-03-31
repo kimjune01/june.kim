@@ -1,0 +1,218 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.6 — Decision Making" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Decision Making</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Rational agents maximize <strong>expected utility</strong>. Real humans don't. Kahneman and Tversky's <strong>prospect theory</strong> explains the gap: people weight losses more than gains, overweight small probabilities, and evaluate outcomes relative to a reference point. <strong>Bounded rationality</strong> reframes the question: given limited time and information, satisficing often beats optimizing.</p>
+    </div>
+
+    <!-- Expected utility -->
+    <h3>Expected utility</h3>
+    <p>The normative theory: choose the option with the highest expected utility. EU = sum of probability times utility for each outcome. This works when you have perfect information, unlimited computation, and stable preferences. Violations of EU theory are not mistakes to be corrected. They are data about how human cognition actually works.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected utility: EU = sum of p(outcome) * u(outcome)
+;
+; Gamble A: 80% chance of $4000, 20% chance of $0
+; Gamble B: 100% chance of $3000
+; EU(A) = 0.8 * 4000 = 3200
+; EU(B) = 1.0 * 3000 = 3000
+; A rational agent picks A. Most people pick B.
+
+(define (expected-utility outcomes)
+  (apply + (map (lambda (pair) (* (car pair) (cdr pair))) outcomes)))
+
+(define gamble-a (list (cons 0.8 4000) (cons 0.2 0)))
+(define gamble-b (list (cons 1.0 3000)))
+
+(display "EU(Gamble A) = ") (display (expected-utility gamble-a)) (newline)
+(display "EU(Gamble B) = ") (display (expected-utility gamble-b)) (newline)
+(display "EU theory picks A, most people pick B (certainty effect)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected utility in Python
+def expected_utility(outcomes):
+    return sum(p * u for p, u in outcomes)
+
+gamble_a = [(0.8, 4000), (0.2, 0)]
+gamble_b = [(1.0, 3000)]
+
+print(f"EU(A) = {expected_utility(gamble_a)}")
+print(f"EU(B) = {expected_utility(gamble_b)}")
+print("EU picks A; most people pick B")
+`} />
+    </div>
+
+
+    <!-- Prospect theory -->
+    <h3>Prospect theory</h3>
+    <p>Prospect theory replaces utility with a <strong>value function</strong> that is concave for gains, convex for losses, and steeper for losses than gains (loss aversion). It also replaces probabilities with <strong>decision weights</strong> that overweight small probabilities and underweight large ones. The reference point makes the same outcome feel like a gain or a loss depending on framing.</p>
+
+    <!-- SVG: prospect theory value function -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="120" x2="330" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="180" y1="20" x2="180" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Labels -->
+        <text x="320" y="135" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">gains</text>
+        <text x="45" y="135" text-anchor="start" fill="currentColor" font-size="10" fill-opacity="0.5">losses</text>
+        <text x="192" y="30" text-anchor="start" fill="currentColor" font-size="10" fill-opacity="0.5">value</text>
+        <!-- Gain curve (concave, above axis) -->
+        <path d="M 180 120 Q 220 60 320 50" fill="none" stroke="#34d399" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Loss curve (convex, below axis, steeper) -->
+        <path d="M 180 120 Q 140 200 40 215" fill="none" stroke="#ef4444" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Reference point -->
+        <circle cx="180" cy="120" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="195" y="145" text-anchor="start" fill="currentColor" font-size="9" fill-opacity="0.4">reference point</text>
+        <!-- Annotation: steeper for losses -->
+        <text x="80" y="230" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.5">steeper (loss aversion)</text>
+        <text x="280" y="42" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.5">diminishing sensitivity</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Prospect theory value function
+; v(x) = x^0.88 for gains
+; v(x) = -2.25 * |x|^0.88 for losses
+; Loss aversion coefficient = 2.25
+
+(define (prospect-value x)
+  (if (>= x 0)
+      (expt x 0.88)
+      (* -2.25 (expt (abs x) 0.88))))
+
+(display "v(100)  = ") (display (prospect-value 100)) (newline)
+(display "v(-100) = ") (display (prospect-value -100)) (newline)
+(display "Loss hurts ~2.25x more than equivalent gain feels good") (newline)
+(newline)
+
+; The framing effect:
+; Option 1: sure gain of $50
+; Option 2: sure loss of $50
+; Same magnitude, very different subjective values
+(display "v(50)  = ") (display (prospect-value 50)) (newline)
+(display "v(-50) = ") (display (prospect-value -50)) (newline)
+(display "|v(-50)| / v(50) = ")
+(display (/ (abs (prospect-value -50)) (prospect-value 50)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Prospect theory value function
+def prospect_value(x):
+    if x >= 0:
+        return x ** 0.88
+    return -2.25 * abs(x) ** 0.88
+
+print("v(100)  = " + "{:.4f}".format(prospect_value(100)))
+print("v(-100) = " + "{:.4f}".format(prospect_value(-100)))
+print("Loss hurts ~2.25x more than equivalent gain")
+print()
+print("v(50)  = " + "{:.4f}".format(prospect_value(50)))
+print("v(-50) = " + "{:.4f}".format(prospect_value(-50)))
+print("|v(-50)| / v(50) = " + "{:.4f}".format(abs(prospect_value(-50)) / prospect_value(50)))
+`} />
+    </div>
+
+
+    <!-- Bounded rationality -->
+    <h3>Bounded rationality and satisficing</h3>
+    <p>Herbert Simon argued that real decision-makers face limited time, limited information, and limited computation. <strong>Bounded rationality</strong> asks: given these constraints, what decision procedures perform well? <strong>Satisficing</strong> means searching until you find an option that meets a threshold, then stopping. This is structurally similar to <a href="https://june.kim/salience"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>competitive inhibition</a>: a winner-take-all gate that passes the first signal above threshold and suppresses the rest. It often outperforms optimization in uncertain environments because it avoids overfitting to noisy estimates.</p>
+
+    <SchemeRepl client:load initialCode={`; Satisficing vs optimizing
+; Scenario: hiring. You interview candidates sequentially.
+; Optimizer: interview all N, pick the best.
+; Satisficer: set a threshold, hire the first who meets it.
+;
+; The "secretary problem": optimal stopping rule is to
+; observe the first N/e candidates, then hire the next one
+; better than all observed so far.
+
+(define e 2.718)
+
+(define (optimal-stopping-threshold n)
+  (inexact->exact (round (/ n e))))
+
+(display "With 100 candidates:") (newline)
+(display "  Observe first ")
+(display (optimal-stopping-threshold 100))
+(display " candidates (the 'look' phase)") (newline)
+(display "  Then hire next one better than all seen") (newline)
+(newline)
+(display "This satisficing rule finds the best candidate")
+(newline)
+(display "  ~37% of the time — surprisingly good for") (newline)
+(display "  a strategy that ignores most of the data.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Satisficing: optimal stopping (secretary problem)
+import math
+
+def optimal_threshold(n):
+    return round(n / math.e)
+
+n = 100
+threshold = optimal_threshold(n)
+print("With " + str(n) + " candidates:")
+print("  Observe first " + str(threshold) + " candidates (the 'look' phase)")
+print("  Then hire next one better than all seen")
+print("This finds the best candidate ~37% of the time.")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Term</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">EU</td><td>Expected utility: sum of p * u(outcome)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">v(x)</td><td>Prospect theory value function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Loss aversion</td><td>Losses loom ~2.25x larger than equivalent gains</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Satisficing</td><td>Accept first option above threshold</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">N/e rule</td><td>Optimal stopping: observe 37%, then decide</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cognitive-science/lovelace-05/">Lovelace Ch.5</a> — reinforcement learning as sequential decision making</li>
+      <li><a href="/reading/game-theory/">Game theory pages</a> — strategic decision making with multiple agents</li>
+      <li><a href="https://en.wikipedia.org/wiki/Prospect_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prospect theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bounded_rationality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bounded rationality</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook covers prospect theory's probability weighting function in addition to the value function, and discusses framing effects, the endowment effect, and the status quo bias as downstream consequences. This page focuses on the three main ideas: EU as normative baseline, prospect theory as descriptive alternative, and bounded rationality as a different framing of the question. The textbook also covers multi-attribute decision making and decision under uncertainty.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter6">Lovelace, Chapter 6</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-05/", label: "Reinforcement Learning" }} next={{ href: "/reading/cognitive-science/lovelace-07/", label: "Language and Communication · 7 of 8" }} />
+
+  </main>
+</Layout>

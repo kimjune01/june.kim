@@ -1,0 +1,178 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.4 — Logical Equivalence" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Logical Equivalence</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 4 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two formulas are <strong>logically equivalent</strong> when they have the same truth value in every possible assignment. Equivalence laws let you rewrite formulas into simpler or more useful forms without changing their meaning.</p>
+    </div>
+
+    <!-- SVG: Two formulas with equals sign -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 80" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="90" y="45" text-anchor="middle" fill="#60a5fa" font-size="15">&not;(P &and; Q)</text>
+        <text x="180" y="45" text-anchor="middle" fill="#f59e0b" font-size="18">&equiv;</text>
+        <text x="275" y="45" text-anchor="middle" fill="#60a5fa" font-size="15">&not;P &or; &not;Q</text>
+        <text x="180" y="72" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">De Morgan's Law</text>
+      </svg>
+    </div>
+
+    <h3>De Morgan's laws</h3>
+    <p>Negation distributes over conjunction and disjunction by flipping the connective. &not;(P &and; Q) &equiv; &not;P &or; &not;Q. &not;(P &or; Q) &equiv; &not;P &and; &not;Q.</p>
+
+    <SchemeRepl client:load initialCode={`; De Morgan's laws: verify by exhaustive check
+
+(define (test-demorgan-and p q)
+  ; not (P and Q) = (not P) or (not Q)
+  (equal? (not (and p q))
+          (or (not p) (not q))))
+
+(define (test-demorgan-or p q)
+  ; not (P or Q) = (not P) and (not Q)
+  (equal? (not (or p q))
+          (and (not p) (not q))))
+
+(display "De Morgan (and) holds for all rows: ")
+(display (and (test-demorgan-and #t #t)
+              (test-demorgan-and #t #f)
+              (test-demorgan-and #f #t)
+              (test-demorgan-and #f #f))) (newline)
+
+(display "De Morgan (or) holds for all rows: ")
+(display (and (test-demorgan-or #t #t)
+              (test-demorgan-or #t #f)
+              (test-demorgan-or #f #t)
+              (test-demorgan-or #f #f)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# De Morgan's laws: exhaustive verification
+from itertools import product
+
+all_hold = True
+for p, q in product([True, False], repeat=2):
+    dm_and = (not (p and q)) == ((not p) or (not q))
+    dm_or  = (not (p or q))  == ((not p) and (not q))
+    all_hold = all_hold and dm_and and dm_or
+
+print(f"De Morgan's laws hold for all assignments: {all_hold}")
+`} />
+    </div>
+
+    <h3>Distribution</h3>
+    <p>Conjunction distributes over disjunction and vice versa. P &and; (Q &or; R) &equiv; (P &and; Q) &or; (P &and; R). P &or; (Q &and; R) &equiv; (P &or; Q) &and; (P &or; R).</p>
+
+    <SchemeRepl client:load initialCode={`; Distribution laws
+(define (test-dist-and p q r)
+  (equal? (and p (or q r))
+          (or (and p q) (and p r))))
+
+(define (test-dist-or p q r)
+  (equal? (or p (and q r))
+          (and (or p q) (or p r))))
+
+(define vals (list #t #f))
+(define all-ok #t)
+
+(for-each
+  (lambda (p)
+    (for-each
+      (lambda (q)
+        (for-each
+          (lambda (r)
+            (if (not (and (test-dist-and p q r)
+                         (test-dist-or p q r)))
+              (set! all-ok #f)))
+          vals))
+      vals))
+  vals)
+
+(display "Distribution laws hold for all 8 rows: ")
+(display all-ok)
+`} />
+
+    <h3>Contrapositive</h3>
+    <p>The contrapositive of P &rarr; Q is &not;Q &rarr; &not;P. They are logically equivalent. The converse (Q &rarr; P) and inverse (&not;P &rarr; &not;Q) are NOT equivalent to the original.</p>
+
+    <SchemeRepl client:load initialCode={`; Contrapositive: P -> Q  equiv  not Q -> not P
+(define (impl p q) (or (not p) q))
+
+(define (test-contrapositive p q)
+  (equal? (impl p q) (impl (not q) (not p))))
+
+(define (test-converse p q)
+  (equal? (impl p q) (impl q p)))
+
+(display "Contrapositive holds: ")
+(display (and (test-contrapositive #t #t)
+              (test-contrapositive #t #f)
+              (test-contrapositive #f #t)
+              (test-contrapositive #f #f))) (newline)
+
+(display "Converse holds: ")
+(display (and (test-converse #t #t)
+              (test-converse #t #f)
+              (test-converse #f #t)
+              (test-converse #f #f)))
+(display " <- not equivalent!")
+`} />
+
+    <h3>Biconditional elimination and simplification</h3>
+    <p>P &harr; Q &equiv; (P &rarr; Q) &and; (Q &rarr; P). The biconditional is just two implications conjoined. Other useful equivalences: double negation (&not;&not;P &equiv; P), idempotence (P &and; P &equiv; P), and absorption (P &and; (P &or; Q) &equiv; P).</p>
+
+    <SchemeRepl client:load initialCode={`; Biconditional elimination
+(define (impl p q) (or (not p) q))
+(define (bicond p q) (equal? p q))
+
+(define (test-bicond-elim p q)
+  (equal? (bicond p q)
+          (and (impl p q) (impl q p))))
+
+(display "Biconditional elimination holds: ")
+(display (and (test-bicond-elim #t #t)
+              (test-bicond-elim #t #f)
+              (test-bicond-elim #f #t)
+              (test-bicond-elim #f #f))) (newline)
+
+; Double negation
+(display "Double negation (not not T): ")
+(display (not (not #t))) (newline)
+(display "Double negation (not not F): ")
+(display (not (not #f)))
+`} />
+
+    <h3>Equivalence laws reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Law</th>
+            <th class="py-2">Equivalence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">De Morgan</td><td class="font-mono">&not;(P &and; Q) &equiv; &not;P &or; &not;Q</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">De Morgan</td><td class="font-mono">&not;(P &or; Q) &equiv; &not;P &and; &not;Q</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Distribution</td><td class="font-mono">P &and; (Q &or; R) &equiv; (P &and; Q) &or; (P &and; R)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Contrapositive</td><td class="font-mono">P &rarr; Q &equiv; &not;Q &rarr; &not;P</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Biconditional</td><td class="font-mono">P &harr; Q &equiv; (P &rarr; Q) &and; (Q &rarr; P)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Double negation</td><td class="font-mono">&not;&not;P &equiv; P</td></tr>
+          <tr><td class="py-2 pr-4">Absorption</td><td class="font-mono">P &and; (P &or; Q) &equiv; P</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <PrevNext prev={{ href: "/reading/logic/logic-03/", label: "Truth Tables" }} next={{ href: "/reading/logic/logic-05/", label: "Natural Deduction" }} />
+
+  </main>
+</Layout>

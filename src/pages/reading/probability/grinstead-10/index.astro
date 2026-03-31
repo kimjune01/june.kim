@@ -1,0 +1,220 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 10 — Generating Functions" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Generating Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Encode a distribution as a polynomial: g(z) = &sum; P(X = k) z&#x1D4F;. Adding independent random variables becomes multiplying their polynomials. Convolution is just polynomial multiplication.</p>
+    </div>
+
+    <!-- 1. Ordinary generating functions -->
+    <h3>Ordinary generating function</h3>
+    <p>For a discrete random variable X taking values 0, 1, 2, &hellip;, the <strong>ordinary generating function</strong> (OGF) is g(z) = E[z&#x1D3A;] = &sum;&#x2096; P(X = k) z&#x1D4F;. The coefficients are the probabilities. Evaluating g(1) = 1 (probabilities sum to 1). The derivative g&prime;(1) = E[X].</p>
+
+    <!-- SVG: Polynomial multiplication diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Poly 1: coin flip -->
+        <rect x="20" y="30" width="130" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="85" y="50" text-anchor="middle" fill="currentColor" font-size="11">g&#x2081;(z) = &frac12; + &frac12;z</text>
+        <text x="85" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">coin flip</text>
+        <!-- Times sign -->
+        <text x="170" y="60" text-anchor="middle" fill="currentColor" font-size="18">&times;</text>
+        <!-- Poly 2: another coin flip -->
+        <rect x="190" y="30" width="130" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="255" y="50" text-anchor="middle" fill="currentColor" font-size="11">g&#x2082;(z) = &frac12; + &frac12;z</text>
+        <text x="255" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">coin flip</text>
+        <!-- Equals -->
+        <text x="340" y="60" text-anchor="middle" fill="currentColor" font-size="18">=</text>
+        <!-- Product polynomial -->
+        <rect x="355" y="25" width="95" height="60" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="402" y="48" text-anchor="middle" fill="#60a5fa" font-size="10">&frac14; + &frac12;z + &frac14;z&sup2;</text>
+        <text x="402" y="72" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">sum of 2 flips</text>
+        <!-- Arrow down to coefficients -->
+        <line x1="402" y1="90" x2="402" y2="110" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Coefficient readout -->
+        <text x="230" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">read off coefficients:</text>
+        <text x="230" y="150" text-anchor="middle" fill="currentColor" font-size="11">P(S=0) = &frac14;,  P(S=1) = &frac12;,  P(S=2) = &frac14;</text>
+        <!-- Caption -->
+        <text x="230" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">convolution of distributions = multiplication of polynomials</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Generating functions as polynomial coefficient lists
+; g(z) = [p0, p1, p2, ...] means p0 + p1*z + p2*z^2 + ...
+
+; Multiply two polynomials (= convolve two distributions)
+(define (poly-mul p q)
+  (let* ((m (length p)) (n (length q))
+         (result-len (- (+ m n) 1)))
+    (let loop ((k 0) (acc '()))
+      (if (= k result-len) (reverse acc)
+          (let inner ((j 0) (s 0))
+            (if (= j m) (loop (+ k 1) (cons s acc))
+                (if (and (>= (- k j) 0) (< (- k j) n))
+                    (inner (+ j 1) (+ s (* (list-ref p j) (list-ref q (- k j)))))
+                    (inner (+ j 1) s))))))))
+
+; Fair coin: P(X=0) = 1/2, P(X=1) = 1/2
+(define coin '(0.5 0.5))
+
+; Sum of 2 coins
+(define two-coins (poly-mul coin coin))
+(display "2 coins: ") (display two-coins) (newline)
+; (0.25 0.5 0.25) => P(0)=1/4, P(1)=1/2, P(2)=1/4
+
+; Sum of 3 coins
+(define three-coins (poly-mul two-coins coin))
+(display "3 coins: ") (display three-coins) (newline)
+; (0.125 0.375 0.375 0.125)
+
+; Fair die: P(X=k) = 1/6 for k in 1..6
+(define die '(0 0.1667 0.1667 0.1667 0.1667 0.1667 0.1667))
+(define two-dice (poly-mul die die))
+(display "2 dice:  ") (display two-dice)
+; Coefficients give P(sum=2), P(sum=3), ..., P(sum=12)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+def poly_mul(p, q):
+    """Multiply polynomials = convolve distributions."""
+    return list(np.convolve(p, q))
+
+coin = [0.5, 0.5]
+print("2 coins:", [round(x, 4) for x in poly_mul(coin, coin)])
+print("3 coins:", [round(x, 4) for x in poly_mul(poly_mul(coin, coin), coin)])
+
+die = [0] + [1/6]*6
+two_dice = poly_mul(die, die)
+for s in range(2, 13):
+    print(f"  P(sum={s:>2}) = {two_dice[s]:.4f}")
+`} />
+    </div>
+
+    <!-- 2. Moments from derivatives -->
+    <h3>Moments from derivatives</h3>
+    <p>The generating function encodes all moments. E[X] = g&prime;(1). E[X(X&minus;1)] = g&Prime;(1), so Var(X) = g&Prime;(1) + g&prime;(1) &minus; (g&prime;(1))&sup2;. No summation needed: just differentiate the polynomial and evaluate at z = 1.</p>
+
+    <SchemeRepl client:load initialCode={`; Extract moments from the generating function
+; g'(1) = E[X], g''(1) = E[X(X-1)]
+
+; Differentiate a polynomial
+(define (poly-deriv p)
+  (let loop ((i 1) (acc '()))
+    (if (>= i (length p)) (reverse acc)
+        (loop (+ i 1) (cons (* i (list-ref p i)) acc)))))
+
+; Evaluate polynomial at z
+(define (poly-eval p z)
+  (let loop ((i 0) (acc 0) (zk 1))
+    (if (>= i (length p)) acc
+        (loop (+ i 1) (+ acc (* (list-ref p i) zk)) (* zk z)))))
+
+; Fair die generating function
+(define die '(0 0.1667 0.1667 0.1667 0.1667 0.1667 0.1667))
+(define die-prime (poly-deriv die))
+(define die-double (poly-deriv die-prime))
+
+(define mean (poly-eval die-prime 1))
+(define factorial-moment (poly-eval die-double 1))
+(define variance (+ factorial-moment mean (- (* mean mean))))
+
+(display "E[X] = ") (display mean) (newline)
+(display "Var(X) = ") (display variance) (newline)
+; E[X] ~ 3.5, Var(X) ~ 2.917
+`} />
+
+    <!-- 3. Moment generating functions -->
+    <h3>Moment generating function</h3>
+    <p>The <strong>moment generating function</strong> (MGF) is M(t) = E[e&#x1D57;&#x1D3A;]. It is the OGF evaluated at z = e&#x1D57;. Its advantage: M&#x2032;(0) = E[X], M&#x2033;(0) = E[X&sup2;], and in general M&#x207D;&#x1D4F;&#x207E;(0) = E[X&#x1D4F;]. The MGF of a sum of independent variables is the product of their MGFs, exactly like the OGF.</p>
+
+    <SchemeRepl client:load initialCode={`; Moment generating function: M(t) = E[e^(tX)]
+; For a fair die: M(t) = (1/6)(e^t + e^2t + ... + e^6t)
+
+(define (mgf-die t)
+  (/ (+ (exp (* 1 t)) (exp (* 2 t)) (exp (* 3 t))
+        (exp (* 4 t)) (exp (* 5 t)) (exp (* 6 t)))
+     6))
+
+; Numerical derivative to extract moments
+(define h 0.0001)
+(define (num-deriv f x)
+  (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))
+
+(define (num-deriv2 f x)
+  (/ (+ (f (+ x h)) (f (- x h)) (* -2 (f x))) (* h h)))
+
+(display "M(0)   = ") (display (mgf-die 0)) (newline)
+(display "M'(0)  = E[X]  = ") (display (num-deriv mgf-die 0)) (newline)
+(display "M''(0) = E[X^2] = ") (display (num-deriv2 mgf-die 0)) (newline)
+(define ex (num-deriv mgf-die 0))
+(define ex2 (num-deriv2 mgf-die 0))
+(display "Var(X) = E[X^2] - E[X]^2 = ") (display (- ex2 (* ex ex)))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">g(z) = &sum; p&#x2096; z&#x1D4F;</td><td class="pr-4 text-green-300">'(p0 p1 p2 ...)</td><td class="font-sans">Generating function as coefficient list</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">g&#x2081; &middot; g&#x2082;</td><td class="pr-4 text-green-300">(poly-mul g1 g2)</td><td class="font-sans">Convolution = polynomial multiplication</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">g&prime;(1)</td><td class="pr-4 text-green-300">(poly-eval (poly-deriv g) 1)</td><td class="font-sans">Expected value</td></tr>
+          <tr><td class="py-2 pr-4">M(t) = E[e&#x1D57;&#x1D3A;]</td><td class="pr-4 text-green-300">(mgf-die t)</td><td class="font-sans">Moment generating function</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-09/">🎰 Ch 9</a> &mdash; Central Limit Theorem (the CLT proof uses MGFs)</li>
+      <li><a href="/reading/probability/grinstead-07/">🎰 Ch 7</a> &mdash; Sums of Random Variables (convolution the hard way)</li>
+      <li><a href="/reading/probability/grinstead-05/">🎰 Ch 5</a> &mdash; Distributions (the named distributions encoded as polynomials)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Connections</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Probability-generating_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Probability-generating function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Moment-generating_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Moment-generating function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Convolution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Convolution</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Polynomials are stored as coefficient lists indexed from 0. The polynomial multiplication is exactly discrete convolution. For continuous distributions, the OGF becomes an integral transform, but the algebraic structure is the same: independence of random variables corresponds to multiplication of their generating functions. The textbook uses this machinery to prove the CLT: take the log of the MGF, expand to second order, and recover the normal MGF.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Chapter 10</a> of Grinstead &amp; Snell.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-09/", label: "Central Limit Theorem" }} next={{ href: "/reading/probability/grinstead-11/", label: "Markov Chains" }} />
+
+  </main>
+</Layout>

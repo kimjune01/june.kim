@@ -1,0 +1,229 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.5 — Key Exchange" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>Key Exchange</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diffie-Hellman key exchange</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Diffie-Hellman</strong> lets two parties who have never met agree on a shared secret over a public channel. Each picks a private number, publishes a public value, and combines the other's public value with their own private number. Both arrive at the same shared secret. An eavesdropper who sees the public values cannot compute the secret without solving the <strong>discrete logarithm problem</strong>.</p>
+    </div>
+
+    <!-- SVG: Alice and Bob exchanging g^a and g^b -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Alice -->
+        <text x="60" y="25" text-anchor="middle" fill="#86efac" font-size="13">Alice</text>
+        <text x="60" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">secret: a</text>
+
+        <!-- Bob -->
+        <text x="340" y="25" text-anchor="middle" fill="#60a5fa" font-size="13">Bob</text>
+        <text x="340" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">secret: b</text>
+
+        <!-- Alice computes g^a -->
+        <text x="60" y="70" text-anchor="middle" fill="#86efac" font-size="10">computes g^a</text>
+
+        <!-- Bob computes g^b -->
+        <text x="340" y="70" text-anchor="middle" fill="#60a5fa" font-size="10">computes g^b</text>
+
+        <!-- Arrow: Alice sends g^a to Bob -->
+        <line x1="100" y1="85" x2="300" y2="95" stroke="#facc15" stroke-width="1.5"/>
+        <polygon points="300,91 298,99 292,93" fill="#facc15"/>
+        <text x="200" y="82" text-anchor="middle" fill="#facc15" font-size="10">g^a (public)</text>
+
+        <!-- Arrow: Bob sends g^b to Alice -->
+        <line x1="300" y1="115" x2="100" y2="125" stroke="#facc15" stroke-width="1.5"/>
+        <polygon points="100,121 102,129 108,123" fill="#facc15"/>
+        <text x="200" y="138" text-anchor="middle" fill="#facc15" font-size="10">g^b (public)</text>
+
+        <!-- Alice computes shared secret -->
+        <text x="60" y="165" text-anchor="middle" fill="#86efac" font-size="10">(g^b)^a = g^ab</text>
+
+        <!-- Bob computes shared secret -->
+        <text x="340" y="165" text-anchor="middle" fill="#60a5fa" font-size="10">(g^a)^b = g^ab</text>
+
+        <!-- Shared secret -->
+        <rect x="145" y="172" width="110" height="22" rx="4" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="200" y="187" text-anchor="middle" fill="#22c55e" font-size="10">shared secret</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Diffie-Hellman with small numbers -->
+    <h3>Diffie-Hellman with small numbers</h3>
+    <p>Pick a prime p and a generator g of the cyclic group Z*<sub>p</sub>. Alice picks secret a, publishes A = g<sup>a</sup> mod p. Bob picks secret b, publishes B = g<sup>b</sup> mod p. Alice computes B<sup>a</sup> mod p. Bob computes A<sup>b</sup> mod p. Both get g<sup>ab</sup> mod p. An eavesdropper sees g, p, A, B but not a or b.</p>
+
+    <SchemeRepl client:load initialCode={`; Diffie-Hellman key exchange with small numbers
+
+(define p 23)   ; prime
+(define g 5)    ; generator of Z*_23
+
+;; Modular exponentiation: base^exp mod m
+(define (mod-exp base exp m)
+  (let loop ((result 1) (b (modulo base m)) (e exp))
+    (if (= e 0) result
+        (loop (if (odd? e) (modulo (* result b) m) result)
+              (modulo (* b b) m)
+              (quotient e 2)))))
+
+;; Alice's secret
+(define a 6)
+(define A (mod-exp g a p))  ; g^a mod p
+
+;; Bob's secret
+(define b 15)
+(define B (mod-exp g b p))  ; g^b mod p
+
+(display "Public parameters: p=") (display p)
+(display ", g=") (display g) (newline)
+
+(display "Alice publishes A = g^a mod p = ") (display A) (newline)
+(display "Bob publishes   B = g^b mod p = ") (display B) (newline)
+
+;; Both compute the shared secret
+(define alice-secret (mod-exp B a p))  ; B^a = g^(ab) mod p
+(define bob-secret   (mod-exp A b p))  ; A^b = g^(ab) mod p
+
+(display "Alice computes B^a mod p = ") (display alice-secret) (newline)
+(display "Bob computes   A^b mod p = ") (display bob-secret) (newline)
+(display "Same secret? ") (display (= alice-secret bob-secret))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Diffie-Hellman in Python
+p, g = 23, 5  # prime and generator
+
+a = 6   # Alice's secret
+b = 15  # Bob's secret
+
+A = pow(g, a, p)  # Alice publishes
+B = pow(g, b, p)  # Bob publishes
+
+print(f"Alice publishes A = {A}")
+print(f"Bob publishes   B = {B}")
+
+alice_secret = pow(B, a, p)  # B^a mod p
+bob_secret   = pow(A, b, p)  # A^b mod p
+
+print(f"Alice's shared secret: {alice_secret}")
+print(f"Bob's shared secret:   {bob_secret}")
+print(f"Same? {alice_secret == bob_secret}")
+`} />
+    </div>
+
+
+    <!-- 2. Discrete log problem -->
+    <h3>The discrete logarithm problem</h3>
+    <p>Given g, p, and A = g<sup>a</sup> mod p, find a. For small p this is easy (try all values). For a 2048-bit prime, no known algorithm solves it efficiently. The best general algorithm (number field sieve) runs in sub-exponential but still impractical time. This hardness assumption is the foundation of DH security.</p>
+
+    <SchemeRepl client:load initialCode={`; Discrete log by brute force (only works for small p)
+
+(define (mod-exp base exp m)
+  (let loop ((result 1) (b (modulo base m)) (e exp))
+    (if (= e 0) result
+        (loop (if (odd? e) (modulo (* result b) m) result)
+              (modulo (* b b) m)
+              (quotient e 2)))))
+
+(define p 23)
+(define g 5)
+(define A 8)  ; = g^a mod p, find a
+
+(define (brute-force-dlog g A p)
+  (let loop ((a 0))
+    (if (= (mod-exp g a p) A) a
+        (loop (+ a 1)))))
+
+(display "g=5, A=8, p=23") (newline)
+(display "Discrete log (brute force): a = ")
+(display (brute-force-dlog g A p)) (newline)
+
+;; Verify
+(define a-found (brute-force-dlog g A p))
+(display "Check: g^a mod p = ") (display (mod-exp g a-found p)) (newline)
+
+(display "For p with 2048 bits, brute force is impossible.")
+`} />
+
+
+    <!-- 3. Man-in-the-middle -->
+    <h3>Man-in-the-middle attack</h3>
+    <p>Plain DH is vulnerable to an active attacker (Mallory) who intercepts the exchange. Mallory runs separate DH with Alice and Bob, establishing different shared secrets with each. She decrypts Alice's messages, re-encrypts for Bob, and neither party knows. The fix: <strong>authenticated key exchange</strong>, where each party proves their identity (via signatures or certificates) alongside the DH exchange.</p>
+
+    <SchemeRepl client:load initialCode={`; Man-in-the-middle: Mallory intercepts DH
+
+(define (mod-exp base exp m)
+  (let loop ((result 1) (b (modulo base m)) (e exp))
+    (if (= e 0) result
+        (loop (if (odd? e) (modulo (* result b) m) result)
+              (modulo (* b b) m)
+              (quotient e 2)))))
+
+(define p 23)
+(define g 5)
+
+;; Alice and Bob's real secrets
+(define a 6)
+(define b 15)
+
+;; Mallory's secrets
+(define m1 10)   ; for Alice
+(define m2 3)    ; for Bob
+
+;; Alice sends g^a, Mallory intercepts, sends g^m1 to Bob
+(define A (mod-exp g a p))
+(define M1 (mod-exp g m1 p))
+
+;; Bob sends g^b, Mallory intercepts, sends g^m2 to Alice
+(define B (mod-exp g b p))
+(define M2 (mod-exp g m2 p))
+
+;; Alice thinks shared secret is (g^m2)^a
+(define alice-key (mod-exp M2 a p))
+;; Mallory knows this too: (g^a)^m2
+(define mallory-alice-key (mod-exp A m2 p))
+
+(display "Alice's key:            ") (display alice-key) (newline)
+(display "Mallory's key (Alice):  ") (display mallory-alice-key) (newline)
+(display "Match? ") (display (= alice-key mallory-alice-key)) (newline)
+
+;; Bob thinks shared secret is (g^m1)^b
+(define bob-key (mod-exp M1 b p))
+(define mallory-bob-key (mod-exp B m1 p))
+
+(display "Bob's key:              ") (display bob-key) (newline)
+(display "Mallory's key (Bob):    ") (display mallory-bob-key) (newline)
+(display "Match? ") (display (= bob-key mallory-bob-key)) (newline)
+(display "Alice and Bob have DIFFERENT keys!")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-01/">🔗 Judson Ch. 1</a> &mdash; groups: Diffie-Hellman operates in cyclic groups</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diffie-Hellman key exchange</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Discrete_logarithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Discrete logarithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Man-in-the-middle attack</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-04/", label: "MACs and Authentication" }} next={{ href: "/reading/cryptography/crypto-06/", label: "RSA" }} />
+
+  </main>
+</Layout>

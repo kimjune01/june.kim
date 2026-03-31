@@ -1,0 +1,138 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.1 — Feedback" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Feedback</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Feedback"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Feedback</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>open-loop</strong> controller acts without measuring the result. A <strong>closed-loop</strong> controller measures the output and adjusts. The difference is the feedback wire. Most of control theory exists because of that wire.</p>
+    </div>
+
+    <!-- Open-loop vs closed-loop -->
+    <h3>Open-loop vs closed-loop</h3>
+    <p>An open-loop system applies a fixed input and hopes for the best. A toaster on a timer is open-loop: it heats for two minutes regardless of how brown the bread is. A closed-loop system measures the output and feeds that measurement back to the input. A thermostat is closed-loop: it measures the temperature and turns the heater on or off.</p>
+
+    <!-- SVG: Open-loop vs closed-loop -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 260" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Open-loop -->
+        <text x="10" y="20" fill="currentColor" font-size="12" fill-opacity="0.5">Open-loop</text>
+        <!-- Controller -->
+        <rect x="80" y="30" width="100" height="35" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="130" y="52" text-anchor="middle" fill="#60a5fa" font-size="12">Controller</text>
+        <!-- Plant -->
+        <rect x="240" y="30" width="100" height="35" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="290" y="52" text-anchor="middle" fill="#f59e0b" font-size="12">Plant</text>
+        <!-- Arrows -->
+        <line x1="30" y1="47" x2="78" y2="47" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="78,43 86,47 78,51" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="180" y1="47" x2="238" y2="47" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="238,43 246,47 238,51" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="340" y1="47" x2="460" y2="47" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="450,43 458,47 450,51" fill="currentColor" fill-opacity="0.5"/>
+        <text x="470" y="52" fill="currentColor" font-size="11" fill-opacity="0.5">y</text>
+        <!-- No feedback wire label -->
+        <text x="290" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">no feedback</text>
+
+        <!-- Closed-loop -->
+        <text x="10" y="140" fill="currentColor" font-size="12" fill-opacity="0.5">Closed-loop</text>
+        <!-- Summing junction -->
+        <circle cx="75" cy="167" r="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="75" y="171" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">&Sigma;</text>
+        <!-- Controller -->
+        <rect x="115" y="150" width="100" height="35" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="165" y="172" text-anchor="middle" fill="#60a5fa" font-size="12">Controller</text>
+        <!-- Plant -->
+        <rect x="270" y="150" width="100" height="35" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="320" y="172" text-anchor="middle" fill="#f59e0b" font-size="12">Plant</text>
+        <!-- Arrows -->
+        <line x1="30" y1="167" x2="61" y2="167" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="61,163 69,167 61,171" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="87" y1="167" x2="113" y2="167" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="113,163 121,167 113,171" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="215" y1="167" x2="268" y2="167" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="268,163 276,167 268,171" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="370" y1="167" x2="460" y2="167" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="450,163 458,167 450,171" fill="currentColor" fill-opacity="0.5"/>
+        <text x="470" y="172" fill="currentColor" font-size="11" fill-opacity="0.5">y</text>
+        <!-- Feedback wire -->
+        <line x1="420" y1="167" x2="420" y2="230" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="420" y1="230" x2="75" y2="230" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="75" y1="230" x2="75" y2="181" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="71,181 75,173 79,181" fill="#a78bfa" fill-opacity="0.5"/>
+        <text x="250" y="248" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">feedback wire</text>
+      </svg>
+    </div>
+
+    <h3>Why feedback stabilizes</h3>
+    <p>Without feedback, any disturbance (a gust of wind, a load change, a modeling error) accumulates unchecked. Feedback subtracts the measured output from the desired reference, producing an <strong>error signal</strong>. The controller acts on the error, not the raw reference.</p>
+    <p>If the output is too high, the error goes negative and the controller reduces its effort. If the output is too low, the error goes positive and the controller pushes harder. This negative feedback loop is self-correcting.</p>
+
+    <h3>The thermostat</h3>
+    <p>Set the desired temperature to 20 degrees C. The sensor measures the room at 18 degrees C, so the error is +2. The heater turns on. As the room warms to 20, the error drops to zero and the heater turns off. If someone opens a window and the room drops to 19, the error becomes +1, and the heater turns on again. That feedback loop maintains the setpoint despite disturbances.</p>
+
+    <SchemeRepl client:load initialCode={`; A simple thermostat simulation
+; Closed-loop: heater responds to error between setpoint and room temp
+
+(define setpoint 20.0)
+(define room-temp 15.0)
+(define heat-rate 0.5)    ; degrees per step when heater is on
+(define cool-rate 0.1)    ; degrees per step from heat loss
+
+(define (thermostat temp steps)
+  (if (= steps 0)
+    (begin (display "Final temp: ") (display temp) (newline))
+    (let* ((error (- setpoint temp))
+           (heater-on (> error 0))
+           (next-temp (if heater-on
+                        (- (+ temp heat-rate) cool-rate)
+                        (- temp cool-rate))))
+      (display "Step: temp=") (display temp)
+      (display (if heater-on " heater=ON" " heater=OFF"))
+      (display " error=") (display error) (newline)
+      (thermostat next-temp (- steps 1)))))
+
+(thermostat room-temp 15)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Thermostat simulation
+setpoint = 20.0
+temp = 15.0
+heat_rate = 0.5
+cool_rate = 0.1
+
+for step in range(15):
+    error = setpoint - temp
+    heater_on = error > 0
+    status = "ON" if heater_on else "OFF"
+    print(f"Step {step:2d}: temp={temp:.1f}  heater={status}  error={error:+.1f}")
+    if heater_on:
+        temp += heat_rate - cool_rate
+    else:
+        temp -= cool_rate
+
+print(f"Final temp: {temp:.1f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-04/">&#x2699; Crowell Ch. 4 — Thermodynamics</a> &#x2014; temperature is the quantity a thermostat controls</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/control/ctrl-02/", label: "Transfer Functions" }} />
+
+  </main>
+</Layout>

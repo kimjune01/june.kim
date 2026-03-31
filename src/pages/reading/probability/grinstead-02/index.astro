@@ -1,0 +1,229 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 2 — Continuous Probability" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">← back to probability</a>
+
+    <h1>Continuous Probability</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell · GFDL · <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When the sample space is a continuum, individual points have probability zero. Probability lives in <strong>areas under curves</strong>. A density function f(x) replaces the discrete weight function, and P(a &lt; X &lt; b) = &int; f(x) dx from a to b.</p>
+    </div>
+
+    <!-- 1. Why continuous? -->
+    <h3>From counting to measuring</h3>
+    <p>Spin a wheel, pick a random real number between 0 and 1, measure a person's height. The sample space is an interval (or all of R). You cannot list the outcomes, so you cannot assign a positive probability to each one. Instead, you describe how probability is <strong>distributed</strong> across regions.</p>
+
+    <!-- SVG: Bell curve with shaded area -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="140" x2="380" y2="140" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="40" y1="140" x2="40" y2="10" stroke="currentColor" stroke-width="1.2"/>
+        <text x="390" y="143" fill="currentColor" font-size="11" fill-opacity="0.5">x</text>
+        <text x="30" y="15" fill="currentColor" font-size="11" fill-opacity="0.5">f(x)</text>
+        <!-- Bell curve path (approximating normal distribution) -->
+        <path d="M 40,140 C 60,140 80,138 100,135 C 120,130 140,115 160,90 C 175,70 185,45 200,30 C 215,45 225,70 240,90 C 260,115 280,130 300,135 C 320,138 340,140 380,140" fill="none" stroke="currentColor" stroke-width="2"/>
+        <!-- Shaded area between a and b -->
+        <path d="M 145,140 C 150,130 155,118 160,108 C 165,98 170,85 175,75 C 180,65 185,52 190,42 C 195,35 198,32 200,30 C 202,32 205,35 210,42 C 215,52 220,65 225,75 C 230,85 235,95 240,108 L 240,140 Z" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+        <!-- Vertical lines at a and b -->
+        <line x1="145" y1="140" x2="145" y2="118" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="240" y1="140" x2="240" y2="108" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <!-- Labels -->
+        <text x="145" y="155" text-anchor="middle" fill="#60a5fa" font-size="11">a</text>
+        <text x="240" y="155" text-anchor="middle" fill="#60a5fa" font-size="11">b</text>
+        <text x="192" y="100" text-anchor="middle" fill="#60a5fa" font-size="12">P(a&lt;X&lt;b)</text>
+        <!-- Annotation -->
+        <text x="200" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">area under f(x) from a to b = probability</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Density function: probability = area under the curve
+; For uniform on [0,1]: f(x) = 1 everywhere
+
+; Approximate integral by summing rectangles (Riemann sum)
+(define (integrate f a b n)
+  (let* ((dx (/ (- b a) n))
+         (sum (let loop ((i 0) (s 0))
+                (if (>= i n) s
+                    (loop (+ i 1) (+ s (* (f (+ a (* i dx))) dx)))))))
+    sum))
+
+; Uniform density on [0,1]
+(define (uniform-density x)
+  (if (and (>= x 0) (<= x 1)) 1 0))
+
+(display "P(0 < X < 1)   = ")
+(display (integrate uniform-density 0 1 1000)) (newline)
+(display "P(0 < X < 0.5) = ")
+(display (integrate uniform-density 0 0.5 1000)) (newline)
+(display "P(0.3 < X < 0.7) = ")
+(display (integrate uniform-density 0.3 0.7 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Density function and numerical integration
+def integrate(f, a, b, n=1000):
+    dx = (b - a) / n
+    return sum(f(a + i * dx) * dx for i in range(n))
+
+# Uniform density on [0, 1]
+uniform = lambda x: 1.0 if 0 <= x <= 1 else 0.0
+
+print(f"P(0 < X < 1)     = {integrate(uniform, 0, 1):.4f}")
+print(f"P(0 < X < 0.5)   = {integrate(uniform, 0, 0.5):.4f}")
+print(f"P(0.3 < X < 0.7) = {integrate(uniform, 0.3, 0.7):.4f}")
+`} />
+    </div>
+
+    <!-- 2. Density functions -->
+    <h3>Density functions</h3>
+    <p>A <strong>density function</strong> f(x) satisfies two rules (the continuous versions of the discrete axioms):</p>
+    <ol>
+      <li>f(x) &ge; 0 for all x</li>
+      <li>&int; f(x) dx over the entire real line = 1</li>
+    </ol>
+    <p>The density at a point is not a probability. It is a rate: how quickly probability accumulates near that point. Only areas (integrals) give probabilities.</p>
+
+    <SchemeRepl client:load initialCode={`; A triangular density on [0, 2]: f(x) = x for 0<=x<=1, f(x) = 2-x for 1<x<=2
+(define (triangle-density x)
+  (cond ((and (>= x 0) (<= x 1)) x)
+        ((and (> x 1) (<= x 2)) (- 2 x))
+        (else 0)))
+
+; Verify it integrates to 1
+(display "total area = ")
+(display (integrate triangle-density 0 2 1000)) (newline)
+
+; P(0.5 < X < 1.5)
+(display "P(0.5 < X < 1.5) = ")
+(display (integrate triangle-density 0.5 1.5 1000))
+`} />
+
+    <!-- 3. Normal distribution -->
+    <h3>The normal distribution</h3>
+    <p>The most important continuous distribution. Its density is the bell curve: f(x) = (1/&radic;(2&pi;)) e^(-x&sup2;/2) for the standard normal (mean 0, variance 1). About 68% of the area lies within one standard deviation of the mean, 95% within two.</p>
+
+    <SchemeRepl client:load initialCode={`; Standard normal density: f(x) = (1/sqrt(2*pi)) * e^(-x^2/2)
+(define pi 3.14159265358979)
+(define e  2.71828182845905)
+
+(define (normal-density x)
+  (* (/ 1 (sqrt (* 2 pi)))
+     (expt e (* -0.5 (* x x)))))
+
+; P(-1 < X < 1) should be about 0.6827
+(display "P(-1 < X < 1) = ")
+(display (integrate normal-density -1 1 2000)) (newline)
+
+; P(-2 < X < 2) should be about 0.9545
+(display "P(-2 < X < 2) = ")
+(display (integrate normal-density -2 2 2000)) (newline)
+
+; P(-3 < X < 3) should be about 0.9973
+(display "P(-3 < X < 3) = ")
+(display (integrate normal-density -3 3 2000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Standard normal density and integration
+import math
+
+def normal_density(x):
+    return (1 / math.sqrt(2 * math.pi)) * math.exp(-0.5 * x**2)
+
+def integrate(f, a, b, n=2000):
+    dx = (b - a) / n
+    return sum(f(a + i * dx) * dx for i in range(n))
+
+print(f"P(-1 < X < 1) = {integrate(normal_density, -1, 1):.4f}")
+print(f"P(-2 < X < 2) = {integrate(normal_density, -2, 2):.4f}")
+print(f"P(-3 < X < 3) = {integrate(normal_density, -3, 3):.4f}")
+`} />
+    </div>
+
+    <!-- 4. Cumulative distribution -->
+    <h3>Cumulative distribution function</h3>
+    <p>The CDF is F(x) = P(X &le; x) = &int; f(t) dt from -&infin; to x. It rises from 0 to 1 and is non-decreasing. The density is the derivative of the CDF: f(x) = F'(x). Two ways to describe the same distribution.</p>
+
+    <SchemeRepl client:load initialCode={`; CDF: integrate density from -infinity to x
+; For uniform on [0,1]: F(x) = x for 0<=x<=1
+
+(define (uniform-cdf x)
+  (cond ((< x 0) 0)
+        ((> x 1) 1)
+        (else x)))
+
+(display "F(0.0) = ") (display (uniform-cdf 0.0)) (newline)
+(display "F(0.3) = ") (display (uniform-cdf 0.3)) (newline)
+(display "F(0.7) = ") (display (uniform-cdf 0.7)) (newline)
+(display "F(1.0) = ") (display (uniform-cdf 1.0)) (newline)
+
+; P(0.3 < X < 0.7) = F(0.7) - F(0.3)
+(display "P(0.3 < X < 0.7) = ")
+(display (- (uniform-cdf 0.7) (uniform-cdf 0.3)))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f(x)</td><td class="pr-4 text-green-300">(normal-density x)</td><td class="font-sans">Density function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F(x) = P(X &le; x)</td><td class="pr-4 text-green-300">(uniform-cdf x)</td><td class="font-sans">Cumulative distribution function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int; f(x)dx = 1</td><td class="pr-4 text-green-300">(integrate f a b n)</td><td class="font-sans">Total area = 1 (normalization)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(a &lt; X &lt; b)</td><td class="pr-4 text-green-300">(integrate f a b n)</td><td class="font-sans">Probability = area under curve</td></tr>
+          <tr><td class="py-2 pr-4">N(0, 1)</td><td class="pr-4 text-green-300">(normal-density x)</td><td class="font-sans">Standard normal distribution</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Adjacent chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-01/">🎰 Ch 1: Discrete Probability</a> — the finite version of everything on this page</li>
+      <li><a href="/reading/probability/grinstead-03/">🎰 Ch 3: Combinatorics</a> — counting, which powers discrete probability</li>
+      <li><a href="/reading/probability/grinstead-04/">🎰 Ch 4: Conditional Probability</a> — conditioning works for continuous distributions too</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories handle both discrete and continuous probability in one framework</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — probabilistic programs sample from continuous distributions</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez-Fritz 2011</a> — entropy as a functor, connecting information to probability</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Probability_density_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Probability density function</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Normal_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Normal distribution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cumulative distribution function</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Ch 2</a> of Grinstead &amp; Snell.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-01/", label: "Discrete Probability" }} next={{ href: "/reading/probability/grinstead-03/", label: "Combinatorics" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,362 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hefferon Ch.1 — Linear Systems" favicon="📐">
+  <main>
+
+    <a href="/reading/linear-algebra/" class="text-sm mb-4 inline-block">← back to linear algebra</a>
+
+    <h1>Linear Systems</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/linearalgebra/">Linear Algebra</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>system of linear equations</strong> can always be solved by row reduction. Convert the augmented matrix to echelon form, then back-substitute. Gauss-Jordan elimination goes further, reducing to reduced row echelon form where every solution reads off directly.</p>
+    </div>
+
+    <!-- 1. Systems of equations -->
+    <h3>Systems as augmented matrices</h3>
+    <p>A system of linear equations is a list of constraints, each linear in the unknowns. Writing it as an <strong>augmented matrix</strong> strips away the variable names and keeps only the coefficients. Row operations on the matrix correspond to legitimate algebraic moves on the system.</p>
+
+    <!-- SVG: Augmented matrix with row operations -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left bracket -->
+        <path d="M 60 30 L 50 30 L 50 150 L 60 150" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Right bracket before augment line -->
+        <path d="M 210 30 L 210 150" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.5"/>
+        <!-- Right bracket -->
+        <path d="M 280 30 L 290 30 L 290 150 L 280 150" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <!-- Row 1 -->
+        <text x="80" y="65" fill="currentColor" font-size="14">2</text>
+        <text x="120" y="65" fill="currentColor" font-size="14">1</text>
+        <text x="160" y="65" fill="currentColor" font-size="14">-1</text>
+        <text x="235" y="65" fill="currentColor" font-size="14">8</text>
+        <!-- Row 2 -->
+        <text x="80" y="100" fill="currentColor" font-size="14">-3</text>
+        <text x="120" y="100" fill="currentColor" font-size="14">-1</text>
+        <text x="160" y="100" fill="currentColor" font-size="14">2</text>
+        <text x="235" y="100" fill="currentColor" font-size="14">-11</text>
+        <!-- Row 3 -->
+        <text x="80" y="135" fill="currentColor" font-size="14">-2</text>
+        <text x="120" y="135" fill="currentColor" font-size="14">1</text>
+        <text x="160" y="135" fill="currentColor" font-size="14">2</text>
+        <text x="235" y="135" fill="currentColor" font-size="14">-3</text>
+        <!-- Arrow and row operation label -->
+        <line x1="310" y1="90" x2="370" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="370,86 378,90 370,94" fill="currentColor"/>
+        <text x="340" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">R2 + 3/2 R1</text>
+        <text x="340" y="110" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">R3 + R1</text>
+        <!-- Caption -->
+        <text x="170" y="172" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">augmented matrix with row operations</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Represent an augmented matrix as a list of rows.
+; Each row is a list of numbers (coefficients | constant).
+
+(define mat '((2 1 -1 8)
+              (-3 -1 2 -11)
+              (-2 1 2 -3)))
+
+; Scale a row by a factor
+(define (scale-row row k)
+  (map (lambda (x) (* x k)) row))
+
+; Add two rows element-wise
+(define (add-rows r1 r2)
+  (map + r1 r2))
+
+; Row replacement: Ri <- Ri + k * Rj
+(define (row-replace mat i j k)
+  (let* ((rows (list->vector mat))
+         (ri (vector-ref rows i))
+         (rj (vector-ref rows j))
+         (new-ri (add-rows ri (scale-row rj k))))
+    (vector-set! rows i new-ri)
+    (vector->list rows)))
+
+; Eliminate below pivot in column 0
+(define step1 (row-replace mat 1 0 3/2))  ; R2 <- R2 + (3/2)R1
+(define step2 (row-replace step1 2 0 1))  ; R3 <- R3 + R1
+
+(display "After eliminating column 0:")
+(newline)
+(for-each (lambda (row)
+  (display "  ")
+  (display row)
+  (newline)) step2)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Augmented matrix as a list of lists
+mat = [[2, 1, -1, 8],
+       [-3, -1, 2, -11],
+       [-2, 1, 2, -3]]
+
+import copy
+m = copy.deepcopy(mat)
+
+# R2 <- R2 + (3/2)*R1
+for j in range(4):
+    m[1][j] += (3/2) * m[0][j]
+
+# R3 <- R3 + R1
+for j in range(4):
+    m[2][j] += m[0][j]
+
+print("After eliminating column 0:")
+for row in m:
+    print(" ", [round(x, 2) for x in row])
+`} />
+    </div>
+
+
+    <!-- 2. Echelon form -->
+    <h3>Echelon form and back-substitution</h3>
+    <p>A matrix is in <strong>echelon form</strong> when each leading entry is to the right of the one above it, and all entries below each leading entry are zero. Once you reach echelon form, the system solves by back-substitution: start from the bottom row and work up.</p>
+
+    <SchemeRepl client:load initialCode={`; Continue from the previous step to reach echelon form.
+; After step2, our matrix is:
+;   (2   1   -1   8)
+;   (0  1/2  1/2  1)
+;   (0   2    1   5)
+;
+; Eliminate below the pivot in column 1.
+
+(define (scale-row row k)
+  (map (lambda (x) (* x k)) row))
+
+(define (add-rows r1 r2)
+  (map + r1 r2))
+
+(define echelon '((2 1 -1 8)
+                  (0 1/2 1/2 1)
+                  (0 2 1 5)))
+
+; R3 <- R3 + (-4)*R2
+(define (row-replace mat i j k)
+  (let* ((rows (list->vector mat))
+         (ri (vector-ref rows i))
+         (rj (vector-ref rows j))
+         (new-ri (add-rows ri (scale-row rj k))))
+    (vector-set! rows i new-ri)
+    (vector->list rows)))
+
+(define result (row-replace echelon 2 1 -4))
+
+(display "Echelon form:")
+(newline)
+(for-each (lambda (row)
+  (display "  ")
+  (display row)
+  (newline)) result)
+
+; Back-substitute from row 3:
+;   -1 * x3 = 1  =>  x3 = -1
+;   (1/2)x2 + (1/2)(-1) = 1  =>  x2 = 3
+;   2*x1 + 3 - (-1) = 8  =>  x1 = 2
+(newline)
+(display "Solution: x1=2, x2=3, x3=-1")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Row reduce to echelon form
+m = [[2, 1, -1, 8],
+     [0, 0.5, 0.5, 1],
+     [0, 2, 1, 5]]
+
+# R3 <- R3 + (-4)*R2
+for j in range(4):
+    m[2][j] += -4 * m[1][j]
+
+print("Echelon form:")
+for row in m:
+    print(" ", [round(x, 2) for x in row])
+
+# Back-substitute: x3=-1, x2=3, x1=2
+print("Solution: x1=2, x2=3, x3=-1")
+`} />
+    </div>
+
+
+    <!-- 3. Gauss-Jordan -->
+    <h3>Gauss-Jordan elimination</h3>
+    <p>Gauss-Jordan goes beyond echelon form: eliminate upward too, and scale each pivot to 1. The result is <strong>reduced row echelon form</strong> (RREF). Every column either contains a pivot or represents a free variable. The solution reads off without any arithmetic.</p>
+
+    <SchemeRepl client:load initialCode={`; Full Gauss-Jordan elimination on a 3x3 system.
+; We'll go from raw system to RREF.
+
+(define (scale-row row k) (map (lambda (x) (* x k)) row))
+(define (add-rows r1 r2) (map + r1 r2))
+
+(define (row-replace mat i j k)
+  (let* ((v (list->vector mat))
+         (new-ri (add-rows (vector-ref v i) (scale-row (vector-ref v j) k))))
+    (vector-set! v i new-ri)
+    (vector->list v)))
+
+(define (scale-pivot mat i k)
+  (let ((v (list->vector mat)))
+    (vector-set! v i (scale-row (vector-ref v i) k))
+    (vector->list v)))
+
+; Start: x + y = 5, 2x - y = 1
+(define m '((1 1 5)
+            (2 -1 1)))
+
+; Forward: R2 <- R2 - 2*R1
+(define m1 (row-replace m 1 0 -2))
+
+; Scale R2: R2 <- (-1/3)*R2
+(define m2 (scale-pivot m1 1 -1/3))
+
+; Backward: R1 <- R1 - R2
+(define m3 (row-replace m2 0 1 -1))
+
+(display "RREF:")
+(newline)
+(for-each (lambda (row)
+  (display "  ")
+  (display row)
+  (newline)) m3)
+; Should be ((1 0 2) (0 1 3)) => x=2, y=3
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gauss-Jordan elimination in Python
+import numpy as np
+
+A = np.array([[1, 1, 5],
+              [2, -1, 1]], dtype=float)
+
+# Forward: R2 -= 2*R1
+A[1] -= 2 * A[0]
+
+# Scale R2
+A[1] /= A[1, 1]
+
+# Backward: R1 -= R2
+A[0] -= A[0, 1] * A[1]
+
+print("RREF:")
+print(A)
+# [[1, 0, 2], [0, 1, 3]] => x=2, y=3
+`} />
+    </div>
+
+
+    <!-- 4. Free variables -->
+    <h3>Free variables and solution sets</h3>
+    <p>When a system has more unknowns than pivot positions, the non-pivot columns correspond to <strong>free variables</strong>. The solution set is a line, plane, or higher-dimensional flat through the particular solution. This is where linear algebra meets geometry.</p>
+
+    <SchemeRepl client:load initialCode={`; A system with a free variable:
+;   x + 2y + z = 4
+;   2x + 4y + 3z = 9
+; Two equations, three unknowns.
+
+(define (scale-row row k) (map (lambda (x) (* x k)) row))
+(define (add-rows r1 r2) (map + r1 r2))
+
+(define m '((1 2 1 4)
+            (2 4 3 9)))
+
+; R2 <- R2 - 2*R1
+(define m1
+  (let ((v (list->vector m)))
+    (vector-set! v 1 (add-rows (vector-ref v 1) (scale-row (vector-ref v 0) -2)))
+    (vector->list v)))
+
+(display "Echelon form:")
+(newline)
+(for-each (lambda (row)
+  (display "  ") (display row) (newline)) m1)
+
+; Result: ((1 2 1 4) (0 0 1 1))
+; z = 1 (from row 2)
+; x + 2y + 1 = 4, so x = 3 - 2y
+; y is free.
+(newline)
+(display "z = 1, x = 3 - 2t, y = t  (t is free)")
+(newline)
+(display "Solution is a line through (3,0,1).")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# System with a free variable
+m = [[1, 2, 1, 4],
+     [2, 4, 3, 9]]
+
+# R2 <- R2 - 2*R1
+for j in range(4):
+    m[1][j] -= 2 * m[0][j]
+
+print("Echelon form:")
+for row in m:
+    print(" ", [round(x, 2) for x in row])
+
+# z=1, x=3-2t, y=t (free)
+print("z = 1, x = 3 - 2t, y = t  (t is free)")
+print("Solution is a line through (3, 0, 1).")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">[A | b]</td><td class="pr-4 text-green-300">'((a11 ... b1) ...)</td><td class="pr-4 text-blue-300">np.array([[...]])</td><td class="font-sans">Augmented matrix</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Ri ← Ri + kRj</td><td class="pr-4 text-green-300">(row-replace mat i j k)</td><td class="pr-4 text-blue-300">A[i] += k * A[j]</td><td class="font-sans">Row replacement</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Ri ← cRi</td><td class="pr-4 text-green-300">(scale-pivot mat i c)</td><td class="pr-4 text-blue-300">A[i] *= c</td><td class="font-sans">Row scaling</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">RREF</td><td class="pr-4 text-green-300">pivots = 1, rest = 0</td><td class="pr-4 text-blue-300">pivots = 1, rest = 0</td><td class="font-sans">Reduced row echelon form</td></tr>
+          <tr><td class="py-2 pr-4">free variable</td><td class="pr-4 text-green-300">non-pivot column</td><td class="pr-4 text-blue-300">non-pivot column</td><td class="font-sans">Parameter in solution set</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Next chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-02/">Ch.2 Vector Spaces</a> — the algebraic structure behind solution sets</li>
+      <li><a href="/reading/linear-algebra/hefferon-03/">Ch.3 Maps Between Spaces</a> — matrices as linear maps</li>
+    </ul>
+    <ul>
+      <li><a href="/reading/discrete-math/levin-01/">🔢 Levin Ch.1 Counting</a> — counting the number of solutions to a system</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Gaussian_elimination"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Gaussian elimination</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Row_echelon_form"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Row echelon form</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/System_of_linear_equations"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W System of linear equations</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Hefferon's chapter covers additional topics: describing solution sets geometrically, general = particular + homogeneous decomposition, and a careful treatment of the uniqueness of RREF. The examples here focus on the core algorithm. For full proofs, see the original text.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Full chapter: <a href="https://hefferon.net/linearalgebra/">Hefferon, Chapter One — Linear Systems</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/linear-algebra/hefferon-02/", label: "Vector Spaces" }} />
+
+  </main>
+</Layout>

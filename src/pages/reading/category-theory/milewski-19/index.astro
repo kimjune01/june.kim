@@ -1,0 +1,479 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.19 — F-Algebras" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>F-Algebras</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2017 · <a href="https://bartoszmilewski.com/2017/02/28/f-algebras/">Category Theory for Programmers, Ch. 19</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>, <a href="/reading/category-theory/milewski-06/">🍞 Ch6 (Simple Algebraic Data Types)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>F-algebra</strong> is a functor F plus a morphism <code>F(a) &rarr; a</code>. The <strong>initial algebra</strong> is the fixed point of the functor: it <em>is</em> the recursive data type. A <strong>catamorphism</strong> (fold) is the unique morphism from the initial algebra to any other algebra. Every recursive data type you define is an initial algebra. Every fold you write is a catamorphism.</p>
+    </div>
+
+    <!-- 1. What is an F-algebra -->
+    <h3>What is an F-algebra</h3>
+    <p>An F-algebra has three parts: an endofunctor F (the shape of one layer of recursion), a carrier object <code>a</code> (the result type), and an evaluator <code>F(a) &rarr; a</code> (how to collapse one layer). The functor generates expressions; the evaluator interprets them.</p>
+
+    <!-- SVG: F-algebra commutative square -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Top-left: F(a) -->
+        <rect x="20" y="20" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="43" text-anchor="middle" fill="currentColor" font-size="14">F(a)</text>
+
+        <!-- Top-right: F(a) -->
+        <rect x="220" y="20" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="260" y="43" text-anchor="middle" fill="currentColor" font-size="14">F(a)</text>
+
+        <!-- Bottom-left: a -->
+        <rect x="40" y="140" width="40" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="163" text-anchor="middle" fill="currentColor" font-size="14">a</text>
+
+        <!-- Bottom-right: a -->
+        <rect x="240" y="140" width="40" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="260" y="163" text-anchor="middle" fill="currentColor" font-size="14">a</text>
+
+        <!-- Top arrow: F(a) -> F(a) -->
+        <line x1="100" y1="38" x2="216" y2="38" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="216,34 224,38 216,42" fill="currentColor"/>
+        <text x="160" y="28" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(f)</text>
+
+        <!-- Bottom arrow: a -> a -->
+        <line x1="80" y1="158" x2="236" y2="158" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="236,154 244,158 236,162" fill="currentColor"/>
+        <text x="160" y="150" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Left arrow: F(a) -> a  (the algebra) -->
+        <line x1="60" y1="56" x2="60" y2="136" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="56,136 60,144 64,136" fill="currentColor"/>
+        <text x="30" y="100" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">alg</text>
+
+        <!-- Right arrow: F(a) -> a -->
+        <line x1="260" y1="56" x2="260" y2="136" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="256,136 260,144 264,136" fill="currentColor"/>
+        <text x="290" y="100" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">alg</text>
+
+        <!-- Caption -->
+        <text x="160" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">the algebra alg : F(a) &#x2192; a is the evaluator</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; An F-algebra = (functor, carrier, evaluator)
+; The functor describes one layer of a recursive type.
+; The evaluator collapses that layer into the carrier.
+
+; NatF: the functor for natural numbers.
+; NatF(a) = Zero | Succ(a)
+; Represented as tagged lists: ('zero) or ('succ value)
+
+(define (natf-map f x)
+  (if (eq? (car x) 'zero)
+      x
+      (list 'succ (f (cadr x)))))
+
+; An algebra over NatF with carrier = integer
+; Evaluator: NatF(Int) -> Int
+(define (eval-int x)
+  (if (eq? (car x) 'zero) 0
+      (+ 1 (cadr x))))
+
+(display "eval Zero: ")
+(display (eval-int '(zero))) (newline)
+(display "eval Succ(0): ")
+(display (eval-int (list 'succ 0))) (newline)
+(display "eval Succ(2): ")
+(display (eval-int (list 'succ 2)))
+; Each call collapses ONE layer. Not recursive yet.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# F-algebra: functor + carrier + evaluator
+# NatF(a) = ("zero",) | ("succ", a)
+
+def natf_map(f, x):
+    if x[0] == "zero": return x
+    return ("succ", f(x[1]))
+
+def eval_int(x):
+    """Algebra: NatF(Int) -> Int"""
+    if x[0] == "zero": return 0
+    return 1 + x[1]
+
+print(f"eval Zero: {eval_int(('zero',))}")
+print(f"eval Succ(0): {eval_int(('succ', 0))}")
+print(f"eval Succ(2): {eval_int(('succ', 2))}")
+`} />
+    </div>
+
+
+    <!-- 2. Fixed points and initial algebras -->
+    <h3>Fixed points and initial algebras</h3>
+    <p>A recursive data type is the <strong>fixed point</strong> of its functor: <code>Fix f = f (Fix f)</code>. Wrapping with <code>Fix</code> lets you nest layers infinitely. The fixed point is the initial algebra: there is exactly one algebra homomorphism from it to any other algebra. <strong>Lambek's theorem</strong> says the initial algebra's evaluator is an isomorphism: <code>F(Fix f) &cong; Fix f</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Fix f = f (Fix f)
+; We represent Fix as nested tagged lists.
+; fix wraps one layer, unfix unwraps it.
+
+(define (fix x) (list 'fix x))
+(define (unfix x) (cadr x))
+
+; Build natural numbers from NatF
+(define zero (fix '(zero)))
+(define (succ n) (fix (list 'succ n)))
+
+(define one (succ zero))
+(define two (succ one))
+(define three (succ two))
+
+(display "zero: ") (display zero) (newline)
+(display "one:  ") (display one) (newline)
+(display "two:  ") (display two) (newline)
+(display "three: ") (display three)
+; Each number is layers of Fix wrapped around NatF.
+; fix and unfix are inverses — that's Lambek's theorem.
+`} />
+
+
+    <!-- 3. Catamorphisms -->
+    <h3>Catamorphisms — the universal fold</h3>
+    <p>A <strong>catamorphism</strong> takes an algebra (evaluator) and recursively collapses a fixed-point structure into the carrier. It peels off one layer with <code>unfix</code>, recursively processes all sub-structures with <code>fmap</code>, then applies the evaluator. This is the unique homomorphism guaranteed by initiality.</p>
+
+    <!-- SVG: Catamorphism — unique morphism from initial algebra -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Top-left: F(Fix F) -->
+        <rect x="10" y="20" width="110" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="43" text-anchor="middle" fill="currentColor" font-size="13">F(Fix F)</text>
+
+        <!-- Top-right: F(a) -->
+        <rect x="290" y="20" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="330" y="43" text-anchor="middle" fill="currentColor" font-size="13">F(a)</text>
+
+        <!-- Bottom-left: Fix F -->
+        <rect x="25" y="130" width="80" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="153" text-anchor="middle" fill="currentColor" font-size="13">Fix F</text>
+
+        <!-- Bottom-right: a -->
+        <rect x="310" y="130" width="40" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="330" y="153" text-anchor="middle" fill="currentColor" font-size="13">a</text>
+
+        <!-- Top arrow: F(Fix F) -> F(a) -->
+        <line x1="120" y1="38" x2="286" y2="38" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="286,34 294,38 286,42" fill="currentColor"/>
+        <text x="200" y="28" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">F(cata)</text>
+
+        <!-- Bottom arrow: Fix F -> a  (dashed = unique) -->
+        <line x1="105" y1="148" x2="306" y2="148" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <polygon points="306,144 314,148 306,152" fill="currentColor"/>
+        <text x="200" y="142" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">cata alg</text>
+
+        <!-- Left arrow: F(Fix F) -> Fix F  (initial algebra) -->
+        <line x1="65" y1="56" x2="65" y2="126" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="61,126 65,134 69,126" fill="currentColor"/>
+        <text x="22" y="94" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">in</text>
+
+        <!-- Right arrow: F(a) -> a  (target algebra) -->
+        <line x1="330" y1="56" x2="330" y2="126" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="326,126 330,134 334,126" fill="currentColor"/>
+        <text x="370" y="94" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">alg</text>
+
+        <!-- Caption -->
+        <text x="210" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">cata is the unique arrow from the initial algebra</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; cata : (F(a) -> a) -> Fix(F) -> a
+; cata alg = alg . fmap (cata alg) . unfix
+
+(define (cata fmap alg x)
+  (alg (fmap (lambda (y) (cata fmap alg y))
+             (unfix x))))
+
+; Algebra 1: count — NatF(Int) -> Int
+(define (count-alg x)
+  (if (eq? (car x) 'zero) 0
+      (+ 1 (cadr x))))
+
+(display "cata count three: ")
+(display (cata natf-map count-alg three)) (newline)
+; 3
+
+; Algebra 2: even? — NatF(Bool) -> Bool
+(define (even-alg x)
+  (if (eq? (car x) 'zero) #t
+      (not (cadr x))))
+
+(display "cata even? three: ")
+(display (cata natf-map even-alg three)) (newline)
+(display "cata even? two:   ")
+(display (cata natf-map even-alg two)) (newline)
+
+; Algebra 3: Fibonacci — NatF((Int,Int)) -> (Int,Int)
+(define (fib-alg x)
+  (if (eq? (car x) 'zero) (cons 1 1)
+      (let ((pair (cadr x)))
+        (cons (cdr pair) (+ (car pair) (cdr pair))))))
+
+(display "fib(6): ")
+(define six (succ (succ (succ three))))
+(display (car (cata natf-map fib-alg six)))
+; Same recursive structure, different algebras, different results.
+; The catamorphism is the universal fold.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Catamorphism: the universal fold
+def fix(x): return ("fix", x)
+def unfix(x): return x[1]
+
+def natf_map(f, x):
+    if x[0] == "zero": return x
+    return ("succ", f(x[1]))
+
+def cata(fmap, alg, x):
+    return alg(fmap(lambda y: cata(fmap, alg, y), unfix(x)))
+
+# Build naturals
+zero = fix(("zero",))
+def succ(n): return fix(("succ", n))
+three = succ(succ(succ(zero)))
+
+# Count algebra
+def count_alg(x):
+    return 0 if x[0] == "zero" else 1 + x[1]
+
+print(f"cata count 3: {cata(natf_map, count_alg, three)}")
+
+# Fibonacci algebra
+def fib_alg(x):
+    if x[0] == "zero": return (1, 1)
+    a, b = x[1]
+    return (b, a + b)
+
+six = succ(succ(succ(three)))
+print(f"fib(6): {cata(natf_map, fib_alg, six)[0]}")
+`} />
+    </div>
+
+
+    <!-- 4. Lists as initial algebra -->
+    <h3>Lists as an initial algebra</h3>
+    <p>Lists are the initial algebra of <code>ListF e a = Nil | Cons e a</code>. The catamorphism over ListF is <code>foldr</code>. Every fold you've ever written is a catamorphism in disguise.</p>
+
+    <SchemeRepl client:load initialCode={`; ListF e a = Nil | Cons(e, a)
+; Represented as ('nil) or ('cons element rest)
+
+(define (listf-map f x)
+  (if (eq? (car x) 'nil) x
+      (list 'cons (cadr x) (f (caddr x)))))
+
+; Build a list: [10, 20, 30]
+(define (fix-nil) (fix '(nil)))
+(define (fix-cons e rest) (fix (list 'cons e rest)))
+
+(define my-list
+  (fix-cons 10 (fix-cons 20 (fix-cons 30 (fix-nil)))))
+
+; Algebra 1: sum — ListF(Int, Int) -> Int
+(define (sum-alg x)
+  (if (eq? (car x) 'nil) 0
+      (+ (cadr x) (caddr x))))
+
+(display "sum [10,20,30]: ")
+(display (cata listf-map sum-alg my-list)) (newline)
+
+; Algebra 2: length — ListF(Int, Int) -> Int
+(define (len-alg x)
+  (if (eq? (car x) 'nil) 0
+      (+ 1 (caddr x))))
+
+(display "length [10,20,30]: ")
+(display (cata listf-map len-alg my-list)) (newline)
+
+; Algebra 3: collect to native list
+(define (to-list-alg x)
+  (if (eq? (car x) 'nil) '()
+      (cons (cadr x) (caddr x))))
+
+(display "to-list: ")
+(display (cata listf-map to-list-alg my-list))
+; foldr IS cata. Every fold is a catamorphism.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Lists as initial algebra of ListF
+def listf_map(f, x):
+    if x[0] == "nil": return x
+    return ("cons", x[1], f(x[2]))
+
+# Build [10, 20, 30]
+nil = fix(("nil",))
+my_list = fix(("cons", 10, fix(("cons", 20, fix(("cons", 30, nil))))))
+
+def sum_alg(x):
+    return 0 if x[0] == "nil" else x[1] + x[2]
+
+def len_alg(x):
+    return 0 if x[0] == "nil" else 1 + x[2]
+
+def to_list_alg(x):
+    return [] if x[0] == "nil" else [x[1]] + x[2]
+
+print(f"sum [10,20,30]: {cata(listf_map, sum_alg, my_list)}")
+print(f"length [10,20,30]: {cata(listf_map, len_alg, my_list)}")
+print(f"to-list: {cata(listf_map, to_list_alg, my_list)}")
+`} />
+    </div>
+
+
+    <!-- 5. Coalgebras and anamorphisms -->
+    <h3>Coalgebras and anamorphisms — the dual</h3>
+    <p>An <strong>F-coalgebra</strong> reverses the arrow: <code>a &rarr; F(a)</code>. Instead of collapsing structure, it generates it. The terminal coalgebra is the greatest fixed point. The <strong>anamorphism</strong> (unfold) is the unique morphism into the terminal coalgebra. In Haskell, the fixed point for both is <code>Fix f</code>, but conceptually: algebras consume, coalgebras produce.</p>
+
+    <SchemeRepl client:load initialCode={`; Anamorphism: unfold from a seed.
+; ana : (a -> F(a)) -> a -> Fix(F)
+; ana coalg = fix . fmap (ana coalg) . coalg
+
+(define (ana fmap coalg seed)
+  (fix (fmap (lambda (s) (ana fmap coalg s))
+             (coalg seed))))
+
+; Coalgebra: generate natural numbers from an int
+; Int -> NatF(Int)
+(define (nat-coalg n)
+  (if (= n 0) '(zero)
+      (list 'succ (- n 1))))
+
+(display "ana 3: ")
+(display (ana natf-map nat-coalg 3)) (newline)
+; Builds the same structure as (succ (succ (succ zero)))
+
+; Round trip: ana builds, cata tears down
+(display "cata count (ana 5): ")
+(display (cata natf-map count-alg (ana natf-map nat-coalg 5))) (newline)
+
+; Coalgebra for lists: generate from a native list
+(define (list-coalg xs)
+  (if (null? xs) '(nil)
+      (list 'cons (car xs) (cdr xs))))
+
+(define built (ana listf-map list-coalg '(1 2 3)))
+(display "round-trip [1,2,3]: ")
+(display (cata listf-map to-list-alg built))
+; ana . cata = identity on the fixed point.
+`} />
+
+
+    <!-- 6. Ring expressions -->
+    <h3>Ring expressions — algebras as evaluators</h3>
+    <p>F-algebras cleanly separate <em>syntax</em> from <em>semantics</em>. The functor defines the shape of expressions (syntax). Different algebras over the same functor give different interpretations (semantics). Here: ring expressions can be evaluated to integers, pretty-printed to strings, or simplified, all via different algebras over the same RingF functor.</p>
+
+    <SchemeRepl client:load initialCode={`; RingF: the functor for ring expressions
+; RingF(a) = RZero | ROne | RAdd(a, a) | RMul(a, a) | RNeg(a)
+
+(define (ringf-map f x)
+  (case (car x)
+    ((rzero) x)
+    ((rone) x)
+    ((radd) (list 'radd (f (cadr x)) (f (caddr x))))
+    ((rmul) (list 'rmul (f (cadr x)) (f (caddr x))))
+    ((rneg) (list 'rneg (f (cadr x))))))
+
+; Build: (2 + 3) * -(1)
+(define expr
+  (fix (list 'rmul
+    (fix (list 'radd
+      (fix (list 'radd (fix '(rone)) (fix '(rone))))
+      (fix (list 'radd (fix '(rone)) (fix (list 'radd (fix '(rone)) (fix '(rone))))))))
+    (fix (list 'rneg (fix '(rone)))))))
+
+; Algebra 1: evaluate to integer
+(define (eval-ring x)
+  (case (car x)
+    ((rzero) 0) ((rone) 1)
+    ((radd) (+ (cadr x) (caddr x)))
+    ((rmul) (* (cadr x) (caddr x)))
+    ((rneg) (- (cadr x)))))
+
+(display "eval (2+3)*(-1): ")
+(display (cata ringf-map eval-ring expr)) (newline)
+
+; Algebra 2: pretty-print to string
+(define (show-ring x)
+  (case (car x)
+    ((rzero) "0") ((rone) "1")
+    ((radd) (string-append "(" (cadr x) "+" (caddr x) ")"))
+    ((rmul) (string-append "(" (cadr x) "*" (caddr x) ")"))
+    ((rneg) (string-append "-" (cadr x)))))
+
+(display "show: ")
+(display (cata ringf-map show-ring expr))
+; Same structure, different algebra, different result.
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">type Algebra f a = f a -&gt; a</td><td class="pr-4 text-green-300">(eval-int x)</td><td class="font-sans">F-algebra: evaluator from one layer to carrier</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Fix f = Fix (f (Fix f))</td><td class="pr-4 text-green-300">(fix x) / (unfix x)</td><td class="font-sans">Fixed point: recursive nesting of functor layers</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">cata alg = alg . fmap (cata alg) . unFix</td><td class="pr-4 text-green-300">(cata fmap alg x)</td><td class="font-sans">Catamorphism: universal fold from initial algebra</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ana coalg = Fix . fmap (ana coalg) . coalg</td><td class="pr-4 text-green-300">(ana fmap coalg seed)</td><td class="font-sans">Anamorphism: universal unfold into terminal coalgebra</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">data NatF a = ZeroF | SuccF a</td><td class="pr-4 text-green-300">'(zero) / (list 'succ a)</td><td class="font-sans">Functor for natural numbers</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">data ListF e a = NilF | ConsF e a</td><td class="pr-4 text-green-300">'(nil) / (list 'cons e a)</td><td class="font-sans">Functor for lists</td></tr>
+          <tr><td class="py-2 pr-4">Lambek: F(Fix f) &cong; Fix f</td><td class="pr-4 text-green-300">fix/unfix are inverses</td><td class="font-sans">Initial algebra evaluator is an isomorphism</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Chapter 7</a> — Functors (the F in F-algebra)</li>
+      <li><a href="/reading/category-theory/milewski-06/">🍞 Chapter 6</a> — Simple Algebraic Data Types (sum and product types that F-algebras generalize)</li>
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> — Adjunctions (adjoint functors give rise to monads; F-algebras give rise to recursive types)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/F-algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>F-algebra</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Catamorphism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Catamorphism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Anamorphism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Anamorphism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Initial_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Initial algebra</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell's type system to enforce the functor constraint on <code>cata</code> and to distinguish <code>Fix</code> from <code>unFix</code> at the type level. In Scheme, <code>fix</code> and <code>unfix</code> are just list wrappers; the functor map is passed explicitly. The blog post covers infinite structures via coalgebras (streams, the Sieve of Eratosthenes). This page limits coalgebras to finite unfolding because BiwaScheme does not support lazy evaluation. The blog post also proves that Lambek's theorem follows from initiality: the inverse of the evaluator is itself an algebra homomorphism, so it must be unique, making the evaluator an isomorphism. That proof is structural, not computational, so it does not translate to runnable code.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/02/28/f-algebras/">Read the blog post</a>. Start with the definition of Algebra, then trace how Fix and cata fall out of initiality.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-18/", label: "Comonads" }} next={{ href: "/reading/category-theory/milewski-20/", label: "Ends and Coends" }} />
+
+  </main>
+</Layout>

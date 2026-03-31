@@ -1,0 +1,263 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 8 — Entropy as Functor" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to information theory</a>
+
+    <h1>Entropy as Functor</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/information-theory/shannon-02/">📡 Entropy</a>, <a href="/reading/baez-fritz-2011/">🍞 Baez-Fritz-Leinster 2011</a>. 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Shannon entropy is the <strong>unique functorial information measure</strong>. Baez, Fritz, and Leinster proved: any continuous function from finite probability spaces to real numbers that satisfies the chain rule and maximality <em>must</em> be Shannon entropy (up to a constant). Shannon did not choose entropy. The axioms forced it.</p>
+    </div>
+
+    <!-- 1. Entropy respects composition -->
+    <h3>Entropy respects composition</h3>
+    <p>The chain rule says H(X,Y) = H(X) + H(Y|X). When you process data in two steps, the total information equals the information from step 1 plus the conditional information from step 2. This is functoriality: the measure of the composite equals the sum of the measures of the parts.</p>
+
+    <!-- SVG: Functor diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Left: Category of finite probability spaces -->
+        <rect x="20" y="20" width="160" height="150" rx="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5,3"/>
+        <text x="100" y="15" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">FinProb</text>
+
+        <!-- Objects: P, Q, R -->
+        <circle cx="60" cy="60" r="16" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="60" y="65" text-anchor="middle" fill="#60a5fa" font-size="12">P</text>
+        <circle cx="140" cy="60" r="16" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="140" y="65" text-anchor="middle" fill="#60a5fa" font-size="12">Q</text>
+        <circle cx="100" cy="140" r="16" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="100" y="145" text-anchor="middle" fill="#60a5fa" font-size="12">R</text>
+
+        <!-- Morphisms f, g, g;f -->
+        <line x1="76" y1="60" x2="124" y2="60" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="119,56 129,60 119,64" fill="currentColor"/>
+        <text x="100" y="52" text-anchor="middle" fill="currentColor" font-size="10">f</text>
+
+        <line x1="146" y1="76" x2="116" y2="128" stroke="currentColor" stroke-width="1.2"/>
+        <polygon points="119,123 113,133 123,127" fill="currentColor"/>
+        <text x="138" y="105" fill="currentColor" font-size="10">g</text>
+
+        <line x1="60" y1="76" x2="88" y2="128" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <polygon points="84,123 92,133 82,127" fill="currentColor"/>
+        <text x="64" y="105" fill="currentColor" font-size="10">g;f</text>
+
+        <!-- Arrow H (functor) -->
+        <line x1="190" y1="95" x2="270" y2="95" stroke="#4ade80" stroke-width="2"/>
+        <polygon points="265,91 275,95 265,99" fill="#4ade80"/>
+        <text x="230" y="85" text-anchor="middle" fill="#4ade80" font-size="14">H</text>
+
+        <!-- Right: Real numbers -->
+        <rect x="280" y="20" width="160" height="150" rx="10" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5,3"/>
+        <text x="360" y="15" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">R</text>
+
+        <!-- Values -->
+        <text x="320" y="65" text-anchor="middle" fill="#4ade80" font-size="12">H(f)</text>
+        <text x="400" y="105" text-anchor="middle" fill="#4ade80" font-size="12">H(g)</text>
+        <text x="320" y="145" text-anchor="middle" fill="#4ade80" font-size="12">H(g;f)</text>
+
+        <!-- Plus sign -->
+        <text x="360" y="80" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.4">+</text>
+
+        <!-- Equation below -->
+        <text x="230" y="192" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">H(g ; f) = H(f) + H(g | f)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Entropy respects composition: H(X,Y) = H(X) + H(Y|X)
+; This is the chain rule — the functorial property.
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; Joint distribution P(X,Y)
+; X = weather (sun/rain), Y = umbrella (yes/no)
+; sun+no=0.4, sun+yes=0.1, rain+no=0.1, rain+yes=0.4
+(define pxy '(0.4 0.1 0.1 0.4))
+(define px  '(0.5 0.5))
+
+(define h-joint (entropy pxy))
+(define h-x (entropy px))
+(define h-y-given-x (- h-joint h-x))
+
+(display "H(X,Y)   = ") (display h-joint) (newline)
+(display "H(X)     = ") (display h-x) (newline)
+(display "H(Y|X)   = ") (display h-y-given-x) (newline)
+(display "H(X) + H(Y|X) = ") (display (+ h-x h-y-given-x)) (newline)
+; H(X,Y) = H(X) + H(Y|X). Composition preserved.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+pxy = [0.4, 0.1, 0.1, 0.4]
+px = [0.5, 0.5]
+
+h_joint = entropy(pxy)
+h_x = entropy(px)
+h_y_given_x = h_joint - h_x
+
+print(f"H(X,Y)       = {h_joint:.4f}")
+print(f"H(X)         = {h_x:.4f}")
+print(f"H(Y|X)       = {h_y_given_x:.4f}")
+print(f"H(X)+H(Y|X)  = {h_x + h_y_given_x:.4f}")
+print("Chain rule: composition preserved.")
+`} />
+    </div>
+
+    <!-- 2. The three axioms -->
+    <h3>The three axioms</h3>
+    <p>Baez-Fritz-Leinster proved that Shannon entropy is the unique function satisfying three properties:</p>
+    <ol>
+      <li><strong>Continuity</strong> &mdash; small changes in probabilities produce small changes in entropy</li>
+      <li><strong>Maximality</strong> &mdash; the uniform distribution has the highest entropy among all distributions on n outcomes</li>
+      <li><strong>Chain rule</strong> &mdash; H(X,Y) = H(X) + H(Y|X). Composition is additive.</li>
+    </ol>
+    <p>Drop any one axiom and other measures become possible. All three together force Shannon's formula.</p>
+
+    <SchemeRepl client:load initialCode={`; The three axioms that force Shannon entropy
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; 1. Continuity: nearby distributions have nearby entropy
+(define h1 (entropy '(0.5 0.5)))
+(define h2 (entropy '(0.51 0.49)))
+(display "H(0.50,0.50) = ") (display h1) (newline)
+(display "H(0.51,0.49) = ") (display h2) (newline)
+(display "difference    = ") (display (abs (- h1 h2))) (newline)
+
+; 2. Maximality: uniform is max
+(define h-uniform (entropy '(0.25 0.25 0.25 0.25)))
+(define h-skewed  (entropy '(0.7 0.1 0.1 0.1)))
+(display "H(uniform) = ") (display h-uniform) (newline)
+(display "H(skewed)  = ") (display h-skewed) (newline)
+(display "uniform >= skewed? ") (display (>= h-uniform h-skewed)) (newline)
+
+; 3. Chain rule: H(X,Y) = H(X) + H(Y|X)
+(define h-xy (entropy '(0.3 0.2 0.1 0.4)))
+(define h-x  (entropy '(0.5 0.5)))
+(display "chain rule: ") (display h-xy) (display " = ")
+(display h-x) (display " + ") (display (- h-xy h-x))
+`} />
+
+    <!-- 3. The payoff -->
+    <h3>The payoff: foundations meet category theory</h3>
+    <p>This is the bridge page. Shannon defined entropy operationally in 1948. Baez-Fritz-Leinster proved in 2011 that it is the unique <a href="https://en.wikipedia.org/wiki/Functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>functor</a> from the category of finite probability spaces to the real numbers that satisfies continuity, maximality, and the chain rule. The foundations (pages 1&ndash;7) are not arbitrary definitions. They are the only definitions that compose. <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Stoch/Giry framework</a> extends this categorical view to stochastic channels, connecting entropy to the broader structure of probabilistic computation.</p>
+
+    <SchemeRepl client:load initialCode={`; The uniqueness result in action
+; Any measure F that is functorial, continuous, and maximal
+; MUST be F = c * Shannon entropy.
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (- (apply + (map (lambda (p)
+    (if (> p 0) (* p (log2 p)) 0)) probs))))
+
+; Information loss of a morphism f: P -> Q
+; F(f) = H(input) - H(output) = information destroyed
+(define (info-loss input-dist output-dist)
+  (- (entropy input-dist) (entropy output-dist)))
+
+; Step 1: 8 symbols -> 4 symbols (merge pairs)
+(define loss1 (info-loss '(0.125 0.125 0.125 0.125
+                           0.125 0.125 0.125 0.125)
+                         '(0.25 0.25 0.25 0.25)))
+
+; Step 2: 4 symbols -> 2 symbols
+(define loss2 (info-loss '(0.25 0.25 0.25 0.25)
+                         '(0.5 0.5)))
+
+; Composite: 8 symbols -> 2 symbols
+(define loss-total (info-loss '(0.125 0.125 0.125 0.125
+                                0.125 0.125 0.125 0.125)
+                              '(0.5 0.5)))
+
+(display "Loss(step 1)    = ") (display loss1) (newline)
+(display "Loss(step 2)    = ") (display loss2) (newline)
+(display "Loss(composite) = ") (display loss-total) (newline)
+(display "Sum of parts    = ") (display (+ loss1 loss2)) (newline)
+; Functorial: loss of composite = sum of losses.
+; Shannon entropy is the ONLY measure with this property.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+def info_loss(input_dist, output_dist):
+    return entropy(input_dist) - entropy(output_dist)
+
+loss1 = info_loss([1/8]*8, [1/4]*4)
+loss2 = info_loss([1/4]*4, [1/2]*2)
+total = info_loss([1/8]*8, [1/2]*2)
+
+print(f"Loss(step 1)    = {loss1:.4f}")
+print(f"Loss(step 2)    = {loss2:.4f}")
+print(f"Loss(composite) = {total:.4f}")
+print(f"Sum of parts    = {loss1 + loss2:.4f}")
+print("Functorial: the ONLY measure that adds up this way.")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H(X,Y) = H(X) + H(Y|X)</td><td class="pr-4 text-green-300">chain rule</td><td class="font-sans">Entropy is additive under composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">FinProb</td><td class="pr-4 text-green-300">list of probabilities</td><td class="font-sans">Category of finite probability spaces</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">H : FinProb &rarr; R</td><td class="pr-4 text-green-300">(entropy probs)</td><td class="font-sans">Entropy as functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F(f) = c &middot; (H(p) &minus; H(q))</td><td class="pr-4 text-green-300">(info-loss p q)</td><td class="font-sans">Information loss (unique up to scale)</td></tr>
+          <tr><td class="py-2 pr-4">H(g ; f) = H(f) + H(g|f)</td><td class="pr-4 text-green-300">functoriality</td><td class="font-sans">Loss of composite = sum of losses</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-02/">📡 Entropy</a> &mdash; the definition that the uniqueness theorem vindicates</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> &mdash; the main theorem: entropy is the unique functorial measure</li>
+      <li><a href="/reading/chen-vigneaux-2023/">🍞 Chen, Vigneaux 2023</a> &mdash; entropy equals magnitude, connecting information to size</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> &mdash; entropy and diversity in ecology, same uniqueness result</li>
+      <li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Functor</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use finite uniform or explicit distributions. The Baez-Fritz-Leinster theorem works over FinProb, the category of finite probability distributions with measure-preserving maps as morphisms. The "functor" here maps each morphism to its information loss (a real number), and the theorem says this functor is unique. Renyi entropy, Tsallis entropy, and other generalizations satisfy some but not all three axioms. The chain rule is the one that eliminates them.</p>
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-07/", label: "Channels" }} fin="fin · 8 of 8" />
+
+  </main>
+</Layout>

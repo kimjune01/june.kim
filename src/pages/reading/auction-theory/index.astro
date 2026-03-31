@@ -1,0 +1,93 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Auction Theory" favicon="💎">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1 class="text-3xl font-bold mb-2">💎 Auction Theory</h1>
+
+    <p class="text-sm text-gray-500 mb-6">Derivatives of <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/vector-space</a> (CC BY-SA 4.0). Original papers linked for each.</p>
+
+    <!-- SVG: Auction diagram — bidders on left, auctioneer in center, item on right -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 500 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Bidder 1 -->
+        <rect x="20" y="20" width="80" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="45" text-anchor="middle" fill="currentColor" font-size="12">Bidder 1</text>
+        <!-- Bidder 2 -->
+        <rect x="20" y="70" width="80" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="95" text-anchor="middle" fill="currentColor" font-size="12">Bidder 2</text>
+        <!-- Bidder 3 -->
+        <rect x="20" y="120" width="80" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="60" y="145" text-anchor="middle" fill="currentColor" font-size="12">Bidder 3</text>
+        <!-- Bid arrows -->
+        <line x1="100" y1="40" x2="190" y2="80" stroke="currentColor" stroke-width="1.2"/>
+        <text x="140" y="50" fill="currentColor" font-size="9" fill-opacity="0.5">$7</text>
+        <line x1="100" y1="90" x2="190" y2="90" stroke="currentColor" stroke-width="1.2"/>
+        <text x="145" y="83" fill="currentColor" font-size="9" fill-opacity="0.5">$10</text>
+        <line x1="100" y1="140" x2="190" y2="100" stroke="currentColor" stroke-width="1.2"/>
+        <text x="140" y="135" fill="currentColor" font-size="9" fill-opacity="0.5">$4</text>
+        <!-- Auctioneer -->
+        <rect x="190" y="60" width="120" height="60" rx="8" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="250" y="85" text-anchor="middle" fill="#60a5fa" font-size="13">Auctioneer</text>
+        <text x="250" y="105" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">mechanism</text>
+        <!-- Arrow to item -->
+        <line x1="310" y1="90" x2="380" y2="90" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="380,85 395,90 380,95" fill="currentColor" fill-opacity="0.6"/>
+        <!-- Item -->
+        <rect x="400" y="65" width="80" height="50" rx="8" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="440" y="95" text-anchor="middle" fill="#fbbf24" font-size="13">Item</text>
+        <!-- Payment label -->
+        <text x="250" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">winner pays, losers pay nothing</text>
+      </svg>
+    </div>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Papers</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Paper</th>
+            <th class="text-left py-2 pr-3 text-gray-400">One sentence</th>
+            <th class="text-left py-2 text-gray-400"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/vickrey-1961/">Vickrey 1961</a></td><td class="pr-3 text-gray-400">Second-price sealed-bid: truthful bidding is a dominant strategy</td><td><a href="/reading/auction-theory/vickrey-1961/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/vcg-1973/">Clarke 1971 + Groves 1973</a></td><td class="pr-3 text-gray-400">VCG mechanism: each winner pays the externality they impose</td><td><a href="/reading/auction-theory/vcg-1973/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/gsp-2007/">Edelman, Ostrovsky, Schwarz 2007</a></td><td class="pr-3 text-gray-400">GSP is not truthful but has efficient equilibria. Google used it anyway</td><td><a href="/reading/auction-theory/gsp-2007/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/milgrom-weber-1982/">Milgrom &amp; Weber 1982</a></td><td class="pr-3 text-gray-400">Affiliated values and the linkage principle: transparency raises revenue</td><td><a href="/reading/auction-theory/milgrom-weber-1982/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/aurenhammer-1987/">Aurenhammer 1987</a></td><td class="pr-3 text-gray-400">Power diagrams partition space with weighted sites</td><td><a href="/reading/auction-theory/aurenhammer-1987/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/lahaie-lubin-2025/">Lahaie &amp; Lubin 2025</a></td><td class="pr-3 text-gray-400">VCG allocation as a linear program; the LP dual gives prices</td><td><a href="/reading/auction-theory/lahaie-lubin-2025/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/hartline-2023/">Hartline, Hoy, Taggart 2023</a></td><td class="pr-3 text-gray-400">Reserve pricing preserves competitive efficiency</td><td><a href="/reading/auction-theory/hartline-2023/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/auction-theory/hajiaghayi-2024/">Hajiaghayi et al. 2024</a></td><td class="pr-3 text-gray-400">RAG-based ad insertion into LLM responses</td><td><a href="/reading/auction-theory/hajiaghayi-2024/" class="text-cyan-300 hover:text-cyan-200">💎</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+    <p class="text-gray-600 text-xs">Derivative of <a href="https://june.kim/vector-space" class="underline hover:text-gray-400"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/vector-space</a> (CC BY-SA 4.0). Original papers linked for each.</p>
+    <p class="text-gray-600 text-xs mt-1"><a href="https://june.kim" class="underline hover:text-gray-400">june.kim</a></p>
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/playlist?list=PLEGCF-WLh2RJBqmxvZ0_ie-mleCFhi2N4">Stanford CS364A: Algorithmic Game Theory (Roughgarden)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; auctions are mechanism design problems</li>
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; market design and equilibrium</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; bidder distributions and revenue calculations</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; VCG as a linear program</li>
+      <li><a href="https://june.kim/buying-space-not-keywords"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/buying-space-not-keywords</a> &mdash; why keyword auctions are giving way to embedding-space auctions</li>
+    </ul>
+    </Neighbors>
+
+
+  </main>
+</Layout>

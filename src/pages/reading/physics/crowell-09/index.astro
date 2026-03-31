@@ -1,0 +1,238 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.9 — Optics" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Optics</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell · Simple Nature Ch. 9 · <a href="https://lightandmatter.com/area1sn.html">CC BY-SA 3.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Light reflects, refracts, diffracts, and interferes. <strong>Snell's law</strong> governs refraction. Lenses form images by bending light. Diffraction and interference reveal the wave nature of light.</p>
+    </div>
+
+    <!-- 1. Reflection -->
+    <h3>Reflection</h3>
+    <p>The law of reflection: the angle of incidence equals the angle of reflection, both measured from the normal to the surface. This is the simplest optical law and follows from <a href="https://en.wikipedia.org/wiki/Fermat%27s_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fermat's principle</a>: light takes the path of least time.</p>
+
+    <SchemeRepl client:load initialCode={`; Law of reflection: angle_in = angle_out
+; Both measured from the normal.
+; A mirror reverses left-right (really front-back).
+
+(define pi 3.14159265)
+
+(define (degrees->radians deg) (* deg (/ pi 180)))
+(define (radians->degrees rad) (* rad (/ 180 pi)))
+
+; Reflection simply returns the same angle
+(define (reflect angle-in)
+  angle-in)
+
+(display "Incident angle: 30 deg") (newline)
+(display "Reflected angle: ")
+(display (reflect 30))
+(display " deg") (newline)
+
+(display "Incident angle: 45 deg") (newline)
+(display "Reflected angle: ")
+(display (reflect 45))
+(display " deg") (newline)
+
+; At normal incidence (0 deg), light bounces straight back
+(display "Normal incidence reflects at: ")
+(display (reflect 0))
+(display " deg")
+`} />
+
+
+    <!-- 2. Refraction and Snell's law -->
+    <h3>Refraction and Snell's law</h3>
+    <p>When light crosses a boundary between two media, it bends. <strong>Snell's law</strong>: n1 * sin(theta1) = n2 * sin(theta2), where n is the index of refraction (n = c/v). Light bends toward the normal when entering a denser medium. Beyond the critical angle, light reflects totally: this is how fiber optics and diamonds work.</p>
+
+    <!-- SVG: Light ray refracting through a lens -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Lens (convex) -->
+        <path d="M 200 30 Q 240 120 200 210" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.4"/>
+        <path d="M 200 30 Q 160 120 200 210" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.4"/>
+        <!-- Fill lens -->
+        <path d="M 200 30 Q 240 120 200 210 Q 160 120 200 30" fill="#60a5fa" fill-opacity="0.06"/>
+        <!-- Optical axis -->
+        <line x1="30" y1="120" x2="370" y2="120" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="4,4"/>
+        <!-- Incoming ray (upper, parallel to axis) -->
+        <line x1="30" y1="70" x2="190" y2="70" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+        <!-- Refracted through lens, converging to focal point -->
+        <line x1="210" y1="70" x2="310" y2="120" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+        <polygon points="308,116 308,124 314,120" fill="#f59e0b" fill-opacity="0.7"/>
+        <!-- Incoming ray (lower, parallel to axis) -->
+        <line x1="30" y1="170" x2="190" y2="170" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Refracted through lens, converging to focal point -->
+        <line x1="210" y1="170" x2="310" y2="120" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Focal point -->
+        <circle cx="310" cy="120" r="4" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="310" y="140" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.6">F</text>
+        <!-- Normal lines at lens surface (dashed) -->
+        <line x1="185" y1="60" x2="215" y2="60" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" stroke-dasharray="2,2"/>
+        <!-- Labels -->
+        <text x="100" y="60" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">parallel rays</text>
+        <text x="200" y="225" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">converging lens focuses to a point</text>
+        <text x="260" y="90" fill="currentColor" font-size="9" fill-opacity="0.3">Snell's law at each surface</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Snell's law: n1 * sin(theta1) = n2 * sin(theta2)
+; theta2 = arcsin(n1/n2 * sin(theta1))
+
+(define pi 3.14159265)
+(define (deg->rad d) (* d (/ pi 180)))
+(define (rad->deg r) (* r (/ 180 pi)))
+
+(define (snell n1 theta1-deg n2)
+  (let* ((theta1 (deg->rad theta1-deg))
+         (sin-theta2 (* (/ n1 n2) (sin theta1))))
+    (if (> sin-theta2 1)
+        "total internal reflection"
+        (rad->deg (asin sin-theta2)))))
+
+; Air (n=1) to glass (n=1.5)
+(display "Air to glass at 30 deg: ")
+(display (snell 1.0 30 1.5))
+(display " deg") (newline)
+
+(display "Air to glass at 45 deg: ")
+(display (snell 1.0 45 1.5))
+(display " deg") (newline)
+
+; Glass to air: critical angle
+(display "Glass to air at 30 deg: ")
+(display (snell 1.5 30 1.0))
+(display " deg") (newline)
+
+(display "Glass to air at 45 deg: ")
+(display (snell 1.5 45 1.0)) (newline)
+
+; Critical angle: sin(theta_c) = n2/n1
+(define theta-c (rad->deg (asin (/ 1.0 1.5))))
+(display "Critical angle (glass to air): ")
+(display theta-c) (display " deg")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def snell(n1, theta1_deg, n2):
+    theta1 = math.radians(theta1_deg)
+    sin_t2 = (n1/n2) * math.sin(theta1)
+    if sin_t2 > 1:
+        return "total internal reflection"
+    return math.degrees(math.asin(sin_t2))
+
+print(f"Air to glass at 30 deg: {snell(1.0, 30, 1.5):.2f} deg")
+print(f"Air to glass at 45 deg: {snell(1.0, 45, 1.5):.2f} deg")
+print(f"Glass to air at 30 deg: {snell(1.5, 30, 1.0):.2f} deg")
+print(f"Glass to air at 45 deg: {snell(1.5, 45, 1.0)}")
+print(f"Critical angle: {math.degrees(math.asin(1/1.5)):.2f} deg")
+`} />
+    </div>
+
+
+    <!-- 3. Lenses -->
+    <h3>Lenses</h3>
+    <p>A lens uses refraction at two curved surfaces to bend light. The <strong>thin lens equation</strong>: 1/f = 1/d_o + 1/d_i, where f is the focal length, d_o is the object distance, and d_i is the image distance. Positive d_i means a real image (on the other side); negative means virtual (same side as object).</p>
+
+    <SchemeRepl client:load initialCode={`; Thin lens equation: 1/f = 1/do + 1/di
+; Solve for di: di = f*do / (do - f)
+; Magnification: m = -di/do
+
+(define (image-distance f do)
+  (/ (* f do) (- do f)))
+
+(define (magnification f do)
+  (let ((di (image-distance f do)))
+    (/ (* -1 di) do)))
+
+; f = 10 cm converging lens
+(define f 10)
+
+; Object at various distances
+(define distances (list 30 20 15 10 5))
+
+(define (show-image do)
+  (if (= do f)
+      (begin (display "  do=") (display do)
+             (display " cm -> image at infinity") (newline))
+      (let ((di (image-distance f do))
+            (m (magnification f do)))
+        (display "  do=") (display do)
+        (display " cm -> di=") (display di)
+        (display " cm, mag=") (display m) (newline))))
+
+(display "f = 10 cm lens:") (newline)
+(for-each show-image distances)
+; Negative di = virtual image (same side as object)
+; |m| > 1 = magnified, |m| < 1 = reduced
+`} />
+
+
+    <!-- 4. Diffraction and interference -->
+    <h3>Diffraction and interference</h3>
+    <p>Waves bend around obstacles (diffraction) and combine constructively or destructively (interference). For a double slit with spacing d, bright fringes appear where d * sin(theta) = m * lambda, with m = 0, 1, 2, ... This pattern proved that light is a wave. Single-slit diffraction produces a central maximum with weaker side lobes.</p>
+
+    <SchemeRepl client:load initialCode={`; Double-slit interference: d*sin(theta) = m*lambda
+; Bright fringe angles for various orders m
+
+(define pi 3.14159265)
+(define (rad->deg r) (* r (/ 180 pi)))
+
+(define (fringe-angle d lambda m)
+  (let ((sin-theta (/ (* m lambda) d)))
+    (if (> (abs sin-theta) 1)
+        #f
+        (rad->deg (asin sin-theta)))))
+
+; Green laser (532 nm) through slits 0.1 mm apart
+(define lambda 532e-9)   ; meters
+(define d 0.1e-3)        ; meters
+
+(display "Double slit: d=0.1 mm, lambda=532 nm") (newline)
+(display "Fringe angles:") (newline)
+(define (show-fringe m)
+  (let ((angle (fringe-angle d lambda m)))
+    (if angle
+        (begin (display "  m=") (display m)
+               (display ": theta = ") (display angle)
+               (display " deg") (newline))
+        (begin (display "  m=") (display m)
+               (display ": no fringe (sin > 1)") (newline)))))
+
+(for-each show-fringe (list 0 1 2 3 4 5))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Snell%27s_law"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Snell's law</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Thin_lens"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thin lens</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Double-slit_experiment"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Double-slit experiment</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Diffraction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diffraction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Total_internal_reflection"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Total internal reflection</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The thin lens equation assumes a thin lens (thickness much less than focal length) and paraxial rays (close to the optical axis). Real lenses have aberrations. The double-slit formula assumes far-field (Fraunhofer) diffraction, where the screen is far from the slits. Crowell develops near-field (Fresnel) diffraction as well. Our Scheme code computes fringe angles but not the full intensity pattern, which requires summing phasors.</p>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-08/", label: "Electromagnetism" }} next={{ href: "/reading/physics/crowell-10/", label: "Relativity" }} />
+
+  </main>
+</Layout>

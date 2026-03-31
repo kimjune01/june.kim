@@ -1,0 +1,263 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.12 — Monopoly and Competition" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Monopoly and Competition</h1>
+    <p class="text-gray-400 text-sm mb-6">Adam Smith · 1776 · <a href="https://en.wikipedia.org/wiki/Monopoly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Monopoly</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">In <strong>perfect competition</strong>, many firms sell identical products at the market price. No single firm can influence the price: they are price takers. A <strong>monopoly</strong> is the opposite: one firm controls the entire market and sets the price. The monopolist restricts output below the competitive level, charges more, and creates deadweight loss.</p>
+    </div>
+
+    <!-- 1. Perfect competition -->
+    <h3>Perfect competition: price takers</h3>
+    <p>Under perfect competition, the firm faces a horizontal demand curve at the market price. It produces where marginal cost equals price. Economic profit is zero in the long run because entry drives price down to average cost.</p>
+
+    <SchemeRepl client:load initialCode={`; Perfect competition: firm is a price taker
+; Produce where marginal cost = price
+
+(define market-price 20)
+
+; Marginal cost increases with quantity
+(define (marginal-cost q) (+ 5 (* 0.5 q)))
+
+; Find optimal quantity: MC = P
+(define (find-competitive-q price)
+  (let loop ((q 1))
+    (if (>= (marginal-cost q) price) q
+        (loop (+ q 1)))))
+
+(define comp-q (find-competitive-q market-price))
+(display "Market price: $") (display market-price) (newline)
+(display "Competitive quantity: ") (display comp-q) (newline)
+(display "MC at that quantity: $") (display (marginal-cost comp-q)) (newline)
+
+; Total revenue and cost
+(define revenue (* market-price comp-q))
+(define total-cost
+  (let loop ((q 1) (tc 0))
+    (if (> q comp-q) tc
+        (loop (+ q 1) (+ tc (marginal-cost q))))))
+
+(display "Revenue: $") (display revenue) (newline)
+(display "Total cost: $") (display total-cost) (newline)
+(display "Profit: $") (display (- revenue total-cost))
+`} />
+
+
+    <!-- 2. Monopoly -->
+    <h3>Monopoly: price setter</h3>
+    <p>The monopolist faces the entire market demand curve. To sell more, it must lower the price on all units. It produces where marginal revenue equals marginal cost, which is less than the competitive quantity. The result: higher price, lower quantity, and a deadweight loss triangle.</p>
+
+    <!-- SVG: Interactive monopoly pricing -->
+    <div class="flex flex-col items-center my-6">
+      <svg id="mon-svg" viewBox="0 0 420 340" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="270" x2="400" y2="270" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="60" y1="270" x2="60" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="230" y="300" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Quantity</text>
+        <text x="25" y="150" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 25, 150)">Price</text>
+        <!-- Axis tick labels -->
+        <text x="60" y="285" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">0</text>
+        <text x="50" y="274" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.3">5</text>
+        <text x="50" y="42" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.3">30</text>
+
+        <!-- Demand curve: P = 30 - Q, Q from 0 to 25 -->
+        <line x1="60" y1="30" x2="400" y2="270" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+        <text x="398" y="260" fill="currentColor" font-size="11" fill-opacity="0.5">D</text>
+
+        <!-- Marginal Revenue: MR = 30 - 2Q -->
+        <line x1="60" y1="30" x2="230" y2="270" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+        <text x="235" y="268" fill="currentColor" font-size="11" fill-opacity="0.5">MR</text>
+
+        <!-- MC = 5 (horizontal line) -->
+        <line x1="60" y1="240" x2="400" y2="240" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
+        <text x="405" y="244" fill="#34d399" font-size="11" fill-opacity="0.7">MC</text>
+
+        <!-- Profit rectangle (dynamic) -->
+        <rect id="mon-profit" fill="#f59e0b" fill-opacity="0.15"/>
+        <!-- Dashed lines to axes -->
+        <line id="mon-vline" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <line id="mon-hline" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <!-- Price dot on demand curve -->
+        <circle id="mon-dot" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <!-- Readout -->
+        <text id="mon-readout" x="230" y="325" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7"></text>
+      </svg>
+      <input id="mon-slider" type="range" min="1" max="20" value="12" step="1" class="w-full max-w-md mt-2" style="accent-color: #f59e0b;" />
+    </div>
+    <script is:inline>
+    (function() {
+      var LEFT = 60, RIGHT = 400, TOP = 30, BOT = 270;
+      var QMAX = 25, PMAX = 30, PMIN = 0;
+      // Map Q to x, P to y
+      function qToX(q) { return LEFT + (q / QMAX) * (RIGHT - LEFT); }
+      function pToY(p) { return BOT - ((p - PMIN) / (PMAX - PMIN)) * (BOT - TOP); }
+      function demand(q) { return 30 - q; }
+      var MC = 5;
+
+      var slider = document.getElementById("mon-slider");
+      var dot = document.getElementById("mon-dot");
+      var rect = document.getElementById("mon-profit");
+      var vline = document.getElementById("mon-vline");
+      var hline = document.getElementById("mon-hline");
+      var readout = document.getElementById("mon-readout");
+
+      function update() {
+        var q = parseFloat(slider.value);
+        var p = demand(q);
+        var profit = (p - MC) * q;
+        var cx = qToX(q), cy = pToY(p);
+        var mcY = pToY(MC);
+        dot.setAttribute("cx", cx);
+        dot.setAttribute("cy", cy);
+        // Profit rectangle: from MC up to P, from x=LEFT to x=cx
+        rect.setAttribute("x", LEFT);
+        rect.setAttribute("y", cy);
+        rect.setAttribute("width", cx - LEFT);
+        rect.setAttribute("height", mcY - cy);
+        // Dashed lines
+        vline.setAttribute("x1", cx); vline.setAttribute("y1", cy);
+        vline.setAttribute("x2", cx); vline.setAttribute("y2", BOT);
+        hline.setAttribute("x1", LEFT); hline.setAttribute("y1", cy);
+        hline.setAttribute("x2", cx); hline.setAttribute("y2", cy);
+        var optNote = (q === 12 || q === 13) ? " ≈ profit max (Q*=12.5)" : "";
+        readout.textContent = "Q = " + q + ", P = " + p.toFixed(0) + ", profit = " + profit.toFixed(0) + optNote;
+      }
+      slider.addEventListener("input", update);
+      update();
+    })();
+    </script>
+
+    <SchemeRepl client:load initialCode={`; Monopoly vs competition
+; Demand: P = 100 - Q
+; MC = 10 + 0.5Q
+
+(define (demand q) (- 100 q))
+(define (marginal-revenue q) (- 100 (* 2 q)))  ; MR has twice the slope
+(define (marginal-cost q) (+ 10 (* 0.5 q)))
+
+; Monopoly: MR = MC -> 100 - 2Q = 10 + 0.5Q -> Q = 36
+(define (find-q mr-or-d mc)
+  (let loop ((q 1))
+    (if (>= (mc q) (mr-or-d q)) q
+        (loop (+ q 1)))))
+
+(define monopoly-q (find-q marginal-revenue marginal-cost))
+(define monopoly-p (demand monopoly-q))
+(display "Monopoly: Q=") (display monopoly-q)
+(display ", P=$") (display monopoly-p) (newline)
+
+; Competition: P = MC -> 100 - Q = 10 + 0.5Q -> Q = 60
+(define comp-q (find-q demand marginal-cost))
+(define comp-p (demand comp-q))
+(display "Competition: Q=") (display comp-q)
+(display ", P=$") (display comp-p) (newline)
+
+; Deadweight loss (triangle area)
+(define dwl (* 0.5 (- comp-q monopoly-q) (- monopoly-p comp-p)))
+(display "Deadweight loss: $") (display dwl)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Monopoly vs perfect competition
+demand = lambda q: 100 - q
+mr = lambda q: 100 - 2*q  # marginal revenue
+mc = lambda q: 10 + 0.5*q  # marginal cost
+
+# Find monopoly quantity (MR = MC)
+q_m = next(q for q in range(1, 100) if mc(q) >= mr(q))
+p_m = demand(q_m)
+print("Monopoly: Q=" + str(q_m) + ", P=$" + str(p_m))
+
+# Find competitive quantity (P = MC)
+q_c = next(q for q in range(1, 100) if mc(q) >= demand(q))
+p_c = demand(q_c)
+print("Competition: Q=" + str(q_c) + ", P=$" + str(p_c))
+
+# Deadweight loss
+dwl = 0.5 * (q_c - q_m) * (p_m - p_c)
+print("Deadweight loss: $" + str(dwl))
+print("Monopoly restricts " + str(q_c - q_m) + " units, charges $" + str(p_m - p_c) + " more")
+`} />
+    </div>
+
+
+    <!-- 3. Natural monopoly -->
+    <h3>Natural monopoly</h3>
+    <p>Some industries have such high fixed costs and low marginal costs that a single firm can serve the entire market more cheaply than two or more. Utilities, railroads, broadband infrastructure. Breaking up a natural monopoly raises costs. The solution is usually regulation: let the monopoly exist but control its pricing.</p>
+
+    <SchemeRepl client:load initialCode={`; Natural monopoly: high fixed cost, low marginal cost
+; Average cost falls over the relevant range
+
+(define fixed-cost 1000)
+(define marginal-cost 2)
+
+(define (total-cost q) (+ fixed-cost (* marginal-cost q)))
+(define (average-cost q) (/ (total-cost q) q))
+
+(display "Average cost at different scales:") (newline)
+(for-each
+  (lambda (q)
+    (display "  Q=") (display q)
+    (display ": AC=$") (display (exact->inexact (average-cost q)))
+    (newline))
+  '(10 50 100 500 1000))
+
+; Two firms splitting the market
+(define (two-firm-ac q)
+  (/ (+ fixed-cost (* marginal-cost (/ q 2))) (/ q 2)))
+
+(display "One firm at Q=500: AC=$")
+(display (exact->inexact (average-cost 500))) (newline)
+(display "Two firms at Q=250 each: AC=$")
+(display (exact->inexact (two-firm-ac 500)))
+(newline)
+(display "Natural monopoly: one firm is cheaper")
+`} />
+
+
+    <!-- Key concepts -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Structure</th>
+            <th class="py-2 pr-4 text-left">Price</th>
+            <th class="py-2 text-left">Efficiency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Perfect competition</td><td class="pr-4">P = MC (price taker)</td><td>Efficient, zero economic profit</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Monopoly</td><td class="pr-4">MR = MC, P > MC (price setter)</td><td>Deadweight loss, positive profit</td></tr>
+          <tr><td class="py-2 pr-4">Natural monopoly</td><td class="pr-4">Regulated pricing</td><td>One firm cheapest, but needs oversight</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Perfect_competition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Perfect competition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monopoly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monopoly</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Deadweight_loss"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deadweight loss</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Natural_monopoly"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Natural monopoly</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-11/", label: "Public Goods" }} next={{ href: "/reading/economics/econ-13/", label: "Oligopoly" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,65 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Finance II" favicon="📉">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>📉 Finance II</h1>
+    <p class="text-gray-400 mb-2">Sources: <a href="https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/">MIT OCW 18.S096</a> &middot; <a href="https://ocw.mit.edu/courses/15-450-analytics-of-finance-fall-2010/">MIT OCW 15.450</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>).</p>
+    <p class="text-gray-400 mb-6">The math behind the prices. Stochastic calculus, derivative pricing, volatility modeling, and credit risk &mdash; with industry applications from Morgan Stanley.</p>
+
+    <!-- SVG: Brownian motion paths -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="180" x2="340" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="30" y1="180" x2="30" y2="10" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="185" y="198" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t</text>
+        <text x="12" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4" transform="rotate(-90, 12, 95)">S(t)</text>
+        <!-- Sample path 1 -->
+        <polyline points="30,100 55,95 80,88 105,92 130,78 155,72 180,80 205,68 230,55 255,60 280,48 305,42 330,38" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Sample path 2 -->
+        <polyline points="30,100 55,105 80,110 105,102 130,115 155,120 180,112 205,125 230,130 255,122 280,135 305,140 330,145" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Sample path 3 -->
+        <polyline points="30,100 55,98 80,102 105,95 130,100 155,105 180,98 205,102 230,95 255,100 280,105 305,98 330,102" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Starting point -->
+        <circle cx="30" cy="100" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <text x="38" y="97" fill="currentColor" font-size="9" fill-opacity="0.5">S&#x2080;</text>
+        <!-- Caption -->
+        <text x="185" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Sample paths of geometric Brownian motion.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/finance-2/fin2-01/", title: "Stochastic Processes", desc: "Random walks, Markov chains, and the probabilistic machinery prices live on." },
+  { href: "/reading/finance-2/fin2-02/", title: "Ito Calculus", desc: "Brownian motion, Ito's lemma, stochastic differential equations. The calculus of noise." },
+  { href: "/reading/finance-2/fin2-03/", title: "Black-Scholes Derivation", desc: "Risk-neutral valuation, the replicating portfolio argument, and the PDE." },
+  { href: "/reading/finance-2/fin2-04/", title: "Monte Carlo Methods", desc: "Simulating prices to price derivatives. Variance reduction, convergence, path-dependent options." },
+  { href: "/reading/finance-2/fin2-05/", title: "Volatility Modeling", desc: "GARCH, implied volatility surfaces, the smile, and why constant volatility is wrong." },
+  { href: "/reading/finance-2/fin2-06/", title: "Time Series Analysis", desc: "Autoregression, stationarity, cointegration. Extracting signal from financial data." },
+  { href: "/reading/finance-2/fin2-07/", title: "Factor Models", desc: "Fama-French, PCA on returns, risk decomposition beyond CAPM." },
+  { href: "/reading/finance-2/fin2-08/", title: "Interest Rate Models", desc: "Vasicek, CIR, HJM framework. Modeling the term structure and pricing rate derivatives." },
+  { href: "/reading/finance-2/fin2-09/", title: "Credit Risk", desc: "Default probability, credit spreads, ratings transitions, structural and reduced-form models." },
+  { href: "/reading/finance-2/fin2-10/", title: "Credit Derivatives", desc: "CDS, CDOs, counterparty risk. The instruments that amplified 2008." },
+  { href: "/reading/finance-2/fin2-11/", title: "Value at Risk", desc: "Measuring tail risk: historical simulation, parametric VaR, expected shortfall." },
+  { href: "/reading/finance-2/fin2-12/", title: "Dynamic Portfolio Choice", desc: "Multi-period optimization, rebalancing, dynamic programming for long-horizon investors." }
+]} icon="📉" />
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/18-s096-topics-in-mathematics-with-applications-in-finance-fall-2013/">MIT 18.S096: Topics in Mathematics with Applications in Finance</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/">📈 Finance</a> &mdash; prerequisite: TVM, portfolio theory, CAPM, options intro</li>
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; derivatives and integrals underpin everything here</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; stochastic processes build on measure theory</li>
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; econometric methods for estimation and testing</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

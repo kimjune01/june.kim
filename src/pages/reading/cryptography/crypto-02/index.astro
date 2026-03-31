@@ -1,0 +1,249 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.2 — Block Ciphers" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>Block Ciphers</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Block_cipher"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Block cipher</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>block cipher</strong> encrypts fixed-size blocks (e.g. 128 bits) using a key. The same key encrypts and decrypts. Security comes from multiple <strong>rounds</strong> of substitution and permutation, creating <strong>confusion</strong> (each ciphertext bit depends on many key bits) and <strong>diffusion</strong> (each plaintext bit affects many ciphertext bits).</p>
+    </div>
+
+    <!-- SVG: Feistel network diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 320" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Input labels -->
+        <text x="80" y="20" text-anchor="middle" fill="#86efac" font-size="12">L0</text>
+        <text x="220" y="20" text-anchor="middle" fill="#86efac" font-size="12">R0</text>
+
+        <!-- Round 1 -->
+        <!-- L line down -->
+        <line x1="80" y1="25" x2="80" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- R line down to F -->
+        <line x1="220" y1="25" x2="220" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- F box -->
+        <rect x="195" y="50" width="50" height="25" rx="3" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <text x="220" y="67" text-anchor="middle" fill="#facc15" font-size="10">F(K1)</text>
+        <!-- F output arrow to XOR -->
+        <line x1="195" y1="62" x2="140" y2="62" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="140,58 132,62 140,66" fill="currentColor" fill-opacity="0.4"/>
+        <!-- XOR circle -->
+        <circle cx="80" cy="62" r="8" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="80" y="66" text-anchor="middle" fill="#60a5fa" font-size="10">+</text>
+        <!-- R continues down -->
+        <line x1="220" y1="75" x2="220" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Swap: cross lines -->
+        <line x1="80" y1="95" x2="220" y2="115" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <line x1="220" y1="95" x2="80" y2="115" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <text x="150" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">swap</text>
+
+        <!-- Round 2 labels -->
+        <text x="80" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">L1</text>
+        <text x="220" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">R1</text>
+
+        <!-- Round 2 -->
+        <line x1="80" y1="135" x2="80" y2="200" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="220" y1="135" x2="220" y2="160" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <rect x="195" y="160" width="50" height="25" rx="3" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <text x="220" y="177" text-anchor="middle" fill="#facc15" font-size="10">F(K2)</text>
+        <line x1="195" y1="172" x2="140" y2="172" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <polygon points="140,168 132,172 140,176" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="80" cy="172" r="8" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="80" y="176" text-anchor="middle" fill="#60a5fa" font-size="10">+</text>
+        <line x1="220" y1="185" x2="220" y2="200" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+
+        <!-- Swap -->
+        <line x1="80" y1="205" x2="220" y2="225" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <line x1="220" y1="205" x2="80" y2="225" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <text x="150" y="218" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">swap</text>
+
+        <!-- Dots for more rounds -->
+        <text x="150" y="250" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">...</text>
+
+        <!-- Output -->
+        <text x="80" y="290" text-anchor="middle" fill="#f87171" font-size="12">Ln</text>
+        <text x="220" y="290" text-anchor="middle" fill="#f87171" font-size="12">Rn</text>
+
+        <!-- Caption -->
+        <text x="150" y="315" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Feistel network: split, round function, XOR, swap.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Feistel network -->
+    <h3>Feistel network</h3>
+    <p>Split the block into left and right halves. In each round: apply a round function F (keyed by a subkey) to the right half, XOR the result into the left half, then swap. After all rounds, concatenate. Decryption runs the same structure in reverse. The round function F does not need to be invertible, because XOR is its own inverse.</p>
+
+    <SchemeRepl client:load initialCode={`; Feistel network: 4 rounds with simple round functions
+; Block = two numbers (left, right)
+
+(define (feistel-round left right round-key)
+  ;; F(R, K) = (R * round-key + 7) mod 256
+  (let ((f-out (modulo (+ (* right round-key) 7) 256)))
+    ;; New left = old right, new right = old left XOR F
+    (list right (bitwise-xor left f-out))))
+
+(define round-keys (list 3 7 13 21))
+
+(define (feistel-encrypt left right keys)
+  (if (null? keys)
+    (list left right)
+    (let ((result (feistel-round left right (car keys))))
+      (feistel-encrypt (car result) (cadr result) (cdr keys)))))
+
+(define (feistel-decrypt left right keys)
+  ;; Same structure, reversed keys, undo final swap
+  (feistel-encrypt left right (reverse keys)))
+
+(define plain-l 72)   ; 'H'
+(define plain-r 105)  ; 'i'
+
+(display "Plaintext:  ") (display plain-l) (display " ")
+(display plain-r) (newline)
+
+(define enc (feistel-encrypt plain-l plain-r round-keys))
+(display "Encrypted:  ") (display (car enc)) (display " ")
+(display (cadr enc)) (newline)
+
+(define dec (feistel-decrypt (car enc) (cadr enc) round-keys))
+(display "Decrypted:  ") (display (car dec)) (display " ")
+(display (cadr dec)) (newline)
+
+(display "Round-trip? ")
+(display (and (= plain-l (car dec)) (= plain-r (cadr dec))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Feistel network in Python
+def feistel_round(left, right, round_key):
+    f_out = (right * round_key + 7) % 256
+    return right, left ^ f_out
+
+def feistel(left, right, keys):
+    for k in keys:
+        left, right = feistel_round(left, right, k)
+    return left, right
+
+keys = [3, 7, 13, 21]
+
+plain_l, plain_r = 72, 105  # 'H', 'i'
+print(f"Plaintext:  {plain_l} {plain_r}")
+
+enc_l, enc_r = feistel(plain_l, plain_r, keys)
+print(f"Encrypted:  {enc_l} {enc_r}")
+
+dec_l, dec_r = feistel(enc_l, enc_r, keys[::-1])
+print(f"Decrypted:  {dec_l} {dec_r}")
+print(f"Round-trip? {(dec_l, dec_r) == (plain_l, plain_r)}")
+`} />
+    </div>
+
+
+    <!-- 2. AES overview -->
+    <h3>AES — the modern standard</h3>
+    <p>AES (Rijndael) is not a Feistel network. It operates on a 4x4 byte grid (128-bit block) with four operations per round: <strong>SubBytes</strong> (nonlinear substitution via an S-box), <strong>ShiftRows</strong> (cyclic shift of each row), <strong>MixColumns</strong> (linear mixing within columns), and <strong>AddRoundKey</strong> (XOR with the round subkey). AES-128 uses 10 rounds. Each operation targets either confusion or diffusion.</p>
+
+    <SchemeRepl client:load initialCode={`; AES round operations (simplified, showing the idea)
+; Real AES uses GF(2^8) arithmetic. This shows the structure.
+
+;; SubBytes: substitute each byte through an S-box
+;; (simplified: XOR with constant + bit rotation)
+(define (sub-byte b) (bitwise-xor b #xA5))
+
+;; ShiftRows: rotate row i by i positions
+;; State is a flat list of 16 bytes (row-major 4x4)
+(define (shift-rows state)
+  ;; Row 0: no shift, Row 1: shift 1, Row 2: shift 2, Row 3: shift 3
+  (let ((s state))
+    (list
+      ;; Row 0 (no shift)
+      (list-ref s 0) (list-ref s 1) (list-ref s 2) (list-ref s 3)
+      ;; Row 1 (shift left by 1)
+      (list-ref s 5) (list-ref s 6) (list-ref s 7) (list-ref s 4)
+      ;; Row 2 (shift left by 2)
+      (list-ref s 10) (list-ref s 11) (list-ref s 8) (list-ref s 9)
+      ;; Row 3 (shift left by 3)
+      (list-ref s 15) (list-ref s 12) (list-ref s 13) (list-ref s 14))))
+
+;; AddRoundKey: XOR each byte with key byte
+(define (add-round-key state key)
+  (map bitwise-xor state key))
+
+;; Demo: one simplified round
+(define plaintext (list 72 101 108 108 111 32 87 111 114 108 100 33 0 0 0 0))
+(define round-key (list 42 17 93 7 55 88 12 64 31 99 200 150 8 3 77 210))
+
+(display "Plaintext bytes: ")
+(for-each (lambda (b) (display b) (display " ")) (list 72 101 108 108))
+(display "...") (newline)
+
+(define step1 (map sub-byte plaintext))
+(define step2 (shift-rows step1))
+;; skip MixColumns for simplicity
+(define step3 (add-round-key step2 round-key))
+
+(display "After 1 round:   ")
+(for-each (lambda (b) (display b) (display " ")) (list (list-ref step3 0) (list-ref step3 1) (list-ref step3 2) (list-ref step3 3)))
+(display "...")
+`} />
+
+
+    <!-- Confusion and diffusion -->
+    <h3>Confusion and diffusion</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Claude_Shannon"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Claude Shannon</a> identified two properties every good cipher needs. <strong>Confusion</strong>: each ciphertext bit should depend on many key bits (SubBytes provides this). <strong>Diffusion</strong>: changing one plaintext bit should change about half the ciphertext bits (ShiftRows and MixColumns provide this). Multiple rounds amplify both.</p>
+
+    <SchemeRepl client:load initialCode={`; Avalanche effect: flipping one bit in plaintext
+; should change ~50% of ciphertext bits
+
+(define (count-different a b)
+  ;; Count differing bytes (simplified)
+  (let loop ((i 0) (al a) (bl b) (diff 0))
+    (if (or (null? al) (null? bl))
+      diff
+      (loop (+ i 1) (cdr al) (cdr bl)
+            (if (= (car al) (car bl)) diff (+ diff 1))))))
+
+(define msg1 (list 72 101 108 108 111 32 87 111 114 108 100 33 0 0 0 0))
+(define msg2 (list 73 101 108 108 111 32 87 111 114 108 100 33 0 0 0 0))
+;; msg2 differs by 1 bit (72 -> 73)
+
+(define key (list 42 17 93 7 55 88 12 64 31 99 200 150 8 3 77 210))
+(define (sub-byte b) (bitwise-xor b #xA5))
+(define (add-round-key state key) (map bitwise-xor state key))
+
+(define enc1 (add-round-key (map sub-byte msg1) key))
+(define enc2 (add-round-key (map sub-byte msg2) key))
+
+(display "Bytes changed: ")
+(display (count-different enc1 enc2))
+(display " / 16") (newline)
+(display "After more rounds, this grows toward 8/16 (50%)")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Block_cipher"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Block cipher</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Feistel_cipher"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Feistel cipher</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Advanced Encryption Standard</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Confusion_and_diffusion"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Confusion and diffusion</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-01/", label: "Symmetric Ciphers" }} next={{ href: "/reading/cryptography/crypto-03/", label: "Hash Functions" }} />
+
+  </main>
+</Layout>

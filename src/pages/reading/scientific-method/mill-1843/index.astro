@@ -1,0 +1,113 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Mill 1843 — A System of Logic" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>A System of Logic</h1>
+    <p class="text-gray-400 text-sm mb-6">John Stuart Mill · 1843 · <a href="https://www.gutenberg.org/ebooks/27942">Project Gutenberg</a><br/>Book III, Chapters 8-10: "Of the Four Methods of Experimental Inquiry" (later expanded to five).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Five methods for extracting causes from observations. You cannot prove causation from data alone, but you can isolate it by systematically varying conditions and watching what changes.</p>
+    </div>
+
+    <h2>The method of difference</h2>
+
+    <p>Mill's most influential method. Two cases identical in every respect except one factor. If the effect differs, that factor is the cause. This is the logic underneath every controlled experiment.</p>
+
+    <!-- SVG: Method of Difference -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Case 1 -->
+        <text x="115" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Case 1</text>
+        <rect x="20" y="35" width="50" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="45" y="55" text-anchor="middle" fill="currentColor" font-size="10">A</text>
+        <rect x="80" y="35" width="50" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="105" y="55" text-anchor="middle" fill="currentColor" font-size="10">B</text>
+        <rect x="140" y="35" width="50" height="30" rx="4" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="165" y="55" text-anchor="middle" fill="#60a5fa" font-size="10">C</text>
+
+        <!-- Arrow -->
+        <line x1="205" y1="50" x2="240" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="240,46 248,50 240,54" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Effect 1 -->
+        <rect x="260" y="35" width="70" height="30" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="295" y="55" text-anchor="middle" fill="#60a5fa" font-size="10">effect e</text>
+
+        <!-- Case 2 -->
+        <text x="115" y="100" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Case 2</text>
+        <rect x="20" y="115" width="50" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="45" y="135" text-anchor="middle" fill="currentColor" font-size="10">A</text>
+        <rect x="80" y="115" width="50" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="105" y="135" text-anchor="middle" fill="currentColor" font-size="10">B</text>
+        <rect x="140" y="115" width="50" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1.2" stroke-opacity="0.45" stroke-dasharray="4 3"/>
+        <text x="165" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">--</text>
+
+        <!-- Arrow -->
+        <line x1="205" y1="130" x2="240" y2="130" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="240,126 248,130 240,134" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- No effect -->
+        <rect x="260" y="115" width="70" height="30" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1.2" stroke-opacity="0.45" stroke-dasharray="4 3"/>
+        <text x="295" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">no e</text>
+
+        <!-- Conclusion -->
+        <text x="230" y="180" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">same conditions, one factor removed, effect disappears: C causes e</text>
+      </svg>
+    </div>
+
+    <h2>The five methods</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Method</th>
+            <th class="text-left py-2 text-gray-400">How it works</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Agreement</td><td class="text-gray-400">Multiple cases share one common factor and the same effect. That factor is probably the cause.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Difference</td><td class="text-gray-400">Two cases identical except one factor. The effect appears only when that factor is present.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Joint method</td><td class="text-gray-400">Agreement and difference combined. Positive cases share the factor; negative cases lack it.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Residues</td><td class="text-gray-400">Subtract known cause-effect pairs from a complex phenomenon. Whatever remains is caused by whatever factor remains.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Concomitant variation</td><td class="text-gray-400">When a factor varies in degree, the effect varies in degree. The precursor to correlation analysis.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Mill's practical answer to Hume</h2>
+
+    <p>Hume showed that no amount of observation proves the next instance. Induction cannot be justified by logic. Mill accepted this and sidestepped it. His methods do not prove causation in Hume's strict sense. They isolate it. If you hold everything constant and vary one factor, and the effect tracks that factor, you have extracted the cause from the noise.</p>
+
+    <p>The move is subtraction. Agreement finds what all positive cases share. Difference removes everything except the candidate. Residues subtract what you already know. Each method narrows the field of possible causes by elimination rather than by accumulating confirmations. Mill understood that Hume's critique applied to confirmation, not to elimination.</p>
+
+    <p>Fisher formalized exactly this insight ninety years later. Randomization is the method of difference made rigorous: assign subjects to treatment and control at random, so every factor except the treatment is (in expectation) identical between the two groups. Fisher never cited Mill directly, but the logic is the same. Vary one thing, hold the rest constant. The randomized controlled trial is Mill's second canon with a probability model bolted on.</p>
+
+    <p>Boole, Mill's contemporary, took the complementary path. Where Mill asked how to extract causes from observations, Boole asked how to make reasoning itself mechanical. Between them, Mill and Boole built the two pillars that twentieth-century science would stand on: controlled experiment and formal inference.</p>
+
+    <h2>Limitations Mill saw</h2>
+
+    <p>Mill was candid about what his methods could not do. The method of agreement can only identify necessary conditions, not sufficient ones. The method of difference requires that you can actually hold everything else constant, which in practice is hard. Concomitant variation detects correlation but cannot distinguish direct from indirect causation. The method of residues assumes you already know most of the causal structure, which means it works only in mature sciences.</p>
+
+    <p>These are not flaws in Mill's thinking. They are honest boundary conditions. Fisher's randomization solved the "hold everything constant" problem probabilistically. Modern causal inference (<a href="https://en.wikipedia.org/wiki/Judea_Pearl"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pearl</a>, Rubin) solved the "direct vs. indirect" problem structurally. But every solution still operates within the framework Mill laid out: isolate causes by systematic variation and elimination.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">scientific method</a></li>
+      <li><a href="/reading/scientific-method/boole-1854/">Boole 1854</a></li>
+      <li><a href="/reading/scientific-method/peirce-1878/">Peirce 1878</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/hume-1739/", label: "Hume 1739 · 3 of 17" }} next={{ href: "/reading/scientific-method/boole-1854/", label: "Boole 1854 · 5 of 17" }} />
+  </main>
+</Layout>

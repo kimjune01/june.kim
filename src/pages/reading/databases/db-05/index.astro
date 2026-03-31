@@ -1,0 +1,187 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.5 — Indexing" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Indexing</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Database_index"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Database index</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>index</strong> is an auxiliary data structure that speeds up lookups at the cost of extra storage and slower writes. B+ trees are the default: they keep keys sorted, support range queries, and guarantee O(log n) lookup. Hash indexes give O(1) point lookups but cannot do ranges.</p>
+    </div>
+
+    <!-- SVG: B+ tree with leaf pointers -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Root -->
+        <rect x="160" y="10" width="100" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="195" y="27" text-anchor="middle" fill="#60a5fa" font-size="10">10 | 20</text>
+
+        <!-- Internal left -->
+        <rect x="40" y="60" width="80" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="80" y="77" text-anchor="middle" fill="#f59e0b" font-size="10">3 | 7</text>
+        <!-- Internal right -->
+        <rect x="300" y="60" width="80" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="340" y="77" text-anchor="middle" fill="#f59e0b" font-size="10">15 | 25</text>
+
+        <!-- Edges root to internal -->
+        <line x1="180" y1="35" x2="100" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="240" y1="35" x2="320" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Leaves -->
+        <rect x="10" y="115" width="50" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="35" y="132" text-anchor="middle" fill="#34d399" font-size="9">1,2,3</text>
+        <rect x="70" y="115" width="50" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="95" y="132" text-anchor="middle" fill="#34d399" font-size="9">5,7,8</text>
+        <rect x="130" y="115" width="60" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="160" y="132" text-anchor="middle" fill="#34d399" font-size="9">10,12</text>
+        <rect x="270" y="115" width="60" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="300" y="132" text-anchor="middle" fill="#34d399" font-size="9">15,18</text>
+        <rect x="340" y="115" width="60" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="370" y="132" text-anchor="middle" fill="#34d399" font-size="9">20,25</text>
+
+        <!-- Edges internal to leaves -->
+        <line x1="55" y1="85" x2="35" y2="115" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="80" y1="85" x2="95" y2="115" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="105" y1="85" x2="160" y2="115" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="315" y1="85" x2="300" y2="115" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="365" y1="85" x2="370" y2="115" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Leaf pointers (linked list) -->
+        <line x1="60" y1="128" x2="70" y2="128" stroke="#34d399" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2,2"/>
+        <line x1="120" y1="128" x2="130" y2="128" stroke="#34d399" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2,2"/>
+        <line x1="330" y1="128" x2="340" y2="128" stroke="#34d399" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2,2"/>
+
+        <!-- Caption -->
+        <text x="210" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">B+ tree: sorted keys, linked leaves for range scans.</text>
+      </svg>
+    </div>
+
+
+    <!-- B-trees -->
+    <h3>B-trees and B+ trees</h3>
+    <p>A <strong>B-tree</strong> of order m allows each node up to m children and m-1 keys. All leaves are at the same depth, giving O(log n) lookup. A <strong>B+ tree</strong> stores all data in the leaves and links them in a sorted chain, making range scans efficient. Most relational databases use B+ trees for their primary indexes.</p>
+
+    <SchemeRepl client:load initialCode={`; B-tree lookup simulation.
+; A node is (keys children) where children is one longer than keys.
+; Leaf nodes have empty children.
+
+(define tree
+  (list (list 10 20)                         ; root keys
+        (list                                ; root children
+          (list (list 3 7)   (list))         ; left child (leaf)
+          (list (list 12 15) (list))         ; middle child (leaf)
+          (list (list 25 30) (list)))))      ; right child (leaf)
+
+(define (btree-search node target)
+  (let ((keys (car node))
+        (children (cadr node)))
+    (if (null? children)
+      ; Leaf: scan keys
+      (if (member target keys) #t #f)
+      ; Internal: find correct child
+      (let loop ((ks keys) (cs children))
+        (cond
+          ((null? ks) (btree-search (car cs) target))
+          ((< target (car ks)) (btree-search (car cs) target))
+          ((= target (car ks)) #t)
+          (else (loop (cdr ks) (cdr cs))))))))
+
+(display "Search 7:  ") (display (btree-search tree 7))  (newline)
+(display "Search 10: ") (display (btree-search tree 10)) (newline)
+(display "Search 11: ") (display (btree-search tree 11)) (newline)
+(display "Search 25: ") (display (btree-search tree 25))
+`} />
+
+
+    <!-- Hash indexes -->
+    <h3>Hash indexes</h3>
+    <p>A <strong>hash index</strong> hashes the key to a bucket number. Lookup is O(1) on average. The tradeoff: hash indexes cannot answer range queries (WHERE x BETWEEN 10 AND 20) because hashing destroys order. Use them only for equality lookups.</p>
+
+    <SchemeRepl client:load initialCode={`; Hash index: O(1) lookup, no range queries.
+
+(define num-buckets 4)
+
+(define (hash-key k)
+  (modulo k num-buckets))
+
+; Build the index: list of buckets, each bucket is a list of (key . value) pairs
+(define (make-index entries)
+  (let ((buckets (make-vector num-buckets (list))))
+    (for-each
+      (lambda (entry)
+        (let ((b (hash-key (car entry))))
+          (vector-set! buckets b (cons entry (vector-ref buckets b)))))
+      entries)
+    buckets))
+
+(define idx (make-index (list (cons 1 "Alice") (cons 5 "Bob") (cons 9 "Carol") (cons 2 "Dave"))))
+
+; Lookup
+(define (hash-lookup index key)
+  (let ((bucket (vector-ref index (hash-key key))))
+    (let loop ((pairs bucket))
+      (cond
+        ((null? pairs) #f)
+        ((= (caar pairs) key) (cdar pairs))
+        (else (loop (cdr pairs)))))))
+
+(display "Lookup 5: ") (display (hash-lookup idx 5)) (newline)
+(display "Lookup 9: ") (display (hash-lookup idx 9)) (newline)
+(display "Lookup 7: ") (display (hash-lookup idx 7))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Demonstrating index usage with SQLite
+import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+c.execute("CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT, price REAL)")
+
+# Insert 1000 rows
+for i in range(1000):
+    c.execute("INSERT INTO items VALUES (?,?,?)", (i, "item_" + str(i), i * 1.5))
+
+# Without index on price
+c.execute("EXPLAIN QUERY PLAN SELECT * FROM items WHERE price > 500")
+print("Without index:", c.fetchone())
+
+# Create index
+c.execute("CREATE INDEX idx_price ON items(price)")
+
+# With index on price
+c.execute("EXPLAIN QUERY PLAN SELECT * FROM items WHERE price > 500")
+print("With index:   ", c.fetchone())
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-05/">⚙ Algorithms Ch.5</a> — trees: B-trees are balanced search trees optimized for disk</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/B-tree"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>B-tree</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/B%2B_tree"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>B+ tree</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hash_table"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hash table</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-04/", label: "Normalization" }} next={{ href: "/reading/databases/db-06/", label: "Transactions" }} />
+
+  </main>
+</Layout>

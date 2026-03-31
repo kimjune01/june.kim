@@ -1,0 +1,367 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.6 — Symbolic Data" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Symbolic Data</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-16.html#%_sec_2.3">SICP §2.3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Quotation</strong> lets programs manipulate symbols as data. Code that writes code. Symbolic differentiation shows the power: mathematical rules become pattern-matching functions. The derivative of a sum is the sum of derivatives &mdash; and that sentence <em>is</em> the program.</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 195" class="w-full max-w-sm mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- root + -->
+      <circle cx="150" cy="30" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="150" y="35" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="600">+</text>
+      <!-- left child * -->
+      <line x1="138" y1="44" x2="80" y2="72" stroke="#888" stroke-width="1.2"/>
+      <circle cx="75" cy="85" r="16" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="75" y="90" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="600">*</text>
+      <!-- right child 3 -->
+      <line x1="162" y1="44" x2="225" y2="72" stroke="#888" stroke-width="1.2"/>
+      <circle cx="225" cy="85" r="16" fill="none" stroke="#34d399" stroke-width="1.5"/>
+      <text x="225" y="90" text-anchor="middle" fill="#34d399" font-size="14" font-weight="600">3</text>
+      <!-- leaves x and y -->
+      <line x1="63" y1="99" x2="35" y2="122" stroke="#888" stroke-width="1.2"/>
+      <circle cx="30" cy="135" r="16" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="30" y="140" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="600">x</text>
+      <line x1="87" y1="99" x2="115" y2="122" stroke="#888" stroke-width="1.2"/>
+      <circle cx="120" cy="135" r="16" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="120" y="140" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="600">y</text>
+      <!-- quote annotation -->
+      <text x="270" y="35" text-anchor="start" fill="currentColor" fill-opacity="0.4" font-size="10" font-style="italic">'(+ (* x y) 3)</text>
+      <!-- caption -->
+      <text x="150" y="172" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">quoted expressions are data</text>
+      <text x="150" y="185" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">code that manipulates code</text>
+    </svg>
+
+    <!-- 1. Quotation -->
+    <h3>Quotation</h3>
+    <p>The quote mark <code>'</code> stops evaluation. <code>'a</code> is the symbol <code>a</code>, not the value bound to <code>a</code>. <code>symbol?</code> tests whether something is a symbol. <code>eq?</code> tests whether two symbols are the same. This is the foundation: data that looks like code.</p>
+
+    <SchemeRepl client:load initialCode={`; Quotation: ' prevents evaluation
+(define a 42)
+(display "a evaluates to: ") (display a) (newline)
+(display "'a is the symbol: ") (display 'a) (newline)
+(display "symbol? 'a: ") (display (symbol? 'a)) (newline)
+(display "symbol? 42: ") (display (symbol? 42)) (newline)
+
+; eq? compares symbols
+(display "(eq? 'a 'a): ") (display (eq? 'a 'a)) (newline)
+(display "(eq? 'a 'b): ") (display (eq? 'a 'b)) (newline)
+
+; Quoted lists are literal data
+(define expr '(+ 1 (* 2 3)))
+(display "expression: ") (display expr) (newline)
+(display "operator:   ") (display (car expr)) (newline)
+(display "operands:   ") (display (cdr expr))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python doesn't have quotation — symbols are strings
+a = 42
+print(f"a evaluates to: {a}")
+print(f"'a' is the string: {'a'}")
+print(f"type 'a': {type('a')}")
+
+# Symbolic expressions as nested tuples
+expr = ('+', 1, ('*', 2, 3))
+print(f"expression: {expr}")
+print(f"operator:   {expr[0]}")
+print(f"operands:   {expr[1:]}")
+`} />
+    </div>
+
+    <!-- 2. Symbolic differentiation -->
+    <h3>Symbolic differentiation</h3>
+    <p>The derivative rules from calculus translate directly into code. Each rule is one clause in a conditional:</p>
+    <ul>
+      <li>Constant: derivative is 0.</li>
+      <li>Variable (with respect to itself): derivative is 1.</li>
+      <li>Sum: derivative of a sum is the sum of derivatives.</li>
+      <li>Product: apply the product rule.</li>
+    </ul>
+
+    <SchemeRepl client:load initialCode={`; Symbolic differentiation
+; Represent expressions as lists: (+ a b), (* a b)
+
+(define (variable? x) (symbol? x))
+(define (same-variable? v1 v2)
+  (and (variable? v1) (variable? v2) (eq? v1 v2)))
+
+(define (sum? x) (and (pair? x) (eq? (car x) '+)))
+(define (addend s) (cadr s))
+(define (augend s) (caddr s))
+(define (make-sum a b)
+  (cond ((and (number? a) (= a 0)) b)
+        ((and (number? b) (= b 0)) a)
+        ((and (number? a) (number? b)) (+ a b))
+        (else (list '+ a b))))
+
+(define (product? x) (and (pair? x) (eq? (car x) '*)))
+(define (multiplier p) (cadr p))
+(define (multiplicand p) (caddr p))
+(define (make-product a b)
+  (cond ((and (number? a) (= a 0)) 0)
+        ((and (number? b) (= b 0)) 0)
+        ((and (number? a) (= a 1)) b)
+        ((and (number? b) (= b 1)) a)
+        ((and (number? a) (number? b)) (* a b))
+        (else (list '* a b))))
+
+(define (deriv exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp)
+         (if (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+           (make-product (multiplier exp)
+                         (deriv (multiplicand exp) var))
+           (make-product (deriv (multiplier exp) var)
+                         (multiplicand exp))))))
+
+; d/dx (x + 3) = 1
+(display "d/dx (x+3):     ")
+(display (deriv '(+ x 3) 'x)) (newline)
+
+; d/dx (x * y) = y
+(display "d/dx (x*y):     ")
+(display (deriv '(* x y) 'x)) (newline)
+
+; d/dx (x*y + x*3) = y + 3
+(display "d/dx (x*y+x*3): ")
+(display (deriv '(+ (* x y) (* x 3)) 'x))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Symbolic differentiation with tuples
+def deriv(exp, var):
+    if isinstance(exp, (int, float)):
+        return 0
+    if isinstance(exp, str):
+        return 1 if exp == var else 0
+    op, a, b = exp[0], exp[1], exp[2]
+    if op == '+':
+        return make_sum(deriv(a, var), deriv(b, var))
+    if op == '*':
+        return make_sum(
+            make_product(a, deriv(b, var)),
+            make_product(deriv(a, var), b))
+
+def make_sum(a, b):
+    if a == 0: return b
+    if b == 0: return a
+    if isinstance(a, (int,float)) and isinstance(b, (int,float)):
+        return a + b
+    return ('+', a, b)
+
+def make_product(a, b):
+    if a == 0 or b == 0: return 0
+    if a == 1: return b
+    if b == 1: return a
+    if isinstance(a, (int,float)) and isinstance(b, (int,float)):
+        return a * b
+    return ('*', a, b)
+
+print(f"d/dx (x+3):     {deriv(('+', 'x', 3), 'x')}")
+print(f"d/dx (x*y):     {deriv(('*', 'x', 'y'), 'x')}")
+print(f"d/dx (x*y+x*3): {deriv(('+', ('*','x','y'), ('*','x',3)), 'x')}")
+`} />
+    </div>
+
+    <!-- 3. Sets as unordered lists -->
+    <h3>Sets as unordered lists</h3>
+    <p>A set is a collection with no duplicates. The simplest representation: an unordered list. <code>element-of-set?</code> scans the whole list &mdash; O(n). <code>adjoin-set</code> adds only if not present. Simple but slow.</p>
+
+    <SchemeRepl client:load initialCode={`; Sets as unordered lists
+(define (element-of-set? x set)
+  (cond ((null? set) #f)
+        ((equal? x (car set)) #t)
+        (else (element-of-set? x (cdr set)))))
+
+(define (adjoin-set x set)
+  (if (element-of-set? x set) set
+      (cons x set)))
+
+(define (intersection-set s1 s2)
+  (cond ((null? s1) '())
+        ((element-of-set? (car s1) s2)
+         (cons (car s1) (intersection-set (cdr s1) s2)))
+        (else (intersection-set (cdr s1) s2))))
+
+(define s1 (list 1 2 3 4 5))
+(define s2 (list 3 4 5 6 7))
+
+(display "s1: ") (display s1) (newline)
+(display "s2: ") (display s2) (newline)
+(display "3 in s1? ") (display (element-of-set? 3 s1)) (newline)
+(display "9 in s1? ") (display (element-of-set? 9 s1)) (newline)
+(display "adjoin 6: ") (display (adjoin-set 6 s1)) (newline)
+(display "adjoin 3: ") (display (adjoin-set 3 s1)) (newline)
+(display "intersection: ") (display (intersection-set s1 s2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sets as lists (manual, not using Python's set)
+def element_of_set(x, s):
+    return x in s
+
+def adjoin_set(x, s):
+    return s if x in s else [x] + s
+
+def intersection_set(s1, s2):
+    return [x for x in s1 if x in s2]
+
+s1, s2 = [1,2,3,4,5], [3,4,5,6,7]
+print(f"s1: {s1}")
+print(f"s2: {s2}")
+print(f"3 in s1? {element_of_set(3, s1)}")
+print(f"9 in s1? {element_of_set(9, s1)}")
+print(f"adjoin 6: {adjoin_set(6, s1)}")
+print(f"adjoin 3: {adjoin_set(3, s1)}")
+print(f"intersection: {intersection_set(s1, s2)}")
+`} />
+    </div>
+
+    <!-- 4. Sets as binary trees -->
+    <h3>Sets as binary trees</h3>
+    <p>Ordered trees give O(log n) lookup. Each node holds an entry, a left subtree (smaller entries), and a right subtree (larger entries). The tree representation is another example of the abstraction barrier: the set interface stays the same, only the performance changes.</p>
+
+    <SchemeRepl client:load initialCode={`; Binary search tree: (entry left right)
+(define (entry tree) (car tree))
+(define (left-branch tree) (cadr tree))
+(define (right-branch tree) (caddr tree))
+(define (make-tree entry left right)
+  (list entry left right))
+
+(define (element-of-set? x set)
+  (cond ((null? set) #f)
+        ((= x (entry set)) #t)
+        ((< x (entry set))
+         (element-of-set? x (left-branch set)))
+        (else
+         (element-of-set? x (right-branch set)))))
+
+(define (adjoin-set x set)
+  (cond ((null? set) (make-tree x '() '()))
+        ((= x (entry set)) set)
+        ((< x (entry set))
+         (make-tree (entry set)
+                    (adjoin-set x (left-branch set))
+                    (right-branch set)))
+        (else
+         (make-tree (entry set)
+                    (left-branch set)
+                    (adjoin-set x (right-branch set))))))
+
+; Build a tree: 5, 3, 7, 1, 4
+(define t (adjoin-set 4
+  (adjoin-set 1
+    (adjoin-set 7
+      (adjoin-set 3
+        (adjoin-set 5 '()))))))
+
+(display "tree: ") (display t) (newline)
+(display "3 in tree? ") (display (element-of-set? 3 t)) (newline)
+(display "6 in tree? ") (display (element-of-set? 6 t))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Binary search tree as nested tuples
+class Tree:
+    def __init__(self, entry, left=None, right=None):
+        self.entry, self.left, self.right = entry, left, right
+    def __repr__(self):
+        parts = [str(self.entry)]
+        if self.left or self.right:
+            parts.append(repr(self.left))
+            parts.append(repr(self.right))
+        return f"({' '.join(parts)})"
+
+def element_of_set(x, t):
+    if t is None: return False
+    if x == t.entry: return True
+    if x < t.entry: return element_of_set(x, t.left)
+    return element_of_set(x, t.right)
+
+def adjoin_set(x, t):
+    if t is None: return Tree(x)
+    if x == t.entry: return t
+    if x < t.entry: return Tree(t.entry, adjoin_set(x, t.left), t.right)
+    return Tree(t.entry, t.left, adjoin_set(x, t.right))
+
+# Build: 5, 3, 7, 1, 4
+t = None
+for v in [5, 3, 7, 1, 4]:
+    t = adjoin_set(v, t)
+
+print(f"tree: {t}")
+print(f"3 in tree? {element_of_set(3, t)}")
+print(f"6 in tree? {element_of_set(6, t)}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">'x</td><td class="pr-4">"x"</td><td class="font-sans">Quoted symbol (data, not code)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(symbol? x)</td><td class="pr-4">isinstance(x, str)</td><td class="font-sans">Test if symbol</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(eq? 'a 'b)</td><td class="pr-4">"a" == "b"</td><td class="font-sans">Symbol equality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">'(+ x 3)</td><td class="pr-4">("+", "x", 3)</td><td class="font-sans">Quoted expression as data</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(deriv exp var)</td><td class="pr-4">deriv(exp, var)</td><td class="font-sans">Symbolic derivative</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(make-tree e l r)</td><td class="pr-4">Tree(e, l, r)</td><td class="font-sans">Binary tree node</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Scheme's quotation is fundamental to the language: <code>'(+ 1 2)</code> is a list of three elements. Python has no equivalent &mdash; you build symbolic expressions from tuples or strings, which means the boundary between code and data is always explicit. This is the tradeoff: Lisp's homoiconicity makes metaprogramming natural at the cost of a less familiar syntax. Python's syntax is readable at the cost of making code-as-data awkward.</p>
+    <p class="mt-2">The simplification rules in <code>make-sum</code> and <code>make-product</code> are a preview of algebraic simplification. SICP keeps it minimal (0+x=x, 0*x=0, 1*x=x). A real computer algebra system would need hundreds of such rules.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">SICP chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-05/">🪄 Chapter 5</a> — Hierarchical Data (the list/tree structures quotation builds on)</li>
+      <li><a href="/reading/programming/sicp-07/">🪄 Chapter 7</a> — Multiple Representations (extending the idea of dispatch on type)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Homoiconicity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Homoiconicity</a> — code and data share the same representation</li>
+      <li><a href="https://en.wikipedia.org/wiki/Symbolic_computation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Symbolic computation</a> — manipulating mathematical expressions as data</li>
+      <li><a href="https://en.wikipedia.org/wiki/Binary_search_tree"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Binary search tree</a> — the tree-based set representation</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-16.html#%_sec_2.3">Read SICP &sect;2.3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-05/", label: "Hierarchical Data" }} next={{ href: "/reading/programming/sicp-07/", label: "Multiple Representations · 7 of 22" }} />
+
+  </main>
+</Layout>

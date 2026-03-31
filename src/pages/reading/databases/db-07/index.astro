@@ -1,0 +1,230 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.7 — Concurrency Control" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Concurrency Control</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Concurrency_control"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Concurrency control</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Concurrency control</strong> ensures that concurrent transactions produce correct results. The main techniques: locking (pessimistic: block conflicts before they happen), optimistic concurrency control (validate at commit time), and MVCC (each transaction sees a consistent snapshot).</p>
+    </div>
+
+    <!-- SVG: Lock compatibility matrix -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 160" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="150" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">Lock Compatibility Matrix</text>
+
+        <!-- Headers -->
+        <text x="150" y="50" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Requested</text>
+        <text x="40" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5" transform="rotate(-90 40 80)">Held</text>
+
+        <text x="170" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">S</text>
+        <text x="230" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">X</text>
+
+        <!-- Row: S held -->
+        <text x="100" y="95" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">S</text>
+        <rect x="148" y="82" width="40" height="20" rx="3" fill="#34d399" fill-opacity="0.15"/>
+        <text x="170" y="96" text-anchor="middle" fill="#34d399" font-size="11">Yes</text>
+        <rect x="210" y="82" width="40" height="20" rx="3" fill="#f87171" fill-opacity="0.15"/>
+        <text x="230" y="96" text-anchor="middle" fill="#f87171" font-size="11">No</text>
+
+        <!-- Row: X held -->
+        <text x="100" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">X</text>
+        <rect x="148" y="107" width="40" height="20" rx="3" fill="#f87171" fill-opacity="0.15"/>
+        <text x="170" y="121" text-anchor="middle" fill="#f87171" font-size="11">No</text>
+        <rect x="210" y="107" width="40" height="20" rx="3" fill="#f87171" fill-opacity="0.15"/>
+        <text x="230" y="121" text-anchor="middle" fill="#f87171" font-size="11">No</text>
+
+        <!-- Caption -->
+        <text x="150" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">S = shared (read), X = exclusive (write).</text>
+      </svg>
+    </div>
+
+
+    <!-- Locks -->
+    <h3>Shared and exclusive locks</h3>
+    <p>A <strong>shared lock</strong> (S-lock, read lock) allows concurrent reads. An <strong>exclusive lock</strong> (X-lock, write lock) blocks all other access. Multiple readers can hold S-locks simultaneously, but an X-lock is exclusive: no other lock (S or X) can coexist with it.</p>
+
+    <SchemeRepl client:load initialCode={`; Lock manager simulation
+
+(define locks (list)) ; list of (item . lock-type)
+
+(define (can-grant? item lock-type)
+  (let ((held (filter (lambda (l) (string=? (car l) item)) locks)))
+    (cond
+      ((null? held) #t)                              ; no lock held
+      ((string=? lock-type "S")
+       (not (member "X" (map cdr held))))             ; S ok if no X held
+      (else #f))))                                    ; X needs no locks at all
+
+(define (acquire item lock-type txn)
+  (if (can-grant? item lock-type)
+    (begin
+      (set! locks (cons (cons item lock-type) locks))
+      (display txn) (display " acquired ") (display lock-type)
+      (display " on ") (display item) (newline))
+    (begin
+      (display txn) (display " BLOCKED on ") (display item) (newline))))
+
+(acquire "A" "S" "T1")   ; granted
+(acquire "A" "S" "T2")   ; granted (shared ok)
+(acquire "A" "X" "T3")   ; blocked (X conflicts with S)
+(newline)
+
+(set! locks (list))       ; release all
+(acquire "B" "X" "T1")   ; granted
+(acquire "B" "S" "T2")   ; blocked (S conflicts with X)
+`} />
+
+
+    <!-- Two-phase locking -->
+    <h3>Two-phase locking (2PL)</h3>
+    <p><strong>Two-phase locking</strong> guarantees serializability. Phase 1 (growing): acquire locks, never release. Phase 2 (shrinking): release locks, never acquire. Once a transaction releases any lock, it cannot acquire new ones. This prevents the interleaving patterns that cause anomalies.</p>
+
+    <SchemeRepl client:load initialCode={`; Two-phase locking: growing phase then shrinking phase.
+; A transaction that violates 2PL can cause non-serializable schedules.
+
+(define (simulate-2pl)
+  (let ((phase "growing") (held (list)))
+    (define (acquire lock)
+      (if (string=? phase "growing")
+        (begin
+          (set! held (cons lock held))
+          (display "  Acquire ") (display lock) (newline))
+        (begin
+          (display "  VIOLATION: cannot acquire in shrinking phase") (newline))))
+    (define (release lock)
+      (set! phase "shrinking")
+      (set! held (filter (lambda (l) (not (string=? l lock))) held))
+      (display "  Release ") (display lock) (newline))
+
+    (display "Growing phase:") (newline)
+    (acquire "A")
+    (acquire "B")
+    (acquire "C")
+    (display "Shrinking phase:") (newline)
+    (release "A")
+    (release "B")
+    ; Try acquiring in shrinking phase:
+    (acquire "D")
+    (release "C")))
+
+(simulate-2pl)
+`} />
+
+
+    <!-- Deadlock -->
+    <h3>Deadlock detection</h3>
+    <p>Deadlock occurs when two transactions each hold a lock the other needs. Detection: build a wait-for graph. If it has a cycle, one transaction must be aborted (the victim). Prevention strategies include timeout and wound-wait/wait-die schemes.</p>
+
+    <Repl client:load initialCode={`# Deadlock detection via wait-for graph cycle detection
+
+def detect_deadlock(waits_for):
+    """waits_for: dict mapping txn -> set of txns it waits for"""
+    def has_cycle(node, visited, stack):
+        visited.add(node)
+        stack.add(node)
+        for neighbor in waits_for.get(node, set()):
+            if neighbor not in visited:
+                if has_cycle(neighbor, visited, stack):
+                    return True
+            elif neighbor in stack:
+                return True
+        stack.discard(node)
+        return False
+
+    visited = set()
+    for txn in waits_for:
+        if txn not in visited:
+            if has_cycle(txn, visited, set()):
+                return True
+    return False
+
+# No deadlock: T1 waits for T2
+print("T1->T2:", detect_deadlock({"T1": {"T2"}}))
+
+# Deadlock: T1 waits for T2, T2 waits for T1
+print("T1->T2->T1:", detect_deadlock({"T1": {"T2"}, "T2": {"T1"}}))
+
+# Three-way deadlock
+print("T1->T2->T3->T1:", detect_deadlock({
+    "T1": {"T2"}, "T2": {"T3"}, "T3": {"T1"}
+}))
+`} />
+
+
+    <!-- MVCC -->
+    <h3>MVCC — multiversion concurrency control</h3>
+    <p><strong>MVCC</strong> lets readers and writers run concurrently without blocking each other. Each write creates a new version of the data. Readers see a consistent snapshot from when their transaction started. PostgreSQL, MySQL/InnoDB, and Oracle all use MVCC.</p>
+
+    <SchemeRepl client:load initialCode={`; MVCC simulation: each write creates a new version.
+; Readers see the version valid at their start time.
+
+(define versions (list))  ; list of (key timestamp value)
+
+(define (mvcc-write key ts value)
+  (set! versions (cons (list key ts value) versions))
+  (display "  Write ") (display key) (display "=") (display value)
+  (display " at t=") (display ts) (newline))
+
+(define (mvcc-read key read-ts)
+  ; Find latest version with timestamp <= read-ts
+  (let loop ((vs versions) (best #f))
+    (if (null? vs)
+      (if best (caddr best) #f)
+      (let ((v (car vs)))
+        (if (and (string=? (car v) key)
+                 (<= (cadr v) read-ts)
+                 (or (not best) (> (cadr v) (cadr best))))
+          (loop (cdr vs) v)
+          (loop (cdr vs) best))))))
+
+(mvcc-write "X" 1 100)
+(mvcc-write "X" 3 200)
+(mvcc-write "X" 5 300)
+(newline)
+
+; T1 started at t=2, sees version from t=1
+(display "T1 (start t=2) reads X = ")
+(display (mvcc-read "X" 2)) (newline)
+
+; T2 started at t=4, sees version from t=3
+(display "T2 (start t=4) reads X = ")
+(display (mvcc-read "X" 4)) (newline)
+
+; T3 started at t=6, sees version from t=5
+(display "T3 (start t=6) reads X = ")
+(display (mvcc-read "X" 6))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/operating-systems/os-05/">🖥 OS Ch.5</a> — deadlock: same concept, different domain (OS resources vs database locks)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Two-phase_locking"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Two-phase locking</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Multiversion_concurrency_control"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>MVCC</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Deadlock"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deadlock</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-06/", label: "Transactions" }} next={{ href: "/reading/databases/db-08/", label: "Recovery" }} />
+
+  </main>
+</Layout>

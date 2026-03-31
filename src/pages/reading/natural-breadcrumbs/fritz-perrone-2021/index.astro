@@ -1,0 +1,307 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Fritz, Perrone, Rezagholi 2021 — Support as Monad Morphism" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Bimonadality of Probability Monads (Support as Monad Morphism)</h1>
+    <p class="text-gray-400 text-sm mb-6">Fritz, Perrone, Rezagholi · 2021 · <a href="https://arxiv.org/abs/1910.03752"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1910.03752</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, support). 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The map "which outcomes are possible?" — dropping probabilities and keeping only the support — is a <strong>monad morphism</strong>. It respects composition: the support of a composed pipeline equals the composition of supports.</p>
+    </div>
+
+    <!-- 1. Possibilistic shadow -->
+    <h3>The possibilistic shadow</h3>
+    <p>Every probability distribution has a <strong>possibilistic shadow</strong>: forget the weights, keep only which outcomes can happen. This maps the probability monad P to the powerset monad 𝒫. The shadow is a monad morphism — it preserves pure and bind.</p>
+
+    <!-- SVG: Support — bar chart with highlighted (nonzero) and grayed-out (zero) bars -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="50" y1="120" x2="350" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Bar a: nonzero -->
+        <rect x="70" y="40" width="40" height="80" rx="3" fill="#4ade80" fill-opacity="0.2" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="90" y="75" text-anchor="middle" fill="#4ade80" font-size="10">0.5</text>
+        <text x="90" y="135" text-anchor="middle" fill="currentColor" font-size="11">a</text>
+        <!-- Bar b: zero -->
+        <rect x="130" y="118" width="40" height="2" rx="1" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="150" y="112" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.25">0</text>
+        <text x="150" y="135" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.3">b</text>
+        <!-- Bar c: nonzero -->
+        <rect x="190" y="60" width="40" height="60" rx="3" fill="#4ade80" fill-opacity="0.2" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="210" y="85" text-anchor="middle" fill="#4ade80" font-size="10">0.3</text>
+        <text x="210" y="135" text-anchor="middle" fill="currentColor" font-size="11">c</text>
+        <!-- Bar d: zero -->
+        <rect x="250" y="118" width="40" height="2" rx="1" fill="#a1a1aa" fill-opacity="0.18" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="270" y="112" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.25">0</text>
+        <text x="270" y="135" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.3">d</text>
+        <!-- Bar e: nonzero -->
+        <rect x="310" y="80" width="40" height="40" rx="3" fill="#4ade80" fill-opacity="0.2" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="330" y="100" text-anchor="middle" fill="#4ade80" font-size="10">0.2</text>
+        <text x="330" y="135" text-anchor="middle" fill="currentColor" font-size="11">e</text>
+        <!-- Support label -->
+        <text x="200" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">support = (a, c, e). Zero-probability outcomes are not in the support.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; The possibilistic shadow: P -> powerset
+; Drop probabilities, keep reachable outcomes
+
+(define (support dist)
+  (map car (filter (lambda (p) (> (cdr p) 0)) dist)))
+
+(define dist1
+  '((a . 0.5) (b . 0.3) (c . 0.2)))
+
+(define dist2
+  '((a . 0.99) (b . 0.005) (c . 0.005)))
+
+(display "dist1 shadow: ") (display (support dist1)) (newline)
+(display "dist2 shadow: ") (display (support dist2)) (newline)
+; dist1 and dist2 have the same shadow — different probabilities, same reachability
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Possibilistic shadow in Python
+def support(dist):
+    return {k for k, v in dist.items() if v > 0}
+
+dist1 = {"a": 0.5, "b": 0.3, "c": 0.2}
+dist2 = {"a": 0.99, "b": 0.0, "c": 0.01}
+
+print("dist1 shadow:", support(dist1))
+print("dist2 shadow:", support(dist2))
+`} />
+    </div>
+
+    <!-- 2. support_pure -->
+    <h3>support_pure — pure maps to singleton</h3>
+    <p>The pure (return) of the probability monad wraps a value in a point-mass distribution: pure(x) = {'{x: 1.0}'}. Its shadow is a singleton set: {'{x}'}. That's exactly the pure of the powerset monad. So support preserves pure.</p>
+
+    <SchemeRepl client:load initialCode={`; support_pure: support(pure(x)) = {x}
+; Probability pure: point mass. Powerset pure: singleton.
+
+(define (prob-pure x) (list (cons x 1.0)))
+(define (powerset-pure x) (list x))
+(define (support dist) (map car (filter (lambda (p) (> (cdr p) 0)) dist)))
+
+(define x 42)
+(display "prob pure(42): ") (display (prob-pure x)) (newline)
+(display "support:       ") (display (support (prob-pure x))) (newline)
+(display "set pure(42):  ") (display (powerset-pure x)) (newline)
+(display "equal? ") (display (equal? (support (prob-pure x)) (powerset-pure x)))
+; #t — support preserves pure
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Exact.</strong> This is the unit law for the monad morphism.</p>
+
+    <!-- 3. support_bind -->
+    <h3>support_bind — support commutes with bind</h3>
+    <p>This is the key theorem. If you compose two stochastic functions and then take the support, you get the same result as taking each support first and then composing the set-valued functions. In notation: supp(f >=> g) = supp(f) >=>_𝒫 supp(g). Support is a monad morphism because it preserves the monad multiplication (bind).</p>
+
+    <SchemeRepl client:load initialCode={`; support_bind: supp(f >=> g) = supp(f) >=> supp(g)
+; "Support of composed = compose of supports"
+
+(define (support dist) (map car (filter (lambda (p) (> (cdr p) 0)) dist)))
+
+(define (kleisli f g)
+  (lambda (x)
+    (apply append
+      (map (lambda (pair)
+        (let ((y (car pair)) (py (cdr pair)))
+          (map (lambda (qp) (cons (car qp) (* py (cdr qp))))
+               (g y))))
+      (f x)))))
+
+; Set-valued compose: union of g applied to each element
+(define (set-compose sf sg)
+  (lambda (x)
+    (apply append (map sg (sf x)))))
+
+(define (f x) (list (cons 'a 0.6) (cons 'b 0.4)))
+(define (g y) (if (eq? y 'a)
+  (list (cons 1 0.5) (cons 2 0.5))
+  (list (cons 2 0.3) (cons 3 0.7))))
+
+; Path 1: compose then support
+(define path1 (support ((kleisli f g) 'start)))
+
+; Path 2: support then set-compose
+(define sf (lambda (x) (support (f x))))
+(define sg (lambda (y) (support (g y))))
+(define path2 ((set-compose sf sg) 'start))
+
+(display "compose then support: ") (display path1) (newline)
+(display "support then compose: ") (display path2) (newline)
+; Same elements — support is a monad morphism
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Finite sets, not measurable spaces. Same algebraic law.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# support_bind in Python
+def support(d): return {k for k,v in d.items() if v > 0}
+
+def kleisli(f, g):
+    def h(x):
+        r = {}
+        for y, py in f(x).items():
+            for z, pz in g(y).items():
+                r[z] = r.get(z, 0) + py * pz
+        return r
+    return h
+
+def f(x): return {"a": 0.6, "b": 0.4}
+def g(y): return {1: 0.5, 2: 0.5} if y == "a" else {2: 0.3, 3: 0.7}
+
+# Path 1: compose then support
+path1 = support(kleisli(f, g)("start"))
+
+# Path 2: support then union-compose
+def set_comp(sf, sg):
+    def h(x):
+        return set().union(*(sg(y) for y in sf(x)))
+    return h
+path2 = set_comp(lambda x: support(f(x)), lambda y: support(g(y)))("start")
+
+print(f"compose then support: {path1}")
+print(f"support then compose: {path2}")
+print(f"equal? {path1 == path2}")
+`} />
+    </div>
+
+    <!-- 4. Why it matters -->
+    <h3>Why possibilistic reasoning is sound</h3>
+    <p>Because support is a monad morphism, you can reason about reachability (what <em>can</em> happen) without tracking exact probabilities. If a state is unreachable through a composed system, it's unreachable through each stage individually. Possibilistic gating — reject impossible outcomes — doesn't need exact probability computation.</p>
+
+    <SchemeRepl client:load initialCode={`; Possibilistic gating: reject impossible, keep possible
+; No probabilities needed — support is enough
+
+(define (support dist) (map car (filter (lambda (p) (> (cdr p) 0)) dist)))
+
+(define (sensor x)
+  (cond ((eq? x 'cat)  '((meow . 0.8) (silence . 0.2)))
+        ((eq? x 'dog)  '((bark . 0.7) (silence . 0.3)))
+        (else           '((silence . 1.0)))))
+
+; Possibilistic filter: can this observation come from this source?
+(define (possible? source observation)
+  (member observation (support (sensor source))))
+
+(display "cat->meow?    ") (display (if (possible? 'cat 'meow) "yes" "no")) (newline)
+(display "dog->meow?    ") (display (if (possible? 'dog 'meow) "yes" "no")) (newline)
+(display "cat->silence? ") (display (if (possible? 'cat 'silence) "yes" "no")) (newline)
+; Meow rules out dog. Silence rules out nothing.
+; No probabilities needed for this gate.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Possibilistic gating in Python
+def support(d): return {k for k, v in d.items() if v > 0}
+
+def sensor(x):
+    if x == "cat": return {"meow": 0.8, "silence": 0.2}
+    if x == "dog": return {"bark": 0.7, "silence": 0.3}
+    return {"silence": 1.0}
+
+for src in ["cat", "dog", "rock"]:
+    for obs in ["meow", "bark", "silence"]:
+        ok = obs in support(sensor(src))
+        if ok: print(f"  {src} -> {obs}: possible")
+`} />
+    </div>
+
+    <!-- 5. The monad morphism diagram -->
+    <h3>The monad morphism square</h3>
+    <p>A monad morphism σ: T → S satisfies two laws: σ ∘ η_T = η_S (preserve pure) and σ ∘ μ_T = μ_S ∘ (σσ) (preserve multiplication). Support satisfies both. The first says "point mass → singleton." The second says "support of bind = bind of supports."</p>
+
+    <SchemeRepl client:load initialCode={`; Monad morphism laws for support
+; Law 1: sigma . eta_T = eta_S  (pure)
+; Law 2: sigma . mu_T = mu_S . (sigma x sigma)  (mult)
+
+(define (support d) (map car (filter (lambda (p) (> (cdr p) 0)) d)))
+
+; Law 1: support(point-mass(x)) = singleton(x)
+(define (check-pure x)
+  (equal? (support (list (cons x 1.0)))
+          (list x)))
+
+(display "Law 1 (pure): ")
+(display (and (check-pure 'a) (check-pure 'b) (check-pure 42)))
+(newline)
+
+; Law 2: flatten-then-support = support-each-then-union
+(define nested '(((a . 0.3) (b . 0.7)) ((b . 0.5) (c . 0.5))))
+(define flat (apply append nested))
+
+(define path1 (support flat))
+(define path2 (apply append (map support nested)))
+(display "Law 2 (mult): ") (display (equal? path1 path2))
+; Both laws hold — support is a monad morphism
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Exact.</strong> These are the defining equations, computed over finite lists.</p>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(X)</td><td class="pr-4 text-green-300">list of (val . prob)</td><td class="font-sans">Probability monad</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">𝒫(X)</td><td class="pr-4 text-green-300">list of val</td><td class="font-sans">Powerset monad</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">σ : P → 𝒫</td><td class="pr-4 text-green-300">support</td><td class="font-sans">Support = monad morphism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">η</td><td class="pr-4 text-green-300">prob-pure / powerset-pure</td><td class="font-sans">Unit (return)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">μ</td><td class="pr-4 text-green-300">apply append (flatten)</td><td class="font-sans">Multiplication (join)</td></tr>
+          <tr><td class="py-2 pr-4">f >=> g</td><td class="pr-4 text-green-300">(kleisli f g)</td><td class="font-sans">Kleisli composition</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category where support lives</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare triples use support for postcondition checking</li>
+      <li><a href="/reading/natural-breadcrumbs/liell-cock-2025/">🍞 Liell-Cock 2025</a> — imprecise probability generalizes the possibilistic shadow</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Power_set"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Power set</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Support_(measure_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Support (measure theory)</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use finite lists of pairs as distributions. The paper works over arbitrary measurable spaces with the <a href="https://ncatlab.org/nlab/show/Giry+monad">Giry monad</a>, and support becomes a measurable map between σ-algebras. For example: the support_bind demonstration on this page composes two functions over small symbol sets. In the paper, the same law applies to Markov kernels between <a href="https://en.wikipedia.org/wiki/Polish_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Polish spaces</a> — where "support" means the topological support of a probability measure, and the proof requires measurable selection theorems. The algebraic structure (support commutes with Kleisli composition) is identical. The measure theory is not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/1910.03752"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the support monad morphism, §4 for the bimonadality result.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The possibilistic shadow justifies the Natural Framework's Filter stage doing reachability-based gating without exact probabilities. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/fritz-2020/", label: "Fritz 2020 · 2 of 21" }} next={{ href: "/reading/natural-breadcrumbs/gaboardi-2021/", label: "Gaboardi 2021 · 4 of 21" }} />
+  </main>
+</Layout>

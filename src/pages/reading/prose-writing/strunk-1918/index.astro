@@ -1,0 +1,119 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Strunk 1918 — The Elements of Style" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to Prose Writing</a>
+
+    <h1>The Elements of Style</h1>
+    <p class="text-gray-400 text-sm mb-6">William Strunk Jr. &middot; 1918 &middot; <a href="https://www.gutenberg.org/ebooks/37134">Read the original (Project Gutenberg, public domain)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Forty-three pages. That's it. Strunk wrote the shortest useful specification for English prose. Rule 17: "Omit needless words." He practiced what he preached&mdash;the rule is three words. The book is a checklist: it tells you what's wrong, not what to write. Apply it, and your prose clears up. Ignore it, and nobody will tell you why they stopped reading.</p>
+    </div>
+
+    <!-- SVG: type-checker pipeline -->
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 520 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Input box -->
+        <rect x="10" y="30" width="100" height="50" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="60" y="60" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">draft</text>
+
+        <!-- Arrow in -->
+        <line x1="115" y1="55" x2="165" y2="55" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <polygon points="162,50 172,55 162,60" fill="currentColor" fill-opacity="0.25"/>
+
+        <!-- Rules box -->
+        <rect x="175" y="15" width="170" height="80" rx="4" fill="none" stroke="#34d399" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="260" y="38" text-anchor="middle" fill="#34d399" fill-opacity="0.7" font-size="10">Strunk's rules</text>
+        <text x="200" y="58" fill="currentColor" fill-opacity="0.35" font-size="9">&#x2713;</text>
+        <text x="200" y="74" fill="currentColor" fill-opacity="0.35" font-size="9">&#x2717;</text>
+        <text x="215" y="58" fill="currentColor" fill-opacity="0.35" font-size="9">pass</text>
+        <text x="215" y="74" fill="currentColor" fill-opacity="0.35" font-size="9">fail</text>
+
+        <!-- Arrow out -->
+        <line x1="350" y1="55" x2="400" y2="55" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+        <polygon points="397,50 407,55 397,60" fill="currentColor" fill-opacity="0.25"/>
+
+        <!-- Output box -->
+        <rect x="410" y="30" width="100" height="50" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="460" y="60" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">clean prose</text>
+
+        <!-- Rule labels below -->
+        <text x="260" y="125" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">active voice</text>
+        <text x="260" y="142" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">omit needless words</text>
+        <text x="260" y="159" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">positive form</text>
+        <text x="260" y="176" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">parallel construction</text>
+
+        <!-- Connector from rules box to labels -->
+        <line x1="260" y1="95" x2="260" y2="113" stroke="currentColor" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="3,3"/>
+      </svg>
+    </div>
+
+    <!-- 1. The argument -->
+    <h3>The argument</h3>
+
+    <p>William Strunk Jr. was a Cornell English professor who got tired of repeating himself. In 1918 he self-published a forty-three-page pamphlet for his students: seven rules of usage, eleven principles of composition, a few matters of form. No theory of rhetoric. No appeals to taste. Just rules, stated as absolutes.</p>
+
+    <p>The rules are prescriptive and unconditional. Use the active voice. Put statements in positive form. Use definite, specific, concrete language. Omit needless words. No hedging, no "it depends," no "consider whether." This is the book's strength and its weakness. The rules are memorable because they admit no exceptions. You can carry them in your head while you write, which is more than you can say for most style guides.</p>
+
+    <p>They are also wrong in edge cases. Passive voice is sometimes correct. "The president was assassinated" puts the object where it belongs. Google's style guide would eventually enumerate the three exceptions Strunk never wrote down. But Strunk was not writing for edge cases. He was writing for undergraduates who padded their essays with throat-clearing and buried their verbs in nominalizations. For that audience, unconditional rules are the right tool.</p>
+
+    <!-- 2. The rules -->
+    <h3>The rules</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Rule</th>
+            <th class="text-left py-2 pr-3 text-gray-400">The instruction</th>
+            <th class="text-left py-2 text-gray-400">What it catches</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Omit needless words</td><td class="pr-3 text-gray-400">Cut every word that doesn't earn its place</td><td class="text-gray-400">Padding, throat-clearing, redundancy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Use the active voice</td><td class="pr-3 text-gray-400">Subject does the action</td><td class="text-gray-400">Bureaucratic evasion, weak attribution</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Put statements in positive form</td><td class="pr-3 text-gray-400">Say what is, not what isn't</td><td class="text-gray-400">Double negatives, hedging</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Use parallel construction</td><td class="pr-3 text-gray-400">Match form to matched content</td><td class="text-gray-400">Inconsistent lists, asymmetric comparisons</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Use definite, specific, concrete language</td><td class="pr-3 text-gray-400">Prefer the particular to the abstract</td><td class="text-gray-400">Vagueness, hand-waving, empty generalities</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Keep related words together</td><td class="pr-3 text-gray-400">Don't separate subject from verb, verb from object</td><td class="text-gray-400">Ambiguous modification, garden-path sentences</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. Discussion -->
+    <h3>Discussion</h3>
+
+    <p>Strunk works because the rules are binary: pass or fail. You can apply them mechanically, which is why they survive a century later. But binary rules have no exceptions clause. "Use the active voice" fails when the object matters more than the subject. "The president was assassinated" is passive, and it is correct. The passive puts the president in topic position, which is where the reader's attention belongs. Strunk's rule cannot express this distinction.</p>
+
+    <p>Every successor had to add an exceptions clause. Orwell added Rule 6. Williams derived the conditions. Google enumerated the cases. But the rules themselves have outlasted every configuration written for them.</p>
+
+    <p>The reason is format. Most style guides are reference material: you look something up when you need it. Strunk is short enough to memorize. A rule you carry in your head while writing is worth more than a rule you have to look up afterward. "Omit needless words" fires in real time, mid-sentence, because it fits in working memory. That is the advantage of forty-three pages. The false positives are the price of compression, and for a pamphlet you can read in an hour, the price is low. This is also why Strunk's rules translate well into <a href="https://june.kim/slop-detection"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>automated slop detection</a>: binary rules are computable in a way that taste-based judgments are not.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h3>See also</h3>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations</p>
+    <ul>
+      <li><a href="https://www.gutenberg.org/ebooks/37134">Project Gutenberg: The Elements of Style (1918)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/The_Elements_of_Style"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: The Elements of Style</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/William_Strunk_Jr."><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: William Strunk Jr.</a></li>
+    </ul>
+
+    <ul class="neighbors">
+      <li><a href="/reading/prose-writing/orwell-1946/">Orwell 1946</a>: added the escape hatch. Break any rule rather than say something barbarous.</li>
+      <li><a href="/reading/prose-writing/williams-1981/">Williams 1981</a>: added the analysis. Old information before new explains when passive is correct.</li>
+      <li><a href="/reading/prose-writing/google-2017/">Google 2017</a>: enumerated the three exceptions Strunk never wrote down.</li>
+      <li><a href="/reading/information-theory/shannon-02/">📡 IT Ch.2</a> — entropy and compression: "omit needless words" is minimum description length — Strunk's rule is Shannon's compression theorem applied to prose</li>
+      <li><a href="/reading/cognitive-science/lovelace-07/">🧠 Cognitive Science Ch.7</a> — working memory and chunking: the short-sentence rule compensates for working memory limits — one idea per sentence = one chunk per slot</li>
+    </ul>
+
+    <PrevNext prev={{ href: "/reading/prose-writing/blair-1783/", label: "Blair 1783 · 4 of 10" }} next={{ href: "/reading/prose-writing/orwell-1946/", label: "Orwell 1946 · 6 of 10" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,465 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.14 — The Yoneda Lemma" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>The Yoneda Lemma</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/09/01/the-yoneda-lemma/">Category Theory for Programmers, Ch. 14</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-10/">🍞 Ch10 (Natural Transformations)</a>, <a href="/reading/category-theory/milewski-13/">🍞 Ch13 (Representable Functors)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Nat(Hom(a, &ndash;), F) &cong; F(a)</strong>. Natural transformations from a hom-functor to any functor F are in bijection with elements of F(a). An object is completely determined by its relationships to every other object. The entire natural transformation crystallizes from a single value: what you assign to the identity morphism.</p>
+    </div>
+
+    <!-- 1. The hom-functor -->
+    <h3>The hom-functor: an object seen from the outside</h3>
+    <p>Fix an object <code>a</code> in a category. The <strong>hom-functor</strong> <code>Hom(a, &ndash;)</code> maps every object <code>x</code> to the set of morphisms from <code>a</code> to <code>x</code>. In Haskell, this is the <code>Reader a</code> functor: <code>Reader a x = a -&gt; x</code>. It captures everything <code>a</code> can "see" in the category.</p>
+
+    <SchemeRepl client:load initialCode={`; The hom-functor Hom(a, -) is the Reader functor.
+; Reader a x = a -> x
+; fmap f h = f . h   (post-compose)
+
+(define (reader-fmap f h)
+  (lambda (a) (f (h a))))
+
+; Fix a = Int. Hom(Int, -) maps every type x
+; to the set of functions Int -> x.
+(define (square x) (* x x))
+(define (show-int n) (string-append "val=" (number->string n)))
+
+; fmap show-int over square : Int -> Int becomes Int -> String
+(define square-then-show (reader-fmap show-int square))
+
+(display (square-then-show 5)) (newline)
+; "val=25" — post-compose show-int after square
+
+(display (square-then-show 3))
+; "val=9"
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Reader functor: fmap = post-compose
+def reader_fmap(f, h):
+    return lambda a: f(h(a))
+
+square = lambda x: x * x
+show_int = lambda n: f"val={n}"
+
+square_then_show = reader_fmap(show_int, square)
+print(square_then_show(5))  # val=25
+print(square_then_show(3))  # val=9
+`} />
+    </div>
+
+
+    <!-- 2. The Yoneda bijection -->
+    <h3>The Yoneda bijection: one value determines everything</h3>
+    <p>A natural transformation <code>&alpha;</code> from <code>Hom(a, &ndash;)</code> to a functor <code>F</code> is a polymorphic function: for every <code>x</code>, it takes an <code>(a &rarr; x)</code> and returns an <code>F x</code>. The <a href="https://en.wikipedia.org/wiki/Yoneda_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda lemma</a> says: every such natural transformation is determined by a single element of <code>F(a)</code>. To recover it, apply <code>&alpha;</code> to the identity morphism. To go the other way, take an element of <code>F(a)</code> and <code>fmap</code> any function over it.</p>
+
+    <!-- SVG: Yoneda bijection diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Left box: natural transformations -->
+        <rect x="20" y="30" width="160" height="60" rx="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="100" y="55" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">natural transformations</text>
+        <text x="100" y="75" text-anchor="middle" fill="currentColor" font-size="13">Nat(Hom(a,&#x2013;), F)</text>
+
+        <!-- Right box: elements of F(a) -->
+        <rect x="260" y="30" width="160" height="60" rx="8" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="340" y="55" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">elements</text>
+        <text x="340" y="75" text-anchor="middle" fill="currentColor" font-size="13">F(a)</text>
+
+        <!-- Top arrow: phi (apply alpha to id_a) going right -->
+        <line x1="180" y1="48" x2="260" y2="48" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="260,48 252,43 252,53" fill="currentColor"/>
+        <text x="220" y="40" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">&#x03B1; &#x21A6; &#x03B1;(id&#x2090;)</text>
+
+        <!-- Bottom arrow: psi (lambda f . F(f)(x)) going left -->
+        <line x1="260" y1="72" x2="180" y2="72" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="180,72 188,67 188,77" fill="currentColor"/>
+        <text x="220" y="86" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">x &#x21A6; (f &#x21A6; F(f)(x))</text>
+
+        <!-- Isomorphism symbol -->
+        <text x="220" y="115" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">&#x2245;</text>
+
+        <!-- Bottom label -->
+        <text x="220" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">one seed at id&#x2090; determines the whole flower</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Yoneda probe — morphisms out of a determine F -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Object a (blue circle) -->
+        <circle cx="60" cy="95" r="22" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="60" y="100" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="600">a</text>
+        <!-- Morphism arrows fanning out -->
+        <!-- f1 to b1 -->
+        <line x1="82" y1="82" x2="168" y2="40" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <polygon points="168,40 159,39 162,48" fill="currentColor" fill-opacity="0.4"/>
+        <text x="118" y="52" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">f&#x2081;</text>
+        <!-- f2 to b2 -->
+        <line x1="82" y1="95" x2="168" y2="95" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <polygon points="168,95 160,90 160,100" fill="currentColor" fill-opacity="0.4"/>
+        <text x="125" y="88" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">f&#x2082;</text>
+        <!-- f3 to b3 -->
+        <line x1="82" y1="108" x2="168" y2="150" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <polygon points="168,150 159,151 162,142" fill="currentColor" fill-opacity="0.4"/>
+        <text x="118" y="140" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">f&#x2083;</text>
+        <!-- Target objects b1, b2, b3 -->
+        <circle cx="185" cy="38" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="185" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">b&#x2081;</text>
+        <circle cx="185" cy="95" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="185" y="99" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">b&#x2082;</text>
+        <circle cx="185" cy="152" r="14" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="185" y="156" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">b&#x2083;</text>
+        <!-- Functor F arrow -->
+        <text x="250" y="95" text-anchor="middle" fill="#a78bfa" font-size="16" font-weight="600">F</text>
+        <path d="M230,60 Q250,95 230,130" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="230,130 234,121 225,124" fill="#a78bfa"/>
+        <!-- F-mapped arrows -->
+        <line x1="270" y1="42" x2="350" y2="42" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+        <polygon points="350,42 342,37 342,47" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="310" y="35" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">F(f&#x2081;)</text>
+        <line x1="270" y1="95" x2="350" y2="95" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+        <polygon points="350,95 342,90 342,100" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="310" y="88" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">F(f&#x2082;)</text>
+        <line x1="270" y1="148" x2="350" y2="148" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.6"/>
+        <polygon points="350,148 342,143 342,153" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="310" y="141" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">F(f&#x2083;)</text>
+        <!-- F(a) seed -->
+        <rect x="260" y="60" width="40" height="22" rx="4" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="280" y="75" text-anchor="middle" fill="#60a5fa" font-size="9">F(a)</text>
+        <!-- Caption -->
+        <text x="210" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">knowing F(a) determines F on every morphism out of a</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; The Yoneda bijection:
+;   phi : (forall x . (a -> x) -> F x) -> F a
+;   phi alpha = alpha id
+;
+;   psi : F a -> (forall x . (a -> x) -> F x)
+;   psi fa h = fmap h fa
+
+; -- Direction 1: phi extracts the element at id --
+(define (phi alpha)
+  (alpha (lambda (x) x)))   ; apply alpha to id_a
+
+; -- Direction 2: psi rebuilds alpha from a single element --
+; For lists: fmap = map
+(define (psi-list fa h)
+  (map h fa))
+
+; Start with a list fa = (1 2 3) in F(Int) where F = List
+(define fa '(1 2 3))
+
+; Build a natural transformation from this single element
+(define (alpha-from-fa h) (psi-list fa h))
+
+; Apply it to various functions (a -> x):
+(display "alpha id:     ") (display (alpha-from-fa (lambda (x) x))) (newline)
+(display "alpha square: ") (display (alpha-from-fa (lambda (x) (* x x)))) (newline)
+(display "alpha show:   ") (display (alpha-from-fa number->string)) (newline)
+
+; Round-trip: phi(alpha-from-fa) should give back fa
+(display "phi recovers: ") (display (phi alpha-from-fa))
+; (1 2 3) — the original element
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Yoneda bijection for lists
+def phi(alpha):
+    return alpha(lambda x: x)  # apply to identity
+
+def psi_list(fa, h):
+    return [h(x) for x in fa]  # fmap h over fa
+
+fa = [1, 2, 3]
+alpha = lambda h: psi_list(fa, h)
+
+print(f"alpha(id):     {alpha(lambda x: x)}")
+print(f"alpha(square): {alpha(lambda x: x*x)}")
+print(f"alpha(str):    {alpha(str)}")
+print(f"phi recovers:  {phi(alpha)}")  # [1, 2, 3]
+`} />
+    </div>
+
+
+    <!-- 3. Why it works: the id trick -->
+    <h3>Why it works: naturality forces your hand</h3>
+    <p>The naturality condition for <code>&alpha;</code> says: <code>&alpha;_y &circ; Hom(a, f) = F(f) &circ; &alpha;_x</code>. Apply this at <code>x = a</code> with the identity morphism <code>id_a</code>. The left side gives <code>&alpha;_y(f)</code>. The right side gives <code>F(f)(&alpha;_a(id_a))</code>. So once you choose <code>&alpha;_a(id_a)</code>, the value at every other component is forced: <code>&alpha;_y(f) = fmap f (&alpha;_a(id_a))</code>. One seed, the whole flower.</p>
+
+    <SchemeRepl client:load initialCode={`; The proof: naturality pins down every component from id_a.
+;
+; Naturality square at f : a -> y :
+;   alpha_y (f . id_a) = (fmap f) (alpha_a id_a)
+;   alpha_y f           = fmap f seed
+;
+; where seed = alpha_a(id_a)
+
+; For Maybe: fmap f Nothing = Nothing, fmap f (Just x) = Just (f x)
+(define nothing (cons 'nothing '()))
+(define (just x) (cons 'just x))
+(define (nothing? m) (eq? (car m) 'nothing))
+
+(define (fmap-maybe f m)
+  (if (nothing? m) nothing (just (f (cdr m)))))
+
+; Seed = Just(7). This single value determines the entire nat. trans.
+(define seed (just 7))
+
+; alpha_x(h) = fmap h seed, for any h : Int -> x
+(define (alpha-maybe h)
+  (fmap-maybe h seed))
+
+(display "alpha id:     ") (display (alpha-maybe (lambda (x) x))) (newline)
+(display "alpha (*2):   ") (display (alpha-maybe (lambda (x) (* x 2)))) (newline)
+(display "alpha show:   ") (display (alpha-maybe number->string)) (newline)
+
+; Seed = Nothing. A different element of F(a) = Maybe(Int).
+(define seed2 nothing)
+(define (alpha2 h) (fmap-maybe h seed2))
+
+(display "alpha2 id:    ") (display (alpha2 (lambda (x) x))) (newline)
+(display "alpha2 (*2):  ") (display (alpha2 (lambda (x) (* x 2))))
+; Nothing everywhere — naturality propagates the Nothing.
+`} />
+
+
+    <!-- 4. Length as a natural transformation -->
+    <h3>Length: a natural transformation in the wild</h3>
+    <p><code>length</code> is a natural transformation from <code>List</code> to <code>Const Int</code>. It turns a <code>[a]</code> into an <code>Int</code> regardless of the element type. Yoneda says this nat. trans. corresponds to a single element of <code>Const Int (a)</code> when the domain is a hom-functor, but here we see the pattern: <code>length</code> is natural because it doesn't inspect the elements. It commutes with <code>fmap</code>: <code>length (map f xs) = length xs</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; length : List a -> Int is a natural transformation.
+; Naturality: length (map f xs) = length xs
+; It never inspects the elements, only the structure.
+
+(define (my-length lst)
+  (if (null? lst) 0 (+ 1 (my-length (cdr lst)))))
+
+; Check naturality: length . fmap f = length
+(define xs '(10 20 30 40))
+
+(display "length xs:             ")
+(display (my-length xs)) (newline)
+
+(display "length (map square xs): ")
+(display (my-length (map (lambda (x) (* x x)) xs))) (newline)
+
+(display "length (map show xs):   ")
+(display (my-length (map number->string xs))) (newline)
+
+; All 4. The natural transformation doesn't care what f does.
+; This is the naturality condition in action:
+; Const(length) . fmap f = id . Const(length)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# length is natural: len(map(f, xs)) == len(xs)
+xs = [10, 20, 30, 40]
+print(f"len(xs):               {len(xs)}")
+print(f"len(map(square, xs)):  {len(list(map(lambda x: x*x, xs)))}")
+print(f"len(map(str, xs)):     {len(list(map(str, xs)))}")
+# All 4 — length doesn't inspect elements.
+`} />
+    </div>
+
+    <!-- 5. Yoneda embedding -->
+    <h3>Yoneda embedding: objects as their morphisms</h3>
+    <p>Set <code>F = Hom(b, &ndash;)</code> in the Yoneda lemma. Then <code>Nat(Hom(a, &ndash;), Hom(b, &ndash;)) &cong; Hom(b, a)</code>. Every natural transformation between hom-functors comes from a morphism. This means the mapping <code>a &mapsto; Hom(a, &ndash;)</code> is a <strong>full and faithful</strong> embedding: it preserves all morphisms, losing nothing. An object is completely characterized by its web of relationships.</p>
+
+    <SchemeRepl client:load initialCode={`; Yoneda embedding: a |-> Hom(a, -)
+; Nat(Hom(a, -), Hom(b, -)) = Hom(b, a)
+;
+; Every nat trans between hom-functors is pre-composition
+; with a morphism g : b -> a.
+
+; In types: (forall x . (a -> x) -> (b -> x)) ≅ (b -> a)
+; alpha h = h . g   (pre-compose with g)
+
+; g : String -> Int (the morphism b -> a)
+(define (g s) (string-length s))
+
+; The nat trans: for any h : Int -> x, produce String -> x
+(define (alpha h)
+  (lambda (s) (h (g s))))
+
+; Test at different h:
+(define (double x) (* x 2))
+(define (is-big x) (> x 5))
+
+(display "alpha(double)(\"hello\"): ")
+(display ((alpha double) "hello")) (newline)
+; string-length "hello" = 5, double 5 = 10
+
+(display "alpha(is-big)(\"hi\"):    ")
+(display ((alpha is-big) "hi")) (newline)
+; string-length "hi" = 2, is-big 2 = #f
+
+; Recover g from alpha: apply to id
+(display "phi(alpha)(\"hello\"):    ")
+(display ((alpha (lambda (x) x)) "hello"))
+; 5 — that's g("hello") = string-length "hello"
+`} />
+
+
+    <!-- 6. Co-Yoneda -->
+    <h3>Co-Yoneda: the contravariant dual</h3>
+    <p>The co-Yoneda lemma applies the same trick to the contravariant hom-functor <code>Hom(&ndash;, a)</code>. Now: <code>Nat(Hom(&ndash;, a), F) &cong; F(a)</code> for contravariant functors F. In Haskell: <code>(forall x . (x &rarr; a) &rarr; F x) &cong; F a</code>. The identity trick works the same way, but the arrows point backwards.</p>
+
+    <SchemeRepl client:load initialCode={`; Co-Yoneda: the contravariant version.
+; Nat(Hom(-, a), F) ≅ F(a)  for contravariant F
+;
+; In programming terms:
+;   (forall x . (x -> a) -> F x) ≅ F a
+;
+; phi alpha = alpha id
+; psi fa h  = contramap h fa
+
+; Predicate as a contravariant functor:
+; contramap : (x -> a) -> Pred(a) -> Pred(x)
+(define (contramap-pred f pred)
+  (lambda (x) (pred (f x))))
+
+; A predicate on Int: is it positive?
+(define (positive? n) (> n 0))
+
+; Co-Yoneda: psi turns a predicate into a nat trans
+(define (psi-pred pred h)
+  (contramap-pred h pred))
+
+; This nat trans works for any h : x -> Int
+(define (str-len s) (string-length s))
+
+(define positive-length? (psi-pred positive? str-len))
+
+(display "positive-length?(\"hello\"): ")
+(display (positive-length? "hello")) (newline)
+; string-length "hello" = 5, positive? 5 = #t
+
+(display "positive-length?(\"\"): ")
+(display (positive-length? "")) (newline)
+; string-length "" = 0, positive? 0 = #f
+
+; Round-trip: phi recovers the original predicate
+(define recovered (psi-pred positive? (lambda (x) x)))
+(display "recovered(3):  ") (display (recovered 3)) (newline)
+(display "recovered(-1): ") (display (recovered -1))
+`} />
+
+
+    <!-- 7. CPS as Yoneda -->
+    <h3>Continuation-passing style: Yoneda with F = Identity</h3>
+    <p>Set <code>F = Identity</code> in the Yoneda lemma. Then <code>(forall x . (a &rarr; x) &rarr; x) &cong; a</code>. A value of type <code>a</code> is the same thing as a function that takes any continuation <code>a &rarr; x</code> and produces an <code>x</code>. This is <strong>continuation-passing style</strong>. The Yoneda lemma is the theoretical justification for CPS transforms.</p>
+
+    <SchemeRepl client:load initialCode={`; CPS is Yoneda with F = Identity.
+; (forall x . (a -> x) -> x) ≅ a
+;
+; "Having a value" = "being able to hand it to any continuation"
+
+; Wrap a value in CPS: a -> (forall x . (a -> x) -> x)
+(define (to-cps val)
+  (lambda (k) (k val)))
+
+; Unwrap: apply to id
+(define (from-cps cps-val)
+  (cps-val (lambda (x) x)))
+
+; Round-trip
+(define cps-42 (to-cps 42))
+
+(display "from-cps: ") (display (from-cps cps-42)) (newline)
+; 42
+
+; The CPS value responds to any continuation:
+(display "double:   ") (display (cps-42 (lambda (x) (* x 2)))) (newline)
+(display "show:     ") (display (cps-42 number->string)) (newline)
+(display "is-big:   ") (display (cps-42 (lambda (x) (> x 10))))
+; The value 42 is "inside" — you access it only through continuations.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CPS is Yoneda with F = Identity
+def to_cps(val):
+    return lambda k: k(val)
+
+def from_cps(cps_val):
+    return cps_val(lambda x: x)
+
+cps_42 = to_cps(42)
+print(f"from_cps: {from_cps(cps_42)}")
+print(f"double:   {cps_42(lambda x: x*2)}")
+print(f"show:     {cps_42(str)}")
+print(f"is_big:   {cps_42(lambda x: x > 10)}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(a, x) / Reader a x</td><td class="pr-4 text-green-300">(lambda (x) ...)</td><td class="font-sans">Hom-set / hom-functor</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Nat(C(a,-), F) &cong; F a</td><td class="pr-4 text-green-300">(phi alpha) = (alpha id)</td><td class="font-sans">Yoneda lemma</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">phi alpha = alpha id</td><td class="pr-4 text-green-300">(alpha (lambda (x) x))</td><td class="font-sans">Extract element at identity</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">psi x h = fmap h x</td><td class="pr-4 text-green-300">(map h fa)</td><td class="font-sans">Rebuild nat. trans. from element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">forall x . (a -&gt; x) -&gt; x</td><td class="pr-4 text-green-300">(to-cps val)</td><td class="font-sans">CPS / Yoneda at Identity</td></tr>
+          <tr><td class="py-2 pr-4">a &mapsto; C(a, -)</td><td class="pr-4 text-green-300">(alpha h) = (h . g)</td><td class="font-sans">Yoneda embedding</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-10/">🍞 Chapter 10</a> — Natural Transformations: the morphisms between functors</li>
+      <li><a href="/reading/category-theory/milewski-13/">🍞 Chapter 13</a> — Representable Functors: functors isomorphic to hom-sets</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/capucci-2021/">🍞 Capucci 2021</a> — optics use the Yoneda lemma to show profunctor and concrete representations coincide</li>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> — entropy as a functor, representability connects to Yoneda</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Yoneda_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda lemma</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Representable_functor"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Representable functor</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Continuation-passing_style"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Continuation-passing style</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post proves Yoneda for locally small categories with Set-valued functors. This page stays in the programming world: functors are type constructors with <code>fmap</code>, natural transformations are polymorphic functions, and the bijection is demonstrated by round-tripping through <code>phi</code> and <code>psi</code>. The key subtlety the blog post emphasizes: in Haskell, polymorphic functions are automatically natural (parametric polymorphism guarantees naturality via the "theorem for free"). In category theory, naturality is an additional condition that must be checked. The co-Yoneda section on this page uses predicates for concreteness. Milewski states it more generally for presheaves (contravariant functors to Set). The Yoneda embedding (full and faithful) is the deeper payoff: it means every category embeds into a functor category, so abstract morphisms can always be studied as concrete functions between sets.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/09/01/the-yoneda-lemma/">Read the blog post</a>. Start with the naturality condition, then trace how alpha at id_a determines everything.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-13/", label: "Representable Functors" }} next={{ href: "/reading/category-theory/milewski-15/", label: "Yoneda Embedding" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,227 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="The Open Problems — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>The Open Problems</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 4 ·
+      <a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. 2008</a> ·
+      <a href="https://arxiv.org/abs/2511.11092">Seely 2025</a>
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        R-D bounds for journey observables. Checkpoint spacing via sheaf cohomology.
+      </p>
+    </div>
+
+    <h3>Problem 1: Rate-distortion bounds for journey observables</h3>
+
+    <p>
+      <strong>The question:</strong> Given a bit budget R, what is the minimum distortion
+      in journey metrics (reachability, duration, hop count) for a temporal graph?
+    </p>
+
+    <p>
+      <strong>What exists:</strong>
+      <a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. (2008)</a>
+      proposed MDL-based graph summarization with bounded per-node reconstruction error
+      for <em>static</em> graphs. This is MDL, not Shannon rate-distortion theory — no
+      R-D tradeoff curve, no converse bounds.
+      <a href="https://homepage.divms.uiowa.edu/~badhikari/assets/doc/papers/CondensingSDM2017.pdf">Adhikari et al. (2017)</a>
+      and <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11223189/">Allen et al. (2024)</a>
+      compress temporal networks preserving dynamics heuristically. None provides
+      information-theoretic bounds where distortion is measured on temporal journeys.
+    </p>
+
+    <p>
+      <strong>What it requires:</strong>
+    </p>
+
+    <ul>
+      <li>A concrete <strong>encoding family</strong> — how temporal graphs are represented in bits</li>
+      <li>A concrete <strong>distortion functional</strong> D(G, Ĝ) on journey observables</li>
+      <li>A concrete <strong>temporal-graph model</strong> (e.g., temporal Erdős–Rényi)</li>
+      <li>A definition of <strong>admissible decoders</strong></li>
+    </ul>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 400 250" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <line x1="60" y1="200" x2="360" y2="200" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <line x1="60" y1="200" x2="60" y2="30" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+
+        <text x="210" y="230" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12">R (bits)</text>
+        <text x="25" y="115" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="12" transform="rotate(-90, 25, 115)">D (journey distortion)</text>
+
+        <path d="M 80 60 Q 140 70 180 120 Q 220 160 340 185" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <text x="300" y="175" fill="currentColor" fill-opacity="0.3" font-size="9">static graphs</text>
+        <text x="300" y="186" fill="currentColor" fill-opacity="0.3" font-size="9">(Navlakha, MDL)</text>
+
+        <path d="M 80 80 Q 150 95 200 140 Q 250 170 340 190" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2"/>
+        <text x="160" y="100" fill="currentColor" fill-opacity="0.6" font-size="10">temporal journeys</text>
+
+        <circle cx="200" cy="140" r="16" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="200" y="145" text-anchor="middle" fill="currentColor" fill-opacity="0.7" font-size="16">?</text>
+        <text x="230" y="135" fill="currentColor" fill-opacity="0.4" font-size="9">unknown bound</text>
+
+        <text x="210" y="20" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">Rate-Distortion for Temporal Graphs</text>
+      </svg>
+    </div>
+
+    <h3>Problem 2: Checkpoint spacing via sheaf cohomology</h3>
+
+    <p>
+      <strong>The question:</strong> On a directed dependency graph with per-edge
+      prediction error, when are checkpoints necessary, and how should they be spaced?
+    </p>
+
+    <p>
+      <strong>The sheaf formulation:</strong>
+      <a href="https://arxiv.org/abs/2511.11092">Seely (2025)</a> shows that on a
+      cellular sheaf, the coboundary δ⁰ produces edgewise prediction errors and
+      the Hodge decomposition splits them into two components:
+    </p>
+
+    <ul>
+      <li><strong>Image part</strong> (in im D) — eliminable by better activations / encoder choices</li>
+      <li><strong>Harmonic part</strong> (in ker Dᵀ = H¹) — not eliminable by any activation assignment</li>
+    </ul>
+
+    <p>
+      The scalar additive error law ε(e₁) ⊕ ... ⊕ ε(eₖ) may be the wrong abstraction.
+      The right quantity could be the harmonic component of accumulated error — the
+      part that no encoder choice can remove. Checkpoints would then correspond to
+      clamped boundary conditions on a subgraph that suppress or localize the
+      harmonic component.
+    </p>
+
+    <p>
+      Seely's framework gives exact definitions for every term. The open question
+      is whether checkpoint placement can be formulated as a constraint on a
+      relative coboundary problem, and whether spacing bounds follow from the
+      cohomological structure.
+    </p>
+
+    <p>
+      The linear restriction aligns with codec prediction (motion-compensated
+      subtraction is linear). Nonlinear extension requires Jacobian linearization.
+    </p>
+
+    <h3>Toy model: empirical compression curve</h3>
+
+    <p>
+      Compress a temporal graph by dropping edges, measure journey distortion.
+      This is greedy edge-dropping, not a Shannon R-D bound — but the shape
+      of the curve is informative:
+    </p>
+
+    <Repl client:load initialCode={`import random
+
+class TemporalGraph:
+    def __init__(self):
+        self.edges = []
+
+    def add_edge(self, u, v, t):
+        self.edges.append((u, v, t))
+
+    def reachable_pairs(self):
+        nodes = set()
+        for u, v, t in self.edges:
+            nodes.add(u)
+            nodes.add(v)
+        count = 0
+        for s in nodes:
+            arrival = {s: -1}
+            for u, v, t in sorted(self.edges, key=lambda e: e[2]):
+                if u in arrival and t >= arrival[u]:
+                    if v not in arrival or t + 1 < arrival[v]:
+                        arrival[v] = t + 1
+            count += len(arrival) - 1
+        return count
+
+# 6 nodes, 15 edges across 5 timesteps
+random.seed(42)
+g = TemporalGraph()
+nodes = list("ABCDEF")
+for t in range(1, 6):
+    for _ in range(3):
+        u, v = random.sample(nodes, 2)
+        g.add_edge(u, v, t)
+
+total = len(g.edges)
+baseline = g.reachable_pairs()
+
+print(f"Full graph: {total} edges, {baseline} reachable pairs")
+print(f"\\n{'Kept':>6} {'Rate':>6} {'Reach':>6} {'%':>6}")
+print("-" * 28)
+
+for frac in [1.0, 0.87, 0.73, 0.60, 0.47, 0.33, 0.20]:
+    n = max(1, int(total * frac))
+    current = list(g.edges)
+    while len(current) > n:
+        best_i, best_r = 0, -1
+        for i, edge in enumerate(current):
+            trial = current[:i] + current[i+1:]
+            tg = TemporalGraph()
+            for e in trial:
+                tg.add_edge(*e)
+            r = tg.reachable_pairs()
+            if r > best_r:
+                best_r = r
+                best_i = i
+        current.pop(best_i)
+    cg = TemporalGraph()
+    for e in current:
+        cg.add_edge(*e)
+    r = cg.reachable_pairs()
+    print(f"{len(current):>6} {len(current)/total:>6.2f} {r:>6} {r/baseline*100:>5.1f}%")
+
+print("\\n→ As rate drops, reachability degrades — the R-D curve.")`} />
+
+    <h3>What the toy model shows</h3>
+
+    <p>
+      Diminishing returns as you add edges, and a critical threshold below which
+      reachability collapses. The open problem asks for the information-theoretic
+      minimum: for a <em>class</em> of temporal graphs, how close can <em>any</em>
+      compression get to the frontier?
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source material:
+      <a href="https://june.kim/temporal-compression">
+        <img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>
+        Temporal Compression
+      </a> (blog post)
+    </div>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Key references</p>
+      <ul class="neighbors">
+        <li><a href="https://arxiv.org/abs/2511.11092">Seely 2025</a> — sheaf cohomology of predictive coding</li>
+        <li><a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. 2008</a> — MDL graph compression</li>
+        <li><a href="https://arxiv.org/abs/1409.6712">Krishnan 2014</a> — sheaf-theoretic MFMC</li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792072/">Temporal state machines</a> — tropical invariance</li>
+      </ul>
+      <p class="text-sm text-gray-500 mb-2 mt-4">Related sections</p>
+      <ul class="neighbors">
+        <li><a href="/reading/information-theory/">📡 Information Theory</a> — rate-distortion foundations</li>
+        <li><a href="/reading/category-theory/">🐱 Category Theory</a> — composition, functors</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/temporal-compression/ch-03/", label: "What Each Field Has" }}
+      next={{ href: "/reading/temporal-compression/ch-05/", label: "The Assembly" }}
+    />
+  </main>
+</Layout>

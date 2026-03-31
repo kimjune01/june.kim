@@ -1,0 +1,270 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §2.2 — Dominated Strategies" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Dominated Strategies</h1>
+    <p class="text-gray-400 text-sm mb-6">Jennifer Nordstrom · CC BY-SA 4.0 · <a href="https://nordstrommath.com/IntroGameTheory/S_DominatedStrategies.html">§2.2 Dominated Strategies</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A strategy is <strong>dominated</strong> if another strategy is always at least as good, no matter what the opponent does. A rational player never plays a dominated strategy. Delete it. Then check again. Repeat until nothing is dominated.</p>
+    </div>
+
+    <!-- 1. What is a dominated strategy -->
+    <h3>What is a dominated strategy?</h3>
+    <p>Strategy X is <strong>dominated by</strong> strategy Y if, for every possible opponent action, Y gives a payoff greater than or equal to X. If Y is strictly better in every case, X is <strong>strictly dominated</strong>. A rational player will never choose a dominated strategy, so we can remove it from the matrix.</p>
+
+    <!-- SVG: A payoff matrix with one row crossed out (dominated) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Column headers -->
+        <text x="220" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Player 2</text>
+        <text x="180" y="42" text-anchor="middle" fill="currentColor" font-size="11">X</text>
+        <text x="270" y="42" text-anchor="middle" fill="currentColor" font-size="11">Y</text>
+        <!-- Row headers -->
+        <text x="80" y="82" text-anchor="middle" fill="currentColor" font-size="11">A</text>
+        <text x="80" y="132" text-anchor="middle" fill="currentColor" font-size="11">B</text>
+        <text x="80" y="182" text-anchor="middle" fill="currentColor" font-size="11">C</text>
+        <!-- Grid rows -->
+        <!-- Row A -->
+        <rect x="130" y="55" width="90" height="40" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="220" y="55" width="90" height="40" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="175" y="80" text-anchor="middle" fill="currentColor" font-size="13">4</text>
+        <text x="265" y="80" text-anchor="middle" fill="currentColor" font-size="13">3</text>
+        <!-- Row B (will be crossed out) -->
+        <rect x="130" y="95" width="90" height="40" fill="#ef4444" fill-opacity="0.06" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="220" y="95" width="90" height="40" fill="#ef4444" fill-opacity="0.06" stroke="currentColor" stroke-width="1.2"/>
+        <text x="175" y="120" text-anchor="middle" fill="#ef4444" fill-opacity="0.5" font-size="13">1</text>
+        <text x="265" y="120" text-anchor="middle" fill="#ef4444" fill-opacity="0.5" font-size="13">0</text>
+        <!-- Strikethrough on row B -->
+        <line x1="130" y1="115" x2="310" y2="115" stroke="#ef4444" stroke-width="2"/>
+        <!-- Row C -->
+        <rect x="130" y="135" width="90" height="40" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="220" y="135" width="90" height="40" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="175" y="160" text-anchor="middle" fill="currentColor" font-size="13">2</text>
+        <text x="265" y="160" text-anchor="middle" fill="currentColor" font-size="13">5</text>
+        <!-- Annotation -->
+        <text x="30" y="120" fill="#ef4444" font-size="9" text-anchor="middle">dominated</text>
+        <text x="30" y="132" fill="#ef4444" font-size="9" text-anchor="middle">by A</text>
+        <!-- Comparison arrows -->
+        <line x1="158" y1="90" x2="158" y2="100" stroke="#ef4444" stroke-width="1.2" marker-end="none"/>
+        <text x="152" y="97" fill="#ef4444" font-size="8">4>1</text>
+        <line x1="248" y1="90" x2="248" y2="100" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="242" y="97" fill="#ef4444" font-size="8">3>0</text>
+        <!-- Caption -->
+        <text x="210" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">B is dominated by A: A beats B in every column</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Check if strategy X is dominated by strategy Y
+; (P1 perspective: compare row payoffs across all columns)
+
+(define (dominates? row-y row-x)
+  ; Y dominates X if every entry in Y >= corresponding entry in X
+  (every (lambda (pair)
+    (>= (car pair) (cdr pair)))
+    (map cons row-y row-x)))
+
+; Zero-sum matrix (P1 payoffs only)
+(define matrix '((4 3)    ; Row A
+                 (1 0)    ; Row B
+                 (2 5)))  ; Row C
+
+(display "A dominates B? ")
+(display (dominates? (list-ref matrix 0) (list-ref matrix 1)))
+(newline)
+(display "A dominates C? ")
+(display (dominates? (list-ref matrix 0) (list-ref matrix 2)))
+(newline)
+(display "C dominates B? ")
+(display (dominates? (list-ref matrix 2) (list-ref matrix 1)))
+; A dominates B (4>=1, 3>=0). A does not dominate C (3 < 5).
+; C dominates B (2>=1, 5>=0). So B is dominated. Delete it.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Check if row Y dominates row X
+def dominates(row_y, row_x):
+    return all(y >= x for y, x in zip(row_y, row_x))
+
+matrix = {"A": [4, 3], "B": [1, 0], "C": [2, 5]}
+
+for name_y, row_y in matrix.items():
+    for name_x, row_x in matrix.items():
+        if name_y != name_x and dominates(row_y, row_x):
+            print(f"{name_y} dominates {name_x}")
+`} />
+    </div>
+
+    <!-- 2. Iterated elimination -->
+    <h3>Iterated elimination of dominated strategies</h3>
+    <p>Sometimes no strategy is obviously dominated. But after you delete one dominated strategy, a previously safe strategy becomes dominated in the smaller matrix. Repeat: delete, recheck, delete, recheck. This is <strong>iterated elimination</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Iterated elimination of dominated strategies (rows only, for zero-sum)
+; Remove dominated rows, then check again.
+
+(define (remove-dominated rows labels)
+  (let loop ((remaining rows) (names labels)
+             (kept-rows '()) (kept-names '()))
+    (if (null? remaining)
+        (list (reverse kept-rows) (reverse kept-names))
+        (let* ((candidate (car remaining))
+               (others (append kept-rows (cdr remaining)))
+               (is-dominated (any (lambda (other) (dominates? other candidate)) others)))
+          (if is-dominated
+              (begin
+                (display "  Eliminating ") (display (car names))
+                (display " (dominated)") (newline)
+                (loop (cdr remaining) (cdr names) kept-rows kept-names))
+              (loop (cdr remaining) (cdr names)
+                    (cons candidate kept-rows)
+                    (cons (car names) kept-names)))))))
+
+(define (iterated-elimination matrix labels)
+  (display "Starting matrix: ") (display labels) (newline)
+  (let loop ((m matrix) (l labels) (round 1))
+    (display "Round ") (display round) (display ":") (newline)
+    (let* ((result (remove-dominated m l))
+           (new-m (car result))
+           (new-l (cadr result)))
+      (if (= (length new-m) (length m))
+          (begin (display "  No more eliminations.") (newline) (list new-m new-l))
+          (loop new-m new-l (+ round 1))))))
+
+; Example: three rows, iterated elimination needed
+(define game '((4 3 2)
+               (1 0 1)
+               (3 4 0)))
+(iterated-elimination game '(A B C))
+`} />
+
+    <!-- 3. Maximin and minimax -->
+    <h3>Maximin and minimax</h3>
+    <p>When elimination does not reduce the matrix to a single cell, use <strong>maximin</strong> (Player 1) and <strong>minimax</strong> (Player 2). Player 1 assumes the worst case for each row and picks the row where the worst case is best. Player 2 assumes the worst case for each column and picks the column where the worst case is least bad.</p>
+
+    <SchemeRepl client:load initialCode={`; Maximin (P1): maximize the minimum payoff across columns
+; Minimax (P2): minimize the maximum payoff across columns
+
+(define (maximin matrix row-labels)
+  (let loop ((rows matrix) (names row-labels)
+             (best-name #f) (best-min -999))
+    (if (null? rows)
+        (list best-name best-min)
+        (let ((row-min (apply min (car rows))))
+          (if (> row-min best-min)
+              (loop (cdr rows) (cdr names) (car names) row-min)
+              (loop (cdr rows) (cdr names) best-name best-min))))))
+
+(define (minimax matrix col-labels)
+  (let* ((n-cols (length (car matrix)))
+         (col-maxes
+          (let col-loop ((j 0) (result '()))
+            (if (>= j n-cols) (reverse result)
+                (col-loop (+ j 1)
+                  (cons (apply max (map (lambda (row) (list-ref row j)) matrix))
+                        result))))))
+    (let loop ((maxes col-maxes) (names col-labels)
+               (best-name #f) (best-max 999))
+      (if (null? maxes)
+          (list best-name best-max)
+          (if (< (car maxes) best-max)
+              (loop (cdr maxes) (cdr names) (car names) (car maxes))
+              (loop (cdr maxes) (cdr names) best-name best-max))))))
+
+(define game '((3 -2 1)
+               (0  4 -1)
+               (2  1  0)))
+
+(display "Maximin (P1): ") (display (maximin game '(A B C))) (newline)
+(display "Minimax (P2): ") (display (minimax game '(X Y Z))) (newline)
+; If maximin value = minimax value, that is the equilibrium value.
+(let ((mm (cadr (maximin game '(A B C))))
+      (mn (cadr (minimax game '(X Y Z)))))
+  (display "Equilibrium? ")
+  (display (if (= mm mn) "yes, saddle point" "no, need mixed strategies")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maximin and minimax
+matrix = [[3, -2, 1], [0, 4, -1], [2, 1, 0]]
+rows = ["A", "B", "C"]
+cols = ["X", "Y", "Z"]
+
+# Maximin: P1 maximizes worst-case
+row_mins = [(r, min(row)) for r, row in zip(rows, matrix)]
+maximin = max(row_mins, key=lambda x: x[1])
+print(f"Maximin (P1): {maximin}")
+
+# Minimax: P2 minimizes worst-case
+col_maxes = [(c, max(matrix[i][j] for i in range(3)))
+             for j, c in enumerate(cols)]
+minimax = min(col_maxes, key=lambda x: x[1])
+print(f"Minimax (P2): {minimax}")
+
+if maximin[1] == minimax[1]:
+    print("Equilibrium exists (saddle point)")
+else:
+    print("No saddle point, need mixed strategies")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Term</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Dominates</td><td class="pr-4 text-green-300">(dominates? row-y row-x)</td><td class="font-sans">Y >= X in every column</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Iterated elimination</td><td class="pr-4 text-green-300">(iterated-elimination m labels)</td><td class="font-sans">Delete dominated, recheck, repeat</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Maximin</td><td class="pr-4 text-green-300">(maximin matrix labels)</td><td class="font-sans">P1: maximize worst-case payoff</td></tr>
+          <tr><td class="py-2 pr-4">Minimax</td><td class="pr-4 text-green-300">(minimax matrix labels)</td><td class="font-sans">P2: minimize worst-case loss</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Prev</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-01/">🎲 Nordstrom §1.1</a> — players and strategies: the ingredients of a game</li>
+      <li><a href="/reading/game-theory/nordstrom-02/">🎲 Nordstrom §1.2</a> — game matrices: payoffs in a table</li>
+      <li><a href="/reading/game-theory/nordstrom-03/">🎲 Nordstrom §1.3</a> — zero-sum games: your gain is my loss</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related paper pages</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory: Nash equilibrium as a compositional predicate</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Strategic_dominance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Strategic dominance</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Minimax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Minimax</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Iterated_elimination_of_dominated_strategies"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Iterated elimination</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://nordstrommath.com/IntroGameTheory/S_DominatedStrategies.html">Read Nordstrom §2.2</a>. Work through the examples by hand before using the REPL.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-03/", label: "Zero-Sum Games" }} next={{ href: "/reading/game-theory/nordstrom-05/", label: "Probability and EV" }} />
+
+  </main>
+</Layout>

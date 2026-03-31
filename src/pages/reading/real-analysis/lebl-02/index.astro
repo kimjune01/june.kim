@@ -1,0 +1,316 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.2 — Sequences and Limits" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>Sequences and Limits</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 2</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A sequence converges to L if, for every &epsilon; &gt; 0, all but finitely many terms lie within &epsilon; of L. Completeness guarantees that every bounded monotone sequence converges and every Cauchy sequence converges.</p>
+    </div>
+
+    <!-- SVG: Sequence converging to a limit -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="160" x2="380" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="160" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="380" y="175" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.4">n</text>
+        <!-- Limit line L -->
+        <line x1="40" y1="70" x2="380" y2="70" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <text x="35" y="74" text-anchor="end" fill="#f59e0b" font-size="11" fill-opacity="0.6">L</text>
+        <!-- Epsilon band -->
+        <rect x="40" y="55" width="340" height="30" fill="#f59e0b" fill-opacity="0.06"/>
+        <text x="35" y="58" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.4">L+ε</text>
+        <text x="35" y="90" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.4">L-ε</text>
+        <!-- Sequence points: a_n = L + (-1)^n / n -->
+        <circle cx="70" cy="30" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="100" cy="105" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="130" cy="47" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="160" cy="93" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="190" cy="55" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="220" cy="85" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="250" cy="62" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="280" cy="78" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="310" cy="66" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="340" cy="74" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="370" cy="68" r="3" fill="#60a5fa" fill-opacity="0.7"/>
+        <!-- Caption -->
+        <text x="200" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Eventually, all terms stay inside the ε-band.</text>
+      </svg>
+    </div>
+
+    <h3>Convergence: the epsilon-N definition</h3>
+    <p>A sequence (a_n) <strong>converges</strong> to L if for every &epsilon; &gt; 0, there exists N such that for all n &ge; N, |a_n - L| &lt; &epsilon;. The key: you pick any &epsilon;, no matter how small, and I produce an N that works.</p>
+
+    <SchemeRepl client:load initialCode={`; Sequence a_n = 1/n converges to 0
+; For any epsilon, find N such that 1/n < epsilon for all n >= N
+
+(define (find-N epsilon)
+  (let loop ((n 1))
+    (if (< (/ 1.0 n) epsilon) n (loop (+ n 1)))))
+
+(display "epsilon = 0.1, N = ")
+(display (find-N 0.1)) (newline)
+(display "epsilon = 0.01, N = ")
+(display (find-N 0.01)) (newline)
+(display "epsilon = 0.001, N = ")
+(display (find-N 0.001)) (newline)
+
+; Verify: all terms past N are within epsilon
+(define (verify-convergence epsilon)
+  (let* ((N (find-N epsilon))
+         (checks (list N (+ N 1) (+ N 5) (+ N 50))))
+    (for-each (lambda (n)
+      (display "  a_")
+      (display n)
+      (display " = ")
+      (display (/ 1.0 n))
+      (display (if (< (/ 1.0 n) epsilon) " < epsilon" " >= epsilon"))
+      (newline))
+    checks)))
+
+(display "Checking epsilon = 0.05:") (newline)
+(verify-convergence 0.05)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Convergence of 1/n to 0
+import math
+
+def find_N(epsilon):
+    return math.ceil(1 / epsilon)
+
+for eps in [0.1, 0.01, 0.001]:
+    N = find_N(eps)
+    print(f"eps={eps}, N={N}, a_N={1/N:.6f} < {eps}: {1/N < eps}")
+`} />
+    </div>
+
+    <h3>Limit theorems</h3>
+    <p>Limits respect arithmetic: if a_n &rarr; a and b_n &rarr; b, then a_n + b_n &rarr; a + b, a_n * b_n &rarr; a * b, and (if b &ne; 0) a_n / b_n &rarr; a / b. The squeeze theorem: if a_n &le; c_n &le; b_n and both a_n and b_n converge to L, then c_n &rarr; L.</p>
+
+    <SchemeRepl client:load initialCode={`; Limit theorems: sum, product, squeeze
+; a_n = 1 + 1/n -> 1
+; b_n = 2 - 1/n -> 2
+
+(define (a n) (+ 1 (/ 1.0 n)))
+(define (b n) (- 2 (/ 1.0 n)))
+
+(display "Sum: a_n + b_n -> 1 + 2 = 3") (newline)
+(display "  n=100: ")
+(display (+ (a 100) (b 100))) (newline)
+
+(display "Product: a_n * b_n -> 1 * 2 = 2") (newline)
+(display "  n=100: ")
+(display (* (a 100) (b 100))) (newline)
+
+; Squeeze: -1/n <= sin(n)/n <= 1/n, both bounds -> 0
+(display "Squeeze: |sin(n)/n| <= 1/n -> 0") (newline)
+(display "  sin(100)/100 = ")
+(display (/ (sin 100) 100)) (newline)
+(display "  1/100         = ")
+(display (/ 1.0 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+a = lambda n: 1 + 1/n
+b = lambda n: 2 - 1/n
+
+print("Sum: a_n + b_n -> 3")
+print("  n=100:", a(100) + b(100))
+print("Product: a_n * b_n -> 2")
+print("  n=100:", a(100) * b(100))
+print("Squeeze: |sin(n)/n| <= 1/n -> 0")
+print("  sin(100)/100 =", math.sin(100)/100)
+print("  1/100         =", 1/100)
+`} />
+    </div>
+
+    <h3>Monotone convergence theorem</h3>
+    <p>Every bounded, monotone sequence converges. If a sequence is increasing and bounded above, it converges to its supremum. This is a direct consequence of the completeness axiom.</p>
+
+    <SchemeRepl client:load initialCode={`; Monotone convergence: a_n = sum_{k=1}^{n} 1/k!
+; Increasing and bounded above by 3, converges to e
+
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+(define (partial-e n)
+  (let loop ((k 0) (sum 0.0))
+    (if (> k n) sum
+      (loop (+ k 1) (+ sum (/ 1.0 (factorial k)))))))
+
+(display "Partial sums of 1/k! (converging to e):") (newline)
+(for-each (lambda (n)
+  (display "  n=")
+  (display n)
+  (display ": ")
+  (display (partial-e n))
+  (newline))
+  (list 1 2 5 10 15))
+
+(display "Bounded above by 3? ")
+(display (< (partial-e 15) 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def partial_e(n):
+    return sum(1/math.factorial(k) for k in range(n + 1))
+
+print("Partial sums of 1/k! (converging to e):")
+for n in [1, 2, 5, 10, 15]:
+    print("  n=" + str(n) + ":", partial_e(n))
+
+print("Bounded above by 3?", partial_e(15) < 3)
+`} />
+    </div>
+
+    <h3>Bolzano-Weierstrass theorem</h3>
+    <p>Every bounded sequence has a convergent subsequence. This is the <a href="https://en.wikipedia.org/wiki/Bolzano%E2%80%93Weierstrass_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bolzano-Weierstrass theorem</a>, the key compactness result for sequences. Even if a sequence doesn't converge (like (-1)^n), some subsequence does.</p>
+
+    <SchemeRepl client:load initialCode={`; Bolzano-Weierstrass: bounded sequence has convergent subsequence
+; a_n = (-1)^n * (1 + 1/n) does not converge
+; but the subsequence a_{2k} = 1 + 1/(2k) -> 1
+
+(define (a n)
+  (* (if (even? n) 1 -1)
+     (+ 1 (/ 1.0 n))))
+
+(display "Full sequence (diverges):") (newline)
+(for-each (lambda (n)
+  (display "  a_")
+  (display n)
+  (display " = ")
+  (display (a n))
+  (newline))
+  (list 1 2 3 4 5 6 7 8))
+
+(display "Even subsequence (converges to 1):") (newline)
+(for-each (lambda (k)
+  (let ((n (* 2 k)))
+    (display "  a_")
+    (display n)
+    (display " = ")
+    (display (a n))
+    (newline)))
+  (list 1 2 5 10 50 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+a = lambda n: (1 if n % 2 == 0 else -1) * (1 + 1/n)
+
+print("Full sequence (diverges):")
+for n in range(1, 9):
+    print("  a_" + str(n) + " =", a(n))
+
+print("Even subsequence (converges to 1):")
+for k in [1, 2, 5, 10, 50, 100]:
+    n = 2 * k
+    print("  a_" + str(n) + " =", a(n))
+`} />
+    </div>
+
+    <h3>Cauchy sequences</h3>
+    <p>A sequence is <strong>Cauchy</strong> if its terms get arbitrarily close to each other: for every &epsilon;, there exists N such that |a_m - a_n| &lt; &epsilon; for all m, n &ge; N. In the reals, a sequence converges if and only if it is Cauchy. This equivalence is another way to state completeness.</p>
+
+    <SchemeRepl client:load initialCode={`; Cauchy criterion: terms get close to each other
+; a_n = sum_{k=1}^{n} 1/k^2 is Cauchy (converges to pi^2/6)
+
+(define (partial-sum n)
+  (let loop ((k 1) (s 0.0))
+    (if (> k n) s
+      (loop (+ k 1) (+ s (/ 1.0 (* k k)))))))
+
+; Check Cauchy: |a_m - a_n| for large m, n
+(display "Cauchy check for sum 1/k^2:") (newline)
+(let* ((a100 (partial-sum 100))
+       (a200 (partial-sum 200))
+       (a500 (partial-sum 500))
+       (a1000 (partial-sum 1000)))
+  (display "  |a_200 - a_100| = ")
+  (display (abs (- a200 a100))) (newline)
+  (display "  |a_500 - a_200| = ")
+  (display (abs (- a500 a200))) (newline)
+  (display "  |a_1000 - a_500| = ")
+  (display (abs (- a1000 a500))) (newline)
+  (display "  a_1000 = ")
+  (display a1000) (newline)
+  (display "  pi^2/6 = ")
+  (display (/ (* 3.141592653589793 3.141592653589793) 6.0)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def partial_sum(n):
+    return sum(1/(k*k) for k in range(1, n + 1))
+
+a100 = partial_sum(100)
+a200 = partial_sum(200)
+a500 = partial_sum(500)
+a1000 = partial_sum(1000)
+
+print("Cauchy check for sum 1/k^2:")
+print("  |a_200 - a_100| =", abs(a200 - a100))
+print("  |a_500 - a_200| =", abs(a500 - a200))
+print("  |a_1000 - a_500| =", abs(a1000 - a500))
+print("  a_1000 =", a1000)
+print("  pi^2/6 =", math.pi**2 / 6)
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">lim a_n = L</td><td class="pr-4 text-green-300">(find-N epsilon)</td><td class="font-sans">Convergence: terms approach L</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">|a_n - L| &lt; &epsilon;</td><td class="pr-4 text-green-300">(< (abs (- an L)) eps)</td><td class="font-sans">Within epsilon of the limit</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Cauchy</td><td class="pr-4 text-green-300">|a_m - a_n| &lt; &epsilon;</td><td class="font-sans">Terms get close to each other</td></tr>
+          <tr><td class="py-2 pr-4">BW theorem</td><td class="pr-4 text-green-300">subsequence</td><td class="font-sans">Bounded seq has convergent subseq</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-01/">Ch. 1: Real Numbers</a> — completeness makes convergence work</li>
+      <li><a href="/reading/probability/grinstead-08/">Grinstead Ch. 8: Law of Large Numbers</a> — convergence of random variables uses these same definitions</li>
+      <li><a href="/reading/probability/grinstead-09/">🎰 Grinstead Ch.9 CLT</a> — the Central Limit Theorem as a convergence result</li>
+      <li><a href="/reading/discrete-math/levin-02/">🔢 Discrete Math Ch.2</a> — sequences and recurrences: the combinatorial counterpart to analytic limits</li>
+      <li><a href="/reading/calculus/calc-03/">📐 Calculus Ch.3</a> — informal limits in calculus made rigorous here</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>We compute convergence numerically but the real content is the proofs. The epsilon-N definition is an existence statement: "there exists N such that..." Our code finds a specific N, which is stronger than existence but weaker than a proof that it always works.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-01/", label: "Real Numbers" }} next={{ href: "/reading/real-analysis/lebl-03/", label: "Series" }} />
+
+  </main>
+</Layout>

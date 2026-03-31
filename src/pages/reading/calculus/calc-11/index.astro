@@ -1,0 +1,294 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.11 — Partial Derivatives" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Partial Derivatives</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus &middot; CC BY-SA &middot; <a href="https://activecalculus.org">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Functions of several variables have derivatives in each direction. A <strong>partial derivative</strong> holds all variables fixed except one. The <strong>gradient</strong> collects all partial derivatives into a vector that points uphill. <strong>Directional derivatives</strong> measure the rate of change in any direction.</p>
+    </div>
+
+    <!-- Functions of several variables -->
+    <h3>Functions of several variables</h3>
+    <p>A function f(x, y) maps R2 to R. Its graph is a surface in R3. Think of it as a terrain map: the input is position, the output is altitude.</p>
+
+    <SchemeRepl client:load initialCode={`; f(x, y) = x^2 + y^2 (paraboloid)
+(define (f x y) (+ (* x x) (* y y)))
+
+(display "f(1, 2) = ") (display (f 1 2)) (newline)  ; 5
+(display "f(3, 4) = ") (display (f 3 4)) (newline)  ; 25
+(display "f(0, 0) = ") (display (f 0 0))             ; 0 (minimum)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# f(x, y) = x^2 + y^2 (paraboloid)
+def f(x, y):
+    return x**2 + y**2
+
+print("f(1, 2) = " + str(f(1, 2)))
+print("f(3, 4) = " + str(f(3, 4)))
+print("f(0, 0) = " + str(f(0, 0)))
+`} />
+    </div>
+
+
+    <!-- Partial derivatives -->
+    <h3>Partial derivatives</h3>
+    <p>The partial derivative df/dx treats y as a constant and differentiates with respect to x. Numerically, it is the limit of [f(x+h, y) &minus; f(x, y)] / h as h goes to zero.</p>
+
+    <SchemeRepl client:load initialCode={`; Partial derivatives of f(x,y) = x^2*y + sin(x*y)
+(define (f x y) (+ (* x x y) (sin (* x y))))
+
+; Numerical partial derivatives
+(define h 0.0001)
+(define (df/dx f x y) (/ (- (f (+ x h) y) (f x y)) h))
+(define (df/dy f x y) (/ (- (f x (+ y h)) (f x y)) h))
+
+(define x0 1.0)
+(define y0 2.0)
+
+(display "f(1, 2) = ") (display (f x0 y0)) (newline)
+(display "df/dx at (1,2) = ") (display (df/dx f x0 y0)) (newline)
+; Exact: 2xy + y*cos(xy) = 4 + 2*cos(2)
+(display "df/dy at (1,2) = ") (display (df/dy f x0 y0)) (newline)
+; Exact: x^2 + x*cos(xy) = 1 + cos(2)
+(display "Exact df/dx = ") (display (+ 4 (* 2 (cos 2)))) (newline)
+(display "Exact df/dy = ") (display (+ 1 (cos 2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+def f(x, y): return x**2 * y + np.sin(x * y)
+
+h = 1e-7
+dfdx = lambda x, y: (f(x+h, y) - f(x, y)) / h
+dfdy = lambda x, y: (f(x, y+h) - f(x, y)) / h
+
+print(f"df/dx at (1,2) = {dfdx(1.0, 2.0):.6f}")
+print(f"df/dy at (1,2) = {dfdy(1.0, 2.0):.6f}")
+print(f"Exact df/dx = {4 + 2*np.cos(2):.6f}")
+print(f"Exact df/dy = {1 + np.cos(2):.6f}")
+`} />
+    </div>
+
+
+    <!-- Gradient -->
+    <h3>Gradient</h3>
+    <p>The gradient of f is the vector of all partial derivatives: grad(f) = (df/dx, df/dy). It points in the direction of steepest ascent. Its magnitude is the maximum rate of change.</p>
+
+    <SchemeRepl client:load initialCode={`; Gradient of f(x,y) = x^2 + y^2
+; grad(f) = (2x, 2y)
+
+(define (f x y) (+ (* x x) (* y y)))
+(define h 0.0001)
+
+(define (gradient f x y)
+  (list (/ (- (f (+ x h) y) (f x y)) h)
+        (/ (- (f x (+ y h)) (f x y)) h)))
+
+(define (vec-mag v) (sqrt (apply + (map (lambda (x) (* x x)) v))))
+
+(define g (gradient f 3.0 4.0))
+(display "grad(f) at (3,4) = ") (display g) (newline)
+; Exact: (6, 8)
+(display "|grad(f)| = ") (display (vec-mag g)) (newline)
+; Magnitude = 10, which is the steepest ascent rate
+
+; Gradient points away from the minimum at (0,0)
+(define g0 (gradient f 0.0 0.0))
+(display "grad(f) at (0,0) = ") (display g0)
+; (0, 0) -- zero gradient at the minimum
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gradient of f(x,y) = x^2 + y^2
+import math
+
+def f(x, y):
+    return x**2 + y**2
+
+h = 1e-7
+
+def gradient(f, x, y):
+    dfdx = (f(x + h, y) - f(x, y)) / h
+    dfdy = (f(x, y + h) - f(x, y)) / h
+    return [dfdx, dfdy]
+
+g = gradient(f, 3.0, 4.0)
+mag = math.sqrt(sum(c**2 for c in g))
+print("grad(f) at (3,4) = " + str([round(c, 4) for c in g]))
+print("|grad(f)| = " + format(mag, ".4f"))
+
+g0 = gradient(f, 0.0, 0.0)
+print("grad(f) at (0,0) = " + str([round(c, 4) for c in g0]))
+`} />
+    </div>
+
+
+    <!-- Directional derivatives -->
+    <h3>Directional derivatives</h3>
+    <p>The directional derivative in direction u is grad(f) &middot; u (where u is a unit vector). The gradient gives the direction of maximum directional derivative.</p>
+
+    <SchemeRepl client:load initialCode={`; Directional derivative of f(x,y) = x^2 + y^2 at (3,4) in direction (1,1)/sqrt(2)
+(define (dot u v) (apply + (map * u v)))
+(define (vec-mag v) (sqrt (apply + (map (lambda (x) (* x x)) v))))
+(define (normalize v)
+  (let ((m (vec-mag v)))
+    (map (lambda (x) (/ x m)) v)))
+
+; grad(f) at (3,4) = (6, 8)
+(define grad-f (list 6 8))
+
+; Direction: 45 degrees (northeast)
+(define direction (normalize (list 1 1)))
+
+(define dir-deriv (dot grad-f direction))
+(display "Directional derivative in (1,1) direction = ")
+(display dir-deriv) (newline)
+; = (6 + 8)/sqrt(2) = 14/sqrt(2) = 9.899
+
+; Compare: max directional derivative = |grad(f)| = 10
+(display "Max rate of change = |grad(f)| = ")
+(display (vec-mag grad-f))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Directional derivative of f(x,y) = x^2 + y^2 at (3,4)
+import math
+
+grad_f = [6, 8]  # grad(f) at (3,4) = (2x, 2y)
+
+# Direction: 45 degrees (northeast), normalized
+direction = [1 / math.sqrt(2), 1 / math.sqrt(2)]
+
+dir_deriv = sum(g * d for g, d in zip(grad_f, direction))
+print("Directional derivative in (1,1) direction = " + format(dir_deriv, ".4f"))
+print("Max rate of change = |grad(f)| = " + format(math.sqrt(sum(c**2 for c in grad_f)), ".4f"))
+`} />
+    </div>
+
+
+    <!-- Tangent planes -->
+    <h3>Tangent planes</h3>
+    <p>The tangent plane to z = f(x, y) at (a, b) is: z = f(a,b) + df/dx(a,b)*(x&minus;a) + df/dy(a,b)*(y&minus;b). It is the best linear approximation to the surface near the point.</p>
+
+    <!-- SVG: Surface with tangent plane -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Surface (curved) -->
+        <path d="M 40 180 Q 100 60 180 100 Q 260 140 320 80" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="330" y="80" fill="currentColor" font-size="11" fill-opacity="0.4">z = f(x,y)</text>
+        <!-- Tangent plane (straight line touching the curve) -->
+        <line x1="100" y1="140" x2="270" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.8"/>
+        <!-- Point of tangency -->
+        <circle cx="180" cy="100" r="4" fill="currentColor" fill-opacity="0.7"/>
+        <text x="188" y="95" fill="currentColor" font-size="11" fill-opacity="0.6">(a, b, f(a,b))</text>
+        <!-- Tangent plane area -->
+        <path d="M 100 140 L 140 100 L 270 80 L 230 120 Z" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+        <text x="180" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">tangent plane</text>
+        <!-- Normal vector (gradient direction, pointing up from surface) -->
+        <line x1="180" y1="100" x2="180" y2="30" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,2" stroke-opacity="0.5"/>
+        <polygon points="176,34 180,22 184,34" fill="currentColor" fill-opacity="0.5"/>
+        <text x="190" y="35" fill="currentColor" font-size="10" fill-opacity="0.4">grad f</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Tangent plane to f(x,y) = x^2 + y^2 at (1, 2)
+; z = f(1,2) + 2*1*(x-1) + 2*2*(y-2)
+; z = 5 + 2(x-1) + 4(y-2) = 2x + 4y - 5
+
+(define (f x y) (+ (* x x) (* y y)))
+
+; Tangent plane approximation
+(define (tangent-plane x y)
+  (+ (* 2 x) (* 4 y) -5))
+
+; Compare near (1, 2)
+(display "At (1, 2):") (newline)
+(display "  f     = ") (display (f 1.0 2.0)) (newline)     ; 5
+(display "  plane = ") (display (tangent-plane 1.0 2.0)) (newline) ; 5
+
+(display "At (1.1, 2.1):") (newline)
+(display "  f     = ") (display (f 1.1 2.1)) (newline)     ; 5.62
+(display "  plane = ") (display (tangent-plane 1.1 2.1)) (newline) ; 5.6
+; Good approximation near the point, diverges far away
+
+(display "At (3, 4):") (newline)
+(display "  f     = ") (display (f 3.0 4.0)) (newline)     ; 25
+(display "  plane = ") (display (tangent-plane 3.0 4.0))    ; 17 (bad!)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tangent plane to f(x,y) = x^2 + y^2 at (1, 2)
+# z = 5 + 2(x-1) + 4(y-2) = 2x + 4y - 5
+
+def f(x, y):
+    return x**2 + y**2
+
+def tangent_plane(x, y):
+    return 2*x + 4*y - 5
+
+for label, x, y in [("(1, 2)", 1.0, 2.0), ("(1.1, 2.1)", 1.1, 2.1), ("(3, 4)", 3.0, 4.0)]:
+    print("At " + label + ":")
+    print("  f     = " + str(f(x, y)))
+    print("  plane = " + str(tangent_plane(x, y)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 pr-4 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&part;f/&part;x</td><td class="font-sans">Partial derivative w.r.t. x</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&nabla;f = (f_x, f_y)</td><td class="font-sans">Gradient vector</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D_u f = &nabla;f &middot; u</td><td class="font-sans">Directional derivative</td></tr>
+          <tr><td class="py-2 pr-4">z = f(a,b) + f_x(x&minus;a) + f_y(y&minus;b)</td><td class="font-sans">Tangent plane</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Calculus sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-10/">Ch.10 Vectors and Geometry</a></li>
+      <li><a href="/reading/calculus/calc-12/">Ch.12 Optimization</a></li>
+    </ul>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-03/">📐 Hefferon Ch.3 Linear Maps</a> &mdash; linear maps formalize the derivative as a linear transformation</li>
+      <li><a href="/reading/machine-learning/ml-03/">🤖 ML Ch.3</a> — gradient descent computes partial derivatives to update weights</li>
+      <li><a href="/reading/control/ctrl-07/">🎛 Control Ch.7</a> — state space uses partial derivative notation throughout</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Partial_derivative"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Partial derivative</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gradient"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gradient</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Directional_derivative"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Directional derivative</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-10/", label: "Vectors and Geometry" }} next={{ href: "/reading/calculus/calc-12/", label: "Optimization · 12 of 15" }} />
+
+  </main>
+</Layout>

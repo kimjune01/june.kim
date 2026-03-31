@@ -1,0 +1,63 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Comp.lean — Full pipeline composition" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Comp.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Comp.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Chains all five forward pipeline stages through their handshakes using the COMP rule, proving <code>&#123;P_raw&#125; forward &#123;Q_ranked&#125;</code>.</p>
+    </div>
+
+    <h3>PipelineTriples</h3>
+    <p>A pipeline where each stage has a Hoare triple with the handshake threading through: postcondition of stage N is precondition of stage N+1. Bundles predicates at each interface point and proofs that each stage satisfies its triple.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">PipelineTriples</span> (M : Type &rarr; Type) [Monad M] [Support M]
+    (I : InterfaceTypes) (p : Pipeline M I) <span class="text-blue-300">where</span>
+  P_raw : I.raw &rarr; Prop
+  Q_encoded : I.encoded &rarr; Prop
+  Q_indexed : I.indexed &rarr; Prop
+  Q_selected : I.selected &rarr; Prop
+  Q_ranked : I.ranked &rarr; Prop
+  h_perceive : Triple P_raw p.perceive Q_encoded
+  h_cache : Triple Q_encoded p.cache Q_indexed
+  h_filter : Triple Q_indexed p.filter Q_selected
+  h_attend : &forall; pol : I.policy, Triple Q_selected (p.attend pol) Q_ranked</code></pre>
+
+    <h3>Multi-stage composition lemmas</h3>
+    <p>Convenience wrappers around triple_comp: two_stage_comp, three_stage_comp, four_stage_comp. Each chains one more stage through the COMP rule. Generic &mdash; not specific to pipeline stages.</p>
+
+    <h3>forward_triple</h3>
+    <p>The forward pipeline satisfies <code>&#123;P_raw&#125; forward &#123;Q_ranked&#125;</code> when each individual stage satisfies its triple. Applies four_stage_comp to the pipeline's specific stages.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">forward_triple</span> [Monad M] [LawfulMonad M] [Support M]
+    &#123;I : InterfaceTypes&#125; &#123;p : Pipeline M I&#125;
+    (t : PipelineTriples M I p) (policy : I.policy)
+    : Triple t.P_raw (p.forwardKernel policy) t.Q_ranked :=
+  four_stage_comp t.h_perceive t.h_cache t.h_filter (t.h_attend policy)</code></pre>
+
+    <h3>forward_triple'</h3>
+    <p>Corollary connecting the abstract kernel composition to the concrete <code>Pipeline.forward</code> function. Shows that the actual forward pass (defined with explicit binds) satisfies the triple proved for the Kleisli composition.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-bridge/">Hoare/Bridge.lean</a> &mdash; imported; provides the bridge between contracts and triples</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; triple_comp is the workhorse</li>
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; the Pipeline structure whose forward pass is proved correct</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; the handshake conditions that enable composition</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+      <li><a href="/reading/kura-2026/">🍞 Kura 2026</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-bridge/", label: "Hoare/Bridge.lean · 17 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-graded/", label: "Hoare/Graded.lean · 19 of 25" }} />
+  </main>
+</Layout>

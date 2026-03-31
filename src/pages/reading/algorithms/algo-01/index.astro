@@ -1,0 +1,132 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — Complexity and O-Notation" favicon="⚙">
+  <main>
+
+    <a href="/reading/algorithms/" class="text-sm mb-4 inline-block">&larr; back to algorithms</a>
+
+    <h1>Complexity and O-Notation</h1>
+    <p class="text-gray-400 text-sm mb-6">Nievergelt &amp; Hinrichs &middot; Ch. 1 &middot; <a href="https://textbookequity.org/algorithms-and-data-structures/">Algorithms and Data Structures</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An algorithm's cost is not a single number. It is a <strong>growth rate</strong>: how the cost scales as the input grows. Big-O, big-Omega, and big-Theta classify these rates. They let you compare algorithms without benchmarking.</p>
+    </div>
+
+    <!-- SVG: Growth rate curves -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="240" x2="380" y2="240" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="50" y1="240" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="215" y="265" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">n</text>
+        <text x="30" y="130" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90,30,130)">cost</text>
+        <!-- log n (green) -->
+        <path d="M 50,240 Q 120,140 380,100" fill="none" stroke="#34d399" stroke-width="2"/>
+        <text x="370" y="90" fill="#34d399" font-size="10">log n</text>
+        <!-- n (blue) -->
+        <line x1="50" y1="240" x2="380" y2="80" stroke="#60a5fa" stroke-width="2"/>
+        <text x="370" y="72" fill="#60a5fa" font-size="10">n</text>
+        <!-- n^2 (yellow) -->
+        <path d="M 50,240 Q 150,220 260,100 T 340,30" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <text x="345" y="25" fill="#f59e0b" font-size="10">n&#xB2;</text>
+        <!-- 2^n (red) -->
+        <path d="M 50,240 C 100,238 140,230 170,200 S 200,100 210,30" fill="none" stroke="#f87171" stroke-width="2"/>
+        <text x="215" y="25" fill="#f87171" font-size="10">2&#x207F;</text>
+      </svg>
+    </div>
+
+    <h3>Big-O: upper bounds</h3>
+    <p>f(n) is O(g(n)) if there exist constants c and n_0 such that f(n) &le; c &middot; g(n) for all n &ge; n_0. It says: f grows <strong>no faster than</strong> g.</p>
+
+    <SchemeRepl client:load initialCode={`; Demonstrate O-notation: compare growth rates
+; f(n) = 3n + 5 is O(n) because 3n + 5 <= 4n for n >= 5
+
+(define (f n) (+ (* 3 n) 5))
+(define (g n) (* 4 n))
+
+(display "n\tf(n)\t4n\tf<=4n?") (newline)
+(define (check n)
+  (display n) (display "\t")
+  (display (f n)) (display "\t")
+  (display (g n)) (display "\t")
+  (display (<= (f n) (g n))) (newline))
+
+(check 1)
+(check 5)
+(check 10)
+(check 100)
+(check 1000)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Big-O: f(n) = 3n + 5 is O(n)
+def f(n): return 3*n + 5
+def g(n): return 4*n
+
+print("n\tf(n)\t4n\tf<=4n?")
+for n in [1, 5, 10, 100, 1000]:
+    print(f"{n}\t{f(n)}\t{g(n)}\t{f(n) <= g(n)}")
+`} />
+    </div>
+
+    <h3>Big-Omega and Big-Theta</h3>
+    <p>Big-Omega is the mirror: f(n) is &Omega;(g(n)) if f grows <strong>at least as fast as</strong> g. Big-Theta is the sandwich: f(n) is &Theta;(g(n)) when both O and &Omega; hold. It means f and g grow at <strong>exactly the same rate</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Big-Theta: f(n) = 2n^2 + 3n is Theta(n^2)
+; Upper bound: 2n^2 + 3n <= 3n^2 for n >= 3
+; Lower bound: 2n^2 + 3n >= 2n^2 for all n
+
+(define (f n) (+ (* 2 n n) (* 3 n)))
+
+(display "n\tf(n)\t2n^2\t3n^2\tsandwich?") (newline)
+(define (check n)
+  (let ((fn (f n))
+        (lo (* 2 n n))
+        (hi (* 3 n n)))
+    (display n) (display "\t")
+    (display fn) (display "\t")
+    (display lo) (display "\t")
+    (display hi) (display "\t")
+    (display (and (>= fn lo) (<= fn hi))) (newline)))
+
+(check 1)
+(check 3)
+(check 10)
+(check 100)
+`} />
+
+    <h3>Comparing growth rates</h3>
+    <p>The hierarchy: O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n&sup2;) &lt; O(2&#x207F;). An algorithm in a lower class will always win for large enough n, regardless of constant factors.</p>
+
+    <SchemeRepl client:load initialCode={`; Growth rate comparison at n = 1000
+(define n 1000)
+
+(display "O(1)       = 1") (newline)
+(display "O(log n)   = ")
+(display (inexact->exact (round (/ (log n) (log 2))))) (newline)
+(display "O(n)       = ")
+(display n) (newline)
+(display "O(n log n) = ")
+(display (inexact->exact (round (* n (/ (log n) (log 2)))))) (newline)
+(display "O(n^2)     = ")
+(display (* n n)) (newline)
+(display "O(2^n)     = way too big to print")
+`} />
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/dm-01/">🔢 Discrete Math Ch.1</a> &mdash; counting: the combinatorics behind growth rates</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/algorithms/algo-02/", label: "Recursion" }} />
+
+  </main>
+</Layout>

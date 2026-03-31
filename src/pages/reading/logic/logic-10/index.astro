@@ -1,0 +1,191 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.10 — Soundness and Completeness" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Soundness and Completeness</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 10 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A proof system is <strong>sound</strong> if every provable formula is valid. It is <strong>complete</strong> if every valid formula is provable. For propositional and first-order predicate logic, natural deduction is both sound and complete. Godel showed that any sufficiently powerful system cannot be both complete and consistent.</p>
+    </div>
+
+    <!-- SVG: Venn diagram of provable inside valid inside all formulas -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- All formulas (outermost) -->
+        <ellipse cx="170" cy="110" rx="150" ry="95" fill="none" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <text x="310" y="30" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.35">All formulas</text>
+        <!-- Valid formulas (middle) -->
+        <ellipse cx="170" cy="105" rx="105" ry="68" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="170" y="178" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">Valid (true in all models)</text>
+        <!-- Provable formulas (innermost) -->
+        <ellipse cx="170" cy="100" rx="70" ry="45" fill="#f59e0b" fill-opacity="0.07" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="170" y="105" text-anchor="middle" fill="#f59e0b" font-size="11">Provable</text>
+        <!-- Soundness arrow -->
+        <text x="170" y="68" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">soundness: provable &sube; valid</text>
+        <!-- Completeness note -->
+        <text x="170" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">completeness: valid &sube; provable</text>
+        <!-- Caption -->
+        <text x="170" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">For first-order logic: provable = valid (Godel 1930)</text>
+      </svg>
+    </div>
+
+    <h3>Soundness</h3>
+    <p><strong>Soundness</strong>: if a formula is provable from premises, then it is valid (true in every model where the premises hold). This means the proof system never lies. Every rule preserves truth.</p>
+
+    <SchemeRepl client:load initialCode={`; Soundness: every provable formula is valid.
+; We can check this for propositional logic by exhaustive truth tables.
+
+; A proof rule is sound if it preserves truth.
+; Modus ponens: from P and P->Q, derive Q.
+; Check: in every row where P=T and (P->Q)=T, is Q=T?
+
+(define (impl p q) (or (not p) q))
+
+(define (mp-sound? p q)
+  ; If P is true and P->Q is true, Q must be true
+  (if (and p (impl p q))
+    q    ; Q should be true
+    #t)) ; premise not met, rule doesn't apply (vacuously sound)
+
+(display "MP sound for all truth values: ")
+(display (and (mp-sound? #t #t)
+              (mp-sound? #t #f)
+              (mp-sound? #f #t)
+              (mp-sound? #f #f)))
+`} />
+
+    <h3>Completeness</h3>
+    <p><strong>Completeness</strong>: every valid formula is provable. This is harder to show. For propositional logic, completeness means that truth tables and proofs agree. For first-order predicate logic, Godel proved completeness in 1930.</p>
+
+    <SchemeRepl client:load initialCode={`; Completeness for propositional logic:
+; If a formula is a tautology (true in all rows),
+; then there exists a proof of it.
+
+; Example tautology: P or (not P)  (law of excluded middle)
+; Check all truth values:
+(display "P or not P:") (newline)
+(display "  P=T: ") (display (or #t (not #t))) (newline)
+(display "  P=F: ") (display (or #f (not #f))) (newline)
+(display "  Tautology: yes") (newline)
+(newline)
+
+; Proof of P or not P (by RAA):
+; 1. Assume not(P or not P)         [assume for RAA]
+; 2.   Assume P                      [assume for RAA]
+; 3.   P or not P                    [or-intro from 2]
+; 4.   Contradiction (1 and 3)       [contradiction]
+; 5. not P                           [RAA, 2-4]
+; 6. P or not P                      [or-intro from 5]
+; 7. Contradiction (1 and 6)         [contradiction]
+; 8. not not(P or not P)             [RAA, 1-7]
+; 9. P or not P                      [double negation, 8]
+
+(display "Completeness: tautology is also provable.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Check if a propositional formula is a tautology
+from itertools import product
+
+def is_tautology(formula, n_vars):
+    """Check all 2^n truth assignments"""
+    for vals in product([True, False], repeat=n_vars):
+        if not formula(*vals):
+            return False
+    return True
+
+# P or not P
+excluded_middle = lambda p: p or not p
+print(f"P or not P is tautology: {is_tautology(excluded_middle, 1)}")
+
+# P -> (Q -> P)
+affirming = lambda p, q: (not p) or ((not q) or p)
+print(f"P -> (Q -> P) is tautology: {is_tautology(affirming, 2)}")
+
+# P -> Q (not a tautology)
+impl = lambda p, q: (not p) or q
+print(f"P -> Q is tautology: {is_tautology(impl, 2)}")
+`} />
+    </div>
+
+    <h3>Godel's incompleteness theorems</h3>
+    <p>For systems strong enough to describe arithmetic (natural numbers with addition and multiplication):</p>
+    <p><strong>First incompleteness theorem</strong>: if the system is consistent, there are true statements it cannot prove. No finite set of axioms captures all arithmetic truths.</p>
+    <p><strong>Second incompleteness theorem</strong>: if the system is consistent, it cannot prove its own consistency.</p>
+    <p>These theorems apply to systems like Peano arithmetic and ZFC set theory. They do NOT apply to propositional logic or first-order predicate logic without arithmetic, which are complete.</p>
+
+    <SchemeRepl client:load initialCode={`; Godel's insight: a system can encode statements ABOUT ITSELF.
+; The key trick: Godel numbering. Every formula gets a number.
+; Then "this formula is not provable" becomes an arithmetic statement.
+
+; Simplified Godel numbering: assign primes to symbols
+(define (godel-number formula)
+  ; Toy version: just hash the string representation
+  (let loop ((chars (string->list (if (string? formula) formula
+                                    (symbol->string formula))))
+             (n 1) (i 0))
+    (if (null? chars) n
+      (loop (cdr chars)
+            (* n (expt (+ 2 i) (char->integer (car chars))))
+            (+ i 1)))))
+
+; Every formula maps to a unique number
+(display "Godel number of 'P': ")
+(display (godel-number "P")) (newline)
+(display "Godel number of 'Q': ")
+(display (godel-number "Q")) (newline)
+(display "Godel number of 'not P': ")
+(display (godel-number "not P")) (newline)
+
+; The real theorem: there exists a sentence G that says
+; "the sentence with Godel number g is not provable"
+; where g IS the Godel number of G itself.
+; If G is provable -> G is false -> system is inconsistent.
+; If G is not provable -> G is true -> system is incomplete.
+(display "G says: 'I am not provable.' If consistent, G is true but unprovable.")
+`} />
+
+    <h3>Summary: what proof systems can and cannot do</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">System</th>
+            <th class="py-2 pr-4">Sound?</th>
+            <th class="py-2 pr-4">Complete?</th>
+            <th class="py-2">Decidable?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Propositional logic</td><td class="pr-4">Yes</td><td class="pr-4">Yes</td><td>Yes (truth tables)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">First-order predicate logic</td><td class="pr-4">Yes</td><td class="pr-4">Yes (Godel 1930)</td><td>No (Church-Turing)</td></tr>
+          <tr><td class="py-2 pr-4">Arithmetic (Peano)</td><td class="pr-4">Yes</td><td class="pr-4">No (Godel 1931)</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/theory-of-computation/toc-07/">🔀 ToC Ch.7</a> &mdash; decidability and the limits of computation</li>
+    
+      <li><a href="/reading/theory-of-computation/toc-07/">🔀 Theory of Computation Ch.7</a> &mdash; Gödel's diagonal argument and Turing's halting problem are the same move</li>
+      <li><a href="/reading/the-natural-framework-lean/axioms/">✏️ Axioms.lean</a> &mdash; what Lean's type theory assumes, and what it cannot prove</li>
+      <li><a href="/reading/category-theory/milewski-23/">🐱 Category Theory Ch.23</a> &mdash; topoi have an internal logic with their own completeness properties</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/logic/logic-09/", label: "Mathematical Induction" }} />
+
+  </main>
+</Layout>

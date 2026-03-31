@@ -1,0 +1,194 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.5 — Non-Euclidean Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Non-Euclidean Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Non-Euclidean_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Non-Euclidean geometry</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Euclid's first four axioms are uncontroversial. The fifth (the parallel postulate) is a choice. Replace it and you get different geometries: <strong>hyperbolic</strong> (many parallels through a point), <strong>spherical</strong> (no parallels). All three are consistent. The universe picked one, and it's not the flat one.</p>
+    </div>
+
+    <!-- 1. The parallel postulate -->
+    <h3>The parallel postulate</h3>
+    <p>Euclid's fifth postulate: given a line and a point not on it, exactly one parallel line passes through the point. For two thousand years, mathematicians tried to prove it from the other four. They failed, because it's independent. You can negate it in two ways:</p>
+    <ul class="mb-4 text-gray-300">
+      <li><strong>Hyperbolic:</strong> infinitely many parallels through the point</li>
+      <li><strong>Spherical (elliptic):</strong> zero parallels through the point</li>
+    </ul>
+
+    <!-- SVG: Three geometries side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 180" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Flat (Euclidean) -->
+        <g transform="translate(0,0)">
+          <rect x="10" y="20" width="130" height="100" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" rx="4"/>
+          <text x="75" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Euclidean (flat)</text>
+          <!-- Flat triangle -->
+          <polygon points="30,100 130,100 80,40" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+          <!-- Angle arcs -->
+          <path d="M 40,100 A 10,10 0 0,0 35,92" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+          <path d="M 120,100 A 10,10 0 0,1 124,92" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+          <path d="M 74,47 A 10,10 0 0,1 86,47" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+          <text x="75" y="135" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.5">angles = 180&#176;</text>
+        </g>
+        <!-- Saddle (Hyperbolic) -->
+        <g transform="translate(165,0)">
+          <rect x="10" y="20" width="130" height="100" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" rx="4"/>
+          <text x="75" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Hyperbolic (saddle)</text>
+          <!-- Curved-in triangle (sides bow inward) -->
+          <path d="M 30,100 Q 80,85 130,100" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+          <path d="M 130,100 Q 95,60 80,40" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+          <path d="M 80,40 Q 55,60 30,100" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+          <text x="75" y="135" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.5">angles &lt; 180&#176;</text>
+        </g>
+        <!-- Sphere (Spherical) -->
+        <g transform="translate(330,0)">
+          <rect x="10" y="20" width="130" height="100" fill="none" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45" rx="4"/>
+          <text x="75" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Spherical</text>
+          <!-- Curved-out triangle (sides bow outward) -->
+          <path d="M 30,100 Q 80,115 130,100" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+          <path d="M 130,100 Q 115,55 80,40" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+          <path d="M 80,40 Q 40,55 30,100" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+          <text x="75" y="135" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.5">angles &gt; 180&#176;</text>
+        </g>
+        <!-- Bottom caption -->
+        <text x="240" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Three geometries. Same first four axioms. Different fifth.</text>
+      </svg>
+    </div>
+
+    <!-- 2. Hyperbolic geometry -->
+    <h3>Hyperbolic geometry</h3>
+    <p>On a surface of constant negative curvature (like a saddle), triangles have angle sums less than 180 degrees. The defect (180 - angle sum) is proportional to area. In the <strong>Poincare disk model</strong>, the entire hyperbolic plane fits inside a circle, with distances growing exponentially near the boundary.</p>
+
+    <SchemeRepl client:load initialCode={`; Hyperbolic distance in the Poincare disk model
+; d(p,q) = 2 * arctanh(|p-q| / |1 - p*conj(q)|)
+; For points on the real axis:
+
+(define (atanh x)
+  (* 0.5 (log (/ (+ 1 x) (- 1 x)))))
+
+(define (hyperbolic-distance x1 x2)
+  ; For points on the real line in the unit disk
+  (let ((num (abs (- x1 x2)))
+        (den (abs (- 1 (* x1 x2)))))
+    (* 2 (atanh (/ num den)))))
+
+; Points near the center: short hyperbolic distance
+(display "d(0, 0.1): ")
+(display (hyperbolic-distance 0 0.1))
+(newline)
+
+; Points near the boundary: huge hyperbolic distance
+(display "d(0, 0.9): ")
+(display (hyperbolic-distance 0 0.9))
+(newline)
+
+(display "d(0, 0.99): ")
+(display (hyperbolic-distance 0 0.99))
+(newline)
+
+; Triangle angle sum in hyperbolic geometry
+; For a triangle with area A and curvature K = -1:
+; angle_sum = pi - A
+(define pi 3.141592653589793)
+(define (hyp-angle-sum area)
+  (- pi area))
+
+(display "Angle sum for area 0.5: ")
+(display (* (/ (hyp-angle-sum 0.5) pi) 180))
+(display " degrees")
+`} />
+
+    <!-- 3. Spherical geometry -->
+    <h3>Spherical geometry</h3>
+    <p>On a sphere, "lines" are great circles (equators). Any two great circles intersect twice, so there are no parallel lines. Triangle angle sums exceed 180 degrees. The excess is proportional to area. This is the geometry of the Earth's surface and of general relativity.</p>
+
+    <SchemeRepl client:load initialCode={`; Spherical geometry on a unit sphere
+; Great-circle distance from latitude/longitude
+
+(define pi 3.141592653589793)
+(define (deg->rad d) (* d (/ pi 180)))
+
+; Haversine formula for great-circle distance
+(define (haversine lat1 lon1 lat2 lon2)
+  (let ((dlat (deg->rad (- lat2 lat1)))
+        (dlon (deg->rad (- lon2 lon1)))
+        (rlat1 (deg->rad lat1))
+        (rlat2 (deg->rad lat2)))
+    (let ((a (+ (* (sin (/ dlat 2)) (sin (/ dlat 2)))
+               (* (cos rlat1) (cos rlat2)
+                  (sin (/ dlon 2)) (sin (/ dlon 2))))))
+      (* 2 (asin (sqrt a))))))
+
+; Distance in radians on unit sphere
+(display "NYC to London (radians): ")
+(display (haversine 40.7 -74.0 51.5 -0.1))
+(newline)
+
+; On Earth (R = 6371 km)
+(display "NYC to London (km): ")
+(display (* 6371 (haversine 40.7 -74.0 51.5 -0.1)))
+(newline)
+
+; Spherical triangle angle sum
+; For a triangle with area A on a unit sphere:
+; angle_sum = pi + A (spherical excess)
+(define (sph-angle-sum area)
+  (+ pi area))
+
+(display "Angle sum for area 1: ")
+(display (* (/ (sph-angle-sum 1) pi) 180))
+(display " degrees")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def haversine(lat1, lon1, lat2, lon2):
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = (math.sin(dlat/2)**2 +
+         math.cos(math.radians(lat1)) *
+         math.cos(math.radians(lat2)) *
+         math.sin(dlon/2)**2)
+    return 2 * math.asin(math.sqrt(a))
+
+d = haversine(40.7, -74.0, 51.5, -0.1)
+print(f"NYC to London: {d:.4f} radians = {6371*d:.0f} km")
+
+# Angle sums
+print(f"Flat triangle: 180 degrees")
+print(f"Spherical triangle (area=1): {180 + 180/math.pi:.1f} degrees")
+print(f"Hyperbolic triangle (area=0.5): {180 - 0.5*180/math.pi:.1f} degrees")
+`} />
+    </div>
+
+    <!-- 4. Gauss-Bonnet -->
+    <h3>The Gauss-Bonnet theorem (preview)</h3>
+    <p>All three geometries are unified by one formula: the angle sum of a triangle equals pi plus the integral of curvature over the triangle's area. Flat: curvature 0, angles sum to pi. Spherical: positive curvature, angles sum to more. Hyperbolic: negative curvature, angles sum to less. This is the <strong>Gauss-Bonnet theorem</strong>, which connects local curvature to global topology. Differential geometry (Chapter 6) makes this precise.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Non-Euclidean_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Non-Euclidean geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hyperbolic_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hyperbolic geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Spherical_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Spherical geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Bonnet_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gauss-Bonnet theorem</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-04/", label: "Projective Geometry" }} next={{ href: "/reading/geometry/geom-06/", label: "Differential Geometry" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,272 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Liell-Cock 2025 — Compositional Imprecise Probability" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Compositional Imprecise Probability</h1>
+    <p class="text-gray-400 text-sm mb-6">Liell-Cock, Staton · POPL 2025 · <a href="https://arxiv.org/abs/2405.09391"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2405.09391</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories). 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When you don't know the exact probability — only that it lies in some set of distributions — you have <strong>imprecise probability</strong>. Liell-Cock shows these form a <a href="https://ncatlab.org/nlab/show/Markov+category">Markov category (nLab)</a> via the <strong>Para construction</strong>, and that graded monads organize the imprecision levels.</p>
+    </div>
+
+    <!-- 1. Imprecise probability -->
+    <h3>Imprecise probability — sets of distributions</h3>
+    <p>A precise Markov kernel maps an input to one distribution. An <strong>imprecise</strong> kernel maps to a <em>set</em> of distributions — a credal set. You know the output is distributed according to one of these distributions, but you don't know which one. This is stronger than a single distribution (you commit less) and weaker than full ignorance (you commit something).</p>
+
+    <SchemeRepl client:load initialCode={`; Imprecise probability: a set of possible distributions
+; Credal set = { d1, d2, ... } where each di is a distribution
+
+(define (make-credal . dists) dists)
+
+; Precise: exactly one distribution
+(define precise
+  (make-credal '((heads . 0.5) (tails . 0.5))))
+
+; Imprecise: coin might be fair or biased
+(define imprecise
+  (make-credal
+    '((heads . 0.5) (tails . 0.5))
+    '((heads . 0.6) (tails . 0.4))
+    '((heads . 0.4) (tails . 0.6))))
+
+(display "Precise: ") (display (length precise)) (display " distribution") (newline)
+(display "Imprecise: ") (display (length imprecise)) (display " distributions") (newline)
+; Imprecise = we don't know which distribution governs the coin
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Credal sets in Python
+precise = [{"heads": 0.5, "tails": 0.5}]
+imprecise = [
+    {"heads": 0.5, "tails": 0.5},
+    {"heads": 0.6, "tails": 0.4},
+    {"heads": 0.4, "tails": 0.6},
+]
+print(f"Precise: {len(precise)} distribution")
+print(f"Imprecise: {len(imprecise)} distributions")
+`} />
+    </div>
+
+    <!-- 2. Para construction -->
+    <h3>The Para construction</h3>
+    <p>The <strong>Para construction</strong> takes a Markov category C and builds a new category Para(C) where morphisms have a hidden parameter. A morphism in Para(C) from X to Y is a morphism P × X → Y in C, where P is the parameter space. Imprecise kernels arise when you existentially quantify over the parameter: "there exists some p in P such that..."</p>
+
+    <SchemeRepl client:load initialCode={`; Para construction: morph with hidden parameter
+; Para(f)(x) = f(p, x) for some parameter p
+; The parameter p is hidden — you see x -> dist, not (p, x) -> dist
+
+(define (make-para param-space kernel)
+  (list param-space kernel))
+
+; A kernel that depends on bias parameter
+(define biased-coin
+  (make-para
+    '(0.3 0.5 0.7)  ; parameter space: possible biases
+    (lambda (bias x)
+      (list (cons 'heads bias) (cons 'tails (- 1.0 bias))))))
+
+; Each parameter gives a different precise kernel
+(for-each (lambda (p)
+  (display "bias=") (display p) (display ": ")
+  (display ((cadr biased-coin) p 'flip)) (newline))
+(car biased-coin))
+
+; The credal set = image of the kernel over all parameters
+(display "Credal set has ") (display (length (car biased-coin)))
+(display " distributions")
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Real Para construction works over arbitrary Markov categories with tensor products for parameters. Same idea: hidden parameter generates a family.</p>
+
+    <!-- 3. Lower and upper expectations -->
+    <h3>Lower and upper expectations</h3>
+    <p>With a credal set, you compute bounds on expectations. The <strong>lower expectation</strong> is the minimum expected value over all distributions in the set. The <strong>upper expectation</strong> is the maximum. These brackets tell you the range of possible answers — how uncertain you are.</p>
+
+    <SchemeRepl client:load initialCode={`; Lower and upper expectations from a credal set
+; E_lower[f] = min over distributions, E_upper[f] = max
+
+(define (expected-value dist f)
+  (apply + (map (lambda (p) (* (f (car p)) (cdr p))) dist)))
+
+(define (lower-exp credal f)
+  (apply min (map (lambda (d) (expected-value d f)) credal)))
+
+(define (upper-exp credal f)
+  (apply max (map (lambda (d) (expected-value d f)) credal)))
+
+; Credal set: coin with unknown bias
+(define credal
+  (list '((heads . 0.3) (tails . 0.7))
+        '((heads . 0.5) (tails . 0.5))
+        '((heads . 0.7) (tails . 0.3))))
+
+; Payoff: heads=10, tails=0
+(define payoff (lambda (x) (if (eq? x 'heads) 10 0)))
+
+(display "Lower E[payoff]: ") (display (lower-exp credal payoff)) (newline)
+(display "Upper E[payoff]: ") (display (upper-exp credal payoff)) (newline)
+; Bracket: [3.0, 7.0] — imprecision shows as a gap
+`} />
+
+    <!-- 4. Graded monads organize imprecision -->
+    <h3>Graded monads — imprecision levels</h3>
+    <p>Different amounts of imprecision form a <strong>graded monad</strong>. The grade tracks how much imprecision you have. Grade 0 = precise (one distribution). Higher grades = wider credal sets. Composition accumulates imprecision — the grade adds up, just like effect grades in <a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a>.</p>
+
+    <SchemeRepl client:load initialCode={`; Graded imprecision: grade = width of credal set
+; Higher grade = more imprecision
+
+(define (make-graded-credal center radius steps)
+  ; Generate distributions around center within radius
+  (let ((lo (max 0.01 (- center radius)))
+        (hi (min 0.99 (+ center radius))))
+    (let loop ((b lo) (acc '()))
+      (if (> b (+ hi 0.001)) acc
+          (loop (+ b (/ (- hi lo) (max 1 (- steps 1))))
+                (cons (list (cons 'H b) (cons 'T (- 1.0 b))) acc))))))
+
+; Grade 0: precise
+(define g0 (make-graded-credal 0.5 0.0 1))
+; Grade 1: small imprecision
+(define g1 (make-graded-credal 0.5 0.1 3))
+; Grade 2: large imprecision
+(define g2 (make-graded-credal 0.5 0.3 5))
+
+(display "grade 0: ") (display (length g0)) (display " dist") (newline)
+(display "grade 1: ") (display (length g1)) (display " dists") (newline)
+(display "grade 2: ") (display (length g2)) (display " dists") (newline)
+; Higher grade = wider credal set = more imprecision
+`} />
+
+    <!-- 5. Markov categories from graded monads -->
+    <h3>The bridge — graded monads = Markov categories</h3>
+    <p>Liell-Cock's main result: the Kleisli category of a graded monad on a Markov category is itself a Markov category. Imprecise probability inherits all the structure — copy, discard, composition — from the precise case. You can do everything Fritz does in FinStoch, but with credal sets instead of single distributions.</p>
+
+    <!-- SVG: Graded monads = Markov categories bridge -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left box: Graded Monad -->
+        <rect x="20" y="25" width="150" height="110" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="95" y="52" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">Graded Monad</text>
+        <text x="95" y="72" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">T_r : C &#x2192; C</text>
+        <line x1="45" y1="82" x2="145" y2="82" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="95" y="100" text-anchor="middle" fill="#60a5fa" font-size="10">grade r accumulates</text>
+        <text x="95" y="116" text-anchor="middle" fill="#60a5fa" font-size="10">T_r ; T_s = T_(r+s)</text>
+
+        <!-- Right box: Markov Category -->
+        <rect x="270" y="25" width="150" height="110" rx="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="345" y="52" text-anchor="middle" fill="currentColor" font-size="13" font-weight="bold">Markov Cat</text>
+        <text x="345" y="72" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Kl(T_r)</text>
+        <line x1="295" y1="82" x2="395" y2="82" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <text x="345" y="100" text-anchor="middle" fill="#4ade80" font-size="10">copy &#x2022; discard</text>
+        <text x="345" y="116" text-anchor="middle" fill="#4ade80" font-size="10">compose &#x2022; condition</text>
+
+        <!-- Double arrow between them -->
+        <line x1="175" y1="72" x2="265" y2="72" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="175" y1="82" x2="265" y2="82" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="262,66 275,77 262,88" fill="currentColor" fill-opacity="0.6"/>
+        <polygon points="178,66 165,77 178,88" fill="currentColor" fill-opacity="0.6"/>
+        <text x="220" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Kleisli</text>
+
+        <!-- Caption -->
+        <text x="220" y="152" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">graded imprecision inherits full Markov structure</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Kleisli composition of imprecise kernels
+; Each kernel maps input to a credal set
+; Composition: for each (d1, d2), marginalize
+
+(define (imprecise-compose f g)
+  ; f(x) = credal set, g(y) = credal set
+  ; composed(x) = union of all marginalizations
+  (lambda (x)
+    (apply append
+      (map (lambda (d-f)
+        (apply append
+          (map (lambda (pair-f)
+            (let ((y (car pair-f)) (py (cdr pair-f)))
+              (map (lambda (d-g)
+                (map (lambda (pair-g)
+                  (cons (car pair-g) (* py (cdr pair-g))))
+                d-g))
+              (g y))))
+          d-f)))
+      (f x)))))
+
+; f: imprecise coin
+(define (f x) (list '((a . 0.6) (b . 0.4))
+                     '((a . 0.4) (b . 0.6))))
+; g: precise doubler
+(define (g y) (list (list (cons (string-append (symbol->string y) (symbol->string y)) 1.0))))
+
+(display "f(x): ") (display (length (f 'start))) (display " dists") (newline)
+(display "Composition preserves Markov structure")
+; Imprecise kernels compose — credal sets stay credal sets
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Real composition requires careful treatment of the parameter space tensor. Same compositional structure.</p>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Para(C)</td><td class="pr-4 text-green-300">(make-para params kernel)</td><td class="font-sans">Para construction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">credal set</td><td class="pr-4 text-green-300">(make-credal d1 d2 ...)</td><td class="font-sans">Set of distributions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E̲[f]</td><td class="pr-4 text-green-300">(lower-exp credal f)</td><td class="font-sans">Lower expectation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E̅[f]</td><td class="pr-4 text-green-300">(upper-exp credal f)</td><td class="font-sans">Upper expectation</td></tr>
+          <tr><td class="py-2 pr-4">T_e</td><td class="pr-4 text-green-300"># credal set at grade e</td><td class="font-sans">Graded monad at imprecision level e</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category that Para generalizes</li>
+      <li><a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> — graded monads for effects (same grading idea)</li>
+      <li><a href="/reading/natural-breadcrumbs/fritz-perrone-2021/">🍞 Fritz, Perrone 2021</a> — support is the maximally imprecise shadow</li>
+      <li><a href="/reading/natural-breadcrumbs/capucci-2021/">🍞 Capucci 2021</a> — Para construction appears in cybernetics too</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Imprecise_probability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Imprecise probability</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Credal_set"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Credal set</a></li>
+      <li><a href="https://ncatlab.org/nlab/show/Markov+category">Markov category (nLab)</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use finite lists of finite distributions as credal sets. The paper works with convex sets of probability measures over measurable spaces, the Para construction on arbitrary Markov categories, and graded monads indexed by a quantale of imprecision levels. For example: the lower/upper expectation example on this page iterates over three coin distributions. In the paper, the same construction applies to credal sets of Gaussian measures over ℝⁿ — where the lower expectation is an optimization problem over an infinite-dimensional convex set. The bracket structure (min/max over the set) is identical. The measure theory and optimization are not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2405.09391"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the Para construction, §5 for graded monads and Markov categories.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Imprecise probability via the Para construction generalizes the Natural Framework's ambient category from precise to credal-set-valued stages. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/baez-fritz-2011/", label: "Baez, Fritz 2011 · 8 of 21" }} next={{ href: "/reading/natural-breadcrumbs/sato-2023/", label: "Sato 2023 · 10 of 21" }} />
+  </main>
+</Layout>

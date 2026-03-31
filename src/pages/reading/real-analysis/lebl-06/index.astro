@@ -1,0 +1,221 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lebl Ch.6 — The Riemann Integral" favicon="∞">
+  <main>
+
+    <a href="/reading/real-analysis/" class="text-sm mb-4 inline-block">← back to real analysis</a>
+
+    <h1>The Riemann Integral</h1>
+    <p class="text-gray-400 text-sm mb-6">Jiří Lebl · <a href="https://www.jirka.org/ra/">Basic Analysis I, Ch. 6</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Riemann integral</strong> is defined by squeezing a function between upper and lower sums over partitions. When the upper and lower integrals agree, the function is integrable. The <strong>fundamental theorem of calculus</strong> links integration to differentiation: integration undoes differentiation.</p>
+    </div>
+
+    <!-- SVG: Riemann sum rectangles under a curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="380" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="170" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Riemann sum rectangles (lower sum) -->
+        <rect x="60" y="140" width="40" height="30" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="100" y="115" width="40" height="55" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="140" y="95" width="40" height="75" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="180" y="78" width="40" height="92" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="220" y="63" width="40" height="107" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="260" y="50" width="40" height="120" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <rect x="300" y="40" width="40" height="130" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Curve on top -->
+        <path d="M 60 145 Q 120 110 180 78 Q 240 50 340 32" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Labels -->
+        <text x="60" y="185" fill="currentColor" font-size="10" fill-opacity="0.4">a</text>
+        <text x="340" y="185" fill="currentColor" font-size="10" fill-opacity="0.4">b</text>
+        <!-- Caption -->
+        <text x="200" y="198" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Riemann sum: rectangles approximate the area under the curve.</text>
+      </svg>
+    </div>
+
+    <h3>Partitions and upper/lower sums</h3>
+    <p>A <strong>partition</strong> P of [a, b] is a finite set of points a = x_0 &lt; x_1 &lt; ... &lt; x_n = b. The <strong>lower sum</strong> L(P, f) uses the infimum of f on each subinterval; the <strong>upper sum</strong> U(P, f) uses the supremum. Always L(P, f) &le; U(P, f). Refining the partition tightens the squeeze.</p>
+
+    <SchemeRepl client:load initialCode={`; Upper and lower Riemann sums for f(x) = x^2 on [0, 1]
+(define (f x) (* x x))
+
+(define (riemann-sums n)
+  (let* ((dx (/ 1.0 n)))
+    (let loop ((i 0) (lower 0.0) (upper 0.0))
+      (if (>= i n)
+        (begin
+          (display "  n=") (display n)
+          (display ": L=") (display lower)
+          (display ", U=") (display upper)
+          (display ", gap=") (display (- upper lower))
+          (newline))
+        (let* ((x-left (* i dx))
+               (x-right (* (+ i 1) dx))
+               ; f is increasing on [0,1], so inf=f(left), sup=f(right)
+               (inf-val (f x-left))
+               (sup-val (f x-right)))
+          (loop (+ i 1)
+                (+ lower (* inf-val dx))
+                (+ upper (* sup-val dx))))))))
+
+(display "Riemann sums for x^2 on [0,1]:") (newline)
+(for-each riemann-sums (list 4 10 100 1000))
+(display "Exact integral = 1/3 = ")
+(display (/ 1.0 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Riemann sums for x^2 on [0,1]
+f = lambda x: x**2
+
+for n in [4, 10, 100, 1000]:
+    dx = 1/n
+    lower = sum(f(i*dx) * dx for i in range(n))
+    upper = sum(f((i+1)*dx) * dx for i in range(n))
+    print(f"n={n:4d}: L={lower:.6f}, U={upper:.6f}, gap={upper-lower:.6f}")
+
+print(f"Exact: {1/3:.6f}")
+`} />
+    </div>
+
+    <h3>Integrability</h3>
+    <p>f is <strong>Riemann integrable</strong> on [a, b] if the supremum of all lower sums equals the infimum of all upper sums. Every continuous function on [a, b] is integrable. Every monotone function on [a, b] is integrable. Functions with finitely many discontinuities are integrable.</p>
+
+    <SchemeRepl client:load initialCode={`; A function with a single discontinuity is still integrable
+; f(x) = 1 if x != 0.5, f(0.5) = 100
+; Integral on [0,1] should be 1 (the spike has measure zero)
+
+(define (f x)
+  (if (and (> x 0.499999) (< x 0.500001)) 100 1))
+
+(define (riemann-sum f n)
+  (let ((dx (/ 1.0 n)))
+    (let loop ((i 0) (s 0.0))
+      (if (>= i n) s
+        (let ((x (+ (* i dx) (/ dx 2.0))))  ; midpoint
+          (loop (+ i 1) (+ s (* (f x) dx))))))))
+
+(display "Midpoint sums (spike at 0.5):") (newline)
+(for-each (lambda (n)
+  (display "  n=") (display n)
+  (display ": ") (display (riemann-sum f n)) (newline))
+  (list 10 100 1000 10000))
+(display "As partition refines, sum -> 1 (spike is negligible)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+def f(x):
+    return 100 if 0.499999 < x < 0.500001 else 1
+
+print("Midpoint sums (spike at 0.5):")
+for n in [10, 100, 1000, 10000]:
+    dx = 1.0 / n
+    s = sum(f(i * dx + dx / 2) * dx for i in range(n))
+    print("  n=" + str(n) + ":", s)
+
+print("As partition refines, sum -> 1 (spike is negligible)")
+`} />
+    </div>
+
+    <h3>Fundamental theorem of calculus</h3>
+    <p><strong>FTC Part 1</strong>: if f is continuous on [a, b], then F(x) = &int;_a^x f(t) dt is differentiable and F'(x) = f(x). <strong>FTC Part 2</strong>: if F is any antiderivative of f, then &int;_a^b f(t) dt = F(b) - F(a). Integration and differentiation are inverse operations.</p>
+
+    <SchemeRepl client:load initialCode={`; FTC: integral of f'(x) = f(b) - f(a)
+; f(x) = x^3, f'(x) = 3x^2
+; integral of 3x^2 from 1 to 3 should = 3^3 - 1^3 = 26
+
+(define (numerical-integral f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (s 0.0))
+      (if (>= i n) s
+        (let ((x (+ a (* i dx) (/ dx 2.0))))
+          (loop (+ i 1) (+ s (* (f x) dx))))))))
+
+(define (fprime x) (* 3 x x))
+(define result (numerical-integral fprime 1.0 3.0 10000))
+(display "Integral of 3x^2 from 1 to 3: ")
+(display result) (newline)
+(display "F(3) - F(1) = 27 - 1 = 26") (newline)
+
+; FTC Part 1: F(x) = integral from 0 to x of sin(t) dt
+; F'(x) should equal sin(x)
+(define (F x) (numerical-integral sin 0 x 1000))
+(define (F-prime x)
+  (let ((h 0.001))
+    (/ (- (F (+ x h)) (F x)) h)))
+
+(display "F'(pi/4) = ") (display (F-prime 0.785398)) (newline)
+(display "sin(pi/4) = ") (display (sin 0.785398))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python equivalent
+import math
+
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + i * dx + dx / 2) * dx for i in range(n))
+
+fprime = lambda x: 3 * x * x
+result = integrate(fprime, 1.0, 3.0)
+print("Integral of 3x^2 from 1 to 3:", result)
+print("F(3) - F(1) = 27 - 1 = 26")
+
+# FTC Part 1: F(x) = integral of sin from 0 to x
+F = lambda x: integrate(math.sin, 0, x, 1000)
+h = 0.001
+x0 = math.pi / 4
+F_prime = (F(x0 + h) - F(x0)) / h
+print("F'(pi/4) =", F_prime)
+print("sin(pi/4) =", math.sin(x0))
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">L(P, f)</td><td class="pr-4 text-green-300">lower sum</td><td class="font-sans">Lower Riemann sum</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">U(P, f)</td><td class="pr-4 text-green-300">upper sum</td><td class="font-sans">Upper Riemann sum</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&int;_a^b f</td><td class="pr-4 text-green-300">(numerical-integral ...)</td><td class="font-sans">Riemann integral</td></tr>
+          <tr><td class="py-2 pr-4">F' = f</td><td class="pr-4 text-green-300">FTC</td><td class="font-sans">Fundamental theorem of calculus</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/real-analysis/lebl-05/">Ch. 5: The Derivative</a> — FTC connects integrals back to derivatives</li>
+      <li><a href="/reading/real-analysis/lebl-04/">Ch. 4: Continuous Functions</a> — continuous functions are integrable</li>
+      <li><a href="/reading/probability/grinstead-04/">Grinstead Ch. 4: Continuous Distributions</a> — probability density uses integration</li>
+      <li><a href="/reading/calculus/calc-07/">📐 Calculus Ch.7</a> — integration techniques: the computational toolkit built on the Riemann integral</li>
+      <li><a href="/reading/probability/grinstead-02/">🎰 Probability Ch.2</a> — continuous probability distributions are Riemann integrals of density functions</li>
+      <li><a href="/reading/physics/crowell-08/">⚛ Physics Ch.8</a> — work and energy: line integrals are the physical application of the Riemann integral</li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>Numerical integration (midpoint rule) converges at rate O(1/n^2). The upper/lower sum approach converges at O(1/n) for monotone functions. Neither is the Riemann integral itself: that is the common value they converge to. The FTC proof requires the mean value theorem, not computation.</p>
+
+    <PrevNext prev={{ href: "/reading/real-analysis/lebl-05/", label: "The Derivative" }} next={{ href: "/reading/real-analysis/lebl-07/", label: "Sequences of Functions" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,322 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="🍞 Gaboardi 2021 — Graded Hoare Logic" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Combining Effects and Coeffects via Grading</h1>
+    <p class="text-gray-400 text-sm mb-6">Gaboardi, Katsumata, Orchard, Sato · ESOP 2021 · <a href="https://arxiv.org/abs/2007.06237"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2007.06237</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples). 5 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Hoare triples with <strong>grades</strong>: a tag on every computation that tracks side effects — how many resources it uses, how much noise it adds, how far it can branch. The grade algebra tells you what happens when you compose.</p>
+    </div>
+
+    <!-- 1. Grades track effects -->
+    <h3>Grades track effects</h3>
+    <p>A grade is an annotation on a computation. Plain Hoare logic says <code>{'{P}'} c {'{Q}'}</code>. Graded Hoare logic says <code>{'{P}'} c : e {'{Q}'}</code> — "c has effect e." When you compose, the grades compose too: if c₁ has grade e₁ and c₂ has grade e₂, then c₁;c₂ has grade e₁·e₂ (monoid multiplication).</p>
+
+    <!-- SVG: Graded Hoare triple -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 100" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Precondition P -->
+        <rect x="20" y="30" width="50" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="45" y="53" text-anchor="middle" fill="currentColor" font-size="13">P</text>
+        <!-- Arrow with grade badge -->
+        <line x1="70" y1="48" x2="280" y2="48" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="280,44 288,48 280,52" fill="currentColor"/>
+        <!-- Program label -->
+        <text x="175" y="40" text-anchor="middle" fill="currentColor" font-size="12">c</text>
+        <!-- Grade badge -->
+        <rect x="148" y="55" width="54" height="20" rx="10" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="175" y="69" text-anchor="middle" fill="#60a5fa" font-size="11">grade e</text>
+        <!-- Postcondition Q -->
+        <rect x="295" y="30" width="50" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="53" text-anchor="middle" fill="currentColor" font-size="13">Q</text>
+        <!-- Caption -->
+        <text x="210" y="95" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">graded Hoare triple: the grade tags the computation</text>
+      </svg>
+    </div>
+
+    <Repl client:load initialCode={`# Graded Hoare triple: {P} c : e {Q}
+# The grade e tracks side effects.
+
+# Example: grades = number of writes to a log
+def logged_double(x):
+    print(f"  [LOG] doubling {x}")  # 1 write
+    return x * 2
+
+def logged_add1(x):
+    print(f"  [LOG] adding 1 to {x}")  # 1 write
+    return x + 1
+
+# Composed: grade = 1 + 1 = 2 writes
+def pipeline(x):
+    return logged_add1(logged_double(x))
+
+print("Pipeline grade: 2 (two log writes)")
+result = pipeline(5)
+print(f"  result = {result}")
+print()
+print("Grades compose: 1 write + 1 write = 2 writes.")
+print("The type system tracks this statically.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <SchemeRepl client:load initialCode={`; Graded computation: value paired with grade
+; (value . grade) where grade is a monoid element
+
+(define (graded-pure x) (cons x 0))  ; pure = zero effect
+
+(define (graded-bind mx f)
+  (let* ((val (car mx)) (grade1 (cdr mx))
+         (result (f val)) (grade2 (cdr result)))
+    (cons (car result) (+ grade1 grade2))))
+
+(define (logged-double x) (cons (* x 2) 1))
+(define (logged-add1 x) (cons (+ x 1) 1))
+
+(define result
+  (graded-bind (logged-double 5) logged-add1))
+
+(display "value: ") (display (car result)) (newline)
+(display "grade: ") (display (cdr result))
+; grade = 2 (composed effects)
+`} />
+    </div>
+
+    <!-- SVG: Grade composition -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 130" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- First arrow with grade r -->
+        <rect x="20" y="35" width="36" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="38" y="55" text-anchor="middle" fill="currentColor" font-size="11">P</text>
+        <line x1="56" y1="50" x2="140" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="140,46 148,50 140,54" fill="currentColor"/>
+        <rect x="78" y="56" width="38" height="18" rx="9" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="97" y="69" text-anchor="middle" fill="#4ade80" font-size="10">r</text>
+        <text x="98" y="44" text-anchor="middle" fill="currentColor" font-size="10">c&#x2081;</text>
+        <!-- Intermediate R -->
+        <rect x="150" y="35" width="36" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="168" y="55" text-anchor="middle" fill="currentColor" font-size="11">R</text>
+        <!-- Second arrow with grade s -->
+        <line x1="186" y1="50" x2="270" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="270,46 278,50 270,54" fill="currentColor"/>
+        <rect x="208" y="56" width="38" height="18" rx="9" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-width="1.2"/>
+        <text x="227" y="69" text-anchor="middle" fill="#4ade80" font-size="10">s</text>
+        <text x="228" y="44" text-anchor="middle" fill="currentColor" font-size="10">c&#x2082;</text>
+        <!-- Q -->
+        <rect x="280" y="35" width="36" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="298" y="55" text-anchor="middle" fill="currentColor" font-size="11">Q</text>
+        <!-- Equals -->
+        <text x="340" y="55" text-anchor="middle" fill="currentColor" font-size="16">=</text>
+        <!-- Composed arrow with grade r&#xB7;s -->
+        <rect x="360" y="35" width="36" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="378" y="55" text-anchor="middle" fill="currentColor" font-size="11">P</text>
+        <line x1="396" y1="50" x2="436" y2="50" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="436,46 444,50 436,54" fill="currentColor"/>
+        <rect x="396" y="56" width="42" height="18" rx="9" fill="#4ade80" fill-opacity="0.2" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="417" y="69" text-anchor="middle" fill="#4ade80" font-size="10">r&#xB7;s</text>
+        <!-- Caption -->
+        <text x="230" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">grades compose: r then s becomes r&#xB7;s</text>
+      </svg>
+    </div>
+
+    <!-- 2. The grade monoid -->
+    <h3>The grade monoid</h3>
+    <p>Grades form a <a href="https://en.wikipedia.org/wiki/Monoid"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>monoid</a>: an identity (no effect) and an associative binary operation (compose effects). Different monoids track different things.</p>
+
+    <Repl client:load initialCode={`# Different grade monoids for different effects
+
+# (ℕ, +, 0) — count operations
+count_pure = 0
+count_compose = lambda e1, e2: e1 + e2
+print(f"Count: 3 ops + 2 ops = {count_compose(3, 2)} ops")
+
+# (ℝ≥0, ×, 1) — noise multiplication
+noise_pure = 1.0
+noise_compose = lambda e1, e2: e1 * e2
+print(f"Noise: 0.9 × 0.8 = {noise_compose(0.9, 0.8)} fidelity")
+
+# ({R,W,RW}, max, ∅) — read/write permissions
+perms = {"": 0, "R": 1, "W": 2, "RW": 3}
+perm_names = {0: "∅", 1: "R", 2: "W", 3: "RW"}
+perm_compose = lambda e1, e2: max(e1, e2)
+print(f"Perms: R + W = {perm_names[perm_compose(perms['R'], perms['W'])]}")
+print()
+print("Each monoid is a different grading.")
+print("Composition rule changes, structure stays.")
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Real grades are semiring-indexed, not just monoids. Same composition idea.</p>
+
+    <!-- 3. Graded COMP rule -->
+    <h3>Graded COMP — the handshake with budgets</h3>
+    <p>Staton's COMP rule chains postconditions. Gaboardi's graded COMP chains postconditions <em>and</em> grades. If <code>{'{P}'} c₁ : e₁ {'{R}'}</code> and <code>{'{R}'} c₂ : e₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ : e₁·e₂ {'{Q}'}</code>. The handshake carries a budget.</p>
+
+    <Repl client:load initialCode={`# Graded COMP: grades compose through the handshake
+# {P} c1 : e1 {R}  and  {R} c2 : e2 {Q}
+#   => {P} c1;c2 : e1*e2 {Q}
+
+def graded_comp(c1, e1, c2, e2, grade_op):
+    """Compose graded computations."""
+    def composed(x):
+        mid = c1(x)
+        out = c2(mid)
+        return out
+    return composed, grade_op(e1, e2)
+
+# Stage 1: filter (0.95 fidelity)
+def stage1(x): return [v for v in x if v > 0]
+
+# Stage 2: normalize (0.90 fidelity)
+def stage2(x):
+    total = sum(x) if x else 1
+    return [v/total for v in x]
+
+pipeline, total_fidelity = graded_comp(
+    stage1, 0.95,
+    stage2, 0.90,
+    lambda e1, e2: round(e1 * e2, 4)
+)
+
+data = [-1, 3, -2, 5, 1]
+print(f"Input: {data}")
+print(f"Output: {pipeline(data)}")
+print(f"Fidelity: 0.95 × 0.90 = {total_fidelity}")
+print()
+print("The grade tracks cumulative effect.")
+print("No stage inspects another's grade —")
+print("composition handles the accounting.")
+`} />
+
+    <!-- 4. Graded Freyd category -->
+    <h3>Graded Freyd category</h3>
+    <p>The categorical setting is a <strong>graded Freyd category</strong>: a pair (C, F) where C is a category of pure values and F is a graded family of categories of effectful computations. The grading indexes which effects are allowed. Pure computations embed with grade 1 (no effect).</p>
+
+    <Repl client:load initialCode={`# Graded Freyd category in miniature
+# Pure values embed with grade "none"
+# Effectful computations carry their grade
+
+class GradedComp:
+    def __init__(self, fn, grade):
+        self.fn = fn
+        self.grade = grade
+
+    def then(self, other, grade_op):
+        """Sequential composition — grades compose."""
+        def composed(x):
+            return other.fn(self.fn(x))
+        return GradedComp(composed, grade_op(self.grade, other.grade))
+
+# Pure embedding: grade = 0 (additive identity)
+pure_inc = GradedComp(lambda x: x + 1, 0)
+
+# Effectful: grade = 1 (one side effect)
+effectful_log = GradedComp(lambda x: x * 2, 1)
+
+# Compose
+pipeline = pure_inc.then(effectful_log, lambda a, b: a + b)
+print(f"pure(+1) then log(*2): grade = {pipeline.grade}")
+print(f"pipeline(5) = {pipeline.fn(5)}")
+
+# Pure;Pure stays pure
+pure2 = pure_inc.then(GradedComp(lambda x: x * 3, 0), lambda a, b: a + b)
+print(f"pure;pure: grade = {pure2.grade} (still pure)")
+`} />
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Analogy.</strong> Real Freyd categories are indexed by a grading semiring. This captures the composition law but not the full categorical structure.</p>
+
+    <!-- 5. Effects meet coeffects -->
+    <h3>Effects meet coeffects</h3>
+    <p>Effects track what a computation does to the world (writes, exceptions, nondeterminism). Coeffects track what it needs from the world (reads, resource usage, context). Gaboardi unifies both in one grading: the effect monoid and coeffect comonoid are two sides of the same semiring.</p>
+
+    <Repl client:load initialCode={`# Effects (what you produce) + Coeffects (what you consume)
+# Unified in one grade: (reads, writes)
+
+def graded_fn(fn, reads, writes):
+    return {"fn": fn, "reads": reads, "writes": writes}
+
+def compose_graded(g1, g2):
+    return graded_fn(
+        lambda x: g2["fn"](g1["fn"](x)),
+        g1["reads"] + g2["reads"],    # coeffects add
+        g1["writes"] + g2["writes"]   # effects add
+    )
+
+# Stage 1 reads config (1 read, 0 writes)
+s1 = graded_fn(lambda x: x.upper(), 1, 0)
+
+# Stage 2 logs result (0 reads, 1 write)
+s2 = graded_fn(lambda x: x + "!", 0, 1)
+
+pipeline = compose_graded(s1, s2)
+print(f"Result: {pipeline['fn']('hello')}")
+print(f"Total reads:  {pipeline['reads']}")
+print(f"Total writes: {pipeline['writes']}")
+print()
+print("Both tracked in one grade pair.")
+print("The semiring handles the accounting.")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">{'{P}'} c : e {'{Q}'}</td><td class="pr-4 text-green-300">assert P; c(); assert Q; grade=e</td><td class="font-sans">Graded Hoare triple</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">e₁ · e₂</td><td class="pr-4 text-green-300">grade_op(e1, e2)</td><td class="font-sans">Grade composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">1</td><td class="pr-4 text-green-300">0 or 1.0</td><td class="font-sans">Identity grade (no effect)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">T_e</td><td class="pr-4 text-green-300">GradedComp(fn, e)</td><td class="font-sans">Graded monad at grade e</td></tr>
+          <tr><td class="py-2 pr-4">(C, F)</td><td class="pr-4 text-green-300"># pure + effectful</td><td class="font-sans">Graded Freyd category</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — ungraded Hoare logic (the starting point)</li>
+      <li><a href="/reading/natural-breadcrumbs/kura-2026/">🍞 Kura 2026</a> — indexed graded monads (grading + indexing together)</li>
+      <li><a href="/reading/natural-breadcrumbs/sato-2023/">🍞 Sato 2023</a> — divergences as another grading on morphism spaces</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monoid"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monoid</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Semiring"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Semiring</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Side_effect_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Side effect</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use simple numeric grades (counts, products). The paper works with graded monads indexed by a semiring, graded Freyd categories, and the interaction between effect and coeffect gradings via a distributive law. For example: the graded COMP on this page multiplies two fidelity floats. In the paper, the same rule works over a preordered semiring where the composition operation may be non-commutative and where the ordering constrains subeffecting (you can always over-approximate an effect grade). The composition structure is identical. The lattice-theoretic subtleties are not.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2007.06237"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for graded monads, §5 for the graded Hoare logic.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's composition with contracts is graded COMP — each stage carries an effect grade that composes through the handshake. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/fritz-perrone-2021/", label: "Fritz, Perrone 2021 · 3 of 21" }} next={{ href: "/reading/natural-breadcrumbs/kura-2026/", label: "Kura 2026 · 5 of 21" }} />
+  </main>
+</Layout>

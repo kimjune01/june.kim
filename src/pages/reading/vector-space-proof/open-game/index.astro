@@ -1,0 +1,124 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="OpenGame.lean — Compositional game theory and DSIC composition" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>OpenGame.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/OpenGame.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The VCG auction as a composable module in Hedges' open-game framework. Sequential and parallel composition are defined. <a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash</a> equilibria decompose into component equilibria. But DSIC composition remains an open question &mdash; no published result covers it.</p>
+    </div>
+
+    <h3>OpenGame</h3>
+    <p>An open game is a <a href="https://en.wikipedia.org/wiki/Optics_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>lens-like</a> object with five type parameters: strategy (<code>St</code>), observation (<code>X</code>), action (<code>Y</code>), result (<code>R</code>), and coresult (<code>S</code>). Three operations: <code>play</code> (forward pass), <code>coplay</code> (backward pass), and <code>bestResponse</code> (equilibrium condition).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">OpenGame</span> (St X Y R S : Type*) <span class="text-blue-300">where</span>
+  play : St → X → Y
+  coplay : St → X → R → S
+  bestResponse : X → (Y → R) → St → Prop</code></pre>
+    <p class="text-sm text-gray-500">Ghani, Hedges, Winschel &amp; Zahn (2018), Definition 2.1. <a href="https://arxiv.org/abs/1603.04641">arXiv: 1603.04641</a></p>
+
+    <h3>OpenGame.seq / OpenGame.par</h3>
+    <p><strong>Sequential composition</strong>: game G plays first, game H plays using G's output. The backward channel threads results back through both games. <strong>Parallel composition</strong>: games G and H play simultaneously on independent inputs (monoidal product).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">OpenGame.seq</span> (G : OpenGame St₁ X Y S T)
+    (H : OpenGame St₂ Y Z R S) :
+    OpenGame (St₁ × St₂) X Z R T
+
+<span class="text-blue-300">def</span> <span class="text-green-300">OpenGame.par</span> (G : OpenGame St₁ X₁ Y₁ R₁ S₁)
+    (H : OpenGame St₂ X₂ Y₂ R₂ S₂) :
+    OpenGame (St₁ × St₂) (X₁ × X₂) (Y₁ × Y₂) (R₁ × R₂) (S₁ × S₂)</code></pre>
+
+    <h3>vcgOpenGame</h3>
+    <p>The VCG auction as an open game. Strategy is the full auction state. Observation is a query point. Action is the winning advertiser. Note: <code>bestResponse</code> ignores the continuation argument <code>k</code> and directly encodes a no-profitable-deviation condition at the current auction state. This is nonstandard &mdash; in typical open games, <code>bestResponse</code> depends on the continuation. Here the condition is continuation-independent, which makes it stronger than standard Nash (closer to dominant-strategy behavior). The actual DSIC theorem with its truthfulness hypothesis lives in <a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">vcgOpenGame</span> : OpenGame (Auction ι E) E ι ℝ ℝ <span class="text-blue-300">where</span>
+  play := fun auc x => winner auc x
+  coplay := fun _auc _x r => r
+  bestResponse := fun x _k auc =>
+    ∀ (i : ι) (r' : Report E),
+      playerUtility auc i x ≥
+        playerUtility (auc.withReport i r') i x</code></pre>
+
+    <h3>composed_equilibria_decompose</h3>
+    <p>Hedges' Theorem 4.3: Nash equilibria of sequentially composed games decompose into component equilibria. A strategy profile is Nash for <code>G.seq H</code> iff the component strategies are Nash for their respective games with appropriately threaded continuations.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">composed_equilibria_decompose</span> ... :
+    (G.seq H).isNashEquilibrium x k (s₁, s₂) ↔
+    (G.bestResponse x ... s₁ ∧ H.bestResponse ... k s₂)</code></pre>
+
+    <SchemeRepl client:load initialCode={`; Hedges Thm 4.3: equilibria decompose
+
+; Game G: bid truthfully (value = 3.0)
+(define (G-best bid) (= bid 3.0))
+
+; Game H: auctioneer picks highest bid
+(define (H-best bids) #t)  ; deterministic, always optimal
+
+; Composed game: G feeds H
+(define (composed-best bid all-bids)
+  (and (G-best bid) (H-best all-bids)))
+
+(define bid 3.0)
+(define all-bids '(3.0 2.5 4.0))
+
+(display "G equilibrium:        ") (display (G-best bid)) (newline)
+(display "H equilibrium:        ") (display (H-best all-bids)) (newline)
+(display "Composed equilibrium: ") (display (composed-best bid all-bids)) (newline)
+(display "Decomposition holds:  ")
+(display (eq? (composed-best bid all-bids)
+              (and (G-best bid) (H-best all-bids))))
+(newline)
+`} />
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Hedges Thm 4.3: equilibria decompose
+
+# Game G: advertiser bids (truthful = bid your value)
+def G_play(bid, x): return bid
+def G_best(bid): return bid == 3.0  # truthful value is 3.0
+
+# Game H: auctioneer picks highest bid
+def H_play(bids): return bids.index(max(bids))
+def H_best(bids): return True  # deterministic, always "optimal"
+
+# Sequential composition: G feeds H
+def composed_best(bid, all_bids):
+    return G_best(bid) and H_best(all_bids)
+
+# Test: is truthful bidding an equilibrium of the composed game?
+bid = 3.0
+all_bids = [3.0, 2.5, 4.0]
+
+comp = composed_best(bid, all_bids)
+g_eq = G_best(bid)
+h_eq = H_best(all_bids)
+
+print(f"G equilibrium:        {g_eq}")
+print(f"H equilibrium:        {h_eq}")
+print(f"Composed equilibrium: {comp}")
+print(f"Decomposition holds:  {comp == (g_eq and h_eq)}")
+print()
+print("Thm 4.3: check the parts, get the whole.")
+`} />
+    </div>
+
+    <h3>What about DSIC composition?</h3>
+    <p>Hedges' decomposition theorem covers Nash, <a href="https://en.wikipedia.org/wiki/Bayesian_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian-Nash</a>, and <a href="https://en.wikipedia.org/wiki/Subgame_perfect_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>subgame-perfect</a> equilibria. It does <em>not</em> cover dominant-strategy incentive compatibility. DSIC doesn't compose in general &mdash; lying in stage 1 can give a payoff through stage 2's interface.</p>
+    <p>The Lean file documents this gap but does not close it. The docstring notes a sufficient condition (i-insensitive continuations) and sketches why it holds in this auction pipeline, but no formal theorem is proved. The <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> series discusses the pipeline composition informally.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/strategyproof/">Strategyproof.lean</a> &mdash; proves <code>vcg_is_nash_equilibrium</code> using this framework</li>
+      <li><a href="/reading/vector-space-proof/gaussian-optimality/">GaussianOptimality.lean</a> &mdash; the capstone theorem this feeds into</li>
+      <li><a href="https://arxiv.org/abs/1603.04641">Ghani, Hedges, Winschel &amp; Zahn (2018)</a> &mdash; compositional game theory, Theorem 4.3</li>
+      <li><a href="https://arxiv.org/abs/1711.07059">Hedges (2017)</a> &mdash; morphisms of open games</li>
+      <li><a href="https://doi.org/10.1016/j.entcs.2018.11.008">Hedges (2018)</a> &mdash; subgame-perfect equilibria in open games</li>
+      <li><a href="https://arxiv.org/abs/1910.03656">Bolt, Hedges &amp; Zahn (2023)</a> &mdash; Bayesian open games</li>
+      <li><a href="https://arxiv.org/abs/2601.14846">Kura et al. (2026)</a> &mdash; indexed graded monad for welfare tracking</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/gaussian-optimality/", label: "GaussianOptimality.lean · 6 of 7" }} fin="fin 📐" />
+  </main>
+</Layout>

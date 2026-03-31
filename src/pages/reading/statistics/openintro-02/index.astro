@@ -1,0 +1,185 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.2 — Summarizing Data" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Summarizing Data</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 2 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Raw data is noise until you summarize it. <strong>Center</strong> (mean, median), <strong>spread</strong> (standard deviation, IQR), and <strong>shape</strong> (skew, modality) compress a dataset into a few numbers. Visualizations like histograms and box plots make the structure visible.</p>
+    </div>
+
+    <!-- 1. Measures of Center -->
+    <h3>Mean, median, mode</h3>
+    <p>The <strong>mean</strong> is the arithmetic average. The <strong>median</strong> is the middle value when sorted. The <strong>mode</strong> is the most frequent value. The mean is sensitive to outliers; the median is robust.</p>
+
+    <!-- SVG: Box plot with quartiles labeled -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Number line -->
+        <line x1="30" y1="70" x2="370" y2="70" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Whisker left -->
+        <line x1="60" y1="50" x2="60" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="60" y1="70" x2="130" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Box -->
+        <rect x="130" y="50" width="140" height="40" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.5" rx="2"/>
+        <!-- Median line -->
+        <line x1="200" y1="50" x2="200" y2="90" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Whisker right -->
+        <line x1="270" y1="70" x2="340" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="340" y1="50" x2="340" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Labels -->
+        <text x="60" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Min</text>
+        <text x="130" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Q1</text>
+        <text x="200" y="108" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.7">Median</text>
+        <text x="270" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Q3</text>
+        <text x="340" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">Max</text>
+        <!-- IQR brace -->
+        <line x1="130" y1="40" x2="270" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="35" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">IQR</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Mean, median, mode
+(define data '(2 3 5 5 7 8 12 15 22))
+
+; Mean: sum / count
+(define (mean lst)
+  (exact->inexact (/ (apply + lst) (length lst))))
+
+(display "Data: ") (display data) (newline)
+(display "Mean: ") (display (mean data)) (newline)
+
+; Median: middle value of sorted list
+(define (median lst)
+  (let* ((sorted (sort lst <))
+         (n (length sorted))
+         (mid (quotient n 2)))
+    (if (odd? n)
+      (list-ref sorted mid)
+      (exact->inexact
+        (/ (+ (list-ref sorted (- mid 1))
+              (list-ref sorted mid)) 2)))))
+
+(display "Median: ") (display (median data)) (newline)
+
+; Mode: most frequent
+(display "Mode: 5 (appears twice)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Mean, median, mode in Python
+data = [2, 3, 5, 5, 7, 8, 12, 15, 22]
+
+mean = sum(data) / len(data)
+sorted_data = sorted(data)
+n = len(sorted_data)
+median = sorted_data[n // 2] if n % 2 else (sorted_data[n//2 - 1] + sorted_data[n//2]) / 2
+
+from collections import Counter
+mode = Counter(data).most_common(1)[0][0]
+
+print(f"Data: {data}")
+print(f"Mean: {mean:.1f}")
+print(f"Median: {median}")
+print(f"Mode: {mode}")
+`} />
+    </div>
+
+
+    <!-- 2. Spread -->
+    <h3>Standard deviation and IQR</h3>
+    <p><strong>Standard deviation</strong> measures average distance from the mean. <strong>IQR</strong> (interquartile range) is Q3 minus Q1, covering the middle 50% of data. IQR is robust to outliers; standard deviation is not.</p>
+
+    <SchemeRepl client:load initialCode={`; Standard deviation and IQR
+(define data '(2 3 5 5 7 8 12 15 22))
+
+(define (mean lst)
+  (/ (apply + lst) (length lst)))
+
+; Variance: average squared deviation from mean
+(define (variance lst)
+  (let ((m (mean lst)))
+    (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
+       (- (length lst) 1))))  ; sample variance uses n-1
+
+; Standard deviation: square root of variance
+(define (std lst)
+  (sqrt (exact->inexact (variance lst))))
+
+(display "Std dev: ")
+(display (std data)) (newline)
+
+; IQR: Q3 - Q1
+(define sorted (sort data <))
+(define q1 (list-ref sorted 2))  ; 25th percentile
+(define q3 (list-ref sorted 6))  ; 75th percentile
+(display "Q1: ") (display q1) (newline)
+(display "Q3: ") (display q3) (newline)
+(display "IQR: ") (display (- q3 q1))
+`} />
+
+
+    <!-- 3. Contingency Tables -->
+    <h3>Contingency tables</h3>
+    <p>For two categorical variables, a <strong>contingency table</strong> (cross-tabulation) counts how often each combination occurs. Row and column proportions reveal the relationship between the variables.</p>
+
+    <SchemeRepl client:load initialCode={`; Contingency table: treatment outcome by group
+; Rows: treatment/control. Columns: improved/no change
+
+(define treatment-improved 28)
+(define treatment-no-change 12)
+(define control-improved 18)
+(define control-no-change 22)
+
+(define treatment-total (+ treatment-improved treatment-no-change))
+(define control-total (+ control-improved control-no-change))
+
+(display "             Improved  No Change  Total") (newline)
+(display "Treatment    28        12         ")
+(display treatment-total) (newline)
+(display "Control      18        22         ")
+(display control-total) (newline)
+(newline)
+
+; Row proportions
+(display "Treatment improvement rate: ")
+(display (exact->inexact (/ treatment-improved treatment-total)))
+(newline)
+(display "Control improvement rate:   ")
+(display (exact->inexact (/ control-improved control-total)))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Standard_deviation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Standard deviation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Box_plot"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Box plot</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Contingency_table"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Contingency table</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>OpenIntro covers histograms, dot plots, and intensity maps with the county dataset. We focus on the core numerical summaries. The original also introduces the concept of robust statistics (median vs. mean) with income distribution examples. Variance here uses Bessel's correction (n-1 denominator) for sample variance, matching the textbook convention.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-01/", label: "Introduction to Data" }} next={{ href: "/reading/statistics/openintro-03/", label: "Probability" }} />
+
+  </main>
+</Layout>

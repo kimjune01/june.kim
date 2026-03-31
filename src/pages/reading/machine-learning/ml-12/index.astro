@@ -1,0 +1,305 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.12 — Large Language Models" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Large Language Models</h1>
+    <p class="text-gray-400 text-sm mb-6">MML (CC BY 4.0) &middot; D2L (CC BY-SA 4.0) &middot; 12 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Scale the transformer, pretrain on next-token prediction over the internet, then align with human feedback. In-context learning emerges: the model learns new tasks from examples in the prompt without weight updates. The LLM is a foundation model &mdash; a general-purpose function approximator that specializes via prompting.</p>
+    </div>
+
+    <!-- SVG: pretrain -> align -> prompt pipeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 140" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Pretrain stage -->
+        <rect x="10" y="35" width="110" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="65" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">large corpus</text>
+        <text x="65" y="72" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.6">next-token loss</text>
+        <text x="65" y="25" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">pretrain</text>
+
+        <!-- Arrow 1 -->
+        <line x1="120" y1="60" x2="150" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="152,60 144,55 144,65" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Base model -->
+        <rect x="155" y="45" width="70" height="30" rx="6" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="190" y="65" text-anchor="middle" fill="#a78bfa" font-size="10">base model</text>
+
+        <!-- Arrow 2 -->
+        <line x1="225" y1="60" x2="255" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="257,60 249,55 249,65" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Align stage -->
+        <rect x="260" y="35" width="70" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="295" y="55" text-anchor="middle" fill="#f59e0b" font-size="11">RLHF</text>
+        <text x="295" y="72" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.6">human prefs</text>
+        <text x="295" y="25" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">align</text>
+
+        <!-- Arrow 3 -->
+        <line x1="330" y1="60" x2="360" y2="60" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="362,60 354,55 354,65" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Prompt stage -->
+        <rect x="365" y="35" width="80" height="50" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="405" y="55" text-anchor="middle" fill="#34d399" font-size="11">context</text>
+        <text x="405" y="72" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.6">&#x2192; response</text>
+        <text x="405" y="25" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">prompt</text>
+
+        <!-- Bottom caption -->
+        <text x="230" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Pretrain on prediction. Align with preferences. Specialize via prompting.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Tokenization (BPE concept) -->
+    <h3>Tokenization (BPE concept)</h3>
+    <p>Before a model sees text, it's split into tokens. Byte Pair Encoding starts with individual characters and repeatedly merges the most frequent adjacent pair. The result: common words are single tokens, rare words are split into subwords. This gives a fixed vocabulary that can represent any text.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified BPE: merge most frequent character pairs
+; Real BPE builds a vocabulary of ~50k-100k tokens
+
+(define (count-pairs tokens)
+  ; Count adjacent pair frequencies
+  (let loop ((toks tokens) (counts '()))
+    (if (null? (cdr toks)) counts
+        (let* ((pair (list (car toks) (cadr toks)))
+               (existing (assoc pair counts)))
+          (loop (cdr toks)
+                (if existing
+                    (map (lambda (c) (if (equal? (car c) pair)
+                                        (cons pair (+ (cdr c) 1))
+                                        c))
+                         counts)
+                    (cons (cons pair 1) counts)))))))
+
+(define (find-best-pair counts)
+  (let loop ((cs counts) (best #f) (best-count 0))
+    (if (null? cs) best
+        (if (> (cdar cs) best-count)
+            (loop (cdr cs) (caar cs) (cdar cs))
+            (loop (cdr cs) best best-count)))))
+
+(define (merge-pair tokens pair)
+  (let ((merged (string-append (car pair) (cadr pair))))
+    (let loop ((toks tokens) (result '()))
+      (cond ((null? toks) (reverse result))
+            ((and (not (null? (cdr toks)))
+                  (equal? (car toks) (car pair))
+                  (equal? (cadr toks) (cadr pair)))
+             (loop (cddr toks) (cons merged result)))
+            (else (loop (cdr toks) (cons (car toks) result)))))))
+
+; Start with characters
+(define text '("l" "o" "w" " " "l" "o" "w" " " "l" "o" "w" "e" "r"))
+
+(display "Start:   ") (display text) (newline)
+
+; Step 1: merge most frequent pair
+(let* ((counts (count-pairs text))
+       (best (find-best-pair counts))
+       (merged (merge-pair text best)))
+  (display "Merge 1: ") (display best) (display " -> ") (display merged) (newline)
+  (let* ((counts2 (count-pairs merged))
+         (best2 (find-best-pair counts2))
+         (merged2 (merge-pair merged best2)))
+    (display "Merge 2: ") (display best2) (display " -> ") (display merged2)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simplified BPE tokenization
+from collections import Counter
+
+def count_pairs(tokens):
+    return Counter(zip(tokens[:-1], tokens[1:]))
+
+def merge_pair(tokens, pair):
+    merged = pair[0] + pair[1]
+    result = []
+    i = 0
+    while i < len(tokens):
+        if i < len(tokens)-1 and tokens[i] == pair[0] and tokens[i+1] == pair[1]:
+            result.append(merged)
+            i += 2
+        else:
+            result.append(tokens[i])
+            i += 1
+    return result
+
+tokens = list("low low lower")
+print("Start:  ", tokens)
+
+for step in range(3):
+    pairs = count_pairs(tokens)
+    if not pairs: break
+    best = pairs.most_common(1)[0][0]
+    tokens = merge_pair(tokens, best)
+    print("Merge {}: {} -> {}".format(step+1, best, tokens))
+`} />
+    </div>
+
+
+    <!-- 2. Next-token sampling -->
+    <h3>Next-token sampling (temperature / top-k)</h3>
+    <p>The model outputs a probability distribution over the vocabulary. Temperature controls sharpness: T&#x2192;0 makes it greedy (always pick the most likely), T&#x2192;&#x221E; makes it uniform (random). Top-k restricts sampling to the k most probable tokens. Together they control the creativity/coherence tradeoff.</p>
+
+    <SchemeRepl client:load initialCode={`; Next-token sampling with temperature and top-k
+
+(define (softmax-with-temp logits temperature)
+  (let* ((scaled (map (lambda (x) (/ x temperature)) logits))
+         (mx (apply max scaled))
+         (exps (map (lambda (x) (exp (- x mx))) scaled))
+         (total (apply + exps)))
+    (map (lambda (e) (/ e total)) exps)))
+
+(define vocab '("the" "cat" "sat" "on" "mat"))
+(define logits '(2.0 1.5 0.5 0.3 0.1))
+
+(define (show-dist label probs)
+  (display label) (newline)
+  (for-each (lambda (word p)
+              (display "  ") (display word) (display ": ")
+              (display (/ (round (* p 1000)) 1000)) (newline))
+            vocab probs))
+
+(show-dist "T=1.0 (normal):" (softmax-with-temp logits 1.0))
+(show-dist "T=0.3 (sharp):" (softmax-with-temp logits 0.3))
+(show-dist "T=3.0 (flat):" (softmax-with-temp logits 3.0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Next-token sampling with temperature
+def softmax_temp(logits, temperature):
+    scaled = [x / temperature for x in logits]
+    mx = max(scaled)
+    exps = [math.exp(x - mx) for x in scaled]
+    total = sum(exps)
+    return [e / total for e in exps]
+
+vocab = ["the", "cat", "sat", "on", "mat"]
+logits = [2.0, 1.5, 0.5, 0.3, 0.1]
+
+for temp, label in [(1.0,"normal"), (0.3,"sharp"), (3.0,"flat")]:
+    probs = softmax_temp(logits, temp)
+    print("T={} ({}):".format(temp, label))
+    for word, p in zip(vocab, probs):
+        print("  {}: {:.3f}".format(word, p))
+`} />
+    </div>
+
+
+    <!-- 3. Simple prompt template -->
+    <h3>Prompt template</h3>
+    <p>In-context learning works by formatting examples into the prompt. The model doesn't update its weights &mdash; it uses the pattern in the context to infer the task. This is why prompt engineering matters: the format of the examples is the program. Fitting more signal into fewer tokens is the problem <a href="https://june.kim/context-density"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>context density</a> addresses.</p>
+
+    <SchemeRepl client:load initialCode={`; Prompt template: few-shot in-context learning
+; The model sees examples, then completes the pattern
+
+(define (make-prompt examples query)
+  (let ((formatted
+         (map (lambda (ex)
+                (string-append "Input: " (car ex) "\nOutput: " (cdr ex)))
+              examples)))
+    (string-append
+     (apply string-append
+            (map (lambda (s) (string-append s "\n\n")) formatted))
+     "Input: " query "\nOutput:")))
+
+(define examples
+  '(("happy" . "sad")
+    ("hot" . "cold")
+    ("big" . "small")))
+
+(display (make-prompt examples "fast")) (newline)
+(newline)
+(display "---") (newline)
+(display "The model sees the pattern (antonyms) and completes:") (newline)
+(display "Expected completion: slow") (newline)
+(newline)
+
+; Token count matters: more examples = better pattern recognition
+; but you're limited by the context window
+(display "Examples: ") (display (length examples)) (newline)
+(display "Context window: ~4k to ~1M tokens")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Prompt template for few-shot in-context learning
+def make_prompt(examples, query):
+    formatted = [
+        "Input: {}\nOutput: {}".format(inp, out)
+        for inp, out in examples
+    ]
+    return "\n\n".join(formatted) + "\n\nInput: {}\nOutput:".format(query)
+
+examples = [
+    ("happy", "sad"),
+    ("hot", "cold"),
+    ("big", "small"),
+]
+
+print(make_prompt(examples, "fast"))
+print()
+print("---")
+print("The model sees the pattern (antonyms) and completes:")
+print("Expected completion: slow")
+print()
+print("Examples:", len(examples))
+print("Context window: ~4k to ~1M tokens")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(x<sub>t</sub>|x<sub>&lt;t</sub>)</td><td class="pr-4 text-green-300">(softmax logits)</td><td class="font-sans">Next-token distribution</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">T (temperature)</td><td class="pr-4 text-green-300">temperature</td><td class="font-sans">Sharpness of sampling</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">top-k</td><td class="pr-4 text-green-300">k most probable</td><td class="font-sans">Restrict sampling to k tokens</td></tr>
+          <tr><td class="py-2 pr-4">RLHF</td><td class="pr-4 text-green-300">reward model + PPO</td><td class="font-sans">Align model to human preferences</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">The jump from transformer to LLM is primarily one of scale: billions of parameters, trillions of tokens, thousands of GPUs. Emergent abilities (chain-of-thought reasoning, code generation, tool use) appear at scale thresholds that we can't predict from smaller models. Whether this is true emergence or smooth scaling is debated. What's not debated: the practical capabilities are real. Whether scale alone produces <a href="https://june.kim/general-intelligence"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>general intelligence</a> is a separate question &mdash; one that depends on whether the system has a closed consolidation loop, not just a larger forward pass.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-01/">&#x1F4E1; Shannon Ch.1</a> &mdash; next-token prediction is minimizing surprise (cross-entropy)</li>
+      <li><a href="/reading/cognitive-science/lovelace-08/">&#x1F9E0; Lovelace Ch.8</a> &mdash; cognitive architectures and the question of understanding</li>
+      <li><a href="/reading/programming/sicp-14/">&#x1F4D6; SICP Ch.14</a> &mdash; the metacircular evaluator: programs that interpret programs, self-reference all the way down</li>
+    </ul>
+
+    <!-- Ready for the real thing? -->
+    </Neighbors>
+    <div class="bg-zinc-800 rounded-lg p-5 mt-8 mb-8 callout">
+      <h3 class="mt-0">Ready for the real thing?</h3>
+      <p><a href="https://d2l.ai/">Dive into Deep Learning</a> (d2l.ai) covers everything here with runnable PyTorch/JAX code, full math, and exercises. It's free, it's excellent, and it's where these chapters point when the scaffolding comes off.</p>
+    </div>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-11/", label: "Transformers" }} fin="fin" />
+
+  </main>
+</Layout>

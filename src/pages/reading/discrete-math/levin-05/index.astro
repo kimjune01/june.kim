@@ -1,0 +1,291 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Levin Ch.5 — Additional Topics" favicon="🔢">
+  <main>
+
+    <a href="/reading/discrete-math/" class="text-sm mb-4 inline-block">&larr; back to discrete math</a>
+
+    <h1>Additional Topics</h1>
+    <p class="text-gray-400 text-sm mb-6">Oscar Levin &middot; CC BY-SA 4.0 &middot; <a href="https://discrete.openmathbooks.org/">Discrete Mathematics: An Open Introduction, Ch. 5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Three tools that punch above their weight. <strong>Matching</strong> in bipartite graphs solves assignment problems. <strong>Ramsey theory</strong> guarantees that sufficiently large structures contain unavoidable order. <strong>Generating functions</strong> encode sequences as polynomials, turning recurrence-solving into algebra.</p>
+    </div>
+
+    <!-- SVG: Bipartite matching -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Left partition -->
+        <circle cx="60" cy="40" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="60" y="45" text-anchor="middle" fill="#60a5fa" font-size="12">1</text>
+        <circle cx="60" cy="100" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="60" y="105" text-anchor="middle" fill="#60a5fa" font-size="12">2</text>
+        <circle cx="60" cy="160" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="60" y="165" text-anchor="middle" fill="#60a5fa" font-size="12">3</text>
+        <!-- Right partition -->
+        <circle cx="240" cy="40" r="14" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="240" y="45" text-anchor="middle" fill="#34d399" font-size="12">a</text>
+        <circle cx="240" cy="100" r="14" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="240" y="105" text-anchor="middle" fill="#34d399" font-size="12">b</text>
+        <circle cx="240" cy="160" r="14" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.7"/>
+        <text x="240" y="165" text-anchor="middle" fill="#34d399" font-size="12">c</text>
+        <!-- Non-matching edges (thin, dim) -->
+        <line x1="74" y1="40" x2="226" y2="100" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="74" y1="100" x2="226" y2="40" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="74" y1="100" x2="226" y2="160" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <line x1="74" y1="160" x2="226" y2="100" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Matching edges (bold, colored) -->
+        <line x1="74" y1="40" x2="226" y2="40" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.8"/>
+        <line x1="74" y1="100" x2="226" y2="100" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.8"/>
+        <line x1="74" y1="160" x2="226" y2="160" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.8"/>
+        <!-- Label -->
+        <text x="150" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">perfect matching: every vertex matched</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Matching in bipartite graphs -->
+    <h3>Matching in bipartite graphs</h3>
+    <p>A <strong>matching</strong> is a set of edges with no shared vertices. In a bipartite graph (vertices split into two groups, edges only between groups), Hall's theorem says a perfect matching exists if and only if every subset S of one side has at least |S| neighbors on the other side.</p>
+
+    <SchemeRepl client:load initialCode={`; Bipartite graph: left = (1 2 3), right = (a b c)
+; Edges: 1-a, 1-b, 2-a, 2-c, 3-b, 3-c
+
+(define edges '((1 a) (1 b) (2 a) (2 c) (3 b) (3 c)))
+
+; Neighbors of a vertex
+(define (neighbors v)
+  (map cadr (filter (lambda (e) (equal? (car e) v)) edges)))
+
+; Check Hall's condition for all subsets of left side
+; For each subset S, |N(S)| >= |S|
+(define left '(1 2 3))
+
+; Powerset (excluding empty set)
+(define (powerset lst)
+  (if (null? lst) '(())
+      (let ((rest (powerset (cdr lst))))
+        (append rest
+                (map (lambda (s) (cons (car lst) s)) rest)))))
+
+(define (unique lst)
+  (cond ((null? lst) '())
+        ((member (car lst) (cdr lst)) (unique (cdr lst)))
+        (else (cons (car lst) (unique (cdr lst))))))
+
+(define (neighborhood subset)
+  (unique (apply append (map neighbors subset))))
+
+(define subsets (filter (lambda (s) (not (null? s))) (powerset left)))
+
+(display "Hall's condition check:") (newline)
+(for-each (lambda (s)
+  (let ((ns (neighborhood s)))
+    (display "  S=") (display s)
+    (display " N(S)=") (display ns)
+    (display " |N(S)|>=|S|? ") (display (>= (length ns) (length s)))
+    (newline)))
+  subsets)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import combinations
+
+edges = [(1,'a'),(1,'b'),(2,'a'),(2,'c'),(3,'b'),(3,'c')]
+left = [1, 2, 3]
+nbrs = lambda v: {b for a,b in edges if a == v}
+
+print("Hall's condition:")
+for size in range(1, len(left)+1):
+    for s in combinations(left, size):
+        ns = set().union(*(nbrs(v) for v in s))
+        print(f"  S={s} N(S)={ns} |N(S)|>={len(s)}? {len(ns)>=len(s)}")
+`} />
+    </div>
+
+
+    <!-- 2. Ramsey theory -->
+    <h3>Ramsey theory</h3>
+    <p><strong>R(s,t)</strong> is the smallest n such that any 2-coloring of K_n's edges contains a red K_s or a blue K_t. R(3,3) = 6: among any 6 people, three are mutual friends or three are mutual strangers. The exact values grow very fast. R(5,5) is still unknown.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify R(3,3) = 6 by exhaustive check on K5.
+; Show K5 CAN be 2-colored without a monochromatic triangle.
+
+; K5 edges
+(define k5-edges
+  '((0 1) (0 2) (0 3) (0 4) (1 2) (1 3) (1 4) (2 3) (2 4) (3 4)))
+
+; Color assignment: edges of a cycle get red, diagonals get blue.
+; Cycle: 0-1, 1-2, 2-3, 3-4, 4-0
+(define red '((0 1) (1 2) (2 3) (3 4) (0 4)))
+(define (is-red? e)
+  (or (member e red)
+      (member (list (cadr e) (car e)) red)))
+
+; Check for monochromatic triangle
+(define (triangle? a b c color?)
+  (and (color? (list a b)) (color? (list b c)) (color? (list a c))))
+
+(define verts '(0 1 2 3 4))
+
+(define (has-mono-triangle? color?)
+  (let loop ((triples '()))
+    ; Generate all triples
+    (let check ((i 0))
+      (if (>= i 3) #f
+          (let check-j ((j (+ i 1)))
+            (if (>= j 4) (check (+ i 1))
+                (let check-k ((k (+ j 1)))
+                  (if (>= k 5) (check-j (+ j 1))
+                      (if (triangle? i j k color?)
+                          #t
+                          (check-k (+ k 1)))))))))))
+
+(display "Red triangle in K5? ")
+(display (has-mono-triangle? is-red?)) (newline)
+(display "Blue triangle in K5? ")
+(display (has-mono-triangle? (lambda (e) (not (is-red? e))))) (newline)
+(display "R(3,3) > 5: K5 can be 2-colored without mono triangle") (newline)
+
+; Known small Ramsey numbers
+(display "R(3,3) = 6") (newline)
+(display "R(3,4) = 9") (newline)
+(display "R(4,4) = 18")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import combinations
+
+# K5 cycle coloring: no monochromatic triangle
+red = {(0,1),(1,2),(2,3),(3,4),(0,4)}
+is_red = lambda a,b: (min(a,b),max(a,b)) in red
+
+def has_mono(color_fn):
+    return any(
+        all(color_fn(a,b) for a,b in combinations(tri, 2))
+        for tri in combinations(range(5), 3)
+    )
+
+print(f"Red triangle? {has_mono(is_red)}")
+print(f"Blue triangle? {has_mono(lambda a,b: not is_red(a,b))}")
+print("R(3,3) > 5 confirmed. R(3,3) = 6.")
+`} />
+    </div>
+
+
+    <!-- 3. Generating functions -->
+    <h3>Generating functions</h3>
+    <p>The <strong>generating function</strong> of a sequence a_0, a_1, a_2, ... is the formal power series A(x) = a_0 + a_1*x + a_2*x^2 + .... Adding sequences adds their generating functions. Multiplication corresponds to convolution. Solving a recurrence becomes solving an algebraic equation.</p>
+
+    <SchemeRepl client:load initialCode={`; Represent polynomials as lists of coefficients: (a0 a1 a2 ...)
+; Polynomial addition
+(define (poly-add a b)
+  (cond ((null? a) b)
+        ((null? b) a)
+        (else (cons (+ (car a) (car b))
+                    (poly-add (cdr a) (cdr b))))))
+
+; Polynomial multiplication (convolution)
+(define (poly-mul a b)
+  (if (null? a) '()
+      (poly-add
+        (map (lambda (bi) (* (car a) bi)) b)
+        (cons 0 (poly-mul (cdr a) b)))))
+
+; GF for Fibonacci: F(x) = x / (1 - x - x^2)
+; Approximate by multiplying: (1 + x + x^2 + ...)*(x)
+; Better: just compute coefficients from the recurrence
+(define (fib-coeffs n)
+  (let loop ((i 0) (a 0) (b 1) (result '()))
+    (if (> i n) (reverse result)
+        (loop (+ i 1) b (+ a b) (cons a result)))))
+
+(display "Fibonacci GF coefficients (first 10):") (newline)
+(display (fib-coeffs 9)) (newline)
+
+; Product of GFs = convolution of sequences
+; (1 + x)^3 = 1 + 3x + 3x^2 + x^3
+(define one-plus-x '(1 1))
+(define squared (poly-mul one-plus-x one-plus-x))
+(define cubed (poly-mul squared one-plus-x))
+
+(display "(1+x)^3 = ") (display cubed) (newline)
+; Should be (1 3 3 1) = binomial coefficients C(3,k)
+
+; (1+x)^4
+(display "(1+x)^4 = ") (display (poly-mul cubed one-plus-x))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+# Polynomial multiplication via numpy
+a = [1, 1]  # 1 + x
+cubed = np.polymul(np.polymul(a, a), a).astype(int).tolist()
+print(f"(1+x)^3 = {cubed}")  # [1, 3, 3, 1]
+
+fourth = np.polymul(cubed, a).astype(int).tolist()
+print(f"(1+x)^4 = {fourth}")  # [1, 4, 6, 4, 1]
+
+# Fibonacci coefficients
+fib = [0, 1]
+for _ in range(8):
+    fib.append(fib[-1] + fib[-2])
+print(f"Fibonacci: {fib}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">R(s,t)</td><td class="pr-4 text-green-300">lookup table</td><td class="pr-4 text-blue-300">lookup table</td><td class="font-sans">Ramsey number</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A(x) = sum a_n x^n</td><td class="pr-4 text-green-300">(a0 a1 a2 ...)</td><td class="pr-4 text-blue-300">[a0, a1, ...]</td><td class="font-sans">Generating function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A*B</td><td class="pr-4 text-green-300">(poly-mul a b)</td><td class="pr-4 text-blue-300">np.polymul</td><td class="font-sans">Convolution / product</td></tr>
+          <tr><td class="py-2 pr-4">Hall's condition</td><td class="pr-4 text-green-300">subset check</td><td class="pr-4 text-blue-300">subset check</td><td class="font-sans">|N(S)| &ge; |S| for all S</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other chapter pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-10/">Grinstead Ch.10</a> — generating functions for probability distributions</li>
+      <li><a href="/reading/discrete-math/levin-02/">Levin Ch.2</a> — recurrence relations that generating functions solve</li>
+      <li><a href="/reading/discrete-math/levin-04/">Levin Ch.4</a> — graph theory foundations for matching</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Hall%27s_marriage_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hall's marriage theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Ramsey_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ramsey theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Generating_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Generating function</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Levin's chapter 5 is a sampler of three deep topics. The matching verification uses Hall's condition but does not implement an augmenting-path algorithm. Ramsey theory is demonstrated by example (R(3,3) = 6) because exact computation of larger Ramsey numbers is intractable. Generating functions are represented as coefficient lists; the formal power series operations (addition, multiplication) are polynomial arithmetic. The connection between convolution and sequence multiplication ties everything together.</p>
+
+    <PrevNext prev={{ href: "/reading/discrete-math/levin-04/", label: "Graph Theory" }} fin="fin · 5 of 5" />
+
+  </main>
+</Layout>

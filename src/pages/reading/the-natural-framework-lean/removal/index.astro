@@ -1,0 +1,64 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Removal.lean — Remove any postcondition, system dies" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Removal.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Removal.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The falsifiability test: for each postcondition in the pipeline, removing it leads to system death. Ten conjuncts, each derived from the declared axioms. This is the machine-checked version of the claim that <a href="https://june.kim/theory-is-load-bearing"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>theory is load-bearing</a> &mdash; remove any piece and the structure collapses.</p>
+    </div>
+
+    <h3>survives / theorem healthy_survives</h3>
+    <p>A system survives if injection exceeds loss at every cycle. When injected bits per cycle exceed lost bits, the system stays alive indefinitely.</p>
+
+    <h3>no_perceive_death (P1)</h3>
+    <p>Zero injection with any positive loss kills the system. Without Perceive injecting new bits, the closed loop bleeds out.</p>
+
+    <h3>no_cache_death (C1)</h3>
+    <p>Rate mismatch without a buffer means cumulative loss &mdash; one item lost per cycle minimum, compounding forever.</p>
+
+    <h3>cache_must_evict (C2)</h3>
+    <p>A bounded store with positive input rate fills eventually. The cache must evict or the system halts.</p>
+
+    <h3>no_attend_death (A1)</h3>
+    <p>Input-only selection (ignoring policy) fails on history-dependent tasks. Same input, different required response &mdash; at least one must be wrong.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">no_attend_death</span>
+    &#123;I O : Type&#125; (select : I &rarr; O)
+    (env : Nat &rarr; I) (required : Nat &rarr; O)
+    (t&#8321; t&#8322; : Nat)
+    (hsame : env t&#8321; = env t&#8322;)
+    (hdiff : required t&#8321; &ne; required t&#8322;)
+    : select (env t&#8321;) &ne; required t&#8321; &or;
+      select (env t&#8322;) &ne; required t&#8322;</code></pre>
+
+    <h3>attend_must_rank (A2)</h3>
+    <p>A binary gate with two output bins cannot distinguish three or more classes. Pigeonhole: 3 items into 2 bins means at least two collide and get the same treatment, causing an error when they need different treatment.</p>
+
+    <h3>attend_must_be_stochastic (A3)</h3>
+    <p>A deterministic transducer with a state+input collision and different requirements must err at one of the colliding times.</p>
+
+    <h3>no_consolidate_death (Co1)</h3>
+    <p>A fixed (non-adapting) transducer with a collision must eventually produce wrong output. Same mechanism as A3.</p>
+
+    <h3>no_remember_death (R1)</h3>
+    <p>A transducer with frozen state (resets each cycle) fails on history-dependent tasks. It has state machinery but cannot persist state across cycles, so same input always gives same output.</p>
+
+    <h3>removal_tests</h3>
+    <p>All ten postcondition removals assembled into one theorem. Eight derive conclusions directly from the axioms. A3 and Co1 take a state collision as hypothesis (the collision itself is guaranteed by capacity_bound + pigeonhole, proved separately).</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> &mdash; imported; each removal test cites specific axioms</li>
+      <li><a href="/reading/the-natural-framework-lean/pigeonhole/">Pigeonhole.lean</a> &mdash; provides the state collision that A3 and Co1 assume</li>
+      <li><a href="/reading/the-natural-framework-lean/stochasticity/">Stochasticity.lean</a> &mdash; the full deterministic limitation argument</li>
+      <li><a href="/reading/the-natural-framework-lean/boundary/">Boundary.lean</a> &mdash; the boundary arguments that these removal tests formalize</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/uniqueness/", label: "Uniqueness.lean · 8 of 25" }} next={{ href: "/reading/the-natural-framework-lean/pigeonhole/", label: "Pigeonhole.lean · 10 of 25" }} />
+  </main>
+</Layout>

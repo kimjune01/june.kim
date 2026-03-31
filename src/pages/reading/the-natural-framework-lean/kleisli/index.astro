@@ -1,0 +1,113 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Kleisli.lean — Stochastic functions compose" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Kleisli.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Kleisli.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Defines monadic kernels (functions that return computations) and proves they form a category &mdash; they compose associatively with an identity.</p>
+    </div>
+
+    <h3>Kernel</h3>
+    <p>A Kernel is a function from <code>a</code> to <code>M b</code> &mdash; given an input, it produces a computation that may be stochastic. When <code>M = Id</code>, this is just a plain function <code>a &rarr; b</code>. Every pipeline stage is a Kernel. This is the Kleisli arrow that <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the formal backbone</a> uses to model morphisms in the Stoch category.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">Kernel</span> (M : Type &rarr; Type) (&alpha; &beta; : Type) := &alpha; &rarr; M &beta;</code></pre>
+
+    <h3>Kernel.comp</h3>
+    <p>Kleisli composition: feed the output of the first kernel into the second, chaining via <code>bind</code>. This is how pipeline stages connect &mdash; the output of Perceive flows into Cache, Cache into Filter, and so on.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">Kernel.comp</span> [Monad M] (f : Kernel M &alpha; &beta;) (g : Kernel M &beta; &gamma;)
+    : Kernel M &alpha; &gamma; :=
+  <span class="text-blue-300">fun</span> a =&gt; f a &gt;&gt;= g</code></pre>
+
+    <h3>Kernel.id_comp / comp_id / comp_assoc</h3>
+    <p>The three category laws: composing with the identity kernel does nothing (left and right), and composition is associative. All three follow from the monad laws &mdash; this is the standard result that every lawful monad induces a Kleisli category.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">Kernel.comp_assoc</span> [Monad M] [LawfulMonad M]
+    (f : Kernel M &alpha; &beta;) (g : Kernel M &beta; &gamma;) (h : Kernel M &gamma; &delta;)
+    : Kernel.comp (Kernel.comp f g) h =
+      Kernel.comp f (Kernel.comp g h)</code></pre>
+    <p class="text-sm text-gray-500">The proof uses <code>funext</code> (two functions are equal if they agree on all inputs) and then applies <code>bind_assoc</code> from the LawfulMonad instance.</p>
+
+    <SchemeRepl client:load initialCode={`; Kleisli composition: chain functions that return lists
+; a -> [b], b -> [c]  =>  a -> [c]
+; (like composing stochastic stages)
+
+(define (kleisli-comp f g)
+  (lambda (x)
+    (apply append (map g (f x)))))
+
+; Stage 1: perceive — one input, two encodings
+(define (perceive x)
+  (list (string-append x "-visual")
+        (string-append x "-audio")))
+
+; Stage 2: cache — each encoding gets indexed
+(define (cache enc)
+  (list (string-append enc ":idx0")
+        (string-append enc ":idx1")))
+
+; Compose: perceive >=> cache
+(define pipeline (kleisli-comp perceive cache))
+
+(display "perceive('cat'): ")
+(display (perceive "cat"))
+(newline)
+(display "pipeline('cat'): ")
+(display (pipeline "cat"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Kleisli composition: chain functions that return lists
+# a -> [b], b -> [c]  =>  a -> [c]
+# (like composing stochastic stages)
+
+def kleisli_comp(f, g):
+    return lambda x: [z for y in f(x) for z in g(y)]
+
+# Stage 1: perceive — one input, two encodings
+def perceive(x):
+    return [x + "-visual", x + "-audio"]
+
+# Stage 2: cache — each encoding gets indexed
+def cache(enc):
+    return [enc + ":idx0", enc + ":idx1"]
+
+# Compose: perceive >=> cache
+pipeline = kleisli_comp(perceive, cache)
+
+print(f"perceive('cat'): {perceive('cat')}")
+print(f"pipeline('cat'): {pipeline('cat')}")
+`} />
+    </div>
+
+    <h3>Kernel.deterministic_comp</h3>
+    <p>Pure functions can be embedded as kernels (wrap the output in <code>pure</code>). This embedding preserves composition: embedding <code>g . f</code> gives the same kernel as composing the embeddings of f and g separately.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">Kernel.deterministic_comp</span> [Monad M] [LawfulMonad M]
+    (f : &alpha; &rarr; &beta;) (g : &beta; &rarr; &gamma;)
+    : Kernel.deterministic (M := M) (g &compfn; f) =
+      Kernel.comp (Kernel.deterministic f) (Kernel.deterministic g)</code></pre>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/support/">Support.lean</a> &mdash; imported; kernels compose over the possibilistic layer</li>
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> &mdash; the pipeline is built from five forward kernels + one backward kernel</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; contract preservation is defined on kernels</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-04/">🐱 Milewski Ch4 Kleisli</a></li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/support/", label: "Support.lean · 1 of 25" }} next={{ href: "/reading/the-natural-framework-lean/axioms/", label: "Axioms.lean · 3 of 25" }} />
+  </main>
+</Layout>

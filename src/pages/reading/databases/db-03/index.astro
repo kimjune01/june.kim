@@ -1,0 +1,225 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.3 — SQL Basics" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>SQL Basics</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/SQL"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>SQL</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>SQL</strong> (Structured Query Language) is the standard language for relational databases. It maps directly to relational algebra: SELECT is projection, WHERE is selection, JOIN is join, UNION is union. SQL adds aggregation (GROUP BY, COUNT, SUM) and ordering (ORDER BY) on top of the algebra.</p>
+    </div>
+
+    <!-- SVG: SQL query mapped to relational algebra -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- SQL side -->
+        <text x="100" y="20" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="bold">SQL</text>
+        <text x="100" y="42" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">SELECT name</text>
+        <text x="100" y="57" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">FROM users</text>
+        <text x="100" y="72" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">WHERE age &gt; 25</text>
+        <text x="100" y="87" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">ORDER BY name</text>
+
+        <!-- Arrow -->
+        <line x1="170" y1="55" x2="220" y2="55" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="220,51 228,55 220,59" fill="currentColor" fill-opacity="0.4"/>
+        <text x="195" y="48" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">compiles to</text>
+
+        <!-- Algebra side -->
+        <text x="310" y="20" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">Relational Algebra</text>
+        <text x="310" y="42" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">sort</text>
+        <text x="310" y="57" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">project(name)</text>
+        <text x="310" y="72" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">select(age &gt; 25)</text>
+        <text x="310" y="87" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.7">scan(users)</text>
+
+        <!-- Downward arrows on algebra side -->
+        <line x1="310" y1="44" x2="310" y2="48" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="310" y1="59" x2="310" y2="63" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="310" y1="74" x2="310" y2="78" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Caption -->
+        <text x="200" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">SQL compiles to relational algebra operations.</text>
+      </svg>
+    </div>
+
+
+    <!-- CREATE and INSERT -->
+    <h3>CREATE and INSERT — defining and populating tables</h3>
+    <p>CREATE TABLE defines a schema: column names, types, and constraints. INSERT adds tuples. We simulate this in Python with sqlite3, which runs entirely in memory.</p>
+
+    <Repl client:load initialCode={`import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+
+# CREATE TABLE
+c.execute("""
+    CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        age INTEGER
+    )
+""")
+
+# INSERT
+c.execute("INSERT INTO users VALUES (1, 'Alice', 30)")
+c.execute("INSERT INTO users VALUES (2, 'Bob', 22)")
+c.execute("INSERT INTO users VALUES (3, 'Carol', 28)")
+c.execute("INSERT INTO users VALUES (4, 'Dave', 35)")
+conn.commit()
+
+# Verify
+for row in c.execute("SELECT * FROM users"):
+    print(row)
+`} />
+
+
+    <!-- SELECT and WHERE -->
+    <h3>SELECT and WHERE — querying data</h3>
+    <p>SELECT chooses which columns to return (projection). WHERE filters which rows to return (selection). Together they implement the two most basic relational algebra operations.</p>
+
+    <Repl client:load initialCode={`import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+c.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+for row in [(1,'Alice',30),(2,'Bob',22),(3,'Carol',28),(4,'Dave',35)]:
+    c.execute("INSERT INTO users VALUES (?,?,?)", row)
+
+# SELECT with WHERE
+print("Users over 25:")
+for row in c.execute("SELECT name, age FROM users WHERE age > 25"):
+    print("  " + str(row[0]) + ", age " + str(row[1]))
+
+print()
+print("All names (projection only):")
+for row in c.execute("SELECT name FROM users"):
+    print("  " + str(row[0]))
+`} />
+
+
+    <!-- JOIN -->
+    <h3>JOIN — combining tables</h3>
+    <p>JOIN combines rows from two tables based on a related column. INNER JOIN returns only matching rows. LEFT JOIN returns all rows from the left table, with NULLs where the right table has no match.</p>
+
+    <Repl client:load initialCode={`import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+c.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)")
+c.execute("CREATE TABLE orders (oid INTEGER PRIMARY KEY, user_id INTEGER, item TEXT)")
+
+for u in [(1,'Alice'),(2,'Bob'),(3,'Carol')]:
+    c.execute("INSERT INTO users VALUES (?,?)", u)
+for o in [(101,1,'book'),(102,2,'pen'),(103,1,'lamp')]:
+    c.execute("INSERT INTO orders VALUES (?,?,?)", o)
+
+# INNER JOIN
+print("Inner join:")
+for row in c.execute("""
+    SELECT users.name, orders.item
+    FROM users
+    INNER JOIN orders ON users.id = orders.user_id
+"""):
+    print("  " + str(row[0]) + " ordered " + str(row[1]))
+
+# LEFT JOIN (Carol has no orders)
+print()
+print("Left join:")
+for row in c.execute("""
+    SELECT users.name, orders.item
+    FROM users
+    LEFT JOIN orders ON users.id = orders.user_id
+"""):
+    print("  " + str(row[0]) + " -> " + str(row[1]))
+`} />
+
+
+    <!-- GROUP BY and aggregates -->
+    <h3>GROUP BY and aggregate functions</h3>
+    <p>GROUP BY partitions rows into groups. Aggregate functions (COUNT, SUM, AVG, MIN, MAX) compute a single value per group. HAVING filters groups after aggregation, the way WHERE filters rows before aggregation.</p>
+
+    <Repl client:load initialCode={`import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+c.execute("CREATE TABLE orders (oid INTEGER, user_id INTEGER, amount REAL)")
+for o in [(1,1,10.0),(2,1,20.0),(3,2,15.0),(4,1,5.0),(5,2,30.0),(6,3,50.0)]:
+    c.execute("INSERT INTO orders VALUES (?,?,?)", o)
+
+# COUNT and SUM per user
+print("Orders per user:")
+for row in c.execute("""
+    SELECT user_id, COUNT(*) as cnt, SUM(amount) as total
+    FROM orders
+    GROUP BY user_id
+"""):
+    print("  User " + str(row[0]) + ": " + str(row[1]) + " orders, total $" + str(round(row[2],2)))
+
+# HAVING: only users with total > 20
+print()
+print("Users with total > 20:")
+for row in c.execute("""
+    SELECT user_id, SUM(amount) as total
+    FROM orders
+    GROUP BY user_id
+    HAVING total > 20
+"""):
+    print("  User " + str(row[0]) + ": $" + str(round(row[1],2)))
+`} />
+
+
+    <!-- ORDER BY -->
+    <h3>ORDER BY — sorting results</h3>
+    <p>ORDER BY sorts the output. It is not a relational algebra operation (relations are unordered sets), but SQL adds it as a convenience. ASC for ascending (default), DESC for descending.</p>
+
+    <SchemeRepl client:load initialCode={`; ORDER BY is sorting after the relational operations.
+; Relations are sets (unordered), but output needs an order.
+
+(define data
+  (list
+    (list (cons "name" "Carol") (cons "score" 88))
+    (list (cons "name" "Alice") (cons "score" 95))
+    (list (cons "name" "Bob")   (cons "score" 72))))
+
+(define (get-attr t a) (cdr (assoc a t)))
+
+; Sort by score descending
+(define sorted
+  (sort data (lambda (a b) (> (get-attr a "score") (get-attr b "score")))))
+
+(display "Sorted by score DESC:") (newline)
+(for-each
+  (lambda (t)
+    (display "  ")
+    (display (get-attr t "name"))
+    (display ": ")
+    (display (get-attr t "score"))
+    (newline))
+  sorted)
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/SQL"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>SQL</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/SQL_syntax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>SQL syntax</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Aggregate_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Aggregate function</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-02/", label: "Relational Algebra" }} next={{ href: "/reading/databases/db-04/", label: "Normalization" }} />
+
+  </main>
+</Layout>

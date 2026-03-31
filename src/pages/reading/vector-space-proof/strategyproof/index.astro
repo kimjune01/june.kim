@@ -1,0 +1,137 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="Strategyproof.lean — VCG is DSIC" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>Strategyproof.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/Strategyproof.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The DSIC proof: no advertiser can improve their utility by misreporting their bid, center, or sigma &mdash; regardless of what others report. Only player <code>i</code> needs to be truthful. The proof is a four-case exhaustion over who wins under truth vs. deviation.</p>
+    </div>
+
+    <h3>The four cases</h3>
+    <p>The proof splits on two binary questions: does player <code>i</code> win when truthful? Does player <code>i</code> win when deviating? That gives four cases:</p>
+
+    <h3>Case 1: both win</h3>
+    <p>Utility = <code>trueVal_i - C</code> in both cases, where <code>C = welfareOthersWithout</code>. By <code>welfareOthersWithout_invariant</code>, <code>C</code> doesn't depend on <code>i</code>'s report. So utility is identical.</p>
+
+    <h3>Case 2: truth wins, deviation loses</h3>
+    <p>Truthful utility = <code>trueVal_i - C &ge; 0</code> by <code>welfareOthersWithout_le_trueVal_of_win</code>: winning truthfully means your value exceeds the externality. Deviated utility = 0 by <code>playerUtility_eq_zero_of_loser</code>. Truth wins.</p>
+
+    <h3>Case 3: truth loses, deviation wins</h3>
+    <p>Truthful utility = 0. Deviated utility = <code>trueVal_i - C &le; 0</code> by <code>trueVal_le_welfareOthersWithout_of_loss</code>: losing truthfully means the externality exceeds your value, and <code>C</code> is invariant. Truth wins again.</p>
+
+    <h3>Case 4: both lose</h3>
+    <p>Both utilities are 0 by <code>playerUtility_eq_zero_of_loser</code>.</p>
+
+    <h3>welfareOthersWithout_invariant (payment invariance)</h3>
+    <p>Changing player <code>i</code>'s report does not change <code>welfareOthersWithout</code>. The counterfactual welfare with <code>i</code> removed depends only on other players' reports. This is the structural property that makes VCG <a href="https://en.wikipedia.org/wiki/Dominant_strategy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>dominant-strategy</a> rather than just <a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash</a>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">welfareOthersWithout_invariant</span>
+    (auc : Auction ι E) (i : ι) (r' : Report E) (x : E) :
+    welfareOthersWithout (auc.withReport i r') i x =
+      welfareOthersWithout auc i x</code></pre>
+
+    <h3>vcg_dsic</h3>
+    <p>The main result. For any deviation <code>r'</code> that player <code>i</code> might submit, truthful utility &ge; deviated utility. The hypothesis is <code>isTruthful (auc.report i) (auc.valuation i)</code> &mdash; only player <code>i</code> needs to be truthful. Others can report anything.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">vcg_dsic</span>
+    (auc : Auction ι E) (i : ι) (x : E) (r' : Report E)
+    (hi : isTruthful (auc.report i) (auc.valuation i)) :
+    playerUtility auc i x ≥
+      playerUtility (auc.withReport i r') i x</code></pre>
+    <p class="text-sm text-gray-500"><a href="https://doi.org/10.2307/2977633">Vickrey (1961)</a> Thm 1, <a href="https://doi.org/10.1007/BF01726210">Clarke (1971)</a> &sect;3, <a href="https://doi.org/10.2307/1914085">Groves (1973)</a> Thm 2. This is the machine-checked version of the DSIC claim in <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a>.</p>
+
+    <SchemeRepl client:load initialCode={`; DSIC: no bid beats truthful
+(define (score c s bid x)
+  (- (log bid) (/ (* (- x c) (- x c)) (* s s))))
+
+(define (trueVal c s v x)
+  (* v (exp (- (/ (* (- x c) (- x c)) (* s s))))))
+
+(define (reportedVal c s bid x)
+  (* bid (exp (- (/ (* (- x c) (- x c)) (* s s))))))
+
+(define ic 0.5) (define is 0.3) (define iv 4.0)
+(define oc 0.4) (define os 0.25) (define ob 3.5)
+(define x 0.45)
+
+(define (wins? bid)
+  (>= (score ic is bid x) (score oc os ob x)))
+
+(define (utility bid)
+  (if (wins? bid)
+      (- (trueVal ic is iv x) (reportedVal oc os ob x))
+      0.0))
+
+(define truth iv)
+(define ut (utility truth))
+
+(for-each (lambda (lie)
+  (let ((ul (utility lie)))
+    (display lie) (display "  ")
+    (display (wins? lie)) (display "  u=")
+    (display (round (* ul 1000))) (display "/1000  truth>=lie: ")
+    (display (>= (+ ut 1e-10) ul)) (newline)))
+  '(0.5 1.0 2.0 4.0 6.0 10.0 20.0))
+`} />
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def score(c, s, bid, x):
+    return math.log(bid) - (x - c)**2 / s**2
+
+def trueVal(c, s, v, x):
+    return v * math.exp(-(x - c)**2 / s**2)
+
+def reportedVal(c, s, bid, x):
+    return bid * math.exp(-(x - c)**2 / s**2)
+
+# Player i and one other
+i = {"c": 0.5, "s": 0.3, "v": 4.0}
+other = {"c": 0.4, "s": 0.25, "bid": 3.5}
+x = 0.45
+
+def wins(bid):
+    return score(i["c"], i["s"], bid, x) >= score(other["c"], other["s"], other["bid"], x)
+
+def utility(bid):
+    tv = trueVal(i["c"], i["s"], i["v"], x)
+    C = reportedVal(other["c"], other["s"], other["bid"], x)
+    return (tv - C) if wins(bid) else 0.0
+
+truth = i["v"]
+ut = utility(truth)
+tw = wins(truth)
+
+print(f"{'bid':>6} {'wins':>5} {'utility':>8} {'truth>=lie':>10}")
+for lie in [0.5, 1.0, 2.0, 4.0, 6.0, 10.0, 20.0]:
+    ul = utility(lie)
+    lw = wins(lie)
+    tag = "TRUTH" if lie == truth else ""
+    print(f"{lie:6.1f} {str(lw):>5} {ul:8.3f} {str(ut >= ul - 1e-10):>10}  {tag}")
+`} />
+    </div>
+
+    <h3>Corollaries</h3>
+    <p><strong>vcg_strategyproof</strong>: when all players are truthful, no single player benefits from deviating. (DSIC implies Nash.)</p>
+    <p><strong>vcg_is_nash_equilibrium</strong>: truthful reporting satisfies the open-game Nash equilibrium condition from <a href="/reading/vector-space-proof/open-game/">OpenGame.lean</a>.</p>
+    <p><strong>truthful_sigma_is_best_response</strong>: even if a player only deviates in sigma (keeping center and bid fixed), truthful sigma is still optimal.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a> &mdash; supplies <code>winner_maximizes_reportedVal</code> and <code>reportedVal_eq_trueVal_of_truthful</code></li>
+      <li><a href="/reading/vector-space-proof/open-game/">OpenGame.lean</a> &mdash; the <code>vcg_is_nash_equilibrium</code> corollary connects to Hedges' framework</li>
+      <li><a href="/reading/vector-space-proof/gaussian-optimality/">GaussianOptimality.lean</a> &mdash; bundles strategyproofness with welfare-optimality in the capstone</li>
+      <li><a href="https://doi.org/10.2307/2977633">Vickrey (1961)</a> &mdash; counterspeculation, auctions, and competitive sealed tenders</li>
+      <li><a href="https://doi.org/10.1007/BF01726210">Clarke (1971)</a> &mdash; multipart pricing of public goods</li>
+      <li><a href="https://doi.org/10.2307/1914085">Groves (1973)</a> &mdash; incentives in teams</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/efficiency/", label: "Efficiency.lean · 3 of 7" }} next={{ href: "/reading/vector-space-proof/integral-efficiency/", label: "IntegralEfficiency.lean · 5 of 7" }} />
+  </main>
+</Layout>

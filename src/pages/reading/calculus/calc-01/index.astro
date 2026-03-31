@@ -1,0 +1,261 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — Functions and Graphs" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Functions and Graphs</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>function</strong> is a rule that assigns each input exactly one output. Domain is what goes in, range is what comes out. Composition chains functions; inverses undo them. Every concept in calculus starts here.</p>
+    </div>
+
+    <!-- SVG: function with domain/range arrows -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Domain oval -->
+        <ellipse cx="80" cy="80" rx="55" ry="60" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="80" y="150" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.6">Domain</text>
+        <!-- Range oval -->
+        <ellipse cx="280" cy="80" rx="55" ry="60" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="280" y="150" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.6">Range</text>
+        <!-- Points in domain -->
+        <circle cx="70" cy="55" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="60" y="52" text-anchor="end" fill="#60a5fa" font-size="10" fill-opacity="0.5">1</text>
+        <circle cx="85" cy="80" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="75" y="77" text-anchor="end" fill="#60a5fa" font-size="10" fill-opacity="0.5">2</text>
+        <circle cx="70" cy="105" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="60" y="102" text-anchor="end" fill="#60a5fa" font-size="10" fill-opacity="0.5">3</text>
+        <!-- Points in range -->
+        <circle cx="275" cy="60" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="290" y="57" fill="#f59e0b" font-size="10" fill-opacity="0.5">1</text>
+        <circle cx="275" cy="85" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="290" y="82" fill="#f59e0b" font-size="10" fill-opacity="0.5">4</text>
+        <circle cx="275" cy="110" r="3" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="290" y="107" fill="#f59e0b" font-size="10" fill-opacity="0.5">9</text>
+        <!-- Arrows -->
+        <line x1="75" y1="55" x2="270" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="270,57 264,55 266,62" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="90" y1="80" x2="270" y2="85" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="270,82 264,80 266,87" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="75" y1="105" x2="270" y2="110" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="270,107 264,105 266,112" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Label -->
+        <text x="180" y="75" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.5" font-style="italic">f(x) = x&#xB2;</text>
+      </svg>
+    </div>
+
+    <!-- 1. Domain and Range -->
+    <h3>Domain and range</h3>
+    <p>The <strong>domain</strong> is every input for which the function produces an output. The <strong>range</strong> is every output the function actually hits. Not every real number needs to be in either set.</p>
+
+    <SchemeRepl client:load initialCode={`; Domain: all reals where the function is defined
+; Range: all outputs the function actually produces
+
+; f(x) = 1/x — domain is all reals except 0
+(define (f x)
+  (if (= x 0)
+      (display "undefined")
+      (/ 1 x)))
+
+(display "f(2) = ") (display (f 2)) (newline)
+(display "f(-3) = ") (display (f -3)) (newline)
+(display "f(0) = ") (f 0) (newline)
+
+; g(x) = sqrt(x) — domain is x >= 0, range is y >= 0
+(define (g x)
+  (if (< x 0)
+      (display "undefined")
+      (sqrt x)))
+
+(display "g(4) = ") (display (g 4)) (newline)
+(display "g(0) = ") (display (g 0)) (newline)
+(display "g(-1) = ") (g -1)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Domain and range in Python
+import math
+
+def f(x):
+    if x == 0: return "undefined"
+    return 1 / x
+
+def g(x):
+    if x < 0: return "undefined"
+    return math.sqrt(x)
+
+print(f"f(2) = {f(2)}")
+print(f"f(-3) = {f(-3)}")
+print(f"f(0) = {f(0)}")
+print(f"g(4) = {g(4)}")
+print(f"g(-1) = {g(-1)}")
+`} />
+    </div>
+
+
+    <!-- 2. Composition -->
+    <h3>Composition</h3>
+    <p>If f goes from A to B and g goes from B to C, then <strong>g composed with f</strong> goes from A to C. The output of f becomes the input of g. Written g(f(x)) or (g . f)(x).</p>
+
+    <SchemeRepl client:load initialCode={`; Composition: (g . f)(x) = g(f(x))
+; f first, then g
+
+(define (compose g f)
+  (lambda (x) (g (f x))))
+
+(define (double x) (* x 2))
+(define (add3 x) (+ x 3))
+
+; (add3 . double)(x) = add3(double(x))
+(define add3-after-double (compose add3 double))
+
+(display "double then add3: (5) = ")
+(display (add3-after-double 5)) (newline) ; 5*2+3 = 13
+
+; Order matters: (double . add3)(x) = double(add3(x))
+(define double-after-add3 (compose double add3))
+
+(display "add3 then double: (5) = ")
+(display (double-after-add3 5)) ; (5+3)*2 = 16
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Composition: g(f(x))
+def compose(g, f):
+    return lambda x: g(f(x))
+
+double = lambda x: x * 2
+add3 = lambda x: x + 3
+
+add3_after_double = compose(add3, double)
+double_after_add3 = compose(double, add3)
+
+print("double then add3: (5) =", add3_after_double(5))  # 13
+print("add3 then double: (5) =", double_after_add3(5))  # 16
+`} />
+    </div>
+
+
+    <!-- 3. Inverse Functions -->
+    <h3>Inverse functions</h3>
+    <p>If f sends x to y, then its <strong>inverse</strong> f&#x207B;&#xB9; sends y back to x. Not every function has an inverse: it must be one-to-one (injective). f&#x207B;&#xB9;(f(x)) = x for all x in the domain.</p>
+
+    <SchemeRepl client:load initialCode={`; Inverse: f-inv(f(x)) = x
+; f(x) = 2x + 1
+; f-inv(y) = (y - 1) / 2
+
+(define (f x) (+ (* 2 x) 1))
+(define (f-inv y) (/ (- y 1) 2))
+
+(display "f(3) = ") (display (f 3)) (newline)         ; 7
+(display "f-inv(7) = ") (display (f-inv 7)) (newline)  ; 3
+
+; Round-trip test
+(display "f-inv(f(3)) = ") (display (f-inv (f 3))) (newline)  ; 3
+(display "f(f-inv(7)) = ") (display (f (f-inv 7)))             ; 7
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Inverse functions: f_inv(f(x)) = x
+def f(x): return 2 * x + 1
+def f_inv(y): return (y - 1) / 2
+
+print("f(3) =", f(3))            # 7
+print("f_inv(7) =", f_inv(7))    # 3.0
+print("f_inv(f(3)) =", f_inv(f(3)))  # 3.0
+print("f(f_inv(7)) =", f(f_inv(7)))  # 7.0
+`} />
+    </div>
+
+
+    <!-- 4. Common function families -->
+    <h3>Common function families</h3>
+    <p>Polynomials, exponentials, and logarithms are the workhorses. Each has a characteristic shape and growth rate. You need to recognize them on sight because calculus rules differ by family.</p>
+
+    <SchemeRepl client:load initialCode={`; Key function families
+
+; Polynomial: f(x) = x^3 - 2x + 1
+(define (poly x) (+ (- (* x x x) (* 2 x)) 1))
+(display "poly(2) = ") (display (poly 2)) (newline)  ; 8-4+1 = 5
+
+; Exponential: f(x) = 2^x (grows faster than any polynomial)
+(define (exp2 x) (expt 2 x))
+(display "2^10 = ") (display (exp2 10)) (newline)  ; 1024
+
+; Logarithm: f(x) = log2(x) (inverse of 2^x)
+(define (log2 x) (/ (log x) (log 2)))
+(display "log2(1024) = ") (display (log2 1024)) (newline)  ; 10
+
+; They are inverses:
+(display "2^(log2(8)) = ") (display (exp2 (log2 8))) (newline)  ; 8
+(display "log2(2^5) = ") (display (log2 (exp2 5)))              ; 5
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Polynomial
+poly = lambda x: x**3 - 2*x + 1
+print(f"poly(2) = {poly(2)}")  # 5
+
+# Exponential
+print(f"2^10 = {2**10}")  # 1024
+
+# Logarithm (inverse of exponential)
+print(f"log2(1024) = {math.log2(1024)}")  # 10.0
+
+# Round-trip
+print(f"2^(log2(8)) = {2**math.log2(8)}")  # 8.0
+print(f"log2(2^5) = {math.log2(2**5)}")    # 5.0
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f(x)</td><td class="pr-4 text-green-300">(f x)</td><td class="pr-4 text-blue-300">f(x)</td><td class="font-sans">Apply f to x</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(g &#x2218; f)(x)</td><td class="pr-4 text-green-300">(g (f x))</td><td class="pr-4 text-blue-300">g(f(x))</td><td class="font-sans">Composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">f&#x207B;&#xB9;(x)</td><td class="pr-4 text-green-300">(f-inv x)</td><td class="pr-4 text-blue-300">f_inv(x)</td><td class="font-sans">Inverse function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">e&#x02E3;</td><td class="pr-4 text-green-300">(exp x)</td><td class="pr-4 text-blue-300">math.exp(x)</td><td class="font-sans">Exponential</td></tr>
+          <tr><td class="py-2 pr-4">ln(x)</td><td class="pr-4 text-green-300">(log x)</td><td class="pr-4 text-blue-300">math.log(x)</td><td class="font-sans">Natural logarithm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-01/">&#x1F431; Milewski Ch.1</a> — composition is the same idea, abstracted to arrows in a category</li>
+      <li><a href="/reading/programming/">&#x1FA84; Programming</a> — SICP builds everything from function application</li>
+    
+      <li><a href="/reading/real-analysis/lebl-01/">∞ Real Analysis Ch.1</a> &mdash; functions and sequences as the rigorous foundation of calculus</li>
+      <li><a href="/reading/logic/logic-05/">🔑 Logic Ch.5</a> &mdash; predicate logic uses the same function notation</li>
+      <li><a href="/reading/category-theory/milewski-01/">🧩 Category Theory Ch.1</a> &mdash; morphisms are generalized functions between objects</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext next={{ href: "/reading/calculus/calc-02/", label: "Trigonometry · 2 of 15" }} />
+
+  </main>
+</Layout>

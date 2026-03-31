@@ -1,0 +1,202 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crypto Ch.4 — MACs and Authentication" favicon="🔐">
+  <main>
+
+    <a href="/reading/cryptography/" class="text-sm mb-4 inline-block">&larr; back to cryptography</a>
+
+    <h1>MACs and Authentication</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Message_authentication_code"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Message authentication code</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>message authentication code</strong> (MAC) is a short tag computed from a message and a secret key. The receiver recomputes the tag and checks it matches. If it does, the message was not tampered with and came from someone who knows the key. A hash alone is not enough: anyone can compute H(m). A MAC requires the key.</p>
+    </div>
+
+    <!-- SVG: message + key -> MAC -> tag appended to message -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Sender side -->
+        <text x="15" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">Sender</text>
+
+        <!-- Message -->
+        <rect x="10" y="40" width="70" height="25" rx="3" fill="none" stroke="#86efac" stroke-width="1"/>
+        <text x="45" y="57" text-anchor="middle" fill="#86efac" font-size="10">message</text>
+
+        <!-- Key -->
+        <text x="45" y="32" text-anchor="middle" fill="#f59e0b" font-size="9">key</text>
+
+        <!-- Arrow to MAC box -->
+        <line x1="85" y1="52" x2="115" y2="52" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="115,48 123,52 115,56" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- MAC computation box -->
+        <rect x="125" y="38" width="55" height="28" rx="4" fill="none" stroke="#facc15" stroke-width="1.5"/>
+        <text x="152" y="56" text-anchor="middle" fill="#facc15" font-size="10">MAC</text>
+
+        <!-- Arrow to combined output -->
+        <line x1="185" y1="52" x2="220" y2="52" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="220,48 228,52 220,56" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- Combined: message + tag -->
+        <rect x="232" y="35" width="70" height="15" rx="2" fill="none" stroke="#86efac" stroke-width="1"/>
+        <text x="267" y="46" text-anchor="middle" fill="#86efac" font-size="8">message</text>
+        <rect x="232" y="50" width="70" height="15" rx="2" fill="none" stroke="#f87171" stroke-width="1"/>
+        <text x="267" y="61" text-anchor="middle" fill="#f87171" font-size="8">tag</text>
+
+        <!-- Arrow to receiver -->
+        <line x1="307" y1="52" x2="340" y2="52" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="340,48 348,52 340,56" fill="currentColor" fill-opacity="0.5"/>
+
+        <!-- Receiver side -->
+        <text x="365" y="15" fill="currentColor" font-size="10" fill-opacity="0.5">Receiver</text>
+
+        <!-- Verify box -->
+        <rect x="352" y="38" width="55" height="28" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="380" y="56" text-anchor="middle" fill="#60a5fa" font-size="10">verify</text>
+        <text x="380" y="32" text-anchor="middle" fill="#f59e0b" font-size="9">key</text>
+
+        <!-- Result -->
+        <line x1="412" y1="52" x2="430" y2="52" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="435" y="56" fill="#86efac" font-size="10">OK</text>
+
+        <!-- Caption -->
+        <text x="220" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Both sides need the same key. Tag proves integrity and authenticity.</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. HMAC construction -->
+    <h3>HMAC construction</h3>
+    <p>HMAC combines a hash function H with a key K using two passes: <code>HMAC(K, m) = H((K XOR opad) || H((K XOR ipad) || m))</code>. The inner and outer padding constants (ipad = 0x36, opad = 0x5C) ensure the two hash applications behave differently. This construction is provably secure if the underlying hash is a pseudorandom function.</p>
+
+    <SchemeRepl client:load initialCode={`; HMAC construction (simplified with toy hash)
+; HMAC(K, m) = H((K xor opad) || H((K xor ipad) || m))
+
+(define IPAD #x36)
+(define OPAD #x5C)
+
+(define (toy-hash nums)
+  ;; Simple hash over a list of numbers
+  (let loop ((acc 1) (ns nums))
+    (if (null? ns)
+      (modulo acc 65536)
+      (loop (modulo (+ (* acc 31) (car ns)) 65536)
+            (cdr ns)))))
+
+(define (hmac key message)
+  (let* ((k-ipad (bitwise-xor key IPAD))
+         (k-opad (bitwise-xor key OPAD))
+         ;; Inner hash: H(K xor ipad || message)
+         (inner (toy-hash (cons k-ipad message)))
+         ;; Outer hash: H(K xor opad || inner-hash)
+         (outer (toy-hash (list k-opad inner))))
+    outer))
+
+(define key 42)
+(define msg (list 72 101 108 108 111))  ; "Hello"
+
+(display "HMAC(42, 'Hello') = ")
+(display (hmac key msg)) (newline)
+
+;; Different key -> different tag
+(display "HMAC(99, 'Hello') = ")
+(display (hmac 99 msg)) (newline)
+
+;; Different message -> different tag
+(display "HMAC(42, 'Hellp') = ")
+(display (hmac key (list 72 101 108 108 112))) (newline)
+
+;; Without the key, you cannot forge the tag
+(display "Attacker cannot compute tag without key")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# HMAC construction (simplified)
+IPAD = 0x36
+OPAD = 0x5C
+
+def toy_hash(nums):
+    acc = 1
+    for n in nums:
+        acc = (acc * 31 + n) % 65536
+    return acc
+
+def hmac(key, message):
+    k_ipad = key ^ IPAD
+    k_opad = key ^ OPAD
+    inner = toy_hash([k_ipad] + message)
+    outer = toy_hash([k_opad, inner])
+    return outer
+
+key = 42
+msg = [72, 101, 108, 108, 111]  # "Hello"
+
+print(f"HMAC(42, 'Hello') = {hmac(key, msg)}")
+print(f"HMAC(99, 'Hello') = {hmac(99, msg)}")
+print(f"HMAC(42, 'Hellp') = {hmac(key, [72,101,108,108,112])}")
+`} />
+    </div>
+
+
+    <!-- 2. Encrypt-then-MAC -->
+    <h3>Encrypt-then-MAC vs MAC-then-encrypt</h3>
+    <p>There are three ways to combine encryption and authentication. <strong>Encrypt-then-MAC</strong> (encrypt the plaintext, then MAC the ciphertext) is the recommended approach. The receiver checks the MAC first, rejecting tampered messages before decrypting. MAC-then-encrypt (MAC the plaintext, then encrypt both) is weaker because the receiver must decrypt before verifying integrity, which opens the door to padding oracle attacks.</p>
+
+    <SchemeRepl client:load initialCode={`; Encrypt-then-MAC: the right order
+; 1. Encrypt the plaintext
+; 2. MAC the ciphertext (not the plaintext)
+; 3. Send ciphertext + tag
+
+(define (encrypt plaintext key)
+  ;; XOR cipher for simplicity
+  (map (lambda (b) (bitwise-xor b key)) plaintext))
+
+(define (toy-hash nums)
+  (let loop ((acc 1) (ns nums))
+    (if (null? ns) (modulo acc 65536)
+        (loop (modulo (+ (* acc 31) (car ns)) 65536) (cdr ns)))))
+
+(define (mac key msg)
+  (toy-hash (cons key msg)))
+
+;; Sender
+(define plaintext (list 72 101 108 108 111))
+(define enc-key 42)
+(define mac-key 99)
+
+(define ciphertext (encrypt plaintext enc-key))
+(define tag (mac mac-key ciphertext))
+
+(display "Ciphertext: ") (display ciphertext) (newline)
+(display "Tag: ") (display tag) (newline)
+
+;; Receiver: verify MAC first, then decrypt
+(define computed-tag (mac mac-key ciphertext))
+(display "Tag valid? ") (display (= tag computed-tag)) (newline)
+
+(define recovered (encrypt ciphertext enc-key))
+(display "Recovered:  ") (display recovered)
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Message_authentication_code"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Message authentication code</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/HMAC"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>HMAC</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Authenticated_encryption"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Authenticated encryption</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/cryptography/crypto-03/", label: "Hash Functions" }} next={{ href: "/reading/cryptography/crypto-05/", label: "Key Exchange" }} />
+
+  </main>
+</Layout>

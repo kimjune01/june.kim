@@ -1,0 +1,254 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.9 — Convolutional Networks" favicon="🤖">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Convolutional Networks</h1>
+    <p class="text-gray-400 text-sm mb-6">MML (CC BY 4.0) &middot; D2L (CC BY-SA 4.0) &middot; 9 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Convolutions exploit spatial structure: shared weights, local receptive fields, translation equivariance. Pooling provides invariance. The hierarchy &mdash; edges, textures, parts, objects &mdash; emerges from stacking layers.</p>
+    </div>
+
+    <!-- SVG: convolution operation -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Input feature map -->
+        <text x="60" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">input</text>
+        <rect x="10" y="22" width="20" height="20" rx="2" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="20" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">3</text>
+        <rect x="30" y="22" width="20" height="20" rx="2" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="40" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">1</text>
+        <rect x="50" y="22" width="20" height="20" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">4</text>
+        <rect x="70" y="22" width="20" height="20" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="80" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">1</text>
+        <rect x="90" y="22" width="20" height="20" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="100" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">5</text>
+        <rect x="110" y="22" width="20" height="20" rx="2" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="120" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">9</text>
+        <rect x="130" y="22" width="20" height="20" rx="2" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="140" y="36" text-anchor="middle" fill="#60a5fa" font-size="9">2</text>
+
+        <!-- Kernel -->
+        <text x="220" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">kernel</text>
+        <rect x="190" y="22" width="20" height="20" rx="2" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="36" text-anchor="middle" fill="#f59e0b" font-size="9">1</text>
+        <rect x="210" y="22" width="20" height="20" rx="2" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="220" y="36" text-anchor="middle" fill="#f59e0b" font-size="9">0</text>
+        <rect x="230" y="22" width="20" height="20" rx="2" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="240" y="36" text-anchor="middle" fill="#f59e0b" font-size="9">-1</text>
+
+        <!-- Multiply-accumulate arrow -->
+        <text x="100" y="68" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">4*1 + 1*0 + 5*(-1) = -1</text>
+        <line x1="80" y1="44" x2="80" y2="55" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+
+        <!-- Output feature map -->
+        <text x="310" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">output</text>
+        <rect x="270" y="22" width="20" height="20" rx="2" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="280" y="36" text-anchor="middle" fill="#34d399" font-size="9">-2</text>
+        <rect x="290" y="22" width="20" height="20" rx="2" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="300" y="36" text-anchor="middle" fill="#34d399" font-size="9">3</text>
+        <rect x="310" y="22" width="20" height="20" rx="2" fill="#34d399" fill-opacity="0.15" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="320" y="36" text-anchor="middle" fill="#34d399" font-size="9">-1</text>
+        <rect x="330" y="22" width="20" height="20" rx="2" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="340" y="36" text-anchor="middle" fill="#34d399" font-size="9">-4</text>
+        <rect x="350" y="22" width="20" height="20" rx="2" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="360" y="36" text-anchor="middle" fill="#34d399" font-size="9">2</text>
+
+        <!-- Caption -->
+        <text x="220" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">A kernel slides across the input. Same weights at every position = translation equivariance.</text>
+      </svg>
+    </div>
+
+    <!-- 1. 1D Convolution -->
+    <h3>1D convolution by hand</h3>
+    <p>A 1D convolution slides a kernel (a small vector of weights) across an input signal. At each position, it computes the dot product of the kernel with the local patch. The kernel is shared across all positions &mdash; this is the parameter sharing that makes CNNs efficient.</p>
+
+    <SchemeRepl client:load initialCode={`; 1D convolution: slide a kernel across a signal
+; kernel [1, 0, -1] detects edges (differences)
+
+(define (conv1d signal kernel)
+  (let ((k-len (length kernel))
+        (s-len (length signal)))
+    (let loop ((i 0) (result '()))
+      (if (> (+ i k-len) s-len) (reverse result)
+          (let inner ((j 0) (sum 0))
+            (if (= j k-len)
+                (loop (+ i 1) (cons sum result))
+                (inner (+ j 1)
+                       (+ sum (* (list-ref signal (+ i j))
+                                 (list-ref kernel j))))))))))
+
+(define signal '(3 1 4 1 5 9 2))
+(define kernel '(1 0 -1))
+
+(display "Signal: ") (display signal) (newline)
+(display "Kernel: ") (display kernel) (newline)
+(display "Conv:   ") (display (conv1d signal kernel))
+; Each output = difference between elements 2 apart
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# 1D convolution by hand
+def conv1d(signal, kernel):
+    k_len = len(kernel)
+    return [sum(signal[i+j] * kernel[j] for j in range(k_len))
+            for i in range(len(signal) - k_len + 1)]
+
+signal = [3, 1, 4, 1, 5, 9, 2]
+kernel = [1, 0, -1]
+
+print("Signal:", signal)
+print("Kernel:", kernel)
+print("Conv:  ", conv1d(signal, kernel))
+`} />
+    </div>
+
+
+    <!-- 2. Max pooling -->
+    <h3>Max pooling</h3>
+    <p>Pooling downsamples the feature map by taking the maximum (or average) over local windows. This provides a degree of translation invariance: small shifts in the input don't change the pooled output. It also reduces the spatial dimensions, cutting computation.</p>
+
+    <SchemeRepl client:load initialCode={`; Max pooling: take the max in each window of size k
+(define (max-pool signal k)
+  (let ((s-len (length signal)))
+    (let loop ((i 0) (result '()))
+      (if (> (+ i k) s-len) (reverse result)
+          (let inner ((j 0) (mx -999999))
+            (if (= j k)
+                (loop (+ i k) (cons mx result))
+                (inner (+ j 1)
+                       (max mx (list-ref signal (+ i j))))))))))
+
+(define feature-map '(2 5 1 8 3 7 4 6))
+
+(display "Feature map:     ") (display feature-map) (newline)
+(display "Max pool (k=2):  ") (display (max-pool feature-map 2)) (newline)
+(display "Max pool (k=4):  ") (display (max-pool feature-map 4))
+; Halves (or quarters) the length, keeps strongest activations
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Max pooling with window size k
+def max_pool(signal, k):
+    return [max(signal[i:i+k]) for i in range(0, len(signal) - k + 1, k)]
+
+feature_map = [2, 5, 1, 8, 3, 7, 4, 6]
+
+print("Feature map:    ", feature_map)
+print("Max pool (k=2): ", max_pool(feature_map, 2))
+print("Max pool (k=4): ", max_pool(feature_map, 4))
+`} />
+    </div>
+
+
+    <!-- 3. Conv + pool pipeline -->
+    <h3>Conv + pool pipeline</h3>
+    <p>A CNN stacks convolution and pooling layers. Each convolution extracts local features; each pooling step compresses the spatial dimension. After enough layers, the feature map is small enough to feed into a fully connected classifier. The early layers detect edges, the middle layers textures, the deep layers objects.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple conv -> ReLU -> pool pipeline on a 1D signal
+
+(define (conv1d signal kernel)
+  (let ((k-len (length kernel)) (s-len (length signal)))
+    (let loop ((i 0) (result '()))
+      (if (> (+ i k-len) s-len) (reverse result)
+          (let inner ((j 0) (sum 0))
+            (if (= j k-len) (loop (+ i 1) (cons sum result))
+                (inner (+ j 1) (+ sum (* (list-ref signal (+ i j))
+                                         (list-ref kernel j))))))))))
+
+(define (relu xs) (map (lambda (x) (max 0 x)) xs))
+
+(define (max-pool xs k)
+  (let loop ((i 0) (result '()))
+    (if (> (+ i k) (length xs)) (reverse result)
+        (let inner ((j 0) (mx -999999))
+          (if (= j k) (loop (+ i k) (cons mx result))
+              (inner (+ j 1) (max mx (list-ref xs (+ i j)))))))))
+
+(define signal '(0 0 1 3 5 3 1 0 0 2 4 6 4 2 0 0))
+(define edge-kernel '(1 0 -1))
+
+(define step1 (conv1d signal edge-kernel))
+(define step2 (relu step1))
+(define step3 (max-pool step2 2))
+
+(display "Input:           ") (display signal) (newline)
+(display "After conv:      ") (display step1) (newline)
+(display "After ReLU:      ") (display step2) (newline)
+(display "After max-pool:  ") (display step3)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Conv -> ReLU -> max pool pipeline
+def conv1d(signal, kernel):
+    k_len = len(kernel)
+    return [sum(signal[i+j]*kernel[j] for j in range(k_len))
+            for i in range(len(signal)-k_len+1)]
+
+def relu(xs):
+    return [max(0, x) for x in xs]
+
+def max_pool(xs, k):
+    return [max(xs[i:i+k]) for i in range(0, len(xs)-k+1, k)]
+
+signal = [0,0,1,3,5,3,1,0,0,2,4,6,4,2,0,0]
+edge_kernel = [1, 0, -1]
+
+step1 = conv1d(signal, edge_kernel)
+step2 = relu(step1)
+step3 = max_pool(step2, 2)
+
+print("Input:         ", signal)
+print("After conv:    ", step1)
+print("After ReLU:    ", step2)
+print("After max-pool:", step3)
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(f * g)[n]</td><td class="pr-4 text-green-300">(conv1d signal kernel)</td><td class="font-sans">1D convolution</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">max(x<sub>i..i+k</sub>)</td><td class="pr-4 text-green-300">(max-pool xs k)</td><td class="font-sans">Max pooling with window k</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ReLU(x) = max(0,x)</td><td class="pr-4 text-green-300">(max 0 x)</td><td class="font-sans">Rectified linear unit</td></tr>
+          <tr><td class="py-2 pr-4">stride, padding</td><td class="pr-4 text-green-300">step size, zero-fill</td><td class="font-sans">Control output dimensions</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">Convolution in signal processing flips the kernel; in deep learning, cross-correlation (no flip) is standard but still called "convolution." The Scheme code above implements cross-correlation. In practice, learned kernels absorb the flip.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-08/">&#x222B; Ch.8 Integration Techniques</a> &mdash; convolution as integral transform</li>
+      <li><a href="/reading/information-theory/shannon-06/">&#x1F4E1; Shannon Ch.6</a> &mdash; channel capacity constrains what filters can extract</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-08/", label: "Regularization" }} next={{ href: "/reading/machine-learning/ml-10/", label: "Sequence Models" }} />
+
+  </main>
+</Layout>

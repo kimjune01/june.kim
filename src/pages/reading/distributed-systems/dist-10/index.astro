@@ -1,0 +1,215 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.10 — CRDTs" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>CRDTs</h1>
+    <p class="text-gray-400 text-sm mb-6">Shapiro et al. 2011 &middot; <a href="https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Conflict-free replicated data types</strong> guarantee eventual consistency without consensus. The trick: structure your data as a <strong>join-semilattice</strong>. Merging any two states produces a unique least upper bound. Merge is commutative, associative, and idempotent. No conflicts, no coordination, no locking.</p>
+    </div>
+
+    <!-- 1. The idea -->
+    <h3>Why CRDTs work</h3>
+    <p>A join-semilattice is a partially ordered set where every pair of elements has a least upper bound (join). If your state is a semilattice and every update moves up in the lattice, then merging replicas always converges. Order of operations does not matter. Duplicate messages do not matter. This is the algebraic foundation of conflict-free replication.</p>
+
+    <!-- SVG: two replicas diverging then converging via merge -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Initial state -->
+        <circle cx="200" cy="30" r="5" fill="currentColor" fill-opacity="0.5"/>
+        <text x="200" y="20" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">initial</text>
+        <!-- Diverge -->
+        <line x1="197" y1="35" x2="100" y2="85" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="203" y1="35" x2="300" y2="85" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Replica A -->
+        <circle cx="100" cy="90" r="20" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="100" y="94" text-anchor="middle" fill="#60a5fa" font-size="10">A: +1</text>
+        <!-- Replica B -->
+        <circle cx="300" cy="90" r="20" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="300" y="94" text-anchor="middle" fill="#f59e0b" font-size="10">B: +2</text>
+        <!-- More divergence -->
+        <circle cx="100" cy="130" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="70" y="134" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.6">+1 again</text>
+        <circle cx="300" cy="130" r="4" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="330" y="134" fill="#f59e0b" font-size="9" fill-opacity="0.6">+3</text>
+        <!-- Converge -->
+        <line x1="103" y1="134" x2="197" y2="170" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="297" y1="134" x2="203" y2="170" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <!-- Merged state -->
+        <circle cx="200" cy="175" r="20" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="179" text-anchor="middle" fill="#34d399" font-size="10">merge</text>
+        <text x="200" y="200" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">same result regardless of merge order</text>
+      </svg>
+    </div>
+
+    <!-- 2. G-Counter -->
+    <h3>G-Counter (grow-only counter)</h3>
+    <p>Each node maintains its own counter. The value is the sum of all counters. Merge takes the componentwise max. Only increments are allowed (no decrements). This is a CRDT because max is a join on the natural number lattice.</p>
+
+    <SchemeRepl client:load initialCode={`; G-Counter: grow-only, merge = componentwise max.
+; 3 nodes, each with its own slot.
+
+(define (make-gcounter n) (make-list n 0))
+
+(define (increment gc node-id)
+  (let loop ((g gc) (i 0) (acc (list)))
+    (if (null? g) (reverse acc)
+        (loop (cdr g) (+ i 1)
+              (cons (if (= i node-id) (+ (car g) 1) (car g)) acc)))))
+
+(define (merge-gc a b)
+  (let loop ((x a) (y b) (acc (list)))
+    (if (null? x) (reverse acc)
+        (loop (cdr x) (cdr y) (cons (max (car x) (car y)) acc)))))
+
+(define (value gc) (apply + gc))
+
+(define a (make-gcounter 3))  ; (0 0 0)
+(set! a (increment a 0))     ; (1 0 0)
+(set! a (increment a 0))     ; (2 0 0)
+
+(define b (make-gcounter 3))  ; (0 0 0)
+(set! b (increment b 1))     ; (0 1 0)
+(set! b (increment b 1))     ; (0 2 0)
+(set! b (increment b 1))     ; (0 3 0)
+
+(display "Replica A: ") (display a) (display " = ") (display (value a)) (newline)
+(display "Replica B: ") (display b) (display " = ") (display (value b)) (newline)
+
+(define merged (merge-gc a b))
+(display "Merged:    ") (display merged) (display " = ") (display (value merged)) (newline)
+
+; Merge is idempotent
+(define double-merged (merge-gc merged merged))
+(display "Merge again: ") (display double-merged) (display " = ") (display (value double-merged))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# G-Counter CRDT
+class GCounter:
+    def __init__(self, n):
+        self.counts = [0] * n
+
+    def increment(self, node_id):
+        self.counts[node_id] += 1
+
+    def merge(self, other):
+        result = GCounter(len(self.counts))
+        result.counts = [max(a, b) for a, b in zip(self.counts, other.counts)]
+        return result
+
+    def value(self):
+        return sum(self.counts)
+
+    def __repr__(self):
+        return f"{self.counts} = {self.value()}"
+
+a = GCounter(3)
+a.increment(0); a.increment(0)
+
+b = GCounter(3)
+b.increment(1); b.increment(1); b.increment(1)
+
+print(f"A: {a}")
+print(f"B: {b}")
+merged = a.merge(b)
+print(f"Merged: {merged}")
+print(f"Merge(merged, merged): {merged.merge(merged)}")  # idempotent
+`} />
+    </div>
+
+    <!-- 3. PN-Counter -->
+    <h3>PN-Counter</h3>
+    <p>A PN-Counter supports both increments and decrements by maintaining two G-Counters: P (positive) and N (negative). The value is P - N. Merge each G-Counter independently. Decrements never cancel increments at the semilattice level; they accumulate separately.</p>
+
+    <SchemeRepl client:load initialCode={`; PN-Counter: two G-Counters, value = sum(P) - sum(N).
+
+(define (make-pn n) (list (make-list n 0) (make-list n 0)))
+(define (pn-p pn) (car pn))
+(define (pn-n pn) (car (cdr pn)))
+
+(define (pn-increment pn node-id)
+  (list (increment (pn-p pn) node-id) (pn-n pn)))
+
+(define (pn-decrement pn node-id)
+  (list (pn-p pn) (increment (pn-n pn) node-id)))
+
+(define (pn-merge a b)
+  (list (merge-gc (pn-p a) (pn-p b))
+        (merge-gc (pn-n a) (pn-n b))))
+
+(define (pn-value pn)
+  (- (value (pn-p pn)) (value (pn-n pn))))
+
+(define c (make-pn 2))
+(set! c (pn-increment c 0))  ; +1
+(set! c (pn-increment c 0))  ; +1
+(set! c (pn-decrement c 0))  ; -1
+
+(display "PN-Counter value: ") (display (pn-value c)) (newline)
+(display "P = ") (display (pn-p c)) (newline)
+(display "N = ") (display (pn-n c))
+`} />
+
+    <!-- 4. OR-Set -->
+    <h3>OR-Set (observed-remove set)</h3>
+    <p>Each element gets a unique tag when added. Remove removes all currently observed tags for that element. If one replica adds and another concurrently removes, the add wins (add has a new tag the remove did not see). This gives intuitive "add wins" semantics without coordination.</p>
+
+    <SchemeRepl client:load initialCode={`; OR-Set: add-wins semantics via unique tags.
+; Simplified: tags are (element, counter) pairs.
+
+(define tag-counter 0)
+(define (fresh-tag elem)
+  (set! tag-counter (+ tag-counter 1))
+  (list elem tag-counter))
+
+(define set-a (list))
+
+; Add "x" on replica A
+(define tag-x1 (fresh-tag "x"))
+(set! set-a (cons tag-x1 set-a))
+
+; Add "y" on replica A
+(define tag-y1 (fresh-tag "y"))
+(set! set-a (cons tag-y1 set-a))
+
+(display "Set A tags: ") (display set-a) (newline)
+
+; Elements in the set
+(define (elements tagged-set)
+  (let loop ((s tagged-set) (seen (list)))
+    (if (null? s) seen
+        (let ((elem (car (car s))))
+          (if (member elem seen)
+              (loop (cdr s) seen)
+              (loop (cdr s) (cons elem seen)))))))
+
+(display "Elements: ") (display (elements set-a)) (newline)
+
+; Remove "x": remove all tags for "x" we can see
+(set! set-a (filter (lambda (tag) (not (equal? (car tag) "x"))) set-a))
+(display "After removing x: ") (display (elements set-a))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-08/">&#x1F517; Abstract Algebra Ch.8</a> — lattices: CRDTs use join-semilattices for conflict-free merging</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-09/", label: "Gossip Protocols" }} />
+
+  </main>
+</Layout>

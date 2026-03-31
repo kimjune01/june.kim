@@ -1,0 +1,227 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.10 — Externalities" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Externalities</h1>
+    <p class="text-gray-400 text-sm mb-6">Adam Smith · 1776 / A.C. Pigou · 1920 / Ronald Coase · 1960 · <a href="https://en.wikipedia.org/wiki/Externality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Externality</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>externality</strong> is a cost or benefit that falls on someone other than the buyer or seller. Pollution is the textbook negative externality: the factory profits, but neighbors breathe the smoke. Education is the textbook positive externality: the student benefits, but so does society. Markets left alone produce too much of the bad and too little of the good.</p>
+    </div>
+
+    <!-- 1. Negative externalities -->
+    <h3>Negative externalities: pollution</h3>
+    <p>When a factory pollutes, its private cost understates the true social cost. The market equilibrium produces more than the socially optimal quantity. The gap between private and social cost is the externality.</p>
+
+    <!-- SVG: Supply curve shifts when social cost included -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="60" y1="250" x2="380" y2="250" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="60" y1="250" x2="60" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="220" y="280" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">Quantity</text>
+        <text x="25" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 25, 140)">Price</text>
+
+        <!-- Demand curve -->
+        <line x1="80" y1="50" x2="350" y2="230" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+        <text x="355" y="235" fill="currentColor" font-size="11" fill-opacity="0.5">D</text>
+
+        <!-- Private supply (lower) -->
+        <line x1="80" y1="220" x2="350" y2="70" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+        <text x="355" y="65" fill="currentColor" font-size="11" fill-opacity="0.5">S (private)</text>
+
+        <!-- Social supply (higher, shifted up) -->
+        <line x1="80" y1="170" x2="350" y2="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
+        <text x="355" y="35" fill="currentColor" font-size="11" fill-opacity="0.5">S (social)</text>
+
+        <!-- Market equilibrium dot -->
+        <circle cx="235" cy="153" r="4" fill="currentColor" fill-opacity="0.7"/>
+        <text x="255" y="165" fill="currentColor" font-size="10" fill-opacity="0.5">Market eq.</text>
+
+        <!-- Social optimum dot -->
+        <circle cx="195" cy="127" r="4" fill="currentColor" fill-opacity="0.7"/>
+        <text x="130" y="120" fill="currentColor" font-size="10" fill-opacity="0.5">Social opt.</text>
+
+        <!-- External cost bracket -->
+        <line x1="235" y1="110" x2="235" y2="153" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <text x="270" y="135" fill="currentColor" font-size="9" fill-opacity="0.4">external cost</text>
+
+        <!-- Deadweight loss area hint -->
+        <path d="M 195 127 L 235 153 L 235 110 Z" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+        <text x="225" y="100" fill="currentColor" font-size="9" fill-opacity="0.4">DWL</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Negative externality: pollution
+; Private cost < social cost
+
+(define private-cost 10)
+(define external-cost 5)
+(define social-cost (+ private-cost external-cost))
+
+; Demand schedule: willing to buy at each price
+(define (quantity-demanded price) (max 0 (- 100 (* 2 price))))
+
+; Market outcome (ignoring externality)
+(define market-qty (quantity-demanded private-cost))
+(display "Market quantity (private cost $10): ")
+(display market-qty) (newline)
+
+; Socially optimal outcome
+(define optimal-qty (quantity-demanded social-cost))
+(display "Optimal quantity (social cost $15): ")
+(display optimal-qty) (newline)
+
+; Overproduction
+(display "Overproduction: ")
+(display (- market-qty optimal-qty))
+(display " units") (newline)
+
+; Deadweight loss (triangle)
+(define dwl (* 0.5 (- market-qty optimal-qty) external-cost))
+(display "Deadweight loss: $")
+(display dwl)
+`} />
+
+
+    <!-- 2. Positive externalities -->
+    <h3>Positive externalities: education</h3>
+    <p>When someone gets educated, they become more productive, innovate more, and commit less crime. These benefits spill over to others. The market, left alone, produces less education than is socially optimal because the individual doesn't capture the full social benefit.</p>
+
+    <SchemeRepl client:load initialCode={`; Positive externality: education
+; Private benefit < social benefit
+
+(define private-benefit 30)
+(define external-benefit 15)
+(define social-benefit (+ private-benefit external-benefit))
+(define cost 25)
+
+; Individual decision: invest if private benefit > cost
+(display "Individual invests? ")
+(display (if (> private-benefit cost) "Yes" "No"))
+(newline)
+
+; Social perspective: invest if social benefit > cost
+(display "Socially worthwhile? ")
+(display (if (> social-benefit cost) "Yes" "No"))
+(newline)
+
+; Subsidy to align incentives
+(define subsidy external-benefit)
+(display "Optimal subsidy: $")
+(display subsidy)
+(newline)
+(display "With subsidy, private return: $")
+(display (+ private-benefit subsidy))
+(display " vs cost $")
+(display cost)
+`} />
+
+
+    <!-- 3. Pigouvian tax -->
+    <h3>Pigouvian tax</h3>
+    <p>Arthur Pigou's solution: tax the externality at exactly the external cost. The polluter now faces the social cost, and the market quantity falls to the social optimum. For positive externalities, subsidize by the external benefit. The tax "internalizes" the externality.</p>
+
+    <SchemeRepl client:load initialCode={`; Pigouvian tax internalizes the externality
+
+(define private-cost 10)
+(define external-cost 5)
+(define pigouvian-tax external-cost)
+
+(define effective-cost (+ private-cost pigouvian-tax))
+(display "Private cost: $") (display private-cost) (newline)
+(display "Pigouvian tax: $") (display pigouvian-tax) (newline)
+(display "Effective cost: $") (display effective-cost) (newline)
+
+; Now producer faces social cost
+(display "Effective cost = social cost? ")
+(display (= effective-cost (+ private-cost external-cost)))
+(newline)
+
+; Tax revenue can compensate those harmed
+(define quantity 70)  ; at social optimum
+(define revenue (* pigouvian-tax quantity))
+(display "Tax revenue: $") (display revenue)
+(display " (can compensate externality victims)")
+`} />
+
+
+    <!-- 4. Coase theorem -->
+    <h3>Coase theorem</h3>
+    <p>Ronald Coase's insight: if property rights are well-defined and transaction costs are zero, private bargaining will reach the efficient outcome regardless of who holds the rights. The initial assignment of rights affects who pays whom, but not the final quantity. In practice, transaction costs are rarely zero, which is why Pigouvian taxes and regulation still matter.</p>
+
+    <SchemeRepl client:load initialCode={`; Coase theorem: bargaining reaches efficiency
+; regardless of who holds property rights
+
+(define factory-profit-from-pollution 100)
+(define neighbor-damage 60)
+
+; Scenario 1: Neighbor has right to clean air
+; Factory must pay neighbor to pollute
+(display "--- Neighbor has rights ---") (newline)
+(display "Factory gains from pollution: $")
+(display factory-profit-from-pollution) (newline)
+(display "Must compensate: $") (display neighbor-damage) (newline)
+(display "Net gain from deal: $")
+(display (- factory-profit-from-pollution neighbor-damage)) (newline)
+(display "Pollute? ")
+(display (if (> factory-profit-from-pollution neighbor-damage)
+             "Yes (pays compensation)" "No"))
+(newline) (newline)
+
+; Scenario 2: Factory has right to pollute
+; Neighbor must pay factory to stop
+(display "--- Factory has rights ---") (newline)
+(display "Neighbor would pay up to: $") (display neighbor-damage) (newline)
+(display "Factory needs at least: $")
+(display factory-profit-from-pollution) (newline)
+(display "Stop pollution? ")
+(display (if (> neighbor-damage factory-profit-from-pollution)
+             "Yes (neighbor pays)" "No (factory keeps polluting)"))
+`} />
+
+
+    <!-- Key concepts -->
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Concept</th>
+            <th class="py-2 text-left">Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Negative externality</td><td>Cost imposed on third parties (pollution, noise)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Positive externality</td><td>Benefit to third parties (education, vaccination)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pigouvian tax</td><td>Tax equal to the external cost, internalizing the externality</td></tr>
+          <tr><td class="py-2 pr-4">Coase theorem</td><td>With zero transaction costs, bargaining reaches efficiency regardless of rights assignment</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Externality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Externality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pigouvian_tax"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pigouvian tax</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Coase_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Coase theorem</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-09/", label: "Price Discrimination" }} next={{ href: "/reading/economics/econ-11/", label: "Public Goods" }} />
+
+  </main>
+</Layout>

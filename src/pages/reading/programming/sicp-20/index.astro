@@ -1,0 +1,557 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.20 — Storage & Garbage Collection" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Storage &amp; Garbage Collection</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-33.html#%_sec_5.3">SICP &sect;5.3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Memory is a vector of pairs. Garbage collection reclaims unreachable storage. Stop-and-copy GC compacts live data by copying it to new space, then flipping.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 380 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Top row: mixed memory -->
+        <text x="10" y="18" fill="#a1a1aa" font-size="11">before</text>
+        <!-- Cells -->
+        <rect x="10" y="25" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="50" y="25" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="90" y="25" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="130" y="25" width="36" height="28" rx="2" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="1"/>
+        <text x="148" y="44" text-anchor="middle" fill="#ef4444" font-size="13">X</text>
+        <rect x="170" y="25" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="210" y="25" width="36" height="28" rx="2" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="1"/>
+        <text x="228" y="44" text-anchor="middle" fill="#ef4444" font-size="13">X</text>
+        <rect x="250" y="25" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="290" y="25" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="330" y="25" width="36" height="28" rx="2" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="1"/>
+        <text x="348" y="44" text-anchor="middle" fill="#ef4444" font-size="13">X</text>
+
+        <!-- Legend -->
+        <rect x="45" y="62" width="10" height="10" rx="1" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="0.8"/>
+        <text x="60" y="71" fill="#a1a1aa" font-size="9">live</text>
+        <rect x="90" y="62" width="10" height="10" rx="1" fill="#3f3f46" stroke="#52525b" stroke-width="0.8"/>
+        <text x="105" y="71" fill="#a1a1aa" font-size="9">free</text>
+        <rect x="135" y="62" width="10" height="10" rx="1" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="0.8"/>
+        <text x="150" y="71" fill="#a1a1aa" font-size="9">garbage</text>
+
+        <!-- Arrow: stop-and-copy -->
+        <line x1="190" y1="80" x2="190" y2="98" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow20)"/>
+        <text x="225" y="93" fill="#34d399" font-size="11">stop-and-copy</text>
+
+        <!-- Bottom row: compacted -->
+        <text x="10" y="112" fill="#a1a1aa" font-size="11">after</text>
+        <rect x="10" y="118" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="50" y="118" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="90" y="118" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="130" y="118" width="36" height="28" rx="2" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1"/>
+        <rect x="170" y="118" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="210" y="118" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="250" y="118" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="290" y="118" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+        <rect x="330" y="118" width="36" height="28" rx="2" fill="#3f3f46" stroke="#52525b" stroke-width="1"/>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow20" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#34d399" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="190" y="158" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">stop-and-copy: live data moves, garbage stays behind</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Memory as vectors -->
+    <h3>Memory as vectors</h3>
+    <p>At the lowest level, memory is a flat array of numbered slots. Lisp pairs become two parallel vectors: <code>the-cars</code> and <code>the-cdrs</code>. Index <em>n</em> in both vectors together form one pair. A pointer is just an index into these vectors.</p>
+
+    <SchemeRepl client:load initialCode={`; Memory as two parallel vectors: the-cars and the-cdrs.
+; A cons cell at index i stores car in the-cars[i], cdr in the-cdrs[i].
+
+(define memory-size 8)
+(define the-cars (make-vector memory-size 'free))
+(define the-cdrs (make-vector memory-size 'free))
+(define free 0)
+
+(define (my-cons car-val cdr-val)
+  (let ((idx free))
+    (set! free (+ free 1))
+    (vector-set! the-cars idx car-val)
+    (vector-set! the-cdrs idx cdr-val)
+    idx))  ; return the pointer (index)
+
+(define (my-car ptr) (vector-ref the-cars ptr))
+(define (my-cdr ptr) (vector-ref the-cdrs ptr))
+
+; Build the list (a b c)
+(define p2 (my-cons 'c '()))
+(define p1 (my-cons 'b p2))
+(define p0 (my-cons 'a p1))
+
+(display "list starts at index: ") (display p0) (newline)
+(display "car[0]=") (display (my-car p0))
+(display " car[1]=") (display (my-car p1))
+(display " car[2]=") (display (my-car p2)) (newline)
+(display "cdr[0]=") (display (my-cdr p0))
+(display " cdr[1]=") (display (my-cdr p1))
+(display " cdr[2]=") (display (my-cdr p2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Memory as two parallel arrays
+MEMORY_SIZE = 8
+the_cars = [None] * MEMORY_SIZE
+the_cdrs = [None] * MEMORY_SIZE
+free = 0
+
+def my_cons(car_val, cdr_val):
+    global free
+    idx = free
+    free += 1
+    the_cars[idx] = car_val
+    the_cdrs[idx] = cdr_val
+    return idx  # pointer = index
+
+def my_car(ptr): return the_cars[ptr]
+def my_cdr(ptr): return the_cdrs[ptr]
+
+# Build the list (a b c)
+p2 = my_cons('c', None)
+p1 = my_cons('b', p2)
+p0 = my_cons('a', p1)
+
+print(f"list starts at index: {p0}")
+print(f"car[0]={my_car(p0)} car[1]={my_car(p1)} car[2]={my_car(p2)}")
+print(f"cdr[0]={my_cdr(p0)} cdr[1]={my_cdr(p1)} cdr[2]={my_cdr(p2)}")
+`} />
+    </div>
+
+
+    <!-- 2. Representing lists -->
+    <h3>Representing lists using vectors</h3>
+    <p>A list is a chain of pairs where each cdr points to the next pair (or to the empty list). Walking the list means following cdr pointers through the vector. This is exactly how linked lists work in hardware &mdash; each &ldquo;next&rdquo; field is a memory address.</p>
+
+    <SchemeRepl client:load initialCode={`; Walk a list stored in vector memory.
+
+(define the-cars (make-vector 10 'free))
+(define the-cdrs (make-vector 10 'free))
+(define free 0)
+
+(define (alloc! car-val cdr-val)
+  (let ((i free))
+    (set! free (+ free 1))
+    (vector-set! the-cars i car-val)
+    (vector-set! the-cdrs i cdr-val)
+    i))
+
+; Build (10 20 30 40)
+(define p3 (alloc! 40 'nil))
+(define p2 (alloc! 30 p3))
+(define p1 (alloc! 20 p2))
+(define p0 (alloc! 10 p1))
+
+; Walk the list following cdr pointers
+(define (walk ptr)
+  (if (eq? ptr 'nil)
+      (display "nil")
+      (begin
+        (display (vector-ref the-cars ptr))
+        (display " -> ")
+        (walk (vector-ref the-cdrs ptr)))))
+
+(display "list: ") (walk p0) (newline)
+
+; Show the raw memory layout
+(display "index: ")
+(let loop ((i 0))
+  (if (< i free)
+      (begin (display i) (display "  ") (loop (+ i 1)))))
+(newline)
+(display "cars:  ")
+(let loop ((i 0))
+  (if (< i free)
+      (begin (display (vector-ref the-cars i)) (display " ") (loop (+ i 1)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Walk a list stored in vector memory
+the_cars = [None] * 10
+the_cdrs = [None] * 10
+free = 0
+
+def alloc(car_val, cdr_val):
+    global free
+    i = free
+    free += 1
+    the_cars[i] = car_val
+    the_cdrs[i] = cdr_val
+    return i
+
+p3 = alloc(40, 'nil')
+p2 = alloc(30, p3)
+p1 = alloc(20, p2)
+p0 = alloc(10, p1)
+
+# Walk following cdr pointers
+def walk(ptr):
+    parts = []
+    while ptr != 'nil':
+        parts.append(str(the_cars[ptr]))
+        ptr = the_cdrs[ptr]
+    return ' -> '.join(parts) + ' -> nil'
+
+print(f"list: {walk(p0)}")
+print(f"index: {list(range(free))}")
+print(f"cars:  {the_cars[:free]}")
+`} />
+    </div>
+
+
+    <!-- 3. Stop-and-copy GC -->
+    <h3>Stop-and-copy garbage collector</h3>
+    <p>When free memory runs out, the collector copies all <strong>reachable</strong> data from &ldquo;from-space&rdquo; to &ldquo;to-space,&rdquo; then flips. Dead data stays behind. The copy is contiguous &mdash; fragmentation vanishes. The cost is proportional to live data, not total memory.</p>
+
+    <SchemeRepl client:load initialCode={`; Stop-and-copy GC simulation.
+; Two half-spaces of size 5. Copy live data, flip spaces.
+
+(define SIZE 5)
+(define from-cars (make-vector SIZE 'free))
+(define from-cdrs (make-vector SIZE 'free))
+(define to-cars   (make-vector SIZE 'free))
+(define to-cdrs   (make-vector SIZE 'free))
+(define free 0)
+(define scan 0)
+
+(define (alloc! car-val cdr-val)
+  (let ((i free))
+    (set! free (+ free 1))
+    (vector-set! from-cars i car-val)
+    (vector-set! from-cdrs i cdr-val)
+    i))
+
+; Allocate 5 cells, making some garbage
+(define garbage1 (alloc! 'dead1 'nil))
+(define live1    (alloc! 'alive1 'nil))
+(define garbage2 (alloc! 'dead2 'nil))
+(define live2    (alloc! 'alive2 live1))
+(define garbage3 (alloc! 'dead3 'nil))
+
+(display "Before GC — from-space full (") (display free) (display "/") (display SIZE) (display ")") (newline)
+
+; Roots: only live2 is reachable (which points to live1)
+; Copy root and everything it reaches
+(set! free 0)
+(set! scan 0)
+
+(define (copy-cell old-idx)
+  (let ((new-idx free))
+    (set! free (+ free 1))
+    (vector-set! to-cars new-idx (vector-ref from-cars old-idx))
+    (vector-set! to-cdrs new-idx (vector-ref from-cdrs old-idx))
+    ; Leave forwarding pointer
+    (vector-set! from-cars old-idx 'forwarded)
+    (vector-set! from-cdrs old-idx new-idx)
+    new-idx))
+
+; Copy root
+(define new-root (copy-cell live2))
+; Scan: process cdr of copied cell
+(let ((cdr-val (vector-ref to-cdrs scan)))
+  (if (number? cdr-val)
+      (let ((new-cdr (copy-cell cdr-val)))
+        (vector-set! to-cdrs scan new-cdr))))
+
+(display "After GC — to-space has ") (display free) (display " live cells") (newline)
+(display "to-cars: ")
+(let loop ((i 0))
+  (if (< i free)
+      (begin (display (vector-ref to-cars i)) (display " ") (loop (+ i 1)))))
+(newline)
+(display "3 dead cells reclaimed")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Stop-and-copy GC simulation
+SIZE = 5
+from_cars = ['free'] * SIZE
+from_cdrs = ['free'] * SIZE
+to_cars = ['free'] * SIZE
+to_cdrs = ['free'] * SIZE
+
+# Allocate 5 cells
+cells = [('dead1','nil'), ('alive1','nil'), ('dead2','nil'),
+         ('alive2', 1),   ('dead3','nil')]
+for i, (car, cdr) in enumerate(cells):
+    from_cars[i] = car
+    from_cdrs[i] = cdr
+
+print(f"Before GC — from-space full (5/{SIZE})")
+
+# Root is index 3 (alive2 -> alive1)
+free = 0
+forwarded = {}
+
+def copy_cell(old_idx):
+    global free
+    if old_idx in forwarded:
+        return forwarded[old_idx]
+    new_idx = free
+    free += 1
+    to_cars[new_idx] = from_cars[old_idx]
+    to_cdrs[new_idx] = from_cdrs[old_idx]
+    forwarded[old_idx] = new_idx
+    # Recursively copy cdr if it's a pointer
+    if isinstance(to_cdrs[new_idx], int):
+        to_cdrs[new_idx] = copy_cell(to_cdrs[new_idx])
+    return new_idx
+
+new_root = copy_cell(3)
+print(f"After GC — to-space has {free} live cells")
+print(f"to_cars: {to_cars[:free]}")
+print(f"3 dead cells reclaimed")
+`} />
+    </div>
+
+
+    <!-- 4. The broken-heart algorithm -->
+    <h3>The broken-heart algorithm</h3>
+    <p>When a cell is copied to new space, a <strong>broken heart</strong> (forwarding pointer) is left in old space. If the collector encounters this cell again via another reference, it follows the forwarding pointer instead of copying a second time. This handles shared structure and cycles.</p>
+
+    <SchemeRepl client:load initialCode={`; Broken-heart forwarding: shared structure handled correctly.
+
+(define from-cars (make-vector 6 'free))
+(define from-cdrs (make-vector 6 'free))
+(define to-cars   (make-vector 6 'free))
+(define to-cdrs   (make-vector 6 'free))
+(define free 0)
+(define forwarding (make-vector 6 -1))
+
+(define (alloc! car-val cdr-val)
+  (let ((i free))
+    (set! free (+ free 1))
+    (vector-set! from-cars i car-val)
+    (vector-set! from-cdrs i cdr-val)
+    i))
+
+; Shared structure: both cell 1 and cell 2 point to cell 0
+(define shared (alloc! 'X 'nil))      ; index 0
+(define a      (alloc! 'A shared))    ; index 1, cdr -> 0
+(define b      (alloc! 'B shared))    ; index 2, cdr -> 0
+
+(display "Before: a=(A . 0) b=(B . 0) — both share cell 0") (newline)
+
+(set! free 0)
+
+(define (relocate old)
+  (if (eq? (vector-ref from-cars old) 'broken-heart)
+      (begin
+        (display "  broken heart at ") (display old)
+        (display " -> forwarded to ") (display (vector-ref from-cdrs old)) (newline)
+        (vector-ref from-cdrs old))
+      (let ((new-idx free))
+        (set! free (+ free 1))
+        (vector-set! to-cars new-idx (vector-ref from-cars old))
+        (vector-set! to-cdrs new-idx (vector-ref from-cdrs old))
+        ; Leave broken heart
+        (vector-set! from-cars old 'broken-heart)
+        (vector-set! from-cdrs old new-idx)
+        (display "  copied ") (display old) (display " -> ") (display new-idx) (newline)
+        new-idx)))
+
+(display "Copying a:") (newline)
+(define new-a (relocate a))
+(display "Copying shared (via a's cdr):") (newline)
+(define new-shared-1 (relocate shared))
+(vector-set! to-cdrs new-a new-shared-1)
+
+(display "Copying b:") (newline)
+(define new-b (relocate b))
+(display "Copying shared again (via b's cdr):") (newline)
+(define new-shared-2 (relocate shared))
+(vector-set! to-cdrs new-b new-shared-2)
+
+(newline)
+(display "Shared cell copied only once. ")
+(display "new-shared-1=") (display new-shared-1)
+(display " new-shared-2=") (display new-shared-2)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Broken-heart forwarding for shared structure
+from_cars = ['X', 'A', 'B'] + ['free'] * 3
+from_cdrs = ['nil', 0, 0] + ['free'] * 3
+to_cars = ['free'] * 6
+to_cdrs = ['free'] * 6
+free = 0
+broken = {}
+
+def relocate(old):
+    global free
+    if old in broken:
+        print(f"  broken heart at {old} -> forwarded to {broken[old]}")
+        return broken[old]
+    new_idx = free
+    free += 1
+    to_cars[new_idx] = from_cars[old]
+    to_cdrs[new_idx] = from_cdrs[old]
+    broken[old] = new_idx
+    print(f"  copied {old} -> {new_idx}")
+    return new_idx
+
+print("Copying a:")
+new_a = relocate(1)
+print("Copying shared (via a's cdr):")
+ns1 = relocate(0)
+to_cdrs[new_a] = ns1
+
+print("Copying b:")
+new_b = relocate(2)
+print("Copying shared again (via b's cdr):")
+ns2 = relocate(0)
+to_cdrs[new_b] = ns2
+
+print(f"\\nShared cell copied only once. ns1={ns1} ns2={ns2}")
+`} />
+    </div>
+
+
+    <!-- 5. Free list vs compacting -->
+    <h3>Free list vs compacting collection</h3>
+    <p>An alternative to stop-and-copy is a <strong>free list</strong>: link all unused cells into a chain, allocate from the head. Simpler but causes fragmentation. Stop-and-copy trades the cost of moving live data for the benefit of contiguous allocation &mdash; every allocation is a pointer bump.</p>
+
+    <SchemeRepl client:load initialCode={`; Free-list allocator: simple but fragmenting.
+
+(define SIZE 8)
+(define memory (make-vector SIZE 'free))
+
+; Build free list: 0 -> 1 -> 2 -> ... -> 7 -> nil
+(define free-list
+  (let loop ((i (- SIZE 1)) (next 'nil))
+    (if (< i 0) next
+        (loop (- i 1) (cons i next)))))
+
+(define (alloc-free-list! val)
+  (if (null? free-list)
+      (error "Out of memory!")
+      (let ((idx (car free-list)))
+        (set! free-list (cdr free-list))
+        (vector-set! memory idx val)
+        idx)))
+
+(define (dealloc! idx)
+  (vector-set! memory idx 'free)
+  (set! free-list (cons idx free-list)))
+
+(define a (alloc-free-list! 'A))
+(define b (alloc-free-list! 'B))
+(define c (alloc-free-list! 'C))
+(display "Allocated A=") (display a)
+(display " B=") (display b)
+(display " C=") (display c) (newline)
+
+; Free B — creates a hole
+(dealloc! b)
+(display "After freeing B, memory: ")
+(let loop ((i 0))
+  (if (< i SIZE)
+      (begin (display (vector-ref memory i)) (display " ")
+             (loop (+ i 1)))))
+(newline)
+(display "Free list head: ") (display (car free-list))
+(display " (fragmented!)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Free-list allocator
+SIZE = 8
+memory = ['free'] * SIZE
+free_list = list(range(SIZE))
+
+def alloc(val):
+    if not free_list:
+        raise RuntimeError("Out of memory!")
+    idx = free_list.pop(0)
+    memory[idx] = val
+    return idx
+
+def dealloc(idx):
+    memory[idx] = 'free'
+    free_list.insert(0, idx)  # prepend
+
+a = alloc('A')
+b = alloc('B')
+c = alloc('C')
+print(f"Allocated A={a} B={b} C={c}")
+
+dealloc(b)
+print(f"After freeing B, memory: {memory}")
+print(f"Free list head: {free_list[0]} (fragmented!)")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme / SICP</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cons a b)</td><td class="pr-4 text-blue-300">(a, b) or [a, b]</td><td class="font-sans">Allocate a pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(car p) / (cdr p)</td><td class="pr-4 text-blue-300">p[0] / p[1]</td><td class="font-sans">First / second element of pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(vector-ref v i)</td><td class="pr-4 text-blue-300">v[i]</td><td class="font-sans">Read from vector/array</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(vector-set! v i x)</td><td class="pr-4 text-blue-300">v[i] = x</td><td class="font-sans">Write to vector/array</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">broken-heart</td><td class="pr-4 text-blue-300">forwarding dict</td><td class="font-sans">Marker: cell already copied</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">from-space / to-space</td><td class="pr-4 text-blue-300">from_* / to_*</td><td class="font-sans">Two memory half-spaces for GC</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Python hides all of this behind the runtime. <code>sys.getrefcount()</code> exposes reference counts; <code>gc.collect()</code> triggers the cycle collector. CPython uses reference counting (immediate collection) plus a generational collector for cycles &mdash; not stop-and-copy. The SICP model is closer to what the JVM or Go runtime does with copying/compacting collectors. The vector representation of pairs maps directly to how struct-of-arrays layouts work in systems programming.</p>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-19/">SICP Ch.19</a> &mdash; Register Machine Simulator (the substrate this chapter manages memory for)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Garbage collection (computer science)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tracing_garbage_collection"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tracing garbage collection</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Memory_management"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Memory management</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-33.html#%_sec_5.3">Read SICP &sect;5.3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-19/", label: "Register Machine Simulator" }} next={{ href: "/reading/programming/sicp-21/", label: "Explicit-Control Evaluator · 21 of 22" }} />
+
+  </main>
+</Layout>

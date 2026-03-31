@@ -1,0 +1,188 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.2 — Coordinate Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Coordinate Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Analytic_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Analytic geometry</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Descartes</a> married algebra to geometry. Every point is a pair of numbers. Every curve is an equation. Every geometric proof becomes a calculation. The Cartesian plane is the bridge between shape and formula.</p>
+    </div>
+
+    <!-- 1. The Cartesian plane -->
+    <h3>The Cartesian plane</h3>
+    <p>Two perpendicular number lines crossing at the origin (0, 0). The horizontal axis is x, the vertical is y. Every point in the plane has coordinates (x, y). This is the idea that turned geometry into algebra.</p>
+
+    <!-- 2. Distance and midpoint -->
+    <h3>Distance and midpoint</h3>
+    <p>The <strong>distance formula</strong> is the Pythagorean theorem in coordinates: d = sqrt((x2-x1)&#178; + (y2-y1)&#178;). The <strong>midpoint</strong> is the average of the coordinates: ((x1+x2)/2, (y1+y2)/2).</p>
+
+    <SchemeRepl client:load initialCode={`; Distance formula: derived from Pythagorean theorem
+(define (distance x1 y1 x2 y2)
+  (sqrt (+ (* (- x2 x1) (- x2 x1))
+           (* (- y2 y1) (- y2 y1)))))
+
+; Midpoint formula
+(define (midpoint x1 y1 x2 y2)
+  (list (/ (+ x1 x2) 2)
+        (/ (+ y1 y2) 2)))
+
+(display "Distance (1,2) to (4,6): ")
+(display (distance 1 2 4 6))
+(newline)
+
+(display "Midpoint (1,2) and (4,6): ")
+(display (midpoint 1 2 4 6))
+(newline)
+
+; Distance from origin
+(display "Distance (0,0) to (3,4): ")
+(display (distance 0 0 3 4))
+`} />
+
+    <!-- 3. Slope and equation of a line -->
+    <h3>Slope and lines</h3>
+    <p><strong>Slope</strong> measures steepness: m = (y2-y1)/(x2-x1). A line through (x1, y1) with slope m satisfies y - y1 = m(x - x1). Two lines are parallel when their slopes are equal. Two lines are perpendicular when m1 * m2 = -1.</p>
+
+    <SchemeRepl client:load initialCode={`; Slope between two points
+(define (slope x1 y1 x2 y2)
+  (/ (- y2 y1) (- x2 x1)))
+
+(display "Slope from (1,1) to (3,5): ")
+(display (slope 1 1 3 5))
+(newline)
+
+; Line equation: y = mx + b
+; Given slope m and point (x1,y1), find b
+(define (y-intercept m x1 y1)
+  (- y1 (* m x1)))
+
+(let ((m (slope 1 1 3 5)))
+  (display "Line: y = ")
+  (display m)
+  (display "x + ")
+  (display (y-intercept m 1 1))
+  (newline))
+
+; Parallel check: equal slopes
+(display "Parallel? slopes 2 and 2: ")
+(display (= 2 2))
+(newline)
+
+; Perpendicular check: product of slopes = -1
+(display "Perpendicular? slopes 2 and -1/2: ")
+(display (= (* 2 -1/2) -1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def slope(x1, y1, x2, y2):
+    return (y2 - y1) / (x2 - x1)
+
+def y_intercept(m, x1, y1):
+    return y1 - m * x1
+
+m = slope(1, 1, 3, 5)
+b = y_intercept(m, 1, 1)
+print(f"Slope from (1,1) to (3,5): {m}")
+print(f"Line: y = {m}x + {b}")
+print(f"Parallel? slopes 2 and 2: {2 == 2}")
+print(f"Perpendicular? slopes 2 and -0.5: {2 * -0.5 == -1}")
+`} />
+    </div>
+
+    <!-- 4. Conic sections -->
+    <h3>Conic sections</h3>
+    <p>Slice a cone at different angles and you get circles, ellipses, parabolas, and hyperbolas. Each has a standard equation in the coordinate plane:</p>
+    <ul class="mb-4 text-gray-300">
+      <li><strong>Circle:</strong> x&#178; + y&#178; = r&#178;</li>
+      <li><strong>Ellipse:</strong> x&#178;/a&#178; + y&#178;/b&#178; = 1</li>
+      <li><strong>Parabola:</strong> y = ax&#178;</li>
+      <li><strong>Hyperbola:</strong> x&#178;/a&#178; - y&#178;/b&#178; = 1</li>
+    </ul>
+
+    <!-- SVG: Line and parabola on coordinate axes -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="200" x2="330" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="180" y1="20" x2="180" y2="280" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Axis labels -->
+        <text x="335" y="204" fill="currentColor" font-size="11" fill-opacity="0.4">x</text>
+        <text x="184" y="18" fill="currentColor" font-size="11" fill-opacity="0.4">y</text>
+        <!-- Origin -->
+        <circle cx="180" cy="200" r="2" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Grid ticks -->
+        <line x1="120" y1="197" x2="120" y2="203" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="240" y1="197" x2="240" y2="203" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="300" y1="197" x2="300" y2="203" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="177" y1="140" x2="183" y2="140" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="177" y1="80" x2="183" y2="80" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Parabola y = 0.01x^2 (in pixel coords) -->
+        <!-- Points: x from -150 to 150, y = x^2/375 -->
+        <path d="M 30,260 Q 105,215 180,200 Q 255,215 330,260" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.6"/>
+        <text x="310" y="255" fill="#f59e0b" font-size="11" fill-opacity="0.6">y = x&#178;</text>
+        <!-- Line y = x + 1 -->
+        <line x1="30" y1="260" x2="300" y2="80" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="295" y="72" fill="#60a5fa" font-size="11" fill-opacity="0.6">y = 2x + 1</text>
+        <!-- Caption -->
+        <text x="180" y="295" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">A line and a parabola on the Cartesian plane.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Conic sections as predicates
+; Does a point lie on the curve?
+
+; Circle: x^2 + y^2 = r^2
+(define (on-circle? x y r)
+  (= (+ (* x x) (* y y)) (* r r)))
+
+(display "Is (3,4) on circle r=5? ")
+(display (on-circle? 3 4 5))
+(newline)
+
+; Parabola: y = a*x^2
+(define (on-parabola? x y a)
+  (= y (* a x x)))
+
+(display "Is (2,12) on y=3x^2? ")
+(display (on-parabola? 2 12 3))
+(newline)
+
+; Ellipse: x^2/a^2 + y^2/b^2 = 1
+(define (on-ellipse? x y a b)
+  (= (+ (/ (* x x) (* a a))
+        (/ (* y y) (* b b)))
+     1))
+
+(display "Is (3,0) on ellipse a=3,b=2? ")
+(display (on-ellipse? 3 0 3 2))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-01/">&#8747; Calculus Ch.1</a> — functions and graphs: coordinate geometry is the prerequisite</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Analytic_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Analytic geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cartesian coordinate system</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Conic_section"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Conic section</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-01/", label: "Euclidean Geometry" }} next={{ href: "/reading/geometry/geom-03/", label: "Transformations" }} />
+
+  </main>
+</Layout>

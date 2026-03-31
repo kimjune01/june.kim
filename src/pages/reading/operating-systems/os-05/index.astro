@@ -1,0 +1,216 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.5 — Deadlock" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Deadlock</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Deadlock"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deadlock</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Deadlock</strong> occurs when a set of processes each hold a resource and wait for another resource held by a different process in the set. Nobody can proceed. The system is stuck.</p>
+    </div>
+
+    <h3>Four necessary conditions</h3>
+    <p>Deadlock requires all four of these simultaneously. Break any one, and deadlock cannot occur.</p>
+    <ol>
+      <li><strong>Mutual exclusion</strong>: at least one resource is non-shareable</li>
+      <li><strong>Hold and wait</strong>: a process holds one resource while waiting for another</li>
+      <li><strong>No preemption</strong>: resources cannot be forcibly taken away</li>
+      <li><strong>Circular wait</strong>: a cycle of processes, each waiting for the next</li>
+    </ol>
+
+    <!-- SVG: Circular wait graph -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 250" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Processes -->
+        <circle cx="150" cy="40" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="150" y="45" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.7">P1</text>
+
+        <circle cx="250" cy="160" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="250" y="165" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.7">P2</text>
+
+        <circle cx="50" cy="160" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="50" y="165" text-anchor="middle" fill="#34d399" font-size="12" fill-opacity="0.7">P3</text>
+
+        <!-- Resources (squares) -->
+        <rect x="190" y="80" width="30" height="30" rx="3" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="205" y="100" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.6">R1</text>
+
+        <rect x="160" y="190" width="30" height="30" rx="3" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="175" y="210" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.6">R2</text>
+
+        <rect x="75" y="80" width="30" height="30" rx="3" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="90" y="100" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.6">R3</text>
+
+        <!-- Holds (solid): P1->R1, P2->R2, P3->R3 -->
+        <line x1="168" y1="52" x2="192" y2="82" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="190,78 196,84 192,76" fill="currentColor" fill-opacity="0.4"/>
+
+        <line x1="240" y1="178" x2="190" y2="200" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="193,196 188,204 196,200" fill="currentColor" fill-opacity="0.4"/>
+
+        <line x1="60" y1="142" x2="82" y2="110" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="78,112 86,106 82,114" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Waits (dashed): R1->P2, R2->P3, R3->P1 -->
+        <line x1="218" y1="104" x2="238" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <polygon points="234,138 242,144 240,134" fill="currentColor" fill-opacity="0.3"/>
+
+        <line x1="162" y1="210" x2="70" y2="172" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <polygon points="74,174 66,170 68,178" fill="currentColor" fill-opacity="0.3"/>
+
+        <line x1="84" y1="84" x2="134" y2="52" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <polygon points="130,54 138,48 132,46" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Legend -->
+        <text x="150" y="240" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">solid = holds, dashed = waits-for</text>
+      </svg>
+    </div>
+
+    <h3>Resource allocation graph</h3>
+    <p>A directed graph where processes and resources are nodes. An edge from a process to a resource means "waiting for." An edge from a resource to a process means "held by." A cycle in this graph indicates deadlock (for single-instance resources).</p>
+
+    <SchemeRepl client:load initialCode={`; Deadlock detection: find a cycle in the wait-for graph
+; Graph represented as adjacency list: ((node . (neighbors ...)) ...)
+
+(define (has-cycle? graph)
+  (define visited '())
+  (define in-stack '())
+
+  (define (dfs node)
+    (cond
+      ((member node in-stack) #t)       ; cycle found!
+      ((member node visited) #f)        ; already explored
+      (else
+        (set! visited (cons node visited))
+        (set! in-stack (cons node in-stack))
+        (let ((neighbors (cond ((assoc node graph) => cdr) (else '()))))
+          (let ((result (any-true? (map dfs neighbors))))
+            (set! in-stack (cdr in-stack))
+            result)))))
+
+  (define (any-true? lst)
+    (cond ((null? lst) #f)
+          ((car lst) #t)
+          (else (any-true? (cdr lst)))))
+
+  (any-true? (map (lambda (entry) (dfs (car entry))) graph)))
+
+; No deadlock: P1 waits for P2, P2 waits for P3
+(define no-cycle '((P1 P2) (P2 P3) (P3)))
+(display "P1->P2->P3: cycle? ") (display (has-cycle? no-cycle)) (newline)
+
+; Deadlock: P1->P2->P3->P1
+(define cycle-graph '((P1 P2) (P2 P3) (P3 P1)))
+(display "P1->P2->P3->P1: cycle? ") (display (has-cycle? cycle-graph))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Deadlock detection via cycle detection in wait-for graph
+def has_cycle(graph):
+    visited = set()
+    in_stack = set()
+
+    def dfs(node):
+        if node in in_stack:
+            return True
+        if node in visited:
+            return False
+        visited.add(node)
+        in_stack.add(node)
+        for neighbor in graph.get(node, []):
+            if dfs(neighbor):
+                return True
+        in_stack.remove(node)
+        return False
+
+    return any(dfs(n) for n in graph)
+
+# No deadlock
+print("P1->P2->P3:", has_cycle({"P1": ["P2"], "P2": ["P3"], "P3": []}))
+
+# Deadlock
+print("P1->P2->P3->P1:", has_cycle({"P1": ["P2"], "P2": ["P3"], "P3": ["P1"]}))
+`} />
+    </div>
+
+    <h3>Prevention</h3>
+    <p>Break one of the four conditions. Impose a total ordering on resources (break circular wait). Require processes to request all resources at once (break hold-and-wait). Allow preemption of resources.</p>
+
+    <h3>Avoidance: Banker's algorithm</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Edsger_W._Dijkstra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dijkstra</a>'s <a href="https://en.wikipedia.org/wiki/Banker%27s_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Banker's algorithm</a> checks whether granting a request leaves the system in a <strong>safe state</strong>: one where there exists a sequence in which all processes can finish. If not, the request is denied. The cost is knowing maximum resource needs in advance.</p>
+
+    <SchemeRepl client:load initialCode={`; Banker's algorithm: is the state safe?
+; available: list of available resources per type
+; max-need: matrix of max needs
+; allocation: matrix of current allocation
+
+(define (safe-state? available max-need allocation)
+  (let* ((n (length allocation))
+         (need (map (lambda (m a) (map - m a)) max-need allocation))
+         (work (list->vector available))
+         (finish (make-vector n #f)))
+
+    (define (find-runnable need-list idx)
+      (cond
+        ((>= idx n) #f)
+        ((vector-ref finish idx) (find-runnable need-list (+ idx 1)))
+        ((for-all? <= (list-ref need-list idx) (vector->list work))
+         idx)
+        (else (find-runnable need-list (+ idx 1)))))
+
+    (define (for-all? pred a b)
+      (cond ((null? a) #t)
+            ((pred (car a) (car b)) (for-all? pred (cdr a) (cdr b)))
+            (else #f)))
+
+    (define (run-sequence need-list count order)
+      (if (= count n)
+          (begin (display "Safe sequence: ") (display (reverse order)) #t)
+          (let ((i (find-runnable need-list 0)))
+            (if (not i)
+                #f
+                (begin
+                  (let ((alloc (list-ref allocation i)))
+                    (for-each (lambda (j v)
+                      (vector-set! work j (+ (vector-ref work j) v)))
+                      (iota (length alloc)) alloc))
+                  (vector-set! finish i #t)
+                  (run-sequence need-list (+ count 1) (cons i order)))))))
+
+    (define (iota n) (if (= n 0) '() (append (iota (- n 1)) (list (- n 1)))))
+
+    (run-sequence need 0 '())))
+
+; Example: 3 processes, 1 resource type
+(display (safe-state? '(3) '((7) (4) (6)) '((1) (2) (3))))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-04/">🔢 Graphs</a> — deadlock detection is cycle detection in a directed graph</li>
+      <li><a href="/reading/game-theory/nordstrom-12/">♟ Game Theory Ch.12</a> — prisoner's dilemma: deadlock is the game-theoretic outcome where rational self-interest (holding resources) leads to mutual destruction</li>
+      <li><a href="/reading/algorithms/algo-06/">⚙ Algorithms Ch.6</a> — graph cycle detection: deadlock detection is cycle detection in the resource allocation digraph</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Deadlock"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Deadlock</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Banker%27s_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Banker's algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Resource_allocation_graph"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Resource allocation graph</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-04/", label: "Synchronization" }} next={{ href: "/reading/operating-systems/os-06/", label: "Memory Management" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,507 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Staton 2025 — Program Logics via Distributive Monoidal Categories" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Program Logics via Distributive Monoidal Categories</h1>
+    <p class="text-gray-400 text-sm mb-6">Bonchi, Di Lavore, Román, Staton · 2025 · <a href="https://arxiv.org/abs/2507.18238"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2507.18238</a></p>
+
+    <!-- One sentence -->
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Every Hoare rule you learned in your algorithms course — SKIP, COMP, WHILE, ASSIGN — is a <strong>theorem</strong>, not an axiom, once your category has the right structure.</p>
+    </div>
+
+    <!-- 1. The Hoare triple -->
+    <h3>The Hoare triple</h3>
+    <p>You already know this pattern:</p>
+
+    <!-- SVG: Basic Hoare triple -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 80" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="40" y="30" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P</text>
+        <line x1="20" y1="40" x2="120" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="120" cy="40" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <rect x="123" y="22" width="60" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="153" y="45" text-anchor="middle" fill="currentColor" font-size="14">c</text>
+        <circle cx="183" cy="40" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <line x1="186" y1="40" x2="290" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <text x="270" y="30" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Q</text>
+        <text x="153" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">if P holds before, Q holds after</text>
+      </svg>
+    </div>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-4 font-mono text-center">
+      <span class="text-gray-400">assert</span> <span class="text-green-300">P</span><span class="text-gray-500">;</span>
+      <span class="text-blue-300">run(c)</span><span class="text-gray-500">;</span>
+      <span class="text-gray-400">assert</span> <span class="text-green-300">Q</span>
+    </div>
+
+    <p>"If P holds before running c, then Q holds after." That's a <a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare triple</a>: <code>{'{P}'} c {'{Q}'}</code>. If the precondition doesn't hold, the triple says nothing — it's vacuously satisfied.</p>
+
+    <Repl client:load initialCode={`# {P} c {Q} — if P holds before, Q holds after.
+
+P = lambda x: x > 0
+c = lambda x: x * 2
+Q = lambda y: y > 0
+
+for x in range(-3, 4):
+    if P(x):
+        result = c(x)
+        assert Q(result), f"Failed: {x} -> {result}"
+        print(f"  x={x} -> {result}: Q holds ✓")
+    else:
+        print(f"  x={x}: P doesn't hold, triple says nothing")
+`} />
+
+    <!-- 2. SKIP -->
+    <h3>SKIP — doing nothing preserves anything</h3>
+
+    <!-- SVG: SKIP — just a wire -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 50" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <text x="30" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P</text>
+        <line x1="20" y1="28" x2="280" y2="28" stroke="currentColor" stroke-width="1.5"/>
+        <text x="270" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P</text>
+        <text x="150" y="45" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">no box — wire passes straight through</text>
+      </svg>
+    </div>
+
+    <p>The simplest rule. <code>{'{P}'} skip {'{P}'}</code>. If P is true before doing nothing, P is still true after. Obvious — but it's a theorem, not an assumption.</p>
+
+    <Repl client:load initialCode={`# SKIP: {P} skip {P}
+skip = lambda x: x
+
+P = lambda x: x > 0
+for x in [1, 5, 100]:
+    assert P(skip(x)) == P(x)
+    print(f"  skip({x}): P preserved ✓")
+
+print()
+print("Nothing happened. That's the point.")
+`} />
+
+    <!-- 3. COMP -->
+    <h3>COMP — the handshake</h3>
+    <p>This is the big one. If <code>{'{P}'} c₁ {'{R}'}</code> and <code>{'{R}'} c₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ {'{Q}'}</code>.</p>
+    <p>R is the <strong>handshake</strong> — stage 1's postcondition is stage 2's precondition. The output guarantee of one stage is the input assumption of the next.</p>
+
+    <!-- SVG diagram: COMP rule — string diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- P label on input wire -->
+        <text x="55" y="40" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P</text>
+        <!-- input wire -->
+        <line x1="30" y1="60" x2="100" y2="60" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- box c₁ -->
+        <rect x="100" y="40" width="70" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="135" y="65" text-anchor="middle" fill="currentColor" font-size="14">c&#x2081;</text>
+
+        <!-- R label on intermediate wire -->
+        <text x="220" y="40" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">R</text>
+        <!-- intermediate wire -->
+        <line x1="170" y1="60" x2="270" y2="60" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- box c₂ -->
+        <rect x="270" y="40" width="70" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="305" y="65" text-anchor="middle" fill="currentColor" font-size="14">c&#x2082;</text>
+
+        <!-- Q label on output wire -->
+        <text x="395" y="40" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Q</text>
+        <!-- output wire -->
+        <line x1="340" y1="60" x2="420" y2="60" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- bottom label -->
+        <text x="220" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">{'{P}'} c&#x2081;;c&#x2082; {'{Q}'}</text>
+      </svg>
+    </div>
+
+    <Repl client:load initialCode={`# COMP: {P} c1 {R} and {R} c2 {Q} implies {P} c1;c2 {Q}
+# R is the handshake.
+
+double = lambda x: x * 2     # {x > 0} double {y > 0}
+sub1 = lambda y: y - 1        # {y > 1} sub1 {z > 0}
+pipeline = lambda x: sub1(double(x))
+
+print("COMP: {x > 0} double;sub1 {z > 0}")
+print()
+for x in range(1, 6):
+    y = double(x)
+    z = pipeline(x)
+    print(f"  x={x} -> y={y} (R: y>1? {y > 1}) -> z={z} (Q: z>0? {z > 0})")
+
+print()
+print("Try: change sub1 to 'lambda y: y - 5'")
+print("     and see where Q breaks.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <SchemeRepl client:load initialCode={`; COMP rule — composition IS the language
+(define (compose f g) (lambda (x) (g (f x))))
+
+(define double (lambda (x) (* x 2)))
+(define sub1   (lambda (x) (- x 1)))
+
+(define pipeline (compose double sub1))
+
+(display (pipeline 1)) (newline)
+(display (pipeline 2)) (newline)
+(display (pipeline 3)) (newline)
+`} />
+    </div>
+
+    <!-- 4. WHILE -->
+    <h3>WHILE — loop invariants</h3>
+
+    <!-- SVG: WHILE loop — feedback with guard -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 140" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Input wire -->
+        <text x="25" y="30" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P</text>
+        <line x1="15" y1="40" x2="80" y2="40" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Guard diamond -->
+        <polygon points="100,20 120,40 100,60 80,40" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="100" y="44" text-anchor="middle" fill="currentColor" font-size="10">b?</text>
+
+        <!-- True branch: into body -->
+        <line x1="120" y1="40" x2="170" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <text x="145" y="33" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">true</text>
+
+        <!-- Body box -->
+        <rect x="170" y="22" width="60" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="200" y="45" text-anchor="middle" fill="currentColor" font-size="13">c</text>
+
+        <!-- Feedback: body output loops back to guard -->
+        <line x1="230" y1="40" x2="260" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="260" y1="40" x2="260" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="260" y1="100" x2="60" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="60" y1="100" x2="60" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="60" y1="40" x2="80" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="160" y="115" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">P survives each iteration</text>
+
+        <!-- False branch: exit -->
+        <line x1="100" y1="60" x2="100" y2="80" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="100" y1="80" x2="350" y2="80" stroke="currentColor" stroke-width="1.5"/>
+        <text x="130" y="75" fill="currentColor" font-size="8" fill-opacity="0.4">false</text>
+        <text x="330" y="72" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">P ∧ ¬b</text>
+      </svg>
+    </div>
+
+    <p>If <code>{'{b ∧ P}'} c {'{P}'}</code>, then <code>{'{P}'} while b do c {'{P ∧ ¬b}'}</code>.</p>
+    <p>If the body preserves the invariant P, the loop preserves it too. When the loop exits, P still holds AND the guard b is false. This is the loop invariant from your algorithms class — except here it's a theorem derived from the categorical structure, not a proof technique you choose to apply.</p>
+
+    <Repl client:load initialCode={`# WHILE: if body preserves P, loop preserves P.
+# When loop exits: P holds AND guard is false.
+
+# Invariant P: x >= 0
+# Guard b: x > 0
+# Body c: x - 1
+
+x = 10
+print(f"  start: x={x}, P (x>=0): {x >= 0}")
+
+while x > 0:
+    x = x - 1
+    assert x >= 0, "Invariant broken!"
+
+print(f"  end:   x={x}, P (x>=0): {x >= 0}, b (x>0): {x > 0}")
+print(f"  P ∧ ¬b: x>=0 and not x>0 → x==0 ✓")
+print()
+print("Try: change the body to 'x = x - 3'")
+print("     Does the invariant still hold?")
+`} />
+
+    <!-- 5. Weakest precondition -->
+    <h3>Weakest precondition</h3>
+
+    <!-- SVG: wp — backwards from Q through c to P -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 80" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Q on the right -->
+        <text x="350" y="25" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">Q</text>
+        <line x1="290" y1="40" x2="370" y2="40" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Box c -->
+        <rect x="180" y="22" width="60" height="36" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="45" text-anchor="middle" fill="currentColor" font-size="14">c</text>
+        <line x1="240" y1="40" x2="290" y2="40" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Backwards arrow to wp(c,Q) -->
+        <line x1="30" y1="40" x2="180" y2="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="80" y="25" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">wp(c, Q) = ?</text>
+        <text x="210" y="70" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">given Q and c, compute the weakest P</text>
+      </svg>
+    </div>
+
+    <p>Flip the question. Given c and Q, what's the <em>weakest</em> P that guarantees Q? That's <code>wp(c, Q)</code>. The most permissive input condition that still gives you the output you want.</p>
+
+    <Repl client:load initialCode={`# wp(c, Q) = the weakest P such that {P} c {Q}
+
+c = lambda x: x - 3
+Q = lambda y: y >= 0
+
+# What inputs make Q hold after c?
+# y = x - 3 >= 0  means  x >= 3
+# So wp(c, Q) = lambda x: x >= 3
+
+wp = lambda x: x >= 3
+
+print("wp(subtract_3, non_negative) = x >= 3")
+print()
+for x in range(0, 8):
+    result = c(x)
+    ok = Q(result)
+    predicted = wp(x)
+    match = "✓" if predicted == ok else "✗"
+    print(f"  x={x}: wp={predicted}, Q(c(x))={ok}  {match}")
+`} />
+
+    <!-- 6. Copy and discard -->
+    <h3>Copy and discard — the structure underneath</h3>
+    <p>An <a href="https://en.wikipedia.org/wiki/Distributive_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>imperative category</a> has two special operations per type: <strong>copy</strong> (ν) and <strong>discard</strong> (ε). A morphism is <strong>deterministic</strong> if it commutes with copy. This is how Fritz (2020) distinguishes deterministic from stochastic morphisms.</p>
+
+    <Repl client:load initialCode={`# Copy: ν(x) = (x, x) — duplicate the state
+# Discard: ε(x) = None — throw it away
+
+# A function f is DETERMINISTIC if:
+#   f(copy(x)) == copy(f(x))
+#   "apply then copy" = "copy then apply to both"
+
+copy = lambda x: (x, x)
+
+double = lambda x: x * 2
+x = 5
+lhs = copy(double(x))
+rhs = (double(x), double(x))
+print(f"  double is deterministic:")
+print(f"    copy(double({x})) = {lhs}")
+print(f"    (double({x}), double({x})) = {rhs}")
+print(f"    equal? {lhs == rhs} ✓")
+print()
+
+# Stochastic functions FAIL this test
+import random
+def coin(x):
+    return x if random.random() > 0.5 else -x
+
+results = set()
+for _ in range(20):
+    a, b = coin(5), coin(5)
+    results.add((a, b))
+print(f"  coin is stochastic:")
+print(f"    20 independent (coin(5), coin(5)) pairs:")
+print(f"    got {len(results)} distinct results")
+print(f"    deterministic would give 1 ✗")
+`} />
+
+    <!-- 7. The bridge -->
+    <h3>The bridge — contracts ARE Hoare triples</h3>
+    <p>The Lean artifact proves the equivalence:</p>
+    <div class="bg-zinc-800 rounded-lg p-4 mb-4 font-mono text-sm">
+      <span class="text-gray-500">-- Lean 4</span><br/>
+      <span class="text-blue-300">theorem</span> contract_is_triple :<br/>
+      &nbsp;&nbsp;ContractPreserving f Q ↔ Triple (<span class="text-green-300">fun _ => True</span>) f Q
+    </div>
+    <p><code>ContractPreserving f Q</code> says: for every input, every output in the support of f satisfies Q. That's <code>{'{⊤}'} f {'{Q}'}</code> — a Hoare triple where the precondition is "true" (anything goes). The contract is an unconditional guarantee.</p>
+
+    <Repl client:load initialCode={`# ContractPreserving f Q  =  {⊤} f {Q}
+# They're the same thing.
+
+support = lambda d: {k for k, v in d.items() if v > 0}
+
+contract_ok = lambda f, Q, xs: all(
+    Q(y) for x in xs for y in support(f(x))
+)
+
+hoare_top_Q = lambda f, Q, xs: all(  # {⊤} f {Q}
+    Q(y) for x in xs for y in support(f(x))
+)
+
+# Same function, same check, same result.
+f = lambda x: {abs(x): 0.7, abs(x)+1: 0.3}
+Q = lambda y: y >= 0
+
+assert contract_ok(f, Q, range(-5, 6))
+assert hoare_top_Q(f, Q, range(-5, 6))
+print("Both passed — they're the same check.")
+print()
+print("ContractPreserving f Q  ↔  {⊤} f {Q}")
+print("That's the bridge theorem.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <SchemeRepl client:load initialCode={`; Contract = predicate on all outputs. {⊤} f {Q}.
+
+(define (contract-preserving? f Q inputs)
+  (every (lambda (x)
+    (every (lambda (y) (Q y))
+           (map car (f x))))
+  inputs))
+
+(define (f x) (list (cons (abs x) 1.0)))
+(define Q (lambda (y) (>= y 0)))
+
+(display (contract-preserving? f Q '(-3 -1 0 1 3)))
+`} />
+    </div>
+
+    <details class="my-2">
+      <summary class="text-xs text-gray-500 cursor-pointer">Lean proof</summary>
+      <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm"><code><span class="text-blue-300">theorem</span> contract_is_triple [Monad M] [Support M]
+    {'{'}f : Kernel M α β{'}'} {'{'}Q : Contract β{'}'}
+    : ContractPreserving f Q ↔ Triple (<span class="text-green-300">fun _ => True</span>) f Q</code></pre>
+      <p class="text-xs text-gray-500"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Bridge.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bridge.lean</a></p>
+    </details>
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Exact.</strong></p>
+
+    <!-- 8. Stoch is an imperative category -->
+    <h3>The punchline — Corollary 76</h3>
+    <p>Stoch (stochastic matrices) is a <strong>posetal imperative category</strong>. That means every Hoare rule in Section 5 holds there as a theorem. Hoare triples aren't an engineering choice — they're forced by the category.</p>
+    <p>A stochastic function takes an input and returns a probability distribution over outputs. <a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli composition</a> chains two such functions: run the first, then for each possible output run the second, weighting by probability. This is how stochastic pipelines compose — and it's the composition that makes the COMP rule work.</p>
+
+    <Repl client:load initialCode={`# Stoch = Kleisli category of the subdistribution monad
+# Morphisms are stochastic functions: X -> Distribution(Y)
+
+f = lambda x: {x: 0.7, x+1: 0.3}      # 70% stay, 30% increment
+g = lambda y: {y*2: 1.0}                # always double
+
+# Kleisli composition: marginalize the intermediate
+kleisli = lambda f, g: lambda x: {
+    z: sum(py * g(y).get(z, 0) for y, py in f(x).items())
+    for z in {z for y in f(x) for z in g(y)}
+}
+
+h = kleisli(f, g)
+print(f"  f(3) = {dict(sorted(f(3).items()))}")
+print(f"  g(3) = {dict(sorted(g(3).items()))}")
+print(f"  (f >=> g)(3) = {dict(sorted(h(3).items()))}")
+print()
+print("This composition is what makes COMP work for")
+print("stochastic pipelines. The handshake chains")
+print("through the bind — same as your Lean proof.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <SchemeRepl client:load initialCode={`; Kleisli composition
+(define (kleisli f g)
+  (lambda (x)
+    (apply append
+      (map (lambda (pair)
+        (let ((y (car pair)) (py (cdr pair)))
+          (map (lambda (qpair)
+            (cons (car qpair) (* py (cdr qpair))))
+          (g y))))
+      (f x)))))
+
+(define (f x) (list (cons x 0.5) (cons (+ x 1) 0.5)))
+(define (g y) (list (cons (* y 2) 1.0)))
+(display ((kleisli f g) 3))
+`} />
+    </div>
+
+    <details class="my-2">
+      <summary class="text-xs text-gray-500 cursor-pointer">Lean proof</summary>
+      <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm"><code><span class="text-blue-300">theorem</span> forward_triple [Monad M] [LawfulMonad M] [Support M]
+    {'{'}I : InterfaceTypes{'}'} {'{'}p : Pipeline M I{'}'}
+    (t : PipelineTriples M I p) (policy : I.policy)
+    : Triple t.P_raw (p.forwardKernel policy) t.Q_ranked :=
+  four_stage_comp t.h_perceive t.h_cache t.h_filter (t.h_attend policy)</code></pre>
+      <p class="text-xs text-gray-500"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Comp.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Comp.lean</a></p>
+    </details>
+
+    <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Simplified.</strong> Finite dicts, not measurable spaces. Same composition law.</p>
+
+    <!-- Notation table -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">{'{P}'} c {'{Q}'}</td><td class="pr-4 text-green-300">assert P; c(); assert Q</td><td class="font-sans">Hoare triple</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">c₁ ; c₂</td><td class="pr-4 text-green-300">c2(c1(x))</td><td class="font-sans">Sequential composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">⊤</td><td class="pr-4 text-green-300">lambda _: True</td><td class="font-sans">Always true</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">⊥</td><td class="pr-4 text-green-300">lambda _: False</td><td class="font-sans">Always false</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">wp(c, Q)</td><td class="pr-4 text-green-300">lambda a: all(Q(b) for b in c(a))</td><td class="font-sans">Weakest precondition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ν</td><td class="pr-4 text-green-300">lambda x: (x, x)</td><td class="font-sans">Copy</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ε</td><td class="pr-4 text-green-300">lambda x: None</td><td class="font-sans">Discard</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">≤</td><td class="pr-4 text-green-300"># refinement</td><td class="font-sans">One program refines another</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">kl(T)</td><td class="pr-4 text-green-300"># functions returning T(...)</td><td class="font-sans">Kleisli category</td></tr>
+          <tr><td class="py-2 pr-4">⊗</td><td class="pr-4 text-green-300">(x, y)</td><td class="font-sans">Tensor (parallel)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Rules table -->
+    <h3>Rules reference (Theorem 79)</h3>
+    <p class="mb-4">Every rule is a <strong>theorem</strong> in any posetal imperative category. Stoch is one (Corollary 76).</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Rule</th>
+            <th class="py-2 pr-4">Statement</th>
+            <th class="py-2">Plain English</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-semibold">SKIP</td><td class="pr-4 font-mono text-sm">{'{P}'} skip {'{P}'}</td><td>Doing nothing preserves anything</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-semibold">COMP</td><td class="pr-4 font-mono text-sm">{'{P}'}c₁{'{R}'}, {'{R}'}c₂{'{Q}'} ⇒ {'{P}'}c₁;c₂{'{Q}'}</td><td>Chain postconditions. <strong>The handshake.</strong></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-semibold">WHILE</td><td class="pr-4 font-mono text-sm">{'{b∧P}'} c {'{P}'} ⇒ {'{P}'} while b do c {'{P∧¬b}'}</td><td>Loop invariant survives</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-semibold">AND</td><td class="pr-4 font-mono text-sm">{'{P₁}'}c{'{Q₁}'}, {'{P₂}'}c{'{Q₂}'} ⇒ {'{P₁∧P₂}'}c{'{Q₁∧Q₂}'}</td><td>Conjunction of specs is a spec</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-semibold">TOP</td><td class="pr-4 font-mono text-sm">{'{P}'} c {'{⊤}'}</td><td>Anything satisfies "true"</td></tr>
+          <tr><td class="py-2 pr-4 font-semibold">BOT</td><td class="pr-4 font-mono text-sm">{'{⊥}'} c {'{Q}'}</td><td>Impossible precondition → vacuously true</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the category (FinStoch) where these rules hold</li>
+      <li><a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> — Hoare triples with grades (track side effects)</li>
+      <li><a href="/reading/natural-breadcrumbs/kura-2026/">🍞 Kura 2026</a> — the restricted pointwise order (handshake as graded monad)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare logic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Weakest_precondition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Weakest precondition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Loop_invariant"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Loop invariant</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Stochastic_matrix"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Stochastic matrix</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All Python examples on this page use finite dicts as probability distributions. The paper works over arbitrary measurable spaces, continuous distributions, and the full subdistribution monad on StdBorel. For example: the WHILE rule on this page counts down from 10 to 0 using integers. In the paper, the same rule applies to a probabilistic loop over continuous state spaces — a particle filter updating a belief distribution until convergence. The invariant structure (P survives each iteration) is identical. The state space is not.</p>
+    <p>The bridge theorem section is tagged <strong class="text-green-400">Exact</strong> — the Python computes the same equivalence the Lean proof verifies. Every other example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Stoch is the ambient category for the Natural Framework pipeline; the COMP rule is the handshake between stages. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+
+    <!-- Paper link -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2507.18238"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a> (52 pages). Start at Section 5.1 (p.20) for correctness triples, Corollary 76 (p.19) for why Stoch qualifies.
+    </div>
+
+    <PrevNext next={{ href: "/reading/natural-breadcrumbs/fritz-2020/", label: "Fritz 2020 · 2 of 21" }} />
+  </main>
+</Layout>

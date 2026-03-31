@@ -1,0 +1,468 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.17 — Monads" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Monads</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2016-2017 · <a href="https://bartoszmilewski.com/2016/11/21/monads-programmers-definition/">Category Theory for Programmers, Ch. 17</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-04/">🍞 Ch4 (Kleisli Categories)</a>, <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>, <a href="/reading/category-theory/milewski-10/">🍞 Ch10 (Natural Transformations)</a>. 12 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A monad is a functor <strong>M</strong> equipped with two natural transformations: <code>return</code> (&eta; : a &rarr; M(a)) and <code>join</code> (&mu; : M(M(a)) &rarr; M(a)). Equivalently, <code>bind</code> (&gt;&gt;=) replaces both. The monad laws (associativity, left/right identity) are the Kleisli category's composition laws. Monads are the compositional glue for effects: partiality, nondeterminism, logging, state.</p>
+    </div>
+
+    <!-- 1. Return and join -->
+    <h3>Return and join: the categorical definition</h3>
+    <p>A monad on a category C is an endofunctor M : C &rarr; C with two natural transformations: <strong>return</strong> (&eta; : Id &rarr; M) embeds a pure value, and <strong>join</strong> (&mu; : M&#8728;M &rarr; M) collapses a nested layer. The monad laws say join is associative and return is its left and right identity. This is a <a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>monoid in the category of endofunctors</a>.</p>
+
+    <!-- SVG: Monad operations — return and join -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 90" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- a -->
+        <text x="50" y="40" text-anchor="middle" fill="currentColor" font-size="14">a</text>
+        <circle cx="50" cy="45" r="2" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- M(a) -->
+        <rect x="150" y="20" width="60" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="180" y="45" text-anchor="middle" fill="currentColor" font-size="13">M(a)</text>
+
+        <!-- M(M(a)) -->
+        <rect x="290" y="20" width="80" height="40" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="330" y="45" text-anchor="middle" fill="currentColor" font-size="13">M(M(a))</text>
+
+        <!-- Arrow &#951; : a → M(a) -->
+        <line x1="62" y1="42" x2="145" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="145,42 138,38 138,46" fill="currentColor"/>
+        <text x="103" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03B7; (return)</text>
+
+        <!-- Arrow &#956; : M(M(a)) → M(a) -->
+        <line x1="285" y1="42" x2="215" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="215,42 222,38 222,46" fill="currentColor"/>
+        <text x="250" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">&#x03BC; (join)</text>
+
+        <!-- Bottom label -->
+        <text x="200" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">return embeds, join collapses</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; A monad = (M, return, join)
+; return : a -> M(a)        — embed a pure value
+; join   : M(M(a)) -> M(a)  — collapse one layer
+;
+; Maybe monad: M(a) = a | nothing
+; return x = x              (just wrap it)
+; join (Just (Just x)) = Just x
+; join (Just Nothing)  = Nothing
+; join Nothing         = Nothing
+
+(define nothing 'nothing)
+(define (just x) (list 'just x))
+(define (just? x) (and (pair? x) (eq? (car x) 'just)))
+(define (from-just x) (cadr x))
+
+(define (maybe-return x) (just x))
+
+(define (maybe-join mmx)
+  (cond ((eq? mmx nothing) nothing)
+        ((just? mmx)
+         (let ((inner (from-just mmx)))
+           (if (or (eq? inner nothing) (just? inner))
+               inner
+               nothing)))
+        (else nothing)))
+
+(display "join (Just (Just 5)): ")
+(display (maybe-join (just (just 5)))) (newline)
+
+(display "join (Just Nothing): ")
+(display (maybe-join (just nothing))) (newline)
+
+(display "join Nothing: ")
+(display (maybe-join nothing))
+; join peels off one layer. Two Justs become one. Nothing stays Nothing.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maybe monad: return and join
+def maybe_return(x):
+    return ("just", x)
+
+def maybe_join(mmx):
+    if mmx is None or mmx == "nothing":
+        return None
+    tag, inner = mmx
+    if tag == "just":
+        return inner  # Just(Just(x)) -> Just(x), Just(None) -> None
+    return None
+
+print(f"join(Just(Just(5))): {maybe_join(('just', ('just', 5)))}")
+print(f"join(Just(None)):    {maybe_join(('just', None))}")
+print(f"join(None):          {maybe_join(None)}")
+`} />
+    </div>
+
+
+    <!-- 2. Bind -->
+    <h3>Bind: the programmer's interface</h3>
+    <p><code>bind</code> (&gt;&gt;=) takes a monadic value M(a) and a function a &rarr; M(b), and produces M(b). It is equivalent to join composed with fmap: <code>bind m f = join (fmap f m)</code>. Conversely, <code>join = bind id</code>. Bind is how programmers actually use monads: chain computations that may produce effects.</p>
+
+    <!-- SVG: Kleisli composition -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- a -->
+        <text x="40" y="40" text-anchor="middle" fill="currentColor" font-size="14">a</text>
+        <circle cx="40" cy="45" r="2" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- b -->
+        <text x="200" y="40" text-anchor="middle" fill="currentColor" font-size="14">b</text>
+        <circle cx="200" cy="45" r="2" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- c -->
+        <text x="360" y="40" text-anchor="middle" fill="currentColor" font-size="14">c</text>
+        <circle cx="360" cy="45" r="2" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Arrow f: a → M(b) -->
+        <line x1="52" y1="42" x2="185" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="185,42 178,38 178,46" fill="currentColor"/>
+        <text x="118" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f : a &#x2192; M(b)</text>
+
+        <!-- Arrow g: b → M(c) -->
+        <line x1="212" y1="42" x2="345" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="345,42 338,38 338,46" fill="currentColor"/>
+        <text x="278" y="33" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">g : b &#x2192; M(c)</text>
+
+        <!-- Dashed arrow g >=> f: a → M(c) -->
+        <path d="M 52 55 Q 200 100 345 55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="345,55 338,52 340,59" fill="currentColor" fill-opacity="0.6"/>
+        <text x="200" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">g &gt;=&gt; f : a &#x2192; M(c)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; bind : M(a) -> (a -> M(b)) -> M(b)
+; bind m f = join (fmap f m)
+;
+; For Maybe:
+;   bind Nothing  f = Nothing
+;   bind (Just x) f = f x
+
+(define (maybe-bind mx f)
+  (if (eq? mx nothing)
+      nothing
+      (f (from-just mx))))
+
+; Safe division: returns Nothing on divide-by-zero
+(define (safe-div a b)
+  (if (= b 0) nothing (just (/ a b))))
+
+; Chain two divisions: 12 / 3 / 2
+(display "12 / 3 / 2: ")
+(display (maybe-bind (safe-div 12 3)
+           (lambda (x) (safe-div x 2)))) (newline)
+
+; Chain with a zero: 12 / 0 / 2
+(display "12 / 0 / 2: ")
+(display (maybe-bind (safe-div 12 0)
+           (lambda (x) (safe-div x 2)))) (newline)
+
+; Three-step chain: 100 / 5 / 4 / 0
+(display "100 / 5 / 4 / 0: ")
+(display (maybe-bind (safe-div 100 5)
+           (lambda (a)
+             (maybe-bind (safe-div a 4)
+               (lambda (b) (safe-div b 0))))))
+; Nothing propagates. No null checks needed.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Maybe bind in Python
+def maybe_bind(mx, f):
+    if mx is None:
+        return None
+    return f(mx[1])  # extract from ("just", value)
+
+def safe_div(a, b):
+    return None if b == 0 else ("just", a / b)
+
+print(f"12 / 3 / 2:     {maybe_bind(safe_div(12, 3), lambda x: safe_div(x, 2))}")
+print(f"12 / 0 / 2:     {maybe_bind(safe_div(12, 0), lambda x: safe_div(x, 2))}")
+print(f"100 / 5 / 4 / 0: {maybe_bind(safe_div(100, 5), lambda a: maybe_bind(safe_div(a, 4), lambda b: safe_div(b, 0)))}")
+`} />
+    </div>
+
+
+    <!-- 3. The monad laws -->
+    <h3>The monad laws</h3>
+    <p>Three laws govern every monad. In terms of the fish operator (&gt;=&gt;, Kleisli composition): <strong>associativity</strong> (f &gt;=&gt; g) &gt;=&gt; h = f &gt;=&gt; (g &gt;=&gt; h), <strong>left identity</strong> return &gt;=&gt; f = f, <strong>right identity</strong> f &gt;=&gt; return = f. These are exactly the category axioms for the Kleisli category from Ch. 4.</p>
+
+    <SchemeRepl client:load initialCode={`; The fish operator (Kleisli composition):
+; (>=>) : (a -> M b) -> (b -> M c) -> (a -> M c)
+; (f >=> g) x = bind (f x) g
+
+(define (fish f g)
+  (lambda (x) (maybe-bind (f x) g)))
+
+; Three test functions
+(define (f x) (just (* x 2)))
+(define (g x) (just (+ x 10)))
+(define (h x) (just (* x 3)))
+
+; Law 1: Associativity
+; (f >=> g) >=> h  =  f >=> (g >=> h)
+(define lhs ((fish (fish f g) h) 5))
+(define rhs ((fish f (fish g h)) 5))
+(display "assoc LHS: ") (display lhs) (newline)
+(display "assoc RHS: ") (display rhs) (newline)
+
+; Law 2: Left identity — return >=> f = f
+(display "left id: ")
+(display ((fish maybe-return f) 7)) (newline)
+(display "just f:  ")
+(display (f 7)) (newline)
+
+; Law 3: Right identity — f >=> return = f
+(display "right id: ")
+(display ((fish f maybe-return) 7)) (newline)
+(display "just f:   ")
+(display (f 7))
+; All equal. The Kleisli category axioms hold.
+`} />
+
+
+    <!-- 4. List monad -->
+    <h3>List monad: nondeterminism</h3>
+    <p>The list monad models <strong>nondeterministic computation</strong>. <code>return x = [x]</code>. <code>bind xs f = concat (map f xs)</code>. Each element spawns a list of possibilities; bind flattens them. This is the monad that arises from the free monoid adjunction (Ch. 16).</p>
+
+    <SchemeRepl client:load initialCode={`; List monad: bind = concatMap
+; return x = (x)
+; bind xs f = flatten (map f xs)
+
+(define (list-return x) (list x))
+
+(define (list-bind xs f)
+  (apply append (map f xs)))
+
+; Nondeterministic choice: each die roll
+(define (die-roll sides)
+  (let loop ((i 1) (acc '()))
+    (if (> i sides) (reverse acc)
+        (loop (+ i 1) (cons i acc)))))
+
+(display "d4: ") (display (die-roll 4)) (newline)
+
+; All pairs from two dice
+(define two-dice
+  (list-bind (die-roll 3)
+    (lambda (a)
+      (list-bind (die-roll 3)
+        (lambda (b)
+          (list-return (list a b)))))))
+
+(display "3x3 pairs: ") (display two-dice) (newline)
+
+; Filter: pairs that sum to 4
+(define sum-to-4
+  (list-bind (die-roll 3)
+    (lambda (a)
+      (list-bind (die-roll 3)
+        (lambda (b)
+          (if (= (+ a b) 4)
+              (list-return (list a b))
+              '()))))))
+
+(display "sum to 4: ") (display sum-to-4)
+; Bind is flatMap. Empty list is failure. List monad = backtracking search.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# List monad in Python
+def list_return(x): return [x]
+
+def list_bind(xs, f):
+    return [y for x in xs for y in f(x)]
+
+dice = [1, 2, 3]
+
+pairs = list_bind(dice, lambda a:
+    list_bind(dice, lambda b:
+        list_return((a, b))))
+print(f"3x3 pairs: {pairs}")
+
+sum4 = list_bind(dice, lambda a:
+    list_bind(dice, lambda b:
+        [(a, b)] if a + b == 4 else []))
+print(f"sum to 4: {sum4}")
+`} />
+    </div>
+
+
+    <!-- 5. Writer monad revisited -->
+    <h3>Writer monad revisited</h3>
+    <p>The Writer monad pairs a value with a log (any monoid). <code>return x = (x, mempty)</code>. <code>bind (a, w) f = let (b, w') = f a in (b, w &lt;&gt; w')</code>. This is the monad from Ch. 4's Kleisli category, now recognized as a proper monad with return, bind, and join. The <code>tell</code> function appends to the log without producing a value.</p>
+
+    <SchemeRepl client:load initialCode={`; Writer monad: (value . log) where log is a monoid (lists here)
+; return x = (x . ())
+; bind (a . w) f = let (b . w') = f(a) in (b . w ++ w')
+
+(define (writer-return x) (cons x '()))
+
+(define (writer-bind mx f)
+  (let* ((a (car mx))
+         (w (cdr mx))
+         (result (f a))
+         (b (car result))
+         (w2 (cdr result)))
+    (cons b (append w w2))))
+
+(define (tell msg) (cons '() (list msg)))
+
+; Logging pipeline: double then add-ten
+(define (double n)
+  (cons (* n 2) (list "doubled")))
+
+(define (add-ten n)
+  (cons (+ n 10) (list "added-ten")))
+
+(define result
+  (writer-bind (double 5)
+    (lambda (n)
+      (writer-bind (add-ten n)
+        (lambda (m)
+          (writer-return m))))))
+
+(display "result: ") (display (car result)) (newline)
+(display "log:    ") (display (cdr result))
+; The log accumulates through bind. No global mutable state.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Writer monad in Python
+def writer_return(x): return (x, "")
+
+def writer_bind(mx, f):
+    a, w = mx
+    b, w2 = f(a)
+    return (b, w + w2)
+
+def to_upper(s): return (s.upper(), "toUpper ")
+def count_words(s): return (len(s.split()), "countWords ")
+
+result = writer_bind(to_upper("hello world"),
+    lambda s: writer_bind(count_words(s),
+        lambda n: writer_return(n)))
+
+print(f"result: {result[0]}")
+print(f"log:    {result[1]}")
+`} />
+    </div>
+
+
+    <!-- 6. Verifying the monad laws -->
+    <h3>Verifying the monad laws for Maybe</h3>
+    <p>The laws are not just axioms: they are testable properties. Left identity says <code>bind (return a) f = f a</code>. Right identity says <code>bind m return = m</code>. Associativity says the order of bind nesting does not matter. If any law fails, composition breaks and the Kleisli category is not a category.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify all three monad laws for Maybe at concrete values.
+
+; Law 1: Left identity — bind (return a) f = f a
+(define (double x) (if (> x 100) nothing (just (* x 2))))
+
+(define law1-lhs (maybe-bind (maybe-return 5) double))
+(define law1-rhs (double 5))
+(display "Left identity:  ") (display law1-lhs)
+(display " = ") (display law1-rhs) (newline)
+
+; Law 2: Right identity — bind m return = m
+(define m (just 42))
+(define law2-lhs (maybe-bind m maybe-return))
+(display "Right identity: ") (display law2-lhs)
+(display " = ") (display m) (newline)
+
+; Also with Nothing
+(define law2n-lhs (maybe-bind nothing maybe-return))
+(display "Right id (Nothing): ") (display law2n-lhs)
+(display " = ") (display nothing) (newline)
+
+; Law 3: Associativity — bind (bind m f) g = bind m (λa. bind (f a) g)
+(define (add10 x) (just (+ x 10)))
+(define law3-lhs (maybe-bind (maybe-bind (just 3) double) add10))
+(define law3-rhs (maybe-bind (just 3) (lambda (a) (maybe-bind (double a) add10))))
+(display "Associativity:  ") (display law3-lhs)
+(display " = ") (display law3-rhs)
+; All three laws hold. Maybe is a lawful monad.
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">return :: a &rarr; m a</td><td class="pr-4 text-green-300">(maybe-return x)</td><td class="font-sans">Embed a pure value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(&gt;&gt;=) :: m a &rarr; (a &rarr; m b) &rarr; m b</td><td class="pr-4 text-green-300">(maybe-bind mx f)</td><td class="font-sans">Bind: chain a computation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">join :: m (m a) &rarr; m a</td><td class="pr-4 text-green-300">(maybe-join mmx)</td><td class="font-sans">Collapse one layer of nesting</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(&gt;=&gt;) :: (a &rarr; m b) &rarr; (b &rarr; m c) &rarr; (a &rarr; m c)</td><td class="pr-4 text-green-300">(fish f g)</td><td class="font-sans">Kleisli composition (fish)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Nothing / Just x</td><td class="pr-4 text-green-300">nothing / (just x)</td><td class="font-sans">Maybe values</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">concatMap f xs</td><td class="pr-4 text-green-300">(list-bind xs f)</td><td class="font-sans">List bind = flatMap</td></tr>
+          <tr><td class="py-2 pr-4">Writer (a, w)</td><td class="pr-4 text-green-300">(cons a w)</td><td class="font-sans">Writer = value + log pair</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-04/">🍞 Chapter 4</a> — Kleisli Categories (where the fish operator was born)</li>
+      <li><a href="/reading/category-theory/milewski-07/">🍞 Chapter 7</a> — Functors (every monad is a functor)</li>
+      <li><a href="/reading/category-theory/milewski-10/">🍞 Chapter 10</a> — Natural Transformations (return and join are natural transformations)</li>
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> — Adjunctions (every adjunction gives a monad)</li>
+    
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">✏️ Kleisli.lean</a> &mdash; Kleisli composition of the probability monad</li>
+      <li><a href="/reading/programming/sicp-04/">🪄 Programming Ch.4</a> &mdash; data abstraction is a monadic pattern</li>
+      <li><a href="/reading/natural-breadcrumbs/kidney-wu-2021/">🍞 Kidney, Wu 2021</a> &mdash; one monad parameterized by a semiring</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories axiomatize the probability monad. The Giry monad (and its Kleisli category <strong>Stoch</strong>) is the formal backbone of <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the handshake</a> between category theory and probability.</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — monads structure the semantics of effectful programs</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(functional_programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad (functional programming)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad (category theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>This page combines material from three of Milewski's blog posts: "Monads: Programmer's Definition" (return, bind, do notation), "Monads and Effects" (IO, state, exceptions as monadic effects), and "Monads Categorically" (the endofunctor definition with &eta; and &mu;). The Scheme translations omit do notation (Scheme has no syntactic equivalent) and IO (Scheme side-effects freely). The blog post proves that any type supporting bind and return is automatically a functor via <code>fmap f m = bind m (&lambda;a. return (f a))</code>. The fish operator (&gt;=&gt;) is Kleisli composition from Ch. 4, now seen as the morphism composition of the Kleisli category. The three monad laws are exactly the category axioms (associativity, left and right identity) for that category. The categorical definition via join (&mu;) makes the connection to adjunctions explicit: if a monad M factors as R&#8728;L for an adjunction L &#8866; R, then join = R&#8728;&epsilon;&#8728;L where &epsilon; is the counit.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2016/11/21/monads-programmers-definition/">Read the blog post</a>. Start with the fish operator, then see how bind and join are equivalent formulations.
+    </div>
+
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-16/", label: "Adjunctions" }} next={{ href: "/reading/category-theory/milewski-18/", label: "Comonads" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,523 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.17 — Logic Programming" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Logic Programming</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-29.html#%_sec_4.4">SICP &sect;4.4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Programs as queries against a database of facts and rules. <strong>Unification</strong> matches patterns with variables. Programming becomes asking questions, not giving instructions.</p>
+    </div>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 360 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left tree: (?x 3) -->
+        <rect x="20" y="10" width="120" height="30" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="80" y="30" text-anchor="middle" fill="#e4e4e7" font-size="13">( ?x  3 )</text>
+        <!-- Left branches -->
+        <line x1="55" y1="40" x2="40" y2="65" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="105" y1="40" x2="120" y2="65" stroke="#60a5fa" stroke-width="1"/>
+        <!-- Left leaves -->
+        <rect x="15" y="65" width="50" height="26" rx="4" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="40" y="83" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">?x</text>
+        <rect x="95" y="65" width="50" height="26" rx="4" fill="none" stroke="#60a5fa" stroke-width="1"/>
+        <text x="120" y="83" text-anchor="middle" fill="#e4e4e7" font-size="13">3</text>
+
+        <!-- Right tree: (5 3) -->
+        <rect x="220" y="10" width="120" height="30" rx="4" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        <text x="280" y="30" text-anchor="middle" fill="#e4e4e7" font-size="13">( 5  3 )</text>
+        <!-- Right branches -->
+        <line x1="255" y1="40" x2="240" y2="65" stroke="#34d399" stroke-width="1"/>
+        <line x1="305" y1="40" x2="320" y2="65" stroke="#34d399" stroke-width="1"/>
+        <!-- Right leaves -->
+        <rect x="215" y="65" width="50" height="26" rx="4" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        <text x="240" y="83" text-anchor="middle" fill="#e4e4e7" font-size="13">5</text>
+        <rect x="295" y="65" width="50" height="26" rx="4" fill="none" stroke="#34d399" stroke-width="1"/>
+        <text x="320" y="83" text-anchor="middle" fill="#e4e4e7" font-size="13">3</text>
+
+        <!-- Dashed connection lines -->
+        <line x1="145" y1="25" x2="220" y2="25" stroke="#a78bfa" stroke-width="1" stroke-dasharray="5,4"/>
+        <line x1="145" y1="78" x2="215" y2="78" stroke="#a78bfa" stroke-width="1" stroke-dasharray="5,4"/>
+
+        <!-- Bind arrow from ?x to 5 -->
+        <line x1="65" y1="78" x2="215" y2="78" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow17)"/>
+        <text x="140" y="73" text-anchor="middle" fill="#f59e0b" font-size="11">bind</text>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow17" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Caption -->
+        <text x="180" y="125" text-anchor="middle" fill="#a1a1aa" font-size="11" font-style="italic">unification finds bindings that make two patterns equal</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Facts and queries -->
+    <h3>Deductive information retrieval</h3>
+    <p>A database of <strong>assertions</strong> (facts) and <strong>rules</strong> (implications). A <strong>query</strong> is a pattern with variables. The system finds all ways to bind the variables so the pattern matches the database. This is Prolog's core idea.</p>
+
+    <SchemeRepl client:load initialCode={`; A tiny fact database and pattern matcher.
+; Facts are lists. Variables start with ?.
+
+(define facts
+  '((job (Hacker Alyssa P) (computer programmer))
+    (job (Fect Cy D) (computer programmer))
+    (job (Bitdiddle Ben) (computer wizard))
+    (job (Tweakit Lem E) (computer technician))
+    (supervisor (Hacker Alyssa P) (Bitdiddle Ben))
+    (supervisor (Fect Cy D) (Bitdiddle Ben))
+    (supervisor (Tweakit Lem E) (Bitdiddle Ben))
+    (salary (Bitdiddle Ben) 60000)
+    (salary (Hacker Alyssa P) 40000)
+    (salary (Fect Cy D) 35000)))
+
+; Simple pattern match: does pattern match datum?
+(define (match? pattern datum bindings)
+  (cond ((eq? bindings 'failed) 'failed)
+        ((equal? pattern datum) bindings)
+        ((variable? pattern)
+         (extend-bindings pattern datum bindings))
+        ((and (pair? pattern) (pair? datum))
+         (match? (cdr pattern) (cdr datum)
+                 (match? (car pattern) (car datum) bindings)))
+        (else 'failed)))
+
+(define (variable? x) (and (symbol? x) (char=? (string-ref (symbol->string x) 0) #\?)))
+(define (extend-bindings var val bindings) (cons (cons var val) bindings))
+
+; Query: who is a computer programmer?
+(define (query-simple pattern)
+  (filter (lambda (f) (not (eq? (match? pattern f '()) 'failed))) facts))
+
+(display "Computer programmers:")
+(newline)
+(for-each (lambda (f) (display "  ") (display f) (newline))
+          (query-simple '(job ?who (computer programmer))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fact database and pattern matching in Python
+
+facts = [
+    ("job", ("Hacker", "Alyssa"), ("computer", "programmer")),
+    ("job", ("Fect", "Cy"), ("computer", "programmer")),
+    ("job", ("Bitdiddle", "Ben"), ("computer", "wizard")),
+    ("job", ("Tweakit", "Lem"), ("computer", "technician")),
+    ("supervisor", ("Hacker", "Alyssa"), ("Bitdiddle", "Ben")),
+    ("salary", ("Bitdiddle", "Ben"), 60000),
+    ("salary", ("Hacker", "Alyssa"), 40000),
+]
+
+def is_var(x):
+    return isinstance(x, str) and x.startswith("?")
+
+def match(pattern, datum, bindings):
+    if bindings is None:
+        return None
+    if pattern == datum:
+        return bindings
+    if is_var(pattern):
+        return dict(list(bindings.items()) + [(pattern, datum)])
+    if isinstance(pattern, tuple) and isinstance(datum, tuple):
+        if len(pattern) != len(datum):
+            return None
+        for p, d in zip(pattern, datum):
+            bindings = match(p, d, bindings)
+            if bindings is None:
+                return None
+        return bindings
+    return None
+
+# Query: who is a computer programmer?
+pattern = ("job", "?who", ("computer", "programmer"))
+print("Computer programmers:")
+for f in facts:
+    b = match(pattern, f, {})
+    if b is not None:
+        print(f"  {b['?who']}")
+`} />
+    </div>
+
+
+    <!-- 2. Unification -->
+    <h3>How the query system works &mdash; unification</h3>
+    <p>Pattern matching is one-directional: the pattern has variables, the datum doesn't. <strong>Unification</strong> generalizes this: <em>both</em> sides can have variables. Two patterns unify if there exists a substitution that makes them equal. This is the engine behind Prolog and the query language.</p>
+
+    <SchemeRepl client:load initialCode={`; Unification: find substitution making two patterns equal.
+; Both sides can contain variables.
+
+(define (variable? x) (and (symbol? x) (char=? (string-ref (symbol->string x) 0) #\?)))
+
+(define (lookup var bindings)
+  (let ((pair (assoc var bindings)))
+    (if pair (cdr pair) #f)))
+
+(define (walk x bindings)
+  (if (variable? x)
+      (let ((val (lookup x bindings)))
+        (if val (walk val bindings) x))
+      x))
+
+(define (unify x y bindings)
+  (let ((x (walk x bindings))
+        (y (walk y bindings)))
+    (cond ((eq? bindings 'failed) 'failed)
+          ((equal? x y) bindings)
+          ((variable? x) (cons (cons x y) bindings))
+          ((variable? y) (cons (cons y x) bindings))
+          ((and (pair? x) (pair? y))
+           (unify (cdr x) (cdr y)
+                  (unify (car x) (car y) bindings)))
+          (else 'failed))))
+
+; Examples:
+(display "Unify (?x 2) with (1 ?y): ")
+(display (unify '(?x 2) '(1 ?y) '()))
+(newline)
+; => ((?y . 2) (?x . 1))
+
+(display "Unify (?x ?x) with (1 1): ")
+(display (unify '(?x ?x) '(1 1) '()))
+(newline)
+; => ((?x . 1))
+
+(display "Unify (?x ?x) with (1 2): ")
+(display (unify '(?x ?x) '(1 2) '()))
+(newline)
+; => failed
+
+(display "Unify (?x ?y) with (?y 3): ")
+(display (unify '(?x ?y) '(?y 3) '()))
+; => ((?y . 3) (?x . ?y))  — ?x = ?y = 3
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Unification in Python
+
+def is_var(x):
+    return isinstance(x, str) and x.startswith("?")
+
+def walk(x, bindings):
+    while is_var(x) and x in bindings:
+        x = bindings[x]
+    return x
+
+def unify(x, y, bindings):
+    if bindings is None:
+        return None
+    x = walk(x, bindings)
+    y = walk(y, bindings)
+    if x == y:
+        return bindings
+    if is_var(x):
+        return dict(list(bindings.items()) + [(x, y)])
+    if is_var(y):
+        return dict(list(bindings.items()) + [(y, x)])
+    if isinstance(x, tuple) and isinstance(y, tuple) and len(x) == len(y):
+        for a, b in zip(x, y):
+            bindings = unify(a, b, bindings)
+            if bindings is None:
+                return None
+        return bindings
+    return None
+
+print(unify(("?x", 2), (1, "?y"), {}))
+# => {'?x': 1, '?y': 2}
+
+print(unify(("?x", "?x"), (1, 1), {}))
+# => {'?x': 1}
+
+print(unify(("?x", "?x"), (1, 2), {}))
+# => None (failed)
+
+print(unify(("?x", "?y"), ("?y", 3), {}))
+# => {'?x': '?y', '?y': 3}
+`} />
+    </div>
+
+
+    <!-- 3. Rules -->
+    <h3>Rules &mdash; deduction from facts</h3>
+    <p>A <strong>rule</strong> says: if you can satisfy the body, you can conclude the head. <code>(rule (can-replace ?x ?y) (and (job ?x ?j) (job ?y ?j) (not (same ?x ?y))))</code>. The query system chains rules to derive new facts from existing ones.</p>
+
+    <SchemeRepl client:load initialCode={`; Rules: derive new facts from existing ones.
+; A rule is (head . body-conditions).
+
+(define facts
+  '((parent tom bob)
+    (parent tom liz)
+    (parent bob ann)
+    (parent bob pat)
+    (parent pat kim)))
+
+; Rule: grandparent ?x ?z if (parent ?x ?y) and (parent ?y ?z)
+(define (query-parent db x y bindings)
+  (filter (lambda (b) (not (eq? b 'failed)))
+    (map (lambda (f)
+           (if (eq? (car f) 'parent)
+               (unify (list x y) (cdr f) bindings)
+               'failed))
+         db)))
+
+(define (variable? x) (and (symbol? x) (char=? (string-ref (symbol->string x) 0) #\?)))
+(define (walk x b) (if (variable? x) (let ((v (assoc x b))) (if v (walk (cdr v) b) x)) x))
+(define (unify x y b)
+  (let ((x (walk x b)) (y (walk y b)))
+    (cond ((eq? b 'failed) 'failed) ((equal? x y) b)
+          ((variable? x) (cons (cons x y) b))
+          ((variable? y) (cons (cons y x) b))
+          ((and (pair? x) (pair? y)) (unify (cdr x) (cdr y) (unify (car x) (car y) b)))
+          (else 'failed))))
+
+(define (grandparents db)
+  (apply append
+    (map (lambda (b1)
+           (let ((mid (walk '?mid b1)))
+             (map (lambda (b2)
+                    (list 'grandparent
+                          (walk '?gp b2)
+                          (walk '?gc b2)))
+                  (query-parent db mid '?gc b1))))
+         (query-parent db '?gp '?mid '()))))
+
+(display "Grandparent relations:") (newline)
+(for-each (lambda (g) (display "  ") (display g) (newline))
+          (grandparents facts))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Rules in Python: derive grandparents from parents
+
+facts = [
+    ("parent", "tom", "bob"),
+    ("parent", "tom", "liz"),
+    ("parent", "bob", "ann"),
+    ("parent", "bob", "pat"),
+    ("parent", "pat", "kim"),
+]
+
+def query_parent(x=None, y=None):
+    """Find matching parent facts."""
+    for rel, a, b in facts:
+        if rel != "parent":
+            continue
+        if x is not None and a != x:
+            continue
+        if y is not None and b != y:
+            continue
+        yield (a, b)
+
+# Rule: grandparent(X, Z) :- parent(X, Y), parent(Y, Z).
+def grandparents():
+    for gp, mid in query_parent():
+        for _, gc in query_parent(x=mid):
+            yield (gp, gc)
+
+print("Grandparent relations:")
+for gp, gc in grandparents():
+    print(f"  grandparent({gp}, {gc})")
+`} />
+    </div>
+
+
+    <!-- 4. Is logic programming mathematical logic? -->
+    <h3>Is logic programming mathematical logic?</h3>
+    <p>Not quite. Logic programming uses a <em>closed-world assumption</em>: anything not in the database is false. Mathematical logic has no such default. Also, rule application order matters &mdash; an infinite loop is possible if rules are written carelessly. The query system is a <em>computational</em> interpretation of logic, not a faithful implementation.</p>
+
+    <SchemeRepl client:load initialCode={`; The closed-world assumption: not-in-database = false.
+; Also: rule order matters — naive recursion can loop.
+
+; Demonstrate with a simple "not" via failure to find.
+
+(define db '((likes alice bob)
+             (likes alice carol)
+             (likes bob carol)))
+
+(define (query-likes db who whom)
+  (filter (lambda (f)
+            (and (eq? (car f) 'likes)
+                 (eq? (cadr f) who)
+                 (eq? (caddr f) whom)))
+          db))
+
+(define (likes? who whom) (not (null? (query-likes db who whom))))
+
+; Closed-world: if it's not in the database, it's false
+(display "alice likes bob?   ") (display (likes? 'alice 'bob))   (newline)
+(display "alice likes carol? ") (display (likes? 'alice 'carol)) (newline)
+(display "bob likes alice?   ") (display (likes? 'bob 'alice))   (newline)
+; => #f — not because Bob doesn't like Alice,
+;    but because the database doesn't say he does.
+
+; Negation as failure
+(define (not-likes? who whom) (not (likes? who whom)))
+(display "bob NOT likes alice? ") (display (not-likes? 'bob 'alice))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Closed-world assumption in Python
+
+db = {
+    ("likes", "alice", "bob"),
+    ("likes", "alice", "carol"),
+    ("likes", "bob", "carol"),
+}
+
+def likes(who, whom):
+    return ("likes", who, whom) in db
+
+print(f"alice likes bob?   {likes('alice', 'bob')}")     # True
+print(f"alice likes carol? {likes('alice', 'carol')}")   # True
+print(f"bob likes alice?   {likes('bob', 'alice')}")     # False
+
+# Negation as failure: absent = false
+print(f"bob NOT likes alice? {not likes('bob', 'alice')}")  # True
+# This is the closed-world assumption.
+# We don't know Bob's feelings; we only know what's in the DB.
+`} />
+    </div>
+
+
+    <!-- 5. Implementing unification -->
+    <h3>Implementing the query system</h3>
+    <p>The query evaluator processes compound queries (<code>and</code>, <code>or</code>, <code>not</code>) by combining streams of bindings. An <code>and</code> query pipes the output of one sub-query into the next. An <code>or</code> query merges streams. <code>not</code> filters out bindings that succeed.</p>
+
+    <SchemeRepl client:load initialCode={`; Compound queries: and, or, not — combining binding streams.
+
+(define db '((job alice programmer)
+             (job bob designer)
+             (job carol programmer)
+             (job dave manager)
+             (dept alice engineering)
+             (dept bob design)
+             (dept carol engineering)
+             (dept dave engineering)))
+
+(define (query-all rel db)
+  (filter (lambda (f) (eq? (car f) rel)) db))
+
+; AND: programmers in engineering
+(define programmers
+  (map caddr (filter (lambda (f) (eq? (caddr f) 'programmer))
+                     (query-all 'job db))))
+
+(define engineers
+  (map cadr (filter (lambda (f) (eq? (caddr f) 'engineering))
+                    (query-all 'dept db))))
+
+(define (intersection a b)
+  (filter (lambda (x) (memq x b)) a))
+
+(display "Programmers AND engineering: ")
+(display (intersection programmers engineers))
+(newline)
+
+; OR: programmers or managers
+(define managers
+  (map cadr (filter (lambda (f) (eq? (caddr f) 'manager))
+                    (query-all 'job db))))
+
+(define (union a b)
+  (append a (filter (lambda (x) (not (memq x a))) b)))
+
+(display "Programmers OR managers: ")
+(display (union (map cadr (filter (lambda (f) (eq? (caddr f) 'programmer))
+                                  (query-all 'job db)))
+                managers))
+(newline)
+
+; NOT: engineering but not programmer
+(display "Engineering NOT programmer: ")
+(display (filter (lambda (x) (not (memq x programmers))) engineers))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compound queries in Python
+
+db = [
+    ("job", "alice", "programmer"),
+    ("job", "bob", "designer"),
+    ("job", "carol", "programmer"),
+    ("job", "dave", "manager"),
+    ("dept", "alice", "engineering"),
+    ("dept", "bob", "design"),
+    ("dept", "carol", "engineering"),
+    ("dept", "dave", "engineering"),
+]
+
+programmers = {r[1] for r in db if r[0] == "job" and r[2] == "programmer"}
+engineers = {r[1] for r in db if r[0] == "dept" and r[2] == "engineering"}
+managers = {r[1] for r in db if r[0] == "job" and r[2] == "manager"}
+
+print(f"AND (programmer & engineering): {programmers & engineers}")
+print(f"OR (programmer | manager): {programmers | managers}")
+print(f"NOT (engineering - programmer): {engineers - programmers}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Query language</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(job ?x ?dept)</td><td class="pr-4 text-blue-300">for r in db if r[0]=="job"</td><td class="font-sans">Query with pattern variables</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(and q1 q2)</td><td class="pr-4 text-blue-300">set1 &amp; set2</td><td class="font-sans">Both queries must match</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(or q1 q2)</td><td class="pr-4 text-blue-300">set1 | set2</td><td class="font-sans">Either query matches</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(not q)</td><td class="pr-4 text-blue-300">set1 - set2</td><td class="font-sans">Negation as failure</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(rule (head) body)</td><td class="pr-4 text-blue-300">def head(): body</td><td class="font-sans">Derive new facts from existing</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-16/">SICP Ch.16 &mdash; Nondeterministic Computing</a> &mdash; backtracking as a language feature</li>
+      <li><a href="/reading/programming/sicp-18/">SICP Ch.18 &mdash; Register Machines</a> &mdash; from high-level to hardware</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Prolog"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prolog</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Unification_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Unification (computer science)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Logic_programming"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Logic programming</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Logic programming inverts the usual programming flow: you specify <em>what</em> relates to <em>what</em>, and the system figures out <em>how</em> to compute it. Python has no built-in unification, so the translation uses explicit loops and set operations. Unification generalizes both pattern matching and equation solving. In Python, the closest built-in is dictionary merging, but it lacks the bidirectional variable binding that makes unification powerful.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-29.html#%_sec_4.4">Read SICP &sect;4.4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-16/", label: "Nondeterministic Computing" }} next={{ href: "/reading/programming/sicp-18/", label: "Register Machines · 18 of 22" }} />
+
+  </main>
+</Layout>

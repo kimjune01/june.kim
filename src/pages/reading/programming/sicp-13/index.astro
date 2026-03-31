@@ -1,0 +1,370 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.13 — Streams" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Streams</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-24.html#%_sec_3.5">SICP §3.5</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Delayed evaluation lets you work with infinite sequences. Streams are lazy lists: <code>cons-stream</code> delays the cdr. You get the modularity of sequences without the cost of computing everything upfront.</p>
+    </div>
+
+    <!-- SVG: Stream promise/force chain -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Element 1 -->
+        <rect x="10" y="30" width="60" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="40" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+        <!-- Promise arrow -->
+        <line x1="70" y1="50" x2="103" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <polygon points="105,50 98,45 98,55" fill="currentColor" fill-opacity="0.4"/>
+        <text x="87" y="38" text-anchor="middle" fill="#f59e0b" font-size="8">force</text>
+        <!-- Element 2 -->
+        <rect x="110" y="30" width="60" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="140" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">2</text>
+        <!-- Promise arrow -->
+        <line x1="170" y1="50" x2="203" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <polygon points="205,50 198,45 198,55" fill="currentColor" fill-opacity="0.4"/>
+        <text x="187" y="38" text-anchor="middle" fill="#f59e0b" font-size="8">force</text>
+        <!-- Element 3 -->
+        <rect x="210" y="30" width="60" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="240" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">3</text>
+        <!-- Promise arrow -->
+        <line x1="270" y1="50" x2="303" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <polygon points="305,50 298,45 298,55" fill="currentColor" fill-opacity="0.4"/>
+        <text x="287" y="38" text-anchor="middle" fill="#f59e0b" font-size="8">force</text>
+        <!-- Ellipsis -->
+        <text x="330" y="55" fill="currentColor" font-size="16" fill-opacity="0.4">...</text>
+        <!-- Promise cloud -->
+        <rect x="350" y="30" width="70" height="40" rx="16" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="385" y="55" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.5">promise</text>
+        <!-- Caption -->
+        <text x="220" y="105" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Each cdr is a promise — computed only when forced</text>
+      </svg>
+    </div>
+
+    <!-- 1. Streams are delayed lists -->
+    <h3>Streams are delayed lists</h3>
+    <p><code>cons-stream</code> pairs a value with a <strong>promise</strong> to compute the rest. <code>stream-car</code> returns the value; <code>stream-cdr</code> forces the promise. Only the elements you actually request get computed.</p>
+
+    <SchemeRepl client:load initialCode={`; Streams: delay/force for lazy evaluation
+; BiwaScheme supports delay and force
+
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+(define stream-null '())
+(define (stream-null? s) (null? s))
+
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b) (cons a (delay b)))))
+
+; A finite stream
+(define s (cons-stream 1 (cons-stream 2 (cons-stream 3 stream-null))))
+
+(display (stream-car s)) (newline)                     ; 1
+(display (stream-car (stream-cdr s))) (newline)        ; 2
+(display (stream-car (stream-cdr (stream-cdr s))))     ; 3
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python generators are the natural equivalent of streams
+def stream_123():
+    yield 1
+    yield 2
+    yield 3
+
+s = stream_123()
+print(next(s))  # 1
+print(next(s))  # 2
+print(next(s))  # 3
+# Each value computed only when requested
+`} />
+    </div>
+
+    <!-- 2. Infinite streams -->
+    <h3>Infinite streams</h3>
+    <p>Since the cdr is delayed, a stream can be infinite. The integers, the Fibonacci sequence, and the primes all have natural stream definitions.</p>
+
+    <SchemeRepl client:load initialCode={`; Stream primitives (needed in each REPL block)
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b) (cons a (delay b)))))
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+
+; Infinite stream of integers starting from n
+(define (integers-from n)
+  (cons-stream n (integers-from (+ n 1))))
+
+(define integers (integers-from 1))
+
+; Take the first n elements of a stream
+(define (stream-take s n)
+  (if (= n 0) '()
+      (cons (stream-car s)
+            (stream-take (stream-cdr s) (- n 1)))))
+
+(display (stream-take integers 10)) (newline)
+
+; Fibonacci stream
+(define (fibgen a b)
+  (cons-stream a (fibgen b (+ a b))))
+
+(define fibs (fibgen 0 1))
+(display (stream-take fibs 12))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import islice
+
+def integers_from(n):
+    while True:
+        yield n
+        n += 1
+
+def fibs():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+print(list(islice(integers_from(1), 10)))
+print(list(islice(fibs(), 12)))
+`} />
+    </div>
+
+    <!-- 3. Stream operations -->
+    <h3>Exploiting the stream paradigm</h3>
+    <p>Stream-map, stream-filter, and stream-accumulate give you the same composable pipeline as list operations, but lazily. Define a sieve of Eratosthenes in two lines.</p>
+
+    <SchemeRepl client:load initialCode={`; Stream primitives
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b) (cons a (delay b)))))
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+(define stream-null '())
+(define (stream-null? s) (null? s))
+(define (integers-from n)
+  (cons-stream n (integers-from (+ n 1))))
+(define (stream-take s n)
+  (if (= n 0) '()
+      (cons (stream-car s)
+            (stream-take (stream-cdr s) (- n 1)))))
+
+; Stream utilities
+(define (stream-filter pred s)
+  (cond ((stream-null? s) stream-null)
+        ((pred (stream-car s))
+         (cons-stream (stream-car s)
+                      (stream-filter pred (stream-cdr s))))
+        (else (stream-filter pred (stream-cdr s)))))
+
+(define (stream-map f s)
+  (if (stream-null? s) stream-null
+      (cons-stream (f (stream-car s))
+                   (stream-map f (stream-cdr s)))))
+
+; Sieve of Eratosthenes
+(define (sieve s)
+  (cons-stream
+    (stream-car s)
+    (sieve (stream-filter
+             (lambda (x) (not (= 0 (modulo x (stream-car s)))))
+             (stream-cdr s)))))
+
+(define primes (sieve (integers-from 2)))
+(display (stream-take primes 15))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import islice, count
+
+def sieve(s):
+    """Sieve of Eratosthenes as a generator pipeline."""
+    p = next(s)
+    yield p
+    yield from sieve(n for n in s if n % p != 0)
+
+# Note: Python recursion limit will cap this
+# For production, use an iterative sieve
+import sys
+sys.setrecursionlimit(2000)
+
+primes = sieve(count(2))
+print(list(islice(primes, 15)))
+`} />
+    </div>
+
+    <!-- 4. Implicit stream definitions -->
+    <h3>Implicit stream definitions</h3>
+    <p>Streams can be defined implicitly, referring to themselves. The ones stream is 1 followed by itself. Adding two streams element-wise lets you define Fibonacci numbers as: fibs = 0, 1, fibs + (cdr fibs).</p>
+
+    <SchemeRepl client:load initialCode={`; Stream primitives
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b) (cons a (delay b)))))
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+(define (stream-take s n)
+  (if (= n 0) '()
+      (cons (stream-car s)
+            (stream-take (stream-cdr s) (- n 1)))))
+
+; Implicit definitions: streams that reference themselves
+
+; add-streams: element-wise addition
+(define (add-streams s1 s2)
+  (cons-stream (+ (stream-car s1) (stream-car s2))
+               (add-streams (stream-cdr s1) (stream-cdr s2))))
+
+; ones = 1, 1, 1, ...
+(define ones (cons-stream 1 ones))
+
+; integers = 1, 2, 3, ... (implicit)
+(define integers (cons-stream 1 (add-streams ones integers)))
+
+(display "integers: ")
+(display (stream-take integers 10)) (newline)
+
+; fibs (implicit): each element is sum of two predecessors
+(define fibs
+  (cons-stream 0
+    (cons-stream 1
+      (add-streams fibs (stream-cdr fibs)))))
+
+(display "fibs: ")
+(display (stream-take fibs 12))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import islice
+
+# Python generators can't self-reference as elegantly
+# but we can achieve similar patterns
+
+def ones():
+    while True:
+        yield 1
+
+def add_streams(s1, s2):
+    for a, b in zip(s1, s2):
+        yield a + b
+
+def integers():
+    n = 1
+    while True:
+        yield n
+        n += 1
+
+def fibs():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+print("integers:", list(islice(integers(), 10)))
+print("fibs:", list(islice(fibs(), 12)))
+`} />
+    </div>
+
+    <!-- 5. Streams and delayed evaluation -->
+    <h3>Streams and delayed evaluation</h3>
+    <p>Streams decouple the <em>order of events</em> from the <em>apparent structure</em> of the computation. You write code that looks like it processes an entire sequence, but only the needed elements are ever computed. This is <strong>normal-order evaluation</strong> achieved within an applicative-order language.</p>
+
+    <SchemeRepl client:load initialCode={`; Stream primitives
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream a b) (cons a (delay b)))))
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+(define (integers-from n)
+  (cons-stream n (integers-from (+ n 1))))
+(define (stream-take s n)
+  (if (= n 0) '()
+      (cons (stream-car s)
+            (stream-take (stream-cdr s) (- n 1)))))
+
+; Partial sums: running total of a stream
+(define (add-streams s1 s2)
+  (cons-stream (+ (stream-car s1) (stream-car s2))
+               (add-streams (stream-cdr s1) (stream-cdr s2))))
+
+(define (partial-sums s)
+  (cons-stream (stream-car s)
+               (add-streams (partial-sums s)
+                            (stream-cdr s))))
+
+; 1, 1+2, 1+2+3, ...
+(define sums (partial-sums (integers-from 1)))
+(display "partial sums: ")
+(display (stream-take sums 8))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from itertools import islice, accumulate, count
+
+# accumulate gives running totals
+sums = accumulate(count(1))
+print("partial sums:", list(islice(sums, 8)))
+# [1, 3, 6, 10, 15, 21, 28, 36]
+`} />
+    </div>
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4 text-gray-400">Scheme</th>
+            <th class="text-left py-2 pr-4 text-gray-400">Python</th>
+            <th class="text-left py-2 text-gray-400">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(cons-stream a b)</code></td><td class="pr-4"><code>yield a</code></td><td class="text-gray-400">Pair value with delayed rest</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(stream-car s)</code></td><td class="pr-4"><code>next(s)</code></td><td class="text-gray-400">Get current element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(stream-cdr s)</code></td><td class="pr-4">(implicit in <code>next</code>)</td><td class="text-gray-400">Force the promise, get rest</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(delay expr)</code></td><td class="pr-4"><code>lambda: expr</code></td><td class="text-gray-400">Wrap expression as promise</td></tr>
+          <tr><td class="py-1 pr-4"><code>(force promise)</code></td><td class="pr-4"><code>promise()</code></td><td class="text-gray-400">Evaluate a delayed expression</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li>Scheme streams are cons pairs with a delayed cdr. Python generators are the idiomatic equivalent, using <code>yield</code> for lazy production.</li>
+      <li>Scheme streams can be rewound (the pair persists). Python generators are one-shot; once consumed, they are exhausted. Use <code>itertools.tee</code> for multiple passes.</li>
+      <li>Implicit self-referential streams (like <code>(define ones (cons-stream 1 ones))</code>) have no direct Python analog. Python generators cannot reference their own output mid-iteration without explicit feedback loops.</li>
+      <li><code>itertools</code> provides <code>count</code>, <code>islice</code>, <code>accumulate</code>, and <code>chain</code> as stream combinators.</li>
+    </ul>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li><a href="https://en.wikipedia.org/wiki/Lazy_evaluation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Lazy evaluation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Generator_(computer_programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Generator (computer programming)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Sieve of Eratosthenes</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-24.html#%_sec_3.5">Read SICP &sect;3.5</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-12/", label: "Concurrency" }} next={{ href: "/reading/programming/sicp-14/", label: "Metacircular Evaluator · 14 of 22" }} />
+
+  </main>
+</Layout>

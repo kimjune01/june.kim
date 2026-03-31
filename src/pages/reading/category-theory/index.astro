@@ -1,0 +1,76 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Category Theory for Programmers" favicon="🐱">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>🐱 Category Theory for Programmers</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">Bartosz Milewski's blog series</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">Same format as the paper pages: runnable Python, diagrams, plain English. Milewski wrote for Haskell programmers. These pages translate to Python.</p>
+
+    <!-- SVG: The simplest category — two objects, one arrow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object A -->
+        <circle cx="80" cy="50" r="20" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="80" y="55" text-anchor="middle" fill="#60a5fa" font-size="16">A</text>
+        <!-- Object B -->
+        <circle cx="280" cy="50" r="20" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="280" y="55" text-anchor="middle" fill="#f59e0b" font-size="16">B</text>
+        <!-- Arrow f: A -> B -->
+        <line x1="105" y1="50" x2="253" y2="50" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="255,50 245,45 245,55" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Label f -->
+        <text x="180" y="40" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6" font-style="italic">f</text>
+        <!-- Caption -->
+        <text x="180" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Objects, arrows, composition. That is all of it.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/category-theory/milewski-01/", title: "Category", desc: "Objects and arrows that compose — the only axioms are identity and associativity" },
+  { href: "/reading/category-theory/milewski-02/", title: "Types and Functions", desc: "Types are sets, functions are arrows, and Hask is (almost) a category" },
+  { href: "/reading/category-theory/milewski-03/", title: "Categories Great and Small", desc: "Preorders, monoids, and the thin categories hiding in your code" },
+  { href: "/reading/category-theory/milewski-04/", title: "Kleisli Categories", desc: "Side effects compose when you change what 'arrow' means" },
+  { href: "/reading/category-theory/milewski-05/", title: "Products and Coproducts", desc: "Tuples and tagged unions from universal properties alone" },
+  { href: "/reading/category-theory/milewski-06/", title: "Simple Algebraic Data Types", desc: "Sum types + product types = the algebra of types" },
+  { href: "/reading/category-theory/milewski-07/", title: "Functors", desc: "Structure-preserving maps between categories — map is a functor" },
+  { href: "/reading/category-theory/milewski-08/", title: "Functoriality", desc: "Bifunctors, contravariance, and the functor laws your code already obeys" },
+  { href: "/reading/category-theory/milewski-09/", title: "Function Types", desc: "Exponentials — why a → b is an object in the category" },
+  { href: "/reading/category-theory/milewski-10/", title: "Natural Transformations", desc: "Polymorphic functions are natural transformations — the parametricity theorem says so" },
+  { href: "/reading/category-theory/milewski-11/", title: "Limits and Colimits", desc: "The universal cone over a diagram — products and equalizers generalized" },
+  { href: "/reading/category-theory/milewski-12/", title: "Free Monoids", desc: "Lists are the free monoid — the cheapest way to make concatenation associative" },
+  { href: "/reading/category-theory/milewski-13/", title: "Representable Functors", desc: "Every container is secretly Hom(A, –) for some A" },
+  { href: "/reading/category-theory/milewski-14/", title: "The Yoneda Lemma", desc: "An object is determined by how everything maps into it" },
+  { href: "/reading/category-theory/milewski-15/", title: "Yoneda Embedding", desc: "Every category embeds faithfully into its presheaf category" },
+  { href: "/reading/category-theory/milewski-16/", title: "Adjunctions", desc: "Free/forgetful, curry/uncurry — two functors that are almost inverses" },
+  { href: "/reading/category-theory/milewski-17/", title: "Monads", desc: "Kleisli composition — the pattern behind Maybe, List, IO, and probability" },
+  { href: "/reading/category-theory/milewski-18/", title: "Comonads", desc: "Extract and extend — the dual of monads, hiding in spreadsheets and streams" },
+  { href: "/reading/category-theory/milewski-19/", title: "F-Algebras", desc: "Recursive data structures as initial algebras — fold is a catamorphism" },
+  { href: "/reading/category-theory/milewski-20/", title: "Ends and Coends", desc: "Generalized products and sums over functor categories" },
+  { href: "/reading/category-theory/milewski-21/", title: "Kan Extensions", desc: "The universal construction — everything else is a Kan extension" },
+  { href: "/reading/category-theory/milewski-22/", title: "Enriched Categories", desc: "When Hom-sets aren't sets — categories enriched over monoidal categories" },
+  { href: "/reading/category-theory/milewski-23/", title: "Topoi", desc: "A category that acts like a universe of sets — with its own internal logic" },
+  { href: "/reading/category-theory/milewski-24/", title: "Lawvere Theories", desc: "Algebraic theories as categories — operations are arrows, equations are diagrams" }
+]} icon="🐱" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/user/DrBartosz/playlists">Bartosz Milewski: Category Theory lectures</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/">🔗 Abstract Algebra</a> &mdash; groups and monoids are the objects categories generalize</li>
+      <li><a href="/reading/programming/">🪄 Programming</a> &mdash; functors and monads appear directly in typed languages</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; entropy as a functor</li>
+      <li><a href="/reading/the-natural-framework-lean/">✏️ Lean Proofs</a> &mdash; the Kleisli category and monad morphisms formalized</li>
+      <li><a href="/reading/natural-breadcrumbs/">🍞 Natural Breadcrumbs</a> &mdash; applied category theory papers</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

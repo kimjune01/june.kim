@@ -1,0 +1,148 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Descartes 1637 — Discourse on the Method" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Discourse on the Method</h1>
+    <p class="text-gray-400 text-sm mb-6">Ren&eacute; Descartes &middot; 1637 &middot; <a href="https://www.gutenberg.org/ebooks/59">Project Gutenberg</a> (public domain)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Doubt everything. Whatever survives doubt is your foundation. Decompose every problem into its smallest parts, solve from simplest to most complex, and enumerate until nothing is missed. Four rules that replace scholastic authority with individual reason.</p>
+    </div>
+
+    <!-- SVG: The four rules as a pipeline -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 140" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <!-- Rule 1: Doubt -->
+        <rect x="10" y="30" width="105" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="62" y="55" text-anchor="middle" fill="currentColor" font-size="11">1. Doubt</text>
+        <text x="62" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">accept nothing</text>
+        <text x="62" y="80" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">without evidence</text>
+
+        <!-- Arrow 1-2 -->
+        <line x1="115" y1="60" x2="140" y2="60" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="140,56 148,60 140,64" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Rule 2: Divide -->
+        <rect x="148" y="30" width="105" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="55" text-anchor="middle" fill="currentColor" font-size="11">2. Divide</text>
+        <text x="200" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">split into</text>
+        <text x="200" y="80" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">smallest parts</text>
+
+        <!-- Arrow 2-3 -->
+        <line x1="253" y1="60" x2="278" y2="60" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="278,56 286,60 278,64" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Rule 3: Order -->
+        <rect x="286" y="30" width="105" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="338" y="55" text-anchor="middle" fill="currentColor" font-size="11">3. Order</text>
+        <text x="338" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">solve simplest</text>
+        <text x="338" y="80" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">to most complex</text>
+
+        <!-- Arrow 3-4 -->
+        <line x1="391" y1="60" x2="416" y2="60" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="416,56 424,60 416,64" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Rule 4: Enumerate -->
+        <rect x="424" y="30" width="86" height="60" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="467" y="55" text-anchor="middle" fill="currentColor" font-size="11">4. Enumerate</text>
+        <text x="467" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">review until</text>
+        <text x="467" y="80" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">nothing missed</text>
+
+        <!-- Subtitle -->
+        <text x="260" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">each rule feeds the next: filter, decompose, sequence, verify</text>
+      </svg>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p>Descartes wrote the Discourse in French, not Latin. He wanted anyone with good sense to read it, not just scholars. The book is part autobiography, part method, part demonstration. He tells you how he arrived at these rules by rejecting everything he learned in school.</p>
+
+    <p>Scholastic philosophy relied on authority: Aristotle said it, therefore it is true. Descartes rejected this entirely. His starting point is doubt. If you can doubt something, do not treat it as knowledge. Strip away every belief that admits any possibility of error. Whatever remains after this process is your foundation.</p>
+
+    <p>What survived? Only the act of doubting itself. "I think, therefore I am" is not a logical argument. It is what's left when everything else has been removed. From this single certainty, Descartes attempted to rebuild all of knowledge through deduction.</p>
+
+    <p>The reconstruction proceeds bottom-up. Take any problem. Divide it into the smallest parts you can. Solve the simplest parts first. Build upward toward the complex. At every stage, enumerate your steps to confirm nothing was omitted. This is the method.</p>
+
+    <h2>The four rules</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Rule</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Statement</th>
+            <th class="text-left py-2 text-gray-400">What it replaces</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">1. Evidence</td><td class="pr-3 text-gray-400">Accept nothing as true unless it presents itself so clearly and distinctly that there is no occasion to doubt it.</td><td class="text-gray-400">Authority, tradition, hearsay</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">2. Analysis</td><td class="pr-3 text-gray-400">Divide each difficulty into as many parts as possible.</td><td class="text-gray-400">Tackling problems whole</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">3. Synthesis</td><td class="pr-3 text-gray-400">Conduct thoughts in order, beginning with the simplest and easiest, ascending to the most complex.</td><td class="text-gray-400">Starting from conclusions</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">4. Enumeration</td><td class="pr-3 text-gray-400">Make enumerations so complete and reviews so general that nothing is omitted.</td><td class="text-gray-400">Trusting memory and intuition</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What Descartes rejected</h2>
+
+    <p>Bacon had published Novum Organum seventeen years earlier, arguing that knowledge comes from systematic observation. Descartes went the opposite direction. Where Bacon trusts the senses and distrusts the mind, Descartes trusts the mind and distrusts the senses. The senses deceive. Optical illusions, dreams, fevers. Reason does not deceive, provided you use it carefully.</p>
+
+    <p>This disagreement is not a footnote. It splits the entire history of epistemology. Bacon's empiricism leads to experiment, measurement, data. Descartes' rationalism leads to deduction, proof, mathematics. Modern science uses both, but the tension never resolved. Every time a physicist demands a mathematical proof before believing an experiment, that is Descartes. Every time a biologist demands data before believing a theory, that is <a href="/reading/scientific-method/">Bacon</a>.</p>
+
+    <p>Descartes also rejected the probabilistic reasoning that Bacon tolerated. For Descartes, knowledge is certain or it is not knowledge. This absolutism made his method powerful for mathematics and geometry, where certainty is achievable, and fragile everywhere else.</p>
+
+    <h2>Who destroyed the certainty</h2>
+
+    <p>A century later, <a href="/reading/scientific-method/hume-1739/">🔬 Hume</a> dismantled the foundation Descartes built on. Hume's problem of induction shows that no amount of observation can guarantee the next instance. The sun has risen every morning, but nothing in logic requires it to rise tomorrow. Descartes promised certainty through reason alone. Hume showed that reason alone, without empirical input, produces only tautologies. And empirical input never produces certainty.</p>
+
+    <p>The Cartesian project of rebuilding all knowledge from indubitable foundations collapsed. What replaced it was something more cautious: hypotheses tested against evidence, with the understanding that confirmation is always provisional. Popper formalized this retreat. You cannot prove a theory true. You can only fail to prove it false. Descartes would have found this intolerable.</p>
+
+    <h2>Who mechanized the logic</h2>
+
+    <p>Descartes used logic informally. His four rules describe a procedure, but the reasoning within each step relies on the thinker's intuition about what is "clear and distinct." Two centuries later, <a href="/reading/scientific-method/boole-1854/">🔬 Boole</a> took the logical operations Descartes performed by hand and reduced them to algebra. AND, OR, NOT became operations on 0 and 1. Reasoning became computation.</p>
+
+    <p>Boole did not claim to improve on Descartes' method. He claimed to have made part of it mechanical. The analysis step (rule 2) and the enumeration step (rule 4) can be performed by symbol manipulation. The evidence step (rule 1) and the synthesis step (rule 3) still require judgment. Boole automated the parts of thought that can be automated and left the rest alone.</p>
+
+    <p>This division persists. Every formal verification system, every proof assistant, every logic programming language descends from Boole's algebra. They handle rules 2 and 4. Rules 1 and 3 remain the human's job, or the job of whoever decides which axioms to start with and which direction to build.</p>
+
+    <h2>Doubt as intellectual honesty</h2>
+
+    <p>Strip away the metaphysics and the cogito and the proofs of God's existence that occupy most of the Discourse. What remains is a single principle: refuse to accept what you have not verified for yourself.</p>
+
+    <p>This is harder than it sounds. Most of what anyone believes was inherited, not verified. Descartes proposed that you should, at least once in your life, demolish everything and start over. Not because your beliefs are wrong, but because you do not know which ones are wrong until you test them all.</p>
+
+    <p>Feynman said the same thing three centuries later: the first principle is that you must not fool yourself, and you are the easiest person to fool. Descartes' method of doubt is the earliest systematic attempt to operationalize that principle. He failed at the reconstruction. The demolition was the lasting contribution.</p>
+
+    <p>Chamberlin's method of multiple working hypotheses is doubt applied to scientific practice. Hold several explanations at once, because commitment to one will make you blind to evidence against it. Descartes held one foundation (the cogito) and deduced everything from it. Chamberlin's correction: hold many, test all, commit to none prematurely.</p>
+
+    <p>The integrity angle is this. Doubt is not skepticism for its own sake. It is the discipline of distinguishing what you know from what you merely believe. Every method on the <a href="/reading/scientific-method/">scientific method</a> page is a refinement of that distinction.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">🔬 The Scientific Method</a> — the full timeline from Bacon to Mayo</li>
+      <li><a href="/reading/logic/">logic</a></li>
+      <li><a href="/reading/proof-writing/">proofs</a></li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://www.gutenberg.org/ebooks/59">Project Gutenberg</a> — full text, public domain</li>
+      <li><a href="https://en.wikipedia.org/wiki/Discourse_on_the_Method"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a> — Discourse on the Method</li>
+      <li><a href="https://plato.stanford.edu/entries/descartes-epistemology/">Stanford Encyclopedia of Philosophy</a> — Descartes' epistemology</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/bacon-1620/", label: "Bacon 1620 · 1 of 17" }} next={{ href: "/reading/scientific-method/hume-1739/", label: "Hume 1739 · 3 of 17" }} />
+  </main>
+</Layout>

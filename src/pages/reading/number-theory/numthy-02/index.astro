@@ -1,0 +1,212 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Number Theory Ch.2 — Primes" favicon="#">
+  <main>
+
+    <a href="/reading/number-theory/" class="text-sm mb-4 inline-block">&larr; back to Number Theory</a>
+
+    <h1>Primes</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon &middot; Elementary Number Theory &middot; <a href="https://jheffero.w3.uvm.edu/numbertheory/">Ch. 2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>prime</strong> is an integer greater than 1 whose only positive divisors are 1 and itself. Every integer greater than 1 factors uniquely into primes. There are infinitely many of them.</p>
+    </div>
+
+    <!-- 1. Fundamental theorem of arithmetic -->
+    <h3>Fundamental theorem of arithmetic</h3>
+    <p>Every integer n &gt; 1 can be written as a product of primes, and this factorization is unique up to the order of factors. This is the structural backbone of number theory: the primes are the atoms.</p>
+
+    <SchemeRepl client:load initialCode={`; Prime factorization
+(define (factor n)
+  (define (factor-helper n d)
+    (cond ((> (* d d) n) (if (> n 1) (list n) (list)))
+          ((= 0 (modulo n d))
+           (cons d (factor-helper (quotient n d) d)))
+          (else (factor-helper n (+ d 1)))))
+  (factor-helper n 2))
+
+(display "factor(60) = ") (display (factor 60)) (newline)
+(display "factor(97) = ") (display (factor 97)) (newline)
+(display "factor(360) = ") (display (factor 360)) (newline)
+(display "factor(1024) = ") (display (factor 1024))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Prime factorization
+def factor(n):
+    factors = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1
+    if n > 1:
+        factors.append(n)
+    return factors
+
+print(f"factor(60) = {factor(60)}")
+print(f"factor(97) = {factor(97)}")
+print(f"factor(360) = {factor(360)}")
+print(f"factor(1024) = {factor(1024)}")
+`} />
+    </div>
+
+
+    <!-- 2. Infinitude of primes -->
+    <h3>Infinitude of primes (Euclid's proof)</h3>
+    <p>Suppose there are only finitely many primes p1, p2, ..., pn. Consider N = p1 p2 ... pn + 1. No pi divides N (each leaves remainder 1). So N has a prime factor not in the list. Contradiction. Therefore, there are infinitely many primes.</p>
+
+    <SchemeRepl client:load initialCode={`; Euclid's proof, constructively:
+; Given a list of primes, find a new one.
+(define (euclid-new-prime known-primes)
+  (let* ((product (apply * known-primes))
+         (n (+ product 1)))
+    ; n might not be prime itself, but its smallest
+    ; prime factor is not in known-primes.
+    (define (smallest-factor n d)
+      (cond ((> (* d d) n) n)
+            ((= 0 (modulo n d)) d)
+            (else (smallest-factor n (+ d 1)))))
+    (smallest-factor n 2)))
+
+(display "Start with (2,3): new prime = ")
+(display (euclid-new-prime (list 2 3))) (newline)
+; 2*3+1 = 7, which is prime
+
+(display "Start with (2,3,5): new prime = ")
+(display (euclid-new-prime (list 2 3 5))) (newline)
+; 2*3*5+1 = 31, which is prime
+
+(display "Start with (2,3,5,7,11,13): new prime = ")
+(display (euclid-new-prime (list 2 3 5 7 11 13)))
+; 30031 = 59 * 509; smallest new prime is 59
+`} />
+
+
+    <!-- 3. Sieve of Eratosthenes -->
+    <h3>Sieve of Eratosthenes</h3>
+    <p>To find all primes up to n: list 2 through n, then cross out multiples of 2 (keeping 2), multiples of 3 (keeping 3), and so on. Whatever remains is prime. You only need to sieve up to the square root of n.</p>
+
+    <!-- SVG: Sieve animation showing crossing out -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="200" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Cross out multiples of 2, then 3, then 5...</text>
+        <!-- Numbers 2-30, composites crossed out -->
+        <!-- Row 1: 2-10 -->
+        <text x="30" y="45" text-anchor="middle" fill="#facc15" font-size="13">2</text>
+        <text x="70" y="45" text-anchor="middle" fill="#facc15" font-size="13">3</text>
+        <text x="110" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">4</text>
+        <line x1="100" y1="40" x2="120" y2="40" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="150" y="45" text-anchor="middle" fill="#facc15" font-size="13">5</text>
+        <text x="190" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">6</text>
+        <line x1="180" y1="40" x2="200" y2="40" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="230" y="45" text-anchor="middle" fill="#facc15" font-size="13">7</text>
+        <text x="270" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">8</text>
+        <line x1="260" y1="40" x2="280" y2="40" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="310" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">9</text>
+        <line x1="300" y1="40" x2="320" y2="40" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="350" y="45" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">10</text>
+        <line x1="340" y1="40" x2="360" y2="40" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <!-- Row 2: 11-20 -->
+        <text x="30" y="80" text-anchor="middle" fill="#facc15" font-size="13">11</text>
+        <text x="70" y="80" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">12</text>
+        <line x1="58" y1="75" x2="82" y2="75" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="110" y="80" text-anchor="middle" fill="#facc15" font-size="13">13</text>
+        <text x="150" y="80" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">14</text>
+        <line x1="138" y1="75" x2="162" y2="75" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="190" y="80" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">15</text>
+        <line x1="178" y1="75" x2="202" y2="75" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="230" y="80" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">16</text>
+        <line x1="218" y1="75" x2="242" y2="75" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="270" y="80" text-anchor="middle" fill="#facc15" font-size="13">17</text>
+        <text x="310" y="80" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">18</text>
+        <line x1="298" y1="75" x2="322" y2="75" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="350" y="80" text-anchor="middle" fill="#facc15" font-size="13">19</text>
+        <!-- Row 3: 20-30 -->
+        <text x="30" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">20</text>
+        <line x1="18" y1="110" x2="42" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="70" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">21</text>
+        <line x1="58" y1="110" x2="82" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="110" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">22</text>
+        <line x1="98" y1="110" x2="122" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="150" y="115" text-anchor="middle" fill="#facc15" font-size="13">23</text>
+        <text x="190" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">24</text>
+        <line x1="178" y1="110" x2="202" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="230" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">25</text>
+        <line x1="218" y1="110" x2="242" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="270" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">26</text>
+        <line x1="258" y1="110" x2="282" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="310" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">27</text>
+        <line x1="298" y1="110" x2="322" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="350" y="115" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">28</text>
+        <line x1="338" y1="110" x2="362" y2="110" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+        <!-- Bottom: 29, 30 -->
+        <text x="30" y="150" text-anchor="middle" fill="#facc15" font-size="13">29</text>
+        <text x="70" y="150" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.2">30</text>
+        <line x1="58" y1="145" x2="82" y2="145" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Sieve of Eratosthenes
+(define (sieve n)
+  (let ((is-prime (make-vector (+ n 1) #t)))
+    (vector-set! is-prime 0 #f)
+    (vector-set! is-prime 1 #f)
+    (let loop ((i 2))
+      (when (<= (* i i) n)
+        (when (vector-ref is-prime i)
+          (let inner ((j (* i i)))
+            (when (<= j n)
+              (vector-set! is-prime j #f)
+              (inner (+ j i)))))
+        (loop (+ i 1))))
+    ; collect primes
+    (let collect ((i 2) (primes (list)))
+      (if (> i n)
+          (reverse primes)
+          (collect (+ i 1)
+                   (if (vector-ref is-prime i)
+                       (cons i primes)
+                       primes))))))
+
+(display "Primes up to 50: ")
+(display (sieve 50))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sieve of Eratosthenes
+def sieve(n):
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    i = 2
+    while i * i <= n:
+        if is_prime[i]:
+            for j in range(i * i, n + 1, i):
+                is_prime[j] = False
+        i += 1
+    return [i for i in range(2, n + 1) if is_prime[i]]
+
+print(f"Primes up to 50: {sieve(50)}")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-06/">&rarr; Cryptography Ch.6</a> — RSA encryption relies on the difficulty of factoring large numbers into primes</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/number-theory/numthy-01/", label: "Divisibility" }} next={{ href: "/reading/number-theory/numthy-03/", label: "Congruences" }} />
+
+  </main>
+</Layout>

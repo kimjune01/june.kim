@@ -1,0 +1,205 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.20 — Mechanism Design" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Mechanism Design</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Vickrey (1961), Clarke (1971), Groves (1973)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Mechanism design</strong> is game theory in reverse. Instead of analyzing what players do in a given game, you design the game so that self-interested players produce the outcome you want. The revelation principle says: if any mechanism works, there is a direct mechanism where truthful reporting is optimal.</p>
+    </div>
+
+    <!-- 1. The Revelation Principle -->
+    <h3>The revelation principle</h3>
+    <p>For any mechanism where agents play some equilibrium strategy, there exists an equivalent <strong>direct mechanism</strong> where each agent simply reports their true type, and truthful reporting is a (Bayesian) Nash equilibrium. This is powerful: you only need to search over direct, truthful mechanisms. It does not say truth-telling is always optimal in practice; it says any achievable outcome can be achieved by a truthful mechanism.</p>
+
+    <!-- SVG: Mechanism as box -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Input arrows (reports) -->
+        <text x="20" y="65" fill="currentColor" font-size="11" fill-opacity="0.6">agent 1 report</text>
+        <line x1="110" y1="60" x2="150" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="148,56 156,60 148,64" fill="currentColor"/>
+
+        <text x="20" y="115" fill="currentColor" font-size="11" fill-opacity="0.6">agent 2 report</text>
+        <line x1="110" y1="110" x2="150" y2="110" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="148,106 156,110 148,114" fill="currentColor"/>
+
+        <text x="20" y="165" fill="currentColor" font-size="11" fill-opacity="0.6">agent n report</text>
+        <line x1="110" y1="160" x2="150" y2="160" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="148,156 156,160 148,164" fill="currentColor"/>
+
+        <!-- Dots for more agents -->
+        <text x="65" y="140" fill="currentColor" font-size="14" fill-opacity="0.4">...</text>
+
+        <!-- Mechanism box -->
+        <rect x="155" y="35" width="140" height="150" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="225" y="100" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.8">Mechanism</text>
+        <text x="225" y="118" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">(rules of the game)</text>
+
+        <!-- Output arrows -->
+        <line x1="295" y1="80" x2="340" y2="80" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="338,76 346,80 338,84" fill="#4ade80"/>
+        <text x="350" y="84" fill="#4ade80" font-size="11">allocation</text>
+
+        <line x1="295" y1="140" x2="340" y2="140" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="338,136 346,140 338,144" fill="#60a5fa"/>
+        <text x="350" y="144" fill="#60a5fa" font-size="11">payments</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Revelation principle illustration
+; Direct mechanism: agents report values, mechanism decides
+
+; Simple example: allocate one item to the highest-value agent
+; Each agent reports their value. Truthful reporting is optimal
+; in a second-price (Vickrey) mechanism.
+
+(define (second-price-auction bids)
+  ; Winner = highest bidder, pays second-highest price
+  (let* ((sorted (sort bids >))
+         (winner-bid (car sorted))
+         (second-bid (cadr sorted))
+         (winner-idx
+           (let loop ((i 0) (bs bids))
+             (if (= (car bs) winner-bid) i
+                 (loop (+ i 1) (cdr bs))))))
+    (list winner-idx second-bid)))
+
+(define bids (list 30 50 20 45))
+(define result (second-price-auction bids))
+(display "Bids: ") (display bids) (newline)
+(display "Winner: agent ") (display (car result)) (newline)
+(display "Payment: $") (display (cadr result)) (newline)
+(display "Winner's value: $") (display (list-ref bids (car result)))
+`} />
+
+
+    <!-- 2. Incentive Compatibility -->
+    <h3>Incentive compatibility</h3>
+    <p>A mechanism is <strong>incentive compatible</strong> (IC) if every agent maximizes their payoff by reporting truthfully. Dominant-strategy IC means truth-telling is optimal regardless of what others do. Bayesian IC means it is optimal in expectation over others' types. The stronger the IC condition, the fewer mechanisms qualify, but the more robust the design.</p>
+
+    <SchemeRepl client:load initialCode={`; Why truth-telling is dominant in Vickrey auction
+; Agent's payoff = value - payment if they win, 0 otherwise
+; Payment = second-highest bid (independent of own bid)
+
+(define (payoff my-value my-bid other-bids)
+  (let* ((all-bids (cons my-bid other-bids))
+         (sorted (sort all-bids >))
+         (highest (car sorted))
+         (second (cadr sorted)))
+    (if (= my-bid highest)
+        (- my-value second)  ; win: value minus second price
+        0)))                 ; lose
+
+(define my-value 50)
+(define others (list 30 20 45))
+
+; Truthful bid
+(display "Truthful (bid=50): ")
+(display (payoff my-value 50 others)) (newline)
+
+; Overbid: still win, same payment
+(display "Overbid  (bid=80): ")
+(display (payoff my-value 80 others)) (newline)
+
+; Underbid: might lose (bid=40 < 45)
+(display "Underbid (bid=40): ")
+(display (payoff my-value 40 others)) (newline)
+
+(display "Truth-telling is weakly dominant.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Incentive compatibility in Vickrey auction
+def payoff(my_value, my_bid, other_bids):
+    all_bids = sorted([my_bid] + other_bids, reverse=True)
+    if my_bid == all_bids[0]:
+        return my_value - all_bids[1]  # win, pay second price
+    return 0  # lose
+
+my_value = 50
+others = [30, 20, 45]
+
+for bid, label in [(50, "Truthful"), (80, "Overbid"), (40, "Underbid")]:
+    print(str(label) + " (bid=" + str(bid) + "): " + str(payoff(my_value, bid, others)))
+`} />
+    </div>
+
+
+    <!-- 3. VCG Mechanism -->
+    <h3>The VCG mechanism</h3>
+    <p>The <strong>Vickrey-Clarke-Groves</strong> mechanism generalizes second-price auctions to any allocation problem. Each agent reports their value for every possible outcome. The mechanism picks the allocation that maximizes total reported value. Each agent pays the externality they impose: the difference in others' welfare between the world with and without them. Truth-telling is a dominant strategy.</p>
+
+    <SchemeRepl client:load initialCode={`; VCG mechanism for two items, three agents
+; Each agent has values for items A and B
+; Efficient allocation maximizes total value
+
+; Values: (agent (value-for-A value-for-B))
+(define vals
+  (list (list 10 5)    ; agent 0
+        (list 8 12)    ; agent 1
+        (list 6 7)))   ; agent 2
+
+; Efficient: assign A to agent 0 (val=10), B to agent 1 (val=12)
+; Total welfare = 22
+
+; VCG payment for agent 0:
+; Without agent 0: best allocation gives agent1=12, agent2=7 => 19
+; With agent 0: others get agent1=12, agent2=0 => 12
+; Payment = 19 - 12 = 7
+
+; VCG payment for agent 1:
+; Without agent 1: agent0=10, agent2=7 => 17
+; With agent 1: others get agent0=10, agent2=0 => 10
+; Payment = 17 - 10 = 7
+
+(display "Efficient allocation:") (newline)
+(display "  Agent 0 gets A (value=10)") (newline)
+(display "  Agent 1 gets B (value=12)") (newline)
+(display "Total welfare: 22") (newline) (newline)
+(display "VCG payments:") (newline)
+(display "  Agent 0 pays: 7 (externality)") (newline)
+(display "  Agent 1 pays: 7 (externality)") (newline)
+(display "Net surplus:") (newline)
+(display "  Agent 0: 10 - 7 = 3") (newline)
+(display "  Agent 1: 12 - 7 = 5")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/hedges-2018/">Hedges 2018</a> — compositional game theory: mechanisms as composed open games</li>
+      <li><a href="/reading/game-theory/nordstrom-06/">Game Theory Ch.6</a> — Nash equilibrium, the solution concept underlying IC</li>
+    
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; mechanism design is reverse game theory: design the rules to produce the desired equilibrium</li>
+      <li><a href="/reading/auction-theory/vcg-1973/">🏷 VCG Mechanism</a> &mdash; the canonical mechanism design result</li>
+      <li><a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim/vector-space</a> &mdash; mechanism design applied to embedding-space ad auctions</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Mechanism_design"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mechanism design</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Revelation_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Revelation principle</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Vickrey%E2%80%93Clarke%E2%80%93Groves_mechanism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>VCG mechanism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Incentive_compatibility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Incentive compatibility</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/economics/econ-19/", label: "Fiscal and Monetary Policy" }} next={{ href: "/reading/economics/econ-21/", label: "Behavioral Economics" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.6 — Frequency Response" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Frequency Response</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Bode_plot"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bode plot</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Feed a sinusoid into a linear system. The output is a sinusoid at the same frequency, but with different amplitude and phase. The <strong>Bode plot</strong> shows magnitude and phase as functions of frequency. <strong>Gain margin</strong> and <strong>phase margin</strong> tell you how close you are to instability.</p>
+    </div>
+
+    <h3>Bode plots</h3>
+    <p>Two plots stacked vertically. The top plot shows magnitude in decibels (20*log10 of the gain) versus log frequency. The bottom plot shows phase in degrees versus log frequency. Straight-line asymptotes approximate the curves. Each pole contributes -20 dB/decade of slope and -90 degrees of phase shift. Each zero contributes +20 dB/decade and +90 degrees.</p>
+
+    <!-- SVG: Bode plot -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 340" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Magnitude plot -->
+        <text x="25" y="20" fill="currentColor" font-size="10" fill-opacity="0.5">|H| (dB)</text>
+        <line x1="60" y1="30" x2="60" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="60" y1="150" x2="400" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- 0 dB line -->
+        <line x1="60" y1="90" x2="400" y2="90" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="45" y="94" fill="currentColor" font-size="9" fill-opacity="0.3">0</text>
+        <!-- Magnitude curve: flat then -20dB/decade -->
+        <path d="M 60 60 L 160 60 Q 180 60 200 80 Q 230 105 260 120 Q 300 138 400 150" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <!-- Corner frequency -->
+        <line x1="170" y1="30" x2="170" y2="155" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="2,2"/>
+        <text x="170" y="165" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">&omega;c</text>
+        <!-- -20 dB/decade slope label -->
+        <text x="310" y="128" fill="#60a5fa" font-size="9" fill-opacity="0.6">-20 dB/dec</text>
+        <!-- Gain margin annotation -->
+        <line x1="330" y1="90" x2="330" y2="145" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="340" y="120" fill="#ef4444" font-size="9" fill-opacity="0.6">GM</text>
+
+        <!-- Phase plot -->
+        <text x="25" y="190" fill="currentColor" font-size="10" fill-opacity="0.5">&angle;H (deg)</text>
+        <line x1="60" y1="200" x2="60" y2="310" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="60" y1="310" x2="400" y2="310" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- 0 deg line -->
+        <line x1="60" y1="210" x2="400" y2="210" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="40" y="214" fill="currentColor" font-size="9" fill-opacity="0.3">0&deg;</text>
+        <!-- -180 deg line -->
+        <line x1="60" y1="300" x2="400" y2="300" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="30" y="304" fill="currentColor" font-size="9" fill-opacity="0.3">-180&deg;</text>
+        <!-- -90 deg line -->
+        <line x1="60" y1="255" x2="400" y2="255" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="35" y="259" fill="currentColor" font-size="9" fill-opacity="0.3">-90&deg;</text>
+        <!-- Phase curve -->
+        <path d="M 60 210 L 120 210 Q 140 210 160 225 Q 180 245 200 255 Q 220 265 240 270 Q 280 280 330 285 Q 370 288 400 290" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <!-- Phase margin annotation -->
+        <line x1="330" y1="285" x2="330" y2="300" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="340" y="298" fill="#ef4444" font-size="9" fill-opacity="0.6">PM</text>
+        <!-- Frequency axis -->
+        <text x="400" y="325" fill="currentColor" font-size="11" fill-opacity="0.4">&omega;</text>
+      </svg>
+    </div>
+
+    <h3>Gain and phase margin</h3>
+    <p><strong>Gain margin</strong>: how much you can increase the gain before the system goes unstable. Measured at the frequency where the phase is -180 degrees. <strong>Phase margin</strong>: how much additional phase lag the system can tolerate. Measured at the frequency where the gain is 0 dB (the gain crossover frequency). Positive margins mean stable. Typical design targets: gain margin of at least 6 dB, phase margin of at least 45 degrees.</p>
+
+    <SchemeRepl client:load initialCode={`; Bode magnitude for a first-order system: H(s) = 1/(1 + s/wc)
+; |H(jw)| = 1 / sqrt(1 + (w/wc)^2)
+; In dB: 20*log10(|H|)
+
+(define wc 10.0)  ; corner frequency
+
+(define (log10 x) (/ (log x) (log 10)))
+
+(define (magnitude-db w)
+  (let ((ratio (/ w wc)))
+    (* 20.0 (log10 (/ 1.0 (sqrt (+ 1.0 (* ratio ratio))))))))
+
+(define (phase-deg w)
+  ; phase = -arctan(w/wc), converted to degrees
+  (let ((ratio (/ w wc)))
+    (* (- (atan ratio)) (/ 180.0 3.14159265))))
+
+(display "Bode plot data (wc=10 rad/s):") (newline)
+(display "  w(rad/s)  |H|(dB)   phase(deg)") (newline)
+(for-each
+  (lambda (w)
+    (display "  ")
+    (display w)
+    (display "       ")
+    (display (magnitude-db w))
+    (display "  ")
+    (display (phase-deg w))
+    (newline))
+  (list 0.1 1.0 5.0 10.0 20.0 50.0 100.0))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Bode plot for H(s) = 1/(1 + s/wc)
+wc = 10.0
+
+print("Bode plot data (wc=10 rad/s):")
+print(f"  {'w':>8}  {'|H| (dB)':>10}  {'phase (deg)':>12}")
+for w in [0.1, 1.0, 5.0, 10.0, 20.0, 50.0, 100.0]:
+    mag_db = 20 * math.log10(1.0 / math.sqrt(1 + (w/wc)**2))
+    phase = -math.degrees(math.atan(w / wc))
+    print(f"  {w:8.1f}  {mag_db:10.2f}  {phase:12.2f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-05/">&#x2699; Crowell Ch. 5 — Waves</a> &#x2014; frequency is the shared concept between waves and frequency response</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-05/", label: "Root Locus" }} next={{ href: "/reading/control/ctrl-07/", label: "State Space" }} />
+
+  </main>
+</Layout>

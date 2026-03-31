@@ -1,0 +1,42 @@
+---
+interface Chapter {
+  href: string;
+  title: string;
+  desc: string;
+}
+
+interface Props {
+  chapters: Chapter[];
+  icon?: string;
+  iconClass?: string;
+}
+
+const { chapters, icon, iconClass = '' } = Astro.props;
+---
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="border-b border-zinc-700">
+        <th class="py-2 pr-1 w-6"></th>
+        <th class="text-left py-2 px-2 text-gray-400">Chapter</th>
+        <th class="py-2 px-2"></th>
+        {icon && <th class="py-2 w-8"></th>}
+      </tr>
+    </thead>
+    <tbody>
+      {chapters.map((ch, i) => (
+        <tr class={i < chapters.length - 1 ? 'border-b border-zinc-800' : ''}>
+          <td class="py-2 pr-1 text-right text-gray-500 tabular-nums whitespace-nowrap align-top">{i + 1}.</td>
+          <td class="py-2 px-2 text-gray-300 align-top"><a href={ch.href} style="background:transparent;padding:0">{ch.title}</a></td>
+          <td class="py-2 px-2 text-gray-400 align-top">{ch.desc}</td>
+          {icon && (
+            <td class="py-2 pl-1 align-top">
+              <a href={ch.href} class={iconClass} style="background:transparent;padding:0">{icon}</a>
+            </td>
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

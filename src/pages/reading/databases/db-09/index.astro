@@ -1,0 +1,206 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.9 — Query Processing" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Query Processing</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Query_optimization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Query optimization</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Query processing</strong> translates a SQL query into an execution plan. The optimizer considers multiple plans (different join orders, index choices, join algorithms) and picks the cheapest one based on cost estimates. The main join algorithms: nested-loop, sort-merge, and hash join.</p>
+    </div>
+
+    <!-- SVG: Query plan tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Root: Project -->
+        <rect x="130" y="10" width="100" height="25" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="27" text-anchor="middle" fill="#60a5fa" font-size="10">Project(name)</text>
+
+        <!-- Select -->
+        <rect x="130" y="60" width="100" height="25" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="77" text-anchor="middle" fill="#f59e0b" font-size="10">Select(age&gt;25)</text>
+        <line x1="180" y1="35" x2="180" y2="60" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Join -->
+        <rect x="120" y="110" width="120" height="25" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="127" text-anchor="middle" fill="#34d399" font-size="10">Hash Join(id=uid)</text>
+        <line x1="180" y1="85" x2="180" y2="110" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Left scan -->
+        <rect x="40" y="160" width="100" height="25" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="90" y="177" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Scan(users)</text>
+        <line x1="150" y1="135" x2="110" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Right scan -->
+        <rect x="220" y="160" width="100" height="25" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="270" y="177" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">Scan(orders)</text>
+        <line x1="210" y1="135" x2="250" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Caption - moved up to stay in viewBox -->
+        <text x="180" y="198" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">Query plan: scan, join, filter, project.</text>
+      </svg>
+    </div>
+
+
+    <!-- Nested loop join -->
+    <h3>Nested-loop join</h3>
+    <p>The simplest join algorithm. For each row in the outer table, scan the entire inner table for matches. Cost: O(n * m). Good when one table is small or the inner table has an index.</p>
+
+    <SchemeRepl client:load initialCode={`; Nested-loop join: for each outer row, scan inner.
+
+(define users
+  (list (list 1 "Alice") (list 2 "Bob") (list 3 "Carol")))
+(define orders
+  (list (list 1 "book") (list 2 "pen") (list 1 "lamp") (list 3 "desk")))
+
+(define (nested-loop-join outer inner)
+  (apply append
+    (map (lambda (o)
+      (filter (lambda (x) x)
+        (map (lambda (i)
+          (if (= (car o) (car i))
+            (list (car o) (cadr o) (cadr i))
+            #f))
+          inner)))
+      outer)))
+
+(define result (nested-loop-join users orders))
+(for-each
+  (lambda (r)
+    (display (cadr r)) (display " -> ") (display (caddr r)) (newline))
+  result)
+(newline)
+(display "Comparisons: ")
+(display (* (length users) (length orders)))
+(display " (n * m)")
+`} />
+
+
+    <!-- Sort-merge join -->
+    <h3>Sort-merge join</h3>
+    <p>Sort both tables on the join key, then merge them in one pass. Cost: O(n log n + m log m) for the sorts, then O(n + m) for the merge. Best when both tables are large and already nearly sorted.</p>
+
+    <Repl client:load initialCode={`# Sort-merge join
+
+def sort_merge_join(left, right, key_l, key_r):
+    left_sorted = sorted(left, key=lambda r: r[key_l])
+    right_sorted = sorted(right, key=lambda r: r[key_r])
+
+    result = []
+    i, j = 0, 0
+    while i < len(left_sorted) and j < len(right_sorted):
+        lk = left_sorted[i][key_l]
+        rk = right_sorted[j][key_r]
+        if lk == rk:
+            # Collect all matching right rows
+            j2 = j
+            while j2 < len(right_sorted) and right_sorted[j2][key_r] == lk:
+                result.append({**left_sorted[i], **right_sorted[j2]})
+                j2 += 1
+            i += 1
+        elif lk < rk:
+            i += 1
+        else:
+            j += 1
+    return result
+
+users = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}, {"id": 3, "name": "Carol"}]
+orders = [{"uid": 3, "item": "desk"}, {"uid": 1, "item": "book"}, {"uid": 1, "item": "lamp"}]
+
+for r in sort_merge_join(users, orders, "id", "uid"):
+    print("  " + r['name'] + " -> " + r['item'])
+`} />
+
+
+    <!-- Hash join -->
+    <h3>Hash join</h3>
+    <p>Build a hash table on the smaller (build) relation, then probe it with each row of the larger (probe) relation. Cost: O(n + m) on average. The default choice in most modern query optimizers when no useful index exists.</p>
+
+    <SchemeRepl client:load initialCode={`; Hash join: build hash table on smaller relation, probe with larger.
+
+(define build-table
+  (list (list 1 "Alice") (list 2 "Bob") (list 3 "Carol")))
+(define probe-table
+  (list (list 1 "book") (list 3 "desk") (list 1 "lamp") (list 2 "pen")))
+
+; Build phase: create an association list keyed by join column
+(define hash-table
+  (map (lambda (row) (cons (car row) (cadr row))) build-table))
+
+; Probe phase: look up each probe row
+(define (hash-lookup ht key)
+  (let ((found (assoc key ht)))
+    (if found (cdr found) #f)))
+
+(display "Hash join results:") (newline)
+(for-each
+  (lambda (row)
+    (let ((name (hash-lookup hash-table (car row))))
+      (if name
+        (begin
+          (display "  ") (display name)
+          (display " -> ") (display (cadr row)) (newline)))))
+  probe-table)
+`} />
+
+
+    <!-- Cost estimation -->
+    <h3>Cost estimation</h3>
+    <p>The optimizer estimates the cost of each plan using statistics: table sizes, index selectivity, data distribution. It picks the plan with the lowest estimated I/O and CPU cost. The estimates are not always accurate, which is why sometimes the optimizer picks a suboptimal plan.</p>
+
+    <Repl client:load initialCode={`# Cost estimation: compare nested-loop vs hash join
+
+def estimate_cost(n_left, n_right, has_index=False):
+    nl_cost = n_left * n_right  # nested loop
+    if has_index:
+        nl_cost = n_left * 3    # ~log2 lookup per outer row
+    hj_cost = n_left + n_right  # hash join (build + probe)
+    sm_cost = (n_left * 14 +    # sort left (n log n, log2(1000)~10 + overhead)
+               n_right * 17 +   # sort right
+               n_left + n_right) # merge
+
+    print("Tables: " + str(n_left) + " x " + str(n_right))
+    print("  Nested loop:  " + str(nl_cost))
+    print("  Hash join:    " + str(hj_cost))
+    print("  Sort-merge:   " + str(sm_cost))
+    best = min(("Nested loop", nl_cost), ("Hash join", hj_cost),
+               ("Sort-merge", sm_cost), key=lambda x: x[1])
+    print("  Winner: " + best[0])
+    print()
+
+estimate_cost(1000, 10000)
+estimate_cost(10, 10000)   # small outer table
+estimate_cost(1000, 10000, has_index=True)  # with index
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/algo-03/">⚙ Algorithms Ch.3</a> — sorting: sort-merge join depends on efficient sorting</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Query_optimization"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Query optimization</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hash_join"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hash join</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sort-merge_join"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Sort-merge join</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Nested_loop_join"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nested loop join</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-08/", label: "Recovery" }} next={{ href: "/reading/databases/db-10/", label: "NoSQL and Beyond" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,307 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hefferon Ch.5 — Similarity" favicon="📐">
+  <main>
+
+    <a href="/reading/linear-algebra/" class="text-sm mb-4 inline-block">← back to linear algebra</a>
+
+    <h1>Similarity</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon · GFDL + CC BY-SA 2.5 · <a href="https://hefferon.net/linearalgebra/">Linear Algebra</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>eigenvector</strong> of a linear map is a nonzero vector whose direction is unchanged by the map: Av = lambda v. The scalar lambda is the <strong>eigenvalue</strong>. Finding eigenvalues reduces to solving det(A - lambda I) = 0. When a matrix has enough independent eigenvectors, it can be <strong>diagonalized</strong>: the map becomes just scaling along each eigenvector axis.</p>
+    </div>
+
+    <!-- 1. Eigenvalues and eigenvectors -->
+    <h3>Eigenvalues and eigenvectors</h3>
+    <p>A nonzero vector v is an eigenvector of A with eigenvalue lambda if Av = lambda v. The vector gets scaled but not rotated. Eigenvalues are the roots of the <strong>characteristic polynomial</strong> det(A - lambda I) = 0. Each eigenvalue has an eigenspace: the set of all eigenvectors for that eigenvalue, plus zero.</p>
+
+    <!-- SVG: Vector that doesn't change direction -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="300" y2="180" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="40" y1="20" x2="40" y2="180" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Origin -->
+        <circle cx="40" cy="180" r="2.5" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Original eigenvector v (blue) -->
+        <line x1="40" y1="180" x2="140" y2="110" stroke="#60a5fa" stroke-width="2"/>
+        <polygon points="140,110 130,107 132,117" fill="#60a5fa"/>
+        <text x="100" y="158" fill="#60a5fa" font-size="12">v</text>
+        <!-- Scaled eigenvector Av = 2v (blue, longer, dashed) -->
+        <line x1="40" y1="180" x2="240" y2="40" stroke="#60a5fa" stroke-width="2" stroke-dasharray="5,3" stroke-opacity="0.6"/>
+        <polygon points="240,40 230,37 232,47" fill="#60a5fa" fill-opacity="0.6"/>
+        <text x="210" y="55" fill="#60a5fa" font-size="12" fill-opacity="0.7">Av = 2v</text>
+        <!-- Non-eigenvector w (amber, direction changes) -->
+        <line x1="40" y1="180" x2="170" y2="170" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="170,170 162,164 162,176" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="155" y="190" fill="#f59e0b" font-size="11" fill-opacity="0.6">w</text>
+        <!-- Aw points in different direction -->
+        <line x1="40" y1="180" x2="200" y2="100" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3" stroke-opacity="0.4"/>
+        <polygon points="200,100 190,97 192,107" fill="#f59e0b" fill-opacity="0.4"/>
+        <text x="195" y="90" fill="#f59e0b" font-size="11" fill-opacity="0.4">Aw</text>
+        <!-- Caption -->
+        <text x="170" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">eigenvector v keeps its direction; w does not</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Eigenvectors: Av = lambda * v.
+; A = ((2 1) (0 3)). Find eigenvalues.
+; det(A - lambda*I) = (2-lambda)(3-lambda) - 0 = 0
+; lambda = 2 or lambda = 3.
+
+(define (dot u v) (apply + (map * u v)))
+(define (mat-vec A v) (map (lambda (row) (dot row v)) A))
+(define (scalar-mult c v) (map (lambda (x) (* c x)) v))
+
+(define A '((2 1) (0 3)))
+
+; Eigenvalue lambda=2: solve (A - 2I)v = 0
+; ((0 1)(0 1))v = 0 => v2 = 0. Eigenvector: (1, 0).
+(define v1 '(1 0))
+(display "A * v1 = ") (display (mat-vec A v1)) (newline)
+(display "2 * v1 = ") (display (scalar-mult 2 v1)) (newline)
+
+; Eigenvalue lambda=3: solve (A - 3I)v = 0
+; ((-1 1)(0 0))v = 0 => v1 = v2. Eigenvector: (1, 1).
+(define v2 '(1 1))
+(display "A * v2 = ") (display (mat-vec A v2)) (newline)
+(display "3 * v2 = ") (display (scalar-mult 3 v2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+A = np.array([[2, 1], [0, 3]], dtype=float)
+
+vals, vecs = np.linalg.eig(A)
+print(f"Eigenvalues: {vals}")
+print(f"Eigenvectors (columns):\\n{vecs}")
+
+# Verify: A @ v = lambda * v
+for i in range(2):
+    v = vecs[:, i]
+    lam = vals[i]
+    print(f"A*v{i+1} = {A @ v}, {lam}*v{i+1} = {lam * v}")
+`} />
+    </div>
+
+
+    <!-- 2. Characteristic polynomial -->
+    <h3>Characteristic polynomial</h3>
+    <p>The <strong>characteristic polynomial</strong> of an n-by-n matrix A is det(A - lambda I), a polynomial of degree n in lambda. Its roots are the eigenvalues. For a 2-by-2 matrix, this is lambda^2 - trace(A)*lambda + det(A) = 0. The trace equals the sum of eigenvalues, and the determinant equals their product.</p>
+
+    <SchemeRepl client:load initialCode={`; Characteristic polynomial of a 2x2 matrix.
+; A = ((a b)(c d))
+; char poly: lambda^2 - (a+d)*lambda + (ad - bc) = 0
+
+(define (char-poly-2x2 a b c d)
+  ; Returns (list p q) where poly is lambda^2 + p*lambda + q
+  (list (- (+ a d)) (- (* a d) (* b c))))
+
+; A = ((4 2)(1 3))
+(define coeffs (char-poly-2x2 4 2 1 3))
+(display "lambda^2 + ")
+(display (car coeffs))
+(display "*lambda + ")
+(display (cadr coeffs))
+(display " = 0")
+(newline)
+; lambda^2 - 7*lambda + 10 = 0
+; (lambda - 2)(lambda - 5) = 0
+; Eigenvalues: 2 and 5
+
+(display "Eigenvalues: 2 and 5")
+(newline)
+(display "Trace = 4 + 3 = 7 = 2 + 5")
+(newline)
+(display "Det = 4*3 - 2*1 = 10 = 2 * 5")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Characteristic polynomial of 2x2 matrix
+# A = ((a,b),(c,d)) -> lambda^2 - (a+d)*lambda + (ad-bc) = 0
+a, b, c, d = 4, 2, 1, 3
+p = -(a + d)
+q = a*d - b*c
+
+print("lambda^2 + " + str(p) + "*lambda + " + str(q) + " = 0")
+# lambda^2 - 7*lambda + 10 = 0 -> (lambda-2)(lambda-5) = 0
+print("Eigenvalues: 2 and 5")
+print("Trace = " + str(a+d) + " = 2 + 5")
+print("Det = " + str(a*d - b*c) + " = 2 * 5")
+`} />
+    </div>
+
+
+    <!-- 3. Diagonalization -->
+    <h3>Diagonalization</h3>
+    <p>If an n-by-n matrix has n linearly independent eigenvectors, it is <strong>diagonalizable</strong>: A = P D P^(-1), where D is the diagonal matrix of eigenvalues and P is the matrix whose columns are eigenvectors. In the eigenvector basis, the map is just scaling along each axis. Not all matrices are diagonalizable; those with repeated eigenvalues may fail.</p>
+
+    <SchemeRepl client:load initialCode={`; Diagonalization: A = P D P^(-1)
+; A = ((4 2)(1 3)), eigenvalues 2 and 5 (from above).
+;
+; lambda=2: (A-2I)v=0 => ((2,2)(1,1))v=0 => v=(-1,1)
+; lambda=5: (A-5I)v=0 => ((-1,2)(1,-2))v=0 => v=(2,1)
+;
+; P = ((-1 2)(1 1)), D = ((2 0)(0 5))
+
+(define (dot u v) (apply + (map * u v)))
+(define (mat-vec A v) (map (lambda (row) (dot row v)) A))
+
+(define A '((4 2) (1 3)))
+
+; Verify by applying A to each eigenvector
+(define v1 '(-1 1))
+(define v2 '(2 1))
+
+(display "A*(-1,1) = ") (display (mat-vec A v1))
+(display "  should be 2*(-1,1) = (-2,2)")
+(newline)
+
+(display "A*(2,1)  = ") (display (mat-vec A v2))
+(display "  should be 5*(2,1) = (10,5)")
+(newline)
+
+; In the eigenvector basis, A becomes diagonal:
+;   D = ((2 0) (0 5))
+; Powers are easy: D^n = ((2^n 0) (0 5^n))
+(display "D^3 = ((8 0)(0 125))")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+A = np.array([[4, 2], [1, 3]], dtype=float)
+vals, P = np.linalg.eig(A)
+D = np.diag(vals)
+
+print(f"P =\\n{P}")
+print(f"D =\\n{D}")
+
+# Verify: P @ D @ P^(-1) = A
+reconstructed = P @ D @ np.linalg.inv(P)
+print(f"P D P^(-1) =\\n{np.round(reconstructed, 6)}")
+print(f"Matches A? {np.allclose(A, reconstructed)}")
+`} />
+    </div>
+
+
+    <!-- 4. When diagonalization fails -->
+    <h3>When diagonalization fails</h3>
+    <p>A matrix with a repeated eigenvalue may not have enough independent eigenvectors to diagonalize. The matrix ((2 1)(0 2)) has eigenvalue 2 with algebraic multiplicity 2 but geometric multiplicity 1 (only one independent eigenvector). Hefferon covers Jordan normal form as the next-best thing: block-diagonal with 1s on the superdiagonal of deficient blocks.</p>
+
+    <SchemeRepl client:load initialCode={`; A = ((2 1)(0 2)). Eigenvalue: 2 (repeated).
+; (A - 2I) = ((0 1)(0 0)). Kernel = span of (1,0).
+; Only one eigenvector. Not diagonalizable.
+
+(define (dot u v) (apply + (map * u v)))
+(define (mat-vec A v) (map (lambda (row) (dot row v)) A))
+(define (scalar-mult c v) (map (lambda (x) (* c x)) v))
+
+(define A '((2 1) (0 2)))
+(define v '(1 0))
+
+(display "A*(1,0) = ") (display (mat-vec A v))
+(display " = 2*(1,0)? ") (display (equal? (mat-vec A v) (scalar-mult 2 v)))
+(newline)
+
+; Try (0,1): A*(0,1) = (1,2) which is not 2*(0,1) = (0,2).
+(define w '(0 1))
+(display "A*(0,1) = ") (display (mat-vec A w))
+(display " = 2*(0,1)? ") (display (equal? (mat-vec A w) (scalar-mult 2 w)))
+(newline)
+
+; Only one eigenvector direction. Not diagonalizable.
+; Jordan form: ((2 1)(0 2)) — already in Jordan form.
+(display "Jordan form: ((2 1)(0 2))")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Non-diagonalizable matrix: A = [[2,1],[0,2]]
+def mat_vec(A, v):
+    return [sum(a*x for a,x in zip(row, v)) for row in A]
+
+def scalar_mult(c, v):
+    return [c*x for x in v]
+
+A = [[2, 1], [0, 2]]
+v = [1, 0]
+w = [0, 1]
+
+print("A*(1,0) = " + str(mat_vec(A, v)) + " = 2*(1,0)? " + str(mat_vec(A, v) == scalar_mult(2, v)))
+print("A*(0,1) = " + str(mat_vec(A, w)) + " = 2*(0,1)? " + str(mat_vec(A, w) == scalar_mult(2, w)))
+print("Only one eigenvector direction. Not diagonalizable.")
+print("Jordan form: [[2,1],[0,2]]")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Av = lambda v</td><td class="pr-4 text-green-300">(mat-vec A v)</td><td class="pr-4 text-blue-300">A @ v == lam * v</td><td class="font-sans">Eigenvalue equation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">det(A - lambda I) = 0</td><td class="pr-4 text-green-300">(char-poly ...)</td><td class="pr-4 text-blue-300">np.linalg.eigvals</td><td class="font-sans">Characteristic polynomial</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A = PDP^(-1)</td><td class="pr-4 text-green-300">change of basis</td><td class="pr-4 text-blue-300">P @ D @ inv(P)</td><td class="font-sans">Diagonalization</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">tr(A)</td><td class="pr-4 text-green-300">sum of diagonal</td><td class="pr-4 text-blue-300">np.trace(A)</td><td class="font-sans">Sum of eigenvalues</td></tr>
+          <tr><td class="py-2 pr-4">Jordan form</td><td class="pr-4 text-green-300">block diagonal</td><td class="pr-4 text-blue-300">scipy jordan_form</td><td class="font-sans">Best form when not diagonalizable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Adjacent chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-04/">Ch.4 Determinants</a> — eigenvalues come from det(A - lambda I) = 0</li>
+    
+      <li><a href="/reading/machine-learning/ml-06/">🤖 ML Ch.6</a> &mdash; PCA is eigendecomposition of the covariance matrix</li>
+      <li><a href="/reading/control/ctrl-07/">🎛 Control Ch.7</a> &mdash; eigenvalues determine stability in state space</li>
+      <li><a href="/reading/geometry/geom-03/">△ Geometry Ch.3</a> &mdash; linear transformations as geometric operations</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/sato-2023/">Sato 2023</a> — enriched categories use eigenvalue-like structure in their hom-objects</li>
+      <li><a href="/reading/category-theory/milewski-01/">Milewski Ch.1</a> — similar matrices represent the same morphism in different bases</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Eigenvalues and eigenvectors</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Diagonalizable_matrix"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Diagonalizable matrix</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Jordan_normal_form"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Jordan normal form</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Characteristic_polynomial"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Characteristic polynomial</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Hefferon's final chapter also covers complex eigenvalues, the Cayley-Hamilton theorem, and Jordan normal form in detail. This page covers the core arc from eigenvalues through diagonalization. For the full treatment of similarity and canonical forms, see the original text.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Full chapter: <a href="https://hefferon.net/linearalgebra/">Hefferon, Chapter Five — Similarity</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/linear-algebra/hefferon-04/", label: "Determinants" }} fin="fin · 5 of 5" />
+
+  </main>
+</Layout>

@@ -1,0 +1,282 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.7 — Inference for Means" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Inference for Means</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; CC BY-SA 3.0 &middot; <a href="https://www.openintro.org/book/operating-systems/">Chapter 7</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When data are numerical, inference targets the mean. The t-distribution replaces the normal when the population standard deviation is unknown. ANOVA generalizes the two-sample test to any number of groups.</p>
+    </div>
+
+    <!-- SVG: Two overlapping distributions with means marked -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="40" y1="150" x2="400" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Distribution 1 (blue) centered at 160 -->
+        <path d="M 60 150 Q 80 148 100 140 Q 120 120 140 80 Q 155 40 160 30 Q 165 40 180 80 Q 200 120 220 140 Q 240 148 260 150" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.5"/>
+        <line x1="160" y1="150" x2="160" y2="25" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="160" y="168" text-anchor="middle" fill="#60a5fa" font-size="10">x&#x0304;1</text>
+
+        <!-- Distribution 2 (orange) centered at 250 -->
+        <path d="M 150 150 Q 170 148 190 140 Q 210 120 230 80 Q 245 40 250 30 Q 255 40 270 80 Q 290 120 310 140 Q 330 148 350 150" fill="#f97316" fill-opacity="0.15" stroke="#f97316" stroke-width="1.5"/>
+        <line x1="250" y1="150" x2="250" y2="25" stroke="#f97316" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="250" y="168" text-anchor="middle" fill="#f97316" font-size="10">x&#x0304;2</text>
+
+        <!-- Labels -->
+        <text x="110" y="15" fill="#60a5fa" font-size="10">Group 1</text>
+        <text x="290" y="15" fill="#f97316" font-size="10">Group 2</text>
+      </svg>
+    </div>
+
+    <!-- 1. One-sample t-test -->
+    <h3>One-sample t-test</h3>
+    <p>Test whether a sample mean differs from a hypothesized value. The t-statistic replaces Z when sigma is unknown: t = (x-bar - mu0) / (s / sqrt(n)). It follows a <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>t-distribution</a> with n - 1 degrees of freedom. As n grows, t approaches Z.</p>
+
+    <SchemeRepl client:load initialCode={`; One-sample t-test
+; H0: mu = 100, sample mean = 105, s = 15, n = 25
+
+(define x-bar 105)
+(define mu0 100)
+(define s 15)
+(define n 25)
+
+(define se (/ s (sqrt n)))
+(define t-stat (/ (- x-bar mu0) se))
+
+(display "x-bar = ") (display x-bar) (newline)
+(display "SE    = ") (display se) (newline)
+(display "t     = ") (display t-stat) (newline)
+(display "df    = ") (display (- n 1)) (newline)
+; Critical t at alpha=0.05, df=24, two-tailed: ~2.064
+(display "Reject H0? ")
+(display (if (> (abs t-stat) 2.064) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# One-sample t-test
+import math
+
+x_bar, mu0, s, n = 105, 100, 15, 25
+se = s / math.sqrt(n)
+t = (x_bar - mu0) / se
+
+print(f"t = {t:.3f}, df = {n-1}")
+print(f"Critical t (alpha=0.05, df=24) = 2.064")
+print(f"Reject H0? {'Yes' if abs(t) > 2.064 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 2. Two-sample t-test -->
+    <h3>Two-sample t-test</h3>
+    <p>Compare means from two independent groups. The standard error combines variability from both samples: SE = sqrt(s1^2/n1 + s2^2/n2). Degrees of freedom come from Welch's approximation when variances are unequal.</p>
+
+    <SchemeRepl client:load initialCode={`; Two-sample t-test (Welch's)
+; Group 1: mean=82, s=10, n=30
+; Group 2: mean=78, s=12, n=35
+
+(define x1 82) (define s1 10) (define n1 30)
+(define x2 78) (define s2 12) (define n2 35)
+
+(define se (sqrt (+ (/ (* s1 s1) n1) (/ (* s2 s2) n2))))
+(define t-stat (/ (- x1 x2) se))
+
+(display "Difference = ") (display (- x1 x2)) (newline)
+(display "SE         = ") (display se) (newline)
+(display "t          = ") (display t-stat) (newline)
+; Welch df approximation is complex; use min(n1-1, n2-1) = 29 as conservative
+(display "df (conservative) = 29") (newline)
+; Critical t at alpha=0.05, df=29: ~2.045
+(display "Reject H0? ")
+(display (if (> (abs t-stat) 2.045) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Two-sample t-test
+import math
+
+x1, s1, n1 = 82, 10, 30
+x2, s2, n2 = 78, 12, 35
+
+se = math.sqrt(s1**2/n1 + s2**2/n2)
+t = (x1 - x2) / se
+
+print(f"t = {t:.3f}, SE = {se:.3f}")
+print(f"Reject H0? {'Yes' if abs(t) > 2.045 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 3. Paired t-test -->
+    <h3>Paired t-test</h3>
+    <p>When observations come in pairs (before/after, matched subjects), compute the differences and run a one-sample t-test on those differences. This controls for subject-level variation that would inflate the two-sample SE.</p>
+
+    <SchemeRepl client:load initialCode={`; Paired t-test
+; Before: (85 90 78 92 88), After: (90 94 80 96 91)
+; Test H0: mean difference = 0
+
+(define before (list 85 90 78 92 88))
+(define after  (list 90 94 80 96 91))
+
+(define diffs (map - after before))
+(display "Differences: ") (display diffs) (newline)
+
+(define n (length diffs))
+(define d-bar (/ (apply + diffs) n))
+
+; Sample SD of differences
+(define ss (apply + (map (lambda (d) (* (- d d-bar) (- d d-bar))) diffs)))
+(define s-d (sqrt (/ ss (- n 1))))
+
+(define se (/ s-d (sqrt n)))
+(define t-stat (/ (exact->inexact d-bar) se))
+
+(display "d-bar = ") (display (exact->inexact d-bar)) (newline)
+(display "s_d   = ") (display s-d) (newline)
+(display "t     = ") (display t-stat) (newline)
+(display "df    = ") (display (- n 1)) (newline)
+; Critical t at alpha=0.05, df=4: ~2.776
+(display "Reject H0? ")
+(display (if (> (abs t-stat) 2.776) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Paired t-test
+import math
+
+before = [85, 90, 78, 92, 88]
+after  = [90, 94, 80, 96, 91]
+diffs = [a - b for a, b in zip(after, before)]
+
+n = len(diffs)
+d_bar = sum(diffs) / n
+s_d = math.sqrt(sum((d - d_bar)**2 for d in diffs) / (n - 1))
+t = d_bar / (s_d / math.sqrt(n))
+
+print(f"Diffs: {diffs}")
+print(f"d_bar = {d_bar}, s_d = {s_d:.3f}")
+print(f"t = {t:.3f}, df = {n-1}")
+print(f"Reject H0? {'Yes' if abs(t) > 2.776 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 4. ANOVA and the F-distribution -->
+    <h3>ANOVA and the F-distribution</h3>
+    <p>Analysis of variance tests whether any group mean differs among k groups. It decomposes total variation into between-group (MSG) and within-group (MSE) components. The F-statistic = MSG / MSE follows an F-distribution with (k-1, n-k) degrees of freedom. A large F means the group means spread more than within-group noise would predict.</p>
+
+    <SchemeRepl client:load initialCode={`; One-way ANOVA
+; Three groups:
+; A: (4 5 6 5), B: (8 9 7 8), C: (6 7 5 6)
+
+(define a (list 4 5 6 5))
+(define b (list 8 9 7 8))
+(define c (list 6 7 5 6))
+
+(define (mean lst) (/ (apply + lst) (length lst)))
+(define (ss-within lst mu)
+  (apply + (map (lambda (x) (* (- x mu) (- x mu))) lst)))
+
+(define grand-mean (/ (+ (apply + a) (apply + b) (apply + c)) 12))
+(define ma (mean a)) (define mb (mean b)) (define mc (mean c))
+
+; Between-group SS
+(define ssg (+ (* 4 (* (- ma grand-mean) (- ma grand-mean)))
+               (* 4 (* (- mb grand-mean) (- mb grand-mean)))
+               (* 4 (* (- mc grand-mean) (- mc grand-mean)))))
+; Within-group SS
+(define sse (+ (ss-within a ma) (ss-within b mb) (ss-within c mc)))
+
+(define msg (/ ssg 2))    ; df = k-1 = 2
+(define mse (/ sse 9))    ; df = n-k = 9
+
+(define f-stat (/ (exact->inexact msg) (exact->inexact mse)))
+
+(display "Group means: ") (display (list (exact->inexact ma) (exact->inexact mb) (exact->inexact mc))) (newline)
+(display "Grand mean:  ") (display (exact->inexact grand-mean)) (newline)
+(display "MSG = ") (display (exact->inexact msg)) (newline)
+(display "MSE = ") (display (exact->inexact mse)) (newline)
+(display "F   = ") (display f-stat) (newline)
+; Critical F at alpha=0.05, df=(2,9): ~4.26
+(display "Reject H0? ")
+(display (if (> f-stat 4.26) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# One-way ANOVA
+a = [4, 5, 6, 5]
+b = [8, 9, 7, 8]
+c = [6, 7, 5, 6]
+
+groups = [a, b, c]
+all_vals = a + b + c
+grand_mean = sum(all_vals) / len(all_vals)
+means = [sum(g)/len(g) for g in groups]
+
+ssg = sum(len(g) * (m - grand_mean)**2 for g, m in zip(groups, means))
+sse = sum(sum((x - m)**2 for x in g) for g, m in zip(groups, means))
+
+msg = ssg / 2   # k-1
+mse = sse / 9   # n-k
+f = msg / mse
+
+print(f"Means: {means}")
+print(f"F = {f:.2f} (critical = 4.26)")
+print(f"Reject H0? {'Yes' if f > 4.26 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Formula</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">t</td><td class="pr-4">(x&#x0304; - &mu;0) / (s/&radic;n)</td><td class="font-sans">t-statistic</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">df</td><td class="pr-4">n - 1</td><td class="font-sans">Degrees of freedom (one-sample)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">MSG</td><td class="pr-4">SSG / (k-1)</td><td class="font-sans">Mean square between groups</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">MSE</td><td class="pr-4">SSE / (n-k)</td><td class="font-sans">Mean square within groups</td></tr>
+          <tr><td class="py-2 pr-4">F</td><td class="pr-4">MSG / MSE</td><td class="font-sans">F-statistic for ANOVA</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-06/">Grinstead Ch.6</a> &mdash; expected value foundations for what "mean" means</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Student%27s_t-test"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Student's t-test</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Welch%27s_t-test"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Welch's t-test</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Analysis_of_variance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Analysis of variance</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/F-distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>F-distribution</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-06/", label: "Inference for Proportions" }} next={{ href: "/reading/statistics/openintro-08/", label: "Simple Linear Regression" }} />
+
+  </main>
+</Layout>

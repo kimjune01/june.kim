@@ -1,0 +1,468 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.22 — Enriched Categories" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Enriched Categories</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski &middot; 2017 &middot; <a href="https://bartoszmilewski.com/2017/05/13/enriched-categories/">Category Theory for Programmers, Ch. 22</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-03/">🍞 Ch3 (Categories Great and Small &mdash; monoids)</a>, <a href="/reading/category-theory/milewski-09/">🍞 Ch9 (Function Types)</a>. 10 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Replace hom-<em>sets</em> with hom-<em>objects</em> from a monoidal category <strong>V</strong>. Composition becomes a morphism in V, identity becomes a morphism from the monoidal unit. The payoff: preorders are Bool-enriched categories (hom = true/false), metric spaces are [0,&infin;]-enriched categories (hom = distance, composition = triangle inequality), and 2-categories are Cat-enriched categories (hom = functor categories). One definition, three fields of mathematics.</p>
+    </div>
+
+    <!-- SVG: Enriched category — hom-objects instead of hom-sets -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Objects a, b, c -->
+        <circle cx="60" cy="80" r="5" fill="currentColor" fill-opacity="0.5"/>
+        <text x="60" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">a</text>
+        <circle cx="200" cy="80" r="5" fill="currentColor" fill-opacity="0.5"/>
+        <text x="200" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">b</text>
+        <circle cx="340" cy="80" r="5" fill="currentColor" fill-opacity="0.5"/>
+        <text x="340" y="68" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">c</text>
+
+        <!-- Hom-object C(a,b) as colored box -->
+        <rect x="100" y="70" width="60" height="20" rx="4" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="130" y="85" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">C(a,b)</text>
+        <!-- Hom-object C(b,c) as colored box -->
+        <rect x="240" y="70" width="60" height="20" rx="4" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="270" y="85" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">C(b,c)</text>
+
+        <!-- Tensor product symbol between hom-objects -->
+        <text x="200" y="128" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">C(b,c) &#x2297; C(a,b) &#x2192; C(a,c)</text>
+
+        <!-- Composition arrow below -->
+        <rect x="130" y="110" width="140" height="20" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="200" y="145" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">composition via &#x2297; in V</text>
+
+        <!-- V label -->
+        <text x="200" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">hom-objects live in a monoidal category V</text>
+      </svg>
+    </div>
+
+    <!-- 1. Why enrichment -->
+    <h3>Why replace hom-sets?</h3>
+    <p>In an ordinary category, the morphisms between two objects form a <em>set</em>. But sometimes you want more structure: a distance, a truth value, or an entire category of maps. Enriched categories replace the hom-set <code>C(a,b)</code> with a hom-object living in a monoidal category V. Composition, normally a function between sets, becomes a morphism in V. Identity, normally an element picked from a set, becomes a morphism from V's unit object. Everything is restated "point-free" so it works without naming individual morphisms.</p>
+
+    <SchemeRepl client:load initialCode={`; An ordinary category has hom-SETS: finite collections of morphisms.
+; An enriched category has hom-OBJECTS from some monoidal category V.
+;
+; V must provide:
+;   - a tensor product (⊗) to combine hom-objects
+;   - a unit object (I) to source identity morphisms
+;
+; We'll build three examples:
+;   1. V = Bool  (hom = true/false)    => preorders
+;   2. V = [0,∞] (hom = distance)      => metric spaces
+;   3. V = Set   (hom = set)           => ordinary categories
+
+; First: a monoidal category is (objects, tensor, unit)
+(define (make-monoidal tensor unit)
+  (list tensor unit))
+
+(define (monoidal-tensor m) (car m))
+(define (monoidal-unit m) (cadr m))
+
+; Bool as a monoidal category: tensor = AND, unit = #t
+(define bool-monoidal (make-monoidal (lambda (a b) (and a b)) #t))
+
+(display "Bool tensor: #t ⊗ #t = ")
+(display ((monoidal-tensor bool-monoidal) #t #t)) (newline)
+(display "Bool tensor: #t ⊗ #f = ")
+(display ((monoidal-tensor bool-monoidal) #t #f)) (newline)
+(display "Bool unit: ")
+(display (monoidal-unit bool-monoidal))
+`} />
+
+    <!-- 2. Bool-enriched: preorders -->
+    <h3>Preorders as Bool-enriched categories</h3>
+    <p>Enrich over <strong>Bool</strong> with AND as tensor and true as unit. The hom-object <code>C(a,b)</code> is just true or false: "can you get from a to b?" Composition requires <code>C(b,c) AND C(a,b) &rArr; C(a,c)</code>, which is transitivity. Identity requires <code>true &rArr; C(a,a)</code>, which is reflexivity. A preorder falls out of the definition for free.</p>
+
+    <SchemeRepl client:load initialCode={`; A Bool-enriched category is a preorder.
+; hom(a,b) = #t means a ≤ b, #f means not.
+; Composition: hom(b,c) AND hom(a,b) => hom(a,c)  [transitivity]
+; Identity: true => hom(a,a)                       [reflexivity]
+
+(define (make-preorder leq?)
+  (list 'preorder leq?))
+
+(define (preorder-hom p a b)
+  ((cadr p) a b))
+
+; The enriched composition law: if a≤b and b≤c then a≤c
+(define (preorder-compose p a b c)
+  (and (preorder-hom p a b)
+       (preorder-hom p b c)))
+
+; Example: divisibility preorder on positive integers
+; a ≤ b iff a divides b
+(define divides-preorder
+  (make-preorder (lambda (a b) (= 0 (modulo b a)))))
+
+; Check hom-objects (true/false)
+(display "hom(2,6) = ") (display (preorder-hom divides-preorder 2 6)) (newline)
+(display "hom(3,6) = ") (display (preorder-hom divides-preorder 3 6)) (newline)
+(display "hom(4,6) = ") (display (preorder-hom divides-preorder 4 6)) (newline)
+
+; Verify composition = transitivity: 2|6 and 6|12 => 2|12
+(display "compose(2,6,12) = ")
+(display (preorder-compose divides-preorder 2 6 12)) (newline)
+
+; Verify identity = reflexivity: hom(a,a) = #t
+(display "hom(5,5) = ") (display (preorder-hom divides-preorder 5 5)) (newline)
+
+; This IS the enriched category. No extra axioms needed.
+; The monoidal structure of Bool enforces preorder laws.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bool-enriched category = preorder
+# hom(a,b) = True iff a <= b
+
+class Preorder:
+    def __init__(self, leq):
+        self.leq = leq
+
+    def hom(self, a, b):
+        return self.leq(a, b)
+
+    def compose(self, a, b, c):
+        """Enriched composition: hom(a,b) AND hom(b,c) => hom(a,c)"""
+        return self.hom(a, b) and self.hom(b, c)
+
+# Divisibility preorder
+div_order = Preorder(lambda a, b: b % a == 0)
+
+print(f"hom(2,6) = {div_order.hom(2, 6)}")
+print(f"hom(4,6) = {div_order.hom(4, 6)}")
+print(f"compose(2,6,12) = {div_order.compose(2, 6, 12)}")
+print(f"hom(5,5) = {div_order.hom(5, 5)}")
+`} />
+    </div>
+
+
+    <!-- 3. Metric-enriched: metric spaces -->
+    <h3>Metric spaces as [0,&infin;]-enriched categories</h3>
+    <p>Enrich over <strong>[0,&infin;]</strong> with addition as tensor and 0 as unit. The hom-object <code>C(a,b)</code> is the distance from a to b. Composition requires <code>C(b,c) + C(a,b) &ge; C(a,c)</code>, which is the <strong>triangle inequality</strong>. Identity requires <code>0 &ge; C(a,a)</code>, so self-distance is zero. Metric space axioms emerge from the enrichment.</p>
+
+    <SchemeRepl client:load initialCode={`; A [0,∞]-enriched category is a (generalized) metric space.
+; hom(a,b) = distance from a to b
+; Tensor = +, unit = 0
+;
+; Composition law: hom(a,b) + hom(b,c) >= hom(a,c)
+;   This IS the triangle inequality.
+; Identity law: 0 >= hom(a,a)
+;   So hom(a,a) = 0. Self-distance is zero.
+
+(define (make-metric dist)
+  (list 'metric dist))
+
+(define (metric-hom m a b)
+  ((cadr m) a b))
+
+; Check the enriched composition law (triangle inequality)
+(define (metric-composition-ok? m a b c)
+  (>= (+ (metric-hom m a b) (metric-hom m b c))
+      (metric-hom m a c)))
+
+; Example: points on the real line
+(define real-line
+  (make-metric (lambda (a b) (abs (- a b)))))
+
+(display "hom(1, 4) = ") (display (metric-hom real-line 1 4)) (newline)
+(display "hom(4, 10) = ") (display (metric-hom real-line 4 10)) (newline)
+(display "hom(1, 10) = ") (display (metric-hom real-line 1 10)) (newline)
+
+; Triangle inequality: d(1,4) + d(4,10) >= d(1,10)
+; 3 + 6 >= 9 ✓
+(display "triangle(1,4,10)? ")
+(display (metric-composition-ok? real-line 1 4 10)) (newline)
+
+; Identity: d(a,a) = 0
+(display "hom(7,7) = ") (display (metric-hom real-line 7 7)) (newline)
+
+; A tighter example: d(0,3) + d(3,5) = 3+2 = 5 >= d(0,5) = 5
+(display "triangle(0,3,5)? ")
+(display (metric-composition-ok? real-line 0 3 5))
+; Equality holds — the shortest path goes through the midpoint.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# [0,∞]-enriched category = metric space
+# Tensor = addition, unit = 0
+
+class Metric:
+    def __init__(self, dist):
+        self.dist = dist
+
+    def hom(self, a, b):
+        return self.dist(a, b)
+
+    def triangle_ok(self, a, b, c):
+        """Enriched composition: d(a,b) + d(b,c) >= d(a,c)"""
+        return self.hom(a, b) + self.hom(b, c) >= self.hom(a, c)
+
+# Real line metric
+real_line = Metric(lambda a, b: abs(a - b))
+
+print(f"d(1,4) = {real_line.hom(1, 4)}")
+print(f"d(4,10) = {real_line.hom(4, 10)}")
+print(f"d(1,10) = {real_line.hom(1, 10)}")
+print(f"triangle(1,4,10)? {real_line.triangle_ok(1, 4, 10)}")
+print(f"d(7,7) = {real_line.hom(7, 7)}")
+`} />
+    </div>
+
+
+    <!-- 4. Enriched composition law verified -->
+    <h3>The enriched composition law</h3>
+    <p>In an ordinary category, composition is a function <code>C(b,c) &times; C(a,b) &rarr; C(a,c)</code>. In a V-enriched category, it is a morphism in V: <code>C(b,c) &otimes; C(a,b) &rarr; C(a,c)</code>. For Bool, this is <code>AND &rArr; hom</code>. For [0,&infin;], this is <code>+ &ge; hom</code>. Let's verify both in one framework.</p>
+
+    <SchemeRepl client:load initialCode={`; Unified enriched composition check.
+; Given a monoidal category V and a hom-function,
+; verify the composition law:
+;   tensor(hom(b,c), hom(a,b)) => hom(a,c)
+;
+; For Bool: AND(hom(b,c), hom(a,b)) implies hom(a,c)
+; For [0,∞]: hom(a,b) + hom(b,c) >= hom(a,c)
+
+; Bool version: composition = implication
+(define (bool-compose-ok? hom a b c)
+  ; If hom(a,b) AND hom(b,c), then hom(a,c) must hold
+  (if (and (hom a b) (hom b c))
+      (hom a c)    ; must be #t
+      #t))         ; vacuously true
+
+; Metric version: composition = triangle inequality
+(define (metric-compose-ok? hom a b c)
+  (>= (+ (hom a b) (hom b c))
+      (hom a c)))
+
+; Test Bool (divisibility)
+(define (divides? a b) (= 0 (modulo b a)))
+
+(display "Bool composition checks (divisibility):\n")
+(display "  2|6 and 6|12 => 2|12? ")
+(display (bool-compose-ok? divides? 2 6 12)) (newline)
+(display "  3|6 and 6|18 => 3|18? ")
+(display (bool-compose-ok? divides? 3 6 18)) (newline)
+
+; Test metric (real line)
+(define (real-dist a b) (abs (- a b)))
+
+(display "\nMetric composition checks (triangle inequality):\n")
+(display "  d(0,3)+d(3,7) >= d(0,7)? ")
+(display (metric-compose-ok? real-dist 0 3 7)) (newline)
+(display "  3 + 4 = 7 >= 7 ✓\n")
+
+; 2D Euclidean distance — triangle inequality is strict
+(define (dist-2d p q)
+  (sqrt (+ (expt (- (car p) (car q)) 2)
+           (expt (- (cdr p) (cdr q)) 2))))
+
+(define A (cons 0 0))
+(define B (cons 3 0))
+(define C (cons 3 4))
+
+(display "\n2D triangle inequality:\n")
+(display "  d(A,B) = ") (display (dist-2d A B)) (newline)
+(display "  d(B,C) = ") (display (dist-2d B C)) (newline)
+(display "  d(A,C) = ") (display (dist-2d A C)) (newline)
+(display "  3 + 4 = 7 >= 5? ")
+(display (metric-compose-ok? dist-2d A B C))
+; Strict inequality: going through B is longer than the direct path.
+`} />
+
+
+    <!-- 5. Cat-enriched: 2-categories -->
+    <h3>2-categories as Cat-enriched categories</h3>
+    <p>When V = <strong>Cat</strong> (the category of small categories), hom-objects are entire categories. Morphisms in the hom-category are 2-cells: natural transformations between functors. The canonical example: <strong>Cat</strong> itself is enriched over Cat, with functor categories as hom-objects. This gives 2-categories: objects, 1-morphisms (functors), and 2-morphisms (natural transformations).</p>
+
+    <SchemeRepl client:load initialCode={`; Cat-enriched category = 2-category.
+; hom(A,B) is a CATEGORY, not a set.
+;   Objects of hom(A,B) = functors A -> B (1-morphisms)
+;   Morphisms of hom(A,B) = natural transformations (2-morphisms)
+;
+; We can't build full functor categories in Scheme,
+; but we can model the structure: hom-objects that are
+; themselves categories with vertical composition.
+
+; A 2-cell: a natural transformation between two functors
+(define (make-2-cell name source target component)
+  (list name source target component))
+
+(define (two-cell-name nt) (car nt))
+(define (two-cell-source nt) (cadr nt))
+(define (two-cell-target nt) (caddr nt))
+(define (two-cell-at nt x) ((cadddr nt) x))
+
+; Vertical composition of 2-cells (within a hom-category)
+; If α : F => G and β : G => H, then β∘α : F => H
+(define (vertical-compose beta alpha)
+  (make-2-cell
+    (string-append (two-cell-name beta) "." (two-cell-name alpha))
+    (two-cell-source alpha)
+    (two-cell-target beta)
+    (lambda (x) (list 'compose (two-cell-at beta x) (two-cell-at alpha x)))))
+
+; Example: three "functors" (just named mappings for illustration)
+; F: x -> x+1, G: x -> x+2, H: x -> x+3
+; α : F => G  (component at x: the morphism x+1 -> x+2)
+; β : G => H  (component at x: the morphism x+2 -> x+3)
+
+(define alpha
+  (make-2-cell "α" 'F 'G (lambda (x) (list '-> (+ x 1) (+ x 2)))))
+
+(define beta
+  (make-2-cell "β" 'G 'H (lambda (x) (list '-> (+ x 2) (+ x 3)))))
+
+(define beta-alpha (vertical-compose beta alpha))
+
+(display "α at 5: ") (display (two-cell-at alpha 5)) (newline)
+(display "β at 5: ") (display (two-cell-at beta 5)) (newline)
+(display "β∘α at 5: ") (display (two-cell-at beta-alpha 5)) (newline)
+(display "β∘α source: ") (display (two-cell-source beta-alpha)) (newline)
+(display "β∘α target: ") (display (two-cell-target beta-alpha))
+; The hom-category hom(A,B) has its own composition. That's 2-categorical.
+`} />
+
+
+    <!-- 6. Self-enrichment -->
+    <h3>Self-enrichment: Set over Set</h3>
+    <p>A closed symmetric monoidal category can enrich over itself. <strong>Set</strong> with cartesian product is the prototype: the internal hom <code>[a,b]</code> is the function set <code>b^a</code>. Composition uses the universal property of the exponential. This is why ordinary categories (enriched over Set) feel "native" &mdash; Set is self-enriching.</p>
+
+    <SchemeRepl client:load initialCode={`; Set enriched over Set = ordinary category.
+; The internal hom [a,b] is the set of functions a -> b.
+; Composition: [b,c] × [a,b] -> [a,c]
+;   is just ordinary function composition.
+
+; Model: finite sets as lists, functions as association lists
+(define (make-fn domain mapping)
+  (list domain mapping))
+
+(define (apply-fn f x)
+  (let ((pair (assoc x (cadr f))))
+    (if pair (cdr pair) 'undefined)))
+
+; Two functions to compose
+(define f (make-fn '(1 2 3) '((1 . a) (2 . b) (3 . c))))
+(define g (make-fn '(a b c) '((a . x) (b . y) (c . z))))
+
+; Enriched composition: build the composite function
+(define (compose-fn g f)
+  (make-fn
+    (car f)
+    (map (lambda (pair)
+           (cons (car pair) (apply-fn g (cdr pair))))
+         (cadr f))))
+
+(define gf (compose-fn g f))
+
+(display "f(1)=") (display (apply-fn f 1))
+(display ", g(a)=") (display (apply-fn g 'a))
+(display ", (g∘f)(1)=") (display (apply-fn gf 1)) (newline)
+
+(display "f(2)=") (display (apply-fn f 2))
+(display ", g(b)=") (display (apply-fn g 'b))
+(display ", (g∘f)(2)=") (display (apply-fn gf 2)) (newline)
+
+; The enriched identity: unit I -> [a,a] picks out id_a
+(define (enriched-id domain)
+  (make-fn domain (map (lambda (x) (cons x x)) domain)))
+
+(define id-123 (enriched-id '(1 2 3)))
+(display "id(1)=") (display (apply-fn id-123 1))
+(display ", id(2)=") (display (apply-fn id-123 2))
+; Self-enrichment makes the internal structure explicit.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Set enriched over Set: ordinary function composition
+# Internal hom [a,b] = set of all functions a -> b
+
+f = {1: "a", 2: "b", 3: "c"}
+g = {"a": "x", "b": "y", "c": "z"}
+
+# Enriched composition: [b,c] × [a,b] -> [a,c]
+gf = {k: g[v] for k, v in f.items()}
+
+print(f"f(1)={f[1]}, g(a)={g['a']}, (g∘f)(1)={gf[1]}")
+print(f"f(2)={f[2]}, g(b)={g['b']}, (g∘f)(2)={gf[2]}")
+
+# Enriched identity: unit -> [a,a]
+id_fn = {x: x for x in [1, 2, 3]}
+print(f"id(1)={id_fn[1]}, id(2)={id_fn[2]}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(a,b) &isin; V</td><td class="pr-4 text-green-300">(hom a b)</td><td class="font-sans">Hom-object in the monoidal category V</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">C(b,c) &otimes; C(a,b) &rarr; C(a,c)</td><td class="pr-4 text-green-300">(compose-ok? hom a b c)</td><td class="font-sans">Enriched composition morphism in V</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">j<sub>a</sub> : I &rarr; C(a,a)</td><td class="pr-4 text-green-300">(enriched-id domain)</td><td class="font-sans">Identity as morphism from the monoidal unit</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V = <strong>Bool</strong>, &otimes; = AND</td><td class="pr-4 text-green-300">bool-monoidal</td><td class="font-sans">Bool-enrichment gives preorders</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V = <strong>[0,&infin;]</strong>, &otimes; = +</td><td class="pr-4 text-green-300">real-dist</td><td class="font-sans">Metric enrichment; composition = triangle inequality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V = <strong>Cat</strong>, &otimes; = &times;</td><td class="pr-4 text-green-300">(vertical-compose &beta; &alpha;)</td><td class="font-sans">Cat-enrichment gives 2-categories</td></tr>
+          <tr><td class="py-2 pr-4">[a,b]</td><td class="pr-4 text-green-300">(make-fn domain mapping)</td><td class="font-sans">Internal hom (self-enrichment)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-03/">🍞 Chapter 3</a> &mdash; Categories Great and Small (monoids, preorders)</li>
+      <li><a href="/reading/category-theory/milewski-09/">🍞 Chapter 9</a> &mdash; Function Types (exponentials, internal hom)</li>
+      <li><a href="/reading/category-theory/milewski-16/">🍞 Chapter 16</a> &mdash; Adjunctions (hom-set isomorphisms)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
+    <ul>
+      <li><a href="/reading/leinster-2021/">🍞 Leinster 2021</a> &mdash; entropy as an enriched-categorical concept</li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> &mdash; Markov categories use monoidal structure throughout</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Enriched_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Enriched category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monoidal_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monoidal category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/2-category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>2-category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Lawvere_metric_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lawvere metric space</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post develops enriched categories by first recapping monoidal categories, then giving the point-free reformulation of composition and identity. This page skips the monoidal recap (covered in Ch. 16) and jumps to the three key examples: Bool, [0,&infin;], and Cat. The fact that the same definition spans preorders, metric spaces, and 2-categories is a case study in how <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>different mathematical communities share overlapping formalisms</a> under different names. The blog post also discusses enriched functors (morphisms of hom-objects that preserve composition) and self-enrichment of closed monoidal categories. Self-enrichment is shown here for Set; the general construction uses the internal hom adjunction. Weighted limits, mentioned briefly in the blog post as a generalization of ordinary limits to the enriched setting, are omitted here since they require enriched presheaves. The Lawvere metric space characterization allows asymmetric distances and does not require the separation axiom (d(a,b) = 0 does not imply a = b), making it more general than the standard metric space definition.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2017/05/13/enriched-categories/">Read the blog post</a>. Start with the monoidal category recap, then see how hom-sets become hom-objects.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-21/", label: "Kan Extensions" }} next={{ href: "/reading/category-theory/milewski-23/", label: "Topoi" }} />
+
+  </main>
+</Layout>

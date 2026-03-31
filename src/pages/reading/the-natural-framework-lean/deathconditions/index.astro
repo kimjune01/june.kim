@@ -1,0 +1,49 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DeathConditions.lean — Three ways to die" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>DeathConditions.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/DeathConditions.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Three ways a recursive loop dies: broken step, closed loop, or decaying input. Each shows that cumulative loss eventually exceeds any finite budget.</p>
+    </div>
+
+    <h3>Budget</h3>
+    <p>An information budget tracks bits through the pipeline. Input bits come from Perceive; loss bits leave through the competitive core (Filter + Attend + Consolidate). The budget must balance: input must cover loss.</p>
+
+    <h3>broken_step_death</h3>
+    <p>Death condition 1: a broken step leaks extra bits. If a morphism's contract fails and leaks <code>extra_leak</code> bits per cycle, the cumulative leak eventually exceeds any finite budget.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">broken_step_death</span>
+    (budget extra_leak : Nat) (hleak : extra_leak &gt; 0)
+    : &exists; n : Nat, n * extra_leak &gt; budget</code></pre>
+    <p class="text-sm text-gray-500">The proof picks <code>n = budget + 1</code>. At that point, <code>(budget + 1) * extra_leak &ge; budget + 1 &gt; budget</code>.</p>
+
+    <h3>closed_loop_zero_input</h3>
+    <p>Death condition 2: a closed loop has zero input. With any positive loss per cycle, state bits deplete to zero. At cycle <code>state</code>: <code>state * loss &ge; state</code>.</p>
+
+    <h3>decaying_input_death</h3>
+    <p>Death condition 3: decaying input. If input decays by some amount each cycle, cumulative decay eventually exceeds the initial input.</p>
+
+    <h3>survival_induction</h3>
+    <p>Standard induction on natural numbers, named for use by the life_persists theorem in Induction.lean. Given a base case and an inductive step, the property holds for all n.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">survival_induction</span>
+    (contract_holds : Nat &rarr; Prop)
+    (base : contract_holds 0)
+    (step : &forall; n, contract_holds n &rarr; contract_holds (n + 1))
+    : &forall; n, contract_holds n</code></pre>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/induction/">Induction.lean</a> &mdash; imports survival_induction; uses it to prove life persists when all six fire</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; the information budget constraints (InformationBudget, closed_loop_budget_negative)</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; each removal test is one of these death conditions instantiated</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/stochasticity/", label: "Stochasticity.lean · 11 of 25" }} next={{ href: "/reading/the-natural-framework-lean/induction/", label: "Induction.lean · 13 of 25" }} />
+  </main>
+</Layout>

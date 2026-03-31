@@ -1,0 +1,100 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Stochasticity.lean — Determinism forces confusion forces error" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Stochasticity.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Stochasticity.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A deterministic bounded transducer partitions all histories into at most N equivalence classes &mdash; an environment requiring more distinctions forces errors.</p>
+    </div>
+
+    <h3>same_state_same_input_same_output</h3>
+    <p>The property that determinism means: same state + same input always produces the same output. This is exactly what stochasticity breaks &mdash; a stochastic system in the same state with the same input can produce different outputs. The Stoch category in <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the formal backbone</a> makes this distinction structural.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">same_state_same_input_same_output</span>
+    &#123;N : Nat&#125; &#123;I O : Type&#125;
+    (t : BoundedTransducer N I O)
+    (env : Nat &rarr; I) (s0 : Fin N) (i j : Nat)
+    (hstate : t.stateTraj env s0 i = t.stateTraj env s0 j)
+    (hinput : env i = env j)
+    : t.output env s0 i = t.output env s0 j</code></pre>
+    <p class="text-sm text-gray-500">The proof is a direct rewrite: substitute equal states and equal inputs into the step function.</p>
+
+    <h3>state_collision</h3>
+    <p>Pigeonhole gives a state collision: N+1 steps through <code>Fin N</code> states means two time steps must share the same state. This is where capacity_bound feeds in &mdash; finite energy means finite states.</p>
+
+    <h3>must_err_at_confusion</h3>
+    <p>The core limitation. If two times have the same state and same input but the environment requires different outputs, the transducer gives the wrong answer at one of them. Determinism forces identical output; the environment demands different output; contradiction at one endpoint.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">must_err_at_confusion</span>
+    &#123;N : Nat&#125; &#123;I O : Type&#125;
+    (t : BoundedTransducer N I O)
+    (env : Nat &rarr; I) (s0 : Fin N) (required : Nat &rarr; O)
+    (i j : Nat)
+    (hstate : t.stateTraj env s0 i = t.stateTraj env s0 j)
+    (hinput : env i = env j)
+    (hdiff : required i &ne; required j)
+    : t.output env s0 i &ne; required i &or;
+      t.output env s0 j &ne; required j</code></pre>
+    <p class="text-sm text-gray-500">The proof first derives that the outputs are equal (from same_state_same_input_same_output), then checks: if output matches required at i, it must mismatch at j (since required differs). Otherwise, it already mismatches at i.</p>
+
+    <Repl client:load initialCode={`# A deterministic transducer with N states MUST cycle.
+# When it cycles on the same input but needs different
+# outputs, it's wrong at least once.
+
+class DetTransducer:
+    def __init__(self, n_states):
+        self.n = n_states
+        self.state = 0
+    def step(self, inp):
+        out = (self.state + inp) % 10
+        self.state = (self.state + 1) % self.n  # deterministic
+        return out
+
+t = DetTransducer(n_states=3)
+env =    [1, 1, 1, 1]  # same input every time
+needed = [1, 2, 3, 4]  # but environment needs different outputs
+
+results = []
+for i, inp in enumerate(env):
+    out = t.step(inp)
+    ok = "ok" if out == needed[i] else "WRONG"
+    results.append((i, out, needed[i], ok))
+
+print(f"3 states, 4 steps — pigeonhole forces a state repeat")
+for i, out, need, ok in results:
+    print(f"  t={i}: state cycles, out={out}, need={need} [{ok}]")
+print("\\nDeterminism + finite states + varied demands = error.")
+print("Stochasticity breaks the 'same state => same output' chain.")
+`} />
+
+    <h3>finite_discrimination</h3>
+    <p>Given a state collision where the environment requires different outputs, some time step k exists where the transducer errs. Existential packaging of must_err_at_confusion.</p>
+
+    <h3>deterministic_limitation</h3>
+    <p>Three independently proved facts bundled together: (1) capacity_bound gives finite states, (2) determinism means same state + same input gives same output, (3) confusion forces error. The chain is: finite states &rarr; collision &rarr; confusion &rarr; error.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> &mdash; imported; provides BoundedTransducer and capacity_bound</li>
+      <li><a href="/reading/the-natural-framework-lean/pigeonhole/">Pigeonhole.lean</a> &mdash; imported; provides the state collision</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> &mdash; A3 (attend must be stochastic) and Co1 use this argument</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-01/">🎰 Grinstead Ch1</a></li>
+      <li><a href="/reading/information-theory/shannon-02/">📡 Shannon Ch2 Entropy</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/pigeonhole/", label: "Pigeonhole.lean · 10 of 25" }} next={{ href: "/reading/the-natural-framework-lean/deathconditions/", label: "DeathConditions.lean · 12 of 25" }} />
+  </main>
+</Layout>

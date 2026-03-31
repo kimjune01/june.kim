@@ -1,0 +1,80 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Bush 1945 — As We May Think" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>As We May Think</h1>
+    <p class="text-gray-400 text-sm mb-6">Vannevar Bush &middot; The Atlantic &middot; July 1945 &middot; <a href="https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/">Read the original</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Bush proposes the <strong>memex</strong>&mdash;a desk that stores and links all of a researcher's documents by <em>associative trails</em> rather than hierarchical index. The real argument: science's bottleneck is not producing knowledge but <em>selecting</em> what matters from the flood.</p>
+    </div>
+
+    <!-- 1. Context -->
+    <h3>The moment</h3>
+    <p>Vannevar Bush ran the Office of Scientific Research and Development during World War II, coordinating roughly 6,000 American scientists. By the summer of 1945, the war was ending. The institutional question was practical: what happens when those scientists go back to peacetime work?</p>
+    <p>Bush's answer was not administrative. He looked at the knowledge those scientists had already produced and asked a harder question: can anyone actually find it? The publication rate had outrun every retrieval system in existence. Libraries filed by subject. Journals filed by date. Neither matched the way researchers actually thought.</p>
+
+    <blockquote>
+      <p>The investigator is staggered by the findings and conclusions of thousands of other workers&mdash;conclusions which he cannot find time to grasp, much less to remember, as they appear.</p>
+    </blockquote>
+
+    <!-- 2. The memex -->
+    <h3>The memex</h3>
+    <p>Bush imagined a device the size of a desk. Inside: all of a person's books, records, correspondence, stored on microfilm. Two viewing screens. A keyboard for annotation. The storage technology was speculative but grounded in existing microfilm capabilities pushed to their limits.</p>
+    <p>The interesting part was not the hardware. It was the linking. A user reading one document could tie it to another with a named <em>trail</em>. That trail was permanent. The next time the user opened either document, the link was there, ready to follow. The memex stored not just information but the paths a mind had taken through it.</p>
+
+    <blockquote>
+      <p>Wholly new forms of encyclopedias will appear, ready-made with a mesh of associative trails running through them, ready to be dropped into the memex and there amplified.</p>
+    </blockquote>
+
+    <p>This was not alphabetical order. Not the Dewey Decimal System. Not any hierarchy at all. Bush was proposing what Ted Nelson would later call hypertext, twenty years before Nelson coined the term. The web wouldn't arrive for another half century.</p>
+
+    <!-- 3. Trails as thought -->
+    <h3>Trails as thought</h3>
+    <p>Bush grounded the memex in a claim about cognition. The human mind does not work by index. It works by association. One thought triggers the next through connections that are contextual, idiosyncratic, often surprising. A filing cabinet fights this tendency. The memex would mirror it.</p>
+    <p>The trail was the key concept. A researcher studying, say, the elastic properties of materials might build a trail linking a Turkish bow to a short English bow to the decline of mounted archery. That trail would persist. Another researcher could pick it up, extend it, branch from it. The trails themselves became documents worth sharing.</p>
+
+    <blockquote>
+      <p>The human mind&nbsp;.&nbsp;.&nbsp;. operates by association. With one item in its grasp, it snaps instantly to the next that is suggested by the association of thoughts, in accordance with some intricate web of trails carried by the cells of the brain.</p>
+    </blockquote>
+
+    <p>Bush understood that the trail a researcher leaves through a body of knowledge is itself a form of knowledge. The path encodes judgment: what mattered, what connected, what was worth following up. Destroy the path and you lose more than convenience. You lose the researcher's interpretation of the material.</p>
+
+    <!-- 4. Selection, not production -->
+    <h3>Selection, not production</h3>
+    <p>This is the hinge of the essay:</p>
+
+    <blockquote>
+      <p>The difficulty seems to be, not so much that we publish unduly in view of the extent and variety of present-day interests, but rather that publication has been extended far beyond our present ability to make real use of the record.</p>
+    </blockquote>
+
+    <p>The tools for creating knowledge had raced ahead. Laboratories, measurement instruments, printing presses — all scaled. The tools for <em>finding</em> knowledge had not. Card catalogs. Manual cross-referencing. Memory. No incremental improvement would close the gap.</p>
+    <p>Eighty years later, the gap has only widened. arXiv adds 16,000 papers a month. Search engines retrieve by keyword. Recommendation algorithms surface what is popular. Neither captures the associative, trail-building cognition Bush wanted to augment. The record exists. Making real use of it remains the unsolved problem.</p>
+
+    <!-- 5. What Bush got wrong -->
+    <h3>Wrong and right</h3>
+    <p>The microfilm was wrong. The desk was wrong. The mechanical selectors were wrong. Bush was extrapolating analog technologies that digital ones would overtake within a decade. He also imagined the memex as personal — each researcher's trails private by default, sharing by physical copy. He did not foresee a network connecting all the memexes into a shared space.</p>
+    <p>The diagnosis was exact. Knowledge retrieval is the bottleneck. Associative linking beats hierarchical filing. Trails encode thought. Selection is harder than production. These claims survive because they are claims about cognition, not about microfilm.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-03/">📡 IT Ch.3</a> — channel capacity: Shannon's compression is the mathematical answer to Bush's selection problem — keep what matters, discard what doesn't</li>
+      <li><a href="/reading/commons/statute-of-anne-1710/">⚖ Statute of Anne 1710</a> — next in the Commons collection: if Bush asked how we find knowledge, the Statute asked who gets to own it</li>
+      <li><a href="/reading/cognitive-science/lovelace-01/">🧠 Cognitive Science Ch.1</a> — memory and cognitive architecture: the memex is a cognitive prosthetic — Bush's diagnosis of memory failure anticipates working/long-term memory distinctions in cognitive architecture</li>
+      <li><a href="/reading/commons/berners-lee-1989/">⚖ Berners-Lee 1989</a> — the web as memex: the world wide web implements Bush's associative links — hyperlinks are trails, URLs are the index, and browsers are the memex</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mt-6">Bush imagined Ramanujan and Hardy finding each other through trails&mdash;two minds describing the same problem in different vocabularies, finally linked by association rather than index. <a href="https://june.kim/pageleft-manifesto"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>PageLeft Manifesto</a> imagines the same thing through embeddings: the trails are vectors now, but the problem Bush diagnosed has not changed.</p>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/commons/statute-of-anne-1710/", label: "Statute of Anne · 2 of 8" }} />
+
+  </main>
+</Layout>

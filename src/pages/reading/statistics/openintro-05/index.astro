@@ -1,0 +1,232 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.5 — Foundations for Inference" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Foundations for Inference</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 5 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Statistical inference</strong> draws conclusions about a population from a sample. Two main tools: <strong>confidence intervals</strong> estimate a parameter with a margin of error, and <strong>hypothesis tests</strong> evaluate whether evidence supports a claim. Both rest on the sampling distribution.</p>
+    </div>
+
+    <!-- 1. Point Estimates and Sampling Distribution -->
+    <h3>Point estimates and the sampling distribution</h3>
+    <p>A <strong>point estimate</strong> is a single number computed from data (like the sample mean). Different samples give different estimates. The distribution of all possible estimates is the <strong>sampling distribution</strong>. By the <a href="/reading/probability/grinstead-09/">🎰 Central Limit Theorem</a>, sample means are approximately normal for large n.</p>
+
+    <!-- SVG: Sampling distribution with rejection regions -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="140" x2="370" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Bell curve (sampling distribution) -->
+        <path d="M 30,140 Q 60,138 80,135 Q 100,128 120,115 Q 140,92 160,65 Q 180,35 200,25 Q 220,35 240,65 Q 260,92 280,115 Q 300,128 320,135 Q 340,138 370,140" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Left rejection region (alpha/2) -->
+        <path d="M 30,140 Q 45,139 60,138 Q 80,135 95,130 L 95,140 Z" fill="#ef4444" fill-opacity="0.3"/>
+        <line x1="95" y1="130" x2="95" y2="140" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Right rejection region (alpha/2) -->
+        <path d="M 305,130 Q 320,135 340,138 Q 355,139 370,140 L 370,140 L 305,140 Z" fill="#ef4444" fill-opacity="0.3"/>
+        <line x1="305" y1="130" x2="305" y2="140" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.6"/>
+        <!-- Center: fail to reject -->
+        <path d="M 95,130 Q 100,128 120,115 Q 140,92 160,65 Q 180,35 200,25 Q 220,35 240,65 Q 260,92 280,115 Q 300,128 305,130 L 305,140 L 95,140 Z" fill="#3b82f6" fill-opacity="0.1"/>
+        <!-- Labels -->
+        <text x="60" y="135" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">reject</text>
+        <text x="340" y="135" text-anchor="middle" fill="#ef4444" font-size="9" fill-opacity="0.7">reject</text>
+        <text x="200" y="110" text-anchor="middle" fill="#3b82f6" font-size="10" fill-opacity="0.6">fail to reject</text>
+        <text x="95" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">-z*</text>
+        <text x="200" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">&#x3bc;&#x2080;</text>
+        <text x="305" y="155" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">+z*</text>
+        <text x="95" y="165" text-anchor="middle" fill="#ef4444" font-size="8" fill-opacity="0.4">&#x3b1;/2</text>
+        <text x="305" y="165" text-anchor="middle" fill="#ef4444" font-size="8" fill-opacity="0.4">&#x3b1;/2</text>
+        <!-- Caption -->
+        <text x="200" y="178" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">Two-tailed hypothesis test at significance level &#x3b1;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Point estimate: sample mean as estimate of population mean
+; Standard error: SD / sqrt(n)
+
+(define sample '(67 72 74 68 71 69 73 70 75 66))
+
+(define (mean lst)
+  (exact->inexact (/ (apply + lst) (length lst))))
+
+(define (std lst)
+  (let ((m (mean lst)))
+    (sqrt (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
+             (- (length lst) 1)))))
+
+(define x-bar (mean sample))
+(define s (std sample))
+(define n (length sample))
+(define se (/ s (sqrt n)))
+
+(display "Sample mean: ") (display x-bar) (newline)
+(display "Sample SD:   ") (display s) (newline)
+(display "Sample size: ") (display n) (newline)
+(display "Std error:   ") (display se)
+`} />
+
+
+    <!-- 2. Confidence Intervals -->
+    <h3>Confidence intervals</h3>
+    <p>A <strong>95% confidence interval</strong> is: point estimate &plusmn; z* &times; SE, where z* = 1.96 for 95% confidence. Interpretation: if we repeated the sampling many times, 95% of intervals would contain the true parameter.</p>
+
+    <SchemeRepl client:load initialCode={`; 95% confidence interval for the mean
+; CI = x-bar +/- z* * SE
+
+(define sample '(67 72 74 68 71 69 73 70 75 66))
+
+(define (mean lst)
+  (exact->inexact (/ (apply + lst) (length lst))))
+(define (std lst)
+  (let ((m (mean lst)))
+    (sqrt (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
+             (- (length lst) 1)))))
+
+(define x-bar (mean sample))
+(define se (/ (std sample) (sqrt (length sample))))
+(define z-star 1.96)  ; for 95% confidence
+
+(define margin (* z-star se))
+(define ci-lower (- x-bar margin))
+(define ci-upper (+ x-bar margin))
+
+(display "Point estimate: ") (display x-bar) (newline)
+(display "Margin of error: ") (display margin) (newline)
+(display "95% CI: (")
+(display ci-lower) (display ", ")
+(display ci-upper) (display ")") (newline)
+(newline)
+(display "We are 95% confident the population mean") (newline)
+(display "falls between ") (display ci-lower)
+(display " and ") (display ci-upper)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Confidence interval in Python
+import math
+
+sample = [67, 72, 74, 68, 71, 69, 73, 70, 75, 66]
+n = len(sample)
+x_bar = sum(sample) / n
+s = math.sqrt(sum((x - x_bar)**2 for x in sample) / (n - 1))
+se = s / math.sqrt(n)
+
+z_star = 1.96  # 95% confidence
+margin = z_star * se
+
+print(f"Point estimate: {x_bar:.1f}")
+print(f"Margin of error: {margin:.2f}")
+print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
+`} />
+    </div>
+
+
+    <!-- 3. Hypothesis Testing -->
+    <h3>Hypothesis testing and p-values</h3>
+    <p>Start with a <strong>null hypothesis</strong> H&#x2080; (no effect). Compute a <strong>test statistic</strong> and its <strong>p-value</strong>: the probability of seeing data this extreme if H&#x2080; is true. If p &lt; &alpha; (typically 0.05), reject H&#x2080;.</p>
+
+    <SchemeRepl client:load initialCode={`; Hypothesis test: is the population mean = 70?
+; H0: mu = 70
+; HA: mu != 70 (two-tailed)
+
+(define sample '(67 72 74 68 71 69 73 70 75 66))
+(define mu-0 70)  ; null hypothesis value
+
+(define (mean lst)
+  (exact->inexact (/ (apply + lst) (length lst))))
+(define (std lst)
+  (let ((m (mean lst)))
+    (sqrt (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
+             (- (length lst) 1)))))
+
+(define x-bar (mean sample))
+(define se (/ (std sample) (sqrt (length sample))))
+
+; Test statistic: Z = (x-bar - mu0) / SE
+(define z-stat (/ (- x-bar mu-0) se))
+
+(display "Sample mean:    ") (display x-bar) (newline)
+(display "Null value:     ") (display mu-0) (newline)
+(display "Std error:      ") (display se) (newline)
+(display "Z-statistic:    ") (display z-stat) (newline)
+(newline)
+
+; Decision at alpha = 0.05
+; Reject if |Z| > 1.96
+(define alpha 0.05)
+(display "Critical value: 1.96") (newline)
+(display "|Z| = ") (display (abs z-stat)) (newline)
+(display "Reject H0? ")
+(display (if (> (abs z-stat) 1.96) "Yes" "No"))
+`} />
+
+
+    <!-- 4. Significance Level -->
+    <h3>Significance level and errors</h3>
+    <p>The <strong>significance level</strong> &alpha; is the threshold for rejecting H&#x2080;. Type I error: rejecting H&#x2080; when it is true (probability = &alpha;). Type II error: failing to reject H&#x2080; when it is false (probability = &beta;). <strong>Power</strong> = 1 - &beta;: the probability of correctly detecting a real effect.</p>
+
+    <SchemeRepl client:load initialCode={`; Error types in hypothesis testing
+
+;                 H0 true       H0 false
+; Reject H0:     Type I (a)    Correct (power)
+; Fail to reject: Correct      Type II (b)
+
+(define alpha 0.05)
+(display "Significance level (alpha): ") (display alpha) (newline)
+(display "P(Type I error) = alpha = ") (display alpha) (newline)
+(newline)
+
+; If the true effect is small, power is low
+; Power increases with: larger sample, larger effect, larger alpha
+(define beta 0.20)  ; typical target
+(define power (- 1 beta))
+(display "P(Type II error) = beta = ") (display beta) (newline)
+(display "Power = 1 - beta = ") (display power) (newline)
+(newline)
+
+; Trade-off: lowering alpha reduces Type I errors
+; but increases Type II errors (lowers power)
+(display "Lower alpha -> fewer false positives,") (newline)
+(display "             -> more false negatives")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Confidence_interval"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Confidence interval</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/P-value"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; P-value</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Hypothesis testing</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Central_limit_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Central Limit Theorem</a></li>
+    
+      <li><a href="/reading/scientific-method/fisher-1935/">🔬 Fisher 1935</a> &mdash; the inventor of significance testing and p-values</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis 2005</a> &mdash; why the tools in this chapter are often misused</li>
+      <li><a href="/reading/machine-learning/ml-01/">🤖 ML Ch.1</a> &mdash; statistical learning as inference from data</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>OpenIntro builds inference from the sampling distribution of the sample proportion, then generalizes. We use the sample mean for clarity. The original covers decision errors with medical testing analogies and uses simulation to build intuition for sampling distributions. For large samples, the Z-test is equivalent to the t-test. Small-sample inference uses the t-distribution (covered in Ch. 7).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 5</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-04/", label: "Distributions" }} />
+
+  </main>
+</Layout>

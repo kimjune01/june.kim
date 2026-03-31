@@ -1,0 +1,218 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Sato, Katsumata 2023 — Divergences on Monads" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Divergences on Monads for Relational Program Logics</h1>
+    <p class="text-gray-400 text-sm mb-6">Sato, Katsumata · MSCS 2023 · <a href="https://arxiv.org/abs/2206.05716"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2206.05716</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Assumes you've seen <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Markov categories</a> and <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Hoare triples</a>. 5 minutes each.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The distance between two programs IS the enrichment on the category. Divergences on a monad give you a metric on morphism spaces — and that metric powers relational program logics.</p>
+    </div>
+
+    <h3>Divergences as distance</h3>
+    <p>A <a href="https://en.wikipedia.org/wiki/Divergence_(statistics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>divergence</a> measures how different two distributions are. KL divergence, <a href="https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>total variation</a>, <a href="https://en.wikipedia.org/wiki/R%C3%A9nyi_entropy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rényi divergence</a> — all are ways to ask "how far apart are these?" Sato and Katsumata showed that putting a divergence on a monad's outputs gives you a metric on the entire Kleisli category. The distance between two programs is the worst-case divergence of their outputs.</p>
+
+    <!-- SVG: Divergence as enrichment -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 380 150" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Distribution P (left blob) -->
+        <ellipse cx="80" cy="70" rx="50" ry="35" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="80" y="65" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold">P</text>
+        <text x="80" y="80" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">distribution</text>
+
+        <!-- Distribution Q (right blob) -->
+        <ellipse cx="300" cy="70" rx="50" ry="35" fill="#4ade80" fill-opacity="0.06" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="300" y="65" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">Q</text>
+        <text x="300" y="80" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">distribution</text>
+
+        <!-- Arrow from P to Q with divergence label -->
+        <line x1="133" y1="70" x2="247" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="244,65 254,70 244,75" fill="currentColor"/>
+        <text x="190" y="60" text-anchor="middle" fill="currentColor" font-size="11">D(P &#x2016; Q)</text>
+
+        <!-- Enrichment annotation below -->
+        <line x1="100" y1="115" x2="280" y2="115" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3,2" stroke-opacity="0.4"/>
+        <text x="190" y="132" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">hom-object is a number, not a set</text>
+        <text x="190" y="146" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">enriched category: distance replaces functions</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; KL divergence: D(p || q) = Σ p(x) · log(p(x)/q(x))
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0)
+      (* pi (log2 (/ pi qi)))
+      0))
+  p q)))
+
+; Two distributions over {A, B, C}
+(define p '(0.5 0.3 0.2))
+(define q '(0.33 0.33 0.34))
+
+(display "D(p || q) = ")
+(display (kl-divergence p q))
+(newline)
+; Measures how "surprised" you'd be seeing q when expecting p
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`import math
+
+def kl(p, q):
+    return sum(pi * math.log2(pi/qi) for pi, qi in zip(p, q) if pi > 0)
+
+p = [0.5, 0.3, 0.2]
+q = [0.33, 0.33, 0.34]
+print(f"D(p || q) = {kl(p, q):.4f} bits")
+`} />
+    </div>
+
+    <h3>Enrichment — metric on morphisms</h3>
+    <p>The insight: a divergence on the monad lifts to a divergence on Kleisli arrows. Two stochastic functions f, g : X → D(Y) are "close" if their output distributions are close for every input. This turns the hom-sets of the Kleisli category into metric spaces.</p>
+    <p>A non-expanding morphism doesn't increase distance. That's the data processing inequality for metrics — processing can't make programs more distinguishable than they already are.</p>
+
+    <SchemeRepl client:load initialCode={`; Distance between two morphisms:
+; d(f, g) = max over inputs x of D(f(x) || g(x))
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0) (* pi (log2 (/ pi qi))) 0))
+  p q)))
+
+; Two stochastic functions: X -> D(Y)
+; f: biased toward first outcome
+; g: more uniform
+(define (f x) '(0.7 0.2 0.1))
+(define (g x) '(0.4 0.3 0.3))
+
+(display "d(f, g) at x=0: ")
+(display (kl-divergence (f 0) (g 0)))
+; This distance enriches the hom-set Hom(X, Y)
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`import math
+
+def kl(p, q):
+    return sum(pi * math.log2(pi/qi) for pi, qi in zip(p, q) if pi > 0)
+
+def f(x): return [0.7, 0.2, 0.1]
+def g(x): return [0.4, 0.3, 0.3]
+
+# Distance between morphisms = worst-case divergence
+inputs = range(5)
+d = max(kl(f(x), g(x)) for x in inputs)
+print(f"d(f, g) = {d:.4f} bits")
+`} />
+    </div>
+
+    <h3>Relational program logics</h3>
+    <p>With a metric on morphisms, you can state relational properties: "these two programs produce outputs within ε of each other." That's a relational Hoare triple — instead of <code>{'{P}'} c {'{Q}'}</code>, you get <code>{'{P}'} c₁ ~ c₂ {'{Q}'}</code> where Q talks about the *relationship* between the two outputs. Divergences on monads give the semantic foundation for these relational triples.</p>
+    <p>Applications: differential privacy (programs are "close" if adding one record changes the output by at most ε), cost analysis (programs are "close" if their resource usage differs by at most k), and probabilistic coupling (two distributions are close if they can be jointly sampled to agree often).</p>
+
+    <SchemeRepl client:load initialCode={`; Relational property: f and g are ε-close
+; "For all inputs, their outputs diverge by at most ε"
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0) (* pi (log2 (/ pi qi))) 0))
+  p q)))
+
+(define epsilon 0.5)
+
+(define (f x) '(0.5 0.3 0.2))
+(define (g x) '(0.45 0.35 0.2))
+
+(define dist (kl-divergence (f 0) (g 0)))
+(display "D(f(0) || g(0)) = ") (display dist) (newline)
+(display "ε-close? ") (display (<= dist epsilon))
+; #t — these programs are within ε of each other
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`import math
+
+def kl(p, q):
+    return sum(pi * math.log2(pi/qi) for pi, qi in zip(p, q) if pi > 0)
+
+epsilon = 0.5
+
+def f(x): return [0.5, 0.3, 0.2]
+def g(x): return [0.45, 0.35, 0.2]
+
+dist = kl(f(0), g(0))
+print(f"D(f(0) || g(0)) = {dist:.4f} bits")
+print(f"ε = {epsilon}")
+print(f"ε-close? {dist <= epsilon}")
+# These programs are within ε of each other
+`} />
+    </div>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D(p ‖ q)</td><td class="pr-4 text-green-300">kl(p, q)</td><td class="font-sans">KL divergence between distributions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">d(f, g)</td><td class="pr-4 text-green-300">max(kl(f(x), g(x)) for x)</td><td class="font-sans">Distance between morphisms</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">{'{P}'} c₁ ~ c₂ {'{Q}'}</td><td class="pr-4 text-green-300"># relational triple</td><td class="font-sans">Two programs satisfy a relation</td></tr>
+          <tr><td class="py-2 pr-4">V-enriched</td><td class="pr-4 text-green-300"># metric on hom-sets</td><td class="font-sans">Hom-sets carry distance structure</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the Markov category that gets enriched</li>
+      <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — non-relational Hoare logic (single program)</li>
+      <li><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> — entropy as a special case of divergence</li>
+      <li><a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a> — graded Hoare logic (tracks effects including cost)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Divergence_(statistics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Statistical divergence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>KL divergence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Differential_privacy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Differential privacy</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Enriched_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Enriched category</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>All examples use KL divergence over finite discrete distributions. The paper works with arbitrary divergences (Rényi, total variation, hockey-stick) over arbitrary monads on arbitrary base categories. For example: the ε-closeness test on this page checks KL divergence of two functions over a finite set. In the paper, the same construction applies to differential privacy of database queries — the monad is the randomized response mechanism, the divergence is the hockey-stick divergence, and ε-closeness is the privacy guarantee. The structure (divergence enriches the Kleisli category) is identical. The monad and divergence are not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/2206.05716"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for divergences on monads, §5 for the connection to relational program logics.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework's NonExpanding typeclass captures exactly this — pipeline stages must be non-expanding morphisms in the divergence-enriched category. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/liell-cock-2025/", label: "Liell-Cock 2025 · 9 of 21" }} next={{ href: "/reading/natural-breadcrumbs/spivak-2013/", label: "Spivak 2013 · 11 of 21" }} />
+  </main>
+</Layout>

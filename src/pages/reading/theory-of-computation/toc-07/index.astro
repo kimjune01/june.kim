@@ -1,0 +1,160 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="ToC Ch.7 — Decidability" favicon="🔀">
+  <main>
+
+    <a href="/reading/theory-of-computation/" class="text-sm mb-4 inline-block">&larr; back to Theory of Computation</a>
+
+    <h1>Decidability</h1>
+    <p class="text-gray-400 text-sm mb-6">Maheshwari &amp; Smid &middot; Ch. 7 &middot; <a href="https://cglab.ca/~michiel/TheoryOfComputation/">Introduction to Theory of Computation</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A language is <strong>decidable</strong> if a Turing machine always halts with the correct answer. It is <strong>recognizable</strong> if the machine halts on "yes" inputs but may loop forever on "no" inputs. The <strong>halting problem</strong> is recognizable but not decidable: no algorithm can determine whether an arbitrary program halts.</p>
+    </div>
+
+    <!-- SVG: Venn diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- All languages (outermost) -->
+        <rect x="20" y="10" width="360" height="240" rx="15" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <text x="350" y="35" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.3">All languages</text>
+        <!-- Recognizable -->
+        <ellipse cx="200" cy="140" rx="150" ry="95" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="200" y="230" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.6">Recognizable (Turing-recognizable)</text>
+        <!-- Decidable -->
+        <ellipse cx="200" cy="130" rx="100" ry="60" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="120" text-anchor="middle" fill="#34d399" font-size="12" fill-opacity="0.7">Decidable</text>
+        <!-- Examples -->
+        <text x="200" y="140" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">a^n b^n, primes, sorting</text>
+        <text x="200" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Halting problem (recognizable, not decidable)</text>
+        <text x="340" y="100" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.25">Not even recognizable</text>
+      </svg>
+    </div>
+
+    <!-- Halting problem -->
+    <h3>The halting problem</h3>
+    <p>Can we write a program that takes any program P and input I and decides whether P(I) halts? No. The proof is by <strong><a href="https://en.wikipedia.org/wiki/Cantor%27s_diagonal_argument"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>diagonalization</a></strong>: assume such a decider H exists, then build a program D that calls H on itself and does the opposite. D halts if and only if D does not halt. Contradiction.</p>
+
+    <SchemeRepl client:load initialCode={`; The halting problem: a diagonalization argument.
+; We cannot build H, but we can show why.
+
+; Suppose H(program, input) returns #t if program halts on input.
+; Define D(x) = if H(x, x) then loop-forever else halt.
+; What does D(D) do?
+;   If H(D, D) = #t (D halts on D), then D loops. Contradiction.
+;   If H(D, D) = #f (D loops on D), then D halts. Contradiction.
+
+; We can demonstrate the structure of the argument:
+(define (pretend-H program input)
+  ; This is NOT a real halting decider. It's a stand-in.
+  ; A real one cannot exist.
+  #t)
+
+(define (D x)
+  (if (pretend-H x x)
+      (let loop () (loop))  ; loop forever
+      "halt"))
+
+; D(D) creates a paradox:
+; If pretend-H says D halts on D, then D loops.
+; If pretend-H says D loops on D, then D halts.
+; No consistent H can exist.
+
+(display "The halting problem is undecidable.") (newline)
+(display "No program can decide if arbitrary programs halt.") (newline)
+(display "This is proved by self-referential contradiction.")
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# The diagonalization argument (structure only)
+# A real halting decider cannot exist.
+
+def pretend_H(program, inp):
+    """Suppose this decides halting. It can't."""
+    return True
+
+def D(x):
+    if pretend_H(x, x):
+        while True: pass  # loop forever
+    else:
+        return "halt"
+
+# D(D) is paradoxical:
+# If H says D(D) halts -> D loops. Contradiction.
+# If H says D(D) loops -> D halts. Contradiction.
+print("The halting problem is undecidable.")
+print("No algorithm can decide if arbitrary programs halt.")
+`} />
+    </div>
+
+    <!-- Rice's theorem -->
+    <h3>Rice's theorem</h3>
+    <p>The halting problem is just one instance of a general result. <strong><a href="https://en.wikipedia.org/wiki/Rice%27s_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rice's theorem</a></strong>: every nontrivial semantic property of programs is undecidable. "Does this program output 42?" Undecidable. "Does this program ever print anything?" Undecidable. "Is this program equivalent to that one?" Undecidable. The only decidable properties are trivial ones (true for all programs or false for all programs).</p>
+
+    <!-- Reductions -->
+    <h3>Reductions</h3>
+    <p>To prove a new problem is undecidable, <strong>reduce</strong> a known undecidable problem to it. If the halting problem can be transformed into your problem, then your problem is at least as hard. Reductions are the main proof technique in decidability and complexity theory.</p>
+
+    <SchemeRepl client:load initialCode={`; Reduction: proving "does M accept empty string?" is undecidable.
+; Reduce from the halting problem.
+;
+; Given (M, w), build M' that:
+;   1. Ignores its own input
+;   2. Simulates M on w
+;   3. If M halts on w, M' accepts
+;
+; If we could decide "does M' accept epsilon?",
+; we could decide "does M halt on w?"
+; But halting is undecidable, so acceptance-on-epsilon is too.
+
+(display "Reduction pattern:") (newline)
+(display "  Known undecidable: HALT(M, w)") (newline)
+(display "  Target problem:    ACCEPT-EMPTY(M')") (newline)
+(display "  Transform: build M' that simulates M on w") (newline)
+(display "  If target were decidable, HALT would be too.") (newline)
+(display "  Contradiction. QED.")
+`} />
+
+    <div class="python-block my-2">
+      <Repl client:load initialCode={`# Reduction: proving acceptance-on-epsilon is undecidable
+# (structure only — the argument, not an actual decider)
+
+print("Reduction pattern:")
+print("  Known undecidable: HALT(M, w)")
+print("  Target problem:    ACCEPT-EMPTY(M')")
+print("  Transform: build M' that simulates M on w")
+print("  If target were decidable, HALT would be too.")
+print("  Contradiction. QED.")
+
+# Rice's theorem: every nontrivial semantic property is undecidable.
+properties = [
+    "Does this program output 42?",
+    "Does this program ever print anything?",
+    "Is this program equivalent to that one?",
+    "Does this program halt on all inputs?",
+]
+print()
+print("Rice's theorem: all these are undecidable:")
+for p in properties:
+    print(f"  - {p}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-07/">🔑 Logic Ch.7</a> — Gödel's incompleteness theorem and undecidability are deeply related: the halting problem is a logical statement</li>
+      <li><a href="/reading/proof-writing/proofs-07/">📝 Proofs Ch.7</a> — diagonalization: Cantor's diagonal argument proves the same impossibility result as the halting problem proof</li>
+      <li><a href="/reading/the-natural-framework-lean/">🧮 Lean</a> — proof assistants can only check decidable properties; undecidable questions cannot be automated</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/theory-of-computation/toc-06/", label: "Turing Machines" }} next={{ href: "/reading/theory-of-computation/toc-08/", label: "Complexity" }} />
+
+  </main>
+</Layout>

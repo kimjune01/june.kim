@@ -1,0 +1,256 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.1 — Conservation of Energy" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Conservation of Energy</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Energy is never created or destroyed. It converts between <strong>kinetic energy</strong> (motion) and <strong>potential energy</strong> (position). The <strong>work-energy theorem</strong> links force over distance to changes in kinetic energy. That is the entire chapter.</p>
+    </div>
+
+    <!-- 1. Kinetic Energy -->
+    <h3>Kinetic energy</h3>
+    <p>A mass m moving at speed v has kinetic energy KE = (1/2)mv&sup2;. Double the speed, quadruple the energy. This is why car crashes at highway speed are so much worse.</p>
+
+    <!-- SVG: interactive energy conservation — drag height -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:24rem;">
+        <svg id="energy" viewBox="0 0 300 220" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Ground -->
+          <line x1="20" y1="170" x2="280" y2="170" stroke="#71717a" stroke-width="1"/>
+          <!-- Ball -->
+          <circle id="en-ball" r="10" fill="#60a5fa" fill-opacity="0.7"/>
+          <!-- Height line -->
+          <line id="en-hline" stroke="#71717a" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <text id="en-hlabel" fill="currentColor" font-size="9" fill-opacity="0.5"></text>
+          <!-- PE bar -->
+          <rect id="en-pe" x="200" width="20" fill="#f59e0b" fill-opacity="0.5" rx="2"/>
+          <text x="210" y="115" text-anchor="middle" fill="#f59e0b" font-size="9">PE</text>
+          <!-- KE bar -->
+          <rect id="en-ke" x="235" width="20" fill="#34d399" fill-opacity="0.5" rx="2"/>
+          <text x="245" y="115" text-anchor="middle" fill="#34d399" font-size="9">KE</text>
+          <!-- Total marker -->
+          <line x1="195" y1="120" x2="260" y2="120" stroke="#71717a" stroke-width="0.5" stroke-dasharray="2,2"/>
+          <text x="270" y="124" fill="currentColor" font-size="7" fill-opacity="0.4">total</text>
+          <!-- Readout -->
+          <text id="en-readout" x="150" y="210" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4"></text>
+        </svg>
+        <input type="range" id="en-slider" min="0" max="100" value="80" step="1" style="width:100%;margin-top:4px;accent-color:#60a5fa;">
+      </div>
+    </div>
+    <script is:inline>
+    (function() {
+      var GROUND = 170, TOP = 40, MAX_BAR = 50;
+      var slider = document.getElementById('en-slider');
+      var ball = document.getElementById('en-ball');
+      var pe = document.getElementById('en-pe');
+      var ke = document.getElementById('en-ke');
+      var hline = document.getElementById('en-hline');
+      var hlabel = document.getElementById('en-hlabel');
+      var readout = document.getElementById('en-readout');
+
+      function update() {
+        var hFrac = parseInt(slider.value) / 100; // 0 = ground, 1 = top
+        var ballY = GROUND - hFrac * (GROUND - TOP);
+        ball.setAttribute('cx', 80);
+        ball.setAttribute('cy', ballY);
+        // Height line
+        hline.setAttribute('x1', 80); hline.setAttribute('y1', ballY + 10);
+        hline.setAttribute('x2', 80); hline.setAttribute('y2', GROUND);
+        hlabel.setAttribute('x', 90);
+        hlabel.setAttribute('y', (ballY + GROUND) / 2 + 4);
+        hlabel.textContent = 'h=' + (hFrac * 10).toFixed(1) + 'm';
+        // Bars: PE = mgh ∝ h, KE = total - PE
+        var peH = hFrac * MAX_BAR;
+        var keH = (1 - hFrac) * MAX_BAR;
+        pe.setAttribute('y', GROUND - peH);
+        pe.setAttribute('height', peH);
+        ke.setAttribute('y', GROUND - peH - keH);
+        ke.setAttribute('height', keH);
+        // Readout
+        var peVal = (hFrac * 100).toFixed(0);
+        var keVal = ((1 - hFrac) * 100).toFixed(0);
+        readout.textContent = 'PE = ' + peVal + 'J, KE = ' + keVal + 'J, total = 100J';
+      }
+      slider.addEventListener('input', update);
+      update();
+    })();
+    </script>
+
+    <SchemeRepl client:load initialCode={`; Kinetic energy: KE = (1/2) m v^2
+; A 2 kg ball at different speeds
+
+(define (kinetic-energy m v)
+  (* 0.5 m (* v v)))
+
+(display "KE at 1 m/s: ")
+(display (kinetic-energy 2 1)) (newline)   ; 1 J
+
+(display "KE at 2 m/s: ")
+(display (kinetic-energy 2 2)) (newline)   ; 4 J
+
+(display "KE at 3 m/s: ")
+(display (kinetic-energy 2 3)) (newline)   ; 9 J
+
+; Double speed -> 4x energy
+(display "KE at 10 m/s: ")
+(display (kinetic-energy 2 10)) (newline)  ; 100 J
+
+(display "KE at 20 m/s: ")
+(display (kinetic-energy 2 20))            ; 400 J
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Kinetic energy
+def kinetic_energy(m, v):
+    return 0.5 * m * v**2
+
+for v in [1, 2, 3, 10, 20]:
+    print(f"KE at {v:2d} m/s: {kinetic_energy(2, v):6.1f} J")
+`} />
+    </div>
+
+
+    <!-- 2. Potential Energy -->
+    <h3>Potential energy</h3>
+    <p>Near Earth's surface, gravitational potential energy is PE = mgh. Lift a ball higher and you store energy in its position. Drop it and that stored energy converts to kinetic energy. The sum KE + PE stays constant (ignoring friction).</p>
+
+    <SchemeRepl client:load initialCode={`; Gravitational potential energy: PE = m * g * h
+; g = 9.8 m/s^2
+
+(define g 9.8)
+
+(define (potential-energy m h) (* m g h))
+(define (kinetic-energy m v) (* 0.5 m (* v v)))
+
+; 1 kg ball at height 10 m, released from rest
+(define m 1)
+(define h 10)
+
+(define PE-top (potential-energy m h))
+(define KE-top (kinetic-energy m 0))
+(define total-top (+ PE-top KE-top))
+
+(display "At top:    PE = ") (display PE-top)
+(display "  KE = ") (display KE-top)
+(display "  Total = ") (display total-top) (newline)
+
+; At bottom: all PE converted to KE
+; v = sqrt(2gh)
+(define v-bottom (sqrt (* 2 g h)))
+(define PE-bottom (potential-energy m 0))
+(define KE-bottom (kinetic-energy m v-bottom))
+(define total-bottom (+ PE-bottom KE-bottom))
+
+(display "At bottom: PE = ") (display PE-bottom)
+(display "  KE = ") (display KE-bottom)
+(display "  Total = ") (display total-bottom) (newline)
+
+(display "v at bottom: ") (display v-bottom) (display " m/s")
+`} />
+
+
+    <!-- 3. Work-Energy Theorem -->
+    <h3>Work-energy theorem</h3>
+    <p>Work is force times displacement along the direction of force: W = F * d * cos(theta). The work-energy theorem says the net work done on an object equals the change in its kinetic energy. This connects force (Newton's world) to energy (the conservation world).</p>
+
+    <SchemeRepl client:load initialCode={`; Work-energy theorem: W_net = delta KE
+; Push a 5 kg box with 20 N over 3 m, starting from rest.
+
+(define (kinetic-energy m v) (* 0.5 m (* v v)))
+
+(define F 20)   ; Newtons
+(define d 3)    ; meters
+(define m 5)    ; kg
+
+(define W (* F d))
+(display "Work done: ") (display W) (display " J") (newline)
+
+; W = KE_final - KE_initial
+; KE_initial = 0 (starts from rest)
+; So KE_final = W
+; (1/2) m v^2 = W => v = sqrt(2W/m)
+
+(define v-final (sqrt (/ (* 2 W) m)))
+(display "Final speed: ") (display v-final) (display " m/s") (newline)
+
+; Verify
+(define KE-final (kinetic-energy m v-final))
+(display "KE_final: ") (display KE-final) (display " J") (newline)
+(display "W = delta KE? ") (display (= W KE-final))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Work-energy theorem
+import math
+
+F, d, m = 20, 3, 5  # N, m, kg
+W = F * d
+v_final = math.sqrt(2 * W / m)
+
+print(f"Work done: {W} J")
+print(f"Final speed: {v_final:.2f} m/s")
+print(f"KE_final: {0.5 * m * v_final**2} J")
+print(f"W = delta KE? {abs(W - 0.5 * m * v_final**2) < 1e-10}")
+`} />
+    </div>
+
+
+    <!-- 4. Conservation -->
+    <h3>The conservation law</h3>
+    <p>In an isolated system, total energy is constant. No experiment has ever found a violation. When energy seems to disappear, we discover a new form of it (heat, mass via E = mc&sup2;, nuclear binding energy). Conservation of energy is not derived from Newton's laws. It is deeper and more general.</p>
+
+    <SchemeRepl client:load initialCode={`; Conservation of energy: simulate a bouncing ball
+; (no friction, perfectly elastic)
+
+(define g 9.8)
+(define dt 0.1)
+
+(define (simulate y vy steps)
+  (if (= steps 0) (newline)
+    (let* ((KE (* 0.5 (* vy vy)))
+           (PE (* g (max y 0)))
+           (total (+ KE PE)))
+      (display "y=") (display (round (* y 100)))
+      (display "cm  KE=") (display (round KE))
+      (display "  PE=") (display (round PE))
+      (display "  Total=") (display (round total))
+      (newline)
+      (let* ((new-vy (- vy (* g dt)))
+             (new-y (+ y (* new-vy dt)))
+             ; Bounce off ground
+             (new-y2 (if (< new-y 0) (- new-y) new-y))
+             (new-vy2 (if (< new-y 0) (- new-vy) new-vy)))
+        (simulate new-y2 new-vy2 (- steps 1))))))
+
+; Drop from 5 m
+(display "Dropping from 5 m:") (newline)
+(simulate 5 0 8)
+`} />
+
+
+    <!-- Cross-links -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/boelkins-07/">&#x222B; Calculus Ch. 7</a> &mdash; integrals compute work: W = integral of F dx</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/physics/crowell-02/", label: "Conservation of Momentum" }} />
+
+  </main>
+</Layout>

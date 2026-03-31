@@ -1,0 +1,296 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.3 — Equities" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Equities</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (CC BY 4.0) · MIT OCW 15.401 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A stock is worth the present value of expected cash returned to shareholders &mdash; dividends, buybacks, or liquidation proceeds. The <strong>dividend discount model</strong> is the cleanest form, but the cash flows are uncertain, so every valuation is only as good as its growth assumptions.</p>
+    </div>
+
+    <!-- SVG: dividends grow but their present values shrink -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 190" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline -->
+        <line x1="40" y1="110" x2="400" y2="110" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Time labels -->
+        <text x="60" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="120" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <text x="180" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">2</text>
+        <text x="240" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">3</text>
+        <text x="300" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">4</text>
+        <text x="360" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">5</text>
+        <!-- Price paid -->
+        <line x1="60" y1="110" x2="60" y2="140" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="60,140 56,134 64,134" fill="#f87171" fill-opacity="0.6"/>
+        <text x="60" y="152" text-anchor="middle" fill="#f87171" font-size="9" fill-opacity="0.6">-P</text>
+        <!-- Raw dividends (green, growing upward) -->
+        <line x1="120" y1="110" x2="120" y2="80" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="180" y1="110" x2="180" y2="74" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="240" y1="110" x2="240" y2="67" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="300" y1="110" x2="300" y2="59" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="360" y1="110" x2="360" y2="50" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="395" y="46" fill="#34d399" font-size="8" fill-opacity="0.5">D grows</text>
+        <!-- PV of dividends (blue, shrinking) -->
+        <rect x="123" y="85" width="6" height="25" fill="#60a5fa" fill-opacity="0.4"/>
+        <rect x="183" y="89" width="6" height="21" fill="#60a5fa" fill-opacity="0.4"/>
+        <rect x="243" y="93" width="6" height="17" fill="#60a5fa" fill-opacity="0.4"/>
+        <rect x="303" y="96" width="6" height="14" fill="#60a5fa" fill-opacity="0.4"/>
+        <rect x="363" y="99" width="6" height="11" fill="#60a5fa" fill-opacity="0.4"/>
+        <text x="395" y="102" fill="#60a5fa" font-size="8" fill-opacity="0.5">PV shrinks</text>
+        <!-- Caption -->
+        <text x="230" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Dividends grow, but present values converge: the series sums to a finite price.</text>
+      </svg>
+    </div>
+
+    <!-- 1. Dividend Discount Model -->
+    <h3>Dividend discount model</h3>
+    <p>The <strong>dividend discount model</strong> (DDM) values a stock as the sum of all future dividends discounted at the required return r. If you hold the stock forever, price equals &sum; D<sub>t</sub>/(1+r)<sup>t</sup>. For a finite holding period, you discount dividends received plus the sale price.</p>
+
+    <SchemeRepl client:load initialCode={`(define (range a b) (if (> a b) '() (cons a (range (+ a 1) b))))
+
+; DDM: P = sum of D_t / (1+r)^t
+; Finite holding: P = sum(D_t/(1+r)^t) + P_sell/(1+r)^n
+
+(define (ddm-finite dividends sell-price r)
+  (let ((n (length dividends)))
+    (+ (apply + (map (lambda (d t)
+                       (/ d (expt (+ 1 r) t)))
+                     dividends
+                     (range 1 n)))
+       (/ sell-price (expt (+ 1 r) n)))))
+
+; Expected dividends: $2, $2.10, $2.20 over 3 years
+; Expected sale price: $50
+; Required return: 10%
+(define divs (list 2 2.10 2.20))
+(define p (ddm-finite divs 50 0.10))
+
+(display "Stock value (3yr hold): $")
+(display (/ (round (* p 100)) 100))
+(newline)
+
+; Break it down
+(display "PV of dividends: $")
+(display (/ (round (* (- p (/ 50 (expt 1.10 3))) 100)) 100))
+(newline)
+(display "PV of sale price: $")
+(display (/ (round (* (/ 50 (expt 1.10 3)) 100)) 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Dividend discount model — finite holding period
+def ddm_finite(dividends, sell_price, r):
+    pv_divs = sum(d / (1 + r) ** (t + 1) for t, d in enumerate(dividends))
+    pv_sell = sell_price / (1 + r) ** len(dividends)
+    return pv_divs + pv_sell
+
+divs = [2.00, 2.10, 2.20]
+p = ddm_finite(divs, 50, 0.10)
+pv_sell = 50 / 1.10 ** 3
+
+print(f"Stock value (3yr hold): \${p:.2f}")
+print(f"PV of dividends: \${p - pv_sell:.2f}")
+print(f"PV of sale price: \${pv_sell:.2f}")
+`} />
+    </div>
+
+
+    <!-- 2. Gordon Growth Model -->
+    <h3>Gordon growth model</h3>
+    <p>If dividends grow at a constant rate g forever, the DDM collapses to a closed form: P = D<sub>1</sub> / (r - g). This is the <strong>Gordon growth model</strong>, a special case of the growing perpetuity. It only works when r &gt; g. Small changes in g swing the price dramatically.</p>
+
+    <SchemeRepl client:load initialCode={`; Gordon growth model: P = D1 / (r - g)
+(define (gordon d1 r g)
+  (if (<= r g)
+      (display "Error: r must exceed g")
+      (/ d1 (- r g))))
+
+; Stock paying $3 next year, 10% required return
+(display "g = 2%: $") (display (gordon 3 0.10 0.02)) (newline)
+(display "g = 4%: $") (display (gordon 3 0.10 0.04)) (newline)
+(display "g = 6%: $") (display (gordon 3 0.10 0.06)) (newline)
+(display "g = 8%: $") (display (gordon 3 0.10 0.08)) (newline)
+
+; Implied growth rate: g = r - D1/P
+(define (implied-growth d1 r price)
+  (- r (/ d1 price)))
+
+(newline)
+(display "Stock at $50, D1=$3, r=10%: implied g = ")
+(display (* 100 (implied-growth 3 0.10 50)))
+(display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Gordon growth model: P = D1 / (r - g)
+def gordon(d1, r, g):
+    assert r > g, "r must exceed g"
+    return d1 / (r - g)
+
+# Sensitivity to growth rate
+for g in [0.02, 0.04, 0.06, 0.08]:
+    print(f"g = {g:.0%}: \${gordon(3, 0.10, g):.2f}")
+
+# Implied growth rate
+def implied_growth(d1, r, price):
+    return r - d1 / price
+
+ig = implied_growth(3, 0.10, 50)
+print(f"\\nStock at $50, D1=$3, r=10%: implied g = {ig:.0%}")
+`} />
+    </div>
+
+
+    <!-- 3. P/E Ratios -->
+    <h3>P/E ratios and relative valuation</h3>
+    <p>The <strong>price-to-earnings ratio</strong> (P/E) divides stock price by earnings per share. A high P/E can mean the market expects high growth, or that the stock is overpriced. Comparing P/E across similar firms is <strong>relative valuation</strong> &mdash; faster than DCF, but only as good as the comparables.</p>
+
+    <SchemeRepl client:load initialCode={`; P/E ratio = Price / Earnings per share
+(define (pe-ratio price eps)
+  (/ price eps))
+
+; Earnings yield = 1 / P/E = EPS / Price
+(define (earnings-yield price eps)
+  (/ eps price))
+
+; Three tech companies
+(define companies
+  (list (list "AlphaCo" 150 5.00)
+        (list "BetaInc" 80 4.00)
+        (list "GammaTech" 200 2.50)))
+
+(for-each (lambda (co)
+            (let ((name (car co))
+                  (price (cadr co))
+                  (eps (caddr co)))
+              (display name) (display ": P/E = ")
+              (display (pe-ratio price eps))
+              (display ", E/P = ")
+              (display (* 100 (earnings-yield price eps)))
+              (display "%")
+              (newline)))
+          companies)
+
+; If BetaInc should trade at AlphaCo's P/E:
+(newline)
+(display "BetaInc at AlphaCo's P/E (30x): $")
+(display (* (pe-ratio 150 5.00) 4.00))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# P/E ratios and relative valuation
+companies = [
+    ("AlphaCo", 150, 5.00),
+    ("BetaInc", 80, 4.00),
+    ("GammaTech", 200, 2.50),
+]
+
+for name, price, eps in companies:
+    pe = price / eps
+    ey = eps / price
+    print(f"{name}: P/E = {pe:.1f}, E/P = {ey:.1%}")
+
+# Relative valuation: if BetaInc traded at AlphaCo's P/E
+alpha_pe = 150 / 5.00
+beta_implied = alpha_pe * 4.00
+print(f"\\nBetaInc at AlphaCo's P/E ({alpha_pe:.0f}x): \${beta_implied:.2f}")
+`} />
+    </div>
+
+
+    <!-- 4. Holding Period Return -->
+    <h3>Stock returns and holding period</h3>
+    <p>The <strong>holding period return</strong> (HPR) includes both price appreciation and dividends: HPR = (P<sub>1</sub> - P<sub>0</sub> + D) / P<sub>0</sub>. Annualizing over multiple years uses geometric compounding. Total return is what actually hits your account.</p>
+
+    <SchemeRepl client:load initialCode={`; Holding period return
+(define (hpr p0 p1 dividends)
+  (/ (+ (- p1 p0) dividends) p0))
+
+; Bought at $40, sold at $48, received $2 in dividends
+(define r (hpr 40 48 2))
+(display "HPR: ") (display (* 100 r)) (display "%") (newline)
+(display "  Price return: ") (display (* 100 (/ (- 48 40) 40))) (display "%") (newline)
+(display "  Dividend yield: ") (display (* 100 (/ 2 40))) (display "%") (newline)
+
+; Annualized return over multiple years
+; (1 + total)^(1/n) - 1
+(define (annualized-return total-return years)
+  (- (expt (+ 1 total-return) (/ 1 years)) 1))
+
+; 50% total return over 3 years
+(newline)
+(define ann (annualized-return 0.50 3))
+(display "50% over 3 years = ")
+(display (/ (round (* ann 10000)) 100))
+(display "% annualized")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Holding period return
+def hpr(p0, p1, dividends):
+    return (p1 - p0 + dividends) / p0
+
+r = hpr(40, 48, 2)
+print(f"HPR: {r:.1%}")
+print(f"  Price return: {(48-40)/40:.1%}")
+print(f"  Dividend yield: {2/40:.1%}")
+
+# Annualized return
+def annualized_return(total_return, years):
+    return (1 + total_return) ** (1 / years) - 1
+
+ann = annualized_return(0.50, 3)
+print(f"\\n50% over 3 years = {ann:.2%} annualized")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D<sub>1</sub></td><td class="pr-4 text-green-300">d1</td><td class="pr-4 text-blue-300">d1</td><td class="font-sans">Next year's dividend</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">g</td><td class="pr-4 text-green-300">g</td><td class="pr-4 text-blue-300">g</td><td class="font-sans">Dividend growth rate</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P/E</td><td class="pr-4 text-green-300">(pe-ratio p eps)</td><td class="pr-4 text-blue-300">price / eps</td><td class="font-sans">Price-to-earnings ratio</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">HPR</td><td class="pr-4 text-green-300">(hpr p0 p1 d)</td><td class="pr-4 text-blue-300">hpr(p0, p1, d)</td><td class="font-sans">Holding period return</td></tr>
+          <tr><td class="py-2 pr-4">P = D/(r-g)</td><td class="pr-4 text-green-300">(gordon d1 r g)</td><td class="pr-4 text-blue-300">gordon(d1, r, g)</td><td class="font-sans">Gordon growth model</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-02/">&#x1F4C8; Finance Ch.2</a> &mdash; bonds use the same discounting with known cash flows</li>
+      <li><a href="/reading/finance-1/fin-01/">&#x1F4C8; Finance Ch.1</a> &mdash; TVM and perpetuity formulas underpin the Gordon model</li>
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &mdash; geometric series convergence behind the perpetuity formula</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-02/", label: "Fixed Income · 2 of 12" }}
+      next={{ href: "/reading/finance-1/fin-04/", label: "Risk and Return · 4 of 12" }}
+    />
+
+  </main>
+</Layout>

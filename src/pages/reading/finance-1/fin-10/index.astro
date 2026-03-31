@@ -1,0 +1,263 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — Behavioral Finance" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Behavioral Finance</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; <a href="https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/">MIT OCW 15.401</a> (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">People do not maximize expected utility. They overweight losses, anchor on irrelevant numbers, and chase trends. <strong>Behavioral finance</strong> studies these systematic deviations and the market anomalies they produce.</p>
+    </div>
+
+    <!-- SVG: Prospect theory value function -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 240" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="180" y1="20" x2="180" y2="220" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="30" y1="120" x2="330" y2="120" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Axis labels -->
+        <text x="320" y="115" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.5">Gains</text>
+        <text x="45" y="115" text-anchor="start" fill="currentColor" font-size="10" fill-opacity="0.5">Losses</text>
+        <text x="185" y="30" fill="currentColor" font-size="10" fill-opacity="0.5">Value</text>
+        <!-- Gain curve (concave) -->
+        <path d="M 180,120 Q 220,55 310,50" fill="none" stroke="#10b981" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Loss curve (convex, steeper) -->
+        <path d="M 180,120 Q 140,200 50,210" fill="none" stroke="#ef4444" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Reference point -->
+        <circle cx="180" cy="120" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="192" y="135" fill="#f59e0b" font-size="9" fill-opacity="0.7">Reference</text>
+        <!-- Steepness annotation -->
+        <text x="70" y="195" fill="#ef4444" font-size="9" fill-opacity="0.6">Steeper: loss aversion</text>
+        <text x="230" y="55" fill="#10b981" font-size="9" fill-opacity="0.6">Concave: diminishing</text>
+        <!-- Caption -->
+        <text x="180" y="235" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Kahneman &amp; Tversky prospect theory value function</text>
+      </svg>
+    </div>
+
+    <!-- 1. Prospect Theory and Loss Aversion -->
+    <h3>Prospect theory and loss aversion</h3>
+    <p>Kahneman and Tversky showed that people evaluate outcomes relative to a <strong>reference point</strong>, not in absolute terms. Losses hurt roughly twice as much as equivalent gains feel good. This asymmetry &mdash; <strong>loss aversion</strong> &mdash; explains why investors hold losers too long and sell winners too early (the disposition effect).</p>
+
+    <SchemeRepl client:load initialCode={`; Prospect theory value function
+; v(x) = x^0.88 for gains, -lambda * |x|^0.88 for losses
+; lambda ≈ 2.25 (loss aversion coefficient)
+
+(define lambda-loss 2.25)
+(define alpha 0.88)
+
+(define (prospect-value x)
+  (if (>= x 0)
+      (expt x alpha)
+      (* (- lambda-loss) (expt (abs x) alpha))))
+
+(display "Gain of $100:  v = ") (display (prospect-value 100)) (newline)
+(display "Loss of $100:  v = ") (display (prospect-value -100)) (newline)
+(display "Gain of $1000: v = ") (display (prospect-value 1000)) (newline)
+(display "Loss of $1000: v = ") (display (prospect-value -1000)) (newline)
+
+; The ratio shows loss aversion: |v(-x)| / v(x) ≈ 2.25
+(display "Loss/gain ratio at $100: ")
+(display (/ (abs (prospect-value -100)) (prospect-value 100)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Prospect theory value function
+LAMBDA = 2.25  # loss aversion coefficient
+ALPHA = 0.88
+
+def prospect_value(x):
+    if x >= 0:
+        return x ** ALPHA
+    else:
+        return -LAMBDA * abs(x) ** ALPHA
+
+print(f"Gain of $100:  v = {prospect_value(100):.2f}")
+print(f"Loss of $100:  v = {prospect_value(-100):.2f}")
+print(f"Gain of $1000: v = {prospect_value(1000):.2f}")
+print(f"Loss of $1000: v = {prospect_value(-1000):.2f}")
+print(f"Loss/gain ratio at $100: {abs(prospect_value(-100)) / prospect_value(100):.2f}")
+`} />
+    </div>
+
+
+    <!-- 2. Overconfidence and Anchoring -->
+    <h3>Overconfidence and anchoring biases</h3>
+    <p><strong>Overconfidence</strong> makes investors trade too much. They set confidence intervals too narrow &mdash; what they call a 90% range captures reality maybe 50% of the time. <strong>Anchoring</strong> locks judgments to irrelevant starting points: a stock's 52-week high, a round number, the price you paid. Both biases distort information processing.</p>
+
+    <SchemeRepl client:load initialCode={`; Anchoring bias simulation
+; An investor anchors on a stock's purchase price
+; and adjusts insufficiently toward new information
+
+(define (anchored-estimate anchor new-info adjustment-factor)
+  ; People adjust from the anchor, but not enough
+  ; adjustment-factor < 1 means under-adjustment (bias)
+  (+ anchor (* adjustment-factor (- new-info anchor))))
+
+(define purchase-price 50)
+(define fair-value 35)      ; analyst estimate after bad earnings
+
+; Rational investor: full adjustment
+(display "Rational estimate: $")
+(display (anchored-estimate purchase-price fair-value 1.0)) (newline)
+
+; Anchored investor: only adjusts ~40% of the way
+(display "Anchored estimate: $")
+(display (anchored-estimate purchase-price fair-value 0.4)) (newline)
+
+; Overconfidence: true 90% CI vs. stated 90% CI
+(define true-std 15)
+(define perceived-std 8)
+(display "True 90% CI:     $") (display (- 50 (* 1.645 true-std)))
+(display " to $") (display (+ 50 (* 1.645 true-std))) (newline)
+(display "Perceived 90% CI: $") (display (- 50 (* 1.645 perceived-std)))
+(display " to $") (display (+ 50 (* 1.645 perceived-std)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Anchoring bias
+def anchored_estimate(anchor, new_info, adjustment_factor):
+    return anchor + adjustment_factor * (new_info - anchor)
+
+purchase_price = 50
+fair_value = 35
+
+print(f"Rational estimate: \${anchored_estimate(purchase_price, fair_value, 1.0):.0f}")
+print(f"Anchored estimate: \${anchored_estimate(purchase_price, fair_value, 0.4):.0f}")
+
+# Overconfidence: stated vs. true confidence intervals
+true_std = 15
+perceived_std = 8
+z = 1.645  # 90% CI
+
+print(f"True 90% CI:      \${50 - z*true_std:.0f} to \${50 + z*true_std:.0f}")
+print(f"Perceived 90% CI: \${50 - z*perceived_std:.0f} to \${50 + z*perceived_std:.0f}")
+`} />
+    </div>
+
+
+    <!-- 3. Limits to Arbitrage -->
+    <h3>Limits to arbitrage</h3>
+    <p>Even when mispricings exist, rational traders may not correct them. Short-selling is costly and risky. Noise traders can push prices further from fundamentals before they revert. Synchronization risk means you can be right about value but wrong about timing. These frictions let behavioral anomalies persist.</p>
+
+    <SchemeRepl client:load initialCode={`; Limits to arbitrage: cost of short-selling
+; An arbitrageur spots a $5 overpricing but faces costs
+
+(define (arbitrage-profit overpricing borrow-cost margin-cost time-months)
+  ; Net profit after costs of maintaining the short position
+  (let ((total-cost (* (+ borrow-cost margin-cost) (/ time-months 12))))
+    (- overpricing total-cost)))
+
+; Stock at $105, fair value $100, overpriced by $5
+(display "Overpricing: $5.00") (newline)
+
+; Scenario 1: corrects in 1 month — profitable
+(display "Corrects in 1mo:  profit = $")
+(display (arbitrage-profit 5.0 0.02 0.03 1)) (newline)
+
+; Scenario 2: takes 6 months — barely worth it
+(display "Corrects in 6mo:  profit = $")
+(display (arbitrage-profit 5.0 0.02 0.03 6)) (newline)
+
+; Scenario 3: takes 18 months — net loss
+(display "Corrects in 18mo: profit = $")
+(display (arbitrage-profit 5.0 0.02 0.03 18)) (newline)
+
+; Scenario 4: gets worse before correcting (noise trader risk)
+(define (noise-trader-loss initial-short price-moves-against margin-call-cost)
+  (+ initial-short price-moves-against margin-call-cost))
+
+(display "If price rises $10 before correcting, total capital at risk: $")
+(display (noise-trader-loss 105 10 5))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Limits to arbitrage: costs erode mispricing profits
+
+def arbitrage_profit(overpricing, borrow_cost, margin_cost, time_months):
+    total_cost = (borrow_cost + margin_cost) * (time_months / 12)
+    return overpricing - total_cost
+
+print("Overpricing: $5.00")
+print(f"Corrects in 1mo:  profit = \${arbitrage_profit(5, 0.02, 0.03, 1):.2f}")
+print(f"Corrects in 6mo:  profit = \${arbitrage_profit(5, 0.02, 0.03, 6):.2f}")
+print(f"Corrects in 18mo: profit = \${arbitrage_profit(5, 0.02, 0.03, 18):.2f}")
+
+# Noise trader risk: price can move against you
+print(f"If price rises $10 before correcting, capital at risk: \${105 + 10 + 5}")
+`} />
+    </div>
+
+
+    <!-- 4. Bubbles and Crashes -->
+    <h3>Bubbles and crashes</h3>
+    <p>A <strong>bubble</strong> forms when prices detach from fundamentals and keep rising because participants expect to sell to a greater fool. Feedback loops amplify: rising prices attract more buyers, which raises prices. The crash comes when the supply of new money runs out. Historically, every bubble follows the same pattern: displacement, boom, euphoria, profit-taking, panic.</p>
+
+    <SchemeRepl client:load initialCode={`; Bubble dynamics: exponential price growth vs. fundamental value
+; Fundamental grows at 5%/year, bubble price at 30%/year
+
+(define (compound initial rate years)
+  (* initial (expt (+ 1 rate) years)))
+
+(define (show-bubble year)
+  (let ((fundamental (compound 100 0.05 year))
+        (bubble-price (compound 100 0.30 year)))
+    (display "Year ") (display year)
+    (display "  fundamental: $") (display (round fundamental))
+    (display "  bubble: $") (display (round bubble-price))
+    (display "  overvaluation: ")
+    (display (round (* 100 (/ (- bubble-price fundamental) fundamental))))
+    (display "%") (newline)))
+
+(show-bubble 1)
+(show-bubble 2)
+(show-bubble 3)
+(show-bubble 4)
+(show-bubble 5)
+
+; After crash: price reverts to fundamental
+(display "Year 5 crash: bubble pops, price returns to $")
+(display (round (compound 100 0.05 5)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bubble dynamics: exponential divergence from fundamentals
+
+def compound(initial, rate, years):
+    return initial * (1 + rate) ** years
+
+for year in range(1, 6):
+    fund = compound(100, 0.05, year)
+    bubble = compound(100, 0.30, year)
+    overval = (bubble - fund) / fund * 100
+    print(f"Year {year}  fundamental: \${fund:.0f}  bubble: \${bubble:.0f}  overvaluation: {overval:.0f}%")
+
+print(f"Year 5 crash: bubble pops, price returns to \${compound(100, 0.05, 5):.0f}")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/finance-1/fin-09/">📈 Finance Ch.9</a> &mdash; efficient markets: the hypothesis behavioral finance challenges</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; expected utility theory that prospect theory replaces</li>
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; bounded rationality and behavioral economics more broadly</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-09/", label: "Efficient Markets · 9 of 12" }}
+      next={{ href: "/reading/finance-1/fin-11/", label: "Capital Budgeting · 11 of 12" }}
+    />
+
+  </main>
+</Layout>

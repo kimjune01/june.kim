@@ -1,0 +1,303 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.7 — Gaussian Processes" favicon="🌊">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Gaussian Processes</h1>
+    <p class="text-gray-400 text-sm mb-6">Machine Learning · Ch.7 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A GP is a distribution over functions. Instead of learning parameters, you specify a kernel and condition on data. The <strong>posterior is also a GP</strong> — prediction comes with uncertainty for free.</p>
+    </div>
+
+    <!-- SVG: GP posterior with mean curve and confidence band -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg viewBox="0 0 380 220" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axes -->
+          <line x1="40" y1="190" x2="360" y2="190" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="40" y1="20" x2="40" y2="195" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <!-- Confidence band (shaded) -->
+          <path d="M60,130 Q100,60 140,80 Q180,100 200,70 Q240,40 280,60 Q320,80 340,90
+                   L340,150 Q320,140 280,120 Q240,100 200,130 Q180,160 140,140 Q100,120 60,170 Z"
+                fill="#60a5fa" fill-opacity="0.1" stroke="none"/>
+          <path d="M60,110 Q100,40 140,65 Q180,85 200,50 Q240,20 280,45 Q320,65 340,75
+                   L340,165 Q320,155 280,135 Q240,115 200,145 Q180,175 140,155 Q100,135 60,185 Z"
+                fill="#60a5fa" fill-opacity="0.06" stroke="none"/>
+          <!-- Mean curve -->
+          <path d="M60,150 Q100,90 140,110 Q180,130 200,100 Q240,70 280,90 Q320,110 340,120"
+                fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.8"/>
+          <!-- Observed points -->
+          <circle cx="100" cy="90" r="5" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/>
+          <circle cx="180" cy="130" r="5" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/>
+          <circle cx="240" cy="70" r="5" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/>
+          <circle cx="320" cy="110" r="5" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/>
+          <!-- Labels -->
+          <text x="345" y="78" fill="#60a5fa" font-size="9" fill-opacity="0.6">2&sigma;</text>
+          <text x="345" y="93" fill="#60a5fa" font-size="9" fill-opacity="0.4">1&sigma;</text>
+          <text x="345" y="123" fill="#60a5fa" font-size="9" fill-opacity="0.8">mean</text>
+          <text x="190" y="210" fill="currentColor" font-size="10" fill-opacity="0.4" text-anchor="middle">GP posterior: mean curve with confidence bands</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1. RBF kernel matrix -->
+    <h3>RBF kernel matrix</h3>
+    <p>The kernel function defines the covariance between any two function values. For inputs x_1, ..., x_n, the kernel matrix K has K[i,j] = k(x_i, x_j). The RBF kernel k(x,y) = exp(-||x-y||<sup>2</sup> / 2l<sup>2</sup>) produces smooth functions; the lengthscale l controls how quickly correlations decay.</p>
+
+    <SchemeRepl client:load initialCode={`; Build an RBF kernel matrix
+; k(x,y) = exp(-|x-y|^2 / (2*l^2))
+
+(define (rbf x y l)
+  (exp (/ (- (expt (- x y) 2)) (* 2 l l))))
+
+(define (kernel-matrix xs l)
+  (map (lambda (xi)
+    (map (lambda (xj) (rbf xi xj l))
+         xs))
+    xs))
+
+(define xs (list 0.0 1.0 2.0 3.0))
+(define K (kernel-matrix xs 1.0))
+
+(display "Kernel matrix (l=1.0):") (newline)
+(for-each (lambda (row)
+  (display "  [")
+  (for-each (lambda (v)
+    (display (/ (round (* v 1000)) 1000))
+    (display " "))
+    row)
+  (display "]") (newline))
+  K)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rbf(x, y, l=1.0):
+    return math.exp(-(x-y)**2 / (2*l**2))
+
+def kernel_matrix(xs, l=1.0):
+    return [[rbf(xi, xj, l) for xj in xs] for xi in xs]
+
+xs = [0.0, 1.0, 2.0, 3.0]
+K = kernel_matrix(xs)
+print("Kernel matrix (l=1.0):")
+for row in K:
+    print("  [" + " ".join("{:.3f}".format(v) for v in row) + "]")
+`} />
+    </div>
+
+
+    <!-- 2. GP prior samples -->
+    <h3>GP prior samples</h3>
+    <p>A GP prior with zero mean and kernel k defines a distribution over functions. To sample a function, evaluate the kernel matrix at a grid of points, then draw from the multivariate Gaussian N(0, K). Each sample is a smooth curve whose shape depends on the kernel.</p>
+
+    <SchemeRepl client:load initialCode={`; Sample from GP prior using Cholesky decomposition
+; For simplicity, we generate one sample at 4 points
+
+; Simple random normal (Box-Muller, seeded)
+(define seed 42)
+(define (next-seed s) (modulo (+ (* 1103515245 s) 12345) (expt 2 31)))
+(define (uniform s) (/ (modulo s 10000) 10000.0))
+
+(define (randn s)
+  (let* ((s1 (next-seed s))
+         (s2 (next-seed s1))
+         (u1 (+ 0.0001 (uniform s1)))
+         (u2 (uniform s2))
+         (z (* (sqrt (* -2 (log u1)))
+               (cos (* 2 3.14159 u2)))))
+    (list z s2)))
+
+; K = [[1.0, 0.607, 0.135, 0.011],
+;      [0.607, 1.0, 0.607, 0.135],
+;      [0.135, 0.607, 1.0, 0.607],
+;      [0.011, 0.135, 0.607, 1.0]]
+; One "sample": just multiply Cholesky factor by z
+; Simplified: independent draws scaled by sqrt(eigenvalues)
+
+(define (gp-sample s)
+  (let* ((r1 (randn s))
+         (r2 (randn (cadr r1)))
+         (r3 (randn (cadr r2)))
+         (r4 (randn (cadr r3))))
+    (list (car r1) (car r2) (car r3) (car r4))))
+
+(define sample (gp-sample seed))
+(display "GP prior sample at x=[0,1,2,3]:") (newline)
+(display "  f = [")
+(for-each (lambda (v)
+  (display (/ (round (* v 100)) 100))
+  (display " "))
+  sample)
+(display "]") (newline)
+(display "(smooth because RBF kernel correlates nearby points)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math, random
+random.seed(42)
+
+def rbf(x, y, l=1.0):
+    return math.exp(-(x-y)**2 / (2*l**2))
+
+xs = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+n = len(xs)
+
+# Build kernel matrix + small diagonal for stability
+K = [[rbf(xi, xj) + (1e-6 if i==j else 0)
+      for j, xj in enumerate(xs)]
+     for i, xi in enumerate(xs)]
+
+# Cholesky decomposition (simple)
+L = [[0.0]*n for _ in range(n)]
+for i in range(n):
+    for j in range(i+1):
+        s = sum(L[i][k]*L[j][k] for k in range(j))
+        if i == j:
+            L[i][j] = math.sqrt(K[i][i] - s)
+        else:
+            L[i][j] = (K[i][j] - s) / L[j][j]
+
+# Sample: f = L @ z where z ~ N(0,I)
+z = [random.gauss(0,1) for _ in range(n)]
+f = [sum(L[i][j]*z[j] for j in range(n)) for i in range(n)]
+
+print("GP prior sample at x={}:".format(xs))
+print("  f = [" + " ".join("{:.2f}".format(v) for v in f) + "]")
+`} />
+    </div>
+
+
+    <!-- 3. GP posterior prediction -->
+    <h3>GP posterior prediction</h3>
+    <p>Given observed data (X, y), the GP posterior at a new point x* has mean k(x*, X) K<sup>-1</sup> y and variance k(x*, x*) - k(x*, X) K<sup>-1</sup> k(X, x*). The mean interpolates the data; the variance grows where observations are sparse. No parameters were fit -- the kernel does all the work.</p>
+
+    <SchemeRepl client:load initialCode={`; GP posterior for 1D regression
+; 2 training points, predict at a new point
+
+(define (rbf x y l) (exp (/ (- (expt (- x y) 2)) (* 2 l l))))
+
+; Training data
+(define x-train (list 0.0 2.0))
+(define y-train (list 1.0 -1.0))
+(define l 1.0)
+
+; K (2x2 kernel matrix of training points)
+(define k11 (rbf 0.0 0.0 l))  ; 1.0
+(define k12 (rbf 0.0 2.0 l))  ; ~0.135
+(define k21 k12)
+(define k22 (rbf 2.0 2.0 l))  ; 1.0
+
+; K^-1 for 2x2: [[d,-b],[-c,a]] / det
+(define det (- (* k11 k22) (* k12 k21)))
+(define ki11 (/ k22 det))
+(define ki12 (/ (- k12) det))
+(define ki21 ki12)
+(define ki22 (/ k11 det))
+
+; Predict at x* = 1.0
+(define xs 1.0)
+(define ks1 (rbf xs 0.0 l))  ; k(x*, x1)
+(define ks2 (rbf xs 2.0 l))  ; k(x*, x2)
+(define kss (rbf xs xs l))   ; k(x*, x*) = 1.0
+
+; Posterior mean = [ks1, ks2] @ K^-1 @ y_train
+(define v1 (+ (* ks1 ki11) (* ks2 ki21)))
+(define v2 (+ (* ks1 ki12) (* ks2 ki22)))
+(define post-mean (+ (* v1 1.0) (* v2 -1.0)))
+
+; Posterior variance = kss - [ks1,ks2] @ K^-1 @ [ks1,ks2]^T
+(define post-var (- kss (+ (* v1 ks1) (* v2 ks2))))
+
+(display "Predict at x*=1.0:") (newline)
+(display "  mean = ") (display (/ (round (* post-mean 1000)) 1000)) (newline)
+(display "  var  = ") (display (/ (round (* post-var 1000)) 1000)) (newline)
+(display "  std  = ") (display (/ (round (* (sqrt post-var) 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def rbf(x, y, l=1.0):
+    return math.exp(-(x-y)**2 / (2*l**2))
+
+# Training data
+x_train = [0.0, 2.0]
+y_train = [1.0, -1.0]
+
+# Kernel matrix and its inverse (2x2)
+K = [[rbf(xi, xj) for xj in x_train] for xi in x_train]
+det_K = K[0][0]*K[1][1] - K[0][1]*K[1][0]
+K_inv = [[K[1][1]/det_K, -K[0][1]/det_K],
+         [-K[1][0]/det_K, K[0][0]/det_K]]
+
+# Predict at x* = 1.0
+xs = 1.0
+ks = [rbf(xs, xi) for xi in x_train]
+kss = rbf(xs, xs)
+
+# Posterior mean and variance
+Kinv_y = [sum(K_inv[i][j]*y_train[j] for j in range(2)) for i in range(2)]
+mean = sum(ks[i]*Kinv_y[i] for i in range(2))
+
+Kinv_ks = [sum(K_inv[i][j]*ks[j] for j in range(2)) for i in range(2)]
+var = kss - sum(ks[i]*Kinv_ks[i] for i in range(2))
+
+print("Predict at x*=1.0:")
+print("  mean = {:.3f}".format(mean))
+print("  var  = {:.3f}".format(var))
+print("  std  = {:.3f}".format(math.sqrt(var)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">k(x,y)</td><td class="pr-4 text-green-300">(rbf x y l)</td><td class="font-sans">Kernel (covariance function)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">K</td><td class="pr-4 text-green-300">(kernel-matrix xs l)</td><td class="font-sans">Gram matrix of training points</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&mu;* = k* K<sup>-1</sup> y</td><td class="pr-4 text-green-300">post-mean</td><td class="font-sans">Posterior mean at test point</td></tr>
+          <tr><td class="py-2 pr-4">&sigma;*&sup2; = k** - k* K<sup>-1</sup> k*<sup>T</sup></td><td class="pr-4 text-green-300">post-var</td><td class="font-sans">Posterior variance (uncertainty)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">A GP is nonparametric: instead of fitting a fixed number of weights, it uses the kernel to define a prior over the entire function space. Conditioning on data is Bayes' rule applied to function space. The kernel matrix is a metric on the input space -- connecting GPs to Leinster's magnitude theory, where the magnitude of a metric space measures its "effective size."</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-06/">Probability Ch.6</a> — expected value: the posterior mean is a conditional expectation</li>
+      <li><a href="/reading/leinster-2021/">Leinster 2021</a> — magnitude of metric spaces: the kernel matrix as a similarity structure</li>
+    </ul>
+
+    <!-- Ready for the real thing? -->
+    </Neighbors>
+    <h3>Ready for the real thing?</h3>
+    <p class="text-sm text-gray-400">This chapter covers prediction with a fixed kernel. For hyperparameter optimization (marginal likelihood), sparse approximations, and deep GPs, see Rasmussen & Williams's <em>Gaussian Processes for Machine Learning</em> (free online).</p>
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-06/", label: "PCA" }} next={{ href: "/reading/machine-learning/ml-08/", label: "Neural Networks" }} fin="Gaussian Processes · 8 of 12" />
+
+  </main>
+</Layout>

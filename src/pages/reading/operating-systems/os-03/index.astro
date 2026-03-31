@@ -1,0 +1,138 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OS Ch.3 — Threads and Concurrency" favicon="🖥">
+  <main>
+
+    <a href="/reading/operating-systems/" class="text-sm mb-4 inline-block">&larr; back to Operating Systems</a>
+
+    <h1>Threads and Concurrency</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Thread_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thread (computing)</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>thread</strong> is the smallest unit of execution within a process. Threads within the same process share code, data, and open files, but each has its own stack, registers, and program counter. Concurrency is cheap with threads. Safety is not.</p>
+    </div>
+
+    <h3>Threads vs processes</h3>
+    <p>Creating a new process copies the entire address space (or uses copy-on-write). Creating a thread adds a new execution context within the existing space. Threads are lighter: faster to create, faster to switch, faster to communicate. The cost is shared mutable state.</p>
+
+    <!-- SVG: Two threads accessing shared variable -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Process boundary -->
+        <rect x="30" y="10" width="340" height="180" rx="8" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="200" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Process address space</text>
+
+        <!-- Thread 1 -->
+        <rect x="60" y="50" width="100" height="60" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="110" y="72" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">Thread 1</text>
+        <text x="110" y="88" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.4">stack, PC, regs</text>
+
+        <!-- Thread 2 -->
+        <rect x="240" y="50" width="100" height="60" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="290" y="72" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Thread 2</text>
+        <text x="290" y="88" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.4">stack, PC, regs</text>
+
+        <!-- Shared variable -->
+        <rect x="150" y="140" width="100" height="35" rx="4" fill="none" stroke="#f87171" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="158" text-anchor="middle" fill="#f87171" font-size="10" fill-opacity="0.7">Shared: count</text>
+        <text x="200" y="170" text-anchor="middle" fill="#f87171" font-size="9" fill-opacity="0.4">(heap / global)</text>
+
+        <!-- Arrows to shared -->
+        <line x1="110" y1="110" x2="175" y2="140" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="290" y1="110" x2="225" y2="140" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+      </svg>
+    </div>
+
+    <h3>Race conditions</h3>
+    <p>When two threads read-modify-write the same variable without coordination, the result depends on interleaving. This is a <strong>race condition</strong>. The outcome is non-deterministic. The fix is synchronization (next chapter).</p>
+
+    <SchemeRepl client:load initialCode={`; Simulating a race condition
+; Two "threads" both increment a shared counter
+; Without synchronization, interleaving can lose updates
+
+(define shared-count 0)
+
+; Thread 1 reads, increments, writes
+(define (thread-increment! label)
+  (let ((local (+ shared-count 1)))  ; read + compute
+    ; In a real race, the other thread could run here
+    (set! shared-count local)         ; write
+    (display label)
+    (display " set count to ")
+    (display shared-count)
+    (newline)))
+
+; Sequential execution: no race
+(set! shared-count 0)
+(thread-increment! "T1")
+(thread-increment! "T2")
+(display "Sequential result: ") (display shared-count) (newline)
+
+; Simulated interleaved execution (race!)
+(set! shared-count 0)
+(let ((t1-read shared-count)   ; T1 reads 0
+      (t2-read shared-count))  ; T2 also reads 0
+  (set! shared-count (+ t1-read 1))  ; T1 writes 1
+  (set! shared-count (+ t2-read 1))) ; T2 writes 1, not 2!
+(display "Interleaved result: ") (display shared-count)
+; Lost update: expected 2, got 1
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Race condition demonstration
+# In real threading, this would be non-deterministic
+
+import threading
+
+count = 0
+
+def increment():
+    global count
+    for _ in range(100000):
+        count += 1  # NOT atomic: read, add, write
+
+# Sequential: always correct
+count = 0
+increment()
+increment()
+print(f"Sequential: {count}")  # 200000
+
+# Threaded: race condition
+count = 0
+t1 = threading.Thread(target=increment)
+t2 = threading.Thread(target=increment)
+t1.start(); t2.start()
+t1.join(); t2.join()
+print(f"Threaded:   {count}")  # likely < 200000
+`} />
+    </div>
+
+    <h3>Critical sections</h3>
+    <p>A <strong>critical section</strong> is the part of code that accesses shared resources. The goal: ensure that at most one thread is in its critical section at any time. Three requirements: mutual exclusion, progress (no unnecessary blocking), and bounded waiting (no starvation).</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-12/">♟ Game Theory Ch.12</a> — prisoner's dilemma and race conditions: concurrent threads are like players in a game where uncoordinated choices cause data races</li>
+      <li><a href="/reading/programming/sicp-18/">🪄 SICP Ch.18</a> — streams and delayed evaluation: threads are like lazy streams evaluated interleaved</li>
+      <li><a href="/reading/theory-of-computation/toc-01/">💻 TOC Ch.1</a> — finite automata: concurrent thread interleavings are modeled as nondeterministic finite automata</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Thread_(computing)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Thread (computing)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Race_condition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Race condition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Critical_section"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Critical section</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/operating-systems/os-02/", label: "Scheduling" }} next={{ href: "/reading/operating-systems/os-04/", label: "Synchronization" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.7 — CAP Theorem" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>CAP Theorem</h1>
+    <p class="text-gray-400 text-sm mb-6">Brewer 2000, Gilbert &amp; Lynch 2002 &middot; <a href="https://en.wikipedia.org/wiki/CAP_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>CAP theorem</strong>: a distributed data store can provide at most two of three guarantees: <strong>Consistency</strong> (every read gets the latest write), <strong>Availability</strong> (every request gets a response), <strong>Partition tolerance</strong> (the system works despite network partitions). Since partitions happen in practice, the real choice is between C and A during a partition.</p>
+    </div>
+
+    <!-- SVG: CAP triangle with systems plotted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Triangle -->
+        <polygon points="200,30 40,260 360,260" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Vertex labels -->
+        <text x="200" y="20" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">Consistency</text>
+        <text x="30" y="280" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">Availability</text>
+        <text x="370" y="280" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">Partition</text>
+        <text x="370" y="295" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">Tolerance</text>
+        <!-- CP side (Consistency + Partition tolerance) -->
+        <text x="310" y="140" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.7">CP: HBase,</text>
+        <text x="310" y="152" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.7">MongoDB, Zookeeper</text>
+        <!-- AP side (Availability + Partition tolerance) -->
+        <text x="90" y="140" text-anchor="middle" fill="#fb923c" font-size="10" fill-opacity="0.7">AP: Cassandra,</text>
+        <text x="90" y="152" text-anchor="middle" fill="#fb923c" font-size="10" fill-opacity="0.7">DynamoDB, CouchDB</text>
+        <!-- CA side (not practical in distributed systems) -->
+        <text x="200" y="275" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">CA: single-node RDBMS (not distributed)</text>
+        <!-- During partition annotation -->
+        <text x="200" y="195" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">During a partition:</text>
+        <text x="200" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">CP waits, AP serves stale data</text>
+      </svg>
+    </div>
+
+    <!-- 1. The three properties -->
+    <h3>The three properties</h3>
+    <p><strong>Consistency</strong>: linearizability. Every read returns the value of the most recent write. <strong>Availability</strong>: every non-failing node returns a response for every request. <strong>Partition tolerance</strong>: the system continues to operate despite arbitrary message loss between nodes. In any real network, partitions happen, so you must tolerate them. The theorem says you then must choose: block during a partition (CP) or return possibly stale data (AP).</p>
+
+    <SchemeRepl client:load initialCode={`; CAP: during a partition, choose C or A.
+; CP system: refuse to respond if unsure about latest value.
+; AP system: respond with whatever you have.
+
+(define partitioned #t)
+(define local-value 41)   ; stale: leader has 42
+
+(define (cp-read)
+  (if partitioned
+      "ERROR: cannot guarantee consistency"
+      local-value))
+
+(define (ap-read)
+  local-value)  ; may be stale, but always responds
+
+(display "Partition active") (newline)
+(display "CP system read: ") (display (cp-read)) (newline)
+(display "AP system read: ") (display (ap-read)) (newline)
+(display "CP chose consistency over availability.") (newline)
+(display "AP chose availability over consistency.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# CAP tradeoff during partition
+partitioned = True
+local_value = 41  # stale: leader updated to 42
+
+def cp_read():
+    if partitioned:
+        raise Exception("Cannot guarantee consistency")
+    return local_value
+
+def ap_read():
+    return local_value  # stale but responsive
+
+print("Partition active")
+try:
+    print(f"CP read: {cp_read()}")
+except Exception as e:
+    print(f"CP read: {e}")
+print(f"AP read: {ap_read()}")
+`} />
+    </div>
+
+    <!-- 2. The real choice -->
+    <h3>The real choice: latency vs consistency</h3>
+    <p>CAP is often oversimplified. The deeper insight (from Abadi's PACELC extension): even when there is no partition, there is a tradeoff between latency and consistency. Synchronous replication is consistent but slow. Asynchronous replication is fast but eventually consistent. The partition case is just the extreme version of this tradeoff.</p>
+
+    <SchemeRepl client:load initialCode={`; PACELC: even without partitions, latency vs consistency.
+; P -> choose A or C
+; else -> choose L (latency) or C (consistency)
+
+(define (pacelc-classify system)
+  (cond
+    ((equal? system "DynamoDB") "PA/EL - available + low latency")
+    ((equal? system "MongoDB")  "PC/EC - consistent always")
+    ((equal? system "Cassandra") "PA/EL - available + low latency")
+    ((equal? system "Spanner")  "PC/EL - consistent + low latency (TrueTime)")
+    (else "unknown")))
+
+(display "DynamoDB: ") (display (pacelc-classify "DynamoDB")) (newline)
+(display "MongoDB:  ") (display (pacelc-classify "MongoDB")) (newline)
+(display "Cassandra: ") (display (pacelc-classify "Cassandra")) (newline)
+(display "Spanner:  ") (display (pacelc-classify "Spanner"))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/distributed-systems/dist-03/">&#x1F310; Ch.3 Replication</a> — the consistency models that CAP forces you to choose between</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-06/", label: "Byzantine Fault Tolerance" }} next={{ href: "/reading/distributed-systems/dist-08/", label: "Distributed Transactions" }} />
+
+  </main>
+</Layout>

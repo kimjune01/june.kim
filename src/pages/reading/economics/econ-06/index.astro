@@ -1,0 +1,166 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.6 — Marginal Utility" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">&larr; back to economics</a>
+
+    <h1>Marginal Utility</h1>
+    <p class="text-gray-400 text-sm mb-6">Alfred Marshall &middot; 1890 &middot; <a href="https://en.wikipedia.org/wiki/Marginal_utility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Principles of Economics, Book III</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The first slice of pizza is great. The fifth is fine. The tenth makes you sick. <strong>Diminishing marginal utility</strong>: each additional unit of a good provides less additional satisfaction. This is why demand curves slope down: as you have more, you value each extra unit less, so you only buy more if the price drops.</p>
+    </div>
+
+    <!-- SVG: Utility bars decreasing -->
+    <h3>Decreasing bars</h3>
+    <p>Marginal utility falls with each additional unit consumed. Total utility still rises, but slower and slower.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="370" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="170" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="210" y="195" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Units consumed</text>
+        <text x="18" y="95" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 18, 95)">Marginal utility</text>
+        <!-- Bars (decreasing height) -->
+        <rect x="70" y="30" width="35" height="140" rx="3" fill="#10b981" fill-opacity="0.7"/>
+        <text x="87" y="25" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">10</text>
+        <text x="87" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">1st</text>
+
+        <rect x="120" y="60" width="35" height="110" rx="3" fill="#10b981" fill-opacity="0.6"/>
+        <text x="137" y="55" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">8</text>
+        <text x="137" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">2nd</text>
+
+        <rect x="170" y="85" width="35" height="85" rx="3" fill="#10b981" fill-opacity="0.5"/>
+        <text x="187" y="80" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">6</text>
+        <text x="187" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">3rd</text>
+
+        <rect x="220" y="110" width="35" height="60" rx="3" fill="#10b981" fill-opacity="0.4"/>
+        <text x="237" y="105" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">4</text>
+        <text x="237" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">4th</text>
+
+        <rect x="270" y="135" width="35" height="35" rx="3" fill="#10b981" fill-opacity="0.3"/>
+        <text x="287" y="130" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">2</text>
+        <text x="287" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">5th</text>
+
+        <rect x="320" y="155" width="35" height="15" rx="3" fill="#10b981" fill-opacity="0.2"/>
+        <text x="337" y="150" text-anchor="middle" fill="#10b981" font-size="10" fill-opacity="0.8">1</text>
+        <text x="337" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">6th</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Diminishing marginal utility
+; Utility function: U(n) = 20*ln(n+1)
+; Marginal utility: MU(n) = U(n) - U(n-1)
+
+(define (utility n)
+  (* 20 (log (+ n 1))))
+
+(define (marginal-utility n)
+  (- (utility n) (utility (- n 1))))
+
+(display "Unit  Total U   Marginal U")
+(newline)
+(display "----  -------   ----------")
+(newline)
+
+(define (show n)
+  (display n)
+  (display "     ")
+  (display (exact->inexact (utility n)))
+  (display "    ")
+  (display (exact->inexact (marginal-utility n)))
+  (newline))
+
+(show 1)
+(show 2)
+(show 3)
+(show 4)
+(show 5)
+(show 6)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def utility(n):
+    return 20 * math.log(n + 1)
+
+def marginal_utility(n):
+    return utility(n) - utility(n - 1)
+
+print("Unit   Total U  Marginal U")
+print("----   -------  ----------")
+for n in range(1, 7):
+    print(str(n).rjust(4) + "  " + str(round(utility(n),2)).rjust(8) + "  " + str(round(marginal_utility(n),2)).rjust(10))
+`} />
+    </div>
+
+
+    <h3>Consumer surplus</h3>
+    <p>You would pay $10 for the first slice but only $2 for the fifth. If the price is $3, you buy four slices. The difference between what you would have paid and what you actually paid is <strong>consumer surplus</strong>. It is the area under the demand curve and above the price line.</p>
+
+    <SchemeRepl client:load initialCode={`; Consumer surplus: sum of (willingness to pay - price)
+; for each unit purchased
+
+(define willingness-to-pay (list 10 8 6 4 2 1))
+(define price 3)
+
+; Buy all units where WTP >= price
+(define (surplus wtp-list p)
+  (if (or (null? wtp-list) (< (car wtp-list) p))
+    0
+    (+ (- (car wtp-list) p) (surplus (cdr wtp-list) p))))
+
+(define units-bought
+  (length (filter (lambda (w) (>= w price)) willingness-to-pay)))
+
+(display "Price: $")
+(display price)
+(newline)
+(display "Units bought: ")
+(display units-bought)
+(newline)
+(display "Consumer surplus: $")
+(display (surplus willingness-to-pay price))
+(newline)
+(display "  ($10-$3) + ($8-$3) + ($6-$3) + ($4-$3) = $")
+(display (+ 7 5 3 1))
+`} />
+
+
+    <h3>Key terms</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-400">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Marginal utility</td><td>Additional satisfaction from one more unit</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-gray-300">Total utility</td><td>Cumulative satisfaction from all units consumed</td></tr>
+          <tr><td class="py-2 pr-4 text-gray-300">Consumer surplus</td><td>Difference between willingness to pay and actual price</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Marginal_utility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Marginal utility</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Consumer_surplus"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>W Consumer surplus</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-05/", label: "Elasticity" }} next={{ href: "/reading/economics/econ-07/", label: "Opportunity Cost" }} />
+
+  </main>
+</Layout>

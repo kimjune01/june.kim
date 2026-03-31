@@ -1,0 +1,258 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Panangaden 2009 — Labelled Markov Processes" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Labelled Markov Processes</h1>
+    <p class="text-gray-400 text-sm mb-6">Prakash Panangaden · 2009 · Imperial College Press</p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov kernels, composition). Basic probability.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two stochastic systems are <strong>behaviorally equivalent</strong> if no experiment can tell them apart. <a href="https://en.wikipedia.org/wiki/Bisimulation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bisimulation</a> makes this precise. The <strong>bisimulation metric</strong> measures <em>how different</em> two systems are — a continuous relaxation of the binary same-or-different question.</p>
+    </div>
+
+    <h3>Labelled Markov processes</h3>
+    <p>A labelled Markov process (LMP) is a state space with labelled probabilistic transitions. From state s, action a leads to a distribution over next states. It's a <a href="https://en.wikipedia.org/wiki/Markov_decision_process"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Markov decision process</a> viewed through the lens of process algebra.</p>
+
+    <SchemeRepl client:load initialCode={`; LMP: states + labelled transitions
+; transition(state, label) -> distribution over states
+
+(define (transition state label)
+  (cond
+    ((and (eq? state 's0) (eq? label 'a))
+     '((s1 . 0.7) (s2 . 0.3)))
+    ((and (eq? state 's1) (eq? label 'a))
+     '((s0 . 0.5) (s1 . 0.5)))
+    ((and (eq? state 's2) (eq? label 'a))
+     '((s2 . 1.0)))
+    (else '())))
+
+(display "s0 --a--> ") (display (transition 's0 'a)) (newline)
+(display "s1 --a--> ") (display (transition 's1 'a)) (newline)
+(display "s2 --a--> ") (display (transition 's2 'a)) (newline)
+; s2 is absorbing: once you're there, you stay
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# LMP as a transition function
+def transition(state, label):
+    lmp = {
+        ("s0", "a"): {"s1": 0.7, "s2": 0.3},
+        ("s1", "a"): {"s0": 0.5, "s1": 0.5},
+        ("s2", "a"): {"s2": 1.0},
+    }
+    return lmp.get((state, label), {})
+
+for s in ["s0", "s1", "s2"]:
+    print(f"  {s} --a--> {transition(s, 'a')}")
+`} />
+    </div>
+
+    <h3>Bisimulation — behavioral equivalence</h3>
+    <p>Two states are <a href="https://en.wikipedia.org/wiki/Bisimulation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>bisimilar</a> if they can't be distinguished by any sequence of observations. Formally: s ~ t if for every label a, the distributions transition(s,a) and transition(t,a) assign the same total probability to every equivalence class of ~.</p>
+
+    <SchemeRepl client:load initialCode={`; Bisimulation: s ~ t iff no experiment distinguishes them
+; Check: do s and t assign same probability to each class?
+
+; Two systems: one with 3 states, one with 2
+; System 1: s0 --a--> (s1: 0.5, s2: 0.5)
+; System 2: t0 --a--> (t1: 0.5, t1: 0.5) = (t1: 1.0)
+; s1 and s2 might be bisimilar (both absorbing)
+
+(define (absorbing? state trans label)
+  (let ((d (trans state label)))
+    (and (= (length d) 1)
+         (eq? (caar d) state))))
+
+(define (trans1 s l)
+  (cond ((eq? s 's1) '((s1 . 1.0)))
+        ((eq? s 's2) '((s2 . 1.0)))
+        (else '())))
+
+(display "s1 absorbing? ")
+(display (absorbing? 's1 trans1 'a)) (newline)
+(display "s2 absorbing? ")
+(display (absorbing? 's2 trans1 'a)) (newline)
+; Both absorbing — bisimilar. No experiment tells them apart.
+; They can be merged into one equivalence class.
+`} />
+
+    <h3>Bisimulation metric</h3>
+    <p>Instead of binary (same or different), measure <em>how far apart</em> two states are. The bisimulation metric d(s,t) is the maximum difference in expected reward over all experiments. d(s,t) = 0 iff s ~ t. This is the Kantorovich lifting of the metric to distributions.</p>
+
+    <!-- SVG: Bisimulation metric — two state machines with distance -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 170" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left machine -->
+        <text x="95" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">System 1</text>
+        <!-- State s0 -->
+        <circle cx="60" cy="55" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="59" text-anchor="middle" fill="currentColor" font-size="10">s0</text>
+        <!-- State s1 -->
+        <circle cx="130" cy="55" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="130" y="59" text-anchor="middle" fill="currentColor" font-size="10">s1</text>
+        <!-- State s2 -->
+        <circle cx="95" cy="115" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="95" y="119" text-anchor="middle" fill="currentColor" font-size="10">s2</text>
+        <!-- Transition arrows (left machine) -->
+        <line x1="76" y1="52" x2="114" y2="52" stroke="currentColor" stroke-width="1"/>
+        <polygon points="112,48 118,52 112,56" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="68" y1="69" x2="84" y2="101" stroke="currentColor" stroke-width="1"/>
+        <polygon points="80,98 86,104 80,105" fill="currentColor" fill-opacity="0.5"/>
+        <text x="95" y="42" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">0.7</text>
+        <text x="68" y="90" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">0.3</text>
+
+        <!-- Right machine -->
+        <text x="325" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">System 2</text>
+        <!-- State t0 -->
+        <circle cx="290" cy="55" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="290" y="59" text-anchor="middle" fill="currentColor" font-size="10">t0</text>
+        <!-- State t1 -->
+        <circle cx="360" cy="55" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="360" y="59" text-anchor="middle" fill="currentColor" font-size="10">t1</text>
+        <!-- State t2 -->
+        <circle cx="325" cy="115" r="16" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="325" y="119" text-anchor="middle" fill="currentColor" font-size="10">t2</text>
+        <!-- Transition arrows (right machine) -->
+        <line x1="306" y1="52" x2="344" y2="52" stroke="currentColor" stroke-width="1"/>
+        <polygon points="342,48 348,52 342,56" fill="currentColor" fill-opacity="0.5"/>
+        <line x1="298" y1="69" x2="314" y2="101" stroke="currentColor" stroke-width="1"/>
+        <polygon points="310,98 316,104 310,105" fill="currentColor" fill-opacity="0.5"/>
+        <text x="325" y="42" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">0.6</text>
+        <text x="298" y="90" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">0.4</text>
+
+        <!-- Dashed lines between corresponding states with distances -->
+        <line x1="76" y1="55" x2="274" y2="55" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="180" y="50" text-anchor="middle" fill="#60a5fa" font-size="9">d = 0.12</text>
+
+        <line x1="146" y1="55" x2="344" y2="55" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="4,3" stroke-opacity="0.5"/>
+
+        <line x1="111" y1="115" x2="309" y2="115" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="210" y="110" text-anchor="middle" fill="#4ade80" font-size="9">d &#x2248; 0</text>
+
+        <!-- Caption -->
+        <text x="210" y="160" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">close states behave similarly; d = 0 means bisimilar</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Bisimulation metric: iterative fixed point
+; d_{n+1}(s,t) = max_label Kantorovich(d_n)(trans(s,l), trans(t,l))
+; Kantorovich distance lifts d to distributions
+
+(define (kantorovich-1d d-prev dist1 dist2)
+  ; Simplified: total variation for 2-state case
+  (let ((states '(s0 s1 s2)))
+    (apply + (map (lambda (s)
+      (let ((p1 (let ((e (assoc s dist1))) (if e (cdr e) 0)))
+            (p2 (let ((e (assoc s dist2))) (if e (cdr e) 0))))
+        (abs (- p1 p2))))
+    states))))
+
+; s0 --a--> (s1: 0.7, s2: 0.3)
+; s1 --a--> (s0: 0.5, s1: 0.5)
+(define d1 '((s1 . 0.7) (s2 . 0.3)))
+(define d2 '((s0 . 0.5) (s1 . 0.5)))
+
+(display "TV distance(s0->a, s1->a) = ")
+(display (kantorovich-1d '() d1 d2))
+; Nonzero — s0 and s1 are behaviorally different
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bisimulation metric (total variation approximation)
+def tv_distance(d1, d2):
+    keys = set(d1) | set(d2)
+    return sum(abs(d1.get(k, 0) - d2.get(k, 0)) for k in keys)
+
+d1 = {"s1": 0.7, "s2": 0.3}
+d2 = {"s0": 0.5, "s1": 0.5}
+print(f"TV(s0->a, s1->a) = {tv_distance(d1, d2)}")
+print("Nonzero = behaviorally distinguishable")
+`} />
+    </div>
+
+    <h3>Logical characterization</h3>
+    <p>The metric has a logical counterpart: two states are distance d apart iff there exists a formula in a quantitative logic that evaluates to values differing by d on the two states. Behavioral distance = logical distance. This is the quantitative analogue of the Hennessy-Milner theorem.</p>
+
+    <SchemeRepl client:load initialCode={`; Logical characterization: distance = max formula difference
+; Formula: "probability of reaching absorbing state within 2 steps"
+
+(define (prob-reach trans state label target steps)
+  (if (= steps 0)
+    (if (eq? state target) 1.0 0.0)
+    (let ((dist (trans state label)))
+      (apply + (map (lambda (p)
+        (* (cdr p)
+           (prob-reach trans (car p) label target (- steps 1))))
+      dist)))))
+
+(define (trans s l)
+  (cond ((eq? s 's0) '((s1 . 0.7) (s2 . 0.3)))
+        ((eq? s 's1) '((s0 . 0.5) (s1 . 0.5)))
+        ((eq? s 's2) '((s2 . 1.0)))
+        (else '())))
+
+(display "P(reach s2 in 2 from s0) = ")
+(display (prob-reach trans 's0 'a 's2 2)) (newline)
+(display "P(reach s2 in 2 from s1) = ")
+(display (prob-reach trans 's1 'a 's2 2)) (newline)
+; Difference in this formula witnesses behavioral distance
+`} />
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(S, {'{'}&tau;_a{'}'})</td><td class="pr-4 text-green-300">(transition state label)</td><td class="font-sans">LMP: states + labelled transitions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">s ~ t</td><td class="pr-4 text-green-300">; bisimilar (no experiment distinguishes)</td><td class="font-sans">Bisimulation relation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">d(s,t)</td><td class="pr-4 text-green-300">(kantorovich-1d ...)</td><td class="font-sans">Bisimulation metric</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">K(d)</td><td class="pr-4 text-green-300">; Kantorovich lifting</td><td class="font-sans">Lift metric to distributions</td></tr>
+          <tr><td class="py-2 pr-4">L</td><td class="pr-4 text-green-300">; set of labels (actions)</td><td class="font-sans">Action alphabet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the category where these kernels compose</li>
+      <li><a href="/reading/natural-breadcrumbs/sato-2023/">🍞 Sato 2023</a> — divergences as distances between distributions</li>
+      <li><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">🍞 Baez, Fritz, Leinster 2011</a> — information loss (related to behavioral distance)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Bisimulation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bisimulation</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Markov_decision_process"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Markov decision process</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Kantorovich_metric"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kantorovich metric</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>All examples use finite state spaces with explicit transition tables. Panangaden works with labelled Markov processes over analytic spaces — continuous state spaces with σ-algebras, where bisimulation is defined via measurable partitions and the metric uses the Kantorovich (<a href="https://en.wikipedia.org/wiki/Wasserstein_metric"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wasserstein</a>-1) distance on probability measures. For example: the bisimulation metric on this page computes total variation between finite distributions. In the book, the Kantorovich metric lifts an arbitrary pseudometric on states to distributions over those states, and the bisimulation metric is the greatest fixed point of this lifting. The iterative structure is the same; the measure-theoretic foundations are not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? The book is published by Imperial College Press (2009). Start at Chapter 4 for bisimulation, Chapter 7 for the metric, Chapter 8 for the logical characterization.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/di-lavore-2025/", label: "Di Lavore 2025 · 17 of 21" }} next={{ href: "/reading/natural-breadcrumbs/cho-jacobs-2015/", label: "Cho, Jacobs 2015 · 19 of 21" }} />
+  </main>
+</Layout>

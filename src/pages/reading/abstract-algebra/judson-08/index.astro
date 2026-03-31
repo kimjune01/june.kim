@@ -1,0 +1,223 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.8 — Lattices and Boolean Algebras" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Lattices and Boolean Algebras</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 8</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>lattice</strong> is a partially ordered set where every pair of elements has a least upper bound (join) and a greatest lower bound (meet). A <strong>Boolean algebra</strong> is a distributive, complemented lattice. Boolean algebras connect algebra to logic: meet is AND, join is OR, complement is NOT.</p>
+    </div>
+
+    <!-- 1. Partial orders -->
+    <h3>Partial orders</h3>
+    <p>A <strong>partial order</strong> is a relation that is reflexive (a &le; a), antisymmetric (a &le; b and b &le; a implies a = b), and transitive (a &le; b and b &le; c implies a &le; c). Not every pair needs to be comparable. The divisibility relation on positive integers is a partial order: 2 | 6 but 2 and 3 are incomparable.</p>
+
+    <SchemeRepl client:load initialCode={`; Divisibility as a partial order on divisors of 12
+; a <= b means a divides b
+
+(define (divides? a b) (= 0 (modulo b a)))
+
+(define divs '(1 2 3 4 6 12))
+
+(display "Divisibility on [1,2,3,4,6,12]:") (newline)
+(for-each
+  (lambda (a)
+    (display "  ") (display a) (display " divides: ")
+    (for-each
+      (lambda (b)
+        (when (and (not (= a b)) (divides? a b))
+          (display b) (display " ")))
+      divs)
+    (newline))
+  divs)
+; 2 and 3 are incomparable: neither divides the other.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Divisibility partial order on divisors of 12
+divs = [1, 2, 3, 4, 6, 12]
+for a in divs:
+    above = [b for b in divs if b != a and b % a == 0]
+    print(str(a).rjust(2) + " divides: " + str(above))
+`} />
+    </div>
+
+
+    <!-- 2. Meet and join -->
+    <h3>Meet and join</h3>
+    <p>The <strong>meet</strong> (greatest lower bound) of a and b, written a &and; b, is the largest element below both. The <strong>join</strong> (least upper bound), written a &or; b, is the smallest element above both. In the divisibility lattice, meet is GCD and join is LCM.</p>
+
+    <SchemeRepl client:load initialCode={`; Meet = GCD, Join = LCM in the divisibility lattice
+
+(define (gcd a b)
+  (if (= b 0) a (gcd b (modulo a b))))
+
+(define (lcm a b)
+  (/ (* a b) (gcd a b)))
+
+(display "meet(4, 6) = gcd(4, 6) = ") (display (gcd 4 6)) (newline)
+(display "join(4, 6) = lcm(4, 6) = ") (display (lcm 4 6)) (newline)
+
+(display "meet(2, 3) = gcd(2, 3) = ") (display (gcd 2 3)) (newline)
+(display "join(2, 3) = lcm(2, 3) = ") (display (lcm 2 3)) (newline)
+
+; Properties: a ^ b <= a, a ^ b <= b
+;             a <= a v b, b <= a v b
+(display "4 ^ 6 = 2 divides both 4 and 6? ")
+(display (and (= 0 (modulo 4 (gcd 4 6)))
+              (= 0 (modulo 6 (gcd 4 6)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Meet = GCD, Join = LCM
+from math import gcd
+lcm = lambda a, b: a * b // gcd(a, b)
+
+print("meet(4,6) = gcd = " + str(gcd(4,6)))
+print("join(4,6) = lcm = " + str(lcm(4,6)))
+print("meet(2,3) = gcd = " + str(gcd(2,3)))
+print("join(2,3) = lcm = " + str(lcm(2,3)))
+`} />
+    </div>
+
+
+    <!-- SVG: diamond lattice -->
+    <h3>The diamond lattice</h3>
+    <p>The divisors of 6 under divisibility form a diamond-shaped lattice. This is the simplest non-chain lattice: 2 and 3 are incomparable, but both sit between 1 and 6.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 220 220" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Top: 6 -->
+        <circle cx="110" cy="30" r="4" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="110" y="20" text-anchor="middle" fill="#f59e0b" font-size="13">6</text>
+
+        <!-- Left: 2 -->
+        <circle cx="40" cy="110" r="4" fill="#60a5fa" fill-opacity="0.5"/>
+        <text x="25" y="114" text-anchor="middle" fill="#60a5fa" font-size="13">2</text>
+
+        <!-- Right: 3 -->
+        <circle cx="180" cy="110" r="4" fill="#a78bfa" fill-opacity="0.5"/>
+        <text x="195" y="114" text-anchor="middle" fill="#a78bfa" font-size="13">3</text>
+
+        <!-- Bottom: 1 -->
+        <circle cx="110" cy="190" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="110" y="210" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">1</text>
+
+        <!-- Edges -->
+        <line x1="106" y1="34" x2="44" y2="106" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="114" y1="34" x2="176" y2="106" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="44" y1="114" x2="106" y2="186" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="176" y1="114" x2="114" y2="186" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Labels -->
+        <text x="60" y="65" fill="currentColor" font-size="9" fill-opacity="0.3">2|6</text>
+        <text x="148" y="65" fill="currentColor" font-size="9" fill-opacity="0.3">3|6</text>
+        <text x="60" y="165" fill="currentColor" font-size="9" fill-opacity="0.3">1|2</text>
+        <text x="148" y="165" fill="currentColor" font-size="9" fill-opacity="0.3">1|3</text>
+      </svg>
+    </div>
+
+
+    <!-- 3. Boolean algebras -->
+    <h3>Boolean algebras</h3>
+    <p>A <strong>Boolean algebra</strong> is a distributive lattice with complements: for every element a, there exists a' such that a &and; a' = 0 and a &or; a' = 1. The power set of any set, ordered by inclusion, is a Boolean algebra. So is the two-element set (0, 1) with AND, OR, and NOT.</p>
+
+    <SchemeRepl client:load initialCode={`; Boolean algebra: power set of {a, b}
+; ordered by subset inclusion
+; Represent subsets as bitmasks: empty = 0, [a] = 1, [b] = 2, [a,b] = 3
+
+(define (meet a b) (bitwise-and a b))  ; intersection
+(define (join a b) (bitwise-ior a b))  ; union
+(define (complement a) (bitwise-xor a 3))  ; flip within [a,b]
+
+(define (name s)
+  (cond ((= s 0) "[]")
+        ((= s 1) "[a]")
+        ((= s 2) "[b]")
+        ((= s 3) "[a,b]")
+        (else "?")))
+
+(display "Meet and join in P([a,b]):") (newline)
+(display "  [a] ^ [b]   = ") (display (name (meet 1 2))) (newline)
+(display "  [a] v [b]   = ") (display (name (join 1 2))) (newline)
+(display "  [a]'        = ") (display (name (complement 1))) (newline)
+(display "  [a] ^ [a]'  = ") (display (name (meet 1 (complement 1)))) (newline)
+(display "  [a] v [a]'  = ") (display (name (join 1 (complement 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Boolean algebra: power set of {a, b}
+names = dict([(0,"[]"), (1,"[a]"), (2,"[b]"), (3,"[a,b]")])
+meet = lambda a, b: a & b
+join = lambda a, b: a | b
+comp = lambda a: a ^ 3
+
+print("[a] ^ [b]  = " + names[meet(1,2)])
+print("[a] v [b]  = " + names[join(1,2)])
+print("[a]'       = " + names[comp(1)])
+print("[a] ^ [a]' = " + names[meet(1, comp(1))])
+print("[a] v [a]' = " + names[join(1, comp(1))])
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a &and; b</td><td class="pr-4 text-green-300">(meet a b)</td><td class="pr-4 text-blue-300">meet(a, b)</td><td class="font-sans">Greatest lower bound</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a &or; b</td><td class="pr-4 text-green-300">(join a b)</td><td class="pr-4 text-blue-300">join(a, b)</td><td class="font-sans">Least upper bound</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a'</td><td class="pr-4 text-green-300">(complement a)</td><td class="pr-4 text-blue-300">comp(a)</td><td class="font-sans">Complement</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a &le; b</td><td class="pr-4 text-green-300">(divides? a b)</td><td class="pr-4 text-blue-300">b % a == 0</td><td class="font-sans">Partial order</td></tr>
+          <tr><td class="py-2 pr-4">P(S)</td><td class="pr-4 text-green-300">bitmask ops</td><td class="pr-4 text-blue-300">bitmask ops</td><td class="font-sans">Power set (Boolean algebra)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-07/">&larr; Ch.7 Integral Domains and Fields</a> &mdash; fields are complete in a different sense</li>
+    
+      <li><a href="/reading/logic/logic-02/">🔑 Logic Ch.2</a> &mdash; Boolean algebra is the algebra of propositional logic</li>
+      <li><a href="/reading/scientific-method/boole-1854/">🔬 Boole 1854</a> &mdash; the historical origin of this whole chapter</li>
+      <li><a href="/reading/discrete-math/levin-03/">🔢 Discrete Math Ch.3</a> &mdash; symbolic logic uses the same lattice operations</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-03/">Milewski Ch.3</a> &mdash; preorders are categories where hom-sets have at most one morphism; lattices are preorders with products and coproducts</li>
+      <li><a href="/reading/category-theory/milewski-23/">Milewski Ch.23</a> &mdash; topoi have Heyting algebra structure on subobjects, generalizing Boolean algebras by dropping excluded middle</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson covers lattices and Boolean algebras in Ch. 19. The power set Boolean algebra is the canonical example. The connection to logic (meet = AND, join = OR) makes Boolean algebras central to computer science. The <a href="https://en.wikipedia.org/wiki/Heyting_algebra"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Heyting algebra</a> generalization (drop the complement axiom, keep distributivity) connects to intuitionistic logic and the internal logic of topoi. Every Boolean algebra is a Heyting algebra, but not conversely.</p>
+
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-07/", label: "Integral Domains and Fields" }} fin="fin · 8 of 8" />
+
+  </main>
+</Layout>

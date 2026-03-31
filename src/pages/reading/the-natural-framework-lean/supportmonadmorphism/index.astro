@@ -1,0 +1,62 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SupportMonadMorphism.lean — Support as monad morphism" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>SupportMonadMorphism.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/SupportMonadMorphism.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Proves that the support map is a monad morphism from any monad M to the reachability (powerset) monad &mdash; formalizing the connection to Fritz, Perrone, and Rezagholi (2021). This morphism is one of the key bridges in <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the category-theoretic backbone</a>.</p>
+    </div>
+
+    <h3>Reach</h3>
+    <p>The reachability monad: predicates on a type. <code>Reach a</code> is <code>a &rarr; Prop</code> &mdash; the powerset monad. <code>pure</code> is the singleton set, <code>bind</code> is relational composition (existential quantification over an intermediate).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">Reach</span> (&alpha; : Type) := &alpha; &rarr; Prop
+
+<span class="text-blue-300">instance</span> : Monad Reach <span class="text-blue-300">where</span>
+  pure := <span class="text-blue-300">fun</span> a x =&gt; x = a
+  bind := <span class="text-blue-300">fun</span> s f y =&gt; &exists; x, s x &and; f x y</code></pre>
+
+    <h3>MonadMorphism</h3>
+    <p>A monad morphism from M to N: a natural transformation that preserves <code>pure</code> and <code>bind</code>. In software terms: a map that commutes with wrapping values and with sequencing computations. The <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>framework lexicon</a> maps how different communities name these same structures.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">class</span> <span class="text-green-300">MonadMorphism</span> (M N : Type &rarr; Type) [Monad M] [Monad N] <span class="text-blue-300">where</span>
+  morph : &#123;&alpha; : Type&#125; &rarr; M &alpha; &rarr; N &alpha;
+  morph_pure : &forall; &#123;&alpha;&#125; (a : &alpha;), morph (pure a : M &alpha;) = (pure a : N &alpha;)
+  morph_bind : &forall; &#123;&alpha; &beta;&#125; (m : M &alpha;) (f : &alpha; &rarr; M &beta;),
+    morph (m &gt;&gt;= f) = (morph m &gt;&gt;= <span class="text-blue-300">fun</span> x =&gt; morph (f x))</code></pre>
+
+    <h3>instance supportMonadMorphism</h3>
+    <p>Support is a monad morphism from M to Reach. The unit law (<code>support(pure a) = &#123;a&#125;</code>) follows from <code>support_pure</code>. The bind law (<code>support(m >>= f) = union of support(f x) for x in support(m)</code>) follows from <code>support_bind</code>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">instance</span> <span class="text-green-300">supportMonadMorphism</span> (M : Type &rarr; Type) [Monad M] [Support M] :
+    MonadMorphism M Reach <span class="text-blue-300">where</span>
+  morph := <span class="text-blue-300">fun</span> m =&gt; Support.support m
+  morph_pure := <span class="text-blue-300">by</span>
+    intro &alpha; a; funext x
+    exact propext (Support.support_pure a x)
+  morph_bind := <span class="text-blue-300">by</span>
+    intro &alpha; &beta; m f; funext y
+    exact propext (Support.support_bind m f y)</code></pre>
+    <p class="text-sm text-gray-500">Both laws reduce to propositional extensionality applied to the Support axioms. The proofs are one line each.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/support/">Support.lean</a> &mdash; imported; the Support typeclass whose laws are the monad morphism laws</li>
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">Kleisli.lean</a> &mdash; kernels compose in M; this shows support maps them to Reach coherently</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/fritz-perrone-2021/">🍞 Fritz-Perrone 2021</a></li>
+      <li><a href="/reading/category-theory/milewski-17/">🐱 Milewski Ch17 Monads</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/corollary/", label: "Corollary.lean · 24 of 25" }} />
+  </main>
+</Layout>

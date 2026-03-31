@@ -1,0 +1,190 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 5 — KL Divergence" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to information theory</a>
+
+    <h1>KL Divergence</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>KL divergence</a> measures the <strong>extra surprise</strong> you get when you use distribution Q to code data that actually comes from P. It is not a distance: D(P||Q) &ne; D(Q||P). It is always &ge; 0, and zero only when P = Q.</p>
+    </div>
+
+    <!-- 1. Definition -->
+    <h3>The formula</h3>
+    <p>D<sub>KL</sub>(P || Q) = &sum; P(x) log(P(x) / Q(x)). Each term weights the log-ratio by how likely x actually is under P. When Q assigns low probability to something P considers likely, that term blows up. When Q matches P perfectly, every ratio is 1 and every log is 0.</p>
+
+    <!-- SVG: Two distributions P and Q overlaid -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="370" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="170" x2="50" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- P bars (blue, left-shifted) -->
+        <rect x="75" y="50" width="25" height="120" rx="2" fill="#3b82f6" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1"/>
+        <rect x="135" y="80" width="25" height="90" rx="2" fill="#3b82f6" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1"/>
+        <rect x="195" y="120" width="25" height="50" rx="2" fill="#3b82f6" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1"/>
+        <rect x="255" y="145" width="25" height="25" rx="2" fill="#3b82f6" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1"/>
+        <rect x="315" y="160" width="25" height="10" rx="2" fill="#3b82f6" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1"/>
+        <!-- Q bars (red, right-shifted) -->
+        <rect x="100" y="130" width="25" height="40" rx="2" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1"/>
+        <rect x="160" y="90" width="25" height="80" rx="2" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1"/>
+        <rect x="220" y="60" width="25" height="110" rx="2" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1"/>
+        <rect x="280" y="90" width="25" height="80" rx="2" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1"/>
+        <rect x="340" y="130" width="25" height="40" rx="2" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1"/>
+        <!-- Divergence shading between bars where P > Q -->
+        <rect x="75" y="50" width="50" height="80" rx="0" fill="#fbbf24" fill-opacity="0.12"/>
+        <!-- Labels -->
+        <text x="88" y="42" text-anchor="middle" fill="#60a5fa" font-size="11">P</text>
+        <text x="113" y="125" text-anchor="middle" fill="#ef4444" font-size="11">Q</text>
+        <!-- Legend -->
+        <rect x="60" y="8" width="10" height="10" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="75" y="17" fill="currentColor" font-size="10" fill-opacity="0.6">P (truth)</text>
+        <rect x="150" y="8" width="10" height="10" fill="#ef4444" fill-opacity="0.5"/>
+        <text x="165" y="17" fill="currentColor" font-size="10" fill-opacity="0.6">Q (model)</text>
+        <rect x="240" y="8" width="10" height="10" fill="#fbbf24" fill-opacity="0.3"/>
+        <text x="255" y="17" fill="currentColor" font-size="10" fill-opacity="0.6">divergence</text>
+        <!-- x labels -->
+        <text x="90" y="186" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">a</text>
+        <text x="150" y="186" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">b</text>
+        <text x="210" y="186" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">c</text>
+        <text x="270" y="186" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">d</text>
+        <text x="330" y="186" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">e</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; KL divergence: D(P||Q) = sum P(x) * log2(P(x)/Q(x))
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0) (* pi (log2 (/ pi qi))) 0))
+  p q)))
+
+; P = truth, Q = model
+(define P '(0.4 0.3 0.15 0.1 0.05))
+(define Q '(0.1 0.2 0.3 0.25 0.15))
+
+(display "D(P||Q) = ") (display (kl-divergence P Q)) (newline)
+(display "D(Q||P) = ") (display (kl-divergence Q P)) (newline)
+; Not equal — KL divergence is asymmetric.
+
+; D(P||P) should be 0
+(display "D(P||P) = ") (display (kl-divergence P P)) (newline)
+; Zero: no extra surprise when the model matches the truth.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def kl_divergence(p, q):
+    return sum(pi * math.log2(pi / qi) for pi, qi in zip(p, q) if pi > 0)
+
+P = [0.4, 0.3, 0.15, 0.1, 0.05]
+Q = [0.1, 0.2, 0.3, 0.25, 0.15]
+
+print(f"D(P||Q) = {kl_divergence(P, Q):.4f}")
+print(f"D(Q||P) = {kl_divergence(Q, P):.4f}")
+print(f"D(P||P) = {kl_divergence(P, P):.4f}")
+print("Asymmetric: D(P||Q) != D(Q||P). Not a distance.")
+`} />
+    </div>
+
+    <!-- 2. Gibbs' inequality -->
+    <h3>Gibbs' inequality: always non-negative</h3>
+    <p>KL divergence is always &ge; 0. This is <a href="https://en.wikipedia.org/wiki/Gibbs%27_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gibbs' inequality</a>. The proof uses <a href="https://en.wikipedia.org/wiki/Jensen%27s_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Jensen's inequality</a> on the concavity of log. Intuitively: you can never do <em>better</em> than the truth. Any mismatch between model and reality costs you bits.</p>
+
+    <SchemeRepl client:load initialCode={`; Gibbs' inequality: D(P||Q) >= 0 always
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0) (* pi (log2 (/ pi qi))) 0))
+  p q)))
+
+; Try many random-ish distributions — all non-negative
+(define (check p q label)
+  (let ((d (kl-divergence p q)))
+    (display label) (display ": D = ")
+    (display d) (display (if (>= d 0) "  ok" "  FAIL"))
+    (newline)))
+
+(check '(0.5 0.5)     '(0.5 0.5)     "uniform vs uniform")
+(check '(0.9 0.1)     '(0.5 0.5)     "biased vs uniform ")
+(check '(0.5 0.5)     '(0.9 0.1)     "uniform vs biased ")
+(check '(0.7 0.2 0.1) '(0.1 0.2 0.7) "flipped           ")
+; All >= 0. Gibbs' inequality holds.
+`} />
+
+    <!-- 3. Asymmetry -->
+    <h3>Not a distance</h3>
+    <p>A true distance satisfies d(x,y) = d(y,x). KL divergence does not. D(P||Q) asks "how surprised am I using Q when P is true?" while D(Q||P) asks the reverse. These are different questions with different answers. Using a bad model for rare events is worse than using one for common events.</p>
+
+    <SchemeRepl client:load initialCode={`; Asymmetry: D(P||Q) != D(Q||P) in general
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (kl-divergence p q)
+  (apply + (map (lambda (pi qi)
+    (if (> pi 0) (* pi (log2 (/ pi qi))) 0))
+  p q)))
+
+; P concentrates on outcome 1. Q spreads evenly.
+(define P '(0.9 0.05 0.05))
+(define Q '(0.33 0.34 0.33))
+
+(display "D(P||Q) = ") (display (kl-divergence P Q)) (newline)
+(display "D(Q||P) = ") (display (kl-divergence Q P)) (newline)
+(display "ratio   = ") (display (/ (kl-divergence P Q) (kl-divergence Q P)))
+; Very different. Direction matters.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D<sub>KL</sub>(P || Q)</td><td class="pr-4 text-green-300">(kl-divergence P Q)</td><td class="font-sans">KL divergence from Q to P</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(x) log(P(x)/Q(x))</td><td class="pr-4 text-green-300">(* pi (log2 (/ pi qi)))</td><td class="font-sans">Pointwise divergence term</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">D &ge; 0</td><td class="pr-4 text-green-300">(&gt;= d 0)</td><td class="font-sans">Gibbs' inequality</td></tr>
+          <tr><td class="py-2 pr-4">D = 0 iff P = Q</td><td class="pr-4 text-green-300">(kl-divergence P P) = 0</td><td class="font-sans">Zero divergence means identical</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-04/">📡 Mutual information</a> &mdash; KL divergence between joint and product of marginals</li>
+      <li><a href="/reading/information-theory/shannon-06/">📡 Data processing inequality</a> &mdash; processing can only increase divergence from truth</li>
+      <li><a href="/reading/sato-2023/">🍞 Sato, Katsumata 2023</a> &mdash; divergences on monads; KL is the primary example</li>
+      <li><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>KL divergence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gibbs%27_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gibbs' inequality</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Cross-entropy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cross-entropy</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>All examples use finite discrete distributions with explicit probability vectors. KL divergence extends to continuous distributions via integrals, and to distributions over infinite countable sets via infinite sums. The asymmetry is the same in all cases. The non-negativity proof (Gibbs' inequality) uses Jensen's inequality on the convexity of -log, which holds regardless of whether the sample space is finite.</p>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-04/", label: "Mutual Information" }} next={{ href: "/reading/information-theory/shannon-06/", label: "Data Processing" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="The Natural Framework Lean Proof" favicon="✏️">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>The Natural Framework Lean Proof</h1>
+
+    <p>The <a href="https://github.com/kimjune01/natural-framework"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Natural Framework</a> is 2,800+ lines of Lean 4 that formalize <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the six-role information processing pipeline</a>. Zero <code>sorry</code>. No Mathlib.</p>
+
+    <img src="/reading/natural-framework-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember, with Consolidate as backward pass" style="width:100%; display:block; margin: 1.5rem 0;">
+
+    <p>Each page below explains one file in plain English. The code is shown for reference.</p>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Foundations</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/the-natural-framework-lean/support/">Support.lean</a> — which outputs a computation can produce</li>
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">Kleisli.lean</a> — stochastic functions compose</li>
+      <li><a href="/reading/the-natural-framework-lean/axioms/">Axioms.lean</a> — five empirical assumptions</li>
+      <li><a href="/reading/the-natural-framework-lean/pipeline/">Pipeline.lean</a> — six stages, one cycle</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Contracts and composition</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> — postconditions on morphism outputs</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> — stage N's guarantee = stage N+1's assumption</li>
+      <li><a href="/reading/the-natural-framework-lean/boundary/">Boundary.lean</a> — why each stage is forced</li>
+      <li><a href="/reading/the-natural-framework-lean/uniqueness/">Uniqueness.lean</a> — the ordering is unique</li>
+      <li><a href="/reading/the-natural-framework-lean/removal/">Removal.lean</a> — remove any postcondition, system dies</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Stochasticity and termination</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/the-natural-framework-lean/pigeonhole/">Pigeonhole.lean</a> — no injection from n+1 to n</li>
+      <li><a href="/reading/the-natural-framework-lean/stochasticity/">Stochasticity.lean</a> — determinism → confusion → error</li>
+      <li><a href="/reading/the-natural-framework-lean/deathconditions/">DeathConditions.lean</a> — three ways to die</li>
+      <li><a href="/reading/the-natural-framework-lean/induction/">Induction.lean</a> — life persists iff all six fire</li>
+      <li><a href="/reading/the-natural-framework-lean/fractal/">Fractal.lean</a> — recursive consolidation with budget termination</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Hoare logic layer</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> — triples, COMP, AND, OR, consequence</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-wp/">Hoare/WP.lean</a> — weakest precondition</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-bridge/">Hoare/Bridge.lean</a> — contracts = Hoare triples</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-comp/">Hoare/Comp.lean</a> — full pipeline composition</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-graded/">Hoare/Graded.lean</a> — grades from a preordered monoid</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-effects/">Hoare/Effects.lean</a> — Boolean effect embedding</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-static/">Hoare/Static.lean</a> — iteration stability</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-divergence/">Hoare/Divergence.lean</a> — NonExpanding as threshold triples</li>
+    </ul>
+
+    <p class="text-gray-500 text-xs mb-2 mt-4">Variational and morphisms</p>
+    <ul class="text-sm space-y-1 mb-4">
+      <li><a href="/reading/the-natural-framework-lean/variational/">Variational.lean</a> — contracts from optimization</li>
+      <li><a href="/reading/the-natural-framework-lean/corollary/">Corollary.lean</a> — competitive core, control/data split</li>
+      <li><a href="/reading/the-natural-framework-lean/supportmonadmorphism/">SupportMonadMorphism.lean</a> — support as monad morphism</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/">🔑 Logic</a> &mdash; Lean implements dependent type theory as a logic</li>
+      <li><a href="/reading/proof-writing/">✎ Proofs</a> &mdash; the same proof techniques, now machine-checked</li>
+      <li><a href="/reading/category-theory/">🐱 Category Theory</a> &mdash; Kleisli, monads, and functors formalized</li>
+      <li><a href="/reading/programming/">🪄 Programming</a> &mdash; type systems as a programming language foundation</li>
+    </ul>
+    </Neighbors>
+
+
+  </main>
+</Layout>

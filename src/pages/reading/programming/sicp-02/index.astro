@@ -1,0 +1,278 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.2 — Recursion & Iteration" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Recursion &amp; Iteration</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-11.html#%_sec_1.2">SICP &sect;1.2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A recursive <strong>procedure</strong> can generate an iterative <strong>process</strong>. The shape of the process &mdash; stack growth vs constant space &mdash; matters more than whether the procedure calls itself.</p>
+    </div>
+
+
+    <!-- SVG: linear recursion vs iteration -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Linear Recursion (left) -->
+        <text x="110" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">linear recursion</text>
+        <text x="30" y="45" fill="currentColor" font-size="10" fill-opacity="0.6">(fact 4)</text>
+        <text x="50" y="65" fill="currentColor" font-size="10" fill-opacity="0.6">(* 4 (fact 3))</text>
+        <text x="70" y="85" fill="currentColor" font-size="10" fill-opacity="0.6">(* 4 (* 3 (fact 2)))</text>
+        <text x="90" y="105" fill="currentColor" font-size="10" fill-opacity="0.5">(* 4 (* 3 (* 2 (fact 1))))</text>
+        <text x="90" y="125" fill="currentColor" font-size="10" fill-opacity="0.5">(* 4 (* 3 (* 2 1)))</text>
+        <text x="70" y="145" fill="currentColor" font-size="10" fill-opacity="0.6">(* 4 (* 3 2))</text>
+        <text x="50" y="165" fill="currentColor" font-size="10" fill-opacity="0.6">(* 4 6)</text>
+        <text x="30" y="185" fill="currentColor" font-size="10" fill-opacity="0.7">24</text>
+        <!-- Arrow showing stack growth -->
+        <line x1="15" y1="40" x2="15" y2="120" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="15,120 11,112 19,112" fill="#f59e0b" fill-opacity="0.4"/>
+        <text x="8" y="80" fill="#f59e0b" font-size="8" fill-opacity="0.5" transform="rotate(-90,8,80)">grows</text>
+
+        <!-- Iterative (right) -->
+        <text x="380" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">iterative process</text>
+        <text x="310" y="45" fill="currentColor" font-size="10" fill-opacity="0.6">(fact-iter 1 1 4)</text>
+        <text x="310" y="65" fill="currentColor" font-size="10" fill-opacity="0.6">(fact-iter 1 2 4)</text>
+        <text x="310" y="85" fill="currentColor" font-size="10" fill-opacity="0.6">(fact-iter 2 3 4)</text>
+        <text x="310" y="105" fill="currentColor" font-size="10" fill-opacity="0.6">(fact-iter 6 4 4)</text>
+        <text x="310" y="125" fill="currentColor" font-size="10" fill-opacity="0.6">(fact-iter 24 5 4)</text>
+        <text x="310" y="145" fill="currentColor" font-size="10" fill-opacity="0.7">24</text>
+        <!-- Arrow showing constant space -->
+        <line x1="295" y1="40" x2="295" y2="145" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="285" y="95" fill="#60a5fa" font-size="8" fill-opacity="0.5" transform="rotate(-90,285,95)">constant</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Linear recursion -->
+    <h3>Linear recursion &mdash; factorial</h3>
+    <p>The naive factorial builds a chain of deferred multiplications. Each call adds a frame to the stack. Space grows linearly with n. This is a <strong>linear recursive process</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Linear recursive process
+; Each call defers a multiplication: n * (factorial (- n 1))
+; Stack grows to depth n before contracting.
+
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+
+(display "6! = ") (display (factorial 6)) (newline)
+(display "10! = ") (display (factorial 10)) (newline)
+(display "20! = ") (display (factorial 20))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Linear recursive factorial
+def factorial(n):
+    if n == 1:
+        return 1
+    return n * factorial(n - 1)
+
+print(f"6!  = {factorial(6)}")
+print(f"10! = {factorial(10)}")
+print(f"20! = {factorial(20)}")
+`} />
+    </div>
+
+
+    <!-- 2. Iterative process -->
+    <h3>Iterative process &mdash; factorial with accumulator</h3>
+    <p>Same recursive procedure, different process shape. The accumulator carries the running product. Each call passes all state forward &mdash; no deferred operations, constant space. Scheme guarantees <strong>tail-call optimization</strong>, so this runs in O(1) space.</p>
+
+    <SchemeRepl client:load initialCode={`; Iterative process via tail recursion.
+; State is carried in the accumulator — no deferred operations.
+
+(define (factorial n)
+  (define (iter product counter)
+    (if (> counter n)
+        product
+        (iter (* counter product) (+ counter 1))))
+  (iter 1 1))
+
+(display "6! = ") (display (factorial 6)) (newline)
+(display "10! = ") (display (factorial 10)) (newline)
+(display "20! = ") (display (factorial 20))
+; Same results, but constant stack space.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Iterative factorial — a loop is the natural Python form
+def factorial(n):
+    product = 1
+    for counter in range(1, n + 1):
+        product *= counter
+    return product
+
+print(f"6!  = {factorial(6)}")
+print(f"10! = {factorial(10)}")
+print(f"20! = {factorial(20)}")
+# Python doesn't optimize tail calls, so loops are preferred.
+`} />
+    </div>
+
+
+    <!-- 3. Tree recursion -->
+    <h3>Tree recursion &mdash; Fibonacci</h3>
+    <p>Fibonacci via the naive definition branches at each step. The call tree has exponential nodes &mdash; the same subproblems are recomputed many times. It's beautiful and wasteful. The iterative version below runs in linear time and constant space.</p>
+
+    <SchemeRepl client:load initialCode={`; Tree recursion: two branches per call.
+; fib(n) computes fib(n-1) + fib(n-2) redundantly.
+
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1)) (fib (- n 2))))))
+
+(display "fib(10) = ") (display (fib 10)) (newline)
+
+; Iterative Fibonacci: O(n) time, O(1) space.
+(define (fib-iter n)
+  (define (iter a b count)
+    (if (= count 0)
+        b
+        (iter (+ a b) a (- count 1))))
+  (iter 1 0 n))
+
+(display "fib-iter(10) = ") (display (fib-iter 10)) (newline)
+(display "fib-iter(30) = ") (display (fib-iter 30))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Tree recursion vs iterative Fibonacci
+def fib(n):
+    if n == 0: return 0
+    if n == 1: return 1
+    return fib(n - 1) + fib(n - 2)
+
+print(f"fib(10)      = {fib(10)}")
+
+# Iterative version
+def fib_iter(n):
+    a, b = 1, 0
+    for _ in range(n):
+        a, b = a + b, a
+    return b
+
+print(f"fib_iter(10) = {fib_iter(10)}")
+print(f"fib_iter(30) = {fib_iter(30)}")
+`} />
+    </div>
+
+
+    <!-- 4. Orders of growth -->
+    <h3>Orders of growth</h3>
+    <p>The key question: how do time and space scale with input size? Linear recursive factorial: &Theta;(n) time, &Theta;(n) space. Iterative factorial: &Theta;(n) time, &Theta;(1) space. Tree Fibonacci: &Theta;(&phi;<sup>n</sup>) time, &Theta;(n) space. The shape of the process determines the resource profile.</p>
+
+    <SchemeRepl client:load initialCode={`; Exponentiation — two approaches.
+
+; Recursive: O(n) time, O(n) space
+(define (expt-rec b n)
+  (if (= n 0) 1 (* b (expt-rec b (- n 1)))))
+
+; Iterative: O(n) time, O(1) space
+(define (expt-iter b n)
+  (define (iter product counter)
+    (if (= counter 0)
+        product
+        (iter (* b product) (- counter 1))))
+  (iter 1 n))
+
+; Fast exponentiation: O(log n) time via successive squaring
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+(define (square x) (* x x))
+
+(display "2^10 (recursive) = ") (display (expt-rec 2 10)) (newline)
+(display "2^10 (iterative) = ") (display (expt-iter 2 10)) (newline)
+(display "2^10 (fast)      = ") (display (fast-expt 2 10)) (newline)
+(display "2^20 (fast)      = ") (display (fast-expt 2 20))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Three approaches to exponentiation
+def expt_rec(b, n):
+    if n == 0: return 1
+    return b * expt_rec(b, n - 1)
+
+def expt_iter(b, n):
+    product = 1
+    for _ in range(n):
+        product *= b
+    return product
+
+def fast_expt(b, n):
+    if n == 0: return 1
+    if n % 2 == 0: return fast_expt(b, n // 2) ** 2
+    return b * fast_expt(b, n - 1)
+
+print(f"2^10 (recursive) = {expt_rec(2, 10)}")
+print(f"2^10 (iterative) = {expt_iter(2, 10)}")
+print(f"2^10 (fast)      = {fast_expt(2, 10)}")
+print(f"2^20 (fast)      = {fast_expt(2, 20)}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(define (f x) body)</td><td class="pr-4 text-blue-300">def f(x): body</td><td class="font-sans">Recursive procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(define (iter a b) ...)</td><td class="pr-4 text-blue-300">for / while loop</td><td class="font-sans">Iterative process (tail call)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(even? n)</td><td class="pr-4 text-blue-300">n % 2 == 0</td><td class="font-sans">Parity test</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">&Theta;(n), &Theta;(log n)</td><td class="pr-4 text-blue-300">O(n), O(log n)</td><td class="font-sans">Orders of growth</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(cond (p1 e1) (else e2))</td><td class="pr-4 text-blue-300">if p1: e1; else: e2</td><td class="font-sans">Multi-branch conditional</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-01/">SICP Ch.1 &mdash; Expressions</a> &mdash; the evaluation model these processes run on</li>
+      <li><a href="/reading/programming/sicp-03/">SICP Ch.3 &mdash; Higher-Order Functions</a> &mdash; abstracting these patterns</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Recursion_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Recursion (computer science)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tail_call"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tail call</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Big_O_notation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Big O notation</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Scheme guarantees tail-call optimization: a tail-recursive procedure runs in constant space. Python does not &mdash; deep recursion hits the stack limit. The Python translations use explicit loops where SICP uses tail recursion. The <code>even?</code> predicate becomes <code>n % 2 == 0</code>. SICP's &Theta; notation (tight bound) is more precise than big-O (upper bound), but they coincide for these examples.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-11.html#%_sec_1.2">Read SICP &sect;1.2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-01/", label: "Expressions" }} next={{ href: "/reading/programming/sicp-03/", label: "Higher-Order Functions · 3 of 22" }} />
+
+  </main>
+</Layout>

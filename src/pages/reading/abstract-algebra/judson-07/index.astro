@@ -1,0 +1,230 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.7 — Integral Domains and Fields" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Integral Domains and Fields</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 7</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>integral domain</strong> is a commutative ring with no zero divisors: if ab = 0 then a = 0 or b = 0. A <strong>field</strong> is an integral domain where every nonzero element has a multiplicative inverse. Fields are where you can divide freely. Every finite integral domain is a field.</p>
+    </div>
+
+    <!-- 1. Zero divisors -->
+    <h3>Zero divisors</h3>
+    <p>In Z6, we have 2 * 3 = 0. Neither 2 nor 3 is zero, so they are <strong>zero divisors</strong>. Zero divisors break cancellation: if ab = ac and a is a zero divisor, you cannot conclude b = c. Integral domains ban zero divisors to keep cancellation safe.</p>
+
+    <SchemeRepl client:load initialCode={`; Zero divisors in Z6
+; Find all pairs where a*b = 0 mod 6 with a,b nonzero
+
+(display "Zero divisors in Z6:") (newline)
+(let loop ((a 1))
+  (when (< a 6)
+    (let inner ((b 1))
+      (when (< b 6)
+        (when (= 0 (modulo (* a b) 6))
+          (display "  ") (display a) (display " * ")
+          (display b) (display " = 0") (newline))
+        (inner (+ b 1))))
+    (loop (+ a 1))))
+
+; Z5 has no zero divisors (5 is prime)
+(newline) (display "Zero divisors in Z5:") (newline)
+(let loop ((a 1))
+  (when (< a 5)
+    (let inner ((b 1))
+      (when (< b 5)
+        (when (= 0 (modulo (* a b) 5))
+          (display "  ") (display a) (display " * ")
+          (display b) (display " = 0") (newline))
+        (inner (+ b 1))))
+    (loop (+ a 1))))
+(display "  (none)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Zero divisors in Z6 vs Z5
+for n in [6, 5]:
+    divs = [(a,b) for a in range(1,n) for b in range(1,n) if (a*b)%n==0]
+    print("Z" + str(n) + " zero divisors: " + str(divs if divs else "none"))
+`} />
+    </div>
+
+
+    <!-- 2. Fields -->
+    <h3>Fields</h3>
+    <p>A <strong>field</strong> is a commutative ring where every nonzero element has a multiplicative inverse. Z5 is a field: every element 1,2,3,4 has an inverse mod 5. Z6 is not: 2 and 3 have no inverses. Z_p is a field if and only if p is prime.</p>
+
+    <SchemeRepl client:load initialCode={`; Find multiplicative inverses in Z5
+
+(define (find-inverse a n)
+  (let loop ((b 1))
+    (cond
+      ((= b n) #f)
+      ((= 1 (modulo (* a b) n)) b)
+      (else (loop (+ b 1))))))
+
+(display "Inverses in Z5:") (newline)
+(let loop ((a 1))
+  (when (< a 5)
+    (display "  ") (display a) (display "^-1 = ")
+    (display (find-inverse a 5)) (newline)
+    (loop (+ a 1))))
+
+(newline) (display "Inverses in Z6:") (newline)
+(let loop ((a 1))
+  (when (< a 6)
+    (let ((inv (find-inverse a 6)))
+      (display "  ") (display a) (display "^-1 = ")
+      (display (if inv inv "none")) (newline))
+    (loop (+ a 1))))
+; 2 and 3 have no inverses in Z6.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multiplicative inverses
+def find_inv(a, n):
+    for b in range(1, n):
+        if (a * b) % n == 1:
+            return b
+    return None
+
+for n in [5, 6]:
+    print("Inverses in Z" + str(n) + ":")
+    for a in range(1, n):
+        inv = find_inv(a, n)
+        print("  " + str(a) + "^-1 = " + str(inv if inv else "none"))
+`} />
+    </div>
+
+
+    <!-- SVG: containment diagram -->
+    <h3>Containment hierarchy</h3>
+    <p>Fields are the most structured. Every field is an integral domain (no zero divisors). Every integral domain is a commutative ring. Every commutative ring is a ring.</p>
+
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Rings (outermost) -->
+        <rect x="10" y="10" width="320" height="180" rx="12" fill="none" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <text x="30" y="30" fill="currentColor" font-size="11" fill-opacity="0.4">Rings</text>
+
+        <!-- Commutative rings -->
+        <rect x="30" y="40" width="280" height="140" rx="10" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="50" y="58" fill="#60a5fa" font-size="11" fill-opacity="0.6">Commutative rings</text>
+
+        <!-- Integral domains -->
+        <rect x="55" y="68" width="230" height="100" rx="8" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="75" y="86" fill="#f59e0b" font-size="11" fill-opacity="0.6">Integral domains</text>
+
+        <!-- Fields (innermost) -->
+        <rect x="85" y="96" width="170" height="60" rx="6" fill="#a78bfa" fill-opacity="0.08" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="170" y="120" text-anchor="middle" fill="#a78bfa" font-size="12">Fields</text>
+        <text x="170" y="140" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.5">Q, R, Z_p (p prime)</text>
+
+        <!-- Examples outside fields but in integral domains -->
+        <text x="280" y="155" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">Z</text>
+
+        <!-- Example outside integral domains but in comm rings -->
+        <text x="300" y="75" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.5">Z&#x2086;</text>
+      </svg>
+    </div>
+
+
+    <!-- 3. Polynomial rings -->
+    <h3>Polynomial rings</h3>
+    <p>Given a ring R, the <strong>polynomial ring</strong> R[x] consists of polynomials with coefficients in R. If R is an integral domain, so is R[x]. Polynomial rings over fields are particularly well-behaved: you can do polynomial long division.</p>
+
+    <SchemeRepl client:load initialCode={`; Polynomials over Z5 (a field)
+; Represent polynomial as list of coefficients: (a0 a1 a2 ...)
+; p(x) = 2 + 3x + x^2 -> (2 3 1)
+
+(define (poly-eval coeffs x n)
+  (let loop ((cs (reverse coeffs)) (result 0))
+    (if (null? cs)
+        result
+        (loop (cdr cs)
+              (modulo (+ (car cs) (* result x)) n)))))
+
+(define p '(2 3 1))  ; 2 + 3x + x^2
+
+(display "p(x) = 2 + 3x + x^2 over Z5") (newline)
+(let loop ((x 0))
+  (when (< x 5)
+    (display "  p(") (display x) (display ") = ")
+    (display (poly-eval p x 5)) (newline)
+    (loop (+ x 1))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Polynomials over Z5
+# p(x) = 2 + 3x + x^2
+coeffs = [2, 3, 1]
+
+def poly_eval(coeffs, x, n):
+    result = 0
+    for c in reversed(coeffs):
+        result = (c + result * x) % n
+    return result
+
+print("p(x) = 2 + 3x + x^2 over Z5")
+for x in range(5):
+    print("  p(" + str(x) + ") = " + str(poly_eval(coeffs, x, 5)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ab = 0 &rArr; a=0 or b=0</td><td class="pr-4 text-green-300">no zero divisors</td><td class="pr-4 text-blue-300">no zero divisors</td><td class="font-sans">Integral domain</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a&#x207B;&sup1;</td><td class="pr-4 text-green-300">(find-inverse a n)</td><td class="pr-4 text-blue-300">find_inv(a, n)</td><td class="font-sans">Multiplicative inverse</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Z_p</td><td class="pr-4 text-green-300">(modulo (* a b) p)</td><td class="pr-4 text-blue-300">(a*b)%p</td><td class="font-sans">Field when p is prime</td></tr>
+          <tr><td class="py-2 pr-4">R[x]</td><td class="pr-4 text-green-300">(poly-eval coeffs x n)</td><td class="pr-4 text-blue-300">poly_eval(coeffs,x,n)</td><td class="font-sans">Polynomial ring over R</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-06/">&larr; Ch.6 Rings</a> &mdash; fields are rings with multiplicative inverses</li>
+      <li><a href="/reading/abstract-algebra/judson-08/">Ch.8 Lattices and Boolean Algebras</a> &mdash; a different kind of algebraic structure</li>
+    
+      <li><a href="/reading/number-theory/numthy-07/">&#35; Number Theory Ch.7</a> &mdash; primitive roots come from the multiplicative group of a field</li>
+      <li><a href="/reading/cryptography/crypto-07/">🔐 Cryptography Ch.7</a> &mdash; elliptic curves form fields, used directly in crypto</li>
+      <li><a href="/reading/category-theory/milewski-24/">🐱 Category Theory Ch.24</a> &mdash; Lawvere theories unify rings, groups, and fields</li>
+    </ul>
+    <ul>
+      <li><a href="/reading/real-analysis/lebl-01/">∞ Lebl Ch.1 Real Numbers</a> &mdash; the reals as the motivating example of a complete ordered field</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson covers integral domains in Ch. 16 alongside rings and fields. The fact that every finite integral domain is a field is proved via the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>pigeonhole principle</a>: left-multiplication by a nonzero element is injective (no zero divisors), hence surjective (finite set), so 1 is in the image. Polynomial rings appear in Ch. 17. The containment diagram is the key mental model: more axioms, fewer examples, stronger theorems.</p>
+
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-06/", label: "Rings" }} next={{ href: "/reading/abstract-algebra/judson-08/", label: "Lattices and Boolean Algebras · 8 of 8" }} />
+
+  </main>
+</Layout>

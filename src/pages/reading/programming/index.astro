@@ -1,0 +1,77 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Programming (SICP)" favicon="🪄">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>🪄 Programming (SICP)</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">Abelson &amp; Sussman, <em>Structure and Interpretation of Computer Programs</em></a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-2">Python translations draw from <a href="https://www.composingprograms.com/">DeNero, <em>Composing Programs</em></a>, licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+    <p class="text-gray-400 mb-6">Scheme REPLs run in the browser. Python equivalents in collapsible blocks.</p>
+
+    <!-- SVG: eval/apply cycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- eval box -->
+        <rect x="40" y="30" width="100" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="90" y="55" text-anchor="middle" fill="#60a5fa" font-size="14">eval</text>
+        <!-- apply box -->
+        <rect x="220" y="30" width="100" height="40" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="270" y="55" text-anchor="middle" fill="#f59e0b" font-size="14">apply</text>
+        <!-- eval -> apply (top arrow) -->
+        <line x1="140" y1="42" x2="213" y2="42" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="215,42 205,37 205,47" fill="currentColor" fill-opacity="0.5"/>
+        <text x="178" y="36" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">expression</text>
+        <!-- apply -> eval (bottom arrow) -->
+        <line x1="220" y1="58" x2="147" y2="58" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="145,58 155,53 155,63" fill="currentColor" fill-opacity="0.5"/>
+        <text x="182" y="72" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">subexpressions</text>
+        <!-- Caption -->
+        <text x="180" y="130" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">The eval/apply loop — the heart of every interpreter.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/programming/sicp-01/", title: "Expressions ★", desc: "Prefix notation, environment model, and the substitution rule" },
+  { href: "/reading/programming/sicp-02/", title: "Recursion &amp; Iteration ★", desc: "Recursive processes vs iterative processes — shape, not syntax" },
+  { href: "/reading/programming/sicp-03/", title: "Higher-Order Functions ★", desc: "Functions as arguments and return values — abstraction over patterns" },
+  { href: "/reading/programming/sicp-04/", title: "Data Abstraction ★", desc: "Pairs, constructors, selectors — separating use from representation" },
+  { href: "/reading/programming/sicp-05/", title: "Hierarchical Data ★", desc: "Lists, trees, and the closure property of cons" },
+  { href: "/reading/programming/sicp-06/", title: "Symbolic Data ★", desc: "Quotation, symbolic differentiation, and sets as data" },
+  { href: "/reading/programming/sicp-07/", title: "Multiple Representations", desc: "Tagged data, data-directed programming, and message passing" },
+  { href: "/reading/programming/sicp-08/", title: "Generic Operations", desc: "Coercion, type towers, and a generic arithmetic system" },
+  { href: "/reading/programming/sicp-09/", title: "Assignment &amp; State ★", desc: "set! breaks substitution — the environment model replaces it" },
+  { href: "/reading/programming/sicp-10/", title: "Environment Model", desc: "Frames, bindings, and how closures really work" },
+  { href: "/reading/programming/sicp-11/", title: "Mutable Data ★", desc: "set-car!, set-cdr!, queues, and identity vs equality" },
+  { href: "/reading/programming/sicp-12/", title: "Concurrency", desc: "Serializers, deadlock, and the problem with shared state" },
+  { href: "/reading/programming/sicp-13/", title: "Streams ★", desc: "Lazy lists — infinite sequences without mutation" },
+  { href: "/reading/programming/sicp-14/", title: "Metacircular Evaluator ★", desc: "A Scheme interpreter written in Scheme — eval and apply" },
+  { href: "/reading/programming/sicp-15/", title: "Lazy Evaluation", desc: "Normal-order evaluation — thunks and memoization" },
+  { href: "/reading/programming/sicp-16/", title: "Nondeterministic Computing", desc: "amb and backtracking search — logic as programming" },
+  { href: "/reading/programming/sicp-17/", title: "Logic Programming", desc: "A query language — unification and pattern matching" },
+  { href: "/reading/programming/sicp-18/", title: "Register Machines", desc: "Designing machines — data paths and controllers" },
+  { href: "/reading/programming/sicp-19/", title: "Register Machine Simulator", desc: "Simulating machines in software — the assembler" },
+  { href: "/reading/programming/sicp-20/", title: "Storage &amp; Garbage Collection", desc: "Memory as vectors, stop-and-copy GC" },
+  { href: "/reading/programming/sicp-21/", title: "Explicit-Control Evaluator", desc: "The metacircular evaluator, compiled to a register machine" },
+  { href: "/reading/programming/sicp-22/", title: "Compilation", desc: "Compiling Scheme to register-machine code" }
+]} icon="🪄" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">MIT 6.001 SICP Lectures</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/">🐱 Category Theory</a> &mdash; functors and monads from SICP's higher-order functions</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; SICP's register machines and compilation connect</li>
+      <li><a href="/reading/logic/">🔑 Logic</a> &mdash; SICP chapter 4 builds a logic programming evaluator</li>
+      <li><a href="/reading/operating-systems/">🖥 Operating Systems</a> &mdash; concurrency and streams reappear in OS design</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

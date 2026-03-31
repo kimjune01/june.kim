@@ -1,0 +1,152 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Introduction to Game Theory" favicon="🎲">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>🎲 Introduction to Game Theory</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://nordstrommath.com/IntroGameTheory/">Jennifer Firkins Nordstrom's textbook</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">Same format as the paper pages: runnable Python, diagrams, plain English. If you're reading the <a href="/reading/hedges-2018/">Hedges 2018</a> page and want to know what Nash equilibrium actually means, start here.</p>
+
+    <!-- SVG: 2x2 payoff matrix -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 240" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Column headers: Player 2 -->
+        <text x="220" y="18" text-anchor="middle" fill="#f59e0b" font-size="12">Player 2</text>
+        <text x="180" y="42" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">L</text>
+        <text x="260" y="42" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">R</text>
+        <!-- Row headers: Player 1 -->
+        <text x="30" y="120" text-anchor="middle" fill="#60a5fa" font-size="12" transform="rotate(-90 30 120)">Player 1</text>
+        <text x="100" y="85" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">T</text>
+        <text x="100" y="155" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">B</text>
+        <!-- Grid -->
+        <rect x="140" y="50" width="160" height="140" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <line x1="220" y1="50" x2="220" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="140" y1="120" x2="300" y2="120" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <!-- Cell contents -->
+        <text x="165" y="90" text-anchor="middle" fill="#60a5fa" font-size="13">a</text>
+        <text x="180" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">,</text>
+        <text x="195" y="90" text-anchor="middle" fill="#f59e0b" font-size="13">b</text>
+        <text x="245" y="90" text-anchor="middle" fill="#60a5fa" font-size="13">c</text>
+        <text x="260" y="90" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">,</text>
+        <text x="275" y="90" text-anchor="middle" fill="#f59e0b" font-size="13">d</text>
+        <text x="165" y="160" text-anchor="middle" fill="#60a5fa" font-size="13">e</text>
+        <text x="180" y="160" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">,</text>
+        <text x="195" y="160" text-anchor="middle" fill="#f59e0b" font-size="13">f</text>
+        <text x="245" y="160" text-anchor="middle" fill="#60a5fa" font-size="13">g</text>
+        <text x="260" y="160" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">,</text>
+        <text x="275" y="160" text-anchor="middle" fill="#f59e0b" font-size="13">h</text>
+        <!-- Legend -->
+        <text x="170" y="215" text-anchor="middle" fill="#60a5fa" font-size="9">P1 payoff</text>
+        <text x="220" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">,</text>
+        <text x="270" y="215" text-anchor="middle" fill="#f59e0b" font-size="9">P2 payoff</text>
+      </svg>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Section</th>
+            <th class="text-left py-2 pr-3 text-gray-400">One sentence</th>
+            <th class="text-left py-2 text-gray-400"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800 bg-zinc-900"><td colspan="3" class="py-2 pr-3 text-gray-300 font-semibold">Ch 1. What is Game Theory?</td></tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-01/">Players and Strategies</a></td>
+            <td class="pr-3 text-gray-400">A game is players, strategies, and payoffs — everything else is commentary</td>
+            <td><a href="/reading/game-theory/nordstrom-01/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-02/">Game Matrices</a></td>
+            <td class="pr-3 text-gray-400">Every simultaneous two-player game fits in a payoff matrix</td>
+            <td><a href="/reading/game-theory/nordstrom-02/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800 bg-zinc-900"><td colspan="3" class="py-2 pr-3 text-gray-300 font-semibold">Ch 2. Two-Person Zero-Sum Games</td></tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-03/">Zero-Sum Games</a></td>
+            <td class="pr-3 text-gray-400">Your gain is my loss — the payoffs always sum to zero</td>
+            <td><a href="/reading/game-theory/nordstrom-03/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-04/">Dominated Strategies</a></td>
+            <td class="pr-3 text-gray-400">If strategy A is always worse than B, delete it — rational players never use it</td>
+            <td><a href="/reading/game-theory/nordstrom-04/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-05/">Probability and Expected Value</a></td>
+            <td class="pr-3 text-gray-400">Mixing strategies randomly lets you do better than any fixed choice</td>
+            <td><a href="/reading/game-theory/nordstrom-05/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-06/">Equilibrium Points</a></td>
+            <td class="pr-3 text-gray-400">A pair of strategies where neither player wants to switch — Nash equilibrium</td>
+            <td><a href="/reading/game-theory/nordstrom-06/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-07/">Zero-Sum Summary</a></td>
+            <td class="pr-3 text-gray-400">Minimax, maximin, and when they meet: the saddle point</td>
+            <td><a href="/reading/game-theory/nordstrom-07/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800 bg-zinc-900"><td colspan="3" class="py-2 pr-3 text-gray-300 font-semibold">Ch 3. Repeated Two-Person Zero-Sum Games</td></tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-08/">Repeated Games</a></td>
+            <td class="pr-3 text-gray-400">Play the same game many times and the best strategy is a probability distribution</td>
+            <td><a href="/reading/game-theory/nordstrom-08/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-09/">Mixed Strategies: Graphical</a></td>
+            <td class="pr-3 text-gray-400">Plot expected payoffs against mixing probability — the optimal mix is where the lines cross</td>
+            <td><a href="/reading/game-theory/nordstrom-09/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-10/">Mixed Strategies: Expected Value</a></td>
+            <td class="pr-3 text-gray-400">Set opponent indifferent — choose your mix so they can't exploit your pattern</td>
+            <td><a href="/reading/game-theory/nordstrom-10/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800 bg-zinc-900"><td colspan="3" class="py-2 pr-3 text-gray-300 font-semibold">Ch 4. Non-Zero-Sum Games</td></tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-11/">Non-Zero-Sum Intro</a></td>
+            <td class="pr-3 text-gray-400">When payoffs don't sum to zero, cooperation and conflict coexist</td>
+            <td><a href="/reading/game-theory/nordstrom-11/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-12/">Prisoner's Dilemma and Chicken</a></td>
+            <td class="pr-3 text-gray-400">Two games that define modern game theory — and why rational self-interest can be collectively irrational</td>
+            <td><a href="/reading/game-theory/nordstrom-12/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-13/">Volunteer's Dilemma</a></td>
+            <td class="pr-3 text-gray-400">Everyone benefits if someone acts, but acting is costly — who volunteers?</td>
+            <td><a href="/reading/game-theory/nordstrom-13/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/game-theory/nordstrom-14/">Repeated Prisoner's Dilemma</a></td>
+            <td class="pr-3 text-gray-400">Play once: defect. Play forever: cooperate. The shadow of the future changes everything</td>
+            <td><a href="/reading/game-theory/nordstrom-14/" class="text-yellow-300 hover:text-yellow-200">🎲</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://oyc.yale.edu/economics/econ-159">Yale ECON 159: Game Theory (Ben Polak)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; mixed strategies are probability distributions over pure strategies</li>
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; Nash equilibrium and mechanism design connect</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; game matrices and minimax theorem use linear programming</li>
+      <li><a href="/reading/auction-theory/">🏷 Auction Theory</a> &mdash; auctions as a class of mechanism design problem</li>
+      <li>Applied: <a href="https://june.kim/power-diagrams-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>power diagrams in ad auctions</a> and <a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>one-shot bidding strategy</a></li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

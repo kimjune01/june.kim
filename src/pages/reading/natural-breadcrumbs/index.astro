@@ -1,0 +1,98 @@
+---
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Natural Breadcrumbs" favicon="🍞">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1 class="text-3xl font-bold mb-2">🍞 Natural Breadcrumbs</h1>
+
+    <p class="text-lg text-gray-300 mb-6">Applied category theory and programming language theory are converging on the same structures from different directions. These pages map the translations, with runnable code.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-6" style="display:flex;gap:2em;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <p class="text-xs text-gray-500 mb-2">PL theory</p>
+        <pre class="text-sm font-mono text-green-300" style="margin:0">assert P(x)
+y = f(x)
+assert R(y)
+z = g(y)
+assert Q(z)</pre>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <p class="text-xs text-gray-500 mb-2">Category theory</p>
+        <pre class="text-sm font-mono text-blue-300" style="margin:0">{'{'} P {'}'} f {'{'} R {'}'}    {'{'} R {'}'} g {'{'} Q {'}'}
+─────────────────────
+    {'{'} P {'}'} g∘f {'{'} Q {'}'}</pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-8">Same structure. Different notation. Each paper below gets a page that shows both.</p>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Papers</h2>
+    <p class="text-gray-400 mb-4">Each paper has a 🍞 page that translates its key ideas into diagrams and runnable code.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Paper</th>
+            <th class="text-left py-2 pr-3 text-gray-400">One sentence</th>
+            <th class="text-left py-2 text-gray-400"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/staton-2025/">Staton 2025</a></td><td class="pr-3 text-gray-400">Every Hoare rule is a theorem, not an axiom, in stochastic systems</td><td><a href="/reading/natural-breadcrumbs/staton-2025/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/fritz-2020/">Fritz 2020</a></td><td class="pr-3 text-gray-400">Stochastic functions form a category with copy and discard</td><td><a href="/reading/natural-breadcrumbs/fritz-2020/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/fritz-perrone-2021/">Fritz, Perrone, Rezagholi 2021</a></td><td class="pr-3 text-gray-400">"Which outputs are possible?" is a monad morphism</td><td><a href="/reading/natural-breadcrumbs/fritz-perrone-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/gaboardi-2021/">Gaboardi 2021</a></td><td class="pr-3 text-gray-400">Hoare logic with grades: track side effects through composition</td><td><a href="/reading/natural-breadcrumbs/gaboardi-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/kura-2026/">Kura 2026</a></td><td class="pr-3 text-gray-400">Stage N's guarantee becomes stage N+1's assumption</td><td><a href="/reading/natural-breadcrumbs/kura-2026/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/hedges-2018/">Hedges, Ghani 2018</a></td><td class="pr-3 text-gray-400">Nash equilibrium composes the same way contracts compose</td><td><a href="/reading/natural-breadcrumbs/hedges-2018/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/capucci-2021/">Capucci 2021</a></td><td class="pr-3 text-gray-400">"What is a goal but a predicate on a system?"</td><td><a href="/reading/natural-breadcrumbs/capucci-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/baez-fritz-2011/">Baez, Fritz, Leinster 2011</a></td><td class="pr-3 text-gray-400">Shannon entropy is the only information loss that respects composition</td><td><a href="/reading/natural-breadcrumbs/baez-fritz-2011/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/liell-cock-2025/">Liell-Cock, Staton 2025</a></td><td class="pr-3 text-gray-400">Graded monads and Markov categories are the same structure</td><td><a href="/reading/natural-breadcrumbs/liell-cock-2025/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/sato-2023/">Sato, Katsumata 2023</a></td><td class="pr-3 text-gray-400">Distance between programs = enrichment on the category</td><td><a href="/reading/natural-breadcrumbs/sato-2023/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/spivak-2013/">Spivak 2013</a></td><td class="pr-3 text-gray-400">Typed ports and wiring diagrams: the syntax layer for composing boxes</td><td><a href="/reading/natural-breadcrumbs/spivak-2013/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/jacobs-2014/">Jacobs 2014</a></td><td class="pr-3 text-gray-400">Weakest preconditions from fibrations over Kleisli categories</td><td><a href="/reading/natural-breadcrumbs/jacobs-2014/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/kidney-wu-2021/">Kidney, Wu 2021</a></td><td class="pr-3 text-gray-400">One monad parameterized by a semiring: probability, counting, search</td><td><a href="/reading/natural-breadcrumbs/kidney-wu-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/leinster-2021/">Leinster 2021</a></td><td class="pr-3 text-gray-400">Diversity IS categorical cardinality: magnitude generalizes species count</td><td><a href="/reading/natural-breadcrumbs/leinster-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/smithe-2021/">Smithe 2021</a></td><td class="pr-3 text-gray-400">Bayesian inversions compose as lenses: forward inference, backward learning</td><td><a href="/reading/natural-breadcrumbs/smithe-2021/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/parzygnat-2020/">Parzygnat 2020</a></td><td class="pr-3 text-gray-400">Bayesian inversion as dagger structure: three levels of reversibility</td><td><a href="/reading/natural-breadcrumbs/parzygnat-2020/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/di-lavore-2025/">Di Lavore, Roman, Sobocinski 2025</a></td><td class="pr-3 text-gray-400">Markov categories where morphisms can fail: observations, conditioning</td><td><a href="/reading/natural-breadcrumbs/di-lavore-2025/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/panangaden-2009/">Panangaden 2009</a></td><td class="pr-3 text-gray-400">Bisimulation metrics: behavioral distance between stochastic processes</td><td><a href="/reading/natural-breadcrumbs/panangaden-2009/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">Cho, Jacobs 2015</a></td><td class="pr-3 text-gray-400">Predicates as effects, not subobjects: states/effects duality</td><td><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/ho-wu-2026/">Ho, Wu, Raad 2026</a></td><td class="pr-3 text-gray-400">Hoare logic for Bayesian programs: frame rule IS probabilistic independence</td><td><a href="/reading/natural-breadcrumbs/ho-wu-2026/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/natural-breadcrumbs/chen-vigneaux-2023/">Chen, Vigneaux 2023</a></td><td class="pr-3 text-gray-400">Shannon entropy and magnitude unified: recovers magnitude under uniform</td><td><a href="/reading/natural-breadcrumbs/chen-vigneaux-2023/" class="text-yellow-300 hover:text-yellow-200">🍞</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Three ways in</h2>
+    <ul class="text-gray-400 space-y-1 mb-4">
+      <li>A <a href="https://github.com/kimjune01/natural-framework"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lean 4 proof</a> machine-checks the connections (<a href="/reading/the-natural-framework-lean/">read the proof file by file</a>)</li>
+      <li>A <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>vocabulary table</a> maps terms across communities</li>
+      <li><strong>This site</strong>: the same ideas, in code you can run</li>
+    </ul>
+
+    <p class="text-gray-500 text-sm">Also: <a href="/reading/symbols/">symbol grid</a> · <a href="/reading/how/">how to use this site</a></p>
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/18-s097-applied-category-theory-january-iap-2019/">MIT 18.S097: Applied Category Theory (Fong &amp; Spivak)</a> · <a href="https://www.youtube.com/playlist?list=PLEGCF-WLh2RJBqmxvZ0_ie-mleCFhi2N4">Stanford CS364A: Algorithmic Game Theory (Roughgarden)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/">🐱 Category Theory</a> &mdash; the mathematical language most papers use</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; probability monads and Markov kernels throughout</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; entropy as a functor is central</li>
+      <li><a href="/reading/the-natural-framework-lean/">✏️ Lean Proofs</a> &mdash; several results formalized</li>
+    </ul>
+    </Neighbors>
+
+
+  </main>
+</Layout>

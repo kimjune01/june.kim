@@ -1,0 +1,196 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.4 — Isomorphisms" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Isomorphisms</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An <strong>isomorphism</strong> is a bijective homomorphism. When two groups are isomorphic, they have the same structure wearing different labels. <strong>Cayley's theorem</strong> says every group is isomorphic to a group of permutations, so permutation groups are all there is.</p>
+    </div>
+
+    <!-- 1. When two groups are the same -->
+    <h3>When two groups are the same</h3>
+    <p>Groups G and H are <strong>isomorphic</strong> (written G &cong; H) if there exists a bijective homomorphism f: G &rarr; H. Bijective means one-to-one and onto. Isomorphic groups have the same Cayley table up to relabeling.</p>
+
+    <!-- SVG: two Cayley tables that match up -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Z2 table (left) -->
+        <text x="80" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">ZZ&#x2082; = {0, 1}#x2082; = (0, 1)</text>
+        <!-- Grid -->
+        <line x1="30" y1="35" x2="140" y2="35" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="65" x2="140" y2="65" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="95" x2="140" y2="95" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="125" x2="140" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="30" y1="35" x2="30" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="67" y1="35" x2="67" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="103" y1="35" x2="103" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="140" y1="35" x2="140" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Labels -->
+        <text x="15" y="55" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">+</text>
+        <text x="85" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">0</text>
+        <text x="122" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+        <text x="15" y="85" text-anchor="middle" fill="#60a5fa" font-size="13">0</text>
+        <text x="15" y="115" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+        <!-- Values -->
+        <text x="85" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">0</text>
+        <text x="122" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">1</text>
+        <text x="85" y="115" text-anchor="middle" fill="#f59e0b" font-size="13">1</text>
+        <text x="122" y="115" text-anchor="middle" fill="#f59e0b" font-size="13">0</text>
+
+        <!-- Arrow in the middle -->
+        <line x1="160" y1="80" x2="280" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="280,76 288,80 280,84" fill="currentColor" fill-opacity="0.4"/>
+        <text x="220" y="72" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">f: 0&#x21A6;1, 1&#x21A6;-1</text>
+
+        <!-- {1,-1} under * (right) -->
+        <text x="370" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">（1, -1） under &times;</text>
+        <line x1="310" y1="35" x2="430" y2="35" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="310" y1="65" x2="430" y2="65" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="310" y1="95" x2="430" y2="95" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="310" y1="125" x2="430" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="310" y1="35" x2="310" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="350" y1="35" x2="350" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="390" y1="35" x2="390" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="430" y1="35" x2="430" y2="125" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <!-- Labels -->
+        <text x="323" y="55" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">&times;</text>
+        <text x="370" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+        <text x="410" y="55" text-anchor="middle" fill="#60a5fa" font-size="13">-1</text>
+        <text x="323" y="85" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+        <text x="323" y="115" text-anchor="middle" fill="#60a5fa" font-size="13">-1</text>
+        <!-- Values -->
+        <text x="370" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">1</text>
+        <text x="410" y="85" text-anchor="middle" fill="#f59e0b" font-size="13">-1</text>
+        <text x="370" y="115" text-anchor="middle" fill="#f59e0b" font-size="13">-1</text>
+        <text x="410" y="115" text-anchor="middle" fill="#f59e0b" font-size="13">1</text>
+
+        <!-- Caption -->
+        <text x="230" y="165" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">Same table, different labels. These groups are isomorphic.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Z2 = {0, 1} under + mod 2
+; (1, -1) under multiplication
+; They are isomorphic: f(0)=1, f(1)=-1
+
+(define (z2+ a b) (modulo (+ a b) 2))
+(define (signs* a b) (* a b))
+
+; Map: 0 -> 1, 1 -> -1
+(define (f x) (if (= x 0) 1 -1))
+
+; Check homomorphism: f(a+b) = f(a) * f(b)
+(display "f(0+0) = ") (display (f (z2+ 0 0)))
+(display "  f(0)*f(0) = ") (display (signs* (f 0) (f 0))) (newline)
+
+(display "f(0+1) = ") (display (f (z2+ 0 1)))
+(display "  f(0)*f(1) = ") (display (signs* (f 0) (f 1))) (newline)
+
+(display "f(1+0) = ") (display (f (z2+ 1 0)))
+(display "  f(1)*f(0) = ") (display (signs* (f 1) (f 0))) (newline)
+
+(display "f(1+1) = ") (display (f (z2+ 1 1)))
+(display "  f(1)*f(1) = ") (display (signs* (f 1) (f 1)))
+; All match. f is a homomorphism, and it is bijective.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Z2 and {1,-1} are isomorphic
+z2_add = lambda a, b: (a + b) % 2
+signs_mul = lambda a, b: a * b
+f = lambda x: 1 if x == 0 else -1
+
+for a in [0, 1]:
+    for b in [0, 1]:
+        lhs = f(z2_add(a, b))
+        rhs = signs_mul(f(a), f(b))
+        print("f("+str(a)+"+"+str(b)+")="+str(lhs)+"  f("+str(a)+")*f("+str(b)+")="+str(rhs)+"  match="+str(lhs==rhs))
+`} />
+    </div>
+
+
+    <!-- 2. Cayley's theorem -->
+    <h3>Cayley's theorem</h3>
+    <p>Every group G is isomorphic to a subgroup of the symmetric group on G's elements (<a href="https://en.wikipedia.org/wiki/Cayley%27s_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cayley's theorem</a>). The map sends each element g to the permutation "multiply everything by g on the left." This means every abstract group is secretly a group of permutations.</p>
+
+    <SchemeRepl client:load initialCode={`; Cayley's theorem for Z3
+; Each element g maps to the permutation: x -> g+x mod 3
+
+(define (cayley-perm g n)
+  (let loop ((x 0) (result '()))
+    (if (= x n)
+        (reverse result)
+        (loop (+ x 1) (cons (modulo (+ g x) n) result)))))
+
+(display "0 -> ") (display (cayley-perm 0 3)) (newline)
+(display "1 -> ") (display (cayley-perm 1 3)) (newline)
+(display "2 -> ") (display (cayley-perm 2 3)) (newline)
+; Each element becomes a permutation of (0,1,2).
+; These three permutations form a subgroup of S3.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cayley's theorem for Z3
+for g in range(3):
+    perm = [(g + x) % 3 for x in range(3)]
+    print(str(g) + " -> " + str(perm))
+# Each element becomes a permutation of (0,1,2)
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">G &cong; H</td><td class="pr-4 text-green-300">bijective f</td><td class="pr-4 text-blue-300">bijective f</td><td class="font-sans">G and H are isomorphic</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S_n</td><td class="pr-4 text-green-300">permutation lists</td><td class="pr-4 text-blue-300">permutation lists</td><td class="font-sans">Symmetric group on n elements</td></tr>
+          <tr><td class="py-2 pr-4">L_g(x) = gx</td><td class="pr-4 text-green-300">(cayley-perm g n)</td><td class="pr-4 text-blue-300">left multiplication</td><td class="font-sans">Cayley embedding</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-03/">&larr; Ch.3 Homomorphisms</a> &mdash; isomorphisms are bijective homomorphisms</li>
+      <li><a href="/reading/abstract-algebra/judson-05/">Ch.5 Cosets and Lagrange's Theorem</a> &mdash; subgroup structure constrains isomorphism classes</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-07/">Milewski Ch.7</a> &mdash; isomorphisms in a category are invertible morphisms; Cayley's theorem is a special case of the Yoneda lemma</li>
+      <li><a href="/reading/category-theory/milewski-01/">🍞 Milewski Ch.1</a> &mdash; isomorphisms as the fundamental notion of "sameness" in categories</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson covers isomorphisms in Ch. 9 after cosets and normal subgroups. We bring it forward because the concept requires only bijective homomorphisms. Cayley's theorem appears in Ch. 5 of Judson. The connection to the <a href="https://en.wikipedia.org/wiki/Yoneda_lemma"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Yoneda lemma</a> is not in Judson but is the categorical generalization: every object is determined by the morphisms into (or out of) it.</p>
+
+    <PrevNext prev={{ href: "/reading/abstract-algebra/judson-03/", label: "Homomorphisms" }} next={{ href: "/reading/abstract-algebra/judson-05/", label: "Cosets and Lagrange's Theorem · 5 of 8" }} />
+
+  </main>
+</Layout>

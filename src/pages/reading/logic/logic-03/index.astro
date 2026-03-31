@@ -1,0 +1,168 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Logic Ch.3 — Truth Tables" favicon="🔑">
+  <main>
+
+    <a href="/reading/logic/" class="text-sm mb-4 inline-block">&larr; back to logic</a>
+
+    <h1>Truth Tables</h1>
+    <p class="text-gray-400 text-sm mb-6">Craig DeLancey &middot; A Concise Introduction to Logic, Ch. 3 &middot; <a href="https://milneopentextbooks.org/a-concise-introduction-to-logic/">CC BY-SA 4.0</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>truth table</strong> lists every possible assignment of truth values to the atoms and computes the result. A formula true in every row is a <strong>tautology</strong>. False in every row: <strong>contradiction</strong>. Mixed: <strong>contingency</strong>.</p>
+    </div>
+
+    <!-- SVG: Truth table for implication with highlight -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Header -->
+        <text x="50" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">P</text>
+        <text x="120" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Q</text>
+        <text x="220" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">P &rarr; Q</text>
+        <line x1="10" y1="32" x2="280" y2="32" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Row 1: T T -> T -->
+        <text x="50" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <text x="120" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <text x="220" y="55" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <!-- Row 2: T F -> F -->
+        <text x="50" y="85" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <text x="120" y="85" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F</text>
+        <text x="220" y="85" text-anchor="middle" fill="#ef4444" font-size="12">F</text>
+        <!-- Row 3: F T -> T (highlighted) -->
+        <rect x="10" y="92" width="270" height="24" rx="3" fill="#f59e0b" fill-opacity="0.1"/>
+        <text x="50" y="110" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F</text>
+        <text x="120" y="110" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <text x="220" y="110" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="bold">T</text>
+        <!-- Row 4: F F -> T -->
+        <text x="50" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F</text>
+        <text x="120" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">F</text>
+        <text x="220" y="140" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">T</text>
+        <!-- Caption -->
+        <text x="150" y="180" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">F &rarr; T = T: a false premise implies anything.</text>
+      </svg>
+    </div>
+
+    <h3>Truth values of connectives</h3>
+    <p>Each connective has a fixed truth table. The surprising one: <strong>implication is false only when the premise is true and the conclusion is false</strong>. A false premise implies anything. This is called "vacuous truth."</p>
+
+    <SchemeRepl client:load initialCode={`; Define the five connectives as functions on booleans
+
+(define (neg p) (not p))
+(define (conj p q) (and p q))
+(define (disj p q) (or p q))
+(define (impl p q) (or (not p) q))
+(define (bicond p q) (equal? p q))
+
+; Print truth table for implication
+(define (show-row p q)
+  (display (if p "T" "F"))
+  (display " -> ")
+  (display (if q "T" "F"))
+  (display " = ")
+  (display (if (impl p q) "T" "F"))
+  (newline))
+
+(display "P -> Q = result") (newline)
+(display "---") (newline)
+(show-row #t #t)
+(show-row #t #f)
+(show-row #f #t)
+(show-row #f #f)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Truth tables for all connectives
+from itertools import product
+
+def impl(p, q): return (not p) or q
+def bicond(p, q): return p == q
+
+print("P | Q | not P | P and Q | P or Q | P->Q | P<->Q")
+print("-" * 52)
+for p, q in product([True, False], repeat=2):
+    t = lambda b: "T" if b else "F"
+    print(f"{t(p)} | {t(q)} |   {t(not p)}   |    {t(p and q)}    |   {t(p or q)}    |  {t(impl(p,q))}   |   {t(bicond(p,q))}")
+`} />
+    </div>
+
+    <h3>Evaluating compound formulas</h3>
+    <p>To evaluate a compound formula, recursively evaluate subformulas bottom-up, applying each connective's truth table.</p>
+
+    <SchemeRepl client:load initialCode={`; Evaluate a formula given an environment (assoc list)
+(define (eval-formula f env)
+  (cond
+    ((symbol? f) (cdr (assoc f env)))
+    ((equal? (car f) (quote neg))
+     (not (eval-formula (cadr f) env)))
+    ((equal? (car f) (quote and))
+     (and (eval-formula (cadr f) env)
+          (eval-formula (caddr f) env)))
+    ((equal? (car f) (quote or))
+     (or (eval-formula (cadr f) env)
+         (eval-formula (caddr f) env)))
+    ((equal? (car f) (quote implies))
+     (or (not (eval-formula (cadr f) env))
+         (eval-formula (caddr f) env)))
+    ((equal? (car f) (quote iff))
+     (equal? (eval-formula (cadr f) env)
+             (eval-formula (caddr f) env)))))
+
+; Evaluate (P and Q) implies R
+(define formula
+  (list (quote implies) (list (quote and) (quote P) (quote Q)) (quote R)))
+
+(define env1 (list (cons (quote P) #t) (cons (quote Q) #t) (cons (quote R) #f)))
+(define env2 (list (cons (quote P) #t) (cons (quote Q) #f) (cons (quote R) #f)))
+
+(display "(P and Q) -> R with P=T,Q=T,R=F: ")
+(display (eval-formula formula env1)) (newline)
+(display "(P and Q) -> R with P=T,Q=F,R=F: ")
+(display (eval-formula formula env2))
+`} />
+
+    <h3>Tautology, contradiction, contingency</h3>
+
+    <SchemeRepl client:load initialCode={`; A tautology is true in ALL rows.
+; A contradiction is false in ALL rows.
+; A contingency is true in some, false in others.
+
+(define (impl p q) (or (not p) q))
+
+; Check P or (not P) -- law of excluded middle
+(define (excluded-middle p) (or p (not p)))
+
+; Check P and (not P) -- contradiction
+(define (contra p) (and p (not p)))
+
+; Check all truth values
+(display "P or (not P): ")
+(display (list (excluded-middle #t) (excluded-middle #f)))
+(display " <- tautology") (newline)
+
+(display "P and (not P): ")
+(display (list (contra #t) (contra #f)))
+(display " <- contradiction") (newline)
+
+(display "P -> Q: ")
+(define results
+  (list (impl #t #t) (impl #t #f) (impl #f #t) (impl #f #f)))
+(display results)
+(display " <- contingency")
+`} />
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/theory-of-computation/toc-03/">🔀 ToC Ch.3</a> &mdash; regular expressions as logical formulas over strings</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/logic/logic-02/", label: "Propositional Logic Syntax" }} next={{ href: "/reading/logic/logic-04/", label: "Logical Equivalence" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,131 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Aristotle — Rhetoric" favicon="✍️">
+  <main>
+
+    <a href="/reading/prose-writing/" class="text-sm mb-4 inline-block">&larr; back to prose writing</a>
+
+    <h1>Rhetoric</h1>
+    <p class="text-gray-400 text-sm mb-6">Aristotle &middot; ~350 BCE &middot; <a href="http://classics.mit.edu/Aristotle/rhetoric.html">full text (MIT Classics, public domain)</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Persuasion has exactly three available means: the character of the speaker, the emotional state of the audience, and the argument itself. Every speech deploys some combination of the three. The Sophists treated this as a bag of tricks. Aristotle treated it as a theory.</p>
+    </div>
+
+    <!-- SVG: Three modes of persuasion converging on belief change -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Ethos branch -->
+        <circle cx="70" cy="40" r="24" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="70" y="36" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.8">ethos</text>
+        <text x="70" y="48" text-anchor="middle" fill="#60a5fa" font-size="7" fill-opacity="0.5">character</text>
+        <line x1="94" y1="52" x2="200" y2="95" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Pathos branch -->
+        <circle cx="70" cy="110" r="24" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="70" y="106" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.8">pathos</text>
+        <text x="70" y="118" text-anchor="middle" fill="#f59e0b" font-size="7" fill-opacity="0.5">emotion</text>
+        <line x1="94" y1="110" x2="200" y2="102" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Logos branch -->
+        <circle cx="70" cy="170" r="24" fill="#34d399" fill-opacity="0.1" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="70" y="166" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.8">logos</text>
+        <text x="70" y="178" text-anchor="middle" fill="#34d399" font-size="7" fill-opacity="0.5">argument</text>
+        <line x1="94" y1="164" x2="200" y2="108" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Convergence point -->
+        <circle cx="220" cy="100" r="6" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+
+        <!-- Arrow to belief change -->
+        <line x1="226" y1="100" x2="310" y2="100" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <polygon points="310,95 320,100 310,105" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Belief change label -->
+        <rect x="325" y="82" width="85" height="36" rx="4" fill="#a1a1aa" fill-opacity="0.08" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <text x="367" y="98" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">belief</text>
+        <text x="367" y="110" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.6">change</text>
+
+        <!-- Labels -->
+        <text x="160" y="72" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.25">"I trust you"</text>
+        <text x="160" y="102" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.25">"I feel it"</text>
+        <text x="160" y="145" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.25">"it follows"</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Before Aristotle, the Sophists taught persuasion as manipulation. Gorgias could argue either side of any question and charged by the hour. Rhetoric was a skill without a theory, a collection of techniques for moving an audience, with no account of why the techniques worked or when they would fail. Plato's response was to reject rhetoric entirely: persuasion is the enemy of truth.</p>
+
+    <p>Aristotle took neither position. He systematized rhetoric as a discipline. Every speech, he argued, has three available means of persuasion. Ethos: the character of the speaker as perceived by the audience. Pathos: the emotional state the speaker induces in the audience. Logos: the structure of the argument itself &mdash; its premises, its inferences, its evidence. These three are exhaustive. Every act of persuasion works through some combination of the three, and every failure of persuasion is a failure in at least one.</p>
+
+    <p>The innovation was the claim underneath: rhetoric is a theory of how belief changes. The Sophists had techniques. Aristotle had a theory. A theory tells you what works, why it works, what its preconditions are, and how it can fail. That is why the framework survived twenty-four centuries: it works in every medium.</p>
+
+    <h3>The three modes</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Mode</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it is</th>
+            <th class="text-left py-2 text-gray-400">When it dominates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Ethos</td><td class="pr-3 text-gray-400">The audience's perception of the speaker's character, competence, and goodwill. Not the speaker's actual virtue, the audience's belief about it.</td><td class="text-gray-400">When the audience cannot evaluate the argument directly. Medical advice. Expert testimony. Any situation where trust substitutes for understanding.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Pathos</td><td class="pr-3 text-gray-400">The emotional state the speaker creates in the audience. Anger, pity, fear, hope. Aristotle catalogues the emotions and their causes in Book II.</td><td class="text-gray-400">When the audience must act, not just agree. Fundraising. Political rallies. Crisis communication. Belief without emotion rarely produces behavior.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Logos</td><td class="pr-3 text-gray-400">The argument itself: its evidence, its logical structure, its examples. Includes both deductive reasoning (enthymemes) and inductive reasoning (examples).</td><td class="text-gray-400">When the audience is willing and able to follow the reasoning. Academic papers. Legal briefs. Engineering reviews. Anywhere the audience rewards rigor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The modes in one paragraph</h3>
+
+    <blockquote>
+      <p>"I've treated over two hundred patients with this condition. Without intervention, the pain will only get worse. The clinical trial showed 80% improvement in eight weeks."</p>
+    </blockquote>
+
+    <p>Three sentences, three modes. The doctor leads with credibility (ethos), creates urgency (pathos), then delivers the evidence (logos). Remove any one and the paragraph weakens in a predictable way: without the first sentence, why listen? Without the second, why act now? Without the third, why believe it works?</p>
+
+    <h3>Discussion</h3>
+
+    <p>The same message, delivered with a single mode, fails in a predictable direction:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Version</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it does</th>
+            <th class="text-left py-2 text-gray-400">What's missing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">"Trust me, I've been doing this for twenty years."</td><td class="pr-3 text-gray-400">Pure ethos</td><td class="text-gray-400">No evidence, no urgency — the audience nods and does nothing</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">"If we don't act now, we'll lose everything."</td><td class="pr-3 text-gray-400">Pure pathos</td><td class="text-gray-400">No credibility, no plan — the audience panics</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">"The data shows a 40% decline over six quarters."</td><td class="pr-3 text-gray-400">Pure logos</td><td class="text-gray-400">No trust, no motivation — the audience files it and forgets</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Effective writing balances all three. The ratio shifts by context, but zero in any mode is a failure. <a href="https://june.kim/writing-with-claude"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Writing with Claude</a> is an exercise in mode selection: the human supplies ethos and argument direction, the model drafts at the logos and elocutio level, and the human edits for pathos.</p>
+
+    <p>The three modes are also the three failure modes. Ethos without logos is authority worship: "trust me because I'm the expert" with no argument to inspect. Pathos without logos is manipulation, exactly what the Sophists were doing, and what Plato rightly condemned. Logos without ethos is the paper nobody reads: technically correct, socially inert, dead on arrival because the audience has no reason to care what the author thinks. Every communication failure maps to an imbalance in the triad.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Quintilian"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Quintilian</a> took this framework and built a full education around it. Where Aristotle gave the theory, Quintilian gave the process: five canons (invention, arrangement, style, memory, delivery) that turn the three modes into a complete practice. The distance from Aristotle to Quintilian is the distance from theory to curriculum.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Rhetoric_(Aristotle)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></li>
+      <li><a href="/reading/prose-writing/">back to prose writing</a></li>
+    </ul>
+
+
+    <PrevNext next={{ href: "/reading/prose-writing/quintilian/", label: "Quintilian · 2 of 10" }} />
+
+  </main>
+</Layout>

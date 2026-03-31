@@ -1,0 +1,73 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Introduction to Proofs" favicon="✎">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>✎ Introduction to Proofs</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://hefferon.net/">Jim Hefferon's</a> <em>Introduction to Proofs</em>, licensed <a href="https://www.gnu.org/licenses/fdl-1.3.html">GFDL</a> + <a href="https://creativecommons.org/licenses/by-sa/2.5/">CC BY-SA 2.5</a>.</p>
+    <p class="text-gray-400 mb-6">How to read and write mathematical proofs. Every proof technique here shows up in every branch of mathematics on this site.</p>
+
+    <!-- SVG: Proof structure diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 280" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Hypothesis box -->
+        <rect x="90" y="10" width="120" height="32" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="150" y="31" text-anchor="middle" fill="#60a5fa" font-size="13">Hypothesis P</text>
+        <!-- Arrow down -->
+        <line x1="150" y1="42" x2="150" y2="68" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="146,66 150,74 154,66" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Step 1 -->
+        <rect x="80" y="74" width="140" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="150" y="93" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">step 1: definition</text>
+        <!-- Arrow down -->
+        <line x1="150" y1="102" x2="150" y2="124" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="146,122 150,130 154,122" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Step 2 -->
+        <rect x="80" y="130" width="140" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="150" y="149" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">step 2: algebra</text>
+        <!-- Arrow down -->
+        <line x1="150" y1="158" x2="150" y2="180" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="146,178 150,186 154,178" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Step 3 -->
+        <rect x="80" y="186" width="140" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="150" y="205" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">step 3: apply lemma</text>
+        <!-- Arrow down -->
+        <line x1="150" y1="214" x2="150" y2="236" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="146,234 150,242 154,234" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Conclusion box -->
+        <rect x="90" y="242" width="120" height="32" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="150" y="263" text-anchor="middle" fill="#f59e0b" font-size="13">Conclusion Q</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/proof-writing/proofs-01/", title: "Statements and Logic", desc: "Propositions, connectives, truth tables, and the conditional that trips everyone up" },
+  { href: "/reading/proof-writing/proofs-02/", title: "Direct Proof", desc: "Assume P, deduce Q in a straight line" },
+  { href: "/reading/proof-writing/proofs-03/", title: "Contrapositive and Contradiction", desc: "When the front door is locked, try the back door or blow up the building" },
+  { href: "/reading/proof-writing/proofs-04/", title: "Mathematical Induction", desc: "Prove the base, prove the step, knock down infinitely many dominoes" },
+  { href: "/reading/proof-writing/proofs-05/", title: "Sets", desc: "Element-chasing: to prove A is a subset of B, pick x in A and show x is in B" },
+  { href: "/reading/proof-writing/proofs-06/", title: "Functions", desc: "Injective, surjective, bijective: the three properties that control invertibility" },
+  { href: "/reading/proof-writing/proofs-07/", title: "Relations", desc: "Equivalence relations partition a set into non-overlapping classes" },
+  { href: "/reading/proof-writing/proofs-08/", title: "Cardinality", desc: "Some infinities are bigger than others, and Cantor proved it with a diagonal" }
+]} icon="✎" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/">MIT 6.042J Mathematics for Computer Science</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/">🔑 Logic</a> &mdash; formal foundations for the proof techniques used here</li>
+      <li><a href="/reading/abstract-algebra/">🔗 Abstract Algebra</a> &mdash; groups, rings, and fields as proof territory</li>
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> &mdash; combinatorics and graph theory as proof territory</li>
+      <li><a href="/reading/the-natural-framework-lean/">✏️ Lean Proofs</a> &mdash; machine-checked versions of the same proofs</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

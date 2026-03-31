@@ -1,0 +1,341 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.7 — The Integral" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>The Integral</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus (CC BY-SA) · <a href="https://activecalculus.org/">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>definite integral</strong> is the signed area under a curve. Riemann sums approximate it with rectangles. The <strong>Fundamental Theorem of Calculus</strong> connects integration to differentiation: the integral of f' is f, and the derivative of the integral is f.</p>
+    </div>
+
+    <!-- SVG: interactive Riemann sum — slider controls n -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg id="riemann" viewBox="0 0 380 185" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axis -->
+          <line x1="40" y1="150" x2="350" y2="150" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="50" y1="20" x2="50" y2="155" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <!-- Rectangles container -->
+          <g id="rs-rects"></g>
+          <!-- Curve on top -->
+          <path id="rs-curve" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+          <!-- Labels -->
+          <text x="50" y="15" fill="currentColor" font-size="10" fill-opacity="0.4">f(x)</text>
+          <text id="rs-readout" x="190" y="175" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4"></text>
+        </svg>
+        <input type="range" id="rs-slider" min="1" max="80" value="6" step="1" style="width:100%;margin-top:4px;accent-color:#60a5fa;">
+      </div>
+    </div>
+    <script is:inline>
+    (function() {
+      var X0 = 60, X1 = 330, Y0 = 25, Y1 = 150;
+      // f(t) for t in [0,1] — a hump
+      function f(t) { return 0.6 * Math.sin(Math.PI * t) + 0.2; }
+
+      var slider = document.getElementById('rs-slider');
+      var rectsG = document.getElementById('rs-rects');
+      var readout = document.getElementById('rs-readout');
+      var curve = document.getElementById('rs-curve');
+
+      // Draw curve once
+      var pts = [];
+      for (var i = 0; i <= 100; i++) {
+        var t = i / 100;
+        var x = X0 + t * (X1 - X0);
+        var y = Y1 - f(t) * (Y1 - Y0);
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+      }
+      curve.setAttribute('d', 'M ' + pts.join(' L '));
+
+      function update() {
+        var n = parseInt(slider.value);
+        var dx = 1 / n;
+        var html = '';
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+          var t = i * dx;
+          var h = f(t);
+          sum += h * dx;
+          var x = X0 + t * (X1 - X0);
+          var w = dx * (X1 - X0);
+          var barH = h * (Y1 - Y0);
+          html += '<rect x="' + x.toFixed(1) + '" y="' + (Y1 - barH).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + barH.toFixed(1) + '" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3"/>';
+        }
+        rectsG.innerHTML = html;
+        // Exact integral of 0.6*sin(pi*t)+0.2 from 0 to 1 = 0.6*2/pi + 0.2 ≈ 0.5817
+        readout.textContent = 'n = ' + n + '  |  sum = ' + sum.toFixed(4) + '  |  exact = 0.5817';
+      }
+
+      slider.addEventListener('input', update);
+      update();
+    })();
+    </script>
+
+    <!-- 1. Riemann sums -->
+    <h3>Riemann sums</h3>
+    <p>Divide [a,b] into n equal subintervals of width &#x394;x = (b-a)/n. In each subinterval, pick a sample point and multiply f(sample) by &#x394;x. The sum of these rectangles approximates the area. As n approaches infinity, the sum becomes the integral.</p>
+
+    <SchemeRepl client:load initialCode={`; Left Riemann sum for integral of x^2 from 0 to 1
+; Exact answer: 1/3
+
+(define (f x) (* x x))
+(define a 0)
+(define b 1)
+
+(define (riemann-sum n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(display "n=4:    ") (display (riemann-sum 4)) (newline)
+(display "n=10:   ") (display (riemann-sum 10)) (newline)
+(display "n=100:  ") (display (riemann-sum 100)) (newline)
+(display "n=1000: ") (display (riemann-sum 1000)) (newline)
+(display "Exact:  1/3 = 0.3333...")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Left Riemann sum for integral of x^2 from 0 to 1
+def riemann_sum(f, a, b, n):
+    dx = (b - a) / n
+    return sum(f(a + i*dx) * dx for i in range(n))
+
+f = lambda x: x**2
+for n in [4, 10, 100, 1000]:
+    print(f"n={n:<5} sum = {riemann_sum(f, 0, 1, n):.6f}")
+print("Exact: 1/3 = 0.333333...")
+`} />
+    </div>
+
+
+    <!-- 2. Definite integral -->
+    <h3>The definite integral</h3>
+    <p>The integral from a to b of f(x)dx is the limit of the Riemann sum as n approaches infinity. It represents signed area: positive above the x-axis, negative below. The notation is inherited from Leibniz.</p>
+
+    <SchemeRepl client:load initialCode={`; Signed area: sin(x) from 0 to 2*pi
+; Positive hump + negative hump = 0
+
+(define pi 3.141592653589793)
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))  ; midpoint
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(display "sin from 0 to pi:   ")
+(display (/ (round (* (integrate sin 0 pi 1000) 10000)) 10000)) (newline) ; 2.0
+
+(display "sin from pi to 2pi: ")
+(display (/ (round (* (integrate sin pi (* 2 pi) 1000) 10000)) 10000)) (newline) ; -2.0
+
+(display "sin from 0 to 2pi:  ")
+(display (/ (round (* (integrate sin 0 (* 2 pi) 1000) 10000)) 10000))  ; 0.0
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Signed area: sin(x) from 0 to 2*pi
+def integrate(f, a, b, n=1000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+print("sin from 0 to pi:  {:.4f}".format(integrate(math.sin, 0, math.pi)))    # 2.0
+print("sin from pi to 2pi:{:.4f}".format(integrate(math.sin, math.pi, 2*math.pi)))  # -2.0
+print("sin from 0 to 2pi: {:.4f}".format(integrate(math.sin, 0, 2*math.pi)))  # 0.0
+`} />
+    </div>
+
+
+    <!-- 3. FTC Part 1 -->
+    <h3>Fundamental Theorem of Calculus, Part 1</h3>
+    <p>If F(x) = integral from a to x of f(t)dt, then F'(x) = f(x). Differentiation undoes integration. The integral with a variable upper limit is an antiderivative of the integrand.</p>
+
+    <SchemeRepl client:load initialCode={`; FTC Part 1: d/dx [integral from 0 to x of f(t) dt] = f(x)
+; F(x) = integral of t^2 from 0 to x = x^3/3
+; F'(x) = x^2 = f(x)
+
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define (f t) (* t t))
+
+; F(x) = integral from 0 to x of t^2 dt
+(define (F x) (integrate f 0 x 500))
+
+; Numerical derivative of F
+(define h 0.0001)
+(define (F-prime x) (/ (- (F (+ x h)) (F (- x h))) (* 2 h)))
+
+(display "F'(2) = ") (display (/ (round (* (F-prime 2) 1000)) 1000)) (newline)
+(display "f(2)  = ") (display (f 2)) (newline)
+(display "F'(3) = ") (display (/ (round (* (F-prime 3) 1000)) 1000)) (newline)
+(display "f(3)  = ") (display (f 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# FTC Part 1: d/dx[integral from 0 to x of t^2 dt] = x^2
+def integrate(f, a, b, n=500):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+f = lambda t: t**2
+F = lambda x: integrate(f, 0, x)
+
+h = 1e-4
+for x in [2, 3]:
+    F_prime = (F(x+h) - F(x-h)) / (2*h)
+    print("F'({}) = {:.3f}".format(x, F_prime))
+    print("f({})  = {}".format(x, f(x)))
+`} />
+    </div>
+
+
+    <!-- 4. FTC Part 2 -->
+    <h3>Fundamental Theorem of Calculus, Part 2</h3>
+    <p>If F is any antiderivative of f (meaning F' = f), then the integral from a to b of f(x)dx = F(b) - F(a). This turns integration from a limit of sums into a subtraction. It is the most important result in calculus.</p>
+
+    <SchemeRepl client:load initialCode={`; FTC Part 2: integral of f from a to b = F(b) - F(a)
+; f(x) = 3x^2, antiderivative F(x) = x^3
+
+(define (f x) (* 3 x x))
+(define (F x) (* x x x))
+
+; Integral from 1 to 4
+(define exact (- (F 4) (F 1)))  ; 64 - 1 = 63
+
+; Compare with numerical integration
+(define (integrate f a b n)
+  (let ((dx (/ (- b a) n)))
+    (let loop ((i 0) (sum 0))
+      (if (= i n) (* sum dx)
+          (let ((x (+ a (* i dx) (/ dx 2))))
+            (loop (+ i 1) (+ sum (f x))))))))
+
+(define numerical (integrate f 1 4 10000))
+
+(display "F(4) - F(1) = ") (display exact) (newline)
+(display "Numerical:     ") (display (/ (round (* numerical 1000)) 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# FTC Part 2: integral of f from a to b = F(b) - F(a)
+# f(x) = 3x^2, F(x) = x^3
+def integrate(f, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(f(a + (i+0.5)*dx) * dx for i in range(n))
+
+f = lambda x: 3*x**2
+F = lambda x: x**3
+
+exact = F(4) - F(1)  # 64 - 1 = 63
+numerical = integrate(f, 1, 4)
+print("F(4) - F(1) =", exact)
+print("Numerical:    {:.3f}".format(numerical))
+`} />
+    </div>
+
+
+    <!-- 5. Antiderivatives -->
+    <h3>Antiderivatives</h3>
+    <p>An antiderivative of f is any function F such that F' = f. The general antiderivative is F(x) + C, where C is an arbitrary constant. The integral sign without limits denotes the general antiderivative.</p>
+
+    <SchemeRepl client:load initialCode={`; Common antiderivatives:
+; integral of x^n dx = x^(n+1)/(n+1) + C  (n != -1)
+; integral of 1/x dx = ln|x| + C
+; integral of sin(x) dx = -cos(x) + C
+; integral of cos(x) dx = sin(x) + C
+; integral of e^x dx = e^x + C
+
+(define (deriv f)
+  (let ((h 0.00001))
+    (lambda (x) (/ (- (f (+ x h)) (f (- x h))) (* 2 h)))))
+
+; Verify: F(x) = x^4/4 is antiderivative of f(x) = x^3
+(define (F x) (/ (expt x 4) 4))
+(define F-prime (deriv F))
+
+(display "F'(2) = ") (display (/ (round (* (F-prime 2) 1000)) 1000)) (newline)  ; 8
+(display "x^3 at 2 = ") (display (* 2 2 2)) (newline)
+
+; Verify: -cos(x) is antiderivative of sin(x)
+(define (G x) (- (cos x)))
+(define G-prime (deriv G))
+
+(display "G'(1) = ") (display (/ (round (* (G-prime 1) 10000)) 10000)) (newline)
+(display "sin(1) = ") (display (/ (round (* (sin 1) 10000)) 10000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# Common antiderivatives verified numerically
+def deriv(f, x, h=1e-5):
+    return (f(x+h) - f(x-h)) / (2*h)
+
+# F(x) = x^4/4 is antiderivative of x^3
+F = lambda x: x**4 / 4
+print("F'(2) = {:.3f}".format(deriv(F, 2)))  # 8
+print("x^3 at 2 =", 2**3)
+
+# -cos(x) is antiderivative of sin(x)
+G = lambda x: -math.cos(x)
+print("G'(1) = {:.4f}".format(deriv(G, 1)))
+print("sin(1) = {:.4f}".format(math.sin(1)))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x222B;<sub>a</sub><sup>b</sup> f(x)dx</td><td class="pr-4 text-green-300">(integrate f a b n)</td><td class="font-sans">Definite integral (area)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">F(b) - F(a)</td><td class="pr-4 text-green-300">(- (F b) (F a))</td><td class="font-sans">FTC evaluation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x394;x</td><td class="pr-4 text-green-300">dx</td><td class="font-sans">Width of rectangle</td></tr>
+          <tr><td class="py-2 pr-4">&#x222B; f(x)dx</td><td class="pr-4 text-green-300">F(x) + C</td><td class="font-sans">Indefinite integral (antiderivative)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-04/">∫ Ch.4 The Derivative</a> — the FTC says integration is the inverse of differentiation</li>
+      <li><a href="/reading/calculus/calc-08/">∫ Ch.8 Integration Techniques</a> — methods for finding antiderivatives</li>
+      <li><a href="/reading/probability/grinstead-06/">🎰 Grinstead Ch.6</a> — expected value is a weighted integral</li>
+      <li><a href="/reading/real-analysis/lebl-06/">∞ Real Analysis Ch.6</a> — the Riemann integral defined rigorously</li>
+      <li><a href="/reading/probability/grinstead-02/">🎰 Probability Ch.2</a> — continuous probability uses integrals for density functions</li>
+      <li><a href="/reading/physics/crowell-01/">⚛ Physics Ch.1</a> — integration as accumulation of work and energy</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-06/", label: "Applications of Derivatives" }} next={{ href: "/reading/calculus/calc-08/", label: "Techniques of Integration" }} />
+
+  </main>
+</Layout>

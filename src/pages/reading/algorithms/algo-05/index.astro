@@ -1,0 +1,188 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Trees" favicon="⚙">
+  <main>
+
+    <a href="/reading/algorithms/" class="text-sm mb-4 inline-block">&larr; back to algorithms</a>
+
+    <h1>Trees</h1>
+    <p class="text-gray-400 text-sm mb-6">Nievergelt &amp; Hinrichs &middot; Ch. 5 &middot; <a href="https://textbookequity.org/algorithms-and-data-structures/">Algorithms and Data Structures</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>binary search tree</strong> keeps keys ordered: left child &lt; parent &lt; right child. Unbalanced, it degrades to a linked list. <strong>AVL trees</strong> restore balance after every insertion. <strong>B-trees</strong> generalize to disk-friendly multi-way branching.</p>
+    </div>
+
+    <!-- SVG: AVL tree with balance factors -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 230" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Edges -->
+        <line x1="200" y1="40" x2="120" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="200" y1="40" x2="280" y2="90" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="120" y1="90" x2="70" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="120" y1="90" x2="170" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="280" y1="90" x2="240" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="280" y1="90" x2="330" y2="140" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="70" y1="140" x2="45" y2="185" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Nodes with balance factors -->
+        <circle cx="200" cy="40" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="45" text-anchor="middle" fill="#60a5fa" font-size="12">20</text>
+        <text x="222" y="35" fill="#f59e0b" font-size="8">+1</text>
+
+        <circle cx="120" cy="90" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="120" y="95" text-anchor="middle" fill="#60a5fa" font-size="12">10</text>
+        <text x="142" y="85" fill="#f59e0b" font-size="8">+1</text>
+
+        <circle cx="280" cy="90" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="280" y="95" text-anchor="middle" fill="#60a5fa" font-size="12">30</text>
+        <text x="302" y="85" fill="#34d399" font-size="8">0</text>
+
+        <circle cx="70" cy="140" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="70" y="145" text-anchor="middle" fill="#60a5fa" font-size="12">5</text>
+        <text x="92" y="135" fill="#f59e0b" font-size="8">+1</text>
+
+        <circle cx="170" cy="140" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="170" y="145" text-anchor="middle" fill="#60a5fa" font-size="12">15</text>
+        <text x="192" y="135" fill="#34d399" font-size="8">0</text>
+
+        <circle cx="240" cy="140" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="240" y="145" text-anchor="middle" fill="#60a5fa" font-size="12">25</text>
+        <text x="262" y="135" fill="#34d399" font-size="8">0</text>
+
+        <circle cx="330" cy="140" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="330" y="145" text-anchor="middle" fill="#60a5fa" font-size="12">35</text>
+        <text x="352" y="135" fill="#34d399" font-size="8">0</text>
+
+        <circle cx="45" cy="185" r="16" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="45" y="190" text-anchor="middle" fill="#60a5fa" font-size="12">3</text>
+        <text x="67" y="180" fill="#34d399" font-size="8">0</text>
+
+        <!-- Caption -->
+        <text x="200" y="220" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">AVL tree: balance factor = height(left) - height(right), always in -1..+1</text>
+      </svg>
+    </div>
+
+    <h3>Binary search tree</h3>
+    <p>Insert, search, and delete all follow the same path from root to leaf. Average depth O(log n) for random insertions. Worst case O(n) for sorted input.</p>
+
+    <SchemeRepl client:load initialCode={`; BST: insert and search
+; Tree = () | (key left right)
+
+(define (make-node key) (list key (list) (list)))
+(define (node-key t) (car t))
+(define (node-left t) (cadr t))
+(define (node-right t) (caddr t))
+
+(define (bst-insert tree key)
+  (cond ((null? tree) (make-node key))
+        ((< key (node-key tree))
+         (list (node-key tree)
+               (bst-insert (node-left tree) key)
+               (node-right tree)))
+        ((> key (node-key tree))
+         (list (node-key tree)
+               (node-left tree)
+               (bst-insert (node-right tree) key)))
+        (else tree)))
+
+(define (bst-search tree key)
+  (cond ((null? tree) #f)
+        ((= key (node-key tree)) #t)
+        ((< key (node-key tree)) (bst-search (node-left tree) key))
+        (else (bst-search (node-right tree) key))))
+
+(define t (list))
+(set! t (bst-insert t 20))
+(set! t (bst-insert t 10))
+(set! t (bst-insert t 30))
+(set! t (bst-insert t 5))
+(set! t (bst-insert t 15))
+
+(display "Search 15: ") (display (bst-search t 15)) (newline)
+(display "Search 25: ") (display (bst-search t 25))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# BST in Python
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+def insert(root, key):
+    if root is None: return Node(key)
+    if key < root.key: root.left = insert(root.left, key)
+    elif key > root.key: root.right = insert(root.right, key)
+    return root
+
+def search(root, key):
+    if root is None: return False
+    if key == root.key: return True
+    if key < root.key: return search(root.left, key)
+    return search(root.right, key)
+
+def inorder(root):
+    if root is None: return []
+    return inorder(root.left) + [root.key] + inorder(root.right)
+
+root = None
+for k in [20, 10, 30, 5, 15, 25, 35]:
+    root = insert(root, k)
+
+print(f"Inorder: {inorder(root)}")
+print(f"Search 15: {search(root, 15)}")
+print(f"Search 25: {search(root, 25)}")
+`} />
+    </div>
+
+    <h3>Tree traversals</h3>
+    <p><strong>Inorder</strong> (left, root, right) gives sorted output. <strong>Preorder</strong> (root, left, right) gives a serialization that can reconstruct the tree. <strong>Postorder</strong> (left, right, root) evaluates expressions bottom-up.</p>
+
+    <SchemeRepl client:load initialCode={`; Three traversals of the same tree
+; Tree: (key left right)
+
+(define tree
+  (list 20
+    (list 10 (list 5 (list) (list)) (list 15 (list) (list)))
+    (list 30 (list 25 (list) (list)) (list 35 (list) (list)))))
+
+(define (inorder t)
+  (if (null? t) (list)
+      (append (inorder (cadr t))
+              (list (car t))
+              (inorder (caddr t)))))
+
+(define (preorder t)
+  (if (null? t) (list)
+      (append (list (car t))
+              (preorder (cadr t))
+              (preorder (caddr t)))))
+
+(define (postorder t)
+  (if (null? t) (list)
+      (append (postorder (cadr t))
+              (postorder (caddr t))
+              (list (car t)))))
+
+(display "Inorder:   ") (display (inorder tree)) (newline)
+(display "Preorder:  ") (display (preorder tree)) (newline)
+(display "Postorder: ") (display (postorder tree))
+`} />
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-19/">🐱 Milewski Ch.19</a> &mdash; trees as initial algebras: fold over a tree is a catamorphism</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/algorithms/algo-04/", label: "Searching" }} next={{ href: "/reading/algorithms/algo-06/", label: "Graphs" }} />
+
+  </main>
+</Layout>

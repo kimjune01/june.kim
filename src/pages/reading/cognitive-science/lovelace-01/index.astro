@@ -1,0 +1,233 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.1 — What is Computational Cognitive Science?" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>What is Computational Cognitive Science?</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Computational cognitive science builds <strong>formal models</strong> of mental processes, then tests them against behavioral data. A model is not a metaphor: it is a precise, runnable theory that makes falsifiable predictions. Marr's three levels give the framework: <em>what</em> is computed, <em>how</em> it is computed, and <em>what implements</em> the computation. (For an alternative organizing scheme that decomposes information processing into six functional roles, see <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>.)</p>
+    </div>
+
+    <!-- Models vs. theories -->
+    <h3>Models vs. theories</h3>
+    <p>A verbal theory says "people use context to disambiguate words." A computational model specifies <em>exactly</em> how context is represented, what operations run over it, and what predictions follow. The model can be wrong in ways a verbal theory cannot, because it commits to details. That precision is the point: being wrong precisely is more useful than being vaguely right.</p>
+
+    <SchemeRepl client:load initialCode={`; A toy model: does the agent predict "bank" means
+; river-bank or money-bank, given context?
+; The model commits to a specific mechanism: word frequency.
+
+(define (predict-meaning context)
+  (let ((river-words '("water" "fish" "stream" "paddle"))
+        (money-words '("cash" "loan" "deposit" "account")))
+    (let ((river-score (length (filter (lambda (w) (member w river-words)) context)))
+          (money-score (length (filter (lambda (w) (member w money-words)) context))))
+      (cond
+        ((> river-score money-score) "river-bank")
+        ((> money-score river-score) "money-bank")
+        (else "ambiguous")))))
+
+(display (predict-meaning '("water" "fish" "loan")))
+(newline)
+; "river-bank" — the model commits to this prediction.
+; A verbal theory would just say "context helps."
+
+(display (predict-meaning '("cash" "deposit")))
+(newline)
+; "money-bank"
+
+(display (predict-meaning '("tree" "cloud")))
+; "ambiguous"
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Same toy disambiguation model in Python
+def predict_meaning(context):
+    river_words = {"water", "fish", "stream", "paddle"}
+    money_words = {"cash", "loan", "deposit", "account"}
+    river_score = len(set(context) & river_words)
+    money_score = len(set(context) & money_words)
+    if river_score > money_score:
+        return "river-bank"
+    elif money_score > river_score:
+        return "money-bank"
+    return "ambiguous"
+
+print(predict_meaning(["water", "fish", "loan"]))
+print(predict_meaning(["cash", "deposit"]))
+print(predict_meaning(["tree", "cloud"]))
+`} />
+    </div>
+
+
+    <!-- Marr's three levels -->
+    <h3>Marr's three levels</h3>
+    <p><a href="https://en.wikipedia.org/wiki/David_Marr_(neuroscientist)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>David Marr</a> proposed that any information-processing system should be understood at three levels. The <strong>computational level</strong> asks what problem is being solved and why. The <strong>algorithmic level</strong> asks what representations and procedures carry out the computation. The <strong>implementational level</strong> asks how the algorithm is physically realized. These levels are logically independent: the same computation can be carried out by different algorithms, and the same algorithm can be implemented in different hardware.</p>
+
+    <!-- SVG: Marr's three levels -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Computational level -->
+        <rect x="40" y="10" width="280" height="50" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="30" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">Computational</text>
+        <text x="180" y="48" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">What is computed and why?</text>
+        <!-- Arrow down -->
+        <line x1="180" y1="60" x2="180" y2="70" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="176,70 184,70 180,78" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Algorithmic level -->
+        <rect x="40" y="78" width="280" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="98" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">Algorithmic</text>
+        <text x="180" y="116" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">What representations and procedures?</text>
+        <!-- Arrow down -->
+        <line x1="180" y1="128" x2="180" y2="138" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="176,138 184,138 180,146" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Implementational level -->
+        <rect x="40" y="146" width="280" height="50" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="180" y="166" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">Implementational</text>
+        <text x="180" y="184" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">How is it physically realized?</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Marr's levels applied to addition:
+;
+; Computational: map pairs of numbers to their sum.
+; Algorithmic: carry-based decimal addition, or binary addition,
+;   or repeated increment.
+; Implementational: silicon logic gates, or neurons, or gears.
+;
+; Two different algorithms for the same computation:
+
+; Algorithm 1: recursive increment
+(define (add-by-increment a b)
+  (if (= b 0)
+      a
+      (add-by-increment (+ a 1) (- b 1))))
+
+; Algorithm 2: built-in addition (the hardware does it)
+(define (add-direct a b) (+ a b))
+
+; Same computational-level function, different algorithms
+(display "increment: ")
+(display (add-by-increment 3 4)) (newline)
+(display "direct:    ")
+(display (add-direct 3 4))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Two algorithms for the same computation
+def add_by_increment(a, b):
+    while b > 0:
+        a += 1
+        b -= 1
+    return a
+
+def add_direct(a, b):
+    return a + b
+
+print("increment: " + str(add_by_increment(3, 4)))
+print("direct:    " + str(add_direct(3, 4)))
+`} />
+    </div>
+
+
+    <!-- Simulation vs. explanation -->
+    <h3>Simulation vs. explanation</h3>
+    <p>A simulation reproduces the output. An explanation reveals <em>why</em> the output takes that form. A weather simulation can predict rain without explaining why low pressure causes precipitation. Cognitive science wants explanations: models that not only fit the data but illuminate the mechanism. The test is whether the model makes surprising, correct predictions beyond the data it was fit to.</p>
+
+    <SchemeRepl client:load initialCode={`; Simulation vs explanation:
+; Both models predict that reaction time increases with set size.
+; Only one explains WHY.
+
+; Model A (simulation): lookup table from data
+; "I measured these reaction times"
+(define (model-a-rt set-size)
+  (cond ((= set-size 1) 450)
+        ((= set-size 2) 500)
+        ((= set-size 4) 600)
+        ((= set-size 8) 800)
+        (else 0)))
+
+; Model B (explanation): serial search, ~50ms per item
+; "Each item takes ~50ms to check"
+(define (model-b-rt set-size)
+  (+ 400 (* 50 set-size)))
+
+; Both fit the original data:
+(display "Set size 4: ")
+(display (model-a-rt 4)) (display " vs ")
+(display (model-b-rt 4)) (newline)
+
+; But Model B predicts novel set sizes:
+(display "Set size 16 (model A): ")
+(display (model-a-rt 16)) (newline)  ; 0 — no prediction
+(display "Set size 16 (model B): ")
+(display (model-b-rt 16))            ; 1200 — testable prediction
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simulation vs explanation
+# Model A: lookup table (simulation)
+model_a = {1: 450, 2: 500, 4: 600, 8: 800}
+
+# Model B: serial search, ~50ms/item (explanation)
+model_b = lambda n: 400 + 50 * n
+
+print("Set size 4: " + str(model_a[4]) + " vs " + str(model_b(4)))
+print("Set size 16 (model A): " + str(model_a.get(16, 0)))
+print("Set size 16 (model B): " + str(model_b(16)))
+# Model B predicts novel inputs; Model A cannot.
+`} />
+    </div>
+
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Term</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Computational level</td><td>What is the goal of the computation?</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Algorithmic level</td><td>What representations and steps achieve it?</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Implementational level</td><td>What physical substrate runs it?</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Model</td><td>A precise, runnable specification of a theory</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">Simulation</td><td>Reproduces outputs; explanation reveals why</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/David_Marr_(neuroscientist)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>David Marr</a> — the neuroscientist behind the three levels</li>
+      <li><a href="https://en.wikipedia.org/wiki/Computational_theory_of_mind"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Computational theory of mind</a> — the broader philosophical context</li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook is interactive and example-heavy. This page condenses the conceptual core: the distinction between verbal theories and computational models, Marr's levels as an organizing framework, and the simulation-vs-explanation test. The textbook also discusses historical context (behaviorism, connectionism, Bayesian revolution) which we pick up in later chapters.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter1">Lovelace, Chapter 1</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/cognitive-science/lovelace-02/", label: "Probability and Bayes · 2 of 8" }} />
+
+  </main>
+</Layout>

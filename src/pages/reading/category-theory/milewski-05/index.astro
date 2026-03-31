@@ -1,0 +1,419 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.5 — Products and Coproducts" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Products and Coproducts</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2015 · <a href="https://bartoszmilewski.com/2015/01/07/products-and-coproducts/">Category Theory for Programmers, Ch. 5</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> (Category), <a href="/reading/category-theory/milewski-02/">🍞 Chapter 2</a> (Types and Functions). 8 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Tuples and tagged unions aren't language features. They're <strong>universal constructions</strong>: the product is the best object with two projections, the coproduct is the best object with two injections. "Best" means every other candidate factors through it uniquely.</p>
+    </div>
+
+    <!-- 1. Initial and terminal objects -->
+    <h3>Initial and terminal objects</h3>
+    <p>A <strong>terminal object</strong> has exactly one morphism coming from every other object. In sets, it's a singleton. In Python, it's <code>None</code>: every function can return <code>None</code>, and there's only one way to do it. An <strong>initial object</strong> has exactly one morphism going <em>to</em> every other object. In sets, it's the empty set. Both are unique up to isomorphism.</p>
+
+    <SchemeRepl client:load initialCode={`; Terminal object: one morphism from every object to it.
+; In Set, it's any singleton. In Scheme, we use '()
+; unit : a -> ()
+; There's exactly one such function for any type a.
+
+(define (unit x) '())
+
+(display "unit of 42:      ") (display (unit 42)) (newline)
+(display "unit of 'hello:  ") (display (unit "hello")) (newline)
+(display "unit of (list):  ") (display (unit (list 1 2 3))) (newline)
+; Always '(). That's the point — there's only one morphism.
+
+; Initial object: the empty set / Void.
+; There's a unique morphism FROM it to every object,
+; but you can never call it — there are no values of type Void.
+(define (absurd x)
+  (display "ERROR: Void has no values") (newline))
+
+(display "absurd is defined but uncallable — Void is empty")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Terminal object: unit returns None (the singleton)
+def unit(x):
+    return None
+
+print(f"unit(42) = {unit(42)}")
+print(f"unit('hello') = {unit('hello')}")
+# Always None. One morphism from any type to the terminal object.
+
+# Initial object: Void (no values)
+# Python has no true Void type, but NoReturn is close.
+# The function exists but can never be called — no input to give it.
+def absurd(x):
+    raise RuntimeError("Void has no values")
+`} />
+    </div>
+
+
+    <!-- 2. Universal construction -->
+    <h3>Universal construction — ranking candidates</h3>
+    <p>Category theory defines objects by their relationships, not their internals. The <strong>universal construction</strong> is a three-step recipe: (1) define a pattern of objects and morphisms, (2) rank all candidates by whether one factors through another, (3) pick the best one. "Best" means every other candidate factors through it via a unique morphism.</p>
+
+    <SchemeRepl client:load initialCode={`; Universal construction for products: find the "best" pair.
+; Pattern: object c with two projections p: c->a, q: c->b.
+;
+; Candidate 1: c = (int, int, string), p = first, q = second
+; Candidate 2: c = (int, int),         p = fst,   q = snd
+;
+; Candidate 2 is "better" because candidate 1 factors through it:
+; there's a morphism m from candidate 1 to candidate 2
+; such that p = fst . m and q = snd . m.
+
+; Candidate 1: a triple (too much info)
+(define (p-triple t) (car t))         ; first element
+(define (q-triple t) (cadr t))        ; second element
+
+; Candidate 2: a pair (just right)
+(define (fst p) (car p))
+(define (snd p) (cadr p))
+
+; The factorizing morphism: strip the extra data
+(define (m t) (list (car t) (cadr t)))
+
+; Verify: p-triple = fst . m, q-triple = snd . m
+(define test-triple (list 3 7 "extra"))
+
+(display "p directly:   ") (display (p-triple test-triple)) (newline)
+(display "fst . m:      ") (display (fst (m test-triple))) (newline)
+(display "q directly:   ") (display (q-triple test-triple)) (newline)
+(display "snd . m:      ") (display (snd (m test-triple))) (newline)
+; The pair is better — the triple has redundant structure.
+`} />
+
+    <!-- 3. Products -->
+    <h3>Products — tuples from projections</h3>
+    <p>The <strong>product</strong> of objects <em>a</em> and <em>b</em> is an object <em>c</em> with two projections <code>fst : c → a</code> and <code>snd : c → b</code>, such that for any other candidate <em>c'</em> with projections <em>p'</em> and <em>q'</em>, there exists a unique morphism <code>m : c' → c</code> where <code>p' = fst ∘ m</code> and <code>q' = snd ∘ m</code>. In programming, the product is a tuple.</p>
+
+    <!-- SVG: Product universal property triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object C (apex, top center) -->
+        <circle cx="180" cy="40" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="28" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">C</text>
+        <!-- Object A (bottom left) -->
+        <circle cx="50" cy="190" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="50" y="210" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Object B (bottom right) -->
+        <circle cx="310" cy="190" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="310" y="210" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">B</text>
+        <!-- Object A&#xD7;B (bottom center) -->
+        <circle cx="180" cy="180" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="200" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">A&#xD7;B</text>
+        <!-- Arrow f: C -> A -->
+        <line x1="174" y1="46" x2="56" y2="184" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="58,180 50,186 58,188" fill="currentColor"/>
+        <text x="96" y="108" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">f</text>
+        <!-- Arrow g: C -> B -->
+        <line x1="186" y1="46" x2="304" y2="184" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="302,180 310,186 302,188" fill="currentColor"/>
+        <text x="264" y="108" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">g</text>
+        <!-- Dashed arrow m: C -> A&#xD7;B -->
+        <line x1="180" y1="48" x2="180" y2="172" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="176,170 180,178 184,170" fill="currentColor" fill-opacity="0.6"/>
+        <text x="195" y="115" text-anchor="start" fill="currentColor" font-size="12" fill-opacity="0.4">m</text>
+        <!-- Arrow p1: A&#xD7;B -> A -->
+        <line x1="172" y1="182" x2="58" y2="190" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="60,186 52,190 60,194" fill="currentColor"/>
+        <text x="110" y="178" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">p&#x2081;</text>
+        <!-- Arrow p2: A&#xD7;B -> B -->
+        <line x1="188" y1="182" x2="302" y2="190" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="300,186 308,190 300,194" fill="currentColor"/>
+        <text x="250" y="178" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">p&#x2082;</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Product = pair with projections fst and snd.
+; The factorizer builds the unique morphism m.
+
+(define (fst p) (car p))
+(define (snd p) (cadr p))
+
+; factorizer: given any two functions p: c->a and q: c->b,
+; produce the unique m: c -> (a, b)
+(define (factorizer p q)
+  (lambda (x) (list (p x) (q x))))
+
+; Example: c = integer, a = bool (is-even?), b = string (show)
+(define (is-even? n) (= 0 (modulo n 2)))
+(define (show n) (number->string n))
+
+(define m (factorizer is-even? show))
+
+(display "m(42):  ") (display (m 42)) (newline)
+(display "m(7):   ") (display (m 7)) (newline)
+
+; Verify: fst . m = is-even?, snd . m = show
+(display "fst(m(42)) = is-even?(42)? ")
+(display (equal? (fst (m 42)) (is-even? 42))) (newline)
+(display "snd(m(42)) = show(42)?     ")
+(display (equal? (snd (m 42)) (show 42)))
+; The factorizer witnesses the universal property.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Product = tuple with fst, snd projections
+fst = lambda p: p[0]
+snd = lambda p: p[1]
+
+# Factorizer: given p: c->a and q: c->b, build m: c->(a,b)
+def factorizer(p, q):
+    return lambda x: (p(x), q(x))
+
+is_even = lambda n: n % 2 == 0
+show = str
+
+m = factorizer(is_even, show)
+print(f"m(42) = {m(42)}")
+print(f"m(7)  = {m(7)}")
+
+# Verify universal property
+print(f"fst(m(42)) == is_even(42)? {fst(m(42)) == is_even(42)}")
+print(f"snd(m(42)) == show(42)?    {snd(m(42)) == show(42)}")
+`} />
+    </div>
+
+
+    <!-- 4. Coproducts -->
+    <h3>Coproducts — tagged unions from injections</h3>
+    <p>Reverse the arrows and you get the <strong>coproduct</strong>. Instead of projections <em>out</em>, you have injections <em>in</em>: <code>Left : a → c</code> and <code>Right : b → c</code>. The universal property: for any other candidate <em>c'</em> with injections <em>i'</em> and <em>j'</em>, there exists a unique morphism <code>m : c → c'</code> where <code>i' = m ∘ Left</code> and <code>j' = m ∘ Right</code>. In programming, the coproduct is <code>Either</code> (Haskell) or a tagged union.</p>
+
+    <!-- SVG: Coproduct universal property (dual triangle) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 220" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Object A (top left) -->
+        <circle cx="50" cy="40" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="50" y="28" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">A</text>
+        <!-- Object B (top right) -->
+        <circle cx="310" cy="40" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="310" y="28" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">B</text>
+        <!-- Object A+B (top center) -->
+        <circle cx="180" cy="50" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="38" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">A+B</text>
+        <!-- Object C (bottom center) -->
+        <circle cx="180" cy="190" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="180" y="210" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.7">C</text>
+        <!-- Arrow i1: A -> A+B -->
+        <line x1="58" y1="42" x2="172" y2="48" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="170,44 178,48 170,52" fill="currentColor"/>
+        <text x="110" y="56" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">i&#x2081;</text>
+        <!-- Arrow i2: B -> A+B -->
+        <line x1="302" y1="42" x2="188" y2="48" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="190,44 182,48 190,52" fill="currentColor"/>
+        <text x="250" y="56" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">i&#x2082;</text>
+        <!-- Arrow f: A -> C -->
+        <line x1="52" y1="48" x2="174" y2="184" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="172,180 178,188 174,180" fill="currentColor"/>
+        <polygon points="170,180 178,186 176,178" fill="currentColor"/>
+        <text x="96" y="128" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">f</text>
+        <!-- Arrow g: B -> C -->
+        <line x1="308" y1="48" x2="186" y2="184" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="190,180 182,188 184,178" fill="currentColor"/>
+        <text x="264" y="128" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">g</text>
+        <!-- Dashed arrow [f,g]: A+B -> C -->
+        <line x1="180" y1="58" x2="180" y2="182" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="176,180 180,188 184,180" fill="currentColor" fill-opacity="0.6"/>
+        <text x="200" y="125" text-anchor="start" fill="currentColor" font-size="12" fill-opacity="0.4">(f,g)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Coproduct = Either = tagged union with Left and Right injections.
+
+(define (Left x)  (list 'Left x))
+(define (Right x) (list 'Right x))
+
+(define (is-left? e)  (eq? (car e) 'Left))
+(define (from-left e) (cadr e))
+(define (from-right e) (cadr e))
+
+; Coproduct factorizer: given i: a->c and j: b->c,
+; produce the unique m: Either a b -> c
+(define (factorizer-coprod i j)
+  (lambda (e)
+    (if (is-left? e)
+        (i (from-left e))
+        (j (from-right e)))))
+
+; Example: convert either a number or a string to a display string
+(define show-num (lambda (n) (string-append "Number: " (number->string n))))
+(define show-str (lambda (s) (string-append "String: " s)))
+
+(define m (factorizer-coprod show-num show-str))
+
+(display (m (Left 42))) (newline)
+(display (m (Right "hello"))) (newline)
+
+; Verify: m . Left = show-num, m . Right = show-str
+(display "m(Left(42)) = show-num(42)?      ")
+(display (equal? (m (Left 42)) (show-num 42))) (newline)
+(display "m(Right('hello')) = show-str('hello')? ")
+(display (equal? (m (Right "hello")) (show-str "hello")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Coproduct = tagged union (Either)
+class Either:
+    def __init__(self, tag, value):
+        self.tag = tag
+        self.value = value
+    def __repr__(self):
+        return f"{self.tag}({self.value!r})"
+
+Left  = lambda x: Either("Left", x)
+Right = lambda x: Either("Right", x)
+
+# Coproduct factorizer: given i: a->c and j: b->c, build m: Either->c
+def factorizer_coprod(i, j):
+    def m(e):
+        return i(e.value) if e.tag == "Left" else j(e.value)
+    return m
+
+show_num = lambda n: f"Number: {n}"
+show_str = lambda s: f"String: {s}"
+
+m = factorizer_coprod(show_num, show_str)
+print(m(Left(42)))
+print(m(Right("hello")))
+
+# Verify universal property
+print(f"m(Left(42)) == show_num(42)?       {m(Left(42)) == show_num(42)}")
+print(f"m(Right('hello')) == show_str('hello')? {m(Right('hello')) == show_str('hello')}")
+`} />
+    </div>
+
+
+    <!-- 5. Duality -->
+    <h3>Duality — reverse the arrows</h3>
+    <p>Every categorical construction has a <strong>dual</strong>: reverse all the arrows. The product's dual is the coproduct. The terminal object's dual is the initial object. Projections become injections. If you prove something about products, you get a theorem about coproducts for free. This is the power of the opposite category <em>C</em><sup>op</sup>.</p>
+
+    <SchemeRepl client:load initialCode={`; Duality in action: product vs. coproduct side by side.
+; Product:   c has fst: c->a, snd: c->b    (projections OUT)
+; Coproduct: c has Left: a->c, Right: b->c  (injections IN)
+
+; Product: decompose a pair
+(define pair-val (list 3 7))
+(display "Product:   fst=") (display (car pair-val))
+(display ", snd=") (display (cadr pair-val)) (newline)
+
+; Coproduct: construct a tagged value
+(define (Left x)  (list 'Left x))
+(define (Right x) (list 'Right x))
+(display "Coproduct: Left(3)=")  (display (Left 3)) (newline)
+(display "Coproduct: Right(7)=") (display (Right 7)) (newline)
+
+; Product factorizer: two functions OUT => one function TO pair
+; Coproduct factorizer: two functions IN => one function FROM either
+; Same universal property, arrows reversed.
+
+(display "Product factorizer:   c -> (a, b)") (newline)
+(display "Coproduct factorizer: Either a b -> c") (newline)
+(display "Dual constructions. Dual factorizers.")
+`} />
+
+    <!-- 6. Asymmetry in Set -->
+    <h3>Why products and coproducts aren't symmetric in Set</h3>
+    <p>Functions must be defined on their entire domain but don't have to cover their codomain. This makes products and coproducts behave differently in the category of sets. A "bad" product candidate can lose information (too few projections), but a "bad" coproduct candidate can <em>collapse</em> information (map distinct values to the same output). The asymmetry comes from functions themselves, not from the constructions.</p>
+
+    <SchemeRepl client:load initialCode={`; Asymmetry: a bad product candidate vs. a bad coproduct candidate.
+
+; BAD product for (Int, Bool):
+; c = Int, p = identity, q = is-even?
+; This "works" but loses information — many ints map to the same bool.
+; The real product (pair) doesn't lose anything.
+
+(define (bad-p n) n)
+(define (bad-q n) (= 0 (modulo n 2)))
+(display "Bad product: (5, is-even?) = ")
+(display (list (bad-p 5) (bad-q 5))) (newline)
+(display "Can't recover the original bool from int alone.") (newline)
+(newline)
+
+; BAD coproduct for (Int, Bool):
+; c = Int, i = identity, j = (lambda (b) (if b 1 0))
+; This collapses: Left(1) and Right(#t) both map to 1.
+; The real coproduct (Either) keeps them distinct.
+
+(define (bad-i n) n)
+(define (bad-j b) (if b 1 0))
+(display "Bad coproduct: Left(1) = ") (display (bad-i 1)) (newline)
+(display "Bad coproduct: Right(#t) = ") (display (bad-j #t)) (newline)
+(display "Collision! Both map to 1. Either keeps them tagged and distinct.")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">()</td><td class="pr-4 text-green-300">'()</td><td class="font-sans">Terminal object (unit)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Void</td><td class="pr-4 text-green-300">(error ...)</td><td class="font-sans">Initial object (empty type)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">fst :: (a, b) → a</td><td class="pr-4 text-green-300">(car p)</td><td class="font-sans">First projection</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">snd :: (a, b) → b</td><td class="pr-4 text-green-300">(cadr p)</td><td class="font-sans">Second projection</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Left :: a → Either a b</td><td class="pr-4 text-green-300">(Left x)</td><td class="font-sans">Left injection</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Right :: b → Either a b</td><td class="pr-4 text-green-300">(Right x)</td><td class="font-sans">Right injection</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">factorizer p q = \x → (p x, q x)</td><td class="pr-4 text-green-300">(factorizer p q)</td><td class="font-sans">Product factorizer</td></tr>
+          <tr><td class="py-2 pr-4">factorizer i j (Left a) = i a</td><td class="pr-4 text-green-300">(factorizer-coprod i j)</td><td class="font-sans">Coproduct factorizer</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-04/">🍞 Chapter 4</a> — Kleisli Categories</li>
+      <li><a href="/reading/category-theory/milewski-06/">🍞 Chapter 6</a> — Simple Algebraic Data Types (products + coproducts = algebra of types)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use products and coproducts</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — open games use products for strategy profiles</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Product_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Product (category theory)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Coproduct"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Coproduct</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tagged_union"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tagged union</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Universal_property"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal property</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses Haskell tuples and <code>Either</code>, plus C++ <code>std::pair</code> and tagged unions. This page uses Scheme lists as pairs and tagged lists as Either. The factorizers are direct translations of Milewski's Haskell definitions. The "ranking candidates" section (universal construction) is presented concretely: a triple is a worse product candidate than a pair because the triple factors through the pair. The blog post also discusses the asymmetry between products and coproducts in Set, which comes from functions being total (defined everywhere) but not necessarily surjective (covering the codomain).</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2015/01/07/products-and-coproducts/">Read the blog post</a>. The universal construction pattern here recurs in every chapter from here on.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-04/", label: "Kleisli Categories" }} next={{ href: "/reading/category-theory/milewski-06/", label: "Algebraic Data Types" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,226 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 04 — Mutual information" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to info theory</a>
+
+    <h1>Mutual information</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Mutual information</strong> I(X;Y) = H(X) + H(Y) &minus; H(X,Y) measures the information shared between two variables. It is always non-negative, and zero if and only if X and Y are independent.</p>
+    </div>
+
+    <!-- 1. What mutual information measures -->
+    <h3>The shared information</h3>
+    <p>Mutual information answers: how much does knowing X tell you about Y? Equivalently: how much does the joint distribution differ from the product of marginals? Three equivalent formulas:</p>
+    <ul>
+      <li>I(X;Y) = H(X) + H(Y) &minus; H(X,Y)</li>
+      <li>I(X;Y) = H(X) &minus; H(X|Y)</li>
+      <li>I(X;Y) = H(Y) &minus; H(Y|X)</li>
+    </ul>
+    <p>The first says mutual information is the overlap in the Venn diagram. The second says it is how much Y reduces uncertainty about X. The third is the symmetric version.</p>
+
+    <!-- SVG: Venn diagram with mutual information highlighted -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Clip paths for intersection highlight -->
+        <defs>
+          <clipPath id="clip-x"><circle cx="155" cy="110" r="80"/></clipPath>
+          <clipPath id="clip-y"><circle cx="245" cy="110" r="80"/></clipPath>
+        </defs>
+        <!-- H(X) circle -->
+        <circle cx="155" cy="110" r="80" fill="#60a5fa" fill-opacity="0.06" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- H(Y) circle -->
+        <circle cx="245" cy="110" r="80" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <!-- Intersection highlighted in blue -->
+        <circle cx="245" cy="110" r="80" clip-path="url(#clip-x)" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+        <!-- Labels -->
+        <text x="110" y="110" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">H(X|Y)</text>
+        <text x="290" y="110" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">H(Y|X)</text>
+        <text x="200" y="100" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold">I(X;Y)</text>
+        <text x="200" y="118" text-anchor="middle" fill="#60a5fa" font-size="10">shared</text>
+        <!-- Outer labels -->
+        <text x="120" y="30" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.6">H(X)</text>
+        <text x="280" y="30" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.6">H(Y)</text>
+        <!-- H(X,Y) brace -->
+        <line x1="75" y1="200" x2="325" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="75" y1="195" x2="75" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="325" y1="195" x2="325" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="215" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">H(X,Y)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Mutual information: I(X;Y) = H(X) + H(Y) - H(X,Y)
+; The information shared between X and Y
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+; Weather/umbrella example from ch.3
+(define h-joint (entropy '(0.15 0.55 0.25 0.05)))
+(define h-weather (entropy '(0.70 0.30)))
+(define h-umbrella (entropy '(0.40 0.60)))
+
+; Three equivalent formulas
+(define mi-1 (+ h-weather h-umbrella (- h-joint)))
+(define mi-2 (- h-weather (- h-joint h-umbrella)))
+(define mi-3 (- h-umbrella (- h-joint h-weather)))
+
+(display "I(W;U) = H(W) + H(U) - H(W,U) = ")
+(display mi-1) (newline)
+(display "I(W;U) = H(W) - H(W|U)         = ")
+(display mi-2) (newline)
+(display "I(W;U) = H(U) - H(U|W)         = ")
+(display mi-3) (newline)
+
+; All three agree
+(display "all equal? ")
+(display (and (< (abs (- mi-1 mi-2)) 0.0001)
+              (< (abs (- mi-2 mi-3)) 0.0001)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def entropy(probs):
+    return -sum(p * math.log2(p) for p in probs if p > 0)
+
+h_joint = entropy([0.15, 0.55, 0.25, 0.05])
+h_w = entropy([0.70, 0.30])
+h_u = entropy([0.40, 0.60])
+
+mi = h_w + h_u - h_joint
+print(f"I(W;U) = {mi:.4f} bits")
+print(f"H(W) - H(W|U) = {h_w - (h_joint - h_u):.4f} bits")
+print(f"H(U) - H(U|W) = {h_u - (h_joint - h_w):.4f} bits")
+`} />
+    </div>
+
+    <!-- 2. Non-negativity and independence -->
+    <h3>Non-negativity and independence</h3>
+    <p>Mutual information is always non-negative: I(X;Y) &ge; 0. It equals zero if and only if X and Y are independent, because independent variables share no information. This follows from the fact that H(X|Y) &le; H(X): conditioning never increases entropy.</p>
+
+    <SchemeRepl client:load initialCode={`; I(X;Y) = 0 iff X and Y are independent
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+(define (mutual-info joint marginal-x marginal-y)
+  (+ (entropy marginal-x)
+     (entropy marginal-y)
+     (- (entropy joint))))
+
+; Independent: coin flip and die roll
+; P(H,1) = 0.5 * 1/6, etc.
+(define coin-die-joint
+  (list (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6))
+        (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6))
+        (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6))
+        (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6)) (* 0.5 (/ 1.0 6))))
+
+(display "independent (coin,die): I = ")
+(display (mutual-info coin-die-joint
+                      '(0.5 0.5)
+                      (list (/ 1.0 6) (/ 1.0 6) (/ 1.0 6)
+                            (/ 1.0 6) (/ 1.0 6) (/ 1.0 6))))
+(newline)
+
+; Dependent: weather/umbrella
+(display "dependent (W,U):        I = ")
+(display (mutual-info '(0.15 0.55 0.25 0.05)
+                      '(0.70 0.30)
+                      '(0.40 0.60)))
+`} />
+
+    <!-- 3. Symmetry -->
+    <h3>Symmetry</h3>
+    <p>Mutual information is symmetric: I(X;Y) = I(Y;X). Knowing X tells you as much about Y as knowing Y tells you about X. This is not true of conditional entropy: H(X|Y) and H(Y|X) can differ.</p>
+
+    <SchemeRepl client:load initialCode={`; Symmetry: I(X;Y) = I(Y;X)
+; But H(X|Y) != H(Y|X) in general
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (= p 0) (loop (cdr ps) h)
+              (loop (cdr ps)
+                    (- h (* p (log2 p)))))))))
+
+(define h-joint (entropy '(0.15 0.55 0.25 0.05)))
+(define h-w (entropy '(0.70 0.30)))
+(define h-u (entropy '(0.40 0.60)))
+
+; MI is symmetric
+(display "I(W;U) = H(W) - H(W|U) = ")
+(display (- h-w (- h-joint h-u))) (newline)
+(display "I(U;W) = H(U) - H(U|W) = ")
+(display (- h-u (- h-joint h-w))) (newline)
+
+; Conditional entropy is NOT symmetric
+(display "H(W|U) = ") (display (- h-joint h-u)) (newline)
+(display "H(U|W) = ") (display (- h-joint h-w)) (newline)
+(display "H(W|U) = H(U|W)? ")
+(display (< (abs (- (- h-joint h-u) (- h-joint h-w))) 0.0001))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I(X;Y) = H(X) + H(Y) &minus; H(X,Y)</td><td class="pr-4 text-green-300">(mutual-info joint mx my)</td><td class="font-sans">Mutual information</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I(X;Y) = H(X) &minus; H(X|Y)</td><td class="pr-4 text-green-300">(- h-x h-x-given-y)</td><td class="font-sans">Reduction in uncertainty</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I(X;Y) &ge; 0</td><td class="pr-4 text-green-300">(&gt;= mi 0)</td><td class="font-sans">Non-negativity</td></tr>
+          <tr><td class="py-2 pr-4">I(X;Y) = 0 iff independent</td><td class="pr-4 text-green-300">(= mi 0)</td><td class="font-sans">Zero means no shared info</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-03/">📡 Shannon 03</a> &mdash; joint and conditional entropy</li>
+      <li><a href="/reading/information-theory/shannon-05/">📡 Shannon 05</a> &mdash; KL divergence</li>
+      <li><a href="/reading/information-theory/shannon-06/">📡 Shannon 06</a> &mdash; data processing inequality</li>
+      <li><a href="/reading/smithe-2021/">🍞 Smithe 2021</a> &mdash; Bayesian lenses trade mutual information between prior and posterior</li>
+      <li><a href="https://en.wikipedia.org/wiki/Mutual_information"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mutual information</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Information_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Information diagram</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/information-theory/shannon-03/", label: "Joint and Conditional" }} next={{ href: "/reading/information-theory/shannon-05/", label: "KL Divergence" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,153 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="VCG Mechanism — Clarke 1971, Groves 1973" favicon="💎">
+  <main>
+
+    <a href="/reading/auction-theory/" class="text-sm mb-4 inline-block">&larr; back to Auction Theory</a>
+
+    <h1>VCG Mechanism</h1>
+    <p class="text-gray-400 text-sm mb-6">Clarke 1971 &middot; Groves 1973 &middot; <a href="https://doi.org/10.2307/1914085">Clarke doi:10.2307/1914085</a> &middot; <a href="https://doi.org/10.2307/1914085">Groves doi:10.2307/1914085</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Each winner pays the <strong>externality</strong> they impose on other bidders. This makes truthful bidding dominant, allocation efficient, and participation individually rational.</p>
+    </div>
+
+    <h3>The externality principle</h3>
+    <p>Your VCG payment = the total value others would have gotten without you, minus the total value others actually get. You pay exactly the harm your presence causes.</p>
+
+    <!-- SVG: Three bidders, payment = social welfare without you minus social welfare with you -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- World WITH bidder i -->
+        <text x="130" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">With you</text>
+        <rect x="30" y="25" width="200" height="80" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="60" y="50" fill="#4ade80" font-size="11">A: $10</text>
+        <text x="60" y="70" fill="currentColor" font-size="11">B: $7</text>
+        <text x="60" y="90" fill="currentColor" font-size="11">C: $4</text>
+        <text x="170" y="50" fill="#4ade80" font-size="10">wins item</text>
+        <text x="170" y="70" fill="currentColor" font-size="10" fill-opacity="0.5">others get $11</text>
+
+        <!-- World WITHOUT bidder i -->
+        <text x="380" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Without you</text>
+        <rect x="280" y="25" width="200" height="80" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <text x="310" y="50" fill="currentColor" font-size="11" fill-opacity="0.4">A: gone</text>
+        <text x="310" y="70" fill="#60a5fa" font-size="11">B: $7</text>
+        <text x="310" y="90" fill="currentColor" font-size="11">C: $4</text>
+        <text x="420" y="70" fill="#60a5fa" font-size="10">wins item</text>
+        <text x="420" y="90" fill="currentColor" font-size="10" fill-opacity="0.5">others get $4</text>
+
+        <!-- Payment calculation -->
+        <rect x="100" y="125" width="300" height="55" rx="6" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="250" y="148" text-anchor="middle" fill="#60a5fa" font-size="12">A's payment = ($7 + $4) - ($7 + $4) = $7</text>
+        <text x="250" y="168" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">others' welfare without A ($11) minus others' welfare with A ($4) = $7</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; VCG mechanism: each winner pays the externality they impose
+; payment_i = welfare_others_without_i - welfare_others_with_i
+
+(define (sum lst) (if (null? lst) 0 (+ (car lst) (sum (cdr lst)))))
+
+(define (remove-nth lst n)
+  (if (= n 0) (cdr lst)
+      (cons (car lst) (remove-nth (cdr lst) (- n 1)))))
+
+(define (vcg-payment bids winner-idx)
+  (let* ((others-with (remove-nth bids winner-idx))
+         (welfare-others-with (sum others-with))
+         ;; Without winner, next highest gets the item
+         (others-without (remove-nth bids winner-idx))
+         (welfare-others-without (+ (apply max others-without)
+                                     (sum (cdr (sort others-without >))))))
+    ;; Simplified: for single-item, payment = second-highest bid
+    (apply max others-with)))
+
+; Single item auction: bids = (10 7 4)
+(define bids '(10 7 4))
+(display "Bids: ") (display bids) (newline)
+(display "Winner: bidder 0 (bid $10)") (newline)
+(display "VCG payment: $")
+(display (vcg-payment bids 0)) (newline)
+(display "Surplus: $")
+(display (- 10 (vcg-payment bids 0)))
+; For a single item, VCG reduces to second-price (Vickrey)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# VCG mechanism — single item
+def vcg_single_item(bids):
+    """For one item: winner pays second-highest bid (= Vickrey)."""
+    s = sorted(bids, reverse=True)
+    winner_value = s[0]
+    payment = s[1]  # externality = what second-place loses
+    return dict(winner=winner_value, payment=payment,
+            surplus=winner_value - payment)
+
+print(vcg_single_item([10, 7, 4]))
+
+# Multi-item VCG
+def vcg_multi(values, k):
+    """k items, unit demand. Each winner pays externality."""
+    s = sorted(values, reverse=True)
+    winners = s[:k]
+    payments = []
+    for i in range(k):
+        # Without winner i, the k-th highest bid would win
+        without = sorted([v for j,v in enumerate(values) if j != i], reverse=True)
+        welfare_without = sum(without[:k])
+        welfare_with = sum(s[:k]) - s[i]  # others' share with i present
+        payments.append(welfare_without - welfare_with)
+    return dict(winners=winners, payments=payments)
+
+print(vcg_multi([10, 7, 4, 3, 1], k=2))
+`} />
+    </div>
+
+    <h3>Three properties</h3>
+    <p><strong>Truthful</strong>: bidding your true value is a <a href="https://en.wikipedia.org/wiki/Dominant_strategy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>dominant strategy</a>. <strong>Efficient</strong>: items go to those who value them most. <strong>Individually rational</strong>: every participant is at least as well off as not participating. These three properties make VCG the theoretical backbone of <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>embedding-space ad auctions</a>, where truthfulness matters because advertisers bid continuously without room to iterate.</p>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">W(N \ i)</td><td class="pr-4 text-green-300">welfare-others-without</td><td class="font-sans">Social welfare without bidder i</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">W_(-i)(N)</td><td class="pr-4 text-green-300">welfare-others-with</td><td class="font-sans">Others' welfare with bidder i present</td></tr>
+          <tr><td class="py-2 pr-4">p_i = W(N\i) - W_(-i)(N)</td><td class="pr-4 text-green-300">(vcg-payment bids i)</td><td class="font-sans">VCG payment = externality</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; econ-20: mechanism design</li>
+      <li><a href="/reading/auction-theory/vickrey-1961/">💎 Vickrey 1961</a> &mdash; VCG reduces to second-price for single items</li>
+      <li><a href="/reading/auction-theory/lahaie-lubin-2025/">💎 Lahaie &amp; Lubin 2025</a> &mdash; VCG as a linear program</li>
+    
+      <li><a href="/reading/auction-theory/vickrey-1961/">💎 Vickrey 1961</a> &mdash; the second-price auction is the single-item special case of VCG</li>
+      <li><a href="/reading/economics/econ-20/">💰 Economics Ch.20</a> &mdash; mechanism design: VCG as the canonical incentive-compatible mechanism</li>
+      <li><a href="/reading/auction-theory/lahaie-lubin-2025/">💎 Lahaie &amp; Lubin 2025</a> &mdash; VCG as a linear program</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? Read <a href="https://doi.org/10.2307/1914085">Clarke 1971</a> and <a href="https://doi.org/10.2307/1914085">Groves 1973</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/auction-theory/vickrey-1961/", label: "Vickrey 1961 · 1 of 8" }} next={{ href: "/reading/auction-theory/gsp-2007/", label: "GSP 2007 · 3 of 8" }} />
+
+  </main>
+</Layout>

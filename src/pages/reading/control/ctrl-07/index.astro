@@ -1,0 +1,134 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.7 — State Space" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>State Space</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/State-space_representation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>State-space representation</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">State-space form replaces one high-order differential equation with a system of first-order equations: <strong>x' = Ax + Bu</strong> (state equation) and <strong>y = Cx + Du</strong> (output equation). The state vector x captures everything the system remembers. A, B, C, D are matrices.</p>
+    </div>
+
+    <h3>State variables</h3>
+    <p>A <strong>state variable</strong> is a quantity whose current value, together with the input, determines the future behavior of the system. For a mass-spring-damper, the state variables are position and velocity. For an electrical circuit, they might be capacitor voltages and inductor currents. The state vector x collects all state variables into a column vector.</p>
+
+    <!-- SVG: State-space block diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 220" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Input u -->
+        <text x="10" y="60" fill="currentColor" font-size="12" fill-opacity="0.6">u</text>
+        <!-- B block -->
+        <rect x="50" y="40" width="50" height="35" rx="4" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="75" y="62" text-anchor="middle" fill="#60a5fa" font-size="13">B</text>
+        <line x1="25" y1="57" x2="48" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="48,53 56,57 48,61" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Summing junction -->
+        <circle cx="130" cy="57" r="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="130" y="61" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">+</text>
+        <line x1="100" y1="57" x2="116" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="116,53 124,57 116,61" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Integrator -->
+        <rect x="170" y="40" width="60" height="35" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="62" text-anchor="middle" fill="#f59e0b" font-size="13">&int;</text>
+        <line x1="142" y1="57" x2="168" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="168,53 176,57 168,61" fill="currentColor" fill-opacity="0.5"/>
+        <!-- x' label -->
+        <text x="155" y="45" fill="currentColor" font-size="10" fill-opacity="0.4">x'</text>
+        <!-- State x -->
+        <text x="245" y="52" fill="currentColor" font-size="12" fill-opacity="0.6">x</text>
+        <line x1="230" y1="57" x2="260" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Branch point -->
+        <circle cx="270" cy="57" r="3" fill="currentColor" fill-opacity="0.5"/>
+        <!-- C block -->
+        <rect x="300" y="40" width="50" height="35" rx="4" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="325" y="62" text-anchor="middle" fill="#a78bfa" font-size="13">C</text>
+        <line x1="273" y1="57" x2="298" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="298,53 306,57 298,61" fill="currentColor" fill-opacity="0.5"/>
+        <!-- Output y -->
+        <line x1="350" y1="57" x2="420" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="410,53 418,57 410,61" fill="currentColor" fill-opacity="0.5"/>
+        <text x="430" y="62" fill="currentColor" font-size="12" fill-opacity="0.6">y</text>
+        <!-- A feedback loop -->
+        <rect x="170" y="140" width="50" height="35" rx="4" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="195" y="162" text-anchor="middle" fill="#22c55e" font-size="13">A</text>
+        <line x1="270" y1="57" x2="270" y2="157" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="270" y1="157" x2="222" y2="157" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="168" y1="157" x2="130" y2="157" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="130" y1="157" x2="130" y2="71" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="126,71 130,63 134,71" fill="currentColor" fill-opacity="0.5"/>
+        <!-- D feedthrough (optional, dashed) -->
+        <line x1="75" y1="75" x2="75" y2="200" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="75" y1="200" x2="400" y2="200" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <line x1="400" y1="200" x2="400" y2="57" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="3,3"/>
+        <text x="240" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">D (feedthrough, often zero)</text>
+      </svg>
+    </div>
+
+    <h3>Controllability and observability</h3>
+    <p>A system is <strong>controllable</strong> if you can steer the state from any initial condition to any target using the input. Check: the controllability matrix [B, AB, A^2B, ...] must have full rank. A system is <strong>observable</strong> if you can determine the full state from the output history. Check: the observability matrix [C; CA; CA^2; ...] must have full rank.</p>
+
+    <SchemeRepl client:load initialCode={`; State-space simulation: x' = Ax + Bu, y = Cx
+; Mass-spring-damper: m*x'' + c*x' + k*x = u
+; State: [position, velocity]
+; A = [[0, 1], [-k/m, -c/m]], B = [[0], [1/m]], C = [1, 0]
+
+(define m 1.0) (define c 0.5) (define k 2.0)
+(define dt 0.05)
+
+; State: (x1 x2) = (position, velocity)
+(define (simulate x1 x2 u steps)
+  (if (= steps 0) (begin (display "Done.") (newline))
+    (let* ((x1-dot x2)
+           (x2-dot (+ (* (- (/ k m)) x1) (* (- (/ c m)) x2) (/ u m)))
+           (new-x1 (+ x1 (* x1-dot dt)))
+           (new-x2 (+ x2 (* x2-dot dt))))
+      (if (= 0 (modulo steps 10))
+        (begin
+          (display "  pos=") (display new-x1)
+          (display "  vel=") (display new-x2)
+          (newline))
+        'skip)
+      (simulate new-x1 new-x2 u (- steps 1)))))
+
+(display "Mass-spring-damper step response:") (newline)
+(simulate 0.0 0.0 1.0 200)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# State-space: mass-spring-damper
+# x' = Ax + Bu, y = Cx
+m, c, k = 1.0, 0.5, 2.0
+dt = 0.05
+u = 1.0  # step input
+
+x1, x2 = 0.0, 0.0  # position, velocity
+print("Mass-spring-damper step response:")
+for step in range(200):
+    x1_dot = x2
+    x2_dot = -(k/m)*x1 - (c/m)*x2 + u/m
+    x1 += x1_dot * dt
+    x2 += x2_dot * dt
+    if step % 20 == 0:
+        print(f"  t={step*dt:5.2f}  pos={x1:.4f}  vel={x2:.4f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/linear-algebra/hefferon-03/">&#x1F4D0; Hefferon Ch. 3 — Linear Maps</a> &#x2014; A is a linear map from state space to state space</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-06/", label: "Frequency Response" }} next={{ href: "/reading/control/ctrl-08/", label: "Optimal Control" }} />
+
+  </main>
+</Layout>

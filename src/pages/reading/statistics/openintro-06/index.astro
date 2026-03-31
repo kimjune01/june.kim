@@ -1,0 +1,275 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="OpenIntro Ch.6 — Inference for Proportions" favicon="📊">
+  <main>
+
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+
+    <h1>Inference for Proportions</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; CC BY-SA 3.0 &middot; <a href="https://www.openintro.org/book/operating-systems/">Chapter 6</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When data are counts or categories, proportions replace means. The Z-test for proportions uses the normal approximation to the binomial. The chi-square test extends this to tables with many categories.</p>
+    </div>
+
+    <!-- 1. One-proportion Z-test -->
+    <h3>One-proportion Z-test</h3>
+    <p>Test whether a sample proportion p-hat differs from a hypothesized value p0. The test statistic is Z = (p-hat - p0) / sqrt(p0 * (1 - p0) / n). Under the null, Z follows a standard normal distribution when n is large enough (np0 and n(1 - p0) both at least 10).</p>
+
+    <SchemeRepl client:load initialCode={`; One-proportion Z-test
+; H0: p = 0.5, Ha: p != 0.5
+; Sample: 560 successes out of 1000
+
+(define p-hat (/ 560 1000))
+(define p0 0.5)
+(define n 1000)
+
+(define se (sqrt (/ (* p0 (- 1 p0)) n)))
+(define z (/ (- p-hat p0) se))
+
+(display "p-hat = ") (display (exact->inexact p-hat)) (newline)
+(display "SE    = ") (display se) (newline)
+(display "Z     = ") (display z) (newline)
+(display "Reject H0 at alpha=0.05? ")
+(display (if (> (abs z) 1.96) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# One-proportion Z-test
+import math
+
+p_hat = 560 / 1000
+p0 = 0.5
+n = 1000
+
+se = math.sqrt(p0 * (1 - p0) / n)
+z = (p_hat - p0) / se
+
+print(f"p-hat = {p_hat}")
+print(f"SE    = {se:.4f}")
+print(f"Z     = {z:.2f}")
+print(f"Reject H0 at alpha=0.05? {'Yes' if abs(z) > 1.96 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 2. Two-proportion Z-test -->
+    <h3>Two-proportion Z-test</h3>
+    <p>Compare proportions from two independent groups. Under the null hypothesis p1 = p2, pool the data to estimate the common proportion, then compute the standard error from the pooled value.</p>
+
+    <!-- SVG: Two proportions with confidence intervals side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="50" y1="140" x2="350" y2="140" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Tick marks -->
+        <line x1="100" y1="136" x2="100" y2="144" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="100" y="158" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0.3</text>
+        <line x1="200" y1="136" x2="200" y2="144" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="158" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0.5</text>
+        <line x1="300" y1="136" x2="300" y2="144" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="300" y="158" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0.7</text>
+
+        <!-- Group 1: p1 = 0.45, CI: 0.38 to 0.52 -->
+        <text x="30" y="55" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.7">Group 1</text>
+        <line x1="130" y1="50" x2="240" y2="50" stroke="#60a5fa" stroke-width="2"/>
+        <line x1="130" y1="44" x2="130" y2="56" stroke="#60a5fa" stroke-width="2"/>
+        <line x1="240" y1="44" x2="240" y2="56" stroke="#60a5fa" stroke-width="2"/>
+        <circle cx="180" cy="50" r="4" fill="#60a5fa"/>
+        <text x="180" y="38" text-anchor="middle" fill="#60a5fa" font-size="10">0.45</text>
+
+        <!-- Group 2: p2 = 0.58, CI: 0.50 to 0.66 -->
+        <text x="30" y="95" text-anchor="end" fill="currentColor" font-size="11" fill-opacity="0.7">Group 2</text>
+        <line x1="200" y1="90" x2="310" y2="90" stroke="#f97316" stroke-width="2"/>
+        <line x1="200" y1="84" x2="200" y2="96" stroke="#f97316" stroke-width="2"/>
+        <line x1="310" y1="84" x2="310" y2="96" stroke="#f97316" stroke-width="2"/>
+        <circle cx="260" cy="90" r="4" fill="#f97316"/>
+        <text x="260" y="78" text-anchor="middle" fill="#f97316" font-size="10">0.58</text>
+
+        <!-- Overlap region shaded -->
+        <rect x="200" y="44" width="40" height="58" fill="#a1a1aa" fill-opacity="0.15" rx="2"/>
+        <text x="220" y="125" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">overlap</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Two-proportion Z-test
+; Group 1: 45 out of 100, Group 2: 58 out of 100
+; H0: p1 = p2
+
+(define x1 45) (define n1 100)
+(define x2 58) (define n2 100)
+
+(define p1 (/ x1 n1))
+(define p2 (/ x2 n2))
+
+; Pooled proportion under H0
+(define p-pool (/ (+ x1 x2) (+ n1 n2)))
+
+(define se (sqrt (+ (/ (* p-pool (- 1 p-pool)) n1)
+                    (/ (* p-pool (- 1 p-pool)) n2))))
+
+(define z (/ (- (exact->inexact p1) (exact->inexact p2)) se))
+
+(display "p1     = ") (display (exact->inexact p1)) (newline)
+(display "p2     = ") (display (exact->inexact p2)) (newline)
+(display "pooled = ") (display (exact->inexact p-pool)) (newline)
+(display "Z      = ") (display z) (newline)
+(display "Reject H0 at alpha=0.05? ")
+(display (if (> (abs z) 1.96) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Two-proportion Z-test
+import math
+
+x1, n1 = 45, 100
+x2, n2 = 58, 100
+p1, p2 = x1/n1, x2/n2
+
+p_pool = (x1 + x2) / (n1 + n2)
+se = math.sqrt(p_pool * (1 - p_pool) * (1/n1 + 1/n2))
+z = (p1 - p2) / se
+
+print(f"p1 = {p1}, p2 = {p2}")
+print(f"pooled = {p_pool}")
+print(f"Z = {z:.3f}")
+print(f"Reject H0? {'Yes' if abs(z) > 1.96 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 3. Chi-square goodness of fit -->
+    <h3>Chi-square goodness of fit</h3>
+    <p>Test whether observed counts across k categories match expected proportions. The test statistic sums (observed - expected)^2 / expected across all cells. It follows a <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>chi-square distribution</a> with k - 1 degrees of freedom.</p>
+
+    <SchemeRepl client:load initialCode={`; Chi-square goodness of fit
+; Are dice rolls uniform? 60 rolls.
+; Observed: 8, 12, 10, 14, 7, 9
+
+(define observed (list 8 12 10 14 7 9))
+(define expected (list 10 10 10 10 10 10))
+
+; Chi-square = sum of (O - E)^2 / E
+(define (chi-sq-term o e)
+  (/ (* (- o e) (- o e)) e))
+
+(define chi-sq
+  (apply + (map chi-sq-term observed expected)))
+
+(display "Observed: ") (display observed) (newline)
+(display "Expected: ") (display expected) (newline)
+(display "Chi-sq   = ") (display (exact->inexact chi-sq)) (newline)
+(display "df       = 5") (newline)
+; Critical value at alpha=0.05, df=5 is 11.07
+(display "Reject H0? ")
+(display (if (> chi-sq 11.07) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Chi-square goodness of fit
+observed = [8, 12, 10, 14, 7, 9]
+expected = [10, 10, 10, 10, 10, 10]
+
+chi_sq = sum((o - e)**2 / e for o, e in zip(observed, expected))
+
+print(f"Chi-sq = {chi_sq:.2f}")
+print(f"df = 5")
+print(f"Critical value (alpha=0.05) = 11.07")
+print(f"Reject H0? {'Yes' if chi_sq > 11.07 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- 4. Chi-square test for independence -->
+    <h3>Chi-square test for independence</h3>
+    <p>Test whether two categorical variables are associated. Arrange data in a contingency table, compute expected counts from row and column totals, then apply the chi-square formula. Degrees of freedom = (rows - 1)(cols - 1).</p>
+
+    <SchemeRepl client:load initialCode={`; Chi-square test for independence
+; 2x2 contingency table:
+;              Success  Failure  Total
+; Treatment:     40       60      100
+; Control:       30       70      100
+; Total:         70      130      200
+
+(define n 200)
+; Expected = (row total * col total) / n
+(define e11 (/ (* 100 70) n))   ; Treatment-Success
+(define e12 (/ (* 100 130) n))  ; Treatment-Failure
+(define e21 (/ (* 100 70) n))   ; Control-Success
+(define e22 (/ (* 100 130) n))  ; Control-Failure
+
+(define (chi-term o e) (/ (* (- o e) (- o e)) e))
+
+(define chi-sq (+ (chi-term 40 e11) (chi-term 60 e12)
+                  (chi-term 30 e21) (chi-term 70 e22)))
+
+(display "Expected: ") (display (list e11 e12 e21 e22)) (newline)
+(display "Chi-sq = ") (display (exact->inexact chi-sq)) (newline)
+(display "df = 1") (newline)
+; Critical value at alpha=0.05, df=1 is 3.84
+(display "Reject H0? ")
+(display (if (> chi-sq 3.84) "Yes" "No"))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Chi-square test for independence
+# 2x2 table: Treatment(40,60), Control(30,70)
+n = 200
+observed = [[40, 60], [30, 70]]
+row_totals = [100, 100]
+col_totals = [70, 130]
+
+chi_sq = 0
+for i in range(2):
+    for j in range(2):
+        e = row_totals[i] * col_totals[j] / n
+        chi_sq += (observed[i][j] - e)**2 / e
+
+print(f"Chi-sq = {chi_sq:.3f}")
+print(f"df = 1, critical = 3.84")
+print(f"Reject H0? {'Yes' if chi_sq > 3.84 else 'No'}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Formula</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Z</td><td class="pr-4">(p&#x0302; - p0) / SE</td><td class="font-sans">Test statistic for proportions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">SE</td><td class="pr-4">sqrt(p0(1-p0)/n)</td><td class="font-sans">Standard error under H0</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">p&#x0302;</td><td class="pr-4">x / n</td><td class="font-sans">Sample proportion</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&chi;&sup2;</td><td class="pr-4">&Sigma;(O-E)&sup2;/E</td><td class="font-sans">Chi-square test statistic</td></tr>
+          <tr><td class="py-2 pr-4">df</td><td class="pr-4">(r-1)(c-1)</td><td class="font-sans">Degrees of freedom (independence)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Foundations (Wikipedia)</p>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Z-test"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Z-test</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Chi-squared_test"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Chi-squared test</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Goodness_of_fit"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Goodness of fit</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/statistics/openintro-05/", label: "Foundations for Inference" }} next={{ href: "/reading/statistics/openintro-07/", label: "Inference for Means" }} />
+
+  </main>
+</Layout>

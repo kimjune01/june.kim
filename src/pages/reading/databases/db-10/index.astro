@@ -1,0 +1,271 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.10 — NoSQL and Beyond" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>NoSQL and Beyond</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/NoSQL"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>NoSQL</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>NoSQL</strong> databases abandon the relational model when it does not fit. Four main types: key-value stores (Redis), document stores (MongoDB), column-family stores (Cassandra), and graph databases (Neo4j). The CAP theorem says you can have at most two of Consistency, Availability, and Partition tolerance.</p>
+    </div>
+
+    <!-- SVG: Four NoSQL types side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 140" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Key-Value -->
+        <rect x="10" y="20" width="90" height="70" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="55" y="40" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="bold">Key-Value</text>
+        <text x="55" y="58" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">k1 -> v1</text>
+        <text x="55" y="70" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">k2 -> v2</text>
+        <text x="55" y="82" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">k3 -> v3</text>
+
+        <!-- Document -->
+        <rect x="120" y="20" width="90" height="70" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="165" y="40" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold">Document</text>
+        <text x="165" y="56" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5">&#123;"name":"A",</text>
+        <text x="165" y="66" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5"> "age": 30,</text>
+        <text x="165" y="76" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.5"> "tags":[..]&#125;</text>
+
+        <!-- Column-Family -->
+        <rect x="230" y="20" width="90" height="70" rx="3" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="275" y="40" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">Column</text>
+        <text x="250" y="56" fill="currentColor" font-size="7" fill-opacity="0.5">cf1:</text>
+        <text x="260" y="66" fill="currentColor" font-size="7" fill-opacity="0.5">a b c</text>
+        <text x="250" y="78" fill="currentColor" font-size="7" fill-opacity="0.5">cf2:</text>
+        <text x="260" y="88" fill="currentColor" font-size="7" fill-opacity="0.5">x y</text>
+
+        <!-- Graph -->
+        <rect x="340" y="20" width="90" height="70" rx="3" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="385" y="37" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="bold">Graph</text>
+        <circle cx="365" cy="60" r="6" fill="none" stroke="#c084fc" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="405" cy="55" r="6" fill="none" stroke="#c084fc" stroke-width="1" stroke-opacity="0.5"/>
+        <circle cx="385" cy="80" r="6" fill="none" stroke="#c084fc" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="370" y1="58" x2="399" y2="56" stroke="#c084fc" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="368" y1="65" x2="381" y2="75" stroke="#c084fc" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="390" y1="77" x2="402" y2="60" stroke="#c084fc" stroke-width="1" stroke-opacity="0.4"/>
+
+        <!-- Caption -->
+        <text x="220" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Four NoSQL data models.</text>
+      </svg>
+    </div>
+
+
+    <!-- Key-value stores -->
+    <h3>Key-value stores</h3>
+    <p>The simplest model: a dictionary. Store and retrieve values by key. No schema, no query language beyond GET/SET/DELETE. Extremely fast for point lookups. Examples: Redis, DynamoDB, Riak.</p>
+
+    <SchemeRepl client:load initialCode={`; Key-value store: just an association list.
+
+(define store (list))
+
+(define (kv-set key value)
+  (set! store (cons (cons key value)
+    (filter (lambda (p) (not (string=? (car p) key))) store))))
+
+(define (kv-get key)
+  (let ((found (assoc key store)))
+    (if found (cdr found) #f)))
+
+(define (kv-delete key)
+  (set! store (filter (lambda (p) (not (string=? (car p) key))) store)))
+
+(kv-set "user:1" "Alice")
+(kv-set "user:2" "Bob")
+(kv-set "session:abc" "user:1")
+
+(display "GET user:1 = ") (display (kv-get "user:1")) (newline)
+(display "GET session:abc = ") (display (kv-get "session:abc")) (newline)
+
+(kv-delete "user:2")
+(display "GET user:2 = ") (display (kv-get "user:2"))
+`} />
+
+
+    <!-- Document stores -->
+    <h3>Document stores</h3>
+    <p>Store semi-structured documents (JSON, BSON). Each document can have different fields. Queries can reach into nested structure. Good for heterogeneous data that does not fit a fixed schema. Examples: MongoDB, CouchDB.</p>
+
+    <Repl client:load initialCode={`# Document store simulation
+import json
+
+class DocumentStore:
+    def __init__(self):
+        self.docs = {}
+        self.next_id = 1
+
+    def insert(self, doc):
+        doc_id = str(self.next_id)
+        self.next_id += 1
+        self.docs[doc_id] = doc
+        return doc_id
+
+    def find(self, query):
+        """Find docs matching all key-value pairs in query."""
+        results = []
+        for doc_id, doc in self.docs.items():
+            if all(doc.get(k) == v for k, v in query.items()):
+                results.append((doc_id, doc))
+        return results
+
+db = DocumentStore()
+db.insert({"name": "Alice", "age": 30, "tags": ["admin", "dev"]})
+db.insert({"name": "Bob", "age": 22, "dept": "sales"})
+db.insert({"name": "Carol", "age": 30, "tags": ["dev"]})
+
+# Different documents have different shapes - that is fine
+print("All docs:")
+for doc_id, doc in db.docs.items():
+    print("  " + doc_id + ": " + json.dumps(doc))
+
+print()
+print("Find age=30:")
+for doc_id, doc in db.find({"age": 30}):
+    print("  " + doc_id + ": " + doc['name'])
+`} />
+
+
+    <!-- Graph databases -->
+    <h3>Graph databases</h3>
+    <p>Store nodes and edges directly. Queries traverse relationships without expensive joins. Good for social networks, recommendation engines, knowledge graphs. Examples: Neo4j, Amazon Neptune.</p>
+
+    <SchemeRepl client:load initialCode={`; Graph database: nodes and edges with traversal.
+
+(define nodes
+  (list (cons "alice" "person")
+        (cons "bob" "person")
+        (cons "carol" "person")
+        (cons "proj1" "project")))
+
+(define edges
+  (list (list "alice" "knows" "bob")
+        (list "alice" "knows" "carol")
+        (list "bob" "works-on" "proj1")
+        (list "carol" "works-on" "proj1")))
+
+; Traverse: who does Alice know?
+(define (neighbors node rel)
+  (map caddr
+    (filter (lambda (e)
+      (and (string=? (car e) node)
+           (string=? (cadr e) rel)))
+      edges)))
+
+(display "Alice knows: ")
+(display (neighbors "alice" "knows")) (newline)
+
+; Two-hop: what projects do Alice's friends work on?
+(display "Projects of Alice's friends:") (newline)
+(for-each
+  (lambda (friend)
+    (let ((projects (neighbors friend "works-on")))
+      (for-each (lambda (p)
+        (display "  ") (display friend)
+        (display " -> ") (display p) (newline))
+        projects)))
+  (neighbors "alice" "knows"))
+`} />
+
+
+    <!-- CAP theorem -->
+    <h3>CAP theorem</h3>
+    <p>The <strong><a href="https://en.wikipedia.org/wiki/CAP_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>CAP theorem</a></strong> (<a href="https://en.wikipedia.org/wiki/Eric_Brewer_(scientist)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Brewer</a>, 2000): a distributed data store can satisfy at most two of three properties. <strong>Consistency</strong> (every read returns the latest write), <strong>Availability</strong> (every request gets a response), <strong>Partition tolerance</strong> (the system works despite network splits). In practice, partitions happen, so the real choice is between consistency and availability during a partition.</p>
+
+    <SchemeRepl client:load initialCode={`; CAP theorem: pick two.
+; CP systems: consistent but unavailable during partition (e.g., HBase)
+; AP systems: available but may return stale data (e.g., Cassandra)
+; CA systems: not partition-tolerant (single-node relational DB)
+
+(define systems
+  (list
+    (list "PostgreSQL (single)" "CA" "No partition tolerance")
+    (list "HBase / MongoDB"     "CP" "Blocks during partition")
+    (list "Cassandra / DynamoDB" "AP" "Eventual consistency")
+    (list "Spanner"             "CP" "Uses TrueTime for global consistency")))
+
+(for-each
+  (lambda (s)
+    (display (car s))
+    (display " [") (display (cadr s)) (display "] - ")
+    (display (caddr s))
+    (newline))
+  systems)
+`} />
+
+
+    <!-- Eventual consistency -->
+    <h3>Eventual consistency</h3>
+    <p>AP systems trade strong consistency for availability. After a write, replicas may temporarily disagree. Given enough time without new writes, all replicas converge to the same value. This is <strong>eventual consistency</strong>. Many applications tolerate this: a social media timeline that is a few seconds stale is acceptable.</p>
+
+    <Repl client:load initialCode={`# Eventual consistency simulation: three replicas
+
+import random
+
+class Replica:
+    def __init__(self, name):
+        self.name = name
+        self.data = {"x": 0}
+        self.pending = []
+
+    def write(self, key, value):
+        self.data[key] = value
+        print("  " + self.name + ": wrote " + key + "=" + str(value))
+
+    def sync_to(self, other):
+        for k, v in self.data.items():
+            if other.data.get(k) != v:
+                other.data[k] = v
+
+replicas = [Replica("R1"), Replica("R2"), Replica("R3")]
+
+# Write to R1 only
+print("Write x=42 to R1:")
+replicas[0].write("x", 42)
+
+print()
+print("Before sync:")
+for r in replicas:
+    print("  " + r.name + ": x = " + str(r.data['x']))
+
+# Sync propagates
+print()
+print("Syncing...")
+replicas[0].sync_to(replicas[1])
+replicas[0].sync_to(replicas[2])
+
+print()
+print("After sync (eventual consistency achieved):")
+for r in replicas:
+    print("  " + r.name + ": x = " + str(r.data['x']))
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/distributed-systems/">🌐 Distributed Systems</a> — CAP theorem originates from distributed systems theory</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/NoSQL"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>NoSQL</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/CAP_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>CAP theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Eventual_consistency"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Eventual consistency</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Graph_database"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Graph database</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-09/", label: "Query Processing" }} />
+
+  </main>
+</Layout>

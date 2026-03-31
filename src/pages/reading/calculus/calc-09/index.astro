@@ -1,0 +1,266 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.9 — Applications of Integrals" favicon="∫">
+  <main>
+
+    <a href="/reading/calculus/" class="text-sm mb-4 inline-block">&larr; back to calculus</a>
+
+    <h1>Applications of Integrals</h1>
+    <p class="text-gray-400 text-sm mb-6">Active Calculus &middot; CC BY-SA &middot; <a href="https://activecalculus.org">activecalculus.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Integration measures accumulation. Once you can integrate, you can compute <strong>area between curves</strong>, <strong>volumes of revolution</strong>, <strong>arc length</strong>, and <strong>work</strong>. Each application sets up the same pattern: slice the problem into thin pieces, write a Riemann sum, take the limit.</p>
+    </div>
+
+    <!-- Area between curves -->
+    <h3>Area between curves</h3>
+    <p>The area between f(x) and g(x) on [a, b], where f(x) &ge; g(x), is the integral of their difference. Each thin vertical strip has width dx and height f(x) &minus; g(x).</p>
+
+    <SchemeRepl client:load initialCode={`; Area between f(x) = x^2 + 1 and g(x) = x on [0, 2]
+; A = integral from 0 to 2 of (f(x) - g(x)) dx
+
+(define (f x) (+ (* x x) 1))
+(define (g x) x)
+
+; Numerical integration via midpoint rule
+(define (integrate fn a b n)
+  (let* ((dx (/ (- b a) n))
+         (sum 0))
+    (do ((i 0 (+ i 1)))
+        ((= i n) (* sum dx))
+      (let ((mid (+ a (* dx (+ i 0.5)))))
+        (set! sum (+ sum (fn mid)))))))
+
+(define area
+  (integrate (lambda (x) (- (f x) (g x))) 0 2 1000))
+
+(display "Area between x^2+1 and x on [0,2] = ")
+(display area) (newline)
+; Exact answer: integral of (x^2 - x + 1) = [x^3/3 - x^2/2 + x] from 0 to 2
+; = 8/3 - 2 + 2 = 8/3 = 2.6667
+(display "Exact: 8/3 = ")
+(display (/ 8.0 3))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Area between curves
+import numpy as np
+
+f = lambda x: x**2 + 1
+g = lambda x: x
+
+x = np.linspace(0, 2, 10000)
+dx = x[1] - x[0]
+area = np.sum((f(x) - g(x)) * dx)
+print(f"Area between x^2+1 and x on [0,2] = {area:.4f}")
+print(f"Exact: 8/3 = {8/3:.4f}")
+`} />
+    </div>
+
+
+    <!-- Volumes of revolution -->
+    <h3>Volumes of revolution</h3>
+    <p>Rotate a curve around an axis and you get a solid. The <strong>disk method</strong> stacks circular cross-sections: V = pi integral of r(x)^2 dx. The <strong>shell method</strong> wraps cylindrical shells: V = 2*pi integral of x*f(x) dx. Use whichever makes the integral simpler.</p>
+
+    <!-- SVG: Solid of revolution -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="50" y1="200" x2="370" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="375" y="205" fill="currentColor" font-size="12" fill-opacity="0.5">x</text>
+        <!-- Curve (top half of parabola-like shape) -->
+        <path d="M 80 200 Q 120 60 200 80 Q 280 100 340 200" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Mirror curve (bottom half showing rotation) -->
+        <path d="M 80 200 Q 120 340 200 320 Q 280 300 340 200" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <!-- Ellipses showing circular cross-sections -->
+        <ellipse cx="140" cy="200" rx="8" ry="115" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <ellipse cx="200" cy="200" rx="8" ry="120" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <ellipse cx="260" cy="200" rx="8" ry="110" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- One highlighted disk -->
+        <ellipse cx="200" cy="200" rx="8" ry="120" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="200" y1="80" x2="200" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" stroke-opacity="0.4"/>
+        <text x="210" y="145" fill="currentColor" font-size="11" fill-opacity="0.5">r(x)</text>
+        <!-- Labels -->
+        <text x="200" y="25" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.6">solid of revolution</text>
+        <text x="200" y="40" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">each slice is a disk of radius r(x)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Volume of revolution: rotate y = sqrt(x) around x-axis on [0, 4]
+; Disk method: V = pi * integral of (sqrt(x))^2 dx = pi * integral of x dx
+
+(define pi 3.141592653589793)
+
+(define (integrate fn a b n)
+  (let* ((dx (/ (- b a) n)))
+    (do ((i 0 (+ i 1))
+         (sum 0 (+ sum (fn (+ a (* dx (+ i 0.5)))))))
+        ((= i n) (* sum dx)))))
+
+; Disk method: integrand is pi * r(x)^2 = pi * x
+(define volume-disk
+  (* pi (integrate (lambda (x) x) 0 4 1000)))
+
+(display "V (disk) = pi * integral of x dx from 0 to 4") (newline)
+(display "        = ") (display volume-disk) (newline)
+(display "Exact: 8*pi = ") (display (* 8 pi)) (newline)
+
+; Shell method (rotating same curve around y-axis):
+; V = 2*pi * integral of x * sqrt(x) dx from 0 to 4
+(define volume-shell
+  (* 2 pi (integrate (lambda (x) (* x (sqrt x))) 0 4 1000)))
+
+(display "V (shell, y-axis) = ") (display volume-shell) (newline)
+(display "Exact: 128*pi/5 = ") (display (* (/ 128 5.0) pi))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import numpy as np
+
+x = np.linspace(0, 4, 10000)
+dx = x[1] - x[0]
+
+# Disk method: rotate y=sqrt(x) around x-axis
+vol_disk = np.pi * np.sum(x * dx)
+print(f"V (disk) = {vol_disk:.4f}, exact = {8*np.pi:.4f}")
+
+# Shell method: rotate around y-axis
+vol_shell = 2 * np.pi * np.sum(x * np.sqrt(x) * dx)
+print(f"V (shell) = {vol_shell:.4f}, exact = {128*np.pi/5:.4f}")
+`} />
+    </div>
+
+
+    <!-- Arc length -->
+    <h3>Arc length</h3>
+    <p>The length of a curve y = f(x) from a to b is the integral of sqrt(1 + (f'(x))^2) dx. Each tiny segment has length sqrt(dx^2 + dy^2) = sqrt(1 + (dy/dx)^2) * dx.</p>
+
+    <SchemeRepl client:load initialCode={`; Arc length of y = x^(3/2) from 0 to 4
+; dy/dx = (3/2) * x^(1/2)
+; L = integral of sqrt(1 + (9/4)*x) dx from 0 to 4
+
+(define (integrate fn a b n)
+  (let* ((dx (/ (- b a) n)))
+    (do ((i 0 (+ i 1))
+         (sum 0 (+ sum (fn (+ a (* dx (+ i 0.5)))))))
+        ((= i n) (* sum dx)))))
+
+(define arc-length
+  (integrate
+    (lambda (x) (sqrt (+ 1 (* (/ 9 4.0) x))))
+    0 4 1000))
+
+(display "Arc length of y = x^(3/2) on [0,4] = ")
+(display arc-length) (newline)
+; Exact: (2/27)*((10)^(3/2) - 1) = (2/27)*(31.623 - 1) = 2.268
+(display "Exact: (2/27)*(10^1.5 - 1) = ")
+(display (* (/ 2 27.0) (- (expt 10 1.5) 1)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Arc length of y = x^(3/2) on [0, 4]
+import math
+
+def integrate(fn, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(fn(a + dx * (i + 0.5)) for i in range(n)) * dx
+
+arc_length = integrate(lambda x: math.sqrt(1 + (9/4) * x), 0, 4)
+exact = (2/27) * (10**1.5 - 1)
+print("Arc length of y = x^(3/2) on [0,4] = " + format(arc_length, ".4f"))
+print("Exact: (2/27)*(10^1.5 - 1) = " + format(exact, ".4f"))
+`} />
+    </div>
+
+
+    <!-- Work -->
+    <h3>Work</h3>
+    <p>Work = force times distance. When force varies with position, W = integral of F(x) dx. Hooke's law for a spring: F(x) = kx, so the work to stretch a spring from 0 to d is k*d^2/2.</p>
+
+    <SchemeRepl client:load initialCode={`; Work to stretch a spring (Hooke's law: F = kx)
+; k = 50 N/m, stretch from x=0 to x=0.3 m
+
+(define k 50)
+
+(define (integrate fn a b n)
+  (let* ((dx (/ (- b a) n)))
+    (do ((i 0 (+ i 1))
+         (sum 0 (+ sum (fn (+ a (* dx (+ i 0.5)))))))
+        ((= i n) (* sum dx)))))
+
+(define work
+  (integrate (lambda (x) (* k x)) 0 0.3 1000))
+
+(display "Work = integral of 50x dx from 0 to 0.3") (newline)
+(display "     = ") (display work) (display " J") (newline)
+(display "Exact: k*d^2/2 = ") (display (* 0.5 k 0.3 0.3)) (display " J")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Work to stretch a spring (Hooke's law)
+k = 50  # N/m
+
+def integrate(fn, a, b, n=10000):
+    dx = (b - a) / n
+    return sum(fn(a + dx * (i + 0.5)) for i in range(n)) * dx
+
+work = integrate(lambda x: k * x, 0, 0.3)
+exact = 0.5 * k * 0.3**2
+print("Work = integral of 50x dx from 0 to 0.3")
+print("     = " + format(work, ".4f") + " J")
+print("Exact: k*d^2/2 = " + format(exact, ".4f") + " J")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Symbol</th>
+            <th class="py-2 pr-4 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">A = &int;[f(x)&minus;g(x)]dx</td><td class="font-sans">Area between curves</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V = &pi;&int;r(x)&sup2;dx</td><td class="font-sans">Volume by disk method</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">V = 2&pi;&int;x&middot;f(x)dx</td><td class="font-sans">Volume by shell method</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">L = &int;&radic;(1+f'(x)&sup2;)dx</td><td class="font-sans">Arc length</td></tr>
+          <tr><td class="py-2 pr-4">W = &int;F(x)dx</td><td class="font-sans">Work done by variable force</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Calculus sequence</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-08/">Ch.8 Techniques of Integration</a> &mdash; the tools you need before applying them here</li>
+      <li><a href="/reading/calculus/calc-10/">Ch.10 Vectors and Geometry</a> &mdash; moving from scalar calculus to vector calculus</li>
+    </ul>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-01/">⚛ Physics Ch.1</a> — integrals compute physical quantities like work, center of mass, and fluid pressure</li>
+      <li><a href="/reading/probability/grinstead-05/">🎰 Probability Ch.5</a> — probability distributions use the same area-under-curve interpretation</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Solid_of_revolution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Solid of revolution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Arc_length"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Arc length</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Work_(physics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Work (physics)</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/calculus/calc-08/", label: "Techniques of Integration" }} next={{ href: "/reading/calculus/calc-10/", label: "Vectors and Geometry" }} />
+
+  </main>
+</Layout>

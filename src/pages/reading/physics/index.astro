@@ -1,0 +1,65 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Physics — Simple Nature" favicon="⚛">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>⚛ Physics</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://lightandmatter.com/area1sn.html">Benjamin Crowell, Simple Nature</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+    <p class="text-gray-400 mb-6">Calculus-based physics from conservation laws to quantum mechanics. Runnable code, inline diagrams, plain English.</p>
+
+    <!-- SVG: Ball on parabolic trajectory with velocity vector -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Parabolic trajectory -->
+        <path d="M 40 130 Q 180 -20 320 130" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3" stroke-dasharray="5,4"/>
+        <!-- Ground -->
+        <line x1="30" y1="135" x2="330" y2="135" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+        <!-- Ball at peak-ish position -->
+        <circle cx="160" cy="28" r="8" fill="#60a5fa" fill-opacity="0.6"/>
+        <!-- Velocity vector (tangent to parabola, pointing right and slightly down) -->
+        <line x1="168" y1="28" x2="220" y2="38" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <polygon points="220,38 212,32 214,42" fill="#f59e0b" fill-opacity="0.7"/>
+        <text x="225" y="42" fill="#f59e0b" font-size="12" fill-opacity="0.6" font-style="italic">v</text>
+        <!-- Ball at start -->
+        <circle cx="40" cy="130" r="5" fill="currentColor" fill-opacity="0.2"/>
+        <!-- Ball at end -->
+        <circle cx="320" cy="130" r="5" fill="currentColor" fill-opacity="0.2"/>
+        <!-- Caption -->
+        <text x="180" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Conservation laws govern the trajectory.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/physics/crowell-01/", title: "Conservation of Energy", desc: "Energy is never created or destroyed, only converted between kinetic and potential forms" },
+  { href: "/reading/physics/crowell-02/", title: "Conservation of Momentum", desc: "Total momentum of an isolated system is constant, even through collisions" },
+  { href: "/reading/physics/crowell-03/", title: "Conservation of Angular Momentum", desc: "Spinning things keep spinning unless a torque acts on them" },
+  { href: "/reading/physics/crowell-04/", title: "Thermodynamics", desc: "Entropy always increases, and that arrow of time constrains every engine" },
+  { href: "/reading/physics/crowell-05/", title: "Waves", desc: "Waves superpose, interfere, and decompose into Fourier components" },
+  { href: "/reading/physics/crowell-06/", title: "Electricity", desc: "Charges create fields, fields do work, and circuits are the plumbing" },
+  { href: "/reading/physics/crowell-07/", title: "Magnetism", desc: "Moving charges create magnetic fields; magnetic forces are always perpendicular to velocity" },
+  { href: "/reading/physics/crowell-08/", title: "Electromagnetism", desc: "Changing electric fields create magnetic fields and vice versa: Maxwell's equations" },
+  { href: "/reading/physics/crowell-09/", title: "Optics", desc: "Light is an electromagnetic wave: reflection, refraction, diffraction" },
+  { href: "/reading/physics/crowell-10/", title: "Relativity", desc: "Space and time are one fabric; nothing outruns light" },
+  { href: "/reading/physics/crowell-11/", title: "Quantum Mechanics", desc: "Particles are waves of probability; measurement collapses the wavefunction" },
+  { href: "/reading/physics/crowell-12/", title: "The Atom", desc: "Quantum mechanics explains the periodic table, spectral lines, and chemical bonds" }
+]} icon="⚛" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://oyc.yale.edu/physics/phys-200">Yale PHYS 200: Fundamentals of Physics (Ramamurti Shankar)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/">∫ Calculus</a> &mdash; calculus was invented to describe motion and force</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; quantum mechanics and electromagnetism use vectors and matrices</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; thermodynamics and entropy share a deep connection</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

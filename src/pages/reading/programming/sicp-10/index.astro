@@ -1,0 +1,264 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.10 — Environment Model" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Environment Model</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-21.html#%_sec_3.2">SICP §3.2</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The environment model replaces substitution when mutation exists. A closure is a procedure + the environment in which it was defined. Frames chain into scope.</p>
+    </div>
+
+    <!-- SVG: Environment frame diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 200" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Global frame -->
+        <rect x="100" y="10" width="200" height="55" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="28" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">global env</text>
+        <text x="120" y="50" fill="#60a5fa" font-size="11">square:</text>
+        <!-- Closure blob: dot + body -->
+        <circle cx="210" cy="47" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+        <line x1="214" y1="47" x2="240" y2="47" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="245" y="50" fill="currentColor" font-size="10" fill-opacity="0.4">(* x x)</text>
+        <!-- Closure arrow: dot curves up to point back at global frame top -->
+        <path d="M 210 43 C 210 20, 320 10, 300 10" fill="none" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <polygon points="300,10 294,6 294,14" fill="#60a5fa" fill-opacity="0.3"/>
+        <!-- E1 frame -->
+        <rect x="40" y="110" width="140" height="50" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="110" y="128" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">E1</text>
+        <text x="60" y="148" fill="#f59e0b" font-size="11">x: 5</text>
+        <!-- E1 -> global arrow -->
+        <line x1="130" y1="110" x2="180" y2="68" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <polygon points="180,68 172,72 176,63" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Caption -->
+        <text x="200" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Closure points to defining environment; E1 extends it</text>
+      </svg>
+    </div>
+
+    <!-- 1. Rules for evaluation -->
+    <h3>Rules for evaluation</h3>
+    <p>In the environment model, every expression is evaluated <em>with respect to some environment</em>. The two key rules:</p>
+    <ol>
+      <li>To evaluate a combination, evaluate the subexpressions in the current environment, then apply the procedure to the arguments.</li>
+      <li>To apply a procedure, create a <strong>new frame</strong> that binds the parameters to the arguments, extend the procedure's environment with this frame, and evaluate the body in the new environment.</li>
+    </ol>
+
+    <SchemeRepl client:load initialCode={`; A procedure is created in the global environment
+(define (square x)
+  (* x x))
+
+; Calling (square 5):
+; 1. Create new frame E1 with x = 5
+; 2. E1 extends global env
+; 3. Evaluate (* x x) in E1
+; 4. x is found in E1 -> 5
+
+(display (square 5)) (newline)   ; 25
+(display (square 12))            ; 144
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def square(x):
+    return x * x
+
+# Each call creates a new local scope (frame)
+# x is bound in that scope
+print(square(5))   # 25
+print(square(12))  # 144
+`} />
+    </div>
+
+    <!-- 2. Applying simple procedures -->
+    <h3>Applying simple procedures</h3>
+    <p>When a procedure is applied, the new frame's enclosing environment is the one where the procedure was <em>defined</em>, not where it is called. This is <strong>lexical scoping</strong>.</p>
+
+    <SchemeRepl client:load initialCode={`; Lexical scoping: the closure remembers where it was born
+(define (make-adder n)
+  (lambda (x) (+ x n)))
+
+(define add5 (make-adder 5))
+(define add10 (make-adder 10))
+
+; add5's closure points to a frame where n=5
+; add10's closure points to a different frame where n=10
+(display (add5 3)) (newline)    ; 8
+(display (add10 3)) (newline)   ; 13
+(display (add5 (add10 1)))      ; 16
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def make_adder(n):
+    return lambda x: x + n
+
+add5 = make_adder(5)
+add10 = make_adder(10)
+
+print(add5(3))          # 8
+print(add10(3))         # 13
+print(add5(add10(1)))   # 16
+`} />
+    </div>
+
+    <!-- 3. Frames as repositories of local state -->
+    <h3>Frames as repositories of local state</h3>
+    <p><code>set!</code> modifies a binding <em>in place</em> within its frame. The frame persists as long as the closure references it. This is how local state works: the frame is the state.</p>
+
+    <SchemeRepl client:load initialCode={`; Each call to make-counter creates a fresh frame
+; The closure holds a reference to that frame
+(define (make-counter)
+  (let ((count 0))
+    (lambda ()
+      (set! count (+ count 1))
+      count)))
+
+(define c1 (make-counter))
+(define c2 (make-counter))
+
+; c1 and c2 have separate frames, separate state
+(display (c1)) (newline)  ; 1
+(display (c1)) (newline)  ; 2
+(display (c1)) (newline)  ; 3
+(display (c2)) (newline)  ; 1  — independent
+(display (c2))            ; 2
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def make_counter():
+    count = [0]  # mutable cell for closure
+    def counter():
+        count[0] += 1
+        return count[0]
+    return counter
+
+c1 = make_counter()
+c2 = make_counter()
+
+print(c1())  # 1
+print(c1())  # 2
+print(c1())  # 3
+print(c2())  # 1 — independent
+print(c2())  # 2
+`} />
+    </div>
+
+    <!-- 4. Internal definitions -->
+    <h3>Internal definitions</h3>
+    <p>Internal <code>define</code>s create bindings in the procedure's frame. They are visible only within that procedure. This gives us block structure without any special mechanism.</p>
+
+    <SchemeRepl client:load initialCode={`; Internal definitions are local to their frame
+(define (sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (* guess guess) x)) 0.001))
+  (define (improve guess)
+    (/ (+ guess (/ x guess)) 2))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        guess
+        (sqrt-iter (improve guess))))
+  (sqrt-iter 1.0))
+
+; good-enough?, improve, sqrt-iter are not visible here
+(display (sqrt 2)) (newline)   ; ~1.4142
+(display (sqrt 9)) (newline)   ; ~3.0
+(display (sqrt 100))           ; ~10.0
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def sqrt(x):
+    def good_enough(guess):
+        return abs(guess * guess - x) < 0.001
+    def improve(guess):
+        return (guess + x / guess) / 2
+    def sqrt_iter(guess):
+        while not good_enough(guess):
+            guess = improve(guess)
+        return guess
+    return sqrt_iter(1.0)
+
+print(f"{sqrt(2):.4f}")    # ~1.4142
+print(f"{sqrt(9):.4f}")    # ~3.0000
+print(f"{sqrt(100):.4f}")  # ~10.0000
+`} />
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Visualizing scope chains:
+; Each procedure call extends the environment
+
+(define (f x)
+  (define (g y)
+    (define (h z)
+      (+ x y z))  ; h sees x from f, y from g, z from h
+    (h 30))
+  (g 20))
+
+; Environment chain: h-frame -> g-frame -> f-frame -> global
+(display (f 10))  ; 60
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def f(x):
+    def g(y):
+        def h(z):
+            return x + y + z  # h sees all enclosing scopes
+        return h(30)
+    return g(20)
+
+print(f(10))  # 60
+`} />
+    </div>
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4 text-gray-400">Concept</th>
+            <th class="text-left py-2 pr-4 text-gray-400">Scheme</th>
+            <th class="text-left py-2 text-gray-400">Python</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4 text-gray-400">Frame</td><td class="pr-4"><code>(define ...)</code> in body</td><td>Local scope of a function call</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4 text-gray-400">Enclosing env</td><td class="pr-4">Where <code>lambda</code> was evaluated</td><td>Closure's <code>__closure__</code></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4 text-gray-400">Binding</td><td class="pr-4"><code>(define x 5)</code></td><td><code>x = 5</code></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4 text-gray-400">Mutation</td><td class="pr-4"><code>(set! x 10)</code></td><td><code>x = 10</code> / <code>nonlocal x</code></td></tr>
+          <tr><td class="py-1 pr-4 text-gray-400">Block structure</td><td class="pr-4">Internal <code>define</code></td><td>Nested <code>def</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li>Scheme's environment model maps directly to Python's LEGB rule (Local, Enclosing, Global, Built-in).</li>
+      <li><code>let</code> in Scheme is syntactic sugar for an immediately-applied lambda, creating a new frame. Python has no exact equivalent; the closest is a nested function call.</li>
+      <li>Python's <code>nonlocal</code> keyword explicitly requests mutation of an enclosing frame's binding, making the set! operation visible in syntax.</li>
+    </ul>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li><a href="https://en.wikipedia.org/wiki/Scope_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Scope (computer science)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Closure (computer programming)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Call_stack"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Call stack</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-21.html#%_sec_3.2">Read SICP &sect;3.2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-09/", label: "Assignment & State" }} next={{ href: "/reading/programming/sicp-11/", label: "Mutable Data · 11 of 22" }} />
+
+  </main>
+</Layout>

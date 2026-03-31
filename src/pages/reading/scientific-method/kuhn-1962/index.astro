@@ -1,0 +1,151 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Kuhn 1962 — The Structure of Scientific Revolutions" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>The Structure of Scientific Revolutions</h1>
+    <p class="text-gray-400 text-sm mb-6">Thomas S. Kuhn · 1962 · University of Chicago Press</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Science doesn't accumulate. It breaks and rebuilds. Normal science solves puzzles within an accepted framework until anomalies pile up, the framework cracks, and a revolution replaces it with something incommensurable. The new framework doesn't extend the old one. It replaces it.</p>
+    </div>
+
+    <!-- SVG: Kuhn cycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 300" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Circular path (invisible, for reference) -->
+        <!-- Nodes at roughly clock positions: Normal Science (top), Anomalies (right), Crisis (bottom), Revolution (left) -->
+
+        <!-- Connecting arcs -->
+        <path d="M 250,70 C 320,70 340,140 320,180" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="318,176 324,184 314,184" fill="currentColor" fill-opacity="0.3"/>
+
+        <path d="M 300,210 C 300,260 240,280 200,270" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="204,270 196,274 200,264" fill="currentColor" fill-opacity="0.3"/>
+
+        <path d="M 150,260 C 90,240 60,180 80,140" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="78,144 84,136 74,138" fill="currentColor" fill-opacity="0.3"/>
+
+        <path d="M 100,110 C 110,70 160,50 200,55" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="196,53 204,50 200,60" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- New Normal label on the return arrow -->
+        <text x="140" y="78" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">new paradigm</text>
+
+        <!-- Normal Science node -->
+        <rect x="170" y="40" width="110" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="225" y="60" text-anchor="middle" fill="currentColor" font-size="11">Normal Science</text>
+
+        <!-- Anomalies node -->
+        <rect x="270" y="180" width="80" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="310" y="200" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.8">Anomalies</text>
+
+        <!-- Crisis node -->
+        <rect x="140" y="248" width="60" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#ef4444" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="170" y="268" text-anchor="middle" fill="#ef4444" font-size="11" fill-opacity="0.8">Crisis</text>
+
+        <!-- Revolution node -->
+        <rect x="50" y="110" width="85" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="92" y="130" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.8">Revolution</text>
+
+        <!-- Edge labels -->
+        <text x="340" y="130" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">puzzles resist</text>
+        <text x="340" y="139" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">solution</text>
+        <text x="270" y="255" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">confidence</text>
+        <text x="270" y="264" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">collapses</text>
+        <text x="55" y="210" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">new framework</text>
+        <text x="55" y="219" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">proposed</text>
+      </svg>
+    </div>
+
+    <h2>Key concepts</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Concept</th>
+            <th class="text-left py-2 text-gray-400">What Kuhn means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Paradigm</td><td class="text-gray-400">The shared framework of theory, methods, standards, and exemplars that defines a scientific community. A whole way of seeing.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Normal science</td><td class="text-gray-400">Puzzle-solving within the paradigm. Not testing the paradigm. Extending it. Most science, most of the time.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Anomaly</td><td class="text-gray-400">A result that resists explanation within the paradigm. One anomaly is a puzzle. Many anomalies are a signal.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Crisis</td><td class="text-gray-400">When anomalies accumulate past tolerance. The paradigm's defenders start improvising ad hoc patches. Confidence erodes. Young researchers look elsewhere.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Incommensurability</td><td class="text-gray-400">Rival paradigms lack a shared standard of comparison. They define terms differently, value different evidence, sometimes literally see different things. Rational argument across paradigms is limited.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Paradigm shift</td><td class="text-gray-400">The community abandons the old framework and adopts a new one. Not a gradual transition. A gestalt switch. Textbooks get rewritten. The old puzzles get reframed or forgotten.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p>Popper said science advances by conjecture and refutation. Scientists propose bold theories, try to falsify them, and keep what survives. Kuhn looked at how science actually works and found something different.</p>
+
+    <p>Scientists inside a paradigm do not try to falsify it. They solve puzzles that the paradigm defines. When an experiment fails, they blame the experimenter, not the theory. This is not pathological. It is productive. Normal science accumulates precise results because it doesn't constantly question its foundations.</p>
+
+    <p>Trouble starts when too many puzzles resist solution. The paradigm's defenders patch and extend, but the patches grow baroque. Confidence wavers. A few researchers start entertaining alternatives that would have been dismissed a decade earlier. This is crisis.</p>
+
+    <p>Revolution happens when a new framework explains the anomalies, and enough of the community switches allegiance. The switch is not purely rational. The new paradigm redefines what counts as evidence, what questions matter, even what the key terms mean. Proponents of the old and new paradigms talk past each other. Resolution comes through generational replacement: the old guard retires, the new guard was trained in the new framework.</p>
+
+    <h2>Failures that illustrate</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Old paradigm</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Anomalies</th>
+            <th class="text-left py-2 text-gray-400">Revolution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Phlogiston</td><td class="pr-3 text-gray-400">Metals gain weight when burned. Phlogiston supposedly has negative weight. The patches got absurd.</td><td class="text-gray-400">Lavoisier's oxygen theory. Different substances, different reactions, different vocabulary.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Newtonian mechanics</td><td class="pr-3 text-gray-400">Mercury's orbit precesses 43 arcseconds per century more than Newton predicts. Tiny, persistent, unexplained.</td><td class="text-gray-400">Einstein's general relativity. Space itself curves. Newton's absolute space and time abandoned.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Luminiferous aether</td><td class="pr-3 text-gray-400">Michelson-Morley found no motion through the aether. The most productive null result in physics.</td><td class="text-gray-400">Special relativity. The aether was not hidden. It did not exist. Light needs no medium.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each case follows Kuhn's pattern. The old paradigm worked well enough for decades. Anomalies appeared. Defenders patched. A new framework arrived that made the anomalies disappear by changing the question.</p>
+
+    <h2>Discussion</h2>
+
+    <p>Kuhn's relationship to <a href="/reading/scientific-method/popper-1934/">🔬 Popper</a> is the central tension. Popper described how science should work: bold conjectures, honest attempts at refutation, discard what fails. Kuhn described how science does work: conservative puzzle-solving, resistance to anomalies, revolutionary breaks that resist rational reconstruction. Popper gives you a normative ideal. Kuhn gives you a descriptive history. They are both right, about different things.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Imre_Lakatos"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Lakatos</a> tried to reconcile them. His "research programmes" have a hard core (protected from falsification) and a protective belt (expendable auxiliary hypotheses). A programme is degenerating when the belt grows faster than the confirmed predictions. This captures Kuhn's insight that scientists rationally protect their core theory while preserving Popper's insistence that evidence eventually forces abandonment. Lakatos wanted rules for when to switch. Kuhn doubted such rules exist.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Paul_Feyerabend"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Feyerabend</a> took Kuhn further. If paradigms are incommensurable and rational argument across them is limited, then there is no universal scientific method. "Anything goes" was Feyerabend's provocation. Not that method doesn't matter, but that enforcing a single method would have prevented most actual discoveries. Galileo succeeded by rhetoric, propaganda, and ignoring the rules of Aristotelian methodology. Feyerabend argued this was not a failure of science but a feature.</p>
+
+    <p><a href="/reading/scientific-method/feynman-1974/">Feynman's</a> integrity principle sits at an angle to all three. Feynman does not care about methodology. He cares about honesty: report what went wrong, mention what might make your result wrong, give credit where it's due. Kuhn would say Feynman's integrity is compatible with any paradigm. It does not tell you when to switch. It tells you not to lie about what you see.</p>
+
+    <h2>The uncomfortable implication</h2>
+
+    <p>Scientists are conservative by nature. Kuhn did not present this as a flaw to fix. Normal science requires conservatism. You cannot solve precise puzzles if you constantly question the framework that defines them. Progress within a paradigm requires commitment to that paradigm.</p>
+
+    <p>Revolutions happen despite this conservatism, not because of it. They happen when the anomalies become too painful to ignore and a viable alternative appears. The community resists the new framework until resistance becomes more costly than switching. Conversion is often generational. Max Planck: "Science advances one funeral at a time."</p>
+
+    <p>This means the people doing the best normal science are often the last to see the revolution coming. Expertise within a paradigm becomes a liability when the paradigm breaks. The ones who see it first are outsiders, young researchers, people from adjacent fields who were never fully committed to the old framework.</p>
+
+    <p>Kuhn gave us the vocabulary to describe this pattern. He did not give us a way to escape it.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/platt-1964/">Platt 1964</a></li>
+      <li><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/popper-1934/", label: "Popper 1934 · 9 of 17" }} next={{ href: "/reading/scientific-method/platt-1964/", label: "Platt 1964 · 11 of 17" }} />
+  </main>
+</Layout>

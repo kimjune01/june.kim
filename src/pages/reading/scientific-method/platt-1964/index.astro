@@ -1,0 +1,123 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Platt 1964 — Strong Inference" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Strong Inference</h1>
+    <p class="text-gray-400 text-sm mb-6">John R. Platt · 1964 · <a href="https://www.science.org/doi/10.1126/science.146.3642.347">Science 146(3642), 347-353</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Why some fields move faster than others. Devise alternative hypotheses. Design a crucial experiment that excludes one or more. Carry it out to get a clean result. Repeat. Four pages that explain why molecular biology leapfrogged social psychology.</p>
+    </div>
+
+    <!-- SVG: Strong inference decision tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 280" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Step 1: Multiple hypotheses -->
+        <rect x="140" y="10" width="180" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="230" y="30" text-anchor="middle" fill="currentColor" font-size="11">1. Alternative hypotheses</text>
+
+        <!-- Arrow down -->
+        <line x1="230" y1="40" x2="230" y2="60" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="226,57 230,65 234,57" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Step 2: Crucial experiment -->
+        <rect x="140" y="65" width="180" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="230" y="85" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.8">2. Crucial experiment</text>
+
+        <!-- Branch into outcomes -->
+        <line x1="230" y1="95" x2="230" y2="115" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <line x1="230" y1="115" x2="110" y2="135" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="230" y1="115" x2="350" y2="135" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+
+        <!-- Outcome A: H1 eliminated -->
+        <rect x="40" y="135" width="140" height="26" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#ef4444" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="110" y="152" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.7">H1 eliminated</text>
+
+        <!-- Outcome B: H2, H3 eliminated -->
+        <rect x="280" y="135" width="140" height="26" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#ef4444" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="350" y="152" text-anchor="middle" fill="#ef4444" font-size="10" fill-opacity="0.7">H2, H3 eliminated</text>
+
+        <!-- Surviving hypotheses converge -->
+        <line x1="110" y1="161" x2="110" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="350" y1="161" x2="350" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+
+        <!-- Step 3: Refine surviving -->
+        <rect x="55" y="180" width="110" height="26" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="110" y="197" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">H2, H3 survive</text>
+
+        <rect x="295" y="180" width="110" height="26" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="350" y="197" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">H1 survives</text>
+
+        <!-- Both loop back -->
+        <line x1="110" y1="206" x2="110" y2="225" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="350" y1="206" x2="350" y2="225" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+
+        <!-- Repeat boxes -->
+        <rect x="85" y="225" width="280" height="30" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="225" y="244" text-anchor="middle" fill="#34d399" font-size="11" fill-opacity="0.8">3. Repeat with refined sub-hypotheses</text>
+
+        <!-- Loop arrow back to top -->
+        <line x1="225" y1="255" x2="225" y2="268" stroke="currentColor" stroke-width="1" stroke-opacity="0.25"/>
+        <path d="M 225,268 C 440,268 460,30 370,25" fill="none" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <polygon points="374,22 366,22 370,30" fill="currentColor" fill-opacity="0.2"/>
+
+        <text x="445" y="150" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25" transform="rotate(90, 445, 150)">each cycle eliminates, never confirms</text>
+      </svg>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p>Platt opens with a simple observation. Molecular biology and certain branches of physics advance rapidly. Whole fields of knowledge open up in a decade. Other sciences, equally well-funded and equally staffed with talented people, seem to wander. What explains the difference?</p>
+
+    <p>His answer: the fast-moving fields practice a systematic method he calls <a href="https://en.wikipedia.org/wiki/Strong_inference"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>strong inference</a>. Three steps, applied to every problem. First, devise alternative hypotheses. Not one hypothesis and a null. Multiple, mutually exclusive explanations for the same phenomenon. Second, design a crucial experiment with alternative possible outcomes, each of which excludes one or more hypotheses. Third, carry out the experiment to get a clean result. Then recycle: the surviving hypotheses generate new alternatives, new experiments, new eliminations.</p>
+
+    <p>The method is not new. Platt credits <a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin</a> (1890) for the idea of multiple working hypotheses. What Platt adds is the insistence that the method be applied systematically, at every step, as institutional habit rather than occasional insight.</p>
+
+    <h2>Strong vs. weak inference</h2>
+
+    <p>Weak inference gathers data and hopes patterns emerge. It measures everything available, runs correlations, reports what passes a significance threshold. There is no branching logic, no elimination, no tree of decreasing possibilities. The researcher accumulates findings. Progress is additive.</p>
+
+    <p>Strong inference is subtractive. Each experiment kills something. The surviving hypothesis space shrinks. Molecular biologists in the 1950s and 1960s moved fast because every experiment was designed to tell them which model was wrong. They could answer "is the genetic code overlapping or non-overlapping?" with a single experiment. They did not collect data about the genetic code in general and hope to figure it out later.</p>
+
+    <p>Platt is blunt about which fields practice which. Physics and molecular biology practice strong inference. Much of psychology, much of ecology, much of social science practices weak inference. The difference in rate of progress is not a coincidence.</p>
+
+    <h2>What it requires</h2>
+
+    <p>Holding multiple hypotheses simultaneously is uncomfortable. The natural tendency is to commit to one explanation and look for evidence that supports it. Chamberlin described this failure mode in 1890: the "ruling theory" that becomes a "ruling passion." Platt operationalizes the fix. You write down all the plausible alternatives before you design the experiment. You design the experiment so that the outcome distinguishes between them. If your experiment is compatible with all your hypotheses regardless of outcome, it is not a crucial experiment. Redesign it.</p>
+
+    <p>This discipline has a cost. It forces you to take seriously explanations you find implausible. It forces you to invest effort designing experiments that might prove you wrong. It forces clarity about what you would accept as evidence against your preferred explanation. Most researchers find this unpleasant. The fields that do it anyway are the ones that move.</p>
+
+    <h2>Discussion</h2>
+
+    <p>Platt operationalized what Chamberlin described. Chamberlin said: hold multiple hypotheses. Platt said: here is the protocol. Devise alternatives, design crucial experiments, carry them out, repeat. The contribution is not philosophical. It is procedural.</p>
+
+    <p><a href="/reading/scientific-method/popper-1934/">🔬 Popper</a> argued that science advances by falsification. Strong inference is applied falsification with a twist: you falsify not against a single hypothesis but against a branching tree of alternatives. Each experiment prunes branches. Popper gave the logic. Platt gave the workflow.</p>
+
+    <p><a href="/reading/scientific-method/feynman-1974/">Feynman</a> arrives at the same place from a different direction. Feynman does not talk about protocol. He talks about integrity: the willingness to design experiments that could prove you wrong, to report what went wrong, to mention alternative explanations. Strong inference is what Feynman's integrity looks like as a daily practice. You cannot fool yourself about which hypothesis survives if you designed the experiment to eliminate the losers cleanly.</p>
+
+    <h2>The integrity angle</h2>
+
+    <p>Confirmation bias is the default. Without deliberate structure, researchers gravitate toward experiments that can confirm but not disconfirm their favored hypothesis. Platt's protocol is a structural defense against this tendency. It works not by making scientists more honest but by making dishonesty harder to sustain. When you have three hypotheses and an experiment eliminates two, the result is public and unambiguous. There is no room for reinterpretation.</p>
+
+    <p>The discipline of designing experiments that discriminate rather than confirm is rare because it requires accepting that most of your ideas are wrong. Each round of strong inference kills more hypotheses than it spares. Researchers who practice it spend most of their time being wrong. Researchers who practice weak inference can avoid that experience indefinitely. The difference shows up in the rate of actual progress, not in the number of publications.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/kuhn-1962/">Kuhn 1962</a></li>
+      <li><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/kuhn-1962/", label: "Kuhn 1962 · 10 of 17" }} next={{ href: "/reading/scientific-method/feynman-1974/", label: "Feynman 1974 · 12 of 17" }} />
+  </main>
+</Layout>

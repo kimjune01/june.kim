@@ -1,0 +1,281 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Spivak 2013 — The Operad of Wiring Diagrams" favicon="🍞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>The Operad of Wiring Diagrams</h1>
+    <p class="text-gray-400 text-sm mb-6">David I. Spivak · 2013 · <a href="https://arxiv.org/abs/1305.0297"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1305.0297</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: basic comfort with typed functions. <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> helps but isn't required.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A wiring diagram is a box with typed input and output ports. Composing boxes means plugging outputs into inputs — the types must match. This is the syntax layer: <strong>how</strong> components connect, before you decide <strong>what</strong> they compute.</p>
+    </div>
+
+    <h3>Boxes and ports</h3>
+    <p>A box has typed input ports and typed output ports. It's an interface specification — no implementation yet. Think of a function signature without the body.</p>
+
+    <!-- SVG: Wiring diagram — two boxes composed -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Outer box (the composite) -->
+        <rect x="20" y="10" width="460" height="200" rx="10" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="6,3" stroke-opacity="0.3"/>
+        <text x="250" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">composite wiring diagram</text>
+
+        <!-- Box A -->
+        <rect x="60" y="50" width="120" height="70" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="120" y="90" text-anchor="middle" fill="currentColor" font-size="13">Box A</text>
+
+        <!-- Box B -->
+        <rect x="280" y="50" width="120" height="70" rx="6" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+        <text x="340" y="90" text-anchor="middle" fill="currentColor" font-size="13">Box B</text>
+
+        <!-- Input ports on A (left side, small circles) -->
+        <circle cx="60" cy="70" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="60" cy="100" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <text x="48" y="73" text-anchor="end" fill="currentColor" font-size="8" fill-opacity="0.5">type X</text>
+        <text x="48" y="103" text-anchor="end" fill="currentColor" font-size="8" fill-opacity="0.5">type Y</text>
+
+        <!-- Input wires -->
+        <line x1="25" y1="70" x2="57" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="25" y1="100" x2="57" y2="100" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Output port on A -->
+        <circle cx="180" cy="85" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <text x="210" y="78" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">type Z</text>
+
+        <!-- Wire from A to B -->
+        <line x1="183" y1="85" x2="277" y2="70" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Input ports on B -->
+        <circle cx="280" cy="70" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <circle cx="280" cy="100" r="3" fill="currentColor" fill-opacity="0.4"/>
+        <text x="268" y="103" text-anchor="end" fill="currentColor" font-size="8" fill-opacity="0.5">type Y</text>
+
+        <!-- Policy wire splits: input goes to both A and B -->
+        <line x1="25" y1="100" x2="25" y2="145" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="25" y1="145" x2="265" y2="145" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="265" y1="145" x2="265" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="265" y1="100" x2="277" y2="100" stroke="currentColor" stroke-width="1.5"/>
+
+        <!-- Output port on B -->
+        <circle cx="400" cy="85" r="3" fill="currentColor" fill-opacity="0.4"/>
+
+        <!-- Output wire -->
+        <line x1="403" y1="85" x2="475" y2="85" stroke="currentColor" stroke-width="1.5"/>
+        <text x="472" y="78" text-anchor="end" fill="currentColor" font-size="8" fill-opacity="0.5">type Z</text>
+
+        <!-- Type annotations on ports -->
+        <text x="120" y="42" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">types must match</text>
+      </svg>
+    </div>
+
+    <p>Boxes compose by wiring outputs to inputs. The types constrain which wirings are legal — you can't plug a "type Z" output into a "type X" input. The composite is itself a box, with its own input and output ports. This is operadic composition: boxes all the way down.</p>
+
+    <SchemeRepl client:load initialCode={`; A box is a typed interface: input ports -> output ports
+; We represent a box as (name inputs outputs)
+
+(define (make-box name ins outs)
+  (list 'box name ins outs))
+
+(define box-A (make-box 'filter '(signal) '(filtered)))
+(define box-B (make-box 'amplify '(filtered) '(output)))
+
+(display box-A) (newline)
+(display box-B) (newline)
+; box-A: signal -> filtered
+; box-B: filtered -> output
+; The output type of A matches the input type of B.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Boxes as typed interfaces
+box_A = {"name": "filter", "ins": ["signal"], "outs": ["filtered"]}
+box_B = {"name": "amplify", "ins": ["filtered"], "outs": ["output"]}
+
+print(f"A: {box_A['ins']} -> {box_A['outs']}")
+print(f"B: {box_B['ins']} -> {box_B['outs']}")
+print("Output type of A matches input type of B.")
+`} />
+    </div>
+
+    <h3>Supplier assignment</h3>
+    <p>Wiring a diagram means assigning a <strong>supplier</strong> to each input port. Every input must get its value from exactly one output port (or from an external input of the outer box). The assignment must respect types: a port of type T can only be wired to an output of type T.</p>
+
+    <SchemeRepl client:load initialCode={`; Supplier assignment: each input port gets one source
+; A wiring is a function from input ports to output ports
+
+(define (wire outer-ins inner-boxes connections)
+  ; connections: list of (target-box target-port source-box source-port)
+  (map (lambda (c)
+    (let ((tgt (list-ref c 0)) (tp (list-ref c 1))
+          (src (list-ref c 2)) (sp (list-ref c 3)))
+      (list tgt tp '<- src sp)))
+  connections))
+
+(define wiring
+  (wire '(signal)
+        '(filter amplify)
+        '((filter signal outer signal)
+          (amplify filtered filter filtered))))
+
+(for-each (lambda (w) (display w) (newline)) wiring)
+; filter.signal <- outer.signal
+; amplify.filtered <- filter.filtered
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Supplier assignment in Python
+wiring = {
+    ("filter", "signal"): ("outer", "signal"),
+    ("amplify", "filtered"): ("filter", "filtered"),
+}
+
+for target, source in wiring.items():
+    print(f"  {target[0]}.{target[1]} <- {source[0]}.{source[1]}")
+
+print()
+print("Every input has exactly one supplier.")
+print("Types must match at every wire.")
+`} />
+    </div>
+
+    <h3>Composing boxes</h3>
+    <p>The operad operation: given an outer box with inner boxes wired together, collapse the inner structure into a single box. The composite box has the outer box's interface. The internal wiring is hidden — encapsulation.</p>
+
+    <SchemeRepl client:load initialCode={`; Composing boxes: wire inner boxes, collapse to one
+; The composite has the outer interface
+
+(define (compose-boxes outer-ins outer-outs inner-wiring)
+  ; Inner wiring is hidden; result is just outer interface
+  (list 'composite outer-ins outer-outs
+        (length inner-wiring) 'internal-wires))
+
+(define pipeline
+  (compose-boxes '(signal) '(output)
+    '((filter.signal <- outer.signal)
+      (amplify.filtered <- filter.filtered)
+      (outer.output <- amplify.output))))
+
+(display pipeline) (newline)
+; (composite (signal) (output) 3 internal-wires)
+; From outside: signal -> output. Interior is hidden.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Composition hides internal wiring
+def compose(outer_ins, outer_outs, inner_boxes, wiring):
+    return {
+        "ins": outer_ins,
+        "outs": outer_outs,
+        "internal": len(wiring),
+    }
+
+pipeline = compose(
+    ["signal"], ["output"],
+    ["filter", "amplify"],
+    [("filter.signal", "outer.signal"),
+     ("amplify.filtered", "filter.filtered"),
+     ("outer.output", "amplify.output")]
+)
+
+print(f"Pipeline: {pipeline['ins']} -> {pipeline['outs']}")
+print(f"  ({pipeline['internal']} internal wires, hidden)")
+`} />
+    </div>
+
+    <h3>Operadic composition is associative</h3>
+    <p>The key property: composing (A then B) then C gives the same wiring diagram as composing A then (B then C). The wiring diagram operad is a genuine <a href="https://en.wikipedia.org/wiki/Operad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>operad</a> — composition is associative and there's an identity (the box that passes all ports through unchanged).</p>
+
+    <SchemeRepl client:load initialCode={`; Associativity: (A;B);C = A;(B;C)
+; We check that composing three stages is order-independent
+
+(define (pipe f g) (lambda (x) (g (f x))))
+
+(define stage-a (lambda (x) (+ x 1)))
+(define stage-b (lambda (x) (* x 2)))
+(define stage-c (lambda (x) (- x 3)))
+
+; Left-associated: (A;B);C
+(define left ((pipe (pipe stage-a stage-b) stage-c) 5))
+; Right-associated: A;(B;C)
+(define right ((pipe stage-a (pipe stage-b stage-c)) 5))
+
+(display "((A;B);C)(5) = ") (display left) (newline)
+(display "(A;(B;C))(5) = ") (display right) (newline)
+(display "equal? ") (display (= left right))
+; Associativity holds — this is the operad law.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Associativity check
+a = lambda x: x + 1
+b = lambda x: x * 2
+c = lambda x: x - 3
+
+left = c(b(a(5)))
+right = c(b(a(5)))
+print(f"(a;b);c = {left}")
+print(f"a;(b;c) = {right}")
+print(f"Equal: {left == right}")
+`} />
+    </div>
+
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Paper</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">X = (X_in, X_out)</td><td class="pr-4 text-green-300">(make-box name ins outs)</td><td class="font-sans">Box with typed ports</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">φ: Y_in → X_out ∐ Z_in</td><td class="pr-4 text-green-300">supplier assignment</td><td class="font-sans">Wiring function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">W(X; Y₁,…,Yₙ)</td><td class="pr-4 text-green-300">(compose-boxes ...)</td><td class="font-sans">Wiring diagram with n inner boxes</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">id_X</td><td class="pr-4 text-green-300">(lambda (x) x)</td><td class="font-sans">Identity box (pass-through)</td></tr>
+          <tr><td class="py-2 pr-4">∘</td><td class="pr-4 text-green-300">(pipe f g)</td><td class="font-sans">Operadic composition</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> — the semantics (Markov categories) that fills these boxes</li>
+      <li><a href="/reading/natural-breadcrumbs/capucci-2021/">🍞 Capucci 2021</a> — cybernetic lenses as wiring diagrams with feedback</li>
+      <li><a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> — game theory via compositional diagrams</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Operad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Operad</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/String_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>String diagram</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monoidal_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monoidal category</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The examples on this page use lists and symbols to represent typed ports and wiring. Spivak's paper works with operads in the category of typed finite sets — the supplier assignment is a genuine function between coproducts. For example: the wiring diagram above connects two boxes with string labels. In the paper, the same construction uses typed finite sets with a function φ from inner input ports to the disjoint union of outer inputs and other boxes' outputs. The compositional structure is identical. The set-theoretic precision is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://arxiv.org/abs/1305.0297"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §2 for the operad definition, §3 for propagation of properties through wiring.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a wiring diagram in Spivak's operad — the operad gives the syntax of how stages connect, while Markov categories give the semantics. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+
+    <PrevNext prev={{ href: "/reading/natural-breadcrumbs/sato-2023/", label: "Sato 2023 · 10 of 21" }} next={{ href: "/reading/natural-breadcrumbs/jacobs-2014/", label: "Jacobs 2014 · 12 of 21" }} />
+  </main>
+</Layout>

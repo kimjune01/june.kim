@@ -1,0 +1,82 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Bridge.lean — Contracts = Hoare triples" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Bridge.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Bridge.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Connects the contract infrastructure to Hoare triples: ContractPreserving is a triple with precondition True, and handshakes compose via the COMP rule. This bridge is one of several translations catalogued in the <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>framework lexicon</a>.</p>
+    </div>
+
+    <h3>contract_is_triple</h3>
+    <p>Contract preservation is exactly a Hoare triple with trivial precondition. <code>ContractPreserving f Q</code> is the same as <code>&#123;True&#125; f &#123;Q&#125;</code>. Both unfold to: for all inputs, all reachable outputs satisfy Q.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">contract_is_triple</span> [Monad M] [Support M]
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;Q : Contract &beta;&#125;
+    : ContractPreserving f Q &harr; Triple (<span class="text-blue-300">fun</span> _ =&gt; True) f Q</code></pre>
+
+    <Repl client:load initialCode={`# contract_is_triple: ContractPreserving f Q  <=>  {True} f {Q}
+# A contract with no precondition IS a Hoare triple.
+
+def contract_preserving(f, Q, inputs):
+    """Check: for ALL inputs, every output satisfies Q"""
+    return all(Q(f(x)) for x in inputs)
+
+def triple(P, f, Q, inputs):
+    """Check: for inputs where P holds, outputs satisfy Q"""
+    return all(Q(f(x)) for x in inputs if P(x))
+
+is_positive = lambda y: y > 0
+always_true = lambda x: True
+abs_fn = lambda x: abs(x) + 1
+
+inputs = range(-10, 10)
+
+cp = contract_preserving(abs_fn, is_positive, inputs)
+tr = triple(always_true, abs_fn, is_positive, inputs)
+
+print(f"ContractPreserving(abs+1, positive): {cp}")
+print(f"Triple(True, abs+1, positive):       {tr}")
+print(f"They're the same thing:              {cp == tr}")
+`} />
+
+    <h3>handshake_enables_comp</h3>
+    <p>Handshake-compatible stages compose. If f establishes the handshake's postcondition and g requires the handshake's precondition, sequential composition carries P to R. The handshake's compatibility lemma (<code>post implies pre</code>) bridges the gap via the rule of consequence.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">handshake_enables_comp</span> [Monad M] [LawfulMonad M] [Support M]
+    &#123;P : &alpha; &rarr; Prop&#125; &#123;R : &gamma; &rarr; Prop&#125;
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;k : Kernel M &beta; &gamma;&#125;
+    (h : Handshake &beta;)
+    (hf : Triple P f h.post) (hk : Triple h.pre k R)
+    : Triple P (Kernel.comp f k) R</code></pre>
+
+    <h3>triple_counterexample</h3>
+    <p>Nontriviality: not every kernel satisfies every triple. A specific bad kernel (mapping unit to false) fails the triple <code>&#123;True&#125; badKernel &#123;b = true&#125;</code>. This demonstrates the proof system has teeth &mdash; it can reject kernels.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">triple_counterexample</span> :
+    &not; Triple (<span class="text-blue-300">fun</span> (_ : Unit) =&gt; True) badKernel (&middot; = true)</code></pre>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; imported; provides Triple and triple_comp</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; ContractPreserving is the bridge target</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; the Handshake structure that enables composition</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-comp/">Hoare/Comp.lean</a> &mdash; uses handshake_enables_comp to chain the full pipeline</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-graded/">Hoare/Graded.lean</a> &mdash; graded_contract_bridge lifts this to graded triples</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-wp/", label: "Hoare/WP.lean · 16 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-comp/", label: "Hoare/Comp.lean · 18 of 25" }} />
+  </main>
+</Layout>

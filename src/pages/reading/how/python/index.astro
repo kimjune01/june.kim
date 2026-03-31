@@ -1,0 +1,118 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+---
+
+<Layout title="Python in 5 Minutes" favicon="🔵">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading list</a>
+
+    <h1>Python in 5 Minutes</h1>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">If you already know any programming language, you know most of Python.</p>
+    </div>
+
+    <!-- SVG: Python vs Scheme side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 80" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Python -->
+        <text x="90" y="20" text-anchor="middle" fill="#34d399" font-size="10">Python</text>
+        <text x="90" y="45" text-anchor="middle" fill="currentColor" font-size="15"><tspan fill="#34d399">3</tspan> <tspan fill="#60a5fa">+</tspan> <tspan fill="#34d399">4</tspan></text>
+        <text x="90" y="65" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">infix: operator between</text>
+        <!-- Arrow -->
+        <text x="180" y="45" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.3">&#x2194;</text>
+        <!-- Scheme -->
+        <text x="270" y="20" text-anchor="middle" fill="#60a5fa" font-size="10">Scheme</text>
+        <text x="270" y="45" text-anchor="middle" fill="currentColor" font-size="15">(<tspan fill="#60a5fa">+</tspan> <tspan fill="#34d399">3</tspan> <tspan fill="#34d399">4</tspan>)</text>
+        <text x="270" y="65" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">prefix: operator first</text>
+      </svg>
+    </div>
+
+    <!-- 1. Variables and expressions -->
+    <h3>Variables and expressions</h3>
+    <p>No type declarations. No semicolons. Just assign and compute.</p>
+
+    <Repl client:load initialCode={`x = 5
+print(x + 3)
+print(x * 2)
+`} />
+
+    <!-- 2. Functions -->
+    <h3>Functions</h3>
+    <p>Define with <code>def</code>. Indentation marks the body. <code>return</code> sends a value back.</p>
+
+    <Repl client:load initialCode={`def square(x):
+    return x * x
+
+print(square(5))
+print(square(12))
+`} />
+
+    <!-- 3. Lists -->
+    <h3>Lists</h3>
+    <p>Square brackets make a list. Index from zero. Slice with <code>start:end</code>. <code>len()</code> gives the length.</p>
+
+    <Repl client:load initialCode={`nums = [1, 2, 3, 4, 5]
+print(nums[0])      # first element
+print(nums[1:3])    # slice: elements 1 and 2
+print(len(nums))    # length
+`} />
+
+    <!-- 4. Conditionals -->
+    <h3>Conditionals</h3>
+    <p><code>if</code>, <code>elif</code>, <code>else</code>. Indentation replaces braces.</p>
+
+    <Repl client:load initialCode={`def classify(n):
+    if n < 0:
+        return "negative"
+    elif n == 0:
+        return "zero"
+    else:
+        return "positive"
+
+print(classify(-1))
+print(classify(0))
+print(classify(7))
+`} />
+
+    <!-- 5. List comprehensions -->
+    <h3>List comprehensions</h3>
+    <p>Build a new list by transforming and filtering an existing one, all in one line.</p>
+
+    <Repl client:load initialCode={`squares = [x*x for x in range(5)]
+print(squares)
+
+evens = [x for x in range(10) if x % 2 == 0]
+print(evens)
+`} />
+
+    <!-- 6. Lambda -->
+    <h3>Lambda</h3>
+    <p><code>lambda</code> creates a small anonymous function. Combine with <code>map()</code> and <code>filter()</code> to transform sequences.</p>
+
+    <Repl client:load initialCode={`square = lambda x: x * x
+print(square(5))
+
+print(list(map(lambda x: x * 2, [1, 2, 3])))
+print(list(filter(lambda x: x > 2, [1, 2, 3, 4, 5])))
+`} />
+
+    <!-- 7. Dictionaries -->
+    <h3>Dictionaries</h3>
+    <p>Key-value pairs. Create with <code>dict()</code>, access by key, iterate over items.</p>
+
+    <Repl client:load initialCode={`ages = dict(alice=30, bob=25, carol=35)
+print(ages["alice"])
+
+for name, age in ages.items():
+    print(name, "is", age)
+`} />
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      That's enough to read every page on this site.
+    </div>
+
+  </main>
+</Layout>

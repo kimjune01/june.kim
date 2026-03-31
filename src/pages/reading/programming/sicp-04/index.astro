@@ -1,0 +1,342 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.4 — Data Abstraction" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Data Abstraction</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-14.html#%_sec_2.1">SICP &sect;2.1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Separate how data is <strong>used</strong> from how it's <strong>represented</strong>. Constructors and selectors form an abstraction barrier. You can even implement pairs with nothing but functions.</p>
+    </div>
+
+
+    <!-- SVG: Abstraction barrier diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 210" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Use layer -->
+        <rect x="50" y="15" width="300" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="200" y="40" text-anchor="middle" fill="#60a5fa" font-size="12">Programs that use rational numbers</text>
+        <!-- Barrier 1 -->
+        <line x1="50" y1="70" x2="350" y2="70" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.5"/>
+        <text x="200" y="85" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.5">abstraction barrier: make-rat, numer, denom</text>
+        <!-- Constructor/selector layer -->
+        <rect x="50" y="95" width="300" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <text x="200" y="120" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.6">Rational number operations (+rat, *rat, ...)</text>
+        <!-- Barrier 2 -->
+        <line x1="50" y1="150" x2="350" y2="150" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.5"/>
+        <text x="200" y="165" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.5">abstraction barrier: cons, car, cdr</text>
+        <!-- Representation layer -->
+        <rect x="50" y="173" width="300" height="30" rx="6" fill="none" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+        <text x="200" y="193" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.4">Pairs (the underlying representation)</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Rational numbers -->
+    <h3>Rational numbers &mdash; make-rat, numer, denom</h3>
+    <p>A rational number is a pair: numerator and denominator. The constructor <code>make-rat</code> and selectors <code>numer</code>, <code>denom</code> define the interface. Everything above the barrier uses only these three operations.</p>
+
+    <SchemeRepl client:load initialCode={`; Rational number arithmetic via abstraction barriers.
+
+(define (make-rat n d)
+  (let ((g (gcd (abs n) (abs d))))
+    (cons (/ n g) (/ d g))))
+
+(define (numer x) (car x))
+(define (denom x) (cdr x))
+
+(define (print-rat x)
+  (display (numer x))
+  (display "/")
+  (display (denom x))
+  (newline))
+
+; Arithmetic uses only numer, denom, make-rat:
+(define (add-rat x y)
+  (make-rat (+ (* (numer x) (denom y))
+               (* (numer y) (denom x)))
+            (* (denom x) (denom y))))
+
+(define (mul-rat x y)
+  (make-rat (* (numer x) (numer y))
+            (* (denom x) (denom y))))
+
+(define one-half (make-rat 1 2))
+(define one-third (make-rat 1 3))
+
+(display "1/2 + 1/3 = ") (print-rat (add-rat one-half one-third))
+(display "1/2 * 1/3 = ") (print-rat (mul-rat one-half one-third))
+(display "1/3 + 1/3 = ") (print-rat (add-rat one-third one-third))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Rational numbers in Python
+from math import gcd
+
+def make_rat(n, d):
+    g = gcd(abs(n), abs(d))
+    return (n // g, d // g)
+
+def numer(x): return x[0]
+def denom(x): return x[1]
+
+def add_rat(x, y):
+    return make_rat(numer(x) * denom(y) + numer(y) * denom(x),
+                    denom(x) * denom(y))
+
+def mul_rat(x, y):
+    return make_rat(numer(x) * numer(y), denom(x) * denom(y))
+
+def print_rat(x):
+    print(f"{numer(x)}/{denom(x)}")
+
+one_half = make_rat(1, 2)
+one_third = make_rat(1, 3)
+
+print("1/2 + 1/3 =", end=" "); print_rat(add_rat(one_half, one_third))
+print("1/2 * 1/3 =", end=" "); print_rat(mul_rat(one_half, one_third))
+print("1/3 + 1/3 =", end=" "); print_rat(add_rat(one_third, one_third))
+`} />
+    </div>
+
+
+    <!-- 2. Abstraction barriers -->
+    <h3>Abstraction barriers</h3>
+    <p>The rational number layer never touches <code>cons</code>, <code>car</code>, <code>cdr</code> directly. The programs that use rationals never touch <code>numer</code> or <code>denom</code> directly &mdash; they use <code>add-rat</code>, <code>mul-rat</code>. Each layer talks only to the layer below it. Change the representation, and only one layer needs updating.</p>
+
+    <SchemeRepl client:load initialCode={`; Barrier discipline: swap the representation,
+; nothing above the barrier changes.
+
+; Representation 1: reduce on construction
+(define (make-rat-v1 n d)
+  (let ((g (gcd (abs n) (abs d))))
+    (cons (/ n g) (/ d g))))
+(define (numer-v1 x) (car x))
+(define (denom-v1 x) (cdr x))
+
+; Representation 2: reduce on access
+(define (make-rat-v2 n d) (cons n d))
+(define (numer-v2 x)
+  (let ((g (gcd (abs (car x)) (abs (cdr x)))))
+    (/ (car x) g)))
+(define (denom-v2 x)
+  (let ((g (gcd (abs (car x)) (abs (cdr x)))))
+    (/ (cdr x) g)))
+
+; Both produce the same results:
+(define r1 (make-rat-v1 6 8))
+(define r2 (make-rat-v2 6 8))
+
+(display "v1: ") (display (numer-v1 r1)) (display "/") (display (denom-v1 r1)) (newline)
+(display "v2: ") (display (numer-v2 r2)) (display "/") (display (denom-v2 r2))
+; Both print 3/4
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Two representations behind the same interface
+from math import gcd
+
+# V1: reduce on construction
+def make_rat_v1(n, d):
+    g = gcd(abs(n), abs(d))
+    return (n // g, d // g)
+
+# V2: store raw, reduce on access
+def make_rat_v2(n, d):
+    return (n, d)
+
+def numer_v2(x):
+    g = gcd(abs(x[0]), abs(x[1]))
+    return x[0] // g
+
+def denom_v2(x):
+    g = gcd(abs(x[0]), abs(x[1]))
+    return x[1] // g
+
+r1 = make_rat_v1(6, 8)
+r2 = make_rat_v2(6, 8)
+print(f"v1: {r1[0]}/{r1[1]}")
+print(f"v2: {numer_v2(r2)}/{denom_v2(r2)}")
+`} />
+    </div>
+
+
+    <!-- 3. What is data? -->
+    <h3>What is data? &mdash; procedural representation of pairs</h3>
+    <p>The deepest insight in this chapter: you can implement <code>cons</code>, <code>car</code>, and <code>cdr</code> with nothing but <code>lambda</code>. Data isn't a thing stored in memory &mdash; it's any set of constructors and selectors that satisfies the contract: <code>(car (cons x y)) = x</code> and <code>(cdr (cons x y)) = y</code>.</p>
+
+    <SchemeRepl client:load initialCode={`; Pairs implemented with nothing but procedures.
+; No data structures — just closures.
+
+(define (my-cons x y)
+  (lambda (m)
+    (cond ((= m 0) x)
+          ((= m 1) y)
+          (else (error "Argument not 0 or 1")))))
+
+(define (my-car z) (z 0))
+(define (my-cdr z) (z 1))
+
+; Test the contract:
+(define p (my-cons 3 7))
+
+(display "(car (cons 3 7)) = ")
+(display (my-car p)) (newline)
+
+(display "(cdr (cons 3 7)) = ")
+(display (my-cdr p)) (newline)
+
+; Nest them — pairs of pairs:
+(define nested (my-cons (my-cons 1 2) (my-cons 3 4)))
+(display "car(car(nested)) = ")
+(display (my-car (my-car nested))) (newline)
+(display "cdr(cdr(nested)) = ")
+(display (my-cdr (my-cdr nested)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Pairs from closures — no tuples, no classes
+def my_cons(x, y):
+    def dispatch(m):
+        if m == 0: return x
+        if m == 1: return y
+        raise ValueError("Argument not 0 or 1")
+    return dispatch
+
+def my_car(z): return z(0)
+def my_cdr(z): return z(1)
+
+p = my_cons(3, 7)
+print(f"car(cons(3, 7)) = {my_car(p)}")
+print(f"cdr(cons(3, 7)) = {my_cdr(p)}")
+
+nested = my_cons(my_cons(1, 2), my_cons(3, 4))
+print(f"car(car(nested)) = {my_car(my_car(nested))}")
+print(f"cdr(cdr(nested)) = {my_cdr(my_cdr(nested))}")
+`} />
+    </div>
+
+
+    <!-- 4. Interval arithmetic -->
+    <h3>Interval arithmetic</h3>
+    <p>Another data abstraction: intervals with upper and lower bounds. Same pattern &mdash; constructors, selectors, and operations that respect the barrier. The operations propagate uncertainty: the result interval contains all possible values.</p>
+
+    <SchemeRepl client:load initialCode={`; Interval arithmetic: another abstraction barrier.
+
+(define (make-interval a b) (cons a b))
+(define (lower-bound x) (car x))
+(define (upper-bound x) (cdr x))
+
+(define (add-interval x y)
+  (make-interval (+ (lower-bound x) (lower-bound y))
+                 (+ (upper-bound x) (upper-bound y))))
+
+(define (mul-interval x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (lower-bound y)))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+
+(define (print-interval x)
+  (display "[")
+  (display (lower-bound x))
+  (display ", ")
+  (display (upper-bound x))
+  (display "]")
+  (newline))
+
+(define a (make-interval 2.0 2.2))
+(define b (make-interval 3.0 3.1))
+
+(display "a + b = ") (print-interval (add-interval a b))
+(display "a * b = ") (print-interval (mul-interval a b))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Interval arithmetic in Python
+def make_interval(a, b): return (a, b)
+def lower(x): return x[0]
+def upper(x): return x[1]
+
+def add_interval(x, y):
+    return make_interval(lower(x) + lower(y), upper(x) + upper(y))
+
+def mul_interval(x, y):
+    products = [lower(x)*lower(y), lower(x)*upper(y),
+                upper(x)*lower(y), upper(x)*upper(y)]
+    return make_interval(min(products), max(products))
+
+a = make_interval(2.0, 2.2)
+b = make_interval(3.0, 3.1)
+
+def fmt(x): return f"[{lower(x):.2f}, {upper(x):.2f}]"
+print(f"a + b = {fmt(add_interval(a, b))}")
+print(f"a * b = {fmt(mul_interval(a, b))}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cons a b)</td><td class="pr-4 text-blue-300">(a, b)</td><td class="font-sans">Construct a pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(car p)</td><td class="pr-4 text-blue-300">p[0]</td><td class="font-sans">First element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(cdr p)</td><td class="pr-4 text-blue-300">p[1]</td><td class="font-sans">Second element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(gcd a b)</td><td class="pr-4 text-blue-300">math.gcd(a, b)</td><td class="font-sans">Greatest common divisor</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">(error "msg")</td><td class="pr-4 text-blue-300">raise ValueError("msg")</td><td class="font-sans">Signal an error</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-05/">Milewski Ch.5</a> &mdash; products as data (the categorical view of pairs)</li>
+      <li><a href="/reading/programming/sicp-03/">SICP Ch.3 &mdash; Higher-Order Functions</a> &mdash; procedure abstraction precedes data abstraction</li>
+      <li><a href="/reading/programming/sicp-05/">SICP Ch.5 &mdash; Hierarchical Data</a> &mdash; building trees and lists from pairs</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Abstract_data_type"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Abstract data type</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Closure (computer programming)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Church_encoding"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Church encoding</a> &mdash; the procedural pairs idea taken to its limit</li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Scheme's <code>cons</code>/<code>car</code>/<code>cdr</code> are primitive; Python uses tuples or lists. The procedural pairs example (section 3) shows that the distinction is superficial &mdash; closures suffice. Python's <code>gcd</code> lives in <code>math</code>; Scheme's is typically built in. The interval arithmetic section foreshadows the "dependency problem" that SICP poses as an exercise: algebraically equivalent expressions give different interval widths because repeated variables are treated as independent. That subtlety is omitted here but worth exploring.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-14.html#%_sec_2.1">Read SICP &sect;2.1</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-03/", label: "Higher-Order Functions" }} next={{ href: "/reading/programming/sicp-05/", label: "Hierarchical Data · 5 of 22" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,260 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Lovelace Ch.7 — Language and Communication" favicon="🧠">
+  <main>
+
+    <a href="/reading/cognitive-science/" class="text-sm mb-4 inline-block">&larr; back to cognitive science</a>
+
+    <h1>Language and Communication</h1>
+    <p class="text-gray-400 text-sm mb-6">Lovelace textbook &middot; CC BY-SA 4.0 &middot; <a href="https://computationalcognitivescience.github.io/lovelace/home">computationalcognitivescience.github.io/lovelace/home</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Language is a <strong>noisy channel</strong> between minds. The speaker encodes a meaning, the channel (speech, text) introduces noise, and the listener decodes. <strong>Surprisal</strong> measures how unexpected a word is: high-surprisal words slow reading. <strong>Pragmatic inference</strong> goes beyond literal meaning: listeners reason about what the speaker <em>chose</em> to say and what they could have said instead.</p>
+    </div>
+
+    <!-- Shannon's communication model -->
+    <h3>The communication channel</h3>
+    <p>Shannon's model: a sender encodes a message, transmits it through a noisy channel, and a receiver decodes it. The fundamental theorem of information theory says that reliable communication is possible at any rate below the channel capacity. Language production and comprehension fit this framework: the speaker compresses meaning into words, the listener decompresses. The same perceive-to-attend pipeline appears in non-linguistic cognition, where a <a href="https://june.kim/perception-pipe"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>salience layer</a> filters the stream before attention allocates resources.</p>
+
+    <!-- SVG: Shannon's communication model -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 120" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Sender -->
+        <rect x="10" y="35" width="80" height="45" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="50" y="62" text-anchor="middle" fill="#60a5fa" font-size="12" font-weight="bold">Sender</text>
+        <!-- Arrow -->
+        <line x1="90" y1="57" x2="130" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="126,53 134,57 126,61" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Channel -->
+        <rect x="134" y="35" width="140" height="45" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="204" y="55" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="bold">Channel</text>
+        <text x="204" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">+ noise</text>
+        <!-- Arrow -->
+        <line x1="274" y1="57" x2="314" y2="57" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <polygon points="310,53 318,57 310,61" fill="currentColor" fill-opacity="0.4"/>
+        <!-- Receiver -->
+        <rect x="318" y="35" width="90" height="45" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="363" y="62" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">Receiver</text>
+        <!-- Labels -->
+        <text x="50" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">meaning</text>
+        <text x="204" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">words / speech</text>
+        <text x="363" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">inferred meaning</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Information content and surprisal
+; Surprisal = -log2(P(word))
+; High surprisal = unexpected word = more information
+
+(define (log2 x) (/ (log x) (log 2)))
+(define (surprisal p) (- (log2 p)))
+
+; Word probabilities in context "The cat sat on the ___"
+(define p-mat 0.15)
+(define p-floor 0.10)
+(define p-elephant 0.001)
+(define p-the 0.30)
+
+(display "Surprisal of 'mat':      ")
+(display (surprisal p-mat)) (display " bits") (newline)
+(display "Surprisal of 'floor':    ")
+(display (surprisal p-floor)) (display " bits") (newline)
+(display "Surprisal of 'elephant': ")
+(display (surprisal p-elephant)) (display " bits") (newline)
+(display "Surprisal of 'the':      ")
+(display (surprisal p-the)) (display " bits") (newline)
+(newline)
+(display "Higher surprisal = slower reading time (empirically)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Surprisal in Python
+import math
+
+def surprisal(p):
+    return -math.log2(p)
+
+words = {"mat": 0.15, "floor": 0.10, "elephant": 0.001, "the": 0.30}
+for word, p in words.items():
+    print(f"Surprisal('{word}'): {surprisal(p):.2f} bits")
+`} />
+    </div>
+
+
+    <!-- Probabilistic language models -->
+    <h3>Probabilistic language models</h3>
+    <p>A language model assigns probabilities to sequences of words. An n-gram model conditions on the previous n-1 words. Better models compress language more efficiently. The cross-entropy between the model's predictions and the true distribution measures how well the model captures the statistical structure of language.</p>
+
+    <SchemeRepl client:load initialCode={`; Bigram language model: P(word | previous word)
+; Estimate from a tiny corpus.
+
+; Corpus: "the cat sat" "the cat ran" "the dog sat"
+(define bigrams
+  '(("the" "cat" 2) ("the" "dog" 1)
+    ("cat" "sat" 1) ("cat" "ran" 1) ("dog" "sat" 1)))
+
+(define (count-prefix prefix)
+  (apply + (map (lambda (b) (if (equal? (car b) prefix) (caddr b) 0))
+               bigrams)))
+
+(define (bigram-prob w1 w2)
+  (let ((match (filter (lambda (b)
+                  (and (equal? (car b) w1) (equal? (cadr b) w2)))
+                bigrams)))
+    (if (null? match) 0.0
+        (/ (caddr (car match)) (count-prefix w1)))))
+
+(display "P(cat | the) = ")
+(display (exact->inexact (bigram-prob "the" "cat"))) (newline)
+(display "P(dog | the) = ")
+(display (exact->inexact (bigram-prob "the" "dog"))) (newline)
+(display "P(sat | cat) = ")
+(display (exact->inexact (bigram-prob "cat" "sat"))) (newline)
+(display "P(ran | cat) = ")
+(display (exact->inexact (bigram-prob "cat" "ran")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Bigram language model
+from collections import defaultdict
+
+corpus = [["the","cat","sat"], ["the","cat","ran"], ["the","dog","sat"]]
+
+counts = defaultdict(lambda: defaultdict(int))
+for sent in corpus:
+    for i in range(len(sent) - 1):
+        counts[sent[i]][sent[i+1]] += 1
+
+def bigram_prob(w1, w2):
+    total = sum(counts[w1].values())
+    if total == 0:
+        return 0.0
+    return counts[w1][w2] / total
+
+for w1, w2 in [("the","cat"), ("the","dog"), ("cat","sat"), ("cat","ran")]:
+    print("P(" + w2 + " | " + w1 + ") = " + "{:.4f}".format(bigram_prob(w1, w2)))
+`} />
+    </div>
+
+
+    <!-- Pragmatic inference -->
+    <h3>Pragmatic inference</h3>
+    <p>Literal meaning is just the starting point. A pragmatic listener reasons about the speaker's choice: if the speaker said "some students passed," they probably mean "not all," because a cooperative speaker would have said "all" if that were true. The Rational Speech Act (RSA) framework models this as nested Bayesian inference: the listener infers meaning by reasoning about a speaker who reasons about a literal listener.</p>
+
+    <SchemeRepl client:load initialCode={`; Scalar implicature: "some" implies "not all"
+; RSA model (simplified)
+;
+; Literal listener: P(state | utterance) proportional to truth value
+; Speaker: P(utterance | state) proportional to informativity
+; Pragmatic listener: P(state | utterance) via Bayes over speaker
+
+; States: "all passed" or "some passed"
+; Utterances: "all" or "some"
+
+; Literal semantics: is the utterance true in the state?
+(define (literal utt state)
+  (cond ((and (equal? utt "all") (equal? state "all"))   1)
+        ((and (equal? utt "all") (equal? state "some"))  0)
+        ((and (equal? utt "some") (equal? state "all"))  1) ; "some" is true when all
+        ((and (equal? utt "some") (equal? state "some")) 1)
+        (else 0)))
+
+; Pragmatic speaker: prefers informative utterances
+(define (speaker state)
+  (let ((p-all  (literal "all" state))
+        (p-some (literal "some" state)))
+    (let ((total (+ p-all p-some)))
+      (list (/ p-all total) (/ p-some total)))))
+
+; When state = "all", speaker says "all" or "some" equally
+(display "Speaker given 'all':  P(say all)=")
+(display (car (speaker "all")))
+(display " P(say some)=")
+(display (cadr (speaker "all"))) (newline)
+
+; When state = "some", speaker must say "some"
+(display "Speaker given 'some': P(say all)=")
+(display (car (speaker "some")))
+(display " P(say some)=")
+(display (cadr (speaker "some"))) (newline)
+
+; Pragmatic listener hearing "some":
+; P(all|"some") is lower because speaker would have said "all"
+(display "Result: hearing 'some' implies 'not all'")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Scalar implicature via RSA (simplified)
+# Literal semantics: is utterance true in state?
+def literal(utt, state):
+    if utt == "all":
+        return 1 if state == "all" else 0
+    if utt == "some":
+        return 1  # "some" is true in both states
+
+# Speaker: uniform over true utterances
+def speaker(state):
+    scores = {"all": literal("all", state), "some": literal("some", state)}
+    total = sum(scores.values())
+    return {u: s / total for u, s in scores.items()}
+
+for state in ["all", "some"]:
+    probs = speaker(state)
+    print("Speaker given '" + state + "': " +
+          "P(say all)=" + str(probs["all"]) +
+          " P(say some)=" + str(probs["some"]))
+
+print("Result: hearing 'some' implies 'not all'")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4">Term</th>
+            <th class="text-left py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Surprisal</td><td>-log2(P(word)); information content in bits</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">n-gram</td><td>P(word | previous n-1 words)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">Cross-entropy</td><td>Expected surprisal under true distribution</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-mono">RSA</td><td>Rational Speech Acts: nested Bayesian pragmatics</td></tr>
+          <tr><td class="py-2 pr-4 font-mono">Channel capacity</td><td>Maximum rate of reliable communication</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-07/">Shannon Ch.7</a> — channel capacity and the noisy channel coding theorem</li>
+      <li><a href="/reading/cognitive-science/lovelace-02/">Lovelace Ch.2</a> — the Bayesian inference that RSA builds on</li>
+      <li><a href="/reading/information-theory/shannon-01/">📡 Shannon 01 Surprise</a> — information content in language: surprisal as the fundamental unit</li>
+      <li><a href="https://en.wikipedia.org/wiki/Rational_speech_act_models"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rational Speech Acts</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <h3>Translation notes</h3>
+    <p>The Lovelace textbook covers language acquisition, syntactic parsing, and semantic composition in addition to the information-theoretic and pragmatic perspectives presented here. This page focuses on the three ideas that connect most directly to the computational toolkit: surprisal as a linking hypothesis between models and reading data, n-gram models as the simplest language model, and RSA as Bayesian inference applied to communication.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Read the original: <a href="https://computationalcognitivescience.github.io/lovelace/chapter7">Lovelace, Chapter 7</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cognitive-science/lovelace-06/", label: "Decision Making" }} next={{ href: "/reading/cognitive-science/lovelace-08/", label: "Cognitive Architecture · 8 of 8" }} />
+
+  </main>
+</Layout>

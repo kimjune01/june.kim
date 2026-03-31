@@ -1,0 +1,200 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="DB Ch.6 — Transactions" favicon="🗄">
+  <main>
+
+    <a href="/reading/databases/" class="text-sm mb-4 inline-block">&larr; back to databases</a>
+
+    <h1>Transactions</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Database_transaction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Database transaction</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>transaction</strong> is a sequence of operations that either all succeed (commit) or all fail (rollback). The ACID properties guarantee correctness: Atomicity (all or nothing), Consistency (valid state to valid state), Isolation (concurrent transactions do not interfere), Durability (committed data survives crashes).</p>
+    </div>
+
+    <!-- SVG: Two transactions interleaving with conflict arrow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Time axis -->
+        <line x1="50" y1="160" x2="370" y2="160" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="380" y="163" fill="currentColor" font-size="9" fill-opacity="0.4">time</text>
+
+        <!-- T1 -->
+        <text x="30" y="50" text-anchor="end" fill="#60a5fa" font-size="10">T1</text>
+        <rect x="80" y="38" width="60" height="18" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="110" y="51" text-anchor="middle" fill="#60a5fa" font-size="9">R(A)</text>
+        <rect x="200" y="38" width="60" height="18" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="230" y="51" text-anchor="middle" fill="#60a5fa" font-size="9">W(A)</text>
+        <rect x="310" y="38" width="50" height="18" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="335" y="51" text-anchor="middle" fill="#60a5fa" font-size="9">Commit</text>
+        <line x1="80" y1="47" x2="360" y2="47" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.2"/>
+
+        <!-- T2 -->
+        <text x="30" y="100" text-anchor="end" fill="#f59e0b" font-size="10">T2</text>
+        <rect x="140" y="88" width="60" height="18" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="170" y="101" text-anchor="middle" fill="#f59e0b" font-size="9">R(A)</text>
+        <rect x="270" y="88" width="60" height="18" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="300" y="101" text-anchor="middle" fill="#f59e0b" font-size="9">W(A)</text>
+        <line x1="140" y1="97" x2="330" y2="97" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.2"/>
+
+        <!-- Conflict arrow -->
+        <path d="M 230 56 L 170 88" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="172,85 168,92 175,90" fill="#f87171"/>
+        <text x="190" y="77" text-anchor="middle" fill="#f87171" font-size="8" fill-opacity="0.8">conflict</text>
+
+        <!-- Caption -->
+        <text x="210" y="145" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">T1 writes A, T2 reads A: a write-read conflict.</text>
+      </svg>
+    </div>
+
+
+    <!-- ACID -->
+    <h3>ACID properties</h3>
+    <p><strong>Atomicity</strong>: a transaction is indivisible. If any operation fails, all are undone. <strong>Consistency</strong>: the database moves from one valid state to another. <strong>Isolation</strong>: concurrent transactions behave as if they ran serially. <strong>Durability</strong>: once committed, the data persists even through power failures.</p>
+
+    <SchemeRepl client:load initialCode={`; Simulating atomicity: transfer money between accounts.
+; If the debit succeeds but the credit fails, rollback both.
+
+(define accounts (list (cons "Alice" 100) (cons "Bob" 50)))
+
+(define (get-balance accts name)
+  (cdr (assoc name accts)))
+
+(define (update-balance accts name delta)
+  (map (lambda (a)
+    (if (string=? (car a) name)
+      (cons name (+ (cdr a) delta))
+      a))
+    accts))
+
+(define (transfer accts from to amount)
+  (let ((from-bal (get-balance accts from)))
+    (if (< from-bal amount)
+      (begin (display "ROLLBACK: insufficient funds") (newline) accts)
+      (let* ((step1 (update-balance accts from (- amount)))
+             (step2 (update-balance step1 to amount)))
+        (display "COMMIT: transfer complete") (newline)
+        step2))))
+
+(display "Before: ") (display accounts) (newline)
+(define after (transfer accounts "Alice" "Bob" 30))
+(display "After:  ") (display after) (newline)
+(newline)
+; Try overdraft
+(transfer after "Bob" "Alice" 200)
+`} />
+
+
+    <!-- Serializability -->
+    <h3>Serializability and conflict graphs</h3>
+    <p>A schedule is <strong>serializable</strong> if its result equals some serial execution of the same transactions. To test: build a <strong>conflict graph</strong> (precedence graph). Add an edge T1 -> T2 whenever T1 and T2 access the same item and at least one writes, and T1 goes first. If the graph has no cycle, the schedule is conflict-serializable.</p>
+
+    <SchemeRepl client:load initialCode={`; Conflict serializability check.
+; Schedule: T1:R(A), T2:R(A), T1:W(A), T2:W(A)
+; Conflicts: T1:R(A) vs T2:W(A) => T1->T2
+;            T2:R(A) vs T1:W(A) => T2->T1
+; Cycle! Not serializable.
+
+(define schedule
+  (list
+    (list "T1" "R" "A")
+    (list "T2" "R" "A")
+    (list "T1" "W" "A")
+    (list "T2" "W" "A")))
+
+(define (conflicts? op1 op2)
+  (and (not (string=? (car op1) (car op2)))         ; different transactions
+       (string=? (caddr op1) (caddr op2))           ; same data item
+       (or (string=? (cadr op1) "W")
+           (string=? (cadr op2) "W"))))              ; at least one write
+
+; Build edges
+(define (find-edges schedule)
+  (let loop ((ops schedule) (edges (list)))
+    (if (null? ops) edges
+      (let inner ((rest (cdr ops)) (e edges))
+        (if (null? rest) (loop (cdr ops) e)
+          (if (conflicts? (car ops) (car rest))
+            (let ((edge (cons (caar ops) (caar rest))))
+              (if (member edge e)
+                (inner (cdr rest) e)
+                (inner (cdr rest) (cons edge e))))
+            (inner (cdr rest) e)))))))
+
+(define edges (find-edges schedule))
+(display "Conflict edges: ") (display edges) (newline)
+
+; Check for cycle: if T1->T2 and T2->T1, cycle exists
+(define (has-cycle? edges)
+  (let loop ((es edges))
+    (if (null? es) #f
+      (let ((rev (cons (cdar es) (caar es))))
+        (if (member rev edges) #t
+          (loop (cdr es)))))))
+
+(display "Has cycle (not serializable)? ")
+(display (has-cycle? edges))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Transaction simulation with sqlite3
+import sqlite3
+
+conn = sqlite3.connect(":memory:")
+c = conn.cursor()
+c.execute("CREATE TABLE accounts (name TEXT PRIMARY KEY, balance REAL)")
+c.execute("INSERT INTO accounts VALUES ('Alice', 100)")
+c.execute("INSERT INTO accounts VALUES ('Bob', 50)")
+conn.commit()
+
+def transfer(conn, src, dst, amount):
+    c = conn.cursor()
+    try:
+        c.execute("SELECT balance FROM accounts WHERE name=?", (src,))
+        bal = c.fetchone()[0]
+        if bal < amount:
+            raise ValueError("Insufficient funds")
+        c.execute("UPDATE accounts SET balance = balance - ? WHERE name=?", (amount, src))
+        c.execute("UPDATE accounts SET balance = balance + ? WHERE name=?", (amount, dst))
+        conn.commit()
+        print("COMMIT: " + src + " -> " + dst + ": $" + str(amount))
+    except Exception as e:
+        conn.rollback()
+        print("ROLLBACK: " + str(e))
+
+transfer(conn, "Alice", "Bob", 30)
+for row in conn.execute("SELECT * FROM accounts"):
+    print("  " + str(row[0]) + ": $" + str(row[1]))
+
+print()
+transfer(conn, "Bob", "Alice", 200)  # should rollback
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/operating-systems/os-04/">🖥 OS Ch.4</a> — synchronization: transactions are the database equivalent of critical sections and mutual exclusion</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/ACID"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ACID</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Serializability"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Serializability</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Precedence_graph"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Precedence graph</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/databases/db-05/", label: "Indexing" }} next={{ href: "/reading/databases/db-07/", label: "Concurrency Control" }} />
+
+  </main>
+</Layout>

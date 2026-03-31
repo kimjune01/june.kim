@@ -1,0 +1,320 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.11 — Mutable Data" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Mutable Data</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-22.html#%_sec_3.3">SICP §3.3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><code>set-car!</code> and <code>set-cdr!</code> turn pairs into mutable building blocks. Queues, tables, and circuits built from mutation. But sharing creates identity puzzles: <code>eq?</code> vs <code>equal?</code>.</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 140" class="w-full max-w-md mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- Before pair -->
+      <text x="80" y="16" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="600">before</text>
+      <rect x="30" y="24" width="50" height="32" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <rect x="80" y="24" width="50" height="32" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="55" y="45" text-anchor="middle" fill="#60a5fa" font-size="13">1</text>
+      <text x="105" y="45" text-anchor="middle" fill="#60a5fa" font-size="13">2</text>
+      <text x="55" y="72" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="9">car</text>
+      <text x="105" y="72" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="9">cdr</text>
+      <!-- Arrow -->
+      <line x1="145" y1="40" x2="210" y2="40" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrowMut)"/>
+      <text x="178" y="32" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">set-car!</text>
+      <!-- After pair -->
+      <text x="280" y="16" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">after</text>
+      <rect x="230" y="24" width="50" height="32" rx="3" fill="none" stroke="#34d399" stroke-width="1.5"/>
+      <rect x="280" y="24" width="50" height="32" rx="3" fill="none" stroke="#34d399" stroke-width="1.5"/>
+      <!-- crossed-out 1 -->
+      <text x="255" y="45" text-anchor="middle" fill="currentColor" fill-opacity="0.25" font-size="13">1</text>
+      <line x1="245" y1="48" x2="265" y2="35" stroke="#f87171" stroke-width="1.5"/>
+      <!-- 99 replacing it -->
+      <text x="255" y="45" text-anchor="middle" fill="#f59e0b" font-size="13" dx="0" dy="-16">99</text>
+      <text x="305" y="45" text-anchor="middle" fill="#34d399" font-size="13">2</text>
+      <text x="255" y="72" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="9">car</text>
+      <text x="305" y="72" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="9">cdr</text>
+      <!-- Caption -->
+      <text x="180" y="100" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">mutation changes the pair in place</text>
+      <text x="180" y="113" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">&mdash; all references see the change</text>
+      <!-- Arrow marker -->
+      <defs>
+        <marker id="arrowMut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!-- 1. Mutable list structure -->
+    <h3>Mutable list structure</h3>
+    <p><code>set-car!</code> and <code>set-cdr!</code> mutate the two halves of a pair in place. With these primitives, lists become mutable data structures.</p>
+
+    <SchemeRepl client:load initialCode={`; Mutating pairs with set-car! and set-cdr!
+(define x (list 1 2 3))
+(display "before: ") (display x) (newline)
+
+(set-car! x 99)
+(display "after set-car!: ") (display x) (newline)
+
+(set-cdr! x (list 7 8))
+(display "after set-cdr!: ") (display x) (newline)
+
+; Sharing: z1 and z2 look the same but differ in structure
+(define a (list 1 2))
+(define z1 (cons a a))       ; both car and cdr point to SAME list
+(define z2 (cons (list 1 2)  ; car and cdr are DIFFERENT lists
+                 (list 1 2)))
+
+(set-car! (car z1) 99)
+(display "z1: ") (display z1) (newline)  ; ((99 2) 99 2) — shared!
+(display "z2: ") (display z2)            ; ((1 2) 1 2) — independent
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python lists are mutable by default
+x = [1, 2, 3]
+print(f"before: {x}")
+
+x[0] = 99
+print(f"after x[0]=99: {x}")
+
+x[1:] = [7, 8]
+print(f"after slice: {x}")
+
+# Sharing vs copying
+a = [1, 2]
+z1 = [a, a]           # both elements ARE a
+z2 = [[1, 2], [1, 2]] # independent lists
+
+a[0] = 99
+print(f"z1: {z1}")  # [[99, 2], [99, 2]] — shared!
+print(f"z2: {z2}")  # [[1, 2], [1, 2]] — independent
+`} />
+    </div>
+
+    <!-- 2. Representing queues -->
+    <h3>Representing queues</h3>
+    <p>A queue needs O(1) insertion at the rear. The trick: maintain a pointer to both the front and rear of the list. <code>set-cdr!</code> on the rear pair threads in new elements.</p>
+
+    <SchemeRepl client:load initialCode={`; Queue: front-ptr and rear-ptr for O(1) enqueue
+(define (make-queue) (cons '() '()))
+(define (front-ptr q) (car q))
+(define (rear-ptr q) (cdr q))
+(define (empty-queue? q) (null? (front-ptr q)))
+
+(define (insert-queue! q item)
+  (let ((new-pair (list item)))
+    (if (empty-queue? q)
+        (begin (set-car! q new-pair)
+               (set-cdr! q new-pair))
+        (begin (set-cdr! (rear-ptr q) new-pair)
+               (set-cdr! q new-pair)))
+    q))
+
+(define (delete-queue! q)
+  (if (empty-queue? q)
+      (error "DELETE on empty queue")
+      (begin (set-car! q (cdr (front-ptr q)))
+             q)))
+
+(define (print-queue q)
+  (display (front-ptr q)))
+
+(define q (make-queue))
+(insert-queue! q 'a)
+(insert-queue! q 'b)
+(insert-queue! q 'c)
+(print-queue q) (newline)     ; (a b c)
+(delete-queue! q)
+(print-queue q)               ; (b c)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`from collections import deque
+
+q = deque()
+q.append('a')
+q.append('b')
+q.append('c')
+print(list(q))   # ['a', 'b', 'c']
+
+q.popleft()
+print(list(q))   # ['b', 'c']
+
+# Under the hood, deque uses a doubly-linked list
+# SICP's version is a singly-linked list with a rear pointer
+`} />
+    </div>
+
+    <!-- 3. Representing tables -->
+    <h3>Representing tables</h3>
+    <p>A table is an association list with a header. Lookup scans the list; insert either updates an existing entry or prepends a new one. Two-dimensional tables nest a table inside each entry.</p>
+
+    <SchemeRepl client:load initialCode={`; One-dimensional table
+(define (make-table) (list '*table*))
+
+(define (lookup key table)
+  (let ((record (assoc key (cdr table))))
+    (if record (cdr record) #f)))
+
+(define (insert! key value table)
+  (let ((record (assoc key (cdr table))))
+    (if record
+        (set-cdr! record value)
+        (set-cdr! table
+                  (cons (cons key value) (cdr table)))))
+  'ok)
+
+(define t (make-table))
+(insert! 'a 1 t)
+(insert! 'b 2 t)
+(insert! 'c 3 t)
+(display (lookup 'b t)) (newline)  ; 2
+
+(insert! 'b 99 t)  ; update
+(display (lookup 'b t)) (newline)  ; 99
+(display (lookup 'd t))            ; #f
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Python dict is the built-in table
+t = {}
+t['a'] = 1
+t['b'] = 2
+t['c'] = 3
+print(t.get('b'))    # 2
+
+t['b'] = 99          # update
+print(t.get('b'))    # 99
+print(t.get('d'))    # None
+`} />
+    </div>
+
+    <!-- 4. Digital circuit simulator -->
+    <h3>A simulator for digital circuits</h3>
+    <p>Wires carry signals; gates transform them. Each wire maintains a list of <strong>action procedures</strong> that fire when its signal changes. This is event-driven simulation built from mutation and closures.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified wire and gate simulation
+; Wires hold a signal and a list of actions
+
+(define (make-wire)
+  (let ((signal 0) (actions '()))
+    (define (set-signal! new)
+      (if (not (= signal new))
+          (begin (set! signal new)
+                 (for-each (lambda (a) (a)) actions))))
+    (define (add-action! proc)
+      (set! actions (cons proc actions))
+      (proc))  ; run once to initialize
+    (define (dispatch m)
+      (cond ((eq? m 'get-signal) signal)
+            ((eq? m 'set-signal!) set-signal!)
+            ((eq? m 'add-action!) add-action!)
+            (else (error "Unknown wire op" m))))
+    dispatch))
+
+(define (get-signal w) (w 'get-signal))
+(define (set-signal! w v) ((w 'set-signal!) v))
+(define (add-action! w proc) ((w 'add-action!) proc))
+
+; Inverter: when input changes, flip output
+(define (inverter input output)
+  (add-action! input
+    (lambda ()
+      (let ((new (if (= (get-signal input) 0) 1 0)))
+        (set-signal! output new)))))
+
+(define in (make-wire))
+(define out (make-wire))
+(inverter in out)
+
+(display "out: ") (display (get-signal out)) (newline)  ; 1
+(set-signal! in 1)
+(display "out: ") (display (get-signal out))             ; 0
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`class Wire:
+    def __init__(self):
+        self.signal = 0
+        self.actions = []
+    def get_signal(self):
+        return self.signal
+    def set_signal(self, new):
+        if self.signal != new:
+            self.signal = new
+            for action in self.actions:
+                action()
+    def add_action(self, proc):
+        self.actions.append(proc)
+        proc()
+
+def inverter(inp, out):
+    def invert():
+        out.set_signal(1 if inp.get_signal() == 0 else 0)
+    inp.add_action(invert)
+
+w_in = Wire()
+w_out = Wire()
+inverter(w_in, w_out)
+
+print(f"out: {w_out.get_signal()}")  # 1
+w_in.set_signal(1)
+print(f"out: {w_out.get_signal()}")  # 0
+`} />
+    </div>
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4 text-gray-400">Scheme</th>
+            <th class="text-left py-2 pr-4 text-gray-400">Python</th>
+            <th class="text-left py-2 text-gray-400">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(set-car! p v)</code></td><td class="pr-4"><code>p[0] = v</code></td><td class="text-gray-400">Mutate first element of pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(set-cdr! p v)</code></td><td class="pr-4"><code>p[1:] = v</code></td><td class="text-gray-400">Mutate rest of pair</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(eq? a b)</code></td><td class="pr-4"><code>a is b</code></td><td class="text-gray-400">Same object in memory</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(equal? a b)</code></td><td class="pr-4"><code>a == b</code></td><td class="text-gray-400">Structurally equal</td></tr>
+          <tr><td class="py-1 pr-4"><code>(assoc key alist)</code></td><td class="pr-4"><code>dict.get(key)</code></td><td class="text-gray-400">Lookup in association list / dict</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li>Scheme pairs are the universal building block. Python has no mutable pair primitive; lists, deques, and dicts replace the various structures SICP builds from cons cells.</li>
+      <li>The circuit simulator's "action procedures on wires" pattern is the Observer pattern. Python typically uses callbacks or event libraries for the same thing.</li>
+      <li>Sharing bugs (mutating a shared substructure) are identical in both languages. The fix is the same too: copy when you need independence.</li>
+    </ul>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li><a href="https://en.wikipedia.org/wiki/Linked_list"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Linked list</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Queue (abstract data type)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hash_table"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Hash table</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-22.html#%_sec_3.3">Read SICP &sect;3.3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-10/", label: "Environment Model" }} next={{ href: "/reading/programming/sicp-12/", label: "Concurrency · 12 of 22" }} />
+
+  </main>
+</Layout>

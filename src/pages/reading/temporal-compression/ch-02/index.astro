@@ -1,0 +1,227 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Chain Fragility — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>Chain Fragility</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 2 ·
+      <a href="https://www.site.uottawa.ca/~flocchin/Papers/tvg-ijpeds.pdf">Casteigts et al. 2012, §4.4</a> ·
+      <a href="https://arxiv.org/abs/1409.6712">Krishnan 2014, Thm 5.12</a>
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        Sequential dependency breaks. Same pattern in all three fields.
+      </p>
+    </div>
+
+    <h3>Three descriptions of the same break</h3>
+
+    <p>
+      A temporal graph journey breaks when timing fails to compose.
+      A P-frame chain breaks when a reference is lost.
+      A sheaf's local sections fail to extend globally when exactness fails.
+      Different triggers, same structural pattern: downstream validity depends
+      on every earlier link.
+    </p>
+
+    <div class="flex justify-center my-8">
+      <svg viewBox="0 0 480 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Top: intact chain -->
+        <text x="240" y="16" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">Intact: A ⟶ B ⟶ C</text>
+
+        <circle cx="80" cy="50" r="20" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+        <text x="80" y="54" text-anchor="middle" fill="currentColor" font-size="13">A</text>
+
+        <line x1="100" y1="50" x2="210" y2="50" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <polygon points="210,50 204,46 204,54" fill="currentColor" fill-opacity="0.5"/>
+
+        <circle cx="230" cy="50" r="20" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+        <text x="230" y="54" text-anchor="middle" fill="currentColor" font-size="13">B</text>
+
+        <line x1="250" y1="50" x2="360" y2="50" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+        <polygon points="360,50 354,46 354,54" fill="currentColor" fill-opacity="0.5"/>
+
+        <circle cx="380" cy="50" r="20" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+        <text x="380" y="54" text-anchor="middle" fill="currentColor" font-size="13">C</text>
+
+        <text x="440" y="54" fill="currentColor" fill-opacity="0.3" font-size="10">✓</text>
+
+        <!-- Bottom: broken -->
+        <text x="240" y="116" text-anchor="middle" fill="currentColor" fill-opacity="0.5" font-size="11">Broken: B severed</text>
+
+        <circle cx="80" cy="155" r="20" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+        <text x="80" y="159" text-anchor="middle" fill="currentColor" font-size="13">A</text>
+
+        <line x1="100" y1="155" x2="180" y2="155" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+        <text x="230" y="162" text-anchor="middle" fill="currentColor" fill-opacity="0.25" font-size="20">✕</text>
+        <text x="230" y="182" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">B lost</text>
+
+        <line x1="280" y1="155" x2="360" y2="155" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+        <circle cx="380" cy="155" r="20" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="4 2"/>
+        <text x="380" y="159" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="13">C</text>
+
+        <text x="440" y="159" fill="currentColor" fill-opacity="0.3" font-size="10">✕</text>
+      </svg>
+    </div>
+
+    <h3>TVG: timing fails to compose</h3>
+
+    <p>
+      In a temporal graph, A→B at time t₁ and B→C at time t₂ only composes
+      into a journey A→C if t₂ ≥ t₁ + ζ(e₁, t₁) — you must arrive at B
+      before the next edge departs, including latency. When this fails, the
+      journey breaks even though both edges exist.
+    </p>
+
+    <Repl client:load initialCode={`class TemporalGraph:
+    """Minimal temporal graph: edges are (u, v, t) triples."""
+    def __init__(self):
+        self.edges = []
+
+    def add_edge(self, u, v, t):
+        self.edges.append((u, v, t))
+
+    def journeys(self, start, end):
+        """Find all time-respecting paths from start to end."""
+        results = []
+        self._dfs(start, end, -1, [start], results)
+        return results
+
+    def _dfs(self, current, end, last_time, path, results):
+        if current == end:
+            results.append(list(path))
+            return
+        for u, v, t in sorted(self.edges, key=lambda e: e[2]):
+            if u == current and t >= last_time and v not in path:
+                path.append(v)
+                self._dfs(v, end, t, path, results)
+                path.pop()
+
+# Build a chain: A→B at t=1, B→C at t=2, C→D at t=3
+g = TemporalGraph()
+g.add_edge("A", "B", 1)
+g.add_edge("B", "C", 2)
+g.add_edge("C", "D", 3)
+
+print("Intact chain:")
+print(f"  A→D journeys: {g.journeys('A', 'D')}")
+print(f"  A→C journeys: {g.journeys('A', 'C')}")
+
+# Remove the B→C edge (timing failure / reference loss)
+g.edges = [(u, v, t) for u, v, t in g.edges if not (u == "B" and v == "C")]
+
+print("\\nAfter removing B→C (t=2):")
+print(f"  A→D journeys: {g.journeys('A', 'D')}")
+print(f"  A→C journeys: {g.journeys('A', 'C')}")
+print(f"  A→B journeys: {g.journeys('A', 'B')}")
+print("\\n→ Upstream survives. Downstream dies.")`} />
+
+    <h3>Codecs: reference lost</h3>
+
+    <p>
+      A P-frame references a previous frame. If that reference is lost,
+      the P-frame can't decode — and neither can anything depending on it.
+      Same pattern: break one link, sever the tail.
+    </p>
+
+    <Repl client:load initialCode={`class Frame:
+    def __init__(self, name, frame_type, ref=None, data=None):
+        self.name = name
+        self.type = frame_type
+        self.ref = ref
+        self.data = data
+
+def decode_sequence(frames):
+    decoded = {}
+    results = []
+    for f in frames:
+        if f.type == "I":
+            decoded[f.name] = f.data
+            results.append((f.name, "OK", f.data))
+        elif f.type == "P":
+            if f.ref in decoded:
+                value = decoded[f.ref] + f.data
+                decoded[f.name] = value
+                results.append((f.name, "OK", value))
+            else:
+                results.append((f.name, "FAIL", "missing ref: " + f.ref))
+    return results
+
+# GOP: I₀ → P₁ → P₂ → P₃
+frames = [
+    Frame("I0", "I", data=100),
+    Frame("P1", "P", ref="I0", data=5),
+    Frame("P2", "P", ref="P1", data=3),
+    Frame("P3", "P", ref="P2", data=7),
+]
+
+print("Intact GOP:")
+for name, status, val in decode_sequence(frames):
+    print(f"  {name}: {status} → {val}")
+
+damaged = [f for f in frames if f.name != "P1"]
+
+print("\\nAfter losing P1:")
+for name, status, val in decode_sequence(damaged):
+    print(f"  {name}: {status} → {val}")
+print("\\n→ I0 survives. P2, P3 fail (missing chain link).")`} />
+
+    <h3>Sheaves: exactness failure</h3>
+
+    <p>
+      Krishnan (2014, Theorem 5.12) proves that duality gaps — where max-flow
+      is strictly less than min-cut — arise when directed sheaf cohomology fails
+      to be exact. Local sections (valid flows on subnetworks) exist, but they
+      don't compose into a global section. "Local consistency fails to globalize"
+      is the algebraic form of chain fragility. (The three-way connection is
+      this series' reading, not Krishnan's.)
+    </p>
+
+    <p>
+      Ghrist & Hiraoka make it concrete: Proposition 11 says global flow on
+      a failure network G\A lives in H⁰_Z(X; F). Checking whether flows
+      survive node removal is a cohomological computation — same question as
+      "does removing B break A→C?"
+    </p>
+
+    <h3>One pattern, three triggers</h3>
+
+    <p>
+      All three describe: on a directed dependency graph, removing an intermediate
+      node severs everything downstream that depends uniquely on it. The triggers
+      differ — failed time composition (TVG), reference loss (codecs), exactness
+      failure (sheaves) — but the dependency pattern is formally the same.
+    </p>
+
+    <p>
+      This is the one genuine parallel in the crosswalk. The others
+      (<a href="/reading/temporal-compression/ch-03/">next chapter</a>) are forced.
+    </p>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Key references</p>
+      <ul class="neighbors">
+        <li><a href="https://www.site.uottawa.ca/~flocchin/Papers/tvg-ijpeds.pdf">Casteigts et al. 2012</a> — non-transitivity of temporal reachability (§4.4)</li>
+        <li><a href="https://arxiv.org/abs/1409.6712">Krishnan 2014</a> — duality gaps as exactness failures (Thm 5.12)</li>
+        <li><a href="https://www2.math.upenn.edu/~ghrist/preprints/networkcodingshort.pdf">Ghrist &amp; Hiraoka</a> — network robustness (Prop 11)</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/temporal-compression/ch-01/", label: "The Operator Dictionary" }}
+      next={{ href: "/reading/temporal-compression/ch-03/", label: "What Each Field Has" }}
+    />
+  </main>
+</Layout>

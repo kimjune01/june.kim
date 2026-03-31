@@ -1,0 +1,65 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Economics" favicon="💰">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>💰 Economics</h1>
+    <p class="text-gray-400 mb-2">Adam Smith, David Ricardo, Alfred Marshall (public domain) &middot; Wikipedia (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).</p>
+    <p class="text-gray-400 mb-6">Classical economics translated into runnable code and diagrams. Smith wrote for merchants, Ricardo for Parliament, Marshall for Cambridge students. These pages translate to Python and Scheme.</p>
+
+    <!-- SVG: Supply and demand curves crossing at equilibrium -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="330" y2="170" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="50" y1="170" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="190" y="195" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Quantity</text>
+        <text x="25" y="95" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90, 25, 95)">Price</text>
+        <!-- Demand curve (slopes down) -->
+        <line x1="70" y1="35" x2="310" y2="155" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="315" y="160" fill="#f59e0b" font-size="11" fill-opacity="0.8">D</text>
+        <!-- Supply curve (slopes up) -->
+        <line x1="70" y1="155" x2="310" y2="35" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <text x="315" y="40" fill="#60a5fa" font-size="11" fill-opacity="0.8">S</text>
+        <!-- Equilibrium point -->
+        <circle cx="190" cy="95" r="4" fill="#10b981" fill-opacity="0.8"/>
+        <text x="210" y="88" fill="#10b981" font-size="11" fill-opacity="0.8">equilibrium</text>
+        <!-- Dashed lines to axes -->
+        <line x1="190" y1="95" x2="190" y2="170" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <line x1="190" y1="95" x2="50" y2="95" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3" stroke-opacity="0.3"/>
+        <text x="190" y="183" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">Q*</text>
+        <text x="40" y="99" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">P*</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/economics/econ-01/", title: "Division of Labor", desc: "Specialization multiplies output: one worker makes one pin, ten workers make 4,800" },
+  { href: "/reading/economics/econ-02/", title: "Supply and Demand", desc: "Demand slopes down, supply slopes up, price settles where they cross" },
+  { href: "/reading/economics/econ-03/", title: "Comparative Advantage", desc: "Both countries gain from trade even when one is better at everything" },
+  { href: "/reading/economics/econ-04/", title: "Diminishing Returns", desc: "Each additional unit of input yields less additional output" },
+  { href: "/reading/economics/econ-05/", title: "Elasticity", desc: "How much quantity responds to a price change, and why it matters for revenue" },
+  { href: "/reading/economics/econ-06/", title: "Marginal Utility", desc: "Each additional unit is worth less than the last" },
+  { href: "/reading/economics/econ-07/", title: "Opportunity Cost", desc: "The cost of any choice is the best alternative you gave up" },
+  { href: "/reading/economics/econ-08/", title: "Market Equilibrium", desc: "Surplus drives price down, shortage drives price up, until the market clears" }
+]} icon="💰" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/">MIT 14.01 Microeconomics</a> · <a href="https://oyc.yale.edu/economics/econ-252">Yale ECON 252: Financial Markets (Shiller)</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; oligopoly, mechanism design, and auctions are applied game theory</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; expected utility and uncertainty</li>
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; empirical methods in economics use the same tools</li>
+      <li><a href="/reading/auction-theory/">🏷 Auction Theory</a> &mdash; the economics of market design</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

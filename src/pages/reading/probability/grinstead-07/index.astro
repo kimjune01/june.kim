@@ -1,0 +1,250 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 7 — Sums of Random Variables" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Sums of Random Variables</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When you add independent random variables, means add, variances add, and the distribution of the sum is the <strong>convolution</strong> of the individual distributions. The sum gets wider and more bell-shaped.</p>
+    </div>
+
+    <!-- 1. Convolution -->
+    <h3>Convolution</h3>
+    <p>If X and Y are independent discrete random variables, the PMF of Z = X + Y is the <strong>convolution</strong>: P(Z = z) = sum over k of P(X = k) P(Y = z - k). Each possible way the parts can add to z contributes to the total. This is why adding dice produces the familiar triangle-shaped distribution.</p>
+
+    <!-- SVG: Two distributions convolving into a third -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Distribution X (narrow, left) -->
+        <rect x="20" y="100" width="20" height="50" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <rect x="45" y="60" width="20" height="90" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+        <rect x="70" y="80" width="20" height="70" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="55" y="170" text-anchor="middle" fill="#3b82f6" font-size="11">X</text>
+        <line x1="20" y1="150" x2="90" y2="150" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Plus sign -->
+        <text x="115" y="115" text-anchor="middle" fill="currentColor" font-size="20" fill-opacity="0.4">+</text>
+
+        <!-- Distribution Y (narrow, middle) -->
+        <rect x="140" y="90" width="20" height="60" rx="2" fill="#f59e0b" fill-opacity="0.5"/>
+        <rect x="165" y="55" width="20" height="95" rx="2" fill="#f59e0b" fill-opacity="0.7"/>
+        <rect x="190" y="70" width="20" height="80" rx="2" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="175" y="170" text-anchor="middle" fill="#f59e0b" font-size="11">Y</text>
+        <line x1="140" y1="150" x2="210" y2="150" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Equals sign -->
+        <text x="240" y="115" text-anchor="middle" fill="currentColor" font-size="20" fill-opacity="0.4">=</text>
+
+        <!-- Convolution Z = X + Y (wider, shifted right) -->
+        <rect x="270" y="130" width="20" height="20" rx="2" fill="#4ade80" fill-opacity="0.3"/>
+        <rect x="295" y="100" width="20" height="50" rx="2" fill="#4ade80" fill-opacity="0.4"/>
+        <rect x="320" y="60" width="20" height="90" rx="2" fill="#4ade80" fill-opacity="0.5"/>
+        <rect x="345" y="35" width="20" height="115" rx="2" fill="#4ade80" fill-opacity="0.7"/>
+        <rect x="370" y="55" width="20" height="95" rx="2" fill="#4ade80" fill-opacity="0.5"/>
+        <rect x="395" y="85" width="20" height="65" rx="2" fill="#4ade80" fill-opacity="0.4"/>
+        <rect x="420" y="120" width="20" height="30" rx="2" fill="#4ade80" fill-opacity="0.3"/>
+        <text x="355" y="170" text-anchor="middle" fill="#4ade80" font-size="11">X + Y</text>
+        <line x1="270" y1="150" x2="440" y2="150" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+
+        <!-- Annotations -->
+        <text x="55" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">narrow</text>
+        <text x="175" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">narrow</text>
+        <text x="355" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">wider, shifted</text>
+
+        <!-- Title -->
+        <text x="260" y="18" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">Convolution: sum is wider and more centered</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Convolution: P(Z = z) = sum_k P(X = k) * P(Y = z - k)
+; Adding two dice: distribution of the sum
+
+(define (convolve pmf-x pmf-y max-x max-y)
+  ; Returns a list of (value . probability) for Z = X + Y
+  (let loop ((z 2) (result '()))
+    (if (> z (+ max-x max-y)) (reverse result)
+        (let inner ((k 1) (prob 0))
+          (if (> k max-x)
+              (loop (+ z 1) (cons (cons z prob) result))
+              (let ((y-val (- z k)))
+                (if (or (< y-val 1) (> y-val max-y))
+                    (inner (+ k 1) prob)
+                    (inner (+ k 1)
+                           (+ prob (* (pmf-x k) (pmf-y y-val)))))))))))
+
+; Fair die PMF
+(define (fair-die k)
+  (if (and (>= k 1) (<= k 6)) (/ 1.0 6) 0))
+
+(define two-dice (convolve fair-die fair-die 6 6))
+
+(display "Sum of two dice:") (newline)
+(for-each (lambda (pair)
+  (display "P(Z=") (display (car pair)) (display ") = ")
+  (display (cdr pair)) (newline))
+  two-dice)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Convolution: sum of two dice
+def convolve(pmf_x, pmf_y, max_x, max_y):
+    result = {}
+    for x in range(1, max_x + 1):
+        for y in range(1, max_y + 1):
+            z = x + y
+            result[z] = result.get(z, 0) + pmf_x(x) * pmf_y(y)
+    return result
+
+fair = lambda k: 1/6 if 1 <= k <= 6 else 0
+two_dice = convolve(fair, fair, 6, 6)
+
+for z in sorted(two_dice):
+    bar = "#" * int(two_dice[z] * 100)
+    print(f"P(Z={z:2d}) = {two_dice[z]:.4f} {bar}")
+`} />
+    </div>
+
+    <!-- 2. Means add -->
+    <h3>Means add</h3>
+    <p>E[X + Y] = E[X] + E[Y]. This is linearity of expectation from Ch 6, and it holds whether or not X and Y are independent. Roll two dice: E[X + Y] = 3.5 + 3.5 = 7. Roll a hundred dice: E[sum] = 350.</p>
+
+    <SchemeRepl client:load initialCode={`; E[X + Y] = E[X] + E[Y] -- always
+
+(define (expected-die)
+  (/ (+ 1 2 3 4 5 6) 6.0))
+
+(display "E[one die] = ") (display (expected-die)) (newline)
+(display "E[two dice] = ") (display (* 2 (expected-die))) (newline)
+(display "E[100 dice] = ") (display (* 100 (expected-die))) (newline)
+
+; Works for any random variables, not just dice
+; E[height + weight] = E[height] + E[weight]
+; even though height and weight are correlated
+(display "Linearity does not require independence.")
+`} />
+
+    <!-- 3. Variances add (when independent) -->
+    <h3>Variances add when independent</h3>
+    <p>Var(X + Y) = Var(X) + Var(Y), but only when X and Y are independent. If they are correlated, a covariance term appears: Var(X + Y) = Var(X) + Var(Y) + 2 Cov(X,Y). For independent variables, covariance is zero, so variances add cleanly.</p>
+
+    <SchemeRepl client:load initialCode={`; Var(X + Y) = Var(X) + Var(Y) when independent
+; Var(die) = E[X^2] - (E[X])^2 = 91/6 - 12.25 = 2.9167
+
+(define (var-die)
+  (let ((e-x (/ (+ 1 2 3 4 5 6) 6.0))
+        (e-x2 (/ (+ 1 4 9 16 25 36) 6.0)))
+    (- e-x2 (* e-x e-x))))
+
+(display "Var(one die) = ") (display (var-die)) (newline)
+(display "Var(two dice) = ") (display (* 2 (var-die))) (newline)
+(display "SD(two dice) = ") (display (sqrt (* 2 (var-die)))) (newline)
+(display "Var(100 dice) = ") (display (* 100 (var-die))) (newline)
+(display "SD(100 dice) = ") (display (sqrt (* 100 (var-die)))) (newline)
+
+; SD grows as sqrt(n), not n.
+; 100 dice: mean 350, SD ~17.
+; Relative spread shrinks: SD/mean -> 0 as n grows.
+; This is why averages get more predictable (Ch 8).
+`} />
+
+    <!-- 4. Verification by simulation -->
+    <h3>Verify by simulation</h3>
+    <p>Theory says: means add, variances add. Simulation confirms it. Roll two dice many times, compute the sample mean and variance of the sum, and check that they match the formulas.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify convolution properties by brute force
+; Enumerate all 36 outcomes of two dice
+
+(define (all-sums)
+  (let loop-x ((x 1) (sums '()))
+    (if (> x 6) sums
+        (let loop-y ((y 1) (s sums))
+          (if (> y 6) (loop-x (+ x 1) s)
+              (loop-y (+ y 1) (cons (+ x y) s)))))))
+
+(define sums (all-sums))
+(define n (length sums))
+
+(define (list-sum lst)
+  (if (null? lst) 0 (+ (car lst) (list-sum (cdr lst)))))
+
+(define mean (/ (list-sum sums) n))
+(define var-val
+  (/ (list-sum (map (lambda (s) (* (- s mean) (- s mean))) sums)) n))
+
+(display "Enumerated mean of X+Y: ") (display (* 1.0 mean)) (newline)
+(display "Expected (3.5 + 3.5):   7.0") (newline)
+(display "Enumerated variance:     ") (display (* 1.0 var-val)) (newline)
+(display "Expected (2.917+2.917):  5.833")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify by enumeration
+sums = [x + y for x in range(1, 7) for y in range(1, 7)]
+mean = sum(sums) / len(sums)
+var = sum((s - mean)**2 for s in sums) / len(sums)
+
+print(f"Mean of X+Y:  {mean:.4f}  (expected 7.0)")
+print(f"Var of X+Y:   {var:.4f}  (expected 5.833)")
+print(f"SD of X+Y:    {var**0.5:.4f}")
+`} />
+    </div>
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Notation</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P(Z = z) = &sum; P(X=k)P(Y=z-k)</td><td class="pr-4 text-green-300">(convolve pmf-x pmf-y ...)</td><td class="font-sans">Convolution of PMFs</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E[X+Y] = E[X]+E[Y]</td><td class="pr-4 text-green-300">(+ mu-x mu-y)</td><td class="font-sans">Means always add</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Var(X+Y) = Var(X)+Var(Y)</td><td class="pr-4 text-green-300">(+ var-x var-y)</td><td class="font-sans">Variances add (if independent)</td></tr>
+          <tr><td class="py-2 pr-4">Cov(X,Y)</td><td class="pr-4 text-green-300">E[(X-&#x03BC;x)(Y-&#x03BC;y)]</td><td class="font-sans">Covariance: dependence correction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-06/">&#x1F3B0; Ch 6</a> &mdash; expected value and variance (prerequisites for this chapter)</li>
+      <li><a href="/reading/probability/grinstead-05/">&#x1F3B0; Ch 5</a> &mdash; the named distributions that get convolved here</li>
+      <li><a href="/reading/probability/grinstead-08/">&#x1F3B0; Ch 8</a> &mdash; law of large numbers (why sums of many variables become predictable)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Convolution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Convolution</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Sum_of_random_variables"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Sum of random variables</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Covariance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Covariance</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Grinstead &amp; Snell</a>, Chapter 7.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-06/", label: "Expected Value" }} next={{ href: "/reading/probability/grinstead-08/", label: "Law of Large Numbers" }} />
+
+  </main>
+</Layout>

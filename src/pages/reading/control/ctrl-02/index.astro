@@ -1,0 +1,113 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Control Ch.2 — Transfer Functions" favicon="🎛">
+  <main>
+
+    <a href="/reading/control/" class="text-sm mb-4 inline-block">&larr; back to Control Theory</a>
+
+    <h1>Transfer Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia &middot; <a href="https://en.wikipedia.org/wiki/Transfer_function"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Transfer function</a> &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>Laplace transform</strong> converts a differential equation into an algebraic one. The <strong>transfer function</strong> H(s) = Y(s)/U(s) captures the input-output relationship. Poles determine stability; zeros shape the response.</p>
+    </div>
+
+    <h3>The Laplace domain</h3>
+    <p>A linear time-invariant (LTI) system is described by a differential equation. The <a href="https://en.wikipedia.org/wiki/Laplace_transform"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Laplace transform</a> replaces derivatives with powers of the complex variable s. Differentiation becomes multiplication: if y(t) has transform Y(s), then y'(t) has transform sY(s). This turns calculus into algebra.</p>
+
+    <h3>Poles and zeros</h3>
+    <p>The transfer function is a ratio of polynomials in s. The roots of the numerator are <strong>zeros</strong>: frequencies where the output vanishes. The roots of the denominator are <strong>poles</strong>: frequencies where the output blows up. Poles in the left half-plane decay. Poles in the right half-plane grow. Poles on the imaginary axis oscillate forever.</p>
+
+    <h3>Step response</h3>
+    <p>Apply a unit step input (off to on at t=0) and watch the output. The step response reveals rise time, overshoot, settling time, and steady-state error. These four numbers summarize the system's behavior for most practical purposes.</p>
+
+    <!-- SVG: Step response curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 250" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="200" x2="380" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="50" y1="20" x2="50" y2="200" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="380" y="215" fill="currentColor" font-size="11" fill-opacity="0.4">t</text>
+        <text x="35" y="20" fill="currentColor" font-size="11" fill-opacity="0.4">y</text>
+        <!-- Steady state line -->
+        <line x1="50" y1="60" x2="380" y2="60" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="385" y="64" fill="currentColor" font-size="9" fill-opacity="0.3">setpoint</text>
+        <!-- Step response curve (underdamped) -->
+        <path d="M 50 200 L 70 200 Q 100 200 120 80 Q 135 20 160 50 Q 180 75 200 55 Q 220 40 240 58 Q 255 68 270 60 Q 285 55 300 59 Q 315 62 330 60 L 380 60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <!-- Rise time -->
+        <line x1="120" y1="205" x2="120" y2="80" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="2,2"/>
+        <text x="95" y="220" fill="currentColor" font-size="9" fill-opacity="0.4">rise time</text>
+        <!-- Overshoot -->
+        <line x1="135" y1="20" x2="165" y2="20" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="150" y1="20" x2="150" y2="60" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="2,2"/>
+        <text x="155" y="15" fill="#f59e0b" font-size="9" fill-opacity="0.6">overshoot</text>
+        <!-- Settling time -->
+        <line x1="300" y1="205" x2="300" y2="60" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="2,2"/>
+        <text x="280" y="220" fill="currentColor" font-size="9" fill-opacity="0.4">settling</text>
+      </svg>
+    </div>
+
+    <h3>First-order and second-order systems</h3>
+    <p>A first-order system has one pole: H(s) = 1/(s + a). It rises exponentially with time constant 1/a. No overshoot. A second-order system has two poles: H(s) = wn^2/(s^2 + 2*zeta*wn*s + wn^2). The damping ratio zeta controls whether the response is overdamped (zeta greater than 1), critically damped (zeta = 1), or underdamped (zeta less than 1, the oscillating case).</p>
+
+    <SchemeRepl client:load initialCode={`; Simulate a first-order step response: y(t) = 1 - e^(-t/tau)
+; Time constant tau = 1/a determines how fast it responds
+
+(define tau 2.0)
+(define dt 0.5)
+
+(define (exp-approx x n)
+  ; Taylor series approximation of e^x
+  (if (= n 0) 1.0
+    (+ 1.0
+       (let loop ((k 1) (term 1.0) (sum 0.0))
+         (if (> k n) sum
+           (let ((next-term (/ (* term x) k)))
+             (loop (+ k 1) next-term (+ sum next-term))))))))
+
+(define (step-response t)
+  (- 1.0 (exp-approx (- (/ t tau)) 15)))
+
+(display "First-order step response (tau=2):") (newline)
+(let loop ((t 0.0))
+  (if (> t 10.0) 'done
+    (begin
+      (display "  t=") (display t)
+      (display "  y=") (display (step-response t))
+      (newline)
+      (loop (+ t dt)))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+# First-order step response: y(t) = 1 - e^(-t/tau)
+tau = 2.0
+dt = 0.5
+
+print("First-order step response (tau=2):")
+t = 0.0
+while t <= 10.0:
+    y = 1.0 - math.exp(-t / tau)
+    bar = "#" * int(y * 40)
+    print(f"  t={t:4.1f}  y={y:.3f}  {bar}")
+    t += dt
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://en.wikipedia.org/wiki/Laplace_transform"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Laplace transform</a> &#x2014; the mathematical tool behind transfer functions</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/control/ctrl-01/", label: "Feedback" }} next={{ href: "/reading/control/ctrl-03/", label: "PID Control" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,263 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Nordstrom §3.1 — Repeated Games" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Repeated Games</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> §3.1 · <a href="https://nordstrommath.com/IntroGameTheory/S_IntroRepeated.html">nordstrommath.com</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Play the same game many times. If an equilibrium exists, play it every round (pure strategy). If not, <strong>mix</strong>: assign probabilities to your strategies so your opponent cannot exploit any pattern.</p>
+    </div>
+
+    <!-- 1. Pure vs mixed in repeated play -->
+    <h3>Pure strategy in repeated play</h3>
+    <p>When a game has an equilibrium point, the optimal repeated strategy is simple: play the equilibrium every single round. There is no reason to vary. The equilibrium is already the best response to the opponent's best response.</p>
+
+    <!-- SVG: Timeline showing repeated game iterations -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline -->
+        <line x1="30" y1="80" x2="410" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Round markers -->
+        <circle cx="60" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="130" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="200" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="270" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="340" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Round labels -->
+        <text x="60" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=1</text>
+        <text x="130" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=2</text>
+        <text x="200" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=3</text>
+        <text x="270" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=4</text>
+        <text x="340" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=5</text>
+        <!-- Dots for continuation -->
+        <text x="390" y="84" fill="currentColor" font-size="14" fill-opacity="0.4">...</text>
+        <!-- P1 choices (top) - all same for pure -->
+        <text x="60" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="130" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="200" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="270" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="340" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="25" y="55" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.5">P1</text>
+        <!-- P2 choices (bottom) - all same for pure -->
+        <text x="60" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="130" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="200" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="270" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="340" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="25" y="135" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">P2</text>
+        <!-- Label -->
+        <text x="220" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">pure strategy: same equilibrium choice every round</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Game with equilibrium: play it every round
+; Matrix:  [[-1  1]
+;           [ 0  2]]
+; Equilibrium at (1,0) with value 0
+
+(define game-with-eq '((-1 1) (0 2)))
+
+; Pure strategy: always play equilibrium
+(define (pure-repeated game strategy rounds)
+  (let loop ((t 1) (total 0))
+    (if (> t rounds) total
+      (let* ((r (car strategy))
+             (c (cadr strategy))
+             (payoff (list-ref (list-ref game r) c)))
+        (loop (+ t 1) (+ total payoff))))))
+
+(define total (pure-repeated game-with-eq '(1 0) 10))
+(display "10 rounds of pure (R2,C1): total = ") (display total) (newline)
+(display "Average per round: ") (display (/ total 10))
+`} />
+
+    <!-- 2. Mixed strategy for no-equilibrium games -->
+    <h3>Mixed strategy: when there is no equilibrium</h3>
+    <p>Without an equilibrium, playing the same strategy every round is exploitable. Instead, randomize. A mixed strategy assigns a probability to each pure strategy. Over many rounds, the expected payoff converges to a predictable value, even though individual outcomes are random. This cycle of perceiving outcomes, updating beliefs, and adjusting strategy is the same feedback loop that appears in <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the natural framework</a> for information processing.</p>
+
+    <!-- SVG: Timeline with varying choices -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 160" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline -->
+        <line x1="30" y1="80" x2="410" y2="80" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Round markers -->
+        <circle cx="60" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="130" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="200" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="270" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="340" cy="80" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Round labels -->
+        <text x="60" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=1</text>
+        <text x="130" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=2</text>
+        <text x="200" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=3</text>
+        <text x="270" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=4</text>
+        <text x="340" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">t=5</text>
+        <text x="390" y="84" fill="currentColor" font-size="14" fill-opacity="0.4">...</text>
+        <!-- P1 choices (top) - varying for mixed -->
+        <text x="60" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R1</text>
+        <text x="130" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="200" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R1</text>
+        <text x="270" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R1</text>
+        <text x="340" y="55" text-anchor="middle" fill="#60a5fa" font-size="11">R2</text>
+        <text x="25" y="55" text-anchor="end" fill="#60a5fa" font-size="9" fill-opacity="0.5">P1</text>
+        <!-- P2 choices (bottom) - varying -->
+        <text x="60" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C2</text>
+        <text x="130" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="200" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="270" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C2</text>
+        <text x="340" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">C1</text>
+        <text x="25" y="135" text-anchor="end" fill="#f59e0b" font-size="9" fill-opacity="0.5">P2</text>
+        <!-- Label -->
+        <text x="220" y="15" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">mixed strategy: randomize to prevent exploitation</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; No equilibrium: must mix
+; Matrix: [[1  0]
+;          [-1  2]]
+; No saddle point (maximin=-1, minimax=1)
+
+(define no-eq-game '((1 0) (-1 2)))
+
+; Simulate mixed strategy with pseudo-random choices
+; P1 plays R1 with probability p, R2 with (1-p)
+; Use a simple LCG for deterministic "randomness"
+(define seed 42)
+(define (next-rand)
+  (set! seed (modulo (+ (* 1103515245 seed) 12345) 2147483648))
+  (/ (modulo seed 1000) 1000))
+
+(define (mixed-play game p1-prob p2-prob rounds)
+  (let loop ((t 0) (total 0))
+    (if (>= t rounds) (/ total rounds)
+      (let* ((r1 (next-rand))
+             (r2 (next-rand))
+             (row (if (< r1 p1-prob) 0 1))
+             (col (if (< r2 p2-prob) 0 1))
+             (payoff (list-ref (list-ref game row) col)))
+        (loop (+ t 1) (+ total payoff))))))
+
+; P1 mixes 60/40, P2 mixes 50/50
+(display "Avg payoff (100 rounds): ")
+(display (mixed-play no-eq-game 0.6 0.5 100)) (newline)
+(display "Avg payoff (1000 rounds): ")
+(display (mixed-play no-eq-game 0.6 0.5 1000))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simulating mixed strategies in repeated play
+import random
+random.seed(42)
+
+game = [[1, 0], [-1, 2]]
+
+def mixed_play(game, p1_prob, p2_prob, rounds):
+    total = 0
+    for _ in range(rounds):
+        row = 0 if random.random() < p1_prob else 1
+        col = 0 if random.random() < p2_prob else 1
+        total += game[row][col]
+    return total / rounds
+
+print(f"Avg (100 rounds):  {mixed_play(game, 0.6, 0.5, 100):.3f}")
+print(f"Avg (1000 rounds): {mixed_play(game, 0.6, 0.5, 1000):.3f}")
+`} />
+    </div>
+
+    <!-- 3. Rock-Paper-Scissors -->
+    <h3>Rock-Paper-Scissors: the classic mixed game</h3>
+    <p>RPS has no pure equilibrium. Any fixed strategy is exploitable. The optimal mixed strategy is uniform: play each option with probability 1/3. This makes your opponent indifferent, so they cannot gain an edge no matter what they do.</p>
+
+    <SchemeRepl client:load initialCode={`; Rock-Paper-Scissors: optimal mix is uniform (1/3 each)
+; Payoff matrix (row player):
+;          Rock  Paper  Scissors
+; Rock       0    -1      1
+; Paper      1     0     -1
+; Scissors  -1     1      0
+
+(define rps '((0 -1 1) (1 0 -1) (-1 1 0)))
+
+; Expected payoff of uniform vs uniform
+(define (ev-uniform game n)
+  (let ((size (length game)))
+    (/ (apply +
+      (map (lambda (row)
+        (apply + row))
+      game))
+    (* size size))))
+
+(display "Uniform vs uniform EV: ")
+(display (ev-uniform rps 3)) (newline)
+; 0 — perfectly fair when both play optimally
+
+; But if P2 favors Rock (0.5, 0.25, 0.25):
+(define (ev-vs-biased game p1-probs p2-probs)
+  (apply +
+    (let rloop ((rows game) (rps p1-probs) (acc '()))
+      (if (null? rows) acc
+        (rloop (cdr rows) (cdr rps)
+          (append acc
+            (map (lambda (cell cp) (* (car rps) cp cell))
+              (car rows) p2-probs)))))))
+
+(display "Uniform vs biased-Rock: ")
+(display (ev-vs-biased rps '(0.333 0.334 0.333) '(0.5 0.25 0.25)))
+; Slightly positive — exploiting the bias
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Concept</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Pure strategy</td><td class="pr-4 text-green-300">always same row/col</td><td class="font-sans">Play the same action every round</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Mixed strategy</td><td class="pr-4 text-green-300">(p, 1-p)</td><td class="font-sans">Probability distribution over actions</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Expected value</td><td class="pr-4 text-green-300">(mixed-play ...)</td><td class="font-sans">Average payoff over many rounds</td></tr>
+          <tr><td class="py-2 pr-4">Optimal mix</td><td class="pr-4 text-green-300">(1/3 1/3 1/3)</td><td class="font-sans">Makes opponent indifferent</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Nordstrom series</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-07/">🍞 §2.5 Zero-Sum Summary</a> — previous section</li>
+      <li><a href="/reading/game-theory/nordstrom-09/">🍞 §3.2 Mixed Strategies: Graphical</a> — next section</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Repeated_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Repeated game</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Rock_paper_scissors"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rock-Paper-Scissors</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Strategy_(game_theory)#Mixed_strategy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mixed strategy</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Source: <a href="https://nordstrommath.com/IntroGameTheory/S_IntroRepeated.html">Nordstrom §3.1</a>. Licensed CC BY-SA 4.0.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-07/", label: "Zero-Sum Summary" }} next={{ href: "/reading/game-theory/nordstrom-09/", label: "Mixed: Graphical" }} />
+
+  </main>
+</Layout>

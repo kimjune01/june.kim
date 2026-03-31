@@ -1,0 +1,59 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Effects.lean — Boolean effect embedding" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Effects.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Effects.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Embeds Boolean contracts as &#123;0,1&#125;-valued effects &mdash; the simplest case of effectus theory (Cho and Jacobs, 2015), bridging contracts to the effect algebra world. Another entry in the <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>cross-community translation table</a>.</p>
+    </div>
+
+    <h3>Effect</h3>
+    <p>An effect on type b: a function assigning a natural number value to each element, bounded above. When the bound is 1, this is a Boolean predicate (true/false). This approximates the [0,1]-valued effects of Cho-Jacobs using natural numbers.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">structure</span> <span class="text-green-300">Effect</span> (&beta; : Type) <span class="text-blue-300">where</span>
+  eval : &beta; &rarr; Nat
+  bound : Nat
+  bounded : &forall; b : &beta;, eval b &le; bound</code></pre>
+
+    <h3>booleanEffect</h3>
+    <p>Embed a decidable Boolean contract (<code>b &rarr; Bool</code>) as a &#123;0,1&#125;-valued effect. True maps to 1, false maps to 0, bound is 1.</p>
+
+    <h3>effectPreserving</h3>
+    <p>A kernel preserves an effect if every reachable output has effect value equal to the bound (fully satisfied). For Boolean effects this means <code>eval b = 1</code> for all outputs &mdash; exactly ContractPreserving.</p>
+
+    <h3>boolean_effect_bridge</h3>
+    <p>The key equivalence: for Boolean effects, <code>effectPreserving</code> is exactly <code>ContractPreserving</code>. Boolean contracts are the &#123;0,1&#125; case of effect algebra predicates.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">boolean_effect_bridge</span> [Monad M] [Support M]
+    &#123;f : Kernel M &alpha; &beta;&#125; &#123;Q : &beta; &rarr; Bool&#125;
+    : effectPreserving f (booleanEffect Q) &harr;
+      ContractPreserving f (<span class="text-blue-300">fun</span> b =&gt; Q b = true)</code></pre>
+
+    <h3>Effect.top / Effect.bot / Effect.and</h3>
+    <p>Basic effect algebra operations: top (always 1), bottom (always 0), conjunction (min of two effects). These are the building blocks, though the full Cho-Jacobs effect algebra (partial addition, orthocomplement) is not formalized here.</p>
+
+    <h3>effectPreserving_comp</h3>
+    <p>Closure under precomposition: if g preserves an effect, then <code>f;g</code> preserves it for any f. Only the last kernel's effect matters.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-core/">Hoare/Core.lean</a> &mdash; imported; effects are checked via the same support quantification as triples</li>
+      <li><a href="/reading/the-natural-framework-lean/contracts/">Contracts.lean</a> &mdash; ContractPreserving is the bridge target</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-graded/">Hoare/Graded.lean</a> &mdash; grades are a different quantitative extension of triples</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cho-jacobs-2015/">🍞 Cho-Jacobs 2015</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-graded/", label: "Hoare/Graded.lean · 19 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-static/", label: "Hoare/Static.lean · 21 of 25" }} />
+  </main>
+</Layout>

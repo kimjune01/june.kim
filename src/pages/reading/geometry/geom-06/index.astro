@@ -1,0 +1,252 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.6 — Differential Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">← back to geometry</a>
+
+    <h1>Differential Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia · <a href="https://en.wikipedia.org/wiki/Differential_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Differential geometry</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Calculus meets geometry. A curve has <strong>curvature</strong> (how fast it turns). A surface has <strong>Gaussian curvature</strong> (how it bends in two directions at once). Geodesics are the straightest paths on curved surfaces. General relativity is differential geometry applied to spacetime.</p>
+    </div>
+
+    <!-- 1. Curves and curvature -->
+    <h3>Curves and curvature</h3>
+    <p>A plane curve can be parameterized as (x(t), y(t)). Its <strong>curvature</strong> kappa measures how quickly the tangent direction changes. For a circle of radius R, kappa = 1/R everywhere. For a straight line, kappa = 0. The <strong>osculating circle</strong> at each point is the best-fitting circle, and its radius is 1/kappa.</p>
+
+    <!-- SVG: Curve with osculating circle showing curvature -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Curve (a smooth curve bending to the right) -->
+        <path d="M 40,220 C 80,220 120,180 160,130 S 240,40 320,60" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+        <!-- Point on curve where we show curvature -->
+        <circle cx="160" cy="130" r="3" fill="#f59e0b" fill-opacity="0.8"/>
+        <!-- Osculating circle at that point -->
+        <!-- Center of osculating circle is along the normal -->
+        <circle cx="235" cy="175" r="85" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3"/>
+        <!-- Radius line from center to point -->
+        <line x1="160" y1="130" x2="235" y2="175" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Label R -->
+        <text x="205" y="145" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.5" font-style="italic">R</text>
+        <!-- Tangent line at the point -->
+        <line x1="120" y1="160" x2="200" y2="100" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="210" y="95" fill="#34d399" font-size="10" fill-opacity="0.5">tangent</text>
+        <!-- Curvature label -->
+        <text x="290" y="175" fill="#f59e0b" font-size="11" fill-opacity="0.5">kappa = 1/R</text>
+        <!-- Caption -->
+        <text x="200" y="250" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">The osculating circle has radius R = 1/kappa.</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Curvature of a parameterized curve
+; kappa = |x'y'' - y'x''| / (x'^2 + y'^2)^(3/2)
+
+; For a circle of radius R: x(t) = R*cos(t), y(t) = R*sin(t)
+; x' = -R*sin(t), y' = R*cos(t)
+; x'' = -R*cos(t), y'' = -R*sin(t)
+; kappa = |(-R*sin)(- R*sin) - (R*cos)(-R*cos)| / R^3
+;       = |R^2 sin^2 + R^2 cos^2| / R^3
+;       = R^2 / R^3 = 1/R
+
+(define (curvature-circle r)
+  (/ 1 r))
+
+(display "Curvature of circle R=5: ")
+(display (curvature-circle 5))
+(newline)
+
+(display "Curvature of circle R=10: ")
+(display (curvature-circle 10))
+(newline)
+
+; Bigger radius = smaller curvature = less bending
+(display "Curvature of circle R=100: ")
+(display (curvature-circle 100))
+(newline)
+
+; For a parabola y = x^2 at x=0:
+; Parameterize as (t, t^2): x'=1, y'=2t, x''=0, y''=2
+; kappa = |1*2 - 2t*0| / (1 + 4t^2)^(3/2)
+; At t=0: kappa = 2
+(display "Curvature of y=x^2 at origin: ")
+(display 2)
+(newline)
+
+(display "Osculating circle radius at origin: ")
+(display (/ 1 2))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def curvature_at(xp, yp, xpp, ypp):
+    """Curvature from first and second derivatives."""
+    num = abs(xp * ypp - yp * xpp)
+    den = (xp**2 + yp**2) ** 1.5
+    return num / den
+
+# Circle of radius 5: x'=-5sin, y'=5cos, x''=-5cos, y''=-5sin
+# At t=0: x'=0, y'=5, x''=-5, y''=0
+k = curvature_at(0, 5, -5, 0)
+print(f"Curvature of circle R=5: {k}")
+print(f"Osculating radius: {1/k}")
+
+# Parabola y=x^2 at origin: x'=1, y'=0, x''=0, y''=2
+k2 = curvature_at(1, 0, 0, 2)
+print(f"Curvature of y=x^2 at origin: {k2}")
+print(f"Osculating radius: {1/k2}")
+`} />
+    </div>
+
+    <!-- 2. Surfaces and Gaussian curvature -->
+    <h3>Gaussian curvature</h3>
+    <p>At each point on a surface, slice it with planes through the normal. Each slice gives a curve with some curvature. The maximum and minimum curvatures are the <strong>principal curvatures</strong> k1 and k2. Their product K = k1 * k2 is the <strong>Gaussian curvature</strong>. K &gt; 0 means the surface bends the same way in all directions (sphere). K &lt; 0 means it bends opposite ways (saddle). K = 0 means it's flat or cylindrical.</p>
+
+    <SchemeRepl client:load initialCode={`; Gaussian curvature K = k1 * k2
+
+; Sphere of radius R: k1 = k2 = 1/R
+(define (gaussian-sphere r)
+  (/ 1 (* r r)))
+
+(display "Gaussian curvature of sphere R=1: ")
+(display (gaussian-sphere 1))
+(newline)
+
+(display "Gaussian curvature of sphere R=5: ")
+(display (gaussian-sphere 5))
+(newline)
+
+; Cylinder: k1 = 1/R, k2 = 0 (flat along the axis)
+(define (gaussian-cylinder r)
+  (* (/ 1 r) 0))
+
+(display "Gaussian curvature of cylinder: ")
+(display (gaussian-cylinder 5))
+(newline)
+
+; Saddle point: k1 = a, k2 = -a
+(define (gaussian-saddle a)
+  (* a (- a)))
+
+(display "Gaussian curvature of saddle (a=1): ")
+(display (gaussian-saddle 1))
+(newline)
+
+; Plane: k1 = k2 = 0
+(display "Gaussian curvature of plane: ")
+(display 0)
+`} />
+
+    <!-- 3. Geodesics -->
+    <h3>Geodesics</h3>
+    <p>A <strong>geodesic</strong> is the shortest path between two points on a surface. On a plane, geodesics are straight lines. On a sphere, geodesics are great circles. On a saddle, geodesics curve in surprising ways. In general relativity, objects in free fall follow geodesics through curved spacetime.</p>
+
+    <SchemeRepl client:load initialCode={`; Geodesic on a sphere = great-circle arc
+; Already computed in Ch.5 with the haversine formula
+
+(define pi 3.141592653589793)
+(define (deg->rad d) (* d (/ pi 180)))
+
+(define (great-circle-distance lat1 lon1 lat2 lon2 r)
+  (let ((dlat (deg->rad (- lat2 lat1)))
+        (dlon (deg->rad (- lon2 lon1)))
+        (rlat1 (deg->rad lat1))
+        (rlat2 (deg->rad lat2)))
+    (let ((a (+ (* (sin (/ dlat 2)) (sin (/ dlat 2)))
+               (* (cos rlat1) (cos rlat2)
+                  (sin (/ dlon 2)) (sin (/ dlon 2))))))
+      (* r 2 (asin (sqrt a))))))
+
+(display "NYC to London (geodesic, km): ")
+(display (great-circle-distance 40.7 -74.0 51.5 -0.1 6371))
+(newline)
+
+; Straight-line (through the Earth) would be shorter
+; but not a valid path on the surface.
+; The geodesic IS the shortest surface path.
+
+; On a flat plane, geodesic = straight line = Euclidean distance
+(define (flat-distance x1 y1 x2 y2)
+  (sqrt (+ (* (- x2 x1) (- x2 x1))
+           (* (- y2 y1) (- y2 y1)))))
+
+(display "Flat geodesic (0,0) to (3,4): ")
+(display (flat-distance 0 0 3 4))
+`} />
+
+    <!-- 4. Theorema Egregium and Gauss-Bonnet -->
+    <h3>Theorema Egregium</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gauss</a> proved that Gaussian curvature depends only on the <strong>metric</strong> (how you measure distances on the surface), not on how the surface sits in space. A cylinder has K = 0 because you can unroll it flat without stretching. A sphere has K &gt; 0 and cannot be flattened, which is why every flat map of the Earth distorts something.</p>
+
+    <SchemeRepl client:load initialCode={`; Theorema Egregium consequence:
+; You cannot flatten a sphere without distortion.
+; Map projections trade off different distortions.
+
+; Mercator projection: preserves angles, distorts area
+(define (mercator lat lon)
+  (let ((x (deg->rad lon))
+        (y (log (/ (+ 1 (sin (deg->rad lat)))
+                   (cos (deg->rad lat))))))
+    (list x y)))
+
+(define pi 3.141592653589793)
+(define (deg->rad d) (* d (/ pi 180)))
+
+; Compare areas at different latitudes
+; Mercator scale factor at latitude phi = 1/cos(phi)
+(define (mercator-scale lat)
+  (/ 1 (cos (deg->rad lat))))
+
+(display "Mercator scale at equator: ")
+(display (mercator-scale 0))
+(newline)
+
+(display "Mercator scale at 60N: ")
+(display (mercator-scale 60))
+(newline)
+
+(display "Mercator scale at 80N: ")
+(display (mercator-scale 80))
+(newline)
+
+; Greenland looks as big as Africa on Mercator,
+; but Africa is 14x larger.
+(display "Scale ratio 80N/equator: ")
+(display (mercator-scale 80))
+`} />
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-11/">&#8747; Calculus Ch.11</a> — partial derivatives: curvature requires derivatives of multivariable functions</li>
+      <li><a href="/reading/real-analysis/lebl-08/">&#8734; Analysis Ch.8</a> — metric spaces: the intrinsic distance on a surface defines a metric</li>
+    
+      <li><a href="/reading/calculus/calc-14/">∫ Calculus Ch.14</a> &mdash; line and surface integrals live on manifolds</li>
+      <li><a href="/reading/real-analysis/lebl-08/">∞ Real Analysis Ch.8</a> &mdash; metric spaces generalize the geometry of manifolds</li>
+      <li><a href="/reading/physics/crowell-10/">⚛ Physics Ch.10</a> &mdash; general relativity is physics on a curved manifold</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Differential_geometry"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Differential geometry</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Curvature"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curvature</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gaussian_curvature"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Gaussian curvature</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Geodesic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Geodesic</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Theorema_Egregium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Theorema Egregium</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-05/", label: "Non-Euclidean Geometry" }} />
+
+  </main>
+</Layout>

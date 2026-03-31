@@ -1,0 +1,68 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Introduction to Probability" favicon="🎰">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">← back to reading</a>
+
+    <h1>🎰 Introduction to Probability</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Grinstead &amp; Snell's Introduction to Probability</a>, licensed <a href="https://www.gnu.org/licenses/fdl-1.3.html">GFDL</a>.</p>
+    <p class="text-gray-400 mb-6">If a paper page uses distributions, expectations, or Markov chains and you want the ground-level definitions, start here.</p>
+
+    <!-- SVG: Probability distribution — 5 bars summing to 1 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 160" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axis -->
+        <line x1="40" y1="130" x2="290" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="130" x2="40" y2="15" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Y-axis tick: 1 -->
+        <text x="35" y="19" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <!-- Bars: heights proportional to probabilities (0.35, 0.25, 0.20, 0.12, 0.08) -->
+        <rect x="55" y="28" width="36" height="102" fill="#60a5fa" fill-opacity="0.35" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5" rx="1"/>
+        <text x="73" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.35</text>
+        <rect x="100" y="57" width="36" height="73" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5" rx="1"/>
+        <text x="118" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.25</text>
+        <rect x="145" y="72" width="36" height="58" fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5" rx="1"/>
+        <text x="163" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.20</text>
+        <rect x="190" y="95" width="36" height="35" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5" rx="1"/>
+        <text x="208" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.12</text>
+        <rect x="235" y="107" width="36" height="23" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5" rx="1"/>
+        <text x="253" y="145" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0.08</text>
+        <!-- Sum label -->
+        <text x="165" y="12" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">sum = 1</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/probability/grinstead-01/", title: "Discrete Probability", desc: "Sample spaces, events, and assigning probabilities to outcomes you can count" },
+  { href: "/reading/probability/grinstead-02/", title: "Continuous Probability", desc: "When outcomes are real numbers, probabilities are areas under curves" },
+  { href: "/reading/probability/grinstead-03/", title: "Combinatorics", desc: "Counting arrangements: permutations, combinations, binomial coefficients" },
+  { href: "/reading/probability/grinstead-04/", title: "Conditional Probability", desc: "P(A|B) = P(A and B) / P(B), and why Bayes' theorem follows" },
+  { href: "/reading/probability/grinstead-05/", title: "Distributions", desc: "Binomial, Poisson, geometric, normal: the named distributions and when they arise" },
+  { href: "/reading/probability/grinstead-06/", title: "Expected Value", desc: "The weighted average of outcomes, and variance as spread around it" },
+  { href: "/reading/probability/grinstead-07/", title: "Sums of Random Variables", desc: "Add independent random variables: means add, variances add, distributions convolve" },
+  { href: "/reading/probability/grinstead-08/", title: "Law of Large Numbers", desc: "Averages converge to the expected value as sample size grows" },
+  { href: "/reading/probability/grinstead-09/", title: "Central Limit Theorem", desc: "Sums of many independent variables approach a normal distribution" },
+  { href: "/reading/probability/grinstead-10/", title: "Generating Functions", desc: "Encode a distribution as a polynomial, then multiply polynomials to convolve" },
+  { href: "/reading/probability/grinstead-11/", title: "Markov Chains", desc: "Memoryless state machines: the next state depends only on the current one" },
+  { href: "/reading/probability/grinstead-12/", title: "Random Walks", desc: "Step left or right with equal probability: will you return to the origin?" }
+]} icon="🎰" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/">MIT 6.041SC Probabilistic Systems Analysis</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/statistics/">📊 Statistics</a> &mdash; probability distributions reappear as inference tools</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; entropy is expected surprise over a probability distribution</li>
+      <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> &mdash; Bayesian models, Gaussian processes, and sampling</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; mixed strategies are probability distributions over actions</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

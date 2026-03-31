@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="Scheme in 5 Minutes" favicon="🟢">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading list</a>
+
+    <h1>Scheme in 5 Minutes</h1>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Everything is an expression. Parentheses are function calls. That's it.</p>
+    </div>
+
+    <!-- SVG: anatomy of a Scheme expression -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 100" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- The expression -->
+        <text x="160" y="35" text-anchor="middle" fill="currentColor" font-size="18">(  <tspan fill="#60a5fa">+</tspan>   <tspan fill="#34d399">3</tspan>   <tspan fill="#34d399">4</tspan>  )</text>
+        <!-- Annotation arrows -->
+        <line x1="120" y1="45" x2="120" y2="65" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="120" y="78" text-anchor="middle" fill="#60a5fa" font-size="9">operator</text>
+        <line x1="170" y1="45" x2="170" y2="60" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="200" y1="45" x2="200" y2="60" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="185" y="78" text-anchor="middle" fill="#34d399" font-size="9">operands</text>
+        <!-- Result -->
+        <text x="270" y="35" text-anchor="middle" fill="currentColor" font-size="14" fill-opacity="0.4">=  7</text>
+      </svg>
+    </div>
+
+    <!-- 1. Expressions -->
+    <h3>Expressions</h3>
+    <p>Every Scheme program is an expression. An expression in parentheses calls a function: the first element is the function, the rest are arguments. Nesting works the way you'd expect.</p>
+
+    <SchemeRepl client:load initialCode={`(+ 1 2)
+`} />
+
+    <SchemeRepl client:load initialCode={`(* 3 4)
+`} />
+
+    <SchemeRepl client:load initialCode={`; Nesting: (2 * 3) + 1
+(+ (* 2 3) 1)
+`} />
+
+    <!-- 2. Define -->
+    <h3>Define</h3>
+    <p>Use <code>define</code> to bind a name to a value or to define a function.</p>
+
+    <SchemeRepl client:load initialCode={`(define x 5)
+(display x)
+`} />
+
+    <SchemeRepl client:load initialCode={`(define (square x) (* x x))
+
+(display (square 5))
+`} />
+
+    <!-- 3. Lists -->
+    <h3>Lists</h3>
+    <p>Lists are the core data structure. Quote a list with <code>'</code> to prevent evaluation. <code>car</code> returns the first element, <code>cdr</code> returns the rest, <code>cons</code> adds an element to the front.</p>
+
+    <SchemeRepl client:load initialCode={`(display '(1 2 3)) (newline)
+
+(display (car '(1 2 3))) (newline)
+
+(display (cdr '(1 2 3))) (newline)
+
+(display (cons 0 '(1 2 3)))
+`} />
+
+    <!-- 4. Conditionals -->
+    <h3>Conditionals</h3>
+    <p><code>if</code> takes a test, a then-branch, and an else-branch. <code>cond</code> handles multiple branches.</p>
+
+    <SchemeRepl client:load initialCode={`(display (if (> 3 2) 'yes 'no))
+`} />
+
+    <SchemeRepl client:load initialCode={`(define (classify n)
+  (cond
+    ((< n 0) 'negative)
+    ((= n 0) 'zero)
+    (else 'positive)))
+
+(display (classify -1)) (newline)
+(display (classify 0)) (newline)
+(display (classify 7))
+`} />
+
+    <!-- 5. Higher-order functions -->
+    <h3>Higher-order functions</h3>
+    <p>Functions that take other functions as arguments. <code>map</code> applies a function to every element. <code>filter</code> keeps elements that pass a test.</p>
+
+    <SchemeRepl client:load initialCode={`(define (square x) (* x x))
+
+(display (map square '(1 2 3))) (newline)
+
+(display (filter odd? '(1 2 3 4 5)))
+`} />
+
+    <!-- 6. Lambda -->
+    <h3>Lambda</h3>
+    <p><code>lambda</code> creates an anonymous function. You can pass it directly without naming it first.</p>
+
+    <SchemeRepl client:load initialCode={`; A lambda that squares its argument
+(display ((lambda (x) (* x x)) 4)) (newline)
+
+; Passing a lambda to map
+(display (map (lambda (x) (+ x 10)) '(1 2 3)))
+`} />
+
+    <!-- 7. Let -->
+    <h3>Let</h3>
+    <p><code>let</code> creates local bindings. Each binding is a name-value pair. The bindings are only visible inside the body.</p>
+
+    <SchemeRepl client:load initialCode={`(let ((x 3) (y 4))
+  (display (+ x y)))
+`} />
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      That's enough to read every page on this site.
+    </div>
+
+  </main>
+</Layout>

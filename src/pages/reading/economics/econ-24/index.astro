@@ -1,0 +1,214 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Econ Ch.24 — Auctions" favicon="💰">
+  <main>
+
+    <a href="/reading/economics/" class="text-sm mb-4 inline-block">← back to economics</a>
+
+    <h1>Auctions</h1>
+    <p class="text-gray-400 text-sm mb-6">Sources: Wikipedia (CC BY-SA 4.0) · Vickrey (1961) · Milgrom &amp; Weber (1982)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Four canonical auction formats, one deep result: under standard assumptions, <strong>revenue equivalence</strong> says they all yield the same expected revenue. The differences matter when those assumptions break down, which they always do in practice.</p>
+    </div>
+
+    <!-- 1. Four Auction Types -->
+    <h3>Four canonical formats</h3>
+    <p><strong>English</strong> (ascending): bidders raise prices until one remains. <strong>Dutch</strong> (descending): price drops until someone claims the item. <strong>First-price sealed</strong>: highest bid wins, pays their bid. <strong>Second-price sealed</strong> (Vickrey): highest bid wins, pays the second-highest bid. English and Vickrey are strategically equivalent (dominant strategy: bid your value). Dutch and first-price sealed are strategically equivalent (must shade your bid below your value).</p>
+
+    <!-- SVG: Four auction types side by side -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- English (ascending) -->
+        <rect x="10" y="30" width="110" height="140" rx="6" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="65" y="22" text-anchor="middle" fill="#4ade80" font-size="11">English</text>
+        <line x1="30" y1="150" x2="100" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="30" y1="150" x2="30" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Ascending steps -->
+        <path d="M 35 140 L 50 130 L 60 115 L 70 100 L 80 80 L 90 65" fill="none" stroke="#4ade80" stroke-width="2"/>
+        <circle cx="90" cy="65" r="3" fill="#4ade80"/>
+        <text x="65" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">ascending</text>
+
+        <!-- Dutch (descending) -->
+        <rect x="130" y="30" width="110" height="140" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="185" y="22" text-anchor="middle" fill="#60a5fa" font-size="11">Dutch</text>
+        <line x1="150" y1="150" x2="220" y2="150" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="150" y1="150" x2="150" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Descending steps -->
+        <path d="M 155 55 L 170 70 L 180 85 L 190 95 L 200 110" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <circle cx="200" cy="110" r="3" fill="#60a5fa"/>
+        <text x="185" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">descending</text>
+
+        <!-- First-price sealed -->
+        <rect x="250" y="30" width="110" height="140" rx="6" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="305" y="22" text-anchor="middle" fill="#fbbf24" font-size="11">First-price</text>
+        <text x="305" y="75" text-anchor="middle" fill="currentColor" font-size="28" fill-opacity="0.2">&#x2709;</text>
+        <text x="305" y="115" text-anchor="middle" fill="#fbbf24" font-size="10">pays own bid</text>
+        <text x="305" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">sealed, shade bid</text>
+
+        <!-- Second-price sealed (Vickrey) -->
+        <rect x="370" y="30" width="120" height="140" rx="6" fill="none" stroke="#c084fc" stroke-width="1.5"/>
+        <text x="430" y="22" text-anchor="middle" fill="#c084fc" font-size="11">Vickrey</text>
+        <text x="430" y="75" text-anchor="middle" fill="currentColor" font-size="28" fill-opacity="0.2">&#x2709;</text>
+        <text x="430" y="115" text-anchor="middle" fill="#c084fc" font-size="10">pays 2nd bid</text>
+        <text x="430" y="175" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">sealed, bid true value</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Four auction formats with three bidders
+; True values: 80, 60, 45
+
+(define values (list 80 60 45))
+
+; --- Vickrey (second-price sealed) ---
+; Dominant strategy: bid true value
+(define vickrey-bids values)
+(define vickrey-winner (apply max vickrey-bids))
+(define vickrey-payment
+  (car (sort (cdr (sort vickrey-bids >)) >)))
+
+(display "=== Vickrey ===") (newline)
+(display "Bids: ") (display vickrey-bids) (newline)
+(display "Winner pays: $") (display vickrey-payment) (newline)
+
+; --- First-price sealed ---
+; Equilibrium bid = value * (n-1)/n for uniform values
+(define n (length values))
+(define fp-bids
+  (map (lambda (v) (* v (/ (- n 1) n))) values))
+
+(newline) (display "=== First-price ===") (newline)
+(display "Shaded bids: ")
+(display (map (lambda (b) (/ (round (* b 100)) 100)) fp-bids)) (newline)
+(define fp-payment (apply max fp-bids))
+(display "Winner pays: $")
+(display (/ (round (* fp-payment 100)) 100)) (newline)
+
+; Revenue equivalence: both yield ~same expected revenue
+(newline) (display "Revenue equivalence:") (newline)
+(display "Vickrey revenue: $") (display vickrey-payment) (newline)
+(display "First-price revenue: $")
+(display (/ (round (* fp-payment 100)) 100))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Four auction types
+values = [80, 60, 45]
+n = len(values)
+
+# Vickrey: bid true values, pay second-highest
+sorted_v = sorted(values, reverse=True)
+print("=== Vickrey ===")
+print("Bids: " + str(values))
+print("Winner pays: $" + str(sorted_v[1]))
+
+# First-price: shade bids, pay own bid
+fp_bids = [v * (n-1)/n for v in values]
+print(f"\\n=== First-price ===")
+print("Shaded bids: " + str([round(b, 2) for b in fp_bids]))
+print("Winner pays: $" + str(round(max(fp_bids), 2)))
+
+print("\\nRevenue equivalence: ~$" + str(sorted_v[1]) + " vs ~$" + str(round(max(fp_bids), 2)))
+`} />
+    </div>
+
+
+    <!-- 2. Revenue Equivalence -->
+    <h3>Revenue equivalence theorem</h3>
+    <p>Under four conditions (independent private values, risk-neutral bidders, symmetric bidders, the lowest-type bidder gets zero surplus), <strong>all</strong> standard auctions yield the same expected revenue. The seller's choice of format does not matter for revenue. It matters for other things: the Vickrey auction is simpler (truth-telling is dominant), but first-price auctions are more robust to collusion.</p>
+
+    <SchemeRepl client:load initialCode={`; Revenue equivalence: simulation
+; N bidders draw values uniformly from [0, 100]
+; Expected revenue in both formats = (N-2)/(N-1) * 100 * N/(N+1)
+; For uniform [0,1]: E[revenue] = (N-1)/(N+1)
+
+(define (expected-revenue-uniform n)
+  ; E[second-highest of n draws from Uniform(0,100)]
+  ; = 100 * (n-1) / (n+1)
+  (/ (* 100 (- n 1)) (+ n 1)))
+
+(display "Expected revenue (uniform values on [0,100]):") (newline)
+(for-each
+  (lambda (n)
+    (display "  ") (display n) (display " bidders: $")
+    (display (/ (round (* (expected-revenue-uniform n) 100)) 100))
+    (newline))
+  (list 2 3 5 10 20))
+
+(newline)
+(display "More bidders = more competition = higher revenue") (newline)
+(display "But format does not matter (given the assumptions).")
+`} />
+
+
+    <!-- 3. VCG for Multiple Items -->
+    <h3>VCG for multiple items</h3>
+    <p>The VCG mechanism extends to multi-item auctions. Each bidder reports values for all bundles of items. The mechanism finds the welfare-maximizing allocation, then charges each bidder the externality they impose on others. This generalizes the Vickrey auction from one item to any combinatorial allocation problem. Computational complexity is the catch: finding the optimal allocation is NP-hard in general.</p>
+
+    <SchemeRepl client:load initialCode={`; VCG multi-item: 2 items (A, B), 3 bidders
+; Bidder values for individual items and the bundle
+
+; (value-A  value-B  value-AB)
+(define bidder-1 (list 10 8 15))   ; slight complementarity
+(define bidder-2 (list 7 12 18))   ; complementarity
+(define bidder-3 (list 9 6 14))
+
+; Efficient allocation: maximize total welfare
+; Try: bidder-1 gets A (10), bidder-2 gets B (12) => 22
+; Try: bidder-2 gets AB (18) => 18
+; Try: bidder-1 gets A (10), bidder-3 gets B (6) => 16
+; Best: bidder-1 gets A, bidder-2 gets B => 22
+
+(display "Efficient allocation:") (newline)
+(display "  Bidder 1 gets A (value=10)") (newline)
+(display "  Bidder 2 gets B (value=12)") (newline)
+(display "  Total welfare: 22") (newline) (newline)
+
+; VCG payment for bidder 1:
+; Without bidder 1: best is bidder-2 gets AB (18)
+;   Others' welfare without 1: 18
+; With bidder 1: others' welfare: 12 (bidder-2 gets B)
+; Payment = 18 - 12 = 6
+
+; VCG payment for bidder 2:
+; Without bidder 2: bidder-1 gets A (10), bidder-3 gets B (6) = 16
+; With bidder 2: others' welfare: 10 (bidder-1 gets A)
+; Payment = 16 - 10 = 6
+
+(display "VCG payments:") (newline)
+(display "  Bidder 1: $6 (gets $10 item, surplus $4)") (newline)
+(display "  Bidder 2: $6 (gets $12 item, surplus $6)") (newline)
+(display "  Total revenue: $12")
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/hedges-2018/">Hedges 2018</a> — compositional game theory: auctions as composed open games</li>
+      <li><a href="https://june.kim/one-shot-bidding"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim: One-Shot Bidding</a> — optimal strategies in single-round auctions</li>
+      <li><a href="https://june.kim/power-diagrams-ad-auctions"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>june.kim: Power Diagrams in Ad Auctions</a> — geometric view of auction equilibria</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Auction_theory"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Auction theory</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Vickrey_auction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vickrey auction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Revenue_equivalence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Revenue equivalence</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Vickrey%E2%80%93Clarke%E2%80%93Groves_auction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>VCG auction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Dutch_auction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Dutch auction</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/economics/econ-23/", label: "Comparative Systems" }} />
+
+  </main>
+</Layout>

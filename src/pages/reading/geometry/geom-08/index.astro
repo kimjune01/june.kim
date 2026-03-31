@@ -1,0 +1,248 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Geometry Ch.8 — Convex Geometry" favicon="△">
+  <main>
+
+    <a href="/reading/geometry/" class="text-sm mb-4 inline-block">&larr; back to geometry</a>
+
+    <h1>Convex Geometry</h1>
+    <p class="text-gray-400 text-sm mb-6">Wikipedia (<a href="https://en.wikipedia.org/wiki/Convex_set"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Convex set</a>, <a href="https://en.wikipedia.org/wiki/Convex_hull"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Convex hull</a>) &middot; CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A set is <strong>convex</strong> if for every two points in the set, the entire line segment between them lies in the set. No dents, no holes. Convexity is the geometric property that makes optimization tractable: every local minimum is global.</p>
+    </div>
+
+    <!-- 1. Convex sets -->
+    <h3>Convex sets</h3>
+    <p>A set S is convex when for all x, y in S and all t in [0, 1], the point tx + (1-t)y is also in S. A circle is convex. A star shape is not. The intersection of any family of convex sets is convex. The empty set and all of R^n are convex.</p>
+
+    <SchemeRepl client:load initialCode={`; Test if a point is inside a convex polygon
+; A convex polygon: all cross products have the same sign
+
+(define (cross-2d ox oy ax ay bx by)
+  (- (* (- ax ox) (- by oy))
+     (* (- ay oy) (- bx ox))))
+
+; Square with vertices (0,0), (4,0), (4,4), (0,4)
+(define square-verts
+  (list (list 0 0) (list 4 0) (list 4 4) (list 0 4)))
+
+; Check convexity: walk edges, all cross products same sign
+(define (convex? verts)
+  (let* ((n (length verts))
+         (signs
+           (map (lambda (i)
+                  (let* ((a (list-ref verts i))
+                         (b (list-ref verts (modulo (+ i 1) n)))
+                         (c (list-ref verts (modulo (+ i 2) n))))
+                    (cross-2d (car a) (cadr a)
+                              (car b) (cadr b)
+                              (car c) (cadr c))))
+                (iota n))))
+    (or (for-all (lambda (s) (> s 0)) signs)
+        (for-all (lambda (s) (< s 0)) signs))))
+
+(define (for-all pred lst)
+  (cond ((null? lst) #t)
+        ((pred (car lst)) (for-all pred (cdr lst)))
+        (else #f)))
+
+(define (iota n)
+  (let loop ((i 0) (acc (list)))
+    (if (>= i n) (reverse acc) (loop (+ i 1) (cons i acc)))))
+
+(display "Square convex? ")
+(display (convex? square-verts)) (newline)
+
+; Star shape (non-convex)
+(define star-verts
+  (list (list 2 0) (list 2.5 1.5) (list 4 2) (list 2.5 2.5)
+        (list 2 4) (list 1.5 2.5) (list 0 2) (list 1.5 1.5)))
+(display "Star convex?   ")
+(display (convex? star-verts))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`def cross_2d(o, a, b):
+    return (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0])
+
+def is_convex(verts):
+    n = len(verts)
+    signs = [cross_2d(verts[i], verts[(i+1)%n], verts[(i+2)%n]) for i in range(n)]
+    return all(s > 0 for s in signs) or all(s < 0 for s in signs)
+
+square = [(0,0), (4,0), (4,4), (0,4)]
+star = [(2,0),(2.5,1.5),(4,2),(2.5,2.5),(2,4),(1.5,2.5),(0,2),(1.5,1.5)]
+
+print(f"Square convex? {is_convex(square)}")
+print(f"Star convex?   {is_convex(star)}")
+`} />
+    </div>
+
+
+    <!-- 2. Convex hull -->
+    <h3>Convex hull</h3>
+    <p>The <strong>convex hull</strong> of a set of points is the smallest convex set containing them. Think of stretching a rubber band around the points: the hull is the shape the band makes. Computing the convex hull of n points can be done in O(n log n) time. Graham scan is the classic algorithm.</p>
+
+    <SchemeRepl client:load initialCode={`; Convex hull via gift wrapping (Jarvis march)
+; Simpler to implement than Graham scan
+
+(define (cross-2d o a b)
+  (- (* (- (car a) (car o)) (- (cadr b) (cadr o)))
+     (* (- (cadr a) (cadr o)) (- (car b) (car o)))))
+
+(define (leftmost points)
+  (let loop ((pts (cdr points)) (best (car points)))
+    (if (null? pts) best
+        (loop (cdr pts)
+              (if (< (car (car pts)) (car best)) (car pts) best)))))
+
+(define (jarvis-hull points)
+  (let* ((start (leftmost points))
+         (hull (list start)))
+    (let loop ((current start) (hull hull))
+      (let ((next (car points)))
+        (let inner ((pts (cdr points)) (best next))
+          (if (null? pts)
+              (if (equal? best start)
+                  (reverse hull)
+                  (loop best (cons best hull)))
+              (inner (cdr pts)
+                     (if (> (cross-2d current best (car pts)) 0)
+                         (car pts) best))))))))
+
+(define pts (list (list 0 0) (list 1 3) (list 2 1)
+                  (list 3 4) (list 4 0) (list 2 2)))
+
+(display "Points: ") (display pts) (newline)
+(display "Hull:   ") (display (jarvis-hull pts))
+`} />
+
+
+    <!-- 3. Separating hyperplane -->
+    <h3>Separation theorems</h3>
+    <p>If two convex sets are disjoint, there exists a <strong>hyperplane</strong> that separates them: one set lies entirely on one side, the other set on the other side. This is the <a href="https://en.wikipedia.org/wiki/Hyperplane_separation_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>hyperplane separation theorem</a>. It is the geometric foundation of support vector machines, linear programming duality, and the Hahn-Banach theorem.</p>
+
+    <!-- SVG: Two convex sets with separating hyperplane -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Left convex set -->
+        <ellipse cx="120" cy="120" rx="70" ry="50" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="120" y="125" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">A</text>
+        <!-- Points in A -->
+        <circle cx="90" cy="110" r="2.5" fill="#60a5fa" fill-opacity="0.5"/>
+        <circle cx="110" cy="100" r="2.5" fill="#60a5fa" fill-opacity="0.5"/>
+        <circle cx="130" cy="130" r="2.5" fill="#60a5fa" fill-opacity="0.5"/>
+        <circle cx="150" cy="115" r="2.5" fill="#60a5fa" fill-opacity="0.5"/>
+
+        <!-- Right convex set -->
+        <ellipse cx="300" cy="120" rx="60" ry="45" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="300" y="125" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.7">B</text>
+        <!-- Points in B -->
+        <circle cx="280" cy="110" r="2.5" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="310" cy="130" r="2.5" fill="#f59e0b" fill-opacity="0.5"/>
+        <circle cx="320" cy="105" r="2.5" fill="#f59e0b" fill-opacity="0.5"/>
+
+        <!-- Separating hyperplane (line in 2D) -->
+        <line x1="215" y1="30" x2="215" y2="210" stroke="#a78bfa" stroke-width="2" stroke-opacity="0.6" stroke-dasharray="6,3"/>
+        <text x="215" y="225" text-anchor="middle" fill="#a78bfa" font-size="10" fill-opacity="0.6">separating hyperplane</text>
+      </svg>
+    </div>
+
+
+    <!-- 4. Support functions -->
+    <h3>Support functions</h3>
+    <p>The <strong>support function</strong> h(d) of a convex set S gives the signed distance from the origin to the supporting hyperplane with outward normal d. It encodes the shape of S completely: knowing h(d) for every direction d lets you reconstruct S. The Minkowski sum of two sets has a support function equal to the sum of their support functions.</p>
+
+    <SchemeRepl client:load initialCode={`; Support function: h_S(d) = max over x in S of (d . x)
+; For a convex polygon, check all vertices
+
+(define (dot u v)
+  (+ (* (car u) (car v)) (* (cadr u) (cadr v))))
+
+(define (support-fn vertices direction)
+  (apply max (map (lambda (v) (dot direction v)) vertices)))
+
+; Unit square: vertices (0,0), (1,0), (1,1), (0,1)
+(define square (list (list 0 0) (list 1 0) (list 1 1) (list 0 1)))
+
+; Support in direction (1, 0) = rightmost extent = 1
+(display "h(1,0) = ") (display (support-fn square (list 1 0))) (newline)
+
+; Support in direction (0, 1) = topmost extent = 1
+(display "h(0,1) = ") (display (support-fn square (list 0 1))) (newline)
+
+; Support in direction (1, 1) = top-right corner
+(display "h(1,1) = ") (display (support-fn square (list 1 1))) (newline)
+
+; Support in direction (-1, 0) = leftmost = 0
+(display "h(-1,0) = ") (display (support-fn square (list -1 0)))
+`} />
+
+
+    <!-- 5. Minkowski sum -->
+    <h3>Minkowski sum</h3>
+    <p>The <strong>Minkowski sum</strong> A + B is the set of all points a + b where a is in A and b is in B. If A is a polygon and B is a disk, A + B is A with rounded corners. Minkowski sums are used in robotics (configuration space obstacles), morphology (dilation), and collision detection. The Minkowski sum of two convex polygons is convex and computable in O(n + m) time.</p>
+
+    <SchemeRepl client:load initialCode={`; Minkowski sum of two convex polygons
+; Merge sorted edge lists by angle
+
+; For finite point sets, brute force: all pairwise sums
+(define (minkowski-sum-brute A B)
+  (apply append
+    (map (lambda (a)
+           (map (lambda (b)
+                  (list (+ (car a) (car b))
+                        (+ (cadr a) (cadr b))))
+                B))
+         A)))
+
+; Triangle + small square
+(define triangle (list (list 0 0) (list 2 0) (list 1 2)))
+(define small-sq (list (list 0 0) (list 0.5 0) (list 0.5 0.5) (list 0 0.5)))
+
+(define msum (minkowski-sum-brute triangle small-sq))
+(display "Triangle + Square vertices:") (newline)
+(for-each (lambda (p) (display "  ") (display p) (newline)) msum)
+(display "Count: ") (display (length msum))
+; Hull of these gives the Minkowski sum polygon
+`} />
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Geometry chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/geometry/geom-07/">&#9651; Chapter 7</a> &mdash; Metric Spaces</li>
+      <li><a href="/reading/geometry/geom-09/">&#9651; Chapter 9</a> &mdash; Voronoi Diagrams</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Cross-references</p>
+    <ul>
+      <li><a href="/reading/algorithms/algo-08/">&#9651; Algorithms Ch.8</a> &mdash; Graham scan and geometric algorithms</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Convex_set"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Convex set</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Convex_hull"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Convex hull</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hyperplane_separation_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Hyperplane separation theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Minkowski_addition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x1d162; Minkowski addition</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The convex hull algorithm shown is Jarvis march (gift wrapping), which runs in O(nh) time where h is the number of hull vertices. Graham scan achieves O(n log n) regardless of output size. The separation theorem stated here is the finite-dimensional version; the infinite-dimensional generalization (Hahn-Banach) requires additional hypotheses (closedness, or one set having nonempty interior).</p>
+
+    <PrevNext prev={{ href: "/reading/geometry/geom-07/", label: "Metric Spaces" }} next={{ href: "/reading/geometry/geom-09/", label: "Voronoi Diagrams" }} />
+
+  </main>
+</Layout>

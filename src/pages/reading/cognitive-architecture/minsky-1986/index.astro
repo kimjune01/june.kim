@@ -1,0 +1,291 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Minsky 1986 — The Society of Mind" favicon="🏛️">
+  <main>
+
+    <a href="/reading/cognitive-architecture/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>The Society of Mind</h1>
+    <p class="text-gray-400 text-sm mb-6">Marvin Minsky · 1986 · <a href="http://aurellem.org/society-of-mind/">full text</a> · <a href="https://ocw.mit.edu/courses/6-868j-the-society-of-mind-fall-2011/video_galleries/video-lectures/">MIT OCW lectures</a><br/>See also: <em>The Emotion Machine</em> (2006), the sequel that replaces agents with layered critics and "ways to think."</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Intelligence emerges from vast numbers of mindless agents organized into agencies. No single agent is intelligent. No single principle explains the whole. The power comes from diversity.</p>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p><a href="https://en.wikipedia.org/wiki/Marvin_Minsky"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Minsky's</a> book is 270 one-page essays organized into 30 chapters. The running example throughout is a child building with blocks — a task that looks simple but requires dozens of cooperating processes. Visual parsing, spatial reasoning, motor control, goal management, error recovery.</p>
+
+    <p>The core claim: there is no central executive. The mind is a society of agents, each mindless, that compose into agencies. Agencies handle domains (locomotion, language, spatial reasoning) and compete for control through winner-take-all switching. No compromise.</p>
+
+    <!-- SVG: Agent-agency hierarchy -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Top agency -->
+        <rect x="160" y="10" width="140" height="32" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="230" y="31" text-anchor="middle" fill="currentColor" font-size="12">BUILDER</text>
+
+        <!-- Mid-level agencies -->
+        <rect x="30" y="75" width="110" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="85" y="94" text-anchor="middle" fill="currentColor" font-size="10">SEE</text>
+        <rect x="175" y="75" width="110" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="230" y="94" text-anchor="middle" fill="currentColor" font-size="10">GRASP</text>
+        <rect x="320" y="75" width="110" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <text x="375" y="94" text-anchor="middle" fill="currentColor" font-size="10">PLACE</text>
+
+        <!-- Connections top to mid -->
+        <line x1="200" y1="42" x2="110" y2="75" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="230" y1="42" x2="230" y2="75" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="260" y1="42" x2="350" y2="75" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Bottom agents (dots) -->
+        <circle cx="45" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="75" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="105" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="190" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="220" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="250" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="335" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="365" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <circle cx="395" cy="140" r="5" fill="#a1a1aa" fill-opacity="0.18" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Connections mid to bottom -->
+        <line x1="65" y1="103" x2="45" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="85" y1="103" x2="75" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="105" y1="103" x2="105" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="210" y1="103" x2="190" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="230" y1="103" x2="220" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="250" y1="103" x2="250" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="355" y1="103" x2="335" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="375" y1="103" x2="365" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="395" y1="103" x2="395" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Labels -->
+        <text x="230" y="165" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">agents: mindless, do one thing</text>
+        <text x="230" y="178" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">agencies: groups that achieve what no agent can alone</text>
+
+        <!-- K-line illustration (right side) -->
+        <text x="230" y="205" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">a child building with blocks needs all three agencies at once</text>
+      </svg>
+    </div>
+
+    <!-- SVG: K-line replay -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 130" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Time 1: record -->
+        <text x="100" y="16" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">record</text>
+        <!-- Active agents -->
+        <circle cx="30" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="60" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+        <circle cx="90" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="120" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+        <circle cx="150" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="180" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+        <!-- K-line wire connecting active agents -->
+        <line x1="30" y1="58" x2="30" y2="75" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+        <line x1="90" y1="58" x2="90" y2="75" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+        <line x1="150" y1="58" x2="150" y2="75" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6"/>
+        <line x1="30" y1="75" x2="150" y2="75" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="90" y="95" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.7">K-line</text>
+
+        <!-- Arrow -->
+        <line x1="210" y1="50" x2="250" y2="50" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="250,46 258,50 250,54" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Time 2: replay -->
+        <text x="360" y="16" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">replay</text>
+        <circle cx="290" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="320" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+        <circle cx="350" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="380" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+        <circle cx="410" cy="45" r="8" fill="currentColor" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <circle cx="440" cy="45" r="8" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.3"/>
+
+        <!-- Caption -->
+        <text x="230" y="120" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">K-line: record the active set on success, replay on similar cue</text>
+      </svg>
+    </div>
+
+    <h2>Architectural primitives</h2>
+
+    <h3>Agents and agencies</h3>
+    <p>An <strong>agent</strong> does one thing. It has no understanding of what it does or why. An <strong>agency</strong> is a group of agents that together achieve a function none could achieve alone. The mind is agencies all the way up. There is no top.</p>
+
+    <p><strong>Proto-specialists</strong> are innate agencies that handle survival domains: locomotion, feeding, defense. They are the boot-loader. Everything else is built on top through learning.</p>
+
+    <h3>Memory agents (the nemes)</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Mechanism</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it does</th>
+            <th class="text-left py-2 text-gray-400">Parts bin analogue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">K-line</td><td class="pr-3 text-gray-400">Records which agents were active during a success. Reactivates that constellation on a similar cue.</td><td class="text-gray-400">Episodic memory / case-based reasoning</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Polyneme</td><td class="pr-3 text-gray-400">A permanent K-line. Activates partial states across many agencies simultaneously.</td><td class="text-gray-400">Embedding vector / pub-sub broadcast</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Microneme</td><td class="pr-3 text-gray-400">A diffuse contextual signal. Sets mood or context globally rather than activating specific representations.</td><td class="text-gray-400">Context injection / system prompt</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Pronome</td><td class="pr-3 text-gray-400">Short-term memory pointer. Controls which role-slot is currently active.</td><td class="text-gray-400">Register / pointer / pronoun</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Isonome</td><td class="pr-3 text-gray-400">Signals many agencies to perform the same operation in parallel.</td><td class="text-gray-400">Broadcast instruction / SIMD</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Paranome</td><td class="pr-3 text-gray-400">Links pronomes across representational realms. Enables cross-domain analogy.</td><td class="text-gray-400">Cross-modal attention / transfer learning</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary class="text-lg font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Representational structures</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Structure</th>
+            <th class="text-left py-2 text-gray-400">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Frame</td><td class="text-gray-400">A skeletal data structure with slots and default assumptions. Defaults hold until contradicted by evidence.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Frame-array</td><td class="text-gray-400">Multiple frames for the same object from different viewpoints. Shared slots enable perspective-switching.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Trans-frame</td><td class="text-gray-400">Represents an event: origin, destination, cause, motive, instrument, time. The verb of internal language.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Story-frame</td><td class="text-gray-400">Chains of trans-frames. Narrative as data structure.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <details>
+      <summary class="text-lg font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Control and error correction</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Mechanism</th>
+            <th class="text-left py-2 text-gray-400">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">A-brain / B-brain</td><td class="text-gray-400">A-brain handles world interaction. B-brain monitors A-brain for errors — infinite loops, faulty reasoning. B-brain can veto.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Censor</td><td class="text-gray-400">Suppresses the activity <em>preceding</em> an unproductive action. Preemptive negative expertise.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Suppressor</td><td class="text-gray-400">Inhibits the unproductive action itself. Reactive negative expertise.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Difference-engine</td><td class="text-gray-400">Identifies gap between current state and goal. Invokes an operator known to shrink the gap.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Cross-exclusion</td><td class="text-gray-400">Winner-take-all switching between proto-specialists. One agency suppresses all others. Emotions are cascade effects of this switching.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </details>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Key principles</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Principle</th>
+            <th class="text-left py-2 text-gray-400">Statement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Papert's Principle</td><td class="text-gray-400">Mental growth depends not on acquiring new skills, but on acquiring new ways to use existing knowledge.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Exception Principle</td><td class="text-gray-400">Easier to extend old frames by adding exceptions than to replace them.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Recursion Principle</td><td class="text-gray-400">The same strategies apply at every level of decomposition.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Predestined Learning</td><td class="text-gray-400">Sufficient innate constraint makes certain learning outcomes nearly inevitable.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </details>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Chapter map</summary>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Ch</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Title</th>
+            <th class="text-left py-2 text-gray-400">Key introductions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">1</td><td class="pr-3 text-gray-300">Prologue</td><td class="text-gray-400">Agents, agencies, blocks-world</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">2–5</td><td class="pr-3 text-gray-300">Wholes, Conflict, Self, Individuality</td><td class="text-gray-400">Heterarchies, no compromise, circular causality</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">6</td><td class="pr-3 text-gray-300">Insight and Introspection</td><td class="text-gray-400">B-brains, self-knowledge is dangerous</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">7</td><td class="pr-3 text-gray-300">Problems and Goals</td><td class="text-gray-400">Difference-engines, local responsibility</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">8</td><td class="pr-3 text-gray-300">A Theory of Memory</td><td class="text-gray-400">K-lines, level-bands, societies of memories</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">10–12</td><td class="pr-3 text-gray-300">Papert's Principle → Learning Meaning</td><td class="text-gray-400">Uniframes, the exception principle</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">16</td><td class="pr-3 text-gray-300">Emotion</td><td class="text-gray-400">Proto-specialists, cross-exclusion cascades</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">18–20</td><td class="pr-3 text-gray-300">Reasoning → Context</td><td class="text-gray-400">Polynemes, micronemes, connection lines</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">21–22</td><td class="pr-3 text-gray-300">Trans-Frames → Expression</td><td class="text-gray-400">Pronomes, trans-frames, isonomes</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">24–26</td><td class="pr-3 text-gray-300">Frames → Language-Frames</td><td class="text-gray-400">Frames, defaults, frame-arrays, story-frames</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">27</td><td class="pr-3 text-gray-300">Censors and Jokes</td><td class="text-gray-400">Suppressors, censors, negative expertise</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">29–30</td><td class="pr-3 text-gray-300">Realms of Thought → Mental Models</td><td class="text-gray-400">Paranomes, cross-realm analogy, recursive self-models</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </details>
+
+    <h2>The Emotion Machine (2006)</h2>
+
+    <p>Twenty years later, Minsky replaced agents with critics. Society of Mind asks how mindless agents compose into intelligence. The Emotion Machine asks how the system decides which agents to run. The answer: layered critics, each monitoring the level below.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Level</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it does</th>
+            <th class="text-left py-2 text-gray-400">Who has it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">1. Instinctive reactions</td><td class="pr-3 text-gray-400">Hard-wired responses. Pain, reflex, startle.</td><td class="text-gray-400">Every agent</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">2. Learned reactions</td><td class="pr-3 text-gray-400">Conditioned responses. Flinch before the blow lands.</td><td class="text-gray-400"><a href="/reading/cognitive-architecture/laird-2022/">Soar</a> (chunking), <a href="/reading/cognitive-architecture/zhao-2023/">LLMs</a> (weights)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">3. Deliberative thinking</td><td class="pr-3 text-gray-400">Search over alternatives. Means-ends analysis.</td><td class="text-gray-400"><a href="/reading/cognitive-architecture/laird-2022/">Soar</a> (impasse), <a href="/reading/cognitive-architecture/arunkumar-2026/">ReAct</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">4. Reflective thinking</td><td class="pr-3 text-gray-400">Monitor your own deliberation. "Am I stuck?"</td><td class="text-gray-400"><a href="/reading/cognitive-architecture/arunkumar-2026/">Reflexion</a>, <a href="/reading/cognitive-architecture/zhao-2023/">RLHF</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">5. Self-reflective thinking</td><td class="pr-3 text-gray-400">Reason about your own reflective strategies.</td><td class="text-gray-400">Nobody</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">6. Self-conscious thinking</td><td class="text-gray-400">Model yourself as others see you.</td><td class="text-gray-400">Nobody</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each level can interrupt, override, or redirect the one beneath it. Emotions are what happens when a critic triggers a large-scale mode switch, shutting down some resources and activating others. Anger narrows attention. Grief suspends goals. Architectural events, not decorations on top of cognition.</p>
+
+    <p>The critic hierarchy is A-brain/B-brain scaled to six layers. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> impasse mechanism gets two levels (substate monitors the superstate). <a href="/reading/cognitive-architecture/arunkumar-2026/">MAKER</a> gets two (verifier monitors worker). <a href="/reading/cognitive-architecture/zhao-2023/">RLHF</a> gets two (reward model monitors policy). Nobody has built six. Minsky argued you need all six before the system can reason about its own reasoning about its own reasoning. Whether he was right depends on whether self-reflection decomposes into a finite stack or requires something else entirely.</p>
+
+    <h2>Where these ideas landed</h2>
+
+    <p>Minsky never wrote pseudocode. His contribution is design patterns. But every architecture in this collection reinvented his ideas under different names.</p>
+
+    <p>K-line replay is episodic memory. <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> stores a working-memory snapshot at every decision cycle, retrieves by partial cue matching. <a href="/reading/cognitive-architecture/arunkumar-2026/">LLM agents</a> do the same with natural-language episode streams (Generative Agents) and MemGPT's paged retrieval. Record what was active when something worked; replay it when the cue matches.</p>
+
+    <p>The A-brain acts; the B-brain watches for errors and vetoes. That's <a href="/reading/cognitive-architecture/zhao-2023/">RLHF</a>: a reward model judging the policy model's output. It's <a href="/reading/cognitive-architecture/arunkumar-2026/">MAKER</a>: verifier agents challenging worker outputs. Constitutional AI is a B-brain that reads a constitution. Minsky had the pattern in 1986.</p>
+
+    <p>Censors and suppressors are negative expertise: learned knowledge about what <em>not</em> to do. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> reject preferences fire before ranking. <a href="/reading/cognitive-architecture/arunkumar-2026/">MemAgent</a> learns what to forget. Alignment filters are suppressors. The censor is more interesting. It suppresses the <em>thought preceding</em> the bad action. Preemptive negative expertise. No modern system does this cleanly.</p>
+
+    <p>Cross-exclusion is <a href="/reading/cognitive-architecture/vaswani-2017/">softmax</a>. One agency wins, all others suppressed. Minsky used it for emotions: proto-specialists competing for control of the whole system. Attention heads compete the same way, but between tokens rather than entire agencies.</p>
+
+    <p>Polyneme broadcast is the embedding vector. One signal activates partial states across many agencies at once. <a href="/reading/cognitive-architecture/vaswani-2017/">Multi-head attention</a> does this with learned projections into subspaces. Minsky's version is simpler and more honest about what it is: pub-sub.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/society-of-mind-emotion-machine"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>blog post (2015)</a></li>
+      <li><a href="/reading/cognitive-architecture/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext next={{ href: "/reading/cognitive-architecture/vaswani-2017/", label: "Vaswani 2017 · 2 of 5" }} />
+
+  </main>
+</Layout>

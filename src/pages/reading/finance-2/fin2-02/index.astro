@@ -1,0 +1,261 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.2 — Ito Calculus" favicon="📉">
+  <main>
+
+    <a href="/reading/finance-2/" class="text-sm mb-4 inline-block">&larr; back to finance II</a>
+
+    <h1>Ito Calculus</h1>
+    <p class="text-gray-400 text-sm mb-6">MIT OCW 18.S096 + 15.450 (CC BY-NC-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Ito calculus</strong> extends the chain rule to functions of Brownian motion. The extra term &#x2014; the &#xBD;&#x03C3;&#xB2;f&#x2033; correction &#x2014; exists because Brownian motion has nonzero quadratic variation. This is the engine behind every option pricing formula.</p>
+    </div>
+
+    <!-- SVG: Ito's lemma diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Box: ordinary calculus -->
+        <rect x="20" y="20" width="160" height="60" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="100" y="45" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">Ordinary Chain Rule</text>
+        <text x="100" y="65" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.5">df = f&#x2032; dx</text>
+        <!-- Box: Ito calculus -->
+        <rect x="220" y="20" width="160" height="60" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="300" y="45" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">Ito&#x2019;s Lemma</text>
+        <text x="300" y="65" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.5">df = f&#x2032;dX + &#xBD;f&#x2033;(dX)&#xB2;</text>
+        <!-- Arrow between -->
+        <line x1="185" y1="50" x2="215" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <polygon points="215,47 215,53 222,50" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Annotation -->
+        <text x="200" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">correction term</text>
+        <!-- Key insight -->
+        <rect x="80" y="120" width="240" height="40" rx="6" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="200" y="140" text-anchor="middle" fill="#34d399" font-size="11" fill-opacity="0.6">(dB)&#xB2; = dt   (quadratic variation)</text>
+        <text x="200" y="155" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.4">This is why the extra term appears</text>
+      </svg>
+    </div>
+
+    <!-- 1. Quadratic Variation -->
+    <h3>Brownian motion properties: quadratic variation</h3>
+    <p>For ordinary smooth functions, the sum of squared increments goes to zero as the partition gets finer. Brownian motion is different: its <strong>quadratic variation</strong> over [0,T] converges to T, not zero. This is why (dB)&#xB2; = dt instead of 0, and why Ito calculus needs an extra term.</p>
+
+    <SchemeRepl client:load initialCode={`; Quadratic variation of Brownian motion
+; Sum of (B(t_{i+1}) - B(t_i))^2 -> T as n -> infinity
+
+; Simulate B(t) increments: each ~ N(0, dt) ≈ sqrt(dt) * {+1,-1}
+(define (quad-var n seed)
+  (define dt (/ 1.0 n))
+  (define step (sqrt dt))
+  (define (qv k s acc)
+    (if (= k 0) acc
+        (let* ((new-s (modulo (+ (* 1103515245 s) 12345) (expt 2 31)))
+               (incr (* step (if (= (modulo new-s 2) 0) 1 -1))))
+          (qv (- k 1) new-s (+ acc (* incr incr))))))
+  (qv n seed 0))
+
+; Each (sqrt(dt))^2 = dt, and n * dt = 1
+(display "n=10:    QV = ") (display (quad-var 10 42)) (newline)
+(display "n=100:   QV = ") (display (quad-var 100 42)) (newline)
+(display "n=1000:  QV = ") (display (quad-var 1000 42)) (newline)
+(display "Theory:  QV = T = 1.0")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+import math
+
+def quadratic_variation(n, T=1.0):
+    random.seed(42)
+    dt = T / n
+    qv = 0
+    for _ in range(n):
+        dB = math.sqrt(dt) * random.choice([1, -1])
+        qv += dB ** 2
+    return qv
+
+for n in [10, 100, 1000, 10000]:
+    print(f"n={n:>5}: QV = {quadratic_variation(n):.6f}")
+print("Theory: QV = T = 1.000000")
+`} />
+    </div>
+
+
+    <!-- 2. Ito's Lemma -->
+    <h3>Ito's lemma &#x2014; the chain rule for stochastic calculus</h3>
+    <p>If X(t) satisfies dX = &#x03BC; dt + &#x03C3; dB, then for any twice-differentiable f(x) with no explicit time dependence, Ito's lemma gives df(X) = f&#x2032;(X) dX + &#xBD; f&#x2033;(X) &#x03C3;&#xB2; dt. (If f also depends on t, add an f&#x2080; dt term.) The extra &#xBD;&#x03C3;&#xB2;f&#x2033; dt term is the Ito correction. It exists because (dB)&#xB2; = dt, not zero.</p>
+
+    <SchemeRepl client:load initialCode={`; Ito's lemma example: f(x) = x^2
+; If dX = sigma * dB, then:
+;   df = 2X dX + (1/2)(2)(sigma^2) dt
+;   df = 2X sigma dB + sigma^2 dt
+;
+; Compare: ordinary calculus gives df = 2x dx (no correction)
+
+; Verify numerically: E[B(t)^2] = t (not 0)
+; because the Ito correction sigma^2 * dt accumulates
+
+(define sigma 1.0)
+(define n 1000)
+(define dt (/ 1.0 n))
+
+; Simulate B(T)^2 and compare to T
+(define (simulate-B-squared seed)
+  (define (run k s x)
+    (if (= k 0) (* x x)
+        (let* ((new-s (modulo (+ (* 1103515245 s) 12345) (expt 2 31)))
+               (dB (* (sqrt dt) (if (= (modulo new-s 2) 0) 1.0 -1.0))))
+          (run (- k 1) new-s (+ x dB)))))
+  (run n seed 0.0))
+
+; Average of B(1)^2 over several paths
+(define trials (map (lambda (s) (simulate-B-squared (* s 31337)))
+                    (list 1 2 3 4 5 6 7 8 9 10)))
+(define avg (/ (apply + trials) (length trials)))
+(display "E[B(1)^2] ≈ ") (display avg) (newline)
+(display "Theory:     1.0 (the Ito correction)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+import math
+
+def simulate_B_squared(n=1000, T=1.0):
+    dt = T / n
+    x = 0.0
+    for _ in range(n):
+        dB = math.sqrt(dt) * random.choice([1.0, -1.0])
+        x += dB
+    return x ** 2
+
+random.seed(42)
+trials = [simulate_B_squared() for _ in range(10000)]
+avg = sum(trials) / len(trials)
+print(f"E[B(1)^2] ≈ {avg:.4f}")
+print("Theory:     1.0 (the Ito correction)")
+`} />
+    </div>
+
+
+    <!-- 3. Geometric Brownian Motion -->
+    <h3>Geometric Brownian motion</h3>
+    <p><strong>Geometric Brownian motion</strong> (GBM) models stock prices: dS = &#x03BC;S dt + &#x03C3;S dB. Applying Ito's lemma to ln(S) gives d(ln S) = (&#x03BC; - &#xBD;&#x03C3;&#xB2;) dt + &#x03C3; dB. So log-returns are normally distributed, and S(t) = S(0) exp((&#x03BC; - &#xBD;&#x03C3;&#xB2;)t + &#x03C3;B(t)). The &#xBD;&#x03C3;&#xB2; drag is the Ito correction in action.</p>
+
+    <SchemeRepl client:load initialCode={`; Geometric Brownian Motion
+; S(t) = S0 * exp((mu - 0.5*sigma^2)*t + sigma*B(t))
+
+(define S0 100.0)
+(define mu 0.08)    ; 8% drift
+(define sigma 0.2)  ; 20% volatility
+(define T 1.0)      ; 1 year
+
+; Exact solution at time T
+(define (gbm-exact B-T)
+  (* S0 (exp (+ (* (- mu (* 0.5 sigma sigma)) T)
+               (* sigma B-T)))))
+
+; Different Brownian outcomes
+(display "If B(1) = -0.5: S = ") (display (gbm-exact -0.5)) (newline)
+(display "If B(1) =  0.0: S = ") (display (gbm-exact 0.0)) (newline)
+(display "If B(1) =  0.5: S = ") (display (gbm-exact 0.5)) (newline)
+(display "If B(1) =  1.0: S = ") (display (gbm-exact 1.0)) (newline)
+
+; Note: E[S(T)] = S0 * exp(mu*T), NOT S0 * exp((mu-0.5*sigma^2)*T)
+(display "E[S(1)] = ") (display (* S0 (exp (* mu T))))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+S0, mu, sigma, T = 100, 0.08, 0.2, 1.0
+
+def gbm_exact(B_T):
+    return S0 * math.exp((mu - 0.5*sigma**2)*T + sigma*B_T)
+
+for b in [-0.5, 0.0, 0.5, 1.0]:
+    print(f"B(1) = {b:+.1f}: S = {gbm_exact(b):.2f}")
+
+print(f"E[S(1)] = {S0 * math.exp(mu * T):.2f}")
+print(f"Ito drag: mu - 0.5*sigma^2 = {mu - 0.5*sigma**2:.4f}")
+`} />
+    </div>
+
+
+    <!-- 4. Stochastic Differential Equations -->
+    <h3>Stochastic differential equations</h3>
+    <p>An <strong>SDE</strong> dX = a(X,t) dt + b(X,t) dB specifies how a process evolves under both deterministic drift a and random diffusion b. The Euler-Maruyama method discretizes: X(t+dt) &#x2248; X(t) + a&#xB7;dt + b&#xB7;&#x221A;dt&#xB7;Z where Z ~ N(0,1). This is the stochastic analog of Euler's method for ODEs.</p>
+
+    <SchemeRepl client:load initialCode={`; Euler-Maruyama for the Ornstein-Uhlenbeck process
+; dX = theta*(mu - X) dt + sigma dB
+; Mean-reverting: pulls toward mu
+
+(define theta 2.0)   ; speed of reversion
+(define mu-ou 1.0)   ; long-run mean
+(define sigma-ou 0.3)
+(define dt 0.01)
+(define steps 100)
+
+(define (euler-maruyama seed)
+  (define (step k s x)
+    (if (= k 0) x
+        (let* ((new-s (modulo (+ (* 1103515245 s) 12345) (expt 2 31)))
+               (z (if (= (modulo new-s 2) 0) 1.0 -1.0))
+               (drift (* theta (- mu-ou x) dt))
+               (diffusion (* sigma-ou (sqrt dt) z))
+               (new-x (+ x drift diffusion)))
+          (step (- k 1) new-s new-x))))
+  (step steps seed 0.0))  ; start at x=0
+
+; Should converge toward mu = 1.0
+(display "Path 1 final: ") (display (euler-maruyama 42)) (newline)
+(display "Path 2 final: ") (display (euler-maruyama 137)) (newline)
+(display "Path 3 final: ") (display (euler-maruyama 999)) (newline)
+(display "Long-run mean: ") (display mu-ou)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+import math
+
+# Ornstein-Uhlenbeck: dX = theta*(mu - X)dt + sigma*dB
+theta, mu_ou, sigma_ou = 2.0, 1.0, 0.3
+dt, steps = 0.01, 200
+
+def euler_maruyama(seed, x0=0.0):
+    random.seed(seed)
+    x = x0
+    for _ in range(steps):
+        z = random.gauss(0, 1)
+        x += theta * (mu_ou - x) * dt + sigma_ou * math.sqrt(dt) * z
+    return x
+
+finals = [euler_maruyama(i) for i in range(1000)]
+avg = sum(finals) / len(finals)
+print(f"Average final value: {avg:.4f}")
+print(f"Long-run mean: {mu_ou}")
+print(f"Std of finals: {(sum((x-avg)**2 for x in finals)/len(finals))**0.5:.4f}")
+print(f"Theory std: {sigma_ou / math.sqrt(2*theta):.4f}")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-01/">&#x222B; Calculus Ch.1</a> &#x2014; ordinary chain rule is the starting point; Ito adds a correction</li>
+      <li><a href="/reading/finance-2/fin2-01/">&#x1F4C9; Finance II Ch.1</a> &#x2014; stochastic processes that Ito calculus operates on</li>
+      <li><a href="/reading/probability/prob-01/">&#x1F3B2; Probability Ch.1</a> &#x2014; normal distribution and expectation</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-2/fin2-01/", label: "Stochastic Processes · 1" }}
+      next={{ href: "/reading/finance-2/fin2-03/", label: "Black-Scholes · 3" }}
+    />
+
+  </main>
+</Layout>

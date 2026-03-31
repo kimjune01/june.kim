@@ -1,0 +1,182 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Dist Ch.4 — Consensus" favicon="🌐">
+  <main>
+
+    <a href="/reading/distributed-systems/" class="text-sm mb-4 inline-block">&larr; back to distributed systems</a>
+
+    <h1>Consensus</h1>
+    <p class="text-gray-400 text-sm mb-6">Fischer, Lynch, Paterson 1985 &middot; Lamport 1998 &middot; <a href="https://en.wikipedia.org/wiki/Consensus_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>consensus problem</strong>: get all non-faulty nodes to agree on a single value. The FLP impossibility result says no deterministic algorithm can guarantee consensus in an asynchronous system if even one node can crash. Paxos solves it anyway by being non-deterministic (it may not terminate, but if it does, it is correct).</p>
+    </div>
+
+    <!-- 1. The problem -->
+    <h3>The consensus problem</h3>
+    <p>Each node proposes a value. All non-faulty nodes must decide the same value (agreement). The decided value must have been proposed by some node (validity). Each node decides at most once (termination, in practice). These three properties are deceptively simple. Getting all three with crash failures is the core challenge.</p>
+
+    <SchemeRepl client:load initialCode={`; Consensus: all nodes agree on one proposed value.
+; Three properties:
+;   1. Agreement: all decide the same value
+;   2. Validity: decided value was proposed
+;   3. Termination: eventually everyone decides
+
+(define proposals (list "A" "B" "A"))
+
+; Naive approach: pick the majority
+(define (count-votes val proposals)
+  (length (filter (lambda (p) (equal? p val)) proposals)))
+
+(define (majority-vote proposals)
+  (let ((a-count (count-votes "A" proposals))
+        (b-count (count-votes "B" proposals)))
+    (if (> a-count b-count) "A" "B")))
+
+(display "Proposals: ") (display proposals) (newline)
+(display "Majority vote: ") (display (majority-vote proposals)) (newline)
+; Works when everyone can see all proposals.
+; Breaks when messages are lost or delayed.
+(display "Problem: what if node 3 crashes before sending?")
+`} />
+
+    <!-- 2. FLP impossibility -->
+    <h3>FLP impossibility</h3>
+    <p><a href="https://en.wikipedia.org/wiki/FLP_impossibility"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fischer, Lynch, and Paterson</a> proved in 1985 that <strong>no deterministic consensus protocol</strong> can guarantee both safety (agreement + validity) and liveness (termination) in an asynchronous system where even one process can crash. The proof constructs an execution where the algorithm is always one step away from deciding but never does. This is not a practical obstacle. It means you need randomization, timeouts, or partial synchrony assumptions.</p>
+
+    <!-- SVG: proposer/acceptor/learner roles (Paxos) -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Proposer -->
+        <rect x="20" y="80" width="80" height="40" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="60" y="105" text-anchor="middle" fill="#60a5fa" font-size="11">Proposer</text>
+        <!-- Acceptors -->
+        <rect x="160" y="20" width="80" height="35" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="42" text-anchor="middle" fill="#34d399" font-size="11">Acceptor 1</text>
+        <rect x="160" y="80" width="80" height="35" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="102" text-anchor="middle" fill="#34d399" font-size="11">Acceptor 2</text>
+        <rect x="160" y="140" width="80" height="35" rx="6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="162" text-anchor="middle" fill="#34d399" font-size="11">Acceptor 3</text>
+        <!-- Learner -->
+        <rect x="310" y="80" width="80" height="40" rx="6" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="350" y="105" text-anchor="middle" fill="#f59e0b" font-size="11">Learner</text>
+        <!-- Arrows: Proposer -> Acceptors -->
+        <line x1="100" y1="95" x2="158" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="100" y1="100" x2="158" y2="97" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="100" y1="105" x2="158" y2="155" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Arrows: Acceptors -> Learner -->
+        <line x1="240" y1="40" x2="308" y2="95" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="240" y1="97" x2="308" y2="100" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="240" y1="155" x2="308" y2="105" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Phase labels -->
+        <text x="120" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">prepare/</text>
+        <text x="120" y="70" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">accept</text>
+        <text x="280" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">accepted</text>
+        <!-- Caption -->
+        <text x="210" y="210" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Paxos roles: propose, accept (majority), learn.</text>
+      </svg>
+    </div>
+
+    <!-- 3. Paxos overview -->
+    <h3>Paxos overview</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Paxos_(computer_science)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Paxos</a> uses two phases. Phase 1 (prepare): the proposer picks a number n, sends prepare(n) to acceptors. Acceptors promise not to accept anything below n and return any value they already accepted. Phase 2 (accept): the proposer sends accept(n, v) where v is the highest-numbered previously accepted value, or its own if none. Acceptors accept if they have not promised a higher number. A value is chosen when a majority of acceptors accept the same proposal.</p>
+
+    <SchemeRepl client:load initialCode={`; Simplified Paxos: two phases with three acceptors.
+; Phase 1: prepare(n) -> promise or reject
+; Phase 2: accept(n, v) -> accepted or reject
+
+; Acceptor state: highest promise, accepted (n, v)
+(define promises (list 0 0 0))
+(define accepted-n (list 0 0 0))
+(define accepted-v (list #f #f #f))
+
+(define (list-set lst i val)
+  (let loop ((l lst) (j 0) (acc (list)))
+    (if (null? l) (reverse acc)
+        (loop (cdr l) (+ j 1)
+              (cons (if (= j i) val (car l)) acc)))))
+
+(define (prepare proposal-n acceptor-id)
+  (if (> proposal-n (list-ref promises acceptor-id))
+      (begin
+        (set! promises (list-set promises acceptor-id proposal-n))
+        (display "  Acceptor ") (display acceptor-id)
+        (display " promises n=") (display proposal-n) (newline)
+        #t)
+      #f))
+
+(define (accept proposal-n value acceptor-id)
+  (if (>= proposal-n (list-ref promises acceptor-id))
+      (begin
+        (set! accepted-n (list-set accepted-n acceptor-id proposal-n))
+        (set! accepted-v (list-set accepted-v acceptor-id value))
+        (display "  Acceptor ") (display acceptor-id)
+        (display " accepts (") (display proposal-n)
+        (display ", ") (display value) (display ")") (newline)
+        #t)
+      #f))
+
+(display "Phase 1: prepare(1)") (newline)
+(prepare 1 0) (prepare 1 1) (prepare 1 2)
+
+(display "Phase 2: accept(1, 'X')") (newline)
+(accept 1 "X" 0) (accept 1 "X" 1)
+; Majority (2 of 3) accepted -> value X is chosen
+(display "Value 'X' chosen by majority.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simplified Paxos
+class Acceptor:
+    def __init__(self, id):
+        self.id = id
+        self.promised = 0
+        self.accepted_n = 0
+        self.accepted_v = None
+
+    def prepare(self, n):
+        if n > self.promised:
+            self.promised = n
+            print(f"  Acceptor {self.id} promises n={n}")
+            return True, self.accepted_n, self.accepted_v
+        return False, None, None
+
+    def accept(self, n, v):
+        if n >= self.promised:
+            self.accepted_n = n
+            self.accepted_v = v
+            print(f"  Acceptor {self.id} accepts ({n}, {v})")
+            return True
+        return False
+
+acceptors = [Acceptor(i) for i in range(3)]
+
+print("Phase 1: prepare(1)")
+for a in acceptors:
+    a.prepare(1)
+
+print("Phase 2: accept(1, 'X')")
+votes = sum(a.accept(1, "X") for a in acceptors)
+print(f"Value 'X' chosen by {votes}/3 (majority={votes >= 2})")
+`} />
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Cross-references</p>
+    <ul class="neighbors">
+      <li><a href="/reading/logic/logic-01/">&#x1F511; Logic Ch.1</a> — arguments: consensus is distributed agreement, requiring valid reasoning under uncertainty</li>
+      <li><a href="/reading/distributed-systems/dist-05/">&#x1F310; Ch.5 Raft</a> — a more understandable consensus algorithm</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/distributed-systems/dist-03/", label: "Replication" }} next={{ href: "/reading/distributed-systems/dist-05/", label: "Raft" }} />
+
+  </main>
+</Layout>

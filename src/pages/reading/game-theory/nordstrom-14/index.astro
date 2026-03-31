@@ -1,0 +1,248 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="🍞 Repeated Prisoner's Dilemma" favicon="🎲">
+  <main>
+
+    <a href="/reading/game-theory/" class="text-sm mb-4 inline-block">← back to game theory</a>
+
+    <h1>Repeated Prisoner's Dilemma</h1>
+    <p class="text-gray-400 text-sm mb-6">Nordstrom, <em>Introduction to Game Theory</em> · <a href="https://nordstrommath.com/IntroGameTheory/S_RepeatPD.html">Section 4.4</a> · CC BY-SA 4.0</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Play once: defect. Play forever: cooperate. <strong>Finite repetition</strong> unravels by backward induction: the last round has no future, so defect; but then the second-to-last round is effectively last, so defect; and so on. <strong>Infinite repetition</strong> breaks the chain. The shadow of the future makes tit-for-tat viable.</p>
+    </div>
+
+    <!-- SVG: Timeline with always-defect vs tit-for-tat -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 560 220" class="w-full max-w-2xl" style="font-family: ui-monospace, monospace;">
+        <!-- Title -->
+        <text x="280" y="16" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">cumulative payoff over rounds</text>
+
+        <!-- Timeline axis -->
+        <line x1="60" y1="170" x2="520" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Round markers -->
+        <text x="80" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <text x="150" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">2</text>
+        <text x="220" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">3</text>
+        <text x="290" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">4</text>
+        <text x="360" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">5</text>
+        <text x="430" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">6</text>
+        <text x="500" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">...</text>
+
+        <!-- Always-defect line (red) — gets 1 per round vs tit-for-tat after round 1 -->
+        <!-- Round 1: D vs C = 5, Round 2+: D vs D = 1 each -->
+        <!-- Cumulative: 5, 6, 7, 8, 9, 10 -->
+        <polyline points="80,120 150,115 220,110 290,105 360,100 430,95" fill="none" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="80" cy="120" r="3" fill="#ef4444"/>
+        <circle cx="150" cy="115" r="3" fill="#ef4444"/>
+        <circle cx="220" cy="110" r="3" fill="#ef4444"/>
+        <circle cx="290" cy="105" r="3" fill="#ef4444"/>
+        <circle cx="360" cy="100" r="3" fill="#ef4444"/>
+        <circle cx="430" cy="95" r="3" fill="#ef4444"/>
+        <text x="445" y="92" fill="#ef4444" font-size="9">always defect (10)</text>
+
+        <!-- Tit-for-tat vs tit-for-tat (green) — both cooperate: 3 per round -->
+        <!-- Cumulative: 3, 6, 9, 12, 15, 18 -->
+        <polyline points="80,145 150,120 220,95 290,70 360,45 430,30" fill="none" stroke="#4ade80" stroke-width="2"/>
+        <circle cx="80" cy="145" r="3" fill="#4ade80"/>
+        <circle cx="150" cy="120" r="3" fill="#4ade80"/>
+        <circle cx="220" cy="95" r="3" fill="#4ade80"/>
+        <circle cx="290" cy="70" r="3" fill="#4ade80"/>
+        <circle cx="360" cy="45" r="3" fill="#4ade80"/>
+        <circle cx="430" cy="30" r="3" fill="#4ade80"/>
+        <text x="445" y="27" fill="#4ade80" font-size="9">tit-for-tat (18)</text>
+
+        <!-- Annotation: the crossover -->
+        <line x1="150" y1="120" x2="150" y2="115" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2,2" stroke-opacity="0.3"/>
+        <text x="160" y="140" fill="currentColor" font-size="8" fill-opacity="0.4">payoffs diverge</text>
+
+        <!-- Y-axis label -->
+        <text x="30" y="100" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4" transform="rotate(-90, 30, 100)">cumulative payoff</text>
+      </svg>
+    </div>
+
+    <h3>Finite repetition: backward induction unravels</h3>
+    <p>If both players know the game ends after round N, work backward. In round N there is no future punishment, so both defect. But then round N-1 is effectively the last real round, so both defect there too. The logic cascades all the way to round 1. Finite repetition gives the same result as playing once.</p>
+
+    <SchemeRepl client:load initialCode={`; Repeated PD payoff matrix (per round)
+; C = cooperate, D = defect
+(define (pd-round me other)
+  (cond
+    ((and (eq? me 'C) (eq? other 'C)) 3)
+    ((and (eq? me 'C) (eq? other 'D)) 0)
+    ((and (eq? me 'D) (eq? other 'C)) 5)
+    ((and (eq? me 'D) (eq? other 'D)) 1)))
+
+; Backward induction: in a finite game, defect every round
+(define (finite-game rounds)
+  (let loop ((r 1) (total-me 0) (total-other 0))
+    (if (> r rounds)
+      (list total-me total-other)
+      ; Both defect every round
+      (loop (+ r 1)
+            (+ total-me (pd-round 'D 'D))
+            (+ total-other (pd-round 'D 'D))))))
+
+(display "10-round finite game (both defect): ")
+(display (finite-game 10))
+(newline)
+(display "per-round: 1 each. Could have had 3 each.")
+`} />
+
+    <h3>Infinite repetition: tit-for-tat cooperates</h3>
+    <p>When the game has no known endpoint, the future matters. <strong>Tit-for-tat</strong>: cooperate on round 1, then copy your opponent's last move. It is responsive (punishes defection), nice (starts cooperative), and forgiving (returns to cooperation). Axelrod's tournaments showed it outperforms pure strategies. Tit-for-tat is a closed feedback loop: perceive the opponent's last move, remember it, act on it. This is the same structure that makes <a href="https://june.kim/general-intelligence"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>general intelligence</a> work -- consolidation over repeated interactions.</p>
+
+    <SchemeRepl client:load initialCode={`; Tit-for-tat vs various strategies over N rounds
+
+(define (play-rounds strat1 strat2 n)
+  (let loop ((r 1) (hist1 '()) (hist2 '())
+             (total1 0) (total2 0))
+    (if (> r n)
+      (list total1 total2)
+      (let ((m1 (strat1 r hist2))
+            (m2 (strat2 r hist1)))
+        (loop (+ r 1)
+              (cons m1 hist1) (cons m2 hist2)
+              (+ total1 (pd-round m1 m2))
+              (+ total2 (pd-round m2 m1)))))))
+
+; Strategies
+(define (always-defect r hist) 'D)
+(define (always-cooperate r hist) 'C)
+(define (tit-for-tat r hist)
+  (if (= r 1) 'C (car hist)))
+
+; Tournaments
+(display "TFT vs TFT (20 rounds):     ")
+(display (play-rounds tit-for-tat tit-for-tat 20))
+(newline)
+(display "TFT vs always-D (20 rounds): ")
+(display (play-rounds tit-for-tat always-defect 20))
+(newline)
+(display "always-D vs always-D:        ")
+(display (play-rounds always-defect always-defect 20))
+(newline)
+(display "always-C vs always-D:        ")
+(display (play-rounds always-cooperate always-defect 20))
+; TFT vs TFT: 60 each (mutual cooperation)
+; TFT vs D: TFT gets hurt round 1 then matches
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Repeated PD: strategy tournament
+def pd(me, other):
+    return {("C","C"):3, ("C","D"):0, ("D","C"):5, ("D","D"):1}[(me,other)]
+
+def play(s1, s2, n=20):
+    h1, h2, t1, t2 = [], [], 0, 0
+    for r in range(n):
+        m1 = s1(r, h2)
+        m2 = s2(r, h1)
+        t1 += pd(m1, m2)
+        t2 += pd(m2, m1)
+        h1.append(m1)
+        h2.append(m2)
+    return t1, t2
+
+always_d = lambda r, h: "D"
+always_c = lambda r, h: "C"
+tft = lambda r, h: "C" if r == 0 else h[-1]
+
+print(f"TFT vs TFT:     {play(tft, tft)}")
+print(f"TFT vs always-D: {play(tft, always_d)}")
+print(f"always-D vs D:   {play(always_d, always_d)}")
+print(f"always-C vs D:   {play(always_c, always_d)}")
+`} />
+    </div>
+
+    <h3>The shadow of the future</h3>
+    <p>Cooperation holds when the expected value of future cooperation exceeds the one-time gain from defecting. With a discount factor d (probability the game continues), cooperation via tit-for-tat is sustainable when the present value of cooperation outweighs the temptation to defect. As d approaches 1, the future looms large and cooperation stabilizes.</p>
+
+    <SchemeRepl client:load initialCode={`; Shadow of the future: when does tit-for-tat sustain cooperation?
+; Per-round payoffs: CC=3, DC=5, DD=1
+; Cooperating forever: 3 / (1 - d)
+; Defect then get punished: 5 + d*1 / (1 - d)
+; Cooperation holds when: 3/(1-d) >= 5 + d/(1-d)
+; Simplifies to: d >= 1/2
+
+(define (coop-value d)
+  (/ 3.0 (- 1.0 d)))
+
+(define (defect-value d)
+  (+ 5.0 (/ (* d 1.0) (- 1.0 d))))
+
+(define (cooperation-holds? d)
+  (>= (coop-value d) (defect-value d)))
+
+(display "d=0.3: coop=") (display (number->string (coop-value 0.3) 1))
+(display " defect=") (display (number->string (defect-value 0.3) 1))
+(display " holds? ") (display (cooperation-holds? 0.3)) (newline)
+
+(display "d=0.5: coop=") (display (number->string (coop-value 0.5) 1))
+(display " defect=") (display (number->string (defect-value 0.5) 1))
+(display " holds? ") (display (cooperation-holds? 0.5)) (newline)
+
+(display "d=0.8: coop=") (display (number->string (coop-value 0.8) 1))
+(display " defect=") (display (number->string (defect-value 0.8) 1))
+(display " holds? ") (display (cooperation-holds? 0.8)) (newline)
+
+(display "Threshold: d >= 1/2")
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Term</th>
+            <th class="py-2 pr-4 text-left">Scheme</th>
+            <th class="py-2 text-left">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Tit-for-tat</td><td class="pr-4 text-green-300">(tit-for-tat r hist)</td><td class="font-sans">Cooperate first, then mirror opponent</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Discount factor d</td><td class="pr-4 text-green-300">(coop-value d)</td><td class="font-sans">Probability game continues next round</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 font-sans">Backward induction</td><td class="pr-4 text-green-300">(finite-game rounds)</td><td class="font-sans">Solve from the last round backward</td></tr>
+          <tr><td class="py-2 pr-4 font-sans">Shadow of the future</td><td class="pr-4 text-green-300">(cooperation-holds? d)</td><td class="font-sans">Future payoff makes cooperation rational</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Game theory foundations</p>
+    <ul class="neighbors">
+      <li><a href="/reading/game-theory/nordstrom-12/">🎲 Nordstrom 12</a> — Prisoner's Dilemma and Chicken (the one-shot case)</li>
+      <li><a href="/reading/game-theory/nordstrom-13/">🎲 Nordstrom 13</a> — Volunteer's Dilemma</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper connections</p>
+    <ul>
+      <li><a href="/reading/hedges-2018/">🍞 Hedges 2018</a> — compositional game theory makes repeated games composable via sequential composition of open games</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Repeated_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Repeated game</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Tit_for_tat"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Tit for tat</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Backward_induction"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Backward induction</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Folk_theorem_(game_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Folk theorem</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Translation notes</h3>
+    <p>The payoff matrix here uses Nordstrom's convention (CC=3, CD=0, DC=5, DD=1), which is the standard form from Axelrod's tournaments. The discount factor analysis simplifies the folk theorem to its core insight: cooperation in repeated games requires d above a threshold determined by the payoff ratios. Axelrod's three properties of successful strategies (responsive, nice, unexploitable) are demonstrated by the tit-for-tat implementation.</p>
+
+
+    <PrevNext prev={{ href: "/reading/game-theory/nordstrom-13/", label: "Volunteer's Dilemma" }} fin="fin · 14 of 14" />
+
+  </main>
+</Layout>

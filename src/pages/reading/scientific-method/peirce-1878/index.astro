@@ -1,0 +1,124 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Peirce 1878 — How to Make Our Ideas Clear" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>How to Make Our Ideas Clear</h1>
+    <p class="text-gray-400 text-sm mb-6">Charles Sanders Peirce · 1878 · <a href="https://en.wikisource.org/wiki/How_to_Make_Our_Ideas_Clear">Wikisource (public domain)</a><br/>Published in <em>Popular Science Monthly</em>, January 1878. The paper that founded pragmatism and named abduction.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Added abduction as the third mode of inference, alongside deduction and induction. Founded pragmatism: the meaning of a concept is the totality of its practical consequences.</p>
+    </div>
+
+    <h2>Three kinds of inference</h2>
+
+    <p>Before Peirce, logic recognized two inference modes. Deduction goes from general rules to particular cases. Induction goes from particular cases to general rules. Peirce identified a third: abduction, which generates hypotheses to explain surprising observations. Science needs all three, but abduction is where new ideas come from.</p>
+
+    <!-- SVG: Three inference types -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 250" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Deduction -->
+        <text x="80" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Deduction</text>
+        <rect x="15" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="42" y="51" text-anchor="middle" fill="currentColor" font-size="9">Rule</text>
+        <text x="80" y="51" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">+</text>
+        <rect x="90" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="117" y="51" text-anchor="middle" fill="currentColor" font-size="9">Case</text>
+        <!-- Arrow -->
+        <line x1="80" y1="65" x2="80" y2="82" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="76,82 80,90 84,82" fill="currentColor" fill-opacity="0.3"/>
+        <rect x="42" y="93" width="75" height="24" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="80" y="109" text-anchor="middle" fill="#60a5fa" font-size="9">Result</text>
+        <text x="80" y="135" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">certain</text>
+
+        <!-- Induction -->
+        <text x="240" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Induction</text>
+        <rect x="175" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="202" y="51" text-anchor="middle" fill="currentColor" font-size="9">Case</text>
+        <text x="240" y="51" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">+</text>
+        <rect x="250" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="277" y="51" text-anchor="middle" fill="currentColor" font-size="9">Result</text>
+        <!-- Arrow -->
+        <line x1="240" y1="65" x2="240" y2="82" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="236,82 240,90 244,82" fill="currentColor" fill-opacity="0.3"/>
+        <rect x="202" y="93" width="75" height="24" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="240" y="109" text-anchor="middle" fill="#60a5fa" font-size="9">Rule</text>
+        <text x="240" y="135" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">probable</text>
+
+        <!-- Abduction -->
+        <text x="400" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Abduction</text>
+        <rect x="335" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="362" y="51" text-anchor="middle" fill="currentColor" font-size="9">Rule</text>
+        <text x="400" y="51" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.3">+</text>
+        <rect x="410" y="35" width="55" height="24" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="437" y="51" text-anchor="middle" fill="currentColor" font-size="9">Result</text>
+        <!-- Arrow -->
+        <line x1="400" y1="65" x2="400" y2="82" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="396,82 400,90 404,82" fill="currentColor" fill-opacity="0.3"/>
+        <rect x="362" y="93" width="75" height="24" rx="4" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="400" y="109" text-anchor="middle" fill="#60a5fa" font-size="9">Case</text>
+        <text x="400" y="135" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">plausible</text>
+
+        <!-- Example row -->
+        <line x1="20" y1="155" x2="460" y2="155" stroke="#71717a" stroke-width="0.5" stroke-opacity="0.45"/>
+        <text x="80" y="175" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">All beans from this</text>
+        <text x="80" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">bag are white.</text>
+        <text x="80" y="198" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">These are from this bag.</text>
+        <text x="80" y="211" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">These beans are white.</text>
+
+        <text x="240" y="175" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">These beans are</text>
+        <text x="240" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">from this bag.</text>
+        <text x="240" y="198" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">These beans are white.</text>
+        <text x="240" y="211" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">All beans from this</text>
+        <text x="240" y="221" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">bag are white.</text>
+
+        <text x="400" y="175" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">All beans from this</text>
+        <text x="400" y="185" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">bag are white.</text>
+        <text x="400" y="198" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">These beans are white.</text>
+        <text x="400" y="211" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">These beans are from</text>
+        <text x="400" y="221" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">this bag.</text>
+
+        <text x="240" y="245" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.25">Peirce's bean example from "Deduction, Induction, and Hypothesis" (1878)</text>
+      </svg>
+    </div>
+
+    <h2>Why abduction matters</h2>
+
+    <p>Deduction tells you what follows from your theory. Induction tells you whether the data support it. Neither tells you where the theory came from. Peirce named that gap: abduction is inference to the best explanation. You observe a surprising fact, search for a rule that would make it unsurprising, and tentatively adopt that rule as a hypothesis.</p>
+
+    <p>Chamberlin's method of multiple working hypotheses (1890) is abduction applied with discipline. Instead of adopting one explanation and testing it, you generate several competing explanations and hold them simultaneously. Each is an abductive inference. The scientist's job is to design experiments that distinguish between them. Chamberlin never cited Peirce, but his method is Peirce's abduction multiplied and made adversarial.</p>
+
+    <p>Popper argued that you cannot justify abduction logically. No rule of inference guarantees that the best explanation is the true one. But Popper also recognized that science needs hypothesis generation, and he had no alternative account of where hypotheses come from. His solution was to sidestep the question: it does not matter how you generate a hypothesis, only whether it survives attempts at falsification. Peirce would have agreed with the second half. He would have insisted that the first half still deserves analysis.</p>
+
+    <h2>Pragmatism</h2>
+
+    <p>The paper's other contribution is the pragmatic maxim: "Consider what effects, that might conceivably have practical bearings, we conceive the object of our conception to have. Then, our conception of these effects is the whole of our conception of the object." In shorter form: the meaning of a concept is the totality of its practical consequences.</p>
+
+    <p>This is the philosophical basis for operationalization in science. A concept that has no observable consequences has no scientific content. "Intelligence" means nothing until you specify what an intelligent system would do differently from a non-intelligent one. "Cause" means nothing until you specify what you would observe if the cause were present versus absent. Mill's methods are operationalizations of causation in exactly this sense.</p>
+
+    <p>Pragmatism also grounds Boole's project. If the meaning of a proposition is its practical consequences, then reducing propositions to algebra makes meaning explicit. Two propositions that yield the same algebraic results have the same meaning. Two propositions that yield different results mean different things. The algebra settles disputes that verbal argument cannot.</p>
+
+    <h2>Peirce's extension of Boole</h2>
+
+    <p>Peirce was the first to extend Boole's propositional logic with quantifiers and relations, laying the groundwork for predicate logic. Boole could express "all X are Y" but not "for every X there exists a Y such that R(X,Y)." Peirce added the notation for universal and existential quantification that <a href="https://en.wikipedia.org/wiki/Gottlob_Frege"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Frege</a> would independently develop and that Russell and Whitehead would systematize. Without this extension, formal logic could handle categories but not structure. Science needs both.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/">scientific method</a></li>
+      <li><a href="/reading/scientific-method/boole-1854/">Boole 1854</a></li>
+      <li><a href="/reading/scientific-method/mill-1843/">Mill 1843</a></li>
+      <li><a href="/reading/logic/">logic</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/boole-1854/", label: "Boole 1854 · 5 of 17" }} next={{ href: "/reading/scientific-method/chamberlin-1890/", label: "Chamberlin 1890 · 7 of 17" }} />
+  </main>
+</Layout>

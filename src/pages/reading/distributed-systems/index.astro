@@ -1,0 +1,74 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Distributed Systems" favicon="🌐">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🌐 Distributed Systems</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://en.wikipedia.org/wiki/Distributed_computing"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia</a> (CC BY-SA 4.0) and <a href="https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf">Cambridge CS course notes</a> (CC BY-SA).</p>
+    <p class="text-gray-400 mb-6">What happens when you split a program across machines that can fail independently, have no shared clock, and communicate by sending messages that might get lost.</p>
+
+    <!-- SVG: three nodes connected by network links with messages in flight -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 240" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Node A (top) -->
+        <circle cx="200" cy="40" r="22" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="200" y="45" text-anchor="middle" fill="#60a5fa" font-size="13">A</text>
+        <!-- Node B (bottom-left) -->
+        <circle cx="80" cy="190" r="22" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="80" y="195" text-anchor="middle" fill="#34d399" font-size="13">B</text>
+        <!-- Node C (bottom-right) -->
+        <circle cx="320" cy="190" r="22" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <text x="320" y="195" text-anchor="middle" fill="#f59e0b" font-size="13">C</text>
+        <!-- Link A-B -->
+        <line x1="182" y1="56" x2="96" y2="174" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Link A-C -->
+        <line x1="218" y1="56" x2="304" y2="174" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Link B-C -->
+        <line x1="102" y1="190" x2="298" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Message in flight A -> B -->
+        <circle cx="145" cy="110" r="4" fill="#60a5fa" fill-opacity="0.8"/>
+        <text x="155" y="108" fill="#60a5fa" font-size="9" fill-opacity="0.7">msg</text>
+        <!-- Message in flight B -> C -->
+        <circle cx="190" cy="186" r="4" fill="#34d399" fill-opacity="0.8"/>
+        <text x="200" y="182" fill="#34d399" font-size="9" fill-opacity="0.7">ack</text>
+        <!-- Message in flight C -> A -->
+        <circle cx="270" cy="120" r="4" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="280" y="118" fill="#f59e0b" font-size="9" fill-opacity="0.7">req</text>
+        <!-- Caption -->
+        <text x="200" y="232" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Nodes, links, messages in flight.</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/distributed-systems/dist-01/", title: "What Makes It Hard", desc: "Network partitions, partial failure, no global clock, Byzantine faults" },
+  { href: "/reading/distributed-systems/dist-02/", title: "Time and Clocks", desc: "Physical clocks drift; logical clocks capture causality without synchronization" },
+  { href: "/reading/distributed-systems/dist-03/", title: "Replication", desc: "Copy data across nodes for fault tolerance, then fight consistency" },
+  { href: "/reading/distributed-systems/dist-04/", title: "Consensus", desc: "Getting nodes to agree on a value, and why it is impossible in general" },
+  { href: "/reading/distributed-systems/dist-05/", title: "Raft", desc: "Leader election and log replication made understandable" },
+  { href: "/reading/distributed-systems/dist-06/", title: "Byzantine Fault Tolerance", desc: "When nodes can lie: 3f+1 to tolerate f traitors" },
+  { href: "/reading/distributed-systems/dist-07/", title: "CAP Theorem", desc: "Consistency, availability, partition tolerance: pick two" },
+  { href: "/reading/distributed-systems/dist-08/", title: "Distributed Transactions", desc: "Two-phase commit, three-phase commit, and the saga pattern" },
+  { href: "/reading/distributed-systems/dist-09/", title: "Gossip Protocols", desc: "Epidemic dissemination: tell two friends, who tell two friends" },
+  { href: "/reading/distributed-systems/dist-10/", title: "CRDTs", desc: "Eventual consistency without consensus, via join-semilattices" }
+]} icon="🌐" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/playlist?list=PLeKd45zvjcDFUEv_ohr_HdUFe97RItdiB">Martin Kleppmann: Distributed Systems</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; consensus algorithms are graph algorithms on distributed state</li>
+      <li><a href="/reading/probability/">🎰 Probability</a> &mdash; probabilistic guarantees and gossip protocols</li>
+      <li><a href="/reading/databases/">🗄 Databases</a> &mdash; distributed transactions are both fields</li>
+      <li><a href="/reading/cryptography/">🔐 Cryptography</a> &mdash; Byzantine fault tolerance and authenticated channels</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

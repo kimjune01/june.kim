@@ -1,0 +1,196 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.3 — Conservation of Angular Momentum" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Conservation of Angular Momentum</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Angular momentum</strong> L = I * omega is conserved when no external torque acts. <strong>Torque</strong> is the rotational analog of force. <strong>Moment of inertia</strong> I measures resistance to angular acceleration. A figure skater pulling in their arms speeds up because L stays constant while I decreases.</p>
+    </div>
+
+    <!-- SVG: Spinning wheel with angular momentum vector -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 200" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Wheel (ellipse for perspective) -->
+        <ellipse cx="150" cy="120" rx="70" ry="25" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.4"/>
+        <!-- Axle -->
+        <line x1="150" y1="120" x2="150" y2="35" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <!-- Angular momentum vector (pointing up from axle) -->
+        <line x1="150" y1="35" x2="150" y2="10" stroke="#f59e0b" stroke-width="2.5"/>
+        <polygon points="145,12 150,2 155,12" fill="#f59e0b"/>
+        <text x="165" y="15" fill="#f59e0b" font-size="12" fill-opacity="0.7" font-style="italic">L</text>
+        <!-- Rotation arrow (curved) -->
+        <path d="M 215 105 A 70 25 0 0 1 215 135" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="213,135 220,138 218,128" fill="#34d399" fill-opacity="0.5"/>
+        <text x="232" y="125" fill="#34d399" font-size="11" fill-opacity="0.6">omega</text>
+        <!-- Hub dot -->
+        <circle cx="150" cy="120" r="3" fill="currentColor" fill-opacity="0.3"/>
+        <!-- Caption -->
+        <text x="150" y="190" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">L points along the axis of rotation (right-hand rule).</text>
+      </svg>
+    </div>
+
+    <!-- 1. Torque -->
+    <h3>Torque</h3>
+    <p>Torque tau = r x F is force times the perpendicular distance from the pivot. It is the rotational analog of force: torque causes angular acceleration just as force causes linear acceleration. No net torque means angular momentum is conserved.</p>
+
+    <SchemeRepl client:load initialCode={`; Torque: tau = r * F * sin(theta)
+; A wrench: longer handle = more torque for same force
+
+(define pi 3.14159265)
+
+(define (torque r F theta)
+  (* r F (sin (* theta (/ pi 180)))))
+
+; 30 cm wrench, 50 N force, perpendicular (90 degrees)
+(display "Short wrench (0.3 m): tau = ")
+(display (round (torque 0.3 50 90)))
+(display " N m") (newline)
+
+; 60 cm wrench, same force
+(display "Long wrench  (0.6 m): tau = ")
+(display (round (torque 0.6 50 90)))
+(display " N m") (newline)
+
+; Same wrench, force at 45 degrees
+(display "Angled force (45 deg): tau = ")
+(display (round (torque 0.3 50 45)))
+(display " N m")
+`} />
+
+
+    <!-- 2. Moment of inertia -->
+    <h3>Moment of inertia</h3>
+    <p>Moment of inertia I = sum(m * r&sup2;) measures how mass is distributed relative to the rotation axis. Mass far from the axis is harder to spin. A solid disk has I = (1/2)MR&sup2;. A hoop has I = MR&sup2;. The hoop is harder to spin because all its mass is at the rim.</p>
+
+    <SchemeRepl client:load initialCode={`; Moment of inertia for common shapes
+; All with mass M = 2 kg, radius R = 0.5 m
+
+(define M 2)
+(define R 0.5)
+
+; Point mass at radius R
+(define I-point (* M (* R R)))
+(display "Point mass:    I = ") (display I-point) (display " kg m^2") (newline)
+
+; Hoop (thin ring): I = M R^2
+(define I-hoop (* M (* R R)))
+(display "Hoop:          I = ") (display I-hoop) (display " kg m^2") (newline)
+
+; Solid disk: I = (1/2) M R^2
+(define I-disk (* 0.5 M (* R R)))
+(display "Solid disk:    I = ") (display I-disk) (display " kg m^2") (newline)
+
+; Solid sphere: I = (2/5) M R^2
+(define I-sphere (* 0.4 M (* R R)))
+(display "Solid sphere:  I = ") (display I-sphere) (display " kg m^2") (newline)
+
+(display "Hoop has 2x the inertia of a disk at same M, R.")
+`} />
+
+
+    <!-- 3. Conservation -->
+    <h3>Conservation of angular momentum</h3>
+    <p>When no external torque acts, L = I * omega is constant. If I decreases (mass moves inward), omega must increase. This is the figure skater effect, and it is why collapsing gas clouds spin faster as they contract into stars.</p>
+
+    <SchemeRepl client:load initialCode={`; Figure skater: arms out -> arms in
+; L = I * omega = constant
+
+(define (angular-momentum I omega) (* I omega))
+
+; Arms out: I = 4 kg m^2, omega = 2 rad/s
+(define I-out 4)
+(define omega-out 2)
+(define L (angular-momentum I-out omega-out))
+
+(display "Arms out:  I = ") (display I-out)
+(display ", omega = ") (display omega-out)
+(display ", L = ") (display L) (newline)
+
+; Arms in: I = 1.5 kg m^2, L is conserved
+(define I-in 1.5)
+(define omega-in (/ L I-in))
+
+(display "Arms in:   I = ") (display I-in)
+(display ", omega = ") (display (exact->inexact omega-in))
+(display ", L = ") (display (angular-momentum I-in omega-in)) (newline)
+
+(display "Speed increase: ")
+(display (exact->inexact (/ omega-in omega-out)))
+(display "x")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Figure skater conservation of angular momentum
+I_out, omega_out = 4.0, 2.0  # kg m^2, rad/s
+L = I_out * omega_out
+
+I_in = 1.5
+omega_in = L / I_in
+
+print(f"Arms out: I={I_out}, omega={omega_out}, L={L}")
+print(f"Arms in:  I={I_in}, omega={omega_in:.2f}, L={I_in * omega_in}")
+print(f"Speed increase: {omega_in / omega_out:.1f}x")
+`} />
+    </div>
+
+
+    <!-- 4. Gyroscopes -->
+    <h3>Gyroscopes</h3>
+    <p>A spinning gyroscope resists changes to its angular momentum vector. When gravity exerts a torque, the angular momentum vector precesses (rotates around the vertical axis) instead of tipping over. The precession rate is tau / L: more spin means slower precession.</p>
+
+    <SchemeRepl client:load initialCode={`; Gyroscopic precession: Omega_precession = tau / L
+; tau = m * g * d (torque from gravity on offset mass)
+; L = I * omega (angular momentum of spinning wheel)
+
+(define g 9.8)
+
+; Bicycle wheel: mass 2 kg, radius 0.35 m, offset 0.15 m from pivot
+(define m 2)
+(define R 0.35)
+(define d 0.15)
+
+; Torque from gravity
+(define tau (* m g d))
+(display "Torque from gravity: ") (display tau) (display " N m") (newline)
+
+; Spin the wheel at different speeds
+(define I (* m (* R R)))  ; hoop approximation
+
+(define (precession-rate omega)
+  (/ tau (* I omega)))
+
+(display "At omega = 10 rad/s: precession = ")
+(display (precession-rate 10)) (display " rad/s") (newline)
+
+(display "At omega = 50 rad/s: precession = ")
+(display (precession-rate 50)) (display " rad/s") (newline)
+
+(display "Faster spin -> slower precession.")
+`} />
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/physics/crowell-02/">&#x2190; Ch. 2: Conservation of Momentum</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-02/", label: "Conservation of Momentum" }} next={{ href: "/reading/physics/crowell-04/", label: "Thermodynamics" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,109 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Berners-Lee 1989 + CERN 1993 — The Accidental Commons" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>The Accidental Commons</h1>
+    <p class="text-gray-400 text-sm mb-6">Tim Berners-Lee &middot; CERN &middot; 1989/1993 &middot; <a href="https://www.w3.org/History/1989/proposal.html">The proposal</a> · <a href="https://cds.cern.ch/record/1164399">CERN public domain declaration</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A document management memo created the universal library. A one-page legal declaration made it free. Neither was the point.</p>
+    </div>
+
+    <!-- SVG: timeline — memo to public domain -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 120" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Timeline axis -->
+        <line x1="40" y1="50" x2="480" y2="50" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- 1989: The memo -->
+        <circle cx="100" cy="50" r="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2"/>
+        <text x="100" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.7">1989</text>
+        <text x="100" y="75" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">memo</text>
+
+        <!-- 1990: First server -->
+        <circle cx="200" cy="50" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1"/>
+        <text x="200" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">1990</text>
+        <text x="200" y="75" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">first server</text>
+
+        <!-- 1991: External sites -->
+        <circle cx="300" cy="50" r="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1"/>
+        <text x="300" y="30" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">1991</text>
+        <text x="300" y="75" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">outside CERN</text>
+
+        <!-- 1993: Public domain -->
+        <circle cx="400" cy="50" r="8" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="400" y="28" text-anchor="middle" fill="#60a5fa" font-size="10">1993</text>
+        <text x="400" y="75" text-anchor="middle" fill="#60a5fa" font-size="9">public domain</text>
+
+        <!-- Annotation -->
+        <text x="260" y="108" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.3">four years between invention and legal freedom</text>
+      </svg>
+    </div>
+
+    <h3>The memo (1989)</h3>
+
+    <p>Berners-Lee wrote a proposal to solve an internal problem at CERN: how do you keep track of who is working on what when 10,000 people cycle through the lab every few years? The institutional memory kept walking out the door. His solution was a system of linked documents — hypertext over a network — where any node could point to any other node without asking permission.</p>
+
+    <p>The memo is pragmatic, almost bureaucratic. It talks about information management, not about creating a universal library. The diagrams show CERN's organizational structure, not the architecture of human knowledge. The word "internet" appears, but only as the transport layer. The ambition was local: make it easier for physicists to find each other's notes.</p>
+
+    <blockquote>
+      <p>"Vague but exciting..."</p>
+    </blockquote>
+
+    <p>That annotation, scrawled by Berners-Lee's supervisor Mike Sendall on the cover page, is the most consequential marginalia of the twentieth century. It was not an endorsement. It was permission to keep going. Sendall did not fund a project to build the World Wide Web. He let a staff member tinker.</p>
+
+    <h3>What the memo assumed</h3>
+
+    <p>The design decisions that made the web a commons were not ideological. They were engineering choices made for a specific environment:</p>
+
+    <p><strong>Anyone can link to anything.</strong> At CERN, you could not predict which documents would be relevant to which projects. A centralized index would be out of date before it was published. So links had to be permissionless. This is the decision that made the web a commons rather than a database.</p>
+
+    <p><strong>Anyone can publish.</strong> CERN had too many groups producing too many documents for a single publishing authority. So publication had to be decentralized. No editorial board. No approval process. Put a file on a server, give it an address, done.</p>
+
+    <p><strong>No central authority decides what is accessible.</strong> This was not a philosophical commitment to free speech. It was the absence of anyone willing to do the work of gatekeeping. The web was a commons by default because nobody built the fences.</p>
+
+    <p>These are not features. They are the absence of restrictions. Every one of them could have been designed differently, and if CERN had been a corporation instead of a research lab, they would have been.</p>
+
+    <h3>The declaration (1993)</h3>
+
+    <p>Four years later, CERN released the web's source code into the public domain. The document is one page. It states that CERN relinquishes all intellectual property rights to the code, protocols, and documentation of the World Wide Web. No conditions. No license. Public domain.</p>
+
+    <p>This is the moment the accidental commons became legally real. Before this document, HTTP and HTML were things that happened to be available. After it, they were things that could not be taken back. Without this declaration, the web could have become CompuServe — a proprietary network owned by a single organization, accessed on its terms.</p>
+
+    <p>Technology creates possibility. Law creates reality. The web existed for four years before anyone decided who owned it. CERN's decision to release it into the public domain was a choice, not an inevitability. The people who made that choice were not thinking about the commons. They were thinking about adoption. A protocol nobody uses is worth less than a protocol everybody uses, even if "everybody" means you gave it away.</p>
+
+    <h3>The accidental pattern</h3>
+
+    <p>The commons was never planned. Berners-Lee wanted to solve CERN's information management problem. The universality was an accident of good design — or more precisely, an accident of minimal design. The web worked everywhere because it assumed nothing about the machines or people at either end of a link.</p>
+
+    <p>This pattern recurs. The most durable commons are not built by idealists. They are built by engineers solving local problems, who make their solutions open because openness is cheaper than control. The ideology comes later, after the commons already exists, as a rationalization for what happened to work.</p>
+
+    <p>The pattern has a second half. Openness creates value. Value attracts enclosure. The trajectory from Berners-Lee's memo to the modern web is the trajectory from commons to fence, and it was already underway by the time the next paper in this collection was published.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/commons/statute-of-anne-1710/">Statute of Anne 1710</a> — the original bargain between creators and the public</li>
+      <li><a href="/reading/commons/brin-page-1998/">Brin &amp; Page 1998</a> — PageRank indexed the commons; Appendix A predicted its enclosure</li>
+      <li><a href="/reading/distributed-systems/">Distributed Systems</a> — the architecture that made the web possible</li>
+      <li><a href="/reading/distributed-systems/dist-01/">💻 Distributed Systems Ch.1</a> — network architecture: the web's hyperlink graph is a distributed system where every node is an equal peer — no hierarchy, no central routing</li>
+      <li><a href="/reading/information-theory/shannon-01/">📡 IT Ch.1</a> — communication and information: the proposal's core insight is Shannon's channel problem restated in document form — communication is successful if the receiver can reconstruct the sender's meaning</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mt-6">Blog connection: <a href="https://june.kim/the-press"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Press</a> — every time a new medium compresses the intermediary layer (scribes to printers to web), the commons expands before the enclosure catches up.</p>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The proposal is <a href="https://www.w3.org/History/1989/proposal.html">on the W3C site</a>. The CERN public domain declaration is <a href="https://cds.cern.ch/record/1164399">in the CERN document server</a>. Both are short. Read both.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/commons/statute-of-anne-1710/", label: "Statute of Anne · 2 of 8" }} next={{ href: "/reading/commons/brin-page-1998/", label: "Brin & Page 1998 · 4 of 8" }} />
+
+  </main>
+</Layout>

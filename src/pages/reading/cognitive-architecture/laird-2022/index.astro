@@ -1,0 +1,232 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Laird 2022 — Introduction to the Soar Cognitive Architecture" favicon="🏛️">
+  <main>
+
+    <a href="/reading/cognitive-architecture/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>Introduction to the Soar Cognitive Architecture</h1>
+    <p class="text-gray-400 text-sm mb-6">John E. Laird · 2022 · <a href="https://arxiv.org/abs/2205.03854"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2205.03854</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The most complete symbolic cognitive architecture. Four memories, four learning modules, one decision cycle. Forty years of building the whole mind, one wall at a time.</p>
+    </div>
+
+    <h2>What Soar is</h2>
+
+    <p>Soar is not a model. It is a <a href="https://en.wikipedia.org/wiki/Cognitive_architecture"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>cognitive architecture</a>, a fixed set of mechanisms that an agent uses to perceive, decide, act, and learn across any domain. The architecture does not change per task. The knowledge does.</p>
+
+    <p><a href="https://en.wikipedia.org/wiki/Allen_Newell"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Allen Newell</a> proposed in 1990 that cognitive science needed unified theories, not isolated models. Soar is the most sustained attempt to build one. It started in 1983 and has been continuously extended for four decades.</p>
+
+    <!-- SVG: Soar decision cycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Pipeline boxes -->
+        <rect x="10" y="50" width="70" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="45" y="71" text-anchor="middle" fill="currentColor" font-size="10">Input</text>
+
+        <rect x="100" y="50" width="90" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="145" y="71" text-anchor="middle" fill="currentColor" font-size="10">Elaboration</text>
+
+        <rect x="210" y="50" width="80" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="250" y="71" text-anchor="middle" fill="currentColor" font-size="10">Decision</text>
+
+        <rect x="310" y="50" width="90" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="355" y="71" text-anchor="middle" fill="currentColor" font-size="10">Application</text>
+
+        <rect x="420" y="50" width="55" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="447" y="71" text-anchor="middle" fill="currentColor" font-size="10">Output</text>
+
+        <!-- Arrows between boxes -->
+        <line x1="80" y1="66" x2="100" y2="66" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="98,62 104,66 98,70" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="190" y1="66" x2="210" y2="66" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="208,62 214,66 208,70" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="290" y1="66" x2="310" y2="66" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="308,62 314,66 308,70" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="400" y1="66" x2="420" y2="66" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="418,62 424,66 418,70" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Elaboration sub-waves -->
+        <text x="145" y="42" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">situate &#x2192; propose &#x2192; eval</text>
+
+        <!-- Decision sub-steps -->
+        <text x="250" y="42" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.4">reject &#x2192; rank</text>
+
+        <!-- Working Memory at center -->
+        <rect x="140" y="105" width="200" height="26" rx="4" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="240" y="122" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Working Memory (central hub)</text>
+
+        <!-- Lines from WM to stages -->
+        <line x1="145" y1="82" x2="200" y2="105" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="250" y1="82" x2="250" y2="105" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+        <line x1="355" y1="82" x2="290" y2="105" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+
+        <!-- Impasse arrow (loops back) -->
+        <path d="M 250 82 Q 250 95 160 95 Q 100 95 100 82" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <text x="90" y="100" fill="#f59e0b" font-size="8" fill-opacity="0.5">impasse → substate</text>
+
+        <!-- Caption -->
+        <text x="240" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">~50ms per cycle, even with millions of rules</text>
+      </svg>
+    </div>
+
+    <h2>The decision cycle</h2>
+
+    <p>Every Soar agent runs the same top-level loop:</p>
+
+    <ol class="text-gray-300 space-y-1 mb-4">
+      <li><strong>Input:</strong> perception writes to working memory</li>
+      <li><strong>Elaboration:</strong> production rules fire in parallel waves. First situation elaboration, then operator proposals, then operator evaluations</li>
+      <li><strong>Decision:</strong> the decision procedure processes preferences. Rejections first, ranking only if needed</li>
+      <li><strong>Application:</strong> the selected operator fires its actions</li>
+      <li><strong>Output:</strong> motor commands and memory store commands</li>
+    </ol>
+
+    <p>The elaboration phase is the key insight. Rules fire in causally dependent waves: evaluation cannot fire until proposals exist. Rejection before ranking, implemented through data dependencies rather than explicit phases. The result is the same as if Filter and Attend ran sequentially, but it emerges from parallel rule firing.</p>
+
+    <!-- SVG: Four memories + learning modules -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 200" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Memory boxes -->
+        <rect x="10" y="30" width="100" height="50" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="60" y="52" text-anchor="middle" fill="currentColor" font-size="9">Working</text>
+        <text x="60" y="65" text-anchor="middle" fill="currentColor" font-size="9">Memory</text>
+
+        <rect x="125" y="30" width="100" height="50" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="175" y="52" text-anchor="middle" fill="currentColor" font-size="9">Procedural</text>
+        <text x="175" y="65" text-anchor="middle" fill="currentColor" font-size="9">Memory</text>
+
+        <rect x="240" y="30" width="100" height="50" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="290" y="52" text-anchor="middle" fill="currentColor" font-size="9">Semantic</text>
+        <text x="290" y="65" text-anchor="middle" fill="currentColor" font-size="9">Memory</text>
+
+        <rect x="355" y="30" width="100" height="50" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="405" y="52" text-anchor="middle" fill="currentColor" font-size="9">Episodic</text>
+        <text x="405" y="65" text-anchor="middle" fill="currentColor" font-size="9">Memory</text>
+
+        <!-- Learning modules -->
+        <rect x="125" y="120" width="100" height="40" rx="5" fill="#34d399" fill-opacity="0.1" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="175" y="138" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.8">Chunking</text>
+        <text x="175" y="150" text-anchor="middle" fill="#34d399" font-size="9" fill-opacity="0.8">+ RL</text>
+
+        <rect x="240" y="120" width="100" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="290" y="138" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Semantic</text>
+        <text x="290" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Learning</text>
+
+        <rect x="355" y="120" width="100" height="40" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="405" y="138" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Episodic</text>
+        <text x="405" y="150" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">Learning</text>
+
+        <!-- Arrows from learning to memory -->
+        <line x1="175" y1="120" x2="175" y2="80" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5"/>
+        <polygon points="171,82 175,76 179,82" fill="#34d399" fill-opacity="0.5"/>
+
+        <line x1="290" y1="120" x2="290" y2="80" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <line x1="405" y1="120" x2="405" y2="80" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+
+        <!-- Labels -->
+        <text x="60" y="20" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">scratchpad</text>
+        <text x="175" y="20" text-anchor="middle" fill="#34d399" font-size="8" fill-opacity="0.6">has learning</text>
+        <text x="290" y="20" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">manual only</text>
+        <text x="405" y="20" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">no discrimination</text>
+
+        <!-- Caption -->
+        <text x="230" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">solid arrow: automatic learning. dashed: missing or manual.</text>
+      </svg>
+    </div>
+
+    <h2>Four memories</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Memory</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Contents</th>
+            <th class="text-left py-2 text-gray-400">Learning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Working Memory</td><td class="pr-3 text-gray-400">Current situation: perceptual input, goals, intermediate results. Graph of attribute-value elements. Truth maintenance auto-retracts unsupported elements.</td><td class="text-gray-400">None (by design: it is the scratchpad)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Procedural Memory</td><td class="pr-3 text-gray-400">Production rules (if-then). The RETE network matches incrementally: cost proportional to change, not to total rules. All matched rules fire in parallel.</td><td class="text-gray-400">Chunking + RL (the only store with automatic learning)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Semantic Memory</td><td class="pr-3 text-gray-400">Long-term facts: graph structures in SQLite. Retrieval uses activation (recency + frequency + spreading) borrowed from <a href="https://en.wikipedia.org/wiki/ACT-R"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>ACT-R</a>.</td><td class="text-gray-400">Manual only. No automatic learning mechanism.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Episodic Memory</td><td class="text-gray-400">Snapshots of working memory, stored as change-deltas. One episode per decision cycle. Retrieval by partial cue matching.</td><td class="text-gray-400">Automatic but undiscriminating. Stores everything.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Plus the <strong>Spatial-Visual System (SVS)</strong>: a 3D scene graph for spatial reasoning, with top-down filters that control what gets symbolized.</p>
+
+    <h2>Four learning modules</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Module</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it does</th>
+            <th class="text-left py-2 text-gray-400">Limitation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Chunking</td><td class="pr-3 text-gray-400">When a substate resolves an impasse, backtrace the dependency chain and compile the result into a production rule. Deliberation becomes reaction.</td><td class="text-gray-400">Requires deterministic substates. Cannot chunk over RL decisions.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Reinforcement Learning</td><td class="pr-3 text-gray-400">Adjust numeric preferences on operators to maximize future reward. Applies to every active substate. Natural hierarchical RL.</td><td class="text-gray-400">Global parameters fixed at initialization. Delta-bar-delta adapts per-rule rates.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Semantic Learning</td><td class="pr-3 text-gray-400">The agent can store facts to semantic memory at any time.</td><td class="text-gray-400">No automatic mechanism. Raw store() call. Laird rates it "missing."</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Episodic Learning</td><td class="text-gray-400">Automatically stores a snapshot at the end of every decision cycle.</td><td class="text-gray-400">No discrimination. Every cycle is recorded. No generalization.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The impasse mechanism</h2>
+
+    <p>When the decision procedure lacks sufficient knowledge to select an operator, Soar creates a <strong>substate</strong>, a new context where the same decision cycle runs recursively. The substate has full access to all reasoning capabilities. This single mechanism unifies:</p>
+
+    <ul class="text-gray-400 space-y-1 mb-4">
+      <li>Planning (operator no-change impasse → look-ahead search)</li>
+      <li>Hierarchical decomposition (operator subgoaling)</li>
+      <li>Metacognition (reasoning about one's own reasoning)</li>
+      <li>Deliberate evaluation (comparing operators by simulation)</li>
+    </ul>
+
+    <p>Most architectures bolt these on as separate modules. Soar derives them from one mechanism.</p>
+
+    <h2>The pattern</h2>
+
+    <p>Every memory has a functional forward pass. Procedural memory is the only store with automatic learning. The other stores (semantic, episodic, perceptual) have no learning mechanism that writes back to them.</p>
+
+    <p>Laird's own assessment: "What I feel is most missing from Soar is its ability to 'bootstrap' itself up from the architecture and a set of innate knowledge into being a fully capable agent across a breadth of tasks."</p>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Demonstrated systems</summary>
+
+    <ul class="text-gray-400 space-y-1 mb-4">
+      <li><strong>Rosie:</strong> learns 60+ tasks from real-time natural language instruction</li>
+      <li><strong>TacAir-Soar:</strong> 8,000 rules, military simulation, large-scale distributed environments</li>
+      <li><strong>20+ real-world robots</strong> with real-time decision-making and spatial reasoning</li>
+      <li>Agents that have run uninterrupted for 30 days</li>
+      <li>Decision cycle of ~50ms with millions of knowledge elements</li>
+    </ul>
+    </details>
+
+    <h2>What Soar gives back</h2>
+
+    <p>The <a href="https://en.wikipedia.org/wiki/Rete_algorithm"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>RETE network</a> is the cache that LLMs don't have. It tracks every partial match incrementally: cost proportional to what changed, not to total knowledge. <a href="/reading/cognitive-architecture/vaswani-2017/">Transformers</a> recompute attention over the entire context every pass. KV-caching helps but doesn't approach RETE's efficiency. When <a href="/reading/cognitive-architecture/arunkumar-2026/">agent frameworks</a> bolt on memory systems like MemGPT, they're rebuilding what RETE already does natively.</p>
+
+    <p>When a rule's conditions no longer hold, truth maintenance automatically retracts the structures it created. No garbage, no stale data. <a href="/reading/cognitive-architecture/arunkumar-2026/">LLM agents</a> accumulate context monotonically. MemAgent had to learn a separate policy for what to forget. Soar does it architecturally. <a href="/reading/cognitive-architecture/minsky-1986/">Minsky's</a> censors and suppressors are the informal version: negative expertise that removes what shouldn't be there.</p>
+
+    <p>How does Soar handle Attend? Staged preferences: process rejections first. If rejection resolves the decision, skip ranking entirely. <a href="/reading/cognitive-architecture/vaswani-2017/">Softmax attention</a> always computes a full distribution over all positions. Soar asks: can I eliminate most candidates before ranking? Same insight as <a href="/reading/cognitive-architecture/minsky-1986/">Minsky's</a> cross-exclusion, but with a principled two-phase protocol.</p>
+
+    <p>Then there's chunking, the Consolidate that the LLM stack lacks. Soar deliberates in a substate, backtraces the dependency chain, compiles the result into a production rule. Next time, it fires directly. <a href="/reading/cognitive-architecture/zhao-2023/">LLMs</a> have no equivalent. Every inference recomputes from scratch. <a href="/reading/cognitive-architecture/arunkumar-2026/">Reflexion</a> is the closest attempt: store a critique in natural language, condition the next attempt on it. Reflexion stores text; chunking compiles executable rules. That gap between verbal and parametric learning is the central unsolved problem.</p>
+
+    <p>Finally, delta episodic storage. Store only changes between snapshots. <a href="/reading/cognitive-architecture/arunkumar-2026/">Generative Agents</a> store full natural-language episodes, expensive and redundant. Soar's delta representation keeps costs proportional to novelty. The <a href="https://june.kim/prescription-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>prescription</a> adds a surprise gate: store only the episodes that deviate from predictions.</p>
+
+    <p class="text-gray-500 text-sm mt-8">Deep dive: <a href="https://june.kim/diagnosis-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diagnosis: Soar</a> · <a href="https://june.kim/prescription-soar"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Prescription: Soar</a> · <a href="/reading/cognitive-architecture/">back to collection</a></p>
+
+    <PrevNext prev={{ href: "/reading/cognitive-architecture/vaswani-2017/", label: "Vaswani 2017 · 2 of 5" }} next={{ href: "/reading/cognitive-architecture/zhao-2023/", label: "Zhao 2023 · 4 of 5" }} />
+
+  </main>
+</Layout>

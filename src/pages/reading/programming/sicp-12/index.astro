@@ -1,0 +1,331 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.12 — Concurrency" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Concurrency</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-23.html#%_sec_3.4">SICP §3.4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Shared mutable state + concurrency = bugs. Serializers ensure critical sections run atomically. But composing serializers can deadlock. There is no free lunch.</p>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 155" class="w-full max-w-md mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- Timeline A -->
+      <text x="10" y="38" fill="#60a5fa" font-size="10" font-weight="600">A</text>
+      <line x1="30" y1="35" x2="350" y2="35" stroke="#60a5fa" stroke-width="1.2"/>
+      <!-- A operations -->
+      <rect x="60" y="24" width="52" height="22" rx="3" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+      <text x="86" y="39" text-anchor="middle" fill="#60a5fa" font-size="9">read x</text>
+      <rect x="180" y="24" width="58" height="22" rx="3" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1"/>
+      <text x="209" y="39" text-anchor="middle" fill="#60a5fa" font-size="9">write x</text>
+      <!-- Timeline B -->
+      <text x="10" y="78" fill="#34d399" font-size="10" font-weight="600">B</text>
+      <line x1="30" y1="75" x2="350" y2="75" stroke="#34d399" stroke-width="1.2"/>
+      <!-- B operations -->
+      <rect x="120" y="64" width="52" height="22" rx="3" fill="#34d399" fill-opacity="0.15" stroke="#34d399" stroke-width="1"/>
+      <text x="146" y="79" text-anchor="middle" fill="#34d399" font-size="9">read x</text>
+      <rect x="250" y="64" width="58" height="22" rx="3" fill="#34d399" fill-opacity="0.15" stroke="#34d399" stroke-width="1"/>
+      <text x="279" y="79" text-anchor="middle" fill="#34d399" font-size="9">write x</text>
+      <!-- Conflict zone -->
+      <rect x="172" y="18" width="144" height="74" rx="5" fill="#f87171" fill-opacity="0.08" stroke="#f87171" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="244" y="108" text-anchor="middle" fill="#f87171" font-size="9" font-weight="600">conflict</text>
+      <!-- Time arrow -->
+      <line x1="30" y1="120" x2="350" y2="120" stroke="currentColor" stroke-opacity="0.3" stroke-width="1" marker-end="url(#arrowConc)"/>
+      <text x="190" y="118" text-anchor="middle" fill="currentColor" fill-opacity="0.3" font-size="9">time &rarr;</text>
+      <!-- Caption -->
+      <text x="190" y="140" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">interleaving makes order unpredictable &mdash; shared state + concurrency = bugs</text>
+      <defs>
+        <marker id="arrowConc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.3"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!-- 1. Nature of time -->
+    <h3>The nature of time in concurrent systems</h3>
+    <p>Without concurrency, events happen in a definite order. With concurrency, operations on shared state can <strong>interleave</strong>. The result depends on timing, not just logic.</p>
+
+    <SchemeRepl client:load initialCode={`; The classic problem: two processes both read-modify-write
+; Imagine balance = 100, and two withdrawals of 10 happen "at once"
+
+; Correct sequential execution:
+(define balance 100)
+
+; Withdrawal 1
+(set! balance (- balance 10))  ; balance = 90
+
+; Withdrawal 2
+(set! balance (- balance 10))  ; balance = 80
+
+(display "sequential: ") (display balance) (newline)
+
+; But with interleaving, both could read 100,
+; then both write 90 — losing one withdrawal!
+; This is a race condition.
+(display "possible concurrent result: 90 (lost update!)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Race condition demonstrated sequentially
+# (real concurrency needs threads)
+
+balance = 100
+
+# Correct sequential:
+balance -= 10  # 90
+balance -= 10  # 80
+print(f"sequential: {balance}")
+
+# With interleaving (simulated):
+# Thread A reads 100, Thread B reads 100
+# Thread A writes 90, Thread B writes 90
+# Result: 90 instead of 80
+print("possible concurrent result: 90 (lost update!)")
+`} />
+    </div>
+
+    <!-- 2. Serializers -->
+    <h3>Mechanisms for controlling concurrency</h3>
+    <p>A <strong>serializer</strong> takes a procedure and returns a version that cannot interleave with other serialized procedures from the same serializer. The serializer is a higher-order function that wraps procedures with mutual exclusion.</p>
+
+    <SchemeRepl client:load initialCode={`; Simulating a serializer concept
+; In real SICP, parallel-execute provides concurrency
+; Here we show the serializer's contract
+
+(define (make-serializer)
+  (let ((locked #f))
+    (lambda (proc)
+      (lambda args
+        ; In real implementation, this would block if locked
+        (set! locked #t)
+        (let ((result (apply proc args)))
+          (set! locked #f)
+          result)))))
+
+(define (make-account balance)
+  (let ((s (make-serializer)))
+    (define (withdraw amount)
+      (if (>= balance amount)
+          (begin (set! balance (- balance amount))
+                 balance)
+          "Insufficient funds"))
+    (define (deposit amount)
+      (set! balance (+ balance amount))
+      balance)
+    (define (dispatch m)
+      (cond ((eq? m 'withdraw) (s withdraw))  ; serialized!
+            ((eq? m 'deposit) (s deposit))     ; serialized!
+            ((eq? m 'balance) balance)
+            (else (error "Unknown request" m))))
+    dispatch))
+
+(define acc (make-account 100))
+(display ((acc 'withdraw) 25)) (newline)  ; 75
+(display ((acc 'deposit) 50)) (newline)   ; 125
+(display (acc 'balance))                  ; 125
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import threading
+
+class Account:
+    def __init__(self, balance):
+        self.balance = balance
+        self.lock = threading.Lock()
+
+    def withdraw(self, amount):
+        with self.lock:  # serialized
+            if self.balance >= amount:
+                self.balance -= amount
+                return self.balance
+            return "Insufficient funds"
+
+    def deposit(self, amount):
+        with self.lock:  # serialized
+            self.balance += amount
+            return self.balance
+
+acc = Account(100)
+print(acc.withdraw(25))  # 75
+print(acc.deposit(50))   # 125
+print(acc.balance)       # 125
+`} />
+    </div>
+
+    <!-- 3. Implementing serializers (mutex) -->
+    <h3>Implementing serializers: the mutex</h3>
+    <p>A serializer is built from a <strong>mutex</strong> (mutual exclusion). A mutex has two operations: <code>acquire</code> and <code>release</code>. A process that has acquired the mutex blocks all others until it releases.</p>
+
+    <SchemeRepl client:load initialCode={`; Mutex: the fundamental synchronization primitive
+(define (make-mutex)
+  (let ((cell (list #f)))
+    (define (the-mutex m)
+      (cond ((eq? m 'acquire)
+             (if (test-and-set! cell)
+                 (the-mutex 'acquire)))  ; busy-wait (spin)
+            ((eq? m 'release)
+             (set-car! cell #f))))
+    the-mutex))
+
+; test-and-set! must be atomic (hardware support)
+(define (test-and-set! cell)
+  (if (car cell)
+      #t                          ; already locked
+      (begin (set-car! cell #t)   ; grab the lock
+             #f)))                ; success
+
+(define m (make-mutex))
+(m 'acquire)
+(display "mutex acquired — critical section") (newline)
+(m 'release)
+(display "mutex released")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import threading
+
+mutex = threading.Lock()
+
+mutex.acquire()
+print("mutex acquired — critical section")
+mutex.release()
+print("mutex released")
+
+# Python's Lock is implemented with OS primitives
+# SICP's test-and-set! maps to hardware CAS instructions
+`} />
+    </div>
+
+    <!-- 4. Deadlock -->
+    <h3>Deadlock</h3>
+    <p>When two accounts need to transfer money, each must lock both accounts. If account A locks itself and waits for B, while B locks itself and waits for A, neither can proceed. This is <strong>deadlock</strong>. The classic fix: always acquire locks in a fixed global order.</p>
+
+    <SchemeRepl client:load initialCode={`; Deadlock scenario (conceptual — no real threads here)
+;
+; Transfer needs to lock BOTH accounts:
+;
+; (define (transfer from to amount)
+;   (serialize-from
+;     (serialize-to
+;       (lambda ()
+;         (withdraw from amount)
+;         (deposit to amount)))))
+;
+; If two transfers happen simultaneously:
+;   Transfer A->B: locks A, waits for B
+;   Transfer B->A: locks B, waits for A
+;   DEADLOCK!
+;
+; Fix: order locks by account number
+
+(define (make-numbered-account id balance)
+  (let ((s (make-serializer)))
+    (define (dispatch m)
+      (cond ((eq? m 'id) id)
+            ((eq? m 'withdraw)
+             (lambda (amt) (set! balance (- balance amt)) balance))
+            ((eq? m 'deposit)
+             (lambda (amt) (set! balance (+ balance amt)) balance))
+            ((eq? m 'balance) balance)
+            ((eq? m 'serializer) s)
+            (else (error "Unknown" m))))
+    dispatch))
+
+(define (make-serializer)
+  (lambda (proc) proc))  ; stub for demonstration
+
+(define a1 (make-numbered-account 1 100))
+(define a2 (make-numbered-account 2 200))
+
+; Safe transfer: always lock lower-numbered account first
+(display "a1 before: ") (display (a1 'balance)) (newline)
+(display "a2 before: ") (display (a2 'balance)) (newline)
+((a1 'withdraw) 30)
+((a2 'deposit) 30)
+(display "a1 after:  ") (display (a1 'balance)) (newline)
+(display "a2 after:  ") (display (a2 'balance))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Deadlock-free transfer: always lock in consistent order
+import threading
+
+class Account:
+    _next_id = 0
+    def __init__(self, balance):
+        self.id = Account._next_id
+        Account._next_id += 1
+        self.balance = balance
+        self.lock = threading.Lock()
+
+def transfer(from_acc, to_acc, amount):
+    # Always lock lower id first to prevent deadlock
+    first, second = sorted([from_acc, to_acc], key=lambda a: a.id)
+    with first.lock:
+        with second.lock:
+            from_acc.balance -= amount
+            to_acc.balance += amount
+
+a1 = Account(100)
+a2 = Account(200)
+print(f"before: a1={a1.balance}, a2={a2.balance}")
+transfer(a1, a2, 30)
+print(f"after:  a1={a1.balance}, a2={a2.balance}")
+`} />
+    </div>
+
+    <!-- Notation reference -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-4 text-gray-400">SICP concept</th>
+            <th class="text-left py-2 pr-4 text-gray-400">Python</th>
+            <th class="text-left py-2 text-gray-400">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>parallel-execute</code></td><td class="pr-4"><code>threading.Thread</code></td><td class="text-gray-400">Run procedures concurrently</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(make-serializer)</code></td><td class="pr-4"><code>threading.Lock()</code></td><td class="text-gray-400">Create mutual exclusion guard</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>(s proc)</code></td><td class="pr-4"><code>with lock:</code></td><td class="text-gray-400">Serialize a procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-1 pr-4"><code>test-and-set!</code></td><td class="pr-4">CAS / atomic op</td><td class="text-gray-400">Hardware-level atomic test-and-set</td></tr>
+          <tr><td class="py-1 pr-4">deadlock</td><td class="pr-4">deadlock</td><td class="text-gray-400">Circular wait on locks</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li>SICP's <code>make-serializer</code> returns a higher-order function. Python's <code>threading.Lock</code> is an object with <code>acquire</code>/<code>release</code> methods, typically used via <code>with</code> statements.</li>
+      <li>Python's GIL (Global Interpreter Lock) means CPU-bound threads don't truly run in parallel, but I/O-bound threads and race conditions on shared state are still real.</li>
+      <li>The deadlock-prevention strategy (lock ordering) is universal across languages.</li>
+    </ul>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="text-sm text-gray-400 mb-6">
+      <li><a href="https://en.wikipedia.org/wiki/Race_condition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Race condition</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mutual_exclusion"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Mutual exclusion</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Deadlock"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wikipedia: Deadlock</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-23.html#%_sec_3.4">Read SICP &sect;3.4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-11/", label: "Mutable Data" }} next={{ href: "/reading/programming/sicp-13/", label: "Streams · 13 of 22" }} />
+
+  </main>
+</Layout>

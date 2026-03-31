@@ -1,0 +1,371 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Milewski Ch.4 — Kleisli Categories" favicon="🐱">
+  <main>
+
+    <a href="/reading/category-theory/" class="text-sm mb-4 inline-block">← back to index</a>
+
+    <h1>Kleisli Categories</h1>
+    <p class="text-gray-400 text-sm mb-6">Bartosz Milewski · 2014 · <a href="https://bartoszmilewski.com/2014/12/23/kleisli-categories/">Category Theory for Programmers, Ch. 4</a></p>
+
+    <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> (Category), <a href="/reading/category-theory/milewski-01/">🍞 Chapter 2</a> (Types and Functions). 7 min.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Side effects are <strong>not side effects</strong> if you make them part of the return type. A <strong>Kleisli category</strong> re-defines morphisms as functions <code>a → m(b)</code> and composition as the fish operator <code>(>=>)</code>. The category laws still hold. You get purity and logging (or failure, or nondeterminism) at the same time.</p>
+    </div>
+
+    <!-- SVG: Kleisli arrow vs plain arrow -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 150" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Plain arrow: a -> b -->
+        <circle cx="50" cy="40" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="50" y="28" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">a</text>
+        <circle cx="170" cy="40" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="170" y="28" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">b</text>
+        <line x1="58" y1="40" x2="160" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="160,36 168,40 160,44" fill="currentColor"/>
+        <text x="110" y="35" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Kleisli arrow: a -> M(b) -->
+        <circle cx="50" cy="110" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="50" y="98" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">a</text>
+        <!-- M(b) as a rounded box -->
+        <rect x="140" y="96" width="60" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="170" y="115" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.7">M(b)</text>
+        <line x1="58" y1="110" x2="135" y2="110" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="135,106 143,110 135,114" fill="currentColor"/>
+        <text x="96" y="105" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">f</text>
+
+        <!-- Labels -->
+        <text x="290" y="42" fill="currentColor" font-size="10" fill-opacity="0.4">plain morphism</text>
+        <text x="290" y="112" fill="currentColor" font-size="10" fill-opacity="0.4">Kleisli arrow</text>
+      </svg>
+    </div>
+
+    <!-- SVG: Kleisli composition -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- a -->
+        <circle cx="40" cy="60" r="4" fill="currentColor" fill-opacity="0.5"/>
+        <text x="40" y="48" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">a</text>
+        <!-- M(b) -->
+        <rect x="110" y="46" width="55" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="137" y="65" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">M(b)</text>
+        <!-- M(c) -->
+        <rect x="235" y="46" width="55" height="28" rx="6" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="262" y="65" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">M(c)</text>
+        <!-- Arrow a -> M(b) -->
+        <line x1="48" y1="60" x2="105" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="105,56 113,60 105,64" fill="currentColor"/>
+        <text x="76" y="54" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">f</text>
+        <!-- Arrow M(b) -> M(c) dashed (internal) -->
+        <line x1="170" y1="60" x2="230" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="230,56 238,60 230,64" fill="currentColor" fill-opacity="0.6"/>
+        <text x="200" y="54" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">g</text>
+        <!-- Composite arc below -->
+        <path d="M 48 70 Q 165 130 250 70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="248,74 256,68 250,64" fill="currentColor" fill-opacity="0.5"/>
+        <text x="160" y="118" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.4">g &#x25B7; f  (fish)</text>
+      </svg>
+    </div>
+
+    <!-- 1. The problem: composing embellished functions -->
+    <h3>The problem: composing embellished functions</h3>
+    <p>You have functions that return a value <em>plus</em> a log string. You can't compose them with ordinary function composition because the types don't line up: <code>a → (b, string)</code> followed by <code>b → (c, string)</code> needs someone to unpack the pair and concatenate the logs. That "someone" is Kleisli composition.</p>
+
+    <SchemeRepl client:load initialCode={`; Functions that return a value AND a log.
+; Type: a -> (value . log-list)
+; We can't use plain compose — the types don't match.
+
+(define (double n)
+  (cons (* n 2) (list "doubled")))
+
+(define (add-ten n)
+  (cons (+ n 10) (list "added-ten")))
+
+(display "double: ")
+(display (double 5)) (newline)
+(display "add-ten: ")
+(display (add-ten 20)) (newline)
+
+; We want to compose them: number -> (number . log)
+; But (add-ten (double 5)) won't work —
+; add-ten expects a number, not a pair.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Functions that return value + log
+def to_upper(s):
+    return (s.upper(), "to_upper ")
+
+def to_words(s):
+    return (s.split(), "to_words ")
+
+print(f"to_upper: {to_upper('hello world')}")
+print(f"to_words: {to_words('HELLO WORLD')}")
+
+# to_words(to_upper("hello")) fails — type mismatch
+`} />
+    </div>
+
+    <!-- 2. The Writer type and Kleisli composition -->
+    <h3>The Writer type and Kleisli composition</h3>
+    <p>The <strong>Writer</strong> type wraps a value with a log: <code>(value . log)</code>. Kleisli composition (<code>>=></code>, the "fish operator") extracts the value from the first function's result, feeds it to the second, and concatenates the logs. This is the composition rule for morphisms in the Kleisli category.</p>
+
+    <SchemeRepl client:load initialCode={`; Writer: (value . log-list)
+; Kleisli composition (fish operator): (a -> Writer b) -> (b -> Writer c) -> (a -> Writer c)
+
+(define (fish f g)
+  (lambda (x)
+    (let* ((p1 (f x))
+           (p2 (g (car p1))))
+      (cons (car p2)
+            (append (cdr p1) (cdr p2))))))
+
+; Our embellished functions
+(define (double n)
+  (cons (* n 2) (list "doubled")))
+
+(define (add-ten n)
+  (cons (+ n 10) (list "added-ten")))
+
+; Compose them with fish
+(define double-then-add (fish double add-ten))
+
+(display "composed: ")
+(display (double-then-add 5)) (newline)
+; => (20 . ("doubled" "added-ten"))
+; Value flows through. Logs accumulate.
+`} />
+
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Kleisli composition for Writer
+def fish(f, g):
+    def composed(x):
+        val1, log1 = f(x)
+        val2, log2 = g(val1)
+        return (val2, log1 + log2)
+    return composed
+
+def to_upper(s):
+    return (s.upper(), "to_upper ")
+
+def to_words(s):
+    return (s.split(), "to_words ")
+
+to_upper_words = fish(to_upper, to_words)
+print(to_upper_words("hello world"))
+# (["HELLO", "WORLD"], "to_upper to_words ")
+`} />
+    </div>
+
+    <!-- 3. Identity and the category laws -->
+    <h3>Identity and the category laws</h3>
+    <p>Every category needs an identity morphism. In the Kleisli category for Writer, identity returns the value unchanged and contributes an empty log. With identity and fish, we can verify the three category laws: left identity, right identity, and associativity.</p>
+
+    <SchemeRepl client:load initialCode={`; Kleisli identity: return value unchanged, empty log
+(define (writer-id x)
+  (cons x '()))
+
+; Fish operator (from above)
+(define (fish f g)
+  (lambda (x)
+    (let* ((p1 (f x))
+           (p2 (g (car p1))))
+      (cons (car p2)
+            (append (cdr p1) (cdr p2))))))
+
+(define (double n)
+  (cons (* n 2) (list "doubled")))
+
+; Left identity:  fish(id, f) = f
+(define left  ((fish writer-id double) 5))
+(define direct (double 5))
+(display "left identity:  ") (display (equal? left direct)) (newline)
+
+; Right identity: fish(f, id) = f
+(define right ((fish double writer-id) 5))
+(display "right identity: ") (display (equal? right direct)) (newline)
+
+; Associativity: fish(fish(f, g), h) = fish(f, fish(g, h))
+(define (add-ten n) (cons (+ n 10) (list "added-ten")))
+(define (negate n) (cons (- 0 n) (list "negated")))
+
+(define lhs ((fish (fish double add-ten) negate) 3))
+(define rhs ((fish double (fish add-ten negate)) 3))
+(display "associativity:  ") (display (equal? lhs rhs)) (newline)
+(display "result: ") (display lhs)
+; (-16 . ("doubled" "added-ten" "negated"))
+`} />
+
+
+    <!-- 4. Logging as a real use case -->
+    <h3>Logging as a real use case</h3>
+    <p>The Writer monad lets you add logging to pure functions without mutation. Each function declares what it logs in its return type. Composition handles the plumbing. No global mutable log. No side effects. Just functions and types.</p>
+
+    <SchemeRepl client:load initialCode={`; A pipeline of "audited" functions — each logs what it did.
+
+(define (fish f g)
+  (lambda (x)
+    (let* ((p1 (f x))
+           (p2 (g (car p1))))
+      (cons (car p2)
+            (append (cdr p1) (cdr p2))))))
+
+(define (validate-age n)
+  (if (and (>= n 0) (<= n 150))
+      (cons n (list "validated"))
+      (cons -1 (list "INVALID"))))
+
+(define (categorize n)
+  (cond ((< n 0)  (cons 'invalid (list "categorized")))
+        ((< n 18) (cons 'minor (list "categorized")))
+        ((< n 65) (cons 'adult (list "categorized")))
+        (else     (cons 'senior (list "categorized")))))
+
+(define (format-result cat)
+  (cons (list 'category cat) (list "formatted")))
+
+(define pipeline (fish (fish validate-age categorize) format-result))
+
+(display (pipeline 25)) (newline)
+; ((category adult) . ("validated" "categorized" "formatted"))
+(display (pipeline 200)) (newline)
+; ((category invalid) . ("INVALID" "categorized" "formatted"))
+; Every step is pure. The log assembles itself through composition.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Logging pipeline — no mutation, no global state
+def fish(f, g):
+    def composed(x):
+        val1, log1 = f(x)
+        val2, log2 = g(val1)
+        return (val2, log1 + log2)
+    return composed
+
+def validate_age(n):
+    if 0 <= n <= 150:
+        return (n, "validated ")
+    return (-1, "INVALID ")
+
+def categorize(n):
+    if n < 0: return ("invalid", "categorized ")
+    if n < 18: return ("minor", "categorized ")
+    if n < 65: return ("adult", "categorized ")
+    return ("senior", "categorized ")
+
+def format_result(cat):
+    return (f"Category: {cat}", "formatted ")
+
+pipeline = fish(fish(validate_age, categorize), format_result)
+print(pipeline(25))
+print(pipeline(200))
+`} />
+    </div>
+
+    <!-- 5. Beyond Writer: the Kleisli pattern -->
+    <h3>Beyond Writer: the Kleisli pattern</h3>
+    <p>Writer is just one Kleisli category. Replace <code>(value . log)</code> with <code>(value | nothing)</code> and you get the <strong>Maybe/Optional</strong> monad for partial functions. Replace it with a list and you get <strong>nondeterminism</strong>. The pattern is always the same: define a type embellishment, a composition rule, and an identity. If the laws hold, you have a Kleisli category.</p>
+
+    <SchemeRepl client:load initialCode={`; Kleisli category for partial functions (Optional/Maybe)
+; Embellishment: value OR 'nothing
+
+(define (fish-maybe f g)
+  (lambda (x)
+    (let ((result (f x)))
+      (if (eq? result 'nothing)
+          'nothing
+          (g result)))))
+
+(define (maybe-id x) x)
+
+; Safe reciprocal: fails on zero
+(define (safe-recip x)
+  (if (= x 0) 'nothing (/ 1 x)))
+
+; Safe square root: fails on negative
+(define (safe-root x)
+  (if (< x 0) 'nothing (sqrt x)))
+
+; Compose: safe-root-of-reciprocal
+(define safe-root-recip (fish-maybe safe-recip safe-root))
+
+(display "1/4 then sqrt: ") (display (safe-root-recip 4)) (newline)
+; 0.5
+(display "1/0 then sqrt: ") (display (safe-root-recip 0)) (newline)
+; nothing — failure propagates
+(display "1/(-1) then sqrt: ") (display (safe-root-recip -1)) (newline)
+; nothing — reciprocal is -1, sqrt fails
+`} />
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Blog / Haskell</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Writer a = (a, String)</td><td class="pr-4 text-green-300">(cons val log)</td><td class="font-sans">Value paired with log</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">(>=>) :: (a→m b) → (b→m c) → (a→m c)</td><td class="pr-4 text-green-300">(fish f g)</td><td class="font-sans">Kleisli composition</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">return :: a → m a</td><td class="pr-4 text-green-300">(writer-id x)</td><td class="font-sans">Kleisli identity</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Maybe a</td><td class="pr-4 text-green-300">value | 'nothing</td><td class="font-sans">Optional/partial result</td></tr>
+          <tr><td class="py-2 pr-4">compose m1 m2</td><td class="pr-4 text-green-300">(fish f g)</td><td class="font-sans">Same as >=></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Milewski chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> — Category: the essence of composition</li>
+      <li>(next) Chapter 5 — Products and Coproducts</li>
+    
+      <li><a href="/reading/the-natural-framework-lean/kleisli/">✏️ Kleisli.lean</a> &mdash; Kleisli composition formalized in Lean</li>
+      <li><a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> &mdash; stochastic maps form a Kleisli category</li>
+      <li><a href="/reading/programming/sicp-13/">🪄 Programming Ch.13</a> &mdash; SICP's streams are a comonadic structure in disguise</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use Kleisli categories</p>
+    <ul>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories: Kleisli category of the distribution monad is the main example. See <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a> for how Fritz's framework gives stochastic maps their own compositional semantics.</li>
+      <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — probabilistic programs compose via Kleisli arrows</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli category</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Monad_(functional_programming)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Monad (functional programming)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Function_composition"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Function composition</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The blog post uses C++ templates and Haskell. This page uses Scheme cons pairs as the Writer type and a plain <code>fish</code> function for Kleisli composition. The monoid used for logs is list append. The general construction works for any monoid (strings, numbers under addition, etc.), and for any monad, not just Writer. The Optional/Maybe example at the end shows the same pattern with a different embellishment.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://bartoszmilewski.com/2014/12/23/kleisli-categories/">Read the blog post</a>. Start with the C++ examples, then try the Haskell fish operator.
+    </div>
+
+
+
+    <PrevNext prev={{ href: "/reading/category-theory/milewski-03/", label: "Great and Small" }} next={{ href: "/reading/category-theory/milewski-05/", label: "Products and Coproducts" }} />
+
+  </main>
+</Layout>

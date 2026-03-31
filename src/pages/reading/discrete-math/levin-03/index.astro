@@ -1,0 +1,281 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Levin Ch.3 — Symbolic Logic" favicon="🔢">
+  <main>
+
+    <a href="/reading/discrete-math/" class="text-sm mb-4 inline-block">&larr; back to discrete math</a>
+
+    <h1>Symbolic Logic</h1>
+    <p class="text-gray-400 text-sm mb-6">Oscar Levin &middot; CC BY-SA 4.0 &middot; <a href="https://discrete.openmathbooks.org/">Discrete Mathematics: An Open Introduction, Ch. 3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Logic is the grammar of proof. Propositions are sentences that are true or false. Connectives combine them. Quantifiers range over domains. <strong>Logical equivalence</strong> lets you rewrite statements without changing their truth, which is the entire engine of formal proof.</p>
+    </div>
+
+    <!-- SVG: Truth table for implication -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 280 160" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <!-- Header -->
+        <text x="40" y="20" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">P</text>
+        <text x="100" y="20" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">Q</text>
+        <text x="200" y="20" text-anchor="middle" fill="currentColor" font-size="13" fill-opacity="0.7">P &#x2192; Q</text>
+        <line x1="10" y1="28" x2="260" y2="28" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Row 1: T T T -->
+        <text x="40" y="50" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <text x="100" y="50" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <text x="200" y="50" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <!-- Row 2: T F F -->
+        <text x="40" y="75" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <text x="100" y="75" text-anchor="middle" fill="#f87171" font-size="13">F</text>
+        <text x="200" y="75" text-anchor="middle" fill="#f87171" font-size="13" font-weight="bold">F</text>
+        <!-- Row 3: F T T -->
+        <text x="40" y="100" text-anchor="middle" fill="#f87171" font-size="13">F</text>
+        <text x="100" y="100" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <text x="200" y="100" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <!-- Row 4: F F T -->
+        <text x="40" y="125" text-anchor="middle" fill="#f87171" font-size="13">F</text>
+        <text x="100" y="125" text-anchor="middle" fill="#f87171" font-size="13">F</text>
+        <text x="200" y="125" text-anchor="middle" fill="#34d399" font-size="13">T</text>
+        <!-- Note -->
+        <text x="140" y="150" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">only false when the premise is true and conclusion is false</text>
+      </svg>
+    </div>
+
+
+    <!-- 1. Propositions and connectives -->
+    <h3>Propositions and connectives</h3>
+    <p>A <strong>proposition</strong> is a statement that is either true or false. The five connectives: negation (not), conjunction (and), disjunction (or), implication (if-then), biconditional (if and only if). Every compound proposition is built from these.</p>
+
+    <SchemeRepl client:load initialCode={`; Propositional connectives as functions
+(define (neg p) (not p))
+(define (conj p q) (and p q))
+(define (disj p q) (or p q))
+(define (impl p q) (or (not p) q))
+(define (bicon p q) (and (impl p q) (impl q p)))
+
+; Truth table for implication
+(display "P     Q     P->Q") (newline)
+(for-each
+  (lambda (row)
+    (let ((p (car row)) (q (cadr row)))
+      (display p) (display " ")
+      (display q) (display " ")
+      (display (impl p q)) (newline)))
+  (list (list #t #t) (list #t #f) (list #f #t) (list #f #f)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Connectives
+impl = lambda p, q: (not p) or q
+bicon = lambda p, q: impl(p, q) and impl(q, p)
+
+print("P     Q     P->Q")
+for p in [True, False]:
+    for q in [True, False]:
+        print(f"{p!s:5} {q!s:5} {impl(p, q)}")
+`} />
+    </div>
+
+
+    <!-- 2. Logical equivalences -->
+    <h3>Logical equivalences</h3>
+    <p>Two propositions are <strong>logically equivalent</strong> if they have the same truth value in every row of their truth table. De Morgan's laws, double negation, contrapositive, and distribution are the workhorses. These are the rewrite rules of formal reasoning.</p>
+
+    <SchemeRepl client:load initialCode={`; Verify De Morgan's laws by exhaustive check
+(define (impl p q) (or (not p) q))
+
+; De Morgan 1: not(P and Q) = (not P) or (not Q)
+; De Morgan 2: not(P or Q)  = (not P) and (not Q)
+
+(define (check-demorgan)
+  (let ((vals (list #t #f)))
+    (let loop ((ps vals) (ok #t))
+      (if (null? ps) ok
+          (let inner ((qs vals) (ok2 ok))
+            (if (null? qs) (loop (cdr ps) ok2)
+                (let ((p (car ps)) (q (car qs)))
+                  (let ((dm1 (equal? (not (and p q))
+                                     (or (not p) (not q))))
+                        (dm2 (equal? (not (or p q))
+                                     (and (not p) (not q)))))
+                    (inner (cdr qs) (and ok2 dm1 dm2))))))))))
+
+(display "De Morgan's laws hold? ")
+(display (check-demorgan)) (newline)
+
+; Contrapositive: (P -> Q) = (not Q -> not P)
+(define (check-contra)
+  (let ((vals (list #t #f)))
+    (let loop ((ps vals) (ok #t))
+      (if (null? ps) ok
+          (let inner ((qs vals) (ok2 ok))
+            (if (null? qs) (loop (cdr ps) ok2)
+                (let ((p (car ps)) (q (car qs)))
+                  (inner (cdr qs)
+                         (and ok2 (equal? (impl p q)
+                                          (impl (not q) (not p))))))))))))
+
+(display "Contrapositive holds? ")
+(display (check-contra))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify logical equivalences
+impl = lambda p, q: (not p) or q
+vals = [True, False]
+
+dm = all(
+    (not (p and q)) == ((not p) or (not q))
+    and (not (p or q)) == ((not p) and (not q))
+    for p in vals for q in vals
+)
+print(f"De Morgan's laws hold? {dm}")
+
+contra = all(
+    impl(p, q) == impl(not q, not p)
+    for p in vals for q in vals
+)
+print(f"Contrapositive holds? {contra}")
+`} />
+    </div>
+
+
+    <!-- 3. Predicate logic and quantifiers -->
+    <h3>Predicate logic and quantifiers</h3>
+    <p>A <strong>predicate</strong> is a proposition with a variable: P(x). The universal quantifier "for all x, P(x)" asserts P holds everywhere. The existential quantifier "there exists x such that P(x)" asserts at least one witness. Negating a universal gives an existential, and vice versa.</p>
+
+    <SchemeRepl client:load initialCode={`; Predicates over a finite domain
+(define domain (list 1 2 3 4 5 6 7 8 9 10))
+
+; P(x): x is even
+(define (even? x) (= 0 (modulo x 2)))
+
+; For-all: every element satisfies P
+(define (for-all pred lst)
+  (cond ((null? lst) #t)
+        ((not (pred (car lst))) #f)
+        (else (for-all pred (cdr lst)))))
+
+; Exists: at least one element satisfies P
+(define (exists pred lst)
+  (cond ((null? lst) #f)
+        ((pred (car lst)) #t)
+        (else (exists pred (cdr lst)))))
+
+(display "All even? ") (display (for-all even? domain)) (newline)
+(display "Some even? ") (display (exists even? domain)) (newline)
+
+; Negation: not(for-all P) = exists(not P)
+(display "not(all even) = exists(odd)? ")
+(display (equal? (not (for-all even? domain))
+                 (exists (lambda (x) (not (even? x))) domain)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`domain = list(range(1, 11))
+
+print(f"All even? {all(x % 2 == 0 for x in domain)}")
+print(f"Some even? {any(x % 2 == 0 for x in domain)}")
+print(f"not(all even) == exists(odd)? "
+      f"{(not all(x % 2 == 0 for x in domain)) == any(x % 2 != 0 for x in domain)}")
+`} />
+    </div>
+
+
+    <!-- 4. Proof methods -->
+    <h3>Proof methods</h3>
+    <p>Direct proof: assume P, derive Q. Contrapositive: assume not-Q, derive not-P. Contradiction: assume P and not-Q, derive a contradiction. Each is valid because the underlying logical equivalences guarantee it. The choice of method is a matter of convenience, not truth.</p>
+
+    <SchemeRepl client:load initialCode={`; Example: "if n^2 is even, then n is even"
+; Contrapositive proof: "if n is odd, then n^2 is odd"
+
+; n odd means n = 2k+1 for some k.
+; n^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1, which is odd.
+
+; Verify computationally:
+(define (even? x) (= 0 (modulo x 2)))
+
+(display "Checking n=1..100: if n^2 even then n even") (newline)
+(define (check n)
+  (if (= n 101) #t
+      (if (even? (* n n))
+          (if (even? n)
+              (check (+ n 1))
+              #f)
+          (check (+ n 1)))))
+
+(display "All pass? ")
+(display (check 1)) (newline)
+
+; Proof by contradiction example:
+; sqrt(2) is irrational. Assume a/b in lowest terms,
+; then 2b^2 = a^2. So a is even. But then b must be
+; even too, contradicting lowest terms.
+; (We can't prove this computationally, only state it.)
+(display "sqrt(2) irrational: proved by contradiction")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Verify: if n^2 is even then n is even
+check = all(
+    (n % 2 == 0) if (n * n) % 2 == 0 else True
+    for n in range(1, 101)
+)
+print(f"All pass (1..100)? {check}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P &#x2227; Q</td><td class="pr-4 text-green-300">(and p q)</td><td class="pr-4 text-blue-300">p and q</td><td class="font-sans">Conjunction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P &#x2228; Q</td><td class="pr-4 text-green-300">(or p q)</td><td class="pr-4 text-blue-300">p or q</td><td class="font-sans">Disjunction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">P &#x2192; Q</td><td class="pr-4 text-green-300">(impl p q)</td><td class="pr-4 text-blue-300">impl(p, q)</td><td class="font-sans">Implication</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x2200;x P(x)</td><td class="pr-4 text-green-300">(for-all pred lst)</td><td class="pr-4 text-blue-300">all(pred(x) ...)</td><td class="font-sans">Universal quantifier</td></tr>
+          <tr><td class="py-2 pr-4">&#x2203;x P(x)</td><td class="pr-4 text-green-300">(exists pred lst)</td><td class="pr-4 text-blue-300">any(pred(x) ...)</td><td class="font-sans">Existential quantifier</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other chapter pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/category-theory/milewski-23/">Milewski Ch.23</a> — topoi have internal logic: subobject classifiers generalize truth values</li>
+      <li><a href="/reading/discrete-math/levin-02/">Levin Ch.2</a> — induction is the proof method that matches recurrence relations</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Propositional_calculus"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Propositional calculus</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/De_Morgan%27s_laws"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>De Morgan's laws</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/First-order_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>First-order logic</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Levin's logic chapter covers proof techniques that are inherently human activities. Programs can verify instances but cannot produce proofs. The Scheme implementations model propositions as booleans and quantifiers as folds over finite domains. Real logic quantifies over infinite domains, which requires axioms, not loops. The implication connective is the one that surprises newcomers: "false implies anything" is vacuously true.</p>
+
+    <PrevNext prev={{ href: "/reading/discrete-math/levin-02/", label: "Sequences" }} next={{ href: "/reading/discrete-math/levin-04/", label: "Graph Theory · 4 of 5" }} />
+
+  </main>
+</Layout>

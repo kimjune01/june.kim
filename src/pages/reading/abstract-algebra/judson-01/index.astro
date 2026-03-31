@@ -1,0 +1,225 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Judson Ch.1 — Groups" favicon="🔗">
+  <main>
+
+    <a href="/reading/abstract-algebra/" class="text-sm mb-4 inline-block">&larr; back to algebra</a>
+
+    <h1>Groups</h1>
+    <p class="text-gray-400 text-sm mb-6">Tom Judson &middot; GFDL &middot; <a href="http://abstract.ups.edu/">Abstract Algebra: Theory and Applications, Ch. 1</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>group</strong> is a set with one operation that satisfies four axioms: closure, associativity, identity, and inverses. It is the simplest algebraic structure that captures symmetry. Every symmetry you will ever encounter is a group.</p>
+    </div>
+
+    <!-- 1. The four axioms -->
+    <h3>The four axioms</h3>
+    <p>A set G with a binary operation * is a group if: (1) for all a, b in G, a * b is in G (<strong>closure</strong>); (2) for all a, b, c in G, (a * b) * c = a * (b * c) (<strong>associativity</strong>); (3) there exists an element e in G such that e * a = a * e = a (<strong>identity</strong>); (4) for every a in G, there exists a&#x207B;&sup1; such that a * a&#x207B;&sup1; = a&#x207B;&sup1; * a = e (<strong>inverse</strong>).</p>
+
+    <SchemeRepl client:load initialCode={`; The integers under addition form a group.
+; Closure: sum of two integers is an integer.
+; Associativity: (a + b) + c = a + (b + c).
+; Identity: 0.
+; Inverse: -a.
+
+(define (op a b) (+ a b))
+(define identity 0)
+(define (inverse a) (- a))
+
+; Check associativity
+(define a 3) (define b 5) (define c 7)
+(display "(a+b)+c = ") (display (op (op a b) c)) (newline)
+(display "a+(b+c) = ") (display (op a (op b c))) (newline)
+
+; Check identity
+(display "a+0 = ") (display (op a identity)) (newline)
+
+; Check inverse
+(display "a+(-a) = ") (display (op a (inverse a)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Integers under addition
+op = lambda a, b: a + b
+identity = 0
+inverse = lambda a: -a
+
+a, b, c = 3, 5, 7
+print("(a+b)+c = " + str(op(op(a,b), c)))
+print("a+(b+c) = " + str(op(a, op(b,c))))
+print("a+0     = " + str(op(a, identity)))
+print("a+(-a)  = " + str(op(a, inverse(a))))
+`} />
+    </div>
+
+
+    <!-- 2. Symmetries -->
+    <h3>Symmetries of a triangle</h3>
+    <p>The symmetries of an equilateral triangle form a group with six elements: three rotations (0, 120, 240 degrees) and three reflections. This is the <strong>symmetric group S3</strong>, the smallest non-abelian group. Composing two symmetries gives another symmetry.</p>
+
+    <!-- SVG: symmetries of a triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 180" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Original triangle -->
+        <polygon points="70,20 20,120 120,120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="70" y="15" text-anchor="middle" fill="#60a5fa" font-size="11">1</text>
+        <text x="15" y="135" text-anchor="middle" fill="#60a5fa" font-size="11">2</text>
+        <text x="125" y="135" text-anchor="middle" fill="#60a5fa" font-size="11">3</text>
+        <text x="70" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">e (identity)</text>
+
+        <!-- Rotated 120 -->
+        <polygon points="210,20 160,120 260,120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="210" y="15" text-anchor="middle" fill="#f59e0b" font-size="11">3</text>
+        <text x="155" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">1</text>
+        <text x="265" y="135" text-anchor="middle" fill="#f59e0b" font-size="11">2</text>
+        <!-- Rotation arrow -->
+        <path d="M 195 65 A 20 20 0 0 1 225 65" fill="none" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <polygon points="225,63 229,67 223,69" fill="#f59e0b" fill-opacity="0.5"/>
+        <text x="210" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">r (120&#xb0;)</text>
+
+        <!-- Reflection -->
+        <polygon points="350,20 300,120 400,120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="350" y="15" text-anchor="middle" fill="#a78bfa" font-size="11">1</text>
+        <text x="295" y="135" text-anchor="middle" fill="#a78bfa" font-size="11">3</text>
+        <text x="405" y="135" text-anchor="middle" fill="#a78bfa" font-size="11">2</text>
+        <!-- Reflection axis -->
+        <line x1="350" y1="10" x2="350" y2="130" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.4"/>
+        <text x="350" y="155" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">s (reflect)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Permutations as lists: (1 2 3) means 1->1, 2->2, 3->3
+; We represent a permutation as a function on indices 1,2,3.
+
+(define (apply-perm p i) (list-ref p (- i 1)))
+
+; S3 elements
+(define e  '(1 2 3))  ; identity
+(define r1 '(3 1 2))  ; rotate 120
+(define r2 '(2 3 1))  ; rotate 240
+(define s1 '(1 3 2))  ; reflect (fix 1)
+(define s2 '(3 2 1))  ; reflect (fix 2)
+(define s3 '(2 1 3))  ; reflect (fix 3)
+
+; Compose two permutations
+(define (compose-perm p q)
+  (list (apply-perm p (apply-perm q 1))
+        (apply-perm p (apply-perm q 2))
+        (apply-perm p (apply-perm q 3))))
+
+(display "r1 then r1 = ") (display (compose-perm r1 r1)) (newline)
+; rotate 120 twice = rotate 240
+(display "r2         = ") (display r2) (newline)
+
+(display "s1 then s1 = ") (display (compose-perm s1 s1)) (newline)
+; reflect twice = identity
+
+(display "r1 then s1 = ") (display (compose-perm r1 s1)) (newline)
+(display "s1 then r1 = ") (display (compose-perm s1 r1))
+; Different! S3 is non-abelian.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# S3 as permutations
+def compose(p, q):
+    return [p[q[i]-1] for i in range(3)]
+
+e  = [1,2,3]
+r1 = [3,1,2]  # rotate 120
+r2 = [2,3,1]  # rotate 240
+s1 = [1,3,2]  # reflect (fix 1)
+
+print("r1 then r1 = " + str(compose(r1,r1)))  # = r2
+print("r2         = " + str(r2))
+print("s1 then s1 = " + str(compose(s1,s1)))  # = e
+print("r1 then s1 = " + str(compose(r1,s1)))
+print("s1 then r1 = " + str(compose(s1,r1)))
+# Last two differ: S3 is non-abelian
+`} />
+    </div>
+
+
+    <!-- 3. Cayley tables -->
+    <h3>Cayley tables</h3>
+    <p>A <strong><a href="https://en.wikipedia.org/wiki/Cayley_table"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cayley table</a></strong> records every product in a finite group. Each row and each column is a permutation of the group elements (this is a consequence of the group axioms). Reading the table tells you everything about the group.</p>
+
+    <SchemeRepl client:load initialCode={`; Cayley table for Z4 = integers mod 4 under addition
+; Elements: 0, 1, 2, 3
+
+(define (mod4+ a b) (modulo (+ a b) 4))
+
+(display "+  | 0  1  2  3") (newline)
+(display "---+------------") (newline)
+(let loop ((i 0))
+  (when (< i 4)
+    (display i) (display "  | ")
+    (let inner ((j 0))
+      (when (< j 4)
+        (display (mod4+ i j)) (display "  ")
+        (inner (+ j 1))))
+    (newline)
+    (loop (+ i 1))))
+; Every row is a permutation of 0,1,2,3.
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Cayley table for Z4
+print("+  | 0  1  2  3")
+print("---+------------")
+for i in range(4):
+    row = "  ".join(str((i+j)%4) for j in range(4))
+    print(str(i) + "  | " + row)
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a * b</td><td class="pr-4 text-green-300">(op a b)</td><td class="pr-4 text-blue-300">op(a, b)</td><td class="font-sans">Group operation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">e</td><td class="pr-4 text-green-300">identity</td><td class="pr-4 text-blue-300">identity</td><td class="font-sans">Identity element</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">a&#x207B;&sup1;</td><td class="pr-4 text-green-300">(inverse a)</td><td class="pr-4 text-blue-300">inverse(a)</td><td class="font-sans">Inverse of a</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S&#x2083;</td><td class="pr-4 text-green-300">'(3 1 2)</td><td class="pr-4 text-blue-300">[3,1,2]</td><td class="font-sans">Permutation</td></tr>
+          <tr><td class="py-2 pr-4">Z&#x2084;</td><td class="pr-4 text-green-300">(modulo (+ a b) 4)</td><td class="pr-4 text-blue-300">(a+b)%4</td><td class="font-sans">Integers mod 4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Algebra track</p>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/judson-02/">Ch.2 Subgroups</a> &mdash; cyclic groups and subgroup tests</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Category theory connections</p>
+    <ul>
+      <li><a href="/reading/category-theory/milewski-03/">Milewski Ch.3</a> &mdash; monoids are groups without inverses; a group is a one-object category where every morphism is invertible</li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Judson's textbook opens with preliminaries on sets and equivalence relations, which we skip. The treatment here covers chapters 3 (Groups) and 4 (Cyclic Groups) of the textbook, compressing the core definitions into executable examples. S3 is built from list permutations, which is less elegant than Judson's cycle notation but easier to run in Scheme. All groups here are finite.</p>
+
+    <PrevNext next={{ href: "/reading/abstract-algebra/judson-02/", label: "Subgroups · 2 of 8" }} />
+
+  </main>
+</Layout>

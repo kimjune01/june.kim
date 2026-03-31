@@ -1,0 +1,117 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from "../../../../components/Repl.tsx";
+import SchemeRepl from '../../../../components/SchemeRepl';
+---
+
+<Layout title="IntegralEfficiency.lean — Pointwise to integrated welfare" favicon="📐">
+  <main>
+    <a href="/reading/vector-space-proof/" class="text-sm mb-4 inline-block">&larr; back to vector space proof</a>
+
+    <h1>IntegralEfficiency.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/IntegralEfficiency.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The pointwise result from Efficiency.lean says: at each query <code>x</code>, the winner has the highest value. This file lifts that to integrated welfare &mdash; no allocation rule can achieve a higher value of <code>&mu;.integrate</code>. (If <code>&mu;</code> is a probability measure, this is expected welfare; formally, it's just a monotone functional.)</p>
+    </div>
+
+    <h3>welfareOfRule</h3>
+    <p>Integrated welfare of an allocation rule under the monotone functional <code>&mu;</code>. The rule maps each query to a winning advertiser; welfare is <code>&mu;.integrate</code> applied to the winner's valuation function.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">welfareOfRule</span> (auc : Auction ι E) (rule : E → ι)
+    (μ : QueryMeasure E) : ℝ :=
+  μ.integrate (fun x => trueVal (auc.valuation (rule x)) x)</code></pre>
+
+    <h3>integral_efficiency</h3>
+    <p>The main result. Under truthful reporting, for any allocation rule <code>rule : E &rarr; &iota;</code>:</p>
+    <p style="text-align:center"><code>&mu;.integrate(trueVal(winner(·), ·)) &ge; &mu;.integrate(trueVal(rule(·), ·))</code></p>
+    <p>The proof is one line: apply <code>integral_mono</code> from <a href="/reading/vector-space-proof/axioms/">QueryMeasure</a> to the pointwise bound from <code>winner_maximizes_welfare</code>.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">integral_efficiency</span>
+    (auc : Auction ι E) (μ : QueryMeasure E)
+    (htruth : allTruthful auc) :
+    ∀ (rule : E → ι),
+      welfareOfRule auc (fun x => winner auc x) μ ≥
+        welfareOfRule auc rule μ</code></pre>
+    <p class="text-sm text-gray-500"><a href="https://doi.org/10.2307/1914085">Groves (1973)</a> Thm 1: efficient choice rule = argmax of values. Standard measure theory: pointwise domination implies integral domination.</p>
+
+    <SchemeRepl client:load initialCode={`; Pointwise domination lifts to any monotone functional
+(define xs '(0.1 0.3 0.5 0.7 0.9))
+
+(define (trueVal c s v x)
+  (* v (exp (- (/ (* (- x c) (- x c)) (* s s))))))
+
+(define (winner-val x)
+  (max (trueVal 0.3 0.3 5.0 x)
+       (trueVal 0.7 0.25 4.0 x)))
+
+(define (alt-val x) (trueVal 0.3 0.3 5.0 x))
+
+(display "Pointwise: winner >= alt") (newline)
+(for-each (lambda (x)
+  (display "  x=") (display x)
+  (display "  w=") (display (round (* (winner-val x) 100)))
+  (display "  a=") (display (round (* (alt-val x) 100)))
+  (display "  ") (display (>= (winner-val x) (alt-val x)))
+  (newline)) xs)
+
+(newline) (display "Integrated:") (newline)
+(let ((ws (map winner-val xs)) (as (map alt-val xs)))
+  (display "  sum: ") (display (>= (apply + ws) (apply + as))) (newline)
+  (display "  max: ") (display (>= (apply max ws) (apply max as))) (newline)
+  (display "  pt:  ") (display (>= (winner-val 0.5) (alt-val 0.5))) (newline))
+`} />
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+xs = [0.1, 0.3, 0.5, 0.7, 0.9]
+
+ads = [
+    {"c": 0.3, "s": 0.3, "v": 5.0},
+    {"c": 0.7, "s": 0.25, "v": 4.0},
+]
+
+def trueVal(a, x):
+    return a["v"] * math.exp(-(x - a["c"])**2 / a["s"]**2)
+
+def winner_val(x):
+    return max(trueVal(a, x) for a in ads)
+
+def alt_val(x):  # always pick advertiser 0
+    return trueVal(ads[0], x)
+
+print("Pointwise: winner >= alt at every x")
+for x in xs:
+    w, a = winner_val(x), alt_val(x)
+    print(f"  x={x}  winner={w:.3f}  alt={a:.3f}  {w >= a}")
+
+# Three monotone functionals
+mu_sum  = lambda f: sum(f(x) for x in xs)
+mu_max  = lambda f: max(f(x) for x in xs)
+mu_pt   = lambda f: f(0.5)
+
+print("\\nIntegrated: winner >= alt under every functional")
+for name, mu in [("sum", mu_sum), ("max", mu_max), ("point", mu_pt)]:
+    w, a = mu(winner_val), mu(alt_val)
+    print(f"  {name:6s}  winner={w:.3f}  alt={a:.3f}  {w >= a}")
+`} />
+    </div>
+
+    <h3>integral_efficiency_pointwise_unique</h3>
+    <p>If an alternative allocation rule achieves the <em>same</em> integrated welfare as the winner rule, the two must agree at every query point. This requires an extra hypothesis beyond monotonicity: a <em>faithfulness</em> property saying that pointwise &ge; with equal integrals implies pointwise equality. The theorem takes this as an explicit precondition (<code>hstrict</code>).</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">integral_efficiency_pointwise_unique</span>
+    <span class="text-gray-500">-- requires: hstrict (faithfulness of the integral)</span>
+    <span class="text-gray-500">-- if welfareOfRule(winner) = welfareOfRule(rule), then</span>
+    ∀ x, trueVal (auc.valuation (winner auc x)) x =
+         trueVal (auc.valuation (rule x)) x</code></pre>
+    <p class="text-sm text-gray-500">Without Mathlib's measure theory, pointwise equality is assumed directly via <code>hstrict</code> rather than derived from measure-theoretic properties. In general, pointwise &ge; with equal integrals only gives <a href="https://en.wikipedia.org/wiki/Almost_everywhere"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>a.e. equality</a>; pointwise equality is a strictly stronger demand.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/vector-space-proof/efficiency/">Efficiency.lean</a> &mdash; supplies the pointwise bound <code>winner_maximizes_welfare</code></li>
+      <li><a href="/reading/vector-space-proof/axioms/">Axioms.lean</a> &mdash; supplies <code>QueryMeasure.integral_mono</code></li>
+      <li><a href="/reading/vector-space-proof/gaussian-optimality/">GaussianOptimality.lean</a> &mdash; composes this with strategyproofness for the capstone</li>
+      <li><a href="https://doi.org/10.2307/1914085">Groves (1973)</a> &mdash; efficient choice rule = argmax of values</li>
+    </ul>
+    <PrevNext prev={{ href: "/reading/vector-space-proof/strategyproof/", label: "Strategyproof.lean · 4 of 7" }} next={{ href: "/reading/vector-space-proof/gaussian-optimality/", label: "GaussianOptimality.lean · 6 of 7" }} />
+  </main>
+</Layout>

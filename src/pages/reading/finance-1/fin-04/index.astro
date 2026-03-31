@@ -1,0 +1,279 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.4 — Risk and Return" favicon="📈">
+  <main>
+
+    <a href="/reading/finance-1/" class="text-sm mb-4 inline-block">&larr; back to finance</a>
+
+    <h1>Risk and Return</h1>
+    <p class="text-gray-400 text-sm mb-6">OpenStax Principles of Finance (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; MIT OCW 15.401 (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Investments that offer higher expected returns usually expose investors to more risk. <strong>Variance</strong> measures dispersion around the mean, and the <strong>Sharpe ratio</strong> measures excess return over the risk-free rate per unit of volatility.</p>
+    </div>
+
+    <!-- SVG: Bell curve with mean and standard deviation -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 185" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="30" y1="150" x2="330" y2="150" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="30" y1="150" x2="30" y2="10" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+        <!-- Bell curve -->
+        <path d="M 40,148 Q 80,145 120,130 Q 150,100 180,40 Q 210,100 240,130 Q 280,145 320,148" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.7"/>
+        <!-- Mean line -->
+        <line x1="180" y1="40" x2="180" y2="150" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="4,3"/>
+        <text x="180" y="165" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.7">&#956; (mean)</text>
+        <!-- Std dev markers -->
+        <line x1="120" y1="130" x2="120" y2="150" stroke="#10b981" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <line x1="240" y1="130" x2="240" y2="150" stroke="#10b981" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <text x="120" y="165" text-anchor="middle" fill="#10b981" font-size="9" fill-opacity="0.6">-&#963;</text>
+        <text x="240" y="165" text-anchor="middle" fill="#10b981" font-size="9" fill-opacity="0.6">+&#963;</text>
+        <!-- Shaded area between -1 and +1 std dev -->
+        <path d="M 120,130 Q 150,100 180,40 Q 210,100 240,130 L 240,150 L 120,150 Z" fill="#60a5fa" fill-opacity="0.08"/>
+        <text x="180" y="120" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">&#x2248;68%</text>
+        <!-- Caption -->
+        <text x="180" y="8" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">Return distribution (if approximately normal).</text>
+      </svg>
+    </div>
+
+    <!-- 1. Expected Return -->
+    <h3>Expected return</h3>
+    <p>The <strong>expected return</strong> is the probability-weighted average of all possible outcomes. If an asset has three scenarios with known probabilities and returns, multiply each return by its probability and sum.</p>
+
+    <SchemeRepl client:load initialCode={`; Expected return: E[R] = sum of p_i * r_i
+; Three scenarios: boom (30%), normal (50%), bust (20%)
+
+(define (expected-return probs returns)
+  (apply + (map * probs returns)))
+
+(define probs '(0.30 0.50 0.20))
+(define returns '(0.25 0.10 -0.15))
+
+(define er (expected-return probs returns))
+(display "E[R] = ") (display er) (newline)
+; 0.30*0.25 + 0.50*0.10 + 0.20*(-0.15)
+; = 0.075 + 0.05 - 0.03 = 0.095
+
+(display "Expected return: ")
+(display (* er 100)) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected return: E[R] = sum(p_i * r_i)
+probs = [0.30, 0.50, 0.20]
+returns = [0.25, 0.10, -0.15]
+
+er = sum(p * r for p, r in zip(probs, returns))
+print(f"E[R] = {er:.4f}")
+print(f"Expected return: {er * 100:.1f}%")
+# 0.30*0.25 + 0.50*0.10 + 0.20*(-0.15) = 9.5%
+`} />
+    </div>
+
+
+    <!-- 2. Variance and Standard Deviation -->
+    <h3>Variance and standard deviation</h3>
+    <p><strong>Variance</strong> is the expected squared deviation from the mean. <strong>Standard deviation</strong> is its square root, in the same units as returns. A higher standard deviation means wider dispersion of outcomes.</p>
+
+    <SchemeRepl client:load initialCode={`; Variance: Var[R] = sum of p_i * (r_i - E[R])^2
+; Standard deviation: sigma = sqrt(Var[R])
+
+(define (variance probs returns er)
+  (apply + (map (lambda (p r) (* p (* (- r er) (- r er))))
+               probs returns)))
+
+(define probs '(0.30 0.50 0.20))
+(define returns '(0.25 0.10 -0.15))
+(define er 0.095)
+
+(define var-r (variance probs returns er))
+(define sigma (sqrt var-r))
+
+(display "Variance = ") (display var-r) (newline)
+(display "Std dev  = ") (display sigma) (newline)
+(display "Sigma    = ") (display (* sigma 100)) (display "%")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+probs = [0.30, 0.50, 0.20]
+returns = [0.25, 0.10, -0.15]
+er = 0.095
+
+var_r = sum(p * (r - er)**2 for p, r in zip(probs, returns))
+sigma = math.sqrt(var_r)
+
+print(f"Variance = {var_r:.6f}")
+print(f"Std dev  = {sigma:.4f}")
+print(f"Sigma    = {sigma * 100:.2f}%")
+`} />
+    </div>
+
+
+    <!-- 3. Sharpe Ratio -->
+    <h3>Sharpe ratio</h3>
+    <p>The <strong>Sharpe ratio</strong> measures excess return per unit of total risk: (E[R] - r_f) / &#963;. A higher Sharpe means better risk-adjusted performance. The risk-free rate r_f is what you earn with zero risk (e.g., Treasury bills).</p>
+
+    <SchemeRepl client:load initialCode={`; Sharpe ratio = (E[R] - r_f) / sigma
+; r_f = risk-free rate
+
+(define (sharpe-ratio er rf sigma)
+  (/ (- er rf) sigma))
+
+(define er 0.095)      ; expected return 9.5%
+(define rf 0.03)       ; risk-free rate 3%
+(define sigma 0.1375)  ; std dev 13.75%
+
+(define sr (sharpe-ratio er rf sigma))
+(display "Sharpe ratio = ") (display sr) (newline)
+
+; Compare two assets
+(display "Asset A: ") (display (sharpe-ratio 0.12 0.03 0.20)) (newline)
+(display "Asset B: ") (display (sharpe-ratio 0.08 0.03 0.10)) (newline)
+(display "B is better risk-adjusted despite lower return")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Sharpe ratio = (E[R] - r_f) / sigma
+def sharpe(er, rf, sigma):
+    return (er - rf) / sigma
+
+er, rf, sigma = 0.095, 0.03, 0.1375
+print(f"Sharpe ratio = {sharpe(er, rf, sigma):.4f}")
+
+# Compare two assets
+print(f"Asset A: {sharpe(0.12, 0.03, 0.20):.4f}")
+print(f"Asset B: {sharpe(0.08, 0.03, 0.10):.4f}")
+print("B is better risk-adjusted despite lower return")
+`} />
+    </div>
+
+
+    <!-- 4. Historical vs Expected Returns -->
+    <h3>Historical vs expected returns</h3>
+    <p><strong>Historical returns</strong> use past data with equal weights (sample mean). <strong>Expected returns</strong> use forward-looking scenario probabilities. Historical data informs expectations but doesn't determine them. The sample standard deviation divides by (n-1), not n.</p>
+
+    <SchemeRepl client:load initialCode={`; Historical (sample) statistics from observed returns
+(define annual-returns '(0.12 -0.05 0.18 0.08 -0.02))
+(define n (length annual-returns))
+
+; Sample mean
+(define (mean xs)
+  (/ (apply + xs) (length xs)))
+
+(define mu (mean annual-returns))
+(display "Sample mean = ") (display mu) (newline)
+
+; Sample variance (divide by n-1)
+(define (sample-var xs mu)
+  (/ (apply + (map (lambda (x) (* (- x mu) (- x mu))) xs))
+     (- (length xs) 1)))
+
+(define sv (sample-var annual-returns mu))
+(display "Sample variance = ") (display sv) (newline)
+(display "Sample std dev  = ") (display (sqrt sv)) (newline)
+
+; Geometric mean (actual compound growth)
+(define (geom-mean xs)
+  (- (expt (apply * (map (lambda (r) (+ 1 r)) xs))
+           (/ 1 (length xs)))
+     1))
+
+(display "Geometric mean  = ") (display (geom-mean annual-returns))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+returns = [0.12, -0.05, 0.18, 0.08, -0.02]
+n = len(returns)
+
+# Sample mean
+mu = sum(returns) / n
+print(f"Sample mean = {mu:.4f}")
+
+# Sample variance (n-1 denominator)
+var_s = sum((r - mu)**2 for r in returns) / (n - 1)
+print(f"Sample variance = {var_s:.6f}")
+print(f"Sample std dev  = {math.sqrt(var_s):.4f}")
+
+# Geometric mean (compound growth rate)
+product = 1
+for r in returns:
+    product *= (1 + r)
+geo_mean = product ** (1/n) - 1
+print(f"Geometric mean  = {geo_mean:.4f}")
+`} />
+    </div>
+
+
+    <!-- 5. Risk-Return Tradeoff -->
+    <h3>Risk-return tradeoff</h3>
+    <p>Assets with higher expected returns tend to have higher volatility. This is the fundamental tradeoff: you cannot earn equity-like returns with bond-like risk. The question is always whether the extra return compensates for the extra risk.</p>
+
+    <SchemeRepl client:load initialCode={`; Compare asset classes by risk and return
+(define (describe name er sigma rf)
+  (display name) (display ": ")
+  (display "E[R]=") (display (* er 100)) (display "%, ")
+  (display "sigma=") (display (* sigma 100)) (display "%, ")
+  (display "Sharpe=")
+  (display (/ (- er rf) sigma))
+  (newline))
+
+(define rf 0.03)
+
+(describe "T-Bills " 0.035 0.03  rf)
+(describe "Bonds   " 0.06  0.08  rf)
+(describe "Lg Stocks" 0.10  0.20  rf)
+(describe "Sm Stocks" 0.13  0.30  rf)
+
+(newline)
+(display "Higher return always comes with higher sigma.")
+(newline)
+(display "Sharpe ratio reveals which tradeoff is best.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Compare asset classes by risk and return
+rf = 0.03
+
+assets = [
+    ("T-Bills  ", 0.035, 0.03),
+    ("Bonds    ", 0.06,  0.08),
+    ("Lg Stocks", 0.10,  0.20),
+    ("Sm Stocks", 0.13,  0.30),
+]
+
+for name, er, sigma in assets:
+    sharpe = (er - rf) / sigma
+    print(f"{name}: E[R]={er*100:.1f}%, sigma={sigma*100:.1f}%, Sharpe={sharpe:.3f}")
+
+print()
+print("Higher return always comes with higher sigma.")
+print("Sharpe ratio reveals which tradeoff is best.")
+`} />
+    </div>
+
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">&#x1F3B0; Probability</a> &mdash; expected value and variance are probability concepts applied to prices</li>
+      <li><a href="/reading/statistics/">&#x1F4CA; Statistics</a> &mdash; sample vs population statistics, hypothesis testing on returns</li>
+      <li><a href="/reading/finance-1/fin-05/">&#x1F4C8; Portfolio Theory</a> &mdash; risk and return extend to portfolios of assets</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/finance-1/fin-03/", label: "Equities · 3 of 12" }}
+      next={{ href: "/reading/finance-1/fin-05/", label: "Portfolio Theory · 5 of 12" }}
+    />
+
+  </main>
+</Layout>

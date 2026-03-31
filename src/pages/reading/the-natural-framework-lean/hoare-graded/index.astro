@@ -1,0 +1,97 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Hoare/Graded.lean — Grades from a preordered monoid" favicon="✏️">
+  <main>
+    <a href="/reading/the-natural-framework-lean/" class="text-sm mb-4 inline-block">&larr; back to lean navigator</a>
+
+    <h1>Hoare/Graded.lean</h1>
+    <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Hoare/Graded.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Extends Hoare triples with a cost bound (grade) drawn from a preordered monoid &mdash; a behavioral guarantee plus a quantitative information budget.</p>
+    </div>
+
+    <h3>PreorderedMonoid</h3>
+    <p>A typeclass for grade structures: a carrier type G with addition, zero, a preorder, and a <code>toNat</code> extraction. The key laws: addition is associative with unit, the preorder respects addition, and <code>toNat</code> is both order-preserving and additive. The canonical instance is <code>Nat</code> itself.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">class</span> <span class="text-green-300">PreorderedMonoid</span> (G : Type) <span class="text-blue-300">where</span>
+  add : G &rarr; G &rarr; G
+  zero : G
+  le : G &rarr; G &rarr; Prop
+  toNat : G &rarr; Nat
+  -- ... associativity, unit laws, monotonicity, toNat laws</code></pre>
+
+    <h3>GradedTriple</h3>
+    <p>A graded Hoare triple <code>&#123;P&#125; f &#123;Q&#125; @ g</code> combines a behavioral guarantee (every reachable output satisfies Q) with a cost bound (the information drop is bounded by <code>toNat g</code>). The cost is stated additively to avoid natural number subtraction.</p>
+    <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">def</span> <span class="text-green-300">GradedTriple</span> [Monad M] [Support M] &#123;G : Type&#125; [PreorderedMonoid G]
+    (P : &alpha; &rarr; Prop) (f : Kernel M &alpha; &beta;) (Q : &beta; &rarr; Prop)
+    (m&alpha; : InfoMeasure &alpha;) (m&beta; : InfoMeasure &beta;) (g : G) : Prop :=
+  Triple P f Q &and;
+  &forall; a, P a &rarr; &forall; b, Support.support (f a) b &rarr;
+    m&alpha;.measure a &le; m&beta;.measure b + PreorderedMonoid.toNat g</code></pre>
+
+    <Repl client:load initialCode={`# Graded triple: {P} f {Q} @ cost
+# Behavioral guarantee + information budget.
+# Grades are additive: composing costs g1+g2.
+import math
+
+def info(items):
+    """Information = log2 of number of possibilities"""
+    return math.log2(max(len(items), 1))
+
+def filter_stage(items):
+    return items[:len(items)//2]  # drop half
+
+def attend_stage(items):
+    return items[:3]  # keep top 3
+
+data = list(range(16))
+after_filter = filter_stage(data)
+after_attend = attend_stage(after_filter)
+
+g1 = info(data) - info(after_filter)
+g2 = info(after_filter) - info(after_attend)
+
+print(f"filter: {len(data)} -> {len(after_filter)}"
+      f"  cost = {g1:.1f} bits")
+print(f"attend: {len(after_filter)} -> {len(after_attend)}"
+      f"  cost = {g2:.1f} bits")
+print(f"composed cost: {g1:.1f} + {g2:.1f}"
+      f" = {g1+g2:.1f} bits (additive)")
+print(f"total drop: {info(data):.1f} -> {info(after_attend):.1f}"
+      f" = {info(data)-info(after_attend):.1f} bits")
+`} />
+
+    <h3>graded_contract_bridge</h3>
+    <p>One direction of the bridge: ContractPreserving plus a supplied cost bound gives a GradedTriple. The grade is whatever the caller provides.</p>
+
+    <h3>graded_comp</h3>
+    <p>Graded triples compose with additive grades. If <code>&#123;P&#125; f &#123;R&#125; @ g1</code> and <code>&#123;R&#125; g &#123;Q&#125; @ g2</code>, then <code>&#123;P&#125; f;g &#123;Q&#125; @ (g1 + g2)</code>. The cost chain uses <code>toNat_add</code> to convert the composed grade into the sum of costs.</p>
+
+    <h3>graded_skip</h3>
+    <p>The identity kernel has unit grade: <code>&#123;P&#125; id &#123;P&#125; @ zero</code>. Since the only output is the input itself, the information drop is zero.</p>
+
+    <h3>graded_weaken</h3>
+    <p>Weakening: a graded triple at grade g1 implies a graded triple at any larger grade g2. Larger grade means a looser cost bound, which is easier to satisfy. Uses <code>toNat_mono</code> for the numeric comparison.</p>
+
+    <h3>Connections</h3>
+    <ul class="neighbors">
+      <li><a href="/reading/the-natural-framework-lean/hoare-bridge/">Hoare/Bridge.lean</a> &mdash; imported; contract_is_triple bridges to the graded version</li>
+      <li><a href="/reading/the-natural-framework-lean/handshake/">Handshake.lean</a> &mdash; InfoMeasure and NonExpanding are the ungraded versions of the cost bound</li>
+      <li><a href="/reading/the-natural-framework-lean/hoare-effects/">Hoare/Effects.lean</a> &mdash; Boolean effect embedding, a different cost algebra</li>
+    </ul>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/gaboardi-2021/">🍞 Gaboardi 2021</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/the-natural-framework-lean/hoare-comp/", label: "Hoare/Comp.lean · 18 of 25" }} next={{ href: "/reading/the-natural-framework-lean/hoare-effects/", label: "Hoare/Effects.lean · 20 of 25" }} />
+  </main>
+</Layout>

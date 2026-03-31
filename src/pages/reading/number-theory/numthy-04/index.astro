@@ -1,0 +1,134 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Number Theory Ch.4 — Euler and Fermat" favicon="#">
+  <main>
+
+    <a href="/reading/number-theory/" class="text-sm mb-4 inline-block">&larr; back to Number Theory</a>
+
+    <h1>Euler and Fermat</h1>
+    <p class="text-gray-400 text-sm mb-6">Jim Hefferon &middot; Elementary Number Theory &middot; <a href="https://jheffero.w3.uvm.edu/numbertheory/">Ch. 4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Euler's totient function counts how many integers below n are coprime to n. Fermat's little theorem and Euler's generalization connect this count to modular exponentiation: <strong>a^phi(n) &#x2261; 1 (mod n)</strong> whenever gcd(a, n) = 1.</p>
+    </div>
+
+    <!-- 1. Euler's totient function -->
+    <h3>Euler's totient function</h3>
+    <p>phi(n) counts the integers from 1 to n that are coprime to n (share no common factor with n other than 1). For a prime p, phi(p) = p - 1. For a prime power, phi(p^k) = p^k - p^(k-1). For coprime m, n: phi(m n) = phi(m) phi(n).</p>
+
+    <!-- SVG: phi(12) showing which numbers are coprime to 12 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 100" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="200" y="15" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">phi(12): numbers coprime to 12 are highlighted</text>
+        <!-- Numbers 1-12 -->
+        <rect x="10" y="28" width="28" height="28" rx="3" fill="#facc15" fill-opacity="0.15"/>
+        <text x="24" y="47" text-anchor="middle" fill="#facc15" font-size="12">1</text>
+        <text x="56" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">2</text>
+        <text x="88" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">3</text>
+        <text x="120" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">4</text>
+        <rect x="138" y="28" width="28" height="28" rx="3" fill="#facc15" fill-opacity="0.15"/>
+        <text x="152" y="47" text-anchor="middle" fill="#facc15" font-size="12">5</text>
+        <text x="184" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">6</text>
+        <rect x="202" y="28" width="28" height="28" rx="3" fill="#facc15" fill-opacity="0.15"/>
+        <text x="216" y="47" text-anchor="middle" fill="#facc15" font-size="12">7</text>
+        <text x="248" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">8</text>
+        <text x="280" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">9</text>
+        <text x="312" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">10</text>
+        <rect x="330" y="28" width="28" height="28" rx="3" fill="#facc15" fill-opacity="0.15"/>
+        <text x="344" y="47" text-anchor="middle" fill="#facc15" font-size="12">11</text>
+        <text x="376" y="47" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.2">12</text>
+        <!-- Result -->
+        <text x="200" y="82" text-anchor="middle" fill="#facc15" font-size="11" fill-opacity="0.7">phi(12) = 4 (coprime: 1, 5, 7, 11)</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Euler's totient function
+(define (gcd a b) (if (= b 0) a (gcd b (modulo a b))))
+
+(define (totient n)
+  (let loop ((i 1) (count 0))
+    (if (> i n)
+        count
+        (loop (+ i 1)
+              (if (= 1 (gcd i n)) (+ count 1) count)))))
+
+(display "phi(12) = ") (display (totient 12)) (newline)  ; 4
+(display "phi(7) = ") (display (totient 7)) (newline)    ; 6 (prime)
+(display "phi(10) = ") (display (totient 10)) (newline)  ; 4
+(display "phi(1) = ") (display (totient 1)) (newline)    ; 1
+
+; List the coprime residues mod 12
+(display "Coprime to 12: ")
+(let loop ((i 1))
+  (when (<= i 12)
+    (when (= 1 (gcd i 12))
+      (display i) (display " "))
+    (loop (+ i 1))))
+`} />
+
+
+    <!-- 2. Fermat's little theorem -->
+    <h3>Fermat's little theorem</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Fermat%27s_little_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Fermat's little theorem</a>: if p is prime and gcd(a, p) = 1, then a^(p-1) &#x2261; 1 (mod p). Equivalently, a^p &#x2261; a (mod p) for all a. This is a special case of Euler's theorem.</p>
+
+    <SchemeRepl client:load initialCode={`; Fast modular exponentiation (repeated squaring)
+(define (mod-pow base exp mod)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (let ((half (mod-pow base (quotient exp 2) mod)))
+           (modulo (* half half) mod)))
+        (else
+         (modulo (* base (mod-pow base (- exp 1) mod)) mod))))
+
+; Fermat's little theorem: a^(p-1) = 1 (mod p)
+(display "2^6 mod 7 = ") (display (mod-pow 2 6 7)) (newline)   ; 1
+(display "3^12 mod 13 = ") (display (mod-pow 3 12 13)) (newline) ; 1
+(display "5^10 mod 11 = ") (display (mod-pow 5 10 11)) (newline) ; 1
+
+; Euler's theorem: a^phi(n) = 1 (mod n) when gcd(a,n)=1
+(display "7^4 mod 12 = ") (display (mod-pow 7 4 12))  ; phi(12)=4, so 1
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Fast modular exponentiation
+def mod_pow(base, exp, mod):
+    result = 1
+    base = base % mod
+    while exp > 0:
+        if exp % 2 == 1:
+            result = (result * base) % mod
+        exp //= 2
+        base = (base * base) % mod
+    return result
+
+# Fermat: a^(p-1) = 1 mod p
+print(f"2^6 mod 7 = {mod_pow(2, 6, 7)}")
+print(f"3^12 mod 13 = {mod_pow(3, 12, 13)}")
+print(f"5^10 mod 11 = {mod_pow(5, 10, 11)}")
+print(f"7^4 mod 12 = {mod_pow(7, 4, 12)}")
+`} />
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/cryptography/crypto-06/">&rarr; Cryptography Ch.6</a> — RSA correctness relies on Euler's theorem: decryption works because m^(ed) &#x2261; m (mod n)</li>
+    
+      <li><a href="/reading/cryptography/crypto-06/">🔐 Cryptography Ch.6</a> &mdash; RSA is Euler's theorem applied to encryption</li>
+      <li><a href="/reading/abstract-algebra/judson-05/">🔗 Abstract Algebra Ch.5</a> &mdash; Lagrange's theorem is the group-theoretic proof of Fermat's little theorem</li>
+    </ul>
+    </Neighbors>
+
+
+
+    <PrevNext prev={{ href: "/reading/number-theory/numthy-03/", label: "Congruences" }} next={{ href: "/reading/number-theory/numthy-05/", label: "Chinese Remainder Theorem" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,194 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Zhao et al. 2023 — A Survey of Large Language Models" favicon="🏛️">
+  <main>
+
+    <a href="/reading/cognitive-architecture/" class="text-sm mb-4 inline-block">&larr; back to index</a>
+
+    <h1>A Survey of Large Language Models</h1>
+    <p class="text-gray-400 text-sm mb-6">Wayne Xin Zhao, Kun Zhou, Junyi Li, Tianyi Tang, Xiaolei Wang et al. · 2023→2026 · <a href="https://arxiv.org/abs/2303.18223"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2303.18223</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A 144-page living survey of the LLM stack: pre-training, alignment, utilization, evaluation. Updated through 19 revisions. The closest thing to a textbook for the field as it moves.</p>
+    </div>
+
+    <!-- SVG: Four-pillar lifecycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 480 160" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- Pre-training -->
+        <rect x="10" y="40" width="100" height="45" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="60" y="58" text-anchor="middle" fill="currentColor" font-size="10">Pre-training</text>
+        <text x="60" y="72" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">next-token on</text>
+        <text x="60" y="82" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">internet-scale data</text>
+
+        <!-- Post-training -->
+        <rect x="130" y="40" width="100" height="45" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="180" y="58" text-anchor="middle" fill="currentColor" font-size="10">Post-training</text>
+        <text x="180" y="72" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">SFT, RLHF, DPO</text>
+        <text x="180" y="82" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">align to intent</text>
+
+        <!-- Utilization -->
+        <rect x="250" y="40" width="100" height="45" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="300" y="58" text-anchor="middle" fill="currentColor" font-size="10">Utilization</text>
+        <text x="300" y="72" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">prompting, ICL</text>
+        <text x="300" y="82" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">CoT, agents</text>
+
+        <!-- Evaluation -->
+        <rect x="370" y="40" width="100" height="45" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="420" y="58" text-anchor="middle" fill="currentColor" font-size="10">Evaluation</text>
+        <text x="420" y="72" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">benchmarks</text>
+        <text x="420" y="82" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">capabilities</text>
+
+        <!-- Arrows -->
+        <line x1="110" y1="62" x2="130" y2="62" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="128,58 134,62 128,66" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="230" y1="62" x2="250" y2="62" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="248,58 254,62 248,66" fill="currentColor" fill-opacity="0.3"/>
+        <line x1="350" y1="62" x2="370" y2="62" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.3"/>
+        <polygon points="368,58 374,62 368,66" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Architecture role mapping -->
+        <text x="60" y="105" text-anchor="middle" fill="#34d399" font-size="8" fill-opacity="0.6">Consolidate</text>
+        <text x="180" y="105" text-anchor="middle" fill="#34d399" font-size="8" fill-opacity="0.6">Consolidate</text>
+        <text x="300" y="105" text-anchor="middle" fill="#60a5fa" font-size="8" fill-opacity="0.6">Forward pass</text>
+        <text x="420" y="105" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">Measurement</text>
+
+        <!-- Dotted lines from role to box -->
+        <line x1="60" y1="85" x2="60" y2="98" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <line x1="180" y1="85" x2="180" y2="98" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <line x1="300" y1="85" x2="300" y2="98" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="3,2"/>
+        <line x1="420" y1="85" x2="420" y2="98" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="3,2"/>
+
+        <!-- Gap annotation -->
+        <rect x="230" y="115" width="120" height="20" rx="3" fill="#a1a1aa" fill-opacity="0.15" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="4,3"/>
+        <text x="290" y="129" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">no learning at inference</text>
+
+        <!-- Caption -->
+        <text x="240" y="152" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">the LLM lifecycle: two Consolidate phases, then frozen forward pass</text>
+      </svg>
+    </div>
+
+    <h2>Why this survey</h2>
+
+    <p>The <a href="/reading/cognitive-architecture/vaswani-2017/">transformer paper</a> gives you the architecture. This survey gives you everything built on top: how models are trained, aligned, prompted, evaluated, compressed, and deployed. Four pillars, each a stage in the lifecycle of an LLM.</p>
+
+    <h2>The four pillars</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Pillar</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it covers</th>
+            <th class="text-left py-2 text-gray-400">Section</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Pre-training</td><td class="pr-3 text-gray-400">Data collection, architecture choices (encoder-only vs. decoder-only vs. encoder-decoder), training objectives, scaling laws, distributed training</td><td class="text-gray-400">§4</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Post-training</td><td class="pr-3 text-gray-400">Instruction tuning (SFT), alignment tuning (RLHF and alternatives), parameter-efficient adaptation (LoRA, adapters)</td><td class="text-gray-400">§5</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Utilization</td><td class="pr-3 text-gray-400">Prompt engineering, in-context learning, chain-of-thought reasoning, planning and agentic frameworks</td><td class="text-gray-400">§6</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Evaluation</td><td class="text-gray-400">What LLMs can do (generation, knowledge, reasoning, tool use, alignment), how to measure it, empirical findings</td><td class="text-gray-400">§7</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary class="text-xl font-semibold mb-4 cursor-pointer" style="font-family: system-ui, -apple-system, sans-serif; font-weight: 500;">Section map</summary>
+
+    <p>The survey is large. These are the sections worth reading in full, versus those to skim for references.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">§</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Topic</th>
+            <th class="text-left py-2 text-gray-400">Read or skim</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">2</td><td class="pr-3 text-gray-300">Overview & GPT evolution</td><td class="text-gray-400">Read:traces the key transitions from GPT-1 through GPT-4</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">3</td><td class="pr-3 text-gray-300">Resources</td><td class="text-gray-400">Skim:model checkpoints, corpora, datasets, libraries</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">4</td><td class="pr-3 text-gray-300">Pre-training</td><td class="text-gray-400">Read:architecture choices, scaling laws, training infrastructure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">5</td><td class="pr-3 text-gray-300">Post-training</td><td class="text-gray-400">Read:instruction tuning, RLHF, DPO, LoRA</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">6</td><td class="pr-3 text-gray-300">Utilization</td><td class="text-gray-400">Read:prompting, ICL, CoT, planning</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">7</td><td class="pr-3 text-gray-300">Capacity & evaluation</td><td class="text-gray-400">Skim:benchmarks, empirical results</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">8</td><td class="pr-3 text-gray-300">Applications</td><td class="text-gray-400">Skim:domain-specific applications</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">9</td><td class="pr-3 text-gray-300">Advanced topics</td><td class="text-gray-400">Read:long context, agents, compression, RAG, hallucination</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </details>
+
+    <h2>Three eras</h2>
+
+    <p>The survey traces an evolution through three stages:</p>
+
+    <ol class="text-gray-300 space-y-2 mb-4">
+      <li><strong>Statistical language models.</strong> N-gram counts, smoothing, Markov assumptions. The insight: predict the next word from a fixed window of preceding words.</li>
+      <li><strong>Neural language models.</strong> Word embeddings, RNNs, LSTMs. The insight: learn distributed representations that capture semantic similarity.</li>
+      <li><strong>Pre-trained / Large language models.</strong> Transformers trained on internet-scale corpora. The insight: scale the architecture and the data together, and capabilities emerge that were not explicitly trained.</li>
+    </ol>
+
+    <p>Within the LLM era, the survey distinguishes three phases that map cleanly to the cognitive architecture lens:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Phase</th>
+            <th class="text-left py-2 pr-3 text-gray-400">LLM term</th>
+            <th class="text-left py-2 text-gray-400">Architecture role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Pre-training</td><td class="pr-3 text-gray-400">Next-token prediction on massive corpora</td><td class="text-gray-400">Consolidate: offline weight updates</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Post-training</td><td class="pr-3 text-gray-400">SFT, RLHF, DPO: align behavior to intent</td><td class="text-gray-400">Consolidate: policy refinement</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Inference</td><td class="text-gray-400">Prompting, ICL, CoT, tool use, agents</td><td class="text-gray-400">Forward pass only: Perceive through Remember, no Consolidate</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The architectural gap is visible: during inference, the model runs a forward pass with frozen weights. There is no learning. In-context learning looks like learning but is attention over the prompt. Nothing persists beyond the context window.</p>
+
+    <h2>The Consolidate stack</h2>
+
+    <p>Nearly everything interesting in this survey is a Consolidate operation. The LLM lifecycle is a stack of increasingly refined backward passes.</p>
+
+    <p>Scaling laws are Consolidate's planning function: predict how much loss a given budget will buy before spending it. No other architecture has this. <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> has no way to predict how many chunks a given amount of experience will produce.</p>
+
+    <p>RLHF is <a href="/reading/cognitive-architecture/minsky-1986/">Minsky's A-brain / B-brain</a> made differentiable. The policy model acts. The reward model judges. PPO optimizes the policy against the judgment. DPO collapses the two into one step: skip the reward model, optimize directly on preference pairs. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> RL does something similar with numeric preferences, but the reward comes from the task, not from a human rater.</p>
+
+    <p>LoRA is the cheapest backward pass. Freeze the base model. Train two small matrices whose product approximates the weight update. Merge at inference. Consolidate with a compression constraint: the update must fit in rank r. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking has a different constraint. The update must be a single production rule derived from a dependency trace.</p>
+
+    <p>Here's what catches people: in-context learning and chain-of-thought look like Consolidate but aren't. They're Attend. Attention over the prompt. Nothing persists. Nothing compiles. <a href="/reading/cognitive-architecture/arunkumar-2026/">Agent frameworks</a> tried to fix this with Reflexion (store verbal critiques) and MemInsight (compress episodes into insights). Consolidate workarounds in text space, because the weights are frozen.</p>
+
+    <h2>Perceive, not Remember</h2>
+
+    <p>RAG retrieves documents and prepends them to the prompt, injecting external information at the input. That's Perceive. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> semantic memory does the same: a queryable store that feeds the forward pass. Soar retrieves by activation (recency + frequency + spreading); RAG retrieves by embedding similarity. Both are read operations on external memory.</p>
+
+    <h2>The frozen forward pass</h2>
+
+    <p>The forward pass is read-only. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking compiles deliberation into rules on every impasse. <a href="/reading/cognitive-architecture/arunkumar-2026/">Reflexion</a> simulates this in text. Neither updates the model.</p>
+
+    <p>The context window is volatile. <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> stores every decision cycle. <a href="/reading/cognitive-architecture/arunkumar-2026/">Generative Agents</a> bolt on a natural-language episode stream. LLMs forget everything when the context clears.</p>
+
+    <p>Pre-training and RLHF are scheduled by engineers, not triggered by the agent's own experience. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking fires automatically on impasse resolution. The <a href="https://june.kim/diagnosis-llm"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>diagnosis</a> is the same: sealed Consolidate, frozen Remember.</p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="https://june.kim/diagnosis-llm"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Diagnosis: LLM (blog)</a></li>
+      <li><a href="/reading/cognitive-architecture/vaswani-2017/">Attention Is All You Need</a></li>
+      <li><a href="/reading/cognitive-architecture/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/cognitive-architecture/laird-2022/", label: "Laird 2022 · 3 of 5" }} next={{ href: "/reading/cognitive-architecture/arunkumar-2026/", label: "Arunkumar 2026 · 5 of 5" }} />
+
+  </main>
+</Layout>

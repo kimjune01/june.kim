@@ -1,0 +1,78 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Brin & Page 1998 — The Anatomy of a Search Engine" favicon="⚖">
+  <main>
+
+    <a href="/reading/commons/" class="text-sm mb-4 inline-block">&larr; back to The Commons</a>
+
+    <h1>The Anatomy of a Search Engine</h1>
+    <p class="text-gray-400 text-sm mb-6">Sergey Brin, Lawrence Page &middot; Stanford &middot; 1998 &middot; <a href="http://infolab.stanford.edu/~backrub/google.html">Read the original</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">An academic paper that described how to organize the web's knowledge. The company it spawned enclosed the commons it indexed.</p>
+    </div>
+
+    <!-- PageRank -->
+    <h3>The web ranked itself</h3>
+
+    <p>PageRank treats the web as a directed graph. Each page is a node. Each hyperlink is an edge. A page's importance is determined by the importance of the pages that link to it, recursively. A link from a page that itself has many inbound links counts more than a link from an obscure corner of the web.</p>
+
+    <p>The insight is structural: you don't need to understand a page's content to judge its quality. The link structure encodes a distributed, decentralized vote. Millions of authors, each deciding independently what to reference, produce a quality signal that no single editor could replicate. The web's commons generated its own ranking for free.</p>
+
+    <p>The algorithm worked because the web in 1998 was still mostly a commons. Links were editorial acts: someone read something, found it valuable, and pointed others to it. PageRank harvested the collective judgment embedded in that structure. It was elegant, effective, and entirely dependent on a commons it did not create.</p>
+
+    <!-- Appendix A -->
+    <h3>Appendix A</h3>
+
+    <p>The technical contribution is in the body of the paper. The prophecy is in the appendix.</p>
+
+    <blockquote class="border-l-2 border-zinc-600 pl-4 my-6 text-gray-300 italic">
+      "We expect that advertising funded search engines will be inherently biased towards the advertisers and away from the needs of consumers."
+    </blockquote>
+
+    <p>Brin and Page wrote this in 1998. They described the exact failure mode of the company they would build. The argument is straightforward: if your revenue comes from advertisers, your incentive is to serve advertisers. The user's interest and the advertiser's interest diverge. An ad-funded search engine will, over time, optimize for the advertiser.</p>
+
+    <p>They were right. Google's search results are now a layer of ads above a layer of SEO-optimized content above whatever the user was actually looking for. The authors predicted their own company's corruption before the company existed. The paper is its own exhibit A.</p>
+
+    <!-- The enclosure -->
+    <h3>The enclosure</h3>
+
+    <p>Google didn't just index the commons. It replaced the commons with a proprietary layer. The web's knowledge is still there, but you can't get to it without going through the gate. Search became a toll road on a public highway.</p>
+
+    <p>The mechanism was gradual. First, Google was the best way to find things. Then the only way most people found things. Then it started answering questions directly — pulling content from other sites, displaying it in featured snippets. The user got their answer without clicking through. The creator got nothing.</p>
+
+    <p>A new technology creates a commons. An intermediary indexes it and becomes indispensable. The intermediary captures the value the commons generated. The commons withers because the incentive to contribute has been redirected. Why publish on the open web when Google will either bury you or extract your content without sending traffic?</p>
+
+    <h3>A gift that became a fence</h3>
+
+    <p>PageRank was an academic paper, published openly, describing an algorithm that would create the most valuable advertising company in history. The same minds that understood the web's link structure well enough to exploit it also understood, in Appendix A, that the exploitation was inevitable once advertising entered the picture.</p>
+
+    <p>They built it anyway.</p>
+
+    <p class="text-sm text-gray-500 mt-6">The enclosure isn't malice. Network effects in search create a natural monopoly — the more people use one engine, the better its results, the more people use it. The equilibrium is one winner. The original paper warned about exactly this. <a href="https://june.kim/paradox-of-open-competition"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Paradox of Open Competition</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/commons/berners-lee-1989/">⚖ Berners-Lee 1989</a> — the commons that Google indexed</li>
+      <li><a href="/reading/commons/boyle-2003/">⚖ Boyle 2003</a> — the pattern named: the second enclosure movement</li>
+      <li><a href="/reading/commons/lessig-2004/">⚖ Lessig 2004</a> — the legal framework that enabled the enclosure</li>
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> — the ad auction system that funded the enclosure</li>
+      <li><a href="/reading/linear-algebra/la-06/">🔗 Linear Algebra Ch.6</a> — eigenvalues and eigenvectors: PageRank is the dominant eigenvector of the web's link matrix — stationary distribution of the random walk</li>
+      <li><a href="/reading/algorithms/algo-05/">⚙ Algorithms Ch.5</a> — graph algorithms and shortest paths: the web graph is the data structure; the crawl is BFS; PageRank is a fixed-point computation on it</li>
+    </ul>
+
+    <!-- Paper link -->
+    </Neighbors>
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The paper is freely available. <a href="http://infolab.stanford.edu/~backrub/google.html">Read it at Stanford</a>. Pay special attention to Appendix A.
+    </div>
+
+    <!-- Navigation -->
+    <PrevNext prev={{ href: "/reading/commons/berners-lee-1989/", label: "Berners-Lee 1989 · 3 of 8" }} next={{ href: "/reading/commons/boyle-2003/", label: "Boyle 2003 · 5 of 8" }} />
+
+  </main>
+</Layout>

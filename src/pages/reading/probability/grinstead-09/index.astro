@@ -1,0 +1,219 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 9 — Central Limit Theorem" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Central Limit Theorem</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Standardize the sum of <em>n</em> independent random variables: subtract the mean, divide by &sigma;&radic;n. As <em>n</em> grows, the distribution converges to N(0, 1). This is why the normal distribution appears everywhere.</p>
+    </div>
+
+    <!-- 1. The standardized sum -->
+    <h3>The standardized sum</h3>
+    <p>Let X&#x2081;, X&#x2082;, &hellip;, X&#x2099; be independent random variables with mean &mu; and variance &sigma;&sup2;. Their sum S&#x2099; = X&#x2081; + &hellip; + X&#x2099; has mean n&mu; and variance n&sigma;&sup2;. The <strong>standardized sum</strong> is S&#x2099;* = (S&#x2099; &minus; n&mu;) / (&sigma;&radic;n). The CLT says the distribution of S&#x2099;* converges to the standard normal.</p>
+
+    <!-- SVG: Histogram of sample means overlaid with normal curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="420" y2="180" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="180" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Histogram bars (symmetric, approximating normal) -->
+        <rect x="100" y="165" width="30" height="15" fill="#facc15" fill-opacity="0.25" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="130" y="145" width="30" height="35" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="160" y="115" width="30" height="65" fill="#facc15" fill-opacity="0.35" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="190" y="75" width="30" height="105" fill="#facc15" fill-opacity="0.4" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="220" y="45" width="30" height="135" fill="#facc15" fill-opacity="0.45" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="250" y="75" width="30" height="105" fill="#facc15" fill-opacity="0.4" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="280" y="115" width="30" height="65" fill="#facc15" fill-opacity="0.35" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="310" y="145" width="30" height="35" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="0.5"/>
+        <rect x="340" y="165" width="30" height="15" fill="#facc15" fill-opacity="0.25" stroke="#facc15" stroke-width="0.5"/>
+        <!-- Normal curve overlay -->
+        <path d="M 80,178 Q 115,175 130,168 Q 150,155 165,135 Q 185,100 205,65 Q 220,42 235,35 Q 250,42 265,65 Q 285,100 305,135 Q 320,155 340,168 Q 355,175 390,178" fill="none" stroke="#3b82f6" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="235" y="200" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.5">S&#x2099;*</text>
+        <text x="235" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">standardized sum</text>
+        <text x="395" y="30" fill="#3b82f6" font-size="10">N(0,1)</text>
+        <text x="130" y="30" fill="#facc15" font-size="10" fill-opacity="0.7">sample means</text>
+        <!-- Tick marks -->
+        <text x="115" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">-3</text>
+        <text x="175" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">-1</text>
+        <text x="235" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+        <text x="295" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+        <text x="355" y="195" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">3</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Central Limit Theorem: standardize sums of dice rolls
+; S_n* = (S_n - n*mu) / (sigma * sqrt(n))
+
+; Simple pseudo-random via linear congruential generator
+(define *seed* 42)
+(define (rand!)
+  (set! *seed* (modulo (+ (* 1103515245 *seed*) 12345) 2147483648))
+  *seed*)
+
+; Roll a fair die (1-6)
+(define (roll-die) (+ 1 (modulo (rand!) 6)))
+
+; Sum of n dice rolls, standardized
+; mu = 3.5, sigma^2 = 35/12, sigma = sqrt(35/12) ~ 1.708
+(define mu 3.5)
+(define sigma 1.708)
+
+(define (standardized-sum n)
+  (let loop ((i 0) (total 0))
+    (if (= i n) (/ (- total (* n mu)) (* sigma (sqrt n)))
+        (loop (+ i 1) (+ total (roll-die))))))
+
+; Show how the standardized sum concentrates near 0
+(display "n=1:   ") (display (standardized-sum 1)) (newline)
+(display "n=10:  ") (display (standardized-sum 10)) (newline)
+(display "n=100: ") (display (standardized-sum 100)) (newline)
+(display "n=100: ") (display (standardized-sum 100)) (newline)
+(display "n=100: ") (display (standardized-sum 100)) (newline)
+; As n grows, values cluster around 0 — the CLT in action
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+random.seed(42)
+
+mu, sigma = 3.5, (35/12)**0.5
+
+def standardized_sum(n):
+    s = sum(random.randint(1, 6) for _ in range(n))
+    return (s - n * mu) / (sigma * n**0.5)
+
+for n in [1, 10, 100]:
+    vals = [round(standardized_sum(n), 3) for _ in range(5)]
+    print(f"n={n:>3}: {vals}")
+# n=100 values cluster near 0
+`} />
+    </div>
+
+    <!-- 2. Continuity correction -->
+    <h3>Continuity correction</h3>
+    <p>When approximating a discrete distribution with the continuous normal, shift by &frac12;. To find P(S&#x2099; = k), compute P(k &minus; &frac12; &lt; S&#x2099; &lt; k + &frac12;) under the normal curve. This <strong>continuity correction</strong> dramatically improves accuracy for small n.</p>
+
+    <SchemeRepl client:load initialCode={`; Continuity correction example
+; Flip 100 fair coins. P(exactly 50 heads)?
+; Exact: C(100,50) * 0.5^100 ~ 0.0796
+; Without correction: P(S*=0) — a single point has zero area
+; With correction: P(-0.5 < S_n < 0.5) after standardizing
+
+; Normal CDF approximation (Abramowitz & Stegun)
+(define (phi z)
+  (let* ((az (abs z))
+         (t (/ 1 (+ 1 (* 0.2316419 az))))
+         (d (* 0.3989423 (exp (* -0.5 z z))))
+         (p (* d t (+ 0.3193815
+                (* t (+ -0.3565638
+                   (* t (+ 1.781478
+                      (* t (+ -1.8212560
+                         (* t 1.3302744)))))))))))
+    (if (> z 0) (- 1 p) p)))
+
+; n=100 coin flips: mu=50, sigma=5
+(define n 100)
+(define mu-coins 50)
+(define sig-coins 5)
+
+; Standardize with continuity correction
+(define z-lo (/ (- 49.5 mu-coins) sig-coins))
+(define z-hi (/ (- 50.5 mu-coins) sig-coins))
+
+(display "P(exactly 50 heads) ~ ")
+(display (- (phi z-hi) (phi z-lo))) (newline)
+; Should be close to 0.0796 (exact answer)
+
+; Without correction: P(50 < S < 50) = 0
+(display "Without correction: 0 (point has no area)")
+`} />
+
+    <!-- 3. Why normal? -->
+    <h3>Why the normal distribution?</h3>
+    <p>The normal distribution is not arbitrary. It is the maximum-entropy distribution for a given mean and variance. If all you know about a quantity is its mean and variance, the least-presumptuous distribution is normal. The CLT makes this concrete: sums of independent variables lose all structure except mean and variance, so what remains is the max-entropy distribution.</p>
+
+    <SchemeRepl client:load initialCode={`; The normal distribution maximizes entropy
+; among all distributions with fixed mean and variance.
+; H(X) = (1/2) * ln(2 * pi * e * sigma^2)
+
+(define pi 3.141592653589793)
+(define e 2.718281828459045)
+
+(define (normal-entropy sigma)
+  (* 0.5 (log (* 2 pi e sigma sigma))))
+
+; Compare entropies for different sigmas
+(display "sigma=1: H = ") (display (normal-entropy 1)) (newline)
+(display "sigma=2: H = ") (display (normal-entropy 2)) (newline)
+(display "sigma=5: H = ") (display (normal-entropy 5)) (newline)
+; Wider spread = more entropy = more uncertainty
+; No other distribution with the same sigma has higher entropy.
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Textbook</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S&#x2099; = X&#x2081; + &hellip; + X&#x2099;</td><td class="pr-4 text-green-300">(loop ... (+ total (roll-die)))</td><td class="font-sans">Sum of n trials</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">S&#x2099;* = (S&#x2099; &minus; n&mu;) / &sigma;&radic;n</td><td class="pr-4 text-green-300">(standardized-sum n)</td><td class="font-sans">Standardized sum</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&Phi;(z)</td><td class="pr-4 text-green-300">(phi z)</td><td class="font-sans">Standard normal CDF</td></tr>
+          <tr><td class="py-2 pr-4">N(0, 1)</td><td class="pr-4 text-green-300">standard normal</td><td class="font-sans">Mean 0, variance 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-08/">🎰 Ch 8</a> &mdash; Law of Large Numbers (convergence of averages)</li>
+      <li><a href="/reading/probability/grinstead-10/">🎰 Ch 10</a> &mdash; Generating Functions (another route to the CLT proof)</li>
+      <li><a href="/reading/probability/grinstead-07/">🎰 Ch 7</a> &mdash; Sums of Random Variables (convolution)</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Connections</p>
+    <ul>
+      <li><a href="https://arxiv.org/abs/1402.3067">Baez &amp; Fritz 2011</a> &mdash; entropy characterization: the normal maximizes entropy for fixed mean and variance</li>
+      <li><a href="/reading/real-analysis/lebl-02/">∞ Lebl Ch.2 Sequences</a> &mdash; the convergence theory underlying the CLT</li>
+      <li><a href="https://en.wikipedia.org/wiki/Central_limit_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Central Limit Theorem</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Normal_distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Normal distribution</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>The standardized sum here uses a fixed pseudo-random generator, so the "randomness" is deterministic. A real demonstration would run thousands of trials and plot the histogram. The continuity correction uses an approximation to &Phi;(z) from Abramowitz &amp; Stegun, accurate to about 5 decimal places. The textbook proves the CLT via moment generating functions (Chapter 10). The entropy characterization follows from constrained optimization with Lagrange multipliers.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Chapter 9</a> of Grinstead &amp; Snell.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-08/", label: "Law of Large Numbers" }} next={{ href: "/reading/probability/grinstead-10/", label: "Generating Functions" }} />
+
+  </main>
+</Layout>

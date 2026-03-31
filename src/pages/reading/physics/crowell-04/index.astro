@@ -1,0 +1,213 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Crowell Ch.4 — Thermodynamics" favicon="⚛">
+  <main>
+
+    <a href="/reading/physics/" class="text-sm mb-4 inline-block">&larr; back to physics</a>
+
+    <h1>Thermodynamics</h1>
+    <p class="text-gray-400 text-sm mb-6">Benjamin Crowell &middot; Simple Nature &middot; <a href="https://lightandmatter.com/area1sn.html">Ch. 4</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Temperature</strong> measures average kinetic energy per molecule. <strong>Heat</strong> flows from hot to cold. <strong>Entropy</strong> counts microstates and always increases in an isolated system. The <strong>Carnot cycle</strong> sets the theoretical maximum efficiency of any heat engine. <strong>Boltzmann</strong> connected the microscopic (atoms) to the macroscopic (temperature, pressure).</p>
+    </div>
+
+    <!-- SVG: Carnot cycle PV diagram -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 260" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="50" y1="220" x2="300" y2="220" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <line x1="50" y1="220" x2="50" y2="20" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
+        <text x="175" y="250" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5">V (volume)</text>
+        <text x="25" y="120" text-anchor="middle" fill="currentColor" font-size="12" fill-opacity="0.5" transform="rotate(-90, 25, 120)">P (pressure)</text>
+
+        <!-- Carnot cycle: 4 processes -->
+        <!-- 1->2: Isothermal expansion (T_hot) -->
+        <path d="M 80 50 Q 140 55 200 90" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <text x="140" y="45" text-anchor="middle" fill="#f59e0b" font-size="10">T_hot (isothermal)</text>
+        <!-- Arrow on 1->2 -->
+        <polygon points="195,87 205,92 197,95" fill="#f59e0b"/>
+
+        <!-- 2->3: Adiabatic expansion -->
+        <path d="M 200 90 Q 230 130 260 180" fill="none" stroke="#34d399" stroke-width="2"/>
+        <text x="255" y="130" fill="#34d399" font-size="10">adiabatic</text>
+
+        <!-- 3->4: Isothermal compression (T_cold) -->
+        <path d="M 260 180 Q 190 185 140 195" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <text x="200" y="210" text-anchor="middle" fill="#60a5fa" font-size="10">T_cold (isothermal)</text>
+        <!-- Arrow on 3->4 -->
+        <polygon points="145,194 137,197 143,200" fill="#60a5fa"/>
+
+        <!-- 4->1: Adiabatic compression -->
+        <path d="M 140 195 Q 110 130 80 50" fill="none" stroke="#34d399" stroke-width="2"/>
+        <text x="85" y="130" fill="#34d399" font-size="10" text-anchor="end">adiabatic</text>
+
+        <!-- Corner labels -->
+        <circle cx="80" cy="50" r="3" fill="#f59e0b"/>
+        <text x="70" y="45" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.6">1</text>
+        <circle cx="200" cy="90" r="3" fill="#f59e0b"/>
+        <text x="210" y="85" fill="currentColor" font-size="10" fill-opacity="0.6">2</text>
+        <circle cx="260" cy="180" r="3" fill="#60a5fa"/>
+        <text x="270" y="177" fill="currentColor" font-size="10" fill-opacity="0.6">3</text>
+        <circle cx="140" cy="195" r="3" fill="#60a5fa"/>
+        <text x="130" y="192" text-anchor="end" fill="currentColor" font-size="10" fill-opacity="0.6">4</text>
+      </svg>
+    </div>
+
+    <!-- 1. Temperature -->
+    <h3>Temperature</h3>
+    <p>Temperature is the average kinetic energy per molecule: (3/2)kT = (1/2)mv&sup2; on average, where k is Boltzmann's constant. At absolute zero, all thermal motion stops. Temperature is not energy; it is energy per degree of freedom.</p>
+
+    <SchemeRepl client:load initialCode={`; Temperature and average molecular speed
+; (3/2) k T = (1/2) m v_rms^2
+; v_rms = sqrt(3 k T / m)
+
+(define k 1.381e-23)  ; Boltzmann constant, J/K
+
+; Nitrogen molecule: m = 28 * 1.66e-27 kg
+(define m-N2 (* 28 1.66e-27))
+
+(define (v-rms T m) (sqrt (/ (* 3 k T) m)))
+
+(display "N2 molecular speeds:") (newline)
+(display "  At 300 K (room temp): ")
+(display (round (v-rms 300 m-N2)))
+(display " m/s") (newline)
+
+(display "  At 600 K:             ")
+(display (round (v-rms 600 m-N2)))
+(display " m/s") (newline)
+
+(display "  At 77 K (liquid N2):  ")
+(display (round (v-rms 77 m-N2)))
+(display " m/s")
+`} />
+
+
+    <!-- 2. Entropy -->
+    <h3>Entropy</h3>
+    <p>Entropy S = k * ln(W), where W is the number of microstates consistent with the macrostate. The second law says entropy of an isolated system never decreases. This is not a force law; it is statistics. Overwhelmingly many microstates look disordered, so systems drift toward disorder.</p>
+
+    <SchemeRepl client:load initialCode={`; Entropy: S = k * ln(W)
+; Coin analogy: 100 coins, how many microstates for each macrostate?
+
+(define k 1.381e-23)
+
+; Binomial coefficient C(n, r) = n! / (r! * (n-r)!)
+; Use log to avoid overflow: ln(C(n,r)) = sum(ln(i)) for numerator - denominators
+(define (ln-binomial n r)
+  (let loop ((i 1) (result 0))
+    (if (> i n) result
+      (loop (+ i 1)
+            (+ result (log i)
+               (- (if (<= i r) (log i) 0))
+               (- (if (<= i (- n r)) (log i) 0)))))))
+
+; Number of microstates for 100 coins with h heads
+(define (ln-microstates h) (ln-binomial 100 h))
+
+(display "100 coins - ln(microstates):") (newline)
+(display "  All heads (0):   ") (display (round (ln-microstates 0))) (newline)
+(display "  10 heads:        ") (display (round (ln-microstates 10))) (newline)
+(display "  50 heads (max):  ") (display (round (ln-microstates 50))) (newline)
+(display "50/50 has overwhelmingly more microstates.") (newline)
+(display "That is the second law.")
+`} />
+
+
+    <!-- 3. Carnot efficiency -->
+    <h3>Carnot efficiency</h3>
+    <p>The <a href="https://en.wikipedia.org/wiki/Carnot_cycle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Carnot cycle</a> is the most efficient possible heat engine operating between two temperatures. Its efficiency is eta = 1 - T_cold/T_hot. No real engine beats this. The closer T_cold is to T_hot, the less work you can extract.</p>
+
+    <SchemeRepl client:load initialCode={`; Carnot efficiency: eta = 1 - T_cold / T_hot
+; All temperatures in Kelvin
+
+(define (carnot-efficiency T-hot T-cold)
+  (- 1 (/ T-cold T-hot)))
+
+; Power plant: steam at 600 K, coolant at 300 K
+(define eta1 (carnot-efficiency 600 300))
+(display "Power plant (600K/300K): ")
+(display (* 100 eta1)) (display "%") (newline)
+
+; Car engine: combustion at 1500 K, exhaust at 400 K
+(define eta2 (carnot-efficiency 1500 400))
+(display "Car engine (1500K/400K): ")
+(display (round (* 100 eta2))) (display "%") (newline)
+
+; Ocean thermal: 300 K surface, 275 K deep
+(define eta3 (carnot-efficiency 300 275))
+(display "Ocean thermal (300K/275K): ")
+(display (round (* 100 eta3))) (display "%") (newline)
+
+(display "Small temperature difference = tiny efficiency.")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Carnot efficiency
+def carnot(T_hot, T_cold):
+    return 1 - T_cold / T_hot
+
+cases = [
+    ("Power plant", 600, 300),
+    ("Car engine", 1500, 400),
+    ("Ocean thermal", 300, 275),
+]
+for name, Th, Tc in cases:
+    print(f"{name} ({Th}K/{Tc}K): {carnot(Th, Tc)*100:.1f}%")
+`} />
+    </div>
+
+
+    <!-- 4. Boltzmann -->
+    <h3>Boltzmann's bridge</h3>
+    <p><a href="https://en.wikipedia.org/wiki/Ludwig_Boltzmann"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Boltzmann</a> connected the macroscopic (pressure, temperature) to the microscopic (molecular velocities). The ideal gas law PV = NkT follows from averaging over molecular collisions. His tombstone reads S = k log W. The second law is not a postulate; it is a theorem of statistics applied to 10&sup2;&sup3; particles.</p>
+
+    <SchemeRepl client:load initialCode={`; Ideal gas law: PV = NkT
+; N molecules, each bouncing in a box
+
+(define k 1.381e-23)       ; J/K
+(define N 6.022e23)        ; Avogadro's number (1 mol)
+(define T 300)             ; K (room temperature)
+
+; Volume of 1 mole of ideal gas at 1 atm
+(define P 101325)          ; 1 atm in Pascals
+(define V (/ (* N k T) P))
+
+(display "1 mol ideal gas at 300K, 1 atm:") (newline)
+(display "  V = ") (display V) (display " m^3") (newline)
+(display "  V = ") (display (* V 1000)) (display " liters") (newline)
+; Should be about 24.6 liters
+
+(display "PV = ") (display (* P V)) (display " J") (newline)
+(display "NkT = ") (display (* N k T)) (display " J")
+`} />
+
+
+    <!-- Cross-links -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-02/">&#x1F4E1; Shannon Ch. 2</a> &mdash; Shannon entropy is Boltzmann entropy with a different logarithm base</li>
+      <li><a href="/reading/real-analysis/lebl-08/">&#x221E; Analysis Ch. 8</a> &mdash; metric spaces provide the topology for phase space</li>
+      <li><a href="/reading/physics/crowell-03/">&#x2190; Ch. 3: Conservation of Angular Momentum</a></li>
+    
+      <li><a href="/reading/information-theory/shannon-02/">📡 Information Theory Ch.2</a> &mdash; Shannon entropy and Boltzmann entropy are the same formula</li>
+      <li><a href="/reading/real-analysis/lebl-06/">∞ Real Analysis Ch.6</a> &mdash; the Riemann integral formalizes the work calculation used in thermodynamics</li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://lightandmatter.com/area1sn.html">Read Crowell's chapter</a>.
+    </div>
+
+
+    <PrevNext prev={{ href: "/reading/physics/crowell-03/", label: "Conservation of Angular Momentum" }} next={{ href: "/reading/physics/crowell-05/", label: "Waves" }} />
+
+  </main>
+</Layout>

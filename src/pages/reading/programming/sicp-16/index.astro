@@ -1,0 +1,497 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="SICP Ch.16 — Nondeterministic Computing" favicon="🪄">
+  <main>
+
+    <a href="/reading/programming/" class="text-sm mb-4 inline-block">&larr; back to programming</a>
+
+    <h1>Nondeterministic Computing</h1>
+    <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman &middot; 1996 &middot; <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-28.html#%_sec_4.3">SICP &sect;4.3</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><code>amb</code> chooses a value that makes the rest of the computation succeed. Backtracking search is built into the evaluator. Logic puzzles become declarative programs.</p>
+    </div>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 175" class="w-full max-w-sm mx-auto my-8" style="font-family: ui-monospace, monospace;">
+      <!-- Root -->
+      <circle cx="150" cy="24" r="14" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="150" y="28" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">amb</text>
+      <!-- Branches from root -->
+      <line x1="140" y1="37" x2="85" y2="70" stroke="#60a5fa" stroke-width="1.2"/>
+      <line x1="160" y1="37" x2="215" y2="70" stroke="#60a5fa" stroke-width="1.2"/>
+      <!-- A node -->
+      <circle cx="85" cy="80" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="85" y="84" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="600">A</text>
+      <!-- B node -->
+      <circle cx="215" cy="80" r="14" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="215" y="84" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="600">B</text>
+      <!-- A's children -->
+      <line x1="76" y1="93" x2="50" y2="118" stroke="#34d399" stroke-width="1.2"/>
+      <line x1="94" y1="93" x2="120" y2="118" stroke="#f87171" stroke-width="1.2"/>
+      <!-- A success -->
+      <text x="50" y="135" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700">&#x2713;</text>
+      <!-- A failure -->
+      <text x="120" y="135" text-anchor="middle" fill="#f87171" font-size="14" font-weight="700">&#x2717;</text>
+      <!-- Backtrack dashed arrow from A's failure back up -->
+      <path d="M 128,125 C 148,108 148,58 150,38" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowAmb)"/>
+      <text x="163" y="85" fill="#f59e0b" font-size="8">backtrack</text>
+      <!-- B's children -->
+      <line x1="206" y1="93" x2="180" y2="118" stroke="#f87171" stroke-width="1.2"/>
+      <line x1="224" y1="93" x2="250" y2="118" stroke="#34d399" stroke-width="1.2"/>
+      <!-- B failure -->
+      <text x="180" y="135" text-anchor="middle" fill="#f87171" font-size="14" font-weight="700">&#x2717;</text>
+      <!-- B success -->
+      <text x="250" y="135" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700">&#x2713;</text>
+      <!-- Caption -->
+      <text x="150" y="158" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="10">amb chooses; failure backtracks to the last choice point</text>
+      <defs>
+        <marker id="arrowAmb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!-- 1. amb and search -->
+    <h3>amb and search</h3>
+    <p><code>(amb 1 2 3)</code> "ambiguously" returns one of its arguments. If a later <code>require</code> fails, the evaluator backtracks and tries the next choice. This turns depth-first search into a language primitive. You describe <em>what</em> you want; the evaluator figures out <em>how</em>.</p>
+
+    <SchemeRepl client:load initialCode={`; Simulating amb with continuations.
+; We build a tiny backtracking engine.
+
+(define *alternatives* '())
+
+(define (amb-fail)
+  (if (null? *alternatives*)
+      (error "amb: no more alternatives")
+      (let ((next (car *alternatives*)))
+        (set! *alternatives* (cdr *alternatives*))
+        (next))))
+
+(define (amb . choices)
+  (call-with-current-continuation
+   (lambda (return)
+     (for-each
+      (lambda (choice)
+        (call-with-current-continuation
+         (lambda (next)
+           (set! *alternatives* (cons next *alternatives*))
+           (return choice))))
+      choices)
+     (amb-fail))))
+
+(define (require pred)
+  (if (not pred) (amb-fail)))
+
+; Find a Pythagorean triple
+(set! *alternatives* '())
+(let ((a (amb 1 2 3 4 5 6 7 8 9 10))
+      (b (amb 1 2 3 4 5 6 7 8 9 10))
+      (c (amb 1 2 3 4 5 6 7 8 9 10)))
+  (require (<= a b))
+  (require (= (+ (* a a) (* b b)) (* c c)))
+  (display (list a b c)))
+; => (3 4 5)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# amb via generators and backtracking in Python
+
+def amb_search(choices_list, constraint):
+    """Find first combination satisfying constraint."""
+    if not choices_list:
+        yield ()
+        return
+    for choice in choices_list[0]:
+        for rest in amb_search(choices_list[1:], constraint):
+            combo = (choice,) + rest
+            if len(combo) == len(choices_list) and not constraint(combo):
+                continue
+            yield combo
+
+r = range(1, 11)
+results = amb_search(
+    [r, r, r],
+    lambda t: t[0] <= t[1] and t[0]**2 + t[1]**2 == t[2]**2
+)
+print(f"Pythagorean triple: {next(results)}")
+# => (3, 4, 5)
+`} />
+    </div>
+
+
+    <!-- 2. Logic puzzles -->
+    <h3>Examples &mdash; logic puzzles</h3>
+    <p>Nondeterministic programming shines on constraint-satisfaction problems. State the constraints; let backtracking find the solution. The classic example: who lives on which floor?</p>
+
+    <SchemeRepl client:load initialCode={`; The "multiple dwelling" puzzle (simplified).
+; Baker, Cooper, Fletcher, Miller, Smith live on floors 1-5.
+; Constraints eliminate invalid assignments.
+
+; Since we can't use amb in standard Scheme easily,
+; we use a list-based search (same logic, explicit iteration).
+
+(define (permutations lst)
+  (if (null? lst) '(())
+      (apply append
+        (map (lambda (x)
+               (map (lambda (p) (cons x p))
+                    (permutations (remove x lst))))
+             lst))))
+
+(define (remove x lst)
+  (cond ((null? lst) '())
+        ((= x (car lst)) (cdr lst))
+        (else (cons (car lst) (remove x (cdr lst))))))
+
+(define (solve)
+  (let loop ((perms (permutations '(1 2 3 4 5))))
+    (if (null? perms) "no solution"
+        (let* ((p (car perms))
+               (baker (car p)) (cooper (cadr p))
+               (fletcher (caddr p)) (miller (cadddr p))
+               (smith (car (cddddr p))))
+          (if (and (not (= baker 5))
+                   (not (= cooper 1))
+                   (not (= fletcher 5))
+                   (not (= fletcher 1))
+                   (> miller cooper)
+                   (not (= (abs (- smith fletcher)) 1))
+                   (not (= (abs (- fletcher cooper)) 1)))
+              (list (list 'baker baker) (list 'cooper cooper)
+                    (list 'fletcher fletcher) (list 'miller miller)
+                    (list 'smith smith))
+              (loop (cdr perms)))))))
+
+(display (solve))
+; => ((baker 3) (cooper 2) (fletcher 4) (miller 5) (smith 1))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Multiple dwelling puzzle in Python
+from itertools import permutations
+
+def solve():
+    for baker, cooper, fletcher, miller, smith in permutations(range(1, 6)):
+        if baker == 5: continue
+        if cooper == 1: continue
+        if fletcher in (1, 5): continue
+        if miller <= cooper: continue
+        if abs(smith - fletcher) == 1: continue
+        if abs(fletcher - cooper) == 1: continue
+        return dict(baker=baker, cooper=cooper,
+                    fletcher=fletcher, miller=miller, smith=smith)
+
+print(solve())
+# => {'baker': 3, 'cooper': 2, 'fletcher': 4, 'miller': 5, 'smith': 1}
+`} />
+    </div>
+
+
+    <!-- 3. Parsing with amb -->
+    <h3>Parsing as nondeterministic search</h3>
+    <p>Parsing a sentence is choosing how to split it into valid parts. With <code>amb</code>, a parser can "guess" a split point and backtrack if the rest doesn't parse. This makes grammar rules look like their BNF definitions.</p>
+
+    <SchemeRepl client:load initialCode={`; Simple sentence parser using backtracking search.
+; Grammar: sentence = noun-phrase + verb-phrase
+;          noun-phrase = article + noun
+;          verb-phrase = verb | verb + noun-phrase
+
+(define articles '("the" "a"))
+(define nouns '("cat" "dog" "mat"))
+(define verbs '("sat" "chased" "ate"))
+
+(define (member? x lst)
+  (cond ((null? lst) #f)
+        ((equal? x (car lst)) #t)
+        (else (member? x (cdr lst)))))
+
+(define (parse-sentence words)
+  ; Try every split: words[0..i] = noun-phrase, words[i..] = verb-phrase
+  (let loop ((i 2))  ; noun-phrase is at least 2 words
+    (if (> i (length words)) #f
+        (let ((np (take words i))
+              (vp (drop words i)))
+          (if (and (parse-np np) (parse-vp vp))
+              (list 'sentence (parse-np np) (parse-vp vp))
+              (loop (+ i 1)))))))
+
+(define (parse-np words)
+  (if (and (= (length words) 2)
+           (member? (car words) articles)
+           (member? (cadr words) nouns))
+      (list 'np (car words) (cadr words))
+      #f))
+
+(define (parse-vp words)
+  (cond ((and (= (length words) 1) (member? (car words) verbs))
+         (list 'vp (car words)))
+        ((and (>= (length words) 3) (member? (car words) verbs))
+         (let ((np (parse-np (cdr words))))
+           (if np (list 'vp (car words) np) #f)))
+        (else #f)))
+
+(define (take lst n) (if (= n 0) '() (cons (car lst) (take (cdr lst) (- n 1)))))
+(define (drop lst n) (if (= n 0) lst (drop (cdr lst) (- n 1))))
+
+(display (parse-sentence '("the" "cat" "sat")))
+(newline)
+(display (parse-sentence '("a" "dog" "chased" "the" "cat")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Simple parser in Python
+
+articles = {"the", "a"}
+nouns = {"cat", "dog", "mat"}
+verbs = {"sat", "chased", "ate"}
+
+def parse_np(words):
+    if len(words) == 2 and words[0] in articles and words[1] in nouns:
+        return ("np", words[0], words[1])
+    return None
+
+def parse_vp(words):
+    if len(words) == 1 and words[0] in verbs:
+        return ("vp", words[0])
+    if len(words) >= 3 and words[0] in verbs:
+        np = parse_np(words[1:])
+        if np:
+            return ("vp", words[0], np)
+    return None
+
+def parse_sentence(words):
+    for i in range(2, len(words)):
+        np = parse_np(words[:i])
+        vp = parse_vp(words[i:])
+        if np and vp:
+            return ("sentence", np, vp)
+    return None
+
+print(parse_sentence(["the", "cat", "sat"]))
+print(parse_sentence(["a", "dog", "chased", "the", "cat"]))
+`} />
+    </div>
+
+
+    <!-- 4. Success and failure continuations -->
+    <h3>Implementing the amb evaluator</h3>
+    <p>The amb evaluator threads two continuations through every expression: a <strong>success continuation</strong> (what to do with a value) and a <strong>failure continuation</strong> (what to do when stuck). When <code>amb</code> runs out of choices, it calls the failure continuation, which backtracks to the previous choice point.</p>
+
+    <SchemeRepl client:load initialCode={`; Continuation-passing amb evaluator (simplified).
+; Every expression receives success (sk) and failure (fk) continuations.
+
+(define (amb-eval exp env sk fk)
+  (cond
+    ((number? exp) (sk exp fk))
+    ((symbol? exp) (sk (cdr (assoc exp env)) fk))
+    ((eq? (car exp) 'amb)
+     (let try ((choices (cdr exp)))
+       (if (null? choices) (fk)
+           (amb-eval (car choices) env sk
+                     (lambda () (try (cdr choices)))))))
+    ((eq? (car exp) 'require)
+     (amb-eval (cadr exp) env
+               (lambda (val fk2)
+                 (if val (sk 'ok fk2) (fk2)))
+               fk))
+    ((eq? (car exp) '=)
+     (amb-eval (cadr exp) env
+               (lambda (a fk2)
+                 (amb-eval (caddr exp) env
+                           (lambda (b fk3) (sk (= a b) fk3))
+                           fk2))
+               fk))
+    ((eq? (car exp) '+)
+     (amb-eval (cadr exp) env
+               (lambda (a fk2)
+                 (amb-eval (caddr exp) env
+                           (lambda (b fk3) (sk (+ a b) fk3))
+                           fk2))
+               fk))))
+
+; Find x + y = 7 where x in {1,2,3,4,5}, y in {1,2,3,4,5}
+(amb-eval '(amb 1 2 3 4 5) '()
+  (lambda (x fk1)
+    (amb-eval '(amb 1 2 3 4 5) '()
+      (lambda (y fk2)
+        (if (= (+ x y) 7)
+            (begin (display (list x y)) (newline)
+                   ; try next to find all solutions:
+                   (fk2))
+            (fk2)))
+      fk1))
+  (lambda () (display "done")))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Continuation-passing style amb in Python
+
+def amb_search_cps(choices_list, constraint, on_success, on_fail):
+    """CPS-style amb: threads success/failure continuations."""
+    def try_at(depth, assignment, fail):
+        if depth == len(choices_list):
+            if constraint(assignment):
+                on_success(assignment, fail)
+            else:
+                fail()
+            return
+        choices = choices_list[depth]
+        def try_choice(i):
+            if i >= len(choices):
+                fail()
+                return
+            try_at(depth + 1, assignment + [choices[i]],
+                   lambda: try_choice(i + 1))
+        try_choice(0)
+    try_at(0, [], on_fail)
+
+# Find all x + y = 7
+results = []
+amb_search_cps(
+    [range(1, 6), range(1, 6)],
+    lambda a: a[0] + a[1] == 7,
+    lambda a, fk: (results.append(tuple(a)), fk()),
+    lambda: None
+)
+for r in results:
+    print(r)
+`} />
+    </div>
+
+
+    <!-- 5. Eight queens -->
+    <h3>Example &mdash; eight queens</h3>
+    <p>Place 8 queens on a chessboard so no two attack each other. With <code>amb</code>, you'd write: choose a column for each row, require no conflicts. Here we use the same backtracking logic explicitly.</p>
+
+    <SchemeRepl client:load initialCode={`; N-queens via backtracking (N=6 for speed).
+
+(define (queens n)
+  (define (safe? col placed row)
+    (if (null? placed) #t
+        (let ((prev-col (car placed))
+              (prev-row (- row (length placed))))
+          (and (not (= col prev-col))
+               (not (= (abs (- col prev-col))
+                        (abs (- row (- row (- (length placed) 0))))))
+               ; Check diagonal properly
+               (not (= (abs (- col prev-col))
+                        (length placed)))
+               (safe? col (cdr placed) row)))))
+
+  ; Simpler: check all pairs
+  (define (valid? queens)
+    (let check ((q queens) (r 0))
+      (if (null? q) #t
+          (let inner ((rest (cdr q)) (r2 (+ r 1)))
+            (if (null? rest) (check (cdr q) (+ r 1))
+                (let ((c1 (car q)) (c2 (car rest)))
+                  (if (or (= c1 c2)
+                          (= (abs (- c1 c2)) (abs (- r r2))))
+                      #f
+                      (inner (cdr rest) (+ r2 1)))))))))
+
+  (define (solve row placed)
+    (if (= row n)
+        (if (valid? placed) (list placed) '())
+        (apply append
+          (map (lambda (col)
+                 (solve (+ row 1) (append placed (list col))))
+               (iota n)))))
+
+  (define (iota n) (let loop ((i 0)) (if (= i n) '() (cons i (loop (+ i 1))))))
+  (solve 0 '()))
+
+(let ((solutions (queens 6)))
+  (display (length solutions)) (display " solutions for 6-queens") (newline)
+  (display "First: ") (display (car solutions)))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# N-queens via backtracking in Python
+
+def queens(n):
+    def valid(placed):
+        for r1, c1 in enumerate(placed):
+            for r2, c2 in enumerate(placed[r1+1:], r1+1):
+                if c1 == c2 or abs(c1-c2) == abs(r1-r2):
+                    return False
+        return True
+
+    def solve(row, placed):
+        if row == n:
+            return [placed[:]] if valid(placed) else []
+        results = []
+        for col in range(n):
+            placed.append(col)
+            results.extend(solve(row + 1, placed))
+            placed.pop()
+        return results
+
+    return solve(0, [])
+
+solutions = queens(6)
+print(f"{len(solutions)} solutions for 6-queens")
+print(f"First: {solutions[0]}")
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Scheme (amb)</th>
+            <th class="py-2 pr-4">Python</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(amb 1 2 3)</td><td class="pr-4 text-blue-300">for x in [1,2,3]</td><td class="font-sans">Choose one value nondeterministically</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">(require pred)</td><td class="pr-4 text-blue-300">if not pred: continue</td><td class="font-sans">Fail and backtrack if false</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">success continuation</td><td class="pr-4 text-blue-300">callback(val)</td><td class="font-sans">What to do with a value</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4 text-green-300">failure continuation</td><td class="pr-4 text-blue-300">backtrack / next()</td><td class="font-sans">What to do when stuck</td></tr>
+          <tr><td class="py-2 pr-4 text-green-300">call/cc</td><td class="pr-4 text-blue-300">yield / generators</td><td class="font-sans">Capture current continuation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Other reading pages</p>
+    <ul class="neighbors">
+      <li><a href="/reading/programming/sicp-15/">SICP Ch.15 &mdash; Lazy Evaluation</a> &mdash; delayed computation as a simpler form of nondeterminism</li>
+      <li><a href="/reading/programming/sicp-17/">SICP Ch.17 &mdash; Logic Programming</a> &mdash; unification takes nondeterminism further</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Nondeterministic_programming"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nondeterministic programming</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Backtracking"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Backtracking</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Constraint satisfaction</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p>Python has no built-in <code>amb</code>, but generators with <code>yield</code> provide a natural translation: each choice point becomes a <code>for</code> loop, and backtracking is implicit in the generator protocol. The continuation-passing style version (success/failure callbacks) maps directly to CPS in Python. For real constraint problems, Python's <code>itertools.product</code> with filtering is the pragmatic equivalent of nested <code>amb</code> calls.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-28.html#%_sec_4.3">Read SICP &sect;4.3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/programming/sicp-15/", label: "Lazy Evaluation" }} next={{ href: "/reading/programming/sicp-17/", label: "Logic Programming · 17 of 22" }} />
+
+  </main>
+</Layout>

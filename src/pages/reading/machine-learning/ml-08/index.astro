@@ -1,0 +1,391 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.8 — Neural Networks" favicon="🧠">
+  <main>
+
+    <a href="/reading/machine-learning/" class="text-sm mb-4 inline-block">&larr; back to machine learning</a>
+
+    <h1>Neural Networks</h1>
+    <p class="text-gray-400 text-sm mb-6">Machine Learning · Ch.8 of 12</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A neural network is <strong>function composition</strong>: layers of linear maps + nonlinear activations. Backpropagation is the chain rule applied to the computation graph. <strong><a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Universal approximation</a></strong>: one hidden layer can approximate any continuous function.</p>
+    </div>
+
+    <!-- SVG: 3-layer MLP -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg viewBox="0 0 380 240" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Weight arrows: input -> hidden -->
+          <line x1="80" y1="60" x2="180" y2="45" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="60" x2="180" y2="90" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="60" x2="180" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="60" x2="180" y2="180" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="120" x2="180" y2="45" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="120" x2="180" y2="90" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="120" x2="180" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="120" x2="180" y2="180" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="180" x2="180" y2="45" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="180" x2="180" y2="90" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="180" x2="180" y2="135" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="80" y1="180" x2="180" y2="180" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <!-- Weight arrows: hidden -> output -->
+          <line x1="200" y1="45" x2="300" y2="115" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="200" y1="90" x2="300" y2="115" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="200" y1="135" x2="300" y2="115" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line x1="200" y1="180" x2="300" y2="115" stroke="#71717a" stroke-width="0.8" stroke-opacity="0.45"/>
+          <!-- Input layer nodes -->
+          <circle cx="80" cy="60" r="14" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1.5"/>
+          <circle cx="80" cy="120" r="14" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1.5"/>
+          <circle cx="80" cy="180" r="14" fill="#60a5fa" fill-opacity="0.2" stroke="#60a5fa" stroke-width="1.5"/>
+          <text x="80" y="64" text-anchor="middle" fill="#60a5fa" font-size="10">x1</text>
+          <text x="80" y="124" text-anchor="middle" fill="#60a5fa" font-size="10">x2</text>
+          <text x="80" y="184" text-anchor="middle" fill="#60a5fa" font-size="10">x3</text>
+          <!-- Hidden layer nodes -->
+          <circle cx="190" cy="45" r="14" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="190" cy="90" r="14" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="190" cy="135" r="14" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="190" cy="180" r="14" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="190" y="49" text-anchor="middle" fill="#a78bfa" font-size="10">h1</text>
+          <text x="190" y="94" text-anchor="middle" fill="#a78bfa" font-size="10">h2</text>
+          <text x="190" y="139" text-anchor="middle" fill="#a78bfa" font-size="10">h3</text>
+          <text x="190" y="184" text-anchor="middle" fill="#a78bfa" font-size="10">h4</text>
+          <!-- Output node -->
+          <circle cx="300" cy="115" r="14" fill="#34d399" fill-opacity="0.2" stroke="#34d399" stroke-width="1.5"/>
+          <text x="300" y="119" text-anchor="middle" fill="#34d399" font-size="10">y</text>
+          <!-- Layer labels -->
+          <text x="80" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">input</text>
+          <text x="190" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">hidden</text>
+          <text x="300" y="215" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">output</text>
+          <!-- Activation label -->
+          <text x="145" y="230" fill="currentColor" font-size="9" fill-opacity="0.3" text-anchor="middle">W1 &middot; x + b1</text>
+          <text x="250" y="230" fill="currentColor" font-size="9" fill-opacity="0.3" text-anchor="middle">W2 &middot; h + b2</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1. Forward pass -->
+    <h3>Forward pass (matrix multiply + ReLU)</h3>
+    <p>A single layer computes h = ReLU(Wx + b), where W is a weight matrix, b is a bias vector, and ReLU(z) = max(0, z). Stacking layers gives y = W2 &middot; ReLU(W1 &middot; x + b1) + b2. Without the nonlinearity, multiple layers collapse to one linear map.</p>
+
+    <SchemeRepl client:load initialCode={`; Forward pass through a 2-layer network
+; Input: 2D, Hidden: 3 units, Output: 1
+
+(define (relu x) (if (> x 0) x 0))
+
+; Weights (hand-picked for demo)
+; W1: 3x2, b1: 3x1
+(define W1 (list (list 0.5 -0.3)
+                 (list -0.2 0.8)
+                 (list 0.7 0.1)))
+(define b1 (list 0.1 -0.1 0.2))
+
+; W2: 1x3, b2: scalar
+(define W2 (list (list 0.4 -0.6 0.3)))
+(define b2 (list 0.05))
+
+(define (mat-vec-add W x b)
+  (map (lambda (row bi)
+    (+ (let loop ((r row) (x x) (s 0))
+         (if (null? r) s
+             (loop (cdr r) (cdr x)
+                   (+ s (* (car r) (car x))))))
+       bi))
+    W b))
+
+(define (forward x)
+  (let* ((z1 (mat-vec-add W1 x b1))
+         (h  (map relu z1))
+         (z2 (mat-vec-add W2 h b2)))
+    (list z1 h z2)))
+
+(define input (list 1.0 0.5))
+(define result (forward input))
+
+(display "z1 (pre-relu): ") (display (car result)) (newline)
+(display "h  (post-relu): ") (display (cadr result)) (newline)
+(display "output: ") (display (caddr result))
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Forward pass: 2-layer network
+def relu(x):
+    return max(0, x)
+
+def mat_vec(W, x, b):
+    return [sum(w*xi for w,xi in zip(row, x)) + bi
+            for row, bi in zip(W, b)]
+
+W1 = [[0.5, -0.3], [-0.2, 0.8], [0.7, 0.1]]
+b1 = [0.1, -0.1, 0.2]
+W2 = [[0.4, -0.6, 0.3]]
+b2 = [0.05]
+
+x = [1.0, 0.5]
+z1 = mat_vec(W1, x, b1)
+h  = [relu(z) for z in z1]
+y  = mat_vec(W2, h, b2)
+
+print("z1 (pre-relu):", [round(v,3) for v in z1])
+print("h  (post-relu):", [round(v,3) for v in h])
+print("output:", [round(v,3) for v in y])
+`} />
+    </div>
+
+
+    <!-- 2. Backprop by hand -->
+    <h3>Backprop by hand (chain rule)</h3>
+    <p>Backpropagation computes dL/dW for each weight by applying the chain rule backward through the network. For output y and loss L = (y - target)<sup>2</sup>, we get dL/dy = 2(y - target), then dL/dW2 = dL/dy &middot; h<sup>T</sup>, and dL/dh = W2<sup>T</sup> &middot; dL/dy, masked by ReLU's derivative (1 if z > 0, else 0).</p>
+
+    <!-- SVG: Backprop chain — forward and backward passes -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 150" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Input box -->
+        <rect x="20" y="35" width="100" height="40" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="70" y="52" text-anchor="middle" fill="#60a5fa" font-size="11">input x</text>
+        <!-- Hidden box -->
+        <rect x="160" y="35" width="100" height="40" rx="6" fill="#a78bfa" fill-opacity="0.1" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="210" y="49" text-anchor="middle" fill="#a78bfa" font-size="10">hidden</text>
+        <text x="210" y="63" text-anchor="middle" fill="#a78bfa" font-size="9">h = &#x03C3;(Wx)</text>
+        <!-- Output box -->
+        <rect x="300" y="35" width="100" height="40" rx="6" fill="#34d399" fill-opacity="0.1" stroke="#34d399" stroke-width="1.5"/>
+        <text x="350" y="49" text-anchor="middle" fill="#34d399" font-size="10">output</text>
+        <text x="350" y="63" text-anchor="middle" fill="#34d399" font-size="9">&#x0177; = &#x03C3;(Vh)</text>
+        <!-- Forward arrows (top, blue) -->
+        <line x1="120" y1="45" x2="158" y2="45" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="158,45 150,40 150,50" fill="#60a5fa"/>
+        <text x="139" y="38" text-anchor="middle" fill="#60a5fa" font-size="8" fill-opacity="0.7">W</text>
+        <line x1="260" y1="45" x2="298" y2="45" stroke="#60a5fa" stroke-width="1.5"/>
+        <polygon points="298,45 290,40 290,50" fill="#60a5fa"/>
+        <text x="279" y="38" text-anchor="middle" fill="#60a5fa" font-size="8" fill-opacity="0.7">V</text>
+        <!-- Forward label -->
+        <text x="210" y="25" text-anchor="middle" fill="#60a5fa" font-size="9" fill-opacity="0.5">forward pass</text>
+        <!-- Backward arrows (bottom, amber, reversed) -->
+        <line x1="300" y1="65" x2="262" y2="65" stroke="#f59e0b" stroke-width="1.5"/>
+        <polygon points="262,65 270,60 270,70" fill="#f59e0b"/>
+        <text x="281" y="82" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.7">&#x2202;L/&#x2202;V</text>
+        <line x1="160" y1="65" x2="122" y2="65" stroke="#f59e0b" stroke-width="1.5"/>
+        <polygon points="122,65 130,60 130,70" fill="#f59e0b"/>
+        <text x="141" y="82" text-anchor="middle" fill="#f59e0b" font-size="8" fill-opacity="0.7">&#x2202;L/&#x2202;W</text>
+        <!-- Backward label -->
+        <text x="210" y="100" text-anchor="middle" fill="#f59e0b" font-size="9" fill-opacity="0.5">backward pass (gradients)</text>
+        <!-- Caption -->
+        <text x="210" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.3">forward pass computes output; backward pass computes gradients</text>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Backprop for a single training example
+; Network: x -> W1*x+b1 -> relu -> W2*h+b2 -> y
+; Loss: L = (y - target)^2
+
+(define (relu x) (if (> x 0) x 0))
+(define (relu-deriv x) (if (> x 0) 1 0))
+
+; Forward pass
+(define x (list 1.0 0.5))
+(define target 1.0)
+
+(define W1 (list (list 0.5 -0.3) (list -0.2 0.8)))
+(define b1 (list 0.1 -0.1))
+(define W2 (list (list 0.4 -0.6)))
+(define b2 (list 0.05))
+
+; z1 = W1*x + b1
+(define z1 (list (+ (* 0.5 1.0) (* -0.3 0.5) 0.1)    ; 0.45
+                 (+ (* -0.2 1.0) (* 0.8 0.5) -0.1)))  ; 0.1
+(define h (map relu z1))
+
+; y = W2*h + b2
+(define y (+ (* 0.4 (car h)) (* -0.6 (cadr h)) 0.05))
+
+; Backward pass
+(define dL/dy (* 2 (- y target)))
+
+; dL/dW2 = dL/dy * h^T
+(display "dL/dy = ") (display (/ (round (* dL/dy 1000)) 1000)) (newline)
+(display "dL/dW2 = [")
+(for-each (lambda (hi)
+  (display (/ (round (* (* dL/dy hi) 1000)) 1000))
+  (display " "))
+  h)
+(display "]") (newline)
+
+; dL/dh = W2^T * dL/dy, masked by relu'
+(define dL/dh (map (lambda (w2i zi)
+  (* (* w2i dL/dy) (relu-deriv zi)))
+  (car W2) z1))
+(display "dL/dh = ") (display dL/dh)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Backprop by hand for a 2-layer network
+def relu(x): return max(0, x)
+def relu_d(x): return 1 if x > 0 else 0
+
+x = [1.0, 0.5]
+target = 1.0
+W1 = [[0.5, -0.3], [-0.2, 0.8]]
+b1 = [0.1, -0.1]
+W2 = [[0.4, -0.6]]
+b2 = [0.05]
+
+# Forward
+z1 = [sum(w*xi for w,xi in zip(row,x))+b for row,b in zip(W1,b1)]
+h = [relu(z) for z in z1]
+y = sum(w*hi for w,hi in zip(W2[0],h)) + b2[0]
+loss = (y - target)**2
+
+# Backward
+dL_dy = 2 * (y - target)
+dL_dW2 = [dL_dy * hi for hi in h]
+dL_dh = [W2[0][i] * dL_dy * relu_d(z1[i]) for i in range(2)]
+
+print("y = {:.3f}, loss = {:.4f}".format(y, loss))
+print("dL/dy = {:.3f}".format(dL_dy))
+print("dL/dW2 =", [round(v,3) for v in dL_dW2])
+print("dL/dh =", [round(v,3) for v in dL_dh])
+`} />
+    </div>
+
+
+    <!-- 3. Training loop on XOR -->
+    <h3>Training loop on XOR</h3>
+    <p>XOR is not linearly separable, so a single-layer network cannot learn it. A two-layer network with two hidden units can. Training iterates: forward pass, compute loss, backward pass, update weights. After enough iterations, the network learns the nonlinear boundary.</p>
+
+    <SchemeRepl client:load initialCode={`; Train a 2-layer net on XOR
+; Architecture: 2 -> 2 -> 1
+
+(define (relu x) (if (> x 0) x 0.0))
+(define (relu-d x) (if (> x 0) 1.0 0.0))
+
+; XOR data
+(define data (list
+  (list (list 0 0) 0)
+  (list (list 0 1) 1)
+  (list (list 1 0) 1)
+  (list (list 1 1) 0)))
+
+; Weights (init by hand for convergence)
+(define w11 0.5) (define w12 -0.5)
+(define w21 0.5) (define w22 0.5)
+(define b1a 0.0) (define b1b -0.3)
+(define w31 1.0) (define w32 -1.0)
+(define b2 0.0)
+(define lr 0.5)
+
+; One forward pass
+(define (predict x1 x2)
+  (let* ((z1 (+ (* w11 x1) (* w12 x2) b1a))
+         (z2 (+ (* w21 x1) (* w22 x2) b1b))
+         (h1 (relu z1))
+         (h2 (relu z2))
+         (y  (+ (* w31 h1) (* w32 h2) b2)))
+    y))
+
+(display "Before training:") (newline)
+(for-each (lambda (d)
+  (let ((x (car d)) (t (cadr d)))
+    (display "  ") (display x) (display " -> ")
+    (display (/ (round (* (predict (car x) (cadr x)) 100)) 100))
+    (display " (target ") (display t) (display ")")
+    (newline)))
+  data)
+(display "(Full training loop needs mutable state)")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import random
+random.seed(1)
+
+def relu(x): return max(0.0, x)
+def relu_d(x): return 1.0 if x > 0 else 0.0
+
+# XOR data
+data = [([0,0],0), ([0,1],1), ([1,0],1), ([1,1],0)]
+
+# Random init
+W1 = [[random.gauss(0,0.5) for _ in range(2)] for _ in range(4)]
+b1 = [0.0]*4
+W2 = [random.gauss(0,0.5) for _ in range(4)]
+b2 = 0.0
+lr = 0.1
+
+for epoch in range(2000):
+    for x, t in data:
+        # Forward
+        z1 = [sum(W1[j][i]*x[i] for i in range(2))+b1[j] for j in range(4)]
+        h = [relu(z) for z in z1]
+        y = sum(W2[j]*h[j] for j in range(4)) + b2
+
+        # Backward
+        dy = 2*(y-t)
+        for j in range(4):
+            dh = W2[j]*dy*relu_d(z1[j])
+            for i in range(2):
+                W1[j][i] -= lr*dh*x[i]
+            b1[j] -= lr*dh
+            W2[j] -= lr*dy*h[j]
+        b2 -= lr*dy
+
+print("After training:")
+for x, t in data:
+    z1 = [sum(W1[j][i]*x[i] for i in range(2))+b1[j] for j in range(4)]
+    h = [relu(z) for z in z1]
+    y = sum(W2[j]*h[j] for j in range(4)) + b2
+    print("  {} -> {:.3f} (target {})".format(x, y, t))
+`} />
+    </div>
+
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Math</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">h = &sigma;(Wx + b)</td><td class="pr-4 text-green-300">(map relu (mat-vec W x b))</td><td class="font-sans">Layer computation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">ReLU(z) = max(0,z)</td><td class="pr-4 text-green-300">(if (&gt; x 0) x 0)</td><td class="font-sans">Activation function</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&part;L/&part;W</td><td class="pr-4 text-green-300">dL/dW</td><td class="font-sans">Gradient of loss w.r.t. weights</td></tr>
+          <tr><td class="py-2 pr-4">W &larr; W - &eta; &nabla;L</td><td class="pr-4 text-green-300">(- w (* lr dw))</td><td class="font-sans">Gradient descent update</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Translation notes -->
+    <h3>Translation notes</h3>
+    <p class="text-sm text-gray-400">Backpropagation is the chain rule applied to a computation graph. Capucci (2021) shows this is a lens: the forward pass computes the function, the backward pass transports gradients. The universal approximation theorem says one hidden layer suffices for any continuous function -- but it says nothing about how many neurons you need or how easy it is to train.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/calculus/calc-05/">Calculus Ch.5</a> — the chain rule: the mathematical foundation of backpropagation</li>
+      <li><a href="/reading/capucci-2021/">Capucci 2021</a> — backprop as a lens: categorical perspective on gradient flow</li>
+      <li><a href="/reading/cognitive-science/lovelace-04/">CogSci Ch.4</a> — neural networks in cognitive science</li>
+    
+      <li><a href="/reading/linear-algebra/hefferon-03/">📐 Linear Algebra Ch.3</a> &mdash; each layer is a linear map, and the network composes them</li>
+      <li><a href="/reading/calculus/calc-05/">∫ Calculus Ch.5</a> &mdash; chain rule is backpropagation in one dimension</li>
+      <li><a href="/reading/cognitive-science/lovelace-04/">🧠 Cognitive Science Ch.4</a> &mdash; neural networks as cognitive models</li>
+    </ul>
+
+    <!-- Ready for the real thing? -->
+    </Neighbors>
+    <h3>Ready for the real thing?</h3>
+    <p class="text-sm text-gray-400">This chapter covers the core mechanics. For optimization (Adam, batch norm, dropout), architectures (CNNs, RNNs, transformers), and the theory of deep learning, see Goodfellow, Bengio & Courville's <em>Deep Learning</em> (free online).</p>
+
+
+    <PrevNext prev={{ href: "/reading/machine-learning/ml-07/", label: "Gaussian Processes" }} next={{ href: "/reading/machine-learning/ml-09/", label: "Convolutional Networks" }} fin="Neural Networks · 9 of 12" />
+
+  </main>
+</Layout>

@@ -1,0 +1,220 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shannon 01 — Surprise: the atomic unit" favicon="📡">
+  <main>
+
+    <a href="/reading/information-theory/" class="text-sm mb-4 inline-block">&larr; back to info theory</a>
+
+    <h1>Surprise: the atomic unit</h1>
+    <p class="text-gray-400 text-sm mb-6">Shannon 1948 (public domain) &middot; Wikipedia (CC BY-SA 4.0)</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The <strong>information content</strong> of an event is I(x) = &minus;log<sub>2</sub> P(x). Rare events carry more information. Certain events carry none. The unit is the <strong>bit</strong>.</p>
+    </div>
+
+    <!-- 1. Why logarithm? -->
+    <h3>Why logarithm?</h3>
+    <p>Shannon needed a measure of "surprise" with one property: independent events should <strong>add</strong>, not multiply. If you flip a coin and roll a die, the total surprise should be the sum. Since P(A and B) = P(A) &times; P(B) for independent events, and log turns products into sums, the logarithm is the only choice. This measure of surprise per event is the foundation of <a href="https://june.kim/freshness-filter"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>substance detection</a>: high information content signals that something is worth attending to.</p>
+
+    <!-- SVG: interactive surprise bar — drag probability -->
+    <div class="flex justify-center my-6">
+      <div style="width:100%;max-width:28rem;">
+        <svg id="surprise" viewBox="0 0 400 225" class="w-full" style="font-family: ui-monospace, monospace;">
+          <!-- Axes -->
+          <line x1="60" y1="190" x2="380" y2="190" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <line x1="60" y1="190" x2="60" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+          <!-- Y-axis label -->
+          <text x="15" y="105" fill="currentColor" font-size="11" fill-opacity="0.5" transform="rotate(-90,15,105)">I(x) = &#x2212;log&#x2082; P(x)</text>
+          <!-- Y-axis ticks -->
+          <text x="52" y="193" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">0</text>
+          <text x="52" y="148" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">1</text>
+          <text x="52" y="103" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">2</text>
+          <text x="52" y="58" text-anchor="end" fill="currentColor" font-size="9" fill-opacity="0.4">3</text>
+          <line x1="56" y1="145" x2="60" y2="145" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="56" y1="100" x2="60" y2="100" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <line x1="56" y1="55" x2="60" y2="55" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+          <!-- Reference bars (faded) -->
+          <rect x="75" y="190" width="30" height="0" fill="#4ade80" fill-opacity="0.1" stroke="#4ade80" stroke-width="0.5" stroke-opacity="0.2"/>
+          <text x="90" y="205" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">P=1</text>
+          <rect x="115" y="145" width="30" height="45" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="0.5" stroke-opacity="0.2"/>
+          <text x="130" y="205" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">&#xBD;</text>
+          <rect x="155" y="74" width="30" height="116" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.2"/>
+          <text x="170" y="205" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">&#x2159;</text>
+          <rect x="195" y="55" width="30" height="135" fill="#f472b6" fill-opacity="0.1" stroke="#f472b6" stroke-width="0.5" stroke-opacity="0.2"/>
+          <text x="210" y="205" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">&#x215B;</text>
+          <!-- Active bar -->
+          <rect id="si-bar" x="270" width="60" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5"/>
+          <text id="si-bits" x="300" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold"></text>
+          <text id="si-prob" x="300" y="205" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5"></text>
+          <!-- Readout -->
+          <text id="si-readout" x="220" y="222" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35"></text>
+        </svg>
+        <input type="range" id="si-slider" min="1" max="100" value="50" step="1" style="width:100%;margin-top:4px;accent-color:#f59e0b;">
+      </div>
+    </div>
+    <script is:inline>
+    (function() {
+      var BOTTOM = 190, TOP = 25, SCALE = (BOTTOM - TOP) / 3.5;
+      var slider = document.getElementById('si-slider');
+      var bar = document.getElementById('si-bar');
+      var bits = document.getElementById('si-bits');
+      var prob = document.getElementById('si-prob');
+      var readout = document.getElementById('si-readout');
+
+      function update() {
+        var p = parseInt(slider.value) / 100;
+        var info = -Math.log2(p);
+        var h = Math.min(info * SCALE, BOTTOM - TOP);
+        bar.setAttribute('y', BOTTOM - h);
+        bar.setAttribute('height', h);
+        bits.setAttribute('y', BOTTOM - h - 5);
+        bits.textContent = info.toFixed(2) + ' bits';
+        prob.textContent = 'P = ' + p.toFixed(2);
+        readout.textContent = 'rarer events carry more surprise';
+      }
+
+      slider.addEventListener('input', update);
+      update();
+    })();
+    </script>
+
+    <SchemeRepl client:load initialCode={`; Self-information: I(x) = -log2(P(x))
+; The "surprise" of seeing event x
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (self-info p) (- (log2 p)))
+
+; A fair coin lands heads: P = 1/2
+(display "coin flip: ")
+(display (self-info 0.5))
+(display " bits") (newline)
+
+; A fair die lands on 3: P = 1/6
+(display "die roll:  ")
+(display (self-info (/ 1.0 6)))
+(display " bits") (newline)
+
+; A certain event: P = 1
+(display "certain:   ")
+(display (self-info 1.0))
+(display " bits") (newline)
+
+; Independent events ADD surprise
+; Coin flip + die roll
+(display "coin + die: ")
+(display (+ (self-info 0.5) (self-info (/ 1.0 6))))
+(display " bits") (newline)
+
+; Same as joint probability
+(display "joint P:    ")
+(display (self-info (* 0.5 (/ 1.0 6))))
+(display " bits")
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`import math
+
+def self_info(p):
+    return -math.log2(p)
+
+print(f"coin flip: {self_info(0.5):.4f} bits")
+print(f"die roll:  {self_info(1/6):.4f} bits")
+print(f"certain:   {self_info(1.0):.4f} bits")
+print(f"coin + die: {self_info(0.5) + self_info(1/6):.4f} bits")
+print(f"joint P:    {self_info(0.5 * 1/6):.4f} bits")
+`} />
+    </div>
+
+    <!-- 2. The additivity argument -->
+    <h3>Additivity forces the logarithm</h3>
+    <p>Shannon's key insight: any function f(p) that satisfies f(p &times; q) = f(p) + f(q) must be a logarithm. This is the <a href="https://en.wikipedia.org/wiki/Cauchy%27s_functional_equation"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Cauchy functional equation</a>. Adding the constraints that f is continuous and f(1/2) = 1 (defining the bit), the unique solution is f(p) = &minus;log<sub>2</sub>(p).</p>
+
+    <SchemeRepl client:load initialCode={`; Verify additivity: I(p*q) = I(p) + I(q)
+(define (log2 x) (/ (log x) (log 2)))
+(define (self-info p) (- (log2 p)))
+
+; Two independent events
+(define p 0.3)
+(define q 0.2)
+
+(display "I(p):     ") (display (self-info p)) (newline)
+(display "I(q):     ") (display (self-info q)) (newline)
+(display "I(p) + I(q): ") (display (+ (self-info p) (self-info q))) (newline)
+(display "I(p*q):      ") (display (self-info (* p q))) (newline)
+
+; They match: log turns multiplication into addition
+(display "equal? ")
+(display (< (abs (- (+ (self-info p) (self-info q))
+                    (self-info (* p q))))
+            0.0001))
+`} />
+
+    <!-- 3. Bits, nats, hartleys -->
+    <h3>Choosing the base</h3>
+    <p>The base of the logarithm picks the unit. Base 2 gives <strong>bits</strong> (Shannon's choice for digital communication). Base e gives <strong>nats</strong> (convenient for calculus). Base 10 gives <strong>hartleys</strong>. They differ only by a constant factor. The structure is the same.</p>
+
+    <SchemeRepl client:load initialCode={`; Different bases = different units, same structure
+(define (log2 x) (/ (log x) (log 2)))
+(define (log10 x) (/ (log x) (log 10)))
+
+(define p (/ 1.0 8))
+
+(display "bits (base 2):     ")
+(display (- (log2 p))) (newline)
+
+(display "nats (base e):     ")
+(display (- (log p))) (newline)
+
+(display "hartleys (base 10): ")
+(display (- (log10 p))) (newline)
+
+; Convert: 1 bit = ln(2) nats
+(display "3 bits in nats:    ")
+(display (* 3 (log 2)))
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Symbol</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">I(x) = &minus;log<sub>2</sub> P(x)</td><td class="pr-4 text-green-300">(self-info p)</td><td class="font-sans">Self-information / surprise</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">bit</td><td class="pr-4 text-green-300">log base 2</td><td class="font-sans">Unit when base = 2</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">nat</td><td class="pr-4 text-green-300">log base e</td><td class="font-sans">Unit when base = e</td></tr>
+          <tr><td class="py-2 pr-4">I(x,y) = I(x) + I(y)</td><td class="pr-4 text-green-300">(+ (self-info p) (self-info q))</td><td class="font-sans">Additivity (independent events)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/information-theory/shannon-02/">📡 Shannon 02</a> &mdash; entropy is expected surprise</li>
+      <li><a href="/reading/baez-fritz-2011/">🍞 Baez &amp; Fritz 2011</a> &mdash; entropy as a functor: the category-theoretic characterization</li>
+      <li><a href="/reading/cognitive-science/lovelace-07/">🧠 Lovelace Ch.7 Language</a> &mdash; surprisal as a linking hypothesis between language models and reading data</li>
+      <li><a href="https://en.wikipedia.org/wiki/Information_content"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Information content</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bit"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bit</a></li>
+      <li><a href="/reading/probability/grinstead-01/">🎰 Probability Ch.1</a> — probability is the foundation: self-information is -log P(event)</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext next={{ href: "/reading/information-theory/shannon-02/", label: "Entropy" }} />
+
+  </main>
+</Layout>

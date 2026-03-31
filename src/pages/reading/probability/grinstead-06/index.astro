@@ -1,0 +1,238 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Grinstead &amp; Snell Ch 6 — Expected Value and Variance" favicon="🎰">
+  <main>
+
+    <a href="/reading/probability/" class="text-sm mb-4 inline-block">&larr; back to probability</a>
+
+    <h1>Expected Value and Variance</h1>
+    <p class="text-gray-400 text-sm mb-6">Grinstead &amp; Snell &middot; GFDL &middot; <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">PDF</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none"><strong>Expected value</strong> is the weighted average of outcomes: E[X] = sum of x P(x). <strong>Variance</strong> measures how far outcomes spread from the mean. Linearity of expectation holds even when variables are dependent.</p>
+    </div>
+
+    <!-- 1. Expected value -->
+    <h3>Expected value</h3>
+    <p>The expected value E[X] is the long-run average. Weight each outcome by its probability and add. For a fair die: E[X] = (1 + 2 + 3 + 4 + 5 + 6)/6 = 3.5. You never roll 3.5, but that is what you get on average.</p>
+
+    <!-- SVG: Distribution with mean marked and variance brackets -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 440 220" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="400" y2="170" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="170" x2="40" y2="20" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Distribution bars (example: weighted die) -->
+        <rect x="70" y="130" width="40" height="40" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="90" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">1</text>
+        <rect x="120" y="110" width="40" height="60" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="140" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">2</text>
+        <rect x="170" y="50" width="40" height="120" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="190" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">3</text>
+        <rect x="220" y="30" width="40" height="140" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+        <text x="240" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">4</text>
+        <rect x="270" y="70" width="40" height="100" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="290" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">5</text>
+        <rect x="320" y="120" width="40" height="50" rx="2" fill="#3b82f6" fill-opacity="0.5"/>
+        <text x="340" y="185" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">6</text>
+        <!-- Mean line (mu ~ 3.7) -->
+        <line x1="228" y1="20" x2="228" y2="170" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
+        <text x="228" y="15" text-anchor="middle" fill="#f59e0b" font-size="11">&#x03BC; = E[X]</text>
+        <!-- Variance brackets -->
+        <line x1="140" y1="200" x2="316" y2="200" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="140" y1="196" x2="140" y2="204" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="316" y1="196" x2="316" y2="204" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="228" y="215" text-anchor="middle" fill="#ef4444" font-size="10">&#x03C3; (std dev)</text>
+        <!-- Arrow from mu line to bracket -->
+        <line x1="184" y1="200" x2="140" y2="200" stroke="#ef4444" stroke-width="1" marker-end="none"/>
+        <line x1="272" y1="200" x2="316" y2="200" stroke="#ef4444" stroke-width="1" marker-end="none"/>
+      </svg>
+    </div>
+
+    <SchemeRepl client:load initialCode={`; Expected value: E[X] = sum of x * P(x)
+; The probability-weighted average of all outcomes
+
+(define (expected-value outcomes probs)
+  (if (null? outcomes) 0
+      (+ (* (car outcomes) (car probs))
+         (expected-value (cdr outcomes) (cdr probs)))))
+
+; Fair die
+(define die-vals '(1 2 3 4 5 6))
+(define die-probs '(0.1667 0.1667 0.1667 0.1667 0.1667 0.1667))
+
+(display "E[fair die] = ")
+(display (expected-value die-vals die-probs)) (newline)
+
+; Loaded die: 4 is twice as likely
+(define loaded-probs '(0.143 0.143 0.143 0.286 0.143 0.143))
+(display "E[loaded die] = ")
+(display (expected-value die-vals loaded-probs))
+; Higher because 4 is overweighted
+`} />
+
+    <!-- 2. Variance -->
+    <h3>Variance and standard deviation</h3>
+    <p>Variance measures spread: Var(X) = E[(X - mu)^2] = E[X^2] - (E[X])^2. Standard deviation sigma = sqrt(Var(X)) lives in the same units as X. Low variance means the distribution clusters near the mean. High variance means it sprawls.</p>
+
+    <SchemeRepl client:load initialCode={`; Variance: Var(X) = E[(X - mu)^2] = E[X^2] - (E[X])^2
+
+(define (expected-value xs ps)
+  (if (null? xs) 0
+      (+ (* (car xs) (car ps))
+         (expected-value (cdr xs) (cdr ps)))))
+
+(define (variance xs ps)
+  (let* ((mu (expected-value xs ps))
+         (sq-vals (map (lambda (x) (* x x)) xs))
+         (e-x-sq (expected-value sq-vals ps)))
+    (- e-x-sq (* mu mu))))
+
+; Fair die
+(define vals '(1 2 3 4 5 6))
+(define probs '(0.1667 0.1667 0.1667 0.1667 0.1667 0.1667))
+
+(define mu (expected-value vals probs))
+(define var-x (variance vals probs))
+
+(display "E[X] = ") (display mu) (newline)
+(display "Var(X) = ") (display var-x) (newline)
+(display "SD(X) = ") (display (sqrt var-x))
+; Var ~ 2.917, SD ~ 1.708
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:load initialCode={`# Expected value and variance
+import math
+
+def expected_value(vals, probs):
+    return sum(x * p for x, p in zip(vals, probs))
+
+def variance(vals, probs):
+    mu = expected_value(vals, probs)
+    return expected_value([x**2 for x in vals], probs) - mu**2
+
+vals = [1, 2, 3, 4, 5, 6]
+probs = [1/6] * 6
+
+mu = expected_value(vals, probs)
+var = variance(vals, probs)
+print(f"E[X] = {mu:.4f}")
+print(f"Var(X) = {var:.4f}")
+print(f"SD(X) = {math.sqrt(var):.4f}")
+`} />
+    </div>
+
+    <!-- 3. Linearity of expectation -->
+    <h3>Linearity of expectation</h3>
+    <p>The most useful property in probability: E[X + Y] = E[X] + E[Y], always. It does not matter whether X and Y are independent. E[aX + b] = a E[X] + b. This lets you compute expected values of complicated sums by breaking them into simple pieces.</p>
+
+    <SchemeRepl client:load initialCode={`; Linearity: E[X + Y] = E[X] + E[Y] — always, even if dependent!
+
+; Example: expected number of matches in a hat problem
+; n people throw hats in a pile, each grabs one at random.
+; X_i = 1 if person i gets their own hat, 0 otherwise.
+; P(X_i = 1) = 1/n. By linearity:
+; E[total matches] = E[X_1] + ... + E[X_n] = n * (1/n) = 1
+
+(define (hat-expected n)
+  ; Each indicator has E[X_i] = 1/n. Sum n of them.
+  (* n (/ 1.0 n)))
+
+(display "E[matches] for 5 people: ") (display (hat-expected 5)) (newline)
+(display "E[matches] for 100 people: ") (display (hat-expected 100)) (newline)
+(display "E[matches] for 1000000 people: ") (display (hat-expected 1000000))
+; Always 1. Linearity makes the hard problem trivial.
+`} />
+
+    <!-- 4. Expected value as information -->
+    <h3>Connection: expected value and entropy</h3>
+    <p>Shannon entropy H(X) = -sum P(x) log P(x) is itself an expected value: the average surprise. <a href="/reading/baez-fritz-2011/">Baez and Fritz (2011)</a> showed that entropy is the unique functor preserving this expectation structure. Expected value is not just a summary statistic. It is the interface between probability and information.</p>
+
+    <SchemeRepl client:load initialCode={`; Shannon entropy is an expected value: E[-log P(x)]
+; H(X) = -sum P(x) * log2(P(x))
+
+(define (log2 x) (/ (log x) (log 2)))
+
+(define (entropy probs)
+  (let loop ((ps probs) (h 0))
+    (if (null? ps) h
+        (let ((p (car ps)))
+          (if (<= p 0) (loop (cdr ps) h)
+              (loop (cdr ps) (- h (* p (log2 p)))))))))
+
+; Fair coin: maximum entropy for 2 outcomes
+(display "Fair coin: H = ") (display (entropy '(0.5 0.5))) (newline)
+; Biased coin
+(display "p=0.9 coin: H = ") (display (entropy '(0.9 0.1))) (newline)
+; Fair die
+(display "Fair die: H = ") (display (entropy '(0.1667 0.1667 0.1667 0.1667 0.1667 0.1667))) (newline)
+; Entropy is the expected surprise per outcome
+`} />
+
+    <!-- Notation -->
+    <h3>Notation reference</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4">Notation</th>
+            <th class="py-2 pr-4">Scheme</th>
+            <th class="py-2">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono">
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E[X]</td><td class="pr-4 text-green-300">(expected-value xs ps)</td><td class="font-sans">Expected value: weighted average</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">Var(X)</td><td class="pr-4 text-green-300">(variance xs ps)</td><td class="font-sans">Variance: E[X&sup2;] - (E[X])&sup2;</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">&#x03C3;</td><td class="pr-4 text-green-300">(sqrt (variance xs ps))</td><td class="font-sans">Standard deviation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-4">E[aX + b]</td><td class="pr-4 text-green-300">(+ (* a mu) b)</td><td class="font-sans">Linearity of expectation</td></tr>
+          <tr><td class="py-2 pr-4">H(X)</td><td class="pr-4 text-green-300">(entropy probs)</td><td class="font-sans">Shannon entropy: expected surprise</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Probability chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/grinstead-05/">&#x1F3B0; Ch 5</a> &mdash; the distributions whose expected values and variances we compute here</li>
+      <li><a href="/reading/probability/grinstead-07/">&#x1F3B0; Ch 7</a> &mdash; sums of random variables: linearity in action</li>
+      <li><a href="/reading/probability/grinstead-08/">&#x1F3B0; Ch 8</a> &mdash; law of large numbers: sample means converge to E[X]</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages</p>
+    <ul>
+      <li><a href="/reading/baez-fritz-2011/">&#x1F35E; Baez &amp; Fritz 2011</a> &mdash; entropy as a functor, the categorical view of expected information</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Related foundations</p>
+    <ul>
+      <li><a href="/reading/calculus/calc-07/">∫ Calculus Ch.7 The Integral</a> &mdash; expected value is a weighted integral over a distribution</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Expected_value"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Expected value</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Variance"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Variance</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a></li>
+    </ul>
+    </Neighbors>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Ready for the real thing? <a href="https://math.dartmouth.edu/~prob/prob/prob.pdf">Read Grinstead &amp; Snell</a>, Chapter 6.
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6"><a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a></p>
+
+
+    <PrevNext prev={{ href: "/reading/probability/grinstead-05/", label: "Distributions" }} next={{ href: "/reading/probability/grinstead-07/", label: "Sums of Variables" }} />
+
+  </main>
+</Layout>

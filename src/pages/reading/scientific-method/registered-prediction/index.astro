@@ -1,0 +1,112 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Registered Prediction — Falsification as Practice" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Registered Prediction</h1>
+    <p class="text-gray-400 text-sm mb-6">Falsification as daily practice · Example: Gwern Branwen, 2010→ · <a href="https://gwern.net/prediction-market">gwern.net/prediction-market</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Any claim can be hedged after the fact. The defense is long content: a public, timestamped record that makes post-hoc revision impossible.</p>
+    </div>
+
+    <!-- SVG: Calibration curve -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 280" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="200" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">calibration: predicted vs. actual</text>
+
+        <line x1="60" y1="240" x2="360" y2="240" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="60" y1="240" x2="60" y2="40" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <text x="210" y="265" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">predicted probability</text>
+        <text x="25" y="140" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4" transform="rotate(-90, 25, 140)">actual frequency</text>
+
+        <!-- Perfect calibration line -->
+        <line x1="60" y1="240" x2="360" y2="40" stroke="#71717a" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="5,5"/>
+        <text x="340" y="55" fill="currentColor" font-size="7" fill-opacity="0.25">perfect</text>
+
+        <!-- Underconfident curve -->
+        <path d="M 60,240 C 100,220 140,190 180,155 C 220,120 260,85 300,55 C 330,38 360,30 360,28" fill="none" stroke="#facc15" stroke-width="2" stroke-opacity="0.6"/>
+
+        <circle cx="90" cy="225" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+        <circle cx="120" cy="205" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+        <circle cx="150" cy="178" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+        <circle cx="210" cy="130" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+        <circle cx="270" cy="75" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+        <circle cx="330" cy="38" r="4" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1"/>
+
+        <text x="60" y="255" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">0%</text>
+        <text x="210" y="255" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">50%</text>
+        <text x="360" y="255" text-anchor="middle" fill="currentColor" font-size="7" fill-opacity="0.3">100%</text>
+
+        <text x="250" y="110" fill="#facc15" font-size="8" fill-opacity="0.6">underconfident</text>
+        <text x="250" y="122" fill="#facc15" font-size="7" fill-opacity="0.4">(actual > predicted)</text>
+      </svg>
+    </div>
+
+    <h2>The method</h2>
+
+    <p><a href="/reading/scientific-method/popper-1934/">Popper</a> gave science a criterion: a theory is scientific if it specifies what would disprove it. But the criterion is rarely practiced. Scientists state hypotheses. They don't often write down, in advance, the exact observation that would make them abandon the hypothesis. Pundits never do. Registered prediction operationalizes falsification: state your claim, assign a probability, set a deadline, record it publicly, then wait.</p>
+
+    <p>The mechanics are simple. "I assign 70% probability that X happens by 2025." When 2025 arrives, X either happened or it didn't. Over hundreds of such predictions, a calibration curve emerges. If your 70% predictions come true 70% of the time, you're well-calibrated. If they come true 90% of the time, you're systematically underconfident. If 50%, you're overconfident. The curve is a diagnostic for self-deception, measured quantitatively.</p>
+
+    <p>Kant anticipated this. In the <em>Critique of Pure Reason</em>, he observed that a bet "disconcerts" the dogmatist because it forces honest assessment of confidence. Alex Tabarrok gave the modern version: "A bet is a tax on bullshit." A registered prediction is a bet against your future self, scored by reality.</p>
+
+    <h2>What the method catches</h2>
+
+    <p><a href="/reading/scientific-method/feynman-1974/">Feynman's</a> first principle: you must not fool yourself. If you consistently predict 80% and events happen 60% of the time, you are fooling yourself by exactly 20 percentage points. You can't argue with the calibration curve. You can only update your predictions.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity criterion asks: could this test have caught you being wrong? A prediction registered at 90% that resolves false is a severe test. If your model survives thousands of such tests with good calibration, the model has passed severe testing. If it doesn't, the curve shows exactly where it breaks down. Over 2,000 predictions, the sample is large enough that systematic bias cannot hide behind variance.</p>
+
+    <p><a href="/reading/scientific-method/chamberlin-1890/">Chamberlin</a> warned that a favorite hypothesis blinds you. Prediction registration works against this: you can't retroactively claim you predicted the outcome you observed. The record is public, timestamped, immutable. Post-hoc rationalization — the most common form of self-deception in science and punditry alike — is structurally impossible.</p>
+
+    <h2>What the practice requires</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Element</th>
+            <th class="text-left py-2 text-gray-400">Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Explicit probability</td><td class="text-gray-400">"I think X" is unfalsifiable. "70% by March" is not. The number is the method.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Public registration</td><td class="text-gray-400">Prevents revision. The prediction exists before the outcome. <a href="/reading/scientific-method/popper-1934/">Popper's</a> criterion, enforced by a timestamp.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Resolution tracking</td><td class="text-gray-400">Most predictions vanish. Tracked ones accumulate into a calibration record that <a href="/reading/scientific-method/mayo-2018/">Mayo</a> would recognize as a severity audit.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Volume</td><td class="text-gray-400">A few lucky calls prove nothing. Thousands reveal systematic bias. <a href="/reading/scientific-method/fisher-1935/">Fisher's</a> lesson: significance requires sample size.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Published failures</td><td class="text-gray-400"><a href="/reading/scientific-method/feynman-1974/">Feynman's</a> integrity test: report what didn't work. A calibration record that hides the misses is cargo cult prediction.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Discussion</h2>
+
+    <p>Pre-registration in clinical trials solves the same problem at the institutional level. Researchers declare their hypotheses and analysis plan before running the experiment. This prevents <a href="/reading/scientific-method/ioannidis-2005/">the p-hacking and HARKing</a> that Ioannidis showed inflates false positives across entire fields. Registered prediction is pre-registration scaled down to one person making claims about the world. The mechanism is the same: commit to your hypothesis before seeing the data.</p>
+
+    <p>The Good Judgment Project showed that forecasting skill is real, measurable, and trainable. It also showed that it degrades without practice. Participation across multiple seasons produced rankings that went up and down — top quartile one year, 12th percentile another. That variation, published alongside the peaks, is itself a data point about the method's demands. Calibration isn't a talent you have. It's a practice you maintain.</p>
+
+    <p>The deeper point is about Goodhart's law. <a href="/reading/scientific-method/popper-1934/">Popper's</a> falsification criterion can be gamed: state a vague hypothesis, then reinterpret the outcome to fit. <a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity criterion can be selectively applied: report the tests that passed, bury the ones that didn't. The paper trail resists gaming because it's public, timestamped, and immutable. You can Goodhart a method. You can't Goodhart a record that anyone can audit.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/popper-1934/">Popper 1934</a></li>
+      <li><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></li>
+      <li><a href="/reading/scientific-method/self-experiment/">The Self-Experiment</a></li>
+      <li><a href="/reading/scientific-method/integrity/">Integrity</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/self-experiment/", label: "Self-experiment · 16 of 17" }} />
+  </main>
+</Layout>
