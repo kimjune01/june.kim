@@ -6,6 +6,12 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec). Extended in [Timekeeping Parameter](/timekeeping-parameter). Technical detail: [reading section](https://june.kim/reading/temporal-compression/). For agents and reviewers: [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md).*
 
+*A codec engineer keeps talking about how his video chains break. A graph theorist keeps talking about how her journeys don't compose. A topologist keeps talking about how his local sections won't globalize. Same complaint, three accents. None of them cites the other two.*
+
+*The finding: on temporal event graphs, time accumulates along paths like a commodity but selects across paths like a potential. The tropical semiring encodes both operations, but the naive tropical analogue of max-flow/min-cut treats them as dual. They're not. That distinction is the paper inside this crosswalk.*
+
+---
+
 Three fields study directed dependency graphs with time-ordered composition. Across 37 searches on Google Scholar, Semantic Scholar, and the open web, combining terms from all three fields in every pairwise combination, I found zero cross-citations between any two of them.
 
 **Video codecs** (empirical): I-frames store complete states. P-frames store deltas. Error accumulates through the chain. I-frames reset it. Rate-distortion optimization balances bits against reconstruction quality. The dependency structure is a DAG, treated as an engineering artifact.
