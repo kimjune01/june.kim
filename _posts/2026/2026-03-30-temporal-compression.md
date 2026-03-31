@@ -4,7 +4,7 @@ title: "Temporal Compression"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec). Extended in [Timekeeping Parameter](/timekeeping-parameter). Technical detail: [reading section](https://june.kim/reading/temporal-compression/) · [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md).*
+*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec). Extended in [Timekeeping Parameter](/timekeeping-parameter). Technical detail: [reading section](https://june.kim/reading/temporal-compression/). For agents and reviewers: [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md).*
 
 Three fields study directed dependency graphs with time-ordered composition. Across 37 searches on Google Scholar, Semantic Scholar, and the open web, combining terms from all three fields in every pairwise combination, I found zero cross-citations between any two of them.
 
@@ -54,4 +54,4 @@ The codec engineer's I-frame reset is the topologist's clamped sub-complex. The 
 
 ---
 
-*For the full crosswalk with validated sources and open questions: [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md). For runnable code and diagrams: [reading section](https://june.kim/reading/temporal-compression/). For the cultural argument: [Timekeeping Parameter](/timekeeping-parameter). Written via the [double loop](/double-loop).*
+*Written via the [double loop](/double-loop).*
