@@ -1,14 +1,38 @@
-# june.kim blog
+# june.kim
 
-Jekyll blog hosted on S3 + CloudFront.
+Astro site hosted on S3 + CloudFront. Unified build: blog + reading + apps.
+
+## Architecture
+
+- **Blog posts**: `~/Documents/junekim-migrates/src/content/blog/*.md`
+- **Reading site**: `~/Documents/junekim-migrates/src/pages/reading/`
+- **Apps** (static, in `public/`): jamdojo, pinyin-chart, advertising-journey, croupier, vectorspace-ads
+- **Styling**: Tailwind (one `blog.css` for blog pages, reading pages use their own Tailwind)
 
 ## Local dev
 
-`bundle exec jekyll serve --livereload` — runs on port 4000 with auto-reload.
+`cd ~/Documents/junekim-migrates && pnpm run dev` — runs on port 12345 with hot reload.
 
 ## Deploy
 
-`bash deploy.sh` — builds the site and syncs to S3, then invalidates CloudFront.
+`cd ~/Documents/junekim-migrates && bash deploy.sh` — builds, creates .html aliases, syncs to S3, invalidates CloudFront.
+
+## Adding a post
+
+Create `src/content/blog/YYYY-MM-DD-slug.md` with front matter:
+```yaml
+---
+layout: post
+title: "Post Title"
+tags: tag1, tag2
+---
+```
+
+Tags are comma-separated. Available tags: coding, cognition, methodology, reflecting, envelopay, pageleft, vector-space, poetry, crafting, improving, projects, reading.
+
+## Legacy
+
+This repo (`june.kim`) contains the original Jekyll source. It's kept for git history but no longer used for builds. The canonical source is `~/Documents/junekim-migrates/`.
 
 ## Editing style
 
