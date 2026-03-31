@@ -1,4 +1,4 @@
-# Envelopay Spec v0.1.0
+# Envelopay Spec v0.1.1
 
 [Certified Mail](https://june.kim/certified-mail) argued for the protocol. [Sent](https://june.kim/sent) demonstrated it. This is the reference.
 
@@ -13,6 +13,8 @@ The subject is the protocol. A bare `WHICH` with no body is valid. The `X-Envelo
 **Subject parsing.** The first token of the subject must be one of the nine all-caps keywords: `WHICH`, `METHODS`, `PAY`, `ORDER`, `FULFILL`, `INVOICE`, `OFFER`, `ACCEPT`, `OOPS`. No stripping — `Re:` and `Fwd:` prefixes mean the sender doesn't speak the protocol. If the subject and JSON body disagree on type, the subject wins — reply OOPS if the mismatch matters.
 
 When a JSON body is present, it must be a single JSON object containing `v` (version string) and `type` (lowercase type name). Unknown fields must be ignored. The email may contain signatures, rich text, HTML wrappers, or other MIME parts — the protocol is agnostic. Extraction of the JSON object from the message body (stripping signatures, HTML tags, quoted text) is the receiver's responsibility.
+
+**Natural language mode.** A METHODS reply with no parseable JSON body is valid. If the receiver replies to WHICH with a correctly formatted subject line (`METHODS | ...`) and natural language in the body describing accepted rails, `accepts_natural_language` is implicitly `true`. The sender should extract payment details (chain, token, wallet, price) from the natural language and may use natural language in subsequent ORDER tasks and notes. When JSON is present and `accepts_natural_language` is explicitly set, the explicit value takes precedence.
 
 **Assets.** The `chain` + `token` pair is the asset identity. `USDC` on Solana and `USDC` on Base are different assets. Symbols (`SOL`, `USDC`) and contract addresses are both valid as `token`; `chain` disambiguates.
 
@@ -99,6 +101,7 @@ Subject: METHODS | $0.50 USDC, Solana preferred
 | Field | Required | Description |
 |-------|----------|-------------|
 | `rails` | yes | At least one accepted rail. Fiat rails (Stripe, Interac, PayPal) use `chain` for the network and `wallet` for the payment address or URL. Each rail has `chain`, `token`, `wallet`, and indicative `price` (smallest unit string, same convention as `amount`) |
+| `accepts_natural_language` | no | `true` if the receiver accepts natural language in ORDER tasks and notes. Default `false` — sender should use structured `task` objects |
 | `id` | no | Sender-generated identifier |
 | `which_ref` | no | The WHICH `id` this responds to |
 | `note` | no | Human-readable summary |

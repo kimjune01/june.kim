@@ -18,10 +18,15 @@ Create `src/content/blog/YYYY-MM-DD-slug.md` with front matter:
 layout: post
 title: "Post Title"
 tags: tag1, tag2
+image: "/assets/slug-name.png"
 ---
 ```
 
+`image:` sets the social preview (`og:image`, `twitter:card`, JSON-LD). It's independent of images in the post body — an inline diagram is not an og:image. Set it when the post has a meaningful preview image. Not all posts need one.
+
 Tags are comma-separated. Available tags: coding, cognition, methodology, reflecting, envelopay, pageleft, vector-space, poetry, crafting, improving, projects, reading.
+
+Posts that need component imports use `.mdx` extension. **Omit `layout` from `.mdx` frontmatter** — MDX treats it as an import. The default (`post`) is applied by `[slug].astro`. Content collection glob accepts both `**/*.{md,mdx}`.
 
 ## Structure
 

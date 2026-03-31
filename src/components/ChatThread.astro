@@ -1,0 +1,81 @@
+---
+interface Message {
+  from: string;
+  type: string;
+  body?: string;
+  note?: string;
+  side: 'left' | 'right';
+}
+
+interface Props {
+  messages: Message[];
+}
+
+const { messages } = Astro.props;
+---
+
+<div class="chat-thread">
+  {messages.map((msg) => (
+    <div class:list={['chat-msg', msg.side === 'right' ? 'chat-right' : 'chat-left']}>
+      <div class="chat-header">
+        <span class="chat-from">{msg.from}</span>
+        <span class="chat-type">{msg.type}</span>
+      </div>
+      {msg.body && <div class="chat-body" set:html={msg.body} />}
+      {msg.note && <div class="chat-note">{msg.note}</div>}
+    </div>
+  ))}
+</div>
+
+<style>
+  .chat-thread {
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .chat-msg {
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 85%;
+    line-height: 1.4;
+    font-size: 14px;
+  }
+  .chat-right {
+    background: #e3f2fd;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .chat-left {
+    background: #f5f5f5;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .chat-from {
+    font-size: 11px;
+    color: #888;
+    font-family: Consolas, monospace;
+  }
+  .chat-type {
+    font-size: 11px;
+    font-weight: 700;
+    color: #333;
+    font-family: Consolas, monospace;
+  }
+  .chat-body {
+    margin: 4px 0;
+    font-family: 'Lora', Georgia, serif;
+  }
+  .chat-note {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+    margin-top: 4px;
+  }
+</style>

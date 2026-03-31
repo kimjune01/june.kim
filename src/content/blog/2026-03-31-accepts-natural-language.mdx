@@ -1,0 +1,79 @@
+---
+title: "Accepts Natural Language"
+tags: envelopay
+image: "/assets/accepts-natural-language.svg"
+---
+import ChatThread from '../../components/ChatThread.astro';
+
+Every payment system speaks two languages. The API — structured, typed, authenticated — for machines. The frontend — buttons, forms, checkout flows — for humans. Two interfaces to the same pipe. The machine can't use the button. The human can't call the API. A developer sits between them, wiring one to the other.
+
+This is why selling online requires infrastructure. Stripe or Square for payments, Shopify or WooCommerce for the storefront, a domain, hosting, SSL, a developer to connect the pieces. A restaurant that wants online orders needs a tablet bolted to the counter running DoorDash or UberEats — platforms that take 15-30% for standing between the kitchen and the customer.
+
+Kent's Kitchen in Flushing doesn't want any of this. The owner pays rent in cash, pays suppliers in cash, and would rather give you a 5% discount than eat the 2.9% + 30¢ card fee. The handwritten menu taped to the window is the interface. The transaction is a conversation: you point, they nod, you pay. No checkout flow. No payment terminal. No platform. [IRS agents stopped asking, anyway.](/no-postage)
+
+The [envelopay spec](/envelopay-spec) defines nine [message types](/certified-mail) with structured JSON. A proper protocol. But METHODS can reply without any JSON at all:
+
+```
+Subject: METHODS | USDC on Base, $8
+I accept USDC on Base. My wallet is 0x4a7F...
+```
+
+No JSON body means `accepts_natural_language` is implicitly `true`. The receiver is saying: *talk to me like a person.*
+
+A QR code on that handwritten menu. A `mailto:` link in an Instagram bio. A wallet address on a pamphlet. Any surface that can hold text becomes a [shopfront](/unshopify). The transaction is a conversation that settles on-chain.
+
+Here's what that looks like.
+
+### The transaction
+
+Alex wants a book. She's heard of *The Encrypted Commons* — a cyberpunk novel about mesh-networked communes that settle disputes through cryptographic arbitration. The author sells direct. No Amazon. No publisher. Just an email address on the back cover.
+
+<ChatThread messages={[
+  { from: "alex@proton.me", type: "WHICH", side: "right" },
+  { from: "books@mirrorpress.net", type: "METHODS", side: "left",
+    body: "I sell books. $8 each, $12 for any two.<br>Pay in USDC on Base or SOL on Solana.<br>Just tell me what you want — I'll send an invoice.",
+    note: "no JSON — natural language only" },
+  { from: "alex@proton.me", type: "ORDER", side: "right",
+    body: "I'd like The Encrypted Commons in epub format please.<br>If you have a bundle with the sequel, I'll take that instead.",
+    note: "no JSON — natural language only" },
+  { from: "books@mirrorpress.net", type: "INVOICE", side: "left",
+    body: "The bundle's $12 — both books, epub.",
+    note: "JSON: amount, token, chain, wallet ← precision starts here" },
+  { from: "alex@proton.me", type: "PAY", side: "right",
+    note: "JSON: amount, proof, chain ← cryptographic settlement" },
+  { from: "books@mirrorpress.net", type: "FULFILL", side: "left",
+    body: "Here you go. The Key Ceremony is better than the first one — starts slow but the arbitration scene in chapter 9 is worth it. Enjoy.",
+    note: "JSON: file URLs, sha256 ← verifiable delivery" },
+]} />
+
+Six emails. The first three are pure conversation. JSON enters at INVOICE — when amounts must be exact and [proofs must verify](/sent). The agent upsold the bundle not because it followed a conversion funnel, but because it read the request and made a judgment call.
+
+![Natural Language ↔ Spec mapping](/assets/accepts-natural-language.svg)
+
+### The spec is the skeleton
+
+The subject line routes. The JSON carries what must be exact: amounts, wallets, [proofs](/read-receipt). Everything else is natural language. The boundary is sharp: if a machine needs to verify it cryptographically, it's JSON. If an agent needs to understand it, it's English.
+
+Stripe requires a developer, an API key, a webhook endpoint, a checkout session, a payment intent. Envelopay requires an email address and the ability to understand "I'd like the bundle please."
+
+### The protocol doesn't care who's typing
+
+The transaction above was agent↔agent. Six emails, no human in the loop. But Alex could have typed that ORDER herself and the bookstore agent would have handled it identically. No app, no account creation. Just an email.
+
+Three cases: agent↔agent, human→agent, human↔human. Natural language mode makes them indistinguishable. The shopkeeper's agent can't tell whether the customer is a person or a program, and has no reason to ask.
+
+### The book is about this
+
+A novel about anarchist communes that settle disputes through cryptography, purchased through a protocol that does the same. Two agents, natural language, no intermediary.
+
+The author keeps $12. Not $12 minus 2.9% + 30¢. Not $12 minus Amazon's 30%. Twelve dollars, minus [fractions of a cent](/sol-machine) in gas.
+
+The transaction is pseudonymous by default. Two email addresses, an on-chain transfer that links to neither name. No purchase history in a corporate database. No recommendation algorithm targeting Alex with more anarchist literature. The [envelope is opaque](/no-postage) — and if the chain isn't private enough, [Monero](https://www.getmonero.org/) is still a thing.
+
+A cyberpunk novel about escaping institutional control, purchased through a protocol that escapes institutional control. [The medium is the message.](https://en.wikipedia.org/wiki/The_medium_is_the_message) The message is in the subject line.
+
+---
+
+Previous: [No Postage](/no-postage) | Next: [Illegal Tender](/illegal-tender) | [All Envelopay posts](/envelopay)
+
+*Written with Claude Opus 4.6 via [Claude Code](https://claude.ai/claude-code). I directed the argument; Claude drafted prose.*

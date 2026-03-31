@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#999"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="420" fill="#fafafa" rx="4"/>
+
+  <!-- Title -->
+  <text x="360" y="28" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Natural Language ↔ Spec</text>
+
+  <!-- Left column: Email as written -->
+  <rect x="20" y="48" width="320" height="352" rx="6" fill="#fff" stroke="#ddd" stroke-width="1"/>
+  <text x="180" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#555">Email (what agents read)</text>
+
+  <!-- Subject line -->
+  <rect x="32" y="80" width="296" height="36" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="44" y="96" font-size="10" font-weight="600" fill="#1565c0">Subject:</text>
+  <text x="96" y="96" font-size="10" fill="#333">METHODS | USDC on Base, $8</text>
+  <text x="44" y="109" font-size="9" fill="#1565c0">← protocol type</text>
+  <text x="186" y="109" font-size="9" fill="#888">← human summary</text>
+
+  <!-- Body: natural language -->
+  <rect x="32" y="126" width="296" height="72" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="44" y="143" font-size="10" fill="#333">I sell books. $8 each, $12 for any two.</text>
+  <text x="44" y="158" font-size="10" fill="#333">Pay in USDC on Base (0x4a7F...)</text>
+  <text x="44" y="173" font-size="10" fill="#333">or SOL on Solana (7kQ3...).</text>
+  <text x="44" y="190" font-size="9" fill="#2e7d32">↑ no JSON = accepts_natural_language: true</text>
+
+  <!-- Body: structured fields (PAY example) -->
+  <rect x="32" y="212" width="296" height="28" rx="4" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="180" y="230" text-anchor="middle" font-size="10" font-weight="500" fill="#7b1fa2">— or with JSON, when precision matters —</text>
+
+  <rect x="32" y="250" width="296" height="108" rx="4" fill="#fff3e0" stroke="#e65100" stroke-width="1"/>
+  <text x="44" y="268" font-size="10" font-weight="600" fill="#e65100">PAY body (always structured):</text>
+  <text x="44" y="286" font-size="10" font-family="monospace" fill="#333">"amount": "12000000"</text>
+  <text x="44" y="302" font-size="10" font-family="monospace" fill="#333">"token": "USDC"</text>
+  <text x="44" y="318" font-size="10" font-family="monospace" fill="#333">"chain": "base"</text>
+  <text x="44" y="334" font-size="10" font-family="monospace" fill="#333">"proof": {"tx": "0x9c4e..."}</text>
+  <text x="44" y="350" font-size="9" fill="#e65100">↑ amounts + proofs are always exact</text>
+
+  <!-- Right column: What's structured vs free -->
+  <rect x="380" y="48" width="320" height="352" rx="6" fill="#fff" stroke="#ddd" stroke-width="1"/>
+  <text x="540" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#555">Spec (what's required)</text>
+
+  <!-- Protocol layer -->
+  <rect x="392" y="80" width="296" height="56" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="540" y="98" text-anchor="middle" font-size="11" font-weight="600" fill="#1565c0">Subject line = routing</text>
+  <text x="540" y="114" text-anchor="middle" font-size="10" fill="#555">9 keywords. Always structured.</text>
+  <text x="540" y="128" text-anchor="middle" font-size="10" fill="#555">WHICH · METHODS · ORDER · INVOICE</text>
+
+  <!-- Natural language layer -->
+  <rect x="392" y="148" width="296" height="72" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="540" y="168" text-anchor="middle" font-size="11" font-weight="600" fill="#2e7d32">Body = conversation</text>
+  <text x="540" y="186" text-anchor="middle" font-size="10" fill="#555">Tasks, descriptions, recommendations.</text>
+  <text x="540" y="202" text-anchor="middle" font-size="10" fill="#555">Natural language when both sides speak it.</text>
+
+  <!-- Arrows connecting layers -->
+  <line x1="328" y1="98" x2="388" y2="98" stroke="#1565c0" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="328" y1="162" x2="388" y2="178" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Settlement layer -->
+  <rect x="392" y="232" width="296" height="80" rx="4" fill="#fff3e0" stroke="#e65100" stroke-width="1"/>
+  <text x="540" y="252" text-anchor="middle" font-size="11" font-weight="600" fill="#e65100">Settlement = exact</text>
+  <text x="540" y="270" text-anchor="middle" font-size="10" fill="#555">Amounts, wallets, proofs, chain IDs.</text>
+  <text x="540" y="286" text-anchor="middle" font-size="10" fill="#555">Always JSON. Cryptographic verification</text>
+  <text x="540" y="302" text-anchor="middle" font-size="10" fill="#555">needs exact values, not conversation.</text>
+
+  <line x1="328" y1="300" x2="388" y2="272" stroke="#e65100" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Bottom rule -->
+  <rect x="392" y="324" width="296" height="64" rx="4" fill="#f5f5f5" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="540" y="348" text-anchor="middle" font-size="10" font-weight="600" fill="#666">The rule</text>
+  <text x="540" y="364" text-anchor="middle" font-size="10" fill="#666">Structure where machines verify.</text>
+  <text x="540" y="378" text-anchor="middle" font-size="10" fill="#666">Language where agents converse.</text>
+</svg>
