@@ -41,8 +41,11 @@ APPS=(pinyin-chart jamdojo reading)
 #  8. Astro apps content-hash filenames. Sync them separately, gated on
 #     git diff, to avoid re-uploading hundreds of unchanged files.
 #
-#  9. --size-only misses same-size content changes. Pull invalidation paths
-#     from git diff on _posts/ AND assets/ to compensate.
+#  9. --size-only misses same-size content changes. For blog posts, pull
+#     invalidation paths from git diff on _posts/ AND assets/. For Astro
+#     apps, --size-only is fatal: HTML files can be the same size but
+#     reference different content-hashed CSS/JS filenames. Don't use
+#     --size-only for the reading sync — always sync without it.
 #
 # 10. CloudFront treats / and /index.html as separate cache keys.
 #     Invalidate both. Same for /feed.xml and /reading/ vs /reading/*.
@@ -72,6 +75,14 @@ APPS=(pinyin-chart jamdojo reading)
 #     root. Since alias creation skips app dirs, _site/reading.html never
 #     exists locally, so --delete removes it from S3. Exclude "$app.html"
 #     alongside "$app/*" for all apps.
+#
+# 17. Reading sync must compare built output, not just git HEAD. Astro
+#     content-hashes filenames, so a rebuild produces new CSS/JS hashes
+#     even when the source repo HEAD is unchanged (e.g. local reading/
+#     dir was manually updated or rebuilt). Checking only git HEAD skips
+#     the sync, leaving S3 with HTML that references non-existent CSS.
+#     Fix: also compare reading/_astro/ hashes, or always sync reading
+#     when the local reading/ dir is fresher than .reading-deployed.
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ─── build ────────────────────────────────────────────────────────────────────
@@ -179,15 +190,16 @@ for app in "${APPS[@]}"; do
     continue
   fi
   if [[ "$app" == "reading" ]]; then
-    READING_HEAD=$(git -C "$READING_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")
-    READING_DEPLOYED=$(cat .reading-deployed 2>/dev/null || echo "")
-    if [[ "$READING_HEAD" == "$READING_DEPLOYED" ]]; then
-      echo "==> reading unchanged, skipping sync"
+    # Gate on built output hash, not git HEAD (lesson 17)
+    READING_BUILD_HASH=$(find reading/_astro -type f 2>/dev/null | sort | xargs cat | shasum -a 256 | cut -d' ' -f1)
+    READING_DEPLOYED_HASH=$(cat .reading-deployed-hash 2>/dev/null || echo "")
+    if [[ "$READING_BUILD_HASH" == "$READING_DEPLOYED_HASH" ]]; then
+      echo "==> reading unchanged (build hash match), skipping sync"
     else
       echo "==> Syncing $app to S3"
-      aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete --size-only
+      aws s3 sync "$app/" "s3://$BUCKET/$app/" --delete  # no --size-only (lesson 9)
       aws s3 cp "$app/index.html" "s3://$BUCKET/$app.html" --content-type "text/html; charset=utf-8" --quiet
-      echo "$READING_HEAD" > .reading-deployed
+      echo "$READING_BUILD_HASH" > .reading-deployed-hash
       echo "    $app synced"
       READING_SYNCED=true
     fi

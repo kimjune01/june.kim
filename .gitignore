@@ -11,3 +11,4 @@ package.json
 _site/
 .reading-deployed
 reading/
+.reading-deployed-hash
