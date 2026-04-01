@@ -71,16 +71,26 @@ SOAP complete. Four files in `soap/`: S.md, O.md, A.md, P.md. Each one traces ba
 - **No backfilling.** If Step 2 reveals that S.md is missing something, go back to Step 1 and update S.md. Do not patch O.md to compensate.
 - **One question at a time** at every gate. Don't dump the full checkpoint quiz.
 - **Record everything.** Every human answer goes into the relevant file. A reader should reconstruct the full decision trail from the SOAP files alone.
+- **Log every skill run.** Append a one-liner to `soap/surprises.md` when each skill completes, even if nothing surprising happened. This grounds the surprises in temporal order.
+
+  ```
+  ## Run log
+
+  - 2026-04-01 14:00 — /intake on Soar: 90 claims, 6 sources, 7 ambiguous mappings
+  - 2026-04-01 14:30 — /diagnose on Soar: 5 gaps across 3 stack levels, root cause found
+  - 2026-04-01 15:00 — /prescribe on Soar: 5 prescriptions, 3 triage tiers
+  ```
+
 - **Log surprises.** Append to `soap/surprises.md` whenever anything unexpected happens: a skill spec that needed changing, a mapping that broke assumptions, a codex finding that contradicted the pipeline's output, a human answer that redirected the diagnosis. Format:
 
   ```
-  ### [step] — [one-line summary]
+  ### [step] [timestamp] — [one-line summary]
   **Expected:** what the skill/pipeline predicted
   **Found:** what actually happened
   **Action:** what changed (skill spec update, backtrack, new open question)
   ```
 
-  Surprises are the I-frames for a future consolidation pass. This log is the episodic store that will feed skill updates across runs.
+  Surprises are the I-frames for a future consolidation pass. The run log provides the P-frames between them. Together they reconstruct the full episode.
 
 ## Convergence
 
