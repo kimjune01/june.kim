@@ -1,13 +1,13 @@
 ---
 name: copyedit
-description: Run humanize → tighten → readability → flavor in sequence until convergence. The mechanical pass before line editing.
+description: Run humanize → tighten → readability → flavor → codex in a loop until convergence. The mechanical pass before line editing.
 argument-hint: <file_path>
-allowed-tools: Read, Edit, Grep, Glob, WebSearch, WebFetch
+allowed-tools: Read, Edit, Grep, Glob, Bash, Skill, WebSearch, WebFetch
 ---
 
 # Copyedit
 
-Humanize → tighten → readability → flavor in sequence. Repeat until a pass finds nothing to fix.
+Humanize → tighten → readability → flavor → codex review, in a loop. Repeat until a pass finds nothing to fix.
 
 ## Process
 
@@ -16,7 +16,8 @@ Humanize → tighten → readability → flavor in sequence. Repeat until a pass
 3. **Tighten.** Compress every paragraph a bit. Cut dead weight, redundant modifiers, nominalizations, throat-clearing. Then re-read for choppy runs and restore flow with conjunctions where natural. Target 10-20% compression on prose paragraphs over 30 words.
 4. **Readability.** Check prosody, section titles, paragraph sizing, section sizing, bold/italic. Apply fixes liberally, especially prosody.
 5. **Flavor.** Scan for unlinked pop culture refs, proper nouns, named theories, historical figures. Research links with WebSearch. Apply all links directly.
-6. **Convergence check.** Re-read the result. Run humanize scan again. If it finds anything, go back to step 2. If it finds nothing, report final word count vs original and stop.
+6. **Codex review.** Send the current state to codex (`/codex`). Apply feedback you agree with directly. Present only the ambiguous or debatable points to the user for judgment. If codex flags low credence on a claim, research it before dismissing or applying.
+7. **Convergence check.** Re-read the result. Run humanize scan again. If it finds anything, go back to step 2. If a third round still produces substantive changes, stop and flag for the user — the post may have structural issues the pipeline is oscillating around. Otherwise, report final word count vs original and stop.
 
 ## Rules
 
