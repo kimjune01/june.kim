@@ -71,6 +71,16 @@ SOAP complete. Four files in `soap/`: S.md, O.md, A.md, P.md. Each one traces ba
 - **No backfilling.** If Step 2 reveals that S.md is missing something, go back to Step 1 and update S.md. Do not patch O.md to compensate.
 - **One question at a time** at every gate. Don't dump the full checkpoint quiz.
 - **Record everything.** Every human answer goes into the relevant file. A reader should reconstruct the full decision trail from the SOAP files alone.
+- **Log surprises.** Append to `soap/surprises.md` whenever anything unexpected happens: a skill spec that needed changing, a mapping that broke assumptions, a codex finding that contradicted the pipeline's output, a human answer that redirected the diagnosis. Format:
+
+  ```
+  ### [step] — [one-line summary]
+  **Expected:** what the skill/pipeline predicted
+  **Found:** what actually happened
+  **Action:** what changed (skill spec update, backtrack, new open question)
+  ```
+
+  Surprises are the I-frames for a future consolidation pass. This log is the episodic store that will feed skill updates across runs.
 
 ## Convergence
 
