@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Backpack
 tags: crafting
 image: http://imgur.com/KKwaPZ8.jpg

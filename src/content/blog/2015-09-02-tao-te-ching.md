@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Tao Te Ching
 tags: reading
 image: "/assets/tao-te-ching.jpg"

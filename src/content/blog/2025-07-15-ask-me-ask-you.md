@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Ask me ask you
 tags: coding
 image: "/assets/ask-me-ask-you.png"

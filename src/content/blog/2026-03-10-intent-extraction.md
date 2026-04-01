@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Intent Extraction"
 tags: vector-space
 ---

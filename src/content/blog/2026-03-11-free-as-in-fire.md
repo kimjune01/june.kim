@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Free as in Fire"
 tags: vector-space
 image: "/assets/free-as-in-fire.jpg"

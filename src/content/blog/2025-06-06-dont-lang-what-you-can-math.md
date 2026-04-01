@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Don't LLM what you can code
 tags: coding
 ---

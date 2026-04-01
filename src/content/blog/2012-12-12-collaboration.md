@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Collaboration
 tags: reading
 image: "/assets/collab.png"

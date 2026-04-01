@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The Last Signal"
 tags: vector-space
 image: "/assets/last_signal.png"

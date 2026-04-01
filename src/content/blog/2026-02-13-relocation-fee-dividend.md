@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Relocation Fee Dividend"
 tags: vector-space
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Moccasins for Kids
 tags: crafting
 image: /assets/mocs.jpeg

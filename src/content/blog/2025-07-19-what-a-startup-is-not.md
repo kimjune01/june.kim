@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: What a Startup is not
 tags: reflecting
 image: "/assets/vs-startup.png"

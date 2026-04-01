@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Light mallet
 tags: crafting
 image: /assets/light-mallet1.jpg

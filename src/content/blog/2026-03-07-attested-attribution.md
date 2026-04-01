@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Attested Attribution"
 tags: vector-space
 image: "/assets/attested-attribution.jpg"

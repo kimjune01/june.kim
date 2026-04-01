@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Forest Cloak
 tags: crafting
 image: /assets/forest-cloak.png

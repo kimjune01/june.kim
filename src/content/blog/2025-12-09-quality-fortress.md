@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Quality Fortress
 tags: coding
 image: "/assets/defense-layers.png"

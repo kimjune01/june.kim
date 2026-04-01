@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Blog Post Formula
 tags: reflecting
 image: /assets/formula/bench.png

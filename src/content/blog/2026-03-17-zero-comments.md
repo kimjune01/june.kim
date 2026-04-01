@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Zero Comments"
 tags: coding, methodology
 ---

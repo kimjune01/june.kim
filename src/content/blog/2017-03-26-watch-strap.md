@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Watch Strap
 tags: crafting
 image: /assets/watch-strap2.jpg

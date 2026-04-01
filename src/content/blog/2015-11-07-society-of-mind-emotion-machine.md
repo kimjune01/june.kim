@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Society of Mind & The Emotion Machine
 tags: reading
 image: "/assets/society-of-mind.png"

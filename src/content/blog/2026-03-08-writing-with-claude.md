@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Writing with Claude"
 tags: coding, reflecting, methodology
 ---

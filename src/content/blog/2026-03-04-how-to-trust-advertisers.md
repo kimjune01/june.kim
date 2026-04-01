@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "How to Trust Advertisers"
 tags: vector-space
 image: "/assets/how_to_trust_advertisers.jpg"

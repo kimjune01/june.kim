@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Motivation for Improvement
 tags: improving
 image: "/assets/configuration/weeks.png"

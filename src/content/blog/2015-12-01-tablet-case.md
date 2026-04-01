@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Denim Tablet Case
 tags: crafting
 image: http://i.imgur.com/ZCgTMWM.png

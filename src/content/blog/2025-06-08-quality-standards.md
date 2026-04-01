@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Quality Standards
 tags: reflecting
 image: "/assets/the-bar.png"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: No Trophy for Winning an Argument
 tags: reflecting
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Obesity Code
 tags: reading
 image: /assets/obesity-code.jpg

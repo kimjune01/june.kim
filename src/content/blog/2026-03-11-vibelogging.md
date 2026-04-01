@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Vibelogging"
 tags: cognition, pageleft, methodology
 ---

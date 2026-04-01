@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Left-handed Cursor on MacOS
 tags: improving
 image: /assets/pointing-right.png

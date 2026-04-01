@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Can You Detect AI Slop?"
 tags: coding, cognition, methodology
 ---

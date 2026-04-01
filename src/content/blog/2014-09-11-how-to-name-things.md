@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: How to Name Things
 tags: coding
 ---

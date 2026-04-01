@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Stone Soup"
 tags: vector-space
 image: "/assets/stone.jpg"

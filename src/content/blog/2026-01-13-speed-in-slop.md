@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Speed in Slop
 tags: coding
 image: "/assets/fix-fast.png"

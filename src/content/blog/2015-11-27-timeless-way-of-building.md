@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Timeless Way of Building
 tags: reading
 image: "/assets/The_Timeless_Way_of_Building.jpg"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "SOL Machine"
 tags: envelopay
 description: "$1–$5 in, SOL out. No signup."

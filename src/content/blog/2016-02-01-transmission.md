@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: Transmission
 tags: poetry
 ---

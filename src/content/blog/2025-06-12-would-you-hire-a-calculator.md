@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Would you hire a calculator?
 tags: reflecting
 image: "/assets/calculator.png"

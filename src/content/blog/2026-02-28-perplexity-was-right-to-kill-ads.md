@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Perplexity Was Right to Kill Ads"
 tags: vector-space
 ---

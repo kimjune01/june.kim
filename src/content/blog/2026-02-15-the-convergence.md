@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Convergence"
 tags: vector-space
 ---

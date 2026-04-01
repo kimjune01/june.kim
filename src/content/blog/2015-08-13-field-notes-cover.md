@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Field Notes Cover
 tags: crafting
 image: http://i.imgur.com/OcSds1Y.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Sprout Method
 tags: coding
 ---

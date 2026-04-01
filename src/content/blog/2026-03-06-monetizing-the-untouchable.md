@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Monetizing the Untouchable"
 tags: vector-space
 image: "/assets/ftc.jpg"

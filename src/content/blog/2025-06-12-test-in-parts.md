@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Never test in whole what you can test in parts
 tags: coding
 ---

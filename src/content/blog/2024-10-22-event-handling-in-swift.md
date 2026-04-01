@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Event handing in Swift
 tags: coding
 ---

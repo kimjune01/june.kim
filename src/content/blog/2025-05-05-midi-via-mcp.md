@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: MIDI via MCP
 tags: coding
 ---

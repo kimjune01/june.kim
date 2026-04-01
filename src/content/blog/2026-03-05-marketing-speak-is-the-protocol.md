@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Marketing-Speak Is the Protocol"
 tags: vector-space
 image: "/assets/positioning.jpg"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Scrum Board using Notion
 tags: reflecting
 image: /assets/scrum-board-2.gif

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Phantom Tollbooth
 tags: reading
 image: "/assets/phantom-tollbooth.jpg"

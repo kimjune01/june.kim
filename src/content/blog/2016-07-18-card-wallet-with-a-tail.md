@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Card wallet with a tail
 tags: crafting
 image: /assets/card-wallet-tail.jpg

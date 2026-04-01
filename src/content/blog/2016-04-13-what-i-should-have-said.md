@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: What I Should Have Said
 tags: poetry
 image: /assets/should-have-said.jpg

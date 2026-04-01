@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Transparency Is Irreversible"
 tags: vector-space
 image: "/assets/container.jpg"

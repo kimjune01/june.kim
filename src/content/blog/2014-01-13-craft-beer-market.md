@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Craft Beer Market Video
 tags: crafting
 ---

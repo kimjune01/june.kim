@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Abstinence vs. Abstinence Education
 tags: reflecting
 image: "/assets/no-sex.webp"

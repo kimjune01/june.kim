@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Set It and Forget It"
 image: "/assets/set-it-and-forget-it.jpg"
 tags: vector-space

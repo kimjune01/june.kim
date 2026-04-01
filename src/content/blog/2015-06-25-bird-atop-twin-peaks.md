@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: Bird atop Twin Peaks
 tags: poetry
 ---

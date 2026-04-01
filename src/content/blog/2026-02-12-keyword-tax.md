@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Keyword Tax"
 tags: vector-space
 image: "/assets/11_egalitarian_auction.png"

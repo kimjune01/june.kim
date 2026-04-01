@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Anatomy of an agent
 tags: coding
 image: "/assets/agent-anatomy.png"

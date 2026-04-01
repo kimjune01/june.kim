@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "An Open Letter to CloudX"
 tags: vector-space
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Human Performance Metrics
 tags: reflecting
 image: /assets/metrics/web-app.png

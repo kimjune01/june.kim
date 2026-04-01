@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Tabletop Bookshelf
 tags: crafting
 image: http://i.imgur.com/BRjlFEg.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Duality of Expression
 tags: reflecting
 image: "/assets/frown-down.png"

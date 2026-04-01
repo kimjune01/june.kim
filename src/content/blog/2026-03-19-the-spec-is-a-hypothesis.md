@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The Spec Is a Hypothesis"
 tags: cognition, coding, methodology
 ---

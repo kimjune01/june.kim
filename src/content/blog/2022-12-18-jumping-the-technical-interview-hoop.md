@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Jumping the Technical Interview Hoop
 tags: coding
 image: /assets/flaming-motorcycle-jump.jpeg

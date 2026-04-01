@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Punished by Rewards
 tags: reading
 image: /assets/punished-by-rewards.jpg

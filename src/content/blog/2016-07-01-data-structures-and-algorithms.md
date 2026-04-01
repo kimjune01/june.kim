@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Data Structures and Algorithms in C++
 tags: reading
 image: https://images-na.ssl-images-amazon.com/images/I/41oGuEd4krL.jpg

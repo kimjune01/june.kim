@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Trustworth"
 tags: vector-space
 image: "/assets/trustworth.jpg"

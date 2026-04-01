@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "The Parts Bin"
 tags: cognition, methodology
 ---

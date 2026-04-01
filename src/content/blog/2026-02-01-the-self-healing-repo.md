@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Self-healing Repo
 tags: coding
 ---

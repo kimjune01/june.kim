@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Unconditional Parenting
 tags: reading
 image: /assets/unconditional-parenting.jpg

@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: The Sea Retains Such Images
 tags: poetry
 image: /assets/sea-retains.jpg

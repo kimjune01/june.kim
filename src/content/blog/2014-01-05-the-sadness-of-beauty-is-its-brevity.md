@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: The Sadness of Beauty is its Brevity
 tags: poetry
 image: /assets/sadness-of-beauty.jpg

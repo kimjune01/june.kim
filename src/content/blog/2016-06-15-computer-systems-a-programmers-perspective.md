@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: 'Computer Systems: A Programmer''s Perspective'
 tags: reading
 image: https://images-na.ssl-images-amazon.com/images/I/51NTWFgAAbL._SX381_BO1,204,203,200_.jpg

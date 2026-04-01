@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Agile Software Development as a Cooperative Game
 tags: reading
 image: "/assets/cooperative-game.jpg"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Wooden Ring
 tags: crafting
 image: /assets/wooden-ring3.jpg

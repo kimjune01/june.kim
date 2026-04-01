@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Lean Startup
 tags: reading
 image: "/assets/lean-startup.jpg"

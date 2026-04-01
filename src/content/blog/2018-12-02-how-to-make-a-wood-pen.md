@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: How to make a wood pen
 tags: crafting
 image: /assets/how-to-make-a-wood-pen.png

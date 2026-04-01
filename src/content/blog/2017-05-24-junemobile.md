@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Junemobile
 tags: crafting
 image: /assets/jm29.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: A Pattern Language
 tags: reading
 image: "/assets/pattern-language.jpg"

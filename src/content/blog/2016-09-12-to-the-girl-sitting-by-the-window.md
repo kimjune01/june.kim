@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: To the girl sitting by the window
 tags: poetry
 ---

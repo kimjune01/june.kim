@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Hanging an axe
 tags: crafting
 image: /assets/hung-axe1.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Of Teams and Perf
 tags: reflecting
 image: /assets/perf/basketball-scores.png

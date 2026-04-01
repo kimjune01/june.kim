@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "It Costs Money to Move"
 tags: vector-space
 image: "/assets/10_relocation_fees.jpg"

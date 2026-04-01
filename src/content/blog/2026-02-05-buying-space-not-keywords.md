@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Buying Space, Not Keywords"
 tags: vector-space
 image: "/assets/07_hill_climbing_sequence.png"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: 2 Second Lean
 tags: reading
 image: /assets/2-second-lean.jpg

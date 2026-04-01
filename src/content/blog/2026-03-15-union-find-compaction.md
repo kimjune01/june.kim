@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Union-Find Compaction"
 tags: cognition, methodology
 image: /assets/union-find-compaction.png

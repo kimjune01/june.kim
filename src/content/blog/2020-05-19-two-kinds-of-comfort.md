@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Two kinds of comfort
 tags: reflecting
 ---

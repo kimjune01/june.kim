@@ -30,26 +30,58 @@ const { messages } = Astro.props;
 <style>
   .chat-thread {
     margin: 30px 0;
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 14px;
+    background:
+      radial-gradient(ellipse at 20% 80%, #1a2e3d 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, #1d3045 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, #182838 0%, transparent 70%),
+      #151E27;
+    border-radius: 12px;
   }
   .chat-msg {
     padding: 10px 14px;
-    border-radius: 10px;
-    max-width: 85%;
-    line-height: 1.4;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.45;
     font-size: 14px;
+    position: relative;
   }
   .chat-right {
-    background: #e3f2fd;
+    background: linear-gradient(180deg, #3E618A 0%, #3B8CB9 100%);
+    color: #fafafa;
     align-self: flex-end;
     border-bottom-right-radius: 2px;
+    margin-right: 10px;
+  }
+  .chat-right::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -8px;
+    width: 12px;
+    height: 16px;
+    background: #3B8CB9;
+    clip-path: path('M 0 0 C 0 8, 8 16, 12 16 L 0 16 Z');
   }
   .chat-left {
-    background: #f5f5f5;
+    background: #232E3B;
+    color: #fafafa;
     align-self: flex-start;
     border-bottom-left-radius: 2px;
+    margin-left: 10px;
+  }
+  .chat-left::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    width: 12px;
+    height: 16px;
+    background: #232E3B;
+    clip-path: path('M 12 0 C 12 8, 4 16, 0 16 L 12 16 Z');
   }
   .chat-header {
     display: flex;
@@ -59,23 +91,42 @@ const { messages } = Astro.props;
   }
   .chat-from {
     font-size: 11px;
-    color: #888;
+    color: #6ab3f3;
     font-family: Consolas, monospace;
+  }
+  .chat-right .chat-from {
+    color: #8ed196;
   }
   .chat-type {
     font-size: 11px;
     font-weight: 700;
-    color: #333;
+    color: #8a9bab;
     font-family: Consolas, monospace;
   }
+  .chat-right .chat-type {
+    color: #b8d4e8;
+  }
   .chat-body {
-    margin: 4px 0;
-    font-family: 'Lora', Georgia, serif;
+    margin: 6px 0;
+    font-family: 'Avenir', sans-serif;
+    font-size: 14px;
   }
   .chat-note {
     font-size: 11px;
-    color: #999;
+    color: #5a7a8a;
     font-style: italic;
     margin-top: 4px;
+  }
+  .chat-right .chat-note {
+    color: #7a9ab8;
+  }
+  .chat-body :global(a) {
+    color: #6ab3f3;
+    text-decoration: none;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+  }
+  .chat-body :global(a:hover) {
+    text-decoration: underline;
   }
 </style>

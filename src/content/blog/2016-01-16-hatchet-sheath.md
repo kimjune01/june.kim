@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Hatchet Sheath
 tags: crafting
 image: /assets/hatchet-sheath.jpeg

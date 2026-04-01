@@ -10,6 +10,7 @@ export default defineConfig({
   site: 'https://june.kim',
   base: '/',
   server: { port: 12345 },
+  devToolbar: { enabled: false },
   image: {
     service: { entrypoint: 'astro/assets/services/noop' },
   },
@@ -20,5 +21,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      headers: { 'Cache-Control': 'no-store' },
+      hmr: { overlay: true },
+    },
   },
 });

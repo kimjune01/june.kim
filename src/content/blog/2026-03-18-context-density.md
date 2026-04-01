@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Context Density"
 tags: cognition, coding, methodology
 ---

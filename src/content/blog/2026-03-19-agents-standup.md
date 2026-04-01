@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Agents' Standup"
 image: "/assets/the-learning-agent.jpg"
 tags: coding, cognition, methodology

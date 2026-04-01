@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Journal Cover
 tags: crafting
 image: /assets/journal1.jpg

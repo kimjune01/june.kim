@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Output vs. Outcome
 tags: reflecting
 image: "/assets/kanban-darts.png"

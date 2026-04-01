@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Synthetic Friction"
 tags: vector-space
 image: "/assets/synthetic_friction.png"

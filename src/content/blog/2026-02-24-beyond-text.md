@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Beyond Text"
 tags: vector-space
 ---

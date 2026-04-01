@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Agile in action – Information Radiator using Notion
 tags: reflecting
 image: "/assets/collabTakeOne.gif"

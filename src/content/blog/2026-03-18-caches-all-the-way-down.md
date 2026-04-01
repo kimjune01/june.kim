@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Caches All the Way Down"
 tags: coding, cognition
 ---

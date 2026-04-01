@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: Expansion
 tags: poetry
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Condensation: Preprocess by Source"
 tags: coding
 ---

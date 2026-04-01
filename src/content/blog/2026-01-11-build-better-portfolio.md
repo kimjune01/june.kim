@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: AI Engineering at BuildBetter.ai
 tags: coding
 ---

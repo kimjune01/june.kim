@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: /error_review
 tags: coding
 image: "/assets/auto-error-fix.png"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Legacy Vibes
 tags: coding
 ---

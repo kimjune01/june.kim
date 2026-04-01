@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Close the loop
 tags: coding
 image: "/assets/bdd-loop.png"

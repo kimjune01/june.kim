@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Purple Cow
 tags: reading
 image: "/assets/purple-cow.jpg"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: AI Luddite
 tags: reflecting
 ---

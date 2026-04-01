@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Sword and Shield Pen
 tags: crafting
 image: /assets/sword-pen1.jpg

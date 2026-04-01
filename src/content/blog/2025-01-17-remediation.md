@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Remediation
 tags: reflecting
 image: "/assets/palisades-fire.webp"

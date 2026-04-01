@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: To the lady on the bus
 tags: poetry
 image: /assets/lady-bus.jpg

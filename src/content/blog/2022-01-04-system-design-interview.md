@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: System Design Interview
 tags: reading
 image: /assets/system-design-interview.jpg

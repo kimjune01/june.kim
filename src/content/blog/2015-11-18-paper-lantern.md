@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Paper Lantern
 tags: crafting
 image: /assets/paper-lantern.jpg

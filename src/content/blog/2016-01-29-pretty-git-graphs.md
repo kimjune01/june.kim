@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Pretty Git Graphs
 tags: coding
 ---

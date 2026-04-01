@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Claude Reflects on The Natural Framework"
 tags: cognition
 ---

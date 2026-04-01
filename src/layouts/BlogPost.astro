@@ -3,7 +3,7 @@ import '../styles/blog.css';
 
 interface Props {
   title: string;
-  layout?: string;
+  variant?: string;
   tags?: string | string[];
   image?: string;
   date: Date;
@@ -11,9 +11,10 @@ interface Props {
   monospace_title?: boolean;
 }
 
-const { title, layout = 'post', tags, image, date, slug, monospace_title } = Astro.props;
-const isWide = layout === 'post-wide';
-const isPoetry = layout === 'poetry';
+const { title, variant = 'post', tags, image, date, slug, monospace_title } = Astro.props;
+const isWide = variant === 'post-wide';
+const isMedium = variant === 'post-medium';
+const isPoetry = variant === 'poetry';
 const dateStr = date.toISOString();
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
 const excerpt = ''; // TODO: extract from content
@@ -86,19 +87,19 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
 <body>
   <aside class="logo">
     <a href="/">
-      <img src="/images/gravatar.png" width="80" height="80" class="gravatar">
+      <img src="/images/gravatar.png" width="80" height="80" class="gravatar" alt="jk">
     </a>
     <span class="logo-prompt">Home</span>
   </aside>
 
-  <main class={`fade-shift ${isWide ? 'wide' : ''}`} style="opacity:0.3;transform:translate(0,2px)">
+  <main class={`fade-shift ${isWide ? 'wide' : isMedium ? 'medium' : ''}`} style="opacity:0.3;transform:translate(0,2px)">
     {!isPoetry && (
       <noscript>
         <style>{'article .footnotes { display: block; }'}</style>
       </noscript>
     )}
 
-    <article class:list={[{ wide: isWide }]}>
+    <article class:list={[{ wide: isWide, medium: isMedium }]}>
       <div class="center">
         <h1>{monospace_title ? <code>{title}</code> : title}</h1>
       </div>
@@ -161,6 +162,13 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     .rss-popup:hover { background: #d55a1b; color: white; }
     .rss-popup.visible { transform: translateY(0); opacity: 1; }
 
+    article.medium { max-width: 700px; margin: 0 auto; }
+    article.medium > p, article.medium > h2, article.medium > h3, article.medium > h4,
+    article.medium > ul, article.medium > ol, article.medium > blockquote, article.medium > hr,
+    article.medium > div.highlighter-rouge, article.medium > .highlight {
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+    article.medium > p:has(img) { max-width: 100%; }
     article.wide { max-width: 90vw; margin: 0 auto; }
     article.wide > p, article.wide > h2, article.wide > h3, article.wide > h4,
     article.wide > ul, article.wide > ol, article.wide > blockquote, article.wide > hr,

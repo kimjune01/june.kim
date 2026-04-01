@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Surely You're Joking, Mr. Feynman
 tags: reading
 image: "/assets/feynman.jpg"

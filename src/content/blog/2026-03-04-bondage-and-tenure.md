@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Bondage and Tenure"
 tags: vector-space
 image: "/assets/bondage_and_tenure.jpg"

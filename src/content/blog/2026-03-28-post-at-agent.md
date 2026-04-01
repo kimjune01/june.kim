@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "post@agent.june.kim"
 tags: coding
 ---

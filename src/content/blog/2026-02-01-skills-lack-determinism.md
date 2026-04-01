@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Skills Lack Determinism
 tags: coding
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: MCP Server Initiator
 tags: coding
 ---

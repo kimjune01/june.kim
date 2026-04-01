@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Not Worth the Squeeze"
 image: "/assets/not-worth-the-squeeze.jpg"
 tags: vector-space

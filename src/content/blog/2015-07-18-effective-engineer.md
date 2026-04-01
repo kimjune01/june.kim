@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Effective Engineer
 tags: reading
 image: "/assets/effective-engineer.jpg"

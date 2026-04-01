@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Reflecting on Little Bird
 tags: reflecting
 image: "/assets/redacted.png"

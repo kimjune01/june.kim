@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Debug Colors
 tags: coding
 image: "/assets/debugColors-before.png"

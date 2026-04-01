@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Design Patterns
 tags: reading
 image: "/assets/design-patterns.png"

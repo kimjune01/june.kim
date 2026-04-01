@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Power Diagrams for Ad Auctions"
 tags: vector-space
 image: "/assets/01_keywords_vs_embeddings.png"

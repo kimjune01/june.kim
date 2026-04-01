@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Licenses Are Functors"
 tags: pageleft, cognition
 ---

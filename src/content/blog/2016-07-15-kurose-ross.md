@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: 'Computer Networking: A Top-Down Approach '
 tags: reading
 image: https://images-na.ssl-images-amazon.com/images/I/51xfeAQU6dL.jpg

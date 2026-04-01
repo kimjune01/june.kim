@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Why I write in the morning
 ---
 

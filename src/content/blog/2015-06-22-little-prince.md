@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Little Prince
 tags: reading
 image: "/assets/the-little-prince.jpg"

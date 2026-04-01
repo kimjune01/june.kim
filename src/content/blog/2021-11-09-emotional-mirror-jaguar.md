@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Emotional Mirror Jaguar
 tags: reflecting
 image: "/assets/jaguar_50.jpeg"

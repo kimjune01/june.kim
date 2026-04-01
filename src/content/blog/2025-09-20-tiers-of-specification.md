@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Tiers of Specification
 tags: coding
 image: "/assets/spec-tiers.png"

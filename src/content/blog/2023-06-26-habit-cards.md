@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Habit Cards
 tags: improving
 image: /assets/habit-cards/salesman.png

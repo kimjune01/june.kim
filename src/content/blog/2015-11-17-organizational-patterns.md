@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Organizational Patterns of Agile Software Development
 tags: reading
 image: "/assets/orgpatterns.jpeg"

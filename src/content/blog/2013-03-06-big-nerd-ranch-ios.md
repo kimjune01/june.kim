@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: 'iOS Programming: The Big Nerd Ranch Guide
 
   '

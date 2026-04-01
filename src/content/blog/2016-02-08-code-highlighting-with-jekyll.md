@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Code Highlighting in Jekyll
 tags: coding
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Learning Agent
 tags: coding
 image: "/assets/learning-agent.png"

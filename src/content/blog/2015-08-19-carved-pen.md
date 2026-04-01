@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Carved Pen
 tags: crafting
 image: http://i.imgur.com/pCd7tEa.jpg

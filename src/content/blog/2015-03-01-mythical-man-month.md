@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Mythical Man-Month
 tags: reading
 image: "/assets/man-month.jpg"

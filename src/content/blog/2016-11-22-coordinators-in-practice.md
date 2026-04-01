@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Coordinators in practice
 tags: coding
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Notes on the Synthesis of Form
 tags: reading
 image: "/assets/notes-on-the-synthesis-of-form.png"

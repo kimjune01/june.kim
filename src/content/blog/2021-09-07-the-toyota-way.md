@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Toyota Way
 tags: reading
 image: /assets/toyota-way.jpg

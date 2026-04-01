@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "market-position.json"
 tags: vector-space
 description: "v0.1.0"

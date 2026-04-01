@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Todo-bot vs. Goal-bot
 tags: reflecting
 image: /assets/bots/bots.png

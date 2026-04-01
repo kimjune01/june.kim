@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Helping - How to Offer, Give, and Receive Help
 tags: reading
 image: /assets/helping-how.jpg

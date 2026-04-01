@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Filling the Blanks"
 tags: cognition
 ---

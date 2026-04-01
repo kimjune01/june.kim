@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Write logs to file
 tags: coding
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Unshopify"
 date: 2026-03-30
 tags: envelopay

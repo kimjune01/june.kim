@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Zebrawood Pen
 tags: crafting
 image: /assets/zebra1.jpg

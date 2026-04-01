@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Wooden chopsticks
 tags: crafting
 image: /assets/chopstick1.jpg

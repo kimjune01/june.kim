@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Room to Exist"
 tags: vector-space
 image: "/assets/room_to_exist.png"

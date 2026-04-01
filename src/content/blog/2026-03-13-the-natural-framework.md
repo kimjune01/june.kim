@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "The Natural Framework"
 tags: coding, cognition, vector-space
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Keywords Are Tiny Circles"
 tags: vector-space
 image: "/assets/09_keywords_are_tiny_circles.jpg"

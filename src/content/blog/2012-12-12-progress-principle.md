@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Progress Principle
 tags: reading
 image: "/assets/progress-principle.jpg"

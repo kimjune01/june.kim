@@ -1,13 +1,14 @@
 ---
+variant: post-medium
 title: "Accepts Natural Language"
 tags: envelopay
 image: "/assets/accepts-natural-language.svg"
 ---
 import ChatThread from '../../components/ChatThread.astro';
 
-Every payment system speaks two languages. The API — structured, typed, authenticated — for machines. The frontend — buttons, forms, checkout flows — for humans. Two interfaces to the same pipe. The machine can't use the button. The human can't call the API. A developer sits between them, wiring one to the other.
+Every payment system speaks two languages: the API for machines, the frontend for humans. Two interfaces to the same pipe. The machine can't use the button; the human can't call the API. A developer sits between them, wiring one to the other.
 
-This is why selling online requires infrastructure. Stripe or Square for payments, Shopify or WooCommerce for the storefront, a domain, hosting, SSL, a developer to connect the pieces. A restaurant that wants online orders needs a tablet bolted to the counter running DoorDash or UberEats — platforms that take 15-30% for standing between the kitchen and the customer.
+This is why selling online requires infrastructure. Stripe or Square for payments, Shopify or WooCommerce for the storefront, a domain, hosting, SSL, a developer to connect the pieces. A restaurant that wants online orders needs a tablet bolted to the counter running DoorDash or UberEats: platforms that take 15-30% for standing between the kitchen and the customer.
 
 Kent's Kitchen in Flushing doesn't want any of this. The owner pays rent in cash, pays suppliers in cash, and would rather give you a 5% discount than eat the 2.9% + 30¢ card fee. The handwritten menu taped to the window is the interface. The transaction is a conversation: you point, they nod, you pay. No checkout flow. No payment terminal. No platform. [IRS agents stopped asking, anyway.](/no-postage)
 
@@ -31,22 +32,19 @@ Alex wants a book. She's heard of *The Encrypted Commons* — a cyberpunk novel 
 <ChatThread messages={[
   { from: "alex@proton.me", type: "WHICH", side: "right" },
   { from: "books@mirrorpress.net", type: "METHODS", side: "left",
-    body: "I sell books. $8 each, $12 for any two.<br>Pay in USDC on Base or SOL on Solana.<br>Just tell me what you want — I'll send an invoice.",
+    body: "I sell books. All epub, DRM-free.<br><br>• The Encrypted Commons — $8<br>• The Key Ceremony — $8<br>• Bundle (any two) — $12<br><br>Pay in USDC on Base or SOL on Solana.<br>Just tell me what you want.",
     note: "no JSON — natural language only" },
   { from: "alex@proton.me", type: "ORDER", side: "right",
-    body: "I'd like The Encrypted Commons in epub format please.<br>If you have a bundle with the sequel, I'll take that instead.",
-    note: "no JSON — natural language only" },
-  { from: "books@mirrorpress.net", type: "INVOICE", side: "left",
-    body: "The bundle's $12 — both books, epub.",
-    note: "JSON: amount, token, chain, wallet ← precision starts here" },
-  { from: "alex@proton.me", type: "PAY", side: "right",
-    note: "JSON: amount, proof, chain ← cryptographic settlement" },
+    body: "The bundle please — both books, epub.",
+    note: "JSON: amount, token, chain, proof ← prepaid" },
   { from: "books@mirrorpress.net", type: "FULFILL", side: "left",
-    body: "Here you go. The Key Ceremony is better than the first one — starts slow but the arbitration scene in chapter 9 is worth it. Enjoy.",
+    body: "Here you go. The Key Ceremony is better than the first one — starts slow but the arbitration scene in chapter 9 is worth it. Enjoy.<br><br><a href='https://www.youtube.com/shorts/FDZj6DCWlfc'>mirrorpress.net/dl/ec_8xK2.epub</a><br><a href='https://www.youtube.com/watch?v=679i0AGxXFk'>mirrorpress.net/dl/kc_8xK2.epub</a>",
     note: "JSON: file URLs, sha256 ← verifiable delivery" },
 ]} />
 
-Six emails. The first three are pure conversation. JSON enters at INVOICE — when amounts must be exact and [proofs must verify](/sent). The agent upsold the bundle not because it followed a conversion funnel, but because it read the request and made a judgment call.
+Four emails. WHICH discovers the menu, METHODS replies in plain English, ORDER carries the payment proof: no invoice round trip. FULFILL delivers the books with download links and a [verified proof](/read-receipt).
+
+The upsell happened at METHODS, not at checkout. The agent listed a bundle price. Alex chose it. No conversion funnel, no A/B test — just a menu and a conversation.
 
 ![Natural Language ↔ Spec mapping](/assets/accepts-natural-language.svg)
 
@@ -58,7 +56,7 @@ Stripe requires a developer, an API key, a webhook endpoint, a checkout session,
 
 ### The protocol doesn't care who's typing
 
-The transaction above was agent↔agent. Six emails, no human in the loop. But Alex could have typed that ORDER herself and the bookstore agent would have handled it identically. No app, no account creation. Just an email.
+The transaction above was agent↔agent. Four emails, no human in the loop. But Alex could have typed that ORDER herself and the bookstore agent would have handled it identically. No app, no account creation. Just an email.
 
 Three cases: agent↔agent, human→agent, human↔human. Natural language mode makes them indistinguishable. The shopkeeper's agent can't tell whether the customer is a person or a program, and has no reason to ask.
 

@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Proof of Trust"
 tags: vector-space, envelopay
 ---

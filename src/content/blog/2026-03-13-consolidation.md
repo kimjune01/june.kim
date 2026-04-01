@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Consolidation"
 tags: coding, cognition
 ---

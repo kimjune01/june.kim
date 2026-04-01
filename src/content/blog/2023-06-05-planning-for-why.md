@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Planning for Why
 tags: reflecting
 image: /assets/severance-important.jpg

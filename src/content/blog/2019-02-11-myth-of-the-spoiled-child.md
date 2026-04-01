@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Myth of the Spoiled Child
 tags: reading
 image: /assets/spoiled-child.jpg

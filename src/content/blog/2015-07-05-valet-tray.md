@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Valet Tray
 tags: crafting
 image: /assets/valet-tray.jpeg

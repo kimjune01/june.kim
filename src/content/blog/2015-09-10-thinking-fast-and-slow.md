@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Thinking, Fast and Slow
 tags: reading
 image: "/assets/thinking-fast-and-slow.jpg"

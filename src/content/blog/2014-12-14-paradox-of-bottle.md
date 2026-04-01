@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: The Paradox of the Bottle
 tags: poetry
 image: http://imgur.com/pdFO1pa.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: MCP Browser History
 tags: coding
 ---

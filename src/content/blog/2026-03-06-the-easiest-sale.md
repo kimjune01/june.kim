@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The Easiest Sale in the World"
 tags: vector-space
 ---

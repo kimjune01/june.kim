@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The Price of Relevance"
 tags: vector-space
 image: "/assets/price_of_relevance.jpg"

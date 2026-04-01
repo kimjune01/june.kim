@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Portable Book Stand
 tags: crafting
 image: http://i.imgur.com/V9ZpDv0.jpg

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Who Builds It?"
 tags: vector-space
 image: "/assets/who_builds_it.png"

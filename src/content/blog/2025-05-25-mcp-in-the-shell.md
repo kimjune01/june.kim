@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: MCP in the Shell
 tags: coding
 image: "/assets/ghost-hands.webp"

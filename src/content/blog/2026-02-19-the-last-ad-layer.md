@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The Last Ad Layer"
 tags: vector-space
 ---

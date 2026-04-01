@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Double Loop"
 tags: cognition, methodology
 ---

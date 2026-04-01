@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Receipts, Please"
 tags: vector-space
 ---

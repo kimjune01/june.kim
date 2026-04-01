@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Software Development and Reality Construction
 tags: reading
 image: /assets/reality-construction.jpg

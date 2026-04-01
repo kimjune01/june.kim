@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Paradox of Open Competition"
 tags: reflecting
 ---

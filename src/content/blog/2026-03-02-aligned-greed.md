@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Aligned Greed"
 tags: vector-space
 image: "/assets/aligned_greed.png"

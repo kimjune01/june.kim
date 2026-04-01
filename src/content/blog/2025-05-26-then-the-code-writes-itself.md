@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Then the code writes itself
 tags: coding
 image: "/assets/implement.png"

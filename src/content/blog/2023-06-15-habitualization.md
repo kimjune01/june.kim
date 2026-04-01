@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Habitualization
 tags: improving
 image: /assets/habit/scale.png

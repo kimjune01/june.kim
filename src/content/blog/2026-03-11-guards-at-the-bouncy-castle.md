@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Guards at the Bouncy Castle"
 tags: reflecting
 ---

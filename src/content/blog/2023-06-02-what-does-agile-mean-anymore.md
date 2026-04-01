@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: What does 'Agile' mean anymore?
 tags: reflecting
 image: /assets/agile/is-this-agile.png

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Blogging Workflow
 tags: coding
 ---
@@ -31,7 +31,7 @@ New post:
 ```swift
 
 ---
-layout: post
+variant: post
 title: Blogging Workflow
 tags: coding
 ---
@@ -40,7 +40,7 @@ Set up
 Yay! this is a post! So meta. Much deep. Wow.
 ```swift
 ---
-layout: post
+variant: post
 title: Blogging Workflow
 tags: coding
 ---

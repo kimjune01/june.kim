@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: >
         J&S Reclaimed Wood Furniture Video
 tags: crafting

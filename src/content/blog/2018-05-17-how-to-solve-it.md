@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: How to Solve It
 tags: reading
 image: /assets/how-to-solve-it.jpeg

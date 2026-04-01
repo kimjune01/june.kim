@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Pointers are All AI Needs
 tags: coding
 ---

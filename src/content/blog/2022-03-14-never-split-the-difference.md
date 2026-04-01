@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Never Split the Difference
 tags: reading
 image: /assets/never-split.jpg

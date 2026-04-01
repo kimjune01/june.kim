@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "No Postage"
 tags: envelopay
 ---

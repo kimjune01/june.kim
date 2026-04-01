@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Laptop Stand
 tags: crafting
 image: /assets/laptop-stand16.jpg

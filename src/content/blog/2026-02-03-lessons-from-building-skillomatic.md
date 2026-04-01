@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Lessons from Building Skillomatic
 tags: coding, projects
 ---

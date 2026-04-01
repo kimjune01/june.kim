@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Copyleft Is Copyrighted"
 tags: pageleft
 ---

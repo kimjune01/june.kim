@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "The $200 Billion Bottleneck"
 tags: vector-space
 image: "/assets/embedding_gap.jpg"

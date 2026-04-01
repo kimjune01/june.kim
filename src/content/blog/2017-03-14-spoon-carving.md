@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Spoon carving
 tags: crafting
 image: /assets/spoon-carving1.jpg

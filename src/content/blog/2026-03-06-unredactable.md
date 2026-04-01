@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Unredactable"
 tags: vector-space
 image: "/assets/unredactable.jpg"

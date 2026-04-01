@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Non Violent Communication
 tags: reading
 image: /assets/nvc.jpg

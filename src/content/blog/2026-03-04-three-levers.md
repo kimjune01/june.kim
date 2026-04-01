@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Three Levers"
 tags: vector-space
 image: "/assets/tau_and_log_b.jpg"

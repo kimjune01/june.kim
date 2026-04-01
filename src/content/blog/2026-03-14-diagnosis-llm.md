@@ -1,5 +1,5 @@
 ---
-layout: post-wide
+variant: post-wide
 title: "Diagnosis LLM"
 tags: cognition
 ---

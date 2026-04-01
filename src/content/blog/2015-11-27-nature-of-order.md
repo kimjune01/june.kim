@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Nature of Order
 tags: reading
 image: "/assets/nature-of-order.jpg"

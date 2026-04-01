@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: A Heed to the Salaryman
 ---
 

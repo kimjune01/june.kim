@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Goal Transmission
 tags: reflecting
 image: /assets/goal-transmission/tps.png

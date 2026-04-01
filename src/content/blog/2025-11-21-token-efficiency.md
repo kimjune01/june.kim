@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Token Efficiency
 tags: coding
 image: "/assets/token-compaction-convo.png"

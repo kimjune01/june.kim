@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Iterative Method for Clear Requests
 tags: coding
 image: "/assets/cat-drawing.png"

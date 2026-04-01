@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Cleaning up the Alamofire Interface"
 tags: coding
 ---

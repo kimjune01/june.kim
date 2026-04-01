@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Manual Context Compaction
 tags: coding
 image: "/assets/bad-puzzle.png"

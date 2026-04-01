@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Digital Diet
 tags: improving
 image: "/assets/digital-diet/notel-screenshot.png"

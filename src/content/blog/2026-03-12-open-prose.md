@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Open Prose"
 tags: cognition, pageleft, methodology
 image: "/assets/open-prose.jpg"

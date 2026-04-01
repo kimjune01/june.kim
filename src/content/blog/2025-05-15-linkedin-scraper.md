@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Linkedin Scraper
 tags: coding
 ---

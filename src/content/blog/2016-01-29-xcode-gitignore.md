@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Xcode .gitignore
 tags: coding
 ---

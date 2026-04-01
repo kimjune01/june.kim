@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Menu of View Controllers
 tags: coding
 image: "/assets/vcmenu.png"

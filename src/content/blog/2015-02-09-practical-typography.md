@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Butterick's Practical Typography
 tags: reading
 image: "/assets/typography.png"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Rethinking Dashboards
 tags: reflecting
 image: "/assets/reverie-ux.png"

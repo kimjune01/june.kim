@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Remote work through a portal
 tags: reflecting
 image: /assets/portalception.png

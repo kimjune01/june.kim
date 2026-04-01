@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Wooden Table
 tags: crafting
 image: http://i.imgur.com/ergwx4o.jpg

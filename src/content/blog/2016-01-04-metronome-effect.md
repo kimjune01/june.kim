@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Metronome Effect
 tags: reading
 image: "/assets/metronome-effect.jpg"

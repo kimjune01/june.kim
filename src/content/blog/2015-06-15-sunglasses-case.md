@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Sunglasses Case
 tags: crafting
 image: /assets/sunglasses-case.jpeg

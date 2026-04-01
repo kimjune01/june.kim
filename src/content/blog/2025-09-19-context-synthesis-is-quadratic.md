@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Context Synthesis is Quadratic
 tags: coding
 image: "/assets/quadratic.png"

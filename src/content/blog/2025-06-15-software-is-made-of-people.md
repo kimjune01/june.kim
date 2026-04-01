@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Software is made of people
 tags: reflecting
 image: "/assets/mark-14-torpedo-.jpg"

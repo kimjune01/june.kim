@@ -1,5 +1,5 @@
 ---
-layout: poetry
+variant: poetry
 title: The Giving Tree
 tags:
 - reading

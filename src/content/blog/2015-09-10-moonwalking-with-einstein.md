@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Moonwalking With Einstein
 tags: reading
 image: "/assets/moonwalking.jpg"

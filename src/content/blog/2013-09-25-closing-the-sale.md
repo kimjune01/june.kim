@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Secrets of Closing the Sale
 tags: reading
 image: "/assets/zig-ziglar.jpg"

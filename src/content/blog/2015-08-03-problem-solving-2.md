@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Problem Solving 2
 ---
 

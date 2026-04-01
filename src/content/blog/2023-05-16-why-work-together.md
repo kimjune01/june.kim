@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Why Work Together
 tags: reflecting
 image: /assets/work-together/children-playing.jpg

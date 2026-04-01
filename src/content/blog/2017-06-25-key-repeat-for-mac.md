@@ -1,5 +1,5 @@
 ---
-layout: page
+variant: page
 title: Increase keyboard key repeat rate on MacOS
 tags: coding
 ---

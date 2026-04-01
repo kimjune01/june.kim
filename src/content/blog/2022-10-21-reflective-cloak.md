@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Rainbow Reflective Cloak
 tags: crafting
 image: /assets/rainbow-reflective-cloak.png

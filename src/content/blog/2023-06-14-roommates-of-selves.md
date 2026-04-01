@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Roommates of Selves
 tags: improving
 image: /assets/selves/why.png

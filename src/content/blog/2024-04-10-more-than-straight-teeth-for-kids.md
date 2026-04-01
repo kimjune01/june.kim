@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: More than straight teeth for kids
 tags: reflecting
 image: "/assets/maxmilla.jpeg"

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "A Prod Debugger in 300 Lines of Markdown"
 tags: coding, projects
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Leather Tripod Chair
 tags: crafting
 image: /assets/leather-tripod-chair.jpg

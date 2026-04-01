@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: The Seven Principles for Making Marriage Work
 tags: reading
 image: /assets/7-principles.jpg

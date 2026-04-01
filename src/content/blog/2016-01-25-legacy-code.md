@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Working Effectively With Legacy Code
 tags: reading
 image: "/assets/legacy-code.jpg"

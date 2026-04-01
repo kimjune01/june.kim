@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Numerical Analysis by Burden & Faires
 tags: reading
 image: https://images-na.ssl-images-amazon.com/images/I/41uSGNYqOFL._SX393_BO1,204,203,200_.jpg

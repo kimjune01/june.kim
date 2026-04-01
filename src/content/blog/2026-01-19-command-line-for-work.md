@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Command Line for Work
 tags: coding
 image: "/assets/cowork-recruit.png"

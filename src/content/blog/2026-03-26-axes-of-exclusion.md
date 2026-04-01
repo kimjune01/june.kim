@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: "Axes of Exclusion"
 tags: vector-space
 ---

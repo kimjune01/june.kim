@@ -1,5 +1,5 @@
 ---
-layout: post
+variant: post
 title: Emotional Valence
 tags: reflecting
 image: /assets/full-calendar.png
