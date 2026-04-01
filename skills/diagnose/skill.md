@@ -36,17 +36,29 @@ A synopsis document (output of Intake) or a direct path to the system's source c
 5. **Substantiate against code.** For each role mapping, grep the source for the specific mechanism. Quote the relevant code or documentation. If the role is claimed but not implemented, flag it.
 6. **Identify gaps (tower-aware).** Which roles are missing *at which stack level*? A system can have Remember at the top level (stores exist) but lack Remember @ Consolidate (no persistent store for learned parameters). It can have Filter at the top level (production conditions) but lack Filter @ Remember (no eviction policy). Gaps at lower stack levels propagate upward — a missing role inside Consolidate breaks Consolidate at the top level, even if the mechanism nominally exists.
 7. **Write O (Objective).** `soap/O.md` — tower table, SVG diagrams (top-level + subpipes), code quotes, and doc references. The evidence, not the judgment.
-8. **Write A (Assessment).** `soap/A.md` — role-by-role assessment at each stack level (strong / weak / missing). **Causal chain**: trace how gaps at lower stack levels propagate to top-level failures. Summary at the top naming the broken roles and the propagation path.
+8. **Codex sniff.** Before presenting to the human, send O.md to codex. Apply obvious improvements directly (weak code citations, missing tower table entries, SVG inconsistencies). Present only ambiguous or debatable points to the human alongside the elicitation questions.
+9. **Elicit assessment.** O.md is the evidence. The human interprets it. Ask:
+   - "Which gaps at which stack levels are the real failures vs. symptoms of something deeper?"
+   - "Does the causal direction match your understanding — does A cause B, or B cause A?"
+   - "Is anything missing from the tower table — a mechanism the system has that we didn't map?"
+   - "Any gap that looks like a design choice rather than a blind spot?"
+
+   Present one question at a time. Record answers with confidence tags (high/medium/low/unsure), same as Intake elicitation.
+10. **Write A (Assessment).** `soap/A.md` — role-by-role assessment at each stack level (strong / weak / missing), incorporating the human's answers from step 8. **Causal chain**: trace how gaps at lower stack levels propagate to top-level failures, with the causal direction confirmed by the human. Summary at the top naming the broken roles and the propagation path.
 
 ## Output
 
-- `soap/O.md`: SVG diagrams (top-level + subpipes), code evidence, doc references
-- `soap/A.md`: role assessments, summary of broken roles
+- `soap/O.md`: tower table, SVG diagrams (top-level + subpipes), code evidence, doc references
+- `soap/A.md`: role assessments informed by human elicitation, causal chain, summary of broken roles
 
 ## Contract
 
 - **Precondition**: synopsis document (`soap/S.md`) with glossary, elicitation results, and proposed role mappings — or direct access to source code
-- **Postcondition**: every assessment is substantiated by a code quote or doc reference; every mapping specifies stack level
-- **Does not**: prescribe fixes (that's Prescribe) or prioritize which broken role is the root cause (that's the human checkpoint)
-- **Checkpoint contract**: after Diagnose, the human is cross-examined — not "does this look right?" but "which gap at which stack level, if filled, would unblock the others?" and "does the causal chain match your understanding of the system's actual failure mode?" The skills deliver evidence. The checkpoint elicits judgment.
-- **Idempotency**: diagnosing the same system twice produces the same role mapping
+- **Postcondition**: every assessment is substantiated by a code quote or doc reference; every mapping specifies stack level; A.md incorporates human judgment from the O→A elicitation
+- **Does not**: prescribe fixes (that's Prescribe) or prioritize which broken role is the root cause without human input
+- **Gate contract**: O.md is written first and presented to the human. A.md is written only after the human has answered the elicitation questions. The elicitation is the Attend step that turns evidence into judgment. **If the human is unavailable, write O.md and stop. Do not write A.md without elicitation.**
+- **Idempotency**: diagnosing the same system with the same elicitation answers produces the same O.md and A.md
+
+## Convergence
+
+After writing O.md, re-read S.md and O.md together. Are there glossary terms without tower table entries? Code evidence that contradicts a mapping? Gaps visible in the SVGs that aren't called out? If yes, run another pass on steps 2-7. If no, converged. Report deltas each pass. After writing A.md, same check: does the causal chain account for all gaps in O.md? **Hard stop at 10 passes** — if still changing, the skill is oscillating. Stop, report what's fluctuating, and let the human decide.

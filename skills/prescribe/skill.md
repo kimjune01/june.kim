@@ -32,6 +32,7 @@ A diagnosis document (output of Diagnose) identifying broken or missing roles.
    Candidates that address the same code path at different urgencies should be split: the inline/immediate part is Critical, the batch/periodic part is Rehabilitative. Candidates from different broken roles that touch the same code path should be merged.
 6. **Specify composition constraints.** Which prescriptions must run before which at runtime (dependency order), independent of triage tier. E.g., "promote to persistent store before evicting from cache."
 7. **Write P (Plan).** `soap/P.md` — one section per candidate algorithm (not per broken role), organized by triage tier. Each section: failure mode (from A.md), candidate algorithm, implementation sketch, expected outcome. Followed by dependency order and composition constraints.
+8. **Codex sniff.** Before presenting to the human, send P.md to codex. Apply obvious improvements directly (missing composition constraints, triage ordering issues, weak implementation sketches). Present only ambiguous or debatable points to the human alongside the checkpoint questions.
 
 ## Output
 
@@ -42,5 +43,9 @@ A diagnosis document (output of Diagnose) identifying broken or missing roles.
 - **Precondition**: diagnosis document with substantiated role assessments
 - **Postcondition**: every prescribed algorithm exists in the Parts Bin or has a cited source
 - **Does not**: implement the fix (that's Forge) or evaluate whether the fix is worth doing (that's the human checkpoint)
-- **Checkpoint contract**: after Prescribe, the human is cross-examined — "does the prescribed algorithm address the root cause identified at the last checkpoint, or just the symptom?" and "is this implementable within the system's constraints, or does it require architectural changes the maintainers won't accept?"
+- **Checkpoint contract**: after codex sniff, the human is cross-examined — "does the prescribed algorithm address the root cause identified at the last checkpoint, or just the symptom?" and "is this implementable within the system's constraints, or does it require architectural changes the maintainers won't accept?"
 - **Idempotency**: prescribing from the same diagnosis produces the same candidates
+
+## Convergence
+
+After writing P.md, re-read A.md and P.md together. Does every broken role in A.md have a prescription or an explicit `non_actionable` flag? Do the triage tiers and composition constraints hold up? Does the dependency order have gaps? If anything is missing, run another pass on steps 2-7. Report deltas each pass. **Hard stop at 10 passes** — if still changing, the skill is oscillating. Stop, report what's fluctuating, and let the human decide.

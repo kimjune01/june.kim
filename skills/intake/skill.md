@@ -110,7 +110,9 @@ Well-documented systems skip this phase. Under-documented systems need it. The g
 - One round only. No second fan-out cycle — if three reading strategies can't resolve it, the human needs to.
 - Max 10 thin terms per fan-out batch. If the glossary has >10 thin terms, batch them and present the first batch's results before launching the second. The human may redirect after seeing early results.
 
-### Phase 4: Elicitation (Attend — mandatory)
+### Phase 4: Codex sniff + Elicitation (Attend — mandatory)
+
+Before presenting to the human, send S.md to codex for review. Apply obvious improvements directly (framework leaks, weak provenance, miscalibrated confidence, missing discrepancy flags). Present only the ambiguous or debatable points to the human alongside the elicitation questions. This narrows the human's Attend to what actually requires judgment.
 
 The agent does Perceive (read sources), Cache+Filter (translate, dedupe, file), and optionally fan-out (diverge/converge on thin sources). But mapping foreign vocabulary to framework roles is a judgment call. The agent proposes candidates; the human selects. This step is Attend — without it, the pipeline emits unattended Cache. **If the human is unavailable, the pipeline stops. There is no fallback.**
 
@@ -149,8 +151,12 @@ Oracle reliability below 50% is a stop signal — the translations are too uncer
 
 If Synopsis is unavailable or `soap/S.md` cannot be written, Intake stops and reports the failure. Do not buffer claims in conversation context as a workaround.
 
+## Convergence
+
+After completing all phases (including elicitation), re-read S.md and run a self-check: are there claims in the sources that aren't in S.md? Glossary terms without mappings? Ambiguities that weren't elicited? If yes, run another pass (phases 1-4). If no, converged. Report what changed each pass so the human can see the delta shrinking. **Hard stop at 10 passes** — if still changing, the skill is oscillating. Stop, report what's fluctuating, and let the human decide.
+
 ## Contract
 
 - **Postcondition**: every claim in the synopsis traces back through a translated claim to an original source; elicitation section records oracle confidence per ambiguous translation; thin-coverage terms have fan-out evidence or are flagged as insufficient
 - **Does not**: evaluate claims or identify gaps (that's Diagnose)
-- **Idempotency**: running Intake twice on the same sources produces the same synopsis. Elicitation section is replaced (not appended) on re-run, keyed by question content. Fan-out results are deterministic given the same sources (codex filter may vary slightly).
+- **Idempotency**: running Intake twice on the same sources produces the same synopsis. Elicitation section is replaced (not appended) on re-run, keyed by question content.
