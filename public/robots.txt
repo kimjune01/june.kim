@@ -1,0 +1,13 @@
+# Knock knock.
+# Who's there?
+# Javier.
+# Javier who?
+# Javier'd of our lord and savior Jesus Christ?
+
+User-agent: *
+Allow: /
+
+User-agent: EmailCollector
+Disallow: /
+
+Sitemap: https://june.kim/sitemap-index.xml
