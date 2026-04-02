@@ -13,12 +13,13 @@ Run Intake → Diagnose → Prescribe on a foreign system. Each step produces a 
 
 ### Step 1: Intake → S.md
 
-Run `/intake <target>`. Intake reads sources, translates vocabulary, fans out on thin coverage, files claims, and elicits human judgment on ambiguous mappings.
+Run `/intake <target>`. Intake asks development stage first, then reads sources, translates vocabulary, fans out on thin coverage, files claims, and elicits human judgment on ambiguous mappings. **Development stage and constraints recorded in S.md metadata propagate automatically to Diagnose and Prescribe** — they are not re-elicited at each gate.
 
 **Gate:** Intake includes its own elicitation. S.md is not complete until the human has answered the mapping questions. Do not proceed to Step 2 until S.md has an `## elicitation` section with oracle reliability ≥ 50%.
 
 **Verify before advancing:**
 - [ ] S.md exists with source_list, glossary, claims, open_questions
+- [ ] S.md metadata includes `stage:` (development stage)
 - [ ] Elicitation section present with confidence tags
 - [ ] Oracle reliability ≥ 50%
 
@@ -94,7 +95,7 @@ SOAP complete. Four files in `soap/`: S.md, O.md, A.md, P.md. Each one traces ba
 
 ## Convergence
 
-Each skill converges individually (self-check loop, hard stop at 10 passes). Codex sniffs before every human gate, fixing obvious issues so the human only Attends ambiguities. The composed pipeline converges because:
+Each skill converges individually (self-check loop, hard stop at 10 passes). Codex sniffs before every human gate, fixing obvious issues so the human only Attends ambiguities. **If codex is unavailable**, try Gemini as the reviewer. If neither is available, the agent performs a self-review pass applying the same criteria (framework leaks, weak provenance, miscalibrated confidence). Log which reviewer was used or skipped so the human knows the Filter strength. The composed pipeline converges because:
 
 1. Each skill's postcondition matches the next skill's precondition
 2. Each skill is individually convergent

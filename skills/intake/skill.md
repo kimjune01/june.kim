@@ -21,6 +21,10 @@ A system name, URL, paper link, or repo path. The user may also provide initial 
 
 ## Process
 
+### Phase 0: Development stage
+
+Before reading sources, ask the human: **what stage is this system?** (proof of concept / prototype / production / legacy). Record the answer in S.md metadata as `stage: <answer>`. Development stage determines whether gaps are failures or expected — a PoC missing Consolidate is on-schedule, not broken. This propagates to Diagnose and Prescribe automatically via S.md.
+
 ### Phase 1: Read and file
 
 For each source:
@@ -35,7 +39,7 @@ For each source:
    - `confidence`: high / medium / low. **Calibration**: if the term does double duty across distinct functions, confidence cannot be high for a single-role mapping — mark medium and flag as ambiguous.
 
    E.g., "Soar's 'elaboration' → Cache (parallel feature extraction) with competing hypothesis Cache+Filter (operator proposal as relevance gate)."
-3. **File.** Call Synopsis with the original claim (in the subject's vocabulary) and source pointer. Synopsis files it under the system's own structural categories, not framework roles. The translation record stays in Intake's cache — it informs the glossary's proposed mappings and feeds the elicitation quiz, but does not overwrite the subject's words in S.md.
+3. **File.** Write the claim directly to `soap/S.md` in the subject's own vocabulary, organized by the subject's own structural categories (not framework roles). Dedupe against existing entries — if a semantically similar claim exists, merge as convergent evidence. Update the glossary if the claim introduces a new system term. The translation record stays in Intake's cache — it informs the glossary's proposed mappings and feeds the elicitation quiz, but does not overwrite the subject's words in S.md. For large intakes (200+ claims), use `/synopsis` as a library function for mechanical dedupe and glossary updates.
 
 Repeat across all sources. By the time Phase 1 finishes, the synopsis document is already built — in the subject's own terms.
 
@@ -56,63 +60,15 @@ Compute the thin-coverage ratio: (thin terms) / (total glossary terms).
 
 Well-documented systems skip this phase. Under-documented systems need it. The goal is to build richer evidence for thin-coverage terms so that elicitation questions are informed, not blind.
 
-**Shared memory:** All fan-out agents share S.md as their research log. Each agent reads S.md before starting and writes findings immediately via Synopsis. If an earlier agent already filed a claim or dead end for a term, later agents see it and skip redundant searches. The synopsis *is* the dedup mechanism — no separate search budget needed.
+Run `/fan-out` on thin-coverage terms with three agent roles per term: **code** (grep implementation, trace call chains), **intent** (issues, PRs, commit messages), **pattern** (Parts Bin lookup). All agents share S.md as their research log via Synopsis dedup.
 
-**For each thin-coverage term, launch 3 parallel agents** (`model: "sonnet"`, `run_in_background: true`):
+After agents return, codex filters for consensus. Update glossary: all agree → promote to medium; two agree → flag dissent; no agreement → `competing_hypotheses`; all empty → `insufficient_evidence`. Log dead ends in `open_questions` — a well-characterized dead end is worth more than an untested hypothesis.
 
-1. **Code agent.** Grep the source code for the mechanism. Trace call chains. Infer behavior from implementation. Cite file paths and function signatures.
-   - Prompt: "Find the implementation of {system_term} in {repo}. Trace what calls it, what it calls, and when it fires. Is it synchronous or async? Does it run in a loop, on a trigger, or on a schedule? Cite file:function for every claim."
-
-2. **Intent agent.** Read issues, PRs, commit messages, and READMEs. Infer what the developers *intended* vs. what the code does. Look for acknowledged limitations, rejected alternatives, and TODO comments.
-   - Prompt: "Search {repo} issues and PRs for discussions about {system_term}. What did the developers intend? What problems have users reported? Were alternatives proposed and rejected? Cite issue/PR numbers."
-
-3. **Pattern agent.** Check if the mechanism matches a known algorithm in the Parts Bin (`src/data/parts-bin.yml`). Read the Parts Bin grid for the relevant pipeline stage and data structure. Report matches, near-matches, and conspicuous absences.
-   - Prompt: "Read the Parts Bin at src/data/parts-bin.yml. Find the cell for {stage} × {data_structure}. Does {system_term} match any listed algorithm? If not, does it match an algorithm in an adjacent cell? If the cell is empty, that's a finding — report it."
-
-**After all agents return:**
-
-4. **Codex filter.** For each term, collect the three agent reports. Send to codex:
-   ```
-   cat <<'PROMPT_EOF' | codex exec -
-   Three agents investigated {system_term}. Their findings:
-   [Code agent]: {summary}
-   [Intent agent]: {summary}
-   [Pattern agent]: {summary}
-
-   Do they agree on what this mechanism does? Do they agree on which framework role it maps to?
-   If they agree: state the consensus and confidence level.
-   If they disagree: state the disagreement and which agent has stronger evidence.
-   If evidence is insufficient: say so.
-   PROMPT_EOF
-   ```
-
-5. **Update glossary.**
-   - **All three agree**: promote term to medium confidence. No elicitation needed.
-   - **Two agree, one disagrees**: keep the majority mapping, flag the dissent in the glossary rationale. Goes to elicitation with evidence for both sides.
-   - **No agreement**: mark as `competing_hypotheses`. Goes to elicitation with all three perspectives presented.
-   - **Insufficient evidence from all three**: mark as `insufficient_evidence` in open_questions. Still goes to elicitation, but the human knows the sources are thin.
-
-6. **Log dead ends.** Agent findings that led nowhere are the most valuable fan-out output — they document what the sources *don't* say and prevent future investigators from retracing the same ground. For each dead end, record in S.md's `open_questions`:
-
-   ```
-   ### {system_term}: {hypothesis} — DEAD
-   **Agent:** {code|intent|pattern}
-   **Tried:** {what the agent looked for}
-   **Found:** {what it actually found, or nothing}
-   **Killed by:** {codex | contradicted by agent X | no evidence after exhaustive search}
-   **Cause of death:** {one sentence — why this mapping doesn't hold}
-   ```
-
-   A well-characterized dead end is worth more than an untested hypothesis. If three agents all come back empty on a term, that's a strong signal: the system doesn't document this mechanism, which is itself a finding (undocumented = likely absent or accidental).
-
-**Fan-out parameters:**
-- k=3 agents per thin term (code, intent, pattern). More is waste for this task.
-- One round only. No second fan-out cycle — if three reading strategies can't resolve it, the human needs to.
-- Max 10 thin terms per fan-out batch. If the glossary has >10 thin terms, batch them and present the first batch's results before launching the second. The human may redirect after seeing early results.
+**Parameters:** k=3 agents per term, one round only, max 10 thin terms per batch. The `/fan-out` skill handles shared memory, convergence, and pruning mechanics.
 
 ### Phase 4: Codex sniff + Elicitation (Attend — mandatory)
 
-Before presenting to the human, send S.md to codex for review. Apply obvious improvements directly (framework leaks, weak provenance, miscalibrated confidence, missing discrepancy flags). Present only the ambiguous or debatable points to the human alongside the elicitation questions. This narrows the human's Attend to what actually requires judgment.
+Before presenting to the human, send S.md to codex for review. Apply obvious improvements directly (framework leaks, weak provenance, miscalibrated confidence, missing discrepancy flags). Present only the ambiguous or debatable points to the human alongside the elicitation questions. This narrows the human's Attend to what actually requires judgment. **If codex is unavailable**, try Gemini as the reviewer. If neither is available, perform a self-review pass applying the same criteria. Log which reviewer was used or skipped.
 
 The agent does Perceive (read sources), Cache+Filter (translate, dedupe, file), and optionally fan-out (diverge/converge on thin sources). But mapping foreign vocabulary to framework roles is a judgment call. The agent proposes candidates; the human selects. This step is Attend — without it, the pipeline emits unattended Cache. **If the human is unavailable, the pipeline stops. There is no fallback.**
 
@@ -145,7 +101,7 @@ Oracle reliability below 50% is a stop signal — the translations are too uncer
 
 ## Output
 
-1. **`soap/S.md`** — built incrementally by calling the Synopsis skill (`/synopsis`) per translated claim. Synopsis handles dedupe, filing by role, and glossary updates.
+1. **`soap/S.md`** — built by writing claims directly, organized by the subject's own structure. For large intakes (200+ claims), use `/synopsis` for mechanical dedupe and glossary updates.
 2. **Completion report** — after all sources are processed, report to the user: sources processed, claims filed, source thickness assessment, fan-out results (if triggered), ambiguous translations queued for elicitation, any sources that were inaccessible (`blocked`).
 3. **Elicitation quiz** — the mandatory Attend step. Pipeline does not advance to Diagnose until the human completes the quiz.
 
