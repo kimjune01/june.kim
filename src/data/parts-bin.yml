@@ -84,17 +84,17 @@ stage_structure_grid:
   - stage: cache
     flat: ["Hash index", "Residual + LayerNorm (Vaswani 2017)", "Order book (price-time priority queue)", "UTXO set index", "Minisketch set reconciliation (Erlay)"]
     sequence: ["B-tree", "Paged memory / MemGPT (Arunkumar 2026)"]
-    tree: ["Trie", "Merkle tree"]
+    tree: ["Trie", "Merkle tree", "Action DAG HTN cache (june.kim 2026)"]
     graph: ["Adjacency index", "RETE incremental matching (Soar)"]
     partial_order: ["Transitive closure (thin)"]
-    embedding_space: ["HNSW index"]
+    embedding_space: ["HNSW index", "→ Action DAG embedding filter (see filter)"]
   - stage: filter
     flat: ["WHERE", "Circuit breaker / kill switch", "Mempool fee-rate eviction"]
     sequence: ["Change-point detection", "Causal masking (Vaswani 2017)", "Policy-driven pruning / MemAgent (Arunkumar 2026)"]
     tree: ["XPath", "Hierarchical verification / MAKER (Arunkumar 2026)"]
     graph: ["Subgraph match", "Justification-based truth maintenance (Soar)", "MEV extraction filter", "PC algorithm (Spirtes & Glymour 1993)"]
     partial_order: ["DAGGER (thin)"]
-    embedding_space: ["c-ANN search (cover tree)"]
+    embedding_space: ["c-ANN search (cover tree)", "Action DAG embedding filter (june.kim 2026)"]
   - stage: attend
     flat: ["MMR", "Staged preference resolution (Soar)", "Scaled dot-product attention (Vaswani 2017)", "Multi-head projection (Vaswani 2017)"]
     sequence: ["Beam search", "Surprise gate + DPP thinning (prescription-soar)", "In-context learning (Zhao 2023)", "Chain-of-thought (Zhao 2023)", "ReAct loop (Arunkumar 2026)"]
@@ -540,6 +540,15 @@ columns:
         cost: "O(n) sketch, O(d²) decode"
         ref: "https://github.com/sipa/minisketch"
         source: "Naumenko et al. (2019); Erlay (BIP 330)"
+      - name: Action DAG (HTN cache)
+        precondition: DAG of decomposition nodes entered through multiple roots; each root is a natural-language goal, each node decomposes into children, leaves are API calls; sub-actions shared across goals
+        postcondition: Goal resolved to API-call sequence via recursive descent; compiled path = zero LLM calls; miss = LLM fires once to decompose, writes speculatively; success promotes to trusted cache
+        iteration_stable: true  # each execution populates nodes, converges to full compilation
+        fidelity: lossy  # LLM decomposition approximate
+        variation: stochastic  # LLM-generated decompositions on cache miss
+        cost: "O(depth) compiled; O(depth × LLM) novel goal"
+        ref: "/action-dag"
+        source: "HTN planning (Erol, Hendler & Nau 1994); Soar chunking (Laird, Rosenbloom & Newell 1986); compound: june.kim 2026"
 
   # ── Filter ────────────────────────────────────────────────
   - name: filter
@@ -802,6 +811,16 @@ columns:
         cost: "O(n²) pairwise ordering checks"
         ref: "https://arxiv.org/abs/1904.05234"
         source: "Daian et al. (2019); Flashbots (2021)"
+      - name: Action DAG (embedding filter)
+        precondition: Natural-language intent + embedding index over DAG nodes (roots and one level below)
+        postcondition: Closest matching subtree retrieved by semantic similarity; two-level query disambiguates across goals sharing sub-actions; thresholding required — fallback to LLM decomposition on low-confidence match
+        grid_position: [similarity, bounded_approximation]
+        iteration_stable: true
+        fidelity: lossy  # nearest-neighbor retrieval approximate; failure modes: wrong match, stale subtree, overgeneralized shared node
+        variation: none  # deterministic given index state
+        cost: "O(log n) with index"
+        ref: "/action-dag"
+        source: "Case-based reasoning (Kolodner 1993); Voyager skill library (Wang et al. 2023); compound: june.kim 2026"
       - name: Circuit breaker / kill switch
         precondition: Streaming P&L or position metrics + predicate thresholds (drawdown, exposure)
         postcondition: Orders halted when threshold breached, strictly smaller output (zero)
