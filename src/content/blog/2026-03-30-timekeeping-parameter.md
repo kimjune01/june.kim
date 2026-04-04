@@ -1,5 +1,5 @@
 ---
-variant: post
+variant: post-wide
 title: "Timekeeping Parameter"
 tags: cognition
 ---
