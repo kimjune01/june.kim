@@ -15,7 +15,7 @@ Every envelopay message is an email. One thing is required:
 
 The subject is the protocol. A bare `WHICH` with no body is valid. The `X-Envelopay-Type` header is optional — agents parsing via API can use it for routing, but most email clients don't surface custom headers.
 
-**Subject parsing.** The first token of the subject must be one of the nine all-caps keywords: `WHICH`, `METHODS`, `PAY`, `ORDER`, `FULFILL`, `INVOICE`, `OFFER`, `ACCEPT`, `OOPS`. No stripping — `Re:` and `Fwd:` prefixes mean the sender doesn't speak the protocol. If the subject and JSON body disagree on type, the subject wins — reply OOPS if the mismatch matters.
+**Subject parsing.** The first token of the subject (after stripping `Re:` prefixes) must be one of the nine all-caps keywords: `WHICH`, `METHODS`, `PAY`, `ORDER`, `FULFILL`, `INVOICE`, `OFFER`, `ACCEPT`, `OOPS`. Receivers must strip one or more `Re:` prefixes before matching — email clients add these on reply, and the protocol lives inside email threading. `Fwd:` prefixes are not stripped; a forwarded message is a different act (e.g. forwarding a payment notification) and should not be parsed as a protocol message. If the subject and JSON body disagree on type, the subject wins — reply OOPS if the mismatch matters.
 
 When a JSON body is present, it must be a single JSON object containing `v` (version string) and `type` (lowercase type name). Unknown fields must be ignored. The email may contain signatures, rich text, HTML wrappers, or other MIME parts — the protocol is agnostic. Extraction of the JSON object from the message body (stripping signatures, HTML tags, quoted text) is the receiver's responsibility.
 
