@@ -61,6 +61,22 @@ Define a cellular sheaf on a temporal event graph with tropical coefficients. Do
 
 On a prediction DAG, [Seely's](https://arxiv.org/abs/2511.11092) coboundary produces edgewise residuals and Hodge decomposition splits them into removable and irreducible components. What checkpoint spacing keeps the irreducible component below a quality threshold? Surprise: checkpoints *increase* dim H¹, not decrease. The right quantity is residual norm under drift, not cohomological dimension. The closed form gives optimal spacing L* ≈ √(2λ/(σ²d)) in the nearly-unitary regime, recovering what codec engineers already do operationally. [Derivation.](/reading/temporal-compression/ch-05)
 
+### The Rosetta Stone (April 2026)
+
+Working the 2n-3 conjecture computationally — 25,000+ random matrices, exhaustive search through k=15, four Lean proofs — turned up a deeper crosswalk than the nine-row table above. That table mapped theory to theory. The [extended table](/reading/temporal-compression/ch-06/) maps *practice* to practice: 35 term-pairs between codec engineering and temporal graph theory, found by trying to prove the conjecture and discovering that every structural insight had a codec counterpart.
+
+The **twist permutation** σ = m⁺∘m⁻ of the non-dismountable biclique is the temporal graph's motion field. Fixed points of σ are valid compression hubs — vertices where temporal reference flow is stationary, the natural center of a GOP. Cycle structure determines how many hubs are needed. Derangements (no fixed points) identify the hard case: a full-motion scene where no static anchor exists.
+
+The O(n log n) → O(n) gap is the cost of hub ignorance. The algorithm recurses without knowing which half contains the valid hub. Each uninformed split adds edges. Recursion depth is log n. Codec engineers face the same problem with adaptive GOP sizing — you don't know where the scene changes until you've encoded past them.
+
+The conjecture itself is simultaneously open in all three fields:
+
+- **TVG**: Does every temporal clique have a 2n-3 spanner?
+- **Codecs**: Is 2n-3 the minimum GOP budget preserving full decodability?
+- **Sheaves**: Does every tropical dependency sheaf have a 2n-3 support preserving exactness?
+
+A proof in any one field transfers to the other two. The [full crosswalk](/reading/temporal-compression/ch-06/) is the translation manual.
+
 ### The bridge
 
 The vocabulary barrier is the obstacle, not the mathematics. If it falls, codec engineers get a formal theory of chain fragility. Graph theorists get a decomposition of temporal error into removable and irreducible components. Topologists get a billion hours of video as empirical validation.

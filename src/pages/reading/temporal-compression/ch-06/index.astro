@@ -1,0 +1,488 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="The Rosetta Stone — Temporal Compression" favicon="🎞️">
+  <main>
+    <a href="/reading/temporal-compression/" class="text-sm mb-4 inline-block">
+      ← back to temporal compression
+    </a>
+
+    <h1>The Rosetta Stone</h1>
+    <p class="text-gray-400 text-sm mb-6">
+      Chapter 6 · 35 term-pairs from the 2n-3 conjecture
+    </p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">
+        One open question lives simultaneously in three fields. None of them know it's
+        the same question. This table is the translation.
+      </p>
+    </div>
+
+    <h3>One question, three languages</h3>
+
+    <p>
+      The temporal spanner conjecture asks: does every temporal clique K<sub>n</sub>
+      have a spanner with at most 2n-3 edges? This question is open.
+    </p>
+
+    <p>
+      The same question in codec language: does every video sequence have a compressed
+      representation with at most 2n-3 reference edges that preserves full decodability?
+      The codec community would call this the <em>minimum GOP budget</em> — how few
+      I-frame and P-frame references suffice to reconstruct every frame? Open.
+    </p>
+
+    <p>
+      The same question in sheaf language: does every directed dependency graph with
+      tropical stalks have a sub-complex of size 2n-3 that preserves exactness of
+      the reachability sheaf? This would be a <em>tropical sparsification theorem</em> —
+      a bound on the minimum support of a section that witnesses global connectivity.
+      Open.
+    </p>
+
+    <p>
+      Three communities, three formulations, zero shared vocabulary. The first five
+      chapters identified a handful of term-pairs at the theoretical level. Working
+      the conjecture computationally — 25,000+ random matrices, exhaustive search
+      through k=15, four Lean proofs — surfaced twenty-five more. The table below is
+      the Rosetta Stone: every correspondence that survived adversarial testing.
+    </p>
+
+    <h3>Grading rubric</h3>
+
+    <p>
+      <strong style="color: #4ade80;">Genuine</strong> — same formal primitive or theorem
+      pattern under relabeling. You can prove a statement in one field by translating
+      a proof from the other. <br/>
+      <strong style="color: #facc15;">Moderate</strong> — same structural role but different
+      state space or objective. The analogy guides intuition but doesn't transfer proofs. <br/>
+      <strong style="color: #94a3b8;">Structural</strong> — same problem shape. Useful for
+      hypothesis generation, not for proof transfer.
+    </p>
+
+    <h3 id="genuine" style="color: #4ade80;">Genuine parallels</h3>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left" style="width: 2em;">#</th>
+            <th class="py-2 pr-4 text-left">Codec term</th>
+            <th class="py-2 pr-4 text-left">TVG term</th>
+            <th class="py-2 text-left">Identification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">1</td>
+            <td class="pr-4 font-mono text-sm">raw video sequence</td>
+            <td class="pr-4 font-mono text-sm">temporal clique K<sub>n</sub></td>
+            <td class="font-sans text-gray-400">Complete graph, one timestamp per edge = all pairwise dependencies available</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">2</td>
+            <td class="pr-4 font-mono text-sm">compressed bitstream</td>
+            <td class="pr-4 font-mono text-sm">temporal spanner</td>
+            <td class="font-sans text-gray-400">Sparse subset preserving decodability / all-pairs reachability</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">3</td>
+            <td class="pr-4 font-mono text-sm">I-frame (intra-coded)</td>
+            <td class="pr-4 font-mono text-sm">forced edge (M⁻ / M⁺)</td>
+            <td class="font-sans text-gray-400">Self-contained reference. Earliest in column or latest in row. Removal breaks reachability.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">4</td>
+            <td class="pr-4 font-mono text-sm">P-frame / B-frame</td>
+            <td class="pr-4 font-mono text-sm">intermediate cross edge</td>
+            <td class="font-sans text-gray-400">Non-forced edge providing 2-hop relay between I-frames. Each diagonal needs ~2.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">5</td>
+            <td class="pr-4 font-mono text-sm">GOP</td>
+            <td class="pr-4 font-mono text-sm">hub star</td>
+            <td class="font-sans text-gray-400">Set of edges centered on one vertex. Defines scope of P-frame references.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">6</td>
+            <td class="pr-4 font-mono text-sm">predictable frame</td>
+            <td class="pr-4 font-mono text-sm">dismountable vertex</td>
+            <td class="font-sans text-gray-400">Reachability delegated to neighbors at cost 2 edges. Peelable. No independent information.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">7</td>
+            <td class="pr-4 font-mono text-sm">scene (irreducible segment)</td>
+            <td class="pr-4 font-mono text-sm">non-dismountable residual</td>
+            <td class="font-sans text-gray-400">Biclique remaining after peeling. Cannot be compressed by local delegation.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">8</td>
+            <td class="pr-4 font-mono text-sm">reference loss</td>
+            <td class="pr-4 font-mono text-sm">chain fragility</td>
+            <td class="font-sans text-gray-400">Sequential dependency severed. Any break kills the tail.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">9</td>
+            <td class="pr-4 font-mono text-sm">monotone R-D</td>
+            <td class="pr-4 font-mono text-sm">edge monotonicity</td>
+            <td class="font-sans text-gray-400">Adding a reference/edge never reduces decodability/reachability. Feasible set is upward-closed.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">10</td>
+            <td class="pr-4 font-mono text-sm">delay network</td>
+            <td class="pr-4 font-mono text-sm">tropical semiring (min, +)</td>
+            <td class="font-sans text-gray-400">First-arrival composition. min = choose best path, + = accumulate delay.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="moderate" style="color: #facc15;">Moderate parallels</h3>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left" style="width: 2em;">#</th>
+            <th class="py-2 pr-4 text-left">Codec term</th>
+            <th class="py-2 pr-4 text-left">TVG term</th>
+            <th class="py-2 text-left">Mapping</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">11</td>
+            <td class="pr-4 font-mono text-sm">motion field</td>
+            <td class="pr-4 font-mono text-sm">twist permutation σ = m⁺∘m⁻</td>
+            <td class="font-sans text-gray-400">Reference flow through the structure. σ maps column→row→column; motion vectors map pixel→pixel.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">12</td>
+            <td class="pr-4 font-mono text-sm">static region (MV = 0)</td>
+            <td class="pr-4 font-mono text-sm">fixed point of σ</td>
+            <td class="font-sans text-gray-400">Self-referencing loop: reference points back to its own origin. Valid hub 100% of the time.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">13</td>
+            <td class="pr-4 font-mono text-sm">full-motion scene</td>
+            <td class="pr-4 font-mono text-sm">derangement (no fixed point)</td>
+            <td class="font-sans text-gray-400">Every reference points elsewhere. No self-anchoring hub. Hardest case for both.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">14</td>
+            <td class="pr-4 font-mono text-sm">motion segmentation</td>
+            <td class="pr-4 font-mono text-sm">cycle structure of σ</td>
+            <td class="font-sans text-gray-400">σ decomposes into cycles. Each cycle = coherent motion region. Count ~ ln(k).</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">15</td>
+            <td class="pr-4 font-mono text-sm">anchor frame / reference picture</td>
+            <td class="pr-4 font-mono text-sm">hub vertex (h, c)</td>
+            <td class="font-sans text-gray-400">Global optimality, local unpredictability. The choice determines GOP efficiency.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">16</td>
+            <td class="pr-4 font-mono text-sm">prediction residual</td>
+            <td class="pr-4 font-mono text-sm">concordant pairs</td>
+            <td class="font-sans text-gray-400">Pairs where both hub columns agree on ordering — relay fails both ways. What prediction couldn't handle.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">17</td>
+            <td class="pr-4 font-mono text-sm">inter-prediction sufficiency</td>
+            <td class="pr-4 font-mono text-sm">cross-only spanning</td>
+            <td class="font-sans text-gray-400">Cross/inter edges alone span all pairs. Internal/intra edges are redundant.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">18</td>
+            <td class="pr-4 font-mono text-sm">no block is redundant</td>
+            <td class="pr-4 font-mono text-sm">non-domination theorem</td>
+            <td class="font-sans text-gray-400">No row dominates another: ∀ i≠i', ∃ j with M[i][j] < M[i'][j]. Every frame contributes uniquely.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">19</td>
+            <td class="pr-4 font-mono text-sm">Shannon converse</td>
+            <td class="pr-4 font-mono text-sm">packing lower bound (2n-4)</td>
+            <td class="font-sans text-gray-400">Information-theoretic floor. Edge-disjoint journey packing. Gap to conjecture = 1 edge.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">20</td>
+            <td class="pr-4 font-mono text-sm">adaptive GOP sizing</td>
+            <td class="pr-4 font-mono text-sm">O(n log n) recursive dismounting</td>
+            <td class="font-sans text-gray-400">The log factor is the cost of not knowing scene structure in advance. Recursive splitting without lookahead.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="structural" style="color: #94a3b8;">Structural analogies</h3>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left" style="width: 2em;">#</th>
+            <th class="py-2 pr-4 text-left">Codec term</th>
+            <th class="py-2 pr-4 text-left">TVG term</th>
+            <th class="py-2 text-left">Analogy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">21</td>
+            <td class="pr-4 font-mono text-sm">two-pass encoding</td>
+            <td class="pr-4 font-mono text-sm">backward pass (hub repair)</td>
+            <td class="font-sans text-gray-400">Forward: commit without full info. Backward: repair with global view. ≤2 passes suffice.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">22</td>
+            <td class="pr-4 font-mono text-sm">decode complexity</td>
+            <td class="pr-4 font-mono text-sm">certificate size Θ(k²)</td>
+            <td class="font-sans text-gray-400">Verifying a hub requires ~84% of the matrix. Decoding requires the full reference frame.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">23</td>
+            <td class="pr-4 font-mono text-sm">uniform pan / scroll</td>
+            <td class="pr-4 font-mono text-sm">SM(k) (shift matrix)</td>
+            <td class="font-sans text-gray-400">Circulant structure where every vertex is a valid hub. Maximally easy for compression.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">24</td>
+            <td class="pr-4 font-mono text-sm">CBR (constant bitrate)</td>
+            <td class="pr-4 font-mono text-sm">greedy-latest-first</td>
+            <td class="font-sans text-gray-400">Uniform allocation ignores scene structure. SM(7): greedy gives 28, optimal is 24.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">25</td>
+            <td class="pr-4 font-mono text-sm">R-D optimization (joint)</td>
+            <td class="pr-4 font-mono text-sm">joint diagonal optimization</td>
+            <td class="font-sans text-gray-400">Global optimization across all diagonals/frames. Per-element greedy fails.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">26</td>
+            <td class="pr-4 font-mono text-sm">dependency graph</td>
+            <td class="pr-4 font-mono text-sm">covering hypergraph</td>
+            <td class="font-sans text-gray-400">Each edge covers pairs via journeys it enables. Interactions are non-decomposable.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">27</td>
+            <td class="pr-4 font-mono text-sm">encoding order</td>
+            <td class="pr-4 font-mono text-sm">dismounting order</td>
+            <td class="font-sans text-gray-400">Order-independent for 1-hop / pure P-chains. Order-dependent for mixed k-hop / B-frames.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">28</td>
+            <td class="pr-4 font-mono text-sm">first / last reference in GOP</td>
+            <td class="pr-4 font-mono text-sm">extremal matchings M⁻, M⁺</td>
+            <td class="font-sans text-gray-400">Temporal anchors: earliest reachable per target, latest transmittable per source.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">29</td>
+            <td class="pr-4 font-mono text-sm">sources / sinks</td>
+            <td class="pr-4 font-mono text-sm">V⁻ / V⁺ partition</td>
+            <td class="font-sans text-gray-400">Non-dismountable residual partitions into earliest-neighbor set and latest-neighbor set.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">30</td>
+            <td class="pr-4 font-mono text-sm">prediction chain</td>
+            <td class="pr-4 font-mono text-sm">temporal composition (right pre-semiring)</td>
+            <td class="font-sans text-gray-400">Journey composition requires t₂ ≥ t₁. Prediction chains require decode dependency.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">31</td>
+            <td class="pr-4 font-mono text-sm">keyframe rate</td>
+            <td class="pr-4 font-mono text-sm">I-frame ratio</td>
+            <td class="font-sans text-gray-400">Forced edges / total edges. For SM(k): 2k / (4k-4) → 50%. The survival parameter.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">32</td>
+            <td class="pr-4 font-mono text-sm">drift</td>
+            <td class="pr-4 font-mono text-sm">error accumulation (chain length)</td>
+            <td class="font-sans text-gray-400">Long chains accumulate ordering violations / quantization error. Makes keyframes necessary.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">33</td>
+            <td class="pr-4 font-mono text-sm">2-pass VBR</td>
+            <td class="pr-4 font-mono text-sm">2 backward passes suffice</td>
+            <td class="font-sans text-gray-400">Two passes capture enough global information. Zero failures across 870 samples.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">34</td>
+            <td class="pr-4 font-mono text-sm">scene anchor (MV fixed point)</td>
+            <td class="pr-4 font-mono text-sm">hub as fixed point of σ</td>
+            <td class="font-sans text-gray-400">Temporal flow is stationary at the hub. Identifiable by self-reference.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 text-gray-500">35</td>
+            <td class="pr-4 font-mono text-sm">bidirectional prediction</td>
+            <td class="pr-4 font-mono text-sm">σ² fixed points (2-cycles)</td>
+            <td class="font-sans text-gray-400">Two columns whose reference flow ping-pongs. B-frames predict from both directions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Reading the crosswalk</h3>
+
+    <p>
+      Chapters 1-5 identified a handful of term-pairs at the theoretical level.
+      Working the conjecture computationally surfaced twenty-five more, mostly moderate
+      or structural: correspondences that guide intuition but don't transfer proofs.
+    </p>
+
+    <p>
+      The strongest new cluster is #11-14: <strong>twist permutation ↔ motion field</strong>.
+      σ = m⁺∘m⁻ captures temporal reference flow through the biclique — where does a
+      column's earliest arrival send its latest departure? Fixed points are valid hubs
+      (100% at k=7). Cycle structure determines how many hubs are needed. Derangements
+      (no fixed points) mark the hard case. Each property has a codec counterpart:
+      static regions, motion segmentation, full-motion scenes.
+    </p>
+
+    <p>
+      For the conjecture, #20 matters most: <strong>the O(n log n) → O(n) gap is the cost
+      of hub ignorance</strong>. The dismountability algorithm recurses without knowing which
+      half contains the valid hub. Each uninformed split adds edges. Recursion depth is log n.
+      Codec engineers pay the same tax with adaptive GOP sizing — you don't know where
+      the scene changes are until you've encoded past them.
+    </p>
+
+    <p>
+      The backward-pass architecture (#21, #33) suggests the resolution: don't search for the
+      hub during the forward pass. Commit greedily, then repair in batch. Two passes suffice
+      empirically. The gap between this empirical fact and a proof is where the conjecture lives.
+    </p>
+
+    <h3>The question that's open in all three fields</h3>
+
+    <p>
+      The same structural gap appears in each field:
+    </p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="py-2 pr-4 text-left">Field</th>
+            <th class="py-2 pr-4 text-left">Open question</th>
+            <th class="py-2 text-left">Known bound</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">TVG</td>
+            <td class="pr-4 text-gray-400">Does every temporal clique have a 2n-3 spanner?</td>
+            <td class="text-gray-400">O(n log n) constructive (Casteigts 2021)</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">Codecs</td>
+            <td class="pr-4 text-gray-400">Is the minimum GOP budget always 2n-3 references?</td>
+            <td class="text-gray-400">Adaptive GOP gives O(n log n) (two-pass VBR)</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-4 font-mono text-sm">Sheaves</td>
+            <td class="pr-4 text-gray-400">Does every tropical dependency sheaf have a 2n-3 support preserving exactness?</td>
+            <td class="text-gray-400">No tropical sparsification theorem exists</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The shared obstacle is the same in every formulation: <strong>the hub cannot be found
+      locally</strong>. The temporal graph theorist can't identify the pivot vertex without
+      reading the full matrix. The codec engineer can't place the I-frame without seeing
+      the whole scene. The sheaf theorist can't locate the support of the witnessing section
+      without computing the global reachability structure. The log factor in O(n log n) is
+      the price all three pay for this ignorance.
+    </p>
+
+    <p>
+      The crosswalk doesn't solve the question. It makes visible that it's the
+      <em>same</em> question, asked three times in three communities that don't share
+      venues. A proof in any one field transfers to the other two via this table.
+    </p>
+
+    <h3>Proof tree (current state)</h3>
+
+    <p>
+      For readers working on the conjecture. The reduction from temporal cliques to
+      extremally matched bicliques is complete (Carnevale et al. 2025). What remains
+      is a single existence argument on the biclique.
+    </p>
+
+    <div class="bg-zinc-900 rounded-lg p-5 mb-8 text-sm font-mono overflow-x-auto" style="line-height:1.6">
+      <pre style="margin:0; white-space:pre-wrap;">
+<span style="color:#4ade80">PROVED (Lean, zero sorry):</span>
+  ConnectedPair.lean   — non-dismountable bicliques have a connected column pair
+  PivotEdge.lean       — any M⁻ cross edge has |In∩Out| ≥ k+1 (full graph routing)
+  NonDomination.lean   — M⁻ perm → no row dominates another; M⁺ → no col dominates
+  Pigeonhole.lean      — no-injection lemma
+
+<span style="color:#4ade80">PROVED (empirical, 25k+ matrices, exhaustive through k=15):</span>
+  Cross-only spanning  — cross edges alone span all pairs (A-A, B-B, A-B)
+  2 hub pairs suffice  — M⁻ ∪ M⁺ ∪ star(h₁) ∪ star(c₁) ∪ star(h₂) ∪ star(c₂)
+  Fixed-point hubs     — σ(c)=c → valid hub, 100% when fixed points exist (~60%)
+  Edge monotonicity    — adding edges never breaks reachability (zero cascades)
+  2 backward passes    — greedy forward + ≤2 hub stars, zero failures (870 samples)
+
+<span style="color:#facc15">THE GAP:</span>
+  Why do 2 hub pairs always suffice?
+  Equivalently: why does every k×k all-distinct matrix admit a temporal
+  spanner with ≤ 6k cross edges? (The 2n-3 constant is a separate question.)
+
+  Obstacle: hub certification requires Θ(k²) matrix entries. No local
+  criterion covers the derangement case (σ has no fixed points, ~40%).
+  The log factor in O(n log n) is the cost of this ignorance.
+
+<span style="color:#f87171">DEAD ENDS (20+, see CLAUDE.md):</span>
+  Two-column routing, 3DM reduction, covering design, recursive O(n),
+  Laman/rigidity, all local hub heuristics, NP-hardness via Set Cover,
+  forward+backward trees, alteration method, greedy-latest-first, ...
+      </pre>
+    </div>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-sm text-gray-400 mt-10 mb-4">
+      <p class="mb-2"><strong>Computational basis.</strong> Every claim above traces to a script in the
+      <a href="https://github.com/kimjune01/tvg">tvg</a> repository:</p>
+      <p class="text-xs text-gray-500">
+        adversarial_hub.py · query_complexity.py · cycle_breaking.py · fixed_point_algorithm.py ·
+        backward_pass.py · cross_only_spanner.py · domination_proof.py · double_star.py ·
+        two_hub_exhaustive.py · optimal_structure.py · joint_diagonal.py · primal_dual_spanner.py ·
+        direction_gap.py · lifted_kleene.py · mean_payoff_game.py · greedy_vs_optimal.py
+      </p>
+    </div>
+
+    <Neighbors>
+      <p class="text-sm text-gray-500 mb-2">Key references</p>
+      <ul class="neighbors">
+        <li><a href="https://arxiv.org/abs/2502.01321">Carnevale, Casteigts &amp; Corsini 2025</a> — Dismountability Revisited</li>
+        <li><a href="https://arxiv.org/abs/2402.13624">Angrick et al. ESA 2024</a> — pivot-edges, reverted edges, SM(k)</li>
+        <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0022000021000428">Casteigts, Peters &amp; Schoeters 2021</a> — O(n log n) bound</li>
+      </ul>
+      <p class="text-sm text-gray-500 mb-2 mt-4">Blog posts</p>
+      <ul class="neighbors">
+        <li>
+          <a href="https://june.kim/timekeeping-parameter">
+            <img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>
+            The Timekeeping Parameter
+          </a> — the keyframe rate as survival parameter
+        </li>
+        <li>
+          <a href="https://june.kim/temporal-compression">
+            <img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>
+            Temporal Compression
+          </a> — the blog post this section expands
+        </li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext
+      prev={{ href: "/reading/temporal-compression/ch-05/", label: "The Assembly" }}
+      fin="End of Temporal Compression series."
+    />
+  </main>
+</Layout>
