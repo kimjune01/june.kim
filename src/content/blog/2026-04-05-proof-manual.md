@@ -4,25 +4,23 @@ title: "The Proof Manual"
 tags: methodology, cognition
 ---
 
-# The Proof Manual
-
-**For agents:** load [`proof-manual.yml`](/data/proof-manual.yml).
+For agents: load [`proof-manual.yml`](/data/proof-manual.yml).
 
 ---
 
 You have a conjecture. You try induction. It doesn't work. Now what?
 
-Most people try induction again, harder. [Schoenfeld (1985)](https://www.cambridge.org/core/books/mathematical-problem-solving/71E357D32C51F5B4BB279C244ACA6E2F) filmed this: one technique, ridden to exhaustion, consuming the entire session. He called it the wild goose chase. Novices and experts know the same techniques. The difference is **control** — knowing when to switch and what to switch to.
+Most people try induction again, harder. [Schoenfeld (1985)](https://www.cambridge.org/core/books/mathematical-problem-solving/71E357D32C51F5B4BB279C244ACA6E2F) filmed this: one technique, ridden to exhaustion, consuming the entire session. He called it the wild goose chase. Novices and experts know the same techniques. The difference is control — knowing when to switch and what to switch to.
 
 He never specified *what*. This manual does. It doesn't prove your theory right. It makes it faster for it to be wrong.
 
 ## The procedure
 
-1. **Classify.** What are you proving? (Existence, uniqueness, upper bound, lower bound, impossibility, construction, equivalence.) What domain? (Discrete, continuous, algebraic, geometric, probabilistic.)
-2. **Look up.** The [grid](/data/proof-manual.yml) gives candidates for your cell. Scan the row — not just your first instinct.
-3. **Check kill conditions.** For each candidate, check whether its failure modes apply to your problem. Cross off the dead ones *before you start*.
-4. **Check symmetries.** Does your problem lack a symmetry the technique assumes? If yes, the technique fails silently — the argument looks right but has a hidden gap.
-5. **Try the survivors.** Work the top candidate. When it dies, the failure mode names the next one.
+1. Classify. What are you proving — existence, uniqueness, upper bound, lower bound, impossibility, construction, equivalence? What domain — discrete, continuous, algebraic, geometric, probabilistic?
+2. Look up. The [grid](/data/proof-manual.yml) gives candidates for your cell. Scan the row, not just your first instinct.
+3. Check kill conditions. For each candidate, check whether its failure modes apply to your problem. Cross off the dead ones before you start.
+4. Check symmetries. Does your problem lack a symmetry the technique assumes? If yes, the technique fails silently — the argument looks right but has a hidden gap.
+5. Try the survivors. Work the top candidate. When it dies, the failure mode names the next one.
 
 That's it. The rest of this post is the reference material for each step.
 
@@ -30,27 +28,20 @@ That's it. The rest of this post is the reference material for each step.
 
 Every proof technique has characteristic failure modes. They're the part nobody writes down.
 
-**Induction.** Kills: residual loses structure. Subproblem isn't the same type as the original. → Try **potential method**.
+| Technique | Kill condition | Escalate to |
+|---|---|---|
+| Induction | Residual loses structure | Potential method |
+| Contradiction | ¬P doesn't interact with structure | Direct construction |
+| Greedy | Local progress destroys substructure | Potential method |
+| Pigeonhole | Same-size sets, need witness not existence | Probabilistic method |
+| Probabilistic method | E[X]<1, or dependencies, or need witness | Second moment → LLL → derandomization |
+| Spectral | Semiring without eigenvalues | Embed-solve-pullback |
+| IVT / fixed point | Discrete or non-compact domain | Sperner, simplicial Brouwer |
+| Invariant | No separating invariant visible | Reduction |
+| Potential method | No monotone potential | Game equilibrium |
+| Diagonalization | Uncountable candidates | Reduction |
 
-**Contradiction.** Kills: the negation doesn't interact with the structure. You assume ¬P and nothing useful follows. → Try **direct construction**.
-
-**Greedy.** Kills: each step constrains future steps. Local progress destroys substructure. �� Try **potential method**.
-
-**Pigeonhole.** Kills: objects and containers are the same size. Assignment isn't well-defined. You get existence but needed construction. → Try **probabilistic method**.
-
-**Probabilistic method.** Kills: expected count < 1 → try **second moment**. Dependencies too strong → try **Lovász local lemma**. Need explicit witness → try **derandomization**.
-
-**Spectral.** Kills: algebra doesn't support eigenvalues (tropical semiring, non-commutative ring). Relevant quantity isn't spectral. → Try **embed-solve-pullback** into a domain with spectral theory.
-
-**IVT / fixed point.** Kills: discrete domain. Non-compact domain. Discontinuous function. → Try **combinatorial** analogs (Sperner, Brouwer via simplicial).
-
-**Invariant.** Kills: no invariant separates achievable from unachievable. If you don't see it quickly, it's not there. → Try **reduction**.
-
-**Potential method.** Kills: dynamics aren't monotone. Decrease per step too small. → Try **game equilibrium**.
-
-**Diagonalization.** Kills: candidate space uncountable. Defeat function not computable. → Try **reduction**.
-
-Each arrow (→) is a step on the **escalation ladder**: the kill condition at step N names the technique at step N+1.
+The kill at step N names the technique at step N+1.
 
 ## Symmetry mismatch
 
@@ -79,7 +70,7 @@ When nothing in your domain works, change the domain. Map the problem somewhere 
 | Time domain → Frequency | Convolution → multiplication | Localization lost |
 | Graph → Algebra (spectral) | Eigenvalue bounds | Semiring has no spectral theory |
 
-The risk is always the same: **the pullback doesn't preserve the constraints.**
+The risk is always the same: the pullback doesn't preserve the constraints.
 
 ## The lineage
 
@@ -119,12 +110,12 @@ Every proof decomposes into compositions of six [type constructors](https://lean
 
 | Constructor | What it proves |
 |---|---|
-| **Π** (dependent function) | ∀, implication |
-| **Σ** (dependent pair) | ∃, witness |
-| **Inductive type** | Recursion, cases |
-| **Match** | Case analysis, induction |
-| **Quotient** | Equivalence |
-| **Truncation** | Non-constructive existence |
+| Π (dependent function) | ∀, implication |
+| Σ (dependent pair) | ∃, witness |
+| Inductive type | Recursion, cases |
+| Match | Case analysis, induction |
+| Quotient | Equivalence |
+| Truncation | Non-constructive existence |
 
 The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. The techniques in each cell are canonical ways to build that type. The kill conditions are type errors — your proof term doesn't inhabit the target type.
 
