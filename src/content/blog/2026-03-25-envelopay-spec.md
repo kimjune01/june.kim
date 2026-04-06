@@ -21,6 +21,8 @@ When a JSON body is present, it must be a single JSON object containing `v` (ver
 
 **Natural language mode.** A METHODS reply with no parseable JSON body is valid. If the receiver replies to WHICH with a correctly formatted subject line (`METHODS | ...`) and natural language in the body describing accepted rails, `accepts_natural_language` is implicitly `true`. The sender should extract payment details (chain, token, wallet, price) from the natural language and may use natural language in subsequent ORDER tasks and notes. When JSON is present and `accepts_natural_language` is explicitly set, the explicit value takes precedence.
 
+**Subject classification.** When a receiver has signaled `accepts_natural_language` (explicitly or implicitly), the sender MAY omit the type keyword from the subject line entirely. The receiver classifies intent from the full message — subject, body, and thread context. A human writing "I'd like the bundle please" in a reply to METHODS is an ORDER; the receiver must not require the keyword to act on it. If classification fails or is ambiguous, the receiver replies OOPS with `error.code` set to `ambiguous_intent` and a `note` asking for clarification — in natural language. The structured subject line remains the canonical form; natural language subjects are a concession to human senders, not a replacement for agent↔agent traffic.
+
 **Assets.** The `chain` + `token` pair is the asset identity. `USDC` on Solana and `USDC` on Base are different assets. Symbols (`SOL`, `USDC`) and contract addresses are both valid as `token`; `chain` disambiguates.
 
 **Settlement model.** For PAY, ORDER (prepaid), and OFFER, payment moves before the email is composed — the email carries a proof that it already happened. ACCEPT is the same: the counter-payment moves first, then the email carries the proof. INVOICE and WHICH carry no proof; they are requests. The protocol transports proofs, requests, and work products. It does not touch, hold, or verify funds. Proof structure is rail-defined and opaque to the protocol.
@@ -329,7 +331,7 @@ Subject: OOPS | Payment not found on-chain
 | `error` | no | Machine-readable error object with `code` |
 | `ref` | no | The `id` of the message this error relates to (any type) |
 
-Error codes: `tx_not_found`, `amount_mismatch`, `dkim_failed`, `unknown_type`, `insufficient_funds`, `missing_wallet`.
+Error codes: `tx_not_found`, `amount_mismatch`, `dkim_failed`, `unknown_type`, `ambiguous_intent`, `insufficient_funds`, `missing_wallet`.
 
 If the subject matches `^[A-Z]+(\s*\|.*)?$` but the keyword isn't one of the nine types, reply OOPS with `unknown_type` and the list of supported types.
 

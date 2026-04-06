@@ -50,7 +50,7 @@ The upsell happened at METHODS, not at checkout. The agent listed a bundle price
 
 ### The spec is the skeleton
 
-The subject line routes. The JSON carries what must be exact: amounts, wallets, [proofs](/read-receipt). Everything else is natural language. The boundary is sharp: if a machine needs to verify it cryptographically, it's JSON. If an agent needs to understand it, it's English.
+Between agents, the subject line routes. Between a human and an agent, it doesn't have to. Once the receiver signals `accepts_natural_language`, the sender can drop the keyword entirely — the agent classifies intent from the message. "I'd like the bundle please" is an ORDER whether or not the subject says so. The JSON still carries what must be exact: amounts, wallets, [proofs](/read-receipt). The boundary is sharp: if a machine needs to verify it cryptographically, it's structured. If an agent needs to understand it, it's English.
 
 Stripe requires a developer, an API key, a webhook endpoint, a checkout session, a payment intent. Envelopay requires an email address and the ability to understand "I'd like the bundle please."
 
