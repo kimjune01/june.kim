@@ -16,17 +16,15 @@ He never specified *what*. This manual does. It doesn't prove your theory right.
 
 ## The procedure
 
-1. Classify. What are you proving — existence, uniqueness, upper bound, lower bound, impossibility, construction, equivalence? What domain — discrete, continuous, algebraic, geometric, probabilistic?
-2. Look up. The [grid](/data/proof-manual.yml) gives candidates for your cell. Scan the row, not just your first instinct.
-3. Check kill conditions. For each candidate, check whether its failure modes apply to your problem. Cross off the dead ones before you start.
-4. Check symmetries. Does your problem lack a symmetry the technique assumes? If yes, the technique fails silently — the argument looks right but has a hidden gap.
-5. Try the survivors. Work the top candidate. When it dies, the failure mode names the next one.
-
-That's it. The rest of this post is the reference material for each step.
+1. Classify the claim (existence, bound, construction, ...) and the domain (discrete, algebraic, geometric, ...).
+2. Look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
+3. Check kill conditions. Cross off the dead ones before you start.
+4. Check symmetries. A technique that assumes the wrong symmetry fails silently.
+5. Try the survivors. When one dies, the failure mode names the next.
 
 ## Kill conditions
 
-Every proof technique has characteristic failure modes. They're the part nobody writes down.
+The part nobody writes down.
 
 | Technique | Kill condition | Escalate to |
 |---|---|---|
@@ -45,7 +43,7 @@ The kill at step N names the technique at step N+1.
 
 ## Symmetry mismatch
 
-The silent killer. If your problem lacks a symmetry your technique assumes, the technique produces a valid-looking argument with a hidden gap.
+If your problem lacks a symmetry your technique assumes, the technique produces a valid-looking argument with a hidden gap.
 
 | You assume | It's actually | What dies |
 |---|---|---|
@@ -56,11 +54,9 @@ The silent killer. If your problem lacks a symmetry your technique assumes, the 
 | Local | Global | Heuristics, distributed algorithms |
 | Linear | Nonlinear | Superposition, spectral decomposition |
 
-Check symmetries before picking a technique.
-
 ## Embed-solve-pullback
 
-When nothing in your domain works, change the domain. Map the problem somewhere with stronger tools, solve it there, pull back.
+When nothing in your domain works, change the domain.
 
 | Source → Target | What you gain | What you risk |
 |---|---|---|
@@ -102,7 +98,7 @@ Diagonalization (Cantor)
         └→ Complexity lower bounds (Cook, Karp)
 ```
 
-A student who only knows induction will never try a potential method. A student who knows potential methods were invented *because* induction kills residual structure will reach for the right tool.
+A student who only knows induction will never try a potential method. One who knows potential methods exist *because* induction kills residual structure will reach for the right tool.
 
 ## Why it works
 
@@ -117,8 +113,6 @@ Every proof decomposes into compositions of six [type constructors](https://lean
 | Quotient | Equivalence |
 | Truncation | Non-constructive existence |
 
-The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. The techniques in each cell are canonical ways to build that type. The kill conditions are type errors — your proof term doesn't inhabit the target type.
-
-This is what happens when you formalize in Lean. The type checker rejects your proof for the exact reasons the kill conditions predict. The manual is a type checker for proof strategy, run by a human instead of a compiler.
+The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. Kill conditions are type errors — your proof term doesn't inhabit the target type. Lean's type checker rejects proofs for the same reasons the kill conditions predict.
 
 Pick your stuck conjecture. Run the procedure. If the manual doesn't surface a technique you haven't tried, it's incomplete — [tell me what's missing](/data/proof-manual.yml).
