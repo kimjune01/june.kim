@@ -4,7 +4,7 @@ title: "The Proof Manual"
 tags: methodology, cognition
 ---
 
-For agents: load [`proof-manual.yml`](/data/proof-manual.yml).
+For agents: load [`proof-manual.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml).
 
 ---
 
@@ -115,4 +115,4 @@ Every proof decomposes into compositions of six [type constructors](https://lean
 
 The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. Kill conditions are type errors — your proof term doesn't inhabit the target type. Lean's type checker rejects proofs for the same reasons the kill conditions predict.
 
-Pick your stuck conjecture. Run the procedure. If the manual doesn't surface a technique you haven't tried, it's incomplete — [tell me what's missing](/data/proof-manual.yml).
+Pick your stuck conjecture. Run the procedure. If the manual doesn't surface a technique you haven't tried, it's incomplete — [tell me what's missing](https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml).
