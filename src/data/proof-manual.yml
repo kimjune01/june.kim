@@ -1,0 +1,2548 @@
+# The Proof Manual — structured taxonomy
+# Grounded in the Calculus of Inductive Constructions (CIC).
+# Six type constructors generate all proof techniques.
+# See /proof-manual for the full analysis.
+#
+# Agent: load YAML, query by claim_type/domain/constructor.
+# Procedure: classify claim+domain → grid lookup → check kill conditions → escalate on failure.
+
+constructors:
+  - name: pi
+    symbol: "Π (a : A), B a"
+    proves: [universal, implication]
+  - name: sigma
+    symbol: "Σ (a : A), B a"
+    proves: [existence, witness]
+  - name: inductive
+    symbol: "inductive T where | ..."
+    proves: [recursion, cases]
+  - name: match
+    symbol: "match x with ..."
+    proves: [case_analysis, induction]
+  - name: quotient
+    symbol: "Quotient r"
+    proves: [equivalence]
+  - name: truncation
+    symbol: "∃ in Prop"
+    proves: [nonconstructive_existence]
+
+axes:
+  - name: claim_type
+    values: [existence, uniqueness, upper_bound, lower_bound, impossibility, construction, equivalence]
+    cic_targets:
+      existence: "Σ type or truncated ∃"
+      uniqueness: "Π into equality"
+      upper_bound: "Π into ≤"
+      lower_bound: "Σ with ≥"
+      impossibility: "Π into False"
+      construction: "Σ with computability"
+      equivalence: "Iff or Equiv"
+  - name: domain
+    values: [discrete, continuous, algebraic, geometric, probabilistic, number_theoretic, combinatorial]
+
+# The main grid: claim_type × domain → candidate technique IDs
+claim_domain_grid:
+  - claim: existence
+    discrete: [pigeonhole, double_counting, ramsey, transfinite_induction, well_ordering, forcing, lowenheim_skolem, compactness_logic, inclusion_exclusion, charging_discharging, weight_function, fixed_point_tarski, game_tree_evaluation, pigeonhole_infinite]
+    continuous: [ivt, brouwer_fixed_point, compactness, zorns_lemma, transfinite_induction, ultraproducts, barrier_function, energy_method, bootstrapping, density_argument, approximation_argument, weak_convergence, contour_integration, analytic_continuation, concentration_compactness, degree_theory, weight_function, continuity_method, separation_argument, fixed_point_schauder, sard, krein_milman, baire_category]
+    algebraic: [nullstellensatz, structure_theorems, zorns_lemma, transfinite_induction, ultraproducts, forcing, lowenheim_skolem, compactness_logic, density_argument, sylow, character_theory, noether_normalization, going_up_down, spectral_sequence, tensor_product_trick, localization, long_exact_sequence, symmetric_functions, riemann_roch, deformation, probabilistic_polynomial, separation_argument, fixed_point_tarski]
+    geometric: [borsuk_ulam, ham_sandwich, spectral_sequence, long_exact_sequence, lefschetz_fixed_point, degree_theory, morse_theory, riemann_roch, deformation, sard]
+    probabilistic: [probabilistic_method, lovasz_local_lemma, inclusion_exclusion, deletion_method, martingale, stopping_time]
+    number_theoretic: [descent, circle_method, sieve, well_ordering, contour_integration, analytic_continuation, localization, dirichlet_series]
+    combinatorial: [regularity_lemma, polynomial_method, inclusion_exclusion, charging_discharging, deletion_method, dependent_random_choice, symmetric_functions, sunflower_lemma, probabilistic_polynomial, weight_function, game_tree_evaluation]
+
+  - claim: uniqueness
+    discrete: [exhaustion, parity]
+    continuous: [banach_contraction, monotonicity, maximum_principle, energy_method]
+    algebraic: [kernel_triviality, irreducibility, nakayama_lemma, localization]
+    geometric: [convexity_argument]
+    probabilistic: [second_moment]
+    number_theoretic: [p_adic_hensel, localization]
+    combinatorial: [exchange_argument]
+
+  - claim: upper_bound
+    discrete: [greedy, induction, encoding, contrapositive, inclusion_exclusion, charging_discharging, transfer_matrix, amortized_analysis, weight_function]
+    continuous: [cauchy_schwarz, am_gm, gronwall, contrapositive, sandwich_squeeze, dominated_convergence, maximum_principle, barrier_function, energy_method, bootstrapping, density_argument, approximation_argument, sobolev_embedding, interpolation_spaces, littlewood_paley, calderon_zygmund, contour_integration, harnack_inequality, monotone_convergence, weight_function]
+    algebraic: [spectral, trace_bound, contrapositive, density_argument, sylow, burnside_lemma, polya_enumeration, character_theory, nakayama_lemma, spectral_sequence, mayer_vietoris, characteristic_classes, symmetric_functions, bezout]
+    geometric: [packing, volume_bound, spectral_sequence, mayer_vietoris, characteristic_classes, bezout, comparison_theorem]
+    probabilistic: [chernoff, union_bound, expectation, inclusion_exclusion, martingale, talagrand, mcdiarmid, large_deviations, steins_method, stopping_time, fkg_inequality, four_functions]
+    number_theoretic: [circle_method, sieve, contour_integration, dirichlet_series, large_sieve]
+    combinatorial: [regularity_counting, fourier_on_groups, burnside_lemma, polya_enumeration, inclusion_exclusion, charging_discharging, container_method, flag_algebras, transfer_matrix, symmetric_functions, fkg_inequality, weight_function, four_functions]
+
+  - claim: lower_bound
+    discrete: [adversary, counting, information_theoretic, inclusion_exclusion, communication_complexity, weight_function]
+    continuous: [minimax, fenchel_duality, weight_function]
+    algebraic: [rank_argument, dimension_argument, riemann_roch, probabilistic_polynomial]
+    geometric: [covering, isoperimetric, riemann_roch, comparison_theorem]
+    probabilistic: [entropy, mutual_information, inclusion_exclusion, martingale, large_deviations, fkg_inequality]
+    number_theoretic: [sieve, packing_lower, dirichlet_series]
+    combinatorial: [sum_product, kruskal_katona, inclusion_exclusion, dependent_random_choice, flag_algebras, fkg_inequality, probabilistic_polynomial, weight_function]
+
+  - claim: impossibility
+    discrete: [diagonalization, reduction, invariant, contrapositive, well_ordering, forcing, lowenheim_skolem, game_tree_evaluation]
+    continuous: [euler_characteristic, monodromy, contrapositive, degree_theory, separation_argument, baire_category]
+    algebraic: [no_homomorphism, cohomological_obstruction, contrapositive, forcing, lowenheim_skolem, character_theory, mayer_vietoris, long_exact_sequence, characteristic_classes, probabilistic_polynomial, separation_argument]
+    geometric: [dimension_argument, borsuk_ulam, mayer_vietoris, long_exact_sequence, degree_theory, cobordism, characteristic_classes, gauss_bonnet]
+    probabilistic: [rice_theorem]
+    number_theoretic: [local_global_failure, parity_obstruction, well_ordering]
+    combinatorial: [ramsey_lower, vc_dimension, probabilistic_polynomial, game_tree_evaluation]
+
+  - claim: construction
+    discrete: [greedy, induction, potential_method, transfinite_induction, forcing, transfer_matrix]
+    continuous: [gradient_descent, newton, iteration, transfinite_induction]
+    algebraic: [free_resolution, grobner_basis, transfinite_induction, forcing, polya_enumeration, noether_normalization, tensor_product_trick]
+    geometric: [triangulation, convex_hull, morse_theory, surgery]
+    probabilistic: [sampling, mcmc, derandomization, deletion_method]
+    number_theoretic: [modularity_lifting, descent]
+    combinatorial: [shifting, compression, alteration, polya_enumeration, deletion_method, transfer_matrix]
+
+  - claim: equivalence
+    discrete: [bijection, encoding_decoding, transfer_matrix]
+    continuous: [homeomorphism, diffeomorphism, transfer_principle, ultraproducts, dominated_convergence, density_argument, contour_integration, analytic_continuation, monotone_convergence, krein_milman]
+    algebraic: [isomorphism, morita, derived_equivalence, transfer_principle, ultraproducts, density_argument, burnside_lemma, spectral_sequence, tensor_product_trick, localization, mayer_vietoris, long_exact_sequence, symmetric_functions, deformation, lefschetz_hyperplane]
+    geometric: [poincare_duality, pontryagin, spectral_sequence, mayer_vietoris, long_exact_sequence, morse_theory, surgery, cobordism, deformation, gauss_bonnet, lefschetz_hyperplane]
+    probabilistic: [coupling]
+    number_theoretic: [reciprocity, class_field_theory, transfer_principle, contour_integration, analytic_continuation, localization, mobius_inversion, quadratic_reciprocity]
+    combinatorial: [generating_function_identity, burnside_lemma, mobius_inversion, transfer_matrix, lgv_lemma, wz_method, symmetric_functions]
+
+# Full technique metadata
+# Every technique has: works_when, kill_conditions, escalation, lineage
+techniques:
+
+  # ── Existence ──
+
+  - id: pigeonhole
+    name: Pigeonhole principle
+    constructor: truncation
+    claim: existence
+    domains: [discrete, combinatorial]
+    works_when: "Objects outnumber containers"
+    kill_conditions:
+      - "Objects and containers are the same size"
+      - "Container assignment isn't well-defined"
+      - "Need a witness, not just existence"
+    escalation: double_counting
+    lineage: { parent: null, era: classical }
+
+  - id: double_counting
+    name: Double counting
+    constructor: sigma
+    claim: [existence, lower_bound]
+    domains: [discrete, combinatorial]
+    works_when: "Same quantity counted two ways gives a nontrivial equality"
+    kill_conditions:
+      - "No natural bipartite structure to count over"
+      - "Both counts give the same trivial bound"
+    escalation: probabilistic_method
+    lineage: { parent: pigeonhole, era: classical, reason: "Pigeonhole gives existence but no structure" }
+
+  - id: ramsey
+    name: Ramsey theory
+    constructor: truncation
+    claim: existence
+    domains: [discrete, combinatorial]
+    works_when: "Any coloring of a large enough structure contains a monochromatic substructure"
+    kill_conditions:
+      - "Ramsey numbers too large to be useful (galactic bounds)"
+      - "Need quantitative bounds, not just existence"
+      - "Structure isn't defined by colorings"
+    escalation: regularity_lemma
+    lineage: { parent: pigeonhole, era: modern, reason: "Pigeonhole handles 2 classes; Ramsey handles k" }
+
+  - id: ivt
+    name: Intermediate Value Theorem
+    constructor: truncation
+    claim: existence
+    domains: [continuous]
+    works_when: "Continuous function on connected domain, need a root or intermediate value"
+    kill_conditions:
+      - "Discrete domain (no intermediate values)"
+      - "Function not continuous"
+      - "Need to locate the root, not just know it exists"
+    escalation: brouwer_fixed_point
+    lineage: { parent: null, era: early_modern }
+
+  - id: brouwer_fixed_point
+    name: Brouwer fixed point theorem
+    constructor: truncation
+    claim: existence
+    domains: [continuous, geometric]
+    works_when: "Continuous self-map on compact convex set"
+    kill_conditions:
+      - "Domain not compact"
+      - "Domain not convex"
+      - "Map not continuous"
+      - "Need to find the fixed point, not just know it exists"
+    escalation: banach_contraction
+    lineage: { parent: ivt, era: modern, reason: "IVT only works in 1D" }
+
+  - id: compactness
+    name: Compactness argument
+    constructor: truncation
+    claim: existence
+    domains: [continuous, geometric]
+    works_when: "Sequence of approximate solutions in a compact space; limit is exact"
+    kill_conditions:
+      - "Space not compact (need to compactify or find a priori bounds)"
+      - "Limit doesn't inherit the property (not closed under limits)"
+      - "Need constructive witness, not limit"
+    escalation: null
+    lineage: { parent: ivt, era: modern, reason: "IVT needs explicit function; compactness extracts limits" }
+
+  - id: probabilistic_method
+    name: Probabilistic method (Erdős)
+    constructor: truncation
+    claim: existence
+    domains: [discrete, combinatorial, probabilistic]
+    works_when: "Random object has the property with positive probability"
+    kill_conditions:
+      - "Expected count < 1 → try second_moment"
+      - "Dependencies too strong → try lovasz_local_lemma"
+      - "Need explicit construction → try derandomization"
+    escalation: lovasz_local_lemma
+    lineage: { parent: double_counting, era: modern, reason: "Exact counts intractable" }
+
+  - id: lovasz_local_lemma
+    name: Lovász Local Lemma
+    constructor: truncation
+    claim: existence
+    domains: [discrete, combinatorial, probabilistic]
+    works_when: "Bad events are rare and mostly independent (dependency graph is sparse)"
+    kill_conditions:
+      - "Dependency graph is dense"
+      - "Individual event probabilities too high"
+      - "Need explicit witness → try constructive LLL (Moser-Tardos)"
+    escalation: derandomization
+    lineage: { parent: probabilistic_method, era: modern, reason: "Probabilistic method can't handle correlated bad events" }
+
+  - id: nullstellensatz
+    name: Hilbert's Nullstellensatz
+    constructor: sigma
+    claim: [existence, impossibility]
+    domains: [algebraic]
+    works_when: "Polynomial system over algebraically closed field; need to show solutions exist or don't"
+    kill_conditions:
+      - "Field not algebraically closed (reals, finite fields)"
+      - "System not polynomial"
+      - "Need to count or locate solutions, not just existence"
+    escalation: grobner_basis
+    lineage: { parent: null, era: modern }
+
+  - id: structure_theorems
+    name: Structure theorems (classification)
+    constructor: sigma
+    claim: [existence, equivalence]
+    domains: [algebraic]
+    works_when: "Object belongs to a classified family; structure theorem gives canonical form"
+    kill_conditions:
+      - "Classification doesn't exist for this family"
+      - "Object doesn't fit the hypotheses (not finitely generated, not Noetherian, etc.)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: borsuk_ulam
+    name: Borsuk-Ulam theorem
+    constructor: truncation
+    claim: [existence, impossibility]
+    domains: [geometric]
+    works_when: "Continuous map from S^n to R^n; need antipodal coincidence"
+    kill_conditions:
+      - "No natural antipodal structure"
+      - "Map isn't continuous"
+      - "Dimension is wrong (target dimension > source)"
+    escalation: null
+    lineage: { parent: brouwer_fixed_point, era: modern, reason: "Brouwer needs self-map; Borsuk-Ulam handles maps between different spaces" }
+
+  - id: ham_sandwich
+    name: Ham sandwich theorem
+    constructor: truncation
+    claim: existence
+    domains: [geometric]
+    works_when: "Need a hyperplane that bisects d measures in R^d simultaneously"
+    kill_conditions:
+      - "More measures than dimensions"
+      - "Measures aren't absolutely continuous"
+    escalation: null
+    lineage: { parent: borsuk_ulam, era: modern, reason: "Application of Borsuk-Ulam" }
+
+  # ── Uniqueness ──
+
+  - id: exhaustion
+    name: Exhaustive case check
+    constructor: match
+    claim: uniqueness
+    domains: [discrete]
+    works_when: "Finite case space; can check each"
+    kill_conditions:
+      - "Case space too large"
+      - "Cases aren't cleanly enumerable"
+    escalation: invariant
+    lineage: { parent: null, era: classical }
+
+  - id: parity
+    name: Parity argument
+    constructor: pi
+    claim: [uniqueness, impossibility]
+    domains: [discrete]
+    works_when: "Quantity changes by ±1 at each step; parity constrains the outcome"
+    kill_conditions:
+      - "Steps change quantity by variable amounts"
+      - "Parity alone doesn't distinguish the cases"
+    escalation: invariant
+    lineage: { parent: null, era: classical }
+
+  - id: banach_contraction
+    name: Banach contraction mapping
+    constructor: sigma
+    claim: [existence, uniqueness]
+    domains: [continuous]
+    works_when: "Complete metric space; map is a contraction (Lipschitz constant < 1)"
+    kill_conditions:
+      - "Space not complete"
+      - "Map not contractive (Lipschitz ≥ 1)"
+      - "Need the fixed point but iteration converges too slowly"
+    escalation: null
+    lineage: { parent: brouwer_fixed_point, era: modern, reason: "Brouwer gives existence only; Banach gives existence + uniqueness + algorithm" }
+
+  - id: monotonicity
+    name: Monotonicity / order argument
+    constructor: pi
+    claim: uniqueness
+    domains: [continuous, discrete]
+    works_when: "Function is monotone; unique crossing of a threshold"
+    kill_conditions:
+      - "Function not monotone"
+      - "Multiple crossings"
+    escalation: null
+    lineage: { parent: null, era: classical }
+
+  - id: kernel_triviality
+    name: Kernel triviality
+    constructor: pi
+    claim: uniqueness
+    domains: [algebraic]
+    works_when: "Linear map; uniqueness iff kernel is trivial"
+    kill_conditions:
+      - "Map not linear"
+      - "Kernel nontrivial (multiple solutions exist)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: irreducibility
+    name: Irreducibility argument
+    constructor: pi
+    claim: uniqueness
+    domains: [algebraic]
+    works_when: "Object has no nontrivial decomposition"
+    kill_conditions:
+      - "Object is reducible"
+      - "Irreducibility doesn't imply the uniqueness you need"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: convexity_argument
+    name: Convexity argument
+    constructor: pi
+    claim: uniqueness
+    domains: [geometric, continuous]
+    works_when: "Optimization over convex set with strictly convex objective"
+    kill_conditions:
+      - "Objective not strictly convex (flat regions → multiple optima)"
+      - "Feasible set not convex"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: second_moment
+    name: Second moment method
+    constructor: pi
+    claim: [uniqueness, existence]
+    domains: [probabilistic]
+    works_when: "E[X²] / E[X]² is close to 1 (concentration)"
+    kill_conditions:
+      - "Variance too high relative to mean"
+      - "Need tail bounds, not just concentration → try chernoff"
+    escalation: chernoff
+    lineage: { parent: probabilistic_method, era: modern, reason: "First moment gives existence; second moment gives concentration" }
+
+  - id: p_adic_hensel
+    name: Hensel's lemma (p-adic lifting)
+    constructor: sigma
+    claim: [existence, uniqueness]
+    domains: [number_theoretic]
+    works_when: "Root mod p lifts uniquely to root mod p^k; derivative nonzero mod p"
+    kill_conditions:
+      - "Derivative vanishes mod p (singular root)"
+      - "Need archimedean information p-adics can't see"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: exchange_argument
+    name: Exchange argument
+    constructor: pi
+    claim: [uniqueness, upper_bound]
+    domains: [combinatorial]
+    works_when: "Swapping two elements doesn't improve the objective → current solution is optimal"
+    kill_conditions:
+      - "Swaps don't form a connected exchange graph"
+      - "Local optimum ≠ global optimum (non-matroid)"
+    escalation: null
+    lineage: { parent: greedy, era: classical, reason: "Greedy constructs; exchange proves optimality" }
+
+  # ── Upper bound ──
+
+  - id: greedy
+    name: Greedy + induction
+    constructor: match
+    claim: [upper_bound, construction]
+    domains: [discrete, combinatorial]
+    works_when: "Each step makes irrevocable local progress; matroid or submodular"
+    kill_conditions:
+      - "Greedy choice constrains future steps"
+      - "Residual loses structure needed for inductive step"
+      - "Problem not matroid/submodular"
+    escalation: potential_method
+    lineage: { parent: null, era: classical }
+
+  - id: induction
+    name: Mathematical induction
+    constructor: match
+    claim: [upper_bound, existence, construction]
+    domains: [discrete, algebraic]
+    works_when: "Well-ordered parameter; base case + inductive step"
+    kill_conditions:
+      - "Residual loses structure (subproblem not same type)"
+      - "Inductive hypothesis too weak (strengthen it before abandoning)"
+      - "No natural well-ordering"
+    escalation: potential_method
+    lineage: { parent: null, era: classical }
+
+  - id: encoding
+    name: Encoding / counting argument
+    constructor: pi
+    claim: upper_bound
+    domains: [discrete, combinatorial]
+    works_when: "Object has efficient description; count objects ≤ count descriptions"
+    kill_conditions:
+      - "Encoding is lossy"
+      - "Description length hard to bound"
+    escalation: information_theoretic
+    lineage: { parent: null, era: modern }
+
+  - id: cauchy_schwarz
+    name: Cauchy-Schwarz / AM-GM
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous, algebraic]
+    works_when: "Bound follows from convexity of a natural functional"
+    kill_conditions:
+      - "Inequality tight only at degenerate point (bound loose where it matters)"
+      - "No natural inner product or convex structure"
+    escalation: spectral
+    lineage: { parent: null, era: early_modern }
+
+  - id: am_gm
+    name: AM-GM inequality
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: "Need to bound a product by a sum or vice versa"
+    kill_conditions:
+      - "Terms aren't positive"
+      - "Bound too loose (need tighter tool like Schur or Muirhead)"
+    escalation: cauchy_schwarz
+    lineage: { parent: null, era: classical }
+
+  - id: gronwall
+    name: Gronwall's inequality
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: "ODE/integral inequality; u(t) ≤ α(t) + ∫β(s)u(s)ds"
+    kill_conditions:
+      - "Inequality not of Gronwall type (nonlinear coupling)"
+      - "Coefficients not integrable"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: spectral
+    name: Spectral method (eigenvalue bounds)
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [algebraic, geometric]
+    works_when: "Relevant quantity captured by eigenvalues (expansion, mixing, rank)"
+    kill_conditions:
+      - "Algebra doesn't support eigenvalues (tropical semiring, non-commutative)"
+      - "Relevant quantity not captured by spectrum (combinatorial property independent of eigenvalues)"
+      - "Eigenvalues known but bound is loose"
+    escalation: embed_solve_pullback
+    lineage: { parent: cauchy_schwarz, era: modern, reason: "Need matrix structure, not just scalar inequality" }
+
+  - id: trace_bound
+    name: Trace bound
+    constructor: pi
+    claim: upper_bound
+    domains: [algebraic]
+    works_when: "tr(A) = ��λ_i; bound eigenvalue sum via trace"
+    kill_conditions:
+      - "Need individual eigenvalues, not sum"
+      - "Trace is trivial (e.g., traceless matrices)"
+    escalation: spectral
+    lineage: { parent: spectral, era: modern }
+
+  - id: packing
+    name: Packing argument
+    constructor: pi
+    claim: upper_bound
+    domains: [geometric]
+    works_when: "Objects occupy volume; count ≤ total volume / per-object volume"
+    kill_conditions:
+      - "Objects overlap"
+      - "Volume ratio doesn't capture the constraint"
+    escalation: covering
+    lineage: { parent: null, era: classical }
+
+  - id: volume_bound
+    name: Volume bound
+    constructor: pi
+    claim: upper_bound
+    domains: [geometric]
+    works_when: "Geometric object has bounded volume; count lattice points or substructures"
+    kill_conditions:
+      - "Volume hard to compute"
+      - "Lattice points don't correspond to objects of interest"
+    escalation: null
+    lineage: { parent: packing, era: classical }
+
+  - id: chernoff
+    name: Chernoff bound
+    constructor: pi
+    claim: upper_bound
+    domains: [probabilistic]
+    works_when: "Sum of independent random variables; need exponential tail bound"
+    kill_conditions:
+      - "Variables not independent → try martingale (Azuma-Hoeffding)"
+      - "Need exact distribution, not just tail"
+      - "Variables not bounded → try sub-Gaussian bounds"
+    escalation: null
+    lineage: { parent: second_moment, era: modern, reason: "Second moment gives variance; Chernoff gives exponential tails" }
+
+  - id: union_bound
+    name: Union bound
+    constructor: pi
+    claim: upper_bound
+    domains: [probabilistic]
+    works_when: "P(∪A_i) ≤ ΣP(A_i); bound failure probability over many events"
+    kill_conditions:
+      - "Too many events (sum exceeds 1) → try lovasz_local_lemma"
+      - "Events highly correlated (bound loose by factor of n)"
+    escalation: lovasz_local_lemma
+    lineage: { parent: null, era: classical }
+
+  - id: expectation
+    name: Expectation (first moment) method
+    constructor: truncation
+    claim: [existence, upper_bound]
+    domains: [probabilistic]
+    works_when: "E[X] > 0 implies X > 0 with positive probability"
+    kill_conditions:
+      - "E[X] < 1 (rare events)"
+      - "Need concentration, not just existence → try second_moment"
+    escalation: second_moment
+    lineage: { parent: null, era: modern }
+
+  - id: regularity_counting
+    name: Regularity counting lemma
+    constructor: pi
+    claim: upper_bound
+    domains: [combinatorial]
+    works_when: "Count subgraphs in dense graphs via regular partition"
+    kill_conditions:
+      - "Graph is sparse (regularity needs density)"
+      - "Need polynomial bounds (regularity gives tower-function)"
+    escalation: fourier_on_groups
+    lineage: { parent: regularity_lemma, era: modern }
+
+  - id: fourier_on_groups
+    name: Fourier analysis on groups
+    constructor: pi
+    claim: [upper_bound, existence]
+    domains: [combinatorial, number_theoretic]
+    works_when: "Detecting linear structure; large Fourier coefficients = structure"
+    kill_conditions:
+      - "Higher-order patterns (length 4+ APs) → need Gowers norms"
+      - "Non-abelian group (characters don't form basis)"
+    escalation: null
+    lineage: { parent: regularity_counting, era: contemporary, reason: "Regularity bounds too weak for quantitative results" }
+
+  # ���─ Lower bound ──
+
+  - id: adversary
+    name: Adversary argument
+    constructor: sigma
+    claim: lower_bound
+    domains: [discrete]
+    works_when: "Any algorithm can be forced into bad behavior by an adversary"
+    kill_conditions:
+      - "Adversary can't adapt to algorithm's choices (oblivious model)"
+      - "Randomization defeats the adversary → try Yao's minimax"
+    escalation: information_theoretic
+    lineage: { parent: null, era: modern }
+
+  - id: counting
+    name: Counting lower bound
+    constructor: sigma
+    claim: lower_bound
+    domains: [discrete]
+    works_when: "Number of possible inputs exceeds number of distinguishable outputs"
+    kill_conditions:
+      - "Inputs aren't distinguishable (many map to same output)"
+      - "Counting is loose"
+    escalation: information_theoretic
+    lineage: { parent: null, era: classical }
+
+  - id: information_theoretic
+    name: Information-theoretic lower bound
+    constructor: pi
+    claim: lower_bound
+    domains: [discrete, probabilistic]
+    works_when: "Processing can't create information; mutual information bounds"
+    kill_conditions:
+      - "Channel model doesn't match the problem"
+      - "Bound is loose because problem has structure information theory ignores"
+    escalation: reduction
+    lineage: { parent: counting, era: modern, reason: "Counting is a special case of entropy" }
+
+  - id: minimax
+    name: Minimax / von Neumann
+    constructor: sigma
+    claim: lower_bound
+    domains: [continuous]
+    works_when: "Zero-sum game; min-max = max-min"
+    kill_conditions:
+      - "Game not zero-sum"
+      - "Strategy spaces not compact/convex"
+      - "Need constructive strategy, not just value"
+    escalation: fenchel_duality
+    lineage: { parent: null, era: modern }
+
+  - id: fenchel_duality
+    name: Fenchel / LP duality
+    constructor: sigma
+    claim: lower_bound
+    domains: [continuous, algebraic]
+    works_when: "Convex optimization; dual provides lower bound on primal"
+    kill_conditions:
+      - "Duality gap is nonzero (Slater's condition fails)"
+      - "Problem not convex"
+      - "Dual is as hard to solve as primal"
+    escalation: null
+    lineage: { parent: minimax, era: modern, reason: "Minimax is the game-theoretic special case" }
+
+  - id: rank_argument
+    name: Rank / dimension argument
+    constructor: pi
+    claim: lower_bound
+    domains: [algebraic]
+    works_when: "Independent objects span a space; count ≥ dimension"
+    kill_conditions:
+      - "Independence hard to verify"
+      - "Dimension doesn't capture the constraint"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: dimension_argument
+    name: Dimension argument
+    constructor: pi
+    claim: [lower_bound, impossibility]
+    domains: [geometric, algebraic]
+    works_when: "Object needs d dimensions; can't fit in fewer"
+    kill_conditions:
+      - "Dimension isn't the bottleneck"
+      - "Object embeds in lower dimension via nonlinear map"
+    escalation: null
+    lineage: { parent: rank_argument, era: classical }
+
+  - id: covering
+    name: Covering argument
+    constructor: sigma
+    claim: lower_bound
+    domains: [geometric]
+    works_when: "Need to cover a space; covering number × ball volume ≥ total volume"
+    kill_conditions:
+      - "Covering number hard to compute"
+      - "Balls overlap too much (bound loose)"
+    escalation: isoperimetric
+    lineage: { parent: packing, era: classical, reason: "Packing gives upper; covering gives lower" }
+
+  - id: isoperimetric
+    name: Isoperimetric inequality
+    constructor: pi
+    claim: lower_bound
+    domains: [geometric]
+    works_when: "Boundary ≥ f(volume); optimal shape is known (ball, convex set)"
+    kill_conditions:
+      - "Optimal shape unknown"
+      - "Discrete setting with no clean isoperimetric analog → try kruskal_katona"
+    escalation: kruskal_katona
+    lineage: { parent: covering, era: classical }
+
+  - id: entropy
+    name: Entropy method
+    constructor: pi
+    claim: lower_bound
+    domains: [probabilistic]
+    works_when: "H(X) bounds resolution; processing can't increase entropy"
+    kill_conditions:
+      - "Entropy doesn't capture the relevant constraint"
+      - "Need conditional bounds → try mutual_information"
+    escalation: mutual_information
+    lineage: { parent: counting, era: modern, reason: "Counting = log of entropy" }
+
+  - id: mutual_information
+    name: Mutual information bound
+    constructor: pi
+    claim: lower_bound
+    domains: [probabilistic]
+    works_when: "I(X;Y) bounds how much Y reveals about X"
+    kill_conditions:
+      - "Variables aren't naturally paired"
+      - "Bound is loose (mutual information is too coarse)"
+    escalation: null
+    lineage: { parent: entropy, era: modern }
+
+  - id: sum_product
+    name: Sum-product estimate
+    constructor: sigma
+    claim: lower_bound
+    domains: [combinatorial, number_theoretic]
+    works_when: "Set can't be simultaneously additively and multiplicatively structured"
+    kill_conditions:
+      - "Set aligns with a subfield (finite field with subfield structure)"
+      - "Only one operation present"
+    escalation: null
+    lineage: { parent: null, era: contemporary }
+
+  - id: kruskal_katona
+    name: Kruskal-Katona theorem
+    constructor: pi
+    claim: lower_bound
+    domains: [combinatorial]
+    works_when: "Shadow/boundary of k-set in simplicial complex; initial segments minimize"
+    kill_conditions:
+      - "Complex isn't simplicial (need generalization)"
+      - "No natural total order on elements for initial segments"
+      - "Exchange property doesn't hold (not a compression structure)"
+    escalation: null
+    lineage: { parent: isoperimetric, era: modern, reason: "Discrete analog of isoperimetric" }
+
+  # ── Impossibility ──
+
+  - id: diagonalization
+    name: Diagonalization
+    constructor: pi
+    claim: impossibility
+    domains: [discrete]
+    works_when: "List all candidates, defeat each on its own input"
+    kill_conditions:
+      - "Candidate space uncountable"
+      - "Defeat function not computable"
+    escalation: reduction
+    lineage: { parent: null, era: early_modern, origin: "Cantor 1891" }
+
+  - id: reduction
+    name: Reduction (encode/decode)
+    constructor: pi
+    claim: [impossibility, lower_bound]
+    domains: [discrete, algebraic]
+    works_when: "Problem contains a known-hard subproblem"
+    kill_conditions:
+      - "Reduction introduces structure original lacks"
+      - "Hardness doesn't transfer through encoding"
+      - "Known-hard problem is only hard in worst case; your problem is average-case"
+    escalation: null
+    lineage: { parent: diagonalization, era: modern, reason: "Need quantitative hardness, not just undecidability" }
+
+  - id: invariant
+    name: Invariant argument
+    constructor: pi
+    claim: impossibility
+    domains: [discrete, algebraic]
+    works_when: "Operation preserves a quantity the target violates"
+    kill_conditions:
+      - "No invariant separates achievable from unachievable"
+      - "Finding the invariant IS the hard part; if you don't see it quickly, try another technique"
+    escalation: cohomological_obstruction
+    lineage: { parent: null, era: classical }
+
+  - id: euler_characteristic
+    name: Euler characteristic
+    constructor: pi
+    claim: impossibility
+    domains: [continuous, geometric]
+    works_when: "Topological invariant χ = V - E + F constrains what's possible"
+    kill_conditions:
+      - "χ doesn't distinguish the cases (same Euler characteristic)"
+      - "Need finer invariant (homology, fundamental group)"
+    escalation: cohomological_obstruction
+    lineage: { parent: invariant, era: early_modern }
+
+  - id: monodromy
+    name: Monodromy obstruction
+    constructor: pi
+    claim: impossibility
+    domains: [continuous, algebraic]
+    works_when: "Loops in parameter space permute solutions; obstruction to global trivialization"
+    kill_conditions:
+      - "Fundamental group is trivial (simply connected parameter space)"
+      - "Monodromy is trivial (solutions don't permute)"
+    escalation: null
+    lineage: { parent: euler_characteristic, era: modern }
+
+  - id: no_homomorphism
+    name: No-homomorphism argument
+    constructor: pi
+    claim: impossibility
+    domains: [algebraic]
+    works_when: "Source has a property that any homomorphic image inherits; target lacks it"
+    kill_conditions:
+      - "Property not preserved by homomorphisms"
+      - "Homomorphism exists but isn't the map you wanted"
+    escalation: cohomological_obstruction
+    lineage: { parent: invariant, era: modern }
+
+  - id: cohomological_obstruction
+    name: Cohomological obstruction
+    constructor: pi
+    claim: impossibility
+    domains: [algebraic, geometric]
+    works_when: "Obstruction lives in H^n ≠ 0; construction requires H^n = 0"
+    kill_conditions:
+      - "Cohomology is trivial (H^n = 0) but construction still fails for other reasons"
+      - "Wrong cohomology theory for the problem"
+    escalation: null
+    lineage: { parent: invariant, era: modern, reason: "Invariant is ad hoc; cohomology systematizes obstruction theory" }
+
+  - id: local_global_failure
+    name: Local-global failure (Brauer-Manin)
+    constructor: sigma
+    claim: impossibility
+    domains: [number_theoretic]
+    works_when: "Local solutions exist at every place but no global solution exists"
+    kill_conditions:
+      - "Hasse principle holds for this class (quadratic forms, etc.)"
+      - "Brauer-Manin is not the only obstruction (need étale-Brauer)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: parity_obstruction
+    name: Parity obstruction (sieve theory)
+    constructor: pi
+    claim: impossibility
+    domains: [number_theoretic]
+    works_when: "Sieve can't distinguish primes from semiprimes"
+    kill_conditions:
+      - "Problem doesn't involve prime detection"
+      - "Bilinear forms or automorphic input breaks parity"
+    escalation: modularity_lifting
+    lineage: { parent: sieve, era: modern, reason: "Fundamental barrier Selberg proved is intrinsic" }
+
+  - id: rice_theorem
+    name: Rice's theorem
+    constructor: pi
+    claim: impossibility
+    domains: [discrete]
+    works_when: "Nontrivial semantic property of programs is undecidable"
+    kill_conditions:
+      - "Property is syntactic, not semantic"
+      - "Restricted program class (finite automata, pushdown automata)"
+    escalation: null
+    lineage: { parent: diagonalization, era: modern }
+
+  - id: ramsey_lower
+    name: Ramsey lower bound
+    constructor: sigma
+    claim: [lower_bound, impossibility]
+    domains: [combinatorial]
+    works_when: "Explicit coloring avoids monochromatic substructure up to size R(k)"
+    kill_conditions:
+      - "Can't construct the coloring explicitly"
+      - "Need upper bound, not lower"
+    escalation: probabilistic_method
+    lineage: { parent: ramsey, era: modern }
+
+  - id: vc_dimension
+    name: VC dimension
+    constructor: pi
+    claim: [lower_bound, impossibility]
+    domains: [combinatorial, probabilistic]
+    works_when: "Learning requires samples ≥ VC-dim; shattering obstruction"
+    kill_conditions:
+      - "VC-dim is infinite (class too rich)"
+      - "Need agnostic bounds (VC-dim gives realizable case)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  # ── Construction ──
+
+  - id: potential_method
+    name: Potential method
+    constructor: match
+    claim: construction
+    domains: [discrete, combinatorial]
+    works_when: "Each step decreases a potential function; guarantees termination"
+    kill_conditions:
+      - "No monotone potential exists (dynamics aren't monotone)"
+      - "Potential decrease per step too small (convergence too slow)"
+    escalation: game_equilibrium
+    lineage: { parent: greedy, era: modern, reason: "Greedy loses structure; potential preserves it via monotonicity" }
+
+  - id: gradient_descent
+    name: Gradient descent
+    constructor: sigma
+    claim: construction
+    domains: [continuous]
+    works_when: "Differentiable objective; need local minimum"
+    kill_conditions:
+      - "Non-convex (many local minima)"
+      - "Not differentiable"
+      - "Step size hard to choose (ill-conditioned)"
+    escalation: newton
+    lineage: { parent: null, era: early_modern }
+
+  - id: newton
+    name: Newton's method
+    constructor: sigma
+    claim: construction
+    domains: [continuous]
+    works_when: "Finding root of f(x)=0; f is smooth and good initial guess available"
+    kill_conditions:
+      - "Bad initial guess (basin of attraction missed)"
+      - "Jacobian singular or expensive"
+      - "Not smooth"
+    escalation: iteration
+    lineage: { parent: gradient_descent, era: early_modern, reason: "Gradient descent is first-order; Newton uses second-order info" }
+
+  - id: iteration
+    name: Fixed-point iteration
+    constructor: sigma
+    claim: construction
+    domains: [continuous]
+    works_when: "x = g(x); iteration x_{n+1} = g(x_n) converges"
+    kill_conditions:
+      - "g is not a contraction (diverges or cycles)"
+      - "Convergence too slow for practical use"
+    escalation: null
+    lineage: { parent: newton, era: classical }
+
+  - id: free_resolution
+    name: Free resolution
+    constructor: sigma
+    claim: construction
+    domains: [algebraic]
+    works_when: "Module has a projective resolution; construct maps step by step"
+    kill_conditions:
+      - "Resolution doesn't terminate (infinite projective dimension)"
+      - "Maps too complex to compute"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: grobner_basis
+    name: Gröbner basis computation
+    constructor: sigma
+    claim: construction
+    domains: [algebraic]
+    works_when: "Polynomial ideal; need explicit generators in canonical form"
+    kill_conditions:
+      - "Doubly exponential complexity in worst case"
+      - "Too many variables"
+    escalation: null
+    lineage: { parent: nullstellensatz, era: modern, reason: "Nullstellensatz gives existence; Gröbner gives algorithm" }
+
+  - id: triangulation
+    name: Triangulation
+    constructor: sigma
+    claim: construction
+    domains: [geometric]
+    works_when: "Need decomposition of space into simplices"
+    kill_conditions:
+      - "Space not triangulable"
+      - "Triangulation too fine (exponential number of simplices)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: convex_hull
+    name: Convex hull computation
+    constructor: sigma
+    claim: construction
+    domains: [geometric]
+    works_when: "Points in R^d; need the convex hull"
+    kill_conditions:
+      - "Dimension too high (complexity exponential in d)"
+      - "Points not in Euclidean space"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: sampling
+    name: Random sampling
+    constructor: sigma
+    claim: construction
+    domains: [probabilistic]
+    works_when: "Can sample from distribution; high probability of good outcome"
+    kill_conditions:
+      - "Sampling is expensive (intractable distribution)"
+      - "Success probability too low → need more samples or smarter sampling"
+    escalation: mcmc
+    lineage: { parent: probabilistic_method, era: modern, reason: "Probabilistic method proves existence; sampling constructs" }
+
+  - id: mcmc
+    name: Markov Chain Monte Carlo
+    constructor: sigma
+    claim: construction
+    domains: [probabilistic]
+    works_when: "Can design Markov chain with correct stationary distribution; chain mixes fast"
+    kill_conditions:
+      - "Chain doesn't mix (bottleneck, slow mixing)"
+      - "Stationary distribution hard to verify"
+    escalation: derandomization
+    lineage: { parent: sampling, era: modern, reason: "Direct sampling intractable; MCMC samples indirectly" }
+
+  - id: derandomization
+    name: Derandomization
+    constructor: sigma
+    claim: construction
+    domains: [combinatorial, probabilistic]
+    works_when: "Probabilistic proof of existence; method of conditional expectations makes it constructive"
+    kill_conditions:
+      - "Conditional expectations expensive to compute"
+      - "Probability space too large for exhaustive derandomization"
+    escalation: null
+    lineage: { parent: probabilistic_method, era: modern, reason: "Need explicit witness, not just existence" }
+
+  - id: shifting
+    name: Shifting / compression
+    constructor: sigma
+    claim: construction
+    domains: [combinatorial]
+    works_when: "Operator pushes set toward canonical form without increasing objective"
+    kill_conditions:
+      - "Operators don't commute (shifting cycles, doesn't converge)"
+      - "Canonical form doesn't exist (no fixed point)"
+      - "Operator increases objective on partial cubes / non-grid structures"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: compression
+    name: Compression (Bollobás-Leader)
+    constructor: sigma
+    claim: construction
+    domains: [combinatorial, geometric]
+    works_when: "Push toward initial segment; boundary non-increasing on grids/cubes"
+    kill_conditions:
+      - "Underlying structure isn't a grid/cube/product graph"
+      - "Matched pairs have different degrees (partial cube, not full cube)"
+    escalation: shifting
+    lineage: { parent: shifting, era: modern, reason: "Shifting is general; compression is shifting on product structures" }
+
+  - id: alteration
+    name: Alteration method
+    constructor: sigma
+    claim: construction
+    domains: [combinatorial]
+    works_when: "Random object + delete defective parts; defects are sparse"
+    kill_conditions:
+      - "Defects grow faster than deletions fix (O(n²) defects, O(1) per fix)"
+      - "Deletion changes the structure (not monotone)"
+    escalation: lovasz_local_lemma
+    lineage: { parent: probabilistic_method, era: modern, reason: "Probabilistic method gives impure existence; alteration cleans it" }
+
+  - id: game_equilibrium
+    name: Game equilibrium / best response
+    constructor: sigma
+    claim: [existence, construction]
+    domains: [discrete, combinatorial]
+    works_when: "Selfish optimization converges; Price of Anarchy bounded"
+    kill_conditions:
+      - "No potential function (game doesn't converge)"
+      - "Construction cost exceeds equilibrium value"
+      - "PoA unbounded"
+    escalation: null
+    lineage: { parent: potential_method, era: modern, reason: "No monotone potential; need stable point without monotonicity" }
+
+  # ���─ Number theory ──
+
+  - id: descent
+    name: Infinite descent (Fermat)
+    constructor: match
+    claim: [impossibility, existence]
+    domains: [number_theoretic, algebraic]
+    works_when: "Solutions have a natural size; smaller solution of same type exists"
+    kill_conditions:
+      - "No natural size measure"
+      - "Smaller solution isn't same type as original"
+    escalation: modularity_lifting
+    lineage: { parent: null, era: classical, origin: "Fermat ~1640" }
+
+  - id: circle_method
+    name: Circle method (Hardy-Littlewood)
+    constructor: sigma
+    claim: [existence, upper_bound]
+    domains: [number_theoretic]
+    works_when: "Counting solutions to additive problems; enough variables for estimates to close"
+    kill_conditions:
+      - "Minor arcs aren't minor"
+      - "Too few variables for estimates"
+      - "Need multiplicative, not additive structure"
+    escalation: sieve
+    lineage: { parent: null, era: modern }
+
+  - id: sieve
+    name: Sieve methods (Eratosthenes → Selberg)
+    constructor: pi
+    claim: [upper_bound, existence]
+    domains: [number_theoretic]
+    works_when: "Filtering integers by prime divisibility"
+    kill_conditions:
+      - "Parity problem: can't distinguish primes from semiprimes"
+      - "Need lower bounds (sieves give upper)"
+    escalation: modularity_lifting
+    lineage: { parent: null, era: classical }
+
+  - id: modularity_lifting
+    name: Modularity lifting (Wiles)
+    constructor: sigma
+    claim: [equivalence, existence]
+    domains: [number_theoretic, algebraic]
+    works_when: "2-dim Galois representation over Q; deformation ring = Hecke algebra"
+    kill_conditions:
+      - "Representation not 2-dimensional"
+      - "Not over Q"
+    escalation: null
+    lineage: { parent: descent, era: contemporary, reason: "Descent alone can't bridge arithmetic-analytic gap" }
+
+  - id: polynomial_method
+    name: Polynomial method (Dvir)
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [combinatorial, number_theoretic]
+    works_when: "Finite field structure; vanishing polynomial constrains set size by degree"
+    kill_conditions:
+      - "Over integers or reals (no algebraic closure)"
+      - "Set too small relative to ambient space"
+    escalation: null
+    lineage: { parent: nullstellensatz, era: contemporary, origin: "Dvir 2009" }
+
+  # ── Equivalence ──
+
+  - id: bijection
+    name: Bijective proof
+    constructor: quotient
+    claim: equivalence
+    domains: [discrete, combinatorial]
+    works_when: "Two sets have the same size; construct explicit 1-1 correspondence"
+    kill_conditions:
+      - "No natural bijection exists (only algebraic proof of equality)"
+      - "Objects are different types (need encoding/decoding layer)"
+    escalation: encoding_decoding
+    lineage: { parent: null, era: classical }
+
+  - id: encoding_decoding
+    name: Encoding / decoding
+    constructor: quotient
+    claim: equivalence
+    domains: [discrete]
+    works_when: "Two representations of same object; encode one, decode to other"
+    kill_conditions:
+      - "Encoding is lossy"
+      - "Decoding is ambiguous"
+    escalation: null
+    lineage: { parent: bijection, era: modern }
+
+  - id: homeomorphism
+    name: Homeomorphism
+    constructor: quotient
+    claim: equivalence
+    domains: [continuous]
+    works_when: "Continuous bijection with continuous inverse"
+    kill_conditions:
+      - "Spaces have different topological invariants"
+      - "Map is continuous but inverse isn't"
+    escalation: null
+    lineage: { parent: bijection, era: modern }
+
+  - id: isomorphism
+    name: Algebraic isomorphism
+    constructor: quotient
+    claim: equivalence
+    domains: [algebraic]
+    works_when: "Structure-preserving bijection between algebraic objects"
+    kill_conditions:
+      - "Objects have different invariants (order, rank, torsion)"
+      - "Isomorphism exists but isn't canonical"
+    escalation: morita
+    lineage: { parent: bijection, era: modern }
+
+  - id: coupling
+    name: Coupling
+    constructor: quotient
+    claim: equivalence
+    domains: [probabilistic]
+    works_when: "Joint distribution with correct marginals; joint properties imply marginal comparison"
+    kill_conditions:
+      - "No joint distribution with desired marginals exists"
+      - "Coupling inequality is loose"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: reciprocity
+    name: Reciprocity laws
+    constructor: quotient
+    claim: equivalence
+    domains: [number_theoretic]
+    works_when: "Local behavior determines global; checking all primes suffices"
+    kill_conditions:
+      - "Local-global fails for this class (Hasse principle broken)"
+      - "Need to check infinitely many primes (no finite criterion)"
+    escalation: class_field_theory
+    lineage: { parent: null, era: early_modern }
+
+  - id: class_field_theory
+    name: Class field theory
+    constructor: quotient
+    claim: equivalence
+    domains: [number_theoretic]
+    works_when: "Abelian extensions of number fields; Artin map gives explicit correspondence"
+    kill_conditions:
+      - "Extension is non-abelian → need Langlands program"
+      - "Not a number field"
+    escalation: null
+    lineage: { parent: reciprocity, era: modern, reason: "Reciprocity for individual primes; CFT for all abelian extensions" }
+
+  # ── Meta-techniques ──
+
+  - id: embed_solve_pullback
+    name: Embed-solve-pullback
+    constructor: null
+    claim: any
+    domains: any
+    works_when: "Target domain has stronger tools than source"
+    kill_conditions:
+      - "Pullback doesn't preserve constraints"
+      - "Embedding introduces false structure"
+      - "Integrality/rounding gap"
+    variants:
+      - { source: combinatorics, target: "3-SAT", gain: "exponential search", risk: "clause structure artificial" }
+      - { source: discrete, target: geometry, gain: "convexity, separation", risk: "rounding loses feasibility" }
+      - { source: nonlinear, target: "LP/SDP", gain: "poly-time solvers", risk: "integrality gap" }
+      - { source: time_domain, target: frequency, gain: "convolution → multiplication", risk: "localization lost" }
+      - { source: graph, target: algebra, gain: "eigenvalue bounds", risk: "semiring has no spectral theory" }
+    escalation: null
+    lineage: { parent: null, era: classical }
+
+  - id: contradiction
+    name: Proof by contradiction
+    constructor: pi
+    claim: any
+    domains: any
+    works_when: "Assume ¬P; derive contradiction with known facts"
+    kill_conditions:
+      - "Negation doesn't interact with problem structure (nothing useful follows from ¬P)"
+      - "Need constructive witness (contradiction only gives existence)"
+    escalation: null
+    lineage: { parent: null, era: classical }
+
+  - id: direct_construction
+    name: Direct construction
+    constructor: sigma
+    claim: [existence, construction]
+    domains: any
+    works_when: "Can build the object explicitly"
+    kill_conditions:
+      - "Object too complex to build by hand"
+      - "Existence is known but no construction technique applies"
+    escalation: probabilistic_method
+    lineage: { parent: null, era: classical }
+
+  - id: regularity_lemma
+    name: Szemerédi regularity lemma
+    constructor: sigma
+    claim: [existence, upper_bound]
+    domains: [combinatorial]
+    works_when: "Large dense graph; reduce to bounded-size pseudorandom structure"
+    kill_conditions:
+      - "Need polynomial bounds (regularity gives tower-function)"
+      - "Graph is sparse"
+    escalation: fourier_on_groups
+    lineage: { parent: ramsey, era: modern, reason: "Ramsey bounds too large" }
+
+  - id: generating_function_identity
+    name: Generating function identity
+    constructor: quotient
+    claim: equivalence
+    domains: [combinatorial]
+    works_when: "Two combinatorial quantities have the same generating function"
+    kill_conditions:
+      - "No closed-form generating function"
+      - "Coefficients hard to extract"
+    escalation: null
+    lineage: { parent: bijection, era: early_modern }
+
+  # Placeholders — referenced in grid but need metadata from domain experts
+  - id: diffeomorphism
+    name: Diffeomorphism
+    constructor: quotient
+    claim: equivalence
+    domains: [continuous, geometric]
+    works_when: "Smooth bijection with smooth inverse"
+    kill_conditions:
+      - "Exotic smooth structures (same topological type, different smooth)"
+    escalation: null
+    lineage: { parent: homeomorphism, era: modern }
+
+  - id: morita
+    name: Morita equivalence
+    constructor: quotient
+    claim: equivalence
+    domains: [algebraic]
+    works_when: "Rings with equivalent module categories"
+    kill_conditions:
+      - "Need ring isomorphism, not just Morita equivalence"
+    escalation: derived_equivalence
+    lineage: { parent: isomorphism, era: modern }
+
+  - id: derived_equivalence
+    name: Derived equivalence
+    constructor: quotient
+    claim: equivalence
+    domains: [algebraic]
+    works_when: "Derived categories are equivalent (weaker than Morita)"
+    kill_conditions:
+      - "Need abelian category equivalence, not just derived"
+    escalation: null
+    lineage: { parent: morita, era: contemporary }
+
+  - id: poincare_duality
+    name: Poincaré duality
+    constructor: quotient
+    claim: equivalence
+    domains: [geometric]
+    works_when: "Oriented closed manifold; H^k ≅ H_{n-k}"
+    kill_conditions:
+      - "Manifold not oriented or not closed"
+      - "Need finer than homology (homotopy type)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: pontryagin
+    name: Pontryagin duality
+    constructor: quotient
+    claim: equivalence
+    domains: [algebraic, geometric]
+    works_when: "Locally compact abelian group; dual group captures all characters"
+    kill_conditions:
+      - "Group not abelian → need representation theory"
+      - "Group not locally compact"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  # ── Logic ──
+
+  - id: contrapositive
+    name: Contrapositive
+    constructor: pi
+    claim: [impossibility, upper_bound]
+    domains: [discrete, algebraic, continuous]
+    works_when: "Direct implication P→Q hard; ¬Q→¬P is easier to verify"
+    kill_conditions:
+      - Negation introduces quantifiers harder than the original statement
+      - "¬Q is not cleanly characterizable"
+    escalation: contradiction
+    lineage: { parent: null, era: classical }
+
+  - id: zorns_lemma
+    name: "Zorn's lemma"
+    constructor: truncation
+    claim: existence
+    domains: [algebraic, continuous]
+    works_when: Partially ordered set where every chain has an upper bound; need a maximal element
+    kill_conditions:
+      - Upper bound condition fails (chain without bound)
+      - "Need constructive witness, not just existence (Zorn is nonconstructive)"
+      - Poset too large to reason about chains concretely
+    escalation: transfinite_induction
+    lineage: { parent: null, era: modern, reason: Equivalent to Axiom of Choice; used when explicit construction is impossible }
+
+  - id: transfinite_induction
+    name: Transfinite induction
+    constructor: match
+    claim: [existence, construction]
+    domains: [discrete, algebraic, continuous]
+    works_when: Well-ordered set indexed by ordinals; inductive step handles successor and limit ordinals
+    kill_conditions:
+      - No natural well-ordering on the parameter space
+      - "Limit ordinal step fails (accumulated construction doesn't converge)"
+      - "Need an explicit finite bound, not just ordinal termination"
+    escalation: zorns_lemma
+    lineage: { parent: induction, era: modern, reason: Ordinary induction covers ω; transfinite covers all ordinals }
+
+  - id: well_ordering
+    name: Well-ordering argument (minimal counterexample)
+    constructor: match
+    claim: [existence, impossibility]
+    domains: [discrete, number_theoretic]
+    works_when: Assume counterexample exists; well-ordering gives minimal one; derive contradiction
+    kill_conditions:
+      - "Set not well-ordered (dense rationals, reals)"
+      - "Minimal counterexample doesn't yield a strictly smaller one"
+    escalation: transfinite_induction
+    lineage: { parent: induction, era: classical, reason: Induction is constructive ascent; well-ordering is descent to minimum }
+
+  - id: transfer_principle
+    name: Transfer principle (model theory)
+    constructor: pi
+    claim: equivalence
+    domains: [algebraic, continuous, number_theoretic]
+    works_when: First-order statement true in one model transfers to elementarily equivalent model
+    kill_conditions:
+      - "Statement is not first-order (involves completeness, well-ordering, compactness)"
+      - Models not elementarily equivalent
+      - "Need quantitative bounds that don't transfer"
+    escalation: ultraproducts
+    lineage: { parent: null, era: modern, reason: "Łoś's theorem gives transfer for ultraproducts" }
+
+  - id: ultraproducts
+    name: Ultraproduct construction
+    constructor: sigma
+    claim: [existence, equivalence]
+    domains: [algebraic, continuous]
+    works_when: Need a single model capturing asymptotic behavior of a family of structures
+    kill_conditions:
+      - Property not preserved under ultraproducts (not first-order)
+      - "Need explicit bounds, not asymptotic existence"
+      - Ultrafilter choice makes result nonconstructive
+    escalation: compactness
+    lineage: { parent: transfer_principle, era: modern, reason: "Proves compactness theorem; builds models first-order logic can't construct directly" }
+
+  - id: forcing
+    name: Forcing (set theory)
+    constructor: sigma
+    claim: [impossibility, construction, existence]
+    domains: [discrete, algebraic]
+    works_when: Need to show a statement is independent of ZFC; build a model where it fails
+    kill_conditions:
+      - Statement is decidable in ZFC
+      - Forcing conditions collapse cardinals you need preserved
+      - Ground model already decides the statement
+    escalation: null
+    lineage: { parent: diagonalization, era: modern, reason: Diagonalization shows undecidability in computability; forcing shows independence in set theory }
+
+  - id: lowenheim_skolem
+    name: Löwenheim-Skolem
+    constructor: sigma
+    claim: [existence, impossibility]
+    domains: [algebraic, discrete]
+    works_when: First-order theory with infinite model; need model of different cardinality
+    kill_conditions:
+      - Need to preserve second-order properties (categoricity)
+      - Need a specific cardinality the theory forbids
+    escalation: ultraproducts
+    lineage: { parent: compactness, era: modern, reason: Compactness gives models; Löwenheim-Skolem controls their size }
+
+  - id: compactness_logic
+    name: Compactness theorem (logic)
+    constructor: truncation
+    claim: existence
+    domains: [discrete, algebraic]
+    works_when: Every finite subset of a theory has a model; need a model of the whole theory
+    kill_conditions:
+      - "Theory is not first-order (second-order, infinitary logic)"
+      - Need a model with specific properties not guaranteed by finite satisfiability
+    escalation: ultraproducts
+    lineage: { parent: null, era: modern, reason: Topological compactness analog in logic }
+
+
+  # ── Analysis ──
+
+  - id: sandwich_squeeze
+    name: Squeeze theorem
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: Target quantity trapped between two others that converge to the same limit
+    kill_conditions:
+      - "Can't find tight upper and lower bounds that converge"
+      - "Bounds don't converge to the same limit"
+    escalation: dominated_convergence
+    lineage: { parent: monotonicity, era: classical }
+
+  - id: dominated_convergence
+    name: Dominated convergence theorem
+    constructor: pi
+    claim: [equivalence, upper_bound]
+    domains: [continuous]
+    works_when: Pointwise convergent sequence of functions bounded by an integrable dominator
+    kill_conditions:
+      - No integrable dominator (sequence oscillates or grows without bound)
+      - Convergence not pointwise (only in measure) — may still work via subsequence
+      - "Need rate of convergence, not just limit interchange"
+    escalation: null
+    lineage: { parent: null, era: modern, reason: Justifies interchanging limit and integral }
+
+  - id: maximum_principle
+    name: Maximum principle
+    constructor: pi
+    claim: [upper_bound, uniqueness]
+    domains: [continuous]
+    works_when: "Solution to elliptic or parabolic PDE achieves extrema on the boundary, not interior"
+    kill_conditions:
+      - PDE not elliptic or parabolic (hyperbolic equations lack maximum principle)
+      - Coefficients degenerate (equation loses ellipticity)
+      - Domain unbounded without decay conditions
+    escalation: barrier_function
+    lineage: { parent: null, era: modern, reason: Fundamental for elliptic regularity }
+
+  - id: barrier_function
+    name: Barrier function method
+    constructor: sigma
+    claim: [upper_bound, existence]
+    domains: [continuous]
+    works_when: Construct a super/sub-solution that bounds the true solution via comparison principle
+    kill_conditions:
+      - "Can't construct a barrier (no explicit super/sub-solution)"
+      - "Comparison principle fails (nonlinear coupling, systems)"
+    escalation: energy_method
+    lineage: { parent: maximum_principle, era: modern, reason: Maximum principle gives qualitative bound; barriers give quantitative }
+
+  - id: energy_method
+    name: Energy method
+    constructor: pi
+    claim: [upper_bound, existence, uniqueness]
+    domains: [continuous]
+    works_when: PDE has a conserved or dissipated energy functional; bound solutions via energy estimates
+    kill_conditions:
+      - No natural energy functional (non-variational PDE)
+      - "Energy not coercive (doesn't control the norm you need)"
+      - "Nonlinear terms can't be absorbed by energy dissipation"
+    escalation: bootstrapping
+    lineage: { parent: null, era: modern }
+
+  - id: bootstrapping
+    name: Bootstrapping (PDE regularity)
+    constructor: match
+    claim: [upper_bound, existence]
+    domains: [continuous]
+    works_when: Weak regularity implies slightly better regularity; iterate to optimal
+    kill_conditions:
+      - Regularity gain per step is zero (critical exponent)
+      - "Bootstrap loop doesn't close (estimate requires more regularity than it produces)"
+      - Need to cross a critical threshold where the method changes character
+    escalation: null
+    lineage: { parent: energy_method, era: modern, reason: Energy gives initial weak solution; bootstrapping upgrades regularity }
+
+  - id: density_argument
+    name: Density / approximation argument
+    constructor: pi
+    claim: [existence, equivalence, upper_bound]
+    domains: [continuous, algebraic]
+    works_when: "Prove for a dense subset (smooth functions, rationals, simple objects); extend by continuity"
+    kill_conditions:
+      - Property not preserved under limits
+      - Extension map not continuous in the right topology
+      - Dense subset is not actually dense in the required norm
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: approximation_argument
+    name: Approximation argument (mollification / truncation)
+    constructor: pi
+    claim: [existence, upper_bound]
+    domains: [continuous]
+    works_when: Prove for regularized/truncated version; pass to limit
+    kill_conditions:
+      - Regularization destroys the key property
+      - Estimates not uniform in the approximation parameter
+      - "Limit object doesn't solve the original problem (solutions of approximating equations diverge)"
+    escalation: compactness
+    lineage: { parent: density_argument, era: modern, reason: Density extends from nice to general; approximation builds nice versions of the problem itself }
+
+  - id: weak_convergence
+    name: Weak convergence / compactness in function spaces
+    constructor: truncation
+    claim: existence
+    domains: [continuous]
+    works_when: Bounded sequence in reflexive Banach space; extract weakly convergent subsequence
+    kill_conditions:
+      - "Space not reflexive (L^1, L^∞)"
+      - Nonlinear operations not weakly continuous (need compensated compactness or concentration-compactness)
+      - Need strong convergence for the limit to inherit the property
+    escalation: null
+    lineage: { parent: compactness, era: modern, reason: Compactness in finite dimensions; weak compactness in infinite dimensions }
+
+  - id: sobolev_embedding
+    name: Sobolev embedding / interpolation
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: "Control stronger norm (pointwise, Hölder) by weaker norm (Sobolev) when dimension allows"
+    kill_conditions:
+      - Critical or supercritical exponent (embedding fails at the endpoint)
+      - Domain lacks regularity (Lipschitz boundary needed)
+      - Need the non-compact embedding (limiting case requires concentration arguments)
+    escalation: null
+    lineage: { parent: cauchy_schwarz, era: modern, reason: Cauchy-Schwarz bounds one integral; Sobolev relates norms across function spaces }
+
+  - id: interpolation_spaces
+    name: Interpolation of operators
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: Operator bounded on two endpoint spaces; need bounds on intermediate spaces
+    kill_conditions:
+      - Endpoint bounds unavailable or too weak
+      - Operator not compatible with the interpolation functor (sublinear but not linear)
+      - "Need sharp constants, not just boundedness"
+    escalation: null
+    lineage: { parent: sobolev_embedding, era: modern, reason: Riesz-Thorin and Marcinkiewicz handle operator norms between spaces }
+
+  - id: littlewood_paley
+    name: Littlewood-Paley decomposition
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: "Decompose function by frequency scale; estimate each piece separately, sum via square function"
+    kill_conditions:
+      - "Function has no natural frequency structure (discrete, algebraic)"
+      - "Need sharp endpoint estimates where Littlewood-Paley theory fails (L^1, L^∞)"
+      - Interactions between frequency scales dominate (need paraproduct analysis)
+    escalation: null
+    lineage: { parent: fourier_on_groups, era: modern, reason: Fourier gives global frequency info; Littlewood-Paley localizes by scale }
+
+  - id: calderon_zygmund
+    name: Calderón-Zygmund theory
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: Singular integral operator; need L^p bounds (1 < p < ∞)
+    kill_conditions:
+      - Kernel not of Calderón-Zygmund type (no size + smoothness estimates)
+      - "Need L^1 or L^∞ bounds (only weak (1,1) available)"
+      - Non-translation-invariant operator on non-homogeneous space
+    escalation: littlewood_paley
+    lineage: { parent: null, era: modern }
+
+  - id: contour_integration
+    name: Contour integration / residue calculus
+    constructor: sigma
+    claim: [upper_bound, existence, equivalence]
+    domains: [continuous, number_theoretic]
+    works_when: Integral along real line equals sum of residues in a contour; evaluate intractable integrals
+    kill_conditions:
+      - "Integrand has no meromorphic extension (essential singularities, branch cuts)"
+      - "Can't close the contour (integrand doesn't decay on arcs)"
+      - "Need real-variable bounds, not exact evaluation"
+    escalation: null
+    lineage: { parent: null, era: early_modern, reason: "Cauchy's residue theorem" }
+
+  - id: analytic_continuation
+    name: Analytic continuation
+    constructor: sigma
+    claim: [existence, equivalence]
+    domains: [continuous, number_theoretic]
+    works_when: Function defined on subdomain; unique extension to larger domain if holomorphic
+    kill_conditions:
+      - Natural boundary (function has singularities dense on the boundary of convergence)
+      - Function not holomorphic on the subdomain
+      - Multiple extensions possible (function not single-valued on the larger domain)
+    escalation: null
+    lineage: { parent: contour_integration, era: early_modern }
+
+  - id: harnack_inequality
+    name: Harnack inequality
+    constructor: pi
+    claim: upper_bound
+    domains: [continuous]
+    works_when: Nonnegative solution to elliptic PDE; pointwise values comparable across compact subdomain
+    kill_conditions:
+      - Solution changes sign
+      - PDE not uniformly elliptic (degenerate coefficients)
+      - Domain not connected
+    escalation: maximum_principle
+    lineage: { parent: maximum_principle, era: modern, reason: Maximum principle gives one-sided bound; Harnack gives two-sided }
+
+  - id: concentration_compactness
+    name: Concentration-compactness (Lions)
+    constructor: truncation
+    claim: existence
+    domains: [continuous]
+    works_when: "Minimizing sequence for a variational problem may lose compactness via concentration, vanishing, or dichotomy"
+    kill_conditions:
+      - "All three alternatives (vanishing, dichotomy, compactness) are hard to exclude"
+      - Problem lacks the scaling structure needed to classify loss of compactness
+    escalation: null
+    lineage: { parent: weak_convergence, era: contemporary, reason: "Weak compactness extracts a limit, but concentration-compactness diagnoses why limits fail" }
+
+  - id: monotone_convergence
+    name: Monotone convergence theorem
+    constructor: pi
+    claim: [equivalence, upper_bound]
+    domains: [continuous]
+    works_when: Increasing sequence of non-negative measurable functions; limit of integrals = integral of limit
+    kill_conditions:
+      - Sequence not monotone
+      - Functions not non-negative (need dominated convergence instead)
+    escalation: dominated_convergence
+    lineage: { parent: null, era: modern }
+
+  - id: continuity_method
+    name: Continuity method
+    constructor: sigma
+    claim: existence
+    domains: [continuous]
+    works_when: "Deform from known solvable PDE to target; solution set is open and closed in parameter, hence all or nothing"
+    kill_conditions:
+      - Openness fails (linearization not invertible)
+      - Closedness fails (no a priori estimates for limit)
+      - Deformation path hits a singularity
+    escalation: null
+    lineage: { parent: ivt, era: modern, reason: IVT-style connectedness argument in infinite-dimensional function space }
+
+  - id: separation_argument
+    name: Hahn-Banach / separating hyperplane
+    constructor: sigma
+    claim: [existence, impossibility]
+    domains: [continuous, algebraic]
+    works_when: Convex sets in locally convex space; disjoint sets can be separated by a functional
+    kill_conditions:
+      - Space not locally convex
+      - Sets not convex
+      - "Need constructive separator, but Hahn-Banach is nonconstructive"
+    escalation: fenchel_duality
+    lineage: { parent: convexity_argument, era: modern, reason: Convexity gives uniqueness; separation gives existence of certificates }
+
+  - id: krein_milman
+    name: Krein-Milman theorem
+    constructor: sigma
+    claim: [existence, equivalence]
+    domains: [continuous]
+    works_when: Compact convex set in locally convex space is the closed convex hull of its extreme points
+    kill_conditions:
+      - Set not compact
+      - Space not locally convex
+      - Need to identify extreme points (the hard part)
+    escalation: separation_argument
+    lineage: { parent: convexity_argument, era: modern }
+
+  - id: baire_category
+    name: Baire category theorem
+    constructor: truncation
+    claim: [existence, impossibility]
+    domains: [continuous]
+    works_when: Complete metric space (or locally compact Hausdorff); countable intersection of dense open sets is dense
+    kill_conditions:
+      - Space not complete and not locally compact
+      - "Need measure-theoretic statement, not topological (meager ≠ measure zero)"
+      - Constructive witness needed (Baire is nonconstructive)
+    escalation: null
+    lineage: { parent: compactness, era: modern, reason: Compactness gives existence via sequences; Baire gives generic existence }
+
+
+  # ── Algebra ──
+
+  - id: sylow
+    name: Sylow theorems
+    constructor: sigma
+    claim: [existence, upper_bound]
+    domains: [algebraic]
+    works_when: "Finite group; need subgroup of prime-power order, or constraints on number of such subgroups"
+    kill_conditions:
+      - Group is infinite
+      - Need information about non-prime-power subgroups
+      - Group is abelian (Sylow is trivial; use fundamental theorem of finitely generated abelian groups)
+    escalation: structure_theorems
+    lineage: { parent: null, era: early_modern }
+
+  - id: burnside_lemma
+    name: "Burnside's lemma (Cauchy-Frobenius)"
+    constructor: sigma
+    claim: [upper_bound, equivalence]
+    domains: [algebraic, combinatorial]
+    works_when: "Count orbits of a group action; |orbits| = average number of fixed points"
+    kill_conditions:
+      - Group action hard to enumerate
+      - "Need orbit structure, not just count"
+      - Group is infinite (sum diverges)
+    escalation: polya_enumeration
+    lineage: { parent: double_counting, era: modern, reason: Double counting over group orbits }
+
+  - id: polya_enumeration
+    name: Pólya enumeration theorem
+    constructor: sigma
+    claim: [upper_bound, construction]
+    domains: [combinatorial, algebraic]
+    works_when: Count combinatorial objects up to symmetry using cycle index of the symmetry group
+    kill_conditions:
+      - Symmetry group has no clean cycle index
+      - "Objects have constraints cycle index can't encode"
+    escalation: generating_function_identity
+    lineage: { parent: burnside_lemma, era: modern, reason: Burnside counts orbits; Pólya gives generating functions for weighted counts }
+
+  - id: character_theory
+    name: Character theory
+    constructor: pi
+    claim: [existence, impossibility, upper_bound]
+    domains: [algebraic]
+    works_when: "Representation theory over C; character table constrains subgroups, conjugacy classes, and extensions"
+    kill_conditions:
+      - "Characteristic p (Brauer characters needed, theory is harder)"
+      - Representations are infinite-dimensional
+      - "Need module structure, not just characters (character doesn't determine module)"
+    escalation: null
+    lineage: { parent: spectral, era: modern, reason: Eigenvalues of group algebra elements }
+
+  - id: nakayama_lemma
+    name: "Nakayama's lemma"
+    constructor: pi
+    claim: [uniqueness, upper_bound]
+    domains: [algebraic]
+    works_when: Finitely generated module over local ring; mod maximal ideal is zero implies module is zero
+    kill_conditions:
+      - Module not finitely generated
+      - Ring not local (or not in the Jacobson radical setting)
+    escalation: null
+    lineage: { parent: kernel_triviality, era: modern, reason: Kernel triviality is the linear case; Nakayama is the commutative algebra generalization }
+
+  - id: noether_normalization
+    name: Noether normalization
+    constructor: sigma
+    claim: [existence, construction]
+    domains: [algebraic]
+    works_when: Finitely generated k-algebra; express as finite extension of polynomial ring
+    kill_conditions:
+      - Algebra not finitely generated
+      - Base field too small (need generic linear change of variables)
+      - Need the normalization explicitly (constructive version requires Gröbner basis)
+    escalation: grobner_basis
+    lineage: { parent: structure_theorems, era: modern }
+
+  - id: going_up_down
+    name: Going-up / going-down theorems
+    constructor: sigma
+    claim: existence
+    domains: [algebraic]
+    works_when: Integral extension of rings; prime chains lift (going-up) or descend (going-down)
+    kill_conditions:
+      - Extension not integral
+      - Going-down needs flatness or integrally closed domain
+      - Need more than existence of primes (need explicit description)
+    escalation: null
+    lineage: { parent: noether_normalization, era: modern }
+
+  - id: spectral_sequence
+    name: Spectral sequence
+    constructor: pi
+    claim: [upper_bound, existence, equivalence]
+    domains: [algebraic, geometric]
+    works_when: Filtered complex; successive approximations converge to desired (co)homology
+    kill_conditions:
+      - "Differentials intractable (can't compute d_r pages)"
+      - "Spectral sequence doesn't degenerate at a usable page"
+      - Extension problem at E_∞ is non-split
+    escalation: null
+    lineage: { parent: free_resolution, era: modern, reason: Resolutions give one (co)homology group; spectral sequences relate multiple }
+
+  - id: tensor_product_trick
+    name: Tensor product trick
+    constructor: sigma
+    claim: [existence, construction, equivalence]
+    domains: [algebraic]
+    works_when: Extend scalars (tensor with a field extension or completion) to simplify; descend the result
+    kill_conditions:
+      - Property not preserved under base change
+      - Descent fails (Galois cohomology obstruction)
+      - "Extension kills the structure you need (e.g., tensoring with algebraic closure destroys Galois information)"
+    escalation: null
+    lineage: { parent: embed_solve_pullback, era: modern, reason: Embed-solve-pullback where the embedding is base change }
+
+  - id: localization
+    name: Localization (local-global principle)
+    constructor: pi
+    claim: [existence, equivalence, uniqueness]
+    domains: [algebraic, number_theoretic]
+    works_when: Property can be checked locally at each prime; local results glue to global
+    kill_conditions:
+      - "Local-global principle fails for this property (Brauer-Manin obstruction, SHA)"
+      - "Gluing requires patching data that doesn't exist"
+      - Localization kills torsion you need to detect
+    escalation: local_global_failure
+    lineage: { parent: null, era: modern }
+
+
+  # ── Topology ──
+
+  - id: mayer_vietoris
+    name: Mayer-Vietoris sequence
+    constructor: match
+    claim: [equivalence, upper_bound, impossibility]
+    domains: [geometric, algebraic]
+    works_when: Space decomposes into two open sets with known homology; long exact sequence computes the whole
+    kill_conditions:
+      - No natural decomposition into two pieces
+      - "Intersection too complicated (shifts difficulty, doesn't eliminate it)"
+      - "Need homotopy type, not just homology"
+    escalation: spectral_sequence
+    lineage: { parent: null, era: modern }
+
+  - id: long_exact_sequence
+    name: Long exact sequence (homological algebra)
+    constructor: match
+    claim: [existence, equivalence, impossibility]
+    domains: [algebraic, geometric]
+    works_when: Short exact sequence of complexes; connecting homomorphism relates homology groups
+    kill_conditions:
+      - No natural short exact sequence to start from
+      - Extension class is nontrivial and hard to compute
+    escalation: spectral_sequence
+    lineage: { parent: null, era: modern }
+
+  - id: lefschetz_fixed_point
+    name: Lefschetz fixed point theorem
+    constructor: truncation
+    claim: existence
+    domains: [geometric]
+    works_when: Continuous self-map of compact space; Lefschetz number nonzero implies fixed point
+    kill_conditions:
+      - "Lefschetz number is zero (doesn't rule out fixed points, but theorem gives nothing)"
+      - Homology hard to compute
+      - "Need to locate the fixed point, not just prove existence"
+    escalation: brouwer_fixed_point
+    lineage: { parent: brouwer_fixed_point, era: modern, reason: Brouwer needs convexity; Lefschetz uses homological algebra on general spaces }
+
+  - id: degree_theory
+    name: Degree theory (Brouwer degree)
+    constructor: pi
+    claim: [existence, impossibility]
+    domains: [geometric, continuous]
+    works_when: Continuous map between oriented manifolds of same dimension; nonzero degree implies surjectivity
+    kill_conditions:
+      - "Dimensions don't match"
+      - "Degree is zero (map might still be surjective, but degree gives nothing)"
+      - Manifold not oriented
+    escalation: lefschetz_fixed_point
+    lineage: { parent: null, era: modern }
+
+  - id: morse_theory
+    name: Morse theory
+    constructor: match
+    claim: [existence, equivalence, construction]
+    domains: [geometric]
+    works_when: Smooth function on manifold; critical points determine topology (CW structure)
+    kill_conditions:
+      - Function has degenerate critical points (not Morse)
+      - Manifold not smooth
+      - Critical points too numerous to classify
+    escalation: null
+    lineage: { parent: null, era: modern, reason: Connects differential topology to combinatorial topology }
+
+  - id: surgery
+    name: Surgery theory
+    constructor: sigma
+    claim: [construction, equivalence]
+    domains: [geometric]
+    works_when: Modify manifold by cutting and regluing along spheres; classify manifolds up to cobordism
+    kill_conditions:
+      - "Dimension too low (surgery exact sequence requires dimension ≥ 5)"
+      - Surgery obstruction in L-group is nonzero
+      - Manifold not simply connected (fundamental group makes Wall groups intractable)
+    escalation: null
+    lineage: { parent: morse_theory, era: modern, reason: Morse gives handle decomposition; surgery modifies handles }
+
+  - id: cobordism
+    name: Cobordism argument
+    constructor: pi
+    claim: [equivalence, impossibility]
+    domains: [geometric]
+    works_when: Two manifolds are cobordant iff they represent the same class in cobordism ring
+    kill_conditions:
+      - Cobordism ring hard to compute in the relevant dimension
+      - "Need diffeomorphism, not just cobordism (cobordism is coarser)"
+    escalation: surgery
+    lineage: { parent: null, era: modern }
+
+  - id: characteristic_classes
+    name: "Characteristic classes (Chern, Stiefel-Whitney, Pontryagin)"
+    constructor: pi
+    claim: [impossibility, upper_bound]
+    domains: [geometric, algebraic]
+    works_when: "Vector bundle over a space; characteristic class in cohomology obstructs triviality, sections, or immersions"
+    kill_conditions:
+      - "Characteristic class is zero (doesn't rule out the property)"
+      - "Need primary obstruction, but higher obstructions are nonzero"
+      - Bundle not in the right category (real vs. complex vs. oriented)
+    escalation: cohomological_obstruction
+    lineage: { parent: cohomological_obstruction, era: modern, reason: Specific computable cohomological obstructions for bundles }
+
+
+  # ── Geometry ──
+
+  - id: riemann_roch
+    name: Riemann-Roch theorem
+    constructor: sigma
+    claim: [existence, lower_bound]
+    domains: [geometric, algebraic]
+    works_when: Divisor on curve or coherent sheaf on variety; computes dimension of global sections
+    kill_conditions:
+      - Higher-dimensional variety (need Hirzebruch-Riemann-Roch or Grothendieck-Riemann-Roch)
+      - Sheaf not coherent
+      - "Need explicit sections, not just dimension count"
+    escalation: null
+    lineage: { parent: null, era: early_modern }
+
+  - id: bezout
+    name: "Bézout's theorem"
+    constructor: pi
+    claim: upper_bound
+    domains: [geometric, algebraic]
+    works_when: "Two projective curves of degrees d, e; intersection ≤ d·e (with multiplicity, equality)"
+    kill_conditions:
+      - Curves share a component (intersection infinite)
+      - Working in affine space (need projective closure)
+      - Higher dimensions (need more sophisticated intersection theory)
+    escalation: null
+    lineage: { parent: nullstellensatz, era: early_modern }
+
+  - id: deformation
+    name: Deformation argument
+    constructor: sigma
+    claim: [existence, equivalence]
+    domains: [geometric, algebraic]
+    works_when: Prove for a special member of a family; property is open/closed in the family
+    kill_conditions:
+      - Property not semicontinuous (can jump in families)
+      - No flat family connecting special to general
+      - Special fiber is too degenerate to analyze
+    escalation: null
+    lineage: { parent: density_argument, era: modern, reason: "Density argument for algebraic geometry: specialize, then lift" }
+
+  - id: gauss_bonnet
+    name: Gauss-Bonnet theorem
+    constructor: pi
+    claim: [equivalence, impossibility]
+    domains: [geometric]
+    works_when: Integral of curvature equals topological invariant (Euler characteristic)
+    kill_conditions:
+      - Manifold has boundary (need boundary correction term)
+      - Curvature not integrable
+      - "Need local information, not just global integral"
+    escalation: characteristic_classes
+    lineage: { parent: euler_characteristic, era: modern, reason: Euler characteristic is topological; Gauss-Bonnet connects it to geometry }
+
+  - id: comparison_theorem
+    name: "Comparison theorems (Rauch, Toponogov, Bishop-Gromov)"
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [geometric]
+    works_when: Riemannian manifold with curvature bounds; compare to constant-curvature model space
+    kill_conditions:
+      - "Curvature bound not available (need two-sided or sectional, depending on theorem)"
+      - Manifold has boundary or is non-complete
+      - "Need sharp estimate, not just comparison"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+  - id: lefschetz_hyperplane
+    name: Lefschetz hyperplane theorem
+    constructor: pi
+    claim: equivalence
+    domains: [geometric, algebraic]
+    works_when: Smooth projective variety; homology of hyperplane section determines homology up to middle dimension
+    kill_conditions:
+      - Variety singular
+      - Need middle-dimensional homology (exactly where Lefschetz says nothing)
+      - Working with non-ample divisor
+    escalation: null
+    lineage: { parent: mayer_vietoris, era: modern, reason: Hyperplane section as a topological decomposition }
+
+  - id: sard
+    name: "Sard's theorem (generic transversality)"
+    constructor: truncation
+    claim: existence
+    domains: [continuous, geometric]
+    works_when: Smooth map; almost every value is a regular value (critical values have measure zero)
+    kill_conditions:
+      - Map not smooth enough (C^k with k too small)
+      - "Need specific regular value, not generic"
+      - "Finite-dimensional Sard doesn't apply in infinite dimensions (need Smale-Sard)"
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+
+  # ── Number theory ──
+
+  - id: quadratic_reciprocity
+    name: Quadratic reciprocity (and higher reciprocity)
+    constructor: pi
+    claim: equivalence
+    domains: [number_theoretic]
+    works_when: "Determine solvability of x² ≡ a mod p from arithmetic of p and a"
+    kill_conditions:
+      - Higher-degree congruences (need Artin reciprocity or class field theory)
+      - Composite modulus (need CRT first)
+    escalation: class_field_theory
+    lineage: { parent: reciprocity, era: early_modern }
+
+  - id: dirichlet_series
+    name: Dirichlet series / L-functions
+    constructor: pi
+    claim: [existence, upper_bound, lower_bound]
+    domains: [number_theoretic]
+    works_when: "Arithmetic function encoded as Σ a(n)n^{-s}; analytic properties (poles, zeros, functional equation) give number-theoretic information"
+    kill_conditions:
+      - Analytic continuation not available (only converges in half-plane)
+      - Zeros not well-understood (GRH needed but unproven)
+      - Function not multiplicative (no Euler product)
+    escalation: circle_method
+    lineage: { parent: analytic_continuation, era: modern }
+
+  - id: large_sieve
+    name: Large sieve inequality
+    constructor: pi
+    claim: upper_bound
+    domains: [number_theoretic]
+    works_when: Exponential sum or character sum over well-spaced points; duality gives L² bound
+    kill_conditions:
+      - Points not well-spaced
+      - "Need pointwise bound, not L² average"
+    escalation: sieve
+    lineage: { parent: sieve, era: modern, reason: Sieve gives combinatorial bounds; large sieve gives analytic bounds via duality }
+
+
+  # ── Probability ──
+
+  - id: martingale
+    name: "Martingale methods (Azuma-Hoeffding, optional stopping)"
+    constructor: pi
+    claim: [upper_bound, lower_bound, existence]
+    domains: [probabilistic]
+    works_when: Adapted sequence with bounded differences; concentration around expectation
+    kill_conditions:
+      - Differences not bounded (heavy tails)
+      - Filtration not natural (hard to express quantity as a martingale)
+      - "Need stronger than Gaussian tails → try Talagrand"
+    escalation: talagrand
+    lineage: { parent: chernoff, era: modern, reason: Chernoff needs independence; martingale handles dependent sequences }
+
+  - id: talagrand
+    name: Talagrand concentration inequality
+    constructor: pi
+    claim: upper_bound
+    domains: [probabilistic]
+    works_when: Function of independent variables that is Lipschitz or convex; exponential concentration around median
+    kill_conditions:
+      - Function not Lipschitz (certification via witnesses needed)
+      - Variables not independent
+      - "Need concentration around mean, not median (may differ)"
+    escalation: null
+    lineage: { parent: martingale, era: contemporary, reason: Martingale handles bounded differences; Talagrand handles convex Lipschitz }
+
+  - id: mcdiarmid
+    name: "McDiarmid's inequality (bounded differences)"
+    constructor: pi
+    claim: upper_bound
+    domains: [probabilistic]
+    works_when: "Function of independent variables where changing one variable changes function by ≤ c_i"
+    kill_conditions:
+      - Variables not independent
+      - Bounded difference condition fails (one variable can swing the function)
+      - Need sub-Gaussian rate but differences are loose
+    escalation: martingale
+    lineage: { parent: chernoff, era: modern, reason: Chernoff handles sums; McDiarmid handles general functions of independent variables }
+
+  - id: large_deviations
+    name: "Large deviations (Cramér, Sanov)"
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [probabilistic]
+    works_when: Probability of rare event decays exponentially; rate function is Legendre transform of log-MGF
+    kill_conditions:
+      - "Moment generating function doesn't exist (heavy-tailed distribution)"
+      - "Need exact probability, not just exponential rate"
+      - Variables not i.i.d. (need Gärtner-Ellis extension)
+    escalation: null
+    lineage: { parent: chernoff, era: modern, reason: Chernoff gives one-sided bounds; large deviations give the sharp exponential rate }
+
+  - id: steins_method
+    name: "Stein's method"
+    constructor: pi
+    claim: upper_bound
+    domains: [probabilistic]
+    works_when: "Approximate distribution by a reference (Gaussian, Poisson); bound total variation or Wasserstein distance"
+    kill_conditions:
+      - No natural reference distribution
+      - Stein equation for the reference distribution too hard to solve
+      - "Need convergence rate, but dependency structure makes Stein coupling intractable"
+    escalation: null
+    lineage: { parent: null, era: modern, reason: "CLT gives limit; Stein's method gives quantitative error bounds" }
+
+  - id: stopping_time
+    name: Stopping time / optional stopping
+    constructor: sigma
+    claim: [existence, upper_bound]
+    domains: [probabilistic]
+    works_when: Martingale stopped at a random time; optional stopping theorem constrains expected value
+    kill_conditions:
+      - Stopping time not integrable (unbounded expected waiting time)
+      - Martingale not uniformly integrable at the stopping time
+    escalation: martingale
+    lineage: { parent: martingale, era: modern }
+
+  - id: fkg_inequality
+    name: FKG inequality (correlation inequalities)
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [probabilistic, combinatorial]
+    works_when: Monotone events on a distributive lattice; positively correlated
+    kill_conditions:
+      - Events not monotone
+      - Measure not log-supermodular (FKG condition fails)
+      - Need negative correlation (use BK inequality instead)
+    escalation: null
+    lineage: { parent: null, era: modern }
+
+
+  # ── Combinatorics ──
+
+  - id: inclusion_exclusion
+    name: Inclusion-exclusion principle
+    constructor: sigma
+    claim: [upper_bound, lower_bound, existence]
+    domains: [discrete, combinatorial, probabilistic]
+    works_when: Count elements in union/intersection of sets via alternating sum
+    kill_conditions:
+      - "Too many sets (2^n terms; alternating sum doesn't converge fast)"
+      - Intersection sizes hard to compute
+      - Cancellation makes the bound loose (partial inclusion-exclusion needed)
+    escalation: mobius_inversion
+    lineage: { parent: double_counting, era: classical }
+
+  - id: mobius_inversion
+    name: Möbius inversion
+    constructor: sigma
+    claim: equivalence
+    domains: [combinatorial, number_theoretic]
+    works_when: Poset with Möbius function; invert a sum over the poset to recover individual terms
+    kill_conditions:
+      - Poset has no tractable Möbius function
+      - "Sum is over a structure that isn't a poset"
+    escalation: generating_function_identity
+    lineage: { parent: inclusion_exclusion, era: modern, reason: Inclusion-exclusion is Möbius inversion on the Boolean lattice }
+
+  - id: charging_discharging
+    name: Charging-discharging
+    constructor: pi
+    claim: [existence, upper_bound]
+    domains: [discrete, combinatorial]
+    works_when: Assign charges to elements; redistribute (discharge) to create contradiction with assumed structure
+    kill_conditions:
+      - "Discharging rules don't balance (total charge changes)"
+      - Too many cases in discharging (hundreds of rules; see four-color theorem)
+      - "Graph not planar or doesn't have the degree constraints needed"
+    escalation: null
+    lineage: { parent: double_counting, era: modern, reason: Double counting is global; charging-discharging is local redistribution }
+
+  - id: deletion_method
+    name: Deletion method (alteration)
+    constructor: sigma
+    claim: [existence, construction]
+    domains: [combinatorial, probabilistic]
+    works_when: Random object almost has the property; delete a small fraction to fix it
+    kill_conditions:
+      - Deletions cascade (fixing one violation creates others)
+      - "Can't bound the number of deletions"
+    escalation: lovasz_local_lemma
+    lineage: { parent: probabilistic_method, era: modern, reason: Probabilistic method gives existence; deletion makes it constructive by removing defects }
+
+  - id: container_method
+    name: Container method (Balogh-Morris-Samotij / Saxton-Thomason)
+    constructor: pi
+    claim: upper_bound
+    domains: [combinatorial]
+    works_when: Hypergraph is uniform and has bounded codegrees; independent sets are contained in few small containers
+    kill_conditions:
+      - Codegree condition fails (too many correlated edges)
+      - "Need lower bound on independent sets, not upper"
+      - Hypergraph not uniform
+    escalation: null
+    lineage: { parent: regularity_lemma, era: contemporary, reason: Regularity handles dense graphs; containers handle sparse hypergraphs }
+
+  - id: dependent_random_choice
+    name: Dependent random choice
+    constructor: sigma
+    claim: [existence, lower_bound]
+    domains: [combinatorial]
+    works_when: Dense bipartite graph; random vertex subset with many common neighbors
+    kill_conditions:
+      - Graph not dense enough
+      - "Need independent set, not common-neighbor set"
+    escalation: regularity_lemma
+    lineage: { parent: probabilistic_method, era: contemporary, reason: Simpler than regularity for Ramsey-type problems in dense graphs }
+
+  - id: flag_algebras
+    name: Flag algebras (Razborov)
+    constructor: pi
+    claim: [upper_bound, lower_bound]
+    domains: [combinatorial]
+    works_when: Extremal graph/hypergraph problem; express as semidefinite program over flag densities
+    kill_conditions:
+      - Problem not expressible in terms of subgraph densities
+      - SDP relaxation has a gap (need exact solution but only get approximate)
+      - "Stability/uniqueness needs separate argument (flag algebras give bounds, not structure)"
+    escalation: null
+    lineage: { parent: regularity_counting, era: contemporary, reason: Regularity gives qualitative structure; flag algebras give computer-verified quantitative bounds }
+
+  - id: transfer_matrix
+    name: Transfer matrix method
+    constructor: sigma
+    claim: [upper_bound, construction, equivalence]
+    domains: [combinatorial, discrete]
+    works_when: Count paths of length n in a graph; answer = entry of A^n where A is adjacency/transfer matrix
+    kill_conditions:
+      - State space too large (matrix is exponential in natural parameters)
+      - No natural row-by-row decomposition of the combinatorial structure
+      - "Need exact count, but characteristic polynomial is intractable"
+    escalation: spectral
+    lineage: { parent: generating_function_identity, era: modern, reason: Generating function encoded as matrix power }
+
+  - id: lgv_lemma
+    name: Lindström-Gessel-Viennot lemma
+    constructor: sigma
+    claim: equivalence
+    domains: [combinatorial]
+    works_when: Count non-intersecting lattice paths; equals determinant of path-count matrix
+    kill_conditions:
+      - Paths must be allowed to intersect (non-crossing condition not natural)
+      - Graph is not acyclic (LGV requires DAG)
+    escalation: bijection
+    lineage: { parent: transfer_matrix, era: modern, reason: Transfer matrix counts all paths; LGV counts non-intersecting tuples via determinant }
+
+  - id: wz_method
+    name: Wilf-Zeilberger method
+    constructor: sigma
+    claim: equivalence
+    domains: [combinatorial]
+    works_when: Hypergeometric sum identity; algorithmic certificate proves telescoping
+    kill_conditions:
+      - Summand not hypergeometric
+      - Multi-sum where creative telescoping is intractable
+    escalation: generating_function_identity
+    lineage: { parent: generating_function_identity, era: contemporary, reason: Generating function identity by algorithmic proof }
+
+  - id: symmetric_functions
+    name: "Symmetric function techniques (Schur, Hall-Littlewood)"
+    constructor: sigma
+    claim: [equivalence, upper_bound, existence]
+    domains: [combinatorial, algebraic]
+    works_when: "Problem has symmetric group action; expand in Schur basis, use Littlewood-Richardson rule"
+    kill_conditions:
+      - No natural symmetric group action
+      - Need non-symmetric invariants
+      - Schur expansion has too many terms to control
+    escalation: character_theory
+    lineage: { parent: generating_function_identity, era: modern }
+
+  - id: sunflower_lemma
+    name: Sunflower lemma (Erdős-Ko-Rado family)
+    constructor: sigma
+    claim: existence
+    domains: [combinatorial]
+    works_when: Large family of sets of bounded size contains a sunflower (sets pairwise sharing the same core)
+    kill_conditions:
+      - Sets not of bounded size
+      - "Need specific core structure sunflower lemma doesn't guarantee"
+    escalation: container_method
+    lineage: { parent: pigeonhole, era: modern, reason: Pigeonhole finds one collision; sunflower finds structured family of collisions }
+
+  - id: four_functions
+    name: Four functions theorem (Ahlswede-Daykin)
+    constructor: pi
+    claim: upper_bound
+    domains: [combinatorial, probabilistic]
+    works_when: Lattice with four functions satisfying multiplicative inequality; implies correlation inequalities
+    kill_conditions:
+      - "Functions don't satisfy the four-function condition"
+      - Lattice not distributive
+    escalation: fkg_inequality
+    lineage: { parent: fkg_inequality, era: modern, reason: Generalization of FKG and Holley inequalities }
+
+
+  # ── Discrete ──
+
+  - id: amortized_analysis
+    name: Amortized analysis (potential method variant)
+    constructor: pi
+    claim: upper_bound
+    domains: [discrete]
+    works_when: Worst-case per-operation cost is high but average over sequence is low; potential function tracks credit
+    kill_conditions:
+      - No natural potential function
+      - "Operations don't have amortized savings (each truly costs its worst case)"
+    escalation: potential_method
+    lineage: { parent: potential_method, era: modern }
+
+  - id: communication_complexity
+    name: Communication complexity lower bound
+    constructor: pi
+    claim: lower_bound
+    domains: [discrete]
+    works_when: "Two-party computation; bits communicated ≥ information content of output"
+    kill_conditions:
+      - Problem has low communication complexity (structured input)
+      - Randomized/nondeterministic models weaken the bound
+      - "Need computational, not communication, lower bound"
+    escalation: information_theoretic
+    lineage: { parent: information_theoretic, era: modern, reason: Information theory bounds channel capacity; communication complexity bounds protocol bits }
+
+  - id: pigeonhole_infinite
+    name: "Infinite pigeonhole (Ramsey for pairs / König's lemma)"
+    constructor: truncation
+    claim: existence
+    domains: [discrete]
+    works_when: Infinite set mapped to finite set of colors; infinite monochromatic subset exists
+    kill_conditions:
+      - Need explicit infinite subset (nonconstructive in general)
+      - "Colors not finite (uncountable partition → need Ramsey on uncountable cardinals)"
+    escalation: ramsey
+    lineage: { parent: pigeonhole, era: classical, reason: Pigeonhole for finite; König/infinite pigeonhole for infinite }
+
+
+  # ── Cross-cutting ──
+
+  - id: probabilistic_polynomial
+    name: Polynomial method (combinatorial nullstellensatz variant)
+    constructor: pi
+    claim: [existence, lower_bound, impossibility]
+    domains: [combinatorial, algebraic]
+    works_when: Encode combinatorial problem as polynomial; nonvanishing coefficient implies existence
+    kill_conditions:
+      - No natural polynomial encoding
+      - Coefficient vanishes (method gives nothing)
+      - Degree too high for the grid size
+    escalation: polynomial_method
+    lineage: { parent: polynomial_method, era: contemporary, reason: Polynomial method uses degree; combinatorial nullstellensatz uses coefficient }
+
+  - id: weight_function
+    name: Weight / potential function argument
+    constructor: pi
+    claim: [upper_bound, lower_bound, existence]
+    domains: [discrete, continuous, combinatorial]
+    works_when: Assign weights to elements; total weight is invariant or monotone; derive bound
+    kill_conditions:
+      - No natural weighting (all weight functions give trivial bounds)
+      - Weight function has the same complexity as the original problem
+    escalation: potential_method
+    lineage: { parent: double_counting, era: classical }
+
+  - id: fixed_point_schauder
+    name: Schauder fixed point theorem
+    constructor: truncation
+    claim: existence
+    domains: [continuous]
+    works_when: Continuous map on compact convex subset of locally convex topological vector space
+    kill_conditions:
+      - Map not compact (image not precompact)
+      - Domain not convex
+      - Need uniqueness (Schauder only gives existence)
+    escalation: banach_contraction
+    lineage: { parent: brouwer_fixed_point, era: modern, reason: Brouwer is finite-dimensional; Schauder extends to infinite dimensions }
+
+  - id: fixed_point_tarski
+    name: Tarski / Knaster-Tarski fixed point theorem
+    constructor: sigma
+    claim: existence
+    domains: [discrete, algebraic]
+    works_when: Monotone function on a complete lattice has a fixed point
+    kill_conditions:
+      - Function not monotone
+      - Domain not a complete lattice
+      - Need least fixed point but can only find some fixed point
+    escalation: zorns_lemma
+    lineage: { parent: null, era: modern, reason: Order-theoretic fixed point; no continuity or contraction needed }
+
+  - id: game_tree_evaluation
+    name: Strategy stealing argument
+    constructor: pi
+    claim: [existence, impossibility]
+    domains: [discrete, combinatorial]
+    works_when: "Two-player game; if second player had a winning strategy, first player could steal it by making a free first move"
+    kill_conditions:
+      - "Extra move is not always advantageous (Go with komi, Hex with swap rule)"
+      - Game not determined (infinite games without Axiom of Determinacy)
+      - "Need explicit strategy, not just existence"
+    escalation: null
+    lineage: { parent: adversary, era: modern }
+
+# Symmetry mismatch — the silent killer
+symmetry_mismatches:
+  - assumed: undirected
+    actual: directed
+    kills: [union_find, spanning_trees]
+  - assumed: transitive
+    actual: non_transitive
+    kills: [reachability_composition, route_announcements]
+  - assumed: time_independent
+    actual: time_dependent
+    kills: [static_data_structures, single_reachability_matrix]
+  - assumed: commutative
+    actual: non_commutative
+    kills: [abelian_group_tools, fourier_on_groups]
+  - assumed: local
+    actual: global
+    kills: [heuristics, distributed_without_communication]
+  - assumed: linear
+    actual: nonlinear
+    kills: [superposition, spectral]
+
+# Escalation ladders — multiple chains, not just one
+escalation_ladders:
+  - name: construction
+    chain: [greedy, potential_method, game_equilibrium]
+  - name: existence_probabilistic
+    chain: [expectation, second_moment, lovasz_local_lemma, derandomization]
+  - name: impossibility
+    chain: [parity, invariant, cohomological_obstruction]
+  - name: lower_bound_discrete
+    chain: [counting, information_theoretic, reduction]
+  - name: lower_bound_geometric
+    chain: [packing, covering, isoperimetric, kruskal_katona]
+  - name: upper_bound_probabilistic
+    chain: [union_bound, chernoff]
+  - name: embedding
+    chain: [direct_construction, embed_solve_pullback]
+  - name: analysis_pde
+    chain: [energy_method, bootstrapping]
+  - name: analysis_convergence
+    chain: [monotone_convergence, dominated_convergence]
+  - name: analysis_pde_bounds
+    chain: [maximum_principle, barrier_function, energy_method]
+  - name: probability_concentration
+    chain: [chernoff, martingale, talagrand]
+  - name: probability_methods
+    chain: [mcdiarmid, martingale, large_deviations]
+  - name: logic_foundations
+    chain: [induction, transfinite_induction, zorns_lemma]
+  - name: topology_homology
+    chain: [mayer_vietoris, long_exact_sequence, spectral_sequence]
+  - name: fixed_point
+    chain: [brouwer_fixed_point, fixed_point_schauder, banach_contraction]
+  - name: combinatorics_enumeration
+    chain: [burnside_lemma, polya_enumeration, generating_function_identity]
+  - name: number_theory_analytic
+    chain: [dirichlet_series, circle_method, large_sieve, sieve]
+  - name: algebra_local
+    chain: [localization, noether_normalization, grobner_basis]
+  - name: combinatorics_counting
+    chain: [inclusion_exclusion, mobius_inversion, generating_function_identity]
+  - name: geometry_curvature
+    chain: [gauss_bonnet, comparison_theorem, characteristic_classes]
+  - name: existence_fixed_point
+    chain: [fixed_point_tarski, brouwer_fixed_point, fixed_point_schauder, banach_contraction]
+  - name: impossibility_topological
+    chain: [degree_theory, lefschetz_fixed_point, cohomological_obstruction]
