@@ -120,3 +120,5 @@ Every proof decomposes into compositions of six [type constructors](https://lean
 The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. The techniques in each cell are canonical ways to build that type. The kill conditions are type errors — your proof term doesn't inhabit the target type.
 
 This is what happens when you formalize in Lean. The type checker rejects your proof for the exact reasons the kill conditions predict. The manual is a type checker for proof strategy, run by a human instead of a compiler.
+
+Pick your stuck conjecture. Run the procedure. If the manual doesn't surface a technique you haven't tried, it's incomplete — [tell me what's missing](/data/proof-manual.yml).
