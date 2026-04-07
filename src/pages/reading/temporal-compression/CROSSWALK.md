@@ -227,7 +227,7 @@ The linear chain formula E[‖r*‖²] = σ² · tr Gₙ(W) is known math. The o
 
 ## Computational attempts (April 2026)
 
-Seventeen hypotheses tested against the 2n-3 temporal spanner conjecture. Full log at the [TVG project](https://github.com/kimjune01/june.kim). Key findings:
+Seventeen hypotheses tested against the 2n-3 temporal spanner conjecture. Key findings:
 
 ### Finding 4: Forward reachability is transitive, backward is not
 
