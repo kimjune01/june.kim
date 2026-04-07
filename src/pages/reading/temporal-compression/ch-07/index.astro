@@ -85,7 +85,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <h2>What doesn't work (27 hypotheses)</h2>
 
     <p>
-      Twenty-seven proof techniques were tested. They died for four structural reasons.
+      They died for four structural reasons.
     </p>
 
     <h3>Asymmetry kills</h3>
@@ -99,7 +99,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       An edge's relay value depends on global timestamp structure.
       No local heuristic predicts which edges are critical. Per-node rules,
-      column degree, timestamp spread, Farey mediants — all structurally
+      column degree, timestamp spread, Farey mediants: all structurally
       insufficient. Five hypotheses.
     </p>
 
@@ -128,13 +128,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>
       Sequential delegation on the CPS residual biclique gives O(n) total
-      spanner edges. The log factor in CPS was an overcounting artifact
-      from parallel elimination, not a structural barrier.
+      spanner edges. The log factor in CPS was overcounting from parallel
+      elimination.
     </p>
 
     <p>
       Star+tree on K<sub>n</sub> gives exactly 2n-3 edges and works on
-      99.8% of instances. The construction is trivial — the proof isn't.
+      99.8% of instances.
     </p>
 
     <h2>The negative mold</h2>
@@ -153,9 +153,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>
       The <a href="https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml">proof manual</a>
-      was applied systematically. Every candidate from the claim &times; domain
-      grid was checked against kill conditions. The manual surfaces candidates
-      but cannot generate the bespoke construction — that's the frontier.
+      surfaces candidates. It cannot generate the bespoke construction.
     </p>
 
     <h2>For the next attempt</h2>
@@ -165,10 +163,6 @@ import PrevNext from "../../../../components/PrevNext.astro";
       works have a specific structure: no vertex's temporal position is
       "central" enough to relay all pairs. These instances exist but are
       rare and get rarer with n.
-    </p>
-
-    <p>
-      Three paths to close the gap:
     </p>
 
     <ol>
@@ -190,10 +184,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </ol>
 
     <p>
-      The conjecture has resisted 27 attempts over two days. It will likely
-      resist many more. But the gap is now one lemma wide, the construction
-      is explicit, and the dead ends are mapped. The next person to pick this
-      up starts here, not from scratch.
+      The construction is trivial. The proof isn't. The gap is one lemma wide.
     </p>
 
     <PrevNext
