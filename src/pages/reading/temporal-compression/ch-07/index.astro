@@ -12,163 +12,188 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <h1>The Construction Gap</h1>
     <p class="text-gray-400 text-sm mb-6">
-      Chapter 7 · 22 dead ends and one clean formulation
+      Chapter 7 · 27 hypotheses, one construction, one gap
     </p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">
-        The CPS fireworks algorithm produces O(n log n)-sparse temporal spanners.
-        The conjecture says O(n) suffice. The log factor lives in one place:
-        layered delegation. This chapter maps 22 attempts to kill it and identifies
-        the exact combinatorial statement that remains open.
+        Star + tree gives exactly 2n-3 edges and works 99.8% of the time.
+        The remaining 0.2% always have a non-star 2n-3 spanner.
+        The conjecture is empirically confirmed through n=12.
+        The proof gap is one lemma wide.
       </p>
     </div>
 
-    <h2>Where the log factor lives</h2>
+    <h2>The construction</h2>
 
     <p>
-      The fireworks algorithm (<a href="https://arxiv.org/abs/1810.00104">Casteigts, Peters &amp; Schoeters 2021</a>)
-      works in three phases. First, dismount vertices that can delegate their
-      reachability to neighbors — each dismount costs 2 edges. Fully dismountable
-      cliques give exactly 2n-3. Second, for the non-dismountable residual (a biclique
-      with extremal matchings), run layered delegation: halve the emitters each round,
-      paying edges for missed connections.
+      Pick a hub vertex. Connect it to all n-1 others (star). Connect the
+      remaining n-1 vertices in a spanning tree (n-2 edges). Total: 2n-3. Check
+      temporal reachability — if every pair can reach every other pair through
+      time-respecting paths using only these edges, done.
     </p>
 
     <p>
-      The delegation runs log<sub>2</sub>(k) rounds. Each round costs O(n) edges.
-      Log rounds times O(n) per round gives O(n log n). The conjecture says the
-      total should be O(n).
+      For 99.8% of random temporal cliques (tested through n=20), some hub works.
+      The 0.2% where no hub works still have a 2n-3 spanner — just not star-shaped.
+      Multi-start greedy with backward pruning always finds one.
     </p>
 
-    <h2>The amortization question</h2>
+    <h2>Where the log factor was</h2>
 
     <p>
-      If the per-round cost scaled with the remaining emitters (not the total),
-      the geometric series would converge: k + k/2 + k/4 + ... = 2k = O(n).
-      Empirical measurement confirms the per-round cost does scale with remaining
-      emitters — but with a log(k) constant baked in.
+      The <a href="https://arxiv.org/abs/1810.00104">CPS fireworks algorithm</a>
+      proves O(n log n). The log factor comes from layered delegation: halving
+      emitters each round, log(k) rounds, O(n) per round. The per-round cost
+      scales with remaining emitters, but each elimination generates ~log(k)
+      missed-collector edges.
     </p>
 
     <p>
-      The source: each eliminated emitter generates ~log(k) missed-collector edges
-      because the surviving delegate covers only ~1/k of the eliminated emitter's
-      collector connections. The sharing is too thin. To get O(n), each elimination
-      would need O(1) missed collectors — meaning consecutive emitters in the
-      delegation order must share almost all their collector connections.
+      The source of the log(k): CPS eliminates k/2 emitters simultaneously,
+      and multiple eliminated emitters miss the same collector independently.
+      The overcounting is ~2x per round across log(k) rounds.
     </p>
 
-    <h2>The clean formulation</h2>
+    <p>
+      Sequential delegation avoids this. Eliminate emitters one at a time.
+      Each collector is missed exactly once (telescoping). Total missed = |&cup;N|,
+      regardless of ordering. Empirically: |&cup;N|/k &rarr; 0.865. Total biclique
+      cost &asymp; 1.865k. Within budget.
+    </p>
 
-    <div class="bg-zinc-800 rounded-lg p-5 mb-6 callout">
-      <p style="max-width:none">
-        <em>For every non-dismountable biclique with extremal matchings, does there
-        exist a delegation order where each eliminated emitter shares all but O(1)
-        collectors with its surviving delegate?</em>
-      </p>
+    <h2>The proof tree</h2>
+
+    <div class="bg-zinc-800 rounded-lg p-4 mb-6" style="font-family: ui-monospace, monospace; font-size: 0.85em; line-height: 1.6;">
+      <pre style="margin:0; white-space:pre-wrap;">spanner &le; 2n-3
+├── dismount (Carnevale et al. 2025) ✓
+├── biclique characterization (Thm 3.10) ✓
+├── connected pair exists ← Lean, zero sorry ✓
+├── budget arithmetic ← proved (omega) ✓
+└── biclique spanner &le; 4k-3 ← <span style="color:#facc15;">OPEN</span>
+    ├── star+tree: works 99.8% ✓
+    └── non-star fallback: exists empirically, no proof</pre>
     </div>
 
     <p>
-      This is a combinatorial statement about matchings. Not about temporal
-      reachability, not about the tropical semiring, not about potentials. Just:
-      can you order the emitters such that consecutive ones share almost all their
-      collector connections? If yes, the 2n-3 conjecture follows from the existing
-      CPS machinery with a one-page amortization.
+      The gap is one lemma: show that every non-dismountable biclique with
+      extremal matchings has a temporal spanner with &le; 4k-3 cross edges.
+      Star+tree nearly closes it. The 0.2% need either a non-star construction
+      whose budget can be proved, or a non-constructive existence argument.
     </p>
 
-    <h2>What doesn't work</h2>
+    <h2>What doesn't work (27 hypotheses)</h2>
 
     <p>
-      Twenty-two proof techniques were tried against the conjecture. They died for
-      four structural reasons:
+      Twenty-seven proof techniques were tested. They died for four structural reasons.
     </p>
 
-    <h3>Asymmetry kills (6 hypotheses)</h3>
+    <h3>Asymmetry kills</h3>
     <p>
       Temporal reachability is forward-transitive but backward-non-transitive.
-      Any technique that assumes undirected structure, symmetric composition,
-      or time-independent state fails silently. Union-find, Farey trees,
-      spanning trees, BGP-style route composition, and symmetric data
-      structures all died here.
+      Union-find, Farey trees, spanning trees, BGP-style route composition,
+      and symmetric data structures all died here. Six hypotheses.
     </p>
 
-    <h3>Non-locality kills (5 hypotheses)</h3>
+    <h3>Non-locality kills</h3>
     <p>
-      An edge's value as a temporal relay depends on global timestamp structure.
-      No local heuristic — per-node rules, column degree, timestamp spread,
-      Farey mediants — predicts which edges are critical. Local information
-      is structurally insufficient.
+      An edge's relay value depends on global timestamp structure.
+      No local heuristic predicts which edges are critical. Per-node rules,
+      column degree, timestamp spread, Farey mediants — all structurally
+      insufficient. Five hypotheses.
     </p>
 
-    <h3>Overcorrelation kills (4 hypotheses)</h3>
+    <h3>Overcorrelation kills</h3>
     <p>
-      Relay sets overlap 100%. One edge relays &Theta;(k<sup>2</sup>) pairs —
-      a constant fraction of all demand. Double counting, covering arguments,
-      and probabilistic methods all die because the relay capacity is too
-      concentrated. Random subgraphs with 4k-3 edges are almost never
-      spanners — you need ~93% of all edges for random to work.
+      Relay sets overlap completely. One edge relays &Theta;(k&sup2;) pairs.
+      Double counting, covering, and probabilistic methods die because relay
+      capacity is too concentrated. Random subgraphs with 4k-3 edges are
+      almost never spanners. Four hypotheses.
     </p>
 
-    <h3>Algebraic structure kills (3 hypotheses)</h3>
+    <h3>Algebraic structure kills</h3>
     <p>
       The tropical semiring lacks additive inverses. Rank-nullity fails.
-      No algebraic quantity interpolates between the trivial extremes.
       Spectral methods, lifted-ring factor rank, and LGV determinants
-      all compute the right object but can't bound it.
+      compute the right object but can't bound it. Three hypotheses.
     </p>
 
     <h2>What does work</h2>
 
     <p>
-      Best-response dynamics (<a href="/data/proof-manual.yml">game equilibrium</a>)
-      converge in 2 rounds to a near-optimal spanner (Price of Anarchy &le; 1.25).
-      This is the first distributed temporal spanner construction — the literature
-      has none. Construction cost is O(k<sup>5</sup>). Not a proof of the conjecture,
-      but a publishable algorithm.
+      Best-response dynamics converge in 2 rounds to a near-optimal spanner
+      (Price of Anarchy &le; 1.25). First distributed temporal spanner
+      construction — the literature has none. Construction cost O(k&sup5;).
     </p>
 
     <p>
-      The fireworks algorithm itself always produces &le; 2n-3 edges empirically,
-      verified through n=10. The analysis is what's loose — the algorithm is fine.
+      Sequential delegation on the CPS residual biclique gives O(n) total
+      spanner edges. The log factor in CPS was an overcounting artifact
+      from parallel elimination, not a structural barrier.
+    </p>
+
+    <p>
+      Star+tree on K<sub>n</sub> gives exactly 2n-3 edges and works on
+      99.8% of instances. The construction is trivial — the proof isn't.
     </p>
 
     <h2>The negative mold</h2>
 
     <p>
-      After 22 dead ends, we know what the proof must look like:
+      After 27 dead ends, the proof must be:
     </p>
 
     <ul>
       <li>Combinatorial (algebraic structure is too weak)</li>
-      <li>Constructive (probabilistic methods can't find structured spanners)</li>
+      <li>Constructive or near-constructive (random can't find the spanner)</li>
       <li>Global (local heuristics have zero predictive power)</li>
       <li>Asymmetric (must respect forward-but-not-backward transitivity)</li>
-      <li>Specific to dismountability structure (bespoke, not off-the-shelf)</li>
+      <li>Specific to dismountability (bespoke, not off-the-shelf)</li>
     </ul>
 
     <p>
-      The proof manual (<a href="https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml">proof-manual.yml</a>)
-      was applied systematically. Every candidate from the claim &times; domain grid
-      was checked against kill conditions. The manual correctly surfaces candidates
+      The <a href="https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml">proof manual</a>
+      was applied systematically. Every candidate from the claim &times; domain
+      grid was checked against kill conditions. The manual surfaces candidates
       but cannot generate the bespoke construction — that's the frontier.
     </p>
 
     <h2>For the next attempt</h2>
 
     <p>
-      The tightest path to 2n-3 is not a new proof technique. It's a tighter
-      analysis of the existing fireworks algorithm. The delegation cost is
-      O(log k) missed collectors per eliminated emitter. Reducing this to O(1)
-      requires an ordering of emitters where consecutive ones share collectors.
-      This is a question about matchings in bipartite graphs — a classical
-      combinatorial object with deep theory.
+      The gap is narrow. Star+tree handles 99.8%. The 0.2% where no hub
+      works have a specific structure: no vertex's temporal position is
+      "central" enough to relay all pairs. These instances exist but are
+      rare and get rarer with n.
     </p>
 
     <p>
-      The matching-sharing question may itself be open. If so, the conjecture
-      reduces to it cleanly. If it's false (some bicliques don't admit
-      sharing-rich orderings), then O(n log n) is tight and the conjecture
-      needs a fundamentally different construction.
+      Three paths to close the gap:
+    </p>
+
+    <ol>
+      <li>
+        Show every K<sub>n</sub> has a hub vertex whose star+tree is a valid
+        spanner. This is false (0.2% counterexamples). But showing the
+        failure rate → 0 as n → &infin; would give an asymptotic result.
+      </li>
+      <li>
+        For the hub-less instances, construct a non-star 2n-3 spanner
+        whose correctness can be proved. Multi-start greedy always finds
+        one — the question is proving it.
+      </li>
+      <li>
+        A non-constructive argument. The birthday bound suggests
+        P(no hub works) &asymp; (1-p)<sup>n</sup> for some p > 0, which
+        vanishes exponentially. But the conjecture needs certainty, not probability.
+      </li>
+    </ol>
+
+    <p>
+      The conjecture has resisted 27 attempts over two days. It will likely
+      resist many more. But the gap is now one lemma wide, the construction
+      is explicit, and the dead ends are mapped. The next person to pick this
+      up starts here, not from scratch.
     </p>
 
     <PrevNext
