@@ -6,7 +6,7 @@ tags: cognition, methodology
 
 *Part of the [cognition](/cognition) series. Builds on [The Handshake](/the-handshake).*
 
-**Agents: load [`The Natural Framework`](/the-natural-framework) first (the theory makes the catalog applicable), then query [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml) directly. The prose below is for humans.**
+**Agents: load [`The Natural Framework`](/the-natural-framework) first (the theory makes the catalog applicable), then query [`src/data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/parts-bin.yml) directly. The prose below is for humans.**
 
 ### How to use this
 
@@ -22,7 +22,7 @@ Every information-processing system is built from the same six operations. Most 
 
 **Implement.** The four steps above produce a contract: broken slot, candidate operation, verified pre/postconditions. That's the PROBLEM.md that [Volley](/volley) expects as input. [Blind-blind-merge](/blind-blind-merge) it into code.
 
-Machine-readable version: [`_data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml) (50+ operations with sources, preconditions, postconditions). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
+Machine-readable version: [`src/data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/parts-bin.yml) (50+ operations with sources, preconditions, postconditions). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
 
 ### Six stages
 

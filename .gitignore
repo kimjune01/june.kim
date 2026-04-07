@@ -4,6 +4,7 @@ dist/
 .astro/
 .env
 .env.production
+.claude/scheduled_tasks.lock
 
 # Legacy Jekyll
 .jekyll

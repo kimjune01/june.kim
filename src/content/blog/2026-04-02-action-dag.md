@@ -1,6 +1,6 @@
 ---
 variant: post
-title: "The Action DAG"
+title: "Action DAG"
 tags: coding, methodology
 ---
 
@@ -10,7 +10,7 @@ tags: coding, methodology
 
 A simulation agent needs to turn goals into API calls. The naive approach: prompt an LLM every time. This works until you run the same simulation twice and realize you're paying for the same reasoning you already did.
 
-The fix is a compound data structure I'm calling a **semantic DAG**: a DAG of decomposition nodes indexed by semantic similarity, entered through multiple roots.
+The fix is a compound data structure I'm calling a **Action DAG**: a DAG of decomposition nodes indexed by semantic similarity, entered through multiple roots.
 
 ## Structure
 
@@ -69,7 +69,7 @@ Each ingredient above covers one axis. HTN gives the decomposition structure. So
 
 ## Two parts
 
-In [parts bin](/the-parts-bin) terms, the semantic DAG splits cleanly into two roles:
+In [parts bin](/the-parts-bin) terms, the Action DAG splits cleanly into two roles:
 
 1. **Embedding filter** — similarity lookup over DAG nodes to retrieve the right subtree. This is the CBR / Voyager axis. It lives in Filter × embedding_space.
 

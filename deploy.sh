@@ -20,7 +20,7 @@ done < <(find dist -name index.html -mindepth 2)
 echo "    $ALIAS_COUNT aliases created"
 
 echo "==> Syncing to S3"
-aws s3 sync dist/ "s3://$BUCKET/" --delete
+aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only
 
 echo "==> Invalidating CloudFront"
 aws cloudfront create-invalidation \
