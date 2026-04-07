@@ -225,6 +225,52 @@ The linear chain formula E[‖r*‖²] = σ² · tr Gₙ(W) is known math. The o
 
 ---
 
+## Computational attempts (April 2026)
+
+Seventeen hypotheses tested against the 2n-3 temporal spanner conjecture. Full log at the [TVG project](https://github.com/kimjune01/june.kim). Key findings:
+
+### Finding 4: Forward reachability is transitive, backward is not
+
+The tropical semiring (min, +) composes associatively forward in time: if A reaches B by time t₁ and B reaches C at time t₂ ≥ t₁, then A reaches C. Backward composition fails — you can't un-arrive. This asymmetry kills every symmetric proof technique (union-find, undirected spanning trees, Farey trees, BGP-style route composition). Six of seventeen hypotheses died from this symmetry mismatch alone.
+
+**Status:** Structural finding. Explains why the semiring gap (graph reachability ≠ temporal reachability) is one-directional. Any proof technique that assumes undirected, transitive, or time-independent structure will fail on temporal spanners.
+
+### Finding 5: Best-response dynamics converge in 2 rounds (PoA ≤ 1.25)
+
+Model each vertex as a selfish agent that drops its most redundant edge. Sequential or simultaneous best-response converges to a Nash equilibrium in exactly 2 rounds. The equilibrium matches centralized greedy optimum (Price of Anarchy ≤ 1.25). Per-node degree is O(1) (avg 3-4 edges). This is the first distributed temporal spanner construction — the literature has none.
+
+**Status:** Novel and publishable. Distributed temporal spanner construction is an open problem. The game-theoretic characterization (Nash = near-optimal, 2-round convergence) adds a new angle. Construction complexity is O(k⁵) due to per-edge reachability checking.
+
+### Finding 6: The 4k-3 bound may not hold for K_{k,k}
+
+Exhaustive search at k=4 confirms ~6% of random all-distinct K_{k,k} matrices genuinely require >4k-3 edges for a temporal spanner. Budget compliance drops to 20% at k=8. Optimal spanner size scales as ~4.1k at k=10, growing faster than 4k-3. The CPS conjecture (2n-3) is stated for K_n, not K_{k,k} — the bipartite case may have a different (larger) bound.
+
+**Status:** Relevant to conjecture scope. If confirmed at larger k, this clarifies that the 2n-3 conjecture applies to complete graphs under the dismountability reduction, not directly to bipartite temporal cliques with arbitrary timestamps.
+
+### Finding 7: Relay value is non-local
+
+No local heuristic (per-node edge selection, column degree, timestamp spread, Farey mediant) predicts which edges are critical relays. An edge's value as a temporal relay depends on global timestamp structure — whether it bridges timestamps for pairs that have no alternative path. Seven hypotheses testing local construction rules all failed. An O(n) construction appears impossible; the best known is O(k⁵).
+
+**Status:** Negative result. Explains why the conjecture resists constructive proofs: the right edges can only be identified by global reachability queries, not local criteria.
+
+### Finding 8: Three proof-technique families are structurally incompatible
+
+Systematic application of the Proof Manual ([proof-manual.yml](https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml)) identified three families that are structurally killed:
+
+- **Volumetric arguments** (double counting, covering, packing): relay sets overlap 100% — each edge relays Θ(k²) pairs, so one edge covers a constant fraction of all demand. Lower bound from double counting converges to ~4, not 4k-3.
+- **Probabilistic arguments** (Erdős method, FKG, LLL): at budget density p = (4k-3)/k², the bottleneck pair has reachability probability ~0.2, needs >0.99. Random subgraphs with 4k-3 edges are almost never spanners — you need ~93% of all edges.
+- **Algebraic rank arguments** (tropical rank, lifted semiring factor rank): the tropical semiring lacks additive inverses. Rank-nullity fails. No algebraic quantity interpolates between the trivial extremes (rank 1 for Boolean reachability, rank 2k for the lifted semiring).
+
+**Status:** These are permanent obstructions, not technical gaps. Any future proof attempt using volumetric, probabilistic, or algebraic rank methods will hit the same barriers. The proof must be combinatorial and constructive.
+
+### Finding 9: SM(k) optimal spanner = border of k×k matrix
+
+For the shifted-diagonal matrix SM(k), the optimal temporal spanner is the border: all edges in the first row, last row, and M⁻/M⁺ matchings. Total: 4k-4 edges. The interior edges are redundant because SM's monotone timestamps allow rerouting through the border. This is the I-frame/B-frame structure from codec theory: the border edges are I-frames (essential), and the interior edges are B-frames (redundant given the I-frames).
+
+**Status:** Minor but clean result. Connects to the codec analogy from Chapter 4.
+
+---
+
 ## Questions for discussion
 
 1. Where does the event graph ≅ prediction dependency DAG identification break first: B-frame bidirectionality, multi-reference prediction, or weighted event graph δt-semantics?
