@@ -168,7 +168,9 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     article.medium > div.highlighter-rouge, article.medium > .highlight {
       max-width: 500px; margin-left: auto; margin-right: auto;
     }
-    article.medium > p:has(img) { max-width: 100%; }
+    article.medium > p:has(img), article.medium > figure,
+    article.medium > .table-wrap, article.medium > table,
+    article.medium > svg, article.medium > p:has(svg) { max-width: 100%; }
     article.wide { max-width: 90vw; margin: 0 auto; }
     article.wide > p, article.wide > h2, article.wide > h3, article.wide > h4,
     article.wide > ul, article.wide > ol, article.wide > blockquote, article.wide > hr,

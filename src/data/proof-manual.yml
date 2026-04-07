@@ -1,7 +1,7 @@
 # The Proof Manual — structured taxonomy
 # Grounded in the Calculus of Inductive Constructions (CIC).
 # Six type constructors generate all proof techniques.
-# See /proof-manual for the full analysis.
+# See /the-proof-manual for the full analysis.
 #
 # Agent: load YAML, query by claim_type/domain/constructor.
 # Procedure: classify claim+domain → grid lookup → check kill conditions → escalate on failure.

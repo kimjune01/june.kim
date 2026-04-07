@@ -39,8 +39,8 @@ pre.astro-code { background-color: #f9f9f9 !important; color: inherit !important
 pre.astro-code code { color: inherit; }
 table { width: 100%; table-layout: fixed; margin: 45px 0; border-collapse: collapse; }
 table thead { background: #f2f2f2; }
-table th { text-align: left; padding: 8px 10px; border-bottom: 15px solid #fff; }
-table td { padding: 4px 0; }
+table th { text-align: left; padding: 8px 10px; }
+table td { padding: 8px 10px; }
 .highlight { width: 100%; display: block; margin-left: 0; margin-right: 0; }
 
 /* ── Section / post list (replaces section.scss) ── */
