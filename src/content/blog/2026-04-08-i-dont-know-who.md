@@ -13,7 +13,7 @@ In 2016 I wrote a poem I didn't understand for almost ten years:
 > that is the transmission
 > I am now sending to you
 
-The line I couldn't place was "I don't know who." I finally placed it last month at a cafe, chatting up the barista. What I understood was that most messaging media are morally misshapen. What I wanted was a kind of messaging puritanism.
+The line I couldn't place was "I don't know who." I finally placed it last month at a cafe, chatting up the barista. I understood that most messaging media are morally misshapen. I wanted a kind of messaging puritanism.
 
 I wanted to leave her a note. Every option I had would have turned the note into a performance.
 
@@ -71,7 +71,7 @@ What we are starved of is not connection. It is a signal, from a specific person
 
 None of this eliminates pressure, coercion, manipulation, or memory. It changes the shape of them. An ephemeral message can still be rerecorded by a second device, a sender can still carry intent no medium can screen, a listener can still save what was said in their head.
 
-The point is not purity in the absolute sense. The point is which harms the medium makes ordinary. A persistent channel makes performance ordinary. This one does not.
+The point is not purity in the absolute sense. The point is what the medium makes ordinary. A persistent channel makes performance ordinary. This one does not.
 
 Most communication media don't get to pick their ethics. Email inherits identity from DNS. Phone calls inherit it from telco billing. iMessage inherits it from your Apple ID. The medium carries half your relationship before you type anything, and that half is usually performance, because that's what the substrate was built for.
 
