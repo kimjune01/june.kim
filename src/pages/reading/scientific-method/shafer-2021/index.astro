@@ -1,0 +1,129 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Shafer 2021 — Testing by Betting" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Testing by Betting</h1>
+    <p class="text-gray-400 text-sm mb-6">Glenn Shafer · 2021 · <a href="https://arxiv.org/abs/1903.06991">JRSS-A 184(2), 407–431</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">If you can get rich wagering against the null hypothesis, the null is wrong. The wealth you accumulate is the evidence.</p>
+    </div>
+
+    <!-- SVG: Wealth process vs p-value -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 280" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="250" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">two ways to track evidence over time</text>
+
+        <!-- P-value panel (left) -->
+        <text x="120" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">p-value</text>
+
+        <line x1="40" y1="220" x2="220" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="40" y1="60" x2="40" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- p-value path: jumpy, undefined how to combine -->
+        <path d="M 50,90 L 70,150 L 90,80 L 110,180 L 130,100 L 150,160 L 170,120 L 190,140 L 210,110" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-opacity="0.7"/>
+
+        <text x="120" y="240" text-anchor="middle" fill="#fbbf24" font-size="8" fill-opacity="0.7">fragile under optional stopping</text>
+        <text x="120" y="252" text-anchor="middle" fill="#fbbf24" font-size="8" fill-opacity="0.7">peeking needs alpha-spending or</text>
+        <text x="120" y="264" text-anchor="middle" fill="#fbbf24" font-size="8" fill-opacity="0.7">a pre-specified stopping rule</text>
+
+        <!-- E-value panel (right) -->
+        <text x="380" y="42" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.6">e-value (wealth)</text>
+
+        <line x1="290" y1="220" x2="470" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <line x1="290" y1="60" x2="290" y2="220" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+
+        <!-- Starting capital line -->
+        <line x1="290" y1="180" x2="470" y2="180" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.25" stroke-dasharray="3,3"/>
+        <text x="475" y="183" fill="currentColor" font-size="7" fill-opacity="0.4">$1</text>
+
+        <!-- Wealth process: monotonic-ish accumulation -->
+        <path d="M 300,180 L 320,170 L 340,165 L 360,148 L 380,135 L 400,118 L 420,95 L 440,80 L 460,65" fill="none" stroke="#22d3ee" stroke-width="2" stroke-opacity="0.8"/>
+
+        <circle cx="460" cy="65" r="3" fill="#22d3ee"/>
+        <text x="460" y="55" text-anchor="middle" fill="#22d3ee" font-size="8">Eₙ</text>
+
+        <text x="380" y="240" text-anchor="middle" fill="#22d3ee" font-size="8" fill-opacity="0.7">wealth accumulates multiplicatively</text>
+        <text x="380" y="252" text-anchor="middle" fill="#22d3ee" font-size="8" fill-opacity="0.7">peek anytime; stop anytime</text>
+        <text x="380" y="264" text-anchor="middle" fill="#22d3ee" font-size="8" fill-opacity="0.7">Eₙ ≥ 1/α rejects at level α</text>
+
+        <!-- Divider -->
+        <line x1="255" y1="50" x2="255" y2="225" stroke="#71717a" stroke-width="1" stroke-opacity="0.45"/>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>Statistical testing began in two minds. <a href="/reading/scientific-method/fisher-1935/">Fisher's</a> p-value asked: how surprising are these data under the null? Neyman and Pearson asked: how often will this procedure reject a true null in the long run? Both framings dominated twentieth-century practice, and both have a peculiar property: they punish you for looking at your data more than once. Peek and you must correct for it; combine two studies and you must adjust for dependence; stop early and your p-value is no longer valid. The mathematics treats curiosity as a crime against rigor.</p>
+
+    <p>Shafer is reviving an older tradition. Probability, on the betting interpretation, has always been about wagers. Pascal, Bernoulli, and de Moivre worked in this idiom, and Kolmogorov's measure-theoretic axiomatization in the 1930s buried it. Shafer and Vovk's program over the 2000s and 2010s pulls it back into hypothesis testing. Skeptic puts up $1 against the null, designs a wager whose conditional expected payoff under the null is at most $1, and lets the data play out. The ratio of final wealth to starting wealth is the e-value. If Skeptic ends with $20, the data argued against the null with strength 20, in the same units regardless of when Skeptic chose to stop.</p>
+
+    <p>The trick is that the wealth process is a (super)martingale under the null. <a href="https://en.wikipedia.org/wiki/Ville%27s_inequality">Ville's inequality</a>, a martingale generalization of Markov's, then guarantees that under the null the probability the wealth ever crosses 1/α is at most α. You get a valid level-α test that is anytime-valid by construction. The realized path can still rise; the bet is just not <em>expected</em> to win unless the null fails.</p>
+
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Concept</th>
+            <th class="text-left py-2 text-gray-400">What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">E-value</td><td class="text-gray-400">A non-negative random variable with expectation ≤ 1 under the null. Larger values are stronger evidence against the null.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Test supermartingale</td><td class="text-gray-400">A wealth process whose conditional expectation never increases under the null. Realized paths can rise; the bet is just not <em>expected</em> to win unless the null fails. Its value at any stopping time is a valid e-value.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Skeptic vs. Nature</td><td class="text-gray-400">Game-theoretic framing: Skeptic bets against the null, Nature reveals data. The story is the proof.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Multiplicative composition</td><td class="text-gray-400">When e-values are chained as a sequential test, their product is a valid e-value for the combined test. The bound holds at every stopping time without Bonferroni or alpha-spending — within that construction.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Connections</h3>
+
+    <p><a href="/reading/scientific-method/fisher-1935/">Fisher's</a> p-value answered "how surprised should I be by these data, under the null?" Shafer reframes the question as "how much would I bet against the null, given these data?" The two are not the same number, and Shafer argues the betting question is the more honest one. A p-value of 0.04 says "if the null were true, results this extreme arise 4% of the time," but that probability is fragile under any deviation from the assumed sampling plan: peeking, optional stopping, dependent observations, post-hoc analyses. An e-value of 25 says "Skeptic turned $1 into $25 betting against the null." That statement does not depend on when Skeptic chose to stop.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity principle and Shafer's betting framework are first cousins. Both ask whether a test could have caught a false hypothesis. Severity asks counterfactually: would a false null have probably produced different data? Betting asks operationally: did Skeptic, betting against the null, walk away rich? When the test is well-designed, the two answers align. The betting framework adds something Mayo's framework lacks: a single number, in interpretable units, that composes across experiments.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> diagnosed the replication crisis as a tooling problem dressed up as a discipline problem. Researchers peek at their data because curiosity is unstoppable; the tools then punish them for it, so they hide the peeking. The mathematics encourages concealment. Shafer's framework removes the incentive: peek all you want, the wealth process is valid at every stopping time. The tool stops fighting the human.</p>
+
+    <h3>The reframing</h3>
+
+    <p>This is not a small technical adjustment. Shafer is claiming that fixed-horizon significance testing was always a special case of something more general, and a poorly-behaved one. The general thing is the betting game; the fixed-sample-size test is what you get when you forbid Skeptic from reacting to intermediate results. Most real experiments do not satisfy that constraint, which is why p-values are so easy to misuse and so hard to combine.</p>
+
+    <p>The historical irony is that the betting framework is closer to what scientists actually want to do (accumulate evidence, peek when curious, stop when convinced) than the Fisherian apparatus that occupied the twentieth century. The mathematics caught up to the practice, not the other way around.</p>
+
+    <!-- Book access note -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The paper is on <a href="https://arxiv.org/abs/1903.06991">arXiv:1903.06991</a>. The longer book treatment is Shafer &amp; Vovk's <a href="https://www.amazon.com/Game-Theoretic-Foundations-Probability-Wiley-Statistics/dp/1118547934"><em>Game-Theoretic Foundations for Probability and Finance</em></a> (Wiley, 2019). The 2001 precursor is <a href="https://www.amazon.com/Probability-Finance-Its-Only-Game/dp/0471402265"><em>Probability and Finance: It's Only a Game!</em></a>
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/fisher-1935/">🔬 Fisher 1935</a> — the p-value Shafer's framework supersedes</li>
+      <li><a href="/reading/scientific-method/mayo-2018/">🔬 Mayo 2018</a> — severity as a counterfactual cousin of betting</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis 2005</a> — the crisis the betting framework attacks mathematically</li>
+      <li><a href="/reading/scientific-method/ramdas-2023/">🔬 Ramdas 2023</a> — the consolidation into safe anytime-valid inference</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://arxiv.org/abs/1903.06991">arXiv:1903.06991 — Testing by Betting</a></li>
+      <li><a href="https://arxiv.org/abs/1906.07801">arXiv:1906.07801 — Grünwald, de Heide, Koolen: Safe Testing</a></li>
+      <li><a href="https://arxiv.org/abs/1912.06116">arXiv:1912.06116 — Vovk &amp; Wang: E-values: Calibration, combination, and applications</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/E-values"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>E-values (Wikipedia)</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/registered-prediction/", label: "Registered prediction · 18 of 20" }} next={{ href: "/reading/scientific-method/ramdas-2023/", label: "Ramdas 2023 · 20 of 20" }} />
+  </main>
+</Layout>

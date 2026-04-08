@@ -1,0 +1,130 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Pearl 2000 — Causality" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Causality</h1>
+    <p class="text-gray-400 text-sm mb-6">Judea Pearl · 2000 · <a href="https://www.cambridge.org/core/books/causality/B0046844FAE10CBF274D4ACBDAEB5F5B"><em>Models, Reasoning, and Inference</em></a> · Cambridge University Press</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Correlation is what you see. Causation is what would happen if you reached in and changed something. Pearl wrote down the difference: P(Y | X) versus P(Y | do(X)). One symbol, and a confusion that had haunted statistics for a century became visible.</p>
+    </div>
+
+    <!-- SVG: Causal hierarchy ladder -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 520 320" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="260" y="20" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">Pearl's causal hierarchy: three rungs, three questions</text>
+
+        <!-- Rung 1: Association -->
+        <rect x="40" y="240" width="440" height="50" rx="6" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1"/>
+        <text x="60" y="262" fill="currentColor" font-size="11">1. Seeing</text>
+        <text x="60" y="278" fill="currentColor" font-size="9" fill-opacity="0.55">"What does observing X tell me about Y?"</text>
+        <text x="470" y="270" text-anchor="end" fill="#a1a1aa" font-size="11">P(Y | X)</text>
+
+        <!-- Rung 2: Intervention -->
+        <rect x="40" y="160" width="440" height="50" rx="6" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-width="1"/>
+        <text x="60" y="182" fill="#fbbf24" font-size="11">2. Doing</text>
+        <text x="60" y="198" fill="currentColor" font-size="9" fill-opacity="0.55">"What happens if I force X to take this value?"</text>
+        <text x="470" y="190" text-anchor="end" fill="#fbbf24" font-size="11">P(Y | do(X))</text>
+
+        <!-- Rung 3: Counterfactual -->
+        <rect x="40" y="80" width="440" height="50" rx="6" fill="#22d3ee" fill-opacity="0.12" stroke="#22d3ee" stroke-width="1"/>
+        <text x="60" y="102" fill="#22d3ee" font-size="11">3. Imagining</text>
+        <text x="60" y="118" fill="currentColor" font-size="9" fill-opacity="0.55">"Given what happened, what would have happened if X had been different?"</text>
+        <text x="470" y="110" text-anchor="end" fill="#22d3ee" font-size="11">P(Y_x | X', Y')</text>
+
+        <!-- Connecting arrows -->
+        <line x1="260" y1="240" x2="260" y2="215" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.4" marker-end="url(#arrow)"/>
+        <line x1="260" y1="160" x2="260" y2="135" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.4" marker-end="url(#arrow)"/>
+
+        <defs>
+          <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M 0 0 L 6 3 L 0 6 z" fill="currentColor" fill-opacity="0.4"/>
+          </marker>
+        </defs>
+
+        <!-- Side note -->
+        <text x="260" y="50" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">each rung needs strictly more than the rung below</text>
+        <text x="260" y="62" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">no amount of pure observation can answer a "doing" question on its own</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>One way to read the lineage (my framing, not necessarily Fisher's or Pearl's self-understanding): <a href="/reading/scientific-method/mill-1843/">Mill</a> gave us the methods of difference and agreement, telling us to vary one thing and hold the rest constant. <a href="/reading/scientific-method/fisher-1935/">Fisher</a> gave us randomization, which can be read as Mill's method of difference implemented stochastically. Path analysis, structural equation modeling, and twentieth-century epidemiology built more on top, each in its own dialect. What was missing was a shared formal language for asking causal questions about systems you couldn't randomize: economies, climates, populations, history. The canonical default answer was "you can't, without an experiment," and the workarounds were specific to each field. Pearl supplies a unified notation and a sharper answer: sometimes yes, sometimes no, and given an assumed graph, here is the procedure for telling which case you're in.</p>
+
+    <p>The central object is the do-operator. P(Y | X = x) is what you observe when X happens to take the value x: an association. P(Y | do(X = x)) is what you would observe if you reached in and forced X to be x, severing every other influence on X. The two are different distributions, and one of the central facts of statistics is that they often disagree. Smoking is correlated with lung cancer. Forcing someone to smoke would also cause lung cancer. The two probabilities point the same direction here, but that agreement is an empirical fact about smoking, not a definitional one about probability. Whenever they diverge (confounders, selection effects, reverse causation, colliders) and we read the seeing-probability as if it were the doing-probability, we make exactly the kind of mistake that builds a literature of false findings.</p>
+
+    <p>The deeper move is the <em>do-calculus</em>: three rules, written in the language of directed acyclic graphs, that tell you whether a particular interventional probability can be computed from observational data, <em>given an assumed causal graph</em>. The graph is not delivered by the calculus; you supply it from substantive knowledge of the system. What the calculus delivers, conditional on the graph, is a verdict: here is a closed-form expression that identifies the causal effect, or here is a proof that no such expression exists from the variables you measured. Sometimes the verdict is "you cannot answer this question from your data, full stop." No extra covariate would help; the only path forward is a different study design. Turning that judgment call into a decision procedure is the load-bearing innovation. Pen and paper, in the strict sense.</p>
+
+    <h3>Key concepts</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Concept</th>
+            <th class="text-left py-2 text-gray-400">What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Do-operator: do(X = x)</td><td class="text-gray-400">A formal symbol for intervention. P(Y | do(X = x)) is the distribution of Y when X is forced, not merely observed, to take the value x.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Causal hierarchy</td><td class="text-gray-400">Three rungs: seeing (association), doing (intervention), imagining (counterfactual). Each rung answers questions the rung below cannot, no matter how much data you collect.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">DAG (directed acyclic graph)</td><td class="text-gray-400">A diagram of which variables can causally influence which others. The graph is the assumption; the calculus is what you do with it.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Backdoor criterion</td><td class="text-gray-400">A graphical test for when conditioning on a set of observed variables is enough to identify a causal effect, given an assumed causal graph. If your variables pass it, you can estimate the effect; if they don't, sometimes another variable in the graph closes the gap and sometimes no observational adjustment can, and the calculus tells you which case you're in.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Structural causal model</td><td class="text-gray-400">A system of equations plus a DAG that fully specifies the data-generating process. Counterfactual queries are answered by surgically modifying the model.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Connections</h3>
+
+    <p><a href="/reading/scientific-method/mill-1843/">Mill</a> stated the methods of causal inference informally; Pearl gives them a formal calculus. Where Mill said "vary one thing, hold the rest constant," Pearl says "given the causal diagram you're assuming, here is whether a sufficient adjustment set exists, what it is when it does, and a proof that no such set exists when it doesn't." Mill's intuitions become theorems, and the cases where Mill's program is unfollowable become theorems too.</p>
+
+    <p><a href="/reading/scientific-method/fisher-1935/">Fisher's</a> randomization is the gold standard for the same reason: when you randomize the assignment of X, you mechanically sever the arrows from any confounders to X, which means P(Y | X) and P(Y | do(X)) become equal by construction. Pearl's contribution is showing that randomization is not the <em>only</em> way to achieve that equality. Sometimes you can achieve it with the right conditioning set, and the do-calculus tells you when. Randomization is one solution to the identification problem. The do-calculus is the general theory of the problem.</p>
+
+    <p>The other half of modern causal inference is the potential outcomes framework, originally written down by Jerzy Neyman in 1923 (in Polish, mostly forgotten outside Poland for fifty years) and rediscovered and formalized by Donald Rubin in 1974. Rubin's notation and Pearl's graphs are largely equivalent for the questions both can express, but the working idioms differ. Pearl's diagrams are easier to draw on the back of an envelope; Rubin's potential outcomes are closer to standard statistical estimators. The credibility revolution in econometrics (Angrist, Imbens, Card, 2021 Nobel) ran principally on the potential-outcomes side: natural experiments, instrumental variables, regression discontinuity, difference-in-differences. Many economists were explicitly cool on DAGs. Pearl's contribution to that revolution was indirect: a parallel formalization of the same underlying logic, more visible in epidemiology, computer science, and recently in causal machine learning than in mainstream econometrics.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis's</a> diagnosis is broader than causal confusion: it covers low priors, low power, multiplicity, analytic flexibility, and publication bias. But causal confusion is one strand inside it, and a particularly damaging one, because the resulting findings often <em>do</em> replicate. They're causally wrong, not statistically noisy. Hormone replacement therapy and heart disease was the textbook case: well-conducted observational studies, internally consistent, externally replicated, and contradicted by the WHI randomized trial when the question finally got asked the right way. Pearl's framework does not fix the social structure that produces such literatures, but it gives you the language to write down when an observational design is and isn't licensed to make a causal claim.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severe testing asks whether a test could have caught the hypothesis being wrong. For a causal hypothesis, that question only has a meaningful answer if you can write the hypothesis down precisely enough to derive what "different" data would look like. The do-calculus is the apparatus for writing causal hypotheses down. Severity gives you the philosophical principle; Pearl gives you the syntax that makes the principle operational.</p>
+
+    <h3>Why this is the most pen-and-paper thing in modern statistics</h3>
+
+    <p>Causal inference is the area of statistics where the objects are explicitly notational. The do-operator is a symbol. The DAG is a diagram you can draw on a napkin. The backdoor criterion is a graph-theoretic procedure you can run by hand on small examples. The front-door adjustment is a closed-form expression. Pearl's claim is not that he has discovered new facts about the world; it is that he has invented a language in which previously unwriteable questions can be written, and a calculus for resolving them. The field's progress since 2000 is largely the progress of working out what that language can express.</p>
+
+    <p>The transmissibility is the point. If you can write a causal question in Pearl's notation, and supply the causal graph you're assuming, then another mind can pick up the page and either solve the question, prove it unsolvable from your data, or pinpoint which additional measurement would help. The objectivity here is conditional, not absolute: given the same graph and the same data, different readers reach the same verdict. The graph itself remains a substantive assumption you have to defend. That is the methodologically objective sense of "foundation," verifiable between minds once the assumptions are written down, and it is the kind of foundation you can build on.</p>
+
+    <!-- Book access note -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The technical reference is <a href="https://www.cambridge.org/core/books/causality/B0046844FAE10CBF274D4ACBDAEB5F5B"><em>Causality</em></a> (Cambridge, 2nd ed. 2009). The popular treatment is <a href="https://en.wikipedia.org/wiki/The_Book_of_Why"><em>The Book of Why</em></a> (Pearl &amp; Mackenzie, 2018). The cleanest introduction for working analysts is <a href="https://mixtape.scunning.com/"><em>Causal Inference: The Mixtape</em></a> (Cunningham, free online). For the econometrics-flavored counterpart, see <a href="https://www.mostlyharmlesseconometrics.com/"><em>Mostly Harmless Econometrics</em></a> (Angrist &amp; Pischke, 2009).
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/mill-1843/">🔬 Mill 1843</a> — the methods of difference and agreement Pearl formalizes</li>
+      <li><a href="/reading/scientific-method/fisher-1935/">🔬 Fisher 1935</a> — randomization as one (not the only) path to identification</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis 2005</a> — the false-findings diagnosis; causal confusion is one strand of it, the one Pearl's notation makes visible</li>
+      <li><a href="/reading/scientific-method/mayo-2018/">🔬 Mayo 2018</a> — severity needs causal hypotheses written down precisely; the do-calculus is how you write them</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Judea_Pearl"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Judea Pearl (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Do-calculus"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Do-calculus (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Rubin_causal_model"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Rubin causal model (Wikipedia)</a></li>
+      <li><a href="https://mixtape.scunning.com/">Causal Inference: The Mixtape (free)</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/feynman-1974/", label: "Feynman 1974 · 12 of 20" }} next={{ href: "/reading/scientific-method/ioannidis-2005/", label: "Ioannidis 2005 · 14 of 20" }} />
+  </main>
+</Layout>

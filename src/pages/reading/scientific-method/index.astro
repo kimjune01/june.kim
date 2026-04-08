@@ -14,8 +14,8 @@ import Neighbors from "../../../components/Neighbors.astro";
 
     <!-- SVG: Timeline -->
     <div class="flex justify-center my-6">
-      <svg viewBox="0 0 560 120" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
-        <line x1="20" y1="50" x2="540" y2="50" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
+      <svg viewBox="0 0 620 120" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <line x1="20" y1="50" x2="600" y2="50" stroke="#71717a" stroke-width="1.5" stroke-opacity="0.45"/>
 
         <!-- Empiricists (blue) -->
         <circle cx="40" cy="50" r="5" fill="#60a5fa" fill-opacity="0.3" stroke="#60a5fa" stroke-width="1.5"/>
@@ -56,6 +56,11 @@ import Neighbors from "../../../components/Neighbors.astro";
         <text x="400" y="30" text-anchor="middle" fill="#34d399" font-size="8">1974</text>
         <text x="400" y="72" text-anchor="middle" fill="#34d399" font-size="7">Feynman</text>
 
+        <!-- Causal inference (pink) -->
+        <circle cx="425" cy="50" r="5" fill="#f472b6" fill-opacity="0.3" stroke="#f472b6" stroke-width="1.5"/>
+        <text x="425" y="30" text-anchor="middle" fill="#f472b6" font-size="8">2000</text>
+        <text x="425" y="72" text-anchor="middle" fill="#f472b6" font-size="7">Pearl</text>
+
         <!-- Crisis & repair (purple) -->
         <circle cx="450" cy="50" r="5" fill="#a78bfa" fill-opacity="0.3" stroke="#a78bfa" stroke-width="1.5"/>
         <text x="450" y="30" text-anchor="middle" fill="#a78bfa" font-size="8">2005</text>
@@ -66,17 +71,28 @@ import Neighbors from "../../../components/Neighbors.astro";
         <text x="490" y="72" text-anchor="middle" fill="#a78bfa" font-size="7">Mayo</text>
 
         <!-- Practice (yellow) -->
-        <circle cx="530" cy="50" r="5" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1.5"/>
-        <text x="530" y="30" text-anchor="middle" fill="#facc15" font-size="8">2010→</text>
-        <text x="530" y="72" text-anchor="middle" fill="#facc15" font-size="7">Gwern</text>
+        <circle cx="525" cy="50" r="5" fill="#facc15" fill-opacity="0.3" stroke="#facc15" stroke-width="1.5"/>
+        <text x="525" y="30" text-anchor="middle" fill="#facc15" font-size="8">2010→</text>
+        <text x="525" y="72" text-anchor="middle" fill="#facc15" font-size="7">Gwern</text>
 
-        <text x="260" y="100" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">each one responding to a failure of what came before</text>
+        <!-- Mathematical repair (cyan) -->
+        <circle cx="565" cy="50" r="5" fill="#22d3ee" fill-opacity="0.3" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="565" y="30" text-anchor="middle" fill="#22d3ee" font-size="8">2021</text>
+        <text x="565" y="72" text-anchor="middle" fill="#22d3ee" font-size="7">Shafer</text>
+
+        <circle cx="600" cy="50" r="5" fill="#22d3ee" fill-opacity="0.3" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="600" y="30" text-anchor="middle" fill="#22d3ee" font-size="8">2023</text>
+        <text x="600" y="72" text-anchor="middle" fill="#22d3ee" font-size="7">Ramdas</text>
+
+        <text x="310" y="100" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.25">each one responding to a failure of what came before</text>
       </svg>
     </div>
 
     <h2>The arc</h2>
 
-    <p>Bacon says: observe, don't speculate. Descartes says: doubt everything, rebuild from certainty. Hume says: your observations don't prove anything. Mill says: here's how to extract causes anyway. Boole says: logic is algebra, make it mechanical. Chamberlin says: hold multiple hypotheses or you'll fool yourself. Popper says: you can't prove a theory, only disprove it. Kuhn says: scientists don't actually work that way. Feynman says: the first principle is that you must not fool yourself. Ioannidis says: you're fooling yourself. Mayo says: here's how to stop. Gwern says: any method can be gamed, so publish the trail. He calls it <em>long content</em>.</p>
+    <p>Bacon says: observe, don't speculate. Descartes says: doubt everything, rebuild from certainty. Hume says: your observations don't prove anything. Mill says: here's how to extract causes anyway. Boole says: logic is algebra, make it mechanical. Chamberlin says: hold multiple hypotheses or you'll fool yourself. Popper says: you can't prove a theory, only disprove it. Kuhn says: scientists don't actually work that way. Feynman says: the first principle is that you must not fool yourself. Pearl says: here is the notation for asking what would have happened if you had reached in and changed something. Ioannidis says: you're fooling yourself. Mayo says: here's how to stop. Gwern says: any method can be gamed, so publish the trail. He calls it <em>long content</em>.</p>
+
+    <p>Gwern's response is procedural: discipline the researcher. Shafer, Vovk, Grünwald, and Ramdas push at a different layer: the evidence measure itself. The Fisherian apparatus asked "how surprised should I be under the null?" That question is fragile under optional stopping and hard to compose without bespoke corrections (alpha-spending, group-sequential designs, Bonferroni). E-values ask "how much would I bet against the null?" instead. The composition rules and anytime guarantees fall out of one supermartingale inequality, in the constructions where the bets chain validly. Two responses to the same crisis at different layers: discipline (Gwern, Mayo, open-science reforms) and machinery (SAVI). The machinery has its own lineage older than the crisis: Ville's 1939 inequality, Wald's 1947 sequential analysis, the Robbins–Siegmund line of the 1960s. All three ran parallel to Fisher's fixed-horizon view for decades. SAVI is the modern consolidation of that parallel tradition, not a sudden invention prompted by Ioannidis. Neither layer subsumes the other.</p>
 
     <p>Each thinker responds to a failure of the previous method. The failures are the interesting part.</p>
 
@@ -106,11 +122,14 @@ import Neighbors from "../../../components/Neighbors.astro";
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/kuhn-1962/">Kuhn 1962</a></td><td class="pr-3 text-gray-400">Science doesn't accumulate. It breaks and rebuilds. Paradigm shifts happen when anomalies pile up.</td><td><a href="/reading/scientific-method/kuhn-1962/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/platt-1964/">Platt 1964</a></td><td class="pr-3 text-gray-400">Strong inference: alternative hypotheses, crucial experiments, repeat. Why some fields move faster.</td><td><a href="/reading/scientific-method/platt-1964/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a></td><td class="pr-3 text-gray-400">Cargo cult science. The first principle is that you must not fool yourself, and you are the easiest person to fool.</td><td><a href="/reading/scientific-method/feynman-1974/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/pearl-2000/">Pearl 2000</a></td><td class="pr-3 text-gray-400">Causality. The do-operator, the causal hierarchy, and the calculus that turns "is this question answerable from observational data?" from a judgment call into a decision procedure.</td><td><a href="/reading/scientific-method/pearl-2000/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis 2005</a></td><td class="pr-3 text-gray-400">Why most published research findings are false. The replication crisis, diagnosed before it had a name.</td><td><a href="/reading/scientific-method/ioannidis-2005/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></td><td class="pr-3 text-gray-400">Severe testing: a test only confirms if it had a real chance of catching you being wrong.</td><td><a href="/reading/scientific-method/mayo-2018/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/integrity/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">Long content: any method can be Goodharted, so publish the full trail — data, nulls, revisions — and let anyone audit it.</td><td><a href="/reading/scientific-method/integrity/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/self-experiment/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">The self-experiment: Fisher's randomization at n=1. Self-blinding, power analysis, and published nulls — without the institution.</td><td><a href="/reading/scientific-method/self-experiment/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
-          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/registered-prediction/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">Registered prediction: assign a probability, set a deadline, publish it, score it. Falsification operationalized.</td><td><a href="/reading/scientific-method/registered-prediction/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/registered-prediction/">Gwern 2010→</a></td><td class="pr-3 text-gray-400">Registered prediction: assign a probability, set a deadline, publish it, score it. Falsification operationalized.</td><td><a href="/reading/scientific-method/registered-prediction/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/shafer-2021/">Shafer 2021</a></td><td class="pr-3 text-gray-400">Testing by betting. Systematized the betting interpretation of probability for hypothesis testing — if Skeptic can grow $1 into $20 wagering against the null, that ratio is the evidence.</td><td><a href="/reading/scientific-method/shafer-2021/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><a href="/reading/scientific-method/ramdas-2023/">Ramdas et al. 2023</a></td><td class="pr-3 text-gray-400">Game-theoretic statistics, surveyed and named: SAVI. Consolidates two decades of work on e-values, test supermartingales, and confidence sequences into one framework with worked examples for the standard tests.</td><td><a href="/reading/scientific-method/ramdas-2023/" class="text-yellow-300 hover:text-yellow-200">🔬</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -143,8 +162,13 @@ import Neighbors from "../../../components/Neighbors.astro";
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Paradigm shift</td><td class="pr-3 text-gray-400">Kuhn</td><td class="text-gray-400">Science breaks and rebuilds, it doesn't just accumulate</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Strong inference</td><td class="pr-3 text-gray-400">Platt</td><td class="text-gray-400">Design experiments that exclude alternatives</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Severe testing</td><td class="pr-3 text-gray-400">Mayo</td><td class="text-gray-400">A test confirms only if it could have caught you being wrong</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Do-operator: do(X)</td><td class="pr-3 text-gray-400">Pearl</td><td class="text-gray-400">Notation for intervention. Distinguishes "what is correlated with X" from "what would happen if I forced X"</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Causal hierarchy</td><td class="pr-3 text-gray-400">Pearl</td><td class="text-gray-400">Three rungs (seeing, doing, imagining); each needs strictly more than the rung below</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Long content</td><td class="pr-3 text-gray-400">Gwern</td><td class="text-gray-400">Publish the full trail — data, nulls, revisions — so the method can't be Goodharted</td></tr>
-          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Registered prediction</td><td class="text-gray-400">Gwern</td><td class="text-gray-400">Assign a probability, set a deadline, score it. Falsification with a timestamp.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Registered prediction</td><td class="pr-3 text-gray-400">Gwern</td><td class="text-gray-400">Assign a probability, set a deadline, score it. Falsification with a timestamp.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">E-value</td><td class="pr-3 text-gray-400">Vovk &amp; Wang</td><td class="text-gray-400">Evidence measure with expectation ≤ 1 under the null; multiplies into a valid e-value when chained as a sequential test</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Anytime-valid inference</td><td class="pr-3 text-gray-400">Ramdas et al.</td><td class="text-gray-400">Statistical guarantees that hold at any stopping time, not just pre-specified ones</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Test supermartingale</td><td class="pr-3 text-gray-400">Shafer</td><td class="text-gray-400">A wealth process whose conditional expectation never increases under the null; its value at any stopping time is a valid e-value</td></tr>
         </tbody>
       </table>
     </div>
@@ -171,8 +195,10 @@ import Neighbors from "../../../components/Neighbors.astro";
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Eugenics</td><td class="pr-3 text-gray-400">Fisher's statistics weaponized by ideology. Sound method, monstrous application.</td><td class="text-gray-400">Research ethics, informed consent, institutional review</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Lysenko affair</td><td class="pr-3 text-gray-400">Political authority overriding evidence. Soviet genetics destroyed for decades.</td><td class="text-gray-400">Scientific autonomy as a value worth defending</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Cargo cult science</td><td class="pr-3 text-gray-400">Form without substance. Rituals of method without the honesty.</td><td class="text-gray-400">Feynman's integrity principle</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Correlation as causation</td><td class="pr-3 text-gray-400">Hormone replacement therapy and heart disease, dietary fat and mortality, vitamin supplementation and almost everything. Decades of observational findings reported as treatment effects.</td><td class="text-gray-400">Neyman's potential outcomes (1923, rediscovered by Rubin 1974), Pearl's do-calculus, and the design-based credibility revolution in econometrics</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Replication crisis</td><td class="pr-3 text-gray-400">P-hacking, publication bias, garden of forking paths</td><td class="text-gray-400">Pre-registration, open data, Mayo's severe testing</td></tr>
-          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Goodharting the method</td><td class="pr-3 text-gray-400">Pre-registration gamed, severity selectively reported. The form of rigor without the trail.</td><td class="text-gray-400">Long content, registered prediction</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Goodharting the method</td><td class="pr-3 text-gray-400">Pre-registration gamed, severity selectively reported. The form of rigor without the trail.</td><td class="text-gray-400">Long content, registered prediction</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Replication crisis (statistical)</td><td class="pr-3 text-gray-400">Fixed-horizon p-values are fragile under optional stopping and hard to compose without bespoke corrections. Workarounds exist (alpha-spending, group-sequential designs); they're paid for in power and pre-specification.</td><td class="text-gray-400">E-values and SAVI: an alternative evidence framework where anytime validity and sequential composition fall out of one supermartingale inequality</td></tr>
         </tbody>
       </table>
     </div>

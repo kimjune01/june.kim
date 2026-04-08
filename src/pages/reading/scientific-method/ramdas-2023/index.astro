@@ -1,0 +1,132 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ramdas 2023 — Game-Theoretic Statistics and SAVI" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Game-Theoretic Statistics and Safe Anytime-Valid Inference</h1>
+    <p class="text-gray-400 text-sm mb-6">Aaditya Ramdas, Peter Grünwald, Vladimir Vovk &amp; Glenn Shafer · 2023 · <a href="https://arxiv.org/abs/2210.01948">Statistical Science 38(4), 576–601</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two decades of game-theoretic statistics, surveyed and named: SAVI. E-values are the evidence, anytime validity is the guarantee, multiplication is how you compose along a sequential test.</p>
+    </div>
+
+    <!-- SVG: SAVI properties -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 500 300" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="250" y="20" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">three properties p-values lack, all valid by construction</text>
+
+        <!-- Property 1: continuous monitoring -->
+        <rect x="20" y="50" width="150" height="100" rx="6" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-width="1"/>
+        <text x="95" y="72" text-anchor="middle" fill="#22d3ee" font-size="10">Continuous</text>
+        <text x="95" y="86" text-anchor="middle" fill="#22d3ee" font-size="10">monitoring</text>
+        <text x="95" y="108" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">peek anytime</text>
+        <text x="95" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">stop anytime</text>
+        <text x="95" y="132" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">no α inflation</text>
+
+        <!-- Property 2: composition under dependence -->
+        <rect x="180" y="50" width="150" height="100" rx="6" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-width="1"/>
+        <text x="255" y="72" text-anchor="middle" fill="#22d3ee" font-size="10">Composition</text>
+        <text x="255" y="86" text-anchor="middle" fill="#22d3ee" font-size="10">under dependence</text>
+        <text x="255" y="108" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">multiply e-values</text>
+        <text x="255" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">across studies</text>
+        <text x="255" y="132" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">no Bonferroni</text>
+
+        <!-- Property 3: optional stopping -->
+        <rect x="340" y="50" width="150" height="100" rx="6" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-width="1"/>
+        <text x="415" y="72" text-anchor="middle" fill="#22d3ee" font-size="10">Optional</text>
+        <text x="415" y="86" text-anchor="middle" fill="#22d3ee" font-size="10">stopping</text>
+        <text x="415" y="108" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">stop on success</text>
+        <text x="415" y="120" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">stop on futility</text>
+        <text x="415" y="132" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">stop on funding</text>
+
+        <!-- Underlying mechanism -->
+        <line x1="95" y1="155" x2="250" y2="190" stroke="#22d3ee" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <line x1="255" y1="155" x2="250" y2="190" stroke="#22d3ee" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+        <line x1="415" y1="155" x2="250" y2="190" stroke="#22d3ee" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+
+        <rect x="100" y="195" width="300" height="50" rx="6" fill="#22d3ee" fill-opacity="0.15" stroke="#22d3ee" stroke-width="1.2"/>
+        <text x="250" y="218" text-anchor="middle" fill="#22d3ee" font-size="11">test supermartingale</text>
+        <text x="250" y="234" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.45">E[Eₙ | ℱₙ₋₁] ≤ 1 under H₀</text>
+
+        <text x="250" y="270" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">Doob + Markov ⇒ P(sup Eₙ ≥ 1/α) ≤ α</text>
+        <text x="250" y="284" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">a single inequality covers all three properties</text>
+      </svg>
+    </div>
+
+    <h3>The argument</h3>
+
+    <p>The 2023 paper is a survey, not a discovery. Ramdas, Grünwald, Vovk, and Shafer take twenty years of scattered work on game-theoretic statistics (Shafer &amp; Vovk's 2001 monograph, Vovk &amp; Wang's e-value calibration, Grünwald's safe testing, Howard et al.'s confidence sequences, Ramdas et al.'s anytime-valid concentration inequalities) and consolidate it under a single name: <em>safe anytime-valid inference</em>, SAVI.</p>
+
+    <p>The unification matters because it makes the framework usable. Before this paper, anyone wanting to escape the p-value had to assemble parts from a dozen sources, reconcile incompatible notations, and figure out which results applied to their setting. After it, there is a textbook treatment with one vocabulary, one set of theorems, and worked examples for the standard tests: t-test, ANOVA, binomial, contingency tables, Cox regression. The mathematics had been ready for a decade. The packaging was the bottleneck.</p>
+
+    <p>The framework rests on a single inequality. If the wealth process is a (super)martingale under the null, then by <a href="https://en.wikipedia.org/wiki/Ville%27s_inequality">Ville's inequality</a> (a martingale generalization of Markov's) the probability the wealth ever exceeds 1/α is at most α. From that one fact, three properties fall out at once. Continuous monitoring is direct: the bound holds at every step. Optional stopping is the same statement evaluated at any stopping time. Sequential composition takes one extra step: when test supermartingales are chained correctly, their product is itself a test supermartingale, even with conditionally dependent increments. The book ships a recipe for each standard test. The freedom is real, but local to those constructions, not a universal "any dependence goes" license.</p>
+
+    <h3>What changed</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Old (Fisher)</th>
+            <th class="text-left py-2 text-gray-400">New (SAVI)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">P-value: P(T ≥ t | H₀)</td><td class="text-gray-400">E-value: E[E | H₀] ≤ 1</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Fixed sample size, no peeking</td><td class="text-gray-400">Anytime-valid; peek and stop freely</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Combine via Bonferroni or alpha-spending</td><td class="text-gray-400">Multiply along a sequential test (no separate correction)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Independence between observations assumed</td><td class="text-gray-400">Conditionally dependent increments allowed by construction</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Power calculation before the experiment</td><td class="text-gray-400">Wealth target sets the stopping rule</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Connections</h3>
+
+    <p><a href="/reading/scientific-method/shafer-2021/">Shafer's</a> 2021 paper laid out the betting interpretation as a philosophical and practical reframing. The 2023 survey is the technical follow-through: every standard testing scenario, recast in the betting framework, with explicit constructions of the test supermartingales. Where Shafer 2021 said "here is the better way to think about evidence," Ramdas et al. say "here is the working manual."</p>
+
+    <p><a href="/reading/scientific-method/fisher-1935/">Fisher's</a> p-value and the Neyman-Pearson decision framework were built for fixed-horizon experiments where the analyst commits to a sample size before seeing the data. That assumption was always a constraint on how the math could be used, not a description of how scientists actually work. <a href="/reading/scientific-method/ioannidis-2005/">Ioannidis</a> showed what happens when the constraint is widely ignored: false positives at scale. SAVI does not claim Fisher was wrong; it proposes a different evidence machinery for the regime where peeking, sequential analysis, and combination across studies are the norm rather than the exception. Fisher remains correct inside his assumptions. SAVI extends the toolkit when those assumptions don't hold.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">Mayo's</a> severity framework and SAVI converge from different directions. Severity asks counterfactually whether a test could have caught a false claim. SAVI delivers a related operational guarantee: the wealth process is not <em>expected</em> to grow under the null, so accumulated wealth is a measure of how thoroughly the null has been probed. Mayo argues for severity from the philosophy of science. Ramdas et al. derive a complementary guarantee from the calculus of martingales. Different machinery, overlapping epistemic role.</p>
+
+    <p><a href="/reading/scientific-method/integrity/">Gwern's</a> long content and SAVI are the two halves of the post-Ioannidis recovery. Gwern fixes the human side: publish the trail so the method cannot be gamed. SAVI fixes the tool side: build a tool that does not penalize the things humans naturally want to do. Without Gwern's discipline, SAVI tools can still be selectively reported. Without SAVI's tools, Gwern's discipline still struggles against the perverse incentives of fixed-sample-size testing. Both responses are necessary because the replication crisis is both a behavioral and a mathematical problem.</p>
+
+    <h3>Adoption</h3>
+
+    <p>The slow part is now ahead. SAVI tools are settled; the question is whether journals, regulators, and reviewers will accept them. Online experimentation moved first: <a href="https://www.optimizely.com/insights/blog/statistics-for-the-internet-age-the-story-behind-optimizelys-new-stats-engine/">Optimizely's Stats Engine</a>, <a href="https://www.statsig.com/updates/update/sequential-testing-capabilities">Statsig</a>, and Eppo all ship sequential or always-valid tests, because their users were peeking at dashboards anyway and the alternatives leaked false positives. Pharma followed, with confidence sequences and group-sequential designs running adaptive trials. The FDA's <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/adaptive-design-clinical-trials-drugs-and-biologics-guidance-industry">2019 adaptive-design guidance</a> now treats them as a recognized regulatory pathway. Academic statistics is the slowest mover, which is the usual order: industry adopts first, journals last. The mathematics is settled. The sociology is still in motion.</p>
+
+    <!-- Book access note -->
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      The paper is on <a href="https://arxiv.org/abs/2210.01948">arXiv:2210.01948</a>. Aaditya Ramdas's <a href="https://www.stat.cmu.edu/~aramdas/">CMU page</a> hosts an extensive bibliography of follow-up work and tutorials. The Game-Theoretic Probability and Finance project at <a href="http://probabilityandfinance.com/">probabilityandfinance.com</a> archives the founding work by Shafer &amp; Vovk.
+    </div>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/shafer-2021/">🔬 Shafer 2021</a> — the betting reframing this paper consolidates</li>
+      <li><a href="/reading/scientific-method/mayo-2018/">🔬 Mayo 2018</a> — severity as the philosophical cousin of anytime-valid evidence</li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis 2005</a> — the crisis SAVI attacks at the tool layer</li>
+      <li><a href="/reading/scientific-method/integrity/">🔬 Integrity</a> — Gwern's behavioral half of the same recovery</li>
+      <li><a href="/reading/scientific-method/fisher-1935/">🔬 Fisher 1935</a> — the framework SAVI generalizes and replaces</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://arxiv.org/abs/2210.01948">arXiv:2210.01948 — Game-Theoretic Statistics and SAVI</a></li>
+      <li><a href="https://arxiv.org/abs/2009.02824">arXiv:2009.02824 — Wang &amp; Ramdas: False discovery rate control with e-values</a></li>
+      <li><a href="https://engineering.atspotify.com/2023/03/choosing-sequential-testing-framework-comparisons-and-discussions">Spotify Engineering — Choosing a sequential testing framework</a> (mSPRT vs. GAVI vs. corrected-alpha)</li>
+      <li><a href="https://www.stat.cmu.edu/~aramdas/">Aaditya Ramdas — CMU</a></li>
+      <li><a href="http://probabilityandfinance.com/">probabilityandfinance.com</a> — the Shafer/Vovk archive</li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/shafer-2021/", label: "Shafer 2021 · 19 of 20" }} fin="fin" />
+  </main>
+</Layout>
