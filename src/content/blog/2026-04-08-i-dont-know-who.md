@@ -43,6 +43,10 @@ Every branch refuses audience. Every branch eliminates debt. Every branch requir
 
 This is why I've been building [ephemeral.website](/ephemeral-website) as a pure core, with confession, appreciation, and apology as themed layers on top. Each layer is a door you walk through for a specific act. None of them knows who you are. None has an inbox. Ephemerality isn't a feature. It's what makes the thing a message instead of a performance.
 
+Here's a test. If the barista were seventeen, asking for her number would make me a predator before any message had been exchanged. The extraction of an ongoing channel from a minor who can't gracefully refuse is the harm itself, regardless of what I meant to say next. But I might want to express heartfelt gratitude to a seventeen-year-old without becoming a predator to do it. A handwritten note of thanks on the way out would manage this. An ephemeral URL, said the same way, would manage it too. Only the phone number fails the test.
+
+Same man, same heartfelt intent, same content, three channels. One makes him a predator; two make him a kind stranger. Intent and speaker and content held constant, only the medium varies, and the medium is doing enough moral work that the act changes category. The medium is not neutral carriage. It is constitutive of the act.
+
 Most communication media don't get to pick their ethics. Email inherits identity from DNS. Phone calls inherit it from telco billing. iMessage inherits it from your Apple ID. The medium carries half your relationship before you type anything, and that half is usually performance, because that's what the substrate was built for. If you want the message to remain a message, you need a medium that forgets as fast as air does.
 
 I carried that poem for nearly ten years, not knowing what it was waiting for. What I finally see is that it was describing a hope: that a transmission could happen without putting either party in the other's audience. That silence could stop being the only safe option.
