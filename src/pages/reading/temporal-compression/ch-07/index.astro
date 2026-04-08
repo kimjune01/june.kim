@@ -12,15 +12,15 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <h1>The Construction Gap</h1>
     <p class="text-gray-400 text-sm mb-6">
-      Chapter 7 · 27 hypotheses, one construction, one gap
+      Chapter 7 · 10 paradigms, 46 variations, zero proofs
     </p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">
-        Star + tree gives exactly 2n-3 edges and works 99.8% of the time.
-        The remaining 0.2% always have a non-star 2n-3 spanner.
-        The conjecture is empirically confirmed through n=12.
-        The proof gap is one lemma wide.
+        Every temporal clique we tested has a spanner with &le; 2n-3 edges.
+        We tried 10 distinct proof paradigms, 46 variations total. All failed.
+        The gap is one lemma wide — and that lemma resists every known proof
+        technique in combinatorics.
       </p>
     </div>
 
@@ -34,9 +34,10 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </p>
 
     <p>
-      For 99.8% of random temporal cliques (tested through n=20), some hub works.
-      The 0.2% where no hub works still have a 2n-3 spanner — just not star-shaped.
-      Multi-start greedy with backward pruning always finds one.
+      For 99.8% of random temporal cliques (tested through n=20), some hub works
+      with greedy tree selection. With exhaustive tree search, the true failure
+      rate is 10&times; lower — 0.02% at K<sub>6</sub>, vanishing by K<sub>8</sub>.
+      The "hub-less" instances always have a non-star spanner with &le; 2n-4 edges.
     </p>
 
     <h2>Where the log factor was</h2>
@@ -44,22 +45,16 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       The <a href="https://arxiv.org/abs/1810.00104">CPS fireworks algorithm</a>
       proves O(n log n). The log factor comes from layered delegation: halving
-      emitters each round, log(k) rounds, O(n) per round. The per-round cost
-      scales with remaining emitters, but each elimination generates ~log(k)
-      missed-collector edges.
+      emitters each round, log(k) rounds, O(n) per round.
     </p>
 
     <p>
-      The source of the log(k): CPS eliminates k/2 emitters simultaneously,
-      and multiple eliminated emitters miss the same collector independently.
-      The overcounting is ~2x per round across log(k) rounds.
-    </p>
-
-    <p>
-      Sequential delegation avoids this. Eliminate emitters one at a time.
-      Each collector is missed exactly once (telescoping). Total missed = |&cup;N|,
-      regardless of ordering. Empirically: |&cup;N|/k &rarr; 0.865. Total biclique
-      cost &asymp; 1.865k. Within budget.
+      We tried to kill the log factor with sequential delegation — eliminate
+      emitters one at a time instead of in batches. It doesn't work.
+      The log factor is structural, not an analysis artifact: temporal filtering
+      at each relay vertex consumes a constant fraction of the timestamp range.
+      Root delegation gives &Theta;(k log k) edges at k=50. The CPS framework
+      cannot yield O(n). A fundamentally different construction is needed.
     </p>
 
     <h2>The proof tree</h2>
@@ -70,125 +65,170 @@ import PrevNext from "../../../../components/PrevNext.astro";
 ├── biclique characterization (Thm 3.10) ✓
 ├── connected pair exists ← Lean, zero sorry ✓
 ├── budget arithmetic ← proved (omega) ✓
+├── M⁻ covers all A-A pairs ✓ <span style="color:#4ade80;">NEW</span>
+├── M⁺ covers all B-B pairs ✓ <span style="color:#4ade80;">NEW</span>
 └── biclique spanner &le; 4k-3 ← <span style="color:#facc15;">OPEN</span>
-    ├── star+tree: works 99.8% ✓
-    └── non-star fallback: exists empirically, no proof</pre>
+    ├── 46 proof strategies attempted, all dead
+    ├── fixed-hop arguments: dead (journey lengths grow with k)
+    ├── CPS delegation: &Theta;(k log k), log is structural
+    └── the gap requires new mathematical tools</pre>
     </div>
 
     <p>
       The gap is one lemma: show that every non-dismountable biclique with
       extremal matchings has a temporal spanner with &le; 4k-3 cross edges.
-      Star+tree nearly closes it. The 0.2% need either a non-star construction
-      whose budget can be proved, or a non-constructive existence argument.
+      The M&#x207B;/M&#x207A; matchings handle same-side pairs completely (proved).
+      The remaining problem is cross-side routing within budget.
     </p>
 
-    <h2>What doesn't work (27 hypotheses)</h2>
+    <h2>What doesn't work (10 paradigms)</h2>
 
     <p>
-      They died for four structural reasons.
+      The 46 variations cluster into 10 distinct proof paradigms.
+      Calling them 46 separate hypotheses would be inflated — they're really
+      variations on a smaller set of underlying ideas. Each paradigm died for
+      a specific structural reason.
     </p>
 
-    <h3>Asymmetry kills</h3>
+    <h3>1. Hub-based constructions (~9 variations)</h3>
     <p>
-      Temporal reachability is forward-transitive but backward-non-transitive.
-      Union-find, Farey trees, spanning trees, BGP-style route composition,
-      and symmetric data structures all died here. Six hypotheses.
+      Star+tree, double-star, two-hub, star+early+late, K-early+late,
+      inductive tree, three-case decomposition. All pick a hub vertex,
+      add the star, then add "extra" edges. They work empirically but
+      can't be proved because the extra-edge selection depends on global
+      timestamp structure and resists analysis.
     </p>
 
-    <h3>Non-locality kills</h3>
+    <h3>2. Fixed-hop relay analysis (~6 variations)</h3>
     <p>
-      An edge's relay value depends on global timestamp structure.
-      No local heuristic predicts which edges are critical. Per-node rules,
-      column degree, timestamp spread, Farey mediants: all structurally
-      insufficient. Five hypotheses.
+      3-hop relays, 4-hop biclique routes, sequential delegation, median
+      floor conjecture, LIVE/DZ framework, dead-zone analysis. All count
+      relay edges assuming bounded journey length. Dead because the adversary
+      forces journey lengths that grow with k (max hop = 4 at k=3, rising
+      to 9 at k=6). No fixed-hop argument survives.
     </p>
 
-    <h3>Overcorrelation kills</h3>
+    <h3>3. Tropical / semiring algebra (~6 variations)</h3>
     <p>
-      Relay sets overlap completely. One edge relays &Theta;(k&sup2;) pairs.
-      Double counting, covering, and probabilistic methods die because relay
-      capacity is too concentrated. Random subgraphs with 4k-3 edges are
-      almost never spanners. Four hypotheses.
+      Tropical rank, Develin-Sturmfels convexity, Praprotnik-Batagelj lifted
+      ring, Lindström-Gessel-Viennot determinants, KKM lemma, monotone Dijkstra
+      sweep. The (min,+) semiring lacks additive inverses. Rank-nullity fails.
+      These methods compute the right object but can't bound it.
     </p>
 
-    <h3>Algebraic structure kills</h3>
+    <h3>4. Probabilistic method (~4 variations)</h3>
     <p>
-      The tropical semiring lacks additive inverses. Rank-nullity fails.
-      Spectral methods, lifted-ring factor rank, and LGV determinants
-      compute the right object but can't bound it. Three hypotheses.
+      Random tree selection, birthday bound on hubs, FKG / positive
+      correlation, best-response Nash dynamics. All work for random
+      timestamps but not adversarial ones. The concentration inequalities
+      don't transfer to worst-case bounds.
+    </p>
+
+    <h3>5. Matroid / exchange (~3 variations)</h3>
+    <p>
+      Laman rigidity, exchange argument on minimal spanners, matroid
+      exchange on matchings. Dead because minimal spanners can exceed
+      2n-3 (n=7: size 13 &gt; 11). The problem is non-matroidal —
+      locally irredundant &ne; globally optimal.
+    </p>
+
+    <h3>6. Set cover / covering design (~3 variations)</h3>
+    <p>
+      Covering hypergraph, VC dimension on rescue sets, X3C reduction.
+      Dead because relay sets interact (submodular) rather than cover
+      independently. Minimum set cover doesn't produce a valid spanner.
+    </p>
+
+    <h3>7. Dismountability reductions (~3 variations)</h3>
+    <p>
+      k-hop dismountability, recursive dismounting, Carnevale et al.'s
+      "dismountability revisited." The reduction works (blocks ~99% of
+      the problem) but explicit counterexamples exist: not all cliques
+      are dismountable. The residual biclique needs a different proof.
+    </p>
+
+    <h3>8. Induction on size (~2 variations)</h3>
+    <p>
+      Recursive T(n) = T(n/2) + O(n), inductive extension from k&times;k
+      to (k+1)&times;(k+1). Dead because the residual after vertex removal
+      loses extremal matching structure, and the extension cost grows as
+      O(k&sup2;) not O(1).
+    </p>
+
+    <h3>9. Local heuristics (~5 variations)</h3>
+    <p>
+      Per-vertex rules, column degree, timestamp spread, Farey mediants,
+      forward ratio. All dead because an edge's relay value depends on
+      global timestamp structure. No local metric predicts which edges
+      are critical. Forward ratio is literally a tautology (always exactly 50%).
+    </p>
+
+    <h3>10. Distributed / game-theoretic (~1 variation)</h3>
+    <p>
+      Best-response dynamics converges in 2 rounds. Price of anarchy
+      &le; 1.25. Publishable as a distributed construction (the first
+      one in the literature) but doesn't prove the 2n-3 bound.
     </p>
 
     <h2>What does work</h2>
 
     <p>
+      <strong>M⁻ covers all A-A pairs. M⁺ covers all B-B pairs.</strong> (Proved.)
+      In any extremally matched biclique, the column-minimum matching routes every
+      same-side row pair through a 2-hop relay. The row-maximum matching does the
+      same for column pairs. These I-frame edges are structurally complete for
+      same-side reachability. The open problem is cross-side routing only.
+    </p>
+
+    <p>
+      <strong>Three-timestamp median.</strong> (Proved.) For any triangle {'{h,v,w}'}
+      in K<sub>n</sub>, edge {'{v,w}'} is "dead zone" for hub h iff its timestamp is
+      the median of three. Average dead-zone degree = (n-2)/3. This identity is
+      exact and gives the right framework for understanding spanner structure —
+      but doesn't yield a bound.
+    </p>
+
+    <p>
       Best-response dynamics converge in 2 rounds to a near-optimal spanner
       (Price of Anarchy &le; 1.25). First distributed temporal spanner
-      construction — the literature has none. Construction cost O(k&sup5;).
-    </p>
-
-    <p>
-      Sequential delegation on the CPS residual biclique gives O(n) total
-      spanner edges. The log factor in CPS was overcounting from parallel
-      elimination.
-    </p>
-
-    <p>
-      Star+tree on K<sub>n</sub> gives exactly 2n-3 edges and works on
-      99.8% of instances.
+      construction. Construction cost O(k&sup5;).
     </p>
 
     <h2>The negative mold</h2>
 
     <p>
-      After 27 dead ends, the proof must be:
+      After probing 10 paradigms, the proof must:
     </p>
 
     <ul>
-      <li>Combinatorial (algebraic structure is too weak)</li>
-      <li>Constructive or near-constructive (random can't find the spanner)</li>
-      <li>Global (local heuristics have zero predictive power)</li>
-      <li>Asymmetric (must respect forward-but-not-backward transitivity)</li>
-      <li>Specific to dismountability (bespoke, not off-the-shelf)</li>
+      <li>Handle unbounded journey lengths (fixed-hop arguments are dead)</li>
+      <li>Reason about global temporal composition (local relay analysis fails)</li>
+      <li>Work adversarially (probabilistic arguments over random timestamps don't transfer)</li>
+      <li>Respect forward-but-not-backward transitivity</li>
+      <li>Use tools that don't yet exist in the combinatorics literature</li>
     </ul>
 
     <p>
-      The <a href="https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml">proof manual</a>
-      surfaces candidates. It cannot generate the bespoke construction.
+      The most likely resolution: a new mathematical framework for adversarial
+      temporal composition — perhaps tropical rank theory, temporal VC dimension,
+      or sheaf-theoretic bounds. Each would be a thesis-scale contribution.
     </p>
 
-    <h2>For the next attempt</h2>
+    <h2>What we learned</h2>
 
     <p>
-      The gap is narrow. Star+tree handles 99.8%. The 0.2% where no hub
-      works have a specific structure: no vertex's temporal position is
-      "central" enough to relay all pairs. These instances exist but are
-      rare and get rarer with n.
+      The problem is genuinely hard. It has resisted three active research groups
+      for seven years (CPS 2018, Angrick et al. 2024, Carnevale et al. 2025) and
+      our probes at all ten paradigms. The gap is one lemma wide but that lemma
+      requires mathematics that doesn't exist yet.
     </p>
 
-    <ol>
-      <li>
-        Show every K<sub>n</sub> has a hub vertex whose star+tree is a valid
-        spanner. This is false (0.2% counterexamples). But showing the
-        failure rate → 0 as n → &infin; would give an asymptotic result.
-      </li>
-      <li>
-        For the hub-less instances, construct a non-star 2n-3 spanner
-        whose correctness can be proved. Multi-start greedy always finds
-        one — the question is proving it.
-      </li>
-      <li>
-        A non-constructive argument. The birthday bound suggests
-        P(no hub works) &asymp; (1-p)<sup>n</sup> for some p > 0, which
-        vanishes exponentially. But the conjecture needs certainty, not probability.
-      </li>
-    </ol>
-
     <p>
-      The construction is trivial. The proof isn't. The gap is one lemma wide.
+      The construction is trivial. The proof isn't. The gap is waiting for new tools.
     </p>
 
     <p class="text-gray-500 text-sm mt-8">
-      Full project: <a href="https://github.com/kimjune01/tvg">github.com/kimjune01/tvg</a> — Lean proofs, Python experiments, 27 hypotheses, research logs
+      Full project: <a href="https://github.com/kimjune01/tvg">github.com/kimjune01/tvg</a> — Lean proofs, Python experiments, 10 paradigms probed, research logs
     </p>
 
     <PrevNext
