@@ -41,7 +41,7 @@ If she listens and replies, we are in it. We got here without either of us havin
 
 Every branch refuses audience. Every branch eliminates debt. Every branch requires only courage to speak without demanding interruption.
 
-This is why I've been building [ephemeral.website](/ephemeral-website) as a pure core, with confession, appreciation, and apology as themed layers on top. Each layer is a door you walk through for a specific act. None of them knows who you are. None has an inbox. Ephemerality isn't a feature. It's what makes the thing a message instead of a performance.
+This is why I've been building [ephemeral.website](/ephemeral-website) as a pure core, with confession, appreciation, and apology as themed layers on top. Each layer is a door you walk through for a specific act. None of them knows who you are. None has an inbox. Ephemerality isn't a feature. It's what makes the thing a message instead of a performance. The writing is CC-BY-SA. The code is AGPL-3.0. The pattern can be implemented by anyone. It cannot be walled off by anyone.
 
 Here's a test. If the barista were seventeen, asking for her number would make me a predator before any message had been exchanged. The extraction of an ongoing channel from a minor who can't gracefully refuse is the harm itself, regardless of what I meant to say next. But I might want to express heartfelt gratitude to a seventeen-year-old without becoming a predator to do it. A handwritten note of thanks on the way out would manage this. An ephemeral URL, said the same way, would manage it too. Only the phone number fails the test.
 
