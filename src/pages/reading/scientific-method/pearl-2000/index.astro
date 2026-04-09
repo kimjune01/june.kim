@@ -63,6 +63,86 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>The deeper move is the <em>do-calculus</em>: three rules, written in the language of directed acyclic graphs, that tell you whether a particular interventional probability can be computed from observational data, <em>given an assumed causal graph</em>. The graph is not delivered by the calculus; you supply it from substantive knowledge of the system. What the calculus delivers, conditional on the graph, is a verdict: here is a closed-form expression that identifies the causal effect, or here is a proof that no such expression exists from the variables you measured. Sometimes the verdict is "you cannot answer this question from your data, full stop." No extra covariate would help; the only path forward is a different study design. Turning that judgment call into a decision procedure is the load-bearing innovation. Pen and paper, in the strict sense.</p>
 
+    <!-- SVG: Do-operator surgery on the smoking/cancer DAG -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 600 330" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <text x="300" y="18" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">the same three variables, two different questions</text>
+
+        <!-- LEFT PANEL: observational -->
+        <text x="150" y="46" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Seeing</text>
+        <text x="150" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">P(cancer | smoking)</text>
+
+        <!-- Nodes -->
+        <circle cx="150" cy="100" r="24" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1.2"/>
+        <text x="150" y="104" text-anchor="middle" fill="currentColor" font-size="9">Genes</text>
+
+        <circle cx="80" cy="190" r="28" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1.2"/>
+        <text x="80" y="194" text-anchor="middle" fill="currentColor" font-size="9">Smoking</text>
+
+        <circle cx="220" cy="190" r="26" fill="#a1a1aa" fill-opacity="0.12" stroke="#71717a" stroke-width="1.2"/>
+        <text x="220" y="194" text-anchor="middle" fill="currentColor" font-size="9">Cancer</text>
+
+        <!-- Genes -> Smoking (curved) -->
+        <path d="M 130 118 Q 100 145 88 165" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.55" marker-end="url(#arrowGray)"/>
+        <!-- Genes -> Cancer (curved) -->
+        <path d="M 170 118 Q 200 145 212 165" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.55" marker-end="url(#arrowGray)"/>
+        <!-- Smoking -> Cancer (horizontal) -->
+        <line x1="108" y1="190" x2="192" y2="190" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.55" marker-end="url(#arrowGray)"/>
+
+        <!-- Caption -->
+        <text x="150" y="245" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">two paths from smoking to cancer:</text>
+        <text x="150" y="257" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">a direct effect and a backdoor through genes.</text>
+        <text x="150" y="269" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">the observed association mixes both.</text>
+
+        <!-- DIVIDER -->
+        <line x1="300" y1="38" x2="300" y2="290" stroke="#71717a" stroke-width="1" stroke-opacity="0.4"/>
+
+        <!-- RIGHT PANEL: interventional -->
+        <text x="450" y="46" text-anchor="middle" fill="#fbbf24" font-size="11" fill-opacity="0.75">Doing</text>
+        <text x="450" y="60" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.45">P(cancer | do(smoking))</text>
+
+        <!-- Nodes -->
+        <circle cx="450" cy="100" r="24" fill="#fbbf24" fill-opacity="0.06" stroke="#fbbf24" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="450" y="104" text-anchor="middle" fill="currentColor" font-size="9">Genes</text>
+
+        <circle cx="380" cy="190" r="28" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="1.6"/>
+        <text x="380" y="194" text-anchor="middle" fill="currentColor" font-size="9">Smoking</text>
+
+        <circle cx="520" cy="190" r="26" fill="#fbbf24" fill-opacity="0.06" stroke="#fbbf24" stroke-width="1.2" stroke-opacity="0.4"/>
+        <text x="520" y="194" text-anchor="middle" fill="currentColor" font-size="9">Cancer</text>
+
+        <!-- Genes -> Smoking is SEVERED (dashed, no arrowhead) -->
+        <path d="M 430 118 Q 400 145 388 165" fill="none" stroke="#71717a" stroke-width="1.2" stroke-opacity="0.25" stroke-dasharray="3,3"/>
+        <!-- Strike-through (red X at midpoint) -->
+        <line x1="402" y1="135" x2="418" y2="151" stroke="#ef4444" stroke-width="2" stroke-opacity="0.85"/>
+        <line x1="418" y1="135" x2="402" y2="151" stroke="#ef4444" stroke-width="2" stroke-opacity="0.85"/>
+        <text x="410" y="172" text-anchor="middle" fill="#ef4444" font-size="7" fill-opacity="0.85">severed</text>
+
+        <!-- Genes -> Cancer (still present, dimmer) -->
+        <path d="M 470 118 Q 500 145 512 165" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4" marker-end="url(#arrowGray)"/>
+        <!-- Smoking -> Cancer (highlighted causal effect) -->
+        <line x1="408" y1="190" x2="494" y2="190" stroke="#fbbf24" stroke-width="1.8" stroke-opacity="0.85" marker-end="url(#arrowGold)"/>
+
+        <!-- Caption -->
+        <text x="450" y="245" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">intervention severs the arrow into smoking.</text>
+        <text x="450" y="257" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">the backdoor is closed; the only remaining</text>
+        <text x="450" y="269" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">smoking→cancer path is the direct causal effect.</text>
+
+        <!-- ARROW MARKERS -->
+        <defs>
+          <marker id="arrowGray" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M 0 0 L 6 3 L 0 6 z" fill="currentColor" fill-opacity="0.55"/>
+          </marker>
+          <marker id="arrowGold" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M 0 0 L 7 3.5 L 0 7 z" fill="#fbbf24" fill-opacity="0.85"/>
+          </marker>
+        </defs>
+
+        <!-- BOTTOM TAGLINE -->
+        <text x="300" y="318" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">draw the DAG. then operate on it.</text>
+      </svg>
+    </div>
+
     <h3>Key concepts</h3>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
