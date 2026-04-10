@@ -13,7 +13,7 @@ import SchemeRepl from '../../../../components/SchemeRepl';
     <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/auction-proof/blob/reading-pages/AuctionProof/OpenGame.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">The VCG auction as a composable module in Hedges' open-game framework. Sequential and parallel composition are defined. <a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash</a> equilibria decompose into component equilibria. But DSIC composition remains an open question &mdash; no published result covers it.</p>
+      <p class="text-lg" style="max-width:none">The VCG auction as a composable module in Hedges' open-game framework. Sequential and parallel composition are defined. <a href="https://en.wikipedia.org/wiki/Nash_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Nash</a> equilibria decompose into component equilibria. DSIC does not &mdash; but it composes under <strong>argmax-stability</strong>, and additive separability of valuations is the sharp necessary condition for a mechanism-independent guarantee.</p>
     </div>
 
     <h3>OpenGame</h3>
@@ -105,9 +105,10 @@ print("Thm 4.3: check the parts, get the whole.")
 `} />
     </div>
 
-    <h3>What about DSIC composition?</h3>
+    <h3>DSIC composition, characterized</h3>
     <p>Hedges' decomposition theorem covers Nash, <a href="https://en.wikipedia.org/wiki/Bayesian_game"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian-Nash</a>, and <a href="https://en.wikipedia.org/wiki/Subgame_perfect_equilibrium"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>subgame-perfect</a> equilibria. It does <em>not</em> cover dominant-strategy incentive compatibility. DSIC doesn't compose in general &mdash; lying in stage 1 can give a payoff through stage 2's interface.</p>
-    <p>The Lean file documents this gap but does not close it. The docstring notes a sufficient condition (i-insensitive continuations) and sketches why it holds in this auction pipeline, but no formal theorem is proved. The <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a> series discusses the pipeline composition informally.</p>
+    <p>The sufficient condition is <strong>argmax-stability</strong>: the optimal report in each mechanism is independent of the other mechanism's outcome. Equivalently, "i-insensitive continuations" &mdash; player i's upstream report cannot affect i's downstream payoff. <strong>Additive separability of valuations is the sharp necessary condition</strong> for a mechanism-independent guarantee; any ε-violation admits a rectangle-test counterexample. The k-mechanism generalization requires k-way stability, not pairwise &mdash; the same structural gap as pairwise versus mutual independence in probability.</p>
+    <p>This auction pipeline satisfies the condition because the publisher filter is exogenous. The characterization currently lives in the docstring and in <a href="https://june.kim/vector-space"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Vector Space</a>; mechanized Lean proofs of the sufficient and necessary directions are still to be written.</p>
 
     <h3>Connections</h3>
     <ul class="neighbors">
