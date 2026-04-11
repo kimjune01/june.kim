@@ -42,21 +42,25 @@ A teacher opens a room before class and shares the link. Students click it on th
 
 The product is an IRC server, a WebSocket bridge, and a web client. The IRC protocol ([RFC 2812](https://www.rfc-editor.org/rfc/rfc2812)) defines channels, nicks, messages, presence, and server linking. This spec defines only the delta.
 
-**Server.** Phoenix application that speaks IRC natively and exposes Phoenix Channels over WebSocket. No separate IRC daemon; the Phoenix process is the IRCd. It accepts both raw IRC connections (for bots and traditional clients) and WebSocket connections (for browsers).
+**Server.** Phoenix application that speaks IRC natively and exposes Phoenix Channels over WebSocket. No separate IRC daemon; the Phoenix process is the IRCd. Browser-first; raw IRC support comes later.
 
 **Client.** LiveView renders the web UI. No frontend build step, no React, no bundler. The browser connects over WebSocket; LiveView handles the DOM. A URL like `room.website/calc-study` is a channel. Visiting the link joins it.
 
 **Identity.** IRC nick rules apply. Pick a nick on connect, change it with NICK. No registration, no email, no OAuth. The browser generates a keypair on first visit (localStorage); the public key is the persistent identity across rooms and sessions. Export the key to move to another browser, or clear it to become a new person.
 
-**Persistence.** The server stores nothing by default. Messages exist in the channel buffer while the channel is alive. When the last participant leaves, the channel and its buffer are gone. Bots count as participants.
+**Persistence.** The server stores nothing by default. Messages exist in the channel buffer while the channel is alive. When the last human participant leaves, the channel and its buffer are gone. Bots alone do not keep a room alive.
 
 **Decay.** Channels have an optional TTL set on creation. A 2-hour exam room, a 1-day event backchannel. When the TTL expires, the server sends PART to all participants and destroys the channel. Channels without a TTL live until empty.
 
 **Bots.** Any process that speaks IRC can join as a nick. [OpenClaw](https://github.com/openclaw/openclaw) already bridges LLMs to IRC. A bot's message context is the channel buffer (in-memory, ephemeral). When the channel dies, the bot's context dies with it. Multiple bots per channel is the expected configuration.
 
-**Federation.** The server supports IRC server linking ([RFC 2813](https://www.rfc-editor.org/rfc/rfc2813)). Anyone can run an instance and peer with others. The wire format is the only contract.
+**Moderation.** The room creator gets a capability URL for kick, lock, and end room. No global identity required to moderate.
+
+**Federation.** Single server first. IRC server linking ([RFC 2813](https://www.rfc-editor.org/rfc/rfc2813)) is a future concern.
 
 **License.** AGPL-3.0, with attribution to [Kiwi IRC](https://github.com/kiwiirc/kiwiirc) and [Halloy](https://github.com/squidowl/halloy).
+
+**Promise.** Ephemerality is a social contract, not a technical guarantee. Anyone in the room can copy, screenshot, or record. The server's promise is that it doesn't keep what you said.
 
 ### Who this is for
 
