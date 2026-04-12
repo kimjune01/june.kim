@@ -1,0 +1,48 @@
+---
+import '../styles/blog.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>chat.june.kim — privacy & terms</title>
+  <link rel="stylesheet" href="/styles/blog.css">
+</head>
+<body>
+  <article class="post" style="max-width: 500px; margin: 3rem auto; padding: 0 1rem;">
+    <h1 style="font-size: 1.5rem; margin-bottom: 2rem;">chat.june.kim</h1>
+
+    <h2>What I store</h2>
+    <p>Nothing.</p>
+    <p>Messages exist in server process memory while the room is active. When the last person leaves, the process terminates and the memory is freed. There is no database, no log file, no message archive, no analytics, no telemetry on message content.</p>
+
+    <h2>What I log</h2>
+    <p>Process start/stop counts. Error classes without message content. Rate-limit counters. No message text, no nicknames, no IP-to-room correlation, no chat content in any log.</p>
+
+    <h2>What I can't prevent</h2>
+    <p>Anyone in the room can copy, screenshot, or record what they see. Bots that join can retain conversation externally. Network intermediaries can observe traffic. Browser extensions can read the page. Messages are plaintext in server memory while the room is alive.</p>
+
+    <h2>Voice</h2>
+    <p>Voice audio is peer-to-peer via WebRTC. Audio goes directly between browsers. It never passes through or is stored on the server. The server relays only the connection handshake (SDP offers and ICE candidates), which contain no audio data.</p>
+
+    <h2>Identity</h2>
+    <p>No accounts. No email. No phone number. No OAuth. Your browser generates a local keypair on first visit, stored in localStorage. You can clear it at any time. The server does not store it persistently.</p>
+
+    <h2>Moderation</h2>
+    <p>The room creator receives a capability URL. Whoever has that URL can kick, lock, mute, or end the room. There is no admin panel, no role system, no moderation log. The capability token is hashed in memory; the raw value is shown once and never stored.</p>
+
+    <h2>Third parties</h2>
+    <p>No analytics scripts. No third-party cookies. No CDN for user content. No ad network. No tracking pixels. The only external request is to Google's STUN server for WebRTC connection setup.</p>
+
+    <h2>Code</h2>
+    <p>The server is open source under AGPL-3.0. You can read every line of what runs on this server at <a href="https://github.com/kimjune01/hangout">github.com/kimjune01/hangout</a>.</p>
+
+    <h2>Operator</h2>
+    <p>This instance is operated by June Kim. Questions: <a href="mailto:hey@june.kim">hey@june.kim</a>.</p>
+
+    <p style="margin-top: 2rem; color: #6e7681; font-size: 0.875rem;">Last updated April 2026.</p>
+  </article>
+</body>
+</html>
