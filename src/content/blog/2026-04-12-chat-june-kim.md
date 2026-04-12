@@ -6,7 +6,7 @@ tags: projects
 
 [ephemeral IRC](/ephemeral-irc) was the spec. I built the room.
 
-It speaks IRC on port 6667 and LiveView in the browser. WeeChat and Safari see the same messages. One process per room. When the last human leaves, the process dies and the buffer goes with it.
+It speaks IRC on port 6667 and LiveView in the browser. WeeChat and Safari see the same messages. One process per room. When the last human leaves, the process dies and the buffer dies with it.
 
 No accounts. No database. I don't store messages; they live in memory. The server promises I don't keep what you said; it doesn't promise others won't.
 
