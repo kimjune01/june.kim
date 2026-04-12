@@ -16,4 +16,4 @@ Right now it replaces the chat button on this blog. If I have the tab open, we t
 
 That's the whole product: a room that exists while people are in it.
 
-[step in](https://chat.june.kim) · [source](https://github.com/kimjune01/hangout) · [the spec](/ephemeral-irc)
+[step in](https://chat.june.kim) · [source](https://github.com/kimjune01/hangout) · [the vibelog](/ephemeral-irc)
