@@ -1,5 +1,5 @@
 ---
-variant: post
+variant: post-medium
 title: "Revised SOAP Notes: Soar"
 tags: cognition, methodology
 ---
@@ -44,7 +44,30 @@ The broken loop isn't inside Soar's memory architecture. It's in the project's c
 
 Soar is a mature C++ system with tightly coupled modules. There is no benchmark suite for cognitive metrics, no eval harness for agent-level behavior, no contributor guidelines that map proposed changes to testable claims. Without that signal, the only alternative is meetings — and nothing is cheaper than sample data that runs at compute time. Experimental branches start and don't land. PRs open and close. Mechanisms remain plausible instead of becoming measured progress.
 
-The next useful contribution is not another memory mechanism. It is a way to tell whether a memory mechanism helped: tasks, metrics, baselines, and acceptance criteria. Until Soar can tell a contributor whether their change made agents better, every proposed mechanism — mine included — flies blind.
+The next useful contribution is not another memory mechanism. It is a way to tell whether a memory mechanism helped.
+
+## A transfer eval
+
+So I built one. The harness generates random [Blocks World](https://en.wikipedia.org/wiki/Blocks_world) tasks, trains a chunking agent on a set of them, then tests whether the learned chunks transfer to new tasks. Three conditions: trained-transfer (chunks from training), fresh baseline (no prior learning), and no-learning control (chunking disabled).
+
+```
+  Seed  Condition             Success   Transfer DCs  Chunks  Transfer Ratio
+  ----------------------------------------------------------------------------
+     0  trained-transfer      6/6                 18       5          +0.571
+     0  fresh-baseline        6/6                 42       -               -
+     1  trained-transfer      6/6                 18       4          +0.280
+     1  fresh-baseline        6/6                 25       -               -
+     2  trained-transfer      6/6                 19       5          +0.424
+     2  fresh-baseline        6/6                 33       -               -
+     3  trained-transfer      6/6                 28       2          +0.569
+     3  fresh-baseline        6/6                 65       -               -
+     4  trained-transfer      6/6                 23       4          +0.635
+     4  fresh-baseline        6/6                 63       -               -
+```
+
+Chunking cuts transfer task decision cycles by 28–64%. The measurement is automatic, deterministic, and runs in seconds. This is the signal my PRs should have been tested against. An architectural change that improves this ratio is earning its place. One that doesn't is an architecture-shaped guess.
+
+The [harness](https://github.com/SoarGroup/Soar) is a Python script wrapping Soar's existing CLI. It generates tasks, runs agents, parses stats, and compares conditions. No new infrastructure required.
 
 ---
 

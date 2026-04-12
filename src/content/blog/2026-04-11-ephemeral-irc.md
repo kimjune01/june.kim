@@ -42,7 +42,7 @@ A teacher opens a room before class and shares the link. Students click it on th
 
 The product is an IRC server, a WebSocket bridge, and a web client. The IRC protocol ([RFC 2812](https://www.rfc-editor.org/rfc/rfc2812)) defines channels, nicks, messages, presence, and server linking. This spec defines only the delta.
 
-**Server.** Phoenix application that speaks IRC natively and exposes Phoenix Channels over WebSocket. No separate IRC daemon; the Phoenix process is the IRCd. Browser-first; raw IRC support comes later.
+**Server.** Phoenix application that speaks IRC natively and exposes Phoenix Channels over WebSocket. No separate IRC daemon; the Phoenix process is the IRCd. It accepts both raw IRC connections (for bots and traditional clients) and WebSocket connections (for the LiveView client).
 
 **Client.** LiveView renders the web UI. No frontend build step, no React, no bundler. The browser connects over WebSocket; LiveView handles the DOM. A URL like `room.website/calc-study` is a channel. Visiting the link joins it.
 
@@ -56,9 +56,9 @@ The product is an IRC server, a WebSocket bridge, and a web client. The IRC prot
 
 **Moderation.** The room creator gets a capability URL for kick, lock, and end room. No global identity required to moderate.
 
-**Federation.** Single server first. IRC server linking ([RFC 2813](https://www.rfc-editor.org/rfc/rfc2813)) is a future concern.
-
 **License.** AGPL-3.0, with attribution to [Kiwi IRC](https://github.com/kiwiirc/kiwiirc) and [Halloy](https://github.com/squidowl/halloy).
+
+**Notifications.** Browser Notification API for messages while the tab is in the background. No push service, no service worker.
 
 **Promise.** Ephemerality is a social contract, not a technical guarantee. Anyone in the room can copy, screenshot, or record. The server's promise is that it doesn't keep what you said.
 
