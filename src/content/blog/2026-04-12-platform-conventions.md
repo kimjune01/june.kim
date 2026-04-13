@@ -14,6 +14,8 @@ Each platform publishes its expectations. These are the context parameters for l
 
 Opinionated and prescriptive. Covers iOS, macOS, watchOS, tvOS, visionOS. Strong on navigation patterns (tab bars, nav stacks, modal sheets), typography (SF Pro system), spacing, and platform-specific interaction (swipe gestures, Digital Crown, spatial input). The HIG assumes you're building a native app; web apps get less guidance. Recently updated for Liquid Glass, which is controversial — the older principles underneath are still sound.
 
+**iOS keyboard trap.** Mobile Safari doesn't resize the layout viewport when the keyboard opens — it shifts it. Fixed-position elements (chat input bars, bottom nav) break. Three approaches: `100dvh` (simplest, iOS 15.4+), the [`visualViewport` API](https://github.com/mattpilott/ios-chat) (proven for chat apps — sets `--vvh` from `visualViewport.height`), or the [`VirtualKeyboard` API](https://developer.mozilla.org/en-US/docs/Web/API/VirtualKeyboard_API) (newest, not yet on Safari). Test on real devices — simulators don't reproduce this.
+
 ### Google — Material Design
 
 [m3.material.io](https://m3.material.io)
