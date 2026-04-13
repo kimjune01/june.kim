@@ -1,6 +1,6 @@
 ---
 variant: post
-title: "Spacing and Layout"
+title: "Spaced Out"
 tags: design
 ---
 

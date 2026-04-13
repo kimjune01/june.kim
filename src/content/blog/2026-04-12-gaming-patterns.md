@@ -1,6 +1,6 @@
 ---
 variant: post-wide
-title: "Game UI Patterns"
+title: "Gaming Patterns"
 tags: design
 ---
 

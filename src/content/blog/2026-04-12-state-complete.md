@@ -1,6 +1,6 @@
 ---
 variant: post
-title: "State Completeness"
+title: "State Complete"
 tags: design
 ---
 
@@ -32,4 +32,4 @@ For any view, ask: what does the user see in each of these six states? If the an
 
 Check state completeness before checking transitions. A beautiful transition into a blank screen is still a blank screen. Enumerate the six states for every interactive view. Flag any that are undefined or collapsed into another.
 
-[Conveyance](/game-ui-patterns) applies to every state, not just the happy path. Empty conveys "here's how to start." Error conveys "here's what to fix." Loading conveys "the system is working." If any state fails to convey, the interface fails silently.
+[Conveyance](/gaming-patterns) applies to every state, not just the happy path. Empty conveys "here's how to start." Error conveys "here's what to fix." Loading conveys "the system is working." If any state fails to convey, the interface fails silently.

@@ -18,7 +18,7 @@ Slay the Spire solved novice-to-expert. The first combat has no tutorial. You dr
 
 Dark Souls solved tutorialization. It teaches through level design, not text. A weak enemy near a bonfire teaches combat safely. A narrow bridge teaches falling. The environment *is* the tutorial.
 
-These aren't cherry-picked. The [full pattern catalog](/game-ui-patterns) has more: cooldown indicators, HUD minimalism, progress visualization, inventory systems. They all emerged from the same pressure.
+These aren't cherry-picked. The [full pattern catalog](/gaming-patterns) has more: cooldown indicators, HUD minimalism, progress visualization, inventory systems. They all emerged from the same pressure.
 
 ### Provenance
 
