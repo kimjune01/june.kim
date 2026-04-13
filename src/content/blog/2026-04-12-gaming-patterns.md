@@ -89,3 +89,8 @@ The game uses animation, pointer highlights, and immediate visual feedback to te
 **Card tooltips on hover.** Beginners read them to learn what cards do. Experts hover to check exact numbers for damage math. No "simple mode" vs "advanced mode." The tooltip serves both because the information is layered: the name and art convey the concept, the text conveys the mechanics, the numbers convey the math.
 
 **Ascension levels.** After winning, the game unlocks harder modifiers one at a time. Each ascension adds exactly one new constraint. This is progressive disclosure applied to difficulty — the game teaches you what "harder" means in increments, so you always understand what changed.
+
+### Reference implementations
+
+- [Excalidraw](https://github.com/excalidraw/excalidraw) (MIT) — canvas tools as conveyance: mode indicators, cursor changes, selection affordances, keyboard shortcut discoverability.
+- [lazygit](https://github.com/jesseduffield/lazygit) (MIT) — terminal conveyance for high-risk Git operations: staging individual lines, interactive rebase, undo/redo, confirmation patterns.

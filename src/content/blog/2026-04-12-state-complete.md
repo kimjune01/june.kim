@@ -28,6 +28,12 @@ For any view that reads, writes, or syncs with external systems, audit at least 
 
 For any view, ask: what does the user see in each of these six states? If the answer for any state is "I don't know" or "the same as another state," that's a gap. Empty and loading should not look the same. Error and offline should not look the same. Each state is a different answer to a different question.
 
+### Reference implementations
+
+- [Actual](https://github.com/actualbudget/actual) (MIT) — local-first budgeting forces handling of empty, loading, partial sync, offline, validation. Every state matters because money is involved.
+- [Hugging Face Chat UI](https://github.com/huggingface/chat-ui) (Apache-2.0) — streaming message states: pending, streaming, failed, retried, tool-running, tool-failed.
+- [Hoppscotch](https://github.com/hoppscotch/hoppscotch) (MIT) — API client with request/response lifecycle states: loading, success, error, timeout, auth failure.
+
 ### The agent instruction
 
 Check state completeness before checking transitions. A beautiful transition into a blank screen is still a blank screen. Enumerate the six states for every interactive view. Flag any that are undefined or collapsed into another.

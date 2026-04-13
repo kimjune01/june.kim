@@ -57,3 +57,8 @@ If a principle is from the computer era but has held up for 30+ years across pla
 If a principle is younger than the current framework, it might be fashion. It might also be genuine discovery. The way to tell: does it reduce to one of the older principles, or does it say something new? "Cards improve scannability" reduces to proximity, similarity, enclosure, and chunking — cite the originals. "Skeleton loaders feel faster than spinners" probably reduces to feedback and perceived latency. If it reduces, the older principle is load-bearing. If it's genuinely new, it needs time.
 
 The point is not that old principles are automatically correct. The point is that age is evidence. A principle that survived paper forms, factory controls, aircraft cockpits, terminals, desktops, phones, and headsets is probably describing the user, not the medium.
+
+### Reference implementations
+
+- [NetNewsWire](https://github.com/Ranchero-Software/NetNewsWire) (MIT) — native Apple app demonstrating Gestalt hierarchy, Fitts's Law (keyboard shortcuts), signal-to-noise (low-chrome reader), and platform accessibility.
+- [Now in Android](https://github.com/android/nowinandroid) (Apache-2.0) — Material 3 color system, typography scale, adaptive layouts, dark mode. Principles made concrete in Compose.

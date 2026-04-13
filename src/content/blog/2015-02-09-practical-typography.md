@@ -24,4 +24,8 @@ Line length, line spacing, font size, paragraph spacing, and heading hierarchy a
 
 Font choice is not mechanical. It's the difference between a correct page and a page with character. System fonts are safe. A well-chosen web font is a voice. This is the one decision the agent should not make alone — ask the user what tone the page should carry, then propose options. Butterick's [font recommendations](https://practicaltypography.com/font-recommendations.html) are a good starting point for the conversation.
 
+### Reference implementations
+
+- [NetNewsWire](https://github.com/Ranchero-Software/NetNewsWire) (MIT) — reader typography: system fonts, proper line height, comfortable reading width, low-noise hierarchy.
+
 ![typography](/assets/typography.png)

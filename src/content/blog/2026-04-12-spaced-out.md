@@ -57,3 +57,7 @@ Material Design uses 8dp layout increments, with typography and smaller elements
 - [Material Design layout](https://m3.material.io/foundations/layout/understanding-layout/spacing) — 8dp grid, systematic spacing
 - [Tailwind spacing tokens](https://tailwindcss.com/docs/theme) — practical constrained scale via `--spacing-*` namespace
 - [Butterick's Practical Typography](https://practicaltypography.com) — line height, margins, and paragraph spacing for text
+
+### Reference implementations
+
+- [Hoppscotch](https://github.com/hoppscotch/hoppscotch) (MIT) — dense multi-pane layout with consistent spacing system across panels, tabs, and request builders.

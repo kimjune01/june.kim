@@ -19,3 +19,7 @@ The key insight: color roles are semantic, not aesthetic. Arbitrary hex values b
 - **Never color alone.** Color must not be the sole indicator of state. Pair with icons, text, or shape. 8% of men have color vision deficiency.
 - **Dark mode is its own palette.** Not inverted light mode. Needs adjusted surfaces, reduced saturation, and re-tested contrast ratios.
 - **Limit the palette.** Primary, secondary, error plus neutrals covers most interfaces. More than five active color roles is usually noise.
+
+### Reference implementations
+
+- [Now in Android](https://github.com/android/nowinandroid) (Apache-2.0) — Material 3 dynamic color, tonal palettes, dark mode with proper surface adjustment. The reference for semantic color roles in practice.

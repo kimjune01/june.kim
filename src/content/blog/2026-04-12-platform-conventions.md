@@ -42,6 +42,12 @@ The Butterick of CLIs. Concrete, opinionated, community-maintained. Covers namin
 
 No single authority. The rendering environment is hostile: Outlook uses Word's HTML engine, Gmail strips `<style>` tags, every client is different. The de facto conventions: 600px max width, table-based layout, inline styles, images-off-by-default design. [Can I Email](https://www.caniemail.com/) is the caniuse.com equivalent. [Mailchimp's email guide](https://templates.mailchimp.com/getting-started/html-email-basics/) and [Email on Acid](https://www.emailonacid.com/blog/article/email-development/email-development-best-practices-2/) are the most practical references. The platform convention for email is: assume nothing works.
 
+### Reference implementations
+
+- [NetNewsWire](https://github.com/Ranchero-Software/NetNewsWire) (MIT) — follows Apple HIG closely: native navigation, keyboard shortcuts, system typography.
+- [Now in Android](https://github.com/android/nowinandroid) (Apache-2.0) — follows Material 3: adaptive layouts, dynamic color, Compose accessibility semantics.
+- [Posting](https://github.com/darrenburns/posting) (Apache-2.0) — follows CLI conventions: keyboard-first, command palette, theme system, Vim keys.
+
 ### The agent instruction
 
 When linting a design, check which platform it ships on and load the corresponding conventions. A cross-platform app gets the intersection — the patterns that all platforms agree on. A native app gets the full platform spec. A web app gets WCAG as the floor and picks its own conventions above it.

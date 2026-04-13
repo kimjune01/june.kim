@@ -20,4 +20,9 @@ Key ingredients for an agent:
 
 The [WCAG guidelines](https://www.w3.org/WAI/standards-guidelines/wcag/) are the legal standard. Material Design translates them into actionable design patterns. Use both: WCAG for compliance, Material for implementation.
 
+### Reference implementations
+
+- [NetNewsWire](https://github.com/Ranchero-Software/NetNewsWire) (MIT) — native Apple a11y: VoiceOver, keyboard navigation, dark mode, reader typography.
+- [Posting](https://github.com/darrenburns/posting) (Apache-2.0) — terminal a11y: focus management, keyboard-first interaction, command palette, theme system with density modes.
+
 This is the one area where "good enough" is not good enough. Every other design principle degrades gracefully — a slightly wrong line height is still readable, a slightly slow transition is still navigable. An inaccessible interface is a locked door.
