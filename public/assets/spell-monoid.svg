@@ -49,10 +49,10 @@
   <text class="node-text" x="230" y="28">epmem</text>
   <text class="node-sub" x="230" y="46">what happened</text>
 
-  <text class="node-text" x="102" y="254">smem</text>
-  <text class="node-sub" x="102" y="272">what is true</text>
+  <text class="node-text" x="102" y="240">smem</text>
+  <text class="node-sub" x="102" y="258">what is true</text>
 
-  <text class="node-text" x="358" y="254">pmem</text>
-  <text class="node-sub" x="358" y="272">how to act</text>
+  <text class="node-text" x="358" y="240">pmem</text>
+  <text class="node-sub" x="358" y="258">how to act</text>
 
 </svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 220" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .box { stroke: #555; stroke-width: 1.5; fill: #fff; rx: 8; }
+    .box-ship { stroke: #555; stroke-width: 1.5; fill: #d4edd4; rx: 8; }
+    .box-text { text-anchor: middle; dominant-baseline: central; font-weight: 700; font-size: 12px; fill: #333; }
+    .arrow { stroke: #888; stroke-width: 1.5; fill: none; marker-end: url(#ah2); }
+    .label { text-anchor: end; font-size: 11px; fill: #888; font-weight: 600; font-style: italic; }
+    .output { text-anchor: middle; font-size: 10px; fill: #1565c0; font-weight: 600; }
+    .input { text-anchor: middle; font-size: 10px; fill: #888; font-weight: 500; }
+  </style>
+  <defs>
+    <marker id="ah2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <path d="M0,0 L7,2.5 L0,5" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Row label: Architecture -->
+  <text class="label" x="95" y="52">Architecture</text>
+
+  <!-- Framework -->
+  <rect class="box" x="105" y="30" width="110" height="40"/>
+  <text class="box-text" x="160" y="50">Framework</text>
+
+  <line class="arrow" x1="215" y1="50" x2="235" y2="50"/>
+
+  <!-- Parts Bin -->
+  <rect class="box" x="235" y="30" width="100" height="40"/>
+  <text class="box-text" x="285" y="50">Parts Bin</text>
+
+  <line class="arrow" x1="335" y1="50" x2="355" y2="50"/>
+
+  <!-- Volley -->
+  <rect class="box" x="355" y="30" width="80" height="40"/>
+  <text class="box-text" x="395" y="50">Volley</text>
+
+  <line class="arrow" x1="435" y1="50" x2="455" y2="50"/>
+
+  <!-- Merge -->
+  <rect class="box" x="455" y="30" width="80" height="40"/>
+  <text class="box-text" x="495" y="50">Merge</text>
+
+  <line class="arrow" x1="535" y1="50" x2="555" y2="50"/>
+
+  <!-- Volley 2 -->
+  <rect class="box" x="555" y="30" width="80" height="40"/>
+  <text class="box-text" x="595" y="50">Volley</text>
+
+  <line class="arrow" x1="635" y1="50" x2="655" y2="50"/>
+
+  <!-- Ship -->
+  <rect class="box-ship" x="655" y="30" width="70" height="40"/>
+  <text class="box-text" x="690" y="50">PR</text>
+
+  <!-- Row label: Product -->
+  <text class="label" x="95" y="142">Product</text>
+
+  <!-- PageLeft -->
+  <rect class="box" x="105" y="120" width="100" height="40"/>
+  <text class="box-text" x="155" y="140">PageLeft</text>
+
+  <line class="arrow" x1="205" y1="140" x2="235" y2="140"/>
+
+  <!-- Forge -->
+  <rect class="box" x="235" y="120" width="80" height="40"/>
+  <text class="box-text" x="275" y="140">Forge</text>
+
+  <line class="arrow" x1="315" y1="140" x2="345" y2="140"/>
+
+  <!-- Design -->
+  <rect class="box" x="345" y="120" width="80" height="40"/>
+  <text class="box-text" x="385" y="140">Design</text>
+
+  <line class="arrow" x1="425" y1="140" x2="455" y2="140"/>
+
+  <!-- Ship -->
+  <rect class="box-ship" x="455" y="120" width="70" height="40"/>
+  <text class="box-text" x="490" y="140">Ship</text>
+
+  <!-- Note -->
+  <text style="text-anchor:middle; font-size:10px; fill:#888; font-style:italic;" x="375" y="200">Each step converges. Composition compounds the guarantee.</text>
+</svg>
