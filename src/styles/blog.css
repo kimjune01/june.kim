@@ -32,6 +32,7 @@ sup { vertical-align: top; position: relative; top: -0.5em; margin-left: 1px; }
 time { color: #555; }
 code, pre { font-family: Consolas, monospace, x; }
 code { color: #000066; background: #eee; padding: 2px; font-size: 13px; }
+h1 code { font-size: inherit; background: none; padding: 0; }
 pre { display: block; margin-top: 0; margin-bottom: 1rem; font-size: 0.8rem; line-height: 1.25; white-space: pre; overflow-x: auto; background-color: #f9f9f9; border: 1px solid #ddd; padding: 1rem; }
 pre code { font-size: 85%; color: inherit; background-color: transparent; padding: 0; }
 /* Override Astro's built-in code block styling */

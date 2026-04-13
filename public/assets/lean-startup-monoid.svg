@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="50 55 360 240" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .node-text { text-anchor: middle; font-weight: 700; font-size: 15px; fill: #333; }
+    .node-sub { text-anchor: middle; font-size: 11px; fill: #888; }
+    .arrow { stroke: #555; stroke-width: 1.8; fill: none; marker-end: url(#ah); }
+    .label { font-size: 12px; fill: #555; font-weight: 600; font-style: italic; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Background image -->
+  <image href="/assets/lean-startup-bg.png" x="115" y="80" width="230" height="230" opacity="0.2"/>
+
+  <!-- Inscribed triangle -->
+  <polygon points="230,72 122,259 338,259" stroke="#e8ddd0" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- measure: episodes → knowledge (left side) -->
+  <path class="arrow" d="M216,105 Q135,150 137,226"/>
+
+  <!-- learn: knowledge → procedures (bottom) -->
+  <path class="arrow" d="M158,259 Q230,300 302,259"/>
+
+  <!-- build: procedures → episodes (right side) -->
+  <path class="arrow" d="M323,226 Q325,150 244,105"/>
+
+  <!-- Labels -->
+  <text class="label" x="138" y="158" text-anchor="end">measure</text>
+  <text class="label" x="230" y="295" text-anchor="middle">learn</text>
+  <text class="label" x="328" y="158" text-anchor="start">build</text>
+
+  <!-- Nodes -->
+  <text class="node-text" x="230" y="78">episodes</text>
+  <text class="node-sub" x="230" y="94">what happened</text>
+
+  <text class="node-text" x="122" y="255">knowledge</text>
+  <text class="node-sub" x="122" y="271">what is true</text>
+
+  <text class="node-text" x="338" y="255">procedures</text>
+  <text class="node-sub" x="338" y="271">how to act</text>
+</svg>
