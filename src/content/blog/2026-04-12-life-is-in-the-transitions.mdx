@@ -1,0 +1,201 @@
+---
+variant: post-wide
+title: "Life Is in the Transitions"
+tags: design
+---
+
+I'm staring at a chat app I built. You tap a room, and the whole page just *is* different. No slide, no fade, no indication of where you came from or where you'd go back. Every screen is an island. It works — functionally. But it feels like a PowerPoint deck, not a place.
+
+This is layout jank. Not just the performance kind, the experiential kind, where your brain loses the map. One frame you're here, the next you're somewhere else, and you have to rebuild context from scratch. The problem is missing metaphor. Nothing tells you whether you moved forward, backed out, opened a layer, or swapped modes.
+
+Most apps ship this way. Figma hands off pixel-perfect statics, rectangles at rest, and the developer fills in the gaps with instant state swaps. What makes software feel like a *place* instead of a slideshow gets left to "the developer will figure it out." The developer does not figure it out.
+
+### Metaphors that worked
+
+The iPhone figured it out in 2007. On a 412 MHz ARM chip with 128 MB of RAM, Apple allocated 0.35 seconds of every navigation to a push animation — scarce compute spent on motion, because motion carried meaning. Push goes right, pop goes left, modal comes up, dismisses down. You always knew where you were in the stack without thinking about it.
+
+Before that, most handheld UIs treated navigation as replacement: tap, redraw, new screen. The hierarchy existed, but it rarely moved.
+
+The nav push was the spatial metaphor. Content is *over there*, to the right, and you're moving to it. The animation isn't decoration. It's information.
+
+Then the indie app scene ran with it. iPad storybook apps shipped gestural page turns where the page wasn't a binary state but a continuous object under your finger. You could peek, hesitate, commit, or retreat. The transition *was* the UI.
+
+But spatial is just one metaphor. On [confession.website](https://confession.website), I didn't start with a transition strategy. The first builds had the same jump-cut problem. Suppress the rerender here, double-rAF the fade there, kill the 300ms tap delay on mobile. Whack-a-mole.
+
+The divider changed everything. Once I moved it out of the card templates and into the frame — one DOM element, same position on every screen — recording no longer felt like entering a new screen. It felt like the same place changing state. Content changes above and below it. Nothing shifts. Every state change happens *around* the divider, not *to* it.
+
+That one decision — the divider doesn't move — resolved dozens of layout bugs at once. Not because I found the right fix, but because I found the right constraint.
+
+On this blog, it's a 0.15-second fade-shift on every page load. Barely perceptible. Remove it and the page *slams* into existence instead of arriving.
+
+Spatial (iPhone push), anchored (confession.website divider), atmospheric (fade-shift). Three metaphors, same problem: they give your brain a story about what just happened, so it doesn't have to reconstruct one from scratch.
+
+### Pick a metaphor
+
+The gap between jank and butter is one decision: *what is the transition about?*
+
+| Metaphor | What it does |
+|---|---|
+| **Spatial** | Things slide in from where they live |
+| **Anchored** | One element stays fixed while the world changes around it |
+| **Continuous** | The user's gesture drives the state change in real time |
+| **Atmospheric** | Content fades in like it was always there |
+
+These patterns survived a decade of framework churn. They outlast their implementations because the metaphor is right.
+
+<style>{`
+  .metaphor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 2rem 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(128, 128, 128, 0.8);
+  }
+  .metaphor-grid .col {
+    padding: 1rem 1.25rem;
+  }
+  .metaphor-grid .col:nth-child(4n+1),
+  .metaphor-grid .col:nth-child(4n+3) {
+    background: rgba(128, 128, 128, 0.06);
+  }
+  .metaphor-grid h4 {
+    margin: 0 0 0.75rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(128, 128, 128, 0.6);
+  }
+  .metaphor-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .metaphor-grid li {
+    padding: 0.2rem 0;
+  }
+  @media (max-width: 640px) {
+    .metaphor-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .honorary {
+    margin: 2rem 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(128, 128, 128, 0.8);
+  }
+  .honorary h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(128, 128, 128, 0.6);
+    margin: 1.5rem 0 0.25rem;
+  }
+  .honorary h4:first-child {
+    margin-top: 0;
+  }
+  .honorary p {
+    margin: 0;
+  }
+`}</style>
+
+<div class="metaphor-grid">
+  <div class="col">
+    <h4>Spatial</h4>
+    <ul>
+      <li>Nav push/pop</li>
+      <li>Modal sheet slide-up</li>
+      <li>Drawer/side panel</li>
+      <li>Off-canvas menu</li>
+      <li>Tab bar switching</li>
+      <li>Carousel slide</li>
+      <li>Master-detail drill-in</li>
+      <li>Bottom sheet expansion</li>
+      <li>Accordion expand/collapse</li>
+      <li>Toast/snackbar slide-in</li>
+      <li>Notification banner slide-down</li>
+      <li>Wizard step slide</li>
+      <li>Card stack swipe</li>
+      <li>Sidebar collapse/expand</li>
+    </ul>
+  </div>
+  <div class="col">
+    <h4>Anchored</h4>
+    <ul>
+      <li>Fixed header</li>
+      <li>Sticky nav</li>
+      <li>Sticky table header</li>
+      <li>Frozen table column</li>
+      <li>Pinned sidebar</li>
+      <li>Persistent bottom nav</li>
+      <li>Persistent tab bar</li>
+      <li>Floating action button</li>
+      <li>Scrollspy nav</li>
+      <li>Sticky section label</li>
+      <li>Split-pane divider</li>
+      <li>Docked inspector panel</li>
+      <li>Persistent mini-player</li>
+      <li>Chat composer fixed to bottom</li>
+      <li>Breadcrumb bar</li>
+      <li>Back-to-top button</li>
+    </ul>
+  </div>
+  <div class="col">
+    <h4>Continuous</h4>
+    <ul>
+      <li>Pull-to-refresh</li>
+      <li>Swipe-to-dismiss</li>
+      <li>Swipe actions on list rows</li>
+      <li>Drag-and-drop reorder</li>
+      <li>Drag-to-resize panel</li>
+      <li>Interactive back gesture</li>
+      <li>Edge-swipe drawer</li>
+      <li>Bottom sheet drag</li>
+      <li>Range slider drag</li>
+      <li>Scrubber/timeline drag</li>
+      <li>Pinch-to-zoom</li>
+      <li>Pan-to-move canvas</li>
+      <li>Overscroll rubber-band</li>
+      <li>Scroll-linked parallax</li>
+      <li>Scroll-linked header collapse</li>
+      <li>Page curl</li>
+      <li>Swipe between tabs</li>
+    </ul>
+  </div>
+  <div class="col">
+    <h4>Atmospheric</h4>
+    <ul>
+      <li>Skeleton shimmer</li>
+      <li>Content placeholder fade-in</li>
+      <li>Lazy-loaded image blur-up</li>
+      <li>Fade-and-shift entrance</li>
+      <li>Staggered list fade-in</li>
+      <li>Toast fade-in/out</li>
+      <li>Tooltip fade</li>
+      <li>Modal backdrop fade</li>
+      <li>Dialog fade/scale</li>
+      <li>Spinner fade to content</li>
+      <li>Route crossfade</li>
+      <li>Tab content crossfade</li>
+      <li>Theme transition crossfade</li>
+      <li>Inline validation fade-in</li>
+    </ul>
+  </div>
+</div>
+
+### Honorary mentions
+
+The four metaphors above are abstract — they describe how the transition moves. But you can also start from a concrete object and let the metaphor generate the interface. Pick any physical thing with a natural transition and the UI patterns fall out on their own:
+
+- **Room** — enter and exit spaces. Game UIs, VR, spatial computing.
+- **Carousel** — items on a revolving ring. Cover Flow, image galleries, onboarding flows.
+- **Vending machine** — insert input, watch the mechanism, receive output. Checkout flows, deploy pipelines, progress bars.
+- **Theater** — curtain up, scene change, spotlight. Keynote presentations, onboarding reveals, splash screens.
+
+The code can be small — a CSS transition, a fixed-position element, an animation-fill-mode. The hard part is choosing, because the choice constrains every layout decision downstream. confession.website's entire CSS flows from "the divider doesn't move." The iPhone's entire navigation stack follows from "content lives on a horizontal rail."
+
+That constraint is the point. Without a metaphor, every state change is an ad hoc jump cut, and no amount of polish will make it feel coherent. With one, even the simplest animation — 0.15 seconds, 2 pixels — is enough. The brain only needs a hint.[^1]
+
+[^1]: The title is from Bruce Feiler's *Life Is in the Transitions* (2020). I haven't read it, but the premise — that meaning lives in the passages between stable states, not in the states themselves — maps cleanly to UI.

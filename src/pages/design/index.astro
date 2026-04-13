@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import '../../styles/blog.css';
+
+const posts = await getCollection('blog');
+const filtered = posts
+  .filter(post => {
+    const tags = post.data.tags;
+    if (!tags) return false;
+    const arr = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : tags;
+    return arr.includes('design');
+  })
+  .sort((a, b) => {
+    const dateA = a.id.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] || '';
+    const dateB = b.id.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] || '';
+    return dateB.localeCompare(dateA);
+  });
+
+function slugFromId(id: string) {
+  return id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+}
+
+function formatDate(id: string) {
+  const match = id.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return '';
+  const d = new Date(`${match[1]}-${match[2]}-${match[3]}T00:00:00`);
+  return d.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>design | june.kim</title>
+  <link rel="icon" href="/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="logo">
+    <a href="/">
+      <img src="/images/gravatar.png" width="80" height="80" class="gravatar">
+    </a>
+    <span class="logo-prompt">Home</span>
+  </aside>
+
+  <main class="fade-shift">
+    <div class="collection-container">
+      <h1 class="collection-title">design</h1>
+      <div class="card-grid">
+        {filtered.map(post => (
+          <div class="card">
+            {post.data.image && (
+              <img src={post.data.image} alt={post.data.title} class="card-image">
+            )}
+            <div class="card-content">
+              <h2 class="card-title">
+                <a href={`/${slugFromId(post.id)}`}>{post.data.title}</a>
+              </h2>
+              <p class="card-date">{formatDate(post.id)}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+
+  <style is:global>
+    .collection-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .collection-title { margin-bottom: 2rem; text-align: center; }
+    .card-grid { display: flex; flex-wrap: wrap; gap: 2rem; }
+    .card { flex: 1 1 calc(100% - 2rem); max-width: calc(100% - 2rem); display: flex; flex-direction: column; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; transition: box-shadow 0.3s ease; }
+    .card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .card-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+    .card-content { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
+    .card-title { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    .card-title a { color: inherit; text-decoration: none; }
+    .card-date { margin: 0; font-size: 0.875rem; color: #666; }
+    @media (min-width: 600px) { .card { flex: 1 1 calc(50% - 2rem); max-width: calc(50% - 2rem); } }
+    @media (min-width: 900px) { .card { flex: 1 1 calc(33.333% - 2rem); max-width: calc(33.333% - 2rem); } }
+  </style>
+</body>
+</html>
