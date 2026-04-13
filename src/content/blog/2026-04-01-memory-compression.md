@@ -82,7 +82,7 @@ The diagnostic stack is one level deep. The SOAP orchestration is still manual. 
 
 The raw material is accumulating. `/worklog` appends a timestamped entry after every session — the episodic store, growing. The Soar demo produced twenty worklog entries across two days. The diagnostic skills improved four times from those entries. But I'm still the one reading the log, noticing the pattern, and updating the skill. The epmem exists. The compression doesn't run yet.
 
-That's where Soar was. Three stores, no cron job. Consolidate is the hardest contract to fulfill — for reasons that deserve [their own post](/consolidate-codec).
+That's where Soar was. Three stores, no cron job. Consolidate is the hardest contract to fulfill — for reasons that deserve [their own post](/consolidation-codec).
 
 ---
 

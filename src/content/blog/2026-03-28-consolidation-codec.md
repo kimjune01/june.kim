@@ -1,6 +1,6 @@
 ---
-variant: post
-title: "The Consolidation Codec"
+variant: post-medium
+title: "Consolidation Codec"
 tags: cognition
 ---
 

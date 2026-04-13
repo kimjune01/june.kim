@@ -4,7 +4,7 @@ title: "Temporal Compression"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec). Extended in [Timekeeping Parameter](/timekeeping-parameter). Technical detail: [reading section](https://june.kim/reading/temporal-compression/). For agents and reviewers: [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md).*
+*Part of the [cognition](/cognition) series. Builds on [Consolidation Codec](/consolidation-codec). Extended in [Timekeeping Parameter](/timekeeping-parameter). Technical detail: [reading section](https://june.kim/reading/temporal-compression/). For agents and reviewers: [CROSSWALK.md](https://github.com/kimjune01/junekim-reading/blob/master/src/pages/temporal-compression/CROSSWALK.md).*
 
 *A codec engineer keeps talking about how his video chains break. A graph theorist keeps talking about how her journeys don't compose. A topologist keeps talking about how his local sections won't globalize. Same complaint, three accents. None of them cites the other two.*
 

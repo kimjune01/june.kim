@@ -4,7 +4,7 @@ title: "Diffusive Phenomenology"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec).*
+*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidation-codec).*
 
 ### The decode loop
 
@@ -16,7 +16,7 @@ More passes, sharper output, more temporal lag. The tradeoff is universal: **ref
 
 ### GOP override
 
-The [consolidation codec](/consolidate-codec) introduced the GOP — the group of pictures that determines how often the system stores a full keyframe versus a delta. In normal operation, the GOP is long. Most of your Tuesday is P-frames: low resolution, efficiently compressed, reconstructible but not vivid. The scene-change detector fires occasionally when something breaks the pattern.
+The [consolidation codec](/consolidation-codec) introduced the GOP — the group of pictures that determines how often the system stores a full keyframe versus a delta. In normal operation, the GOP is long. Most of your Tuesday is P-frames: low resolution, efficiently compressed, reconstructible but not vivid. The scene-change detector fires occasionally when something breaks the pattern.
 
 Focus is manual GOP override. The conscious system says: store more keyframes right now.
 
@@ -58,7 +58,7 @@ A denoiser without a scene-change detector is a confabulation engine. It will al
 
 ### What this is
 
-Induction. Not proof. The codec vocabulary came from [consolidation](/consolidate-codec), where I/P structure is demonstrated in [working code](https://github.com/SoarGroup/Soar/pull/578). The extensions here — subjective time as keyframe density, focus as GOP override, sensemaking as B-frame construction — are pattern matches. They're specific enough to be wrong, which makes them useful as leads. Whether they're more than leads is an empirical question.
+Induction. Not proof. The codec vocabulary came from [consolidation](/consolidation-codec), where I/P structure is demonstrated in [working code](https://github.com/SoarGroup/Soar/pull/578). The extensions here — subjective time as keyframe density, focus as GOP override, sensemaking as B-frame construction — are pattern matches. They're specific enough to be wrong, which makes them useful as leads. Whether they're more than leads is an empirical question.
 
 The testable claim: systems with adaptive GOP (variable keyframe rate based on scene-change detection) should produce episodic stores with the same temporal-density patterns that humans report. Dense keyframes during novelty, sparse keyframes during routine, and subjective duration that tracks keyframe count rather than clock time.
 
