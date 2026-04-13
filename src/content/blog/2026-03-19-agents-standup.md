@@ -23,7 +23,7 @@ Process affects the learning rate, not whether learning happens. What keeps the 
 
 Agents already do an analogous thing. Not by retraining weights — by updating externalized policy: hooks, filter rules, skill configurations, priorities. The learning lives outside the model, in the tooling that shapes how the next session runs.
 
-[Work logs](/work-log) are Remember: append-only, timestamped, structured. The agent writes them as a byproduct of working. [/consolidate](/consolidation) is a backward pass that reads from Remember. The methodology *is* the cognition. The channel opened both ways.
+[Work logs](/work-log) are Transmit: append-only, timestamped, structured. The agent writes them as a byproduct of working. [/consolidate](/consolidation) is a backward pass that reads from Transmit. The methodology *is* the cognition. The channel opened both ways.
 
 But one agent's work log doesn't carry enough bits to learn fast. A single session produces a handful of lessons. Each is true. None generalizes without reinforcement. [Complementary learning systems](https://doi.org/10.1037/0033-295X.102.3.419) explains why: the hippocampus stores fast, the neocortex learns slow. One agent is all hippocampus. It remembers everything, learns nothing.
 
@@ -33,7 +33,7 @@ Each agent gets a fixed budget of [skills and hooks](https://docs.anthropic.com/
 
 The ingredients, all running:
 
-1. **Work logs as Remember.** The agent writes them as a byproduct. [Work Log](/work-log) showed the format.
+1. **Work logs as Transmit.** The agent writes them as a byproduct. [Work Log](/work-log) showed the format.
 2. **Shared storage outside any context window.** A separate store that outlives every session. The [consolidation harness](https://github.com/kimjune01/agi) already does this.
 3. **Threshold trigger.** Turn count, byte budget, action count. When the store accumulates enough, fire the cron job.
 4. **[Blind-blind-merge](/blind-blind-merge) as exploration.** Parallel rollouts, no coordination, merge at the root. The diversity is structural.
@@ -45,11 +45,11 @@ Everything runs. Nothing learns.
 
 **Forward pass (parallel):** N agents run independent tasks, each writing a work log to shared storage. Same battle-tested baseline, different specialty stacks.
 
-**Accumulate (Remember):** Shared storage collects logs.
+**Accumulate (Transmit):** Shared storage collects logs.
 
 **Trigger:** Threshold fires the cron job.
 
-**Backward pass (serial, by stage).** Why these three? Cache and Remember are infrastructure — they store and retrieve. Consolidate is the process running right now. Perceive, Filter, and Attend are the policy layers: what to notice, what to reject, what to prioritize. Those are what learning changes.
+**Backward pass (serial, by stage).** Why these three? Cache and Transmit are infrastructure — they store and retrieve. Consolidate is the process running right now. Perceive, Filter, and Attend are the policy layers: what to notice, what to reject, what to prioritize. Those are what learning changes.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:6em"><col><col></colgroup>

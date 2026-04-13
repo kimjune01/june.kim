@@ -43,7 +43,7 @@
   <line class="arr" x1="435" y1="68" x2="455" y2="68"/>
 
   <rect class="box-forced" x="455" y="50" width="90" height="36"/>
-  <text class="name" x="500" y="68">Remember</text>
+  <text class="name" x="500" y="68">Transmit</text>
   <text class="type" x="500" y="100">persisted</text>
 
   <line class="arr" x1="545" y1="68" x2="565" y2="68"/>

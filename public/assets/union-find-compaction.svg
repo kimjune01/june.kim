@@ -57,7 +57,7 @@
   <line class="arr-break" x1="892" y1="86" x2="920" y2="86" marker-end="url(#c)"/>
 
   <rect class="box-nil" x="920" y="64" width="150" height="44"/>
-  <text class="name" x="995" y="80">Remember</text>
+  <text class="name" x="995" y="80">Transmit</text>
   <text class="sub-nil" x="995" y="97">nil</text>
 
 
@@ -91,7 +91,7 @@
   <line class="arr" x1="892" y1="200" x2="920" y2="200"/>
 
   <rect class="box-fix" x="920" y="178" width="150" height="44"/>
-  <text class="name" x="995" y="194" fill="#1565c0">Remember</text>
+  <text class="name" x="995" y="194" fill="#1565c0">Transmit</text>
   <text class="sub-fix" x="995" y="211">Forest persists</text>
 
   <!-- Annotation -->

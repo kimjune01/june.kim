@@ -58,9 +58,9 @@
   <text class="itype" x="628" y="48">ranked</text>
   <line class="arr" x1="606" y1="74" x2="643" y2="74"/>
 
-  <!-- Remember -->
+  <!-- Transmit -->
   <rect class="box" x="643" y="54" width="120" height="40"/>
-  <text class="name" x="703" y="74">Remember</text>
+  <text class="name" x="703" y="74">Transmit</text>
   <text class="guar" x="703" y="108">persisted</text>
 
   <circle class="dot" cx="785" cy="74" r="3"/>

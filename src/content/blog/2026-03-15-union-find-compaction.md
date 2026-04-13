@@ -14,7 +14,7 @@ Every chatbot has the same context problem: conversations grow, the window doesn
 Compression is coarse. The summary replaces every source, so it can't trace a claim back to the original message.
 
 <div style="max-width:72vw; margin:1.5em auto;">
-<img src="/assets/union-find-compaction.svg" alt="Chatbot layer from Diagnosis LLM: today's flat summary in Cache destroys provenance, four nil cells downstream. Union-find fixes Cache and Remember." style="width:100%; display:block;">
+<img src="/assets/union-find-compaction.svg" alt="Chatbot layer from Diagnosis LLM: today's flat summary in Cache destroys provenance, four nil cells downstream. Union-find fixes Cache and Transmit." style="width:100%; display:block;">
 </div>
 
 *Chatbot layer from [Diagnosis LLM](/diagnosis-llm). Full diagnostic: six roles, three layers, nine dysfunction cells.*

@@ -34,9 +34,9 @@ Machine-readable version: [`src/data/parts-bin.yml`](https://github.com/kimjune0
 
 **Attend** ((policy, selected) → ranked, diverse, bounded): MMR, [git bisect](https://git-scm.com/docs/git-bisect-lk2009), dot-product attention, [poset diverse top-k](/filling-the-blanks#3-diverse-top-k-from-a-poset). git bisect is the surprise: a version control tool doing the same job as MCTS, picking the single query that maximizes worst-case elimination on a DAG. The grid found it; domain expertise wouldn't. Policy is a routing function; control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound. [Soar](/diagnosis-soar)'s [staged preference resolution](https://soar.eecs.umich.edu/soar_manual/02_TheSoarArchitecture/) is the rare exception: reject, then better/worse, then best/worst, then indifferent — order, diversity, and bound in one mechanism. Forty years of agent-building produced it.
 
-**Consolidate** (persisted → policy′): gradient descent, decision tree induction, [EBC/chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)), [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation). The backward pass: reads from Remember, writes to the substrate, reshaping how each forward stage processes next cycle. Its inner loop is itself a pipe (perceive, filter, attend, remember) and the [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination. [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column; a blank cell predicted a new algorithm that beat the state of the art. Soar is the most instructive failure: every forward stage worked, but Consolidate was [missing for episodic and semantic memory](/diagnosis-soar#the-forgetting-asymmetry). The stores grew without bound and [perception narrowed to compensate](/diagnosis-soar#the-dominoes) — a clogged drain forcing the valve shut.
+**Consolidate** (persisted → policy′): gradient descent, decision tree induction, [EBC/chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)), [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation). The backward pass: reads from Transmit, writes to the substrate, reshaping how each forward stage processes next cycle. Its inner loop is itself a pipe (perceive, filter, attend, transmit) and the [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination. [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column; a blank cell predicted a new algorithm that beat the state of the art. Soar is the most instructive failure: every forward stage worked, but Consolidate was [missing for episodic and semantic memory](/diagnosis-soar#the-forgetting-asymmetry). The stores grew without bound and [perception narrowed to compensate](/diagnosis-soar#the-dominoes) — a clogged drain forcing the valve shut.
 
-**Remember** (ranked → persisted): WAL append, git commit, SSTable flush. Lossless: no additional loss at this step. Not a separate store but the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Remember for the database pipe but Cache for the CRM pipe.
+**Transmit** (ranked → persisted): WAL append, git commit, SSTable flush. Lossless: no additional loss at this step. Not a separate store but the historically shaped substrate, the part of the medium that carries the system's past forward. A database row is Transmit for the database pipe but Cache for the CRM pipe.
 
 ### Grid
 
@@ -46,7 +46,7 @@ An axis qualifies if it's discrete, orthogonal, and crossing it with another pro
 
 Four universal axes:
 
-1. **Pipeline stage**: perceive, cache, filter, attend, consolidate, remember
+1. **Pipeline stage**: perceive, cache, filter, attend, consolidate, transmit
 2. **Data structure**: flat, sequence, tree, graph, partial order, embedding space
 3. **Error guarantee**: exact, bounded, probabilistic
 4. **Temporality**: batch, stream
@@ -69,9 +69,9 @@ Select a plane to explore. Data is pulled from [`parts-bin.yml`](https://github.
 (function(){var f=document.getElementById('pivot-frame');if(!f)return;function resize(){f.style.height=f.contentDocument.body.scrollHeight+16+'px';}f.addEventListener('load',function(){resize();new MutationObserver(resize).observe(f.contentDocument.body,{childList:true,subtree:true});});})();
 </script>
 
-The data structure × selection semantics grid started with blanks. The causal column was emptiest, but two cells dissolved once the system could *act* on what it selected, a [Filter-Remember couple](/union-find-compaction) where selection is the intervention. [Operant conditioning](https://en.wikipedia.org/wiki/Operant_conditioning) fills sequence × causal; the [graph causal filter](/return-to-sender) fills graph × causal. The partial order row filled via [Filling the Blanks](/filling-the-blanks). All cells occupied.
+The data structure × selection semantics grid started with blanks. The causal column was emptiest, but two cells dissolved once the system could *act* on what it selected, a [Filter-Transmit couple](/union-find-compaction) where selection is the intervention. [Operant conditioning](https://en.wikipedia.org/wiki/Operant_conditioning) fills sequence × causal; the [graph causal filter](/return-to-sender) fills graph × causal. The partial order row filled via [Filling the Blanks](/filling-the-blanks). All cells occupied.
 
-The stage × error guarantee grid has two structural nulls in Remember's row: the contract demands losslessness, so bounded or probabilistic persistence would violate it. A taxonomy that can only sort is a catalog. One that can rule things out is a theory. The empty cells are the theory.
+The stage × error guarantee grid has two structural nulls in Transmit's row: the contract demands losslessness, so bounded or probabilistic persistence would violate it. A taxonomy that can only sort is a catalog. One that can rule things out is a theory. The empty cells are the theory.
 
 Given a broken slot, name the coordinates, look up the candidate.
 

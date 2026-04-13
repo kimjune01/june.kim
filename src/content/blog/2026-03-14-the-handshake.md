@@ -8,7 +8,7 @@ tags: cognition
 
 ### Claim
 
-The six roles are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six from temporal flow and bounded storage: three by existence proof at the boundaries, three more by corollary. Five compose forward as stages. The sixth, Consolidate, reads from Remember and writes to the substrate. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
+The six roles are not a metaphor. They have a natural home in category theory: morphisms inside a monad, constrained by the data processing inequality. [The Natural Framework](/the-natural-framework) derives all six from temporal flow and bounded storage: three by existence proof at the boundaries, three more by corollary. Five compose forward as stages. The sixth, Consolidate, reads from Transmit and writes to the substrate. This post formalizes the composition: contracts, budget, and the inductive argument for survival.
 
 ### Category
 
@@ -29,19 +29,19 @@ Not all morphisms are equal. Each role carries a postcondition, a structural gua
 <tr><td>Cache</td><td style="white-space:nowrap">encoded → indexed</td><td>Retrievable by key. Atomic under concurrent read/write (Perceive writes while Filter reads).</td></tr>
 <tr><td>Filter</td><td style="white-space:nowrap">indexed → selected</td><td>Strictly smaller. Losers suppressed, winners forwarded.</td></tr>
 <tr><td>Attend</td><td style="white-space:nowrap">(policy, selected) → ranked</td><td>Ordered, diverse, bounded. Survivors are dissimilar.</td></tr>
-<tr><td>Remember</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive. Also caches ranked output for Consolidate.</td></tr>
-<tr><td style="font-style:italic">Consolidate</td><td style="white-space:nowrap">persisted → policy′</td><td style="font-style:italic">Backward pass. Reads from Remember asynchronously, writes to the substrate. Lossy. Reshapes how each stage processes.</td></tr>
+<tr><td>Transmit</td><td style="white-space:nowrap">ranked → persisted</td><td>Retrievable on next cycle's Perceive. Also caches ranked output for Consolidate.</td></tr>
+<tr><td style="font-style:italic">Consolidate</td><td style="white-space:nowrap">persisted → policy′</td><td style="font-style:italic">Backward pass. Reads from Transmit asynchronously, writes to the substrate. Lossy. Reshapes how each stage processes.</td></tr>
 </table>
 
 <div style="max-width:1100px; margin:1.5em auto;">
-<img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Remember. Consolidate reads from Remember and writes to the substrate." style="width:100%; display:block;">
+<img src="/assets/handshake-pipeline.svg" alt="Five forward stages: Perceive → Cache → Filter → Attend → Transmit. Consolidate reads from Transmit and writes to the substrate." style="width:100%; display:block;">
 </div>
 
 A morphism that preserves its contract through composition is *contract-preserving*. It belongs in the pipeline. One that doesn't is an arbitrary self-map. It breaks downstream. (In the proof: `Contract`, `ContractPreserving`, `IterationStable`.)
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
-The contracts encode a second axis: which store. Perceive, Cache, Filter, and Remember operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
+The contracts encode a second axis: which store. Perceive, Cache, Filter, and Transmit operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
 
 Four claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now. (`swappable`)
@@ -55,20 +55,20 @@ Four claims follow from the contracts:
 
 - Attend before Filter: policy applied to unfiltered input. Signal drowns in volume.
 - Filter before Cache: selecting from what hasn't been stored. No index, no comparison across items.
-- Remember before Attend: persisting before ranking. No selection, no diversity.
+- Transmit before Attend: persisting before ranking. No selection, no diversity.
 
-Consolidate is not in the forward chain. It reads from Remember and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof. The ordering is provably unique: `forward_ordering_unique` shows the type chain forces each position, and `consolidate_has_no_slot` shows Consolidate cannot occupy any forward position. The only configuration whose types compose is five canonical forward stages plus one backward pass.
+Consolidate is not in the forward chain. It reads from Transmit and writes to the substrate, reshaping how each stage processes. The typed interfaces force the forward order. That is the handshake: the postcondition of stage N is the precondition of stage N+1. The name is the proof. The ordering is provably unique: `forward_ordering_unique` shows the type chain forces each position, and `consolidate_has_no_slot` shows Consolidate cannot occupy any forward position. The only configuration whose types compose is five canonical forward stages plus one backward pass.
 
-**Open problem: type forcing beyond linear pipelines.** The Lean proof covers linear composition. [Spivak's operad of wiring diagrams](https://arxiv.org/abs/1305.0297) gives the search space of all type-valid wirings for six boxes. If the six postcondition types are pairwise distinct and each box has arity 1, the only valid wiring in a [directed typed operad](https://arxiv.org/abs/1307.6894) is the chain. The feedback from Consolidate to Perceive is a delay node, not a regular wire. The six contracts are structurally distinct: Cache carries concurrency invariants that Filter's output doesn't; Filter is stateless where Attend reads policy; Remember is durable where Attend is transient; Consolidate emits control where Remember emits data. Every observed collapse to passthrough (δ=0) dims the downstream cells. No counterexample exists in the [twenty-four domains](/the-natural-framework). The operadic proof is not yet written.
+**Open problem: type forcing beyond linear pipelines.** The Lean proof covers linear composition. [Spivak's operad of wiring diagrams](https://arxiv.org/abs/1305.0297) gives the search space of all type-valid wirings for six boxes. If the six postcondition types are pairwise distinct and each box has arity 1, the only valid wiring in a [directed typed operad](https://arxiv.org/abs/1307.6894) is the chain. The feedback from Consolidate to Perceive is a delay node, not a regular wire. The six contracts are structurally distinct: Cache carries concurrency invariants that Filter's output doesn't; Filter is stateless where Attend reads policy; Transmit is durable where Attend is transient; Consolidate emits control where Transmit emits data. Every observed collapse to passthrough (δ=0) dims the downstream cells. No counterexample exists in the [twenty-four domains](/the-natural-framework). The operadic proof is not yet written.
 
 ### Data processing inequality
 
 The order is fixed. The question is whether the ordered pipeline survives iteration. The constraint: for a Markov chain X → Y → Z, mutual information satisfies I(X;Z) ≤ I(X;Y). Each intermediate step can only decrease what downstream knows about the original input. The pipeline is a cascade of such maps.
 
-In the forward pass, Filter and Attend are lossy: each reduces what the output retains about the raw input. Cache and Remember can be lossless; the forward pipeline's net loss comes from the competitive core. Consolidate is also lossy, but it reads from Remember and compresses persisted outcomes into parameter changes. Its loss is a different kind: it discards specifics to keep the rule.
+In the forward pass, Filter and Attend are lossy: each reduces what the output retains about the raw input. Cache and Transmit can be lossless; the forward pipeline's net loss comes from the competitive core. Consolidate is also lossy, but it reads from Transmit and compresses persisted outcomes into parameter changes. Its loss is a different kind: it discards specifics to keep the rule.
 
 <div style="max-width:875px; margin:1.5em auto;">
-<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Remember is lossless (blue). Consolidate reads from Remember, writes to substrate." style="width:100%; display:block;">
+<img src="/assets/handshake-budget.svg" alt="Information budget: bars showing bits retained at each stage. Perceive and Cache are lossless (blue), Filter and Attend are lossy (red), Transmit is lossless (blue). Consolidate reads from Transmit, writes to substrate." style="width:100%; display:block;">
 </div>
 
 The loop survives only because Perceive injects new bits from the environment. Without new input, a lossy loop compounds information loss per cycle. A closed lossy loop dies (`closed_loop_budget_negative`). That is the named constraint that makes the budget visible. (In the proof: `NonExpanding`, `StrictlyLossy`, `non_expanding_compose`, `InformationBudget`.)
@@ -104,7 +104,7 @@ Three open directions:
 
 ### Trace
 
-Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Remember → Perceive) has the structure of a categorical trace (`TracedPipeline`): output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
+Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Transmit → Perceive) has the structure of a categorical trace (`TracedPipeline`): output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
 
 In the simpler view: ignore the environment boundary, and the six-step composition is a self-map in Stoch, a Markov chain on information states. But bare Markov chains never worked for cognition: n-grams plateau, PageRank has no taste.
 
@@ -120,10 +120,10 @@ The trace predicts the closed loop. The falsification test predicts the broken s
 <thead><tr><th style="background:#f0f0f0">Role replaced</th><th style="background:#f0f0f0">Self-map substituted</th><th style="background:#f0f0f0">System</th><th style="background:#f0f0f0">Outcome</th></tr></thead>
 <tr><td>Perceive</td><td>Prion — no guarantee on protein encoding</td><td>Biology</td><td>Death</td></tr>
 <tr><td>Filter</td><td>p53 loss — no guarantee on which cells survive</td><td>Biology</td><td>Cancer</td></tr>
-<tr><td>Remember</td><td>Immunosenescence — no guarantee on memory fidelity</td><td>Biology</td><td>Decay</td></tr>
+<tr><td>Transmit</td><td>Immunosenescence — no guarantee on memory fidelity</td><td>Biology</td><td>Decay</td></tr>
 <tr><td>Perceive</td><td>Great Leap Forward — falsified harvest data</td><td>Society</td><td>Famine</td></tr>
 <tr><td>Filter</td><td>TerraUSD — no filter on destabilizing redemptions</td><td>Finance</td><td>Death spiral</td></tr>
-<tr><td>Remember</td><td>NASA Columbia — lesson not durably consolidated</td><td>Engineering</td><td>Catastrophe</td></tr>
+<tr><td>Transmit</td><td>NASA Columbia — lesson not durably consolidated</td><td>Engineering</td><td>Catastrophe</td></tr>
 </table>
 
 Every case is multi-causal. But in each, a contract was lost, and the loss compounded rather than self-correcting. The vocabulary names the dominant failure mode.
@@ -155,7 +155,7 @@ The gap: the sequential processing pipeline as morphisms in a Markov category wi
 
 Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics (Giry 1982).
 
-The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate reads from Remember and writes to the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Remember's output matches Perceive's input. Consolidate reads persisted outcomes and reshapes parameters for the next cycle.
+The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate reads from Transmit and writes to the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Transmit's output matches Perceive's input. Consolidate reads persisted outcomes and reshapes parameters for the next cycle.
 
 Inductive step: if cycle *n* preserves all contracts, cycle *n+1* preserves them. The forward contracts are stateless: Filter's guarantee depends on the input, not on which cycle it is. But Attend reads from the policy store, and Consolidate writes to it. The forward chain at cycle *n+1* depends on what the backward pass did at cycle *n*. The induction requires a coupling lemma:
 
@@ -191,10 +191,10 @@ Every historical failure is multi-causal. The prediction is falsifiable: find a 
 **"Real systems persist first, then compact later. Logs, databases, brains."**
 Those systems are stacked pipes operating on different types.
 
-A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Remember is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Remember is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Remember is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Remember at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Remember.
+A database "persists" a row, but the row is Cache in the larger pipeline. The CRM's Transmit is the customer relationship, not the database record. A log "persists" events, but that's Cache for the monitoring pipe. The actual Transmit is the alert rule or the postmortem finding. The brain's sensory trace "persists" briefly, but that's Cache. The actual Transmit is consolidated long-term memory. Every "persist first, compact later" example, under analysis, is Cache at one level being confused with Transmit at a higher level. The type mismatch is the tell: if the thing being persisted is a representation rather than the final entity, it's Cache, not Transmit.
 
-**"Consolidate is lossy; Remember is lossless. How do they relate?"**
-Remember is the last forward stage: it persists ranked output for the next cycle's Perceive. Consolidate is the backward pass: it reads from Remember and writes to the substrate, reshaping how each stage processes. Remember persists the episode (lossless relative to its input). Consolidate extracts the rule (lossy). Remember also serves as the cache for Consolidate: ranked outcomes accumulate there, and Consolidate reads them asynchronously. The forward contract on Remember is "no additional loss." The backward contract on Consolidate is "reshape how each stage processes." Timescale is the diagnostic; the contract is the definition.
+**"Consolidate is lossy; Transmit is lossless. How do they relate?"**
+Transmit is the last forward stage: it emits ranked output for the next cycle's Perceive. Consolidate is the backward pass: it reads from Transmit and writes to the substrate, reshaping how each stage processes. Transmit emits the episode (lossless relative to its input). Consolidate extracts the rule (lossy). Transmit also serves as the cache for Consolidate: ranked outcomes accumulate there, and Consolidate reads them asynchronously. The forward contract on Transmit is "no additional loss." The backward contract on Consolidate is "reshape how each stage processes." Timescale is the diagnostic; the contract is the definition.
 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
@@ -205,7 +205,7 @@ A merged function could internally decompose into a reliable gating phase follow
 
 Harder objection: deterministic cycling could maintain diversity by rotating winners (ABCD, ABCD...). The population argument defeats this. Every system starts as passthrough. A coordinated rotation requires a non-trivial policy that developed from nothing. For a population of functors to arrive at the same rotation, every member must develop the same policy at the same rate. Landauer noise on each development path makes identical trajectories physically impossible. But the deductive proof stops here: convergent attractors, coupling, and inheritance could in principle synchronize a population despite noise. The empirical record closes the gap inductively: no deterministic intelligence exists in nature. Neurons are noisy, evolution is random, immune recombination is stochastic, markets are volatile. Across every domain examined, every system that crossed the threshold to intelligence did it with stochastic selection. The deductive separation of the other five roles is stronger; this one rests on physics plus universal empirical evidence. The deductive closure remains open.
 
-Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate reads from Remember and writes to the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
+Every interface in the forward pipeline is a handshake. The postcondition of one stage is the precondition of the next. Consolidate reads from Transmit and writes to the substrate, reshaping the stages from outcome to cause. The grip holds in both directions. What remains is to fill the slots.
 
 ### Proof status
 

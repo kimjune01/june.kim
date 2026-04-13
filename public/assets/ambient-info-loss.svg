@@ -38,9 +38,9 @@
 
   <line class="arr" x1="475" y1="92" x2="515" y2="92"/>
 
-  <!-- Remember -->
+  <!-- Transmit -->
   <rect x="515" y="66" width="80" height="76" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.2" rx="3"/>
-  <text class="name" x="555" y="160" fill="#1565c0">Remember</text>
+  <text class="name" x="555" y="160" fill="#1565c0">Transmit</text>
   <text class="bits" x="555" y="176" fill="#1565c0">lossless</text>
 
   <line class="arr" x1="595" y1="92" x2="635" y2="92"/>

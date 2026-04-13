@@ -60,11 +60,11 @@ The forward pass:
 2. **Cache** — [Moments](/moments) segments events into composable chunks.
 3. **Filter** — [Perception Pipe](/perception-pipe) runs competitive inhibition. Winners suppress losers.
 4. **Attend** — [Salience](/salience) retrieves max-volume-k via DPP. Diverse, not redundant.
-5. **Remember** — publish to [Canon](/canon). The durable output that feeds the next cycle's Perceive.
+5. **Transmit** — publish to [Canon](/canon). The durable output that feeds the next cycle's Perceive.
 
 The backward pass:
 
-- **Consolidate** — schemas form offline from repeated co-activation. Reads from Remember, writes to the substrate. Additive, never lossy.
+- **Consolidate** — schemas form offline from repeated co-activation. Reads from Transmit, writes to the substrate. Additive, never lossy.
 
 Residual connections throughout: raw episodes stay addressable at every role. Schemas add structure. The original signal is never destroyed.
 
@@ -76,13 +76,13 @@ I never read [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762). I 
 | Positional encoding | Moments — temporal structure over tokens |
 | Softmax attention | Perception Pipe — normalized competition across all candidates |
 | Multi-head attention | Salience + DPP — attend to diverse subspaces, not redundant copies |
-| Context window | Canon (Remember) — the durable output, addressable by the next cycle |
+| Context window | Canon (Transmit) — the durable output, addressable by the next cycle |
 | Backpropagation | Consolidation — offline compression into higher-level features |
 | Residual connections | Raw episodes stay addressable; schemas are additive |
 
-Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, and remember — then consolidate offline. [The Natural Framework](/the-natural-framework) finds the same six roles across twenty-four domains, from neurons to evolution.
+Vaswani et al. derived it from sequence-to-sequence translation. This series derived it from lived experience. Same destination, no shared path. The convergence suggests the architecture is not an engineering choice. It's what information processing looks like when you need to perceive, cache, filter, attend, and transmit — then consolidate offline. [The Natural Framework](/the-natural-framework) finds the same six roles across twenty-four domains, from neurons to evolution.
 
-One difference. A transformer remembers as frozen weights behind an API. This pipeline remembers as [open prose](/open-prose). The output is public. Attention goes in. [Canon](/canon) comes out.
+One difference. A transformer transmits as frozen weights behind an API. This pipeline transmits as [open prose](/open-prose). The output is public. Attention goes in. [Canon](/canon) comes out.
 
 ---
 

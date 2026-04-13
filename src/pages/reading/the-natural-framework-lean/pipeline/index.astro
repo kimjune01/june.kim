@@ -14,14 +14,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-gray-400 text-sm mb-6"><a href="https://github.com/kimjune01/natural-framework/blob/master/NaturalFramework/Pipeline.lean"><img src="/reading/github.svg" alt="gh" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>View source on GitHub</a></p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Defines the six-stage information processing pipeline from <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the Natural Framework</a>: five forward stages (Perceive, Cache, Filter, Attend, Remember) and one backward pass (Consolidate).</p>
+      <p class="text-lg" style="max-width:none">Defines the six-stage information processing pipeline from <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the Natural Framework</a>: five forward stages (Perceive, Cache, Filter, Attend, Transmit) and one backward pass (Consolidate).</p>
     </div>
 
     <h3>Step</h3>
     <p>An enumeration of the six roles. Five are forward stages that process data sequentially. Consolidate is the backward pass that updates policy inside the substrate.</p>
     <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">inductive</span> <span class="text-green-300">Step</span> <span class="text-blue-300">where</span>
   | perceive | cache | filter
-  | attend | consolidate | remember</code></pre>
+  | attend | consolidate | transmit</code></pre>
 
     <h3>InterfaceTypes</h3>
     <p>The seven types that flow between pipeline stages: raw input, encoded, indexed, selected, ranked, policy, and persisted. Each stage consumes one type and produces the next.</p>
@@ -32,7 +32,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
   selected : Type   -- after Filter
   ranked : Type     -- after Attend
   policy : Type     -- parameterizes Attend; written by Consolidate
-  persisted : Type  -- after Remember (feeds back to Perceive)</code></pre>
+  persisted : Type  -- after Transmit (feeds back to Perceive)</code></pre>
 
     <h3>Pipeline</h3>
     <p>A complete pipeline bundles five forward kernels and one backward kernel. All are monadic &mdash; when the monad is <code>Id</code>, everything is deterministic. Attend takes a policy parameter; Consolidate reads persisted state and updates policy.</p>
@@ -41,7 +41,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
   cache       : Kernel M I.encoded I.indexed
   filter      : Kernel M I.indexed I.selected
   attend      : I.policy &rarr; Kernel M I.selected I.ranked
-  remember    : Kernel M I.ranked I.persisted
+  transmit    : Kernel M I.ranked I.persisted
   consolidate : I.policy &rarr; Kernel M I.persisted I.policy</code></pre>
 
     <SchemeRepl client:load initialCode={`; The six-stage pipeline as function composition
@@ -60,7 +60,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
   (map (lambda (s) (string-append s "|" policy))
        selected))
 
-(define (remember ranked) ranked)  ; lossless
+(define (transmit ranked) ranked)  ; lossless
 
 ; Forward pass: compose perceive through attend
 (define (forward raw policy)
@@ -90,7 +90,7 @@ def filter_stage(indexed):
 def attend(policy, selected):
     return [s + "|" + policy for s in selected]
 
-def remember(ranked):
+def transmit(ranked):
     return ranked  # lossless
 
 # Forward pass: compose perceive through attend
@@ -106,7 +106,7 @@ print(f"forward('hello', 'diverse'): {forward('hello', 'diverse')}")
     <p>The forward data path: raw input flows through Perceive, Cache, Filter, and Attend (parameterized by current policy), producing ranked output. Written as explicit binds for proof tractability (easier for Lean to unfold).</p>
 
     <h3>Pipeline.cycle</h3>
-    <p>One full cycle: run the forward pass, persist the result via Remember, then run Consolidate to derive updated policy. Returns the new policy and persisted state as a pair.</p>
+    <p>One full cycle: run the forward pass, persist the result via Transmit, then run Consolidate to derive updated policy. Returns the new policy and persisted state as a pair.</p>
 
     <h3>Pipeline.iterate</h3>
     <p>Run the pipeline n times over a stream of inputs. Each iteration chains via bind, threading the policy through cycles.</p>

@@ -148,7 +148,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
         <tbody>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Pre-training</td><td class="pr-3 text-gray-400">Next-token prediction on massive corpora</td><td class="text-gray-400">Consolidate: offline weight updates</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Post-training</td><td class="pr-3 text-gray-400">SFT, RLHF, DPO: align behavior to intent</td><td class="text-gray-400">Consolidate: policy refinement</td></tr>
-          <tr><td class="py-2 pr-3 text-gray-300">Inference</td><td class="text-gray-400">Prompting, ICL, CoT, tool use, agents</td><td class="text-gray-400">Forward pass only: Perceive through Remember, no Consolidate</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Inference</td><td class="text-gray-400">Prompting, ICL, CoT, tool use, agents</td><td class="text-gray-400">Forward pass only: Perceive through Transmit, no Consolidate</td></tr>
         </tbody>
       </table>
     </div>
@@ -167,7 +167,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Here's what catches people: in-context learning and chain-of-thought look like Consolidate but aren't. They're Attend. Attention over the prompt. Nothing persists. Nothing compiles. <a href="/reading/cognitive-architecture/arunkumar-2026/">Agent frameworks</a> tried to fix this with Reflexion (store verbal critiques) and MemInsight (compress episodes into insights). Consolidate workarounds in text space, because the weights are frozen.</p>
 
-    <h2>Perceive, not Remember</h2>
+    <h2>Perceive, not Transmit</h2>
 
     <p>RAG retrieves documents and prepends them to the prompt, injecting external information at the input. That's Perceive. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> semantic memory does the same: a queryable store that feeds the forward pass. Soar retrieves by activation (recency + frequency + spreading); RAG retrieves by embedding similarity. Both are read operations on external memory.</p>
 
@@ -177,7 +177,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>The context window is volatile. <a href="/reading/cognitive-architecture/laird-2022/">Soar</a> stores every decision cycle. <a href="/reading/cognitive-architecture/arunkumar-2026/">Generative Agents</a> bolt on a natural-language episode stream. LLMs forget everything when the context clears.</p>
 
-    <p>Pre-training and RLHF are scheduled by engineers, not triggered by the agent's own experience. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking fires automatically on impasse resolution. The <a href="https://june.kim/diagnosis-llm"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>diagnosis</a> is the same: sealed Consolidate, frozen Remember.</p>
+    <p>Pre-training and RLHF are scheduled by engineers, not triggered by the agent's own experience. <a href="/reading/cognitive-architecture/laird-2022/">Soar's</a> chunking fires automatically on impasse resolution. The <a href="https://june.kim/diagnosis-llm"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>diagnosis</a> is the same: sealed Consolidate, frozen Transmit.</p>
 
     <Neighbors>
     <ul class="neighbors">

@@ -58,7 +58,7 @@
   <line class="arrow" x1="880" y1="60" x2="910" y2="60"/>
 
   <rect class="step" x="910" y="36" width="210" height="48"/>
-  <text class="step-name" x="1015" y="53">Remember</text>
+  <text class="step-name" x="1015" y="53">Transmit</text>
   <text class="step-sub" x="1015" y="73">Weights (read-only)</text>
 
   <!-- Consolidate backward: sealed -->
@@ -94,7 +94,7 @@
   <line class="arrow" x1="880" y1="202" x2="910" y2="202"/>
 
   <rect class="step" x="910" y="178" width="210" height="48"/>
-  <text class="step-name" x="1015" y="195">Remember</text>
+  <text class="step-name" x="1015" y="195">Transmit</text>
   <text class="step-nil" x="1015" y="215">nil</text>
 
   <!-- Consolidate backward: nil -->
@@ -130,7 +130,7 @@
   <line class="arrow" x1="880" y1="344" x2="910" y2="344"/>
 
   <rect class="step" x="910" y="320" width="210" height="48"/>
-  <text class="step-name" x="1015" y="337">Remember</text>
+  <text class="step-name" x="1015" y="337">Transmit</text>
   <text class="step-sub" x="1015" y="357">Filesystem</text>
 
   <!-- Consolidate backward: prompted -->

@@ -186,7 +186,7 @@ The [stochasticity requirement](/the-natural-framework#attend) derives from [Lan
 <colgroup><col style="width:10em"><col><col></colgroup>
 <thead><tr><th style="background:#f0f0f0"></th><th style="background:#f0f0f0">Natural Framework</th><th style="background:#f0f0f0">Soar</th></tr></thead>
 <tr><td><strong>Attend</strong></td><td>Must be stochastic (derived)</td><td>RL exploration is stochastic (observed)</td></tr>
-<tr><td><strong>Consolidate</strong></td><td>Reads from Remember, writes policy</td><td>Chunking reads substates, writes rules</td></tr>
+<tr><td><strong>Consolidate</strong></td><td>Reads from Transmit, writes policy</td><td>Chunking reads substates, writes rules</td></tr>
 <tr><td><strong>The gap</strong></td><td>Phase transition required</td><td>Gate required</td></tr>
 </table>
 
@@ -244,7 +244,7 @@ The prescription draws from the parts bin. Soar gives back. Six algorithms from 
 <tr><td>Staged preferences</td><td>Attend × flat</td><td>Reject-first, rank-survivors via <a href="https://github.com/SoarGroup/Soar/blob/development/Core/SoarKernel/src/decision_process/decide.cpp"><code>run_preference_semantics()</code></a>. Process prohibit/reject before better/worse/best.</td></tr>
 <tr><td>EBC/Chunking</td><td>Consolidate × tree</td><td>Backtrace through dependency tree, identify necessary conditions, compile deliberation into production rule.</td></tr>
 <tr><td>Delta-bar-delta</td><td>Consolidate × flat</td><td>Per-production adaptive learning rate. Each rule gets its own alpha, updated on every RL update.</td></tr>
-<tr><td>Delta episodic storage</td><td>Remember × sequence</td><td>Store only changes between snapshots. Interval representation for persistent elements.</td></tr>
+<tr><td>Delta episodic storage</td><td>Transmit × sequence</td><td>Store only changes between snapshots. Interval representation for persistent elements.</td></tr>
 </table>
 
 ---

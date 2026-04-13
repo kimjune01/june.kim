@@ -33,7 +33,7 @@
   <line class="arr" x1="298" y1="24" x2="312" y2="24"/>
 
   <rect class="box" x="312" y="8" width="82" height="32"/>
-  <text class="name" x="353" y="24">Remember</text>
+  <text class="name" x="353" y="24">Transmit</text>
 
   <!-- Dotted zoom arrow from Cache₀ down into container -->
   <path class="zoom" d="M136,40 L136,56 L26,56 L26,78"/>
@@ -60,7 +60,7 @@
   <line class="arr" x1="276" y1="96" x2="288" y2="96"/>
 
   <rect class="box" x="288" y="82" width="74" height="28"/>
-  <text class="sub" x="325" y="96">Remember</text>
+  <text class="sub" x="325" y="96">Transmit</text>
 
   <!-- Dotted zoom arrow from Cache₁ down into container -->
   <path class="zoom" d="M133,110 L133,126 L40,126 L40,150"/>
@@ -87,7 +87,7 @@
   <line class="arr" x1="270" y1="166" x2="282" y2="166"/>
 
   <rect class="box" x="282" y="154" width="66" height="24"/>
-  <text class="sub dim" x="315" y="166">Remember</text>
+  <text class="sub dim" x="315" y="166">Transmit</text>
 
   <!-- Dotted zoom arrow from Cache₂ down to bool -->
   <path class="zoom" d="M137,178 L137,204"/>

@@ -21,13 +21,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
   | .cache    =&gt; .encoded
   | .filter   =&gt; .indexed
   | .attend   =&gt; .selected
-  | .remember =&gt; .ranked</code></pre>
+  | .transmit =&gt; .ranked</code></pre>
 
     <h3>Consumer uniqueness theorems</h3>
-    <p>Five theorems, one per interface type: only Perceive consumes raw, only Cache consumes encoded, only Filter consumes indexed, only Attend consumes selected, only Remember consumes ranked. Each is proved by case analysis &mdash; try every stage, only one matches.</p>
+    <p>Five theorems, one per interface type: only Perceive consumes raw, only Cache consumes encoded, only Filter consumes indexed, only Attend consumes selected, only Transmit consumes ranked. Each is proved by case analysis &mdash; try every stage, only one matches.</p>
 
     <h3>forward_ordering_unique</h3>
-    <p>The main theorem. Any handshake-compatible ordering that starts from raw must equal the canonical ordering (Perceive &rarr; Cache &rarr; Filter &rarr; Attend &rarr; Remember) at every position. The type chain forces each slot.</p>
+    <p>The main theorem. Any handshake-compatible ordering that starts from raw must equal the canonical ordering (Perceive &rarr; Cache &rarr; Filter &rarr; Attend &rarr; Transmit) at every position. The type chain forces each slot.</p>
     <pre class="bg-zinc-800 rounded-lg p-4 font-mono text-sm text-blue-300"><code><span class="text-blue-300">theorem</span> <span class="text-green-300">forward_ordering_unique</span>
     (ord : Fin 5 &rarr; ForwardStage)
     (hcompat : handshake_ok ord)

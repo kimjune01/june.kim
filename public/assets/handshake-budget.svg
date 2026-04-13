@@ -46,10 +46,10 @@
   <text class="delta minus" x="364" y="74">−bits</text>
   <text class="label" x="364" y="152">Attend</text>
 
-  <!-- Remember: 44px (lossless, preserves Attend output) -->
+  <!-- Transmit: 44px (lossless, preserves Attend output) -->
   <rect class="bar lossless" x="422" y="84" width="80" height="44"/>
   <text class="delta zero" x="462" y="74">=</text>
-  <text class="label" x="462" y="152">Remember</text>
+  <text class="label" x="462" y="152">Transmit</text>
 
   <!-- Consolidate: 32px (lossy, different kind — compresses to policy) -->
   <rect class="bar backward" x="558" y="96" width="80" height="32"/>

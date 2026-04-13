@@ -47,12 +47,12 @@ Any physical system has finite state space; the environment includes everything 
 
 Inputs arrive faster than outputs drain, so by [pigeonhole](https://en.wikipedia.org/wiki/Pigeonhole_principle) something must hold the excess — that is Cache. Cache requires write and read interfaces. The write interface is concurrent with Perceive: new items arrive while old items are being read, forcing invariants on the Cache type (atomicity, ordering) that downstream types don't carry.
 
-If the loop feeds back, the last step's output must persist across the cycle boundary. That is Remember. Bounded storage forces selection before persistence, or the store grows without bound.
+If the loop feeds back, the last step's output must persist across the cycle boundary. That is Transmit. Bounded storage forces selection before persistence, or the store grows without bound.
 
-**Consequence:** Perceive (type bridge), Cache (pigeonhole buffer), and Remember (loop closure) are forced. Each has a postcondition the others cannot provide. Three distinct types: *encoded*, *indexed*, *persisted*.
+**Consequence:** Perceive (type bridge), Cache (pigeonhole buffer), and Transmit (loop closure) are forced. Each has a postcondition the others cannot provide. Three distinct types: *encoded*, *indexed*, *persisted*.
 
 <div style="max-width:700px; margin:1.5em auto;">
-<img src="/assets/type-forcing-bounded.svg" alt="Six boxes. Perceive, Cache, and Remember are highlighted blue with their types labeled. Three boxes remain as dashed outlines with question marks." style="width:100%; display:block;">
+<img src="/assets/type-forcing-bounded.svg" alt="Six boxes. Perceive, Cache, and Transmit are highlighted blue with their types labeled. Three boxes remain as dashed outlines with question marks." style="width:100%; display:block;">
 </div>
 
 ## Constraint 3: [Landauer's principle](https://en.wikipedia.org/wiki/Landauer%27s_principle)
@@ -96,7 +96,7 @@ The operad is fixed. The algebra evolves. Consolidate moves the system through v
 4. Feedback is cross-cycle state evolution (no instantaneous loops in the forward pass).
 5. Policy access is internal state, not a forward wire.
 
-The unique forward acyclic wiring is the chain: Perceive → Cache → Filter → Attend → Remember → Consolidate. Consolidate's policy update propagates through S.
+The unique forward acyclic wiring is the chain: Perceive → Cache → Filter → Attend → Transmit → Consolidate. Consolidate's policy update propagates through S.
 
 The proof is a counting argument on the supplier assignment. Perceive outputs *encoded*; only Cache accepts it. Cache outputs *indexed*; only Filter accepts it. The chain propagates. Six output types, six input types, each matching exactly one partner. No degrees of freedom.
 
@@ -138,14 +138,14 @@ This post identifies operad port labels with postcondition contracts from [The H
 <td>No preference vs policy-derived ordering.</td>
 </tr>
 <tr>
-<td>Attend → Remember</td>
+<td>Attend → Transmit</td>
 <td>ranked → persisted</td>
 <td>Transient → durable</td>
 <td>Bounded storage: loop closure</td>
 <td>Transient dies at cycle boundary; durable survives.</td>
 </tr>
 <tr>
-<td>Remember → Consolidate</td>
+<td>Transmit → Consolidate</td>
 <td>persisted → policy</td>
 <td>Data → control</td>
 <td>All three: variance + eviction + selection drift</td>
@@ -165,7 +165,7 @@ The type-forcing argument constrains topology, not multiplicity. It says nothing
 
 But do parallel chains interact? The types match (both chains use the same six types), so the operad permits inter-chain wiring. It constrains *which roles* can connect, not *which instances*. Whether inter-chain wiring introduces new degrees of freedom or collapses to independent chains is the question [Spivak's operads](https://arxiv.org/abs/1305.0297) were built to answer.
 
-One chain's Remember feeds the next level's Perceive. That's the functor between categories in [The Natural Framework](/the-natural-framework). The operad's composition-via-pushout means the cross-level wiring is well-defined. And the type-forcing argument applies again at the next level: the same three physical constraints, the same six distinct types, the same unique chain. Every level of the tower is forced by the same argument that forced the first. The recursion terminates because each level is strictly lossy (Filter erases information) and physical systems have a resolution floor ([Bekenstein bound](https://en.wikipedia.org/wiki/Bekenstein_bound), Planck scale). A strictly decreasing sequence bounded below is finite. The tower ends.
+One chain's Transmit feeds the next level's Perceive. That's the functor between categories in [The Natural Framework](/the-natural-framework). The operad's composition-via-pushout means the cross-level wiring is well-defined. And the type-forcing argument applies again at the next level: the same three physical constraints, the same six distinct types, the same unique chain. Every level of the tower is forced by the same argument that forced the first. The recursion terminates because each level is strictly lossy (Filter erases information) and physical systems have a resolution floor ([Bekenstein bound](https://en.wikipedia.org/wiki/Bekenstein_bound), Planck scale). A strictly decreasing sequence bounded below is finite. The tower ends.
 
 ### What this post does not prove
 
@@ -197,7 +197,7 @@ Attend reads policy from the substrate — a second input that would break arity
 
 ### The fractal tower is the holarchic property
 
-A composed system becomes a box wirable into a larger system. That is Spivak's holarchic property: composition via pushout produces an element of G(Y), the same kind of object as any primitive system. [The Natural Framework](/the-natural-framework) calls this the fractal tower: one level's Remember feeds the next level's Perceive. Same structure, different vocabulary. The holarchic property is why the type-forcing argument recurses.
+A composed system becomes a box wirable into a larger system. That is Spivak's holarchic property: composition via pushout produces an element of G(Y), the same kind of object as any primitive system. [The Natural Framework](/the-natural-framework) calls this the fractal tower: one level's Transmit feeds the next level's Perceive. Same structure, different vocabulary. The holarchic property is why the type-forcing argument recurses.
 
 ### Rigidity propagates
 

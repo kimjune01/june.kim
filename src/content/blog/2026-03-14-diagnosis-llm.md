@@ -6,7 +6,7 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series.*
 
-The [Natural Framework](/the-natural-framework) defines [six roles](/the-natural-framework#six-steps): perceive, cache, filter, attend, remember (forward stages), and consolidate (reads from Remember, writes to the substrate). Every learning system runs some subset. The question is which roles are dysfunctional.
+The [Natural Framework](/the-natural-framework) defines [six roles](/the-natural-framework#six-steps): perceive, cache, filter, attend, transmit (forward stages), and consolidate (reads from Transmit, writes to the substrate). Every learning system runs some subset. The question is which roles are dysfunctional.
 
 ## Observations
 
@@ -21,7 +21,7 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 - Cache: functional. Positional encoding indexes by position.
 - Filter: functional. Softmax scores and suppresses.
 - Attend: functional. Multi-head attention selects across subspaces.
-- Remember: read-only. Weights loaded every pass, never updated during inference.
+- Transmit: read-only. Weights loaded every pass, never updated during inference.
 - Consolidate: functional. Training is the backward pass. RLHF, red-teaming, evaluation — [humans are the crontab](https://www.anthropic.com/careers/jobs?team=4002061008). Fires per model update, not per session.
 
 ### Chatbot (= agent's Cache + Perceive)
@@ -29,7 +29,7 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 - Cache: functional. Token context accumulates in the window. This IS the agent's Cache.
 - Filter: nil. Expected. Cache doesn't filter.
 - Attend: nil. Expected. Cache doesn't rank.
-- Remember: nil. Expected. Session ends. The agent's Remember (filesystem) persists across sessions.
+- Transmit: nil. Expected. Session ends. The agent's Transmit (filesystem) persists across sessions.
 - Consolidate: nil. Expected. Cache doesn't learn.
 
 ### Agent
@@ -37,25 +37,25 @@ AI has three layers. Inference: transform tokens. Chatbot: transform context. Ag
 - Cache: functional. Context window holds the prompt.
 - Filter: shallow. Triage on pass/fail. No filter on direction.
 - Attend: reactive. Responds to what happens. Cannot set direction.
-- Remember: functional. Filesystem persists across sessions. The cache for Consolidate exists.
-- Consolidate: no backward pass. Can create skills when prompted. No trigger, no schedule, no async loop that reads from Remember.
+- Transmit: functional. Filesystem persists across sessions. The cache for Consolidate exists.
+- Consolidate: no backward pass. Can create skills when prompted. No trigger, no schedule, no async loop that reads from Transmit.
 
 ## Triage
 
 <ol>
-<li style="font-weight:700">Agent consolidate: no backward pass. Remember caches experiences; nothing reads them back.</li>
+<li style="font-weight:700">Agent consolidate: no backward pass. Transmit caches experiences; nothing reads them back.</li>
 <li style="font-weight:600; color:#333">Agent attend: reactive. Cannot set direction.</li>
 <li style="font-weight:400">Agent filter: shallow. No filter on direction.</li>
 <li style="color:#888">Inference consolidate: functional but human-triggered. Training is the backward pass. Fires per model update, not per session.</li>
-<li style="color:#888">Inference remember: read-only during inference. Updated only when Consolidate fires (training).</li>
+<li style="color:#888">Inference transmit: read-only during inference. Updated only when Consolidate fires (training).</li>
 <li style="color:#aaa">Chatbot: not a separate pipeline. It's the agent's Cache (context window) and part of Perceive (turn splitting). The four nil cells are expected, not broken. <a href="/union-find-compaction">Union-find</a> is a cache upgrade.</li>
 </ol>
 
 ## Why the chatbot is Cache
 
-The chatbot's four nil cells are not dysfunction. They are what Cache looks like: store and retrieve, nothing more. The chatbot has no policy store because Cache doesn't need one. It accumulates context in the window (Cache) and splits the conversation into turns (Perceive). Filter, Attend, Remember, and Consolidate belong to the agent, not the chatbot.
+The chatbot's four nil cells are not dysfunction. They are what Cache looks like: store and retrieve, nothing more. The chatbot has no policy store because Cache doesn't need one. It accumulates context in the window (Cache) and splits the conversation into turns (Perceive). Filter, Attend, Transmit, and Consolidate belong to the agent, not the chatbot.
 
-[Union-find compaction](/union-find-compaction) is a cache upgrade: better provenance, recoverability, and incremental updates for the context window. It's still Cache. It reorganizes the store (`VACUUM`) without changing how the agent processes. The missing role is still Consolidate: the cron job that reads from Remember and writes new procedures.
+[Union-find compaction](/union-find-compaction) is a cache upgrade: better provenance, recoverability, and incremental updates for the context window. It's still Cache. It reorganizes the store (`VACUUM`) without changing how the agent processes. The missing role is still Consolidate: the cron job that reads from Transmit and writes new procedures.
 
 The SOAP notes below are what building the missing roles looks like.
 
@@ -65,13 +65,13 @@ The SOAP notes below are what building the missing roles looks like.
 
 *Subjective.* The agent has CRUD access to many forms of procedural memory: [MCP servers](https://modelcontextprotocol.io/), [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands), [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory), agents.md, memory.md, scripts, tool definitions.
 
-*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. It can create [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands) — the only procedure that writes procedures — but only when directed to. [Compaction](/union-find-compaction) upgrades Cache (`VACUUM`), not Consolidate. Skill creation is Consolidate: it changes how the agent processes the next session. The forward pass works. Experiences persist in the filesystem (Remember is the RESTful interface; the store exists). But no backward pass reads from that store to update the substrate. The cron job is defined but never scheduled. The agent never sleeps; always tires.
+*Objective.* It never writes back without being asked. It stores [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) when prompted. It does not prune, update, or delete stale entries. It can create [skills](https://docs.anthropic.com/en/docs/claude-code/slash-commands) — the only procedure that writes procedures — but only when directed to. [Compaction](/union-find-compaction) upgrades Cache (`VACUUM`), not Consolidate. Skill creation is Consolidate: it changes how the agent processes the next session. The forward pass works. Experiences persist in the filesystem (Transmit is the RESTful interface; the store exists). But no backward pass reads from that store to update the substrate. The cron job is defined but never scheduled. The agent never sleeps; always tires.
 
 *Assessment.* The agent can create skills, and skills are procedural memory: they change how the agent filters, attends, and responds in future sessions. That makes skill creation the backward pass. But the agent has no async loop. Neural networks fire backprop after every forward pass. Sleep fires consolidation on a biological clock. Inference has humans as its crontab (RLHF, training). The agent fires Consolidate only when the user says "please make a skill now." [The Flicker](/the-flicker) is that: one backward pass, fired by hand. The bottleneck is not capability but the missing trigger. Inference solved it by hiring humans to schedule the backward pass. The agent hasn't. There is no dataset to aid decision support, no procedure to obtain one, no repository of heuristics or experiments to reference. The entire scientific process is missing. Previous chatbots generated A/B test data, but that data went to inference training, not to personalized procedural memory. The agent is unable to adapt to the engineer.
 
 *Plan.* Build the async backward pass. Six components:
 1. **Event logger** — perceive user edits, rejections, and approvals.
-2. **Decision log** — cache structured records of each user decision in Remember.
+2. **Decision log** — cache structured records of each user decision in Transmit.
 3. **A/B test harness** — filter skill variants against the log, reject losers.
 4. **Red-team scorer** — attend by running adversarial scoring in the background, pick the winner.
 5. **Skill mutator** — the backward pass: read from the decision log, write CRUD operations to procedural memory.

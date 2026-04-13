@@ -35,7 +35,7 @@ A calculator solves equations. An encyclopedia contains more knowledge than any 
 
 ## The Diagnosis
 
-AI has three layers: inference, chatbot, agent. The framework defines [six roles](/the-natural-framework#six-steps) for a learning loop. Diagnosing each layer against those six roles reveals a pattern: the agent can perceive, cache, triage, and remember — the store exists, the API works — but it cannot consolidate. No backward pass reads from the store. The cron job is defined but never scheduled.
+AI has three layers: inference, chatbot, agent. The framework defines [six roles](/the-natural-framework#six-steps) for a learning loop. Diagnosing each layer against those six roles reveals a pattern: the agent can perceive, cache, triage, and transmit — the store exists, the API works — but it cannot consolidate. No backward pass reads from the store. The cron job is defined but never scheduled.
 
 *For detail: [Diagnosis LLM](/diagnosis-llm).*
 
@@ -53,7 +53,7 @@ The human complements the agent.
 
 ## Complementation
 
-But the framework asks a different question: does the loop close? It doesn't care which layer closes it. If the agent layer can perceive, filter, consolidate, and remember without weight updates, the loop is closed. The industry hasn't named it yet.
+But the framework asks a different question: does the loop close? It doesn't care which layer closes it. If the agent layer can perceive, filter, consolidate, and transmit without weight updates, the loop is closed. The industry hasn't named it yet.
 
 Here is what the industry missed: the [double loop](/double-loop) doesn't require all three layers to run on the same substrate.
 
@@ -65,7 +65,7 @@ Here is what the industry missed: the [double loop](/double-loop) doesn't requir
 <tr><td style="font-weight:600">Filter</td><td style="opacity:0.25">Triage</td><td>Taste, judgment</td></tr>
 <tr><td style="font-weight:600">Attend</td><td style="opacity:0.25">Reactive</td><td>Directs focus</td></tr>
 <tr><td style="font-weight:600">Consolidate</td><td style="opacity:0.25">__</td><td style="color:#c62828">Prompts</td></tr>
-<tr><td style="font-weight:600">Remember</td><td style="color:#1565c0">Context window</td><td style="opacity:0.25">Context window</td></tr>
+<tr><td style="font-weight:600">Transmit</td><td style="color:#1565c0">Context window</td><td style="opacity:0.25">Context window</td></tr>
 </table>
 
 Neither pipeline is complete alone. The agent alone is flailing context. The human alone is a slow pipeline with a tiny cache. Together, they cover every slot.
@@ -95,7 +95,7 @@ But does it?
 
 If it bends, it has an inflection point, where acceleration peaks before the ceiling constrains it. The mutable slots are human: filter, attend, consolidate. Improving them increases the rate. [Metacognition](https://en.wikipedia.org/wiki/Metacognition). Without it, the curve stays linear. With it, it bends.
 
-The composition is a type check: if the output type of one pipeline's Remember matches the input type of the other's Perceive, they compose. This is a candidate [functor](https://en.wikipedia.org/wiki/Functor) between categories — the type match is necessary, but composition preservation must be verified. The vocabulary is due to [Eilenberg and Mac Lane (1945)](https://en.wikipedia.org/wiki/Natural_transformation#History); [The Handshake](/the-handshake) gives the proof.
+The composition is a type check: if the output type of one pipeline's Transmit matches the input type of the other's Perceive, they compose. This is a candidate [functor](https://en.wikipedia.org/wiki/Functor) between categories — the type match is necessary, but composition preservation must be verified. The vocabulary is due to [Eilenberg and Mac Lane (1945)](https://en.wikipedia.org/wiki/Natural_transformation#History); [The Handshake](/the-handshake) gives the proof.
 
 > AI ∞ HI ∈ **GI**.
 

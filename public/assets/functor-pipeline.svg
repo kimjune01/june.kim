@@ -49,7 +49,7 @@
   <circle class="node" cx="600" cy="62" r="18"/>
   <text class="node-text" x="600" y="62">M</text>
   <line class="arrow" x1="618" y1="62" x2="732" y2="62"/>
-  <text class="step-label" x="675" y="50">Remember</text>
+  <text class="step-label" x="675" y="50">Transmit</text>
 
   <circle class="node" cx="750" cy="62" r="18"/>
   <text class="node-text" x="750" y="62">M</text>
@@ -65,7 +65,7 @@
 
   <!-- Functor connector -->
   <path class="functor" d="M918,62 L950,62 L950,152 L55,152 L55,202"/>
-  <text class="functor-label" x="490" y="145">Functor: Remember → Perceive</text>
+  <text class="functor-label" x="490" y="145">Functor: Transmit → Perceive</text>
 
   <!-- WRITING row -->
   <text class="title" x="490" y="190">WRITING — object type: Draft</text>
@@ -93,7 +93,7 @@
   <circle class="node" cx="600" cy="234" r="18"/>
   <text class="node-text" x="600" y="234">D</text>
   <line class="arrow" x1="618" y1="234" x2="732" y2="234"/>
-  <text class="step-label" x="675" y="222">Remember</text>
+  <text class="step-label" x="675" y="222">Transmit</text>
 
   <circle class="node" cx="750" cy="234" r="18"/>
   <text class="node-text" x="750" y="234">D</text>

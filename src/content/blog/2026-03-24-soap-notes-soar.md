@@ -75,7 +75,7 @@ For readers familiar with the [Natural Framework](/the-natural-framework), the m
 <tr><td>Working Memory</td><td>Cache</td><td>WME graph, central hub</td></tr>
 <tr><td>Elaboration</td><td>Filter</td><td>Situation elaboration + operator proposal</td></tr>
 <tr><td>Selection</td><td>Attend</td><td>Operator evaluation + decision procedure</td></tr>
-<tr><td>Output</td><td>Remember</td><td>Output-link, LTM store commands</td></tr>
+<tr><td>Output</td><td>Transmit</td><td>Output-link, LTM store commands</td></tr>
 <tr><td>Learning</td><td>Consolidate</td><td>Chunking, RL, semantic/episodic learning</td></tr>
 </table>
 

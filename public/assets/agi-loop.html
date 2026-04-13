@@ -10,13 +10,13 @@
 <div class="mermaid">
 flowchart LR
   subgraph Training
-    T1[Perceive] --> T2[Cache] --> T3[Filter] --> T4[Attend] --> T5[Consolidate] --> T6[Remember]
+    T1[Perceive] --> T2[Cache] --> T3[Filter] --> T4[Attend] --> T5[Consolidate] --> T6[Transmit]
   end
   subgraph Inference
-    I1[Perceive] --> I2[Cache] --> I3[Filter] --> I4[Attend] --> I5[Consolidate] --> I6[Remember]
+    I1[Perceive] --> I2[Cache] --> I3[Filter] --> I4[Attend] --> I5[Consolidate] --> I6[Transmit]
   end
   subgraph Agents
-    A1[Perceive] --> A2[Cache] --> A3[Filter] --> A4[Attend] --> A5[Consolidate] --> A6[Remember]
+    A1[Perceive] --> A2[Cache] --> A3[Filter] --> A4[Attend] --> A5[Consolidate] --> A6[Transmit]
   end
   T6 --> I1
   I6 --> A1

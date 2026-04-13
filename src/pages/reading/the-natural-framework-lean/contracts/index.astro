@@ -38,8 +38,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <h3>ConsolidateContract</h3>
     <p>Consolidate's contract: the operation is lossy. The output policy carries no more information than the input policy. Consolidate is the only procedure that writes procedures.</p>
 
-    <h3>RememberContract</h3>
-    <p>Remember's contract: lossless relative to its input. Every output equals the input &mdash; no additional information is lost at this step.</p>
+    <h3>TransmitContract</h3>
+    <p>Transmit's contract: lossless relative to its input. Every output equals the input &mdash; no additional information is lost at this step.</p>
 
     <h3>contract_composition_base</h3>
     <p>This says: when you compose two kernels, only the second kernel's contract matters for the final guarantee. The first kernel feeds intermediates; the postcondition is checked at the end.</p>

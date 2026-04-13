@@ -14,7 +14,7 @@
     <marker id="a" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker>
   </defs>
 
-  <!-- Level 0: Perceive → Filter → Attend → Remember, then down to Consolidate -->
+  <!-- Level 0: Perceive → Filter → Attend → Transmit, then down to Consolidate -->
   <rect class="box" x="20" y="8" width="74" height="32"/>
   <text class="name" x="57" y="24">Perceive</text>
   <line class="arr" x1="94" y1="24" x2="108" y2="24"/>
@@ -28,14 +28,14 @@
   <line class="arr" x1="240" y1="24" x2="254" y2="24"/>
 
   <rect class="box" x="254" y="8" width="82" height="32"/>
-  <text class="name" x="295" y="24">Remember</text>
+  <text class="name" x="295" y="24">Transmit</text>
   <line class="arr" x1="295" y1="40" x2="295" y2="58"/>
 
   <!-- Consolidate₀ container -->
   <rect class="con" x="16" y="60" width="380" height="208"/>
   <text class="clabel" x="30" y="76">Consolidate</text>
 
-  <!-- Level 1: Perceive₁ → Filter₁ → Attend₁ → Remember₁, then down -->
+  <!-- Level 1: Perceive₁ → Filter₁ → Attend₁ → Transmit₁, then down -->
   <rect class="box" x="30" y="90" width="66" height="28"/>
   <text class="sub" x="63" y="104">Perceive₁</text>
   <line class="arr" x1="96" y1="104" x2="108" y2="104"/>
@@ -49,14 +49,14 @@
   <line class="arr" x1="226" y1="104" x2="238" y2="104"/>
 
   <rect class="box" x="238" y="90" width="74" height="28"/>
-  <text class="sub" x="275" y="104">Remember₁</text>
+  <text class="sub" x="275" y="104">Transmit₁</text>
   <line class="arr" x1="275" y1="118" x2="275" y2="136"/>
 
   <!-- Consolidate₁ container (inside Consolidate₀) -->
   <rect class="con1" x="30" y="138" width="350" height="118"/>
   <text class="clabel" x="44" y="154">Consolidate₁</text>
 
-  <!-- Level 2: Perceive₂ → Filter₂ → Attend₂ → Remember₂, dimmed -->
+  <!-- Level 2: Perceive₂ → Filter₂ → Attend₂ → Transmit₂, dimmed -->
   <rect class="box" x="44" y="168" width="58" height="24"/>
   <text class="sub dim" x="73" y="180">Perceive₂</text>
   <line class="arr" x1="102" y1="180" x2="114" y2="180"/>
@@ -70,7 +70,7 @@
   <line class="arr" x1="222" y1="180" x2="234" y2="180"/>
 
   <rect class="box" x="234" y="168" width="66" height="24"/>
-  <text class="sub dim" x="267" y="180">Remember₂</text>
+  <text class="sub dim" x="267" y="180">Transmit₂</text>
   <line class="arr" x1="267" y1="192" x2="267" y2="210"/>
 
   <!-- Passthrough (bottom, dashed) -->

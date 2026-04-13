@@ -8,7 +8,7 @@ tags: cognition
 
 [General Intelligence](/general-intelligence) proved the cusp bends when the human practices metacognition. Courage compresses into judgment, judgment into intuition. The rate of learning depends on what you've already learned. Superlinear growth from a closed loop.
 
-But the proof was one-sided. The human inflects. The agent doesn't. The [diagnosis](/diagnosis-llm) is specific: the agent has no backward pass. It has the machinery (`create-skill`, the only procedure that writes procedures) but no trigger, no schedule, no async loop that reads from Remember.
+But the proof was one-sided. The human inflects. The agent doesn't. The [diagnosis](/diagnosis-llm) is specific: the agent has no backward pass. It has the machinery (`create-skill`, the only procedure that writes procedures) but no trigger, no schedule, no async loop that reads from Transmit.
 
 This post builds the backward pass by hand.
 

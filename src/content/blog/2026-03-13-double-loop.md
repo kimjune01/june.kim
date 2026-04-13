@@ -28,7 +28,7 @@ García Márquez reportedly said the English was better than his original.
 
 That was not a pipe. That was a loop: read, parse, try, reject, try again, keep. [Six steps.](/the-natural-framework) On every sentence. Rabassa ran all six inside one mind. The same structure holds when the labor splits across two minds with different strengths.
 
-Here are the same six operations [any editor already performs](/the-natural-framework), whether they name them or not: perceive, cache, filter, attend, consolidate, remember. Either party can perform each one. One usually leads.
+Here are the same six operations [any editor already performs](/the-natural-framework), whether they name them or not: perceive, cache, filter, attend, consolidate, transmit. Either party can perform each one. One usually leads.
 
 | Role | Human | AI |
 |---|---|---|
@@ -37,7 +37,7 @@ Here are the same six operations [any editor already performs](/the-natural-fram
 | **Filter** | <span style="opacity:0.35">Gut-checks the draft</span> | [Kill what doesn't belong](https://www.themarginalian.org/2014/10/03/arthur-quiller-couch-art-of-writing/) — skills automate rejection: tighten, humanize, arc-check |
 | **Attend** | Rank what survives, decide what stays and where — judgment the skills can't automate | <span style="opacity:0.35">Follows instructions</span> |
 | **Consolidate** | Each pass compresses — you decide what it lost | <span style="opacity:0.35">Summarizes on request</span> |
-| **Remember** | <span style="opacity:0.35">Forgets the details</span> | Preserves what the loop learned: decisions, failed attempts, editorial memory |
+| **Transmit** | <span style="opacity:0.35">Forgets the details</span> | Preserves what the loop learned: decisions, failed attempts, editorial memory |
 
 Then run it again. The published piece becomes the next cycle's input. You perceive it fresh, notice what's weak, and the loop continues.
 

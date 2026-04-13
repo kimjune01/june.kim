@@ -17,10 +17,10 @@ An embedding pipeline processes items through six stages. Each stage has a contr
 <tr><td><strong>Filter</strong></td><td>Retrieve a candidate set, strictly smaller than the index</td><td>c-ANN search, ε-approximate range search</td></tr>
 <tr><td><strong>Attend</strong></td><td>Rerank and diversify under a budget</td><td><a href="https://www.cs.cmu.edu/~jgc/publication/The_Use_MMR_Diversity_Based_LTMIR_1998.pdf">MMR</a>, k-center / farthest-first traversal</td></tr>
 <tr><td><strong>Consolidate</strong></td><td>Update the embedding model or retrieval policy from outcomes</td><td>Triplet-loss fine-tuning, online k-means, <a href="https://papers.nips.cc/paper/1994/hash/d56b9fc4b0f1be8871f5e1c40c0067e7-Abstract.html">Growing Neural Gas</a></td></tr>
-<tr><td><strong>Remember</strong></td><td>Persist artifacts across runs (index, model, metadata)</td><td>FAISS index serialization, product quantization, checkpoint save</td></tr>
+<tr><td><strong>Transmit</strong></td><td>Persist artifacts across runs (index, model, metadata)</td><td>FAISS index serialization, product quantization, checkpoint save</td></tr>
 </table>
 
-Cache builds and searches the live index. Remember persists it to disk so the next run doesn't start from scratch. Cache is the in-memory structure. Remember is the durable snapshot.
+Cache builds and searches the live index. Transmit persists it to disk so the next run doesn't start from scratch. Cache is the in-memory structure. Transmit is the durable snapshot.
 
 ### Filter grid
 
@@ -52,7 +52,7 @@ A concrete embedding pipe for surfacing fresh articles from an RSS-like feed:
 3. **Filter**: for each candidate, compute distance to nearest existing article in the corpus. Reject if below a novelty threshold (density-based filtering).
 4. **Attend**: from survivors, pick top-k by relevance × diversity using MMR. The similarity penalty is cosine distance in the embedding space.
 5. **Consolidate**: track which articles the user reads. Fine-tune the embedding or adjust the novelty threshold.
-6. **Remember**: serialize the HNSW index and read-history to disk.
+6. **Transmit**: serialize the HNSW index and read-history to disk.
 
 The Filter step inverts the usual ANN query: instead of finding items *close* to a query, it rejects items close to *existing coverage*. The Attend step is standard MMR. The Consolidate step closes the loop.
 

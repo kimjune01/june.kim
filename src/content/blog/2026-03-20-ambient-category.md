@@ -114,7 +114,7 @@ Attend's boundedness follows from capacity — any realizable kernel keeps `meas
 
 ### Open: the rest
 
-Four contracts have no variational derivation: *encoded* (Perceive), *indexed* (Cache), *persisted* (Remember), and *ordered* (the ordering component of Attend). These may be genuinely extra structure — axioms about format and storage that don't reduce to information minimization. Whether they eventually yield to a richer objective or remain independent is the remaining open problem.
+Four contracts have no variational derivation: *encoded* (Perceive), *indexed* (Cache), *persisted* (Transmit), and *ordered* (the ordering component of Attend). These may be genuinely extra structure — axioms about format and storage that don't reduce to information minimization. Whether they eventually yield to a richer objective or remain independent is the remaining open problem.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:10em"><col style="width:10em"><col></colgroup>

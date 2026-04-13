@@ -8,13 +8,13 @@ tags: coding, cognition
 
 In software, we say "everything's a wrapper." An ORM wraps SQL, which wraps disk I/O, which wraps silicon. Each layer exposes the same four verbs (create, read, update, delete) and delegates to the layer below. Wrappers all the way down.
 
-But CRUD is only the Remember interface. Store, retrieve, update, delete: that's the API to the persistent store. When we say "wrapper" we're seeing one role out of [six](/the-natural-framework) and calling it the whole thing.
+But CRUD is only the Transmit interface. Store, retrieve, update, delete: that's the API to the persistent store. When we say "wrapper" we're seeing one role out of [six](/the-natural-framework) and calling it the whole thing.
 
 ## The rest of the pipeline
 
 SQL has `WHERE` (Filter) and `ORDER BY` (Attend). The ORM above it has scopes (Filter) and eager loading (Attend). The API above that has authorization (Filter) and pagination (Attend). The frontend above that has conditional rendering (Filter) and sort/highlight (Attend).
 
-Every layer re-implements the full pipeline over the data from the layer below. We say "just a wrapper" because Remember looks identical at every level. The other roles look different, so we don't notice the repetition.
+Every layer re-implements the full pipeline over the data from the layer below. We say "just a wrapper" because Transmit looks identical at every level. The other roles look different, so we don't notice the repetition.
 
 ## The computing stack
 
@@ -31,7 +31,7 @@ Digital computing is the clearest case because we built it from the floor up. Th
 <th style="background:#f0f0f0"><a href="/perception-pipe">Filter</a></th>
 <th style="background:#f0f0f0"><a href="/salience">Attend</a></th>
 <th style="background:#f0f0f0"><a href="/consolidation">Consolidate</a></th>
-<th style="background:#f0f0f0"><a href="/memory">Remember</a></th>
+<th style="background:#f0f0f0"><a href="/memory">Transmit</a></th>
 </tr>
 </thead>
 <tbody>
@@ -168,7 +168,7 @@ The same tower in a person's energy storage. Each level caches the level below.
 <th style="background:#f0f0f0"><a href="/perception-pipe">Filter</a></th>
 <th style="background:#f0f0f0"><a href="/salience">Attend</a></th>
 <th style="background:#f0f0f0"><a href="/consolidation">Consolidate</a></th>
-<th style="background:#f0f0f0"><a href="/memory">Remember</a></th>
+<th style="background:#f0f0f0"><a href="/memory">Transmit</a></th>
 </tr>
 </thead>
 <tbody>
@@ -283,7 +283,7 @@ The same tower for AI. Read the dim cells.
 <th style="background:#f0f0f0"><a href="/perception-pipe">Filter</a></th>
 <th style="background:#f0f0f0"><a href="/salience">Attend</a></th>
 <th style="background:#f0f0f0"><a href="/consolidation">Consolidate</a></th>
-<th style="background:#f0f0f0"><a href="/memory">Remember</a></th>
+<th style="background:#f0f0f0"><a href="/memory">Transmit</a></th>
 </tr>
 </thead>
 <tbody>

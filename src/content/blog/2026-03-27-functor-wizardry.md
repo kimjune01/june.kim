@@ -82,7 +82,7 @@ The reflective localization says it must be idempotent. Run the consolidation tw
 
 The type signature says `(epmem, pmem) → pmem′`. Episodes and existing procedures in, better procedures out. That's the interface constraint.
 
-The signature comes from the [Natural Framework](/the-natural-framework): Consolidate reads from Remember (episodes) and writes to the substrate that shapes forward processing (procedures). The constraints come from category theory: monoid demands existence, reflective localization demands convergence. Two theories, orthogonal contributions — one gives the interface, the other the behavioral spec.
+The signature comes from the [Natural Framework](/the-natural-framework): Consolidate reads from Transmit (episodes) and writes to the substrate that shapes forward processing (procedures). The constraints come from category theory: monoid demands existence, reflective localization demands convergence. Two theories, orthogonal contributions — one gives the interface, the other the behavioral spec.
 
 The theory is load-bearing, but four of five functors have empirical results. [Soar](/diagnosis-soar) tests Framework (role mapping found the broken slots) and Parts Bin (grid lookup prescribed the algorithms, both became [viable PRs](https://github.com/SoarGroup/Soar/pull/578)). [Gemini-cli](/volley#four-hours-eight-files) tests Volley (spec converged in two rounds) and Merge (PR passed review, zero revisions). Category theory guarantees the composition — test each functor, the pipeline follows. One functor remains: consolidation. If it gets built and doesn't converge, the theory is wrong. That's what makes it a theory, not a retrospective.
 

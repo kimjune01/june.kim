@@ -116,9 +116,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
         </thead>
         <tbody>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Perception</td><td class="pr-3 text-gray-400">Multimodal grounding: text, vision, DOM, coordinates. Evolving from text-only to screenshots to video to 3D.</td><td class="text-gray-400">Perceive</td></tr>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Memory</td><td class="pr-3 text-gray-400">Persistent state across episodes. Retrieval, structured storage, summarization, decay, pruning.</td><td class="text-gray-400">Cache + Remember</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Memory</td><td class="pr-3 text-gray-400">Persistent state across episodes. Retrieval, structured storage, summarization, decay, pruning.</td><td class="text-gray-400">Cache + Transmit</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Planning</td><td class="pr-3 text-gray-400">Reasoning topologies: linear chains (ReAct), branching trees (ToT), hierarchical decomposition, inference-time budgets.</td><td class="text-gray-400">Attend</td></tr>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Action + Tools</td><td class="pr-3 text-gray-400">Execution: API calls → code-as-action → agent-computer interfaces → computer-use → embodied VLA.</td><td class="text-gray-400">Remember (output)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Action + Tools</td><td class="pr-3 text-gray-400">Execution: API calls → code-as-action → agent-computer interfaces → computer-use → embodied VLA.</td><td class="text-gray-400">Transmit (output)</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Reflection</td><td class="pr-3 text-gray-400">Self-critique without weight updates. Store natural-language lessons, condition future attempts.</td><td class="text-gray-400">Consolidate (verbal)</td></tr>
           <tr><td class="py-2 pr-3 text-gray-300">Collaboration</td><td class="text-gray-400">Multi-agent coordination: chain, star, mesh topologies. Role-playing, debate, verification.</td><td class="text-gray-400">Attend (distributed)</td></tr>
         </tbody>
@@ -243,7 +243,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Generative Agents</td><td class="pr-3 text-gray-400">Natural language stream with reflection and summarization</td><td class="text-gray-400">Remember × sequence</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Generative Agents</td><td class="pr-3 text-gray-400">Natural language stream with reflection and summarization</td><td class="text-gray-400">Transmit × sequence</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">MemoryBank</td><td class="pr-3 text-gray-400">Hierarchical clusters with exponential decay</td><td class="text-gray-400">Cache × tree</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">ChatDB</td><td class="pr-3 text-gray-400">Symbolic SQL tables for structured state</td><td class="text-gray-400">Cache × graph</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">MemGPT</td><td class="pr-3 text-gray-400">Paged long-term memory with explicit controller-driven retrieval</td><td class="text-gray-400">Attend × sequence</td></tr>

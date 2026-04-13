@@ -36,7 +36,7 @@
   <line class="arr" x1="430" y1="205" x2="480" y2="205"/>
 
   <rect class="base-box" x="480" y="180" width="140" height="50"/>
-  <text class="label" x="550" y="210" fill="#666">Remember</text>
+  <text class="label" x="550" y="210" fill="#666">Transmit</text>
 
   <line class="arr" x1="620" y1="205" x2="670" y2="205"/>
 

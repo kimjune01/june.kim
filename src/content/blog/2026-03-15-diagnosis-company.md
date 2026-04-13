@@ -18,7 +18,7 @@ Warren Buffett calls the functional loop a "moat." The framework names its six w
 | Cache | Stores and retrieves institutional knowledge | Knowledge survives turnover, systems of record work | Knowledge walks out the door with employees |
 | Filter | Rejects what doesn't matter | Says no to most projects, kills bad bets early | Tries everything, no focus, no kills |
 | Attend | Ranks priorities with diversity guarantee | Multiple revenue streams that repel each other | One product, one market, one bet |
-| Remember | Persists durable output for next cycle | Brand, patents, culture, ecosystem compound | Each quarter starts from zero |
+| Transmit | Persists durable output for next cycle | Brand, patents, culture, ecosystem compound | Each quarter starts from zero |
 | *Consolidate* | *Updates procedures from experience* | *Post-mortems change process, playbook evolves* | *Runs the playbook from ten years ago* |
 
 The dim cell test: count the cells that exist but don't meet their contract. More dim cells, shorter time horizon before the loop degrades.

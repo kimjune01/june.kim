@@ -20,7 +20,7 @@ Four architectures, decomposed. Every row is a named algorithm with independent 
 
 | Component | What it does | Role | Borrowed from |
 |-----------|-------------|------|---------------|
-| Power-law decay | Tracks memory availability by recency and frequency | Remember | [Ebbinghaus, 1885](https://en.wikipedia.org/wiki/Forgetting_curve) |
+| Power-law decay | Tracks memory availability by recency and frequency | Transmit | [Ebbinghaus, 1885](https://en.wikipedia.org/wiki/Forgetting_curve) |
 | Spreading activation | Boosts contextually relevant memories | Attend | Quillian, 1967; [Collins & Loftus, 1975](https://en.wikipedia.org/wiki/Spreading_activation) |
 | Softmax / Luce choice rule | Converts activations into retrieval probabilities | Attend | [Luce, 1959](https://en.wikipedia.org/wiki/Luce%27s_choice_axiom); Boltzmann, 1868 |
 | Partial matching | Penalizes imperfect matches by similarity | Filter | [Shepard, 1987](https://en.wikipedia.org/wiki/Universal_law_of_generalization) |
@@ -58,7 +58,7 @@ Four architectures, decomposed. Every row is a named algorithm with independent 
 | Incorporate | Routes instance down best branch | Filter | Kolodner, 1984; Lebowitz, 1987 |
 | Create | Adds a new leaf node | Cache | Fisher, 1987 |
 | Merge / Split | Restructures tree from accumulated evidence | Consolidate | Fisher, 1987 |
-| Count update | Writes frequencies to each node | Remember | Frequency estimation (MLE) |
+| Count update | Writes frequencies to each node | Transmit | Frequency estimation (MLE) |
 
 **Original contribution:** *Category utility as the universal scoring function* — one metric drives all four tree operators. Five roles in a single function call.
 

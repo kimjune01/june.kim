@@ -25,7 +25,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
   compatible : &forall; b : &beta;, post b &rarr; pre b</code></pre>
 
     <h3>PipelineHandshake</h3>
-    <p>The full pipeline handshake: four forward handshakes (Perceive&rarr;Cache, Cache&rarr;Filter, Filter&rarr;Attend, Attend&rarr;Remember) plus one cross-cycle handshake (Consolidate&rarr;Attend). The cross-cycle one is special: what Consolidate guarantees at cycle k is what Attend requires at cycle k+1.</p>
+    <p>The full pipeline handshake: four forward handshakes (Perceive&rarr;Cache, Cache&rarr;Filter, Filter&rarr;Attend, Attend&rarr;Transmit) plus one cross-cycle handshake (Consolidate&rarr;Attend). The cross-cycle one is special: what Consolidate guarantees at cycle k is what Attend requires at cycle k+1.</p>
 
     <h3>cycle_preserves_policy</h3>
     <p>The coupling lemma. This says: if Consolidate preserves its postcondition (for all policies and persisted states), then after one pipeline cycle, the output policy satisfies Attend's precondition for the next cycle.</p>
@@ -38,7 +38,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     : &forall; result : I.policy &times; I.persisted,
         Support.support (p.cycle input policy) result &rarr;
         h.consolidate_attend.pre result.1</code></pre>
-    <p class="text-sm text-gray-500">The proof unfolds the cycle definition and peels apart each bind using <code>support_bind</code>. After extracting the forward stages, Remember, and Consolidate, it applies the handshake compatibility to convert the postcondition into the precondition.</p>
+    <p class="text-sm text-gray-500">The proof unfolds the cycle definition and peels apart each bind using <code>support_bind</code>. After extracting the forward stages, Transmit, and Consolidate, it applies the handshake compatibility to convert the postcondition into the precondition.</p>
 
     <Repl client:load initialCode={`# Handshake: post(stage N) implies pre(stage N+1)
 # If the guarantee breaks, the next stage can't trust its input.
@@ -87,7 +87,7 @@ print("\\nAll handshakes hold — pipeline composes safely.")
     <p>A structure-preserving map between two pipeline instances. If domain A and domain B both implement six roles with compatible types, the mapping between them is a functor. Naturality means: mapping commutes with each role. The <a href="https://june.kim/framework-lexicon"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>framework lexicon</a> maps how this functor language translates across mathematical communities.</p>
 
     <h3>TracedPipeline</h3>
-    <p>The feedback trace: Remember's output feeds back to Perceive's input. In the self-recursive case, <code>persisted = raw</code>. A traced pipeline can run autonomously, feeding each cycle's output into the next cycle's input.</p>
+    <p>The feedback trace: Transmit's output feeds back to Perceive's input. In the self-recursive case, <code>persisted = raw</code>. A traced pipeline can run autonomously, feeding each cycle's output into the next cycle's input.</p>
 
     <h3>Connections</h3>
     <ul class="neighbors">

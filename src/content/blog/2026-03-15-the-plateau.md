@@ -18,7 +18,7 @@ To improve Consolidate, you need to select among candidate policies: habits, heu
 
 <img src="/assets/plateau-depth.svg" alt="Consolidate's recursive depth: Level 0 has Filter, Attend, Consolidate. Each Consolidate contains its own Filter, Attend, Consolidate at the next level. Levels dim as bits decrease. Level 3 is passthrough." style="width:100%; max-width:620px; display:block; margin:1.5em auto;"> [Minsky](https://en.wikipedia.org/wiki/Society_of_Mind) called the first level B-brain. He stopped at one level because he had no formal reason to go further. The types give that reason. The recursion is structural. It has the same shape as depth in a neural network.
 
-Each inner pipe's Remember is the policy passed back to the level above. That's how Consolidate returns `policy′`: the inner pipe runs, and its output becomes the outer pipe's update.
+Each inner pipe's Transmit is the policy passed back to the level above. That's how Consolidate returns `policy′`: the inner pipe runs, and its output becomes the outer pipe's update.
 
 ## Inner life
 
@@ -37,7 +37,7 @@ Neural networks call this [weight decay](https://proceedings.neurips.cc/paper/19
 
 But look at the equation again. The ceiling is set by Perceive's throughput, not the backward pass rate. You can't learn what you haven't seen. The lever isn't at the role you'd expect. It's the input.
 
-A monk meditates twelve hours a day. Maximum backward pass, Perceive shut. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found the predicted plateau: attention sharpens, domain knowledge doesn't grow. It's overfitting. Remember holds the same evidence; the backward pass extracts every bit and has nothing left. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same: deliberate practice only works when it includes new information. Pure repetition is the backward pass without new forward passes.
+A monk meditates twelve hours a day. Maximum backward pass, Perceive shut. A [seven-year follow-up](https://www.sciencedaily.com/releases/2018/04/180405093257.htm) found the predicted plateau: attention sharpens, domain knowledge doesn't grow. It's overfitting. Transmit holds the same evidence; the backward pass extracts every bit and has nothing left. [Ericsson](https://pubmed.ncbi.nlm.nih.gov/18778378/) found the same: deliberate practice only works when it includes new information. Pure repetition is the backward pass without new forward passes.
 
 No surprise.
 
@@ -45,7 +45,7 @@ No surprise.
 
 What carries the most novel bits per second?
 
-Consider what a book is. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Remembered. What you read is the output of someone else's competitive core. The loser ideas are already dead. Every sentence is a survivor. That's the density term: pre-compressed by the writer's entire pipeline.
+Consider what a book is. The writer already ran the full pipeline: Perceived, Cached, Filtered, Attended, Consolidated, Transmitted. What you read is the output of someone else's competitive core. The loser ideas are already dead. Every sentence is a survivor. That's the density term: pre-compressed by the writer's entire pipeline.
 
 Consider: you can read a thinker's book in a weekend. To get the same bits from conversation, you'd need months. One is compressed, the other is live. Both carry signal, but the *density* isn't even close.
 
@@ -59,7 +59,7 @@ Read more, better, faster, and the plateau rises. Stop reading and it falls. The
 
 The same equation holds for the agent. An LLM does [in-context learning](https://arxiv.org/abs/2005.14165). The context window is its Perceive. Apply the same two terms.
 
-*Density*: boilerplate code is repetitive structure, low novelty, high redundancy. Consolidated prose is post-Remember, pre-compressed. The same model has a higher ceiling when its window carries prose than when it carries boilerplate code. Most software systems are.
+*Density*: boilerplate code is repetitive structure, low novelty, high redundancy. Consolidated prose is post-Transmit, pre-compressed. The same model has a higher ceiling when its window carries prose than when it carries boilerplate code. Most software systems are.
 
 *Rate*: the context window loads once per session. A repo that accumulates consolidated prose front-loads more novel bits each time. Early sessions start sparse. Later sessions start dense. Agent throughput reaches full capacity without changing the underlying model.
 
@@ -81,7 +81,7 @@ That's the downside. Nobody has run it in the other direction. Same setup, same 
 
 Read with intent. Pick a topic you want to get smarter at. Point your coding agent at [pageleft.cc](https://pageleft.cc) and ask it to find prose worth reading. Load the best of it into your context. Watch the ceiling move.
 
-And if you're brave: write. Publishing is Remember. It forces your pipeline to run all six steps, compresses your thinking into prose, and leaves a denser Perceive channel for the next reader. The equation works for them, too.
+And if you're brave: write. Publishing is Transmit. It forces your pipeline to run all six steps, compresses your thinking into prose, and leaves a denser Perceive channel for the next reader. The equation works for them, too.
 
 We compound faster together.
 

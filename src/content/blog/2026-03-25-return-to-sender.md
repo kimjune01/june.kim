@@ -30,7 +30,7 @@ How much of AgentMail's stack could you build from [copyleft parts](https://page
 <tr><td>SMTP server</td><td><a href="https://github.com/foxcpp/maddy">maddy</a></td><td>GPL-3.0</td><td>Perceive — filled</td></tr>
 <tr><td>DKIM/auth</td><td><a href="https://github.com/simple-login/app">SimpleLogin</a></td><td>AGPL-3.0</td><td>Filter (predicate) — filled</td></tr>
 <tr><td>Inbox API</td><td><a href="https://github.com/nylas/sync-engine">Nylas sync-engine</a></td><td>AGPL-3.0</td><td>Cache — filled</td></tr>
-<tr><td>Transactional email</td><td><a href="https://github.com/useplunk/plunk">Plunk</a></td><td>AGPL-3.0</td><td>Remember — filled</td></tr>
+<tr><td>Transactional email</td><td><a href="https://github.com/useplunk/plunk">Plunk</a></td><td>AGPL-3.0</td><td>Transmit — filled</td></tr>
 <tr><td>Semantic search</td><td><a href="https://github.com/basicmachines-co/basic-memory">basic-memory</a></td><td>AGPL-3.0</td><td>Attend (DPP top-k) — filled</td></tr>
 <tr><td>Abuse detection</td><td>???</td><td>—</td><td>Filter (graph × causal) — <strong>blank</strong></td></tr>
 </table>

@@ -40,9 +40,9 @@ The skills run in sequence, producing a growing SOAP document:
 
 The first end-to-end run was the Soar demo. The pipeline found "Consolidate missing → Perceive throttles" without reading the manual diagnosis. But the skills changed during the run. One elicitation answer — "flat mappings are too coarse" — changed the Diagnose spec mid-pipeline:
 
-**Before:** Diagnose mapped each term to a flat role. "Procedural memory = Remember."
+**Before:** Diagnose mapped each term to a flat role. "Procedural memory = Transmit."
 
-**After:** Diagnose maps each term to a role *at a specific stack level*. "Procedural memory = Remember @ Consolidate." A role can be present at one level and missing at another — that's how compound failures hide.
+**After:** Diagnose maps each term to a role *at a specific stack level*. "Procedural memory = Transmit @ Consolidate." A role can be present at one level and missing at another — that's how compound failures hide.
 
 The episode (flat mappings failed) compressed into a procedure change (tower-aware mappings). Four updates like this in one demo. Each one was the same morphism: the skill failed, I noticed the gap, I changed the spec. The pattern ("coverage questions can change downstream specs") is now in the Intake spec. Next time, the skill handles it.
 

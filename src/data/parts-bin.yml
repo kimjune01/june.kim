@@ -157,9 +157,9 @@ stage_error_grid:
     exact: "PCA via SVD"
     bounded: "k-means++"
     probabilistic: "SGD"
-  - stage: remember
+  - stage: transmit
     exact: "WAL append"
-    bounded: null  # structural: bounded persistence violates Remember contract (lossless)
+    bounded: null  # structural: bounded persistence violates Transmit contract (lossless)
     probabilistic: null  # structural: same reason
 
 # Attend: temporality × output form
@@ -912,7 +912,7 @@ columns:
           Agent with action repertoire + environmental contingencies (reinforcers/punishers) + temporal sequence of
           (action, outcome) pairs drawn from the agent's own behavior distribution
         postcondition: >-
-          Action emission probabilities reshaped so reinforced behaviors are emitted more often. Filter-Remember couple
+          Action emission probabilities reshaped so reinforced behaviors are emitted more often. Filter-Transmit couple
           where the agent's own selection is the source of reinforcement, but identification is not designed —
           the agent observes only outcomes of actions it would have taken anyway.
         grid_position: [causal, probabilistic]
@@ -1166,7 +1166,7 @@ columns:
 
   # ── Consolidate ───────────────────────────────────────────
   - name: consolidate
-    input_type: persisted  # reads from Remember (which caches ranked output)
+    input_type: persisted  # reads from Transmit (which caches ranked output)
     output_type: policy  # updated routing function
     store: policy  # writes to policy store (backward pass inside substrate)
     contract: "Lossy. Backward pass: reads persisted ranked outcomes, reshapes how each stage processes."
@@ -1445,8 +1445,8 @@ columns:
           Wang & Ramdas (2022) e-BH; compound: june.kim 2026
         cross_reference: filter/graph/causal (Nodewise e-BH on exposure-mapped supermartingales)
 
-  # ── Remember ──────────────────────────────────────────────
-  - name: remember
+  # ── Transmit ──────────────────────────────────────────────
+  - name: transmit
     input_type: ranked  # persists ranked output from Attend
     output_type: persisted
     store: data  # lossless persistence; also serves as cache for Consolidate
