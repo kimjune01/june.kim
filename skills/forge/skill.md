@@ -21,7 +21,7 @@ The `soap/` directory, specifically `soap/P.md` (polished). Forge reads the Plan
 
 1. **Volley (sharpen).** Take the prescription's implementation sketch and sharpen it into a spec with testable claims. Converge in two rounds — if the spec doesn't stabilize, the prescription was underspecified (fail back to human).
 2. **Merge (implement).** Blind-blind-merge. Two models (opus + codex), same spec, separate directories. Compare implementations, pick the structurally stronger one per component, synthesize. See Merge Tactics below.
-3. **Hunt (verify).** Send codex (`codex exec --full-auto -m gpt-5.4`) on a bug hunt against the merged implementation. Codex reads the spec and the code, reports bugs (logic errors, spec violations, integration seams, security issues, edge cases) to a findings file. Fix all valid findings. Re-hunt until codex reports zero new bugs — convergence, not a fixed number of passes.
+3. **Hunt (verify).** Run `/bug-hunt` against the merged implementation with the spec as input. See the bug-hunt skill for the full protocol — adversarial codex review iterated to convergence.
 4. **Volley (clean).** Review the implementation against the spec. Clean up naming, remove dead code, ensure tests pass. Converge in two rounds. The output is a PR-ready branch.
 
 ## Merge Tactics
