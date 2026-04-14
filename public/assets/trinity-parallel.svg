@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .node-text { text-anchor: middle; font-weight: 700; font-size: 15px; fill: #333; }
+    .node-sub { text-anchor: middle; font-size: 10px; fill: #888; }
+    .arrow { stroke: #aaa; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .label { font-size: 11px; fill: #777; font-weight: 600; font-style: italic; }
+    .title { text-anchor: middle; font-size: 12px; fill: #555; font-weight: 600; letter-spacing: 0.05em; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#aaa"/>
+    </marker>
+  </defs>
+
+  <!-- LEFT: Memory monoid -->
+  <text class="title" x="170" y="20">Memory</text>
+
+  <circle cx="170" cy="165" r="120" stroke="#e8e8e8" stroke-width="1" fill="none"/>
+  <polygon points="170,55 68,232 272,232" stroke="#e8ddd0" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M155,88 Q80,130 82,200"/>
+  <path class="arrow" d="M100,232 Q170,270 240,232"/>
+  <path class="arrow" d="M258,200 Q260,130 185,88"/>
+
+  <!-- Labels -->
+  <text class="label" x="72" y="148" text-anchor="end">consolidate</text>
+  <text class="label" x="170" y="265" text-anchor="middle">shapes</text>
+  <text class="label" x="272" y="148" text-anchor="start">generates</text>
+
+  <!-- Nodes -->
+  <text class="node-text" x="170" y="58">epmem</text>
+  <text class="node-sub" x="170" y="73">what happened</text>
+
+  <text class="node-text" x="68" y="228">smem</text>
+  <text class="node-sub" x="68" y="243">what is true</text>
+
+  <text class="node-text" x="272" y="228">pmem</text>
+  <text class="node-sub" x="272" y="243">how to act</text>
+
+  <!-- RIGHT: Trinity -->
+  <text class="title" x="510" y="20">Trinity</text>
+
+  <circle cx="510" cy="165" r="120" stroke="#e8e8e8" stroke-width="1" fill="none"/>
+  <polygon points="510,55 408,232 612,232" stroke="#e8ddd0" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M495,88 Q420,130 422,200"/>
+  <path class="arrow" d="M440,232 Q510,270 580,232"/>
+  <path class="arrow" d="M598,200 Q600,130 525,88"/>
+
+  <!-- Labels -->
+  <text class="label" x="412" y="148" text-anchor="end">intercedes</text>
+  <text class="label" x="510" y="265" text-anchor="middle">begets</text>
+  <text class="label" x="612" y="148" text-anchor="start">sends</text>
+
+  <!-- Nodes -->
+  <text class="node-text" x="510" y="58">Spirit</text>
+  <text class="node-sub" x="510" y="73">what is happening</text>
+
+  <text class="node-text" x="408" y="228">Father</text>
+  <text class="node-sub" x="408" y="243">what is true</text>
+
+  <text class="node-text" x="612" y="228">Son</text>
+  <text class="node-sub" x="612" y="243">how to act</text>
+</svg>
