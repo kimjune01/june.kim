@@ -4,7 +4,7 @@ title: "Timekeeping Parameter"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [Temporal Compression](/temporal-compression) and [The Consolidation Codec](/consolidate-codec).*
+*Part of the [cognition](/cognition) series. Builds on [Temporal Compression](/temporal-compression) and [Consolidation Codec](/consolidate-codec).*
 
 Any system that keeps time under bounded memory converges on the same structure: store complete states occasionally, store differences the rest of the time. The ratio between the two is the keyframe rate. It is the survival parameter of temporal compression.
 

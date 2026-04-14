@@ -4,7 +4,7 @@ title: "Diffusive Phenomenology"
 tags: cognition
 ---
 
-*Part of the [cognition](/cognition) series. Builds on [The Consolidation Codec](/consolidate-codec).*
+*Part of the [cognition](/cognition) series. Builds on [Consolidation Codec](/consolidate-codec).*
 
 ### The decode loop
 

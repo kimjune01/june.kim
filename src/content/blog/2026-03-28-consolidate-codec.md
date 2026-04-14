@@ -1,6 +1,6 @@
 ---
 variant: post
-title: "The Consolidation Codec"
+title: "Consolidation Codec"
 tags: cognition
 ---
 
@@ -8,9 +8,11 @@ tags: cognition
 
 ### The contract
 
-Consolidate reads from the store, finds patterns across episodes, and writes policy changes back to the substrate. Its contract is: many episodes in, fewer parameters out. The episodes shrink; the policy improves. Every cycle that adds experience without consolidating it grows the store linearly.
+I wrote [Consolidation](/consolidation) to name the backward pass — the offline move that takes winning moments and writes schemas back to the substrate — and then went looking for where it lived in Soar. It wasn't there. 72,000 episodes per hour, unbounded. Retrieval cost scaled with total count. The [diagnosis](/diagnosis-soar) had said the forward pass worked; the operation I had just finished naming was the one missing. The stores grew without bound and perception narrowed to compensate — a clogged drain forcing the valve shut.
 
-Soar hit this wall. 72,000 episodes per hour, unbounded. Retrieval cost scaled with total count. The [diagnosis](/diagnosis-soar) was clear: the forward pass worked, but Consolidate was missing for episodic and semantic memory. The stores grew without bound and perception narrowed to compensate — a clogged drain forcing the valve shut.
+Consolidate itself is simple to describe. It reads from the episode store, finds patterns across episodes, and writes policy changes back to the substrate. Many episodes in, fewer parameters out. The episodes shrink; the policy improves. Every cycle that stores experience without consolidating it grows the store linearly.
+
+That's what makes it the closing move. [Consolidation](/consolidation) traced the forward pass — Perceive, Cache, Filter, Attend, Remember — and showed that without a backward pass, winners pile up, Attend slows, perception narrows. Consolidate returns the output of one cycle to the substrate in a compressed form. Six roles become a monad: signal in, schema back to substrate, next cycle's signal now shaped by what the system has kept. Without Consolidate the loop is open. With it, information circulates.
 
 Every system that stores episodes faces the same curve. Soar built [chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)). Transformers use gradient descent. Zep builds temporal knowledge graphs. Each one works. None share vocabulary.
 
