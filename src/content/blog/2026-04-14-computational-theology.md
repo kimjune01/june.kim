@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "Computational Theology"
-tags: cognition, reflecting
+tags: reflecting
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [Consolidation Codec](/consolidation-codec) and [cons](/cons).*
