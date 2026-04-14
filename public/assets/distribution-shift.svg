@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 260" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .row-label { text-anchor: end; font-size: 11px; fill: #888; font-weight: 500; }
+    .note { text-anchor: middle; font-size: 10px; fill: #888; font-style: italic; }
+  </style>
+
+  <!-- Row 0: Naive model — mostly I-frames -->
+  <text class="row-label" x="75" y="40">Cycle 0</text>
+  <rect x="90" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="125" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="160" y="35" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="195" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="230" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="265" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="300" y="35" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="335" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="370" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="405" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="440" y="35" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="475" y="15" width="30" height="45" rx="3" fill="#333"/>
+  <text class="note" x="545" y="42">everything novel</text>
+
+  <!-- Row 1: Improving — mixed -->
+  <text class="row-label" x="75" y="130">Cycle 3</text>
+  <rect x="90" y="105" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="125" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="160" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="195" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="230" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="265" y="105" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="300" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="335" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="370" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="405" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="440" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="475" y="125" width="30" height="25" rx="3" fill="#bbb"/>
+  <text class="note" x="545" y="132">mostly routine</text>
+
+  <!-- Row 2: Expert — almost all P-frames, rare I -->
+  <text class="row-label" x="75" y="220">Cycle n</text>
+  <rect x="90" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="125" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="160" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="195" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="230" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="265" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="300" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="335" y="195" width="30" height="45" rx="3" fill="#333"/>
+  <rect x="370" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="405" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="440" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <rect x="475" y="215" width="30" height="25" rx="3" fill="#bbb"/>
+  <text class="note" x="545" y="222">rare surprise</text>
+</svg>

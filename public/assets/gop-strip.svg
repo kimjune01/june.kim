@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 120" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .label { text-anchor: middle; font-size: 11px; font-weight: 600; fill: #555; }
+    .size-label { text-anchor: middle; font-size: 11px; fill: #888; font-weight: 500; }
+  </style>
+
+  <!-- I-frame -->
+  <rect x="10" y="20" width="50" height="70" rx="4" fill="#333"/>
+  <text class="label" x="35" y="108">I</text>
+  <text class="size-label" x="35" y="15">3.3 KB</text>
+
+  <!-- P P P -->
+  <rect x="75" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="100" y="108">P</text>
+
+  <rect x="140" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="165" y="108">P</text>
+
+  <rect x="205" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="230" y="108">P</text>
+  <text class="size-label" x="230" y="48">0.7 KB</text>
+
+  <!-- I-frame -->
+  <rect x="270" y="20" width="50" height="70" rx="4" fill="#333"/>
+  <text class="label" x="295" y="108">I</text>
+
+  <!-- P P P -->
+  <rect x="335" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="360" y="108">P</text>
+
+  <rect x="400" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="425" y="108">P</text>
+
+  <rect x="465" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="490" y="108">P</text>
+
+  <!-- I-frame -->
+  <rect x="530" y="20" width="50" height="70" rx="4" fill="#333"/>
+  <text class="label" x="555" y="108">I</text>
+
+  <!-- P P P -->
+  <rect x="595" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="620" y="108">P</text>
+
+  <rect x="660" y="50" width="50" height="40" rx="4" fill="#999"/>
+  <text class="label" x="685" y="108">P</text>
+</svg>

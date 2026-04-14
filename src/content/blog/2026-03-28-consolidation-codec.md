@@ -10,9 +10,11 @@ tags: cognition
 
 Consolidate reads from the store, finds patterns across episodes, and writes policy changes back to the substrate. Its contract is: many episodes in, fewer parameters out. The episodes shrink; the policy improves. Every cycle that adds experience without consolidating it grows the store linearly.
 
-Soar hit this wall. 72,000 episodes per hour, unbounded. Retrieval cost scaled with total count. The [diagnosis](/diagnosis-soar) was clear: the forward pass worked, but Consolidate was missing for episodic and semantic memory. The stores grew without bound and perception narrowed to compensate: a clogged drain forcing the valve shut.
+[Soar](/diagnosis-soar) stores episodes without consolidating them. The forward pass works, but the episodic and semantic stores grow without a backward pass to compress them.
 
 Every system that stores episodes faces the same curve. Soar built [chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)). Transformers use gradient descent. Zep builds temporal knowledge graphs. Each one works. None share vocabulary.
+
+Video codecs are the shared vocabulary. Forty years of engineering on exactly this compression problem.
 
 ### The stream
 
@@ -20,9 +22,9 @@ Episodes arrive in sequence. Each episode is a snapshot of state paired with the
 
 This is a stream with high temporal redundancy. Video codecs compress exactly this kind of signal: consecutive frames share most of their content, and the interesting information lives in the deltas.
 
-### I-frames, P-frames, B-frames
+### Frame types
 
-A video codec doesn't store every frame at full fidelity. It classifies frames into three types:
+A video codec doesn't store every frame at full fidelity. It classifies them by how much context they need:
 
 **I-frame** (intra-coded): a complete snapshot. Self-contained. Expensive to store but requires no context to decode. You can seek directly to any I-frame.
 
@@ -30,38 +32,41 @@ A video codec doesn't store every frame at full fidelity. It classifies frames i
 
 **B-frame** (bidirectional): references both a past and a future frame. Most compressed, but requires lookahead. Only possible when you can buffer.
 
-The codec's GOP (group of pictures) structure determines the pattern: how many P-frames between I-frames, where B-frames go, how long the dependency chain runs before the next keyframe resets it. GOP is a policy. It balances compression ratio against random access, error resilience, and decode cost.
+<div style="max-width:min(90vw, 700px); margin:1.5em auto;">
+<img src="/assets/gop-strip.svg" alt="GOP strip: I-frames are tall (3.3 KB), P-frames are short (0.7 KB). Pattern: I P P P I P P P I P P." style="width:100%; display:block;">
+</div>
 
-### Worked example: Soar PR [#578](https://github.com/SoarGroup/Soar/pull/578)
+The codec's GOP (group of pictures) structure determines the pattern: how many P-frames between I-frames, how long the dependency chain runs before the next keyframe resets it. GOP is a policy. It balances compression ratio against random access, error resilience, and decode cost.
 
-Soar's EPMEM stores episodes as change-deltas indexed by decision cycle number. Each delta records what changed in working memory since the last cycle. In codec terms: every episode is a P-frame. The system never produces I-frames: no operation that collapses a window of deltas into a self-contained snapshot. The P-frame chain grows to 72,000 entries per hour with no keyframes to anchor it. Retrieval means reconstructing state by replaying the chain from the beginning.
+### Worked example: financial accounting
 
-The [demonstration PR](https://github.com/SoarGroup/Soar/pull/578) adds two operations: consolidation and eviction. In codec terms:
+[Double-entry bookkeeping](https://en.wikipedia.org/wiki/Double-entry_bookkeeping) has been running this pattern since the 15th century. Every transaction is an immutable entry. You never modify a ledger line — you append a correction.
 
-| Codec concept | Soar parameter | What it does |
+The raw data is the [journal](https://en.wikipedia.org/wiki/General_journal): chronological entries, every debit and credit. The [ledger](https://en.wikipedia.org/wiki/General_ledger) groups entries by account. The [trial balance](https://en.wikipedia.org/wiki/Trial_balance) collapses all accounts to their balances at a point in time. Three [financial statements](https://en.wikipedia.org/wiki/Financial_statement) project different views from the trial balance: the balance sheet (state now), the income statement (changes this period), the cash flow statement (cash-affecting changes only).
+
+That's a multi-stage compression pipeline. Journal → ledger → trial balance → statements. Each stage discards detail and preserves structure.
+
+| Codec concept | Financial accounting | What it does |
 |---|---|---|
-| **GOP length** | `consolidate-interval` (default: 100) | How many P-frames between I-frame extraction runs |
-| **I-frame extraction** | compose + test over `_now` table | Union of constant WMEs active across the window. Continuous presence ≥ `consolidate-threshold` → write to smem as a self-contained snapshot |
-| **P-frame eviction** | `consolidate-evict-age` | Delete episode rows older than this. Safe because the I-frame (smem entry) already holds what mattered |
-| **Scene-change detection** | `consolidate-threshold` (default: 10) | WMEs must persist for this many consecutive episodes to qualify. Transient state doesn't make the keyframe |
+| **I-frame** | Trial balance (closing) | Full account state. Self-contained, seekable. |
+| **P-frame** | Journal entry | An incremental change. Cheap to record, depends on the chain. |
+| **GOP trigger** | Closing period (monthly, quarterly, annual) | How many entries accumulate before the next balance. |
+| **P-frame eviction** | Archival of closed periods | Move old entries to cold storage. Safe because the trial balance holds what mattered. |
+| **Projections** | Balance sheet, income statement, cash flow | Different read models over the same I/P structure. |
 
-Before the patch: GOP = ∞. Every frame is a P-frame. No keyframes, no eviction, no chain-breaking. Retrieval cost is O(n) in total experience.
+Before closing: reconstructing account state replays every journal entry from day one.
 
-After: GOP = 100. Every 100 episodes, the system scans for stable structure, writes it as a self-contained smem entry (I-frame), and evicts the P-frames that are now reconstructible. Retrieval cost stays proportional to important episodes, not total decision cycles.
+After: start from the nearest trial balance and replay only subsequent entries. The three financial statements are projections from the I-frame — different questions answered from the same snapshot.
 
-The algorithm is [Casteigts et al.'s](https://link.springer.com/article/10.1007/s00224-018-9876-z) compose + test framework from temporal graph theory. The vocabulary to recognize it as a keyframe extractor (GOP, I-frame, eviction) came from video codecs. Neither field talks to the other. The same compression geometry, discovered independently.
+The closing period is the GOP policy. Monthly closes mean fast lookups but more bookkeeping. Annual closes mean less overhead but slow reconstruction. The tradeoff is identical to video: compression ratio against random access latency.
+
+Software formalized this as [event sourcing](https://en.wikipedia.org/wiki/Event_sourcing): immutable event logs with periodic snapshots. Same structure, same tradeoff, five centuries later.
 
 ### Forgetting as bitrate adaptation
 
-Under memory pressure, a codec drops frames in a specific order:
+Under memory pressure, drop P-frames first. They're reconstructible from the nearest I-frame. I-frames persist longest because nothing else can reconstruct them.
 
-1. **B-frames first.** Most dependent, most reconstructible. Losing them costs detail but preserves structure.
-2. **P-frames next.** Reconstruct from nearest I-frame. Losing them costs continuity between keyframes.
-3. **I-frames last.** Self-contained. Losing one means losing an entire segment with no recovery.
-
-The same order works as a forgetting policy for episodic stores. Routine episodes (minor variations on a known pattern) are P-frames. They're the first to drop because they're reconstructible from the nearest keyframe. Distinctive episodes (novel states that share little with their neighbors) are I-frames. They persist longest because nothing else can reconstruct them.
-
-The drop order isn't a metaphor for forgetting. It's a compression strategy that any system under memory pressure can apply: degrade resolution before coverage, lose detail before structure.
+Event sourcing does exactly this: truncate events before the latest snapshot. The snapshot survives. The routine state changes are gone, but the important state is preserved. Degrade resolution before coverage, lose detail before structure.
 
 ### GOP as consolidation policy
 
@@ -75,37 +80,39 @@ The GOP structure is itself a parameter. How often to keyframe? The answer depen
 
 ### The same geometry elsewhere
 
-Git stores diffs (P-frames) anchored by snapshots at pack boundaries (I-frames). Gradient descent stores parameter updates (P-frames) anchored by checkpoints (I-frames). Neither uses the codec vocabulary, but both arrived at the same structure:
+[PostgreSQL's WAL](https://www.postgresql.org/docs/current/wal-intro.html) stores byte-level diffs (P-frames) and periodically writes a checkpoint (I-frame). Recovery replays WAL entries forward from the last checkpoint. Checkpoint frequency trades write amplification against recovery time, the same curve as GOP length against random access.
 
 | | I-frame | P-frame | GOP trigger |
 |---|---|---|---|
-| **Soar** ([PR #578](https://github.com/SoarGroup/Soar/pull/578)) | smem entry via compose + test | WME change-delta | every 100 episodes |
-| **Git** | pack snapshot | commit diff | pack-objects heuristic |
-| **SGD** | checkpoint | parameter update | epoch boundary |
+| **Accounting** | trial balance | journal entry | closing period |
+| **PostgreSQL** | checkpoint | WAL entry | `checkpoint_timeout` / `max_wal_size` |
+| **Video** | keyframe | predicted frame | scene-change detector |
 
-Three systems, three substrates, independently converging on I/P structure with a periodic keyframe trigger. Three examples don't prove universality, but any system accumulating sequential diffs faces the same design choices. Video compression has forty years of engineering on those choices. The algorithms may not port directly (the distortion metric for episodic memory isn't PSNR), but the words travel even when the implementations don't.
+Three systems, three substrates, independently converging on I/P structure with a periodic keyframe trigger. Any system accumulating sequential state changes faces the same design choices. Video compression has forty years of engineering on those choices. The words travel even when the implementations don't.
 
-### Storage and learning
+### Learning is more than compression
 
-The codec gives Consolidate a storage layer (episode format, compression scheme, GOP policy, forgetting order, random access) but not the full contract. An I-frame is a snapshot, not a schema. The step from "compressed episodes" to "updated policy" is where domain-specific work begins.
+The codec gives Consolidate a storage layer (episode format, compression scheme, GOP policy, forgetting order, random access) but not the full contract. An I-frame is a snapshot, not a schema. Compression alone doesn't update the policy. So where does learning enter?
 
-### The third frame type
+### The quality signal
 
-I/P is the demonstrated claim. The Soar PR implements it. But video codecs have a third frame type, and it points somewhere interesting.
+The system has a predictive model (pmem). Each episode arrives and the model either predicted it or didn't. The prediction error is the residual: actual minus expected. [Predictive coding](https://en.wikipedia.org/wiki/Predictive_coding) stores only the residual. Everything the model already knew gets suppressed.
 
-B-frames reference both past and future. They're only constructible offline, when the system has buffered enough of the stream to look in both directions. They produce the highest compression, and they generate frames that aren't literal copies of anything in the input.
+Early in the system's life, the model is naive. Most episodes are surprising. The residuals are large. In codec terms, the stream is I-frame-heavy: dense, expensive, full of novel information.
 
-This looks like what happens when the forward pass stops running. Close your eyes. The stream of I-frames from perception cuts off. What remains is the buffer. The system runs on stored representations, referencing both past episodes and anticipated structure, resolving noise into coherent signal. Children see images form out of the noise. Diffusion models do the same thing computationally: iterative denoising from bidirectional reference toward a coherent frame.
+As the model improves, the residuals shrink. Episodes become routine diffs from a good prediction. The stream shifts to P-frame-heavy: sparse, cheap, mostly confirmations. The I-frames that survive are genuinely novel.
 
-The pattern recurs at every layer where the system fills in what it doesn't directly observe:
+<div style="max-width:min(90vw, 700px); margin:1.5em auto;">
+<img src="/assets/distribution-shift.svg" alt="Three rows of episode blocks. Cycle 0: mostly tall dark blocks (I-frames, everything novel). Cycle 3: mostly short light blocks with occasional tall dark ones (improving). Cycle n: almost all short light blocks with one rare tall dark block (expert, rare surprise)." style="width:100%; display:block;">
+</div>
 
-- **Vision**: foveal capture is a tiny I-frame. Peripheral vision is filled in from the mental model: approximate, low-bitrate, generated.
-- **Hearing**: the [phonemic restoration effect](https://en.wikipedia.org/wiki/Phonemic_restoration_effect). Replace a phoneme with noise; listeners hear the word intact. The system generates the missing frame from context.
-- **Memory**: vivid experiences persist as I-frames. The story between them is reconstructed, which is why eyewitness testimony is unreliable. Most of what people "remember" was never stored.
+The distribution shift *is* learning. Not a separate step after compression, but visible in the data itself: the ratio of I-frames to P-frames tracks how much the system understands. A system that stores everything equally has learned nothing. A system that stores almost nothing predicts almost everything.
 
-Each of these looks like B-frame construction: synthesizing a coherent signal from sparse keyframes and bidirectional context. If I-frames are what was observed and P-frames are what changed, B-frames are what the system generates to fill the gaps.
+### The contracting cycle
 
-This is speculation, not theorem. We don't have a PR for B-frame consolidation. But the lead is specific enough to test: if episodic systems that only do I/P compression plateau in quality while systems that add bidirectional synthesis (diffusion, bidirectional attention, sleep-dependent memory consolidation) surpass them, the codec vocabulary would have predicted it. The frame type that requires offline access to both temporal directions might be where storage becomes learning.
+Better model → smaller residuals → sparser episodes → faster consolidation → better model. Each cycle tightens the prediction. The data gets cheaper to store because it's less surprising. The consolidation gets faster because there's less to process.
+
+This is the data specification for the [monoid](/cons). `cons` describes the structure: episodes → knowledge → procedures → episodes. The codec vocabulary describes what flows through that structure: residuals that shrink as the policy sharpens. The quality measure is prediction error. The trend is monotonic compression toward a system that stores only what it cannot yet predict.
 
 ---
 
