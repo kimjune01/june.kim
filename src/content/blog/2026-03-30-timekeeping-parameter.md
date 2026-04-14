@@ -6,7 +6,7 @@ tags: cognition
 
 *Part of the [cognition](/cognition) series. Builds on [Temporal Compression](/temporal-compression) and [Consolidation Codec](/consolidation-codec).*
 
-Any system that keeps time under bounded memory converges on the same structure: store complete states occasionally, store differences the rest of the time. The ratio between the two is the keyframe rate. It is the survival parameter of temporal compression.
+Any system that keeps time under bounded memory converges on the same structure: store complete states occasionally, differences the rest of the time. The ratio is the keyframe rate — the survival parameter of temporal compression.
 
 ### Why it converges
 
@@ -16,11 +16,11 @@ Three constraints force the structure:
 2. **The sequence has temporal dependencies.** Later states depend on earlier ones.
 3. **Accumulated error grows with chain length.** Each delta drifts from the original. Over enough steps, the reconstruction becomes unusable.
 
-Given these constraints, any system that doesn't periodically store a complete state will drift past recovery. The checkpoint isn't an optimization. It's a necessity. The only free parameter is how often. (This vocabulary has a [formal algebraic counterpart](/temporal-compression) — sheaf cohomology on directed graphs separates removable from irreducible error, and the checkpoint is the sub-complex where irreducible error vanishes.)
+Given these constraints, any system that doesn't periodically store a complete state drifts past recovery. The checkpoint is a necessity, not an optimization. The only free parameter is how often.
 
 ### The evidence
 
-The same five-part architecture appears independently across fifteen domains. Technical systems (top rows) are precise; institutional and cultural systems (lower rows) are less exact but structurally recognizable.
+The same five-part architecture appears independently across eleven domains. Technical systems (top rows) are precise; institutional and cultural systems (lower rows) less exact but structurally recognizable.
 
 | Domain | Checkpoint (I-frame) | Delta (P-frame) | Cycle (GOP) | Break (chain fragility) | Reset |
 |---|---|---|---|---|---|
@@ -31,15 +31,14 @@ The same five-part architecture appears independently across fifteen domains. Te
 | **Accounting** | Balance sheet | Journal entry | Month-end close | Audit discrepancy | Reconciliation |
 | **Oral poetry** | Formulaic epithet | Improvised variation | Performance segment | Audience lost | Re-invoke formula |
 | **Common law** | Landmark case | Subsequent opinion | Era of precedent | Overturned ruling | New landmark |
-| **Historiography** | Period boundary | Events between | Era | Lost context | Revisionist re-encoding |
 | **Religion** | Founding myth | Cultural practice | Liturgical cycle | Schism | Reformation / revival |
 | **Nation-state** | Founding document | Legislation / amendment | Political generation | Constitutional crisis | New constitution |
 | **Scientific paradigm** | [Paradigm](https://en.wikipedia.org/wiki/The_Structure_of_Scientific_Revolutions) (Kuhn) | Normal science | Research program | Anomaly accumulation | Revolution |
 | **Software architecture** | Clean-sheet design | Feature additions | Major version | Technical debt collapse | Rewrite |
 
-Twelve domains. Same architecture. The top five are precise: git's packfile delta compression is I-frame/P-frame encoding on a DAG, and database WAL checkpointing is GOP structure. The lower ten are structural analogies, less exact but recognizable.
+Eleven domains. Same architecture. The top five are precise: git's packfile delta compression is I-frame/P-frame encoding on a DAG, and database WAL checkpointing is GOP structure. The lower six are structural analogies, less exact but recognizable.
 
-### What kills systems: the evidence
+### What kills systems
 
 Systems that get the keyframe rate wrong fail in predictable ways.
 
@@ -78,7 +77,7 @@ Systems that get the keyframe rate wrong fail in predictable ways.
 
 ### What the tables show
 
-**1. Too few keyframes kills slowly.** Boeing drifted for 57 years. The Qing drifted for 268. Korea is drifting now. Accumulated error becomes structural, and the system can no longer distinguish between what it is and what it was supposed to be. By the time someone calls for a reset, the cost of a keyframe has grown larger than the system can bear.
+**1. Too few keyframes kills slowly.** Boeing drifted for 57 years. The Qing for 268. Korea is drifting now. Accumulated error becomes structural, and the system can no longer distinguish what it is from what it was supposed to be. By the time someone calls for a reset, the cost of a keyframe exceeds what the system can bear.
 
 **2. Too many keyframes kills fast.** France cycled through 14 constitutions in 80 years. Mao's Continuous Revolution destroyed institutions faster than they could function. The Khmer Rouge destroyed the substrate itself. Each reset discards accumulated P-frames that took years to build. Reset too often and nothing accumulates.
 
@@ -86,19 +85,21 @@ Systems that get the keyframe rate wrong fail in predictable ways.
 
 ### Trauma compresses the keyframe
 
-South Korea's population crisis is a keyframe written under crisis that was never decompressed after the crisis ended.
+South Korea's population crisis is a keyframe written under duress, never decompressed after the pressure lifted.
 
-The pre-war I-frame was Confucian: family continuity, ancestor worship, filial piety. Reproduction was in the checkpoint. The Korean War destroyed everything. Park Chung-hee's developmental state wrote a new I-frame from rubble: industrialize or die. Intentionally monodimensional — a traumatized society rebuilding from nothing can't afford a complex checkpoint. A simple I-frame compresses well, transmits easily, aligns the population toward a single objective.
+The pre-war I-frame was Confucian: family continuity, ancestor worship, filial piety. Reproduction was in the checkpoint. The Korean War destroyed everything. [Park Chung-hee](https://en.wikipedia.org/wiki/Park_Chung_Hee) wrote a new I-frame from rubble: industrialize or die. Intentionally monodimensional — a traumatized society rebuilding from nothing can't afford a complex checkpoint. A simple I-frame compresses well, transmits easily, aligns the population toward a single objective.
 
 It worked. One generation: agrarian poverty to OECD.
 
 Then the crisis ended and the I-frame didn't update. Family formation, communal obligation, generational continuity were never re-encoded into the new reference. They existed only as P-frame inheritance, increasingly distant from the active checkpoint. When accumulated economic and social pressure compressed the P-frames, reproduction was the first thing dropped. It was never in the I-frame. It was never protected from drift.
 
-The standard explanations aren't wrong. They're downstream. Housing is expensive because the society optimized for one dimension and never re-encoded livability. Work culture is brutal because the I-frame says sacrifice, and every institutional delta since 1960 has been faithful to that reference. Education is a pressure cooker because the checkpoint rewards competition, not formation. These are consequences. The root cause is what the I-frame encodes and what it doesn't.
+### The downstream consequences
 
-"Economics" fails because Israel has comparable cost of living and a TFR of ~2.85. "Culture" fails because it doesn't specify which parameter. The keyframe framing does: Israel's I-frame encodes reproduction ("be fruitful and multiply" is in the Torah, which is the I-frame). Korea's doesn't. What's in the checkpoint is protected from drift. What isn't gets compressed away.
+The standard explanations are downstream. Housing is expensive because the society optimized for one dimension and never re-encoded livability. Work culture is brutal because the I-frame says sacrifice, and every institutional delta since 1960 has been faithful to that reference. Education is a pressure cooker because the checkpoint rewards competition, not formation. These are consequences. The root cause is what the I-frame encodes and what it doesn't.
 
-The generalization: **the severity of the trauma that forces a new I-frame determines its dimensionality.** The more severe, the simpler. Simple I-frames are adaptive in crisis. In peace, they become the chain that can't encode what matters.
+"Economics" fails because Israel has [higher cost of living](https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=Israel&country2=South+Korea) and a [TFR of ~2.9](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN?locations=IL). "Culture" fails because it doesn't specify which parameter. The keyframe framing does: Israel's I-frame encodes reproduction ("[be fruitful and multiply](https://en.wikipedia.org/wiki/Be_fruitful_and_multiply)" is in the Torah, which is the I-frame). Korea's doesn't. What's in the checkpoint is protected from drift. What isn't gets compressed away.
+
+The generalization: *the severity of the trauma that forces a new I-frame determines its dimensionality.* The more severe, the simpler. Simple I-frames are adaptive in crisis. In peace, they become the chain that can't encode what matters.
 
 ### The parameter
 
@@ -108,9 +109,9 @@ The keyframe rate is not a design choice. It emerges from three quantities:
 - **Error accumulation rate** — how fast deltas drift from the reference
 - **Checkpoint cost** — how expensive a complete state is to store
 
-Every system in the tables above discovered this tradeoff independently. Codecs formalized it as rate-distortion optimization. Legal systems formalized it as stare decisis with rare reversals. Religions formalized it as liturgical cycles with occasional councils. The formalism differs. The parameter is the same.
+Every system in the tables discovered this tradeoff independently. Codecs formalized it as [rate-distortion optimization](https://en.wikipedia.org/wiki/Rate%E2%80%93distortion_theory). Legal systems as [stare decisis](https://www.law.cornell.edu/wex/stare_decisis) with rare reversals. Religions as liturgical cycles with occasional councils. The formalism differs. The parameter is the same.
 
-The systems that persist are the ones that found, by trial or by selection, a keyframe rate matched to their constraints. The systems that died are the ones that didn't. This is not a metaphor. It is the consequence of keeping time with a finite buffer.
+The systems that persist found, by trial or by selection, a keyframe rate matched to their constraints. The systems that died didn't. This is more than metaphor. It is the consequence of keeping time with a finite buffer.
 
 ### How to prove this wrong
 
@@ -118,7 +119,7 @@ Score founding documents for dimensionality. Constitutional preambles, national 
 
 Then measure which outcomes survived a century of drift and which didn't.
 
-The prediction: outcomes encoded in the founding document persist under pressure. Outcomes absent from it collapse first when the system is stressed. If Korea's founding documents encode development but not family formation, and Israel's encode both, and the TFR tracks that difference after controlling for GDP, housing cost, and female labor participation — the parameter is real.
+The prediction: outcomes encoded in the founding document persist under pressure. Outcomes absent collapse first when the system is stressed. If Korea's founding documents encode development but not family formation, and Israel's encode both, and the TFR tracks that difference after controlling for GDP, housing cost, and female labor participation — the parameter is real.
 
 If it doesn't track — if I-frame content has no predictive power over which outcomes survive drift — the framework is wrong. Not "needs refinement." Wrong. Run the test.
 
