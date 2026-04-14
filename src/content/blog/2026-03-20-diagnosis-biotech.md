@@ -50,13 +50,13 @@ These are live. Outcome unknown. Published March 20, 2026.
 
 The molecule is mature (7 years, 22 patients, BTD). The company is new — acquired it from bankrupt Allievex after its own lead program failed. Consolidate stack is fragile (going concern, $48.9M cash) but functional (reading FDA feedback, hiring commercial leadership).
 
-Framework: **dying_pivoted, PASS.** Shkreli: bull. We agree on direction, disagree on reasoning. He says "drug will be approved" (forward pass). We say "company is executing despite stress" (consolidate stack). The risk: PPQ batch slip → cash crisis. The molecule has outlived two prior companies. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/SPRB), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/SPRB.md))
+Framework: **dying_pivoted, PASS.** Merges split — SOAP-A says trajectory points to PASS, SOAP-B flags meta-pattern risk (molecule has outlived two prior companies). SOAP-A primary per protocol. Shkreli: bull. We agree on direction, disagree on reasoning. He says "drug will be approved" (forward pass). We say "company is executing despite stress" (consolidate stack). The risk: PPQ batch slip → cash crisis. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/SPRB), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/SPRB.md))
 
 **ATYR (aTyr Pharma)** — New sarcoidosis trial announced by September 30, 2026.
 
 EFZO-FIT Phase 3 [missed primary](https://investors.atyrpharma.com/news-releases/news-release-details/atyr-pharma-announces-topline-results-phase-3-efzo-fittm-study) (steroid dose reduction, p=0.33) but hit secondaries (KSQ-Lung p=0.048, composite steroid withdrawal + improvement p=0.020). The secondary signals suggest the drug has activity on quality-of-life endpoints; the primary endpoint may have been the wrong measure. FDA Type C meeting mid-April 2026.
 
-Framework: **dying_pivoted, PASS.** Shkreli: bear ("really bad drug"). His critique was mechanism-level ("really bad drug"), but the secondary endpoints suggest the molecule has activity that the primary endpoint didn't capture. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/ATYR), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/ATYR.md))
+Framework: **dying_pivoted, PASS.** Merges split — SOAP-A says incentive alignment drives a new trial, SOAP-B says the Type C meeting is necessary but not sufficient. SOAP-A primary per protocol. Shkreli: bear ("really bad drug"). His critique was mechanism-level, but the secondary endpoints suggest the molecule has activity that the primary endpoint didn't capture. The framework predicts the company will pivot because the consolidate stack is functional: honest read of the miss, constructive FDA engagement, no panic pivot. Inverse of QURE — same kind of FDA pushback, opposite management response. ([SOAP notes](https://github.com/kimjune01/universal-diagnosis/tree/master/notes/ATYR), [diagnosis](https://github.com/kimjune01/universal-diagnosis/blob/master/diagnoses/ATYR.md))
 
 **INMB (INmune Bio)** — CORDStrom MAA to UK MHRA by September 30, 2026.
 
@@ -83,9 +83,9 @@ The [blind-blind-merge](/blind-blind-merge) operates at two levels here. The two
 
 | Company | Framework | Shkreli | Agreement? | Confidence |
 |---------|-----------|---------|------------|------------|
-| SPRB | PASS | Bull | Yes | Higher — both say the molecule carries the company |
-| ATYR | PASS | Bear | **No** | Framework's edge case — we disagree on mechanism |
-| INMB | FAIL | Bear | Yes | **Highest** — independent convergence from different analyses |
+| SPRB | PASS (split) | Bull | Yes | Merges disagree — SOAP-B flags meta-pattern |
+| ATYR | PASS (split) | Bear | **No** | Weakest — merges split *and* we disagree with Shkreli |
+| INMB | FAIL | Bear | Yes | **Highest** — merges unanimous, independent convergence with Shkreli |
 
 At N=3, none of this is statistically meaningful. But the structure is interesting: INMB has independent convergence from different analyses. ATYR is the pure disagreement. If the framework is adding signal, it should show on ATYR.
 
@@ -127,6 +127,18 @@ This is a hypothesis, not a finding. The backtest requires historical options da
 [SEC Form 4](https://en.wikipedia.org/wiki/Form_4) filings are dated public records. When insiders buy or sell before an 8-K, the read_outcomes pipe is functioning *privately* even if the public framing is spin. The divergence between insider behavior and management's public narrative is itself a diagnostic signal — it tells you whether the company knows more than it says.
 
 We didn't incorporate insider transaction events in this pilot. But the temporal graph can absorb them: each Form 4 is an event with an archival date, a pipe (read_outcomes), and an implicit status (insider selling before bad news = read_outcomes functional internally, broken externally). Adding this signal to future rounds would strengthen the read_outcomes diagnosis without requiring any change to the framework.
+
+---
+
+## Update: April 13, 2026
+
+Three weeks in. No outcomes resolved yet, but the trajectories are sharpening.
+
+**SPRB** — BLA slipped from H1 to Q4 2026. The FDA's February meeting minutes require one PPQ batch at submission and a second before mid-cycle review. The company [secured $50M from Avenue Capital](https://investors.sprucebio.com/news-releases/news-release-details/spruce-biosciences-secures-50-million-growth-capital-avenue) to fund the runway. FDA confirmed CSF HS-NRE as a surrogate endpoint for accelerated approval. The cash crisis SOAP-B flagged is deferred, not eliminated. Stock ~$66.50, up ~7% since publication. Still within window.
+
+**ATYR** — FDA Type C meeting is mid-April — this week or next. The [meeting was scheduled February 3](https://investors.atyrpharma.com/news-releases/news-release-details/atyr-pharma-announces-scheduling-fda-type-c-meeting-discuss). This is the decision point: if the FDA gives a constructive path, ATYR has five months to announce a new trial. If they shut it down, the PASS prediction is dead. Stock at $0.82, near 52-week low ($0.64). The market is pricing in SOAP-B's skepticism.
+
+**INMB** — [Pre-submission package filed with MHRA on February 10](https://inmunebio.com/index.php/newsroom/2026-news/muneiodvancestromowardsarketinguthor20260210050501). Company targets "mid-summer" for full MAA. The framework predicted FAIL — another timeline slip. "Mid-summer" for a company with this temporal pattern is optimistic. Stock flat at $1.29, near 52-week low ($1.09). The market agrees with the framework and Shkreli.
 
 ---
 

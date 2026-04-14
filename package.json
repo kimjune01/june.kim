@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev --port 12345",
+    "prebuild": "python3 -c \"import yaml,json;json.dump(yaml.safe_load(open('src/data/parts-bin.yml')),open('public/assets/parts-bin.json','w'))\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
