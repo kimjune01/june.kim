@@ -10,9 +10,9 @@ tags: cognition
 
 Consolidate reads from the store, finds patterns across episodes, and writes policy changes back to the substrate. Its contract is: many episodes in, fewer parameters out. The episodes shrink; the policy improves. Every cycle that adds experience without consolidating it grows the store linearly.
 
-[Soar](/diagnosis-soar) stores episodes without consolidating them. The forward pass works, but the episodic and semantic stores grow without a backward pass to compress them.
+[Soar](/diagnosis-soar) has consolidation for procedural memory: [chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)) reads from the decision trace and writes a new production rule, so the impasse that triggered it never fires again. That's a backward pass. But episodic and semantic memory have no equivalent — those stores grow without compression.
 
-Every system that stores episodes faces the same curve. Soar built [chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)). Transformers use gradient descent. Zep builds temporal knowledge graphs. Each one works. None share vocabulary.
+Every system that stores episodes faces the same curve. Soar built chunking. Transformers use gradient descent. Zep builds temporal knowledge graphs. Each one works. None share vocabulary.
 
 Video codecs are the shared vocabulary. Forty years of engineering on exactly this compression problem.
 

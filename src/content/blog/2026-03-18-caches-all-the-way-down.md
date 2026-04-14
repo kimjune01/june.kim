@@ -383,6 +383,8 @@ Active Consolidate within a Cache means there's at least one more level below. P
 
 Every thin wrapper that's genuinely CRUD passthrough either stays thin (it was at the floor, with nothing to learn) or grows filter and attend logic (it was above the floor, and usage pressure forced the missing roles in). Every ORM starts thin. The ones above the floor never stay that way.
 
+Scan bottom-up. Read the columns like [Jenga](https://en.wikipedia.org/wiki/Jenga): a dim cell with solid cells below it is a block you can pull — the tower holds. The layer below already handles the role at higher resolution; the dim cell is delegation, not deficiency. Filling it in duplicates work at coarser grain — premature optimization. But a dim cell with nothing below it is a block missing from the base. The real gaps are the columns that are dim from floor to ceiling.
+
 It's not wrappers all the way down. It's pipelines — until you hit the bool.
 
 ---
