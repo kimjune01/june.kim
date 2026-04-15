@@ -25,6 +25,7 @@ Break a post into beats. Check the arc. Flag what's off. Suggest fixes. Always w
      - A strong pledge doesn't prove the problem with data — it makes the reader feel what they already know.
      - If you have to convince them the system is broken, the pledge is weak.
      - Story and absurdity land harder than statistics.
+     - **Hook check**: the first sentence should be a concrete fact, claim, or observation — not a hypothetical scenario. Second-person present tense ("You push a fix...") puts the reader into a simulation before they know why they should care. Past-tense specifics ("The scribes did not lose a war") or direct claims ("Every chatbot that compacts stalls the conversation") center the payload immediately. Open with something that happened or something that's true, then let the reader find themselves in it.
    - **Arc**: does tension build and resolve? Does the reader feel the problem before getting the solution?
    - **Theme**: does the post stay on topic? Does any theme appear, disappear, then reappear without justification?
 
