@@ -11,6 +11,15 @@ Lint → Fix → Re-lint → converge. No human checkpoint between steps for vio
 
 ## Process
 
+Lint and re-lint fan out to fresh opus subagents — one per principle, in parallel. Fix and converge stay in the parent. A single long-running opus instance grows overconfident after nailing the first few principles and skims the rest; fresh contexts force rigor on each principle independently. The parent is the only continuity across passes.
+
+**Subagent contract (used in steps 1 and 3):**
+- One Agent per principle in the profile's review order, spawned in parallel
+- `subagent_type: "general-purpose"`, `model: "opus"`
+- Prompt carries: target identifier (path/URL/screenshot), principle name, instruction to read only `references/{principle}.md`, the evidence rules, and the finding format
+- Subagent returns findings only. Never fixes.
+- Parent consolidates, dedupes cross-principle duplicates (keep the one whose reference file matched best), preserves format
+
 ### 1. Lint
 
 **Determine target type.**
@@ -26,9 +35,9 @@ Lint → Fix → Re-lint → converge. No human checkpoint between steps for vio
 - `game-ui` — conveyance first, a11y later
 - `marketing` — skip states, focus on typography, color, spacing
 
-**Load references.** Read only relevant files from `references/`. Don't load all ten for a component review.
+**Fan out.** Spawn one opus subagent per principle in the profile's review order, per the subagent contract above. Parent does not read reference files itself — each subagent loads its own.
 
-**Gather evidence.** Before making any claim, inspect the target:
+**Evidence rules (passed to each subagent).** Before making any claim, inspect the target:
 - Source code: grep for state handling, spacing values, color values, ARIA attributes, transition/animation CSS, hardcoded pixels
 - Screenshots: describe layout, grouping, contrast, hierarchy, state shown
 - URLs: fetch, inspect DOM structure, check contrast, find interactive elements
@@ -75,7 +84,7 @@ If a fix requires a design decision the references don't resolve (e.g., which tr
 
 ### 3. Re-lint
 
-Run the lint pass again on the modified target. Same profile, same references.
+Re-spawn fresh opus subagents per the contract — same profile, same principles, same target. Not the same instances: the previous subagents saw their own findings and are biased toward confirming their prior work. Every pass starts cold.
 
 - Violations and risks from pass 1 should be gone. If any survive, the fix was incomplete — fix again.
 - New violations or risks from the fixes themselves → fix those too.
@@ -110,7 +119,7 @@ If pass 2 still produces new violations or risks after fixes, run one more pass 
 ## Rules
 
 - Every finding must point to observable evidence. No "improve hierarchy" without saying what's wrong and where.
-- Don't load all references for a focused review. A component doesn't need platform conventions.
+- Don't spawn subagents for principles outside the profile's review order. A component doesn't need platform conventions.
 - Don't report the same issue under multiple principles. Pick the most relevant one.
 - Accessibility violations are always high severity. They're locked doors, not aesthetic preferences.
 - Suggestions must name the principle they're grounded in. "This feels off" is not a finding.
