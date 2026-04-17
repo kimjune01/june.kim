@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260" font-family="system-ui, sans-serif">
+  <style>
+    .panel { fill: #fafafa; stroke: #e0e0e0; stroke-width: 1; rx: 10; }
+    .title { font-weight: 700; font-size: 14px; fill: #333; }
+    .label { font-size: 12px; fill: #555; }
+    .value { font-size: 12px; fill: #1565c0; font-weight: 600; text-anchor: end; }
+    .track { fill: #e0e0e0; rx: 3; }
+    .fill-bar { fill: #1565c0; rx: 3; }
+    .thumb { fill: #fff; stroke: #1565c0; stroke-width: 2; }
+    .stat-box { fill: #f5f5f5; stroke: #e0e0e0; stroke-width: 1; rx: 6; }
+    .stat-num { font-size: 20px; font-weight: 700; fill: #333; text-anchor: middle; }
+    .stat-label { font-size: 10px; fill: #888; text-anchor: middle; }
+    .toggle-bg { fill: #1565c0; rx: 8; }
+    .toggle-off { fill: #ccc; rx: 8; }
+    .toggle-dot { fill: #fff; }
+    .note { font-size: 10px; fill: #aaa; text-anchor: middle; }
+  </style>
+
+  <!-- Panel background -->
+  <rect class="panel" x="10" y="10" width="500" height="240"/>
+
+  <!-- Header -->
+  <text class="title" x="30" y="40">acme/backend</text>
+  <text class="label" x="30" y="56" fill="#888" font-size="11">shared forest</text>
+
+  <!-- Admission slider -->
+  <text class="label" x="30" y="92">Admission</text>
+  <text class="value" x="480" y="92">26 msgs</text>
+  <rect class="track" x="30" y="100" width="450" height="6"/>
+  <rect class="fill-bar" x="30" y="100" width="260" height="6"/>
+  <circle class="thumb" cx="290" cy="103" r="8"/>
+
+  <!-- Eviction slider -->
+  <text class="label" x="30" y="142">Eviction</text>
+  <text class="value" x="480" y="142">30 msgs</text>
+  <rect class="track" x="30" y="150" width="450" height="6"/>
+  <rect class="fill-bar" x="30" y="150" width="300" height="6"/>
+  <circle class="thumb" cx="330" cy="153" r="8"/>
+
+  <!-- Stats row -->
+  <rect class="stat-box" x="30" y="178" width="100" height="56"/>
+  <text class="stat-num" x="80" y="207">847</text>
+  <text class="stat-label" x="80" y="224">messages</text>
+
+  <rect class="stat-box" x="145" y="178" width="100" height="56"/>
+  <text class="stat-num" x="195" y="207">12</text>
+  <text class="stat-label" x="195" y="224">clusters</text>
+
+  <rect class="stat-box" x="260" y="178" width="100" height="56"/>
+  <text class="stat-num" x="310" y="207">3</text>
+  <text class="stat-label" x="310" y="224">contributors</text>
+
+  <!-- Shared toggle -->
+  <text class="label" x="395" y="198">Shared</text>
+  <rect class="toggle-bg" x="445" y="188" width="36" height="16"/>
+  <circle class="toggle-dot" cx="471" cy="196" r="6"/>
+
+  <text class="note" x="430" y="232">that's it.</text>
+
+</svg>
