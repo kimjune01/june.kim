@@ -1,60 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 210" font-family="system-ui, sans-serif">
   <style>
     .panel { fill: #fafafa; stroke: #e0e0e0; stroke-width: 1; rx: 10; }
     .title { font-weight: 700; font-size: 14px; fill: #333; }
     .label { font-size: 12px; fill: #555; }
     .value { font-size: 12px; fill: #1565c0; font-weight: 600; text-anchor: end; }
+    .hint { font-size: 9px; fill: #aaa; }
     .track { fill: #e0e0e0; rx: 3; }
     .fill-bar { fill: #1565c0; rx: 3; }
     .thumb { fill: #fff; stroke: #1565c0; stroke-width: 2; }
     .stat-box { fill: #f5f5f5; stroke: #e0e0e0; stroke-width: 1; rx: 6; }
-    .stat-num { font-size: 20px; font-weight: 700; fill: #333; text-anchor: middle; }
-    .stat-label { font-size: 10px; fill: #888; text-anchor: middle; }
-    .toggle-bg { fill: #1565c0; rx: 8; }
-    .toggle-off { fill: #ccc; rx: 8; }
-    .toggle-dot { fill: #fff; }
+    .stat-num { font-size: 18px; font-weight: 700; fill: #333; text-anchor: middle; }
+    .stat-label { font-size: 9px; fill: #888; text-anchor: middle; }
+    .pill { rx: 10; stroke-width: 1; }
+    .pill-active { fill: #1565c0; stroke: #1565c0; }
+    .pill-inactive { fill: #fff; stroke: #ccc; }
+    .pill-text-active { font-size: 11px; fill: #fff; text-anchor: middle; font-weight: 600; }
+    .pill-text-inactive { font-size: 11px; fill: #999; text-anchor: middle; }
     .note { font-size: 10px; fill: #aaa; text-anchor: middle; }
   </style>
 
-  <!-- Panel background -->
-  <rect class="panel" x="10" y="10" width="500" height="240"/>
+  <rect class="panel" x="10" y="10" width="500" height="190"/>
 
-  <!-- Header -->
-  <text class="title" x="30" y="40">acme/backend</text>
-  <text class="label" x="30" y="56" fill="#888" font-size="11">shared forest</text>
+  <text class="title" x="30" y="38">acme/backend</text>
 
-  <!-- Admission slider -->
-  <text class="label" x="30" y="92">Admission</text>
-  <text class="value" x="480" y="92">26 msgs</text>
-  <rect class="track" x="30" y="100" width="450" height="6"/>
-  <rect class="fill-bar" x="30" y="100" width="260" height="6"/>
-  <circle class="thumb" cx="290" cy="103" r="8"/>
+  <!-- Retention slider -->
+  <text class="label" x="30" y="68">Retention</text>
+  <text class="value" x="480" y="68">90 days</text>
+  <rect class="track" x="30" y="76" width="450" height="5"/>
+  <rect class="fill-bar" x="30" y="76" width="330" height="5"/>
+  <circle class="thumb" cx="360" cy="78" r="7"/>
+  <text class="hint" x="30" y="95">aggressive</text>
+  <text class="hint" x="462" y="95" text-anchor="end">permanent</text>
 
-  <!-- Eviction slider -->
-  <text class="label" x="30" y="142">Eviction</text>
-  <text class="value" x="480" y="142">30 msgs</text>
-  <rect class="track" x="30" y="150" width="450" height="6"/>
-  <rect class="fill-bar" x="30" y="150" width="300" height="6"/>
-  <circle class="thumb" cx="330" cy="153" r="8"/>
+  <!-- Access mode pills -->
+  <text class="label" x="30" y="122">Access</text>
+  <rect class="pill pill-inactive" x="80" y="110" width="68" height="22"/>
+  <text class="pill-text-inactive" x="114" y="125">private</text>
+  <rect class="pill pill-inactive" x="156" y="110" width="68" height="22"/>
+  <text class="pill-text-inactive" x="190" y="125">readonly</text>
+  <rect class="pill pill-active" x="232" y="110" width="68" height="22"/>
+  <text class="pill-text-active" x="266" y="125">shared</text>
 
-  <!-- Stats row -->
-  <rect class="stat-box" x="30" y="178" width="100" height="56"/>
-  <text class="stat-num" x="80" y="207">847</text>
-  <text class="stat-label" x="80" y="224">messages</text>
+  <!-- Stats -->
+  <rect class="stat-box" x="30" y="148" width="90" height="40"/>
+  <text class="stat-num" x="75" y="170">847</text>
+  <text class="stat-label" x="75" y="183">messages</text>
 
-  <rect class="stat-box" x="145" y="178" width="100" height="56"/>
-  <text class="stat-num" x="195" y="207">12</text>
-  <text class="stat-label" x="195" y="224">clusters</text>
+  <rect class="stat-box" x="130" y="148" width="90" height="40"/>
+  <text class="stat-num" x="175" y="170">9</text>
+  <text class="stat-label" x="175" y="183">clusters</text>
 
-  <rect class="stat-box" x="260" y="178" width="100" height="56"/>
-  <text class="stat-num" x="310" y="207">3</text>
-  <text class="stat-label" x="310" y="224">contributors</text>
+  <rect class="stat-box" x="230" y="148" width="90" height="40"/>
+  <text class="stat-num" x="275" y="170">14</text>
+  <text class="stat-label" x="275" y="183">contributors</text>
 
-  <!-- Shared toggle -->
-  <text class="label" x="395" y="198">Shared</text>
-  <rect class="toggle-bg" x="445" y="188" width="36" height="16"/>
-  <circle class="toggle-dot" cx="471" cy="196" r="6"/>
-
-  <text class="note" x="430" y="232">that's it.</text>
+  <text class="note" x="430" y="178">that's it.</text>
 
 </svg>

@@ -69,13 +69,13 @@ Managed forests open a product surface:
 | Forking and merging | Same semantics as git, but for understanding |
 | Querying | Not just similarity — "what do we know about this module," "what's been tried and failed" |
 
-The management interface is two sliders and a toggle:
+The management interface is a slider and a mode picker:
 
 <div style="max-width:min(90vw, 520px); margin:1.5em auto;">
-<img src="/assets/forest-controls.svg" alt="Forest control panel: admission slider (26 msgs), eviction slider (30 msgs), shared toggle, three stats (messages, clusters, contributors). That's it." style="width:100%; display:block;">
+<img src="/assets/forest-controls.svg" alt="Forest control panel: retention slider (90 days), shared toggle, three stats (messages, clusters, contributors). That's it." style="width:100%; display:block;">
 </div>
 
-Admission controls when messages graduate from the hot window to the cold forest. Eviction caps how many clusters the forest holds. In practice the optimal values are universal — they depend on the data structure, not the project. Convention over configuration. Most teams never touch either slider.
+Clustering parameters (merge threshold, cluster cap, retrieval depth) are convention — the optimal values depend on the data structure, not the project. What teams actually configure is retention and access. **Private**: one person's forest. **Readonly**: agents can query but not write — safe for untrusted or new contributors. **Shared**: full read-write for the team. Retention controls how long unqueried clusters survive. Everything else is defaults. Unlike git, there's no new interface to learn. No commands, no workflow changes. The agent reads from the forest and writes to it automatically. The user just gets better agents.
 
 The whole thing fits in a single SQLite database. Parent pointers, cluster summaries, TF-IDF vectors — all integers and short strings. A repo-wide forest for a mid-size team costs less than a coffee per month to host. The complexity is in the data structure, not the infrastructure. Same reason git won.
 
@@ -94,6 +94,8 @@ Spec-driven approaches ask humans to pre-structure context. The forest accumulat
 ### What's next
 
 The Gemini CLI PR ships the in-memory forest. Next is persistence: serialize to disk, load on session start. Then shared forests: multiple agents, one repo, one store. Each step is independently useful. Together they're infrastructure that doesn't exist yet.
+
+People hate collaborating because the overhead is brutal. Syncing context is work. Documenting decisions is work. Onboarding someone new is work. The forest eliminates the work of collaboration without eliminating the collaboration. What's left is the good part — building things together.
 
 The session is a window. The forest is the memory. Build the forest.
 
