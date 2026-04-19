@@ -1,0 +1,10 @@
+[project]
+name = "junebot"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "boto3>=1.35",
+]

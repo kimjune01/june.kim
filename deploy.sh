@@ -7,6 +7,11 @@ CF_DIST_ID="E1G9R7V0YY4VV1"
 echo "==> Building site"
 pnpm build
 
+if [ -x junebot/deploy-code.sh ]; then
+  echo "==> Deploying junebot Lambda code"
+  bash junebot/deploy-code.sh
+fi
+
 # ─── .html aliases ──────────────────────────────────────────────────────────
 # S3 serves /foo/ → foo/index.html, but /foo 404s unless foo.html exists.
 # Create aliases so both /foo and /foo/ work.

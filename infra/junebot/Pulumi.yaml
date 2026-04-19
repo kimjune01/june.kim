@@ -1,0 +1,3 @@
+name: junebot
+runtime: go
+description: Lambda + Function URL for june-bot (chat.june.kim blog bot)

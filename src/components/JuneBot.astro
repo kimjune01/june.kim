@@ -1,0 +1,194 @@
+---
+// Inline chat with june-bot at the bottom of a post.
+// Lazy-mounts on first focus to keep page weight low.
+interface Props { slug: string }
+const { slug } = Astro.props;
+// Same-origin via CloudFront behavior. Override with PUBLIC_JUNEBOT_URL for local dev.
+const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
+---
+
+<section class="junebot" data-slug={slug} data-endpoint={endpoint}>
+  <div class="junebot-header">
+    <span class="dot"></span>
+    <span>ask june-bot about this post</span>
+  </div>
+  <form class="junebot-form" autocomplete="off">
+    <input
+      type="text"
+      class="junebot-input"
+      placeholder="what's a 'part' in the parts bin?"
+      aria-label="Ask june-bot"
+      maxlength="500"
+    />
+    <button type="submit" class="junebot-send" aria-label="send">↵</button>
+  </form>
+  <div class="junebot-log" aria-live="polite"></div>
+</section>
+
+<style>
+  .junebot {
+    max-width: 500px;
+    margin: 48px auto 24px;
+    padding: 16px 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+    font-family: 'Lora', serif;
+  }
+  .junebot-header {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .junebot-header .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+  }
+  .junebot-form {
+    display: flex;
+    gap: 8px;
+  }
+  .junebot-input {
+    flex: 1;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+  }
+  .junebot-input:focus {
+    outline: none;
+    border-color: #888;
+  }
+  .junebot-send {
+    padding: 0 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+  }
+  .junebot-send:hover { background: #f0f0f0; }
+  .junebot-send:disabled { opacity: 0.4; cursor: wait; }
+  .junebot-log {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .junebot-log:empty { display: none; }
+  .junebot-turn {
+    padding: 10px 0;
+    border-top: 1px dashed #ddd;
+  }
+  .junebot-turn:first-child { border-top: none; }
+  .junebot-turn .who {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  .junebot-turn .who.bot { color: #22a06b; }
+  .junebot-turn.err .text { color: #b91c1c; }
+</style>
+
+<script>
+  type Turn = { role: 'user' | 'bot'; text: string; err?: boolean };
+
+  class JuneBot {
+    el: HTMLElement;
+    form: HTMLFormElement;
+    input: HTMLInputElement;
+    button: HTMLButtonElement;
+    log: HTMLElement;
+    slug: string;
+    endpoint: string;
+    history: { role: string; content: string }[] = [];
+
+    constructor(el: HTMLElement) {
+      this.el = el;
+      this.slug = el.dataset.slug || '';
+      this.endpoint = el.dataset.endpoint || '';
+      this.form = el.querySelector('.junebot-form') as HTMLFormElement;
+      this.input = el.querySelector('.junebot-input') as HTMLInputElement;
+      this.button = el.querySelector('.junebot-send') as HTMLButtonElement;
+      this.log = el.querySelector('.junebot-log') as HTMLElement;
+      this.form.addEventListener('submit', (e) => this.onSubmit(e));
+    }
+
+    addTurn(turn: Turn): HTMLElement {
+      const div = document.createElement('div');
+      div.className = 'junebot-turn' + (turn.err ? ' err' : '');
+      div.innerHTML =
+        `<div class="who${turn.role === 'bot' ? ' bot' : ''}">${turn.role}</div>` +
+        `<div class="text"></div>`;
+      (div.querySelector('.text') as HTMLElement).textContent = turn.text;
+      this.log.appendChild(div);
+      return div.querySelector('.text') as HTMLElement;
+    }
+
+    async onSubmit(e: Event) {
+      e.preventDefault();
+      const text = this.input.value.trim();
+      if (!text || !this.endpoint) {
+        if (!this.endpoint) this.addTurn({ role: 'bot', text: 'junebot endpoint not configured', err: true });
+        return;
+      }
+      this.input.value = '';
+      this.button.disabled = true;
+      this.addTurn({ role: 'user', text });
+      this.history.push({ role: 'user', content: text });
+      const out = this.addTurn({ role: 'bot', text: '' });
+
+      try {
+        const url = (this.endpoint || '') + '/api/chat';
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slug: this.slug, messages: this.history }),
+        });
+        if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = '';
+        let full = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const lines = buf.split('\n');
+          buf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            try {
+              const evt = JSON.parse(line.slice(6));
+              if (evt.type === 'text') {
+                full += evt.text;
+                out.textContent = full;
+              } else if (evt.type === 'error') {
+                out.textContent = full + '\n\n[error: ' + evt.text + ']';
+              }
+            } catch { /* skip malformed event */ }
+          }
+        }
+        this.history.push({ role: 'assistant', content: full });
+      } catch (err) {
+        out.textContent = `(request failed: ${(err as Error).message})`;
+        out.parentElement?.classList.add('err');
+      } finally {
+        this.button.disabled = false;
+        this.input.focus();
+      }
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('.junebot').forEach((el) => new JuneBot(el));
+</script>

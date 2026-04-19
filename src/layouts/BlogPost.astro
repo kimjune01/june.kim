@@ -1,5 +1,6 @@
 ---
 import '../styles/blog.css';
+import JuneBot from '../components/JuneBot.astro';
 
 interface Props {
   title: string;
@@ -82,7 +83,6 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     </Fragment>
   )}
 
-  <script is:inline>window.$crisp=[];window.CRISP_WEBSITE_ID="44344d36-d395-4737-8eec-720a5bc86c4d";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body>
   <aside class="logo">
@@ -105,6 +105,8 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
       </div>
       <slot />
     </article>
+
+    <JuneBot slug={slug} />
 
     {!isPoetry && (
       <a href="https://june.kim/feed.xml" class="rss-popup" id="rss-popup" title="Subscribe via RSS">

@@ -13,3 +13,9 @@ dist/
 .bundle
 .sass-cache
 _site/
+
+# junebot build artifacts
+junebot/.build/
+junebot/junebot.zip
+junebot/data/manifest.json
+infra/junebot/seed.zip
