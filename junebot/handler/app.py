@@ -4,7 +4,6 @@ import os
 import boto3
 from anthropic import Anthropic
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -27,17 +26,10 @@ def _load_api_key() -> str:
 
 
 client = Anthropic(api_key=_load_api_key())
+# CORS is handled by the Lambda Function URL config, not here — adding
+# CORSMiddleware would duplicate the Access-Control-Allow-Origin header
+# and browsers reject that with a NetworkError.
 app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://june.kim",
-        "https://www.june.kim",
-        "http://localhost:12345",
-    ],
-    allow_methods=["POST", "OPTIONS"],
-    allow_headers=["content-type"],
-)
 
 
 class ChatIn(BaseModel):

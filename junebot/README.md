@@ -142,7 +142,58 @@ To test the frontend locally, set `PUBLIC_JUNEBOT_URL=http://localhost:8080` in 
 
 ## Known gaps
 
-- **No conversation persistence** — each page load is a fresh history. Matches the site's ephemeral aesthetic.
-- **No rate limiting** at the Lambda layer. Function URL has no built-in throttle; if abuse shows up, add a tiny DynamoDB-backed token bucket or move behind CloudFront with WAF.
-- **Manifest freshness** — regenerated on every `deploy.sh`, so it's never more than a deploy stale.
-- **Reading-site pages** are raw Astro — the bot sees the full `index.astro` including frontmatter and component imports. Fine for Sonnet, but if output quality suffers there's a cleanup opportunity in `tools.py::read_reading`.
+- **No conversation persistence** — each question is one-shot, no history.
+- **No logs** — by design. The Lambda execution role has no CloudWatch Logs permissions, so errors vanish. If you need to debug, re-attach `AWSLambdaBasicExecutionRole` temporarily, reproduce, then remove it.
+- **No rate limiting** — Function URL has no throttle. Fine at current traffic; if abuse shows up, put CloudFront + WAF in front.
+- **Manifest freshness** — regenerated on every `deploy.sh`, never more than a deploy stale.
+- **Reading-site pages** — bot sees raw `.astro` including imports. Clean up in `tools.py::read_reading` if output quality suffers.
+
+## Gotchas (for the next Claude that works on this)
+
+Everything below cost real time on the first pass. Read before you touch.
+
+### 1. Lambda Function URL needs BOTH `InvokeFunctionUrl` AND `InvokeFunction` (Oct 2025 rule)
+
+AWS quietly changed the resource-policy requirement in October 2025: a public Function URL now rejects every request with a vague 403 "AccessDeniedException" unless the resource policy grants *both* actions. Most docs, CDK constructs, and Pulumi examples still only add `lambda:InvokeFunctionUrl`. If you see a blanket 403 with auth type NONE and a correct-looking policy, add this:
+
+```bash
+aws lambda add-permission --function-name junebot \
+  --statement-id PublicUrlInvokeFn \
+  --action lambda:InvokeFunction \
+  --principal '*' \
+  --region us-east-1
+```
+
+Note: `--function-url-auth-type NONE` is only valid for `InvokeFunctionUrl`; for `InvokeFunction` you pass principal `*` unconditionally.
+
+### 2. Python Lambda needs linux x86_64 wheels
+
+`pydantic_core`, which comes in with `anthropic`, is a Rust native extension. Installing deps on macOS arm produces wheels Lambda can't load — `ModuleNotFoundError: No module named 'pydantic_core._pydantic_core'`. `build-zip.sh` already pins this, but if you replicate outside that script:
+
+```bash
+pip install --platform manylinux2014_x86_64 \
+            --python-version 3.11 \
+            --only-binary=:all: \
+            --target .build \
+            anthropic fastapi uvicorn boto3
+```
+
+### 3. Astro `<style>` scoping does not apply to `innerHTML`-created elements
+
+The frontend component uses `innerHTML` to render streaming markdown and the Q/A pair. Astro's default scoped styles are keyed to `data-astro-cid-*` attributes that only exist on statically rendered elements — dynamically created nodes don't match. Symptom: CSS silently doesn't apply, and you spend a while debugging "why isn't this bold." Fix: `<style is:global>`. Keep class names prefixed (`.junebot-*`) to avoid collisions.
+
+### 4. Duplicate CORS headers kill browser requests
+
+Lambda Function URL CORS config and FastAPI `CORSMiddleware` each add `Access-Control-Allow-Origin`. Browsers hard-reject responses with two, throwing `NetworkError` with no useful message. Pick one. We let the Function URL handle CORS; FastAPI has no middleware.
+
+### 5. CloudFront OAC + Lambda Function URL POST is a dead end
+
+Attempting to front the Function URL with CloudFront OAC (to get same-origin + hide the Lambda URL) signs requests with SigV4. GET works. POST with a JSON body fails with "signature does not match" — a known, unfixed AWS gotcha. Nothing in the origin request policy recovers it reliably. If you want same-origin, put an HTTP API Gateway in front instead (loses streaming) or just keep the public Function URL.
+
+### 6. Pulumi stack has drift from manual CLI changes
+
+`infra/junebot/main.go` creates the Lambda, but the permissions + Function URL auth were adjusted by hand during debugging. `pulumi up` against a fresh clone would revert to AuthType NONE without the correct permission pair. If you're reconciling the stack, `pulumi refresh` first, then align `main.go` with actual state before applying.
+
+### 7. Manifest path split between zip and repo
+
+`tools.py` resolves paths one way in the Lambda zip (flat: `content/blog/`, `content/reading/`) and a different way in local dev (repo-relative: `src/content/blog/`, `src/pages/reading/`). The detection is in `tools.py`'s module-level block. Don't refactor it away unless you want to debug `(no post found)` in production.

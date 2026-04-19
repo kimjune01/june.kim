@@ -51,13 +51,9 @@ func main() {
 			return err
 		}
 
-		_, err = iam.NewRolePolicyAttachment(ctx, "junebot-logs", &iam.RolePolicyAttachmentArgs{
-			Role:      role.Name,
-			PolicyArn: pulumi.String("arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"),
-		})
-		if err != nil {
-			return err
-		}
+		// No CloudWatch Logs attachment — by design. junebot runs without logs so
+		// there's nothing to collect, rotate, or manage. If you need to debug,
+		// temporarily attach AWSLambdaBasicExecutionRole, reproduce, then detach.
 
 		_, err = iam.NewRolePolicy(ctx, "junebot-ssm-read", &iam.RolePolicyArgs{
 			Role: role.ID(),

@@ -3,29 +3,26 @@
 // Lazy-mounts on first focus to keep page weight low.
 interface Props { slug: string }
 const { slug } = Astro.props;
-// Same-origin via CloudFront behavior. Override with PUBLIC_JUNEBOT_URL for local dev.
 const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
 ---
 
-<section class="junebot" data-slug={slug} data-endpoint={endpoint}>
-  <div class="junebot-header">
-    <span class="dot"></span>
-    <span>ask june-bot about this post</span>
-  </div>
-  <form class="junebot-form" autocomplete="off">
-    <input
-      type="text"
-      class="junebot-input"
-      placeholder="what's a 'part' in the parts bin?"
-      aria-label="Ask june-bot"
-      maxlength="500"
-    />
-    <button type="submit" class="junebot-send" aria-label="send">↵</button>
-  </form>
-  <div class="junebot-log" aria-live="polite"></div>
-</section>
+{endpoint && (
+  <section class="junebot" data-slug={slug} data-endpoint={endpoint}>
+    <form class="junebot-form" autocomplete="off">
+      <input
+        type="text"
+        class="junebot-input"
+        placeholder="ask june-bot about this post"
+        aria-label="Ask june-bot about this post"
+        maxlength="500"
+      />
+      <button type="submit" class="junebot-send" aria-label="send">↵</button>
+    </form>
+    <div class="junebot-log" aria-live="polite"></div>
+  </section>
+)}
 
-<style>
+<style is:global>
   .junebot {
     max-width: 500px;
     margin: 48px auto 24px;
@@ -34,21 +31,6 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     border-radius: 10px;
     background: #fafafa;
     font-family: 'Lora', serif;
-  }
-  .junebot-header {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .junebot-header .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
   }
   .junebot-form {
     display: flex;
@@ -83,24 +65,115 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     line-height: 1.55;
   }
   .junebot-log:empty { display: none; }
-  .junebot-turn {
-    padding: 10px 0;
-    border-top: 1px dashed #ddd;
+  .junebot-qa { padding: 6px 0; }
+  .junebot-qa .row { margin-bottom: 10px; white-space: pre-wrap; }
+  .junebot-qa .row:last-child { margin-bottom: 0; }
+  .junebot-qa .label { font-weight: 700; }
+  .junebot-qa.err .text.a { color: #b91c1c; }
+  .junebot-qa.err .text.a a { color: inherit; text-decoration: underline; }
+  .junebot-qa .text.a p { margin: 0 0 8px 0; }
+  .junebot-qa .text.a p:last-child { margin-bottom: 0; }
+  .junebot-qa .text.a ul, .junebot-qa .text.a ol { margin: 6px 0 8px; padding-left: 22px; }
+  .junebot-qa .text.a li { margin-bottom: 3px; }
+  .junebot-qa .text.a h3, .junebot-qa .text.a h4, .junebot-qa .text.a h5, .junebot-qa .text.a h6 {
+    font-size: 15px; margin: 10px 0 4px; font-weight: 700;
   }
-  .junebot-turn:first-child { border-top: none; }
-  .junebot-turn .who {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #999;
-    margin-bottom: 4px;
+  .junebot-qa .text.a code {
+    background: #eee; padding: 1px 5px; border-radius: 3px; font-size: 13px;
   }
-  .junebot-turn .who.bot { color: #22a06b; }
-  .junebot-turn.err .text { color: #b91c1c; }
+  .junebot-qa .text.a pre {
+    background: #f0f0f0; padding: 8px 10px; border-radius: 5px;
+    overflow-x: auto; font-size: 13px; margin: 6px 0;
+  }
+  .junebot-qa .text.a pre code { background: none; padding: 0; }
+  .junebot-qa .text.a a { color: #2563eb; text-decoration: underline; }
+  .junebot-note {
+    margin-top: 14px;
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.45;
+  }
+  .junebot-note a { color: inherit; text-decoration: underline; text-decoration-color: #ccc; }
+  .junebot-note a:hover { color: #777; }
 </style>
 
 <script>
-  type Turn = { role: 'user' | 'bot'; text: string; err?: boolean };
+  // Tiny markdown renderer. HTML-escape first so any ambient HTML in the
+  // model's output is inert; then apply a small set of inline/block rules.
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderMarkdown(src: string): string {
+    const esc = escapeHtml(src);
+    const lines = esc.split('\n');
+    const out: string[] = [];
+    let inUl = false;
+    let inOl = false;
+    let inCode = false;
+    let paraBuf: string[] = [];
+
+    const flushPara = () => {
+      if (paraBuf.length === 0) return;
+      out.push('<p>' + inline(paraBuf.join(' ')) + '</p>');
+      paraBuf = [];
+    };
+    const closeLists = () => {
+      if (inUl) { out.push('</ul>'); inUl = false; }
+      if (inOl) { out.push('</ol>'); inOl = false; }
+    };
+
+    function inline(s: string): string {
+      return s
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" rel="nofollow">$1</a>');
+    }
+
+    for (const raw of lines) {
+      if (/^```/.test(raw)) {
+        flushPara(); closeLists();
+        if (inCode) { out.push('</code></pre>'); inCode = false; }
+        else { out.push('<pre><code>'); inCode = true; }
+        continue;
+      }
+      if (inCode) { out.push(raw); continue; }
+
+      const line = raw.trimEnd();
+      if (!line.trim()) { flushPara(); closeLists(); continue; }
+
+      const h = line.match(/^(#{1,4})\s+(.*)$/);
+      if (h) {
+        flushPara(); closeLists();
+        const lvl = h[1].length + 2; // h1 maps to <h3>
+        out.push(`<h${lvl}>${inline(h[2])}</h${lvl}>`);
+        continue;
+      }
+
+      const ul = line.match(/^\s*[-*]\s+(.*)$/);
+      if (ul) {
+        flushPara();
+        if (!inUl) { closeLists(); out.push('<ul>'); inUl = true; }
+        out.push('<li>' + inline(ul[1]) + '</li>');
+        continue;
+      }
+
+      const ol = line.match(/^\s*\d+\.\s+(.*)$/);
+      if (ol) {
+        flushPara();
+        if (!inOl) { closeLists(); out.push('<ol>'); inOl = true; }
+        out.push('<li>' + inline(ol[1]) + '</li>');
+        continue;
+      }
+
+      closeLists();
+      paraBuf.push(line);
+    }
+    flushPara(); closeLists();
+    if (inCode) out.push('</code></pre>');
+    return out.join('\n');
+  }
 
   class JuneBot {
     el: HTMLElement;
@@ -110,7 +183,6 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     log: HTMLElement;
     slug: string;
     endpoint: string;
-    history: { role: string; content: string }[] = [];
 
     constructor(el: HTMLElement) {
       this.el = el;
@@ -123,36 +195,59 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
       this.form.addEventListener('submit', (e) => this.onSubmit(e));
     }
 
-    addTurn(turn: Turn): HTMLElement {
-      const div = document.createElement('div');
-      div.className = 'junebot-turn' + (turn.err ? ' err' : '');
-      div.innerHTML =
-        `<div class="who${turn.role === 'bot' ? ' bot' : ''}">${turn.role}</div>` +
-        `<div class="text"></div>`;
-      (div.querySelector('.text') as HTMLElement).textContent = turn.text;
-      this.log.appendChild(div);
-      return div.querySelector('.text') as HTMLElement;
+    renderPair(question: string): HTMLElement {
+      this.log.innerHTML =
+        `<div class="junebot-qa">` +
+        `<div class="row"><strong class="label">Q:</strong> <span class="text q"></span></div>` +
+        `<div class="row"><strong class="label">A:</strong> <span class="text a"></span></div>` +
+        `</div>`;
+      (this.log.querySelector('.text.q') as HTMLElement).textContent = question;
+      return this.log.querySelector('.text.a') as HTMLElement;
+    }
+
+    appendNote(question: string) {
+      const qa = this.log.querySelector('.junebot-qa');
+      if (!qa || qa.querySelector('.junebot-note')) return;
+      const mailto = `mailto:june@june.kim?subject=${encodeURIComponent('re: ' + this.slug)}&body=${encodeURIComponent(question + '\n\n')}`;
+      const note = document.createElement('div');
+      note.className = 'junebot-note';
+      note.innerHTML = `nothing you ask is logged. <a href="${mailto}">email june directly</a>.`;
+      qa.appendChild(note);
+    }
+
+    showError(answer: HTMLElement, question: string, detail: string) {
+      const subject = encodeURIComponent('june-bot error');
+      const body = encodeURIComponent(
+        `Post: ${this.slug}\nQuestion: ${question}\nError: ${detail}`
+      );
+      answer.innerHTML = '';
+      answer.appendChild(document.createTextNode('Something broke on my end. Try again, or '));
+      const a = document.createElement('a');
+      a.href = `mailto:june@june.kim?subject=${subject}&body=${body}`;
+      a.textContent = 'email june@june.kim';
+      answer.appendChild(a);
+      answer.appendChild(document.createTextNode(` — error: ${detail}`));
+      (this.log.querySelector('.junebot-qa') as HTMLElement).classList.add('err');
     }
 
     async onSubmit(e: Event) {
       e.preventDefault();
-      const text = this.input.value.trim();
-      if (!text || !this.endpoint) {
-        if (!this.endpoint) this.addTurn({ role: 'bot', text: 'junebot endpoint not configured', err: true });
+      const question = this.input.value.trim();
+      if (!question) return;
+      if (!this.endpoint) {
+        this.showError(this.renderPair(question), question, 'endpoint not configured');
         return;
       }
       this.input.value = '';
       this.button.disabled = true;
-      this.addTurn({ role: 'user', text });
-      this.history.push({ role: 'user', content: text });
-      const out = this.addTurn({ role: 'bot', text: '' });
+      const answer = this.renderPair(question);
 
       try {
-        const url = (this.endpoint || '') + '/api/chat';
-        const res = await fetch(url, {
+        const res = await fetch(this.endpoint + '/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ slug: this.slug, messages: this.history }),
+          // Each question is one-shot — no prior turns.
+          body: JSON.stringify({ slug: this.slug, messages: [{ role: 'user', content: question }] }),
         });
         if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -160,6 +255,7 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
         const decoder = new TextDecoder();
         let buf = '';
         let full = '';
+        let completed = false;
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -172,17 +268,19 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
               const evt = JSON.parse(line.slice(6));
               if (evt.type === 'text') {
                 full += evt.text;
-                out.textContent = full;
+                answer.innerHTML = renderMarkdown(full);
+              } else if (evt.type === 'done') {
+                completed = true;
               } else if (evt.type === 'error') {
-                out.textContent = full + '\n\n[error: ' + evt.text + ']';
+                this.showError(answer, question, evt.text || 'server error');
+                return;
               }
             } catch { /* skip malformed event */ }
           }
         }
-        this.history.push({ role: 'assistant', content: full });
+        if (completed) this.appendNote(question);
       } catch (err) {
-        out.textContent = `(request failed: ${(err as Error).message})`;
-        out.parentElement?.classList.add('err');
+        this.showError(answer, question, (err as Error).message || 'network error');
       } finally {
         this.button.disabled = false;
         this.input.focus();
