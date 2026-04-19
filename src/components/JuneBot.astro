@@ -1,5 +1,5 @@
 ---
-// Inline chat with june-bot at the bottom of a post.
+// Inline chat with junebot at the bottom of a post.
 // Lazy-mounts on first focus to keep page weight low.
 interface Props { slug: string }
 const { slug } = Astro.props;
@@ -12,8 +12,8 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
       <input
         type="text"
         class="junebot-input"
-        placeholder="ask june-bot about this post"
-        aria-label="Ask june-bot about this post"
+        placeholder="ask junebot about this post"
+        aria-label="Ask junebot about this post"
         maxlength="500"
       />
       <button type="submit" class="junebot-send" aria-label="send">↵</button>
@@ -30,8 +30,16 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     border: 1px solid #ddd;
     border-radius: 10px;
     background: #fafafa;
-    font-family: 'Lora', serif;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
   }
+  /* Reset blog.css defaults (big h3/p/ul margins) for everything inside the log. */
+  .junebot-log, .junebot-log * {
+    margin: 0;
+    padding: 0;
+  }
+  .junebot-log { margin-top: 14px; }
   .junebot-form {
     display: flex;
     gap: 8px;
@@ -59,27 +67,40 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
   }
   .junebot-send:hover { background: #f0f0f0; }
   .junebot-send:disabled { opacity: 0.4; cursor: wait; }
-  .junebot-log {
-    margin-top: 14px;
-    font-size: 15px;
-    line-height: 1.55;
-  }
   .junebot-log:empty { display: none; }
-  .junebot-qa { padding: 6px 0; }
-  .junebot-qa .row { margin-bottom: 10px; white-space: pre-wrap; }
-  .junebot-qa .row:last-child { margin-bottom: 0; }
+  .junebot-qa .row { margin-bottom: 8px; }
+  .junebot-qa .text.q { white-space: pre-wrap; }
+  /* Once the answer is populated, the "A:" label is redundant — hide it. */
+  .junebot-qa.answered .row.a .label { display: none; }
+  /* Reserve space while streaming so the page settles once, not every token.
+     Answers shorter than the reservation look slightly padded; answers longer
+     expand past it. Released on `done` so final layout isn't bottom-padded. */
+  .junebot-qa.streaming { min-height: 60vh; }
+  .junebot-qa .row:last-of-type { margin-bottom: 0; }
   .junebot-qa .label { font-weight: 700; }
   .junebot-qa.err .text.a { color: #b91c1c; }
   .junebot-qa.err .text.a a { color: inherit; text-decoration: underline; }
-  .junebot-qa .text.a p { margin: 0 0 8px 0; }
-  .junebot-qa .text.a p:last-child { margin-bottom: 0; }
-  .junebot-qa .text.a ul, .junebot-qa .text.a ol { margin: 6px 0 8px; padding-left: 22px; }
-  .junebot-qa .text.a li { margin-bottom: 3px; }
-  .junebot-qa .text.a h3, .junebot-qa .text.a h4, .junebot-qa .text.a h5, .junebot-qa .text.a h6 {
-    font-size: 15px; margin: 10px 0 4px; font-weight: 700;
+  /* Answer body — tight blog-style spacing */
+  .junebot-qa .text.a > p { margin-bottom: 10px; }
+  .junebot-qa .text.a > p:last-child { margin-bottom: 0; }
+  .junebot-qa .text.a > ul,
+  .junebot-qa .text.a > ol { margin: 4px 0 10px; padding-left: 22px; list-style: revert; }
+  .junebot-qa .text.a > ul:last-child,
+  .junebot-qa .text.a > ol:last-child { margin-bottom: 0; }
+  .junebot-qa .text.a li { margin-bottom: 2px; }
+  .junebot-qa .text.a li:last-child { margin-bottom: 0; }
+  .junebot-qa .text.a h3,
+  .junebot-qa .text.a h4,
+  .junebot-qa .text.a h5,
+  .junebot-qa .text.a h6 {
+    font-size: 15px; margin: 12px 0 4px; font-weight: 700;
+    font-family: 'Avenir', sans-serif;
   }
+  .junebot-qa .text.a h3:first-child,
+  .junebot-qa .text.a h4:first-child { margin-top: 0; }
   .junebot-qa .text.a code {
     background: #eee; padding: 1px 5px; border-radius: 3px; font-size: 13px;
+    font-family: 'Fira Mono', Menlo, monospace;
   }
   .junebot-qa .text.a pre {
     background: #f0f0f0; padding: 8px 10px; border-radius: 5px;
@@ -87,6 +108,36 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
   }
   .junebot-qa .text.a pre code { background: none; padding: 0; }
   .junebot-qa .text.a a { color: #2563eb; text-decoration: underline; }
+  /* Loading indicator: three-dot pulse. Shows in the A: slot until the first
+     streamed token arrives, then fades out. Answers "is it working?" at the
+     point of attention — no saccade, no silent gap. */
+  .junebot-thinking {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .junebot-thinking span {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #bbb;
+    opacity: 0.3;
+    animation: junebot-pulse 1.2s ease-in-out infinite;
+  }
+  .junebot-thinking span:nth-child(2) { animation-delay: 0.18s; }
+  .junebot-thinking span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes junebot-pulse {
+    0%, 80%, 100% { opacity: 0.3; transform: scale(0.9); }
+    40% { opacity: 1; transform: scale(1.1); }
+  }
+  .junebot-qa .text.a {
+    transition: opacity 0.2s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .junebot-thinking span { animation: none; opacity: 0.6; }
+    .junebot-qa .text.a { transition: none; }
+  }
   .junebot-note {
     margin-top: 14px;
     font-size: 11px;
@@ -141,7 +192,13 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
       if (inCode) { out.push(raw); continue; }
 
       const line = raw.trimEnd();
-      if (!line.trim()) { flushPara(); closeLists(); continue; }
+      if (!line.trim()) {
+        // Blank line flushes any open paragraph, but does NOT close the
+        // enclosing list — blank lines between list items are a "loose"
+        // list in CommonMark, not a new list.
+        flushPara();
+        continue;
+      }
 
       const h = line.match(/^(#{1,4})\s+(.*)$/);
       if (h) {
@@ -172,7 +229,9 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     }
     flushPara(); closeLists();
     if (inCode) out.push('</code></pre>');
-    return out.join('\n');
+    // Join without newlines — a rendering container may have white-space:
+    // pre-wrap, and literal \n between block tags would become visible gaps.
+    return out.join('');
   }
 
   class JuneBot {
@@ -197,9 +256,13 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
 
     renderPair(question: string): HTMLElement {
       this.log.innerHTML =
-        `<div class="junebot-qa">` +
+        `<div class="junebot-qa streaming">` +
         `<div class="row"><strong class="label">Q:</strong> <span class="text q"></span></div>` +
-        `<div class="row"><strong class="label">A:</strong> <span class="text a"></span></div>` +
+        `<div class="row a"><strong class="label">A:</strong> <span class="text a">` +
+          `<span class="junebot-thinking" aria-label="junebot is thinking">` +
+            `<span></span><span></span><span></span>` +
+          `</span>` +
+        `</span></div>` +
         `</div>`;
       (this.log.querySelector('.text.q') as HTMLElement).textContent = question;
       return this.log.querySelector('.text.a') as HTMLElement;
@@ -211,12 +274,19 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
       const mailto = `mailto:june@june.kim?subject=${encodeURIComponent('re: ' + this.slug)}&body=${encodeURIComponent(question + '\n\n')}`;
       const note = document.createElement('div');
       note.className = 'junebot-note';
-      note.innerHTML = `nothing you ask is logged. <a href="${mailto}">email june directly</a>.`;
+      note.innerHTML =
+        `nothing you ask is logged. <a href="${mailto}">email june directly</a> ` +
+        `· <a href="https://github.com/kimjune01/june.kim/tree/master/junebot" target="_blank" rel="noopener">junebot source</a>.`;
       qa.appendChild(note);
     }
 
+    unreserve() {
+      (this.log.querySelector('.junebot-qa') as HTMLElement)?.classList.remove('streaming');
+    }
+
     showError(answer: HTMLElement, question: string, detail: string) {
-      const subject = encodeURIComponent('june-bot error');
+      this.unreserve();
+      const subject = encodeURIComponent('junebot error');
       const body = encodeURIComponent(
         `Post: ${this.slug}\nQuestion: ${question}\nError: ${detail}`
       );
@@ -268,9 +338,22 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
               const evt = JSON.parse(line.slice(6));
               if (evt.type === 'text') {
                 full += evt.text;
-                answer.innerHTML = renderMarkdown(full);
+                // First token: atmospheric swap — brief fade replaces the
+                // thinking dots with real content, drop the redundant "A:"
+                // label now that the answer speaks for itself.
+                if (answer.querySelector('.junebot-thinking')) {
+                  answer.style.opacity = '0';
+                  setTimeout(() => {
+                    answer.innerHTML = renderMarkdown(full);
+                    answer.style.opacity = '';
+                    (this.log.querySelector('.junebot-qa') as HTMLElement)?.classList.add('answered');
+                  }, 150);
+                } else {
+                  answer.innerHTML = renderMarkdown(full);
+                }
               } else if (evt.type === 'done') {
                 completed = true;
+                (this.log.querySelector('.junebot-qa') as HTMLElement)?.classList.remove('streaming');
               } else if (evt.type === 'error') {
                 this.showError(answer, question, evt.text || 'server error');
                 return;
