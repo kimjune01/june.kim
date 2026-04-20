@@ -91,7 +91,7 @@ I once watched *The Act of Killing*, a documentary in which perpetrators of the 
 
 The structure transfers even if the moral weight does not. A practice that looks pathological from outside is unremarkable from inside, because the local rituals make sense to the people performing them.
 
-The invisibility runs to the reader. Appeal to authority is a named fallacy. Did you ever believe someone because they studied at Harvard or Stanford? If so, you're a part of the problem. That reflex, unnoticed and routine, is the symptom under diagnosis.
+The invisibility runs to the reader. Appeal to authority is a named fallacy. Did you ever believe someone because they studied at Harvard or Stanford? Did you find a paper more credible because it had many citations? If so, you're a part of the problem. That reflex, unnoticed and routine, is the symptom under diagnosis.
 
 Not every appeal to authority is a fallacy. For a layperson deferring to expert consensus, it is a reasonable division of epistemic labor; you can't personally check every claim. For one scientist citing another scientist's credence, when both have the tools to verify, it is a fallacy masquerading as evidence. You have been trained to treat the second as the first.
 
