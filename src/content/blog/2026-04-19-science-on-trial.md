@@ -201,7 +201,7 @@ Publishing the protocol does not mean announcing results to the world. It means 
 
 The exhibits close. The jury's job begins.
 
-Ask whether you can reproduce what you cite. Reject credence on credence alone; demand the evidence, the methodology, the thought process that led to the conclusion. Follow the outside jury: Retraction Watch, Data Colada, Bik, PubPeer. Fund them where you can.
+Ask whether you can reproduce what you cite. Reject credence on credence alone; demand the evidence, the methodology, the thought process that led to the conclusion. Follow the outside jury: Retraction Watch, Data Colada, Bik, PubPeer. Fund them where you can. Learn [the protocol's four-century history](/reading/scientific-method). Each step was forced by a prior failure.
 
 If you write science: pre-register, publish the nulls, keep the log, release the data, write the replication. Run every draft through an LLM adversary first: every citation, every claim, every inference. If the LLM can find the hole, the replicator will.
 
@@ -211,7 +211,7 @@ The reforms exist. The incentives don't.
 
 ### My own exhibit
 
-I have done this. In [a preregistered experiment I ran](/theory-is-load-bearing), the final posterior came in at 0.949 — 0.001 below the 0.95 threshold I had committed to beforehand. By my own rules, the result does not confirm. I said so. It was harder than any positive result I have ever published. I am not asking anyone to do what I haven't done. I am asking you to do it next.
+I have done this. In [a preregistered experiment I ran](/theory-is-load-bearing), the final posterior came in at 0.949 — 0.001 below the 0.95 threshold I had committed to beforehand. By my own rules, the result does not confirm. I said so. It was harder than any positive result I have ever published. Your turn.
 
 ---
 
