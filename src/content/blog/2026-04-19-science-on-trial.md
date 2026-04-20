@@ -211,7 +211,7 @@ The reforms exist. The incentives don't.
 
 ### My own exhibit
 
-I have done this. In [a preregistered experiment I ran](/theory-is-load-bearing), the final posterior came in at 0.949 — 0.001 below the 0.95 threshold I had committed to beforehand. By my own rules, the result does not confirm. I said so. It was harder than any positive result I have ever published. Your turn.
+I have done this. In [a preregistered experiment I ran](/theory-is-load-bearing), the final posterior came in at 0.949 — 0.001 below the 0.95 threshold I had committed to beforehand. By my own rules, the result does not confirm. I said so. It was harder than any positive result I have ever published. This is the flex. Your turn.
 
 ---
 
