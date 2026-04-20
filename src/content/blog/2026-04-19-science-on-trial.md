@@ -209,6 +209,10 @@ If you fund or hire: trail quality as the metric. Mandate data sharing. Require 
 
 The reforms exist. The incentives don't.
 
+### My own exhibit
+
+I have done this. In [a preregistered experiment I ran](/theory-is-load-bearing), the final posterior came in at 0.949 — 0.001 below the 0.95 threshold I had committed to beforehand. By my own rules, the result does not confirm. I said so. It was harder than any positive result I have ever published. I am not asking anyone to do what I haven't done. I am asking you to do it next.
+
 ---
 
 *Written via the [double loop](/double-loop).*
