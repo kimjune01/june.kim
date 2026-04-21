@@ -24,45 +24,34 @@ The instrument took a day and a half to build, two hours to run. All to produce 
 
 ### Batch 1
 
-I ran the first batch on Claude Sonnet 4.6. Thirty trials. The scorer printed this:
-
-```
-decision: failure
-ambiguous_rate: 0.53
-P(met_recall < 0.70): 0.99
-P(not_met_recall < 0.70): 0.9997
-```
-
-Fifty-three percent of abstracts classified as `ambiguous`. Of the trials where the classifier committed, it was right ten times out of fourteen. That's 71% accuracy on commits, which isn't great, but doesn't fail the prereg. The killer was the abstention: an abstract the classifier can't commit on counts as a recall miss. Half the trials in that bucket means recall is structurally capped near 47% no matter what. The Bayesian rule fired failure correctly and early.
-
-My first thought was that Sonnet was being lazy.
-
-I re-ran on Opus 4.7 expecting the stronger model to push the abstention rate down. It did the opposite.
+I ran the first batch on Claude. Thirty trials. The scorer printed this:
 
 ```
 decision: failure
 ambiguous_rate: 0.66
+P(met_recall < 0.70): 0.9998
+P(not_met_recall < 0.70): 0.9997
 ```
 
-Opus hedged on two thirds of abstracts. On the ten trials where it committed, it was right eight times. Eighty percent, exactly at the prereg bar. But the commit rate collapsed. Stronger model, more abstention, less data.
+Two thirds of abstracts classified as `ambiguous`. Of the ten trials where the classifier committed, it was right eight times. Eighty percent on commits, right at the prereg bar for precision. But the commit rate collapsed. An abstract the classifier can't commit on counts as a recall miss, which caps recall near 33% no matter what. The Bayesian rule fired failure correctly and early.
 
-I sat with that. It cuts the wrong way: the AI industry's pitch is that bigger models see more, and here the bigger model refused to say more. Better at being unwilling.
+I sat with that. A model that could read was refusing to read, two out of every three abstracts. It wouldn't say.
 
 ### What the classifier was actually doing
 
-The auditor prompt told Opus: *if the abstract is unclear, hedged, or spin-heavy, prefer the `ambiguous` class. Do not try to infer what the authors meant if the abstract does not clearly say it.* Opus followed instructions.
+The auditor prompt was explicit: *if the abstract is unclear, hedged, or spin-heavy, prefer the `ambiguous` class. Do not try to infer what the authors meant if the abstract does not clearly say it.* The model followed instructions.
 
 But for trials with posted results, the registry reports primary_outcome_X, p-value, CI, pass/fail on the pre-specified threshold. Far less ambiguous than the abstract. Same trial, same authors, same moment, and the structured record says the answer clearly where the abstract blurs it.
 
 This is a known thing in the literature. [Boutron 2010](https://pubmed.ncbi.nlm.nih.gov/20501928/) found spin in 58% of RCT abstracts with non-significant primaries. [Yavchitz](https://pubmed.ncbi.nlm.nih.gov/26845744/), Lazarus, and others followed up. Authors frame. They emphasize the clinically interesting secondary, call a p-value of 0.07 a trend, foreground the post-hoc subgroup. Each move is individually defensible as craft. Aggregated over a literature, they produce a systematic gap between what the registries know and what the abstracts say.
 
-My classifier wasn't broken. It was picking up the pattern Boutron measured by hand: abstract text that doesn't cleanly support classification of the registered primary. When Opus said `ambiguous`, it was telling me the abstract itself wouldn't commit. That's diagnostic, not defective.
+My classifier wasn't broken. It was picking up the pattern Boutron measured by hand: abstract text that doesn't cleanly support classification of the registered primary. When the model said `ambiguous`, it was telling me the abstract itself wouldn't commit. That's diagnostic, not defective.
 
 I'd been optimizing for a premise the literature doesn't cooperate with: that an LLM could read an abstract and tell me what the trial actually found. The abstract is what the author wanted me to see. The registry is what actually happened. They diverge. My tool was measuring the divergence and I was reading it as a failure.
 
 ### The pivot
 
-I'd spent thirty-six hours of setup and two of runtime to build a Bayesian harness that detects a null from thirty trials. If I'd skipped it and run thirty abstracts through Opus with an auditor prompt, I'd have learned the same thing in an afternoon. The instrumentation was ceremonial, not load-bearing. The signal was clear enough to see at N=30.
+I'd spent thirty-six hours of setup and two of runtime to build a Bayesian harness that detects a null from thirty trials. If I'd skipped it and run thirty abstracts through the classifier with an auditor prompt, I'd have learned the same thing in an afternoon. The instrumentation was ceremonial, not load-bearing. The signal was clear enough to see at N=30.
 
 More importantly: if abstracts and registries diverge systematically, an abstract-derived author ratio inherits the divergence. Computing a null-flex ratio from abstracts means computing a ratio of what the authors told readers. The ratio would be a spin ratio, not a track record. Worse, the authors who spin are the ones it would most need to catch, and they're precisely the ones whose abstracts would read as ambiguous. The tool would be least accurate exactly where it mattered most.
 
@@ -78,7 +67,7 @@ I haven't built it yet. The [spec](https://github.com/kimjune01/null-flex/blob/m
 
 Three things the classifier run taught me, none of which I'd have bet on going in.
 
-One: the stronger model was more honest. I expected Opus to commit where Sonnet hedged. Opus hedged more, and was more accurate when it did commit. The capability to read the abstract was there either way. What Opus added was the willingness to refuse rather than guess. I've only seen it in this setup. It's what better calibration should look like.
+One: build the instrument that can kill the idea, not the one that can prove it. I spent thirty-six hours on a Bayesian harness for a signal that showed up in thirty trials. The sophisticated success machinery was for the 80% bar I didn't get near. For detecting failure, N=30 plus a confusion matrix would have been enough. Next time I'll start with the minimum falsifier.
 
 Two: preregistration works when you don't want it to. The prereg rule fired failure earlier than I wanted, on evidence I would have talked myself past if I'd been eyeballing it. I'd have said "let's see what happens at 100 trials" and rationalized another fifty. The rule didn't care what I wanted.
 
@@ -86,4 +75,4 @@ Three: the instrument you build is usually telling you something about the quest
 
 The null-flex attempt failed as a product. As a diagnostic, it worked better than anything else I'd built that week.
 
-The repo is at [github.com/kimjune01/null-flex](https://github.com/kimjune01/null-flex), with the full audit trail including the thirty trials and both models' confusion matrices. The pivoted spec is the document I'm still staring at.
+The repo is at [github.com/kimjune01/null-flex](https://github.com/kimjune01/null-flex), with the full audit trail: the thirty trials, the confusion matrix, the raw responses. The pivoted spec is the document I'm still staring at.
