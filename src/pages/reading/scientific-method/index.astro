@@ -94,7 +94,34 @@ import Neighbors from "../../../components/Neighbors.astro";
 
     <h2>The arc</h2>
 
-    <p>Bacon says: observe, don't speculate. Descartes says: doubt everything, rebuild from certainty. Hume says: your observations don't prove anything. Mill says: here's how to extract causes anyway. Boole says: logic is algebra, make it mechanical. Chamberlin says: hold multiple hypotheses or you'll fool yourself. Popper says: you can't prove a theory, only disprove it. Kuhn says: scientists don't actually work that way. Meehl says: more data should make tests harder, but in soft psychology it makes them easier — the paradox that predicted the replication crisis by forty years. Feynman says: the first principle is that you must not fool yourself. Pearl says: here is the notation for asking what would have happened if you had reached in and changed something. Ioannidis says: you're fooling yourself. Mayo says: here's how to stop. Gwern says: any method can be gamed, so publish the trail. He calls it <em>long content</em>.</p>
+    <p>Each thinker responds to what broke in the previous step. Read top to bottom — the prior answer always generated the next problem.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Thinker</th>
+            <th class="text-left py-2 text-gray-400">says</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Bacon</td><td class="text-gray-400">observe, don't speculate.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Descartes</td><td class="text-gray-400">doubt everything, rebuild from certainty.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Hume</td><td class="text-gray-400">your observations don't prove anything.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Mill</td><td class="text-gray-400">here's how to extract causes anyway.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Boole</td><td class="text-gray-400">logic is algebra, make it mechanical.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Chamberlin</td><td class="text-gray-400">hold multiple hypotheses or you'll fool yourself.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Popper</td><td class="text-gray-400">you can't prove a theory, only disprove it.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Kuhn</td><td class="text-gray-400">scientists don't actually work that way.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Meehl</td><td class="text-gray-400">more data should make tests harder; in soft psychology it makes them easier. The paradox that predicted the replication crisis by forty years.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Feynman</td><td class="text-gray-400">the first principle is that you must not fool yourself.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Pearl</td><td class="text-gray-400">here is the notation for asking what would have happened if you had reached in and changed something.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Ioannidis</td><td class="text-gray-400">you're fooling yourself.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Mayo</td><td class="text-gray-400">here's how to stop.</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Gwern</td><td class="text-gray-400">any method can be gamed, so publish the trail. He calls it <em>long content</em>.</td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <p>Gwern's response is procedural: discipline the researcher. Shafer, Vovk, Grünwald, and Ramdas push at a different layer: the evidence measure itself. The Fisherian apparatus asked "how surprised should I be under the null?" That question is fragile under optional stopping and hard to compose without bespoke corrections (alpha-spending, group-sequential designs, Bonferroni). E-values ask "how much would I bet against the null?" instead. The composition rules and anytime guarantees fall out of one supermartingale inequality, in the constructions where the bets chain validly. Two responses to the same crisis at different layers: discipline (Gwern, Mayo, open-science reforms) and machinery (SAVI). The machinery has its own lineage older than the crisis: Ville's 1939 inequality, Wald's 1947 sequential analysis, the Robbins–Siegmund line of the 1960s. All three ran parallel to Fisher's fixed-horizon view for decades. SAVI is the modern consolidation of that parallel tradition, not a sudden invention prompted by Ioannidis. Neither layer subsumes the other.</p>
 
