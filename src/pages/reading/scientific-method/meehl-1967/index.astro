@@ -1,0 +1,128 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Meehl 1967 — Theory-testing in psychology and physics" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Theory-testing in psychology and physics</h1>
+    <p class="text-gray-400 text-sm mb-6">Paul E. Meehl · 1967 · <a href="https://www.cambridge.org/core/journals/philosophy-of-science/article/theorytesting-in-psychology-and-physics-a-methodological-paradox/F6CDBDBE5D960C356178BDA5D87EB4BC">Philosophy of Science 34(2), 103–115</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">In physics, sharper instruments make theories harder to corroborate. In psychology, more data makes the null easier to reject. Identical method, opposite direction. The field that moves faster is the one where success is harder to fake.</p>
+    </div>
+
+    <!-- SVG: Inversion between physics and psychology -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 540 260" class="w-full max-w-xl" style="font-family: ui-monospace, monospace;">
+        <!-- Physics panel (left) -->
+        <text x="135" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Physics</text>
+        <text x="135" y="34" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">theory predicts a narrow value</text>
+
+        <rect x="30" y="50" width="210" height="90" rx="4" fill="#a1a1aa" fill-opacity="0.1" stroke="#71717a" stroke-width="1" stroke-opacity="0.4"/>
+
+        <!-- Narrow prediction band -->
+        <rect x="115" y="70" width="40" height="50" rx="2" fill="#60a5fa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <text x="135" y="88" text-anchor="middle" fill="#60a5fa" font-size="7" fill-opacity="0.7">predicted</text>
+        <text x="135" y="98" text-anchor="middle" fill="#60a5fa" font-size="7" fill-opacity="0.7">interval</text>
+
+        <!-- Data point inside narrow band -->
+        <circle cx="132" cy="108" r="4" fill="#60a5fa" stroke="#60a5fa" stroke-width="1.5"/>
+
+        <text x="135" y="158" text-anchor="middle" fill="#60a5fa" font-size="10">↑ more data → tighter bands</text>
+        <text x="135" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">harder to hit the prediction</text>
+        <text x="135" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">success is a real risk survived</text>
+
+        <!-- Psychology panel (right) -->
+        <text x="405" y="20" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">Soft psychology</text>
+        <text x="405" y="34" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">theory predicts a direction</text>
+
+        <rect x="300" y="50" width="210" height="90" rx="4" fill="#a1a1aa" fill-opacity="0.1" stroke="#71717a" stroke-width="1" stroke-opacity="0.4"/>
+
+        <!-- Wide prediction half -->
+        <rect x="405" y="65" width="100" height="60" rx="2" fill="#f472b6" fill-opacity="0.12" stroke="#f472b6" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <text x="455" y="85" text-anchor="middle" fill="#f472b6" font-size="7" fill-opacity="0.7">"X &gt; Y"</text>
+        <text x="455" y="97" text-anchor="middle" fill="#f472b6" font-size="7" fill-opacity="0.7">half the number line</text>
+
+        <!-- Data point anywhere in the half -->
+        <circle cx="430" cy="110" r="4" fill="#f472b6" stroke="#f472b6" stroke-width="1.5"/>
+        <circle cx="470" cy="100" r="4" fill="#f472b6" stroke="#f472b6" stroke-width="1.5" fill-opacity="0.4"/>
+        <circle cx="490" cy="115" r="4" fill="#f472b6" stroke="#f472b6" stroke-width="1.5" fill-opacity="0.3"/>
+
+        <text x="405" y="158" text-anchor="middle" fill="#f472b6" font-size="10">↑ more data → easier "significant"</text>
+        <text x="405" y="172" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">prior P(success) approaches ½</text>
+        <text x="405" y="185" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.5">success corroborates very weakly</text>
+
+        <!-- Inversion arrow -->
+        <line x1="245" y1="95" x2="295" y2="95" stroke="#71717a" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2,3"/>
+        <text x="270" y="88" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">same N</text>
+        <text x="270" y="108" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">opposite direction</text>
+
+        <!-- Caption -->
+        <text x="270" y="225" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">In physics, statistics punishes the theory. In soft psychology, it rewards it.</text>
+        <text x="270" y="242" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.35">Same machinery. Inverted incentive gradient.</text>
+      </svg>
+    </div>
+
+    <h2>The paradox</h2>
+
+    <p>Meehl's observation is short and brutal. In physics, a theory specifies a point value with a tolerance. The experimenter improves the measurement. The tolerance shrinks. Now the theory has to pass through a narrower gate to count as corroborated. More data is a tougher test. Success means more.</p>
+
+    <p>In soft psychology — his examples are personality, clinical, social — a theory specifies a direction. "Group A will score higher than group B on this scale." The experimenter increases the sample size. The standard error shrinks. Any true correlation, however small, eventually reaches significance. The prior probability that <em>some</em> difference exists in the predicted direction approaches one half, then higher, as N grows. More data is an easier test. Success means less.</p>
+
+    <p>Same machinery — null hypothesis, p-value, rejection region — applied in two fields. In one, the method corroborates severely. In the other, it corroborates by ritual.</p>
+
+    <h2>The crud factor</h2>
+
+    <p>The mechanism is not subtle. In any large dataset of social-science variables, almost everything correlates with almost everything. Meehl reports Minnesota data on 55,000 high-school students measured on 45 miscellaneous variables: the majority of pairwise associations were statistically significant, often at tiny p-values. Sex, birth order, religious affiliation, family size, room at home, club membership — all of them intercorrelated, mostly because in populations of that size the true correlation is never exactly zero.</p>
+
+    <p>He calls this the <strong>crud factor</strong>. The nil null hypothesis — the claim that two variables are exactly uncorrelated — is essentially never true in observational soft science. Rejecting it carries almost no information about any particular theory. It tells you the variables are not both random noise. That is not a finding.</p>
+
+    <p>What distinguishes a real corroboration from crud is how tight the prediction was before the data came in. A theory that specifies <em>the effect is positive, greater than 0.20, in this subpopulation, under this manipulation</em> makes a risky claim. A theory that specifies <em>there is some positive effect somewhere</em> makes a claim the crud factor guarantees. Nominally both get "significant" in a large enough sample. Only the first one was tested.</p>
+
+    <h2>Why it matters</h2>
+
+    <p>Meehl is writing in 1967, before the replication crisis had a name. The paper is prescient — he is explaining, in advance, why soft psychology's literature will be full of successful tests that do not compound into cumulative theory. His diagnosis is not that researchers cheat. It is that the method they use cannot tell corroboration from crud without help from theoretical precision, and theoretical precision is exactly what soft psychology does not produce.</p>
+
+    <p>The paper argues that later reform moves — preregistration, open data, replication — address symptoms. They do not fix the upstream problem, which is that verbal theories over loosely-defined constructs do not make risky predictions, so no statistical apparatus can do the corroboration work it is being asked to do. The discipline is not statistical. It is <em>epistemological</em>, in the sense of the link between the theory and what it commits you to.</p>
+
+    <p>Meehl returned to this theme repeatedly. His 1990 "<a href="https://meehl.umn.edu/sites/meehl.umn.edu/files/files/144theoretical-risks.pdf">Theoretical risks and tabular asterisks</a>" (<em>Psychological Reports</em>) is the harder-hitting follow-up: significance tests in soft psychology are "a potent but sterile intellectual rake." His 1997 "<a href="https://meehl.umn.edu/sites/meehl.umn.edu/files/files/169problemisepistemology.pdf">The problem is epistemology, not statistics</a>" is the title as the argument — no Bayesian, frequentist, or preregistration fix reaches the construct-theory gap.</p>
+
+    <h2>Risky vs. non-risky predictions</h2>
+
+    <p>The useful vocabulary Meehl leaves behind is the distinction between <em>point</em> and <em>directional</em> predictions, and between <em>risky</em> and <em>non-risky</em> tests. Physics usually tests point predictions: the anomalous precession of Mercury's perihelion is 43 arcseconds per century; general relativity predicts 43. Any other number falsifies. Soft psychology typically tests directional predictions: treatment group higher than control. The population of possible outcomes that would falsify is half the real line. The population that would corroborate is the other half. Under any prior belief that the manipulation does something, the test is non-risky.</p>
+
+    <p>Meehl's suggested remedy is to make predictions risky — narrow intervals, point values where possible, multi-parameter joint predictions where not. This is an unpopular move because it requires theories that commit to numbers, and most verbal theories in soft psychology do not. His deeper point is that if your theory does not commit to a number, you should not be running significance tests on it; the test will always pass.</p>
+
+    <h2>Connection to the rest</h2>
+
+    <p><a href="/reading/scientific-method/popper-1934/">🔬 Popper</a> said risky predictions are what separate science from pseudoscience. Meehl is Popper applied to psychology. Where Popper frames risk in terms of logical content, Meehl frames it in statistical-power terms: a directional prediction with high N has low risk because the prior P(success) is ~½ <em>even if the theory is wrong</em>.</p>
+
+    <p><a href="/reading/scientific-method/platt-1964/">🔬 Platt</a> recommended strong inference — design experiments that discriminate between alternatives. Meehl explains why strong inference is harder in soft psychology: the alternatives often all predict the same direction, so no experiment discriminates.</p>
+
+    <p><a href="/reading/scientific-method/ioannidis-2005/">🔬 Ioannidis</a> gave the Bayesian accounting of the replication crisis. Meehl gave the structural explanation thirty-eight years earlier. The 96% positive-result rate Sterling and Fanelli documented is what Meehl's paradox predicts: under directional prediction with high N, ~100% of tests succeed, because directional prediction is almost always non-risky.</p>
+
+    <p><a href="/reading/scientific-method/mayo-2018/">🔬 Mayo</a> formalized the severity requirement: a test only corroborates if it had a real chance of catching the hypothesis being wrong. Meehl's methodological paradox is the severity requirement applied to a field that systematically violates it. Mayo gives the criterion; Meehl shows the mechanism.</p>
+
+    <h2>What he did not say</h2>
+
+    <p>Meehl did not argue for abandoning psychology. He argued for changing what counts as a test. He kept doing psychology, built out the <a href="/reading/scientific-method/mayo-2018/">construct validity</a> machinery with <a href="https://psycnet.apa.org/record/1956-04265-001">Cronbach (1955)</a>, and took the epistemological gap between theory and measurement seriously rather than statistically. The reform proposal embedded in the 1967 paper is not "ban p-values." It is "make the theory commit to a number before you compute one."</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/platt-1964/">Platt 1964</a></li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></li>
+      <li><a href="/reading/scientific-method/ioannidis-2005/">Ioannidis 2005</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/platt-1964/", label: "Platt 1964 · 11 of 21" }} next={{ href: "/reading/scientific-method/feynman-1974/", label: "Feynman 1974 · 13 of 21" }} />
+  </main>
+</Layout>
