@@ -55,7 +55,13 @@ Under honest methodology, the published positive-result rate is capped by arithm
 | 80% true | 65% positive | 96% positive |
 | 100% true (impossible ceiling) | 80% positive | 96% positive |
 
-Even the most generous assumption, that every tested hypothesis is true, cannot explain a 96% rate. The literature is not a discovery stream. It is a filter. Either the null results are being systematically buried, or the data is being sculpted to fit the filter. There is no third option.
+Even the most generous assumption, that every tested hypothesis is true, cannot explain a 96% rate under honest methodology. The literature is not a discovery stream. It is a filter. Three ways to produce the gap:
+
+- **Nulls get buried.** Honest tests return nulls; the nulls don't publish; the record sees only the positives.
+- **Data gets sculpted.** Analyses flex until something hits significance. The survivor gets written as if preregistered.
+- **Tests get picked to pass.** Researchers select experiments their hypothesis is already highly likely to win — large effect sizes, easy endpoints, populations where the effect is known to hold. Effective power approaches 1. Every test is legitimate; none carry information. The literature becomes a recording of researchers' priors, not a record of discovery.
+
+The first is fraud by omission. The second is fraud by commission. The third requires no fraud at all — career-preserving risk aversion under publication-conditional incentives. A rational researcher under the current publish-or-perish regime is selected for the third by default. All three produce the same rotten literature.
 
 [Sterling (1959)](https://www.jstor.org/stable/2282137) found 97.3% positive in four psychology journals. The same journals, thirty-six years later: 93–99% (Sterling, Rosenbaum, Weinkam 1995). Across twenty disciplines, [Fanelli (2010)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0010068) measured economics at 88.5%, psychology and psychiatry at 91.5%. Between 1990 and 2007, the rate grew another 22% ([Fanelli 2012](https://link.springer.com/article/10.1007/s11192-011-0494-7)). [Ioannidis (2005)](/reading/scientific-method/ioannidis-2005/) gave the Bayesian version: given typical power and pre-study odds, the positive predictive value of a published biomedical finding is below 50%.
 
