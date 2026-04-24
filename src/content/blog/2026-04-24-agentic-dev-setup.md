@@ -13,7 +13,7 @@ Coding agents emit `grep`, `find`, and `sed` by reflex. Modern Rust rewrites (ri
 So the honest setup is one clean alias, one drop-in replacement, and one dispatcher:
 
 ```bash
-brew install ripgrep bfs sd fd
+brew install ripgrep bfs sd
 
 # in ~/.zshrc
 alias grep='rg'          # ripgrep handles most grep syntax natively
@@ -24,7 +24,8 @@ alias sed='/Users/YOU/.local/bin/sed-dispatch'
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** — aliasable. Recursive by default, respects `.gitignore`, handles the common `grep` flags agents emit.
 - **[bfs](https://github.com/tavianator/bfs)** — aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
 - **[sed-dispatch](https://github.com/kimjune01/classic-dispatch)** — a small wrapper (this repo) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for anything with regex metacharacters, addresses, non-`s` commands, or any form outside the guaranteed-safe subset. 25 behavioral parity tests against real sed.
-- **[fd](https://github.com/sharkdp/fd)** — installed but not aliased. Available for agents that explicitly prefer its modern syntax.
+
+[`fd`](https://github.com/sharkdp/fd) is a popular alternative find rewrite with cleaner modern syntax but an incompatible CLI — skip it unless you plan to invoke it by name.
 
 For sed, a dispatcher is the right architecture because the sed↔sd gap can't be papered over: BRE quantifiers, `&` in replacement, `\1` backrefs, addresses like `1,5d`, and commands like `/pattern/d` all have no sd equivalent or mean different things. The dispatcher gates the fast path tightly — literal patterns only, no metacharacters, `/g` flag, stdin or BSD in-place with empty extension — and hands everything else to `/usr/bin/sed` unchanged. Exit code, stdout, stderr, and file side effects all match real sed on fallback.
 
@@ -33,7 +34,7 @@ For sed, a dispatcher is the right architecture because the sed↔sd gap can't b
 Put this in your project's `CLAUDE.md` or equivalent so the agent understands the tools on the machine:
 
 ```markdown
-Shell environment: `grep` is aliased to ripgrep (`rg`), `find` is aliased to bfs (drop-in faster find), and `sed` is aliased to sed-dispatch (routes literal substitutions to sd, falls back to real sed otherwise). Use classic command names for simple cases; they're faster under the hood. For regex searches that need the full grep dialect, call `/usr/bin/grep` explicitly. For complex sed scripts (addresses, hold space, non-s commands), the dispatcher falls back automatically. Modern tools `fd`, `sd`, and `bfs` are on PATH if you want to use them directly.
+Shell environment: `grep` is aliased to ripgrep (`rg`), `find` is aliased to bfs (drop-in faster find), and `sed` is aliased to sed-dispatch (routes literal substitutions to `sd`, falls back to real sed otherwise). Use classic command names for simple cases; they're faster under the hood. For regex searches that need the full grep dialect, call `/usr/bin/grep` explicitly. For complex sed scripts (addresses, hold space, non-s commands), the dispatcher falls back automatically.
 ```
 
 ## Replace BSD coreutils with GNU
