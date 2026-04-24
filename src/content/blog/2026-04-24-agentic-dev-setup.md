@@ -29,14 +29,6 @@ alias sed='/Users/YOU/.local/bin/sed-dispatch'
 
 For sed, a dispatcher is the right architecture because the sed↔sd gap can't be papered over: BRE quantifiers, `&` in replacement, `\1` backrefs, addresses like `1,5d`, and commands like `/pattern/d` all have no sd equivalent or mean different things. The dispatcher gates the fast path tightly — literal patterns only, no metacharacters, `/g` flag, stdin or BSD in-place with empty extension — and hands everything else to `/usr/bin/sed` unchanged. Exit code, stdout, stderr, and file side effects all match real sed on fallback.
 
-### Prompt for the agent
-
-Put this in your project's `CLAUDE.md` or equivalent so the agent understands the tools on the machine:
-
-```markdown
-Shell environment: `grep`, `find`, `sed`, `date`, `readlink`, `stat`, `head`, `tail`, etc. are the fast/GNU versions under classic names. Use them normally — full classic syntax supported, fallback to the originals is transparent.
-```
-
 ## Replace BSD coreutils with GNU
 
 macOS ships BSD `date`, `ls`, `cp`, `readlink`, `stat`, `head`, `tail`, etc. Agents trained on GNU emit `date -d "yesterday"`, `readlink -f path`, `stat -c %Y file`, `head --lines=10` — none of which exist on BSD. Install `coreutils` and put the GNU versions on PATH:
