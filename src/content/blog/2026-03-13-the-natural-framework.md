@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "The Natural Framework"
-tags: coding, cognition, vector-space
+tags: cognition
 ---
 
 *Part of the [cognition](/cognition) series.*
