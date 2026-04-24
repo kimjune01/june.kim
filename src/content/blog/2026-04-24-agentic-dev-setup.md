@@ -4,33 +4,56 @@ title: "Agentic Dev Setup 2026"
 tags: coding, projects
 ---
 
-New machine for agentic work. The highest-leverage single change takes one minute.
+New machine for agentic work. The highest-leverage single change takes a few minutes.
 
-## Alias the classic tools to their fast replacements
+## Alias classic tools to their fast replacements (honestly)
 
-Agents run `grep`, `find`, and `sed` constantly. Those are the hot path. The BSD tools are slow. Their modern rewrites are 10–100× faster and handle `.gitignore` by default. Point the classic names at the rewrites in `.zshrc` and the agent never has to know.
+Coding agents emit `grep`, `find`, and `sed` by reflex. Modern Rust rewrites (ripgrep, bfs/fd, sd) are 2–100× faster on the hot path. The naive move — `alias grep=rg; alias find=fd; alias sed=sd` — works for `grep` but silently breaks the other two: `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
+
+So the honest setup is one clean alias, one drop-in replacement, and one dispatcher:
 
 ```bash
-brew install ripgrep fd sd parallel
+brew install ripgrep bfs sd fd
 
 # in ~/.zshrc
-alias grep='rg'
-alias find='fd'
-alias sed='sd'
+alias grep='rg'          # ripgrep handles most grep syntax natively
+alias find='bfs'         # bfs is a drop-in find replacement (breadth-first, faster)
+alias sed='/Users/YOU/.local/bin/sed-dispatch'
 ```
 
-That's it. The agent emits `grep "useState" src/` by reflex; ripgrep runs. Across a 50k-file monorepo, search time drops from seconds to milliseconds. The original tools still live at `/usr/bin/grep` if you ever need them.
+- **[ripgrep](https://github.com/BurntSushi/ripgrep)** — aliasable. Recursive by default, respects `.gitignore`, handles the common `grep` flags agents emit.
+- **[bfs](https://github.com/tavianator/bfs)** — aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
+- **[sed-dispatch](https://github.com/kimjune01/classic-dispatch)** — a small wrapper (this repo) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for anything with regex metacharacters, addresses, non-`s` commands, or any form outside the guaranteed-safe subset. 25 behavioral parity tests against real sed.
+- **[fd](https://github.com/sharkdp/fd)** — installed but not aliased. Available for agents that explicitly prefer its modern syntax.
 
-- **ripgrep (rg)**: respects `.gitignore`, runs parallel, 10–100× faster than `grep -r`.
-- **fd**: simpler syntax, faster traversal, ignores `.git` by default.
-- **sd**: clearer regex syntax than `sed`, parallel by default.
-- **parallel**: GNU parallel for shell operations (no alias; call it directly).
+For sed, a dispatcher is the right architecture because the sed↔sd gap can't be papered over: BRE quantifiers, `&` in replacement, `\1` backrefs, addresses like `1,5d`, and commands like `/pattern/d` all have no sd equivalent or mean different things. The dispatcher gates the fast path tightly — literal patterns only, no metacharacters, `/g` flag, stdin or BSD in-place with empty extension — and hands everything else to `/usr/bin/sed` unchanged. Exit code, stdout, stderr, and file side effects all match real sed on fallback.
 
-The alias trick works because agents don't need retraining. Their built-in habits for `grep`/`find`/`sed` stay intact; only the implementation changes. It's the one-line version of making your machine faster at everything an agent does.
+### Prompt for the agent
+
+Put this in your project's `CLAUDE.md` or equivalent so the agent understands the tools on the machine:
+
+```markdown
+Shell environment: `grep` is aliased to ripgrep (`rg`), `find` is aliased to bfs (drop-in faster find), and `sed` is aliased to sed-dispatch (routes literal substitutions to sd, falls back to real sed otherwise). Use classic command names for simple cases; they're faster under the hood. For regex searches that need the full grep dialect, call `/usr/bin/grep` explicitly. For complex sed scripts (addresses, hold space, non-s commands), the dispatcher falls back automatically. Modern tools `fd`, `sd`, and `bfs` are on PATH if you want to use them directly.
+```
+
+## Replace BSD coreutils with GNU
+
+macOS ships BSD `date`, `ls`, `cp`, `readlink`, `stat`, `head`, `tail`, etc. Agents trained on GNU emit `date -d "yesterday"`, `readlink -f path`, `stat -c %Y file`, `head --lines=10` — none of which exist on BSD. Install `coreutils` and put the GNU versions on PATH:
+
+```bash
+brew install coreutils
+
+# in ~/.zshrc, BEFORE any other PATH setup
+export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+```
+
+Same trick as the aliases above: classic names, modern (or here, GNU) implementation. Unlike `fd`/`sd`, GNU coreutils is a superset-compatible drop-in — BSD scripts that use shared flags still work, and the GNU-only flags agents reach for now resolve.
+
+Pairs naturally with `findutils` (GNU find/xargs/locate) and `gnu-sed` (GNU sed) if you want to replace those too. The sed-dispatch approach above is still recommended for `sed` specifically, because the BSD `-i` requires an extension argument and GNU `-i` doesn't — scripts portable across both are easier to read with BSD sed at the bottom. But if all your work is GNU-native, `brew install gnu-sed` and alias `sed=gsed` is another valid choice.
 
 ## Block the destructive operations before they run
 
-Agents move fast. A handful of Bash commands are catastrophic if the agent is wrong and the shell is permissive. Hooks let you block them before they run. Add to `~/.claude/settings.json`:
+Agents move fast. A handful of Bash commands are catastrophic when the agent is wrong and the shell is permissive. Hooks block them first. Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -60,13 +83,13 @@ Agents move fast. A handful of Bash commands are catastrophic if the agent is wr
 
 Three guards:
 
-1. **Block `rm -rf`**: Agents suggest `rm -rf node_modules` or `rm -rf dist`. Hook denies, suggests `mv /tmp/` instead.
-2. **Block force push**: `git push --force` destroys remote history. Hook denies, suggests regular push or new branch.
-3. **Warn on amend**: `git commit --amend` rewrites history. Hook warns but allows (needed for pre-push fixups).
+1. **Block `rm -rf`**. Agents suggest `rm -rf node_modules` or `rm -rf dist`. The hook denies and suggests `mv /tmp/` instead.
+2. **Block force push**. `git push --force` destroys remote history. Denied with reason.
+3. **Warn on amend**. `git commit --amend` rewrites history. Shows a warning to the user; doesn't block (needed for pre-push fixups).
 
-Hooks run before the tool executes. Denial stops the command. Warning injects a system message into context.
+The denial path stops the command; the warning path shows a message to the user without blocking.
 
-## Gemini CLI with yolo mode
+## [Gemini CLI](https://github.com/google-gemini/gemini-cli) with approval-mode=yolo
 
 For agent-to-agent calls:
 
@@ -74,7 +97,7 @@ For agent-to-agent calls:
 brew install gemini-cli google-cloud-sdk
 ```
 
-Set credentials (service account JSON):
+Credentials (Vertex AI):
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/atom.json"
@@ -83,23 +106,23 @@ export GOOGLE_CLOUD_LOCATION="global"
 export GOOGLE_GENAI_USE_VERTEXAI="true"
 ```
 
-Make yolo mode default:
+Auto-approve tool calls:
 
 ```bash
 gemini() {
-  /opt/homebrew/bin/gemini --yolo "$@"
+  /opt/homebrew/bin/gemini --approval-mode=yolo "$@"
 }
 ```
 
-Now `gemini "prompt"` auto-approves all tool calls. Useful when Claude invokes Gemini for second opinions or specialized tasks.
+(`--yolo` is the older deprecated flag; `--approval-mode=yolo` is current.) Now `gemini "prompt"` auto-approves, useful when Claude invokes Gemini for second opinions or specialized tasks.
 
 ---
 
-The rest is the standard new-machine stack. Skip if you know it; included here so the full setup reproduces from one page.
+The rest is the standard Apple-Silicon macOS new-machine stack. Skip if you know it; it's here so the whole setup reproduces from one page.
 
 ## Base layer
 
-Homebrew first. Everything flows from it.
+Homebrew first. Paths below assume Apple Silicon (`/opt/homebrew`); swap to `/usr/local` on Intel.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -114,7 +137,7 @@ npm install -g pnpm
 curl -fsSL https://bun.sh/install | bash
 ```
 
-GitHub CLI for agent PR workflows — `gh auth login`, then the agent can `gh pr create`, `gh pr view 123`, `gh issue list`, `gh api`.
+GitHub CLI for agent PR workflows. Run `gh auth login`, then the agent can `gh pr create`, `gh pr view 123`, `gh issue list`, `gh api`.
 
 Git config (agents commit as you):
 
@@ -123,20 +146,9 @@ git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
-GitLab, if you use it:
-
-```bash
-export GITLAB_TOKEN="glpat-your-token-here"
-export GITLAB_HOST="gitlab.yourcompany.com"
-```
-
 ## Language toolchains
 
-**Node / Astro**: node, pnpm, bun are installed above. For Astro projects the CLI needs to be global so the agent can run `astro dev`, `astro build`, `astro check`:
-
-```bash
-npm install -g astro
-```
+**Node**: already installed above. Most projects manage their own CLIs via `package.json` scripts (`pnpm dev`, `pnpm build`); agents invoke them via scripts, no global install needed.
 
 **Go**:
 
@@ -144,9 +156,9 @@ npm install -g astro
 brew install go
 ```
 
-Sets `GOPATH` and `GOROOT` on install. No extra config.
+Modern Go infers `GOPATH` and `GOROOT` from defaults. No extra config.
 
-**Python** — `uv` for speed (Rust-based, 10× faster than pip) or `pyenv + poetry` for strict version control:
+**Python**: [`uv`](https://github.com/astral-sh/uv) for speed (10× faster than pip per its own benchmarks) or [`pyenv`](https://github.com/pyenv/pyenv) + [`poetry`](https://python-poetry.org) for strict version control:
 
 ```bash
 brew install uv
@@ -161,36 +173,23 @@ With `uv`: `uv venv`, `uv pip install <pkg>`, `uv run script.py`. With pyenv + p
 
 ## What this buys you
 
-**Speed:**
+**Speed on common agent commands**: ripgrep and bfs replace the BSD originals on the search hot path. sed-dispatch makes literal substitutions faster without breaking anything non-literal.
 
-- `grep "import.*React"` across a 50k-file monorepo: **2s → 200ms**
-- `find . -name "*.test.ts"` in nested node_modules: **8s → 300ms**
-- `sed 's/foo/bar/g' *.js` across 1000 files: **parallel by default with sd**
-- `uv pip install requests`: **10s → 1s** vs `pip`
+**Agent workflows**: `gh pr create` from the command line, `go test ./...`, `uv run script.py`, project-local `pnpm dev` — all work directly.
 
-**Agent workflows:**
+**Safety**: `rm -rf` and `git push --force` blocked before execution. `git commit --amend` warns.
 
-- `gh pr create` — create PR from command line
-- `astro check` — type-check .astro files
-- `go test ./...` — run all Go tests
-- `uv run script.py` — run Python without manual venv activation
-
-**Safety:**
-
-- Agent suggests `rm -rf /`: **blocked** before execution
-- Agent tries `git push --force origin main`: **denied** with reason
-
-Cost: fifteen minutes of setup. Aliases preserve command syntax. Original tools still work at `/usr/bin/grep`, `/usr/bin/find` if needed.
+Cost: fifteen minutes, plus cloning and installing the dispatcher.
 
 ## Full config
 
 `.zshrc` additions:
 
 ```bash
-# Performance: alias fast tools
+# Aliases: fast tool replacements where CLI-compatible
 alias grep='rg'
-alias find='fd'
-alias sed='sd'
+alias find='bfs'
+alias sed="$HOME/.local/bin/sed-dispatch"
 
 # GitLab (if using)
 export GITLAB_TOKEN="glpat-your-token-here"
@@ -201,9 +200,9 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# Gemini CLI with yolo mode
+# Gemini CLI with approval-mode=yolo
 gemini() {
-  /opt/homebrew/bin/gemini --yolo "$@"
+  /opt/homebrew/bin/gemini --approval-mode=yolo "$@"
 }
 
 # Google Cloud / Vertex AI
@@ -217,6 +216,13 @@ source /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
 source /opt/homebrew/share/google-cloud-sdk/completion.zsh.inc
 ```
 
+Install sed-dispatch:
+
+```bash
+git clone https://github.com/kimjune01/classic-dispatch ~/Documents/classic-dispatch
+cd ~/Documents/classic-dispatch && ./install.sh
+```
+
 Git config:
 
 ```bash
@@ -224,11 +230,7 @@ git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
-GitHub auth (interactive):
-
-```bash
-gh auth login
-```
+GitHub auth: `gh auth login`.
 
 `~/.claude/settings.json` hooks section: see above.
 
