@@ -8,7 +8,7 @@ New machine for agentic work. The highest-leverage single change takes a few min
 
 ## Why not just alias the classics to their modern rewrites?
 
-Coding agents emit `grep`, `find`, and `sed` by reflex. Modern rewrites (ripgrep, bfs/fd, sd) are faster on the hot path. But the naive aliases only work for one of the three: `ripgrep` handles most `grep` syntax natively, `bfs` is a drop-in `find` replacement by design, but `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
+Coding agents emit `grep`, `find`, and `sed` by reflex. Modern rewrites (ripgrep, bfs/fd, sd) are faster. But only two of the three alias cleanly: `ripgrep` handles most `grep` syntax natively, `bfs` is a drop-in `find` replacement, while `fd` and `sd` have incompatible CLIs and regex dialects. `find . -name "*.ts"` through `fd` errors out. `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
 
 So the honest answer is: alias the two that work, leave the third alone.
 
@@ -24,7 +24,7 @@ alias find='bfs'         # bfs is a drop-in find replacement (breadth-first, fas
 - **[bfs](https://github.com/tavianator/bfs)** — aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
 - **[sd](https://github.com/chmln/sd)** and **[fd](https://github.com/sharkdp/fd)** — worth installing, not worth aliasing. The speedups are real but the CLIs diverge too much from classic `sed`/`find` to be safe aliases. Use them by name when you want modern syntax.
 
-For `sed` specifically: I built a [compatibility dispatcher](https://github.com/kimjune01/classic-dispatch) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for everything else — regex metacharacters, addresses, non-`s` commands, backreferences. 25 parity tests against real sed. It works. But I ripped it out of my own setup after building it. The safe-subset fast path (pure literals, no metacharacters either side, `/g` flag only) is too narrow: most real `sed` invocations have at least one regex character, so they land on the fallback path where nothing is gained. Stock `sed` is already fast enough for the file sizes that go through it. 120 lines of bash wrapping every `sed` call on the machine, for maybe five seconds saved a month, wasn't worth the maintenance surface. Repo stays live as a reference for the dispatcher-with-fallback pattern; don't install it.
+I built a [compatibility dispatcher](https://github.com/kimjune01/classic-dispatch) for `sed` that routes fully-literal `sed 's/X/Y/g'` to `sd -F` and falls back to `/usr/bin/sed` for anything more complex — regex metacharacters, addresses, non-`s` commands, backreferences. 25 parity tests against real sed. It works, but I ripped it out of my setup. The safe-subset fast path (pure literals, `/g` flag only) is too narrow: most real `sed` invocations have at least one regex character and land on the fallback path, where nothing is gained. Stock `sed` is already fast enough for typical file sizes. 120 lines of bash wrapping every `sed` call, for maybe five seconds saved a month, wasn't worth the maintenance. Repo stays live as a reference for the dispatcher-with-fallback pattern; don't install it.
 
 ## Replace BSD coreutils with GNU
 
@@ -39,7 +39,7 @@ export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 
 Same trick as the aliases above: classic names, modern (here, GNU) implementation. Unlike `fd`/`sd`, GNU coreutils is a superset-compatible drop-in — BSD scripts that use shared flags still work, and the GNU-only flags agents reach for now resolve.
 
-Pairs naturally with `findutils` (GNU find/xargs/locate) and `gnu-sed` (GNU sed) if you want to replace those too. For `sed` in particular, `brew install gnu-sed` + `alias sed=gsed` is the cleanest option if all your work is GNU-native.
+Pairs naturally with `findutils` (GNU find/xargs/locate) and `gnu-sed`. For `sed` in particular, `brew install gnu-sed` + `alias sed=gsed` is the cleanest option if you don't need BSD portability.
 
 ## Block the destructive operations before they run
 
@@ -73,11 +73,21 @@ Agents move fast. A handful of Bash commands are catastrophic when the agent is 
 
 Three guards:
 
-1. **Block `rm -rf`**. Agents suggest `rm -rf node_modules` or `rm -rf dist`. The hook denies and suggests `mv /tmp/` instead.
-2. **Block force push**. `git push --force` destroys remote history. Denied with reason.
-3. **Warn on amend**. `git commit --amend` rewrites history. Shows a warning to the user; doesn't block (needed for pre-push fixups).
+1. **Block `rm -rf`**. Denied; agent is nudged toward `mv /tmp/` instead. The point isn't safety-by-destination; it's undoability. /tmp sticks around long enough for you to notice the mistake.
+2. **Block force push**. Denied with reason.
+3. **Block amend when pushed**. `git commit --amend` rewrites history. If HEAD is already on any remote, block — amending would force the next push to rewrite published history. If HEAD is local-only, allow silently (the pre-push fixup case). The sample JSON above only warns; the stricter version is a separate script that checks `git branch -r --contains HEAD`:
 
-The denial path stops the command; the warning path shows a message to the user without blocking.
+```bash
+if echo "$cmd" | grep -qE 'git\s+commit\s+.*--amend'; then
+  if git rev-parse --git-dir >/dev/null 2>&1; then
+    head=$(git rev-parse HEAD 2>/dev/null)
+    if [ -n "$head" ] && git branch -r --contains "$head" 2>/dev/null | grep -q .; then
+      echo "Block: HEAD is on a remote. --amend would rewrite published history." >&2
+      exit 2
+    fi
+  fi
+fi
+```
 
 ## [Gemini CLI](https://github.com/google-gemini/gemini-cli) with approval-mode=yolo
 
@@ -106,116 +116,6 @@ gemini() {
 
 (`--yolo` is the older deprecated flag; `--approval-mode=yolo` is current.) Now `gemini "prompt"` auto-approves, useful when Claude invokes Gemini for second opinions or specialized tasks.
 
----
+The rest is ordinary new-machine setup — Homebrew, node/git/gh, the language toolchain of choice, `gh auth login`, git config. The audience for this post is agents helping humans set up; all of that is territory the agent already knows. The part worth writing down is above: what the aliases really cost, what the coreutils trick buys, and which destructive commands the hooks actually stop.
 
-The rest is the standard Apple-Silicon macOS new-machine stack. Skip if you know it; it's here so the whole setup reproduces from one page.
-
-## Base layer
-
-Homebrew first. Paths below assume Apple Silicon (`/opt/homebrew`); swap to `/usr/local` on Intel.
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-```
-
-Core:
-
-```bash
-brew install node git gh
-npm install -g pnpm
-curl -fsSL https://bun.sh/install | bash
-```
-
-GitHub CLI for agent PR workflows. Run `gh auth login`, then the agent can `gh pr create`, `gh pr view 123`, `gh issue list`, `gh api`.
-
-Git config (agents commit as you):
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
-
-## Language toolchains
-
-**Node**: already installed above. Most projects manage their own CLIs via `package.json` scripts (`pnpm dev`, `pnpm build`); agents invoke them via scripts, no global install needed.
-
-**Go**:
-
-```bash
-brew install go
-```
-
-Modern Go infers `GOPATH` and `GOROOT` from defaults. No extra config.
-
-**Python**: [`uv`](https://github.com/astral-sh/uv) for speed (10× faster than pip per its own benchmarks) or [`pyenv`](https://github.com/pyenv/pyenv) + [`poetry`](https://python-poetry.org) for strict version control:
-
-```bash
-brew install uv
-# or
-brew install pyenv poetry
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-```
-
-With `uv`: `uv venv`, `uv pip install <pkg>`, `uv run script.py`. With pyenv + poetry: `pyenv install 3.13 && pyenv global 3.13`, then `poetry add <pkg>`.
-
-## What this buys you
-
-**Speed on common agent commands**: ripgrep and bfs replace the BSD originals on the search hot path. GNU coreutils on PATH means `date -d`, `readlink -f`, `stat -c` work.
-
-**Agent workflows**: `gh pr create` from the command line, `go test ./...`, `uv run script.py`, project-local `pnpm dev` — all work directly.
-
-**Safety**: `rm -rf` and `git push --force` blocked before execution. `git commit --amend` blocked when HEAD is already on a remote; allowed silently on local-only commits.
-
-Cost: about fifteen minutes.
-
-## Full config
-
-`.zshrc` additions:
-
-```bash
-# Aliases: fast tool replacements where CLI-compatible
-alias grep='rg'
-alias find='bfs'
-
-# GitLab (if using)
-export GITLAB_TOKEN="glpat-your-token-here"
-export GITLAB_HOST="gitlab.yourcompany.com"
-
-# Python (if using pyenv)
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Gemini CLI with approval-mode=yolo
-gemini() {
-  /opt/homebrew/bin/gemini --approval-mode=yolo "$@"
-}
-
-# Google Cloud / Vertex AI
-export GOOGLE_APPLICATION_CREDENTIALS="$HOME/atom.json"
-export GOOGLE_CLOUD_PROJECT="your-project-id"
-export GOOGLE_CLOUD_LOCATION="global"
-export GOOGLE_GENAI_USE_VERTEXAI="true"
-
-# gcloud CLI
-source /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
-source /opt/homebrew/share/google-cloud-sdk/completion.zsh.inc
-```
-
-Read the hook scripts in `~/.claude/hooks/` before relying on them. Any code you put in your shell or your agent's tool chain is code that runs when you type.
-
-Git config:
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
-
-GitHub auth: `gh auth login`.
-
-`~/.claude/settings.json` hooks section: see above.
-
-Ship it.
+Read the hook scripts before relying on them. Any code you put in your shell is code that runs when you type.
