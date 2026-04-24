@@ -24,7 +24,7 @@ alias find='bfs'         # bfs is a drop-in find replacement (breadth-first, fas
 - **[bfs](https://github.com/tavianator/bfs)**: aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
 - **[sd](https://github.com/chmln/sd)** and **[fd](https://github.com/sharkdp/fd)**: worth installing, not worth aliasing. The speedups are real but the CLIs diverge too much from classic `sed`/`find` to be safe aliases. Use them by name when you want modern syntax.
 
-I built a [compatibility dispatcher](https://github.com/kimjune01/classic-dispatch) for `sed` that routes fully-literal `sed 's/X/Y/g'` to `sd -F` and falls back to `/usr/bin/sed` for anything more complex: regex metacharacters, addresses, non-`s` commands, backreferences. 25 parity tests against real sed. It works, but I ripped it out of my setup. The safe-subset fast path (pure literals, `/g` flag only) is too narrow; most real `sed` invocations have at least one regex character and land on the fallback path, where nothing is gained. Stock `sed` is already fast enough for typical file sizes. 120 lines of bash wrapping every `sed` call, for maybe five seconds saved a month, wasn't worth the maintenance. Repo stays live as a reference for the dispatcher-with-fallback pattern; don't install it.
+I built a [sed dispatcher](https://github.com/kimjune01/classic-dispatch) that routes literal substitutions to `sd` and falls back to real `sed` for anything with regex; the repo stays up as reference for the pattern, but the safe subset is too narrow to earn its maintenance, so I don't alias it.
 
 ## Replace BSD coreutils with GNU
 
