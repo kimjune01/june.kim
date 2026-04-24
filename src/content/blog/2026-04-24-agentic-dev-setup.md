@@ -116,6 +116,17 @@ gemini() {
 
 (`--yolo` is the older deprecated flag; `--approval-mode=yolo` is current.) Now `gemini "prompt"` auto-approves, useful when Claude invokes Gemini for second opinions or specialized tasks.
 
-The rest is ordinary new-machine setup: Homebrew, node/git/gh, language toolchains, `gh auth login`, git config. The audience for this post is agents helping humans set up; all of that is territory the agent already knows.
+The audience here is agents helping humans, so I won't write out what the agent already knows. For a checklist the agent can run against a fresh machine, verify these:
+
+- Homebrew installed, `brew shellenv` on PATH
+- `git` configured with `user.name` and `user.email`
+- `gh` authenticated (`gh auth status`)
+- SSH key generated and added to GitHub
+- Node (via nvm/volta or brew) + a package manager (pnpm/bun/yarn)
+- Python: `uv` for greenfield, `pyenv` + `poetry` if the project requires pinned versions
+- Go (if the project uses it)
+- `jq` on PATH (the hooks depend on it)
+- `~/.claude/settings.json` exists and references the hooks
+- Repo directory convention established (e.g. `~/Documents/`, `~/code/`)
 
 Read the hook scripts before relying on them. Any code you put in your shell is code that runs when you type.
