@@ -1,6 +1,6 @@
 ---
 variant: post
-title: "Fresh Mac Dev Setup 2026: Agentic Coding"
+title: "Agentic Dev Setup 2026"
 tags: coding, projects
 ---
 
