@@ -4,129 +4,33 @@ title: "Agentic Dev Setup 2026"
 tags: coding, projects
 ---
 
-New machine. Install the tools that make agents faster, then guard the destructive operations.
+New machine for agentic work. The highest-leverage single change takes one minute.
 
-## The base layer
+## Alias the classic tools to their fast replacements
 
-Homebrew first. Everything else flows from it.
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-```
-
-Core runtimes:
-
-```bash
-brew install node git gh
-npm install -g pnpm
-curl -fsSL https://bun.sh/install | bash  # Bun for speed
-```
-
-## Git and remote hosting
-
-GitHub CLI for agent PR workflows:
-
-```bash
-gh auth login
-```
-
-Agent can now:
-- `gh pr create --title "Fix" --body "Details"`
-- `gh pr view 123`
-- `gh issue list`
-- `gh api` for custom queries
-
-GitLab setup (if using):
-
-```bash
-export GITLAB_TOKEN="glpat-your-token-here"
-export GITLAB_HOST="gitlab.yourcompany.com"
-```
-
-Git config (agents commit as you):
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
-
-## Language toolchains
-
-### Node.js / Astro
-
-Node + pnpm + bun are installed. For Astro projects, agents need the CLI:
-
-```bash
-npm install -g astro
-```
-
-Now `astro dev`, `astro build`, `astro check` work globally.
-
-### Go
-
-```bash
-brew install go
-```
-
-Sets `GOPATH` and `GOROOT` automatically. Agent can `go run`, `go build`, `go test`. No extra config needed.
-
-### Python
-
-Modern Python: `uv` (fast, Rust-based) or `pyenv` + `poetry` (traditional).
-
-**Option 1: uv (recommended)**
-
-```bash
-brew install uv
-```
-
-- `uv venv` — create virtualenv
-- `uv pip install <package>` — 10x faster than pip
-- `uv run script.py` — auto-manages env
-
-**Option 2: pyenv + poetry**
-
-```bash
-brew install pyenv poetry
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-```
-
-- `pyenv install 3.13 && pyenv global 3.13` — set Python version
-- `poetry add requests` — dependency management
-
-Pick `uv` for speed. Pick `pyenv + poetry` for strict version control.
-
-## Performance: modern CLI tools
-
-`grep`, `find`, and `sed` are slow. Agents search and transform code constantly. Replace them.
+Agents run `grep`, `find`, and `sed` constantly. Those are the hot path. The BSD tools are slow. Their modern rewrites are 10–100× faster and handle `.gitignore` by default. Point the classic names at the rewrites in `.zshrc` and the agent never has to know.
 
 ```bash
 brew install ripgrep fd sd parallel
-```
 
-Alias as defaults in `.zshrc`:
-
-```bash
+# in ~/.zshrc
 alias grep='rg'
 alias find='fd'
 alias sed='sd'
 ```
 
-- **ripgrep (rg)**: Respects `.gitignore`, runs parallel, 10-100x faster than `grep -r`
-- **fd**: Simpler syntax, faster traversal, ignores `.git` by default
-- **sd**: Clearer regex syntax than `sed`, parallel by default
-- **parallel**: GNU parallel for shell operations (use directly, no alias needed)
+That's it. The agent emits `grep "useState" src/` by reflex; ripgrep runs. Across a 50k-file monorepo, search time drops from seconds to milliseconds. The original tools still live at `/usr/bin/grep` if you ever need them.
 
-When an agent runs `grep "pattern" .` or `find . -name "*.ts"` or `sed 's/foo/bar/g'`, it now uses the fast versions. Search time drops from seconds to milliseconds on large repos.
+- **ripgrep (rg)**: respects `.gitignore`, runs parallel, 10–100× faster than `grep -r`.
+- **fd**: simpler syntax, faster traversal, ignores `.git` by default.
+- **sd**: clearer regex syntax than `sed`, parallel by default.
+- **parallel**: GNU parallel for shell operations (no alias; call it directly).
 
-## Safety: Claude pre-tool-use hooks
+The alias trick works because agents don't need retraining. Their built-in habits for `grep`/`find`/`sed` stay intact; only the implementation changes. It's the one-line version of making your machine faster at everything an agent does.
 
-Agents move fast. Block the destructive operations before they run.
+## Block the destructive operations before they run
 
-Add to `~/.claude/settings.json`:
+Agents move fast. A handful of Bash commands are catastrophic if the agent is wrong and the shell is permissive. Hooks let you block them before they run. Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -188,6 +92,72 @@ gemini() {
 ```
 
 Now `gemini "prompt"` auto-approves all tool calls. Useful when Claude invokes Gemini for second opinions or specialized tasks.
+
+---
+
+The rest is the standard new-machine stack. Skip if you know it; included here so the full setup reproduces from one page.
+
+## Base layer
+
+Homebrew first. Everything flows from it.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+```
+
+Core:
+
+```bash
+brew install node git gh
+npm install -g pnpm
+curl -fsSL https://bun.sh/install | bash
+```
+
+GitHub CLI for agent PR workflows — `gh auth login`, then the agent can `gh pr create`, `gh pr view 123`, `gh issue list`, `gh api`.
+
+Git config (agents commit as you):
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+GitLab, if you use it:
+
+```bash
+export GITLAB_TOKEN="glpat-your-token-here"
+export GITLAB_HOST="gitlab.yourcompany.com"
+```
+
+## Language toolchains
+
+**Node / Astro**: node, pnpm, bun are installed above. For Astro projects the CLI needs to be global so the agent can run `astro dev`, `astro build`, `astro check`:
+
+```bash
+npm install -g astro
+```
+
+**Go**:
+
+```bash
+brew install go
+```
+
+Sets `GOPATH` and `GOROOT` on install. No extra config.
+
+**Python** — `uv` for speed (Rust-based, 10× faster than pip) or `pyenv + poetry` for strict version control:
+
+```bash
+brew install uv
+# or
+brew install pyenv poetry
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+```
+
+With `uv`: `uv venv`, `uv pip install <pkg>`, `uv run script.py`. With pyenv + poetry: `pyenv install 3.13 && pyenv global 3.13`, then `poetry add <pkg>`.
 
 ## What this buys you
 
