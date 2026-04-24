@@ -23,7 +23,7 @@ alias sed='/Users/YOU/.local/bin/sed-dispatch'
 
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** — aliasable. Recursive by default, respects `.gitignore`, handles the common `grep` flags agents emit.
 - **[bfs](https://github.com/tavianator/bfs)** — aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
-- **[sed-dispatch](https://github.com/kimjune01/classic-dispatch)** — a small wrapper (this repo) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for anything with regex metacharacters, addresses, non-`s` commands, or any form outside the guaranteed-safe subset. 25 behavioral parity tests against real sed.
+- **[sed-dispatch](https://github.com/kimjune01/classic-dispatch)** — a small wrapper (~120 lines of bash) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for anything with regex metacharacters, addresses, non-`s` commands, or any form outside the guaranteed-safe subset. 25 behavioral parity tests against real sed. Fork it before installing — this is a script that intercepts every `sed` call you make, so you want to be reading your own copy.
 
 [`fd`](https://github.com/sharkdp/fd) is a popular alternative find rewrite with cleaner modern syntax but an incompatible CLI — skip it unless you plan to invoke it by name.
 
@@ -209,12 +209,15 @@ source /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
 source /opt/homebrew/share/google-cloud-sdk/completion.zsh.inc
 ```
 
-Install sed-dispatch:
+Install sed-dispatch. Fork first, then clone your fork — the wrapper runs on every `sed` call, so it should be a script you've read and a repo you control. Takes a minute or two:
 
 ```bash
-git clone https://github.com/kimjune01/classic-dispatch ~/Documents/classic-dispatch
+gh repo fork kimjune01/classic-dispatch --clone=false
+git clone git@github.com:YOU/classic-dispatch ~/Documents/classic-dispatch
 cd ~/Documents/classic-dispatch && ./install.sh
 ```
+
+Read the ~120 lines of `sed-dispatch` before you run `install.sh`. Same for the hook scripts in `~/.claude/hooks/`. Any code you alias into your shell is code that runs when you type.
 
 Git config:
 
