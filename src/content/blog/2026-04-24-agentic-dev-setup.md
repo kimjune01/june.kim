@@ -6,9 +6,9 @@ tags: coding, projects
 
 New machine for agentic work. The highest-leverage single change takes a few minutes.
 
-## Alias classic tools to their fast replacements (honestly)
+## Why not just alias the classics to their modern rewrites?
 
-Coding agents emit `grep`, `find`, and `sed` by reflex. Modern Rust rewrites (ripgrep, bfs/fd, sd) are 2–100× faster on the hot path. The naive move — `alias grep=rg; alias find=fd; alias sed=sd` — works for `grep` but silently breaks the other two: `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
+Coding agents emit `grep`, `find`, and `sed` by reflex. Modern Rust rewrites (ripgrep, bfs/fd, sd) are 2–100× faster on the hot path. The naive aliases work for `grep` but silently break the other two: `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
 
 So the honest setup is one clean alias, one drop-in replacement, and one dispatcher:
 
