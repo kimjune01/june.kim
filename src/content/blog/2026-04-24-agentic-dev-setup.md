@@ -34,7 +34,7 @@ For sed, a dispatcher is the right architecture because the sed↔sd gap can't b
 Put this in your project's `CLAUDE.md` or equivalent so the agent understands the tools on the machine:
 
 ```markdown
-Shell environment: `grep`, `find`, and `sed` are aliased to faster modern equivalents (ripgrep, bfs, and sed-dispatch respectively). Just use them as normal. Simple cases get the speedup; complex sed scripts, unusual grep flags, and anything outside the safe subset fall through to the classic tools transparently. GNU coreutils is on PATH, so `date -d "yesterday"`, `readlink -f`, `stat -c`, and other GNU flags work.
+Shell environment: `grep`, `find`, `sed`, `date`, `readlink`, `stat`, `head`, `tail`, etc. are the fast/GNU versions under classic names. Use them normally — full classic syntax supported, fallback to the originals is transparent.
 ```
 
 ## Replace BSD coreutils with GNU
