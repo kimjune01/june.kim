@@ -106,7 +106,7 @@ Without review, these slip through at a 57% rate. With review, they get caught a
 
 This experiment measured the last mile: can machines execute the mechanics at human quality?
 
-The Phase 7 forced-choice result says yes. In a blind A/B between human-authored and forge-authored refactoring, the reviewer picked forge 57% of the time. Coin flip. The iterative review loop then catches the slop from either author and polishes to merge-ready at 91%.
+Two blind forced-choice tests confirm this. Phase 7a: a reviewer picked forge output over the human first draft 57% of the time. Coin flip; parity. Phase 7b: a reviewer picked forge output over the human-reviewed final 70% of the time. Forge wasn't just matching humans; it was preferred. The iterative review loop catches the slop from either author and polishes to merge-ready at 91%.
 
 Vibelogging produces clear intent. Prework separates semantics from mechanics. Forge executes the mechanics at human parity. The review loop is the quality gate for both. The human writes prose. The machine handles the rest.
 
