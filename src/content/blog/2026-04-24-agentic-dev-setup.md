@@ -8,26 +8,23 @@ New machine for agentic work. The highest-leverage single change takes a few min
 
 ## Why not just alias the classics to their modern rewrites?
 
-Coding agents emit `grep`, `find`, and `sed` by reflex. Modern Rust rewrites (ripgrep, bfs/fd, sd) are 2–100× faster on the hot path. The naive aliases work for `grep` but silently break the other two: `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
+Coding agents emit `grep`, `find`, and `sed` by reflex. Modern rewrites (ripgrep, bfs/fd, sd) are faster on the hot path. But the naive aliases only work for one of the three: `ripgrep` handles most `grep` syntax natively, `bfs` is a drop-in `find` replacement by design, but `fd` and `sd` have incompatible CLIs and different regex dialects. Routing `find . -name "*.ts"` through `fd` errors out. Routing `sed 's/foo/bar/g'` through `sd` silently produces wrong output when the pattern has BRE quantifiers or when the replacement uses `&` or backreferences.
 
-So the honest setup is one clean alias, one drop-in replacement, and one dispatcher:
+So the honest answer is: alias the two that work, leave the third alone.
 
 ```bash
-brew install ripgrep bfs sd
+brew install ripgrep bfs
 
 # in ~/.zshrc
 alias grep='rg'          # ripgrep handles most grep syntax natively
 alias find='bfs'         # bfs is a drop-in find replacement (breadth-first, faster)
-alias sed='/Users/YOU/.local/bin/sed-dispatch'
 ```
 
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** — aliasable. Recursive by default, respects `.gitignore`, handles the common `grep` flags agents emit.
 - **[bfs](https://github.com/tavianator/bfs)** — aliasable. Advertises drop-in GNU/BSD `find` compatibility, verified on `-name`, `-type`, `-maxdepth`, `-exec`, boolean operators.
-- **[sed-dispatch](https://github.com/kimjune01/classic-dispatch)** — a small wrapper (~120 lines of bash) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for anything with regex metacharacters, addresses, non-`s` commands, or any form outside the guaranteed-safe subset. 25 behavioral parity tests against real sed. Fork it before installing — this is a script that intercepts every `sed` call you make, so you want to be reading your own copy.
+- **[sd](https://github.com/chmln/sd)** and **[fd](https://github.com/sharkdp/fd)** — worth installing, not worth aliasing. The speedups are real but the CLIs diverge too much from classic `sed`/`find` to be safe aliases. Use them by name when you want modern syntax.
 
-[`fd`](https://github.com/sharkdp/fd) is a popular alternative find rewrite with cleaner modern syntax but an incompatible CLI — skip it unless you plan to invoke it by name.
-
-For sed, a dispatcher is the right architecture because the sed↔sd gap can't be papered over: BRE quantifiers, `&` in replacement, `\1` backrefs, addresses like `1,5d`, and commands like `/pattern/d` all have no sd equivalent or mean different things. The dispatcher gates the fast path tightly — literal patterns only, no metacharacters, `/g` flag, stdin or BSD in-place with empty extension — and hands everything else to `/usr/bin/sed` unchanged. Exit code, stdout, stderr, and file side effects all match real sed on fallback.
+For `sed` specifically: I built a [compatibility dispatcher](https://github.com/kimjune01/classic-dispatch) that routes fully-literal `sed 's/X/Y/g'` substitutions to `sd -F` and falls back to `/usr/bin/sed` for everything else — regex metacharacters, addresses, non-`s` commands, backreferences. 25 parity tests against real sed. It works. But I ripped it out of my own setup after building it. The safe-subset fast path (pure literals, no metacharacters either side, `/g` flag only) is too narrow: most real `sed` invocations have at least one regex character, so they land on the fallback path where nothing is gained. Stock `sed` is already fast enough for the file sizes that go through it. 120 lines of bash wrapping every `sed` call on the machine, for maybe five seconds saved a month, wasn't worth the maintenance surface. Repo stays live as a reference for the dispatcher-with-fallback pattern; don't install it.
 
 ## Replace BSD coreutils with GNU
 
@@ -40,9 +37,9 @@ brew install coreutils
 export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 ```
 
-Same trick as the aliases above: classic names, modern (or here, GNU) implementation. Unlike `fd`/`sd`, GNU coreutils is a superset-compatible drop-in — BSD scripts that use shared flags still work, and the GNU-only flags agents reach for now resolve.
+Same trick as the aliases above: classic names, modern (here, GNU) implementation. Unlike `fd`/`sd`, GNU coreutils is a superset-compatible drop-in — BSD scripts that use shared flags still work, and the GNU-only flags agents reach for now resolve.
 
-Pairs naturally with `findutils` (GNU find/xargs/locate) and `gnu-sed` (GNU sed) if you want to replace those too. The sed-dispatch approach above is still recommended for `sed` specifically, because the BSD `-i` requires an extension argument and GNU `-i` doesn't — scripts portable across both are easier to read with BSD sed at the bottom. But if all your work is GNU-native, `brew install gnu-sed` and alias `sed=gsed` is another valid choice.
+Pairs naturally with `findutils` (GNU find/xargs/locate) and `gnu-sed` (GNU sed) if you want to replace those too. For `sed` in particular, `brew install gnu-sed` + `alias sed=gsed` is the cleanest option if all your work is GNU-native.
 
 ## Block the destructive operations before they run
 
@@ -166,13 +163,13 @@ With `uv`: `uv venv`, `uv pip install <pkg>`, `uv run script.py`. With pyenv + p
 
 ## What this buys you
 
-**Speed on common agent commands**: ripgrep and bfs replace the BSD originals on the search hot path. sed-dispatch makes literal substitutions faster without breaking anything non-literal.
+**Speed on common agent commands**: ripgrep and bfs replace the BSD originals on the search hot path. GNU coreutils on PATH means `date -d`, `readlink -f`, `stat -c` work.
 
 **Agent workflows**: `gh pr create` from the command line, `go test ./...`, `uv run script.py`, project-local `pnpm dev` — all work directly.
 
-**Safety**: `rm -rf` and `git push --force` blocked before execution. `git commit --amend` warns.
+**Safety**: `rm -rf` and `git push --force` blocked before execution. `git commit --amend` blocked when HEAD is already on a remote; allowed silently on local-only commits.
 
-Cost: fifteen minutes, plus cloning and installing the dispatcher.
+Cost: about fifteen minutes.
 
 ## Full config
 
@@ -182,7 +179,6 @@ Cost: fifteen minutes, plus cloning and installing the dispatcher.
 # Aliases: fast tool replacements where CLI-compatible
 alias grep='rg'
 alias find='bfs'
-alias sed="$HOME/.local/bin/sed-dispatch"
 
 # GitLab (if using)
 export GITLAB_TOKEN="glpat-your-token-here"
@@ -209,15 +205,7 @@ source /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
 source /opt/homebrew/share/google-cloud-sdk/completion.zsh.inc
 ```
 
-Install sed-dispatch. Fork first, then clone your fork — the wrapper runs on every `sed` call, so it should be a script you've read and a repo you control. Takes a minute or two:
-
-```bash
-gh repo fork kimjune01/classic-dispatch --clone=false
-git clone git@github.com:YOU/classic-dispatch ~/Documents/classic-dispatch
-cd ~/Documents/classic-dispatch && ./install.sh
-```
-
-Read the ~120 lines of `sed-dispatch` before you run `install.sh`. Same for the hook scripts in `~/.claude/hooks/`. Any code you alias into your shell is code that runs when you type.
+Read the hook scripts in `~/.claude/hooks/` before relying on them. Any code you put in your shell or your agent's tool chain is code that runs when you type.
 
 Git config:
 
