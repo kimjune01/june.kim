@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 290" font-family="system-ui, sans-serif">
+  <style>
+    .title { font-size: 14px; font-weight: 600; fill: #333; text-anchor: middle; }
+    .subtitle { font-size: 11px; fill: #888; text-anchor: middle; font-style: italic; }
+    .code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; fill: #1565c0; }
+    .codebg { fill: #f5f5f5; stroke: #ddd; stroke-width: 1; rx: 4; }
+    .state-box { fill: #fafafa; stroke: #999; stroke-width: 1; rx: 4; }
+    .label { font-size: 11px; fill: #555; text-anchor: middle; }
+    .val { font-family: ui-monospace, monospace; font-size: 14px; fill: #333; font-weight: 600; text-anchor: middle; }
+    .tlabel { font-size: 10px; fill: #888; font-style: italic; text-anchor: middle; }
+    .opl { font-size: 11px; fill: #c62828; font-style: italic; text-anchor: middle; font-family: ui-monospace, monospace; }
+    .arrow { stroke: #c62828; stroke-width: 1.5; fill: none; marker-end: url(#a-imp); }
+  </style>
+  <defs>
+    <marker id="a-imp" markerWidth="7" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <text class="title" x="310" y="22">Imperative — state mutates in time</text>
+  <text class="subtitle" x="310" y="40">"Do this, then this." Named locations hold values; instructions overwrite them.</text>
+
+  <rect class="codebg" x="190" y="55" width="240" height="46"/>
+  <text class="code" x="205" y="74">alice.balance -= 100</text>
+  <text class="code" x="205" y="92">bob.balance   += 100</text>
+
+  <text class="tlabel" x="100" y="130">t = 0</text>
+  <rect class="state-box" x="40" y="138" width="120" height="48"/>
+  <text class="label" x="100" y="156">Alice.balance</text>
+  <text class="val" x="100" y="178">500</text>
+
+  <rect class="state-box" x="40" y="200" width="120" height="48"/>
+  <text class="label" x="100" y="218">Bob.balance</text>
+  <text class="val" x="100" y="240">200</text>
+
+  <line class="arrow" x1="165" y1="162" x2="455" y2="162"/>
+  <text class="opl" x="310" y="155">−= 100</text>
+
+  <line class="arrow" x1="165" y1="224" x2="455" y2="224"/>
+  <text class="opl" x="310" y="217">+= 100</text>
+
+  <text class="tlabel" x="520" y="130">t = 1</text>
+  <rect class="state-box" x="460" y="138" width="120" height="48"/>
+  <text class="label" x="520" y="156">Alice.balance</text>
+  <text class="val" x="520" y="178">400</text>
+
+  <rect class="state-box" x="460" y="200" width="120" height="48"/>
+  <text class="label" x="520" y="218">Bob.balance</text>
+  <text class="val" x="520" y="240">300</text>
+
+  <text class="subtitle" x="310" y="278">The program IS the sequence of mutations.</text>
+</svg>

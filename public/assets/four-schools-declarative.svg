@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 320" font-family="system-ui, sans-serif">
+  <style>
+    .title { font-size: 14px; font-weight: 600; fill: #333; text-anchor: middle; }
+    .subtitle { font-size: 11px; fill: #888; text-anchor: middle; font-style: italic; }
+    .code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; fill: #c62828; }
+    .codebg { fill: #f5f5f5; stroke: #ddd; stroke-width: 1; rx: 4; }
+    .ent-box { fill: #fafafa; stroke: #999; stroke-width: 1; rx: 4; }
+    .ent { font-family: ui-monospace, monospace; font-size: 12px; fill: #333; text-anchor: middle; }
+    .ent-val { font-family: ui-monospace, monospace; font-size: 13px; fill: #333; text-anchor: middle; font-weight: 600; }
+    .cn { fill: #fff; stroke: #c62828; stroke-width: 1.2; }
+    .cn-label { font-family: ui-monospace, monospace; font-size: 12px; fill: #c62828; text-anchor: middle; font-weight: 600; }
+    .edge { stroke: #c62828; stroke-width: 1; fill: none; }
+    .inv-box { fill: #fff8e1; stroke: #c62828; stroke-width: 1; stroke-dasharray: 4,3; rx: 4; }
+    .inv-label { font-size: 11px; fill: #c62828; text-anchor: middle; font-style: italic; font-family: ui-monospace, monospace; }
+  </style>
+
+  <text class="title" x="310" y="22">Declarative — relations must hold</text>
+  <text class="subtitle" x="310" y="40">No order, no time. The solver finds bindings that satisfy every constraint.</text>
+
+  <rect class="codebg" x="155" y="55" width="310" height="62"/>
+  <text class="code" x="170" y="74">transfer(A, B, Amt) :−</text>
+  <text class="code" x="170" y="92">  A.bal &gt;= Amt,</text>
+  <text class="code" x="170" y="108">  A_new is A.bal − Amt,  B_new is B.bal + Amt.</text>
+
+  <rect class="ent-box" x="40" y="138" width="100" height="46"/>
+  <text class="ent" x="90" y="156">A.bal</text>
+  <text class="ent-val" x="90" y="175">500</text>
+
+  <rect class="ent-box" x="260" y="138" width="100" height="46"/>
+  <text class="ent" x="310" y="156">Amt</text>
+  <text class="ent-val" x="310" y="175">100</text>
+
+  <rect class="ent-box" x="480" y="138" width="100" height="46"/>
+  <text class="ent" x="530" y="156">B.bal</text>
+  <text class="ent-val" x="530" y="175">200</text>
+
+  <line class="edge" x1="140" y1="161" x2="200" y2="161"/>
+  <circle class="cn" cx="215" cy="161" r="14"/>
+  <text class="cn-label" x="215" y="166">≥</text>
+  <line class="edge" x1="230" y1="161" x2="260" y2="161"/>
+
+  <line class="edge" x1="90" y1="184" x2="90" y2="220"/>
+  <line class="edge" x1="310" y1="184" x2="310" y2="220"/>
+  <line class="edge" x1="530" y1="184" x2="530" y2="220"/>
+
+  <circle class="cn" cx="200" cy="232" r="14"/>
+  <text class="cn-label" x="200" y="237">−</text>
+  <line class="edge" x1="90" y1="232" x2="186" y2="232"/>
+  <line class="edge" x1="310" y1="232" x2="214" y2="232"/>
+
+  <circle class="cn" cx="420" cy="232" r="14"/>
+  <text class="cn-label" x="420" y="237">+</text>
+  <line class="edge" x1="310" y1="232" x2="406" y2="232"/>
+  <line class="edge" x1="530" y1="232" x2="434" y2="232"/>
+
+  <line class="edge" x1="200" y1="246" x2="200" y2="262"/>
+  <line class="edge" x1="420" y1="246" x2="420" y2="262"/>
+
+  <rect class="ent-box" x="150" y="262" width="100" height="40"/>
+  <text class="ent" x="200" y="280">A_new</text>
+  <text class="ent-val" x="200" y="296">400</text>
+
+  <rect class="ent-box" x="370" y="262" width="100" height="40"/>
+  <text class="ent" x="420" y="280">B_new</text>
+  <text class="ent-val" x="420" y="296">300</text>
+
+  <text class="subtitle" x="310" y="316">The program IS the constraint network.</text>
+</svg>
