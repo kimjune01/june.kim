@@ -18,6 +18,7 @@ Scan a post for AI writing tics and missed opportunities for human voice.
 5. **Judgment call:** if every finding is clear Filter-level work (em dashes, filler, negative parallelisms, restated points), apply fixes directly. If any finding touches argument structure, voice, or is ambiguous, wait for the user to approve.
 6. Apply fixes. Preserve the argument; cut the padding; add the voice. Balance flow and punch: longer sentences build momentum, short ones land the point. A post that's all short sentences reads like a telegram. A post that's all long ones reads like a textbook.
 7. Re-read the result. If anything still reads as AI or feels flat, report it.
+8. **Post-apply report (earn-back).** Every cut gets listed as a numbered item: line number, original text, applied rewrite. Flag with `⚠` any cut where the orchestrator had reservations — those are the cases most likely to want reverting. The user can reply `undo N` (or `undo 2,4,7`) to restore specific cuts. Earn-back sits in the report, not blocking the apply. This is the user's safety hatch: the deterministic detection cut things assertively; the report gives every cut back to the user as undo-able.
 
 ## Batch mode
 
@@ -32,11 +33,17 @@ When given a directory instead of a single file, or when running a targeted pass
 
 **Em dash overuse.** More than 1 per post is a tell. Replace with periods, commas, colons, or restructure. Count every `—` in the file.
 
-**Negative parallelisms.** "Not X but Y", "It's not just X, it's Y", "isn't X; it's Y." Define things by what they are. The negation half is almost always dead weight. Alternatives: "More than X", "Beyond X", or just state Y directly. Even legitimate uses now read as generated.
+**Negative parallelisms.** "Not X but Y", "It's not just X, it's Y", "isn't X; it's Y." Define things by what they are. The negation half is almost always dead weight.
+
+**This pattern slips past LLM scans (including this one) more than any other** — LLMs are blind to their own training distribution. For exhaustive coverage, defer to [/not-but](~/skills/not-but/SKILL.md), which uses deterministic grep for detection and a dedicated triage subagent for the earned-vs-dead-weight call. Run /not-but after /humanize as a forced check, or invoke it directly. /humanize still flags obvious instances opportunistically, but /not-but is authoritative. Every cut /not-but applies surfaces in /humanize's post-apply report (step 8) as undo-able by line number; cuts the orchestrator flagged for reservation get a `⚠` so they catch the user's eye first.
+
+When triaging in /humanize standalone, match by shape not wording: subject + negative copula + complement, then same-subject + positive copula + alternative. Tense/number variations (is/are/was/were/will be/has been/becomes/feels/seems/sounds); same-sentence (semicolon, comma, em dash) and cross-sentence forms ("This isn't about X. ... It's about Y."); tail-attached negation ("X — not Y", "X, not Y"); and parallel paragraph openings where one paragraph denies and the next asserts.
+
+**Concession-rebuttal stacking.** Three or more `X is great, but Y is wrong with it` constructions in adjacent paragraphs or list items. AI's go-to template for review-style comparisons — each item gets a positive trait then a "but" rebuttal. If three or more in a row, restructure as a comparison table or trim to the single sharpest item. The repeated rhythm is the tell, even when each individual sentence is fine.
 
 **Restated points.** Same idea said 2-3 ways. Keep the best, kill the rest. Watch for recap paragraphs that summarize what the previous section argued, and closing sentences that echo the opening of their own paragraph. The closing sentence should advance, not echo. A new *angle* on the same idea is reinforcement, not restatement.
 
-**Rule of three.** Three parallel items are a tell. Check whether the list is honest or performative. If the argument already landed, state the strongest claim and stop. A triple where each item carries genuinely distinct information is fine.
+**Triple prefix (the filibuster).** A triple itself is fine. A triple where each item shares a repeated prefix or grammatical mold is the tell — it sounds like a politician filibustering: "its own X, its own Y, its own Z"; "no X, no Y, no Z"; "for X, for Y, for Z"; "the X of A, the X of B, the X of C." The repeated prefix pads the rhetoric without adding meaning. Drop it (one "its own" up front, then three bare items) or vary the mold so the parallel breaks. Earned cases exist (a repeated prefix that demonstrates a meaningful equivalence, e.g. cross-language parallels), but the default presumption is filibuster until proven otherwise.
 
 **AI vocabulary.** Additionally, crucial, delve, enhance, fostering, garner, highlight (verb), interplay, intricate, key (adj), landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore (verb), valuable, vibrant. Flag any occurrence.
 
@@ -49,6 +56,8 @@ When given a directory instead of a single file, or when running a targeted pass
 **Filler.** "In order to" (→ "to"), "it is important to note that" (→ delete), "has the ability to" (→ "can"), "due to the fact that" (→ "because"). "The question is/was whether" (→ ask it directly or just state the next sentence). "Worth calling out/noting/mentioning" (→ delete, just say it). See also /tighten for broader compression patterns (dead weight, redundant modifiers, nominalizations).
 
 **Throat-clearing.** Sentences that announce what's about to be said instead of saying it. Examples: "To give you something concrete to react to, here's X" (→ just say X). "The short version:" (→ delete). "Here's why" (→ just argue). "The framework says X" (→ just state X). Editorializing ("No disagreement here", "The parallel is clear") and trailing softeners ("curious whether...") are variants. The test: does the sentence add information or just the author's confidence that information is coming?
+
+**Deferred conclusion.** "That told me X." "That's the point: Y." "What this means is Z." "The takeaway: W." "The pattern: ..." The AI explaining its own argument back to the reader after the fact. Just state the conclusion. If the argument doesn't land without the scaffold, fix the argument, not the framing. Subform of throat-clearing, but post-hoc rather than pre-hoc — and worth flagging separately because it sneaks past the throat-clearing check by appearing to deliver content.
 
 **Inflated significance.** "Pivotal moment", "setting the stage", "marks a shift", "indelible mark", "evolving landscape". If the sentence works without the inflation, cut it.
 
@@ -68,6 +77,10 @@ When given a directory instead of a single file, or when running a targeted pass
 
 **Slang and voice injection.** Scan for places where formal phrasing can become casual without forcing it. The test: does the swap sound like a person thinking out loud? If a reader notices the informality, it's forced. Targets: (1) Abstract motivations → rhetorical questions. (2) Multi-clause descriptions → blunt summaries. (3) Jargon → plain equivalent when the formal term isn't load-bearing. Leave technical terms that carry precision no slang can match. A second pass should find nothing to add.
 
+**First-person presence.** When a post is about the author's project, opinion, or lived experience but uses "I" fewer than ~5 times per 1000 words, the voice has drifted to documentation. Re-personalize: "It produces X" → "I made it produce X"; "The framework requires Y" → "I had to specify Y when I built it." First-person anchors claims to specific events, lets doubts and motivations surface, and puts the writer on the hook for what they say. Skip when the genre is genuinely third-person (analytical reportage, abstract observation); apply when the post is the author's own work, opinion, or thought.
+
 ## Reference
 
 Based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) and the [humanizer](https://github.com/blader/humanizer) skill by @blader.
+
+**Reference contrast (calibration set):** [/cord](https://june.kim/cord) is AI-written; [/cord-human](https://june.kim/cord-human) is the same author's human rewrite of the same project. Reading them side by side surfaces every pattern above in context. When tuning this skill, re-run it on `src/content/blog/2026-02-18-cord.md` and check that the diff converges toward `src/content/blog/2026-02-21-cord-human.md` without overshooting (the human version is not pattern-free; it has typos, long winding sentences, and other features the skill should not strip).
