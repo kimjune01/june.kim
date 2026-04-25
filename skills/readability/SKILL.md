@@ -21,6 +21,10 @@ Read sentences aloud in your head. Flag where the rhythm breaks.
 
 **Dangling prepositions.** The sentence dies on "of." Restructure so the final word carries weight.
 
+**Power verbs over copulas.** `is/are/was/were` + abstract noun + `of`/`that` usually hides a stronger active verb. *"The thesis is that languages crystallize"* → *"Languages crystallize."* *"There is a tendency for systems to drift"* → *"Systems drift."* *"The result is decreased latency"* → *"Latency drops."* The action verb shows; the copula tells. Don't blanket-swap, though: definitional sentences (*"A monad is a monoid in the category of endofunctors"*), identity statements (*"That's the shape of a cognitive architecture"*), and deliberate flat declarations (*"The slot is open."*) earn their copulas. Flag where the copula adds words without adding meaning.
+
+**Active voice.** Find the actor and put it in subject position. *"It's what every framework is scrambling to bolt on"* (cleft) → *"Every framework is scrambling to bolt it on."* *"The bug was caused by a race condition"* (passive) → *"A race condition caused the bug."* The cleft (`It's what X...`, `What X is...`) and the passive (`X was Y'd by Z`) both bury the actor. Identify the doer; make it the subject. Keep the cleft when the topic genuinely sits in the predicate (contrast: *"It's not the algorithm that matters, it's the data"*) or when the actor is unknown or irrelevant (*"The file was deleted overnight"* — by whom doesn't matter).
+
 **Monotonous sentence starts.** 3+ consecutive sentences starting with the same word or structure. Vary the opener: invert, use a dependent clause, start with the object.
 
 **Parallel structure mismatch.** List items that don't match meter. Fix by making items the same shape.

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 290" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 620 205" font-family="system-ui, sans-serif">
   <style>
     .title { font-size: 14px; font-weight: 600; fill: #333; text-anchor: middle; }
     .subtitle { font-size: 11px; fill: #888; text-anchor: middle; font-style: italic; }
@@ -16,9 +16,6 @@
       <path d="M0,0 L7,3 L0,6" fill="#c62828"/>
     </marker>
   </defs>
-
-  <text class="title" x="310" y="22">Imperative — state mutates in time</text>
-  <text class="subtitle" x="310" y="40">"Do this, then this." Named locations hold values; instructions overwrite them.</text>
 
   <rect class="codebg" x="190" y="55" width="240" height="46"/>
   <text class="code" x="205" y="74">alice.balance -= 100</text>
@@ -47,6 +44,4 @@
   <rect class="state-box" x="460" y="200" width="120" height="48"/>
   <text class="label" x="520" y="218">Bob.balance</text>
   <text class="val" x="520" y="240">300</text>
-
-  <text class="subtitle" x="310" y="278">The program IS the sequence of mutations.</text>
 </svg>

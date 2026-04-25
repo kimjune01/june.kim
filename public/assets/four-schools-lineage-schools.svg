@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 990" font-family="system-ui, sans-serif">
+  <style>
+    .legend-name { font-size: 11px; fill: #333; font-weight: 600; }
+    .legend-math { font-size: 11px; fill: #888; font-style: italic; font-family: ui-monospace, monospace; }
+    .year { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; fill: #888; text-anchor: end; }
+    .lang { font-family: ui-monospace, monospace; font-size: 12px; fill: #333; }
+    .grounding { font-family: ui-monospace, monospace; font-size: 11px; fill: #555; font-style: italic; text-anchor: end; }
+    .star { font-size: 16px; text-anchor: middle; }
+    .ph-imp { fill: #1565c0; }
+    .ph-func { fill: #2e7d32; }
+    .ph-dec { fill: #c62828; }
+    .ph-act { fill: #ef6c00; }
+    .spine { stroke: #ddd; stroke-width: 1; }
+    .stripe { fill: #f5f5f5; }
+    .connector { stroke: #ccc; stroke-width: 0.7; stroke-dasharray: 2,2; }
+  </style>
+
+  <circle class="ph-imp" cx="20" cy="20" r="5"/>
+  <text class="legend-name" x="32" y="24">Imperative</text>
+  <text class="legend-math" x="115" y="24">Turing machine</text>
+
+  <circle class="ph-func" cx="20" cy="40" r="5"/>
+  <text class="legend-name" x="32" y="44">Functional</text>
+  <text class="legend-math" x="115" y="44">λ-calculus</text>
+
+  <circle class="ph-dec" cx="20" cy="60" r="5"/>
+  <text class="legend-name" x="32" y="64">Declarative</text>
+  <text class="legend-math" x="115" y="64">Horn clauses</text>
+
+  <circle class="ph-act" cx="20" cy="80" r="5"/>
+  <text class="legend-name" x="32" y="84">Actors</text>
+  <text class="legend-math" x="115" y="84">π-calculus</text>
+
+  <rect class="stripe" x="0" y="106" width="380" height="56"/>
+  <rect class="stripe" x="0" y="246" width="380" height="84"/>
+  <rect class="stripe" x="0" y="526" width="380" height="56"/>
+  <rect class="stripe" x="0" y="722" width="380" height="112"/>
+
+  <line class="spine" x1="200" y1="110" x2="200" y2="974"/>
+
+  <text class="grounding" x="130" y="124">Turing machine</text>
+  <line class="connector" x1="138" y1="120" x2="170" y2="120"/>
+  <text class="year" x="185" y="124">1936</text>
+  <text class="star ph-imp" x="200" y="126">★</text>
+
+  <text class="grounding" x="130" y="152">λ-calculus</text>
+  <line class="connector" x1="138" y1="148" x2="170" y2="148"/>
+  <text class="year" x="185" y="152">1936</text>
+  <text class="star ph-func" x="200" y="154">★</text>
+
+  <text class="grounding" x="130" y="180">Horn clauses</text>
+  <line class="connector" x1="138" y1="176" x2="170" y2="176"/>
+  <text class="year" x="185" y="180">1951</text>
+  <text class="star ph-dec" x="200" y="182">★</text>
+
+  <text class="year" x="185" y="208">1957</text>
+  <circle class="ph-imp" cx="200" cy="204" r="5"/>
+  <text class="lang" x="220" y="208">Fortran</text>
+
+  <text class="year" x="185" y="236">1958</text>
+  <circle class="ph-func" cx="200" cy="232" r="5"/>
+  <text class="lang" x="220" y="236">Lisp</text>
+
+  <text class="grounding" x="130" y="264">McCarthy paper</text>
+  <line class="connector" x1="138" y1="260" x2="170" y2="260"/>
+  <text class="year" x="185" y="264">1960</text>
+  <text class="star ph-func" x="200" y="266">★</text>
+
+  <text class="year" x="185" y="292">1960</text>
+  <circle class="ph-imp" cx="200" cy="288" r="5"/>
+  <text class="lang" x="220" y="292">Algol</text>
+
+  <text class="grounding" x="130" y="320">Hoare logic</text>
+  <line class="connector" x1="138" y1="316" x2="170" y2="316"/>
+  <text class="year" x="185" y="320">1969</text>
+  <text class="star ph-imp" x="200" y="322">★</text>
+
+  <text class="year" x="185" y="348">1972</text>
+  <circle class="ph-imp" cx="200" cy="344" r="5"/>
+  <text class="lang" x="220" y="348">C</text>
+
+  <text class="year" x="185" y="376">1972</text>
+  <circle class="ph-dec" cx="200" cy="372" r="5"/>
+  <text class="lang" x="220" y="376">Prolog</text>
+
+  <text class="year" x="185" y="404">1973</text>
+  <circle class="ph-act" cx="200" cy="400" r="5"/>
+  <text class="lang" x="220" y="404">Hewitt model</text>
+
+  <text class="grounding" x="130" y="432">Kowalski paper</text>
+  <line class="connector" x1="138" y1="428" x2="170" y2="428"/>
+  <text class="year" x="185" y="432">1974</text>
+  <text class="star ph-dec" x="200" y="434">★</text>
+
+  <text class="year" x="185" y="460">1974</text>
+  <circle class="ph-dec" cx="200" cy="456" r="5"/>
+  <text class="lang" x="220" y="460">SQL</text>
+
+  <text class="year" x="185" y="488">1975</text>
+  <circle class="ph-func" cx="200" cy="484" r="5"/>
+  <text class="lang" x="220" y="488">Scheme</text>
+
+  <text class="year" x="185" y="516">1976</text>
+  <circle class="ph-dec" cx="200" cy="512" r="5"/>
+  <text class="lang" x="220" y="516">Make</text>
+
+  <text class="year" x="185" y="544">1986</text>
+  <circle class="ph-func" cx="195" cy="540" r="5"/>
+  <circle class="ph-act" cx="205" cy="540" r="5"/>
+  <text class="lang" x="220" y="544">Erlang</text>
+
+  <text class="grounding" x="130" y="572">π-calculus</text>
+  <line class="connector" x1="138" y1="568" x2="170" y2="568"/>
+  <text class="year" x="185" y="572">1989</text>
+  <text class="star ph-act" x="200" y="574">★</text>
+
+  <text class="year" x="185" y="600">1990</text>
+  <circle class="ph-func" cx="200" cy="596" r="5"/>
+  <text class="lang" x="220" y="600">Haskell</text>
+
+  <text class="year" x="185" y="628">1991</text>
+  <circle class="ph-imp" cx="195" cy="624" r="5"/>
+  <circle class="ph-func" cx="205" cy="624" r="5"/>
+  <text class="lang" x="220" y="628">Python</text>
+
+  <text class="year" x="185" y="656">1993</text>
+  <circle class="ph-dec" cx="200" cy="652" r="5"/>
+  <text class="lang" x="220" y="656">HTML</text>
+
+  <text class="year" x="185" y="684">1995</text>
+  <circle class="ph-imp" cx="200" cy="680" r="5"/>
+  <text class="lang" x="220" y="684">Java</text>
+
+  <text class="year" x="185" y="712">1995</text>
+  <circle class="ph-imp" cx="200" cy="708" r="5"/>
+  <text class="lang" x="220" y="712">JavaScript</text>
+
+  <text class="grounding" x="130" y="740">Armstrong thesis</text>
+  <line class="connector" x1="138" y1="736" x2="170" y2="736"/>
+  <text class="year" x="185" y="740">2003</text>
+  <text class="star ph-act" x="200" y="742">★</text>
+
+  <text class="year" x="185" y="768">2007</text>
+  <circle class="ph-func" cx="200" cy="764" r="5"/>
+  <text class="lang" x="220" y="768">Clojure</text>
+
+  <text class="year" x="185" y="796">2009</text>
+  <circle class="ph-imp" cx="195" cy="792" r="5"/>
+  <circle class="ph-act" cx="205" cy="792" r="5"/>
+  <text class="lang" x="220" y="796">Akka</text>
+
+  <text class="year" x="185" y="824">2009</text>
+  <circle class="ph-imp" cx="195" cy="820" r="5"/>
+  <circle class="ph-act" cx="205" cy="820" r="5"/>
+  <text class="lang" x="220" y="824">Go</text>
+
+  <text class="year" x="185" y="852">2010</text>
+  <circle class="ph-imp" cx="195" cy="848" r="5"/>
+  <circle class="ph-func" cx="205" cy="848" r="5"/>
+  <text class="lang" x="220" y="852">Rust</text>
+
+  <text class="year" x="185" y="880">2011</text>
+  <circle class="ph-func" cx="195" cy="876" r="5"/>
+  <circle class="ph-act" cx="205" cy="876" r="5"/>
+  <text class="lang" x="220" y="880">Elixir</text>
+
+  <text class="year" x="185" y="908">2012</text>
+  <circle class="ph-imp" cx="195" cy="904" r="5"/>
+  <circle class="ph-func" cx="205" cy="904" r="5"/>
+  <text class="lang" x="220" y="908">TypeScript</text>
+
+  <text class="year" x="185" y="936">2013</text>
+  <circle class="ph-func" cx="195" cy="932" r="5"/>
+  <circle class="ph-dec" cx="205" cy="932" r="5"/>
+  <text class="lang" x="220" y="936">Lean</text>
+
+  <text class="year" x="185" y="964">2014</text>
+  <circle class="ph-imp" cx="195" cy="960" r="5"/>
+  <circle class="ph-func" cx="205" cy="960" r="5"/>
+  <text class="lang" x="220" y="964">Swift</text>
+</svg>

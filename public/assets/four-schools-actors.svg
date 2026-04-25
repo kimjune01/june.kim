@@ -1,14 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 320" font-family="system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 250" font-family="system-ui, sans-serif">
   <style>
-    .title { font-size: 14px; font-weight: 600; fill: #333; text-anchor: middle; }
-    .subtitle { font-size: 11px; fill: #888; text-anchor: middle; font-style: italic; }
     .code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; fill: #ef6c00; }
     .codebg { fill: #f5f5f5; stroke: #ddd; stroke-width: 1; rx: 4; }
     .actor { fill: #fff; stroke: #ef6c00; stroke-width: 1.5; }
-    .actor-name { font-size: 13px; font-weight: 600; fill: #ef6c00; text-anchor: middle; }
+    .actor-name { font-size: 14px; font-weight: 600; fill: #ef6c00; text-anchor: middle; }
     .actor-state { font-family: ui-monospace, monospace; font-size: 12px; fill: #333; text-anchor: middle; }
     .mailbox { fill: #fff8e1; stroke: #ef6c00; stroke-width: 1; stroke-dasharray: 3,2; rx: 3; }
-    .mb-label { font-size: 9px; fill: #ef6c00; text-anchor: middle; font-style: italic; }
+    .mb-label { font-size: 10px; fill: #ef6c00; text-anchor: middle; font-style: italic; }
     .mb-msg { font-family: ui-monospace, monospace; font-size: 10px; fill: #555; text-anchor: middle; }
     .arrow { stroke: #ef6c00; stroke-width: 1.5; fill: none; marker-end: url(#a-act); }
     .msg { font-family: ui-monospace, monospace; font-size: 11px; fill: #ef6c00; text-anchor: middle; }
@@ -20,43 +18,31 @@
     </marker>
   </defs>
 
-  <text class="title" x="310" y="22">Actors — isolated state, messages cross</text>
-  <text class="subtitle" x="310" y="40">No shared memory. Each actor has a mailbox; the program is a conversation.</text>
+  <rect class="codebg" x="135" y="10" width="330" height="50"/>
+  <text class="code" x="150" y="30">Alice ! {transfer, Bob, 100}</text>
+  <text class="code" x="150" y="50">%% Alice then sends → Bob ! {credit, 100}</text>
 
-  <rect class="codebg" x="170" y="55" width="280" height="46"/>
-  <text class="code" x="185" y="74">Alice ! {transfer, Bob, 100}</text>
-  <text class="code" x="185" y="92">%% Alice then sends → Bob ! {credit, 100}</text>
+  <text class="msg" x="68" y="120">{transfer,</text>
+  <text class="msg" x="68" y="134">Bob, 100}</text>
+  <line class="arrow" x1="20" y1="150" x2="130" y2="150"/>
 
-  <text class="step" x="60" y="135">caller</text>
-  <line class="arrow" x1="60" y1="145" x2="60" y2="170"/>
-  <text class="msg" x="60" y="200">{transfer,</text>
-  <text class="msg" x="60" y="214">Bob, 100}</text>
-  <line class="arrow" x1="80" y1="207" x2="155" y2="207"/>
+  <circle class="actor" cx="180" cy="150" r="48"/>
+  <text class="actor-name" x="180" y="146">Alice</text>
+  <text class="actor-state" x="180" y="166">bal: 500→400</text>
 
-  <circle class="actor" cx="200" cy="207" r="42"/>
-  <text class="actor-name" x="200" y="200">Alice</text>
-  <text class="actor-state" x="200" y="220">bal: 500→400</text>
+  <rect class="mailbox" x="140" y="210" width="80" height="34"/>
+  <text class="mb-label" x="180" y="222">📥 inbox</text>
+  <text class="mb-msg" x="180" y="237">{transfer…}</text>
 
-  <rect class="mailbox" x="160" y="258" width="80" height="34"/>
-  <text class="mb-label" x="200" y="270">📥 inbox</text>
-  <text class="mb-msg" x="200" y="285">{transfer…}</text>
+  <line class="arrow" x1="228" y1="150" x2="372" y2="150"/>
+  <text class="msg" x="300" y="138">{credit, 100}</text>
+  <text class="step" x="300" y="170">async send</text>
 
-  <line class="arrow" x1="245" y1="207" x2="370" y2="207"/>
-  <text class="msg" x="307" y="200">{credit, 100}</text>
-  <text class="step" x="307" y="222">async send</text>
+  <circle class="actor" cx="420" cy="150" r="48"/>
+  <text class="actor-name" x="420" y="146">Bob</text>
+  <text class="actor-state" x="420" y="166">bal: 200→300</text>
 
-  <circle class="actor" cx="415" cy="207" r="42"/>
-  <text class="actor-name" x="415" y="200">Bob</text>
-  <text class="actor-state" x="415" y="220">bal: 200→300</text>
-
-  <rect class="mailbox" x="375" y="258" width="80" height="34"/>
-  <text class="mb-label" x="415" y="270">📥 inbox</text>
-  <text class="mb-msg" x="415" y="285">{credit…}</text>
-
-  <text class="step" x="540" y="200">no shared</text>
-  <text class="step" x="540" y="214">memory</text>
-  <text class="step" x="540" y="228">between</text>
-  <text class="step" x="540" y="242">actors</text>
-
-  <text class="subtitle" x="310" y="312">The program IS the conversation.</text>
+  <rect class="mailbox" x="380" y="210" width="80" height="34"/>
+  <text class="mb-label" x="420" y="222">📥 inbox</text>
+  <text class="mb-msg" x="420" y="237">{credit…}</text>
 </svg>
