@@ -94,3 +94,4 @@
   <text x="440" y="195" text-anchor="middle" font-size="10" fill="#888" font-style="italic">state evolution (cross-cycle)</text>
   <path d="M250,157 Q75,157 75,94" stroke="#1565c0" stroke-width="0.8" fill="none" stroke-dasharray="2,2"/>
 </svg>
+ 
