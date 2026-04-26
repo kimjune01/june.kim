@@ -10,7 +10,7 @@ Open any React codebase and you're touching three programming paradigms at once:
 <colgroup><col style="width:7em"><col style="width:9em"><col style="width:6em"><col><col style="width:11em"><col style="width:16em"></colgroup>
 <thead><tr><th style="background:#f0f0f0">School</th><th style="background:#f0f0f0">Unit</th><th style="background:#f0f0f0">Exemplar</th><th style="background:#f0f0f0">Irreducible because</th><th style="background:#f0f0f0">Breaks at</th><th style="background:#f0f0f0">Patched by</th></tr></thead>
 <tr><td>Imperative</td><td>Statement</td><td>C</td><td>The world is mutable; you can't perceive your way out of pressing a button</td><td>Concurrency safety</td><td>Functional types (Rust borrow checker)</td></tr>
-<tr><td>Functional</td><td>Expression</td><td>Haskell</td><td>Same input, same output; inference must be referentially transparent</td><td>I/O and identity</td><td>Actors (Erlang) or monads (Haskell)</td></tr>
+<tr><td>Functional</td><td>Expression</td><td>Haskell</td><td>A function has no inside; replace it with a lookup table and nothing changes</td><td>Side effects</td><td>Monads, then algebraic effects</td></tr>
 <tr><td>Declarative</td><td>Relation, constraint</td><td>Prolog, SQL</td><td>Goals describe what, not how</td><td>Performance and dynamism</td><td>Imperative escape hatches (PL/pgSQL, useEffect)</td></tr>
 <tr><td>Actors</td><td>Process, message</td><td>Erlang</td><td>Identity, parallel cognition, no shared state</td><td>Large-grain orchestration</td><td>Declarative workflows (Temporal, BPMN)</td></tr>
 </table>
@@ -58,6 +58,8 @@ No shared memory. Each actor has a mailbox; the program is a conversation.
 <div style="max-width:720px;margin:1.5em auto 3em;">
 <img src="/assets/four-schools-actors.svg" alt="Actors paradigm: a caller sends a transfer message to Alice's mailbox; Alice processes it, decrements her local balance from 500 to 400, then sends a credit message to Bob's mailbox; Bob processes and increments his balance from 200 to 300. No shared memory between actors." style="width:100%; display:block;">
 </div>
+
+<hr>
 
 Imperative says a program is a sequence of state changes. Functional says it is a transformation between values. Declarative says it is a constraint network. Actors say it is a conversation between isolated entities.
 
@@ -125,7 +127,7 @@ The least-explored pair is where multi-agent systems are about to live.
 
 Programming-language pointers, oldest at top.
 
-<div style="max-width:540px;margin:1.5em auto;">
+<div style="max-width:460px;margin:1.5em auto;">
 <img src="/assets/four-schools-lineage-schools.svg" alt="Long vertical timeline of programming languages from 1936 to 2014, with each entry tagged by a colored dot indicating its paradigm: imperative (blue), functional (green), declarative (red), actors (orange). Synthesis languages have two colored dots. Stars mark foundational works." style="width:100%; display:block;">
 </div>
 
@@ -133,18 +135,6 @@ Programming-language pointers, oldest at top.
 
 Four schools, six bridges, one missing quad. Each pair has a decade of work behind it; the quad has a generation ahead of it.
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:9em"><col><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">Combination</th><th style="background:#f0f0f0">Direction</th><th style="background:#f0f0f0">Yield</th></tr></thead>
-<tr><td>Imp + Func</td><td>Algebraic effects and resource ownership in one type system</td><td>Concurrency safety and effect handling unified</td></tr>
-<tr><td>Imp + Dec</td><td>LLM-cheap formal verification</td><td>Specs become economical for everyday code</td></tr>
-<tr><td>Imp + Actors</td><td>Durable execution everywhere</td><td>Actors absorb the database</td></tr>
-<tr><td>Func + Dec</td><td>E-graphs as the compiler IR</td><td>Optimizer as theorem prover</td></tr>
-<tr><td>Func + Actors</td><td>Actors independent of process, machine, and time</td><td>Programs survive any infrastructure</td></tr>
-<tr><td>Dec + Actors</td><td>Multi-agent orchestration as a first-class language</td><td>YAML over function calls disappears</td></tr>
-<tr><td>All four</td><td>The four-way synthesis as one language</td><td>A real cognitive architecture, not a stack of frameworks</td></tr>
-</table>
-
-The quad is the cognitive-architecture problem in language clothing. The closest artifacts (React + Hooks, Erlang OTP, Algebraic effects, Behavior trees) each touch three of the four, but none unifies all. Soar and ACT-R hand-wired all four in the eighties; modern LLM stacks arrive the same way, gluing pure inference (functional) to tool calls (imperative) over a memory store (declarative) under a multi-agent runtime (actors). Each generation invents its own DSL (production rules, chunks, graph specs, role contracts), and the same primitives recur under different names. A canonical four-way language will crystallize the way [Smalltalk](https://en.wikipedia.org/wiki/Smalltalk) did out of message-passing simulators, or Erlang out of Ericsson's telecom: extracted from a generation of frameworks all reaching for the same abstractions.
+The quad is the cognitive-architecture problem cosplaying as a programming language. The closest artifacts (React + Hooks, Erlang OTP, Algebraic effects, Behavior trees) each touch three of the four, but none unifies all. Soar and ACT-R hand-wired all four in the eighties; modern LLM stacks arrive the same way, gluing pure inference (functional) to tool calls (imperative) over a memory store (declarative) under a multi-agent runtime (actors). Each generation invents its own DSL (production rules, chunks, graph specs, role contracts), and the same primitives recur under different names. A canonical four-way language will crystallize the way [Smalltalk](https://en.wikipedia.org/wiki/Smalltalk) did out of message-passing simulators, or Erlang out of Ericsson's telecom: extracted from a generation of frameworks all reaching for the same abstractions.
 
 If the pattern holds, we're about 10 years out from a quad-paradigm language.
