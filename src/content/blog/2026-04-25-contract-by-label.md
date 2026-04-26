@@ -10,15 +10,15 @@ We got this right for distributing code. We got it wrong for annotating it.
 
 ## Receipts named where licenses should be
 
-A type-checker accepts `@pure` on a function. The annotation tells the *next* prover the function has no side effects. It tells the *caller* almost nothing. Can I memoize this? Can I call it from a destructor? Can I run it during constexpr evaluation? Each is a separate license. `@pure` is the proof technique; the licenses are downstream.
+A type-checker accepts `const` on a C++ method. The annotation tells the *next* prover the method won't mutate `this`. It tells the *caller* almost nothing. Can I share the object across threads? Can I cache the return value? Can I call it on a temporary? Each is a separate license. `const` is the proof technique; the licenses are downstream.
 
 Same with database isolation. [`SERIALIZABLE`, `REPEATABLE_READ`, `READ_COMMITTED`](https://en.wikipedia.org/wiki/Isolation_(database_systems)). Every developer guesses wrong because the names tell you what the *prover* did, not what *you* are licensed to assume. If they were named `phantom-safe`, `compose-with-parallel-writers`, `snapshot-stable`, callers would pick correctly the first time.
 
-Same with `@noexcept`, `@nullable`, `@thread_safe`. Receipts dressed as interfaces.
+Same with `volatile`, Java's `synchronized`, Rust's `unsafe`. Receipts dressed as interfaces.
 
 ## The proof artifact is a cache
 
-Once you see it, the structure snaps into place. The notarization (proof, audit report, type-checker output, cert record) is a **cache**; the license label is the **key**; the proof contents are the **value** the consumer never reads.
+The notarization (proof, audit report, type-checker output, cert record) is a **cache**; the license label is the **key**; the proof contents are the **value** the consumer never reads.
 
 That's why labels exist: **verify-every-time is too expensive**. Past trivial cost, you can't re-prove a property at every callsite. You prove once, label the result, and let consumers query by label forever. The label is the amortization protocol.
 
@@ -29,15 +29,15 @@ This works at every scale.
 | repo | `license: MIT` | LICENSE text + legal mechanism | maintainer |
 | service | [`SOC 2 Type II`](https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2) | full audit report | auditor |
 | module | `Apache-2.0` | NOTICE + patent grants | committer |
-| function | `@noexcept`, `@pure` | type-checker proof obligation | compiler |
+| function | `const`, `volatile` | type-checker proof obligation | compiler |
 | node | `safe-to-retry`, `loop-safe` | runtime cert + statistical credence | the verification ladder |
 | call | [HTTP idempotent semantics](https://www.rfc-editor.org/rfc/rfc9110.html#name-idempotent-methods) | RFC + caller convention | spec author |
 
-Same shape every time. Prove once, query forever. The PKI analogy lands hard: when your browser checks a TLS cert, it doesn't read the chain. It queries "valid for example.com?" and gets yes or no. The chain is the cache value the validator opens; the consumer just gets the lookup result.
+Same shape every time: prove once, query forever.
 
 ## The failure mode is scale-invariant too
 
-Labels are cheap on the happy path, catastrophic when the cache lies. Someone edits the LICENSE file and downstreams keep the cached badge. A SOC 2 attestation expires and nobody rotates the audit. A `@pure` function quietly starts calling out to a service. A cert ladder trusts a node after an engine upgrade silently changed its postcondition.
+Labels are cheap on the happy path, catastrophic when the cache lies. Someone edits the LICENSE file and downstreams keep the cached badge. A SOC 2 attestation expires and nobody rotates the audit. A `@thread_safe` function quietly calls into a non-thread-safe dependency after a refactor. A cert ladder trusts a node after an engine upgrade silently changed its postcondition.
 
 Same failure shape: stale label, world drifted, nobody re-checked.
 
