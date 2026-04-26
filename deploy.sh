@@ -24,21 +24,33 @@ while IFS= read -r f; do
 done < <(find dist -name index.html -mindepth 2)
 echo "    $ALIAS_COUNT aliases created"
 
-# ─── Cache-bust HTML byte length ────────────────────────────────────────────
+# ─── Cache-bust HTML byte length (S3-aware) ─────────────────────────────────
 # `aws s3 sync --size-only` (below) compares files by byte length, not by
 # content. When an Astro asset hash rotates (e.g. blog.BJesYFMI.css →
 # blog.DR86DZLT.css), the HTML <link> tag changes but stays the same length,
-# so every static page silently keeps the stale reference and 404s the CSS.
-# Workaround: append a random run of spaces to each .html so the byte length
-# varies across deploys, forcing sync to upload it. `pnpm build` rewrites
-# dist/ from scratch each run, so the padding doesn't accumulate.
-# Asset files under _astro/ are content-hashed, so --size-only is still
-# correct (and efficient) for them.
-echo "==> Padding HTML to bust --size-only"
+# so the file gets silently skipped and visitors 404 the CSS.
+#
+# Approach: list S3 sizes once, then pad ONLY the HTML files whose local
+# size happens to equal their S3 size. One-byte pad is enough to break the
+# tie. Cost is ~1 byte per colliding file (~hundreds of bytes per deploy);
+# no avg-page bloat. Asset files under _astro/ are content-hashed so
+# --size-only is sound for them.
+echo "==> Listing S3 sizes for collision check"
+aws s3api list-objects-v2 --bucket "$BUCKET" \
+  --query 'Contents[].[Key,Size]' --output text --no-cli-pager > /tmp/s3-sizes.tsv
+
+echo "==> Pad-busting HTML on size collisions"
+PAD_COUNT=0
 while IFS= read -r f; do
-  pad=$((RANDOM % 64 + 1))
-  printf '%*s' "$pad" '' >> "$f"
+  rel="${f#dist/}"
+  local_size=$(wc -c < "$f" | tr -d ' ')
+  s3_size=$(awk -F'\t' -v k="$rel" '$1==k {print $2; exit}' /tmp/s3-sizes.tsv)
+  if [ -n "$s3_size" ] && [ "$s3_size" = "$local_size" ]; then
+    printf ' ' >> "$f"
+    PAD_COUNT=$((PAD_COUNT + 1))
+  fi
 done < <(find dist -name '*.html')
+echo "    $PAD_COUNT files pad-busted"
 
 echo "==> Syncing to S3"
 aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only

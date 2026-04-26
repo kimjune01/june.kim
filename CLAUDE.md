@@ -10,6 +10,19 @@ Astro site hosted on S3 + CloudFront. Unified build: blog + reading + apps.
 
 `bash deploy.sh` — builds, creates .html aliases, syncs to S3, invalidates CloudFront.
 
+`aws s3 sync --size-only` skips files whose local byte length matches S3. HTML is auto-handled by an S3-aware pad-bust step in `deploy.sh`. **Non-HTML same-byte-length edits are not** — if you rename `Remember`→`Transmit` in an SVG, or any equal-length edit to assets in `public/`, bust it manually before deploying:
+
+```bash
+printf ' ' >> public/assets/foo.svg   # pad by 1 byte
+# (or strip a trailing byte — either works)
+```
+
+If a deploy ships and a page still serves stale content, recovery: force-upload + invalidate.
+```bash
+aws s3 cp dist/ s3://www.june.kim/ --recursive --exclude "*" --include "*.html"
+aws cloudfront create-invalidation --distribution-id E1G9R7V0YY4VV1 --paths "/*"
+```
+
 ## Adding a post
 
 Create `src/content/blog/YYYY-MM-DD-slug.md` with front matter:
