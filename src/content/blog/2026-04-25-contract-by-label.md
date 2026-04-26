@@ -14,7 +14,18 @@ A type-checker accepts `const` on a C++ method. The annotation tells the *next* 
 
 Same with database isolation. [`SERIALIZABLE`, `REPEATABLE_READ`, `READ_COMMITTED`](https://en.wikipedia.org/wiki/Isolation_(database_systems)). Every developer guesses wrong because the names tell you what the *prover* did, not what *you* are licensed to assume. If they were named `phantom-safe`, `compose-with-parallel-writers`, `snapshot-stable`, callers would pick correctly the first time.
 
-Same with `volatile`, Java's `synchronized`, Rust's `unsafe`. Receipts dressed as interfaces.
+Same shape across languages:
+
+| receipt | language | what the caller actually wants to know |
+|---|---|---|
+| [`volatile`](https://en.cppreference.com/w/cpp/language/cv) | C/C++ | don't cache reads, don't reorder accesses |
+| [`synchronized`](https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html) | Java | callable from multiple threads, one at a time |
+| [`unsafe`](https://doc.rust-lang.org/reference/unsafety.html) | Rust | invariants you must hand-check before calling |
+| [`@MainActor`](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0316-global-actors.md) | Swift | callable from main-thread UI without `await` |
+| [`Sendable`](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0302-concurrent-value-and-concurrent-closures.md) | Swift | crossable across actor boundaries |
+| [`@escaping`](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0103-make-noescape-default.md) | Swift | capture self weakly or you'll leak |
+
+Receipts dressed as interfaces.
 
 ## The proof artifact is a cache
 
