@@ -35,7 +35,7 @@ A cogarch built on this epistemology has specific structural requirements. Each 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:18em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">Requirement</th><th style="background:#f0f0f0">Consequence of not implementing</th></tr></thead>
-<tr><td>Non-boolean [credence](https://en.wikipedia.org/wiki/Credence_(statistics))</td><td>Updates too coarse, system crashes on contradictions</td></tr>
+<tr><td>Non-boolean <a href="https://en.wikipedia.org/wiki/Credence_(statistics)">credence</a></td><td>Updates too coarse, system crashes on contradictions</td></tr>
 <tr style="background:#f8f8f8"><td>Confidence must be preserved across processing stages</td><td>Graded beliefs become boolean at consolidation, confident confabulation</td></tr>
 <tr><td>Calibration</td><td>Confidence diverges from empirical frequency, decisions weighted wrong</td></tr>
 <tr style="background:#f8f8f8"><td>Knowledge and belief must not have categorically different epistemic status</td><td>Two-tier brittleness, upper tier breaks first under contradiction</td></tr>

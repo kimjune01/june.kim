@@ -108,12 +108,13 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
 
     <JuneBot slug={slug} />
 
-    {!isPoetry && (
-      <a href="https://june.kim/feed.xml" class="rss-popup" id="rss-popup" title="Subscribe via RSS">
-        <i class="fa fa-rss"></i>
-      </a>
-    )}
   </main>
+
+  {!isPoetry && (
+    <a href="https://june.kim/feed.xml" class="rss-popup" id="rss-popup" title="Subscribe via RSS">
+      <i class="fa fa-rss"></i>
+    </a>
+  )}
 
   <footer class="edit-footer">
     <a href={`https://github.com/kimjune01/kimjune01.github.io/edit/master/_posts/${slug}.md`}>edit</a>
