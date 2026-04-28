@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" style="font-family: ui-monospace, monospace;">
+  <text x="100" y="14" text-anchor="middle" fill="#888" font-size="11">Chaos</text>
+  <line x1="10" y1="70" x2="190" y2="70" stroke="#555" stroke-width="0.5" stroke-dasharray="2,3"/>
+  <path d="M 10 70 L 25 30 L 40 95 L 52 22 L 67 105 L 80 40 L 95 88 L 108 18 L 120 80 L 135 45 L 148 98 L 162 28 L 175 82 L 190 55" fill="none" stroke="#a855f7" stroke-width="2"/>
+  <circle cx="10" cy="70" r="3" fill="#a855f7"/>
+  <text x="10" y="115" fill="#666" font-size="8">↑ perturb</text>
+</svg>
