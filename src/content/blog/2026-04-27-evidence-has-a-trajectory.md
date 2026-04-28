@@ -110,3 +110,5 @@ Statistics watches. Dynamics pokes. The poke is the knowledge.
 
 - Can we read the *shape* of an e-value trajectory to diagnose the system, not just test the hypothesis? Oscillation in your evidence might reveal the cycle before the test converges.
 - The math for classifying iterative sequences already exists (convergence rate, [Lyapunov exponents](https://en.wikipedia.org/wiki/Lyapunov_exponent), stability analysis). Can we apply it to evidence trajectories? I haven't seen it done.
+
+*Sequel: [The Hypothesis Graph](/the-hypothesis-graph).*
