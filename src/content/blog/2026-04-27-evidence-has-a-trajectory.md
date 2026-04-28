@@ -72,11 +72,15 @@ A p-value is a snapshot: collect a fixed sample, compute once, decide. An [e-val
 
 E-values compose. If experiment A produces evidence $e_1$ and experiment B produces $e_2$, the product $e_1 \times e_2$ is also valid evidence. Sequential experiments compose multiplicatively. The [supermartingale](https://en.wikipedia.org/wiki/Martingale_(probability_theory)#Submartingales,_supermartingales,_and_relationship_to_harmonic_functions) property guarantees it: if you're betting honestly and the null is true, your wealth can't grow on average.
 
-A p-value compresses evidence to a single number at a single moment. An e-value preserves the trajectory: your confidence at a granularity where the system's dynamics show through.
+A p-value compresses evidence to a single number at a single moment. Why? Because the guarantee demands it. Peek mid-experiment and the false positive rate inflates. So you don't peek. You wait, compute once, and get a scalar. The temporal structure was in the data the whole time. The method threw it away because the math required it.
+
+Anytime validity removes that requirement. You can check at every observation and the error guarantee holds at each one. The trajectory is free — not a bonus feature, but the natural state of evidence that the p-value workflow was artificially suppressing. Pearl said stop observing and intervene. The same logic, one level up: stop compressing your evidence into a scalar and look at it.
+
+This is a mathematical property of the two frameworks, not an empirical finding. A p-value is a lossy compression of evidence over time into a scalar. An e-value stream is evidence over time. The system's dynamics are in the temporal structure. Compress to a scalar and they're gone. Keep the stream and they're there. No experiment needed to see why.
 
 Point an e-value at a cyclic system and the evidence trajectory inherits the dynamics. Test whether smoking reduces stress: the e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation in your confidence *is* the addiction cycle. A two-week snapshot would say "smoking reduces stress, p < .05." The e-value trajectory shows the loop, if the experiment samples across it.
 
-The four-bin classification applies to e-values when the experiment tracks the system's dynamics. E-values are granular enough to transmit what the system is doing without compressing it to a single number. Convergence, divergence, oscillation in your evidence tells you which mode the system is in. P-values destroy this signal. E-values preserve it.
+The four-bin classification applies directly. E-values don't amplify or reshape the signal — they transmit it, at a granularity where the system's dynamics show through. Once you have the trajectory, the bins tell you how to read it: convergence, divergence, oscillation, chaos. Not four possible conclusions — four modes of sensemaking. Each one tells you what kind of system you're dealing with and what to try next.
 
 ### Where it holds, where it doesn't
 
