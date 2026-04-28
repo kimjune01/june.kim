@@ -1,0 +1,90 @@
+<svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" style="font-family: ui-monospace, monospace;">
+
+  <!-- Layer 0: Implicit graph (low opacity) — existing knowledge -->
+  <g opacity="0.15">
+    <circle cx="80" cy="50" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="160" cy="30" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="250" cy="55" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="340" cy="35" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="420" cy="60" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="140" cy="80" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="300" cy="80" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <circle cx="380" cy="90" r="14" fill="none" stroke="#888" stroke-width="1.5"/>
+    <line x1="94" y1="50" x2="146" y2="33" stroke="#888" stroke-width="1"/>
+    <line x1="174" y1="30" x2="236" y2="52" stroke="#888" stroke-width="1"/>
+    <line x1="264" y1="55" x2="326" y2="38" stroke="#888" stroke-width="1"/>
+    <line x1="354" y1="38" x2="406" y2="57" stroke="#888" stroke-width="1"/>
+    <line x1="87" y1="62" x2="130" y2="72" stroke="#888" stroke-width="1"/>
+    <line x1="154" y1="80" x2="236" y2="60" stroke="#888" stroke-width="1"/>
+    <line x1="264" y1="62" x2="288" y2="74" stroke="#888" stroke-width="1"/>
+    <line x1="314" y1="80" x2="366" y2="88" stroke="#888" stroke-width="1"/>
+    <line x1="354" y1="42" x2="374" y2="78" stroke="#888" stroke-width="1"/>
+  </g>
+
+  <!-- Layer 1: Current experiment — classification -->
+  <g>
+    <!-- Current node -->
+    <circle cx="250" cy="155" r="20" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+    <text x="250" y="159" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">Perturb</text>
+
+    <!-- Edge from implicit graph down -->
+    <line x1="250" y1="69" x2="250" y2="135" stroke="#888" stroke-width="1" stroke-dasharray="3,4" opacity="0.3"/>
+
+    <!-- Classification branches -->
+    <!-- Branch 1: Monotone trend → YES -->
+    <line x1="250" y1="175" x2="250" y2="210" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="200" y="210" width="100" height="24" rx="4" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="250" y="226" text-anchor="middle" fill="#3b82f6" font-size="9">Monotone?</text>
+
+    <!-- Left branch: Curvature test → convergent (validated) -->
+    <line x1="220" y1="234" x2="140" y2="270" stroke="#22c55e" stroke-width="1.5"/>
+    <rect x="90" y="270" width="100" height="24" rx="4" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="140" y="286" text-anchor="middle" fill="#22c55e" font-size="9">Curvature?</text>
+    <text x="175" y="258" fill="#22c55e" font-size="8">yes</text>
+
+    <!-- Right branch: Curvature killed -->
+    <line x1="280" y1="234" x2="360" y2="270" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <rect x="310" y="270" width="100" height="24" rx="4" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="360" y="286" text-anchor="middle" fill="#ef4444" font-size="9">Spectral?</text>
+    <text x="325" y="258" fill="#ef4444" font-size="8">no</text>
+
+    <!-- Kill marker on right branch -->
+    <g transform="translate(360, 258)">
+      <line x1="-4" y1="-4" x2="4" y2="4" stroke="#ef4444" stroke-width="2"/>
+      <line x1="4" y1="-4" x2="-4" y2="4" stroke="#ef4444" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Layer 2: Results — validated and fresh edges -->
+  <g>
+    <!-- Convergent: validated ✓ -->
+    <line x1="140" y1="294" x2="100" y2="340" stroke="#22c55e" stroke-width="1.5"/>
+    <circle cx="100" cy="350" r="14" fill="none" stroke="#22c55e" stroke-width="2"/>
+    <text x="100" y="354" text-anchor="middle" fill="#22c55e" font-size="14">✓</text>
+    <text x="100" y="378" text-anchor="middle" fill="#22c55e" font-size="8">convergent</text>
+
+    <!-- Divergent: validated ✓ -->
+    <line x1="140" y1="294" x2="180" y2="340" stroke="#22c55e" stroke-width="1.5"/>
+    <circle cx="180" cy="350" r="14" fill="none" stroke="#22c55e" stroke-width="2"/>
+    <text x="180" y="354" text-anchor="middle" fill="#22c55e" font-size="14">✓</text>
+    <text x="180" y="378" text-anchor="middle" fill="#22c55e" font-size="8">divergent</text>
+
+    <!-- Kill → fresh hypothesis edges -->
+    <line x1="360" y1="294" x2="310" y2="340" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="310" cy="350" r="14" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>
+    <text x="310" y="354" text-anchor="middle" fill="#f59e0b" font-size="9">?</text>
+    <text x="310" y="378" text-anchor="middle" fill="#f59e0b" font-size="7">test freq</text>
+
+    <line x1="360" y1="294" x2="410" y2="340" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="410" cy="350" r="14" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>
+    <text x="410" y="354" text-anchor="middle" fill="#f59e0b" font-size="9">?</text>
+    <text x="410" y="378" text-anchor="middle" fill="#f59e0b" font-size="7">decompose</text>
+  </g>
+
+  <!-- Labels -->
+  <text x="30" y="55" fill="#888" font-size="8" opacity="0.4">existing knowledge</text>
+  <text x="440" y="160" fill="#3b82f6" font-size="8">classify</text>
+  <text x="440" y="290" fill="#ef4444" font-size="8">kill</text>
+  <text x="440" y="355" fill="#f59e0b" font-size="8">frontier</text>
+
+</svg>
