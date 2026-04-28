@@ -20,6 +20,8 @@ There's a structure to what happens after you classify — one that's been runni
 
 Every experiment is a node: what you learned is its content; open questions become edges pointing outward. Each edge pointing to a potential experiment is a hypothesis. Call it the **hypothesis graph**.
 
+#### The mechanic
+
 When a mechanic taps the alternator and the engine stalls, that's an experiment and it generates two hypothesis edges: test the battery, test the voltage regulator. The frontier advanced.
 
 A doctor orders bloodwork and sees elevated troponin. That's a node, and it generates edges: echocardiogram, stress test, catheterization. The shape of the result (not just "elevated" but *how* elevated, *how fast* it rose, *whether it's still rising*) determines which edges exist.
@@ -31,6 +33,8 @@ Every diagnostician reads the shape, not the result.
 </div>
 
 The graph says what to do next: swap in a known-good wire and test the circuit. That's the perturbation. You can only decompose as far as you can isolate. For automobile electronics, signals are linear in an acyclic system — three bins suffice (converge, diverge, oscillate) and chaos can't occur. But what about a nonlinear system with feedback?
+
+#### The web server
 
 A web application under load is nonlinear with feedback loops everywhere. Perturb it and all four bins show up:
 

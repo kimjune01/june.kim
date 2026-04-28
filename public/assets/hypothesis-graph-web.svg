@@ -1,4 +1,4 @@
-<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">
+<svg viewBox="0 0 500 245" xmlns="http://www.w3.org/2000/svg" style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">
 
   <!-- Central perturbation node -->
   <circle cx="250" cy="50" r="32" fill="none" stroke="#3b82f6" stroke-width="2"/>
