@@ -80,11 +80,11 @@ This is a mathematical property of the two frameworks, not an empirical finding.
 
 Point an e-value at a cyclic system and the evidence trajectory inherits the dynamics. Test whether smoking reduces stress: the e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation in your confidence *is* the addiction cycle. A two-week snapshot would say "smoking reduces stress, p < .05." The e-value trajectory shows the loop, if the experiment samples across it.
 
-The four-bin classification applies directly. E-values don't amplify or reshape the signal — they transmit it, at a granularity where the system's dynamics show through. Once you have the trajectory, the bins tell you how to read it: convergence, divergence, oscillation, chaos. Not four possible conclusions — four modes of sensemaking. Each one tells you what kind of system you're dealing with and what to try next.
+The four-bin classification applies directly. E-values preserve a time-indexed evidence process. If the betting strategy is well matched to the perturbation, the trajectory exposes dynamics that a terminal scalar hides. Once you have the trajectory, the bins tell you how to read it: convergence, divergence, oscillation, chaos. Not four possible conclusions — four modes of sensemaking. Each one tells you what kind of system you're dealing with and what to try next.
 
 ### Where it holds, where it doesn't
 
-Engineered systems: cleanly. You built the feedback loops, you know the graph. [Decompose](https://en.wikipedia.org/wiki/Strongly_connected_component) into cyclic components and the DAG connecting them. Apply Pearl to the acyclic parts, perturbation-response to each cycle. An agent architecture is an engineered system. Every unexpected game state is a free perturbation experiment. The environment *is* the experiment.
+Engineered systems are the best case. You have perturbation access and partial design knowledge. [Decompose](https://en.wikipedia.org/wiki/Strongly_connected_component) into cyclic components and the DAG connecting them. Apply Pearl to the acyclic parts, perturbation-response to each cycle. An agent architecture is an engineered system. Every unexpected game state is a free perturbation experiment. The environment *is* the experiment.
 
 Natural systems with unknown structure: partially. You need causal knowledge to know where one cycle ends and another begins, but cycle-testing is how you're supposed to get causal knowledge. In domains where cycle boundaries are unknown (macroeconomics, climate, cognition at scale), isolation is genuinely hard. The gap isn't theoretical. It's experimental: can you isolate the cycle?
 
@@ -111,4 +111,4 @@ Statistics watches. Dynamics pokes. The poke is the knowledge.
 - Can we read the *shape* of an e-value trajectory to diagnose the system, not just test the hypothesis? Oscillation in your evidence might reveal the cycle before the test converges.
 - The math for classifying iterative sequences already exists (convergence rate, [Lyapunov exponents](https://en.wikipedia.org/wiki/Lyapunov_exponent), stability analysis). Can we apply it to evidence trajectories? I haven't seen it done.
 
-*Sequel: [The Hypothesis Graph](/the-hypothesis-graph).*
+*After writing this, I ran the experiment. Sequel: [The Hypothesis Graph](/the-hypothesis-graph).*

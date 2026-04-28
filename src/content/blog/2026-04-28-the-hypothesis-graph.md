@@ -20,13 +20,9 @@ There's a structure to what happens after you classify — one that's been runni
 
 Every experiment is a node: what you learned is its content; open questions become edges pointing outward. Each edge pointing to a potential experiment is a hypothesis. Call it the **hypothesis graph**.
 
-#### The mechanic
+#### A stalling engine
 
 When a mechanic taps the alternator and the engine stalls, that's an experiment and it generates two hypothesis edges: test the battery, test the voltage regulator. The frontier advanced.
-
-A doctor orders bloodwork and sees elevated troponin. That's a node, and it generates edges: echocardiogram, stress test, catheterization. The shape of the result (not just "elevated" but *how* elevated, *how fast* it rose, *whether it's still rising*) determines which edges exist.
-
-Every diagnostician reads the shape, not the result.
 
 <div style="max-width: 600px; margin: 1em auto;">
 <img src="/assets/hypothesis-graph.svg" alt="The hypothesis graph: existing knowledge fades above, current classification branches into validated edges and killed tests, kill conditions generate fresh frontier nodes below" />
@@ -34,7 +30,7 @@ Every diagnostician reads the shape, not the result.
 
 The graph says what to do next: swap in a known-good wire and test the circuit. That's the perturbation. You can only decompose as far as you can isolate. For automobile electronics, signals are linear in an acyclic system — three bins suffice (converge, diverge, oscillate) and chaos can't occur. But what about a nonlinear system with feedback?
 
-#### The web server
+#### A web server under load
 
 A web application under load is nonlinear with feedback loops everywhere. Perturb it and all four bins show up:
 
@@ -74,13 +70,13 @@ A p-value is a scalar; the shape is gone. An e-value trajectory is a time series
 <tr style="background:#f8f8f8"><td><strong>Unbounded</strong></td><td>—</td><td>Divergence</td></tr>
 </table>
 
-Four bins, no gaps, no overlaps. Each shape points to a different next experiment. The shape *is* the edge-generation mechanism; it just requires keeping the temporal structure that p-values throw away.
+Four bins of triage, no gaps, no overlaps. Because the partition is exhaustive, each test eliminates at least one bin. Four bins, at most four tests to classify. Every elimination narrows what's left and points to the most informative next experiment. The shape *is* the edge-generation mechanism; it just requires keeping the temporal structure that p-values throw away.
 
 <div style="max-width: 720px; margin: 1em auto;">
 <img src="/assets/pvalue-vs-evalue.svg" alt="Same data, two pipelines: p-value produces a scalar and stops; e-value trajectory produces a classification and generates hypothesis edges" />
 </div>
 
-The [previous post](/evidence-has-a-trajectory) described four bins for this classification: converge, diverge, oscillate, chaos. The question was whether the classification actually works on composed e-value trajectories from heterogeneous experiments.
+The [previous post](/evidence-has-a-trajectory) described four bins for this classification: converge, diverge, oscillate, chaos. The question was whether the classification works on composed e-value trajectories from heterogeneous experiments.
 
 ### Kill conditions generate edges
 
@@ -100,7 +96,7 @@ Here's what I noticed: each test that fires produces a label, but each test that
 
 "Nothing triggered" → *Null, or wrong perturbation site?* Test a different node.
 
-The failure mode names the next hypothesis — that's the edge-generation mechanism. Same structure as [The Proof Manual](/the-proof-manual): when induction fails because the residual loses structure, the failure mode names the escalation. A trend test can't distinguish acceleration from deceleration? Check curvature. Kill conditions are the universal edge-generation rule. Doctors learn them by apprenticeship; mathematicians, by getting stuck. Nobody seems to have written it down.
+The failure mode names the next hypothesis — that's the edge-generation mechanism. Same structure as [The Proof Manual](/the-proof-manual): when induction fails because the residual loses structure, the failure mode names the escalation. A trend test can't distinguish acceleration from deceleration? Check curvature. Kill conditions are the universal edge-generation rule. Doctors learn them by apprenticeship; mathematicians, by getting stuck. Nobody has written it down.
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:7em"><col><col style="width:10em"></colgroup>
@@ -132,7 +128,7 @@ But the e-value trajectory of that null has a shape. The trajectory didn't grow,
 
 Only the flat null is a dead end. The other three are edges, lost in the compression to "fail to reject."
 
-### Failed replications aren't ambiguous
+### Failed replications aren't empty
 
 A "failed replication" in the p-value framework is a single bit: the original said yes, the replication said no. Was the original wrong? Was the replication underpowered? Did the system change? The boolean can't say.
 
@@ -144,9 +140,9 @@ How they disagree constrains *why* they disagree, and that constraint is the nex
 
 The graph converges when every frontier edge points to a node already tested and stably classified — no new questions. Mathematicians call this a [fixed point](https://en.wikipedia.org/wiki/Fixed_point_(mathematics)) (where f(x) = x, the map returns what you gave it); computer scientists call it a [fixpoint](https://en.wikipedia.org/wiki/Fixed-point_combinator) (where a computation stabilizes and halts). Same idea from two angles: the system has nothing left to say.
 
-Does this always happen? If every reachable node is visited, classifications are consistent, and composed e-values preserve the regime's signature, the sequence converges to the true map — anytime validity lets you check at every node without inflating error.
+If every reachable node is visited, classifications are consistent, and composed e-values preserve the regime's signature, the sequence converges to the true map — anytime validity lets you check at every node without inflating error.
 
-I don't have a theorem — I'm just showing you that good diagnosticians converge. The pieces exist: [Chernoff](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full) proved adaptive experiment selection converges, [He & Geng](https://jmlr.org/papers/v9/he08a.html) proved adaptive interventions recover causal structure, [Grünwald](https://academic.oup.com/jrsssb/article/86/5/1091/7623686) proved e-values compose across adaptive experiments. No published theorem connects them, but one would formalize what practitioners already do.
+I don't have a theorem — I'm just showing you that good diagnosticians converge. The pieces exist: [Chernoff](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full) proved adaptive experiment selection converges, [He & Geng](https://jmlr.org/papers/v9/he08a.html) proved adaptive interventions recover causal structure, [Grünwald](https://academic.oup.com/jrsssb/article/86/5/1091/7623686) proved e-values compose across adaptive experiments. No published theorem connects them. One would formalize what practitioners already do.
 
 ### An observation
 
@@ -164,7 +160,7 @@ The classification is limited to where you have:
 
 Within those limits, the algorithm converges. Outside them, it tells you where you're stuck and why, which is itself an edge.
 
-Engineered systems are fully within the limits. You built the feedback loops. You know the graph. Every unexpected state is a free perturbation, every test failure is a node, and every failure mode is an edge. The hypothesis graph is how engineered complexity becomes legible: one perturbation at a time, with the kill condition telling you where to cut next.
+Engineered systems are the best case. You have perturbation access and partial design knowledge. Every unexpected state is a free perturbation, every test failure is a node, and every failure mode is an edge. The hypothesis graph is how engineered complexity becomes legible: one perturbation at a time, with the kill condition telling you where to cut next.
 
 If the thought process can be encoded, it can be scaled and repeated. The hypothesis graph encodes it: perturb, classify the shape, follow the edge. An agent that runs this loop doesn't need intuition; it needs perturbation access and a classifier.
 
