@@ -35,12 +35,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <strong>What exists:</strong>
       <a href="https://dl.acm.org/doi/abs/10.1145/1376616.1376661">Navlakha et al. (2008)</a>
       proposed MDL-based graph summarization with bounded per-node reconstruction error
-      for <em>static</em> graphs. This is MDL, not Shannon rate-distortion theory — no
+      for <em>static</em> graphs. This is MDL, not Shannon rate-distortion theory: no
       R-D tradeoff curve, no converse bounds.
       <a href="https://homepage.divms.uiowa.edu/~badhikari/assets/doc/papers/CondensingSDM2017.pdf">Adhikari et al. (2017)</a>
       and <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11223189/">Allen et al. (2024)</a>
-      compress temporal networks preserving dynamics heuristically. None provides
-      information-theoretic bounds where distortion is measured on temporal journeys.
+      compress temporal networks preserving dynamics heuristically. None gives
+      information-theoretic bounds on temporal-journey distortion.
     </p>
 
     <p>
@@ -105,14 +105,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </p>
 
     <p>
-      Seely's framework gives exact definitions for every term. The open question
-      is whether checkpoint placement can be formulated as a constraint on a
-      relative coboundary problem, and whether spacing bounds follow from the
-      cohomological structure.
+      Seely's framework gives exact definitions for every term. The open question:
+      can checkpoint placement be formulated as a constraint on a relative
+      coboundary problem, and do spacing bounds follow from the cohomological
+      structure?
     </p>
 
     <p>
-      The linear restriction aligns with codec prediction (motion-compensated
+      Linearity aligns with codec prediction (motion-compensated
       subtraction is linear). Nonlinear extension requires Jacobian linearization.
     </p>
 
@@ -120,7 +120,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>
       Compress a temporal graph by dropping edges, measure journey distortion.
-      This is greedy edge-dropping, not a Shannon R-D bound — but the shape
+      This is greedy edge-dropping, not a Shannon R-D bound. Still, the shape
       of the curve is informative:
     </p>
 

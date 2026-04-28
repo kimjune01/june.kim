@@ -17,12 +17,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-04/">🍞 Ch4 (Kleisli Categories)</a>, <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>, <a href="/reading/category-theory/milewski-10/">🍞 Ch10 (Natural Transformations)</a>. 12 min.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">A monad is a functor <strong>M</strong> equipped with two natural transformations: <code>return</code> (&eta; : a &rarr; M(a)) and <code>join</code> (&mu; : M(M(a)) &rarr; M(a)). Equivalently, <code>bind</code> (&gt;&gt;=) replaces both. The monad laws (associativity, left/right identity) are the Kleisli category's composition laws. Monads are the compositional glue for effects: partiality, nondeterminism, logging, state.</p>
+      <p class="text-lg" style="max-width:none">A monad is a functor <strong>M</strong> equipped with two natural transformations: <code>return</code> (&eta; : a &rarr; M(a)) and <code>join</code> (&mu; : M(M(a)) &rarr; M(a)). Equivalently, <code>bind</code> (&gt;&gt;=) replaces both. The monad laws (associativity, left/right identity) are the Kleisli category's composition laws. Monads compose effects: partiality, nondeterminism, logging, state.</p>
     </div>
 
     <!-- 1. Return and join -->
     <h3>Return and join: the categorical definition</h3>
-    <p>A monad on a category C is an endofunctor M : C &rarr; C with two natural transformations: <strong>return</strong> (&eta; : Id &rarr; M) embeds a pure value, and <strong>join</strong> (&mu; : M&#8728;M &rarr; M) collapses a nested layer. The monad laws say join is associative and return is its left and right identity. This is a <a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>monoid in the category of endofunctors</a>.</p>
+    <p>A monad on a category C is an endofunctor M : C &rarr; C with two natural transformations: <strong>return</strong> (&eta; : Id &rarr; M) embeds a pure value, and <strong>join</strong> (&mu; : M&#8728;M &rarr; M) collapses a nested layer. The monad laws: join is associative, return is its two-sided identity. This is a <a href="https://en.wikipedia.org/wiki/Monad_(category_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>monoid in the category of endofunctors</a>.</p>
 
     <!-- SVG: Monad operations — return and join -->
     <div class="flex justify-center my-6">
@@ -113,7 +113,7 @@ print(f"join(None):          {maybe_join(None)}")
 
     <!-- 2. Bind -->
     <h3>Bind: the programmer's interface</h3>
-    <p><code>bind</code> (&gt;&gt;=) takes a monadic value M(a) and a function a &rarr; M(b), and produces M(b). It is equivalent to join composed with fmap: <code>bind m f = join (fmap f m)</code>. Conversely, <code>join = bind id</code>. Bind is how programmers actually use monads: chain computations that may produce effects.</p>
+    <p><code>bind</code> (&gt;&gt;=) takes a monadic value M(a) and a function a &rarr; M(b), and produces M(b). Equivalent to join composed with fmap: <code>bind m f = join (fmap f m)</code>. Conversely, <code>join = bind id</code>. Bind is how programmers use monads: chain computations that produce effects.</p>
 
     <!-- SVG: Kleisli composition -->
     <div class="flex justify-center my-6">
@@ -306,7 +306,7 @@ print(f"sum to 4: {sum4}")
 
     <!-- 5. Writer monad revisited -->
     <h3>Writer monad revisited</h3>
-    <p>The Writer monad pairs a value with a log (any monoid). <code>return x = (x, mempty)</code>. <code>bind (a, w) f = let (b, w') = f a in (b, w &lt;&gt; w')</code>. This is the monad from Ch. 4's Kleisli category, now recognized as a proper monad with return, bind, and join. The <code>tell</code> function appends to the log without producing a value.</p>
+    <p>The Writer monad pairs a value with a log (any monoid). <code>return x = (x, mempty)</code>. <code>bind (a, w) f = let (b, w') = f a in (b, w &lt;&gt; w')</code>. This is the monad from Ch. 4's Kleisli category, now with all three operations explicit. The <code>tell</code> function appends to the log without producing a value.</p>
 
     <SchemeRepl client:load initialCode={`; Writer monad: (value . log) where log is a monoid (lists here)
 ; return x = (x . ())
@@ -367,7 +367,7 @@ print(f"log:    {result[1]}")
 
     <!-- 6. Verifying the monad laws -->
     <h3>Verifying the monad laws for Maybe</h3>
-    <p>The laws are not just axioms: they are testable properties. Left identity says <code>bind (return a) f = f a</code>. Right identity says <code>bind m return = m</code>. Associativity says the order of bind nesting does not matter. If any law fails, composition breaks and the Kleisli category is not a category.</p>
+    <p>Every monad law is a testable property. Left identity: <code>bind (return a) f = f a</code>. Right identity: <code>bind m return = m</code>. Associativity: the order of bind nesting does not matter. If any law fails, composition breaks and the Kleisli category is not a category.</p>
 
     <SchemeRepl client:load initialCode={`; Verify all three monad laws for Maybe at concrete values.
 
@@ -440,7 +440,7 @@ print(f"log:    {result[1]}")
 
     <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use these concepts</p>
     <ul>
-      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories axiomatize the probability monad. The Giry monad (and its Kleisli category <strong>Stoch</strong>) is the formal backbone of <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the handshake</a> between category theory and probability.</li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories axiomatize the probability monad. The Giry monad (and its Kleisli category <strong>Stoch</strong>) grounds <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the handshake</a> between category theory and probability.</li>
       <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — monads structure the semantics of effectful programs</li>
     </ul>
 
@@ -454,7 +454,7 @@ print(f"log:    {result[1]}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>This page combines material from three of Milewski's blog posts: "Monads: Programmer's Definition" (return, bind, do notation), "Monads and Effects" (IO, state, exceptions as monadic effects), and "Monads Categorically" (the endofunctor definition with &eta; and &mu;). The Scheme translations omit do notation (Scheme has no syntactic equivalent) and IO (Scheme side-effects freely). The blog post proves that any type supporting bind and return is automatically a functor via <code>fmap f m = bind m (&lambda;a. return (f a))</code>. The fish operator (&gt;=&gt;) is Kleisli composition from Ch. 4, now seen as the morphism composition of the Kleisli category. The three monad laws are exactly the category axioms (associativity, left and right identity) for that category. The categorical definition via join (&mu;) makes the connection to adjunctions explicit: if a monad M factors as R&#8728;L for an adjunction L &#8866; R, then join = R&#8728;&epsilon;&#8728;L where &epsilon; is the counit.</p>
+    <p>This page combines material from three of Milewski's blog posts: "Monads: Programmer's Definition" (return, bind, do notation), "Monads and Effects" (IO, state, exceptions as monadic effects), and "Monads Categorically" (the endofunctor definition with &eta; and &mu;). The Scheme translations omit do notation (Scheme has no syntactic equivalent) and IO (Scheme side-effects freely). The blog post proves that any type supporting bind and return is automatically a functor via <code>fmap f m = bind m (&lambda;a. return (f a))</code>. The fish operator (&gt;=&gt;) is Kleisli composition from Ch. 4: morphism composition in the Kleisli category. The three monad laws are exactly the category axioms (associativity, left and right identity) for that category. The categorical definition via join (&mu;) connects directly to adjunctions: if a monad M factors as R&#8728;L for an adjunction L &#8866; R, then join = R&#8728;&epsilon;&#8728;L where &epsilon; is the counit.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2016/11/21/monads-programmers-definition/">Read the blog post</a>. Start with the fish operator, then see how bind and join are equivalent formulations.

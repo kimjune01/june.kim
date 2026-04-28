@@ -71,7 +71,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <h3>The free semimodule monad</h3>
-    <p>A weighted collection assigns a weight from a semiring S to each element. When S = ℕ, you're counting occurrences. When S = [0,1] with ordinary multiplication, you're assigning probabilities. The free semimodule monad over S captures all of these at once.</p>
+    <p>A weighted collection pairs each element with a weight drawn from a semiring S. When S = ℕ, weights count occurrences. When S = [0,1] with ordinary multiplication, they encode probabilities. The free semimodule monad over S captures all of these at once.</p>
 
     <div class="overflow-x-auto my-4">
       <table class="w-full text-sm">
@@ -193,7 +193,7 @@ print(f"probability: {prob} -> {p1}")
     </div>
 
     <h3>Semiring = ℕ gives counting</h3>
-    <p>When S = ℕ (natural numbers with +, ×), weights count multiplicity. Bind sums the number of paths reaching each state. This is nondeterministic search with counting.</p>
+    <p>When S = ℕ (natural numbers with +, ×), weights count multiplicity. Bind sums the number of paths reaching each state: nondeterministic search with counting.</p>
 
     <SchemeRepl client:load initialCode={`; S = ℕ: how many ways to reach each value?
 ; Fibonacci-like: from n, go to n+1 or n+2
@@ -346,7 +346,7 @@ print(f"sum = {sum(after2.values()):.3f} (probability sums to 1)")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>The examples use association lists with explicit semiring operations. Kidney and Wu work with free semimodule monads in Haskell, using type classes to abstract over the semiring. For example: the counting example above uses an explicit loop with <code>set-cdr!</code> to merge duplicates. In the paper, this is the free semimodule's universal property — the unique algebra morphism that folds a formal sum into a concrete semiring value. The computation is the same; the universality guarantee is not.</p>
+    <p>The examples use association lists with explicit semiring operations. Kidney and Wu work with free semimodule monads in Haskell, using type classes to abstract over the semiring. The counting example above uses an explicit loop with <code>set-cdr!</code> to merge duplicates; in the paper, that merge is the free semimodule's universal property — the unique algebra morphism that folds a formal sum into a concrete semiring value. The computation is the same; the universality guarantee is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">

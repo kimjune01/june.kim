@@ -95,7 +95,7 @@ print(f"bwd: {thermostat.bwd(18, 'heat', 21)}")
 
     <!-- 2. Parametrised optics -->
     <h3>Parametrised optics — agents with tunable parameters</h3>
-    <p>A <strong>parametrised optic</strong> adds parameters: the forward map depends on a parameter (policy/weights), and the backward map produces a parameter update. This is the agent abstraction. The parameter is what gets updated by learning.</p>
+    <p>A <strong>parametrised optic</strong> adds parameters: the forward map depends on a parameter (policy/weights), and the backward map produces a parameter update. This is the agent abstraction. The parameter is what learning updates.</p>
 
     <!-- SVG: Parametrised optic diagram -->
     <div class="flex justify-center my-6">
@@ -160,7 +160,7 @@ print(f"bwd: {thermostat.bwd(18, 'heat', 21)}")
 
     <!-- 3. Selection relations -->
     <h3>Selection relations — goals as predicates</h3>
-    <p>In Hedges 2018, a selection <em>function</em> picks the best action. Capucci generalizes to a selection <em>relation</em>: a predicate that says which actions are acceptable. Not "the best action" but "any action that's good enough." This is the cybernetic goal — a predicate on the optic's choices.</p>
+    <p>In Hedges 2018, a selection <em>function</em> picks the best action. Capucci generalizes to a selection <em>relation</em>: a predicate that says which actions are acceptable. Not "the best action" but "any action that's good enough." This is the cybernetic goal: a predicate on the optic's choices.</p>
 
     <SchemeRepl client:load initialCode={`; Selection relation: which actions are acceptable?
 ; Not "pick the best" but "which ones are good enough?"
@@ -193,7 +193,7 @@ prices)
 
     <!-- 4. Composing cybernetic agents -->
     <h3>Composing agents — wiring optics</h3>
-    <p>Two parametrised optics compose by wiring: agent 1's forward output feeds agent 2's forward input (the action becomes the observation), and agent 2's backward output feeds agent 1's backward input (consequences flow back). The composition of goals is: the whole system satisfies the goal if each agent satisfies its local goal given the context provided by the other.</p>
+    <p>Two parametrised optics compose by wiring: agent 1's forward output feeds agent 2's forward input (the action becomes the observation), and agent 2's backward output feeds agent 1's backward input (consequences flow back). The whole system satisfies the composite goal when each agent satisfies its local goal given the context the other provides.</p>
 
     <SchemeRepl client:load initialCode={`; Composing two agents: wire forward and backward
 
@@ -229,7 +229,7 @@ prices)
 
     <!-- 5. Goals compose -->
     <h3>Goals compose like postconditions</h3>
-    <p>This is the bridge to Staton's Hoare logic. A goal on a composed system decomposes into goals on sub-agents — exactly like a Hoare postcondition decomposes via COMP. The "handshake" is the interface between agents. Cybernetic composition IS program composition, with the backward pass added for learning.</p>
+    <p>This is the bridge to Staton's Hoare logic. A goal on a composed system decomposes into goals on sub-agents, exactly like a Hoare postcondition decomposes via COMP. The "handshake" is the interface between agents. Cybernetic composition IS program composition, with the backward pass added for learning.</p>
 
     <SchemeRepl client:load initialCode={`; Goals compose: local goals + compatible interfaces => global goal
 ; Same structure as Hoare COMP
@@ -311,13 +311,13 @@ prices)
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use plain functions for optics and simple predicates for goals. The paper works with parametrised optics in a symmetric monoidal category, selection relations as profunctors, and a formal composition theorem for goals over mixed optics. For example: the agent composition on this page wires two functions sequentially. In the paper, the same construction works over a monoidal category of parametrised optics where the forward and backward channels live in different categories (the "mixed" in mixed optics) — enabling agents whose learning substrate differs from their action space. The composition pattern is identical. The categorical scaffolding is not.</p>
+    <p>All examples use plain functions for optics and simple predicates for goals. The paper works with parametrised optics in a symmetric monoidal category, selection relations as profunctors, and a formal composition theorem for goals over mixed optics. For example: the agent composition on this page wires two functions sequentially. In the paper, the same construction works over a monoidal category of parametrised optics where the forward and backward channels live in different categories (the "mixed" in mixed optics), enabling agents whose learning substrate differs from their action space. The composition pattern is identical. The categorical scaffolding is not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2105.06332"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for parametrised optics, §4 for selection relations and goals.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a composed cybernetic system — agent composition via parametrised optics is its core structural pattern. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a composed cybernetic system: agent composition via parametrised optics is its core structural pattern. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/hedges-2018/", label: "Hedges 2018 · 6 of 21" }} next={{ href: "/reading/natural-breadcrumbs/baez-fritz-2011/", label: "Baez, Fritz 2011 · 8 of 21" }} />
   </main>

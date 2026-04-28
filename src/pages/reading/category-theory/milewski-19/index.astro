@@ -146,7 +146,7 @@ print(f"eval Succ(2): {eval_int(('succ', 2))}")
 
     <!-- 3. Catamorphisms -->
     <h3>Catamorphisms — the universal fold</h3>
-    <p>A <strong>catamorphism</strong> takes an algebra (evaluator) and recursively collapses a fixed-point structure into the carrier. It peels off one layer with <code>unfix</code>, recursively processes all sub-structures with <code>fmap</code>, then applies the evaluator. This is the unique homomorphism guaranteed by initiality.</p>
+    <p>A <strong>catamorphism</strong> takes an algebra (evaluator) and collapses a fixed-point structure into the carrier. It peels off one layer with <code>unfix</code>, processes all sub-structures recursively with <code>fmap</code>, then applies the evaluator. This is the unique homomorphism guaranteed by initiality.</p>
 
     <!-- SVG: Catamorphism — unique morphism from initial algebra -->
     <div class="flex justify-center my-6">
@@ -268,7 +268,7 @@ print(f"fib(6): {cata(natf_map, fib_alg, six)[0]}")
 
     <!-- 4. Lists as initial algebra -->
     <h3>Lists as an initial algebra</h3>
-    <p>Lists are the initial algebra of <code>ListF e a = Nil | Cons e a</code>. The catamorphism over ListF is <code>foldr</code>. Every fold you've ever written is a catamorphism in disguise.</p>
+    <p>Lists are the initial algebra of <code>ListF e a = Nil | Cons e a</code>. The catamorphism over ListF is <code>foldr</code>. Every fold you've written is a catamorphism.</p>
 
     <SchemeRepl client:load initialCode={`; ListF e a = Nil | Cons(e, a)
 ; Represented as ('nil) or ('cons element rest)
@@ -376,7 +376,7 @@ print(f"to-list: {cata(listf_map, to_list_alg, my_list)}")
 
     <!-- 6. Ring expressions -->
     <h3>Ring expressions — algebras as evaluators</h3>
-    <p>F-algebras cleanly separate <em>syntax</em> from <em>semantics</em>. The functor defines the shape of expressions (syntax). Different algebras over the same functor give different interpretations (semantics). Here: ring expressions can be evaluated to integers, pretty-printed to strings, or simplified, all via different algebras over the same RingF functor.</p>
+    <p>F-algebras cleanly separate <em>syntax</em> from <em>semantics</em>. The functor defines the shape of expressions; different algebras over the same functor give different interpretations. Ring expressions can be evaluated to integers, pretty-printed to strings, or simplified, all by swapping the algebra.</p>
 
     <SchemeRepl client:load initialCode={`; RingF: the functor for ring expressions
 ; RingF(a) = RZero | ROne | RAdd(a, a) | RMul(a, a) | RNeg(a)
@@ -466,7 +466,7 @@ print(f"to-list: {cata(listf_map, to_list_alg, my_list)}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post uses Haskell's type system to enforce the functor constraint on <code>cata</code> and to distinguish <code>Fix</code> from <code>unFix</code> at the type level. In Scheme, <code>fix</code> and <code>unfix</code> are just list wrappers; the functor map is passed explicitly. The blog post covers infinite structures via coalgebras (streams, the Sieve of Eratosthenes). This page limits coalgebras to finite unfolding because BiwaScheme does not support lazy evaluation. The blog post also proves that Lambek's theorem follows from initiality: the inverse of the evaluator is itself an algebra homomorphism, so it must be unique, making the evaluator an isomorphism. That proof is structural, not computational, so it does not translate to runnable code.</p>
+    <p>Haskell's type system enforces the functor constraint on <code>cata</code> and distinguishes <code>Fix</code> from <code>unFix</code> at the type level. In Scheme, <code>fix</code> and <code>unfix</code> are just list wrappers; the functor map is passed explicitly. The original post covers infinite structures via coalgebras (streams, the Sieve of Eratosthenes); this page limits coalgebras to finite unfolding because BiwaScheme lacks lazy evaluation. Milewski also proves that Lambek's theorem follows from initiality: the inverse of the evaluator is itself an algebra homomorphism, so it must be unique, and the evaluator is therefore an isomorphism. That proof is structural, not computational, and does not translate to runnable code.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2017/02/28/f-algebras/">Read the blog post</a>. Start with the definition of Algebra, then trace how Fix and cata fall out of initiality.

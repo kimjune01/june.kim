@@ -136,8 +136,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       With clamped inputs and outputs (known source, known target), the Hodge
       decomposition splits the forcing vector into a removable component
-      (in im D — better encoder choices can eliminate it) and an irreducible
-      component (in ker Dᵀ — no choice of activations can remove it).
+      (in im D; better encoder choices can eliminate it) and an irreducible
+      component (in ker Dᵀ; no choice of activations can remove it).
       The irreducible part lives in H¹, the first cohomology group.
     </p>
 
@@ -146,7 +146,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       A temporal α-spanner removes edges while keeping journey distances
       within a multiplicative stretch factor α. The objective is fewer edges,
-      not fewer bits. No encoding is specified, no bit budget is given.
+      not fewer bits: no encoding is specified, no bit budget given.
     </p>
 
     <Repl client:load initialCode={`class TemporalGraph:
@@ -250,20 +250,19 @@ for s in nodes:
 
     <p>
       This draws a line between stateless temporal composition and stateful
-      computation that requires buffering. The two-phase protocol — store the
-      wavefront, then apply it — is suggestive of the I-frame/P-frame cycle
-      (write a checkpoint, then compute deltas), though that analogy is ours,
-      not the paper's.
+      computation that requires buffering. The two-phase protocol (store the
+      wavefront, then apply it) echoes the I-frame/P-frame cycle: write a
+      checkpoint, then compute deltas. That analogy is ours, not the paper's.
     </p>
 
     <h3>The gaps</h3>
 
     <p>
       The spanner compresses by counting edges. The codec compresses by counting
-      bits. The sheaf separates removable from irreducible error but has no
-      temporal dynamics and no rate constraint. Each field has exactly what the
+      bits. The sheaf separates removable from irreducible error but lacks
+      temporal dynamics or a rate constraint. Each field has exactly what the
       others are missing. The <a href="/reading/temporal-compression/ch-04/">next
-      chapter</a> states the open problems that live in those gaps.
+      chapter</a> lays out the open problems.
     </p>
 
     <Neighbors>

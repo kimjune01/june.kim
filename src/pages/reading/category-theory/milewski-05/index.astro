@@ -65,7 +65,7 @@ def absurd(x):
 
     <!-- 2. Universal construction -->
     <h3>Universal construction — ranking candidates</h3>
-    <p>Category theory defines objects by their relationships, not their internals. The <strong>universal construction</strong> is a three-step recipe: (1) define a pattern of objects and morphisms, (2) rank all candidates by whether one factors through another, (3) pick the best one. "Best" means every other candidate factors through it via a unique morphism.</p>
+    <p>Category theory defines objects by their relationships, not their internals. A <strong>universal construction</strong> works in three steps: (1) define a pattern of objects and morphisms, (2) rank all candidates by whether one factors through another, (3) pick the best one. "Best" means every other candidate factors through it via a unique morphism.</p>
 
     <SchemeRepl client:load initialCode={`; Universal construction for products: find the "best" pair.
 ; Pattern: object c with two projections p: c->a, q: c->b.
@@ -301,7 +301,7 @@ print(f"m(Right('hello')) == show_str('hello')? {m(Right('hello')) == show_str('
 
     <!-- 5. Duality -->
     <h3>Duality — reverse the arrows</h3>
-    <p>Every categorical construction has a <strong>dual</strong>: reverse all the arrows. The product's dual is the coproduct. The terminal object's dual is the initial object. Projections become injections. If you prove something about products, you get a theorem about coproducts for free. This is the power of the opposite category <em>C</em><sup>op</sup>.</p>
+    <p>Every categorical construction has a <strong>dual</strong>: reverse all the arrows. The product's dual is the coproduct. The terminal object's dual is the initial object. Projections become injections. Prove something about products, and you get a theorem about coproducts for free. That's the opposite category <em>C</em><sup>op</sup> at work.</p>
 
     <SchemeRepl client:load initialCode={`; Duality in action: product vs. coproduct side by side.
 ; Product:   c has fst: c->a, snd: c->b    (projections OUT)
@@ -329,7 +329,7 @@ print(f"m(Right('hello')) == show_str('hello')? {m(Right('hello')) == show_str('
 
     <!-- 6. Asymmetry in Set -->
     <h3>Why products and coproducts aren't symmetric in Set</h3>
-    <p>Functions must be defined on their entire domain but don't have to cover their codomain. This makes products and coproducts behave differently in the category of sets. A "bad" product candidate can lose information (too few projections), but a "bad" coproduct candidate can <em>collapse</em> information (map distinct values to the same output). The asymmetry comes from functions themselves, not from the constructions.</p>
+    <p>Functions must be defined on their entire domain but don't have to cover their codomain, so products and coproducts behave differently in Set. A "bad" product candidate can lose information (too few projections), but a "bad" coproduct candidate can <em>collapse</em> information (map distinct values to the same output). The asymmetry lives in functions, not the constructions.</p>
 
     <SchemeRepl client:load initialCode={`; Asymmetry: a bad product candidate vs. a bad coproduct candidate.
 
@@ -406,7 +406,7 @@ print(f"m(Right('hello')) == show_str('hello')? {m(Right('hello')) == show_str('
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post uses Haskell tuples and <code>Either</code>, plus C++ <code>std::pair</code> and tagged unions. This page uses Scheme lists as pairs and tagged lists as Either. The factorizers are direct translations of Milewski's Haskell definitions. The "ranking candidates" section (universal construction) is presented concretely: a triple is a worse product candidate than a pair because the triple factors through the pair. The blog post also discusses the asymmetry between products and coproducts in Set, which comes from functions being total (defined everywhere) but not necessarily surjective (covering the codomain).</p>
+    <p>Milewski uses Haskell tuples and <code>Either</code>, plus C++ <code>std::pair</code> and tagged unions. Here, Scheme lists stand in for pairs and tagged lists for Either. Factorizers are direct translations of his Haskell definitions. The "ranking candidates" section makes the universal construction concrete: a triple is a worse product candidate than a pair because the triple factors through the pair. Milewski also covers the product/coproduct asymmetry in Set: functions are total (defined everywhere) but not necessarily surjective (covering the codomain).</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2015/01/07/products-and-coproducts/">Read the blog post</a>. The universal construction pattern here recurs in every chapter from here on.

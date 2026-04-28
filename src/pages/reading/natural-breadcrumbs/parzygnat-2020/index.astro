@@ -17,11 +17,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, copy, determinism). Some comfort with matrix multiplication helps.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Quantum channels form a Markov category with a <strong>dagger</strong> — a canonical way to reverse any morphism. Bayesian inversion becomes adjunction. The <a href="https://en.wikipedia.org/wiki/No-cloning_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-cloning theorem</a> says copy doesn't exist for quantum states — the very operation that detects determinism in Fritz's setup.</p>
+      <p class="text-lg" style="max-width:none">Quantum channels form a Markov category with a <strong>dagger</strong> — a canonical way to reverse any morphism. Bayesian inversion becomes adjunction. The <a href="https://en.wikipedia.org/wiki/No-cloning_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-cloning theorem</a> forbids copying quantum states. Copy is the very operation that detects determinism in Fritz's setup.</p>
     </div>
 
     <h3>Quantum channels as morphisms</h3>
-    <p>A <a href="https://en.wikipedia.org/wiki/Quantum_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>quantum channel</a> maps density matrices to density matrices — the quantum analogue of a stochastic matrix. It's completely positive and trace-preserving (CPTP). In the classical limit, density matrices reduce to probability distributions and quantum channels reduce to Markov kernels.</p>
+    <p>A <a href="https://en.wikipedia.org/wiki/Quantum_channel"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>quantum channel</a> maps density matrices to density matrices: the quantum analogue of a stochastic matrix. It's completely positive and trace-preserving (CPTP). In the classical limit, density matrices reduce to probability distributions and quantum channels reduce to Markov kernels.</p>
 
     <SchemeRepl client:load initialCode={`; Classical analogue: a stochastic channel as a matrix
 ; Quantum: density matrices instead of distributions
@@ -171,7 +171,7 @@ print(f"dagger (transpose):\\n{dagger}")
 `} />
 
     <h3>No-broadcasting theorem</h3>
-    <p>Classical distributions can be copied (broadcast to multiple receivers without distortion). Quantum states cannot — the <a href="https://en.wikipedia.org/wiki/No-broadcasting_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-broadcasting theorem</a>. In Fritz's framework, copy ν detects determinism. In the quantum version, copy doesn't exist for non-commutative states. This is the categorical manifestation of quantum weirdness.</p>
+    <p>Classical distributions can be copied (broadcast to multiple receivers without distortion). Quantum states cannot: the <a href="https://en.wikipedia.org/wiki/No-broadcasting_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>no-broadcasting theorem</a>. In Fritz's framework, copy detects determinism. In the quantum version, copy doesn't exist for non-commutative states. That's quantum weirdness showing up as missing structure.</p>
 
     <SchemeRepl client:load initialCode={`; Classical: copy works — broadcast a distribution
 (define (copy-classical dist)
@@ -239,7 +239,7 @@ print(f"dagger (transpose):\\n{dagger}")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use classical stochastic matrices as stand-ins for quantum channels. The paper works with completely positive trace-preserving maps on matrix algebras, where the dagger is the Hilbert-Schmidt adjoint and Bayesian inversion is Petz recovery. For example: the Bayesian inverse on this page computes Bayes' rule for a 2×2 stochastic matrix. In the paper, the same construction works for arbitrary CPTP maps on C*-algebras — the inverse involves the modular automorphism group and recovers the Petz recovery map. The factorization structure (joint = forward × backward) is identical. The operator algebra is not.</p>
+    <p>All examples use classical stochastic matrices as stand-ins for quantum channels. The paper works with completely positive trace-preserving maps on matrix algebras, where the dagger is the Hilbert-Schmidt adjoint and Bayesian inversion is Petz recovery. For example: the Bayesian inverse on this page computes Bayes' rule for a 2×2 stochastic matrix. In the paper, the same construction works for arbitrary CPTP maps on C*-algebras, involving the modular automorphism group to recover the Petz recovery map. Factorization structure (joint = forward × backward) is identical. Operator algebra is not.</p>
     <p>Every example is <strong class="text-green-400">Analogy</strong> — classical stand-ins for quantum constructions.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">

@@ -75,7 +75,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 1. Memory as vectors -->
     <h3>Memory as vectors</h3>
-    <p>At the lowest level, memory is a flat array of numbered slots. Lisp pairs become two parallel vectors: <code>the-cars</code> and <code>the-cdrs</code>. Index <em>n</em> in both vectors together form one pair. A pointer is just an index into these vectors.</p>
+    <p>At the lowest level, memory is a flat array of numbered slots. Lisp pairs become two parallel vectors: <code>the-cars</code> and <code>the-cdrs</code>. Index <em>n</em> across both vectors forms one pair. A pointer is just an index.</p>
 
     <SchemeRepl client:load initialCode={`; Memory as two parallel vectors: the-cars and the-cdrs.
 ; A cons cell at index i stores car in the-cars[i], cdr in the-cdrs[i].
@@ -141,7 +141,7 @@ print(f"cdr[0]={my_cdr(p0)} cdr[1]={my_cdr(p1)} cdr[2]={my_cdr(p2)}")
 
     <!-- 2. Representing lists -->
     <h3>Representing lists using vectors</h3>
-    <p>A list is a chain of pairs where each cdr points to the next pair (or to the empty list). Walking the list means following cdr pointers through the vector. This is exactly how linked lists work in hardware &mdash; each &ldquo;next&rdquo; field is a memory address.</p>
+    <p>A list is a chain of pairs where each cdr points to the next pair (or to the empty list). Walking the list means following cdr pointers through the vector. Linked lists work the same way in hardware: each &ldquo;next&rdquo; field is a memory address.</p>
 
     <SchemeRepl client:load initialCode={`; Walk a list stored in vector memory.
 
@@ -221,7 +221,7 @@ print(f"cars:  {the_cars[:free]}")
 
     <!-- 3. Stop-and-copy GC -->
     <h3>Stop-and-copy garbage collector</h3>
-    <p>When free memory runs out, the collector copies all <strong>reachable</strong> data from &ldquo;from-space&rdquo; to &ldquo;to-space,&rdquo; then flips. Dead data stays behind. The copy is contiguous &mdash; fragmentation vanishes. The cost is proportional to live data, not total memory.</p>
+    <p>When free memory runs out, the collector copies all <strong>reachable</strong> data from &ldquo;from-space&rdquo; to &ldquo;to-space,&rdquo; then flips. Dead data stays behind. The copy is contiguous, so fragmentation vanishes. Cost scales with live data, not total memory.</p>
 
     <SchemeRepl client:load initialCode={`; Stop-and-copy GC simulation.
 ; Two half-spaces of size 5. Copy live data, flip spaces.
@@ -327,7 +327,7 @@ print(f"3 dead cells reclaimed")
 
     <!-- 4. The broken-heart algorithm -->
     <h3>The broken-heart algorithm</h3>
-    <p>When a cell is copied to new space, a <strong>broken heart</strong> (forwarding pointer) is left in old space. If the collector encounters this cell again via another reference, it follows the forwarding pointer instead of copying a second time. This handles shared structure and cycles.</p>
+    <p>When the collector copies a cell to new space, it leaves a <strong>broken heart</strong> (forwarding pointer) in old space. If it encounters the same cell again via another reference, it follows the forwarding pointer instead of copying twice. This handles shared structure and cycles.</p>
 
     <SchemeRepl client:load initialCode={`; Broken-heart forwarding: shared structure handled correctly.
 
@@ -429,7 +429,7 @@ print(f"\\nShared cell copied only once. ns1={ns1} ns2={ns2}")
 
     <!-- 5. Free list vs compacting -->
     <h3>Free list vs compacting collection</h3>
-    <p>An alternative to stop-and-copy is a <strong>free list</strong>: link all unused cells into a chain, allocate from the head. Simpler but causes fragmentation. Stop-and-copy trades the cost of moving live data for the benefit of contiguous allocation &mdash; every allocation is a pointer bump.</p>
+    <p>An alternative to stop-and-copy is a <strong>free list</strong>: link all unused cells into a chain, allocate from the head. Simpler, but fragmentation accumulates. Stop-and-copy trades the cost of moving live data for contiguous allocation: every <code>alloc</code> is a pointer bump.</p>
 
     <SchemeRepl client:load initialCode={`; Free-list allocator: simple but fragmenting.
 
@@ -527,7 +527,7 @@ print(f"Free list head: {free_list[0]} (fragmented!)")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>Python hides all of this behind the runtime. <code>sys.getrefcount()</code> exposes reference counts; <code>gc.collect()</code> triggers the cycle collector. CPython uses reference counting (immediate collection) plus a generational collector for cycles &mdash; not stop-and-copy. The SICP model is closer to what the JVM or Go runtime does with copying/compacting collectors. The vector representation of pairs maps directly to how struct-of-arrays layouts work in systems programming.</p>
+    <p>Python hides all of this behind the runtime. <code>sys.getrefcount()</code> exposes reference counts; <code>gc.collect()</code> triggers the cycle collector. CPython uses reference counting (immediate collection) plus a generational collector for cycles, not stop-and-copy. The SICP model is closer to what the JVM or Go runtime does with copying/compacting collectors. The vector representation of pairs maps directly to struct-of-arrays layouts in systems programming.</p>
 
 
     <!-- Neighbors -->

@@ -22,7 +22,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 1. Imprecise probability -->
     <h3>Imprecise probability — sets of distributions</h3>
-    <p>A precise Markov kernel maps an input to one distribution. An <strong>imprecise</strong> kernel maps to a <em>set</em> of distributions — a credal set. You know the output is distributed according to one of these distributions, but you don't know which one. This is stronger than a single distribution (you commit less) and weaker than full ignorance (you commit something).</p>
+    <p>A precise Markov kernel maps an input to one distribution. An <strong>imprecise</strong> kernel maps to a <em>set</em> of distributions: a credal set. This is stronger than a single distribution (you commit less) and weaker than full ignorance (you commit something).</p>
 
     <SchemeRepl client:load initialCode={`; Imprecise probability: a set of possible distributions
 ; Credal set = { d1, d2, ... } where each di is a distribution
@@ -60,7 +60,7 @@ print(f"Imprecise: {len(imprecise)} distributions")
 
     <!-- 2. Para construction -->
     <h3>The Para construction</h3>
-    <p>The <strong>Para construction</strong> takes a Markov category C and builds a new category Para(C) where morphisms have a hidden parameter. A morphism in Para(C) from X to Y is a morphism P × X → Y in C, where P is the parameter space. Imprecise kernels arise when you existentially quantify over the parameter: "there exists some p in P such that..."</p>
+    <p>The <strong>Para construction</strong> takes a Markov category C and builds a new category Para(C) where morphisms carry a hidden parameter. A morphism in Para(C) from X to Y is a morphism P × X → Y in C, where P is the parameter space. Imprecise kernels arise when you existentially quantify over P: the credal set is the image of the kernel across all parameter values.</p>
 
     <SchemeRepl client:load initialCode={`; Para construction: morph with hidden parameter
 ; Para(f)(x) = f(p, x) for some parameter p
@@ -91,7 +91,7 @@ print(f"Imprecise: {len(imprecise)} distributions")
 
     <!-- 3. Lower and upper expectations -->
     <h3>Lower and upper expectations</h3>
-    <p>With a credal set, you compute bounds on expectations. The <strong>lower expectation</strong> is the minimum expected value over all distributions in the set. The <strong>upper expectation</strong> is the maximum. These brackets tell you the range of possible answers — how uncertain you are.</p>
+    <p>With a credal set, you compute bounds on expectations. The <strong>lower expectation</strong> is the minimum expected value over all distributions in the set. The <strong>upper expectation</strong> is the maximum. These brackets tell you how uncertain you are.</p>
 
     <SchemeRepl client:load initialCode={`; Lower and upper expectations from a credal set
 ; E_lower[f] = min over distributions, E_upper[f] = max
@@ -121,7 +121,7 @@ print(f"Imprecise: {len(imprecise)} distributions")
 
     <!-- 4. Graded monads organize imprecision -->
     <h3>Graded monads — imprecision levels</h3>
-    <p>Different amounts of imprecision form a <strong>graded monad</strong>. The grade tracks how much imprecision you have. Grade 0 = precise (one distribution). Higher grades = wider credal sets. Composition accumulates imprecision — the grade adds up, just like effect grades in <a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a>.</p>
+    <p>Different levels of imprecision form a <strong>graded monad</strong>. The grade tracks how wide the credal set is: grade 0 = precise (one distribution), higher grades = wider sets. Composition accumulates grades, just like effect grades in <a href="/reading/natural-breadcrumbs/gaboardi-2021/">🍞 Gaboardi 2021</a>.</p>
 
     <SchemeRepl client:load initialCode={`; Graded imprecision: grade = width of credal set
 ; Higher grade = more imprecision
@@ -259,7 +259,8 @@ print(f"Imprecise: {len(imprecise)} distributions")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use finite lists of finite distributions as credal sets. The paper works with convex sets of probability measures over measurable spaces, the Para construction on arbitrary Markov categories, and graded monads indexed by a quantale of imprecision levels. For example: the lower/upper expectation example on this page iterates over three coin distributions. In the paper, the same construction applies to credal sets of Gaussian measures over ℝⁿ — where the lower expectation is an optimization problem over an infinite-dimensional convex set. The bracket structure (min/max over the set) is identical. The measure theory and optimization are not.</p>
+    <p>All examples use finite lists of finite distributions as credal sets. The paper works with convex sets of probability measures over measurable spaces, the Para construction on arbitrary Markov categories, and graded monads indexed by a quantale of imprecision levels.</p>
+    <p>For example: this page's lower/upper expectation iterates over three coin distributions. In the paper, the same construction applies to credal sets of Gaussian measures over ℝⁿ, where the lower expectation becomes an optimization problem over an infinite-dimensional convex set. The bracket structure (min/max over the set) is identical. The measure theory and optimization are not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2405.09391"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the Para construction, §5 for graded monads and Markov categories.

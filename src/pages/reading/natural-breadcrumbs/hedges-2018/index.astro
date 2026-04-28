@@ -21,8 +21,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <!-- 1. Open games -->
-    <h3>Open games — games with interfaces</h3>
-    <p>An <strong>open game</strong> has inputs (what the player observes) and outputs (what the player does), plus a coplay channel that carries consequences back. Think of it as a function with a feedback wire. Games compose by wiring outputs to inputs, the same pattern as sequential composition of programs.</p>
+    <h3>Open games: games with interfaces</h3>
+    <p>An <strong>open game</strong> has inputs (what the player observes) and outputs (what the player does), plus a coplay channel that carries consequences back. A function with a feedback wire. Wiring one game's output to the next game's input is sequential composition, same as for programs.</p>
 
     <!-- SVG: Single open game — right-pointing triangle: base left (input), tip right (output) -->
     <div class="flex justify-center my-6">
@@ -96,7 +96,7 @@ print(f"seller('high') = {seller('high')}")
 
     <!-- 2. Selection functions -->
     <h3>Selection functions</h3>
-    <p>A <strong>selection function</strong> picks the "best" element from a set, given a valuation (how good each element is). It's the decision-making core of an open game. The classic example: argmax picks the action that maximizes utility.</p>
+    <p>A <strong>selection function</strong> picks the "best" element from a set, given a valuation (how good each element is). It drives every decision in an open game. The canonical example is argmax: pick the action that maximizes utility.</p>
 
     <!-- SVG: Selection function inside the player triangle -->
     <div class="flex justify-center my-6">
@@ -161,7 +161,7 @@ print(f"seller('high') = {seller('high')}")
     <p class="text-sm text-gray-400">Confidence: <strong class="text-green-400">Exact.</strong> argmax is the canonical selection function from the paper.</p>
 
     <!-- 3. Composing games -->
-    <h3>Composing games — sequential play</h3>
+    <h3>Composing games: sequential play</h3>
     <p>Two open games compose when the first player's action becomes the second player's observation. The composite game's equilibrium condition: each player plays optimally given what they observe.</p>
 
     <!-- SVG: Two composition modes side by side -->
@@ -257,7 +257,7 @@ print(f"seller('high') = {seller('high')}")
 
     <!-- 4. Nash equilibrium as predicate -->
     <h3>Nash equilibrium as a compositional predicate</h3>
-    <p>Here's the punchline. An equilibrium is a <strong>predicate on strategy profiles</strong>: "no player can improve by deviating" (<a href="/reading/game-theory/nordstrom-06/">🎲 what is Nash equilibrium?</a>). Hedges shows this predicate is compositional: if each sub-game satisfies it given its context, the whole game does too. Equilibrium is a postcondition.</p>
+    <p>An equilibrium is a <strong>predicate on strategy profiles</strong>: "no player can improve by deviating" (<a href="/reading/game-theory/nordstrom-06/">🎲 what is Nash equilibrium?</a>). Hedges shows this predicate is compositional: if each sub-game satisfies it given its context, the whole game does too. Equilibrium is a postcondition.</p>
 
     <!-- SVG: Nash equilibrium — deviation check -->
     <div class="flex justify-center my-6">
@@ -460,7 +460,7 @@ print(f"(C,C) Nash? {is_nash(['C','C'], [u1,u2], [['C','D'],['C','D']])}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use pure strategies over finite action spaces. The paper works with mixed strategies, continuous spaces, and open games as morphisms in a <a href="https://en.wikipedia.org/wiki/Symmetric_monoidal_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>symmetric monoidal category</a> with a coplay (contravariant) channel. For example: the Nash equilibrium check on this page iterates over two players with two actions each. In the paper, the same construction applies to a network of open games composed via <a href="https://en.wikipedia.org/wiki/String_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>string diagrams</a> — where equilibrium is verified by checking each node's selection function against the continuation induced by all downstream nodes. The compositionality is identical. The string-diagrammatic machinery is not.</p>
+    <p>All examples use pure strategies over finite action spaces. The paper works with mixed strategies, continuous spaces, and open games as morphisms in a <a href="https://en.wikipedia.org/wiki/Symmetric_monoidal_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>symmetric monoidal category</a> with a coplay (contravariant) channel. The Nash equilibrium check on this page iterates over two players with two actions each. In the paper, the same construction applies to a network of open games composed via <a href="https://en.wikipedia.org/wiki/String_diagram"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>string diagrams</a>, where each node's selection function is checked against the continuation from all downstream nodes. The compositionality is identical. The string-diagrammatic machinery is not.</p>
 
     <h3>Watch</h3>
     <p class="text-gray-400 text-sm mb-4">Bartosz Milewski explains open games and compositional game theory:</p>

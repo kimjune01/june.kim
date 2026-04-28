@@ -17,7 +17,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples). 5 min.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Hoare triples with <strong>grades</strong>: a tag on every computation that tracks side effects — how many resources it uses, how much noise it adds, how far it can branch. The grade algebra tells you what happens when you compose.</p>
+      <p class="text-lg" style="max-width:none">Hoare triples with <strong>grades</strong>: a tag on every computation tracking side effects: how many resources it uses, how much noise it adds, how far it can branch. The grade algebra tells you what happens when you compose.</p>
     </div>
 
     <!-- 1. Grades track effects -->
@@ -200,7 +200,7 @@ print("composition handles the accounting.")
 
     <!-- 4. Graded Freyd category -->
     <h3>Graded Freyd category</h3>
-    <p>The categorical setting is a <strong>graded Freyd category</strong>: a pair (C, F) where C is a category of pure values and F is a graded family of categories of effectful computations. The grading indexes which effects are allowed. Pure computations embed with grade 1 (no effect).</p>
+    <p>Gaboardi works in a <strong>graded Freyd category</strong>: a pair (C, F) where C is a category of pure values and F is a graded family of effectful-computation categories. The grading indexes which effects are allowed. Pure computations embed with grade 1 (no effect).</p>
 
     <Repl client:load initialCode={`# Graded Freyd category in miniature
 # Pure values embed with grade "none"
@@ -309,13 +309,13 @@ print("The semiring handles the accounting.")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use simple numeric grades (counts, products). The paper works with graded monads indexed by a semiring, graded Freyd categories, and the interaction between effect and coeffect gradings via a distributive law. For example: the graded COMP on this page multiplies two fidelity floats. In the paper, the same rule works over a preordered semiring where the composition operation may be non-commutative and where the ordering constrains subeffecting (you can always over-approximate an effect grade). The composition structure is identical. The lattice-theoretic subtleties are not.</p>
+    <p>All examples use simple numeric grades (counts, products). The paper works with graded monads indexed by a semiring, graded Freyd categories, and effect/coeffect interaction via a distributive law. For example: the graded COMP on this page multiplies two fidelity floats. In the paper, the same rule works over a preordered semiring. The composition operation may be non-commutative, and the ordering constrains subeffecting (you can always over-approximate an effect grade). The composition structure is identical. The lattice-theoretic subtleties are not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2007.06237"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for graded monads, §5 for the graded Hoare logic.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's composition with contracts is graded COMP — each stage carries an effect grade that composes through the handshake. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's composition with contracts is graded COMP. Each stage carries an effect grade that composes through the handshake. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/fritz-perrone-2021/", label: "Fritz, Perrone 2021 · 3 of 21" }} next={{ href: "/reading/natural-breadcrumbs/kura-2026/", label: "Kura 2026 · 5 of 21" }} />
   </main>

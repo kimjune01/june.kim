@@ -15,7 +15,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-gray-400 text-sm mb-6">Tobias Fritz · 2020 · <a href="https://arxiv.org/abs/1908.07021"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:1908.07021</a></p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Stochastic functions form a <a href="https://en.wikipedia.org/wiki/Category_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>category</a> with copy and discard. Whether a function is deterministic or stochastic is detected by whether it commutes with copying.</p>
+      <p class="text-lg" style="max-width:none">Stochastic functions form a <a href="https://en.wikipedia.org/wiki/Category_(mathematics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>category</a> with copy and discard. Copying detects whether a function is deterministic or stochastic.</p>
     </div>
 
     <!-- What's a Markov category -->
@@ -55,11 +55,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>A <a href="https://ncatlab.org/nlab/show/Markov+category">Markov category (nLab)</a> is three things:</p>
     <ol style="padding-left:1.5em; list-style:decimal !important;">
-      <li><strong>Objects</strong> are types (finite sets, state spaces — the "what")</li>
-      <li><strong>Morphisms</strong> are stochastic functions: input → distribution over outputs (the "how")</li>
-      <li><strong>Structure</strong>: you can <strong>copy</strong> data (duplicate it) and <strong>discard</strong> data (throw it away)</li>
+      <li><strong>Objects</strong> are types: finite sets, state spaces</li>
+      <li><strong>Morphisms</strong> are stochastic functions: input → distribution over outputs</li>
+      <li><strong>Structure</strong>: you can <strong>copy</strong> data and <strong>discard</strong> data</li>
     </ol>
-    <p>That's it. In Python: a morphism is a function that returns a dict. The keys are possible outputs. The values are probabilities. The dict IS the stochastic matrix.</p>
+    <p>That's it. In Python, a morphism is a function that returns a dict: keys are possible outputs, values are probabilities. The dict IS the stochastic matrix.</p>
 
     <pre class="bg-zinc-800 rounded-lg p-4 mb-4 font-mono text-sm text-green-300"><code># A morphism in FinStoch — it's just a dict
 weather_to_temp = {'{'}
@@ -105,7 +105,7 @@ print("double(3):", deterministic_double(3))
     <!-- Copy and determinism -->
     <h3>Copy detects determinism</h3>
     <p>Every object in a Markov category has a <strong>copy</strong> morphism: ν(x) = (x, x). Fritz's insight: a morphism f is <strong>deterministic</strong> if and only if it commutes with copy. "Apply then copy" equals "copy then apply to both copies."</p>
-    <p>Stochastic functions fail this test. If you flip a coin and then copy the result, you get (heads, heads) or (tails, tails). If you copy first and then flip each independently, you can get (heads, tails). Different distributions — the function is stochastic.</p>
+    <p>Stochastic functions fail this test. If you flip a coin and then copy the result, you get (heads, heads) or (tails, tails). If you copy first and then flip each independently, you can get (heads, tails). Different distributions. The function is stochastic.</p>
 
     <!-- SVG: copy-naturality string diagram -->
     <div class="flex justify-center my-6">
@@ -375,7 +375,7 @@ print(f"support(f(5)) = {support(f(5))}")
 
     <!-- Informativeness -->
     <h3>Informativeness preorder</h3>
-    <p>Fritz defines when one morphism is "more informative" than another: f ≤ g if g factors through f. If you can recover g's output from f's output via post-processing, then f is at least as informative. This is the categorical version of <a href="https://en.wikipedia.org/wiki/Sufficient_statistic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>sufficient statistics</a>.</p>
+    <p>One morphism is "more informative" than another when it factors through: f ≤ g if you can recover g's output from f's output by post-processing. This is the categorical version of <a href="https://en.wikipedia.org/wiki/Sufficient_statistic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>sufficient statistics</a>.</p>
 
     <SchemeRepl client:load initialCode={`; Informativeness: f ≤ g if g factors through f
 ; "f is at least as informative as g"
@@ -448,8 +448,8 @@ print("just_square loses the sign — not recoverable")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use finite dicts as distributions over small sets. Fritz's paper works over arbitrary measurable spaces, Borel categories, and continuous distributions. For example: the copy-naturality test on this page checks a function over a handful of integers. In the paper, the same test applies to a Gaussian process over ℝ — infinite-dimensional, continuous, and requiring measure theory to state. The structure (does copying commute?) is identical. The generality is not.</p>
-    <p>The informativeness preorder example is a simplified illustration — the full definition involves almost-sure factorization, not pointwise equality. Every example is <strong class="text-green-400">Simplified</strong> unless marked otherwise.</p>
+    <p>All examples use finite dicts as distributions over small sets. Fritz's paper works over arbitrary measurable spaces, Borel categories, and continuous distributions. For example: the copy-naturality test on this page checks a function over a handful of integers. In the paper, the same test applies to a Gaussian process over ℝ: infinite-dimensional, continuous, requiring measure theory to even state. The structure (does copying commute?) is identical. The generality is not.</p>
+    <p>The informativeness preorder example is a simplified illustration. The full definition involves almost-sure factorization, not pointwise equality. Every example is <strong class="text-green-400">Simplified</strong> unless marked otherwise.</p>
 
     <!-- Paper link -->
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">

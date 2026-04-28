@@ -68,8 +68,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
 
     <!-- 1. The dispatcher -->
-    <h3>The dispatcher &mdash; eval-dispatch</h3>
-    <p>The evaluator&rsquo;s core is a <strong>dispatch loop</strong>. It reads the expression type and jumps to the right handler. In the metacircular evaluator this was a <code>cond</code> inside <code>eval</code>. Here it&rsquo;s explicit: test the tag, branch to a label.</p>
+    <h3>The dispatcher: eval-dispatch</h3>
+    <p>The evaluator&rsquo;s core is a <strong>dispatch loop</strong>. It reads the expression type and jumps to the matching handler. In the metacircular evaluator this was a <code>cond</code> inside <code>eval</code>. Here it&rsquo;s explicit: test the tag, branch to a label.</p>
 
     <SchemeRepl client:load initialCode={`; eval-dispatch: classify expression, jump to handler.
 ; This is the register-machine version of the metacircular eval's cond.
@@ -129,7 +129,7 @@ print(eval_dispatch(['+', 'x', 'y'], env))
 
     <!-- 2. Evaluating simple expressions -->
     <h3>Evaluating simple expressions</h3>
-    <p>Self-evaluating expressions (numbers, strings) go straight to the <code>val</code> register. Variables require an environment lookup. Quoted expressions strip the <code>quote</code> tag and return the datum. No stack needed &mdash; these are leaves of the expression tree.</p>
+    <p>Self-evaluating expressions (numbers, strings) go straight to the <code>val</code> register. Variables require an environment lookup. Quoted expressions strip the <code>quote</code> tag and return the datum. No stack needed. These are leaves of the expression tree.</p>
 
     <SchemeRepl client:load initialCode={`; Simple expression evaluation: no stack, no recursion.
 ; The register machine just assigns val and continues.
@@ -190,7 +190,7 @@ print(f"variable msg: {eval_variable('msg')}")
 
 
     <!-- 3. Evaluating combinations -->
-    <h3>Evaluating combinations &mdash; the operand loop</h3>
+    <h3>Evaluating combinations: the operand loop</h3>
     <p>Combinations require evaluating the operator and each operand, then applying. The explicit-control evaluator must <strong>save registers</strong> before recursing into subexpressions. The operand loop pushes each evaluated argument onto a list (argl), building the argument list one element at a time.</p>
 
     <SchemeRepl client:load initialCode={`; Evaluating (+ 3 (* 2 5)): explicit save/restore.
@@ -284,7 +284,7 @@ print(f"6. apply + to {argl} = {val}")
 
     <!-- 4. Tail recursion -->
     <h3>Sequence evaluation and tail recursion</h3>
-    <p>A <strong>tail call</strong> is a call in return position &mdash; nothing left to do after it returns. The explicit-control evaluator recognizes this: it skips the <code>save</code> of the continuation register. No save means the stack doesn&rsquo;t grow. This is why Scheme guarantees tail-call optimization &mdash; the evaluator&rsquo;s structure makes it free.</p>
+    <p>A <strong>tail call</strong> is a call in return position: nothing left to do after it returns. The explicit-control evaluator recognizes this and skips the <code>save</code> of the continuation register. No save means the stack doesn&rsquo;t grow. Scheme guarantees tail-call optimization because the evaluator&rsquo;s structure makes it free.</p>
 
     <SchemeRepl client:load initialCode={`; Tail recursion: iterative factorial with explicit stack tracking.
 ; The stack never grows because each call is in tail position.
@@ -360,7 +360,7 @@ print(f"max stack depth: {max_depth[0]}")
 
     <!-- 5. Conditionals and assignments -->
     <h3>Conditionals and assignments</h3>
-    <p>Conditionals evaluate the predicate, then branch to the consequent or alternative. The explicit-control evaluator saves the environment and unevaluated branches on the stack before evaluating the predicate. Assignments use <code>set-variable-value!</code> to mutate the environment &mdash; the only place the evaluator writes to the environment frame.</p>
+    <p>Conditionals evaluate the predicate, then branch to the consequent or alternative. The explicit-control evaluator saves the environment and unevaluated branches on the stack before evaluating the predicate. Assignments use <code>set-variable-value!</code> to mutate the environment. This is the only place the evaluator writes to the environment frame.</p>
 
     <SchemeRepl client:load initialCode={`; Explicit conditional evaluation with environment.
 
@@ -448,7 +448,7 @@ print(f"  result = {eval_if(env['x'] > 50, 'big', 'small')}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The explicit-control evaluator is the bridge between the high-level metacircular evaluator (Ch.14) and real machine code. Every implicit operation &mdash; function calls, argument evaluation order, stack management &mdash; becomes a visible instruction. CPython&rsquo;s <code>ceval.c</code> is structurally the same: a giant switch statement dispatching on bytecode opcode, with an explicit value stack. Tail-call optimization is a property of the evaluator&rsquo;s structure, not a compiler trick: if the evaluator doesn&rsquo;t push a frame, the stack doesn&rsquo;t grow.</p>
+    <p>The explicit-control evaluator bridges the high-level metacircular evaluator (Ch.14) and real machine code. Every implicit operation &mdash; function calls, argument evaluation order, stack management &mdash; becomes a visible instruction. CPython&rsquo;s <code>ceval.c</code> works the same way: a giant switch statement dispatching on bytecode opcode, with an explicit value stack. Tail-call optimization falls out of the evaluator&rsquo;s structure, not a compiler trick: if the evaluator doesn&rsquo;t push a frame, the stack doesn&rsquo;t grow.</p>
 
 
     <!-- Neighbors -->

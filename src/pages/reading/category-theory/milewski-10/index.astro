@@ -17,12 +17,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-07/">🍞 Ch7 (Functors)</a>. 8 min.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">A <strong>natural transformation</strong> maps between functors while preserving structure. The naturality condition says: it doesn't matter whether you transform first and then map, or map first and then transform. In Haskell, <strong>parametric polymorphism gives you naturality for free</strong>: any function <code>F a -> G a</code> that works uniformly for all types automatically satisfies the naturality square.</p>
+      <p class="text-lg" style="max-width:none">A <strong>natural transformation</strong> maps between functors while preserving structure. The naturality condition says: it doesn't matter whether you transform first and then map, or map first and then transform. In Haskell, <strong>parametric polymorphism gives you naturality for free</strong>: any function <code>F a -> G a</code> that works uniformly for all types satisfies the naturality square.</p>
     </div>
 
     <!-- 1. Natural transformations -->
     <h3>Natural transformations: morphisms between functors</h3>
-    <p>A functor maps objects and morphisms from one category to another. A <strong>natural transformation</strong> maps between two such functors. For functors F and G from category C to D, a natural transformation alpha provides, for each object <code>a</code> in C, a morphism <code>alpha_a : F(a) -> G(a)</code> in D. These morphisms are called <strong>components</strong>. Natural transformations are how <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the natural framework</a> connects its six processing stages: each stage is a functor, and the transitions between them are natural transformations that preserve the information structure.</p>
+    <p>A functor maps objects and morphisms from one category to another. A <strong>natural transformation</strong> maps between two such functors. For functors F and G from category C to D, a natural transformation alpha provides, for each object <code>a</code> in C, a morphism <code>alpha_a : F(a) -> G(a)</code> in D. These morphisms are called <strong>components</strong>. In <a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>the natural framework</a>, each processing stage is a functor, and the transitions between stages are natural transformations.</p>
 
     <SchemeRepl client:load initialCode={`; A natural transformation alpha : F -> G
 ; gives a component alpha_a : F(a) -> G(a) for every type a.
@@ -163,7 +163,7 @@ print(f"equal? {path1 == path2}")
 
     <!-- 3. length as a natural transformation -->
     <h3>Length: List -> Const Int</h3>
-    <p>Another natural transformation: <code>length</code>. It maps from the List functor to the <code>Const Int</code> functor. The Const functor ignores its type parameter, so <code>Const Int a</code> is just <code>Int</code> regardless of <code>a</code>. Length doesn't care what's in the list, only how many elements there are. That type-blindness is naturality at work.</p>
+    <p><code>length</code> is a natural transformation from the List functor to <code>Const Int</code>. The Const functor ignores its type parameter: <code>Const Int a</code> is just <code>Int</code> regardless of <code>a</code>. Length doesn't care what's in the list, only how many elements there are. That type-blindness is naturality at work.</p>
 
     <SchemeRepl client:load initialCode={`; length : List a -> Const Int a
 ; A natural transformation that forgets the elements.
@@ -193,7 +193,7 @@ print(f"equal? {path1 == path2}")
 
     <!-- 4. Parametric polymorphism -->
     <h3>Theorems for free: polymorphism = naturality</h3>
-    <p>Here is the deepest insight. In Haskell, any polymorphic function <code>alpha :: F a -> G a</code> (where F and G are functors) automatically satisfies the naturality condition. You don't need to check it. Parametric polymorphism means the function works by one formula for all types. It can't inspect the type, so it can't break the naturality square. This is Wadler's "theorems for free": the type signature alone generates the equation <code>fmap g . alpha = alpha . fmap g</code> as a free theorem.</p>
+    <p>In Haskell, any polymorphic function <code>alpha :: F a -> G a</code> (where F and G are functors) automatically satisfies the naturality condition. You don't need to check it. Parametric polymorphism means the function can't inspect the type, so it can't break the naturality square. This is Wadler's "theorems for free": the type signature alone generates the equation <code>fmap g . alpha = alpha . fmap g</code> as a free theorem.</p>
 
     <SchemeRepl client:load initialCode={`; "Theorems for free" — parametric polymorphism implies naturality.
 ;
@@ -284,7 +284,7 @@ print(f"equal? {p3 == p4}")
 
     <!-- 6. Naturality as a constraint -->
     <h3>Naturality as a design constraint</h3>
-    <p>The naturality condition is surprisingly restrictive. How many natural transformations are there from <code>Maybe</code> to <code>List</code>? Only two: either send <code>Nothing -> []</code> and <code>Just x -> [x]</code>, or send everything to <code>[]</code>. The naturality square forbids any other choice. The type signature <code>Maybe a -> [a]</code> pins down the implementation almost completely.</p>
+    <p>The naturality condition is surprisingly restrictive. How many natural transformations are there from <code>Maybe</code> to <code>List</code>? Only two: either send <code>Nothing -> []</code> and <code>Just x -> [x]</code>, or send everything to <code>[]</code>. The type signature <code>Maybe a -> [a]</code> pins down the implementation almost completely.</p>
 
     <SchemeRepl client:load initialCode={`; How many natural transformations Maybe -> List?
 ; Only two! Naturality constrains the options.
@@ -392,7 +392,7 @@ print(f"equal? {p1 == p2}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post covers three layers: natural transformations, functor categories, and the 2-category Cat. This page covers the first two. The 2-category perspective (where categories are objects, functors are 1-morphisms, and natural transformations are 2-morphisms) and horizontal composition are omitted for clarity. The blog post also discusses contravariant natural transformations with <code>Op</code> functors and shows that naturality for polymorphic functions between Haskell functors is automatic via parametricity (Wadler's "Theorems for Free"). In Scheme, we have no type system to enforce this, so naturality is verified by testing rather than by proof. The key insight carries over regardless: a transformation that works uniformly without inspecting elements will satisfy the naturality square.</p>
+    <p>The blog post covers three layers: natural transformations, functor categories, and the 2-category Cat. This page covers the first two. The 2-category perspective (categories as objects, functors as 1-morphisms, natural transformations as 2-morphisms) and horizontal composition are omitted. The blog post also discusses contravariant natural transformations with <code>Op</code> functors and shows that naturality for polymorphic functions between Haskell functors is automatic via parametricity (Wadler's "Theorems for Free"). Scheme has no type system to enforce this, so naturality is verified by testing rather than proof. The core insight still holds: a transformation that works uniformly without inspecting elements will satisfy the naturality square.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2015/04/07/natural-transformations/">Read the blog post</a>. Start with the naturality condition, then see how parametric polymorphism gives it to you for free.

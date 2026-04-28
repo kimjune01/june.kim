@@ -80,7 +80,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 1. Types as sets -->
     <h3>Types as sets</h3>
-    <p>A type is a set of values. <code>Bool</code> is the two-element set &lbrace;True, False&rbrace;. <code>Integer</code> is an infinite set. A function between types is a mapping between sets. This is the category <strong>Set</strong>: objects are sets, morphisms are functions. Programming types live in the same structure.</p>
+    <p>A type is a set of values. <code>Bool</code> is the two-element set &lbrace;True, False&rbrace;; <code>Integer</code> is an infinite set. Functions between types are mappings between sets, and that gives us the category <strong>Set</strong>: objects are sets, morphisms are functions. Programming types live in exactly this structure.</p>
 
     <SchemeRepl client:load initialCode={`; Types are sets of values
 ; Bool = {#t, #f} — a two-element set
@@ -132,7 +132,7 @@ for name, f in fns.items():
 
     <!-- 2. Pure functions -->
     <h3>Pure functions</h3>
-    <p>A <strong>pure function</strong> always produces the same output for the same input and has no side effects. Pure functions are the only kind that qualify as morphisms in a category. Impure functions (I/O, mutation, randomness) break composability: if f's output depends on hidden state, g &compfn; f is not determined by the types alone.</p>
+    <p>A <strong>pure function</strong> always returns the same output for the same input and has no side effects. Only pure functions count as morphisms in a category. Impure functions (I/O, mutation, randomness) break composability: if f's output depends on hidden state, g &compfn; f is not determined by the types alone.</p>
 
     <SchemeRepl client:load initialCode={`; Pure: same input, same output, no side effects
 ; A pure function IS a morphism — it composes reliably
@@ -203,7 +203,7 @@ print(f"impure_add(5) = {impure_add(5)}")  # 7 — different!
 
     <!-- 4. Void — the empty type -->
     <h3>Void &mdash; the empty set</h3>
-    <p>The type <code>Void</code> has no values at all. It corresponds to the empty set. You cannot call a function that takes Void as input, because you have nothing to pass it. But you can <em>declare</em> one: <code>absurd :: Void &rarr; a</code>. From falsity, anything follows. This is the <a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curry-Howard correspondence</a> in action.</p>
+    <p>The type <code>Void</code> has no values: the empty set. You cannot call a function that takes Void as input, because you have nothing to pass it. But you can <em>declare</em> one: <code>absurd :: Void &rarr; a</code>. From falsity, anything follows. This is the <a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Curry-Howard correspondence</a> in action.</p>
 
     <SchemeRepl client:load initialCode={`; Void: the empty type — no values exist
 ; absurd : Void -> a (can be defined but never called)
@@ -350,13 +350,13 @@ print(f"to_unit(True)    = {to_unit(True)}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use total functions in Scheme and Python. The bottom example simulates non-termination with an infinite loop but does not actually run it. Milewski's treatment works in Hask, where every type includes bottom and the category is technically a CPO-enriched category rather than Set. The examples on this page stay in Set (no bottom, no laziness). For example: the four Bool&rarr;Bool functions enumerated above are exactly the four morphisms in Set. In Hask, there are additional "functions" that return bottom on some inputs, bringing the count higher. The enumeration is exact for Set. The Hask subtlety is noted but not demonstrated.</p>
+    <p>All examples use total functions in Scheme and Python. The bottom example simulates non-termination with an infinite loop but never runs it. Milewski's treatment works in Hask, where every type includes bottom and the category is technically CPO-enriched rather than Set. The examples on this page stay in Set (no bottom, no laziness): the four Bool&rarr;Bool functions enumerated above are exactly the four morphisms in Set. In Hask, additional "functions" return bottom on some inputs, raising the count.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2014/11/24/types-and-functions/">Read Chapter 2</a>. Start with "What Are Types?" for the sets-and-functions picture, then "Examples of Types" for Void, Unit, and Bool.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: Types are the handshake between pipeline stages. The target type of one morphism must match the source type of the next. This is the composability constraint that the Natural Framework enforces at every stage boundary. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Types are the handshake between pipeline stages. The target type of one morphism must match the source type of the next, and the Natural Framework enforces this at every stage boundary. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
 
 
     <PrevNext prev={{ href: "/reading/category-theory/milewski-01/", label: "Category" }} next={{ href: "/reading/category-theory/milewski-03/", label: "Great and Small" }} />

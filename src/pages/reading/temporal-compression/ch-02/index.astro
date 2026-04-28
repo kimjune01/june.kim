@@ -132,8 +132,8 @@ print("\\n→ Upstream survives. Downstream dies.")`} />
 
     <p>
       A P-frame references a previous frame. If that reference is lost,
-      the P-frame can't decode — and neither can anything depending on it.
-      Same pattern: break one link, sever the tail.
+      the P-frame can't decode, and neither can anything depending on it.
+      Break one link, sever the tail.
     </p>
 
     <Repl client:load initialCode={`class Frame:
@@ -190,19 +190,18 @@ print("\\n→ I0 survives. P2, P3 fail (missing chain link).")`} />
     </p>
 
     <p>
-      Ghrist & Hiraoka make it concrete: Proposition 11 says global flow on
-      a failure network G\A lives in H⁰_Z(X; F). Checking whether flows
-      survive node removal is a cohomological computation — same question as
-      "does removing B break A→C?"
+      Ghrist & Hiraoka ground this: Proposition 11 places global flow on
+      a failure network G\A in H⁰_Z(X; F). Whether flows survive node
+      removal becomes a cohomological computation: does removing B break A→C?
     </p>
 
     <h3>One pattern, three triggers</h3>
 
     <p>
-      All three describe: on a directed dependency graph, removing an intermediate
-      node severs everything downstream that depends uniquely on it. The triggers
-      differ — failed time composition (TVG), reference loss (codecs), exactness
-      failure (sheaves) — but the dependency pattern is formally the same.
+      All three say the same thing: on a directed dependency graph, removing
+      an intermediate node severs everything downstream that depends uniquely
+      on it. The triggers differ (failed time composition, reference loss,
+      exactness failure), but the dependency pattern is formally identical.
     </p>
 
     <p>

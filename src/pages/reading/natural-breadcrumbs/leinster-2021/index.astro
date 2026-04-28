@@ -190,7 +190,7 @@ for name, dist in [("uniform(5)", uniform), ("dominated", dominated)]:
 `} />
 
     <h3>q=1: exponential of Shannon entropy</h3>
-    <p>At q=1 (the limit), D₁ = exp(H), where H is <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a>. This is the "effective number of equally-common species" — entropy converted from bits to a count.</p>
+    <p>At q=1 (the limit), D₁ = exp(H), where H is <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon entropy</a>. This is the "effective number of equally-common species": entropy converted from bits to a count.</p>
 
     <SchemeRepl client:load initialCode={`; D_1 = exp(H) where H = -sum(p_i log p_i)
 
@@ -233,7 +233,7 @@ for name, dist in [("uniform(5)", uniform), ("dominated", dominated)]:
 `} />
 
     <h3>Magnitude — effective size of a metric space</h3>
-    <p>Magnitude generalizes diversity to metric spaces. Given a finite metric space with distance matrix d, the magnitude is the sum of the weight vector w satisfying Zw = 1, where Z_ij = e^(-d_ij). It measures the "effective number of points" — points close together contribute less than points far apart.</p>
+    <p>Magnitude generalizes diversity to metric spaces. Given a finite metric space with distance matrix d, the magnitude is the sum of the weight vector w satisfying Zw = 1, where Z_ij = e^(-d_ij). It measures the "effective number of points": points close together contribute less than points far apart.</p>
 
     <SchemeRepl client:load initialCode={`; Magnitude of a finite metric space
 ; Z_ij = exp(-d_ij), solve Zw = 1, magnitude = sum(w)
@@ -304,14 +304,14 @@ for name, dist in [("uniform(5)", uniform), ("dominated", dominated)]:
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>The Hill number computations are exact for finite distributions. The magnitude example is conceptual — solving the linear system Zw = 1 for arbitrary metric spaces requires matrix inversion, which the examples only sketch. For example: the magnitude discussion describes 3 points on a line. In the book, magnitude is defined for arbitrary enriched categories via the Euler characteristic of a category — a construction that subsumes metric spaces, posets, and graphs under one definition. The Hill numbers are the same; the categorical generalization of magnitude is not.</p>
+    <p>The Hill number computations are exact for finite distributions. The magnitude example is conceptual: solving Zw = 1 for arbitrary metric spaces requires matrix inversion, which the examples only sketch. The book defines magnitude for arbitrary enriched categories via the Euler characteristic of a category — a construction that subsumes metric spaces, posets, and graphs under one definition. The Hill numbers are the same; the categorical generalization of magnitude is not.</p>
     <p>Hill number examples: <strong class="text-green-400">Exact.</strong> Magnitude example: <strong class="text-green-400">Analogy.</strong></p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? The book is published by Cambridge University Press (2021). Start at Chapter 2 for Hill numbers, Chapter 6 for magnitude.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: Hill diversity and magnitude measure the Natural Framework's information budget — exp(entropy) is the effective number of distinguishable states at each pipeline stage. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Hill diversity and magnitude measure the Natural Framework's information budget: exp(entropy) is the effective number of distinguishable states at each pipeline stage. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/kidney-wu-2021/", label: "Kidney, Wu 2021 · 13 of 21" }} next={{ href: "/reading/natural-breadcrumbs/smithe-2021/", label: "Smithe 2021 · 15 of 21" }} />
   </main>

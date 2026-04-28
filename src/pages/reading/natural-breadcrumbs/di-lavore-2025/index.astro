@@ -17,11 +17,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories). <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare logic) helps.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Not every computation succeeds. A <strong>partial Markov category</strong> extends Fritz's Markov categories with <strong>restriction</strong> — morphisms can fail, observations can have zero probability, and Bayes' theorem handles the conditioning. This is where <a href="https://en.wikipedia.org/wiki/Judea_Pearl"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pearl</a>'s conditioning and <a href="https://en.wikipedia.org/wiki/Probability_kinematics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Jeffrey's updating</a> both live.</p>
+      <p class="text-lg" style="max-width:none">Not every computation succeeds. A <strong>partial Markov category</strong> extends Fritz's Markov categories with <strong>restriction</strong>: morphisms can fail, observations can have zero probability, and Bayes' theorem handles the conditioning. The framework unifies <a href="https://en.wikipedia.org/wiki/Judea_Pearl"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Pearl</a>'s conditioning with <a href="https://en.wikipedia.org/wiki/Probability_kinematics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Jeffrey's updating</a>.</p>
     </div>
 
     <h3>Restriction — morphisms that can fail</h3>
-    <p>A <a href="https://ncatlab.org/nlab/show/restriction+category">restriction category (nLab)</a> gives each morphism a "domain of definition" — a partial identity that says where the morphism is defined. In probabilistic terms: some observations have zero probability, and conditioning on them is undefined.</p>
+    <p>A <a href="https://ncatlab.org/nlab/show/restriction+category">restriction category (nLab)</a> gives each morphism a "domain of definition," a partial identity marking where the morphism is defined. In probabilistic terms: some observations have zero probability, and conditioning on them is undefined.</p>
 
     <!-- SVG: Partial morphism — success and failure paths -->
     <div class="flex justify-center my-6">
@@ -91,7 +91,7 @@ print(f"div(6,0) = {partial_div(6,0)}, defined: {div_ok(6,0)}")
     </div>
 
     <h3>Observations — conditioning on events</h3>
-    <p>An observation is a partial morphism that "tests" whether an event occurred. If the event has zero probability, the observation is undefined — you can't condition on something that can't happen. This is the categorical version of "divide by zero in Bayes' rule."</p>
+    <p>An observation is a partial morphism that "tests" whether an event occurred. If the event has zero probability, the observation is undefined. You can't condition on something that can't happen. Categorically, this is "divide by zero in Bayes' rule."</p>
 
     <SchemeRepl client:load initialCode={`; Observation: condition a distribution on an event
 ; If P(event) = 0, conditioning is undefined
@@ -133,7 +133,7 @@ print(f"P(>10):  {condition(dist, lambda x: x > 10)}")
     </div>
 
     <h3>Bayes' theorem in the partial setting</h3>
-    <p>Bayes' theorem becomes a theorem about partial morphisms: the posterior is defined exactly when the marginal likelihood is nonzero. The restriction structure tracks this automatically — no ad hoc division-by-zero guards needed.</p>
+    <p>In the partial setting, Bayes' theorem says the posterior exists exactly when the marginal likelihood is nonzero. The restriction structure tracks this automatically — no ad hoc division-by-zero guards needed.</p>
 
     <SchemeRepl client:load initialCode={`; Bayes' theorem: partial when marginal likelihood = 0
 
@@ -166,7 +166,7 @@ print(f"P(>10):  {condition(dist, lambda x: x > 10)}")
 `} />
 
     <h3>Pearl vs Jeffrey updating</h3>
-    <p>Pearl conditioning sets evidence to a certainty (hard observation). Jeffrey updating sets evidence to a distribution (soft observation). Both are instances of the same categorical structure — Jeffrey generalizes Pearl by allowing partial observations.</p>
+    <p>Pearl conditioning sets evidence to a certainty (hard observation). Jeffrey updating sets evidence to a distribution (soft observation). Both live in the same categorical structure: Jeffrey generalizes Pearl by allowing partial observations.</p>
 
     <SchemeRepl client:load initialCode={`; Pearl: hard evidence (certainty)
 ; Jeffrey: soft evidence (distribution over observations)
@@ -240,7 +240,7 @@ print(f"P(>10):  {condition(dist, lambda x: x > 10)}")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>The examples use finite distributions with explicit zero-probability checks. The paper works with restriction categories and subdistribution monads, where partiality is built into the categorical structure via restriction idempotents. For example: the conditioning function on this page returns <code>'undefined</code> when the event has zero probability. In the paper, this is a restriction idempotent — a morphism e with e;e = e that acts as a partial identity, and the zero-probability case is where the restriction is the zero morphism. The division-by-zero guard is the same; the categorical abstraction is not.</p>
+    <p>The examples use finite distributions with explicit zero-probability checks. The paper works with restriction categories and subdistribution monads, where partiality is built into the categorical structure via restriction idempotents. For example, the conditioning function on this page returns <code>'undefined</code> when the event has zero probability. In the paper, that becomes a restriction idempotent, a morphism e with e;e = e that acts as a partial identity; the zero-probability case is where the restriction is the zero morphism. The division-by-zero guard is the same; the categorical abstraction is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">

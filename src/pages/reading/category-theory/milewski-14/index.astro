@@ -238,7 +238,7 @@ print(f"phi recovers:  {phi(alpha)}")  # [1, 2, 3]
 
     <!-- 4. Length as a natural transformation -->
     <h3>Length: a natural transformation in the wild</h3>
-    <p><code>length</code> is a natural transformation from <code>List</code> to <code>Const Int</code>. It turns a <code>[a]</code> into an <code>Int</code> regardless of the element type. Yoneda says this nat. trans. corresponds to a single element of <code>Const Int (a)</code> when the domain is a hom-functor, but here we see the pattern: <code>length</code> is natural because it doesn't inspect the elements. It commutes with <code>fmap</code>: <code>length (map f xs) = length xs</code>.</p>
+    <p><code>length</code> is a natural transformation from <code>List</code> to <code>Const Int</code>. It turns a <code>[a]</code> into an <code>Int</code> regardless of the element type, and it never inspects the elements: <code>length (map f xs) = length xs</code>. That commutativity with <code>fmap</code> is exactly the naturality condition.</p>
 
     <SchemeRepl client:load initialCode={`; length : List a -> Int is a natural transformation.
 ; Naturality: length (map f xs) = length xs
@@ -276,7 +276,7 @@ print(f"len(map(str, xs)):     {len(list(map(str, xs)))}")
 
     <!-- 5. Yoneda embedding -->
     <h3>Yoneda embedding: objects as their morphisms</h3>
-    <p>Set <code>F = Hom(b, &ndash;)</code> in the Yoneda lemma. Then <code>Nat(Hom(a, &ndash;), Hom(b, &ndash;)) &cong; Hom(b, a)</code>. Every natural transformation between hom-functors comes from a morphism. This means the mapping <code>a &mapsto; Hom(a, &ndash;)</code> is a <strong>full and faithful</strong> embedding: it preserves all morphisms, losing nothing. An object is completely characterized by its web of relationships.</p>
+    <p>Set <code>F = Hom(b, &ndash;)</code> in the Yoneda lemma. Then <code>Nat(Hom(a, &ndash;), Hom(b, &ndash;)) &cong; Hom(b, a)</code>. Every natural transformation between hom-functors comes from a morphism. This means the mapping <code>a &mapsto; Hom(a, &ndash;)</code> is a <strong>full and faithful</strong> embedding: it preserves all morphisms, losing nothing. Objects are entirely determined by their relationships.</p>
 
     <SchemeRepl client:load initialCode={`; Yoneda embedding: a |-> Hom(a, -)
 ; Nat(Hom(a, -), Hom(b, -)) = Hom(b, a)
@@ -360,7 +360,7 @@ print(f"len(map(str, xs)):     {len(list(map(str, xs)))}")
 
     <!-- 7. CPS as Yoneda -->
     <h3>Continuation-passing style: Yoneda with F = Identity</h3>
-    <p>Set <code>F = Identity</code> in the Yoneda lemma. Then <code>(forall x . (a &rarr; x) &rarr; x) &cong; a</code>. A value of type <code>a</code> is the same thing as a function that takes any continuation <code>a &rarr; x</code> and produces an <code>x</code>. This is <strong>continuation-passing style</strong>. The Yoneda lemma is the theoretical justification for CPS transforms.</p>
+    <p>Set <code>F = Identity</code> in the Yoneda lemma. Then <code>(forall x . (a &rarr; x) &rarr; x) &cong; a</code>. Having a value of type <code>a</code> is equivalent to having a function that accepts any continuation <code>a &rarr; x</code> and produces an <code>x</code>. This is <strong>continuation-passing style</strong>, and the Yoneda lemma is why CPS transforms are sound.</p>
 
     <SchemeRepl client:load initialCode={`; CPS is Yoneda with F = Identity.
 ; (forall x . (a -> x) -> x) ≅ a
@@ -452,7 +452,9 @@ print(f"is_big:   {cps_42(lambda x: x > 10)}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post proves Yoneda for locally small categories with Set-valued functors. This page stays in the programming world: functors are type constructors with <code>fmap</code>, natural transformations are polymorphic functions, and the bijection is demonstrated by round-tripping through <code>phi</code> and <code>psi</code>. The key subtlety the blog post emphasizes: in Haskell, polymorphic functions are automatically natural (parametric polymorphism guarantees naturality via the "theorem for free"). In category theory, naturality is an additional condition that must be checked. The co-Yoneda section on this page uses predicates for concreteness. Milewski states it more generally for presheaves (contravariant functors to Set). The Yoneda embedding (full and faithful) is the deeper payoff: it means every category embeds into a functor category, so abstract morphisms can always be studied as concrete functions between sets.</p>
+    <p>The blog post proves Yoneda for locally small categories with Set-valued functors. This page stays in the programming world: functors are type constructors with <code>fmap</code>, natural transformations are polymorphic functions, and the bijection is demonstrated by round-tripping through <code>phi</code> and <code>psi</code>.</p>
+    <p>One subtlety: in Haskell, polymorphic functions are automatically natural (parametric polymorphism guarantees naturality via the "theorem for free"). In category theory you must check naturality separately. The co-Yoneda section here uses predicates; Milewski states it more generally for presheaves (contravariant functors to Set).</p>
+    <p>The deeper payoff is the Yoneda embedding: every category embeds fully and faithfully into a functor category, so abstract morphisms can always be studied as concrete functions between sets.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2015/09/01/the-yoneda-lemma/">Read the blog post</a>. Start with the naturality condition, then trace how alpha at id_a determines everything.

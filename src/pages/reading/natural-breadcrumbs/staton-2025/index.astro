@@ -44,7 +44,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <span class="text-gray-400">assert</span> <span class="text-green-300">Q</span>
     </div>
 
-    <p>"If P holds before running c, then Q holds after." That's a <a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare triple</a>: <code>{'{P}'} c {'{Q}'}</code>. If the precondition doesn't hold, the triple says nothing — it's vacuously satisfied.</p>
+    <p>"If P holds before running c, then Q holds after." That's a <a href="https://en.wikipedia.org/wiki/Hoare_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Hoare triple</a>: <code>{'{P}'} c {'{Q}'}</code>. If the precondition doesn't hold, the triple says nothing. It's vacuously satisfied.</p>
 
     <Repl client:load initialCode={`# {P} c {Q} — if P holds before, Q holds after.
 
@@ -91,7 +91,7 @@ print("Nothing happened. That's the point.")
     <!-- 3. COMP -->
     <h3>COMP — the handshake</h3>
     <p>This is the big one. If <code>{'{P}'} c₁ {'{R}'}</code> and <code>{'{R}'} c₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ {'{Q}'}</code>.</p>
-    <p>R is the <strong>handshake</strong> — stage 1's postcondition is stage 2's precondition. The output guarantee of one stage is the input assumption of the next.</p>
+    <p>R is the <strong>handshake</strong>: stage 1's postcondition is stage 2's precondition.</p>
 
     <!-- SVG diagram: COMP rule — string diagram -->
     <div class="flex justify-center my-6">
@@ -197,7 +197,7 @@ print("     and see where Q breaks.")
     </div>
 
     <p>If <code>{'{b ∧ P}'} c {'{P}'}</code>, then <code>{'{P}'} while b do c {'{P ∧ ¬b}'}</code>.</p>
-    <p>If the body preserves the invariant P, the loop preserves it too. When the loop exits, P still holds AND the guard b is false. This is the loop invariant from your algorithms class — except here it's a theorem derived from the categorical structure, not a proof technique you choose to apply.</p>
+    <p>If the body preserves the invariant P, the loop preserves it too. When the loop exits, P still holds AND the guard b is false. This is the loop invariant from your algorithms class. But here it's a theorem derived from the categorical structure, not a proof technique you choose to apply.</p>
 
     <Repl client:load initialCode={`# WHILE: if body preserves P, loop preserves P.
 # When loop exits: P holds AND guard is false.
@@ -311,7 +311,7 @@ print(f"    deterministic would give 1 ✗")
       <span class="text-blue-300">theorem</span> contract_is_triple :<br/>
       &nbsp;&nbsp;ContractPreserving f Q ↔ Triple (<span class="text-green-300">fun _ => True</span>) f Q
     </div>
-    <p><code>ContractPreserving f Q</code> says: for every input, every output in the support of f satisfies Q. That's <code>{'{⊤}'} f {'{Q}'}</code> — a Hoare triple where the precondition is "true" (anything goes). The contract is an unconditional guarantee.</p>
+    <p><code>ContractPreserving f Q</code> says: for every input, every output in the support of f satisfies Q. That's <code>{'{⊤}'} f {'{Q}'}</code>: a Hoare triple where the precondition is "true" (anything goes). The contract is an unconditional guarantee.</p>
 
     <Repl client:load initialCode={`# ContractPreserving f Q  =  {⊤} f {Q}
 # They're the same thing.
@@ -366,8 +366,8 @@ print("That's the bridge theorem.")
 
     <!-- 8. Stoch is an imperative category -->
     <h3>The punchline — Corollary 76</h3>
-    <p>Stoch (stochastic matrices) is a <strong>posetal imperative category</strong>. That means every Hoare rule in Section 5 holds there as a theorem. Hoare triples aren't an engineering choice — they're forced by the category.</p>
-    <p>A stochastic function takes an input and returns a probability distribution over outputs. <a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli composition</a> chains two such functions: run the first, then for each possible output run the second, weighting by probability. This is how stochastic pipelines compose — and it's the composition that makes the COMP rule work.</p>
+    <p>Stoch (stochastic matrices) is a <strong>posetal imperative category</strong>. That means every Hoare rule in Section 5 holds there as a theorem. Hoare triples aren't an engineering choice. They're forced by the category.</p>
+    <p>A stochastic function takes an input and returns a probability distribution over outputs. <a href="https://en.wikipedia.org/wiki/Kleisli_category"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kleisli composition</a> chains two such functions: run the first, then for each possible output run the second, weighting by probability. That composition is what makes the COMP rule work.</p>
 
     <Repl client:load initialCode={`# Stoch = Kleisli category of the subdistribution monad
 # Morphisms are stochastic functions: X -> Distribution(Y)
@@ -492,8 +492,9 @@ print("through the bind — same as your Lean proof.")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All Python examples on this page use finite dicts as probability distributions. The paper works over arbitrary measurable spaces, continuous distributions, and the full subdistribution monad on StdBorel. For example: the WHILE rule on this page counts down from 10 to 0 using integers. In the paper, the same rule applies to a probabilistic loop over continuous state spaces — a particle filter updating a belief distribution until convergence. The invariant structure (P survives each iteration) is identical. The state space is not.</p>
-    <p>The bridge theorem section is tagged <strong class="text-green-400">Exact</strong> — the Python computes the same equivalence the Lean proof verifies. Every other example is <strong class="text-green-400">Simplified</strong>.</p>
+    <p>All Python examples on this page use finite dicts as probability distributions. The paper works over arbitrary measurable spaces, continuous distributions, and the full subdistribution monad on StdBorel.</p>
+    <p>For example: the WHILE rule here counts down from 10 to 0 using integers. In the paper, the same rule applies to a probabilistic loop over continuous state spaces: a particle filter updating a belief distribution until convergence. The invariant structure (P survives each iteration) is identical. The state space is not.</p>
+    <p>The bridge theorem section is tagged <strong class="text-green-400">Exact</strong>: the Python computes the same equivalence the Lean proof verifies. Every other example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <p class="text-sm text-gray-500 mt-6">Framework connection: Stoch is the ambient category for the Natural Framework pipeline; the COMP rule is the handshake between stages. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
 

@@ -17,12 +17,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, support). 5 min.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">The map "which outcomes are possible?" — dropping probabilities and keeping only the support — is a <strong>monad morphism</strong>. It respects composition: the support of a composed pipeline equals the composition of supports.</p>
+      <p class="text-lg" style="max-width:none">The map "which outcomes are possible?", dropping weights and keeping only the support, is a <strong>monad morphism</strong>. It respects composition: the support of a composed pipeline equals the composition of supports.</p>
     </div>
 
     <!-- 1. Possibilistic shadow -->
     <h3>The possibilistic shadow</h3>
-    <p>Every probability distribution has a <strong>possibilistic shadow</strong>: forget the weights, keep only which outcomes can happen. This maps the probability monad P to the powerset monad 𝒫. The shadow is a monad morphism — it preserves pure and bind.</p>
+    <p>Every probability distribution has a <strong>possibilistic shadow</strong>: forget the weights, keep only which outcomes can happen. This maps the probability monad P to the powerset monad 𝒫. The shadow is a monad morphism: it preserves pure and bind.</p>
 
     <!-- SVG: Support — bar chart with highlighted (nonzero) and grayed-out (zero) bars -->
     <div class="flex justify-center my-6">
@@ -86,7 +86,7 @@ print("dist2 shadow:", support(dist2))
 
     <!-- 2. support_pure -->
     <h3>support_pure — pure maps to singleton</h3>
-    <p>The pure (return) of the probability monad wraps a value in a point-mass distribution: pure(x) = {'{x: 1.0}'}. Its shadow is a singleton set: {'{x}'}. That's exactly the pure of the powerset monad. So support preserves pure.</p>
+    <p>The pure (return) of the probability monad places all mass on one value: pure(x) = {'{x: 1.0}'}. Its shadow is a singleton set, {'{x}'}, which is exactly the pure of the powerset monad. So support preserves pure.</p>
 
     <SchemeRepl client:load initialCode={`; support_pure: support(pure(x)) = {x}
 ; Probability pure: point mass. Powerset pure: singleton.
@@ -107,7 +107,7 @@ print("dist2 shadow:", support(dist2))
 
     <!-- 3. support_bind -->
     <h3>support_bind — support commutes with bind</h3>
-    <p>This is the key theorem. If you compose two stochastic functions and then take the support, you get the same result as taking each support first and then composing the set-valued functions. In notation: supp(f >=> g) = supp(f) >=>_𝒫 supp(g). Support is a monad morphism because it preserves the monad multiplication (bind).</p>
+    <p>This is the key theorem. Compose two stochastic functions, then take the support: you get the same result as taking each support first and composing the set-valued functions. In notation: supp(f >=> g) = supp(f) >=>_𝒫 supp(g). Support preserves the monad multiplication.</p>
 
     <SchemeRepl client:load initialCode={`; support_bind: supp(f >=> g) = supp(f) >=> supp(g)
 ; "Support of composed = compose of supports"
@@ -182,7 +182,7 @@ print(f"equal? {path1 == path2}")
 
     <!-- 4. Why it matters -->
     <h3>Why possibilistic reasoning is sound</h3>
-    <p>Because support is a monad morphism, you can reason about reachability (what <em>can</em> happen) without tracking exact probabilities. If a state is unreachable through a composed system, it's unreachable through each stage individually. Possibilistic gating — reject impossible outcomes — doesn't need exact probability computation.</p>
+    <p>Because support is a monad morphism, you can reason about reachability (what <em>can</em> happen) without tracking exact probabilities. If a state is unreachable through a composed system, it's unreachable through each stage individually. Possibilistic gating, rejecting impossible outcomes, needs no exact probability computation.</p>
 
     <SchemeRepl client:load initialCode={`; Possibilistic gating: reject impossible, keep possible
 ; No probabilities needed — support is enough
@@ -294,13 +294,13 @@ for src in ["cat", "dog", "rock"]:
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use finite lists of pairs as distributions. The paper works over arbitrary measurable spaces with the <a href="https://ncatlab.org/nlab/show/Giry+monad">Giry monad</a>, and support becomes a measurable map between σ-algebras. For example: the support_bind demonstration on this page composes two functions over small symbol sets. In the paper, the same law applies to Markov kernels between <a href="https://en.wikipedia.org/wiki/Polish_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Polish spaces</a> — where "support" means the topological support of a probability measure, and the proof requires measurable selection theorems. The algebraic structure (support commutes with Kleisli composition) is identical. The measure theory is not.</p>
+    <p>All examples use finite lists of pairs as distributions. The paper works over arbitrary measurable spaces with the <a href="https://ncatlab.org/nlab/show/Giry+monad">Giry monad</a>, and support becomes a measurable map between σ-algebras. The support_bind demo above composes two functions over small symbol sets; in the paper, the same law applies to Markov kernels between <a href="https://en.wikipedia.org/wiki/Polish_space"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Polish spaces</a> — where "support" means topological support of a probability measure, and the proof requires measurable selection theorems. The algebraic structure is identical. The measure theory is not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/1910.03752"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the support monad morphism, §4 for the bimonadality result.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The possibilistic shadow justifies the Natural Framework's Filter stage doing reachability-based gating without exact probabilities. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The possibilistic shadow justifies the Natural Framework's Filter stage gating on reachability without exact probabilities. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/fritz-2020/", label: "Fritz 2020 · 2 of 21" }} next={{ href: "/reading/natural-breadcrumbs/gaboardi-2021/", label: "Gaboardi 2021 · 4 of 21" }} />
   </main>

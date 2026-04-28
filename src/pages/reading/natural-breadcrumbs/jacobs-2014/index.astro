@@ -88,7 +88,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <h3>Predicates as a poset fibration</h3>
-    <p>Above each type X sits a poset of predicates on X — propositions ordered by implication. "x > 5" implies "x > 0", so "x > 5" sits above "x > 0" in the fiber over integers. A fibration is this layered structure: types on the bottom, predicates stacked above, ordered by strength.</p>
+    <p>Above each type X sits a poset of predicates: propositions ordered by implication. "x > 5" implies "x > 0", so "x > 5" sits above "x > 0" in the fiber over integers. A fibration layers types on the bottom, predicates stacked above, ordered by strength.</p>
 
     <SchemeRepl client:load initialCode={`; Fiber over integers: predicates ordered by implication
 ; P ≤ Q means P implies Q (P is stronger)
@@ -174,7 +174,7 @@ for x in range(-1, 4):
     </div>
 
     <h3>Order enrichment makes wp monotone</h3>
-    <p>The fibers are posets (predicates ordered by implication). The wp functor is monotone: if Q₁ implies Q₂, then wp(f, Q₁) implies wp(f, Q₂). Stronger postconditions give stronger preconditions. This monotonicity comes for free from the order-enriched Kleisli structure.</p>
+    <p>The fibers are posets, so wp is monotone: if Q₁ implies Q₂, then wp(f, Q₁) implies wp(f, Q₂). Stronger postconditions give stronger preconditions. The order-enriched Kleisli structure guarantees this.</p>
 
     <SchemeRepl client:load initialCode={`; Monotonicity: Q1 => Q2 implies wp(f,Q1) => wp(f,Q2)
 
@@ -223,7 +223,7 @@ for x in range(0, 9):
     </div>
 
     <h3>Composition of wp via Kleisli composition</h3>
-    <p>wp(f;g, Q) = wp(f, wp(g, Q)). Composing two stochastic functions and computing wp in one step gives the same result as computing wp for g first, then using that as the postcondition for f. The fibration structure guarantees this — it's not a coincidence, it's functoriality.</p>
+    <p>wp(f;g, Q) = wp(f, wp(g, Q)). Computing wp of the composed pipeline in one shot gives the same answer as computing wp(g, Q) first and feeding it to wp(f, -). The fibration structure guarantees this. Not a coincidence: functoriality.</p>
 
     <SchemeRepl client:load initialCode={`; wp(f;g, Q) = wp(f, wp(g, Q))
 ; Functoriality of the fibration
@@ -297,7 +297,7 @@ for x in range(0, 9):
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use finite distributions and boolean predicates. Jacobs works with order-enriched categories, where predicates form complete lattices and the fibration carries a rich adjunction structure (left and right adjoints to reindexing). For example: the wp computation on this page checks all elements of a small support set. In the paper, wp is a right adjoint to substitution in the fibration — a universal construction that works over arbitrary effect monads, not just distributions. The pointwise "for all y" check is the same; the categorical machinery that guarantees it exists is not.</p>
+    <p>All examples use finite distributions and boolean predicates. Jacobs works with order-enriched categories where predicates form complete lattices and the fibration carries left and right adjoints to reindexing. The wp computation on this page checks all elements of a small support set. In the paper, wp is a right adjoint to substitution in the fibration: a universal construction over arbitrary effect monads, not just distributions. The pointwise "for all y" check is the same; the categorical machinery that guarantees it exists is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">

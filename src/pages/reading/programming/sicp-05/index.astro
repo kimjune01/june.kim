@@ -15,7 +15,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-gray-400 text-sm mb-6">Abelson &amp; Sussman · 1996 · <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-15.html#%_sec_2.2">SICP §2.2</a></p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">The <strong>closure property</strong> of cons: the result of combining things can itself be combined. Pairs of pairs build lists and trees. <code>map</code>, <code>filter</code>, <code>accumulate</code> are the universal interfaces for sequence operations &mdash; once you have them, you stop writing loops and start describing pipelines.</p>
+      <p class="text-lg" style="max-width:none">The <strong>closure property</strong> of cons: the result of combining things can itself be combined. Pairs of pairs build lists and trees. <code>map</code>, <code>filter</code>, <code>accumulate</code> are the universal interfaces for sequence operations: once you have them, you stop writing loops and start describing pipelines.</p>
     </div>
 
     <!-- SVG: Box-and-pointer diagram for ((1 2) (3 4)) -->
@@ -137,7 +137,7 @@ print(f"map square: {[x*x for x in xs]}")
 
     <!-- 2. Hierarchical structures -->
     <h3>Hierarchical structures</h3>
-    <p>When list elements are themselves lists, you get a tree. <code>count-leaves</code> recursively walks both the <code>car</code> and <code>cdr</code> of each pair. This is where the closure property pays off: the same operations that work on flat lists work on nested structures.</p>
+    <p>When list elements are themselves lists, you get a tree. <code>count-leaves</code> recursively walks both the <code>car</code> and <code>cdr</code> of each pair. The closure property pays off here: the same operations that work on flat lists work on nested structures.</p>
 
     <SchemeRepl client:load initialCode={`; Trees as nested lists
 (define tree (list (list 1 2) (list 3 (list 4 5))))
@@ -245,7 +245,7 @@ print(f"sum of odd squares: {sum(x*x for x in xs if x % 2 == 1)}")
 
     <!-- 4. Nested mappings -->
     <h3>Nested mappings</h3>
-    <p><code>flatmap</code> maps a function that returns a list over a list, then flattens the results into a single list. It replaces nested loops. Here it generates all ordered pairs (i, j) where 1 &le; j &lt; i &le; n and their sum is prime.</p>
+    <p><code>flatmap</code> applies a list-returning function to each element, then flattens the results into a single list. It replaces nested loops. Here it generates all ordered pairs (i, j) where 1 &le; j &lt; i &le; n and their sum is prime.</p>
 
     <SchemeRepl client:load initialCode={`; flatmap = append all results of mapping
 (define (accumulate op init items)
@@ -339,7 +339,7 @@ print(f"prime-sum pairs up to 6: {prime_sum_pairs(6)}")
     <!-- Translation notes -->
     <h3>Translation notes</h3>
     <p>Scheme's <code>accumulate</code> is a right fold: it processes the last element first. Python's <code>reduce</code> is a left fold. For associative operations (addition, multiplication) they give the same result. For non-associative ones (subtraction, cons) they differ. The SICP convention uses right fold because it mirrors the recursive structure of lists: process the head, then recurse on the tail.</p>
-    <p class="mt-2">Python's list comprehensions do the work of <code>map</code>, <code>filter</code>, and <code>flatmap</code> in a single syntax. The Scheme decomposition is more explicit about the pipeline stages, which matters when you start composing them programmatically.</p>
+    <p class="mt-2">Python's list comprehensions replace <code>map</code>, <code>filter</code>, and <code>flatmap</code> in a single syntax. The Scheme decomposition is more explicit about the pipeline stages, which matters once you compose them programmatically.</p>
 
     <!-- Neighbors -->
     <Neighbors>

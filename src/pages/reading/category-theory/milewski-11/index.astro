@@ -22,7 +22,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 1. Diagrams and cones -->
     <h3>Diagrams and cones</h3>
-    <p>A <strong>diagram</strong> is a functor D : I → C from an index category I (the "shape") into a target category C. A <strong>cone</strong> over that diagram is an apex object <em>c</em> together with morphisms from <em>c</em> to every object in the diagram, such that every triangle commutes. Think of it as a tent pole (<em>c</em>) with ropes (morphisms) to each stake (diagram object), where the ropes respect the connections between stakes.</p>
+    <p>A <strong>diagram</strong> is a functor D : I → C from an index category I (the "shape") into a target category C. A <strong>cone</strong> over that diagram is an apex object <em>c</em> together with morphisms from <em>c</em> to every object in the diagram, such that every triangle commutes. Think of a tent pole (<em>c</em>) with ropes (morphisms) to each stake (diagram object), where every rope follows the connections between stakes.</p>
 
     <!-- SVG: Cone diagram -->
     <div class="flex justify-center my-6">
@@ -211,7 +211,7 @@ print(f"unit(42) = {unit(42)}")
 
 
     <!-- 3. Equalizers -->
-    <h3>Equalizers — where two morphisms agree</h3>
+    <h3>Equalizers: where two morphisms agree</h3>
     <p>When the index category has two objects with two parallel morphisms between them (a ⇉ b), the limit is an <strong>equalizer</strong>. It picks out the subobject of <em>a</em> where the two morphisms agree: the set of all <em>x</em> such that f(x) = g(x). The equalizer comes with an embedding <code>eq : E → a</code> such that <code>f ∘ eq = g ∘ eq</code>.</p>
 
     <SchemeRepl client:load initialCode={`; Equalizer: the limit where two parallel morphisms agree.
@@ -266,8 +266,8 @@ for x in eq_set:
 
 
     <!-- 4. Pullbacks -->
-    <h3>Pullbacks — matching over a shared target</h3>
-    <p>A <strong>pullback</strong> is the limit over a cospan: two morphisms f : a → b and g : c → b pointing at the same object. The pullback is the set of pairs (x, y) from a and c that land on the same element in b: f(x) = g(y). It generalizes the product (a product is a pullback over the terminal object) and the equalizer (an equalizer is a pullback where a = c).</p>
+    <h3>Pullbacks: matching over a shared target</h3>
+    <p>A <strong>pullback</strong> is the limit over a cospan: two morphisms f : a → b and g : c → b pointing at the same object. Concretely, it collects pairs (x, y) from a and c that land on the same element in b: f(x) = g(y). It generalizes the product (a product is a pullback over the terminal object) and the equalizer (an equalizer is a pullback where a = c).</p>
 
     <!-- SVG: Pullback square -->
     <div class="flex justify-center my-6">
@@ -379,7 +379,7 @@ for s, c in matches:
 
 
     <!-- 5. Colimits -->
-    <h3>Colimits — reverse the arrows</h3>
+    <h3>Colimits: reverse the arrows</h3>
     <p>A <strong>colimit</strong> is a limit in the opposite category. Reverse all the arrows in a cone and you get a <strong>cocone</strong>: morphisms going <em>from</em> the diagram objects <em>to</em> the apex. The colimit is the universal cocone. Coproducts are colimits over discrete diagrams. Initial objects are colimits over the empty diagram. Pushouts are dual to pullbacks. The coequalizer is dual to the equalizer: it identifies elements that two morphisms map differently.</p>
 
     <SchemeRepl client:load initialCode={`; Colimit = limit with arrows reversed.
@@ -450,7 +450,7 @@ for s, c in matches:
 
     <!-- 6. The Hom-set definition -->
     <h3>The hom-set definition of limits</h3>
-    <p>There's a cleaner way to state the universal property. A limit Lim D exists when there's a natural isomorphism: <code>C(c, Lim D) ≅ Nat(Δc, D)</code>. The left side is morphisms from <em>c</em> to the limit. The right side is natural transformations from the constant functor at <em>c</em> to the diagram D, which are exactly cones with apex <em>c</em>. This says: morphisms into the limit correspond one-to-one with cones.</p>
+    <p>The universal property has a sharper form. A limit Lim D exists when there's a natural isomorphism: <code>C(c, Lim D) ≅ Nat(Δc, D)</code>. The left side is morphisms from <em>c</em> to the limit. The right side is natural transformations from the constant functor at <em>c</em> to the diagram D, which are exactly cones with apex <em>c</em>. So morphisms into the limit correspond one-to-one with cones.</p>
 
     <SchemeRepl client:load initialCode={`; Hom-set definition: C(c, Lim D) ≅ Nat(Δc, D)
 ;
@@ -539,7 +539,7 @@ for s, c in matches:
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post introduces limits via the constant functor Δ and natural transformations, building up from products and terminal objects to equalizers and pullbacks. This page follows the same progression but makes everything executable. The equalizer is computed by filtering a finite domain rather than defining a subobject categorically. The pullback is computed by brute-force enumeration of pairs, which matches the set-theoretic definition but hides the universal property. The coequalizer uses explicit equivalence-class merging, which is the computational content of a quotient. In the blog post, Milewski also covers continuity (functors that preserve limits), which requires representable functors and is deferred to a later chapter.</p>
+    <p>The blog post introduces limits via the constant functor Δ and natural transformations, building up from products and terminal objects to equalizers and pullbacks. This page follows the same progression but makes everything executable. The equalizer is computed by filtering a finite domain rather than defining a subobject categorically. The pullback is computed by brute-force enumeration of pairs, which matches the set-theoretic definition but hides the universal property. The coequalizer uses explicit equivalence-class merging, which is the computational content of a quotient. Milewski also covers continuity (functors that preserve limits), which requires representable functors and belongs to a later chapter.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2015/04/15/limits-and-colimits/">Read the blog post</a>. Start with the cone construction, then see how the hom-set definition <code>C(c, Lim D) ≅ Nat(Δc, D)</code> unifies everything.

@@ -128,7 +128,7 @@ print(f"bimap id: {bimap_pair(lambda x: x, lambda x: x, p)}")
 
     <!-- 2. Either bifunctor -->
     <h3>Coproduct as a bifunctor</h3>
-    <p>The coproduct (tagged union / Either) is also a bifunctor. <code>bimap</code> applies one function to the Left case, the other to the Right case. Together with the product bifunctor, these two give you the building blocks for all algebraic data types.</p>
+    <p>The coproduct (tagged union / Either) is also a bifunctor. <code>bimap</code> applies one function to the Left case, the other to the Right case. Together, these two are the building blocks for all algebraic data types.</p>
 
     <SchemeRepl client:load initialCode={`; Either as a bifunctor
 ; Represent Either as tagged: (left . value) or (right . value)
@@ -276,7 +276,7 @@ print(f"long_number(1000000): {long_number(1000000)}")
 
     <!-- 6. Profunctors -->
     <h3>Profunctors: contra in first, co in second</h3>
-    <p>The function arrow <code>a -> b</code> is contravariant in <code>a</code> (the input) and covariant in <code>b</code> (the output). A type that behaves this way is a <strong>profunctor</strong>. The operation <code>dimap</code> takes two functions: one to pre-process the input (going backwards), one to post-process the output (going forwards).</p>
+    <p>The function arrow <code>a -> b</code> is contravariant in <code>a</code> (the input) and covariant in <code>b</code> (the output). A type that behaves this way is a <strong>profunctor</strong>. <code>dimap</code> takes two functions: one to adapt the input (going backwards), one to adapt the output (going forwards).</p>
 
     <SchemeRepl client:load initialCode={`; Profunctor: contravariant in first arg, covariant in second.
 ; dimap : (a' -> a) -> (b -> b') -> P(a,b) -> P(a',b')
@@ -332,7 +332,7 @@ print(f"dimap id id: {same('hello')}")  # 5
 
     <!-- 7. The Const functor -->
     <h3>The Const functor</h3>
-    <p>The <strong>Const functor</strong> ignores its second type parameter. <code>Const c a</code> always holds a <code>c</code>, regardless of <code>a</code>. Its <code>fmap</code> does nothing: the value doesn't depend on the type parameter, so there's nothing to transform. Const is the "zero" in the algebra of functors. It shows up everywhere in the automatic derivation of functor instances for ADTs.</p>
+    <p>The <strong>Const functor</strong> ignores its second type parameter. <code>Const c a</code> always holds a <code>c</code>, regardless of <code>a</code>. Its <code>fmap</code> does nothing: the value doesn't depend on the type parameter, so there's nothing to transform. Const is the "zero" in the algebra of functors, and the key ingredient when auto-deriving functor instances for ADTs.</p>
 
     <SchemeRepl client:load initialCode={`; Const functor: holds a fixed value, ignores the type parameter.
 ; Const c a = c  (a is phantom)
@@ -359,7 +359,7 @@ print(f"dimap id id: {same('hello')}")  # 5
 
     <!-- 8. Putting it together -->
     <h3>Putting it together: the functoriality of ADTs</h3>
-    <p>Every algebraic data type is a nested composition of sums (Either), products (pairs), Const, and Identity. Since all of these are functorial, their compositions are too. This is why Haskell can auto-derive <code>Functor</code>: the compiler walks the type structure and assembles <code>fmap</code> from <code>bimap</code>, <code>contramap</code>, and the identity. The only catch: the type parameter must appear in covariant (positive) position. If it appears in a function argument (negative position), you need <code>Contravariant</code> or <code>Profunctor</code> instead.</p>
+    <p>Every algebraic data type is a nested composition of sums (Either), products (pairs), Const, and Identity. Since all of these are functorial, their compositions are too. Haskell can auto-derive <code>Functor</code> because the compiler walks the type structure and assembles <code>fmap</code> from <code>bimap</code>, <code>contramap</code>, and the identity. The only catch: the type parameter must appear in covariant (positive) position. If it appears in a function argument (negative position), you need <code>Contravariant</code> or <code>Profunctor</code> instead.</p>
 
     <SchemeRepl client:load initialCode={`; Summary: the algebra of functors
 ; bimap  handles products and coproducts (two covariant args)
@@ -460,7 +460,7 @@ print(f"doubled:  {fmap_tree(lambda x: x*2, tree)}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post uses Haskell typeclasses (<code>Bifunctor</code>, <code>Contravariant</code>, <code>Profunctor</code>) and C++ templates. This page uses plain Scheme functions, since Scheme has no type system to enforce the laws. The automatic derivation of functor instances for ADTs, which Milewski shows via <code>Const</code> and <code>Identity</code> composition, is demonstrated here by manually following the same decomposition for Maybe and Tree. The blog post also discusses the Writer functor's derivation from Kleisli composition. That's covered in <a href="/reading/category-theory/milewski-04/">Chapter 4</a>. One subtlety from the blog post worth noting: separate functoriality in each argument is not enough to prove joint functoriality. The commutativity condition (applying <code>first</code> then <code>second</code> equals applying <code>second</code> then <code>first</code>) is required. Categories that violate this are called premonoidal.</p>
+    <p>Milewski uses Haskell typeclasses (<code>Bifunctor</code>, <code>Contravariant</code>, <code>Profunctor</code>) and C++ templates. This page uses plain Scheme functions, since Scheme has no type system to enforce the laws. Where the blog derives functor instances for ADTs via <code>Const</code> and <code>Identity</code> composition, this page follows the same decomposition manually for Maybe and Tree. Writer's derivation from Kleisli composition is covered in <a href="/reading/category-theory/milewski-04/">Chapter 4</a>. A subtlety worth flagging: separate functoriality in each argument does not prove joint functoriality. You also need the commutativity condition (applying <code>first</code> then <code>second</code> equals applying <code>second</code> then <code>first</code>). Categories that violate this are called premonoidal.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2015/02/03/functoriality/">Read the blog post</a>. Start with the bifunctor section, then trace how Maybe decomposes into Const + Identity.

@@ -22,7 +22,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- What's information loss -->
     <h3>Information loss</h3>
-    <p>When a stochastic function processes a distribution, some information is lost. The question is: how do you <em>measure</em> that loss? <a href="https://en.wikipedia.org/wiki/Claude_Shannon"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon</a> defined entropy in 1948. Baez, Fritz, and Leinster proved that Shannon's definition is the only one that satisfies three natural properties.</p>
+    <p>When a stochastic function processes a distribution, some information is lost. How do you <em>measure</em> that loss? <a href="https://en.wikipedia.org/wiki/Claude_Shannon"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Shannon</a> defined entropy in 1948. Baez, Fritz, and Leinster proved his definition is the only one satisfying three natural properties.</p>
 
     <SchemeRepl client:load initialCode={`; Shannon entropy: H(p) = -Σ p·log₂(p)
 (define (log2 x) (/ (log x) (log 2)))
@@ -100,7 +100,7 @@ print("Certain = 0 bits. Fair coin = 1 bit.")
     </div>
 
     <!-- Functoriality -->
-    <h3>Functoriality — the key constraint</h3>
+    <h3>Functoriality: the key constraint</h3>
     <p>The paper's theorem: Shannon entropy is the <em>unique</em> measure of information loss that is <strong>functorial</strong>. Functorial means: the loss of a composite equals the sum of the losses of the parts.</p>
     <p>If you process data in two steps, the total information lost is the loss from step 1 plus the loss from step 2. No other definition of "loss" has this property (up to a constant factor).</p>
 
@@ -146,7 +146,7 @@ print(f"Functorial: {h0-h2:.2f} = {(h0-h1)+(h1-h2):.2f} ✓")
 
     <!-- Data processing inequality -->
     <h3>Data processing inequality</h3>
-    <p>A corollary: information can only decrease through processing. You can't create information by computing — you can only lose it or preserve it. This is the <a href="https://en.wikipedia.org/wiki/Data_processing_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>data processing inequality</a> (DPI), proved categorically.</p>
+    <p>A corollary: information can only decrease through processing. Computation loses or preserves bits; it never creates them. This is the <a href="https://en.wikipedia.org/wiki/Data_processing_inequality"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>data processing inequality</a> (DPI), proved categorically.</p>
 
     <SchemeRepl client:load initialCode={`; DPI: H(output) <= H(input). Always.
 (define (log2 x) (/ (log x) (log 2)))
@@ -182,11 +182,11 @@ print(f"Lost: {h_in - h_lossy:.3f} bits. DPI holds ✓")
     <h3>The uniqueness theorem</h3>
     <p>The paper's main result (Theorem 4): any function F that assigns a real number to a morphism in FinProb (finite probability distributions) and satisfies:</p>
     <ol>
-      <li><strong>Functoriality</strong> — F(g ∘ f) = F(f) + F(g)</li>
-      <li><strong>Convex linearity</strong> — F respects mixtures of distributions</li>
-      <li><strong>Continuity</strong> — small changes in probabilities → small changes in F</li>
+      <li><strong>Functoriality</strong>: F(g ∘ f) = F(f) + F(g)</li>
+      <li><strong>Convex linearity</strong>: F respects mixtures of distributions</li>
+      <li><strong>Continuity</strong>: small changes in probabilities → small changes in F</li>
     </ol>
-    <p>...must be F(f) = c · (H(input) − H(output)) for some constant c ≥ 0. That's Shannon entropy, up to scale. There is no other option.</p>
+    <p>...must be F(f) = c · (H(input) − H(output)) for some constant c ≥ 0. Shannon entropy, up to scale.</p>
 
     <SchemeRepl client:load initialCode={`; Uniqueness: F(f) = c · (H(input) - H(output))
 ; Shannon entropy is the ONLY such F (up to scale).
@@ -260,14 +260,14 @@ print("The only functorial, convex-linear, continuous measure.")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use finite distributions with explicit probabilities. The paper's theorem holds over FinProb (finite probability distributions with morphisms that preserve total mass). For example: the DPI example on this page merges four outcomes into two and checks that entropy decreases. In the paper, the same inequality applies to a noisy communication channel transmitting continuous signals — the entropy of the received signal is always less than or equal to the entropy of the transmitted signal, regardless of the channel's noise model. The inequality is identical. The distributions are not.</p>
-    <p>The uniqueness result requires all three axioms — dropping any one allows other measures. Every example is <strong class="text-green-400">Simplified</strong>.</p>
+    <p>All examples use finite distributions with explicit probabilities. The paper's theorem holds over FinProb (finite probability distributions with morphisms that preserve total mass). For example, the DPI example on this page merges four outcomes into two and checks that entropy decreases. In the paper, the same inequality applies to a noisy channel transmitting continuous signals: the received signal's entropy never exceeds the transmitted signal's, regardless of the noise model. The inequality is identical. The distributions are not.</p>
+    <p>The uniqueness result requires all three axioms: drop any one and other measures become possible. Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: Shannon entropy is the unique measure of the Natural Framework pipeline's information budget — DPI governs how bits flow through each stage. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Shannon entropy is the unique measure of the Natural Framework pipeline's information budget. DPI governs how bits flow through each stage. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <!-- Paper link -->
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
-      Ready for the real thing? <a href="https://arxiv.org/abs/1106.1791"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at Theorem 4 (p.8) for the uniqueness result. Short paper — 15 pages.
+      Ready for the real thing? <a href="https://arxiv.org/abs/1106.1791"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at Theorem 4 (p.8) for the uniqueness result. 15 pages.
     </div>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/capucci-2021/", label: "Capucci 2021 · 7 of 21" }} next={{ href: "/reading/natural-breadcrumbs/liell-cock-2025/", label: "Liell-Cock 2025 · 9 of 21" }} />

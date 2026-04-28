@@ -17,7 +17,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/category-theory/milewski-01/">🍞 Chapter 1</a> (Category), <a href="/reading/category-theory/milewski-01/">🍞 Chapter 2</a> (Types and Functions). 7 min.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Side effects are <strong>not side effects</strong> if you make them part of the return type. A <strong>Kleisli category</strong> re-defines morphisms as functions <code>a → m(b)</code> and composition as the fish operator <code>(>=>)</code>. The category laws still hold. You get purity and logging (or failure, or nondeterminism) at the same time.</p>
+      <p class="text-lg" style="max-width:none">Side effects are <strong>not side effects</strong> if you make them part of the return type. A <strong>Kleisli category</strong> redefines morphisms as functions <code>a → m(b)</code> and composition as the fish operator <code>(>=>)</code>. The category laws still hold. You get purity and logging (or failure, or nondeterminism) at the same time.</p>
     </div>
 
     <!-- SVG: Kleisli arrow vs plain arrow -->
@@ -116,7 +116,7 @@ print(f"to_words: {to_words('HELLO WORLD')}")
 
     <!-- 2. The Writer type and Kleisli composition -->
     <h3>The Writer type and Kleisli composition</h3>
-    <p>The <strong>Writer</strong> type wraps a value with a log: <code>(value . log)</code>. Kleisli composition (<code>>=></code>, the "fish operator") extracts the value from the first function's result, feeds it to the second, and concatenates the logs. This is the composition rule for morphisms in the Kleisli category.</p>
+    <p>The <strong>Writer</strong> type wraps a value with a log: <code>(value . log)</code>. Kleisli composition (<code>>=></code>, the "fish operator") extracts the value from the first function's result, feeds it to the second, and concatenates the logs.</p>
 
     <SchemeRepl client:load initialCode={`; Writer: (value . log-list)
 ; Kleisli composition (fish operator): (a -> Writer b) -> (b -> Writer c) -> (a -> Writer c)
@@ -168,7 +168,7 @@ print(to_upper_words("hello world"))
 
     <!-- 3. Identity and the category laws -->
     <h3>Identity and the category laws</h3>
-    <p>Every category needs an identity morphism. In the Kleisli category for Writer, identity returns the value unchanged and contributes an empty log. With identity and fish, we can verify the three category laws: left identity, right identity, and associativity.</p>
+    <p>Every category needs an identity morphism. In the Kleisli category for Writer, identity returns the value unchanged and contributes an empty log. Identity and fish together let us check the three category laws: left identity, right identity, and associativity.</p>
 
     <SchemeRepl client:load initialCode={`; Kleisli identity: return value unchanged, empty log
 (define (writer-id x)
@@ -208,7 +208,7 @@ print(to_upper_words("hello world"))
 
     <!-- 4. Logging as a real use case -->
     <h3>Logging as a real use case</h3>
-    <p>The Writer monad lets you add logging to pure functions without mutation. Each function declares what it logs in its return type. Composition handles the plumbing. No global mutable log. No side effects. Just functions and types.</p>
+    <p>The Writer monad lets you add logging to pure functions. Each function declares what it logs in its return type. Composition handles the plumbing. No mutable state. No side effects. Just functions and types.</p>
 
     <SchemeRepl client:load initialCode={`; A pipeline of "audited" functions — each logs what it did.
 
@@ -273,7 +273,7 @@ print(pipeline(200))
 
     <!-- 5. Beyond Writer: the Kleisli pattern -->
     <h3>Beyond Writer: the Kleisli pattern</h3>
-    <p>Writer is just one Kleisli category. Replace <code>(value . log)</code> with <code>(value | nothing)</code> and you get the <strong>Maybe/Optional</strong> monad for partial functions. Replace it with a list and you get <strong>nondeterminism</strong>. The pattern is always the same: define a type embellishment, a composition rule, and an identity. If the laws hold, you have a Kleisli category.</p>
+    <p>Writer is just one Kleisli category. Replace <code>(value . log)</code> with <code>(value | nothing)</code> and you get the <strong>Maybe/Optional</strong> monad for partial functions. Replace it with a list and you get <strong>nondeterminism</strong>. The recipe is the same each time: define a type embellishment, a composition rule, and an identity. If the laws hold, you have a Kleisli category.</p>
 
     <SchemeRepl client:load initialCode={`; Kleisli category for partial functions (Optional/Maybe)
 ; Embellishment: value OR 'nothing
@@ -343,7 +343,7 @@ print(pipeline(200))
 
     <p class="text-sm text-gray-500 mb-2 mt-4">Paper pages that use Kleisli categories</p>
     <ul>
-      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories: Kleisli category of the distribution monad is the main example. See <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a> for how Fritz's framework gives stochastic maps their own compositional semantics.</li>
+      <li><a href="/reading/fritz-2020/">🍞 Fritz 2020</a> — Markov categories via the distribution monad's Kleisli category. See <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a> for how this gives stochastic maps compositional semantics.</li>
       <li><a href="/reading/staton-2025/">🍞 Staton 2025</a> — probabilistic programs compose via Kleisli arrows</li>
     </ul>
 
@@ -357,7 +357,7 @@ print(pipeline(200))
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>The blog post uses C++ templates and Haskell. This page uses Scheme cons pairs as the Writer type and a plain <code>fish</code> function for Kleisli composition. The monoid used for logs is list append. The general construction works for any monoid (strings, numbers under addition, etc.), and for any monad, not just Writer. The Optional/Maybe example at the end shows the same pattern with a different embellishment.</p>
+    <p>The blog post uses C++ templates and Haskell. This page uses Scheme cons pairs as the Writer type and a plain <code>fish</code> function for Kleisli composition. Logs accumulate via list append, but the construction works for any monoid (strings, numbers under addition, etc.) and any monad, not just Writer.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://bartoszmilewski.com/2014/12/23/kleisli-categories/">Read the blog post</a>. Start with the C++ examples, then try the Haskell fish operator.

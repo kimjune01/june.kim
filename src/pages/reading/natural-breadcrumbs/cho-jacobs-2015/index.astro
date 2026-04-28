@@ -17,11 +17,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories). Basic probability (what a distribution is).</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">A predicate on X is a morphism X → 1+1 — a "fuzzy test" that returns yes with some probability. States and effects (predicates) are dual: a state picks a point, an effect tests it. This duality gives you the <a href="https://en.wikipedia.org/wiki/Born_rule"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Born rule</a> for free — probability = state applied to effect.</p>
+      <p class="text-lg" style="max-width:none">A predicate on X is a morphism X → 1+1: a "fuzzy test" that returns yes with some probability. States and effects are dual: a state picks a point, an effect tests it. This duality gives you the <a href="https://en.wikipedia.org/wiki/Born_rule"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Born rule</a> for free — probability = state applied to effect.</p>
     </div>
 
     <h3>Effects as fuzzy predicates</h3>
-    <p>In classical logic, a predicate is a function X → {0,1}: either true or false. An <strong>effect</strong> generalizes this to X → [0,1]: a fuzzy test that returns "yes" with some probability. In the categorical setting, this is a morphism X → 1+1 (the coproduct of two terminal objects).</p>
+    <p>In classical logic, a predicate is a function X → {0,1}: either true or false. An <strong>effect</strong> generalizes this to X → [0,1]: a fuzzy test that returns "yes" with some probability. Categorically, this becomes a morphism X → 1+1 (the coproduct of two terminal objects).</p>
 
     <SchemeRepl client:load initialCode={`; An effect: X -> [0,1] — fuzzy predicate
 ; Classical predicate: always 0 or 1
@@ -60,8 +60,8 @@ for x in [0, 3, 5, 8, 10, 15]:
 `} />
     </div>
 
-    <h3>States — dual to effects</h3>
-    <p>A state on X is a morphism 1 → D(X) — a distribution over X. States pick points (probabilistically). Effects test points (fuzzily). They're dual: pairing a state with an effect gives a probability.</p>
+    <h3>States: dual to effects</h3>
+    <p>A state on X is a morphism 1 → D(X): a distribution over X. States pick points; effects test them. They're dual: pairing a state with an effect gives a probability.</p>
 
     <!-- SVG: States and effects duality -->
     <div class="flex justify-center my-6">
@@ -131,7 +131,7 @@ print(f"P(x > 2) = {prob}")
     </div>
 
     <h3>The Born rule</h3>
-    <p>The pairing of state and effect is the <a href="https://en.wikipedia.org/wiki/Born_rule"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Born rule</a>: probability = ⟨state | effect⟩. In quantum mechanics, this is |⟨ψ|φ⟩|². In the effectus framework, it's the categorical pairing. Classical probability and quantum probability are both instances.</p>
+    <p>The pairing of state and effect is the <a href="https://en.wikipedia.org/wiki/Born_rule"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Born rule</a>: probability = ⟨state | effect⟩. In quantum mechanics, this is |⟨ψ|φ⟩|². In the effectus framework, it's the categorical pairing. Classical and quantum probability are both instances.</p>
 
     <SchemeRepl client:load initialCode={`; Born rule: probability = <state | effect>
 ; Classical version: expected value of effect under state
@@ -156,7 +156,7 @@ print(f"P(x > 2) = {prob}")
 `} />
 
     <h3>Effect algebra</h3>
-    <p>Effects on X form an <strong>effect algebra</strong>: you can add effects (if they don't exceed 1), negate them (1 - e), and the constant effects 0 and 1 are the extremes. This structure is weaker than a Boolean algebra — you can't always form e ∧ f — which is exactly the non-classical part of quantum logic.</p>
+    <p>Effects on X form an <strong>effect algebra</strong>: you can add effects (if they don't exceed 1), negate them (1 - e), and the constant effects 0 and 1 are the extremes. This structure is weaker than a Boolean algebra: you can't always form e ∧ f. That's exactly the non-classical part of quantum logic.</p>
 
     <SchemeRepl client:load initialCode={`; Effect algebra operations
 ; Negation: 1 - e
@@ -220,14 +220,14 @@ print(f"P(x > 2) = {prob}")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use classical probability (effects are functions to [0,1], states are finite distributions). Cho and Jacobs work in the general setting of effectus categories, which includes quantum probability (effects are positive operators bounded by the identity, states are density matrices). For example: the Born rule on this page computes an expected value via a weighted sum. In the quantum case, the same pairing is tr(ρE) — the trace of a density matrix times a positive operator. The pairing structure is identical. The algebraic setting (commutative vs non-commutative) is not.</p>
-    <p>Every example is <strong class="text-green-400">Simplified</strong> — classical stand-ins for a framework that covers both classical and quantum.</p>
+    <p>All examples use classical probability (effects are functions to [0,1], states are finite distributions). Cho and Jacobs work in the general setting of effectus categories, which includes quantum probability (effects are positive operators bounded by the identity, states are density matrices). For example, the Born rule on this page computes an expected value via a weighted sum. In the quantum case, the same pairing is tr(ρE), the trace of a density matrix times a positive operator. The pairing structure is identical. The algebraic setting (commutative vs non-commutative) is not.</p>
+    <p>Every example is <strong class="text-green-400">Simplified</strong>: classical stand-ins for a framework that covers both classical and quantum.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/1512.05813"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §2 for effectus categories, §4 for states and effects, §6 for the Born rule.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: Effects as fuzzy predicates model the Natural Framework's Filter stage — a probabilistic gate that passes or blocks data. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Effects as fuzzy predicates model the Natural Framework's Filter stage, a probabilistic gate that passes or blocks data. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/panangaden-2009/", label: "Panangaden 2009 · 18 of 21" }} next={{ href: "/reading/natural-breadcrumbs/ho-wu-2026/", label: "Ho, Wu 2026 · 20 of 21" }} />
   </main>

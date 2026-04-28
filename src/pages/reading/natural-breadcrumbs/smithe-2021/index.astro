@@ -17,11 +17,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Markov categories, Bayesian inversion). <a href="/reading/natural-breadcrumbs/hedges-2018/">🍞 Hedges 2018</a> (compositional games) helps but isn't required.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">A <strong>Bayesian lens</strong> pairs a forward channel (prediction) with a backward channel (Bayesian update). Composing lenses gives you a system that predicts and then corrects — <a href="https://en.wikipedia.org/wiki/Free_energy_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>active inference</a> falls out as the equilibrium of a statistical game.</p>
+      <p class="text-lg" style="max-width:none">A <strong>Bayesian lens</strong> pairs a forward channel (prediction) with a backward channel (Bayesian update). Compose them and the system predicts, then corrects — <a href="https://en.wikipedia.org/wiki/Free_energy_principle"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>active inference</a> falls out as the equilibrium of a statistical game.</p>
     </div>
 
     <h3>Lenses: forward and backward</h3>
-    <p>A lens is a pair: a <strong>get</strong> (forward pass, observation) and a <strong>put</strong> (backward pass, update). In the Bayesian setting, get is a likelihood channel and put is the Bayesian inverse — the posterior update given new evidence.</p>
+    <p>A lens is a pair: a <strong>get</strong> (forward pass, observation) and a <strong>put</strong> (backward pass, update). In the Bayesian setting, get is a likelihood channel and put is the Bayesian inverse: the posterior update given new evidence.</p>
 
     <!-- SVG: Bayesian lens -->
     <div class="flex justify-center my-6">
@@ -106,7 +106,7 @@ print(f"observe tails -> posterior: {coin_backward(0.5, 'tails')}")
     </div>
 
     <h3>Bayesian inversion as the backward pass</h3>
-    <p>The backward channel is the <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian inverse</a>: given a prior and an observation, compute the posterior. This isn't an arbitrary update — it's the unique channel that makes the joint distribution factor correctly.</p>
+    <p>The backward channel is the <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Bayesian inverse</a>: given a prior and an observation, compute the posterior. This is the unique channel that makes the joint distribution factor correctly.</p>
 
     <SchemeRepl client:load initialCode={`; Bayesian inversion: P(A|B) = P(B|A) * P(A) / P(B)
 
@@ -155,7 +155,7 @@ print(f"after tails: {bayes_update(prior, likelihood, 'tails')}")
     </div>
 
     <h3>Composing lenses</h3>
-    <p>Two Bayesian lenses compose: the forward passes chain (predict through both stages), and the backward passes chain in reverse (update flows back). This is the categorical structure of lenses — composition is well-defined and associative.</p>
+    <p>Two Bayesian lenses compose: the forward passes chain (predict through both stages), and the backward passes chain in reverse (update flows back). That's the categorical structure of lenses: composition is well-defined and associative.</p>
 
     <SchemeRepl client:load initialCode={`; Composing lenses: forward chains, backward reverses
 ; L1: A -> B, L2: B -> C
@@ -200,7 +200,7 @@ print(f"backward(3, 10) = {L[1](3, 10)}")  # recovers via inverse
     </div>
 
     <h3>Free energy as the game's objective</h3>
-    <p>A statistical game has players that minimize <a href="https://en.wikipedia.org/wiki/Variational_Bayesian_methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>variational free energy</a> — the gap between their model's predictions and the actual observations. The equilibrium of the game is active inference: each agent updates its beliefs to minimize surprise.</p>
+    <p>A statistical game has players that minimize <a href="https://en.wikipedia.org/wiki/Variational_Bayesian_methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>variational free energy</a>, the gap between prediction and observation. At equilibrium each agent updates beliefs to minimize surprise. That's active inference.</p>
 
     <SchemeRepl client:load initialCode={`; Free energy: surprise + complexity
 ; F = -log P(observation | model) + KL(posterior || prior)
@@ -279,14 +279,14 @@ print("Agents update beliefs to reduce free energy.")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>The Bayesian update examples use finite hypothesis spaces with explicit probability tables. Smithe works with Bayesian inversions in arbitrary Markov categories, where the backward channel is defined via a universal property (the <a href="https://en.wikipedia.org/wiki/Disintegration_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>disintegration</a>). For example: the coin-bias update on this page shifts a point estimate by ±0.1. In the paper, the backward channel is the exact Bayesian posterior computed via disintegration of the joint measure — a construction that works over continuous parameter spaces and requires measure-theoretic conditioning. The predict-then-update structure is identical. The exactness of the inversion is not.</p>
+    <p>The Bayesian update examples use finite hypothesis spaces with explicit probability tables. Smithe works with Bayesian inversions in arbitrary Markov categories, where the backward channel is defined via a universal property (the <a href="https://en.wikipedia.org/wiki/Disintegration_theorem"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>disintegration</a>). For example: the coin-bias update on this page shifts a point estimate by ±0.1. In the paper, the backward channel is the exact Bayesian posterior computed via disintegration of the joint measure, a construction that works over continuous parameter spaces and requires measure-theoretic conditioning. The predict-then-update structure is identical. The exactness of the inversion is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2109.04461"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for Bayesian lenses, §5 for statistical games and free energy.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The backward pass of a Bayesian lens corresponds to the Natural Framework's Consolidate stage — the policy update that reads from persistent memory. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The backward pass of a Bayesian lens corresponds to the Natural Framework's Consolidate stage: the policy update that reads from persistent memory. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/leinster-2021/", label: "Leinster 2021 · 14 of 21" }} next={{ href: "/reading/natural-breadcrumbs/parzygnat-2020/", label: "Parzygnat 2020 · 16 of 21" }} />
   </main>

@@ -29,14 +29,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       Pick a hub vertex. Connect it to all n-1 others (star). Connect the
       remaining n-1 vertices in a spanning tree (n-2 edges). Total: 2n-3. Check
-      temporal reachability — if every pair can reach every other pair through
+      temporal reachability: if every pair can reach every other pair through
       time-respecting paths using only these edges, done.
     </p>
 
     <p>
       For 99.8% of random temporal cliques (tested through n=20), some hub works
       with greedy tree selection. With exhaustive tree search, the true failure
-      rate is 10&times; lower — 0.02% at K<sub>6</sub>, vanishing by K<sub>8</sub>.
+      rate is 10&times; lower: 0.02% at K<sub>6</sub>, vanishing by K<sub>8</sub>.
       The "hub-less" instances always have a non-star spanner with &le; 2n-4 edges.
     </p>
 
@@ -49,12 +49,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </p>
 
     <p>
-      We tried to kill the log factor with sequential delegation — eliminate
+      We tried to kill the log factor with sequential delegation: eliminate
       emitters one at a time instead of in batches. It doesn't work.
       The log factor is structural, not an analysis artifact: temporal filtering
       at each relay vertex consumes a constant fraction of the timestamp range.
       Root delegation gives &Theta;(k log k) edges at k=50. The CPS framework
-      cannot yield O(n). A fundamentally different construction is needed.
+      cannot yield O(n). The bound needs a fundamentally different construction.
     </p>
 
     <h2>The proof tree</h2>
@@ -85,7 +85,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>
       The 46 variations cluster into 10 distinct proof paradigms.
-      Calling them 46 separate hypotheses would be inflated — they're really
+      Calling them 46 separate hypotheses would be inflated; they're really
       variations on a smaller set of underlying ideas. Each paradigm died for
       a specific structural reason.
     </p>
@@ -128,7 +128,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       Laman rigidity, exchange argument on minimal spanners, matroid
       exchange on matchings. Dead because minimal spanners can exceed
-      2n-3 (n=7: size 13 &gt; 11). The problem is non-matroidal —
+      2n-3 (n=7: size 13 &gt; 11). The problem is non-matroidal:
       locally irredundant &ne; globally optimal.
     </p>
 
@@ -184,7 +184,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <strong>Three-timestamp median.</strong> (Proved.) For any triangle {'{h,v,w}'}
       in K<sub>n</sub>, edge {'{v,w}'} is "dead zone" for hub h iff its timestamp is
       the median of three. Average dead-zone degree = (n-2)/3. This identity is
-      exact and gives the right framework for understanding spanner structure —
+      exact and frames spanner structure,
       but doesn't yield a bound.
     </p>
 
@@ -210,17 +210,17 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>
       The most likely resolution: a new mathematical framework for adversarial
-      temporal composition — perhaps tropical rank theory, temporal VC dimension,
-      or sheaf-theoretic bounds. Each would be a thesis-scale contribution.
+      temporal composition. Tropical rank theory, temporal VC dimension,
+      sheaf-theoretic bounds. Each would be a thesis-scale contribution.
     </p>
 
     <h2>What we learned</h2>
 
     <p>
-      The problem is genuinely hard. It has resisted three active research groups
-      for seven years (CPS 2018, Angrick et al. 2024, Carnevale et al. 2025) and
-      our probes at all ten paradigms. The gap is one lemma wide but that lemma
-      requires mathematics that doesn't exist yet.
+      The problem is hard. Three active research groups have worked it
+      for seven years (CPS 2018, Angrick et al. 2024, Carnevale et al. 2025),
+      and our probes at all ten paradigms found nothing. The gap is one lemma
+      wide, but that lemma requires mathematics that doesn't exist yet.
     </p>
 
     <p>
@@ -228,7 +228,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </p>
 
     <p class="text-gray-500 text-sm mt-8">
-      Full project: <a href="https://github.com/kimjune01/tvg">github.com/kimjune01/tvg</a> — Lean proofs, Python experiments, 10 paradigms probed, research logs
+      Full project: <a href="https://github.com/kimjune01/tvg">github.com/kimjune01/tvg</a>. Lean proofs, Python experiments, 10 paradigms probed, research logs.
     </p>
 
     <PrevNext

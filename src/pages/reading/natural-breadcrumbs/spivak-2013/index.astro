@@ -21,7 +21,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <h3>Boxes and ports</h3>
-    <p>A box has typed input ports and typed output ports. It's an interface specification — no implementation yet. Think of a function signature without the body.</p>
+    <p>A box has typed input ports and typed output ports. It's an interface specification: no implementation yet. Think of a function signature without the body.</p>
 
     <!-- SVG: Wiring diagram — two boxes composed -->
     <div class="flex justify-center my-6">
@@ -78,7 +78,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       </svg>
     </div>
 
-    <p>Boxes compose by wiring outputs to inputs. The types constrain which wirings are legal — you can't plug a "type Z" output into a "type X" input. The composite is itself a box, with its own input and output ports. This is operadic composition: boxes all the way down.</p>
+    <p>Boxes compose by wiring outputs to inputs. Types constrain which wirings are legal: you can't plug a "type Z" output into a "type X" input. The composite is itself a box with its own ports. Operadic composition: boxes all the way down.</p>
 
     <SchemeRepl client:load initialCode={`; A box is a typed interface: input ports -> output ports
 ; We represent a box as (name inputs outputs)
@@ -149,7 +149,7 @@ print("Types must match at every wire.")
     </div>
 
     <h3>Composing boxes</h3>
-    <p>The operad operation: given an outer box with inner boxes wired together, collapse the inner structure into a single box. The composite box has the outer box's interface. The internal wiring is hidden — encapsulation.</p>
+    <p>The operad operation: given an outer box with inner boxes wired together, collapse them into a single box. The composite keeps the outer interface. Internal wiring is hidden: encapsulation.</p>
 
     <SchemeRepl client:load initialCode={`; Composing boxes: wire inner boxes, collapse to one
 ; The composite has the outer interface
@@ -193,7 +193,7 @@ print(f"  ({pipeline['internal']} internal wires, hidden)")
     </div>
 
     <h3>Operadic composition is associative</h3>
-    <p>The key property: composing (A then B) then C gives the same wiring diagram as composing A then (B then C). The wiring diagram operad is a genuine <a href="https://en.wikipedia.org/wiki/Operad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>operad</a> — composition is associative and there's an identity (the box that passes all ports through unchanged).</p>
+    <p>The key property: composing (A then B) then C gives the same wiring diagram as composing A then (B then C). The wiring diagram operad is a genuine <a href="https://en.wikipedia.org/wiki/Operad"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>operad</a>: composition is associative, and there's an identity (the box that passes all ports through unchanged).</p>
 
     <SchemeRepl client:load initialCode={`; Associativity: (A;B);C = A;(B;C)
 ; We check that composing three stages is order-independent
@@ -267,14 +267,14 @@ print(f"Equal: {left == right}")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>The examples on this page use lists and symbols to represent typed ports and wiring. Spivak's paper works with operads in the category of typed finite sets — the supplier assignment is a genuine function between coproducts. For example: the wiring diagram above connects two boxes with string labels. In the paper, the same construction uses typed finite sets with a function φ from inner input ports to the disjoint union of outer inputs and other boxes' outputs. The compositional structure is identical. The set-theoretic precision is not.</p>
+    <p>The examples on this page use lists and symbols to represent typed ports and wiring. Spivak's paper works with operads in the category of typed finite sets; the supplier assignment is a genuine function between coproducts. For example, the wiring diagram above connects two boxes with string labels. In the paper, the same construction uses typed finite sets with a function φ from inner input ports to the disjoint union of outer inputs and other boxes' outputs. The compositional structure is identical. The set-theoretic precision is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/1305.0297"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §2 for the operad definition, §3 for propagation of properties through wiring.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a wiring diagram in Spivak's operad — the operad gives the syntax of how stages connect, while Markov categories give the semantics. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline is a wiring diagram in Spivak's operad: the operad gives the syntax of how stages connect, while Markov categories give the semantics. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/sato-2023/", label: "Sato 2023 · 10 of 21" }} next={{ href: "/reading/natural-breadcrumbs/jacobs-2014/", label: "Jacobs 2014 · 12 of 21" }} />
   </main>

@@ -17,7 +17,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples, wp). Some comfort with probabilistic programming helps.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Separation_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Separation logic</a> for Bayesian programs. The <strong>frame rule</strong> says: if a program only touches variables x, then independent variables y are unaffected. Independence IS the separating conjunction. Hoare logic for probabilistic programs where "separate" means "statistically independent."</p>
+      <p class="text-lg" style="max-width:none"><a href="https://en.wikipedia.org/wiki/Separation_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Separation logic</a> for Bayesian programs. The <strong>frame rule</strong> says: if a program only touches variables x, then independent variables y are unaffected. Independence IS the separating conjunction: "separate" means "statistically independent."</p>
     </div>
 
     <!-- SVG: Bayesian Hoare triple with distributions -->
@@ -78,7 +78,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <h3>Hoare triples for probabilistic programs</h3>
-    <p>A Bayesian Hoare triple <code>{'{P}'} c {'{Q}'}</code> says: if the prior satisfies P, then after running the probabilistic program c, the posterior satisfies Q. The programs are written in a probabilistic language with sampling, conditioning (observe), and Bayesian inference built in.</p>
+    <p>A Bayesian Hoare triple <code>{'{P}'} c {'{Q}'}</code> says: if the prior satisfies P, then after running the probabilistic program c, the posterior satisfies Q. The language supports sampling, conditioning (observe), and Bayesian inference.</p>
 
     <Repl client:load initialCode={`# Bayesian Hoare triple: {P} c {Q}
 # P, Q are predicates on distributions (not just values)
@@ -109,7 +109,7 @@ print("That's Bayesian conditioning — the program's semantics.")
 `} />
 
     <h3>s-finite kernels</h3>
-    <p>The semantics uses <strong>s-finite kernels</strong> — a generalization of probability kernels that allows unnormalized measures. This is necessary because conditioning (observe) can produce unnormalized distributions. The s-finite kernel framework makes composition well-defined even through observations.</p>
+    <p>The semantics uses <strong>s-finite kernels</strong>: a generalization of probability kernels that allows unnormalized measures. Conditioning (observe) can produce unnormalized distributions; the s-finite kernel framework keeps composition well-defined even through observations.</p>
 
     <Repl client:load initialCode={`# s-finite kernels: allow unnormalized measures
 # After conditioning, weights don't sum to 1 until normalized
@@ -141,8 +141,8 @@ print("s-finite = work with unnormalized weights,")
 print("normalize only when you need probabilities.")
 `} />
 
-    <h3>The frame rule — independence as separation</h3>
-    <p>The frame rule is the core of separation logic: if <code>{'{P}'} c {'{Q}'}</code> and c doesn't touch variables in R, then <code>{'{P * R}'} c {'{Q * R}'}</code>. Here, <code>*</code> is the separating conjunction. In the Bayesian setting, <code>P * R</code> means P and R hold on <strong>independent</strong> variables. The frame rule says: independent variables stay independent after the program runs.</p>
+    <h3>The frame rule: independence as separation</h3>
+    <p>The frame rule is the core of separation logic: if <code>{'{P}'} c {'{Q}'}</code> and c doesn't touch variables in R, then <code>{'{P * R}'} c {'{Q * R}'}</code>. Here, <code>*</code> is the separating conjunction. In the Bayesian setting, <code>P * R</code> means P and R hold on <strong>independent</strong> variables. Independent variables stay independent after the program runs.</p>
 
     <Repl client:load initialCode={`# Frame rule: independent variables stay independent
 # {P} c {Q} implies {P * R} c {Q * R}
@@ -184,7 +184,7 @@ print("Independence (separation) is preserved.")
 `} />
 
     <h3>Composing Bayesian programs</h3>
-    <p>Sequential composition of Bayesian programs chains the s-finite kernels. The COMP rule from <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> carries over: if <code>{'{P}'} c₁ {'{R}'}</code> and <code>{'{R}'} c₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ {'{Q}'}</code>. The handshake works for probabilistic programs too.</p>
+    <p>Composing Bayesian programs chains their s-finite kernels. The COMP rule from <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> carries over: if <code>{'{P}'} c₁ {'{R}'}</code> and <code>{'{R}'} c₂ {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ {'{Q}'}</code>. The handshake works for probabilistic programs too.</p>
 
     <Repl client:load initialCode={`# COMP for Bayesian programs
 # {P} c1 {R} and {R} c2 {Q} implies {P} c1;c2 {Q}
@@ -278,14 +278,14 @@ print("COMP chains evidence accumulation.")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use finite distributions as dicts. Ho, Wu, and Raad work with s-finite kernels on measurable spaces — a generalization that handles continuous distributions, unnormalized measures, and measure-zero conditioning events. For example: the frame rule demonstration on this page uses a 2×2 joint distribution over coin flips. In the paper, the frame rule applies to arbitrary probabilistic programs with continuous random variables, and the separating conjunction is defined via product σ-algebras and independence of σ-sub-algebras. The "independent variables stay independent" intuition is the same; the measure-theoretic formalization is not.</p>
+    <p>All examples use finite distributions as dicts. Ho, Wu, and Raad work with s-finite kernels on measurable spaces, a generalization that handles continuous distributions, unnormalized measures, and measure-zero conditioning events. The frame rule demonstration on this page uses a 2×2 joint distribution over coin flips; in the paper, it applies to arbitrary probabilistic programs with continuous random variables, and the separating conjunction is defined via product σ-algebras and independence of σ-sub-algebras. The "independent variables stay independent" intuition is the same; the measure-theoretic formalization is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2507.15530"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for the Bayesian Hoare logic, §5 for the frame rule, §4 for s-finite kernel semantics.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: Bayesian separation logic extends the COMP rule to probabilistic programs — the same handshake composition the Natural Framework pipeline uses, now with independence as the separating conjunction. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: Bayesian separation logic extends the COMP rule to probabilistic programs, the same handshake composition the Natural Framework pipeline uses, now with independence as the separating conjunction. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>, <a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/cho-jacobs-2015/", label: "Cho, Jacobs 2015 · 19 of 21" }} next={{ href: "/reading/natural-breadcrumbs/chen-vigneaux-2023/", label: "Chen, Vigneaux 2023 · 21 of 21" }} />
   </main>

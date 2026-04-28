@@ -32,14 +32,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       The same question in codec language: does every video sequence have a compressed
       representation with at most 2n-3 reference edges that preserves full decodability?
-      The codec community would call this the <em>minimum GOP budget</em> — how few
+      The codec community would call this the <em>minimum GOP budget</em>: how few
       I-frame and P-frame references suffice to reconstruct every frame? Open.
     </p>
 
     <p>
       The same question in sheaf language: does every directed dependency graph with
       tropical stalks have a sub-complex of size 2n-3 that preserves exactness of
-      the reachability sheaf? This would be a <em>tropical sparsification theorem</em> —
+      the reachability sheaf? This would be a <em>tropical sparsification theorem</em>:
       a bound on the minimum support of a section that witnesses global connectivity.
       Open.
     </p>
@@ -47,8 +47,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>
       Three communities, three formulations, zero shared vocabulary. The first five
       chapters identified a handful of term-pairs at the theoretical level. Working
-      the conjecture computationally — 25,000+ random matrices, exhaustive search
-      through k=15, four Lean proofs — surfaced twenty-five more. The table below is
+      the conjecture computationally (25,000+ random matrices, exhaustive search
+      through k=15, four Lean proofs) surfaced twenty-five more. The table below is
       the Rosetta Stone: every correspondence that survived adversarial testing.
     </p>
 
@@ -328,9 +328,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <h3>Reading the crosswalk</h3>
 
     <p>
-      Chapters 1-5 identified a handful of term-pairs at the theoretical level.
-      Working the conjecture computationally surfaced twenty-five more, mostly moderate
-      or structural: correspondences that guide intuition but don't transfer proofs.
+      Most of the thirty-five correspondences are moderate or structural: they guide
+      intuition but don't transfer proofs. The ten genuine parallels do. Across all
+      three tiers, three clusters matter most.
     </p>
 
     <p>
@@ -346,7 +346,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       For the conjecture, #20 matters most: <strong>the O(n log n) → O(n) gap is the cost
       of hub ignorance</strong>. The dismountability algorithm recurses without knowing which
       half contains the valid hub. Each uninformed split adds edges. Recursion depth is log n.
-      Codec engineers pay the same tax with adaptive GOP sizing — you don't know where
+      Codec engineers pay the same tax with adaptive GOP sizing: you don't know where
       the scene changes are until you've encoded past them.
     </p>
 
@@ -392,16 +392,16 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <p>
-      The shared obstacle is the same in every formulation: <strong>the hub cannot be found
+      Every formulation hits the same wall: <strong>the hub cannot be found
       locally</strong>. The temporal graph theorist can't identify the pivot vertex without
       reading the full matrix. The codec engineer can't place the I-frame without seeing
       the whole scene. The sheaf theorist can't locate the support of the witnessing section
-      without computing the global reachability structure. The log factor in O(n log n) is
-      the price all three pay for this ignorance.
+      without computing the global reachability structure. All three pay for this ignorance
+      with the same log factor in O(n log n).
     </p>
 
     <p>
-      The crosswalk doesn't solve the question. It makes visible that it's the
+      The crosswalk doesn't solve the question. It reveals that it's the
       <em>same</em> question, asked three times in three communities that don't share
       venues. A proof in any one field transfers to the other two via this table.
     </p>
@@ -409,7 +409,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <h3>Proof tree (current state)</h3>
 
     <p>
-      For readers working on the conjecture. The reduction from temporal cliques to
+      For readers working on the conjecture: the reduction from temporal cliques to
       extremally matched bicliques is complete (Carnevale et al. 2025). What remains
       is a single existence argument on the biclique.
     </p>

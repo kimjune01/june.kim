@@ -17,7 +17,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-sm text-gray-500 mb-6">Assumes you've seen <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Markov categories</a> and <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Hoare triples</a>. 5 minutes each.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">The distance between two programs IS the enrichment on the category. Divergences on a monad give you a metric on morphism spaces — and that metric powers relational program logics.</p>
+      <p class="text-lg" style="max-width:none">The distance between two programs IS the enrichment on the category. Divergences on a monad give you a metric on morphism spaces, and that metric powers relational program logics.</p>
     </div>
 
     <h3>Divergences as distance</h3>
@@ -82,7 +82,7 @@ print(f"D(p || q) = {kl(p, q):.4f} bits")
 
     <h3>Enrichment — metric on morphisms</h3>
     <p>The insight: a divergence on the monad lifts to a divergence on Kleisli arrows. Two stochastic functions f, g : X → D(Y) are "close" if their output distributions are close for every input. This turns the hom-sets of the Kleisli category into metric spaces.</p>
-    <p>A non-expanding morphism doesn't increase distance. That's the data processing inequality for metrics — processing can't make programs more distinguishable than they already are.</p>
+    <p>A non-expanding morphism doesn't increase distance. That's the data processing inequality: no amount of processing makes programs more distinguishable.</p>
 
     <SchemeRepl client:load initialCode={`; Distance between two morphisms:
 ; d(f, g) = max over inputs x of D(f(x) || g(x))
@@ -122,7 +122,7 @@ print(f"d(f, g) = {d:.4f} bits")
     </div>
 
     <h3>Relational program logics</h3>
-    <p>With a metric on morphisms, you can state relational properties: "these two programs produce outputs within ε of each other." That's a relational Hoare triple — instead of <code>{'{P}'} c {'{Q}'}</code>, you get <code>{'{P}'} c₁ ~ c₂ {'{Q}'}</code> where Q talks about the *relationship* between the two outputs. Divergences on monads give the semantic foundation for these relational triples.</p>
+    <p>With a metric on morphisms, you can state relational properties: "these two programs produce outputs within ε of each other." That's a relational Hoare triple: instead of <code>{'{P}'} c {'{Q}'}</code>, you get <code>{'{P}'} c₁ ~ c₂ {'{Q}'}</code> where Q talks about the *relationship* between the two outputs. Divergences on monads ground these relational triples.</p>
     <p>Applications: differential privacy (programs are "close" if adding one record changes the output by at most ε), cost analysis (programs are "close" if their resource usage differs by at most k), and probabilistic coupling (two distributions are close if they can be jointly sampled to agree often).</p>
 
     <SchemeRepl client:load initialCode={`; Relational property: f and g are ε-close
@@ -204,14 +204,14 @@ print(f"ε-close? {dist <= epsilon}")
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use KL divergence over finite discrete distributions. The paper works with arbitrary divergences (Rényi, total variation, hockey-stick) over arbitrary monads on arbitrary base categories. For example: the ε-closeness test on this page checks KL divergence of two functions over a finite set. In the paper, the same construction applies to differential privacy of database queries — the monad is the randomized response mechanism, the divergence is the hockey-stick divergence, and ε-closeness is the privacy guarantee. The structure (divergence enriches the Kleisli category) is identical. The monad and divergence are not.</p>
+    <p>All examples use KL divergence over finite discrete distributions. The paper works with arbitrary divergences (Rényi, total variation, hockey-stick) over any monad on any base category. For example: the ε-closeness test on this page checks KL divergence of two functions over a finite set. In the paper, the same construction applies to differential privacy of database queries. The monad is the randomized response mechanism, the divergence is hockey-stick, and ε-closeness is the privacy guarantee. The structure is identical. The monad and divergence are not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2206.05716"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for divergences on monads, §5 for the connection to relational program logics.
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework's NonExpanding typeclass captures exactly this — pipeline stages must be non-expanding morphisms in the divergence-enriched category. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework's NonExpanding typeclass captures this: pipeline stages must be non-expanding morphisms in the divergence-enriched category. (<a href="https://june.kim/the-natural-framework"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Natural Framework</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/liell-cock-2025/", label: "Liell-Cock 2025 · 9 of 21" }} next={{ href: "/reading/natural-breadcrumbs/spivak-2013/", label: "Spivak 2013 · 11 of 21" }} />
   </main>

@@ -24,7 +24,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 1. Indexing = state machine -->
     <h3>Indexing — which state you're in</h3>
-    <p>An indexed monad T(i, j, A) means: "a computation that starts in state i, ends in state j, and produces a value of type A." You can only compose T(i, j, _) with T(j, k, _) — the output state of the first must match the input state of the second. This is the handshake.</p>
+    <p>An indexed monad T(i, j, A) means: "a computation that starts in state i, ends in state j, and produces a value of type A." You can only compose T(i, j, _) with T(j, k, _): the output state of the first must match the input state of the second.</p>
 
     <!-- SVG: Pipeline handshake — 3 stages with contracts between them -->
     <div class="flex justify-center my-6">
@@ -131,7 +131,7 @@ print(step1.bind(step2))
 
     <!-- 2. Grading on top -->
     <h3>Adding grades on top</h3>
-    <p>Now add a grade: T(i, j, e, A) means "start in i, end in j, with effect e, producing A." Composition requires index match (handshake) AND grade composition (budget accounting). This is Definition 3 in the paper. The paper uses a preordered semiring for grades; on this page, we use (&#x2115;, +, 0) — natural numbers with addition.</p>
+    <p>Now add a grade: T(i, j, e, A) means "start in i, end in j, with effect e, producing A." Composition requires index match (handshake) AND grade composition (budget accounting). This is Definition 3. The paper uses a preordered semiring for grades; here we use (&#x2115;, +, 0): natural numbers with addition.</p>
 
     <!-- SVG: Indexed graded monad composition — T(i,j) ; T(j,k) = T(i,k) -->
     <div class="flex justify-center my-6">
@@ -244,7 +244,7 @@ print(step1.bind(step2))
 
     <!-- 3. Restricted pointwise order -->
     <h3>The restricted pointwise order</h3>
-    <p>Kura's innovation: the <strong>restricted pointwise order</strong> on graded predicates. A graded predicate Q at grade e refines Q' at grade e' if e ≤ e' and Q(x) implies Q'(x) for all x. This lets you weaken postconditions by increasing the allowed effect budget — you can always over-approximate.</p>
+    <p>Kura's innovation: the <strong>restricted pointwise order</strong> on graded predicates. A graded predicate Q at grade e refines Q' at grade e' if e ≤ e' and Q(x) implies Q'(x) for all x. This lets you weaken postconditions by increasing the allowed effect budget.</p>
 
     <svg viewBox="0 0 500 150" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
       <!-- Bottom-left: tight Q, low cost (refines) -->
@@ -313,7 +313,7 @@ print(f"(x>0, cost=3) refines (x>10, cost=1)? {refines(Q_weak, 3, Q_strong, 1, v
 
     <!-- 4. The handshake (Def 7) -->
     <h3>The handshake — Definition 7</h3>
-    <p>Definition 7 gives the composition rule for indexed graded Hoare triples. If <code>{'{P}'} c₁ : (i→j, e₁) {'{R}'}</code> and <code>{'{R}'} c₂ : (j→k, e₂) {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ : (i→k, e₁·e₂) {'{Q}'}</code>. The intermediate R is the handshake — it must satisfy both the postcondition of c₁ and the precondition of c₂, at matching index j.</p>
+    <p>Definition 7 gives the composition rule for indexed graded Hoare triples. If <code>{'{P}'} c₁ : (i→j, e₁) {'{R}'}</code> and <code>{'{R}'} c₂ : (j→k, e₂) {'{Q}'}</code>, then <code>{'{P}'} c₁;c₂ : (i→k, e₁·e₂) {'{Q}'}</code>. The intermediate R is the handshake: it must satisfy both the postcondition of c₁ and the precondition of c₂, at matching index j.</p>
 
     <svg viewBox="0 0 500 200" class="w-full max-w-md my-4" style="font-family: ui-monospace, monospace;">
       <!-- Triple 1 -->
@@ -434,7 +434,7 @@ print(f"run(-7) with bad pipeline: {bad.run(-7)}")
 
     <!-- 5. Graded monad lifting -->
     <h3>Graded monad lifting</h3>
-    <p>The restricted pointwise order weakens postconditions: more budget, less guaranteed about the output. Lifting works the other direction. It pulls a postcondition backward through a computation to derive the weakest precondition on the input. The grade controls how much that precondition relaxes. Same monotonicity, opposite ends of the pipe.</p>
+    <p>The restricted pointwise order weakens postconditions: more budget, less guaranteed about the output. Lifting works the other direction, pulling a postcondition backward through a computation to derive the weakest precondition on the input. A higher grade relaxes that precondition further. Same monotonicity, opposite ends of the pipe.</p>
 
     <SchemeRepl client:load initialCode={`; Graded lifting: wp_e(c, Q) — weakest pre adjusted by grade
 ; Grade = tolerance. Higher grade = weaker precondition needed.
@@ -532,13 +532,13 @@ for x in [80, 90, 95, 97, 100, 103, 110, 120]:
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>All examples use simple integers for grades and symbols for indices. The paper works over preordered semirings for grades and arbitrary index categories, with the restricted pointwise order defined on fibered predicates. For example: the handshake demonstration on this page checks symbol equality between two stages. In the paper, the same definition works over a category of indexed types where the index match is a morphism equation in the index category — allowing non-trivial coercions between compatible state types. The composition pattern is identical. The categorical generality is not.</p>
+    <p>All examples use simple integers for grades and symbols for indices. The paper works over preordered semirings for grades and arbitrary index categories, with the restricted pointwise order defined on fibered predicates. On this page, the handshake demonstration checks symbol equality between two stages. In the paper, the index match is a morphism equation in the index category, allowing non-trivial coercions between compatible state types. The composition pattern is identical; the categorical generality is not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Ready for the real thing? <a href="https://arxiv.org/abs/2601.14846"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for indexed graded monads (Def 3), §4 for the Hoare logic (Def 7).
     </div>
 
-    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's handshake composition maps directly to Definition 7 — the output index of each stage must match the input index of the next. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
+    <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's handshake composition maps directly to Definition 7: the output index of each stage must match the input index of the next. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>)</p>
 
     <PrevNext prev={{ href: "/reading/natural-breadcrumbs/gaboardi-2021/", label: "Gaboardi 2021 · 4 of 21" }} next={{ href: "/reading/natural-breadcrumbs/hedges-2018/", label: "Hedges 2018 · 6 of 21" }} />
   </main>
