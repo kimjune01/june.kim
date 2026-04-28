@@ -44,7 +44,7 @@ def build_blog() -> list[dict]:
     out = []
     for f in sorted(BLOG.glob("*.md")) + sorted(BLOG.glob("*.mdx")):
         fm, body = parse_frontmatter(f.read_text())
-        slug = f.stem
+        slug = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", f.stem)
         tags = [t.strip() for t in re.split(r"[,\s]+", fm.get("tags", "")) if t.strip()]
         out.append(
             {
@@ -52,7 +52,7 @@ def build_blog() -> list[dict]:
                 "slug": slug,
                 "title": fm.get("title", slug),
                 "tags": tags,
-                "date": slug[:10] if re.match(r"\d{4}-\d{2}-\d{2}", slug) else None,
+                "date": f.stem[:10] if re.match(r"\d{4}-\d{2}-\d{2}", f.stem) else None,
                 "summary": first_prose_line(body),
             }
         )
@@ -65,7 +65,7 @@ def build_reading() -> list[dict]:
         return out
     for f in sorted(READING.rglob("index.astro")):
         rel = f.parent.relative_to(READING).as_posix()
-        if not rel:
+        if not rel or rel == ".":
             continue
         text = f.read_text()
         title = rel
