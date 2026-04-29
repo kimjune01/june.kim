@@ -70,13 +70,15 @@ Override with `--build CMD` and `--test CMD` in the argument. When overridden, u
 
 ### Default: single-scope blind-blind
 
-Two agents (opus + codex), same spec, same scope. Each writes to a separate directory. Compare, pick the better design per component, synthesize into one. Gemini reviews the merge.
+Two agents (opus + codex), same spec, same scope. Each writes to a separate directory. Compare, pick the better design per component, synthesize into one.
 
 ```
 opus  ──→ dir-a/ ──┐
-                    ├──→ compare ──→ merge ──→ gemini review
+                    ├──→ compare ──→ merge
 codex ──→ dir-b/ ──┘
 ```
+
+Gemini does NOT implement. It reviews in step 4 (hunt). Opus and codex are the implementers.
 
 ### Split-scope: frontend/backend separation
 
