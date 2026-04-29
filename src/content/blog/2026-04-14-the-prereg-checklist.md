@@ -1,6 +1,6 @@
 ---
 variant: post-wide
-title: "Prereg Checklist"
+title: "The Prereg Checklist"
 tags: methodology
 ---
 
