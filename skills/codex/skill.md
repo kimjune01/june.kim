@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Send a file to codex (GPT-5.4) for review. Reports feedback — no changes until the user approves.
+description: Send a file to codex (GPT-5.5) for review. Reports feedback — no changes until the user approves.
 argument-hint: [file_path(s) or leave blank for in-context content]
 allowed-tools: Read, Bash, Glob, AskUserQuestion
 ---

@@ -53,20 +53,28 @@ Override with `--build CMD` and `--test CMD` in the argument. When overridden, u
    If all items pass, print the resolved config (spec source, build cmd, test cmd, scope strategy) and proceed. No confirmation needed — the checklist *is* the gate.
 
 1. **Volley (sharpen).** Take the spec and sharpen it into testable claims. Converge in two rounds — if the spec doesn't stabilize, it was underspecified (fail back to human).
-2. **Hunt (spec).** Before writing any code, hunt the spec itself. Send the sharpened spec to codex with the relevant source files as context. Look for: internal contradictions, assumptions that don't match the codebase (wrong API shapes, nonexistent modules, stale interfaces), underspecified edges that will force implementation guesses. When the spec touches UI, also check structural design: missing states (empty, loading, error, partial), accessibility gaps (keyboard nav, focus management, screen reader labels), and interaction patterns (what happens on dismiss, on resize, on back-navigation). These are spec bugs, not visual polish — they force implementation guesses the same way a wrong API shape does. Fix the spec, re-hunt, repeat until zero new findings. A spec bug that survives this step propagates through every downstream step.
+2. **Hunt (spec).** Before writing any code, hunt the spec itself. Two reviewers, sequentially:
+   - **Codex first** (structural): Send the sharpened spec to codex with relevant source files. Look for: internal contradictions, assumptions that don't match the codebase (wrong API shapes, nonexistent modules, stale interfaces), underspecified edges that will force implementation guesses. When the spec touches UI, also check structural design: missing states (empty, loading, error, partial), accessibility gaps, interaction patterns. Fix findings, re-hunt codex until zero new issues.
+   - **Gemini second** (adversarial logic): Send the codex-approved spec to Gemini 3.1 Pro via `/gemini`. Gemini is better at tracing logic through decision trees, catching inverted boolean conditions, and verifying that code-level operations match prose-level intent. Fix findings, re-send to Gemini until approved.
+   
+   A spec bug that survives both reviewers propagates through every downstream step. The most valuable reviewer is the one that disagrees with the other.
 3. **Merge (implement).** Blind-blind-merge. Two models (opus + codex), same spec, separate directories. Compare implementations, pick the structurally stronger one per component, synthesize. See Merge Tactics below.
-4. **Hunt (code).** Run `/bug-hunt` against the merged implementation with the spec as input. See the bug-hunt skill for the full protocol — adversarial codex review iterated to convergence. If a bug traces back to a spec defect that survived step 2, fix the spec first, then re-merge from the corrected spec rather than patching the implementation.
+4. **Hunt (code).** Two-reviewer hunt against the merged implementation:
+   - **Codex** (`/bug-hunt`): adversarial codex review iterated to convergence. See the bug-hunt skill for the full protocol.
+   - **Gemini** (`/gemini`): send the implementation + spec to Gemini 3.1 Pro for a logic-tracing pass. Gemini catches inverted conditions, off-by-one errors in decision trees, and mismatches between spec and code that codex tends to miss.
+   
+   If a bug traces back to a spec defect that survived step 2, fix the spec first, then re-merge from the corrected spec rather than patching the implementation.
 5. **Volley (clean).** Review the implementation against the spec. Clean up naming, remove dead code, ensure tests pass. Converge in two rounds. The output is a PR-ready branch.
 
 ## Merge Tactics
 
 ### Default: single-scope blind-blind
 
-Two agents (opus + codex), same spec, same scope. Each writes to a separate directory. Compare, pick the better design per component, synthesize into one.
+Two agents (opus + codex), same spec, same scope. Each writes to a separate directory. Compare, pick the better design per component, synthesize into one. Gemini reviews the merge.
 
 ```
 opus  ──→ dir-a/ ──┐
-                    ├──→ compare ──→ merge
+                    ├──→ compare ──→ merge ──→ gemini review
 codex ──→ dir-b/ ──┘
 ```
 

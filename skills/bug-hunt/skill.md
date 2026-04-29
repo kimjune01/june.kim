@@ -1,13 +1,15 @@
 ---
 name: bug-hunt
-description: Send codex on an adversarial bug hunt. Runs to convergence — fix, re-hunt, repeat until zero new bugs. Draws on avionics IV&V practices.
+description: Send codex and Gemini on an adversarial bug hunt. Codex first (structural), Gemini second (logic tracing). Runs to convergence — fix, re-hunt, repeat until zero new bugs.
 argument-hint: [spec-file or scope description]
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, Agent, AskUserQuestion
 ---
 
 # Bug Hunt
 
-Adversarial review by codex (GPT-5.4), iterated to convergence. Independent Verification & Validation — the reviewer has no stake in the implementation.
+Adversarial review by codex (GPT-5.5) then Gemini 3.1 Pro, iterated to convergence. Independent Verification & Validation — the reviewers have no stake in the implementation.
+
+Codex catches structural issues (missing baselines, overclaims, architectural gaps). Gemini catches logic bugs (inverted boolean conditions, decision tree errors, spec-to-code mismatches). Run codex to convergence first, then Gemini on the codex-approved result. If Gemini finds bugs, fix and re-run codex to verify the fix didn't introduce regressions, then Gemini again. Converged = both approve with zero new findings.
 
 ## Input
 
