@@ -72,6 +72,31 @@ If the prompts are simpler, you can employ smaller faster models to reduce cost 
 
 We don't need evals for deterministic code, and the smaller LLM calls are easier to attribute and faster to evaluate and to optimize. For some applications, the difference between 95% and 99% evals is 📈 vs. 📉.
 
+---
+
+## Worked example: CFS aviation Q&A
+
+I applied this methodology to a [Canadian Flight Supplement Q&A tool](https://gitlab.com/udinkar/cfs_ai). The [original pipeline](https://gitlab.com/udinkar/cfs_ai/-/tree/main) runs everything through Sonnet — evaluator, decomposer, embedding API, vector search, synthesizer. Four LLM calls plus a paid embedding API per question.
+
+The [refactored branch](https://gitlab.com/kimjune01/cfs_ai/-/tree/tiered-query-architecture) replaces each operation with the cheapest thing that works:
+
+| Operation | Before (main) | After (branch) |
+|-----------|---------------|-----------------|
+| Data extraction | Sonnet/Haiku per aerodrome | Regex parser, <1s, $0 |
+| Scope evaluation | Sonnet | DB lookup + stopword list |
+| Query classification | Sonnet | Haiku (one call) |
+| Name resolution | LLM guessing | SQLite `LIKE` with scoring |
+| Structured lookup | Vector similarity | SQLite parameterized query |
+| Spatial queries | Vector similarity | Haversine over lat/lon |
+| Unstructured lookup | Vector similarity | File read + Haiku |
+| Cross-result reasoning | — | Sonnet (only for composites) |
+
+The CFS is a regulated publication with a fixed schema — frequencies, fuel, runways, elevations are labeled fields. The original pipeline embedded this structured text and searched it approximately. The regex parser extracts it exactly.
+
+Haiku's remaining job is the one thing this post says LLMs should do: turn "tower frequency at Pitt Meadows" into `{ ref: "Pitt Meadows", intent: "frequency", filter: "twr" }`. Everything after that is deterministic.
+
+The tiered architecture is a strict superset of the original RAG pipeline. Structured queries resolve faster, cheaper, and without hallucination. Everything else falls through to the same Sonnet + vector path the original used. The accuracy floor is the original pipeline; the ceiling is higher because exact lookups don't approximate.
+
 
 
 
