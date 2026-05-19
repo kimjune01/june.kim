@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 500" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .node { fill: #fff; stroke: #555; stroke-width: 1.5; rx: 6; }
+    .nucleus { fill: #fff8e0; stroke: #555; stroke-width: 1.5; rx: 6; }
+    .outbox-box { fill: #f5f5f5; stroke: #888; stroke-width: 1; rx: 4; }
+    .terminal { fill: #e8f0e8; stroke: #555; stroke-width: 1.5; rx: 4; }
+    .label { font-size: 14px; font-weight: 600; fill: #333; text-anchor: middle; dominant-baseline: central; }
+    .sublabel { font-size: 11px; fill: #666; text-anchor: middle; dominant-baseline: central; }
+    .arrow { stroke: #888; stroke-width: 1.5; fill: none; marker-end: url(#arr); }
+    .dashed { stroke: #888; stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; marker-end: url(#arr); }
+    .skip-label { font-size: 11px; fill: #888; font-style: italic; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <path d="M0,0 L7,2.5 L0,5" fill="#888"/>
+    </marker>
+  </defs>
+
+  <text class="label" x="240" y="22">event in</text>
+  <line class="arrow" x1="240" y1="32" x2="240" y2="50"/>
+
+  <rect class="node" x="120" y="55" width="240" height="50"/>
+  <text class="label" x="240" y="75">Precondition (identity)</text>
+  <text class="sublabel" x="240" y="92">rejects malformed input at the inbox</text>
+  <line class="arrow" x1="360" y1="80" x2="500" y2="80"/>
+  <text class="skip-label" x="430" y="74">skip</text>
+  <rect class="outbox-box" x="500" y="65" width="200" height="30"/>
+  <text class="sublabel" x="600" y="80">not-applicable event</text>
+
+  <line class="arrow" x1="240" y1="105" x2="240" y2="130"/>
+
+  <rect class="node" x="120" y="130" width="240" height="50"/>
+  <text class="label" x="240" y="150">Cache (repeats)</text>
+  <text class="sublabel" x="240" y="167">hit returns prior bucket; no LLM call</text>
+  <line class="arrow" x1="360" y1="155" x2="500" y2="155"/>
+  <text class="skip-label" x="430" y="149">hit</text>
+  <rect class="terminal" x="500" y="140" width="200" height="30"/>
+  <text class="sublabel" x="600" y="155">→ bucket outbox</text>
+
+  <line class="arrow" x1="240" y1="180" x2="240" y2="205"/>
+
+  <rect class="node" x="120" y="205" width="240" height="50"/>
+  <text class="label" x="240" y="225">CLI tools (live state)</text>
+  <text class="sublabel" x="240" y="242">enriches prompt with deterministic facts</text>
+
+  <line class="arrow" x1="240" y1="255" x2="240" y2="285"/>
+
+  <rect class="nucleus" x="190" y="285" width="100" height="50"/>
+  <text class="label" x="240" y="305">LLM</text>
+  <text class="sublabel" x="240" y="322">residue only</text>
+
+  <line class="arrow" x1="240" y1="335" x2="240" y2="360"/>
+
+  <rect class="node" x="120" y="360" width="240" height="50"/>
+  <text class="label" x="240" y="380">Postcondition (legal moves)</text>
+  <text class="sublabel" x="240" y="397">enum validates the bucket label</text>
+  <line class="arrow" x1="360" y1="385" x2="500" y2="385"/>
+  <text class="skip-label" x="430" y="379">invalid (ambiguous)</text>
+  <rect class="outbox-box" x="500" y="370" width="200" height="30"/>
+  <text class="sublabel" x="600" y="385">→ operator inbox</text>
+
+  <line class="arrow" x1="240" y1="410" x2="240" y2="440"/>
+  <rect class="terminal" x="140" y="440" width="200" height="30"/>
+  <text class="label" x="240" y="455" font-size="13">→ bucket outbox</text>
+
+  <line class="dashed" x1="340" y1="455" x2="500" y2="455"/>
+  <text class="skip-label" x="420" y="448">if wrong (false-known)</text>
+  <rect class="outbox-box" x="500" y="440" width="200" height="30"/>
+  <text class="sublabel" x="600" y="455">→ andon (downstream invariant)</text>
+</svg>
