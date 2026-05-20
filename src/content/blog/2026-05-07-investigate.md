@@ -22,7 +22,7 @@ The loop is the mechanism. Kill conditions from downstream stations re-enter the
 
 ### Hypothesize
 
-Start with a question about a system you can perturb. [Fan out](/fan-out) competing hypotheses. For each one: perturb, measure, classify the [trajectory shape](/evidence-has-a-trajectory), prune. [Abduction](/modes-of-reason) proposes, deduction traces consequences, induction tests. The graph deepens until the [frontier](/belief-is-the-edge-of-knowing) closes or you redirect.
+Start with a question about a system you can perturb. Isolate the buggy subregion before you fan out (the [delta-debugging](https://en.wikipedia.org/wiki/Delta_debugging) instinct): trace from the symptom to the smallest set of components that could produce it, then [fan out](/fan-out) competing hypotheses inside that region. Fan out in proportion to your uncertainty about where and why: when isolation already pins one cause, a single thread beats parallel hypotheses that only re-derive it. For each one: perturb, measure, classify the [trajectory shape](/evidence-has-a-trajectory), prune. [Abduction](/modes-of-reason) proposes, deduction traces consequences, induction tests. The graph deepens until the [frontier](/belief-is-the-edge-of-knowing) closes or you redirect.
 
 A good investigation attacks its own premise first; if it survives, you weren't adversarial enough.
 
