@@ -1,0 +1,49 @@
+---
+import TagPage from '../../layouts/TagPage.astro';
+
+const mailto =
+  'mailto:kimjune01@gmail.com' +
+  '?subject=' + encodeURIComponent('Methodeutics mailing list') +
+  '&body=' + encodeURIComponent(
+    "Please add me to the mailing list for Methodeutics. I'd like to hear when the book is out.",
+  );
+---
+<TagPage tag="epistemology" title="epistemology">
+  <aside class="book-banner">
+    <div class="book-banner__text">
+      <p class="book-banner__title"><a href="/reading/methodeutics/">Methodeutics</a> — a book on the methodology of inquiry, in progress.</p>
+      <p class="book-banner__blurb">Want to know when it's out?</p>
+    </div>
+    <a class="book-banner__cta" href={mailto}>Notify me</a>
+  </aside>
+</TagPage>
+
+<style>
+  .book-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 25px 0 35px;
+    padding: 16px 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f8f8f8;
+  }
+  .book-banner__text { min-width: 0; }
+  .book-banner__title { margin: 0; font-weight: 600; }
+  .book-banner__title a { text-decoration: underline; text-underline-offset: 2px; }
+  .book-banner__blurb { margin: 4px 0 0; color: #555; font-size: 0.9em; }
+  .book-banner__cta {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border: 1px solid rgba(0,0,0,0.7);
+    border-radius: 4px;
+    background: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .book-banner__cta:hover { background: #000; color: #fff; }
+</style>
