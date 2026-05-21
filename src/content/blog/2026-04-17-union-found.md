@@ -8,8 +8,6 @@ tags: cognition, coding
 
 Every coding agent rebuilds understanding from scratch. Claude Code, Gemini CLI, Cursor, Copilot — they have project memory, rules files, indexed repos. What they lack is the understanding that comes from *doing the work*: which approaches failed, which modules are entangled, which tests are flaky and why. That's the most valuable artifact a coding session produces, and the only one that vanishes.
 
-Code persists in git. Decisions persist in commit messages. Understanding persists nowhere.
-
 ### The data structure already exists
 
 [Union-find compaction](/union-find-compaction) solves the compression problem with provenance. Installing it is a `pnpm i` or a `uv install` away. The [Gemini CLI PR](https://github.com/google-gemini/gemini-cli/pull/24736) ships it in-memory — persistence is mechanical, sharing is a db connection away.
