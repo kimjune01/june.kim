@@ -25,6 +25,22 @@ done < <(find dist -name index.html -mindepth 2)
 echo "    $ALIAS_COUNT aliases created"
 
 # ─── HTML content sync ──────────────────────────────────────────────────────
+# Lessons learned:
+# - Never mutate `dist` just to make a deploy tool notice a change. The old
+#   pad-byte workaround solved one missed-update bug but created a new
+#   deploy-churn bug: every fresh build removed the padding, so the next deploy
+#   saw hundreds of artificial size changes.
+# - HTML is not a content-addressed artifact in this build. It can change while
+#   staying the same byte length, especially when hashed asset names rotate to
+#   another hash of equal length. Therefore HTML must be compared by content,
+#   not by size.
+# - Non-HTML assets are different: generated asset filenames are content-hashed,
+#   so `--size-only` remains a pragmatic fast path for those files.
+# - A one-time normalization deploy may upload many HTML files to remove the old
+#   padding state. After that, unchanged HTML should produce zero uploads. If a
+#   future edit breaks that invariant, fix the comparison logic; do not bring
+#   back padding or timestamp-based HTML sync.
+#
 # `aws s3 sync --size-only` is good for hashed assets, but not HTML:
 # an Astro asset hash can rotate from one same-length filename to another,
 # changing the HTML without changing byte length.
