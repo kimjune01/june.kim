@@ -8,13 +8,13 @@ AI systems / research engineer building cognition, epistemology, and agentic wor
 
 ## Selected Research & Systems Work
 
-### Slop Slope: Artifact-Level LLM Evaluation
+### SWE-bench Verified 97%: Agent Evaluation Pipeline
 
-April 2026
+May 2026
 
-- Ran a controlled artifact-level study of repeated LLM revision loops, testing whether iteration improves output or compounds recognizable AI "slop" patterns.
-- Evaluated degradation across drafts, revisions, and review passes, separating model capability from workflow failure.
-- Connected results to review protocols, AI-assisted production, and quality control for agentic workflows.
+- Built a reproducible recon/craft/audit agent pipeline for SWE-bench Verified, with separate diagnostic, implementation, and verification stages run against offline Docker environments.
+- Produced official-grader-verified artifacts with committed patches, summaries, failures, exclusions, and an append-only audit trail; reported 426 / 438 eligible resolved with explicit contamination and denominator caveats.
+- Designed the system around inspectable merit: every win and loss is traceable through public artifacts, frozen skills, official evaluation reports, and re-runnable procedure.
 
 ### Agentic Open-Source Contribution Pipeline
 
