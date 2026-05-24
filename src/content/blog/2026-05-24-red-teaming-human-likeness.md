@@ -1,5 +1,5 @@
 ---
-variant: post-wide
+variant: post
 title: "Red-Teaming Human-Likeness"
 tags: methodology
 ---
