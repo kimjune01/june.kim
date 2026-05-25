@@ -124,3 +124,7 @@ I submitted anyway, and I said so on the record in the PR. The policy exists to 
 </iframe>
 
 The claim is simple: here is the trail.
+
+---
+
+Archived at [`10.5281/zenodo.20383661`](https://doi.org/10.5281/zenodo.20383661). The DOI is a frozen pointer to the exact commit, nothing more: a citable snapshot, not a seal of approval. The verdict still lives in the logs.
