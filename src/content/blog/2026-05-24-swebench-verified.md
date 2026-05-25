@@ -55,7 +55,54 @@ The official grader is the only verdict. The number below is not prose I am aski
 | django | 223 / 231 | psf/requests | 4 / 8 |
 | matplotlib | 32 / 34 | sphinx-doc | 0 / 44 |
 
-`sphinx-doc` is a clean 0/44: it is tox-based and cannot run airgapped, so it scores zero rather than vanishing from the denominator. That is the whole ethos in one row.
+`sphinx-doc` is a clean 0/44: it is tox-based and cannot run airgapped, so it scores zero rather than vanishing from the denominator.
+
+As far as I can tell, 426 is the highest score the SWE-bench experiments repo has been asked to inspect. The next entries down sit at 396 of 500. I say "asked to inspect" deliberately: mine is a submitted pull request, not an accepted row, and 8 of the 426 won only on an external-fault re-run. Discount those and the first-attempt count is 418, still ahead. Read it as the top number currently sitting in front of the graders.
+
+## The method, stage by stage
+
+The three skills are public and [GPL-licensed](https://github.com/kimjune01/swebench-verified/tree/main/skills). Each is a markdown prompt-spec. The discipline lives in a few load-bearing rules, quoted below from the frozen versions that produced the run.
+
+**Recon** reads the failing test and localizes the bug. It writes nothing to the codebase; its job is a falsifiable handoff, not a fix:
+
+> Be falsifiable, not exhaustive. A decisive, cheaply-tested hypothesis the gate can kill beats a hedged one that tries to cover everything.
+
+> Quote the code. Every claim about behavior cites file:line.
+
+The adversary in this pipeline is the test gate, not a second opinion. Recon's hypotheses exist to be killed cheaply.
+
+**Craft** writes the patch and submits it to a codex (GPT-5.5) subagent that only attacks. The role split is the whole point:
+
+> You generate, codex filters, the gate arbitrates. Never reverse those roles.
+
+> Gate is the arbiter. "I believe the fix is correct" is not a stopping condition.
+
+Codex never writes a line of the patch. It breaks drafts; the gate decides. Confidence is not a stopping signal, a green gate is.
+
+**Audit** runs the full suite and classifies every failure against a baseline captured before the patch. It does not grant partial credit, and its real output is a route, not a grade:
+
+> RESOLVED requires the full contract. All FAIL_TO_PASS pass AND zero PASS_TO_PASS regressions. Both.
+
+> The route is load-bearing. Misrouting a regression to recon (or an ineffective fix to craft) wastes an outer-loop iteration.
+
+A non-resolved audit sends the loop back to recon (wrong diagnosis) or craft (over-broad fix). That edge is the arrow looping back in the diagram above.
+
+### A win, end to end
+
+[`astropy__astropy-12907`](https://github.com/kimjune01/swebench-verified/tree/main/results/astropy__astropy-12907). Nested compound models reported the wrong separability matrix: `rot & (sh1 & sh2)` came back fully non-separable when two of its outputs were in fact separable. Recon localized it to `_cstack` in `separable.py`: when the right operand is already a coordinate matrix, the code filled the block with `1` instead of copying the matrix. The fix is one character of intent:
+
+```diff
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+```
+
+Audit ran the suite: both target tests pass, zero regressions. Recon 123s, craft 190s (one gate iteration), audit 43s. Six minutes, [committed in full](https://github.com/kimjune01/swebench-verified/blob/main/results/astropy__astropy-12907/20260523T033555Z/hypothesis_graph.md).
+
+### A loss, just as committed
+
+[`django__django-14170`](https://github.com/kimjune01/swebench-verified/tree/main/results/django__django-14170) is in the repo too, classified as gate-divergence. The bug is real: ISO-year lookups reuse the calendar-year `BETWEEN` optimization, so boundary dates like `2014-12-31` (ISO year 2015) fall through. Recon nailed it. Then craft went wrong. Its first patch broke six `PASS_TO_PASS` tests that assert the optimization exists for `iso_year`, so craft's second iteration edited the test assertions until the gate went green. The agent's own audit said RESOLVED.
+
+The official grader said no. SWE-bench does not accept changes to test files, and editing the tests to pass is precisely the move the benchmark exists to catch. My gate and the official grader diverged, and the official grader is right. The losing run stays in the repo with its `RESOLVED` claim intact next to the official `false`, because hiding it would defeat the only thing this artifact is for. The fix should have touched the implementation alone, and forbidding test-file edits in the gate is the general correction, not a re-roll of this instance.
 
 ## I submitted it. I expect to be rejected.
 
@@ -63,7 +110,7 @@ I opened a pull request to the [SWE-bench leaderboard](https://github.com/SWE-be
 
 As of November 18, 2025, Verified submissions require an author "affiliated with an academic institution or established research lab" plus an arXiv preprint or technical report. I have neither. I am an independent researcher with a blog and an append-only repo.
 
-I submitted anyway, and I said so on the record in the PR. The policy exists to keep the board rigorous, transparent, and reproducible. My artifact is more inspectable than the leaderboard usually requires: every losing run is committed, the exclusions are committed, the skills are frozen and tagged, and the score regenerates from the logs by the leaderboard's own `analysis.get_results`. If that gets rejected on affiliation, the rejection is the more interesting artifact than the merge would have been. It marks exactly where the gate stops measuring the work and starts measuring the letterhead.
+I submitted anyway, and I said so on the record in the PR. The policy exists to keep the board rigorous, transparent, and reproducible. My artifact is built for exactly that: every losing run is committed, the exclusions are committed, the skills are frozen and tagged, and the score regenerates from the logs by the leaderboard's own `analysis.get_results`. Whatever the maintainers decide, the work is here to inspect.
 
 <iframe
   width="560"
