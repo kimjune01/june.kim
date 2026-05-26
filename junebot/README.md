@@ -36,7 +36,7 @@ Lazy (tool calls)
 ```
 junebot/
 ├── handler/                # Runs in Lambda
-│   ├── app.py              # FastAPI: POST /chat streams SSE
+│   ├── app.py              # FastAPI: POST /api/chat streams SSE
 │   ├── prompts.py          # System-prompt assembly (cache blocks)
 │   ├── tools.py            # read_post / read_reading / search
 │   └── pyproject.toml
@@ -99,9 +99,8 @@ cd ../.. && bash junebot/deploy-code.sh
 # 5. Distill memory (one-time, then on meaningful memory changes)
 python3 junebot/build/distill.py
 
-# 6. Wire frontend to the Function URL
-URL=$(cd infra/junebot && pulumi stack output functionUrl)
-echo "PUBLIC_JUNEBOT_URL=$URL" >> .env.production
+# 6. Wire frontend to the site origin / CloudFront behavior
+echo "PUBLIC_JUNEBOT_URL=https://june.kim" >> .env.production
 ```
 
 ---
@@ -115,10 +114,10 @@ export ANTHROPIC_API_KEY=...   # bypasses SSM lookup
 uv run uvicorn app:app --port 8080
 ```
 
-Then hit `http://localhost:8080/chat`:
+Then hit `http://localhost:8080/api/chat`:
 
 ```bash
-curl -N -X POST http://localhost:8080/chat \
+curl -N -X POST http://localhost:8080/api/chat \
   -H 'content-type: application/json' \
   -d '{"slug":"2026-03-14-the-parts-bin","messages":[{"role":"user","content":"what is the parts bin?"}]}'
 ```
@@ -134,7 +133,7 @@ To test the frontend locally, set `PUBLIC_JUNEBOT_URL=http://localhost:8080` in 
 - **Per-turn cost** ≈ cache-read (cheap) + user tokens + output tokens. Sonnet at typical blog Q&A: single-digit cents/turn in the worst case, fractions of a cent with cache hits.
 - **Tool-call cap**: `MAX_TOOL_ROUNDS = 6` in `app.py`. Prevents runaway loops.
 - **Input cap**: visitor messages capped at 500 chars in the frontend.
-- **CORS**: Function URL allows only `june.kim`, `www.june.kim`, and `localhost:12345`.
+- **Origin**: Production traffic goes through the site CloudFront distribution's `/api/*` behavior to the Lambda Function URL. The Function URL uses `AWS_IAM`; public browser traffic should not call it directly.
 - **Secrets**: Anthropic key lives in SSM SecureString; Lambda reads at cold start. The IAM role grants `ssm:GetParameter` on exactly that one parameter.
 - **Memory leakage**: the persona prompt forbids quoting internal notes; `about_june.md` is the distilled version anyway. If a visitor tries prompt injection, the model has nothing private to leak.
 
@@ -144,7 +143,7 @@ To test the frontend locally, set `PUBLIC_JUNEBOT_URL=http://localhost:8080` in 
 
 - **No conversation persistence** — each question is one-shot, no history.
 - **No logs** — by design. The Lambda execution role has no CloudWatch Logs permissions, so errors vanish. If you need to debug, re-attach `AWSLambdaBasicExecutionRole` temporarily, reproduce, then remove it.
-- **No rate limiting** — Function URL has no throttle. Fine at current traffic; if abuse shows up, put CloudFront + WAF in front.
+- **No app-level rate limiting** — fine at current traffic; if abuse shows up, add CloudFront/WAF controls or a small Lambda-side token bucket.
 - **Manifest freshness** — regenerated on every `deploy.sh`, never more than a deploy stale.
 - **Reading-site pages** — bot sees raw `.astro` including imports. Clean up in `tools.py::read_reading` if output quality suffers.
 
@@ -152,19 +151,11 @@ To test the frontend locally, set `PUBLIC_JUNEBOT_URL=http://localhost:8080` in 
 
 Everything below cost real time on the first pass. Read before you touch.
 
-### 1. Lambda Function URL needs BOTH `InvokeFunctionUrl` AND `InvokeFunction` (Oct 2025 rule)
+### 1. The Function URL is private behind CloudFront OAC
 
-AWS quietly changed the resource-policy requirement in October 2025: a public Function URL now rejects every request with a vague 403 "AccessDeniedException" unless the resource policy grants *both* actions. Most docs, CDK constructs, and Pulumi examples still only add `lambda:InvokeFunctionUrl`. If you see a blanket 403 with auth type NONE and a correct-looking policy, add this:
+The current runtime uses `AuthorizationType: AWS_IAM` on the Lambda Function URL. CloudFront signs origin requests via OAC and routes site `/api/*` traffic to the function. Do not "fix" browser 403s by making the Function URL public unless you are intentionally rolling back to the old architecture.
 
-```bash
-aws lambda add-permission --function-name junebot \
-  --statement-id PublicUrlInvokeFn \
-  --action lambda:InvokeFunction \
-  --principal '*' \
-  --region us-east-1
-```
-
-Note: `--function-url-auth-type NONE` is only valid for `InvokeFunctionUrl`; for `InvokeFunction` you pass principal `*` unconditionally.
+CloudFront permissions were granted after the distribution was known; see `infra/junebot/README.md` for the setup shape.
 
 ### 2. Python Lambda needs linux x86_64 wheels
 
@@ -182,17 +173,17 @@ pip install --platform manylinux2014_x86_64 \
 
 The frontend component uses `innerHTML` to render streaming markdown and the Q/A pair. Astro's default scoped styles are keyed to `data-astro-cid-*` attributes that only exist on statically rendered elements — dynamically created nodes don't match. Symptom: CSS silently doesn't apply, and you spend a while debugging "why isn't this bold." Fix: `<style is:global>`. Keep class names prefixed (`.junebot-*`) to avoid collisions.
 
-### 4. Duplicate CORS headers kill browser requests
+### 4. Duplicate CORS headers can still kill browser requests
 
-Lambda Function URL CORS config and FastAPI `CORSMiddleware` each add `Access-Control-Allow-Origin`. Browsers hard-reject responses with two, throwing `NetworkError` with no useful message. Pick one. We let the Function URL handle CORS; FastAPI has no middleware.
+Do not add FastAPI `CORSMiddleware` casually. CORS/same-origin behavior belongs at the CloudFront edge for production. Duplicate `Access-Control-Allow-Origin` headers make browsers hard-reject responses with a vague `NetworkError`.
 
-### 5. CloudFront OAC + Lambda Function URL POST is a dead end
+### 5. CloudFront owns the production route
 
-Attempting to front the Function URL with CloudFront OAC (to get same-origin + hide the Lambda URL) signs requests with SigV4. GET works. POST with a JSON body fails with "signature does not match" — a known, unfixed AWS gotcha. Nothing in the origin request policy recovers it reliably. If you want same-origin, put an HTTP API Gateway in front instead (loses streaming) or just keep the public Function URL.
+`PUBLIC_JUNEBOT_URL` should point at the site origin in production, not the raw Lambda URL. The component appends `/api/chat`, and CloudFront routes that path to the Function URL.
 
-### 6. Pulumi stack has drift from manual CLI changes
+### 6. Some CloudFront/OAC wiring is still outside this Pulumi stack
 
-`infra/junebot/main.go` creates the Lambda, but the permissions + Function URL auth were adjusted by hand during debugging. `pulumi up` against a fresh clone would revert to AuthType NONE without the correct permission pair. If you're reconciling the stack, `pulumi refresh` first, then align `main.go` with actual state before applying.
+`infra/junebot/main.go` creates the Lambda and `AWS_IAM` Function URL. The CloudFront distribution and origin-access permission are managed outside this stack. If you're reconciling infra, refresh first and verify the live CloudFront behavior before applying changes.
 
 ### 7. Manifest path split between zip and repo
 

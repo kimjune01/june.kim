@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import boto3
 from anthropic import Anthropic
@@ -13,6 +14,9 @@ from tools import TOOL_SCHEMAS, dispatch
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 1024
 MAX_TOOL_ROUNDS = 6
+MAX_INCOMING_MESSAGES = 4
+MAX_MESSAGE_CHARS = 2_000
+SLUG_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,160}$")
 SSM_PARAM = os.environ.get("ANTHROPIC_KEY_PARAM", "/junebot/anthropic-api-key")
 
 
@@ -26,9 +30,9 @@ def _load_api_key() -> str:
 
 
 client = Anthropic(api_key=_load_api_key())
-# CORS is handled by the Lambda Function URL config, not here — adding
-# CORSMiddleware would duplicate the Access-Control-Allow-Origin header
-# and browsers reject that with a NetworkError.
+# CORS / same-origin behavior is handled at the edge in front of the Lambda
+# Function URL. Keep FastAPI out of that path; adding CORSMiddleware here can
+# duplicate Access-Control-Allow-Origin headers and make browsers reject POSTs.
 app = FastAPI()
 
 
@@ -40,6 +44,25 @@ class ChatIn(BaseModel):
 @app.get("/api/health")
 def health() -> dict:
     return {"ok": True}
+
+
+def _validate_body(body: ChatIn) -> None:
+    if not body.messages:
+        raise HTTPException(400, "messages required")
+    if body.slug and not SLUG_RE.match(body.slug):
+        raise HTTPException(400, "invalid slug")
+    if len(body.messages) > MAX_INCOMING_MESSAGES:
+        raise HTTPException(400, "too many messages")
+    if body.messages[0].get("role") != "user":
+        raise HTTPException(400, "first message must be from user")
+    for msg in body.messages:
+        if msg.get("role") not in ("user", "assistant"):
+            raise HTTPException(400, "invalid message role")
+        content = msg.get("content")
+        if not isinstance(content, str):
+            raise HTTPException(400, "message content must be text")
+        if len(content) > MAX_MESSAGE_CHARS:
+            raise HTTPException(400, "message too long")
 
 
 def _seed_messages(body: ChatIn) -> list[dict]:
@@ -97,6 +120,5 @@ def _run_agent_loop(body: ChatIn):
 
 @app.post("/api/chat")
 def chat(body: ChatIn):
-    if not body.messages:
-        raise HTTPException(400, "messages required")
+    _validate_body(body)
     return StreamingResponse(_run_agent_loop(body), media_type="text/event-stream")

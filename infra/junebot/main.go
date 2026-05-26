@@ -1,8 +1,8 @@
 // Pulumi stack for junebot:
 //   - SSM SecureString for the Anthropic API key (seeded manually or by deploy.sh)
-//   - IAM role allowing Lambda to read the SSM param and write CloudWatch logs
+//   - IAM role allowing Lambda to read the SSM param
 //   - Lambda function (python3.11, Web Adapter layer, streaming)
-//   - Function URL with RESPONSE_STREAM invoke mode and CORS locked to june.kim
+//   - Function URL with RESPONSE_STREAM invoke mode, fronted by CloudFront OAC
 //
 // Day-to-day code updates go through `junebot/deploy-code.sh`, not this stack.
 // Re-run `pulumi up` only for infra changes.

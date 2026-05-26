@@ -10,7 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BLOG = ROOT / "src" / "content" / "blog"
-READING = ROOT / "src" / "pages" / "reading"
+READING = ROOT / "reading-src" / "pages" / "reading"
+if not READING.exists():
+    READING = ROOT / "src" / "pages" / "reading"
 OUT = Path(__file__).resolve().parents[1] / "data" / "manifest.json"
 
 FM_RE = re.compile(r"^---\n(.*?)\n---\n(.*)$", re.DOTALL)
