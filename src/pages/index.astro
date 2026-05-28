@@ -26,7 +26,36 @@ function slugFromId(id: string) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>june.kim</title>
+  <title>June Kim | Software, Life, and Everything</title>
+  <meta name="description" content="June Kim writes about software agents, cognition, epistemology, methodology, and verifiable work through essays, projects, and open research.">
+  <meta name="author" content="June Kim">
+  <link rel="canonical" href="https://june.kim/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="June Kim | Software, Life, and Everything">
+  <meta property="og:description" content="Essays and projects on software agents, cognition, epistemology, methodology, and verifiable work.">
+  <meta property="og:url" content="https://june.kim/">
+  <meta property="og:site_name" content="june.kim">
+  <meta property="og:image" content="https://june.kim/assets/default-icon.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@kimjune01">
+  <meta name="twitter:title" content="June Kim | Software, Life, and Everything">
+  <meta name="twitter:description" content="Essays and projects on software agents, cognition, epistemology, methodology, and verifiable work.">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "June Kim",
+    url: "https://june.kim/",
+    email: "mailto:june@june.kim",
+    sameAs: [
+      "https://github.com/kimjune01"
+    ],
+    mainEntityOfPage: {
+      "@type": "WebSite",
+      "@id": "https://june.kim/",
+      name: "june.kim",
+      url: "https://june.kim/"
+    }
+  })} />
   <link rel="icon" href="/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,14 +66,23 @@ function slugFromId(id: string) {
 </head>
 <body>
   <aside class="logo">
-    <a href="/about">
-      <img src="/images/gravatar.png" width="80" height="80" class="gravatar">
+    <a href="/about" style="position:relative;display:inline-block;">
+      <img src="/images/gravatar.png" width="80" height="80" class="gravatar" alt="June Kim">
+      <svg class="open-to-work-ring" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:-35px;left:-35px;width:150px;height:150px;pointer-events:none;">
+        <defs>
+          <path id="otw-circle" d="M 133,75 A 58,58 0 1,0 17,75 A 58,58 0 1,0 133,75" fill="none" />
+        </defs>
+        <text font-family="Avenir, sans-serif" font-size="11" fill="#000" fill-opacity="0.65" letter-spacing="2.5">
+          <textPath href="#otw-circle" startOffset="62.5%" text-anchor="middle">open to work</textPath>
+        </text>
+      </svg>
     </a>
     <span class="logo-prompt">About June</span>
   </aside>
 
   <main class="fade-shift">
     <section>
+      <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">June Kim</h1>
       <div class="header-nav">
         <ul>
           <li class="vector-space"><a href="/vector-space">vector space</a></li>

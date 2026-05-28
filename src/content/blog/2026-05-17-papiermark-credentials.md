@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Papiermark Credentials"
-tags: epistemology, methodology, pageleft
+tags: pageleft, reflecting
 ---
 
 > In 1914, the German [Papiermark](https://en.wikipedia.org/wiki/Hyperinflation_in_the_Weimar_Republic) traded at 4.2 to the dollar. By November 1923, it took 4.2 trillion. A loaf of bread that cost a quarter mark before the war cost 200 billion. Workers were paid twice a day so they could spend their wages before lunch devalued them. Children built towers from bricks of cash. The Reichsbank ran 1,800 printing presses through 133 contracted firms to keep up. The notes were impeccable. The press couldn't print bread.
@@ -47,7 +47,7 @@ When the factory is [turning issues into PRs](https://github.com/kimjune01/sweep
 
 Once verification is cheap, institutions that verified expensively lose their seigniorage. Journals, accreditation bodies, hiring pipelines existed because checking was hard. They charged rent on that cost. Agents arbitrage it away.
 
-A cold PR to a repo with real maintainers is the gold redemption event in this picture. The maintainer didn't ask for it, has their own taste and their own time, and will read the diff. The repo has downstream users who bisect to your commit when it breaks. The merge is a public, timestamped signal from someone whose own reputation is on the line. You cannot spin up Linus accepting your kernel patch. You cannot prompt your way into his git log. The provenance is held by parties who didn't consent to be your reference, which is exactly why it's worth something.
+A cold PR to a repo with real maintainers is the gold redemption event in this picture. The maintainer didn't ask for it, has their own taste and their own time, and will read the diff. The repo has downstream users who bisect to your commit when it breaks. The merge is a public, timestamped signal from someone whose own reputation is on the line. You cannot spin up Linus accepting your kernel patch. You cannot prompt your way into his git log. The [provenance](/provenance-has-no-half-life) is held by parties who didn't consent to be your reference, which is exactly why it's worth something.
 
 The credential isn't "I have N merged PRs." It's "I have merged PRs to repos whose maintainers are themselves gold-backed." Recursive, like [PageRank](https://en.wikipedia.org/wiki/PageRank), but with skin in the game at every node. An agent can compute it. A hiring committee reading a CV cannot.
 
@@ -90,6 +90,8 @@ Research-per-dollar is up roughly an order of magnitude for someone with no inst
 
 Each cell is a surface where the work is shown, not told, and where a referee outside the author's control settles the question. Code that compiles, packages that get imported, models that hit a benchmark, proofs that type-check, bugs that vendors confirm, edits that survive the next reviewer's diff. The set isn't exhaustive. It's the visible floor of something that's still growing.
 
+You may think of merit as inner virtue, deservingness, or the moral worth of the worker. Here, I mean merit to be auditable work that needs no proxy. Credentials are cached trust. Merit is a ratchet: auditable, fully legible to anyone, anywhere.
+
 The divergence is structural. For a decade, hiring committees and grant panels will still be denominated in Papiermarks while the actual production of knowledge has already moved to gold.
 
 That gap is the opportunity.
@@ -104,7 +106,7 @@ Credentials die with the author. The science lives on without.
 
 The PhD, the tenure, the h-index, the named chair. None of it forks, gets imported, or runs after the author stops. The credential is a life estate that reverts to nothing on death, while the contribution keeps executing. People depend on it without knowing the author's name. Value so liquid it has stopped tracking its origin.
 
-Papiermark accumulates to the person and dies with them; gold accumulates away from the person and outlives them. The credentialed researcher's incentive is to keep value attached to their name. The gold-backed researcher's incentive is to release work into infrastructure where it gets used so heavily nobody needs to credit them.
+As Papiermark accumulates to the person and dies with them, so does the credentialed researcher cling to their name. As gold accumulates away from the person and outlives them, so does the researcher release work into infrastructure where it gets used so heavily nobody needs to credit them.
 
 [Ramanujan](https://en.wikipedia.org/wiki/Srinivasa_Ramanujan) filled his notebooks as an autodidact in Madras, before Hardy answered his letter. They are still being mined a century later. The Cambridge fellowship and the FRS came in the last four years of his life; he died at thirty-two. The Papiermark holders of 1920 are dust. The gold he minted is still circulating.
 
