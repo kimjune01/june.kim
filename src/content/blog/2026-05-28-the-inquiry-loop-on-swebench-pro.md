@@ -548,29 +548,7 @@ Per current ethics norms for AI-assisted scientific writing, the use of LLMs in 
 
 ---
 
-## Draft notes (not for paper)
+## What this paper is and isn't
 
-- **Title decision.** *"The inquiry loop on SWE-bench Pro"* with subtitle *"Hypothesis graphs as agent semantic memory, grounded in Peircean methodeutics."* Mirrors the user's existing canon (*The hypothesis graph*, *The spec is a hypothesis*, *Theory is load-bearing*, *Auditing DeepSWE*); declarative copula register, "The X" definite-reified pattern, bench tag for findability, contribution in the subtitle.
-- **Target venue.** arxiv cs.LG primary, cs.AI cross-list. Endorser candidates: Mori (cs.LG, former-student route, first ask), Neubig (cs.CL/LG, OpenHands-Slack-warm route, stronger second ask after draft develops).
-- **Length target.** 8–12 pages standard arxiv preprint; appendices for full provenance schema, hypothesis-graph format, fault classification details, gate state machine.
-- **Layering discipline.** Tip / engineered / framework / foundation. The paper is readable at every depth: bench reader gets §1+§4+§5, methodology reader adds §3, framework reader adds §2, Peirce reader follows the citations.
-- **Sections 6–7 are load-bearing rhetorically.** §6 surfaces limitations more aggressively than any reviewer would; §7 demonstrates substantive engagement with the bench's content and a *small* note on infrastructure (structural observation, not a complaint).
-- **Numeric results section deferred.** Do not insert until both runs complete and the v1 scores stabilize. Insert in §5 with per-repo breakdown first, aggregate second, two-bench comparison third.
-- **Pre-circulation TODOs.**
-  - One-shot replay tool described in §3.10 (artifact rsync daemon; cleanest UX).
-  - Independent third-party re-grade on a sample of WINs, cited in §5.
-  - KNOWN_BAD run completed and disclosed.
-  - The "legible tip of a longer lineage" sentence from the chat folded into §1 verbatim if it survives the next read.
-- **Distribution strategy.**
-  - arxiv preprint (with Mori endorsement for cs.LG).
-  - OpenHands Slack as the warm channel where the work already has acknowledgment.
-  - HN post with methodology-framing title (*not* the headline number) once the preprint has a DOI.
-  - Short, narrow outreach to specific researchers (not @scale_AI org channels).
-- **What this paper is not.**
-  - Not a leaderboard claim. The number is the receipts that earn the read.
-  - Not a critique of Pro. The bench-infrastructure note is one paragraph, structurally observed, not weaponized.
-  - Not a contamination-clean science claim on Verified. Verified is contaminated for everyone; the loop port to Verified is a baseline, not a science claim.
-- **What this paper is.**
-  - A runnable agent harness that assembles a lineage of prior research (Peirce, Wald, Calcagno, Voyager, IRM) into one typed inquiry loop over a hypothesis-graph smem.
-  - The engineering case study for the methodeutics textbook (Ch 15 in the textbook lineage).
-  - An assembly contribution, falsifiable by execution: the harness runs end-to-end on industrial code under contamination discipline, or it doesn't.
+- **What it isn't.** Not a leaderboard claim — the number is the receipts that earn the read. Not a critique of Pro — the bench-infrastructure note is one paragraph, structurally observed, not weaponized. Not a contamination-clean science claim on Verified — Verified is contaminated for everyone; the loop port to Verified is a baseline.
+- **What it is.** A runnable agent harness that assembles a lineage of prior research (Peirce, Wald, Calcagno, Voyager, IRM) into one typed inquiry loop over a hypothesis-graph smem. The engineering case study for the methodeutics textbook. An assembly contribution, falsifiable by execution: the harness runs end-to-end on industrial code under contamination discipline, or it doesn't.
