@@ -2,11 +2,7 @@
 variant: post-wide
 title: "Auditing DeepSWE"
 tags: coding, methodology, epistemology, reflecting
-draft: true
 ---
-
-> ROUGH DRAFT. Audit complete: 113 graded, 4 confirmed defects. Harness, per-task
-> ledger, and prereg published at github.com/kimjune01/deepswe-run.
 
 A benchmark asks us to trust three things: the tasks are real, the grader is fair,
 and the answer key works. This is an audit of the third.
