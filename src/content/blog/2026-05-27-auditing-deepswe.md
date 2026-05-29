@@ -5,32 +5,32 @@ tags: coding, methodology, epistemology, reflecting
 ---
 
 A benchmark asks us to trust three things: the tasks are real, the grader is fair,
-and the answer key works. This is an audit of the third.
+and the answer key works. This is an audit of whether those claims hold.
 
 [DeepSWE](https://github.com/datacurve-ai/deep-swe) arrived last week as a
 contamination-free coding benchmark: 113 tasks drawn from active repositories,
-graded by per-task verifiers. Good work, and making the rounds. The most basic
-check there is: take the answer key, and ask whether it passes its own test.
+graded by per-task verifiers. The most basic check: take the answer key and ask
+whether it passes its own test.
 
 ## The check
 
 Every DeepSWE task ships a reference solution and a verifier. The verifier applies
 a hidden test patch and runs the suite; a passing solution scores 1. So the check
 is simple: apply the *reference* solution, run the verifier, confirm it scores 1.
-If a task's own gold answer cannot pass the test built for it, the task is not
-gradeable. No model is involved, so it costs nothing in tokens. One spot machine,
-ten tasks at a time, the whole set in under an hour, all in for less than a dollar.
+If a task's own gold cannot pass the test built for it, the task cannot be treated
+as a trustworthy graded instance until that contradiction is resolved. No model
+is involved, so it costs nothing in tokens. One spot machine, ten tasks at a time,
+the whole set in under an hour, all in for less than a dollar.
 
-This is the check you would run before shipping. It is also the check nobody
-downstream can run, unless the authors publish the harness and the data to
-reproduce it.
+This is the check you would run before shipping. The authors publish the harness
+and the data, so it is also the check anyone downstream can run. I ran it.
 
 ## First, I audited myself
 
-The first run failed every single task. All 113 came back with no score.
+The first run failed all 113 tasks. Zero scores across the board.
 
 The tempting headline writes itself: *contamination-free benchmark ships 113
-broken tasks*. It would also have been wrong. A uniform failure across every task
+broken tasks*. It would have been wrong. A uniform failure across every task
 is never 113 independent defects; it is one fault in the thing they share, my
 harness. The grading framework brings up its sandbox with `docker compose`, and
 the bare [Amazon Linux](https://aws.amazon.com/linux/) image I provisioned ships Docker without the Compose plugin.
@@ -48,19 +48,17 @@ as they should. Then a few did not.
 The reference solutions for four of the 113 tasks fail their own verifiers:
 `langchain-request-coalescing`, `narwhals-rolling-window-suite`,
 `prometheus-transactional-reload-status`, and `skrub-duration-encoding`. No agent
-attempted them. The answer key itself, applied verbatim, does not pass the test
-the benchmark grades against. Each is confirmed by re-running it alone, which rules
-out contention; a task is flagged only when its gold fails in isolation.
+attempted them; the answer key itself, applied verbatim, does not pass. Each was
+re-run alone to rule out contention; a task is flagged only when its gold fails
+in isolation.
 
-I want to be precise about what this does and does not establish. Three things
-hold, and no more: under the benchmark's published harness at the pinned commit,
-the reference solution failed its verifier; the failure reproduced in isolated
-reruns; and the cause is unresolved. It could be a genuinely broken task, a flaky
-test, or environment drift since the image was built. Sorting those apart is the
-maintainer's job, not the auditor's. A reproducible failure under the published
-harness is a complete report; the diagnosis belongs to whoever shipped the task.
-The bounded claim stands on its own: a task in this state cannot be treated as a
-trustworthy graded instance until that diagnosis happens.
+Three things hold, and no more: under the benchmark's published harness at the
+pinned commit, the reference solution failed its verifier; the failure reproduced
+in isolated reruns; the cause is unresolved. It could be a genuinely broken task,
+a flaky test, or environment drift since the image was built. Sorting those apart
+is the maintainer's job, not the auditor's. The bounded claim stands on its own:
+a task in this state cannot be treated as a trustworthy graded instance until
+that diagnosis happens.
 
 ## Where these failures live
 
@@ -76,11 +74,16 @@ whether by authoring or by drift, is the maintainer's to determine.
 
 | Claim | Observation | Analysis | Recommendation |
 |---|---|---|---|
-| **Tasks are original, the benchmark is contamination-free** | Spot-check holds: the requested `matchEach` matcher is absent from [`ts-pattern`](https://github.com/gvergnaud/ts-pattern) upstream code, PRs, and issues; reference solutions are held out | Verifiable per task, and a genuinely cleaner substrate than the contaminated [SWE-bench Verified](https://www.swebench.com/verified.html). The claim survives inspection | Keep it, and publish the per-task originality check so the claim is earned by inspection, not asserted |
+| **Tasks are original, the benchmark is contamination-free** | One spot-checked task holds up: the requested `matchEach` matcher is absent from [`ts-pattern`](https://github.com/gvergnaud/ts-pattern) upstream code, PRs, and issues; reference solutions are held out. I checked one of 113 | Verifiable in principle, and the design is a genuinely cleaner substrate than the contaminated [SWE-bench Verified](https://www.swebench.com/verified.html). One spot-check is consistent with the claim; it does not establish it across the set | Publish the per-task originality check so the claim is earned by inspection across all 113, not asserted from one |
 | **All 113 tasks are gradeable by their own verifiers** | Four reference solutions fail their own verifier (`langchain-request-coalescing`, `narwhals-rolling-window-suite`, `prometheus-transactional-reload-status`, `skrub-duration-encoding`), each confirmed failing in isolation | A gold that fails its own test makes that task untrustworthy to grade against until resolved. Cause (broken task, flaky test, or environment drift) is undetermined; the public record shows no gold-passes-verifier check behind the published tasks | Run gold-passes-verifier before shipping; fix or exclude the failures; publish the check so others need not rediscover it |
-| **A lighter, standardized harness does not disadvantage any model** (popularly inflated to "less prompting is better") | 3 model families, [`mini-swe-agent`](https://github.com/SWE-agent/mini-swe-agent) vs each native CLI, on a single 10-task slice, one run per cell, no intervals or tests; stated finding is "matches or beats every native harness at comparable token cost" | Ten tasks at single-run with no variance estimate cannot carry a directional scaffolding claim; "matches or beats" without error bars is consistent with noise. Their own wording is careful; the "less is more" reading is not in the data | Run a paired ablation at scale (all 113), repeated for variance, with confidence intervals, a significance test, and published trajectories |
+| **A lighter, standardized harness does not disadvantage any model** (popularly inflated to "less prompting is better") | 3 model families, [`mini-swe-agent`](https://github.com/SWE-agent/mini-swe-agent) vs each native CLI, on a single 10-task slice, one run per cell, no intervals or tests; stated finding is "matches or beats every native harness at comparable token cost" | A ten-task, single-run comparison with no variance estimate cannot carry a directional scaffolding claim; "matches or beats" without error bars is consistent with noise. Their own wording is careful; the "less is more" reading is not in the data | Run a paired ablation at scale (all 113), repeated for variance, with confidence intervals, a significance test, and published trajectories |
 
-The substrate behind that comparison is [`mini.yaml`](https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml) from `mini-swe-agent`. Pier hardcodes `-c mini.yaml` as the base config ([`agents/installed/mini_swe_agent.py:765`](https://github.com/datacurve-ai/pier/blob/main/src/pier/agents/installed/mini_swe_agent.py#L765)), and the DeepSWE README adds no override. The system prompt is one sentence; the instance prompt, in full:
+The harness-comparison claim rests on a specific scaffolding. Pier hardcodes
+[`mini.yaml`](https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml)
+from `mini-swe-agent` as the base config
+([`agents/installed/mini_swe_agent.py:765`](https://github.com/datacurve-ai/pier/blob/main/src/pier/agents/installed/mini_swe_agent.py#L765)),
+and the DeepSWE README adds no override. The system prompt is one sentence; the
+instance prompt, verbatim:
 
 > You are a helpful assistant that can interact with a computer.
 >
@@ -178,28 +181,28 @@ The substrate behind that comparison is [`mini.yaml`](https://github.com/SWE-age
 > anything
 > ```
 
-The asymmetry against the native CLIs it is measured against, `claude-code`, `codex`, `gemini-cli`, `opencode`, sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool, `bash`. The native CLIs each ship a typed tool suite, Read, Write, Edit, Grep, Glob, and so on, with their own schemas and behaviors that bash alone does not replicate. A ten-task single-run comparison across that gap is the slice that has to carry the directional scaffolding claim, and it cannot.
+The asymmetry from the native CLIs it is measured against (`claude-code`, `codex`, `gemini-cli`, `opencode`) sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool, `bash`. The native CLIs each ship a typed tool suite (Read, Write, Edit, Grep, Glob, and so on) with their own schemas and ergonomics. Bash can emulate most of what those tools do; the interfaces are still materially different, and that difference is exactly what a scaffolding study is meant to characterize. A ten-task single-run comparison across that gap is the slice that has to carry the directional claim, and the statistical power is not there.
 
 ## The second read that didn't run
 
 Read the rest as a second reader's note, the review that should have happened before
-this shipped. On the evidence, it did not. This is a note about method, not findings:
-I have not rerun a single leaderboard number and I dispute none of them. The question
-is only whether the process behind them earns the confidence of the claim. The work
-is close, and the gaps are cheap to close.
+this shipped, since whatever review ran did not catch four golds that fail their own tests.
+This section concerns process, not the leaderboard: I have not rerun a single
+number and I dispute none of them. The question is only whether the process
+behind them earns the confidence of the claim. The work is close, and the gaps
+are cheap to close.
 
 Two checks, both nearly free, catch what this audit caught. First, run every task's
 gold through its own verifier and fix or exclude the ones that fail. That is the
 audit above, and it cost about a dollar. Second, have a model read each task cold,
 the instruction beside the reference solution and the test, and flag where they
-disagree. Codex or Gemini does that in a single pass for pocket change. Given four
-golds that contradict their own tests, I doubt the second pass happened.
+disagree. Codex or Gemini does that in a single pass for pocket change.
 
 And the timing is unforgiving. Once a benchmark is public and scored against, it is
 frozen like any other measurement instrument: patch a task now and you change the
-instrument, breaking comparability with every number already posted. So these four
-cannot simply be fixed in place. The honest repair is a full versioned iteration,
-the whole set re-released and re-graded. A dollar of pre-ship checking would have
+instrument, breaking comparability with every number already posted. Fixing these
+four in place would break that comparability; the clean repair is a versioned
+re-release of the whole set, re-graded. A dollar of pre-ship checking would have
 spared that, which is the real cost of skipping it.
 
 There is a cheaper route, and it is open even now: claim less. A benchmark that
@@ -217,7 +220,9 @@ when it is not.
 ## Attestation and reproducibility
 
 The point of this post is not to be trusted. It is to be checked. So here is everything needed to
-re-derive every number above. That is the reproducibility the benchmark did not publish.
+re-derive the quantitative claims above. The benchmark publishes the harness and the data. What
+it did not publish is the gold-passes-verifier pre-ship check, and the per-task run artifacts
+behind the leaderboard. Those are below.
 
 **What ran.** The `oracle` agent applies each task's own reference solution, then the task's own
 verifier grades it through [Pier](https://github.com/datacurve-ai/pier) `0.2.0`, unmodified. No model
