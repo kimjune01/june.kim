@@ -528,6 +528,8 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 
 Four directions follow from this work. A held-out submission under the same artifact, one-shot discipline. Cross-instance smem accumulation: letting the hypothesis graph grow across instances within a repo, then across repos within a domain; the current work tests the smem at per-instance scope. A clean-room ablation on post-cutoff instances (SWE-rebench), with vs without the typed-mode constraint on one fixed model, to isolate the loop's effect on the rate. Skill-level retros: which stages of the loop carry which kinds of wins, and targeted skill freezes for follow-on benches.
 
+The inquiry-loop IR is not SWE-bench-specific. Any benchmark with falsifiable predicates and deterministic per-instance verdicts (HumanEval, MATH, theorem-proving suites, ARC, formal verification tasks, structured-output extraction) admits the same shape: abduction generates candidates, deduction derives an intervention, induction runs the predicate, the hypothesis graph carries belief and trajectory, the deterministic gate routes on shape. SWE-bench is the workload demonstrated here; the IR ports.
+
 ## 11. Availability and Reproducibility
 
 - **Repositories.** github.com/kimjune01/swebench-pro and github.com/kimjune01/swebench-verified.
