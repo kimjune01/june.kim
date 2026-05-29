@@ -488,16 +488,68 @@ Codex spent about four minutes, ran its own curls against the public
 endpoints, and produced ten numbered findings with citations. Three of
 them reproduce the audit above: it independently identified the
 denominator gap, the two specific tasks the top model drops, and the
-`has_model_patch: true` flag whose link is not delivered. Six of them
-are additional methodological catches the audit above does not contain:
-uneven exclusion counts across models that may bias rankings, Wilson
-confidence intervals computed over clustered trials as if they were
-independent, a `pass_rate` field whose definition diverges from the
-naïve interpretation, missing prompts and verifier commands in
-`tasks.json` that prevent reproduction of scoring, mixed-length and
-short `base_commit_hash` values that weaken reproducibility, and
-non-normalized `reasoning_effort` across model configurations that
-collapses model and harness into a single ranking.
+`has_model_patch: true` flag whose link is not delivered.
+
+Seven of them are additional methodological catches the audit above does
+not contain:
+
+- **The public trial universe is larger than the leaderboard universe.**
+  [`summary.json`](https://deepswe.datacurve.ai/artifacts/summary.json)
+  reports `counts.trials = 8852`, while
+  [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json)
+  is scoped to `"Full May 13 DeepSWE Pier job"` using the `deep-swe/full`
+  subset.
+  [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) also
+  contains `eval_scope = "cross-bench"` rows and `source = "swebenchpro"`
+  rows that are not in scope for the leaderboard. The trial file's own
+  structure does not make the separation obvious to a reader who treats
+  it as the source of truth for the leaderboard's verdicts.
+- **Uneven exclusion counts across models.**
+  [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) shows
+  `gemini-3-flash-preview` with 24 excluded full-scope trials, `gpt-5.5`
+  with 8, and several models with 0. The exclusion policy is defensible
+  only if the underlying errors are infrastructure-random; an uneven
+  exclusion distribution shifts the comparison without that being
+  apparent from the leaderboard.
+- **Wilson confidence intervals computed over clustered trials as if
+  they were independent.**
+  [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json)'s
+  `ci_method` field says "95% Wilson over attempts; each trial is
+  treated as one independent unit." Four trials per task share the
+  same prompt, verifier, and base commit; the headline `pass@1` is
+  itself macro-averaged over tasks. Treating attempts as independent
+  underrepresents task-level correlation and produces overconfident
+  intervals.
+- **`pass_rate` field whose definition diverges from the naïve
+  interpretation.**
+  In [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json),
+  `pass_rate` equals `pass_at_1` (macro-averaged over tasks), not
+  `n_passed / n_attempted`. For `claude-sonnet-4-6` the published
+  `pass_rate` is 0.3156 while the attempt-level rate is 142/447 =
+  0.3177. The duplicated fields invite the reader who skims to use
+  the wrong one.
+- **Missing prompts and verifier commands in `tasks.json`.**
+  [`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json)
+  exposes `id`, `repository`, `base_commit_hash`, `display_description`,
+  `problem_title`, and `prompt_characters`, but not the full prompt,
+  the verifier command, the hidden tests, the docker image, the
+  timeout policy, the dependency setup, or the scoring script. A
+  reader with the artifacts cannot reconstruct what the grader did.
+- **Mixed-length and short `base_commit_hash` values.**
+  Most entries in [`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json)
+  are 40-character SHAs. `eicrud-keyset-pagination-cursor` is pinned
+  to `68dafce` (7 characters), `langchain-request-coalescing` to
+  `7cef35b`, and `koota-entity-snapshot-rollback` to a 39-character
+  string that is neither a full SHA nor a recognizable abbreviation.
+  Short SHAs can resolve unambiguously today and silently re-resolve
+  later if the upstream repo changes.
+- **Non-normalized `reasoning_effort` across model configurations.**
+  [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json)
+  records `gpt-5.5` at `xhigh`, `claude-opus-4.7` at `max`,
+  `claude-sonnet-4.6` at `high`, `gemini-3.5-flash` at `medium`, and
+  many of the open-router models at `null`. The leaderboard's column
+  is presented as a model ranking; what is actually being ranked is a
+  model-and-agent-config pair, with the harness varying across rows.
 
 The full transcript, including codex's tool calls and final summary, is
 [in the audit repo](https://github.com/kimjune01/deepswe-run/tree/main/external/codex-audit).
@@ -506,7 +558,7 @@ Total cost: a few dollars in `gpt-5.5` tokens.
 
 Anything in this post that codex caught, you can catch by running the
 prompt at your own agent. Anything codex caught that this post does not
-contain — six issues — is also one prompt away from your reading. The
+contain — seven issues — is also one prompt away from your reading. The
 artifact has been live, cited in
 [VentureBeat](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole),
 quoted as authoritative across the AI press cycle, and treated as
