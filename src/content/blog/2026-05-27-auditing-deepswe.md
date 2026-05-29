@@ -80,6 +80,106 @@ whether by authoring or by drift, is the maintainer's to determine.
 | **All 113 tasks are gradeable by their own verifiers** | Four reference solutions fail their own verifier (`langchain-request-coalescing`, `narwhals-rolling-window-suite`, `prometheus-transactional-reload-status`, `skrub-duration-encoding`), each confirmed failing in isolation | A gold that fails its own test makes that task untrustworthy to grade against until resolved. Cause (broken task, flaky test, or environment drift) is undetermined; the public record shows no gold-passes-verifier check behind the published tasks | Run gold-passes-verifier before shipping; fix or exclude the failures; publish the check so others need not rediscover it |
 | **A lighter, standardized harness does not disadvantage any model** (popularly inflated to "less prompting is better") | 3 model families, [`mini-swe-agent`](https://github.com/SWE-agent/mini-swe-agent) vs each native CLI, on a single 10-task slice, one run per cell, no intervals or tests; stated finding is "matches or beats every native harness at comparable token cost" | Ten tasks at single-run with no variance estimate cannot carry a directional scaffolding claim; "matches or beats" without error bars is consistent with noise. Their own wording is careful; the "less is more" reading is not in the data | Run a paired ablation at scale (all 113), repeated for variance, with confidence intervals, a significance test, and published trajectories |
 
+The substrate behind that comparison is [`mini.yaml`](https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml) from `mini-swe-agent`. Pier hardcodes `-c mini.yaml` as the base config ([`agents/installed/mini_swe_agent.py:765`](https://github.com/datacurve-ai/pier/blob/main/src/pier/agents/installed/mini_swe_agent.py#L765)), and the DeepSWE README adds no override. The system prompt is one sentence; the instance prompt, in full:
+
+> You are a helpful assistant that can interact with a computer.
+>
+> ---
+>
+> Please solve this issue: {{task}}
+>
+> You can execute bash commands and edit files to implement the necessary changes.
+>
+> ## Recommended Workflow
+>
+> This workflow should be done step-by-step so that you can iterate on your changes and any possible problems.
+>
+> 1. Analyze the codebase by finding and reading relevant files
+> 2. Create a script to reproduce the issue
+> 3. Edit the source code to resolve the issue
+> 4. Verify your fix works by running your script again
+> 5. Test edge cases to ensure your fix is robust
+> 6. Submit your changes and finish your work by issuing the following command: `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`. Do not combine it with any other command. `<important>`After this command, you cannot continue working on this task.`</important>`
+>
+> ## Command Execution Rules
+>
+> You are operating in an environment where
+>
+> 1. You issue at least one command
+> 2. The system executes the command(s) in a subshell
+> 3. You see the result(s)
+> 4. You write your next command(s)
+>
+> Each response should include:
+>
+> 1. **Reasoning text** where you explain your analysis and plan
+> 2. At least one tool call with your command
+>
+> **CRITICAL REQUIREMENTS:**
+>
+> - Your response SHOULD include reasoning text explaining what you're doing
+> - Your response MUST include AT LEAST ONE bash tool call
+> - Directory or environment variable changes are not persistent. Every action is executed in a new subshell.
+> - However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files
+> - Submit your changes and finish your work by issuing the following command: `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`. Do not combine it with any other command. `<important>`After this command, you cannot continue working on this task.`</important>`
+>
+> Example of a CORRECT response:
+>
+> `<example_response>`
+> I need to understand the structure of the repository first. Let me check what files are in the current directory to get a better understanding of the codebase.
+>
+> [Makes bash tool call with `{"command": "ls -la"}` as arguments]
+> `</example_response>`
+>
+> `<system_information>`
+> {{system}} {{release}} {{version}} {{machine}}
+> `</system_information>`
+>
+> ## Useful command examples
+>
+> ### Create a new file:
+>
+> ```
+> cat <<'EOF' > newfile.py
+> import numpy as np
+> hello = "world"
+> print(hello)
+> EOF
+> ```
+>
+> ### Edit files with sed:
+>
+> *(template branch: on macOS, prepend a note instructing the use of `sed -i ''` instead of `sed -i`)*
+>
+> ```
+> # Replace all occurrences
+> sed -i 's/old_string/new_string/g' filename.py
+>
+> # Replace only first occurrence
+> sed -i 's/old_string/new_string/' filename.py
+>
+> # Replace first occurrence on line 1
+> sed -i '1s/old_string/new_string/' filename.py
+>
+> # Replace all occurrences in lines 1-10
+> sed -i '1,10s/old_string/new_string/g' filename.py
+> ```
+>
+> ### View file content:
+>
+> ```
+> # View specific lines with numbers
+> nl -ba filename.py | sed -n '10,20p'
+> ```
+>
+> ### Any other command you want to run
+>
+> ```
+> anything
+> ```
+
+The asymmetry against the native CLIs it is measured against, `claude-code`, `codex`, `gemini-cli`, `opencode`, sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool, `bash`. The native CLIs each ship a typed tool suite, Read, Write, Edit, Grep, Glob, and so on, with their own schemas and behaviors that bash alone does not replicate. A ten-task single-run comparison across that gap is the slice that has to carry the directional scaffolding claim, and it cannot.
+
 ## The second read that didn't run
 
 Read the rest as a second reader's note, the review that should have happened before
