@@ -31,28 +31,28 @@ Graph-memory work for agents (AriGraph, Anokhin et al. 2024; CausaLab, Yang et a
 
 This paper presents a persistent typed hypothesis graph for LLM-agent semantic memory. Peircean reasoning modes are first-class node types. Falsification criteria are executable edge predicates. Pipeline stages have mode-specific write contracts. Routing and gating are performed by deterministic graph operations rather than model calls.
 
-The specific composition is tri-disciplinary by construction: it synthesizes Peircean epistemology (1878, 1903), the cognitive-architecture memory tradition (Soar; Laird 1987; ACT-R; chunking-style mechanical operations on structured memory), and LLM-agent read/write semantics. Graph memory for agents is old; Soar has had it since 1987. We borrow Soar's memory typology (semantic memory / `smem`, procedural memory / `pmem`, episodic memory / `epmem`) only as vocabulary. The hypothesis graph occupies the `smem` slot, the pipeline-stage skills occupy the `pmem` slot, the per-run trajectories occupy the `epmem` slot. The fuller mapping is in §8.2b. Our search (§11) did not find a prior `smem` instance that combines LLM-shaped prose read/write, Peirce-typed falsifiable nodes, Vovk-Wang e-value kill-conditioned edges, one-mode-per-stage write contracts, and model-free deterministic gate operations.
+The specific composition is tri-disciplinary by construction: it synthesizes Peircean epistemology (1878, 1903), the cognitive-architecture memory tradition (Soar; Laird 1987; ACT-R; chunking-style mechanical operations on structured memory), and LLM-agent read/write semantics. Graph memory for agents is old; Soar has had it since 1987. We borrow Soar's memory typology (semantic memory / `smem`, procedural memory / `pmem`, episodic memory / `epmem`) only as vocabulary. The hypothesis graph occupies the `smem` slot, the pipeline-stage skills occupy the `pmem` slot, the per-run trajectories occupy the `epmem` slot. The fuller mapping is in §9.2b. Our search (§8) did not find a prior `smem` instance that combines LLM-shaped prose read/write, Peirce-typed falsifiable nodes, Vovk-Wang e-value kill-conditioned edges, one-mode-per-stage write contracts, and model-free deterministic gate operations.
 
 The inquiry loop is the typed read/write contract over that smem. Each stage is constrained to one Peircean mode (1878, 1903): recon writes only abductive nodes, craft reads abductive nodes and emits deductive consequence-edges, and audit reads predictions and writes inductive verdicts plus a trajectory classification. Stages cannot freelance into each other's mode. The Peircean vocabulary names the contract surface; the pipeline enforces the contract mechanically, not the philosophy.
 
-The headline claim is narrow and falsifiable, and conditional on the in-flight Pro run for full unconditional form. No method documented in our comparative literature search (§11) has *proved*, with equivalent receipts, a higher SWE-bench official-harness resolve rate at a lower audited per-instance dollar cost, reproducibly on the two most popular SWE benchmarks (Verified and Pro) under one frozen harness, than the skill set this paper presents.
+The headline claim is narrow and falsifiable, and conditional on the in-flight Pro run for full unconditional form. No method documented in our comparative literature search (§8) has *proved*, with equivalent receipts, a higher SWE-bench official-harness resolve rate at a lower audited per-instance dollar cost, reproducibly on the two most popular SWE benchmarks (Verified and Pro) under one frozen harness, than the skill set this paper presents.
 
 The four receipts grade different failure modes:
 
 - *Verified resolve rate* (426 / 438 eligible, Zenodo-DOI'd, trajectories and diffs committed): controlled-bench accuracy.
-- *In-flight Pro* under preregistration (current state 2026-05-28: 270/8 = 97.1% on 278 terminal grades, 402/728 touched, 326 untouched): contamination-resistant accuracy.
+- *In-flight Pro* under preregistration (current state 2026-05-28: 390/12 = 97.0% on 402 terminal grades, 402/728 touched, 326 untouched in the heavy-tail of the run order): contamination-resistant accuracy.
 - *OSS PR merge rate* (80 merged across 46 repos, 53%, GraphQL-verifiable): ecological maintainer grading.
 - *~$3/instance Sonnet-API (codex on Max subscription, marginal $0); ~$3.5k Sonnet-side both benches, ledger published*: accessibility.
 
 The load-bearing properties are *proved* (we publish the trail that makes the numbers auditable) and *reproducibility on both benches* under one artifact. Refutation is a citation showing a stronger combined receipt.
 
-Three independently developed recent papers reach for typed-reasoning primitives for LLM agents. IDEA (He et al. 2025, ACL Findings) applies Peirce-cited rule learning outside SE. ADI (Gilda & Gilda 2026, April 17) targets algebraic invariants rather than SE. CMM (Khalid & Arora 2026, May 26) is a typed coding-agent reasoning DAG with cross-session skill graduation; this is the closest SE-adjacent work. Older lineage: Voyager (Wang et al. 2023) closes an empirical observe→hypothesize→test→commit loop in Minecraft without typing the stages; AriGraph (Anokhin et al. 2024) and CausaLab (Yang et al. 2026) build graph memory for agents in non-SE domains; CoALA (Sumers et al. 2023) is the broader cognitive-architecture framework. Our search (documented in §11) did not surface a prior treatment combining SE-agent harness, Peircean-typed nodes, kill-conditioned edges, one-mode-per-stage write contracts, deterministic gating, and full per-instance provenance. The assembly is what this paper exhibits.
+Three independently developed recent papers reach for typed-reasoning primitives for LLM agents. IDEA (He et al. 2025, ACL Findings) applies Peirce-cited rule learning outside SE. ADI (Gilda & Gilda 2026, April 17) targets algebraic invariants rather than SE. CMM (Khalid & Arora 2026, May 26) is a typed coding-agent reasoning DAG with cross-session skill graduation; this is the closest SE-adjacent work. Older lineage: Voyager (Wang et al. 2023) closes an empirical observe→hypothesize→test→commit loop in Minecraft without typing the stages; AriGraph (Anokhin et al. 2024) and CausaLab (Yang et al. 2026) build graph memory for agents in non-SE domains; CoALA (Sumers et al. 2023) is the broader cognitive-architecture framework. Our search (documented in §8) did not surface a prior treatment combining SE-agent harness, Peircean-typed nodes, kill-conditioned edges, one-mode-per-stage write contracts, deterministic gating, and full per-instance provenance. The assembly is what this paper exhibits.
 
 Adversarial filtering operates at the hypothesis stage. Blind-blind pushout runs two frontier models from different families with no cross-visibility, then merges on disagreement while the worktree is still untouched. Agreement is uninformative; disagreement supplies the next investigation edge. Termination is mechanical: a deterministic gate consumes the audit-classified evidence trajectory (Wald 1947, Vovk & Wang 2021) and routes re-entry, completion, or budget exhaustion. The gate is finite-state over trajectory shape, attempt count, budget, and frontier-closure status. No model sits in the gate.
 
 SWE-bench is the legibility surface. Two tiers run under one frozen harness: Verified (saturated, contaminated, ports cleanly as a baseline) and Pro (contamination-resistant, the primary validation surface). Same frozen loop, two contamination regimes, two independent provenance trails. The bench supplies legibility; the methodeutics is the contribution.
 
-The contribution is positional, not foundational. No primitive is introduced. The pieces (Peirce's three modes, bi-abduction, Vovk-Wang e-values, Pearl's DAG, Ramsey's credence, Voyager, IRM, Soar-lineage structured agent memory) are not ours. The runnable assembly is what the paper exhibits; the harness executes on industrial code under contamination discipline, or it doesn't. The comparison with the closest SE precedent (CMM) and the parallel Peirce-typing work (IDEA, ADI) is laid out in §8. CMM is a compsci-grounded synthesis that reaches an adjacent intersection without crossing into either the Peircean or Soar-cogsci lineages.
+The contribution is the composition. The primitives — Peirce's three modes, bi-abduction, Vovk-Wang e-values, Pearl's DAG, Ramsey's credence, Voyager, IRM, Soar-lineage structured agent memory — exist in prior work and are cited where used. The runnable assembly is what the paper exhibits; the harness executes on industrial code under contamination discipline, or it doesn't. The comparison with the closest SE precedent (CMM) and the parallel Peirce-typing work (IDEA, ADI) is laid out in §9. CMM is a compsci-grounded synthesis that reaches an adjacent intersection from a different direction.
 
 The hypothesis graph itself decomposes into three independent primitives from three lineages. The **structural skeleton** is Pearl 1988, 2000: the DAG is Pearl's representation primitive for structured belief. We borrow the structure (directed, acyclic, typed nodes with typed edges), not the semantics (probabilistic conditional independence, do-calculus). Nodes here are typed hypotheses; edges encode dependence and the kill conditions that fire on evidence.
 
@@ -86,7 +86,7 @@ Methodeutics is Peirce's term for the methodology of inquiry, the systematic stu
 
 The loop shape recurs across fields with zero shared citations between rediscoveries, and the pre-2025 instances do not cite Peirce at all. *Facebook Infer* (Calcagno et al. 2009) does bi-abductive shape analysis at industrial scale. *Invariant Risk Minimization* (Arjovsky et al. 2019) is tri-abductive figure-ground splitting under environment variation. *Voyager* (Wang et al. 2023) closes an observe→hypothesize→test→commit loop in Minecraft with a skill library, untyped at the node level. *IDEA* (He et al. 2025, ACL Findings) brings the first-class Peirce citation for LLM rule-learning agents but does not target SE. *ADI* (Gilda & Gilda, [arXiv:2604.15727](https://arxiv.org/abs/2604.15727), 2026-04-17) develops Peircean tripartite reasoning over a symbolic knowledge graph, six weeks before this draft. *CMM* (Khalid & Arora, [OpenReview](https://openreview.net/pdf?id=yCsHQnvvWY), Agent Skills '26, 2026-05-26) is the closest SE-targeted precedent: a typed reasoning DAG for coding-agent sessions, published one day before this draft, independently developed, with trajectory-role typing rather than Peirce-typing, no kill-condition edges, no one-mode-per-stage contracts, and a human-approval gate.
 
-Six independent arrivals across seventeen years; the last three within roughly a year of each other; CMM and this paper within twenty-four hours. We treat this as suggestive context for why the typed-reasoning move keeps recurring, not as proof. The framework's public exposition predates CMM and ADI; the dated blog-post timeline is in §10. The cell-by-cell comparison with CMM (typing axis, edge semantics, gate, temporal scope) is in §8.2b.
+Six independent arrivals across seventeen years; the last three within roughly a year of each other; CMM and this paper within twenty-four hours. The pattern is suggestive context for why typed-reasoning decompositions keep recurring as natural primitives in this design space. The framework's public exposition predates CMM and ADI; the dated blog-post timeline is in §11. The cell-by-cell comparison with CMM (typing axis, edge semantics, gate, temporal scope) is in §9.2b.
 
 ## 3. Method
 
@@ -101,7 +101,7 @@ Each SWE-bench instance is recast as an inquiry on an engineered system: a failu
 
 Code is the right substrate for this data structure because it combines three properties that other inquiry domains rarely combine. It is *reproducible* (same input yields same output, modulo controlled nondeterminism), *deterministic* (causal lines from input to behavior are mechanical), and *perturbable* (single-line and single-function diffs are cheap to apply and fully observable). Hypotheses about code can therefore be tested by cheap mechanical perturbations and falsified by deterministic predicates; kill conditions are not approximations, they are executions.
 
-One instance is enough to establish causality in this regime. Statistics is the machinery for inferring causal relationships from noisy populations; in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete causal demonstration for the specified executable predicate on that instance. Hidden behaviors not covered by the executable predicate are out of scope; we report only what the predicate checks, which is what the grader checks. Medical hypotheses need populations because individual responses are noisy; code does not. The paper therefore reports counts and denominators rather than confidence intervals, hypothesis tests, or significance levels: the per-predicate per-instance verdict is already exact, and aggregating across instances is bookkeeping, not inference. Portability of the data structure to substrates without these properties is open.
+One instance is enough to settle the predicate in this regime. Statistics is the machinery for inferring causal relationships from noisy populations; in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable benchmark predicate for that instance. The verdict is for the predicate, not for the broader notion of root-cause correctness — hidden behaviors not covered by the executable predicate are out of scope, and we report only what the predicate checks, which is what the grader checks. Medical hypotheses need populations because individual responses are noisy; the per-predicate per-instance check here does not. The paper therefore reports counts, denominators, and per-repo breakdowns rather than confidence intervals or significance tests: per-predicate verdicts are already exact, and aggregating them is bookkeeping. Aggregate claims across repos, benches, or run-order remain empirical and are caveated where they appear. Portability of this regime to substrates where the per-instance response is not mechanically observable is open.
 
 The three Peircean modes become three stages with disjoint contracts and disjoint access patterns over the hypothesis graph. **Abduction (recon)** proposes candidate causes and writes hypothesis nodes with falsifiable predicates and kill conditions; no edits, no external access. **Deduction (craft)** traces each surviving hypothesis's consequences into a concrete patch; an adversarial challenger critiques the diff against the spec. **Induction (audit)** runs the test suite and classifies the result as an evidence trajectory whose shape determines the next move, not as pass/fail.
 
@@ -168,9 +168,47 @@ The lineage is borrowed for the *taxonomy*, not as a deployed numerical accumula
 
 The deterministic gate (§3.5) reads the shape label emitted by the evaluator. Both the evaluator and the gate are mechanical; neither is a model call.
 
+Broad-strokes labeler (canonical implementation in `driver/shape.py`):
+
+```python
+def classify(trace):
+    # trace: list of audit re-entries, each carrying the
+    # active-hypothesis -> outcome map for FAIL_TO_PASS and
+    # PASS_TO_PASS plus fired kill predicates.
+    winners = [dominant_hypothesis(t) for t in trace]
+    if len(set(winners[-3:])) == 1 and witness_strength_increasing(trace):
+        return "convergent"
+    if multiple_hypotheses_partition_tests(trace[-1]):
+        return "divergent"
+    if winners and winners != sorted(winners) and any_node_flipped_witness_kill(trace):
+        return "oscillatory"
+    return "chaotic"
+```
+
+`dominant_hypothesis`, `witness_strength_increasing`, `multiple_hypotheses_partition_tests`, and `any_node_flipped_witness_kill` are pure functions over the captured trace; no model in the loop.
+
 ### 3.5 Deterministic gating
 
 The gate is a finite-state classifier over (trajectory shape, attempt count, budget remaining, frontier-closure status), not a model call. Outputs are `continue-into-craft`, `re-enter-recon-with-graph-update`, `terminate-success`, `terminate-budget-exhausted`, and `escalate-to-human` (private set only). No stage may decide its own termination; the gate decides. The gate's logic is published, reviewable, and frozen by the same tag as the rest of the artifact. Termination is mechanical, which is what makes the run reproducible: re-running the same evidence trace through the same gate yields the same routing.
+
+The gate's transition table (canonical implementation in `driver/gate.py`):
+
+```python
+def gate(shape, attempt, budget_left, frontier_closed):
+    if budget_left <= 0:
+        return "terminate-budget-exhausted"
+    if frontier_closed and shape == "convergent":
+        return "terminate-success"
+    if shape == "convergent":
+        return "continue-into-craft"
+    if shape in ("divergent", "oscillatory"):
+        return "re-enter-recon-with-graph-update"
+    if shape == "chaotic" and attempt >= MAX_OUTER:
+        return "escalate-to-human"      # private set only
+    return "re-enter-recon-with-graph-update"
+```
+
+Five inputs, five outputs, no calls into the model. The same `(shape, attempt, budget_left, frontier_closed)` tuple maps to the same routing on replay.
 
 ### 3.6 Outer-loop iteration
 
@@ -208,6 +246,8 @@ Fixed run order, no early stopping. Whole-set evaluation on a multi-box fleet wi
 
 No training, no fine-tuning, no reinforcement learning, no in-context demonstrations from prior instances. Frontier models are queried via API at their published checkpoints; the harness contains no learned weights of its own. Generator and challenger are drawn from current frontier families, deliberately cross-family to avoid mode collapse on a single training prior. Models are pluggable: the inquiry loop and smem operate over any pair of capable frontier models with structured-output and tool-use support. We freeze the specific model versions used for this run's reproducibility, but no part of the methodology is specific to a particular model. Auth source is not part of the frozen artifact; billing mechanism is orthogonal to evaluation discipline.
 
+*Prior-instance information boundary.* For each scored bench instance, the loop reads only artifacts derived from that instance's failing-test reproduction and its own in-cycle writes; no other instance's hypothesis graphs, trajectories, or solutions enter the model context. Pattern reuse exists at the harness-design level (typed stages, kill-condition vocabulary, gate transition table) — not at the per-instance prompt level.
+
 ### 4.4 Grading
 
 Official harness only; no bespoke graders. Bench defects are noted in one line per instance; no per-instance forensic analysis that risks becoming bench-specific tuning.
@@ -218,7 +258,7 @@ Before publication, the same frozen harness is rerun **on Pro only** with **Curs
 
 Three outcome readings are planned. If the result holds at a comparable rate, the typed contracts and the kill-conditioned graph are doing the work and model selection is not the lever; this closes the "model selection is unablated hyperparameter" critique. If the result degrades modestly, the loop is necessary but not sufficient, and frontier capability matters on the hard-tail repos (sympy, matplotlib, django) where the cheap pair falls short. If the result collapses, frontier capability is the dominant factor and the loop's contribution is negligible. The answer is published regardless. The Composer+Flash run carries the same provenance contract as the headline run (per-instance trajectories, captured diffs, gate traces, cost ledger) and ships under the same Zenodo DOI as the Sonnet+codex artifact — one bundle, two model-pair runs on Pro.
 
-This is a robustness run, not a clean isolation. The model-pair swap changes model family, capability, training cutoff, and cost-per-instance simultaneously; cross-family adversarial filtering is held fixed, but the families themselves change (Anthropic+OpenAI → Cursor+Google). It tests whether the harness still produces results under a ~7× cheaper pair (combined ~$0.40/instance against the Sonnet-API rate of ~$3/instance in this work; codex side ran on Max subscription, not API). Single-factor attribution is out of reach here. Clean per-factor ablations (typed-mode contract on/off, blind-blind pushout on/off, gate determinism on/off) remain future work and are scoped in §9. Both Composer 2.5 and Flash 3.5 are recent enough that their training cutoffs differ from the headline pair's; comparable performance across two distinct family axes is informal evidence the methodology is not riding on the specific pretraining of any one model or family.
+This is a robustness run, not a clean isolation. The model-pair swap changes model family, capability, training cutoff, and cost-per-instance simultaneously; cross-family adversarial filtering is held fixed, but the families themselves change (Anthropic+OpenAI → Cursor+Google). It tests whether the harness still produces results under a ~7× cheaper pair (combined ~$0.40/instance against the Sonnet-API rate of ~$3/instance in this work; codex side ran on Max subscription, not API). Single-factor attribution is out of reach here. Clean per-factor ablations (typed-mode contract on/off, blind-blind pushout on/off, gate determinism on/off) remain future work and are scoped in §10. Both Composer 2.5 and Flash 3.5 are recent enough that their training cutoffs differ from the headline pair's; comparable performance across two distinct family axes is informal evidence the methodology is not riding on the specific pretraining of any one model or family.
 
 ### 4.5 Cost and replication envelope
 
@@ -228,9 +268,9 @@ Compute requirements outside the model are minimal. The harness runs on commodit
 
 A consumer subscription or a ~$3k API budget puts replication within reach of graduate students, independent researchers, and small teams; no special funding required.
 
-## 5. What the paper reports
+## 5. Reported metrics
 
-> No statistical apparatus. Per §3.1, each instance is a deterministic causal experiment; a single passing test on a captured diff is a complete verdict for that instance. The paper reports counts, denominators, and per-repo breakdowns, and leaves interpretation to the reader.
+> Because the official grader returns deterministic per-instance verdicts (§3.1), the paper reports counts, denominators, and per-repo breakdowns rather than fitting aggregate significance tests. Per-instance verdicts are exact for the executable predicate; aggregation is bookkeeping. Cross-bench and cross-repo comparisons are presented as empirical claims, not inferential statistics, and are caveated where they appear.
 
 ### 5.1 What the tables contain (per-bench)
 
@@ -252,14 +292,14 @@ Twenty random WINs from the union of both benches, stratified by repo to avoid l
 
 Same counts, same tables, computed independently for the Composer-2.5-only run. The Sonnet+codex per-instance verdict and the Composer-2.5 per-instance verdict are reported side by side for each instance in the intersection. The disagreement count is read directly; no statistical procedure applied.
 
-### 5.6 Results
+### 5.6 Current results
 
 > *[Final tables inserted after v1 termination and §3.10 provenance publication. Current state is summarized below; per-repo and provenance tables expand in place once the run terminates.]*
 
 *Verified (closed, public).* 426 / 438 eligible WIN under the official grader. Denominator-explicit; per-repo table committed to the `swebench-verified` repo's `results/` directory; Zenodo DOI pins the frozen artifact. The full 500-instance Sankey (eligible 438 = 500 − 44 sphinx-doc offline-infeasible − 18 documented `KNOWN_BAD.md` defects) is in the companion README.
 
 *Pro (in-flight, current state 2026-05-28).*
-- Terminal grades: 270 WIN / 8 LOSS = 97.1% (N = 278).
+- Terminal grades: 390 WIN / 12 LOSS = 97.0% (N = 402).
 - INCOMPLETE: 124 (re-run queue draining; fault-window reclassifications applied per §3.7).
 - Unique instances seen: 402 / 728 eligible. Untouched: 326 (heavy tail of sympy, matplotlib, django, etc., pending).
 - 8 standing LOSSes: all real-diff "not resolved" under the official grader; none in a fault window. Distribution: protonmail/webclients (4), flipt-io/flipt (1), gravitational/teleport (2, early in run), 1 other.
@@ -269,7 +309,7 @@ Same counts, same tables, computed independently for the Composer-2.5-only run. 
 
 *Cost (Pro, in-flight ledger).* Run is hybrid: Sonnet generator on Max subscription throughout (marginal cost zero) except for a brief May 27–28 API-mode window opened when subscription quota was exhausted and closed when quota replenished; codex challenger on Max subscription throughout (marginal cost zero). Sonnet-API observed rate across the closed window: **~$3 per audited instance** (per-instance ledger committed alongside trajectories). Subscription-mode portions are marginal-zero and don't appear in the ledger. The full bench at the observed API rate projects ~$2.2k if it had been run pure-API end-to-end.
 
-*OSS deployment trace.* 80 merged PRs across 46 repositories at the time of writing, 53% merge rate under adversarial maintainer grading (GraphQL-verifiable via the queries pinned at `kimjune01/kimjune01@paper-2026-05-28/README.md`; profile README is volatile, the receipt is the pinned commit). 67% positive reception on 65 issues filed since the slop-filter campaign start. ~380 hypothesis graphs publicly committed in `sweep/repo-hypotheses/`.
+*OSS deployment trace.* 80 PRs merged across 46 repositories at the time of writing under adversarial maintainer grading; 53% merge rate (merged / all agent-submitted PRs under the `sweep` campaign tag). 67% positive maintainer engagement on 65 issues filed since the slop-filter campaign start (engagement = reproduce-confirmed, assigned, or commented as actionable). All denominators and definitions GraphQL-verifiable from the pinned queries at `kimjune01/kimjune01@paper-2026-05-28/README.md` — profile README is volatile, the receipt is the pinned commit. ~380 hypothesis graphs publicly committed in `sweep/repo-hypotheses/` are the upstream funnel from which submissions are drawn.
 
 *Operator role in the deployment trace.* No human-authored code in any of the 80 merged PRs, no prompt-level steering during the runs, and no human curation of which issues to work on. The harness samples *issues* (not repos) at random from a universe defined as filed issues on ≥200-star open OSS repos across roughly 9 languages, then runs recon / craft / audit autonomously, writes the patch and PR body, and submits. The full deployment story (slop-filter campaign, drip discipline, maintainer-pushback evolution) is in the companion post [Speedrunning Open Source](/speedrunning-open-source). Issue-first sampling matters: every attempted instance is a problem someone filed because they wanted it fixed, which sidesteps the failure mode of repo-first sampling (pick a codebase, contrive work for it). The human role is strictly upstream (define the harness, define the sampling universe) and operational (kick off runs, manage cost) — not authorial, not directive, not selective. The 53% merge rate is the rate at which adversarial maintainers accept *agent-selected, agent-authored, agent-submitted* code into codebases the operator does not maintain, on problems the operator did not pick.
 
@@ -279,13 +319,13 @@ Public Pro is training-cutoff-contaminated for both model families used. This is
 
 One-shot held-out discipline is verifiable only at submission time. The submitter-side invariant (no held-out feedback in the artifact) is necessary but not sufficient. The run is cost-bounded; heavy repos may be under-represented or over-budgeted depending on order, with cost and time logged per instance.
 
-Selection of generator and challenger families is a hyperparameter we do not ablate. The ablation that would isolate the loop's effect (with vs without the typed-mode constraint, on one fixed model) is a separate clean-room study. Because no training or fine-tuning occurs in this work, pretraining-cutoff contamination is the only contamination channel; reviewers concerned about it need only audit the base models' published cutoffs against the bench's instance dates.
+Selection of generator and challenger families is a hyperparameter we do not ablate. The ablation that would isolate the loop's effect (with vs without the typed-mode constraint, on one fixed model) is a separate clean-room study. Because no training or fine-tuning occurs, pretraining-cutoff contamination is the channel most directly auditable from the artifact (cutoffs vs instance dates). Other channels — leaderboard feedback, harness tuning, known-bad-list leakage, retry policy, run-order effects — are handled by §3.7–§3.10 (preregistration, frozen harness, one-shot held-out, published failure list, frozen run order).
 
 The smem is small. Hypothesis graphs in this work are per-instance; cross-instance memory accumulation is future work. The smem proposal is therefore tested in its simplest non-trivial regime.
 
 ## 7. Discussion
 
-> Verified is closed: 426 / 438 eligible, frozen, Zenodo-DOI'd, public. Pro is in-flight: current state 2026-05-28 is 270 WIN / 8 LOSS = 97.1% on 278 terminal grades (402/728 unique instances touched, 326 untouched). The Pro number is provisional pending run termination; Pro-specific readings below are marked accordingly. Discussion of any deviations once Pro terminates is written after the v1 run.
+> Verified is closed: 426 / 438 eligible, frozen, Zenodo-DOI'd, public. Pro is in-flight: current state 2026-05-28 is 390 WIN / 12 LOSS = 97.0% on 402 terminal grades (402/728 unique instances touched, 326 untouched in the heavy-tail of the run order). The Pro number is provisional pending run termination; Pro-specific readings below are marked accordingly. Discussion of any deviations once Pro terminates is written after the v1 run.
 
 The loop ports cleanly to industrial code at the controlled-bench tier. 97% of eligible Verified instances resolved under the official grader with full per-instance provenance: captured diffs, trajectories, and cost ledger committed. The number is public and reproducible. The hypothesis-graph smem records typed inquiry decisions per run (kill conditions fired, evidence trajectories classified); whether those records prove reusable across instances and across benches is what the Pro run will test. The deterministic gate produces reviewable termination traces: an external auditor can replay its decision against the captured trajectory and budget, and the routing is reconstructible from the evidence trace alone.
 
@@ -299,15 +339,67 @@ Portability follows from the no-training stance. The harness contains no learned
 
 One peripheral note on bench infrastructure: held-out validity is partly a function of who gets graded. Published access rubrics (the way submission formats are published) would strengthen Pro's claim to be community infrastructure. We offer this as a structural observation.
 
-One further structural observation, on resource intensity. Tokens are linear in inference compute; inference compute is linear in datacenter power and water draw. The ~$3/instance figure (§5.6) corresponds to roughly an order of magnitude fewer tokens than vendor-published agent runs at comparable resolve rates on Pro-class instances. Whether this translates to a net reduction in aggregate AI energy demand depends on Jevons-style elasticity — cheaper agent runs may invite more runs — and we make no claim on that frontier. What the receipt does establish is that per-task compute footprint is **contingent on user-side orchestration craft**, not intrinsic to the underlying models. The harness is a markdown file plus pinned dependencies; it ships with zero capex lag against new chip generations. To the extent agent-task compute demand drives datacenter buildout, harness craft is one of the few mitigation levers that does not require waiting on the next fab cycle.
+One further structural observation, on token efficiency. The ~$3/instance figure (§5.6) corresponds to roughly an order of magnitude fewer tokens than vendor-published agent runs at comparable resolve rates on Pro-class instances. Token efficiency at this scale is a harness property, not a model property — the underlying models are the same frontier checkpoints anyone else calls. The lever is orchestration craft, and the artifact that carries it is a markdown file plus pinned dependencies, distributable at git-clone latency.
 
-## 8. Related Work
+## 8. Search Methodology
 
-### 8.1 SWE-bench, contamination, and cost transparency
+- **Why this section exists.** Several claims in this paper take the form *"we found no prior X."* Such claims are only as honest as the search they rest on. This section publishes the queries so readers can re-run the search and either confirm the gap or find what we missed.
+- **Sources searched.** Google Scholar; arXiv (cs.LG, cs.AI, cs.CL, cs.SE); ACL Anthology; OpenReview; GitHub code and repository search; public SWE-bench leaderboard and submission archives.
+- **Queries by claim.**
+  - **Peircean SE-agent loop.** *"Peirce" "LLM agent" abduction deduction induction software engineering*; *"Peircean" "LLM agents" abduction deduction induction*; *"abduction deduction induction" "LLM agent" "software engineering"*; *"Peirce" "SWE-bench" agent*; *"code agent" "abduction" "deduction" "induction" LLM*.
+  - **Hypothesis-graph agent memory.** *"hypothesis graph" "LLM agent" memory*; *"belief graph" "LLM agent" memory hypothesis*; *"knowledge graph" "LLM agent" "hypothesis" "memory"*; *"AriGraph" "knowledge graph world models" "episodic memory" "LLM agents"*.
+  - **Blind multi-model hypothesis-stage filtering.** *"multi-agent" "code" "hypothesis" "SWE-bench"*; *"multi-model" "code agent" "disagreement"*; *"blind" "multi-agent" "code review" LLM*; *"ensemble" "LLM agents" "software engineering" "SWE-bench"*.
+  - **Trajectory-shape termination gates.** *"LLM agent" termination criteria trajectory*; *"finite state" "LLM agent" "termination"*; *"sequential testing" "LLM agents" stopping rules*.
+  - **Full per-instance provenance on SWE-bench Pro.** *SWE-bench Pro leaderboard submissions trajectories cost ledger*; *"SWE-bench Pro" "trajectory" "cost"*; *"SWE-bench Verified" "trajectories" "cost ledger"*; *site:github.com "swe-bench-pro" "trajs"*.
+  - **Two-bench validation under one frozen artifact.** *"SWE-bench Verified" "SWE-bench Pro" "same" "scaffold"*; *"SWE-bench Pro" "Verified" "frozen" "artifact"*; *"SWE-bench Pro" "SWE-bench Verified" "cross-bench"*.
+  - **Sub-$1k Pro replication and per-instance cost ledger.** *"SWE-bench Pro" "cost per instance"*; *"SWE-bench Pro" "cost ledger"*; *"SWE-bench" "cost-per-instance" "leaderboard"*; *"SWE-rebench" cost per problem*.
+- **Caveats.** The search is best-effort and bounded by visible-web indexing; private industry work, in-preparation manuscripts, and non-indexed venues are not covered. Discoveries of overlapping prior work post-publication should be reported as issues against the repository for citation update.
+
+### 8.1 Comparative search supporting the headline claim
+
+The headline claim, *no method documented has proved a higher SWE-bench resolve rate at a lower audited per-instance cost with equivalent receipts*, requires a comparative search separate from the novelty search above. The queries below are scoped specifically to that claim. The bar for *equivalent receipts* is: published per-instance trajectories, captured diffs, gate or evaluator traces, cost ledger, and reproducible run conditions.
+
+**Sources searched.** SWE-bench Verified leaderboard ([github.com/swe-bench/experiments](https://github.com/swe-bench/experiments/)); SWE-bench Pro official page ([scaleapi.github.io/SWE-bench_Pro-os/](https://scaleapi.github.io/SWE-bench_Pro-os/)); SWE-rebench public reports ([swe-rebench.com](https://swe-rebench.com/)); Nilenso Pro trajectory analysis; OpenHands, SWE-agent, AutoCodeRover, Aider, Devin reports; venturebeat / techcrunch reporting on Pro/Datacurve / DeepSWE; arXiv recent submissions tagged SWE-bench; vendor blogs (Anthropic, OpenAI, Google) on agent benchmark performance.
+
+**Queries.**
+- *"SWE-bench Verified" "per-instance" cost trajectories*; *"SWE-bench Pro" leaderboard "cost" "trajectories"*; *"SWE-bench" submission "cost ledger"*.
+- *"SWE-bench" "cost per instance" submission diff trajectory*; *"swebench" submission reproducible cost*.
+- *OSS PR merge rate LLM agent maintainer-graded benchmark*; *agent-produced pull request acceptance rate*.
+- *"SWE-bench Verified" 95% 96% 97% top resolve rate trajectories cost*; *Pro leaderboard top resolve rate cost*.
+
+**Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above the rate this paper reports on the same bench (Rate). Receipt-bar columns are *present* (✓), *partial* (~), or *absent* (·). A row that doesn't combine all six is not a refutation of the headline.
+
+<style>
+.receipt-table td { padding: 6px 8px; vertical-align: top; border-bottom: 1px solid #eee; }
+.receipt-table td.c { text-align: center; padding: 6px 4px; }
+.receipt-table tr.ours td { background: #fafaf5; }
+</style>
+<div class="table-wrap">
+<table class="receipt-table" style="margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.35;">
+<colgroup><col style="width:18em"><col style="width:5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:10em"><col style="width:22em"></colgroup>
+<thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Submission / report</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Bench</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="trajectories">T</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="captured diffs">D</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="gate/evaluator traces">G</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="cost ledger">C</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="reproducible artifact">R</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Rate ≥ ours</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Notes</th></tr></thead>
+<tr><td>Official <code>swebench/experiments</code> repo (multiple top entries)</td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td>Various</td><td>Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger.</td></tr>
+<tr><td>Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover)</td><td>Verified</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>Reported below 97%</td><td>Submissions report numbers; reproducible bundles and cost ledgers rarely published.</td></tr>
+<tr><td>SWE-bench Pro official page (Scale)</td><td>Pro</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>N/A (curator)</td><td>Uncapped cost (250-turn limit). No per-instance cost ledger.</td></tr>
+<tr><td>Nilenso Pro trajectory analysis</td><td>Pro</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td class="c">·</td><td>N/A (third-party)</td><td>Cost/token/time analysis across four frontier models. Not a submission.</td></tr>
+<tr><td>Datacurve / DeepSWE reporting (VentureBeat)</td><td>Pro-class</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td class="c">·</td><td>N/A (journalism)</td><td>Reports e.g. GPT-5.5 ~$5.80/trial median (2× this work's per-instance rate). Journalism-level cost data, short of a structured ledger.</td></tr>
+<tr><td>SWE-rebench public reports</td><td>rebench</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">✓</td><td class="c">~</td><td>Below ours</td><td>Strong cost transparency (Cursor Composer 2.5 at $0.23/problem); reported resolve rates below the rates this paper documents on Verified.</td></tr>
+<tr class="ours"><td><strong>This work: Verified</strong></td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>426 / 438 eligible (97.3%)</td><td>Companion repo <code>swebench-verified</code>; Zenodo DOI; gate traces and cost ledger committed.</td></tr>
+<tr class="ours"><td><strong>This work: Pro</strong></td><td>Pro</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>in-flight 390/12 = 97.0% on N=402 (2026-05-28)</td><td>Same frozen harness; 402/728 unique touched, 326 untouched in the heavy-tail; final headline at run termination. Provenance published per §3.10.</td></tr>
+</table>
+</div>
+
+**Reading.** No row above this paper's two rows combines all six receipt-bar columns and a resolve rate at or above the rates this paper documents on the same bench. The headline survives as long as that table reads this way.
+
+**Caveat.** Top-line resolve rates above the receipt bar may exist in private submissions or in submissions whose receipt set we have not been able to verify; the headline is bounded by what we documented. A citation showing a stronger combined receipt is the cleanest refutation.
+
+## 9. Related Work
+
+### 9.1 SWE-bench, contamination, and cost transparency
 
 The SWE-bench family defines the Verified / Pro lineage, official harness, and contamination-resistant tier design. **SWE-rebench** ([swe-rebench.com](https://swe-rebench.com/)) uses post-cutoff filtering as a parallel contamination strategy and publishes per-problem cost figures (e.g., Cursor Composer 2.5 at $0.23/problem), used here as the price anchor for the model-agnostic robustness run in §4.5a. **Adaptive data analysis** (Dwork et al.) provides formal grounding for held-out-budget discipline. The **official SWE-bench experiments repo** ([github.com/swe-bench/experiments](https://github.com/swe-bench/experiments/)) requires `trajs/`, `logs/`, `patch.diff`, `report.json`, and `test_output.txt` per submitted instance, establishing the minimum publication norm; our provenance contract extends it with gate traces, hypothesis graphs, and cost ledger. The **Nilenso SWE-bench Pro trajectory analysis** ([nilenso.github.io/swe-bench-pro-cost-token-time-analysis](https://nilenso.github.io/swe-bench-pro-cost-token-time-analysis/reference.html)) reports deterministic intent classification, exit statuses, structural markers, and cost/error signals across four frontier models on Pro; closest precedent on Pro cost transparency, short of a per-instance dollar ledger. The **Datacurve DeepSWE leaderboard** reports median per-trial cost for frontier models on Pro-class instances (e.g., GPT-5.5 at ~$5.80/trial median); journalism-level cost data, short of a structured ledger.
 
-### 8.2 Agent scaffolds, embodied loops, and SE-agent harnesses
+### 9.2 Agent scaffolds, embodied loops, and SE-agent harnesses
 
 SWE-bench-targeted agent harnesses include OpenHands (Wang et al. 2024), SWE-agent (Yang et al. 2024), and AutoCodeRover (Zhang et al. 2024/25). These are methodological neighbors with different scaffold trade-offs; none implements Peirce-typed stage contracts or a kill-conditioned hypothesis-graph memory. **Voyager** (Wang et al. 2023) is the closest loop-shape precedent: embodied observe→hypothesize→test→commit in Minecraft. We adopt the loop shape, type its stages with Peircean modes, substitute kill-conditioned hypothesis graph for skill library (falsifiable belief in place of verified code), and re-substrate to industrial code. **Invariant Risk Minimization** (Arjovsky et al. 2019) is tri-abductive figure-ground splitting under environment variation; a third witness to the loop pattern from distributional generalization. **SWE-Replay** (2026) evaluates a test-time scaling method across Verified, Pro, and Multilingual; adjacent on cross-bench evaluation, runs without a frozen-artifact preregistration.
 
@@ -315,7 +407,7 @@ Two concurrent developments arrived independently at adjacent points in the same
 
 What this paper composes: the typed inquiry loop **writes** the typed graph prospectively (with kill conditions ahead of evidence and trajectory-shape labels at audit time), the loop **reads** the graph to drive the next move, and a deterministic gate closes the cycle on trajectory shape rather than model self-judgment. Same graph primitive as CMM, opposite epistemological direction: CMM's graph is descriptive (mined from traces); the one here is generative (it routes the run). Same Peircean typing as ToT, pinned to persistent nodes that survive across cycles rather than dissolved per query. The composition is what the bench result is testing.
 
-Table 1 lays out the cell-by-cell comparison spine for the systems treated below in §8.2a–§8.2b; the prose adds nuance the table can't carry.
+Table 1 lays out the cell-by-cell comparison spine for the systems treated below in §9.2a–§9.2b; the prose adds nuance the table can't carry.
 
 <style>
 .relwork-table td { padding: 6px 8px; vertical-align: top; border-bottom: 1px solid #eee; }
@@ -337,13 +429,13 @@ Table 1 lays out the cell-by-cell comparison spine for the systems treated below
 </table>
 </div>
 
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 1.</strong> Comparison spine for adjacent typed-reasoning and graph-memory LLM-agent systems. Cell terseness is by design; prose nuance in §8.2a–§8.2b. Adversarial filtering and termination are separately tabled in §8.2c and §8.2d.</figcaption>
+<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 1.</strong> Comparison spine for adjacent typed-reasoning and graph-memory LLM-agent systems. Cell terseness is by design; prose nuance in §9.2a–§9.2b. Adversarial filtering and termination are separately tabled in §9.2c and §9.2d.</figcaption>
 
-### 8.2a Peirce-typed reasoning for LLM agents (parallel work)
+### 9.2a Peirce-typed reasoning for LLM agents (parallel work)
 
 **IDEA** (He et al. 2025, ACL Findings, [arXiv:2408.10455](https://arxiv.org/abs/2408.10455)), *Enhancing the Rule Learning Ability of Large Language Model Agent through Induction, Deduction, and Abduction*, explicitly cites Peirce and uses the three modes in an interactive LLM-agent rule-learning benchmark. **ADI** (Gilda & Gilda 2026, [arXiv:2604.15727](https://arxiv.org/abs/2604.15727), April 17 2026), *Structured Abductive-Deductive-Inductive Reasoning for LLMs via Algebraic Invariants*, gives an explicit Peircean tripartite protocol with epistemic layers (L0/L1/L2) over a symbolic knowledge graph; near-simultaneous with this paper's draft and the most conceptually adjacent prior work. Both target reasoning domains outside SE (rule learning, algebraic invariants); this paper targets SE agents on real industrial code under benchmark and adversarial-maintainer evaluation. Table 1 carries the cell-by-cell methodological diff.
 
-### 8.2b Graph-structured memory and typed-belief representations for LLM agents
+### 9.2b Graph-structured memory and typed-belief representations for LLM agents
 
 The hypothesis-graph assembly sits at the intersection of three lineages: cognitive-architecture memory (Soar / ACT-R / EPIC), LLM-agent memory systems (CoALA / AriGraph / Mem0 / Zep), and typed-belief / falsifiability representations (CausaLab / BeliefMem / Theorem-of-Thought / CMM). Adjacent work in each lineage:
 
@@ -380,7 +472,7 @@ The hypothesis-graph assembly sits at the intersection of three lineages: cognit
 
 > *Production LLM memory systems with graph variants (Zep/Graphiti, Mem0), staged-hypothesis selection in science agents (DeepScientist), domain-specific hypothesis swarms (drug discovery), deterministic gating in adjacent settings (MemLineage, ROE Gate, Certifying-Risks, FVA-RAG, GHS-TDA), and reflective memory systems (Reflexion, DebugMate, Potpie) are surveyed in the appendix. They are adjacent in particular axes but do not change the cell-by-cell comparison spine above.*
 
-### 8.2c Multi-model adversarial filtering
+### 9.2c Multi-model adversarial filtering
 
 Table 2 compares adversarial multi-model setups on stage of operation, visibility regime, and cross-family use.
 
@@ -396,7 +488,7 @@ Table 2 compares adversarial multi-model setups on stage of operation, visibilit
 
 <figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 2.</strong> Adversarial multi-model filtering: comparison axes are stage and visibility, where this work occupies the pre-patch / blind cell.</figcaption>
 
-### 8.2d Agent termination and trajectory analysis
+### 9.2d Agent termination and trajectory analysis
 
 Table 3 compares termination disciplines. The axes are *what* the system reads to stop, *how* it stops, and the scope at which the stopping decision lives.
 
@@ -412,7 +504,7 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 
 <figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 3.</strong> Agent-termination disciplines. The shape-label gate this paper deploys sits at the per-instance scope on an evidence-trajectory signal, where neighboring work sits at composition- or trajectory-level on type-theoretic or risk-analytic signals.</figcaption>
 
-### 8.3 Peircean inquiry and the philosophy of science
+### 9.3 Peircean inquiry and the philosophy of science
 
 - **Peirce 1878** (*Illustrations of the Logic of Science*, Popular Science Monthly): the original three-mode taxonomy of abduction, deduction, and induction.
 - **Peirce 1903** (*Pragmatism as the Logic of Abduction*, Harvard lectures): abduction as the only mode that introduces new content.
@@ -423,7 +515,7 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 - **Meehl 1967**: soft-science methodological critique that anticipates many of the failure modes our typing constrains.
 - **Feynman 1974** ("Cargo Cult Science"): informal but substantive on the difference between rigor-shaped activity and actual rigor.
 
-### 8.4 Bi-abductive and compositional inference; failure isolation
+### 9.4 Bi-abductive and compositional inference; failure isolation
 
 - **Calcagno et al. 2009**: compositional shape analysis via bi-abduction; Facebook Infer as the industrial-scale instance of typed-mode inference on real code.
 - **Bylander et al. 1991**: abductive computational complexity.
@@ -431,7 +523,7 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 - **Noam Zilberstein, Saliling & Silva 2024** ([arXiv:2305.04842](https://arxiv.org/abs/2305.04842)): Outcome Separation Logic; Theorem 5.1 establishes soundness of tri-abduction for branch composition under effects, extending bi-abduction from sequential to branching.
 - **Zeller & Hildebrandt 2002** (*Simplifying and Isolating Failure-Inducing Input*, IEEE TSE; building on Zeller 1999): delta debugging. An optimization-side adjacent: given a failure-inducing input, isolate the minimal failure-inducing subset by binary-search-shaped perturbation. The hypothesis graph in this work is methodology-shape; delta debugging is optimization-shape; both rely on the reproducible / deterministic / perturbable properties of code (§3.1). Worth citing as the canonical demonstration that mechanical perturbation of code is a productive inference primitive.
 
-### 8.5 Anytime-valid inference and evidence trajectories
+### 9.5 Anytime-valid inference and evidence trajectories
 
 - **de Finetti 1937**: subjective probability foundations.
 - **Ville 1939**: martingales as the formal substrate for sequential evidence.
@@ -442,21 +534,21 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 - **Shafer 2021**: the *betting* interpretation of e-values; an e-value as the wealth of a strategy that bets against the null.
 - **Grünwald 2024; Ramdas 2023**: modern syntheses of anytime-valid inference, e-processes, and safe testing.
 
-### 8.6 Dynamical classification
+### 9.6 Dynamical classification
 
 - **Milnor 1985; Strogatz 2014**: dynamical systems literature for convergent / divergent / oscillatory / chaotic shape classification.
 
-### 8.7 Directed acyclic graphs as reasoning representation
+### 9.7 Directed acyclic graphs as reasoning representation
 
 - **Pearl 1988** (*Probabilistic Reasoning in Intelligent Systems*): Bayesian networks as DAGs of probabilistic dependencies. The foundational application of DAGs to structured belief representation.
 - **Pearl 2000/2009** (*Causality: Models, Reasoning, and Inference*): structural causal models, d-separation, do-calculus. DAGs as the substrate for causal-structure inference.
 - The hypothesis graph in this work uses Pearl's DAG representation primitive but for a different purpose: typed *hypotheses about engineered systems under inquiry*, not probabilistic dependencies between random variables or causal relations between exposures and outcomes. The data structure is borrowed; the semantics over it are not.
 
-## 9. Future Work
+## 10. Future Work
 
 Four directions follow from this work. A held-out submission under the same artifact, one-shot discipline. Cross-instance smem accumulation: letting the hypothesis graph grow across instances within a repo, then across repos within a domain; the current work tests the smem at per-instance scope. A clean-room ablation on post-cutoff instances (SWE-rebench), with vs without the typed-mode constraint on one fixed model, to isolate the loop's effect on the rate. Skill-level retros: which stages of the loop carry which kinds of wins, and targeted skill freezes for follow-on benches.
 
-## 10. Availability and Reproducibility
+## 11. Availability and Reproducibility
 
 - **Repositories.** github.com/kimjune01/swebench-pro and github.com/kimjune01/swebench-verified.
 - **Frozen artifact.** Git tag `prereg-pro-v1`, SHA committed in the worklog.
@@ -465,65 +557,13 @@ Four directions follow from this work. A held-out submission under the same arti
 - **OSS deployment trace.** Public corpus of ~380 hypothesis graphs at `kimjune01/sweep/repo-hypotheses/`, one per investigated issue across 46+ repositories. PR-level outcomes (merged / closed-unmerged / open) are pinned at `kimjune01/kimjune01@paper-2026-05-28` (the profile README itself drifts; the pinned commit is the citable artifact).
 - **OSS metrics are recomputable, not asserted.** Every numeric claim in the deployment trace (merge rate, repo count, issue reception) ships alongside the **GitHub GraphQL query** that produces it. A skeptic with any GitHub token can paste the query into the GraphQL explorer and recompute the number in under a minute. No statistic is presented without its verifier. This is the same anti-grift mechanism as the bench's per-instance provenance, ported to the wild-deployment surface.
 - **Replication budget.** ~$3/instance × bench size (~$2.2k Pro, ~$3.5k both benches), or a single consumer subscription plus patience. See §4.5.
-- **Companion textbook.** A reader-facing synthesis of the same dispersed lineage is available at june.kim/reading/methodeutics. The paper's argument rests on the primary sources cited in §2 and §8, not on the synthesis; the textbook is a navigation aid, not authority.
+- **Companion textbook.** A reader-facing synthesis of the same dispersed lineage is available at june.kim/reading/methodeutics. The paper's argument rests on the primary sources cited in §2 and §9, not on the synthesis; the textbook is a navigation aid, not authority.
 - **Public-provenance trail.** Dated blog posts at june.kim establishing the framework: *Theory is load-bearing* (2026-03-17), *The proof manual* (2026-04-05), *Type the question* (2026-04-08), *Evidence has a trajectory* (2026-04-27), *The hypothesis graph* (2026-04-28), *Abduction* (2026-05-04), *Modes of reason* (2026-05-04). These predate CMM (2026-05-26) and ADI (2026-04-17) and establish parallel rather than derivative development.
 - **PDF.** Arxiv-shape build at [/assets/inquiry-loop-paper.pdf](/assets/inquiry-loop-paper.pdf). Rebuilt from the markdown source by `scripts/build-paper-pdf.sh`; the source is canonical.
 - **DOI.** [placeholder: Zenodo paper-DOI distinct from the software-DOI.]
 - **License.** Skills are released free and openly under **CC-BY-SA-NS** (see [june.kim/cc-by-sa-ns](https://june.kim/cc-by-sa-ns)). Repo-level terms in `LICENSE.md`. The harness, the skills, the trajectories, the hypothesis graphs, the gate logic: all freely available for inspection, replication, modification, and reuse under attribution + share-alike + no-spam terms. No paywall, no gated access, no enterprise tier; the harness an outsider clones is the same harness that produced the published numbers.
 
 **Reproducibility invitation.** *Nullius in verba.* The repository, per-instance trajectories, hypothesis graphs, gate traces, captured diffs, and cost ledger are public. The harness runs end-to-end on a frontier-vendor subscription or under ~$2k of API spend per bench (§4.5). Replication does not require institutional credentials or enterprise access. Doubts about specific instances, regrades, or methodological claims should be filed as issues against the repository; confirmed corrections fold into the next versioned artifact.
-
-## 11. Search Methodology
-
-- **Why this section exists.** Several claims in this paper take the form *"we found no prior X."* Such claims are only as honest as the search they rest on. This section publishes the queries so readers can re-run the search and either confirm the gap or find what we missed.
-- **Sources searched.** Google Scholar; arXiv (cs.LG, cs.AI, cs.CL, cs.SE); ACL Anthology; OpenReview; GitHub code and repository search; public SWE-bench leaderboard and submission archives.
-- **Queries by claim.**
-  - **Peircean SE-agent loop.** *"Peirce" "LLM agent" abduction deduction induction software engineering*; *"Peircean" "LLM agents" abduction deduction induction*; *"abduction deduction induction" "LLM agent" "software engineering"*; *"Peirce" "SWE-bench" agent*; *"code agent" "abduction" "deduction" "induction" LLM*.
-  - **Hypothesis-graph agent memory.** *"hypothesis graph" "LLM agent" memory*; *"belief graph" "LLM agent" memory hypothesis*; *"knowledge graph" "LLM agent" "hypothesis" "memory"*; *"AriGraph" "knowledge graph world models" "episodic memory" "LLM agents"*.
-  - **Blind multi-model hypothesis-stage filtering.** *"multi-agent" "code" "hypothesis" "SWE-bench"*; *"multi-model" "code agent" "disagreement"*; *"blind" "multi-agent" "code review" LLM*; *"ensemble" "LLM agents" "software engineering" "SWE-bench"*.
-  - **Trajectory-shape termination gates.** *"LLM agent" termination criteria trajectory*; *"finite state" "LLM agent" "termination"*; *"sequential testing" "LLM agents" stopping rules*.
-  - **Full per-instance provenance on SWE-bench Pro.** *SWE-bench Pro leaderboard submissions trajectories cost ledger*; *"SWE-bench Pro" "trajectory" "cost"*; *"SWE-bench Verified" "trajectories" "cost ledger"*; *site:github.com "swe-bench-pro" "trajs"*.
-  - **Two-bench validation under one frozen artifact.** *"SWE-bench Verified" "SWE-bench Pro" "same" "scaffold"*; *"SWE-bench Pro" "Verified" "frozen" "artifact"*; *"SWE-bench Pro" "SWE-bench Verified" "cross-bench"*.
-  - **Sub-$1k Pro replication and per-instance cost ledger.** *"SWE-bench Pro" "cost per instance"*; *"SWE-bench Pro" "cost ledger"*; *"SWE-bench" "cost-per-instance" "leaderboard"*; *"SWE-rebench" cost per problem*.
-- **Caveats.** The search is best-effort and bounded by visible-web indexing; private industry work, in-preparation manuscripts, and non-indexed venues are not covered. Discoveries of overlapping prior work post-publication should be reported as issues against the repository for citation update.
-
-### 11.1 Comparative search supporting the headline claim
-
-The headline claim, *no method documented has proved a higher SWE-bench resolve rate at a lower audited per-instance cost with equivalent receipts*, requires a comparative search separate from the novelty search above. The queries below are scoped specifically to that claim. The bar for *equivalent receipts* is: published per-instance trajectories, captured diffs, gate or evaluator traces, cost ledger, and reproducible run conditions.
-
-**Sources searched.** SWE-bench Verified leaderboard ([github.com/swe-bench/experiments](https://github.com/swe-bench/experiments/)); SWE-bench Pro official page ([scaleapi.github.io/SWE-bench_Pro-os/](https://scaleapi.github.io/SWE-bench_Pro-os/)); SWE-rebench public reports ([swe-rebench.com](https://swe-rebench.com/)); Nilenso Pro trajectory analysis; OpenHands, SWE-agent, AutoCodeRover, Aider, Devin reports; venturebeat / techcrunch reporting on Pro/Datacurve / DeepSWE; arXiv recent submissions tagged SWE-bench; vendor blogs (Anthropic, OpenAI, Google) on agent benchmark performance.
-
-**Queries.**
-- *"SWE-bench Verified" "per-instance" cost trajectories*; *"SWE-bench Pro" leaderboard "cost" "trajectories"*; *"SWE-bench" submission "cost ledger"*.
-- *"SWE-bench" "cost per instance" submission diff trajectory*; *"swebench" submission reproducible cost*.
-- *OSS PR merge rate LLM agent maintainer-graded benchmark*; *agent-produced pull request acceptance rate*.
-- *"SWE-bench Verified" 95% 96% 97% top resolve rate trajectories cost*; *Pro leaderboard top resolve rate cost*.
-
-**Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above the rate this paper reports on the same bench (Rate). Receipt-bar columns are *present* (✓), *partial* (~), or *absent* (·). A row that doesn't combine all six is not a refutation of the headline.
-
-<style>
-.receipt-table td { padding: 6px 8px; vertical-align: top; border-bottom: 1px solid #eee; }
-.receipt-table td.c { text-align: center; padding: 6px 4px; }
-.receipt-table tr.ours td { background: #fafaf5; }
-</style>
-<div class="table-wrap">
-<table class="receipt-table" style="margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.35;">
-<colgroup><col style="width:18em"><col style="width:5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:10em"><col style="width:22em"></colgroup>
-<thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Submission / report</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Bench</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="trajectories">T</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="captured diffs">D</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="gate/evaluator traces">G</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="cost ledger">C</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="reproducible artifact">R</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Rate ≥ ours</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Notes</th></tr></thead>
-<tr><td>Official <code>swebench/experiments</code> repo (multiple top entries)</td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td>Various</td><td>Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger.</td></tr>
-<tr><td>Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover)</td><td>Verified</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>Reported below 97%</td><td>Submissions report numbers; reproducible bundles and cost ledgers rarely published.</td></tr>
-<tr><td>SWE-bench Pro official page (Scale)</td><td>Pro</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>N/A (curator)</td><td>Uncapped cost (250-turn limit). No per-instance cost ledger.</td></tr>
-<tr><td>Nilenso Pro trajectory analysis</td><td>Pro</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td class="c">·</td><td>N/A (third-party)</td><td>Cost/token/time analysis across four frontier models. Not a submission.</td></tr>
-<tr><td>Datacurve / DeepSWE reporting (VentureBeat)</td><td>Pro-class</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td class="c">·</td><td>N/A (journalism)</td><td>Reports e.g. GPT-5.5 ~$5.80/trial median (2× this work's per-instance rate). Journalism-level cost data, short of a structured ledger.</td></tr>
-<tr><td>SWE-rebench public reports</td><td>rebench</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">✓</td><td class="c">~</td><td>Below ours</td><td>Strong cost transparency (Cursor Composer 2.5 at $0.23/problem); reported resolve rates below the rates this paper documents on Verified.</td></tr>
-<tr class="ours"><td><strong>This work: Verified</strong></td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>426 / 438 eligible (97.3%)</td><td>Companion repo <code>swebench-verified</code>; Zenodo DOI; gate traces and cost ledger committed.</td></tr>
-<tr class="ours"><td><strong>This work: Pro</strong></td><td>Pro</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>in-flight 270/8 = 97.1% on N=278 (2026-05-28)</td><td>Same frozen harness; 402/728 unique touched, 326 untouched; final headline at run termination. Provenance published per §3.10.</td></tr>
-</table>
-</div>
-
-**Reading.** No row above this paper's two rows combines all six receipt-bar columns and a resolve rate at or above the rates this paper documents on the same bench. The headline survives as long as that table reads this way.
-
-**Caveat.** Top-line resolve rates above the receipt bar may exist in private submissions or in submissions whose receipt set we have not been able to verify; the headline is bounded by what we documented. A citation showing a stronger combined receipt is the cleanest refutation.
 
 ## LLM Collaboration Disclosure
 
@@ -536,10 +576,3 @@ Per current ethics norms for AI-assisted scientific writing, the use of LLMs in 
 ## Acknowledgments
 
 - [Placeholder]: endorser, OpenHands community acknowledgment, prior conversations, methodeutics readers.
-
----
-
-## What this paper is and isn't
-
-- **What it isn't.** Not a leaderboard claim — the number is the receipts that earn the read. Not a critique of Pro — the bench-infrastructure note is one paragraph, structurally observed, not weaponized. Not a contamination-clean science claim on Verified — Verified is contaminated for everyone; the loop port to Verified is a baseline.
-- **What it is.** A runnable agent harness that assembles a lineage of prior research (Peirce, Wald, Calcagno, Voyager, IRM) into one typed inquiry loop over a hypothesis-graph smem. The engineering case study for the methodeutics textbook. An assembly contribution, falsifiable by execution: the harness runs end-to-end on industrial code under contamination discipline, or it doesn't.
