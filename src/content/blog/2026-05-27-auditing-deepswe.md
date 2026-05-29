@@ -217,6 +217,185 @@ does not have to find the cracks. You should do better, and the cheapest version
 better is plain: it is fine to ship unfinished work, but not to call it finished
 when it is not.
 
+## Update — auditing the published numbers (2026-05-29)
+
+After this post first ran, I went back and audited the numbers on
+[the leaderboard](https://deepswe.datacurve.ai/) itself. The single-page React
+app at `deepswe.datacurve.ai` loads its data from five JSON files under
+`/artifacts/`:
+[`summary.json`](https://deepswe.datacurve.ai/artifacts/summary.json),
+[`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json),
+[`heatmap.json`](https://deepswe.datacurve.ai/artifacts/heatmap.json) (the
+per-model-per-task pass grid),
+[`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json), and
+[`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) (every
+individual rollout — 8852 records). Those files are public, mirrored to
+[the audit repo](https://github.com/kimjune01/deepswe-run/tree/main/external/deepswe-leaderboard/raw),
+and let any third party check the math directly. I should retract one critique
+from the section above: per-task receipts *are* published, just behind URLs the
+UI doesn't surface. That much is to the maintainers' credit.
+
+What the data shows under that credit, with the artifacts in hand, is three
+findings.
+
+### Finding 1 — the model patches are not publicly retrievable
+
+The trial records in
+[`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) carry a
+`has_model_patch: true` flag on every scored rollout, alongside
+`has_trajectory`, `has_agent_log`, and `has_verifier_output`. The per-trial
+JSON at `/artifacts/trials/{trial_name}.json` (for example
+[the `abs-module-cache-flags__GUstLQs` trial JSON](https://deepswe.datacurve.ai/artifacts/trials/abs-module-cache-flags__GUstLQs.json),
+a passing rollout of `gpt-5.5` that returned reward 1) carries a provenance
+field that says:
+
+> Raw trajectory, patch, agent log, and verifier output are linked to release
+> object storage when present.
+
+The trial JSON does not, however, carry the link itself, and the leaderboard
+site does not expose the underlying objects through any URL I could find. I
+probed `/artifacts/trials/{trial_name}/<file>` for several plausible
+filenames (`model_patch.patch`, `model_patch`, `trajectory.json`, `agent.log`,
+`verifier_output.txt`) and got 404s on all. The
+`/raw/rollouts/deep-swe-all-4x-cross-bench-minimal/{trial_name}` path that
+the provenance field cites internally returns 404 publicly. The
+[`datacurve-ai/deep-swe`](https://github.com/datacurve-ai/deep-swe) GitHub repo
+contains only the task definitions and a README; there are
+[no GitHub Releases](https://github.com/datacurve-ai/deep-swe/releases) and no
+LFS-stored rollouts. The
+[`datacurve-ai/pier`](https://github.com/datacurve-ai/pier) repo has
+[releases (`v0.1.0`, `v0.2.0`)](https://github.com/datacurve-ai/pier/releases)
+but those are the verifier code, not the rollout artifacts. The HuggingFace org
+[`datacurve-ai`](https://huggingface.co/datacurve-ai) returned 401 on every
+dataset name I tried, including `datacurve-ai/deep-swe-rollouts`.
+
+Press coverage cites the maintainers' decision to publish the full dataset and
+agent trajectories as a mitigating factor against benchmark concerns
+([VentureBeat coverage](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)).
+The trajectory **metadata** is published; the trajectory **content** — the
+model's submitted patch, the agent's full step log, the verifier's stdout —
+is not retrievable from the public site or the GitHub artifacts. Possibly
+they live in a release object store that the leaderboard site references
+internally but does not link, and a request to the maintainers would surface
+the bucket. From outside that conversation, the patches are not public.
+
+The practical consequence: the headline number is verifiable at the aggregate
+level — the per-task pass-counts in `heatmap.json` reproduce the leaderboard's
+pass@1 column under the documented arithmetic, and the trial outcomes in
+`trials.json` reproduce the per-cell counts. The verdicts themselves are not
+independently verifiable, because the model patch each verdict was rendered
+on is not available for re-grading. A third party can audit *whether the
+counting is consistent with the counts they publish*; not *whether the counts
+match what their grader would say when re-run against their own outputs*.
+
+That second check is the one that would foreclose the question this update
+keeps circling, and the artifacts the public site exposes do not let me run
+it.
+
+### Finding 2 — the headline 70% is computed over 111 tasks, not 113
+
+The leaderboard's headline number for `gpt-5.5 [xhigh]` is **0.70045**. Reading
+that directly from the heatmap reproduces it exactly — provided the denominator
+is 111, not the 113 that `leaderboard.json`'s `n_tasks_in_set` field
+explicitly advertises.
+
+```
+mean(per-task pass-fraction over 111 cells)  = 0.70045  ← matches headline
+mean over 113, missing → 0                   = 0.68805
+```
+
+Two tasks are dropped from `gpt-5.5`'s denominator:
+[`goreleaser-retry-publish-auditing`](https://deepswe.datacurve.ai/data/tasks/goreleaser-retry-publish-auditing)
+and
+[`opa-rego-rule-profiling`](https://deepswe.datacurve.ai/data/tasks/opa-rego-rule-profiling).
+The
+[heatmap](https://deepswe.datacurve.ai/artifacts/heatmap.json) has no cell for
+`gpt-5.5` on either. Other frontier models do — `gpt-5.4` hits `goreleaser`
+4/4, `claude-opus-4.7` hits it 4/4 — so the gap isn't that the tasks are
+ungradeable. `gpt-5.5`'s rollouts on those two tasks were classified out of
+the denominator, and the leaderboard's footer doesn't disclose that the
+division was over 111.
+
+Counting the dropped cells as failures — the read a reader of the footer would
+construct — takes the headline from 70.0% to 68.8%. The exact 70.045% lands
+because of how the disagreement between the footer and the computation is
+resolved silently. A round 70% is what marketing prefers; 68.8% is what the
+methodology as written would produce.
+
+### Finding 3 — the four defectives mostly pass on their grader
+
+The four reference-solution failures from the audit above appear on the
+leaderboard's per-task heatmap. Three of them are passed cleanly by
+`gpt-5.5`:
+
+| task | gpt-5.5 | claude-opus-4.7 | gemini-3.5-flash | total across 16 models |
+|---|---|---|---|---|
+| [langchain-request-coalescing](https://deepswe.datacurve.ai/data/tasks/langchain-request-coalescing) | 3/4 | 0/4 | 0/4 | 10/64 |
+| [narwhals-rolling-window-suite](https://deepswe.datacurve.ai/data/tasks/narwhals-rolling-window-suite) | 4/4 | 3/4 | 0/4 | 34/64 |
+| [prometheus-transactional-reload-status](https://deepswe.datacurve.ai/data/tasks/prometheus-transactional-reload-status) | 0/4 | 0/4 | 0/4 | 2/64 |
+| [skrub-duration-encoding](https://deepswe.datacurve.ai/data/tasks/skrub-duration-encoding) | 4/4 | 4/4 | 0/4 | 12/64 |
+
+This is mixed information. It constrains the audit's narrow claim — three of
+four golds I found failing are tasks the leaderboard scores as routinely
+gradeable. The disagreement is either pinned-image drift between my pier and
+theirs, my isolated reruns being insufficient to clear flake on tasks the
+leaderboard gives four shots at, or their grader and mine genuinely returning
+different verdicts on the same task. The audit doesn't pick between those
+readings on the data in hand. The narrow claim — a gold that fails its own
+verifier in two consecutive isolated runs is untrustworthy until diagnosed —
+holds against all three, but the question of which of the three is responsible
+is open.
+
+What it does not constrain: Finding 2. Whether my pier image drifted or not,
+the public denominator for `gpt-5.5` is 111, and the leaderboard's footer
+field announces 113.
+
+### The three findings, taken together
+
+Finding 1 is the load-bearing one. The public artifacts let a reader audit
+*the counting* — pass-counts in
+[`heatmap.json`](https://deepswe.datacurve.ai/artifacts/heatmap.json) roll up
+to the headline in
+[`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json)
+under the documented arithmetic, exclusions are categorized in
+[`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) per
+their stated policy, the per-trial metadata reproduces the per-cell counts.
+They do not let a reader audit *the verdicts themselves*. Whether the patch
+the agent submitted on trial
+[`abs-module-cache-flags__GUstLQs`](https://deepswe.datacurve.ai/artifacts/trials/abs-module-cache-flags__GUstLQs.json)
+actually causes the verifier to return reward 1 when re-graded is a check
+that the public artifact set cannot support, because the patch is not
+retrievable. The trial JSON's `has_model_patch: true` flag is a promise, not
+a link.
+
+Finding 2 is sloppy footer copy: the methodology section's exclusion rule
+combined with two all-errored task cells produces a denominator of 111 for
+`gpt-5.5`, and the leaderboard's `n_tasks_in_set: 113` field announces a
+denominator that the actual headline math does not use. The exclusion is
+defensible by their stated policy; the labelling is misleading. The number
+lands on 70.045% because of the choice between 111 and 113; the documented
+methodology applied transparently to the conservative reading produces 68.8%.
+
+Finding 3 lands harder against my audit than against theirs. Three of four
+golds I found failing in isolation are tasks the leaderboard scores as
+routinely passable; the reconciliation candidate is image drift, isolation
+flake, or grader divergence, and the public data doesn't pick.
+
+The composite: their methodology is more carefully constructed than the
+absence of a UI-linked download page suggests, the per-trial metadata is
+thoroughly published, the exclusion policy is honored per-trial, the
+denominator math is consistent with their policy but inconsistent with
+their own footer's field label, and the model outputs that would let a
+third party re-grade a verdict are not part of the public artifact set. Each of
+those is recoverable. The composite is not "selective inflation"; it is a
+benchmark that publishes enough metadata to audit its arithmetic and not
+enough content to audit its verdicts, with one labelling slip in the
+arithmetic itself.
+
+What remains is the unaudited gap — the patches, the trajectories, the
+verifier outputs — between the metadata that is published and the verdicts
+that the metadata describes.
+
 ## Attestation and reproducibility
 
 The point of this post is not to be trusted. It is to be checked. So here is everything needed to
