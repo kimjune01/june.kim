@@ -457,15 +457,16 @@ standing here.
 
 There was no scientist in the room to call them out.
 
-### The five-minute audit
+### The five-minute audit (codex)
 
 The work in the audit section above is not subtle. The patches gap is
 visible in any per-trial JSON. The denominator gap is visible by computing
 one mean against two divisors. The verifier disagreement is visible by
 running one shell loop against the pinned commit. None of those require
-expertise that a careful reader with an agent doesn't have. To show that,
-I ran the artifact through `codex exec -m gpt-5.5` with the following
-five-line prompt:
+expertise that a careful reader with an agent doesn't have. To show
+that, I ran the artifact through
+[OpenAI's codex CLI](https://github.com/openai/codex)
+with model `gpt-5.5` and the following five-line prompt:
 
 ```
 I'm considering using https://deepswe.datacurve.ai/ as a benchmark to
@@ -491,7 +492,9 @@ denominator gap, the two specific tasks the top model drops, and the
 `has_model_patch: true` flag whose link is not delivered.
 
 Seven of them are additional methodological catches the audit above does
-not contain:
+not contain. **Credit for these seven findings is codex's, not mine. I
+had not surfaced them before running the prompt, and would not have
+without it.**
 
 - **The public trial universe is larger than the leaderboard universe.**
   [`summary.json`](https://deepswe.datacurve.ai/artifacts/summary.json)
@@ -559,6 +562,9 @@ Total cost: a few dollars in `gpt-5.5` tokens.
 Anything in this post that codex caught, you can catch by running the
 prompt at your own agent. Anything codex caught that this post does not
 contain — seven issues — is also one prompt away from your reading. The
+seven additional findings above are codex's contribution to this post.
+The audit section is mine. The reader-challenge close belongs to whoever
+runs the prompt next. The
 artifact has been live, cited in
 [VentureBeat](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole),
 quoted as authoritative across the AI press cycle, and treated as
