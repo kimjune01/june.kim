@@ -108,7 +108,7 @@
 
   <!-- writeback AUDIT → GRAPH (curves around left interior) -->
   <path d="M 140 530 Q 90 530 90 380 Q 90 260 140 260" stroke="#10b981" stroke-width="1.2" fill="none" marker-end="url(#arrow-green)" opacity="0.7"/>
-  <text x="55" y="390" fill="#10b981" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 55 390)">writeback: kill / witness verdict</text>
+  <text x="82" y="390" fill="#10b981" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 82 390)">writeback: kill / witness verdict</text>
 
   <!-- arrow AUDIT → GATE -->
   <line x1="290" y1="570" x2="290" y2="595" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
