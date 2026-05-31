@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" font-family="system-ui, sans-serif">
+  <style>
+    .axis { stroke: #999; stroke-width: 1; fill: none; }
+    .grid { stroke: #eee; stroke-width: 1; }
+    .tick-lbl { font-size: 11px; fill: #999; text-anchor: end; }
+    .bar { fill: #78909c; }
+    .bar-sat { fill: #c62828; }
+    .val { font-size: 13px; font-weight: 600; fill: #333; text-anchor: middle; }
+    .bench { font-size: 13px; fill: #333; text-anchor: middle; font-weight: 500; }
+    .sub { font-size: 11px; fill: #999; text-anchor: middle; }
+    .sat-band { fill: #fdecea; }
+    .sat-line { stroke: #c62828; stroke-width: 1; stroke-dasharray: 5,3; fill: none; }
+    .sat-lbl { font-size: 11px; fill: #c62828; font-style: italic; }
+    .title { font-size: 15px; font-weight: 600; fill: #333; }
+    .cluster { stroke: #c62828; stroke-width: 1.2; fill: none; }
+  </style>
+
+  <!-- title -->
+  <text class="title" x="40" y="28">Top-model score by benchmark</text>
+  <text class="sub" x="40" y="46" text-anchor="start">as of May 2026</text>
+
+  <!-- plot geometry: baseline y=320 (0%), top y=70 (100%), 2.5 px per % -->
+  <!-- saturation band: 88%–100% -->
+  <rect class="sat-band" x="70" y="70" width="490" height="30"/>
+  <line class="sat-line" x1="70" y1="100" x2="560" y2="100"/>
+  <text class="sat-lbl" x="78" y="88" text-anchor="start">saturation zone (&#8805;88%): leaderboard can't discriminate</text>
+
+  <!-- y axis + gridlines/ticks at 0,20,40,60,80,100 -->
+  <line class="axis" x1="70" y1="70" x2="70" y2="320"/>
+  <line class="axis" x1="70" y1="320" x2="560" y2="320"/>
+  <g>
+    <line class="grid" x1="70" y1="320" x2="560" y2="320"/><text class="tick-lbl" x="62" y="324">0</text>
+    <line class="grid" x1="70" y1="270" x2="560" y2="270"/><text class="tick-lbl" x="62" y="274">20</text>
+    <line class="grid" x1="70" y1="220" x2="560" y2="220"/><text class="tick-lbl" x="62" y="224">40</text>
+    <line class="grid" x1="70" y1="170" x2="560" y2="170"/><text class="tick-lbl" x="62" y="174">60</text>
+    <line class="grid" x1="70" y1="120" x2="560" y2="120"/><text class="tick-lbl" x="62" y="124">80</text>
+    <text class="tick-lbl" x="62" y="74">100</text>
+    <text class="tick-lbl" x="40" y="200" transform="rotate(-90,40,200)">resolve rate (%)</text>
+  </g>
+
+  <!-- DeepSWE: 70% -> y = 320 - 70*2.5 = 145 -->
+  <rect class="bar" x="135" y="145" width="90" height="175"/>
+  <text class="val" x="180" y="138">70%</text>
+  <text class="bench" x="180" y="340">DeepSWE</text>
+  <text class="sub" x="180" y="356">gpt-5.5, top</text>
+
+  <!-- SWE-bench Pro: ~80% -> y = 320 - 80*2.5 = 120 -->
+  <rect class="bar" x="275" y="120" width="90" height="200"/>
+  <text class="val" x="320" y="113">~80%</text>
+  <text class="bench" x="320" y="340">SWE-bench Pro</text>
+  <text class="sub" x="320" y="356">leading models</text>
+
+  <!-- SWE-bench Verified: top model ~94 -> y = 320 - 94*2.5 = 85; cluster 88–94 -->
+  <rect class="bar-sat" x="415" y="85" width="90" height="235"/>
+  <text class="val" x="460" y="78">94%</text>
+  <text class="bench" x="460" y="340">SWE-bench Verified</text>
+  <text class="sub" x="460" y="356">top 3: 88&#8211;94%, clustered</text>
+</svg>

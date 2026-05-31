@@ -7,7 +7,7 @@ tags: coding, methodology, epistemology, reflecting
 A benchmark asks us to trust three things: that the tasks are real, that the grader is fair,
 and that the answer key works. This audit asks whether those claims hold.
 
-[DeepSWE](https://github.com/datacurve-ai/deep-swe) arrived last week as a
+[DeepSWE](https://github.com/datacurve-ai/deep-swe) arrived on May 26, 2026 as a
 contamination-free coding benchmark: 113 tasks drawn from active repositories,
 each graded by its own verifier. The most basic check is to take the answer key
 and ask whether it passes its own test.
@@ -358,7 +358,7 @@ the benchmark immediately and trivially reproducible by any third party, and
 it is also the choice that gives the benchmark a useful lifetime in the
 single-digit months. Web crawl picks up the tasks. Synthetic-data pipelines
 sample from the public artifacts. By the next model generation, the
-contamination-free claim that the benchmark makes about itself today
+contamination-free claim that the benchmark makes about itself as of May 2026
 is no longer empirically defensible.
 
 [SWE-bench Pro](https://www.swebench.com/pro.html) made a different design
@@ -377,8 +377,11 @@ models — Claude Mythos Preview, Claude Opus 4.8, Claude Opus 4.7 — sit betwe
 discriminate between them. Eighty percent is not saturation. Eighty percent
 is the operating range where a held-out benchmark is still doing the job it
 was designed for. The "saturated" framing was the justification for replacing
-a [working benchmark](https://june.kim/the-methodeutic-harness-on-swebench-pro) with
+a [working benchmark](https://june.kim/the-methodeutic-harness-on-swebench-pro) and its
+[public per-instance receipts](https://github.com/kimjune01/swebench-pro) with
 a marketing-shaped one before its useful life was over.
+
+<img src="/assets/saturation-by-benchmark.svg" alt="Bar chart of top-model resolve rate by benchmark as of May 2026: DeepSWE 70% (gpt-5.5), SWE-bench Pro ~80%, both below an 88% saturation line; SWE-bench Verified at 94% with its top three models clustered 88–94%, inside the shaded saturation zone where the leaderboard can no longer discriminate." style="width:100%; max-width:560px; display:block; margin:1.5em auto;">
 
 DeepSWE took the public-reproducibility side of the trade-off. The half-life
 that matters here is not contamination timing in isolation; it is the
@@ -387,7 +390,7 @@ axes. Saturation is one: when the top models cluster within a few points of
 each other and the leaderboard cannot discriminate, the bench can no longer
 prove an ordering. Contamination is the other: when models have seen the
 answers during training, a high score no longer proves capability and only
-proves memorization. SWE-bench Verified is now publicly failing on both
+proves memorization. SWE-bench Verified is, as of May 2026, publicly failing on both
 axes, and the failure is documented by the lab whose models top the
 leaderboard. OpenAI's
 [deprecation post](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/)
@@ -656,7 +659,7 @@ three audits in scope here. I am auditing the artifact. The reception is not
 auditing the artifact. DeepSWE, before publication, did not audit itself for
 the gold-passes-verifier check that opens this post, even though the
 authors publish the harness and the data that make the check easy. Three
-audits in scope, two of them missing. The tragedy I am witnessing is that
+audits in scope, two of them missing. What I am witnessing is that
 across every outlet that cited the artifact as authoritative, nobody ran
 the five-minute check. Not the
 [VentureBeat](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
@@ -669,14 +672,15 @@ piece on the Series A. Not the aggregator pages on
 [36Kr](https://eu.36kr.com/en/p/3827435586736777), or
 [The Neuron](https://www.theneuron.ai/explainer-articles/datacurves-deepswe-exposes-a-weird-new-problem-with-ai-coding-leaderboards/)
 republishing the press release. Not the social posts citing the headline as a
-fact. And not [Theo at t3](https://youtu.be/_goOUJkkxUk?si=mWsLdOgqHnReADQQ&t=325),
-whose half-hour reaction video on DeepSWE drops the day after this post, full
-of praise, without the five-minute check having been run against it.
+fact. And not [Theo at t3](https://youtu.be/JpSHyEIZ_bo?t=144),
+an investor in Datacurve [by his own disclosure](https://youtu.be/JpSHyEIZ_bo?t=144),
+whose reaction video proudly promotes DeepSWE without the five-minute check
+having been run against it.
 
 <iframe
   width="100%"
   height="420"
-  src="https://www.youtube.com/embed/_goOUJkkxUk?start=325"
+  src="https://www.youtube.com/embed/JpSHyEIZ_bo?start=144"
   title="Theo at t3 — DeepSWE reaction video"
   frameborder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
