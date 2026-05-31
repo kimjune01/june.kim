@@ -90,7 +90,7 @@ Agents move fast. A handful of Bash commands are catastrophic when the agent is 
 
 Three guards:
 
-1. **Block `rm -rf`**. Denied; agent is nudged toward `mv /tmp/` instead. The point is undoability. /tmp sticks around long enough for you to notice the mistake.
+1. **Block `rm -rf`**. Denied; agent is nudged toward `mv /tmp/` instead. The point is undoability. /tmp sticks around long enough for you to notice the mistake. One subtlety once you move from the literal `grep -qF 'rm -rf'` above to a regex: a fixed-string match misses `rm -fr` and `rm -Rf`, but a regex loose enough to catch them (`rm.*-r.*f`) false-positives on quoted text, because a commit message containing "no-overfit" reads as `rm` ... `-r`...`f`. The safe form anchors `rm` to a command position (start of line, or after `|`, `;`, `&&`, `sudo`, `xargs`) instead of matching it as a substring of "perform" or "transform".
 2. **Block force push**. Denied with reason.
 3. **Block amend when pushed**. `git commit --amend` rewrites history. If HEAD is already on any remote, block: amending would force the next push to rewrite published history. If HEAD is local-only, allow silently (the pre-push fixup case). The sample JSON above only warns; the stricter version is a separate script that checks `git branch -r --contains HEAD`:
 
@@ -105,6 +105,38 @@ if echo "$cmd" | grep -qE 'git\s+commit\s+.*--amend'; then
   fi
 fi
 ```
+
+## Keep the AI tells out of GitHub
+
+Disabling the attribution trailer (above) kills the default `Co-Authored-By: Claude`. It does not stop the model from writing "Generated with Claude Code" into the commit body, or an em dash into a PR comment. Both are tells slop detectors key on, and both ship to a durable public artifact. Two more `PreToolUse` hooks catch what the setting misses.
+
+The first blocks any `git commit` whose message mentions Claude or carries a co-author trailer:
+
+```bash
+# block-claude-mentions.sh
+input=$(cat); command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
+printf '%s' "$command" | grep -qE '(^|[|;&]\s*)git\s+commit\b' || exit 0
+if printf '%s' "$command" | grep -qiE 'claude code|generated with[^"]*claude|co-authored-by:[^"]*claude|🤖'; then
+  echo "no Claude mentions in commit messages; rewrite without the attribution." >&2
+  exit 2
+fi
+```
+
+The second fires on `git` or `gh` and blocks an em or en dash anywhere in the command line. A commit message is as durable and as scannable as a PR comment, so the rule covers git in general, not just GitHub. Hyphen-minus is fine; only the dash glyphs are caught:
+
+```bash
+# block-em-dashes.sh
+input=$(cat); command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
+printf '%s' "$command" | grep -qE '(^|[|;&]\s*)(git|gh)\s' || exit 0
+if printf '%s' "$command" | grep -qF '—' || printf '%s' "$command" | grep -qF '–'; then
+  echo "no em or en dashes in commit messages, comments, or descriptions!" >&2
+  exit 2
+fi
+```
+
+Scope is the whole trick. Both hooks read only `git` and `gh` invocations, so local edits, tests, and ordinary shell work pass untouched. The false-positive surface stays near zero, which is what lets the dash rule stay strict.
+
+Beyond these, the hook layer is where project-specific discipline lives: a kanban pipeline blocking spawn prompts that say "process all" to hold a worker at WIP=1, a release repo refusing commits that touch a frozen path. Those don't generalize, but the shape does: a few lines of `grep` on the tool input, exit 2 to deny.
 
 ## [Gemini CLI](https://github.com/google-gemini/gemini-cli) with approval-mode=yolo
 
