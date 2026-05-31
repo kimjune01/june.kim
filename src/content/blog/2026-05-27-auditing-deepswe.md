@@ -371,18 +371,38 @@ sets cost you third-party verifiability. There is no third choice.
 The DeepSWE launch leaned on a "Pro is saturated, here is the harder one"
 positioning. That claim does not survive contact with the numbers. Pro's
 leading models sit around 80%. Saturation is what you see on the public
-[Verified](https://www.swebench.com/verified.html) set, where the top
-models cluster above 97% and the leaderboard stops being able to discriminate
-between them. Eighty percent is not saturation. Eighty percent is the
-operating range where a held-out benchmark is still doing the job it was
-designed for. The "saturated" framing was the justification for replacing a
-[working benchmark](https://june.kim/the-inquiry-loop-on-swebench-pro) with a
-marketing-shaped one before its useful life was over.
+[Verified](https://www.swebench.com/verified.html) set, where the top three
+models — Claude Mythos Preview, Claude Opus 4.8, Claude Opus 4.7 — sit between
+88% and 94% as of May 2026, and the leaderboard has stopped being able to
+discriminate between them. Eighty percent is not saturation. Eighty percent
+is the operating range where a held-out benchmark is still doing the job it
+was designed for. The "saturated" framing was the justification for replacing
+a [working benchmark](https://june.kim/the-methodeutic-harness-on-swebench-pro) with
+a marketing-shaped one before its useful life was over.
 
-DeepSWE took the public-reproducibility side of the trade-off, and on the
-half-life implied by that choice, the headline-as-measurement is a claim with
-roughly a three-month shelf life. As a marketing artifact, three months is
-all the half-life it needs.
+DeepSWE took the public-reproducibility side of the trade-off. The half-life
+that matters here is not contamination timing in isolation; it is the
+bench's ability to prove anything. A bench loses its proving power on two
+axes. Saturation is one: when the top models cluster within a few points of
+each other and the leaderboard cannot discriminate, the bench can no longer
+prove an ordering. Contamination is the other: when models have seen the
+answers during training, a high score no longer proves capability and only
+proves memorization. SWE-bench Verified is now publicly failing on both
+axes, and the failure is documented by the lab whose models top the
+leaderboard. OpenAI's
+[deprecation post](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/)
+reports gold patches reproducible verbatim from training weights, problem
+statements leaking into pretraining corpora, and sixty percent of failed
+tests subsequently found to be broken. That last item is the one that
+closes the obvious rescue: a saturated bench could in principle still
+prove reliability by marking the unsolved frontier, but a bench whose
+unsolved tail is mostly broken tests cannot. Ranking signal and
+reliability signal die on the same mechanism. OpenAI stopped reporting
+Verified scores. The trajectory Verified followed is the trajectory DeepSWE is
+starting. The half-life is whatever it takes for the same two failure modes
+to apply at DeepSWE's smaller scale, on the same publication choice, in the
+same training environment. As a marketing artifact, whatever that half-life
+turns out to be is all the half-life it needs.
 
 Credit where it lands. Hand-curating 113 original problems, each with a
 verifier and a reference solution, is not small work. The team had to invent
