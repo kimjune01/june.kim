@@ -1,5 +1,5 @@
 ---
-variant: post-wide
+variant: post-medium
 title: "Auditing DeepSWE"
 tags: coding, methodology, epistemology, reflecting
 ---
@@ -70,11 +70,15 @@ authoring or by drift, is for the maintainer to determine.
 
 ## The audit at a glance
 
-| Claim | Observation | Analysis | Recommendation |
-|---|---|---|---|
-| **Tasks are original, the benchmark is contamination-free** | One spot-checked task holds up: the requested `matchEach` matcher is absent from [`ts-pattern`](https://github.com/gvergnaud/ts-pattern) upstream code, PRs, and issues; reference solutions are held out. I checked one of 113 | Verifiable in principle, and the design is a cleaner substrate than the contaminated [SWE-bench Verified](https://www.swebench.com/verified.html). One spot-check is consistent with the claim; it does not establish it across the set | Publish the per-task originality check so the claim is earned by inspection across all 113, not asserted from one |
-| **All 113 tasks are gradeable by their own verifiers** | Four reference solutions fail their own verifier (`langchain-request-coalescing`, `narwhals-rolling-window-suite`, `prometheus-transactional-reload-status`, `skrub-duration-encoding`), each confirmed failing in isolation | A gold that fails its own test makes that task untrustworthy to grade against until resolved. Cause (broken task, flaky test, or environment drift) is undetermined; the public record shows no gold-passes-verifier check behind the published tasks | Run gold-passes-verifier before shipping; fix or exclude the failures; publish the check so others need not rediscover it |
-| **A lighter, standardized harness does not disadvantage any model** (popularly inflated to "less prompting is better") | 3 model families, [`mini-swe-agent`](https://github.com/SWE-agent/mini-swe-agent) vs each native CLI, on a single 10-task slice, one run per cell, no intervals or tests; stated finding is "matches or beats every native harness at comparable token cost" | A ten-task, single-run comparison with no variance estimate cannot carry a directional scaffolding claim; "matches or beats" without error bars is consistent with noise. Their own wording is careful; the "less is more" reading is not in the data | Run a paired ablation at scale (all 113), repeated for variance, with confidence intervals, a significance test, and published trajectories |
+<div class="table-wrap">
+<table style="max-width:100%; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:12em"><col><col><col></colgroup>
+<thead><tr><th style="background:#f0f0f0">Claim</th><th style="background:#f0f0f0">Observation</th><th style="background:#f0f0f0">Analysis</th><th style="background:#f0f0f0">Recommendation</th></tr></thead>
+<tr><td><strong>Tasks are original, the benchmark is contamination-free</strong></td><td>One spot-checked task holds up: the requested <code>matchEach</code> matcher is absent from <a href="https://github.com/gvergnaud/ts-pattern"><code>ts-pattern</code></a> upstream code, PRs, and issues; reference solutions are held out. I checked one of 113</td><td>Verifiable in principle, and the design is a cleaner substrate than the contaminated <a href="https://www.swebench.com/verified.html">SWE-bench Verified</a>. One spot-check is consistent with the claim; it does not establish it across the set</td><td>Publish the per-task originality check so the claim is earned by inspection across all 113, not asserted from one</td></tr>
+<tr><td><strong>All 113 tasks are gradeable by their own verifiers</strong></td><td>Four reference solutions fail their own verifier (<code>langchain-request-coalescing</code>, <code>narwhals-rolling-window-suite</code>, <code>prometheus-transactional-reload-status</code>, <code>skrub-duration-encoding</code>), each confirmed failing in isolation</td><td>A gold that fails its own test makes that task untrustworthy to grade against until resolved. Cause (broken task, flaky test, or environment drift) is undetermined; the public record shows no gold-passes-verifier check behind the published tasks</td><td>Run gold-passes-verifier before shipping; fix or exclude the failures; publish the check so others need not rediscover it</td></tr>
+<tr><td><strong>A lighter, standardized harness does not disadvantage any model</strong> (popularly inflated to "less prompting is better")</td><td>3 model families, <a href="https://github.com/SWE-agent/mini-swe-agent"><code>mini-swe-agent</code></a> vs each native CLI, on a single 10-task slice, one run per cell, no intervals or tests; stated finding is "matches or beats every native harness at comparable token cost"</td><td>A ten-task, single-run comparison with no variance estimate cannot carry a directional scaffolding claim; "matches or beats" without error bars is consistent with noise. Their own wording is careful; the "less is more" reading is not in the data</td><td>Run a paired ablation at scale (all 113), repeated for variance, with confidence intervals, a significance test, and published trajectories</td></tr>
+</table>
+</div>
 
 The harness-comparison claim rests on a specific scaffolding. Pier hardcodes
 [`mini.yaml`](https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/config/mini.yaml)
@@ -179,7 +183,7 @@ instance prompt, verbatim:
 > anything
 > ```
 
-The asymmetry from the native CLIs it is measured against (`claude-code`, `codex`, `gemini-cli`, `opencode`) sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool: `bash`. The native CLIs each ship a typed tool suite (Read, Write, Edit, Grep, Glob, and so on), each with its own schema and ergonomics. Bash can emulate most of what those tools do, but the interfaces differ, and that difference is exactly what a scaffolding study is meant to characterize. A ten-task single-run comparison across that gap is asked to carry the directional claim, and the statistical power is not there.
+Measured against the native CLIs (`claude-code`, `codex`, `gemini-cli`, `opencode`), that asymmetry sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool: `bash`. The native CLIs each ship a typed tool suite (Read, Write, Edit, Grep, Glob, and so on), each with its own schema and ergonomics. Bash can emulate most of what those tools do, but the interfaces differ, and that difference is exactly what a scaffolding study is meant to characterize. A ten-task single-run comparison across that gap is asked to carry the directional claim, and the statistical power is not there.
 
 ## The second read that didn't run
 
@@ -252,22 +256,24 @@ field that says:
 > Raw trajectory, patch, agent log, and verifier output are linked to release
 > object storage when present.
 
-The trial JSON does not carry the link. The leaderboard site does not expose
-the underlying objects through any URL I could find. Probes against
-`/artifacts/trials/{trial_name}/<file>` for plausible filenames
-(`model_patch.patch`, `model_patch`, `trajectory.json`, `agent.log`,
-`verifier_output.txt`) returned 404s. The
-`/raw/rollouts/deep-swe-all-4x-cross-bench-minimal/{trial_name}` path the
-provenance field cites internally returns 404 publicly. The
-[`datacurve-ai/deep-swe`](https://github.com/datacurve-ai/deep-swe) GitHub repo
-contains only task definitions and a README, with
-[no GitHub Releases](https://github.com/datacurve-ai/deep-swe/releases) and no
-LFS-stored rollouts. The
-[`datacurve-ai/pier`](https://github.com/datacurve-ai/pier) repo has
-[releases (`v0.1.0`, `v0.2.0`)](https://github.com/datacurve-ai/pier/releases),
-but those are verifier code, not rollout artifacts. The HuggingFace org
-[`datacurve-ai`](https://huggingface.co/datacurve-ai) returned 401 on every
-dataset name I tried, including `datacurve-ai/deep-swe-rollouts`.
+The trial JSON does not carry the link, and the leaderboard site does not expose
+the underlying objects through any URL I could find. Every place the artifacts
+could live came up empty:
+
+- Probes against `/artifacts/trials/{trial_name}/<file>` for plausible filenames
+  (`model_patch.patch`, `model_patch`, `trajectory.json`, `agent.log`,
+  `verifier_output.txt`) returned 404s.
+- The `/raw/rollouts/deep-swe-all-4x-cross-bench-minimal/{trial_name}` path the
+  provenance field cites internally returns 404 publicly.
+- The [`datacurve-ai/deep-swe`](https://github.com/datacurve-ai/deep-swe) GitHub
+  repo contains only task definitions and a README, with
+  [no GitHub Releases](https://github.com/datacurve-ai/deep-swe/releases) and no
+  LFS-stored rollouts.
+- The [`datacurve-ai/pier`](https://github.com/datacurve-ai/pier) repo has
+  [releases (`v0.1.0`, `v0.2.0`)](https://github.com/datacurve-ai/pier/releases),
+  but those are verifier code, not rollout artifacts.
+- The HuggingFace org [`datacurve-ai`](https://huggingface.co/datacurve-ai)
+  returned 401 on every dataset name I tried, including `datacurve-ai/deep-swe-rollouts`.
 
 [Press coverage](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
 cites the maintainers' decision to publish the full dataset and agent
@@ -329,12 +335,16 @@ takes the methodology section at face value walks straight into.
 The four reference-solution failures from the audit above appear on the
 leaderboard's per-task heatmap. Three of them pass cleanly under `gpt-5.5`:
 
-| task | gpt-5.5 | claude-opus-4.7 | gemini-3.5-flash | total across 16 models |
-|---|---|---|---|---|
-| [langchain-request-coalescing](https://deepswe.datacurve.ai/data/tasks/langchain-request-coalescing) | 3/4 | 0/4 | 0/4 | 10/64 |
-| [narwhals-rolling-window-suite](https://deepswe.datacurve.ai/data/tasks/narwhals-rolling-window-suite) | 4/4 | 3/4 | 0/4 | 34/64 |
-| [prometheus-transactional-reload-status](https://deepswe.datacurve.ai/data/tasks/prometheus-transactional-reload-status) | 0/4 | 0/4 | 0/4 | 2/64 |
-| [skrub-duration-encoding](https://deepswe.datacurve.ai/data/tasks/skrub-duration-encoding) | 4/4 | 4/4 | 0/4 | 12/64 |
+<div class="table-wrap">
+<table style="max-width:100%; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:22em"><col><col><col><col></colgroup>
+<thead><tr><th style="background:#f0f0f0">task</th><th style="background:#f0f0f0">gpt-5.5</th><th style="background:#f0f0f0">claude-opus-4.7</th><th style="background:#f0f0f0">gemini-3.5-flash</th><th style="background:#f0f0f0">total across 16 models</th></tr></thead>
+<tr><td><a href="https://deepswe.datacurve.ai/data/tasks/langchain-request-coalescing">langchain-request-coalescing</a></td><td style="white-space:nowrap">3/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">10/64</td></tr>
+<tr><td><a href="https://deepswe.datacurve.ai/data/tasks/narwhals-rolling-window-suite">narwhals-rolling-window-suite</a></td><td style="white-space:nowrap">4/4</td><td style="white-space:nowrap">3/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">34/64</td></tr>
+<tr><td><a href="https://deepswe.datacurve.ai/data/tasks/prometheus-transactional-reload-status">prometheus-transactional-reload-status</a></td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">2/64</td></tr>
+<tr><td><a href="https://deepswe.datacurve.ai/data/tasks/skrub-duration-encoding">skrub-duration-encoding</a></td><td style="white-space:nowrap">4/4</td><td style="white-space:nowrap">4/4</td><td style="white-space:nowrap">0/4</td><td style="white-space:nowrap">12/64</td></tr>
+</table>
+</div>
 
 My oracle audit, run at the pinned commit, found these four golds failing
 their own verifier in two consecutive isolated runs. The leaderboard's heatmap
@@ -372,11 +382,13 @@ The DeepSWE launch leaned on a "Pro is saturated, here is the harder one"
 positioning. That claim does not survive contact with the numbers. Pro's
 leading models sit around 80%. Saturation is what you see on the public
 [Verified](https://www.swebench.com/verified.html) set, where the top three
-models — Claude Mythos Preview, Claude Opus 4.8, Claude Opus 4.7 — sit between
+models (Claude Mythos Preview, Claude Opus 4.8, Claude Opus 4.7) sit between
 88% and 94% as of May 2026, and the leaderboard has stopped being able to
 discriminate between them. Eighty percent is not saturation. Eighty percent
 is the operating range where a held-out benchmark is still doing the job it
-was designed for. The "saturated" framing was the justification for replacing
+was designed for.
+
+The "saturated" framing was the justification for replacing
 a [working benchmark](https://june.kim/the-methodeutic-harness-on-swebench-pro) and its
 [public per-instance receipts](https://github.com/kimjune01/swebench-pro) with
 a marketing-shaped one before its useful life was over.
@@ -390,7 +402,9 @@ axes. Saturation is one: when the top models cluster within a few points of
 each other and the leaderboard cannot discriminate, the bench can no longer
 prove an ordering. Contamination is the other: when models have seen the
 answers during training, a high score no longer proves capability and only
-proves memorization. SWE-bench Verified is, as of May 2026, publicly failing on both
+proves memorization.
+
+SWE-bench Verified is, as of May 2026, publicly failing on both
 axes, and the failure is documented by the lab whose models top the
 leaderboard. OpenAI's
 [deprecation post](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/)
@@ -400,7 +414,9 @@ tests subsequently found to be broken. That last item is the one that
 closes the obvious rescue: a saturated bench could in principle still
 prove reliability by marking the unsolved frontier, but a bench whose
 unsolved tail is mostly broken tests cannot. Ranking signal and
-reliability signal die on the same mechanism. OpenAI stopped reporting
+reliability signal die on the same mechanism.
+
+OpenAI stopped reporting
 Verified scores. The trajectory Verified followed is the trajectory DeepSWE is
 starting. The half-life is whatever it takes for the same two failure modes
 to apply at DeepSWE's smaller scale, on the same publication choice, in the
@@ -413,7 +429,9 @@ the problems, write the tests, and produce solutions that nobody outside
 Datacurve had ever seen. That is months of skilled engineering labor, and
 the contamination-free claim is design-level honest about the tasks
 themselves: these are not lifted from public PRs or issues, they are
-engineering exercises authored from scratch. The same publication choice
+engineering exercises authored from scratch.
+
+The same publication choice
 that breaks the artifact's measurement life is what gives it its training
 life. As a training corpus, the 113 tasks have a longer half-life than three
 months and look like exactly what the team actually built. The audit above
@@ -431,19 +449,24 @@ bench succeeds at three other things. It works as marketing: favorable press,
 customer adoption, a $15M round closed. It works as engineering: hand-curated
 tasks, credited above. It probably works as a training corpus, which is
 probably what the team actually built. The audit measures it against the
-fourth standard, the one the public portrayal asks for. The failures the
-audit catches are the failures that emerge when an artifact is built by an
-incentive landscape with high standards on engineering and marketing and no
-standard for measurement self-audit. Naming that landscape is what the
-dossier does. The producing entity sells training data to the
-foundation model labs whose models the bench scores. Individual employees at
-those labs are on the producing entity's Series A cap table. The bench's top
-result is the flagship of one of those labs. The team that built the bench has
-no prior public technical artifact on benchmarking or evaluation, on any venue
-where prior methodology positions are a matter of record. None of those
-relationships are conflicts when the artifact is marketing. Each of them is a
-conflict when the artifact is asked to be science. The bench was asked to be
-the latter, by [the press](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
+fourth standard, the one the public portrayal asks for.
+
+The failures the audit catches are the failures that emerge when an artifact
+is built by an incentive landscape with high standards on engineering and
+marketing and no standard for measurement self-audit. Naming that landscape is
+what the dossier does:
+
+- The producing entity sells training data to the foundation model labs whose
+  models the bench scores.
+- Individual employees at those labs are on the producing entity's Series A cap table.
+- The bench's top result is the flagship of one of those labs.
+- The team that built the bench has no prior public technical artifact on
+  benchmarking or evaluation, on any venue where prior methodology positions
+  are a matter of record.
+
+None of those relationships are conflicts when the artifact is marketing. Each
+of them is a conflict when the artifact is asked to be science. The bench was
+asked to be the latter, by [the press](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
 and by the readers who cited it. That request was unanswered.
 
 #### The four authors, and what they have written before
@@ -467,20 +490,22 @@ the Datacurve Wenqi Huang was not unambiguously surfaced.
 What they have published before DeepSWE, by name, across the venues where
 benchmarking and evaluation methodology is publicly discussed:
 
-| Venue | Result |
-|---|---|
-| [arXiv](https://arxiv.org) | none |
-| [Zenodo](https://zenodo.org) | none |
-| [Hugging Face Papers](https://huggingface.co/papers) | none |
-| [Semantic Scholar](https://www.semanticscholar.org/) | none |
-| [OpenReview](https://openreview.net) | none |
-| [Google Scholar](https://scholar.google.com/) | none |
-| [ResearchGate](https://www.researchgate.net/) | none |
-| `datacurve.ai/` company blog | no blog exists |
-| Substack (any author) | none under their names |
-| Medium (any author) | none containing technical writing on benchmarks/evaluation |
-| Personal sites | [`leonardtng.com`](https://leonardtng.com/); no methodology writing |
-| Twitter/X | [`@serenaa_ge`](https://x.com/serenaa_ge); company and personal updates only |
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:18em"><col></colgroup>
+<thead><tr><th style="background:#f0f0f0">Venue</th><th style="background:#f0f0f0">Result</th></tr></thead>
+<tr><td><a href="https://arxiv.org">arXiv</a></td><td>none</td></tr>
+<tr><td><a href="https://zenodo.org">Zenodo</a></td><td>none</td></tr>
+<tr><td><a href="https://huggingface.co/papers">Hugging Face Papers</a></td><td>none</td></tr>
+<tr><td><a href="https://www.semanticscholar.org/">Semantic Scholar</a></td><td>none</td></tr>
+<tr><td><a href="https://openreview.net">OpenReview</a></td><td>none</td></tr>
+<tr><td><a href="https://scholar.google.com/">Google Scholar</a></td><td>none</td></tr>
+<tr><td><a href="https://www.researchgate.net/">ResearchGate</a></td><td>none</td></tr>
+<tr><td><code>datacurve.ai/</code> company blog</td><td>no blog exists</td></tr>
+<tr><td>Substack (any author)</td><td>none under their names</td></tr>
+<tr><td>Medium (any author)</td><td>none containing technical writing on benchmarks/evaluation</td></tr>
+<tr><td>Personal sites</td><td><a href="https://leonardtng.com/"><code>leonardtng.com</code></a>; no methodology writing</td></tr>
+<tr><td>Twitter/X</td><td><a href="https://x.com/serenaa_ge"><code>@serenaa_ge</code></a>; company and personal updates only</td></tr>
+</table>
 
 DeepSWE is the four authors' first and only public technical artifact on
 benchmarking or evaluation. None of them has, to my searching, written publicly
@@ -659,7 +684,9 @@ three audits in scope here. I am auditing the artifact. The reception is not
 auditing the artifact. DeepSWE, before publication, did not audit itself for
 the gold-passes-verifier check that opens this post, even though the
 authors publish the harness and the data that make the check easy. Three
-audits in scope, two of them missing. What I am witnessing is that
+audits in scope, two of them missing.
+
+What I am witnessing is that
 across every outlet that cited the artifact as authoritative, nobody ran
 the five-minute check. Not the
 [VentureBeat](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
