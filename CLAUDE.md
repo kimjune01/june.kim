@@ -35,13 +35,17 @@ image: "/assets/slug-name.png"
 ---
 ```
 
-**`variant:`** controls page width. `post` (525px, default), `post-medium` (700px), `post-wide` (90vw), `poetry`. Works in both `.md` and `.mdx`.
+**`variant:`** controls page width and style. `post` (525px, default), `post-medium` (700px), `post-wide` (90vw), `post-paper` (760px serif, paper-shaped for arxiv-style preprints), `poetry`. Works in both `.md` and `.mdx`.
 
 `image:` sets the social preview (`og:image`, `twitter:card`, JSON-LD). It's independent of images in the post body — an inline diagram is not an og:image. Set it when the post has a meaningful preview image. Not all posts need one.
 
 Tags are comma-separated. Available tags: coding, cognition, epistemology, methodology, reflecting, envelopay, pageleft, vector-space, poetry, crafting, improving, projects, reading.
 
 Posts that need component imports use `.mdx` extension. Content collection glob accepts both `**/*.{md,mdx}`.
+
+## Auto-numbered sections (paper posts)
+
+Set `autonumber: true` in frontmatter to auto-number headings and resolve `§(id)` cross-reference tokens at build time, so sections can be reordered without hand-renumbering. Runs in the normal dev/build (no extra step). Authoring syntax and behavior are documented in the plugin header: `src/plugins/remark-section-numbers.mjs`.
 
 ## Structure
 

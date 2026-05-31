@@ -4,6 +4,9 @@ import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+// Auto-numbers section headings on posts with `autonumber: true`. See the
+// plugin file for the authoring syntax. Runs during `astro dev` and `astro build`.
+import remarkSectionNumbers from './src/plugins/remark-section-numbers.mjs';
 
 export default defineConfig({
   integrations: [react(), mdx(), sitemap()],
@@ -15,6 +18,7 @@ export default defineConfig({
     service: { entrypoint: 'astro/assets/services/noop' },
   },
   markdown: {
+    remarkPlugins: [remarkSectionNumbers],
     shikiConfig: {
       theme: 'github-light',
     },
