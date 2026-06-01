@@ -137,6 +137,25 @@ VERDICT: RESOLVED   RE-ENTER: none
 
 No model arbitrates that verdict; the grader's pass/fail decides, and audit re-runs it against the live patch (two files, +80 lines) before recording the win. `RE-ENTER: none` is the first pass closing the frontier, which is how roughly 93% of wins resolve (§(results)); the remaining ~7% route back to recon for another pass through the same gate that here declines to fire.
 
+That committed node is the conclusion, and an inquiry that reaches one rarely runs straight. Following the same recon skill on an unrelated bug, a single hypothesis flips across all three modes and a kill before it settles:
+
+<figure>
+  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; font-size:12px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; margin:0.6em 0; line-height:2;">
+    <span style="padding:2px 8px; border-radius:10px; background:#fef3c7; color:#b45309;">abduction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#fee2e2; color:#dc2626; text-decoration:line-through;">kill</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#fef3c7; color:#b45309;">abduction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dcfce7; color:#15803d;">induction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dcfce7; color:#15803d;">induction</span><span style="color:#cbd5e1;">→</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span>
+    <span style="color:#94a3b8; font-weight:600;">⇒</span>
+    <span style="padding:2px 8px; border-radius:10px; background:#1d4ed8; color:#fff;">induction · 93%</span>
+  </div>
+  <figcaption><strong>Figure 3.</strong> An in-flight recon trace, illustrative: GPT-5.4 following the recon skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>), not this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
+</figure>
+
 ### Blind-blind pushout at the hypothesis stage {#blind-blind}
 
 Two frontier models from different families receive the same evidence pack with no cross-visibility, and each produces a hypothesis independently. A third pass extracts the disagreements, not the agreements: the disagreement becomes the next node in the graph; the agreement is recorded but not actionable. Adversarial filtering operates at hypothesis time, while the worktree is still untouched, rather than at patch time where the diff is already written. Sampling stochasticity alone produces real divergence even within a single model; cross-family divergence compounds it with architectural and training-corpus differences. Both are signal.
