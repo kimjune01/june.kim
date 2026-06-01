@@ -10,19 +10,7 @@ tags: methodology, epistemology, coding
 
 ## Abstract {-}
 
-Reasoning can be encoded at the harness layer. This paper is the existence proof: a *methodeutic harness* (methodeutic is Peirce's term for the methodology of inquiry) running a typed inquiry over a hypothesis graph (recon abduces, craft deduces, audit induces), closed by a deterministic gate that no model arbitrates. The graph is built and consumed within a single pass; re-entry across passes recovers a small tail, and reuse across *instances* (the harness as long-lived semantic memory) is a conjecture for future work, not a claim this benchmark tests. Frontier models propose, critique, and implement within this structure, but the harness owns the state, the evidence record, and the decision to continue, branch, commit, or stop.
-
-Each software-engineering instance is treated as a problem of inquiry. Recon performs abduction by writing competing hypothesis nodes from the observed failure. Craft performs deduction by tracing consequence-edges from a selected hypothesis into an intervention. Audit performs induction by reading back tests, diffs, logs, and reviewer evidence, then witnessing or killing leaves in the graph. The gate consumes the resulting trajectory shape and routes the next move. Termination is a property of the typed evidence trace, not a model self-judgment. Adversarial filtering operates at the hypothesis stage, not the patch stage: blind-blind pushout runs two frontier models on the same evidence pack with no cross-visibility; the merge surfaces disagreements as the next investigation edge.
-
-The system assembles existing lineages rather than introducing a new model: Peircean inquiry modes, bi-abductive program analysis, sequential evidence accumulation, invariant-feature splitting, and Voyager-style observe-hypothesize-test-commit loops. None of the primitives is new, but the runnable assembly is: a fully automatable agent harness for industrial code that persists hypotheses, exposes its reasoning trace, and separates generation from arbitration.
-
-The harness is validated on three surfaces. On SWE-bench Verified it resolves **426 of 438** eligible under the official grader, with public per-instance trajectories, diffs, gate traces, and a cost ledger. The same frozen harness, preregistered on SWE-bench Pro, resolves **694 of 728 (95.3%)** — the whole eligible set in one measurement, 0 incomplete; swap the entire model pair to open-weight (Composer 2.5 + Gemini Flash 3.5) and it still resolves **678 of 728 (93.1%)** at ~12.6× lower cost. Most of the result survives that downgrade, and reasoning scaling (a single-digit lever) cannot explain a lift this size, though isolating the methodeutic structure from generic agent-engineering is future work. The lab numbers carry into the wild: the same pipeline merged **81 agent-selected, -authored, -submitted PRs across 73 cold repositories** at a 50.6% rate under adversarial maintainer grading, GraphQL-verifiable, with ~380 committed hypothesis graphs as the deployment trace.
-
-Per-instance cost is the economic basis at public API rates: **~$5.14** frontier, **~$0.41** open-weight-generator pair. Actual cash was far lower (most legs ran on flat subscriptions at ~$0 marginal), and both bases are reconciled in the cost ledger.
-
-The evidence standard is receipt-level: every claim ties to a trajectory, a captured diff, a gate trace, and an audited cost line. The existence proof (a methodeutic harness with a hypothesis graph and a deterministic gate resolving industrial SE instances under the official grader) is discharged on Verified (public, Zenodo-DOI'd) and extended to the contamination-resistant Pro tier (preregistered, git-tag-frozen). A comparative search (§(search)) found no documented method matching this on resolve-rate-at-cost with equivalent per-instance receipts across both; we report that as a search outcome, not a priority claim.
-
-No model training, fine-tuning, reinforcement learning, curated dataset, or GPU resources are required. The result is an *organization of inference*: typed inquiry, hypothesis-graph memory, adversarial model disagreement at the hypothesis stage, and deterministic arbitration outside the model.
+Reasoning can be encoded at the harness layer. We present a *methodeutic harness* (methodeutic is Peirce's term for the methodology of inquiry): recon builds a typed hypothesis graph by abduction, deduction, and induction, craft implements the surviving hypothesis, and audit verifies against the official grader, all closed by a deterministic gate that no model arbitrates. The same frozen harness resolves **426 of 438** eligible SWE-bench Verified instances and **694 of 728 (95.3%)** SWE-bench Pro under the official grader; swapping the entire model pair to open-weight models still resolves **678 of 728 (93.1%)** at ~12.6× lower cost. Against the strongest bare model on the standardized scaffold, the harness adds 31 to 37 points, past anything reasoning-budget scaling buys: the result is a property of the harness, not the model tier, though isolating which component earns it (versus generic agent-engineering) is left to a named ablation. Every claim ties to a committed receipt (per-instance trajectory, captured diff, gate trace, cost ledger), and a random sample reproduces in one prompt. In deployment the same lineage merged 81 agent-authored PRs into 73 cold repositories at a 50.6% maintainer rate. No training, fine-tuning, or GPUs.
 
 ## Introduction {#introduction}
 
@@ -38,14 +26,12 @@ Methodeutics, Peirce's methodology of inquiry, is one viable linkage that makes 
 
 The economics point the same way. Buying capability through more training costs GPUs, curated data, and a training run; buying it through a harness around an existing inference core costs orchestration and a few hundred dollars of API (§(cost-envelope)). When the marginal dollar goes further at the harness layer than at the training layer, harness engineering is where capability is cheapest to win, and the open-weight run (§(open-weight-run)) shows the inference core itself can be commodity.
 
-The empirical evidence shows the marriage carries, and carries down-tier. The same frozen harness clears industrial SWE-bench at both tiers under the official grader, Verified at 426 / 438 eligible and Pro at 694 / 728 (95.3%). The sharpest comparison is a 2×2 control on Pro-public: the same model class through the standard, publicly-attested SWE-Agent scaffold, against the same class through this harness.
+The empirical evidence shows the marriage carries, and carries down-tier. The same frozen harness clears industrial SWE-bench at both tiers under the official grader, Verified at 426 / 438 eligible and Pro at 694 / 728 (95.3%). The sharpest comparison is on Pro-public (Figure 2): the same models run bare on the standard, publicly-attested SWE-Agent scaffold, against the same task through this harness.
 
-| Pro-public resolve | cheap generator | frontier generator (Sonnet 4.5) |
-|---|:--:|:--:|
-| **standard SWE-Agent** (public, attested) | 27.7% <sup>†</sup> | 43.6% <sup>‡</sup> |
-| **this methodeutic harness** | 93.1% | 95.3% |
-
-<sup>†</sup> `kimi-k2-instruct` on the official [Scale board](https://labs.scale.com/leaderboard/swe_bench_pro_public), SWE-Agent scaffold, a predecessor-lineage proxy for Composer 2.5's open-weight K2.5 base (unbenchmarked on this scaffold; a separate board prices K2.5 near 51%), so read the cheap column as indicative, not measured. <sup>‡</sup> `claude-4-5-Sonnet`, 43.6 ± 3.6, official Scale board, SWE-Agent 250-turn.
+<figure>
+  <img src="/assets/methodeutic-attribution.svg" alt="Grouped bar chart of SWE-bench Pro resolve rate. Three bare models on the standardized SWE-Agent scaffold: Sonnet 4.5 at 43.6 percent, GPT-5.5 at 58.6 percent, Opus 4.7 at 64.3 percent. Two configurations of this methodeutic harness: open-weight at 93.1 percent, frontier at 95.3 percent. The harness bars stand about thirty points above the tallest bare-model bar." />
+  <figcaption><strong>Figure 2.</strong> Resolve rate on SWE-bench Pro. Bare models run on the standardized SWE-Agent scaffold (official <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public">Scale board</a>, 250-turn; Sonnet 4.5 at 43.6 ± 3.6) against the same task through this harness. The harness clears the best bare model, board-leader Opus 4.7, by 31 to 37 points, well past the ~20-point spread across model tiers. An anchor, not a clean control: the harness adds structure and a larger turn budget over the standardized scaffold (the reading below). Bare figures are vendor/board-reported on differing scaffolds.</figcaption>
+</figure>
 
 Read it conservatively. Grant the skeptic everything: attribute the *entire* model contribution to the strongest model present. GPT-5.5 (stronger than Sonnet 4.5, used here only as a reasoning-off challenger) scores **~58.6%** bare on Pro; the strongest model on the whole board, Opus 4.7, **~64.3%**. This harness resolves **95.3%**, **31 to 37 points above the best bare model**, with generation running on the *weaker* one. No reasoning budget closes a gap that size: more reasoning on a fixed model buys single digits (Sonnet 4.5: 77.2 → 82 on Verified with parallel compute), an order too small. Model strength is a small lever here; the harness is the large one.
 
@@ -55,9 +41,9 @@ The structure it adds: a typed abductive recon stage *before* the act loop, plus
 
 We do not claim *which part* earns the lift: the typed recon, the blind challenger, the deterministic gate, the outer loop. The run rules one out: the outer loop is not the driver. Most wins land on the first pass, re-entry recovers only a small tail (§(results)), so the lift lives in the single-pass machinery, not the iteration. Decomposing the rest is a clean per-component ablation (fixed model, fixed budget, each piece on and off), and future work. The artifact-level claim needs no hedge: across two model pairs, frontier and open-weight, a cheap and fully auditable harness, not the model tier, clears the best bare model by 31 to 37 points on SWE-bench Pro, past anything reasoning scaling reaches, receipts committed.
 
-The contribution is a composition, and that is why it is real rather than a trick. None of the primitives is invented here: Peirce's three inquiry modes, Soar's memory typology, Ramsey's credence under stakes, Pearl's typed directed graph, Wald and Vovk-Wang's evidence-trajectory vocabulary, Calcagno's bi-abduction, Voyager's loop shape, honored in §(grounding) as the lineages the design descends from. What is new is the runnable assembly: our search (§(search)) found no prior `smem` instance combining LLM-shaped prose read/write, Peirce-typed falsifiable nodes, kill-conditioned edges, one-mode-per-stage write contracts, and model-free deterministic gates. What makes it trustworthy is that every claim ties to a committed artifact; the harness executes on industrial code under contamination discipline, or it doesn't.
+The contribution is a composition, and that is why it is real rather than a trick. None of the primitives is invented here: Peirce's three inquiry modes, Soar's memory typology, Ramsey's credence under stakes, Pearl's typed directed graph, Calcagno's bi-abduction, Voyager's loop shape, honored in §(grounding) as the lineages the design descends from. What is new is the runnable assembly: our search (§(search)) found no prior `smem` instance combining LLM-shaped prose read/write, Peirce-typed falsifiable nodes, kill-conditioned edges, disjoint stage read/write contracts, and model-free deterministic gates. What makes it trustworthy is that every claim ties to a committed artifact; the harness executes on industrial code under contamination discipline, or it doesn't.
 
-The methodeutic harness is the typed read/write contract over that smem. Each stage is constrained to one Peircean mode (1878, 1903): recon writes only abductive nodes, craft reads abductive nodes and emits deductive consequence-edges, and audit reads predictions and writes inductive verdicts plus a trajectory classification. Stages cannot freelance into each other's mode; the Peircean vocabulary names the contract surface, and the pipeline enforces it mechanically, not the philosophy. Adversarial filtering operates at the hypothesis stage: blind-blind pushout runs two models from different families with no cross-visibility, then merges on disagreement while the worktree is still untouched, so agreement is uninformative and disagreement supplies the next investigation edge. Termination is mechanical: a deterministic gate consumes the audit-classified evidence trajectory (Wald 1947, Vovk & Wang 2021) and routes re-entry, completion, or budget exhaustion. The gate is finite-state over trajectory shape, attempt count, budget, and frontier-closure status. No model sits in the gate.
+The methodeutic harness is a typed read/write contract over that smem. Recon builds the graph by running Peirce's three inquiry modes (1878, 1903): it abduces candidate root causes from the symptom, deduces their consequences by tracing the code to localize, and induces from cheap read-only experiments, typing each node by the mode that established it (the mode caps the node's confidence). Craft then reads the surviving hypotheses and emits a patch; audit reads predictions, takes the grader's verdict, and writes a trajectory classification back to the graph. The Peircean vocabulary names the node typing, and the pipeline enforces the stage I/O contract mechanically, not the philosophy. Adversarial filtering operates at the hypothesis stage: blind-blind pushout runs two models from different families with no cross-visibility, then merges on disagreement while the worktree is still untouched, so agreement is uninformative and disagreement supplies the next investigation edge. Termination is mechanical: audit emits a binary verdict and a re-entry route, and the driver routes the next move (re-enter recon, re-enter craft, complete, or exhaust budget) by parsing those two lines. The gate is finite-state over the verdict, the route, attempt count, and budget. No model sits in the gate.
 
 The headline claim is narrow and falsifiable. The Verified half is discharged now; the comparative claim across both benches becomes fully unconditional once the Pro artifact is DOI-pinned (§(provenance)). No method documented in our comparative literature search (§(search)), known to us, has *demonstrated* with equivalent receipts a higher SWE-bench official-harness resolve rate at a lower audited per-instance dollar cost, reproducibly on the two most popular SWE benchmarks (Verified and Pro) under one frozen harness, than the skill set this paper presents.
 
@@ -70,13 +56,13 @@ The four receipts grade different failure modes:
 
 The load-bearing properties are *demonstrated* (we publish the trail that makes the numbers auditable) and *reproducibility on both benches* under one artifact. Refutation is a citation showing a stronger combined receipt.
 
-Adversarial filtering operates at the hypothesis stage. Blind-blind pushout runs two frontier models from different families with no cross-visibility, then merges on disagreement while the worktree is still untouched. Agreement is uninformative; disagreement supplies the next investigation edge. Termination is mechanical: a deterministic gate consumes the audit-classified evidence trajectory (Wald 1947, Vovk & Wang 2021) and routes re-entry, completion, or budget exhaustion. The gate is finite-state over trajectory shape, attempt count, budget, and frontier-closure status. No model sits in the gate.
+Adversarial filtering operates at the hypothesis stage. Blind-blind pushout runs two frontier models from different families with no cross-visibility, then merges on disagreement while the worktree is still untouched. Agreement is uninformative; disagreement supplies the next investigation edge. Termination is mechanical: audit emits a binary verdict and a re-entry route, and the driver routes the next move (re-enter recon, re-enter craft, complete, or exhaust budget) by parsing those two lines. The gate is finite-state over the verdict, the route, attempt count, and budget. No model sits in the gate.
 
 SWE-bench is the legibility surface. Two tiers run under one frozen harness: Verified (saturated, contaminated, ports cleanly as a baseline) and Pro (contamination-resistant, the primary validation surface). Same frozen harness, two contamination regimes, two independent provenance trails. The bench supplies legibility; the methodeutics is the contribution.
 
-The contribution is the composition. The primitives (Peirce's three modes, Soar's memory typology, Ramsey's credence under stakes, Pearl's typed directed graph, Wald and Vovk-Wang's evidence-trajectory vocabulary, Calcagno's bi-abduction, Voyager's loop shape) are honored in §(grounding) as the lineages the design descends from. The runnable assembly is what the paper exhibits; the harness executes on industrial code under contamination discipline, or it doesn't.
+The contribution is the composition. The primitives (Peirce's three modes, Soar's memory typology, Ramsey's credence under stakes, Pearl's typed directed graph, Calcagno's bi-abduction, Voyager's loop shape) are honored in §(grounding) as the lineages the design descends from. The runnable assembly is what the paper exhibits; the harness executes on industrial code under contamination discipline, or it doesn't.
 
-Part of what the assembly exhibits is knowing what the score does not show. The harness marks its unexercised affordances (cyclic graphs, the flaky-test reading of non-clean trajectories), keeps its claims inside what the bench can witness, and reports the boundary rather than the headline. The resolve rate is the legibility surface's output; the calibrated, checkable method is the artifact.
+Part of what the assembly exhibits is knowing what the score does not show. The harness marks its unexercised affordances (the cyclic-graph relaxation), keeps its claims inside what the bench can witness, and reports the boundary rather than the headline. The resolve rate is the legibility surface's output; the calibrated, checkable method is the artifact.
 
 ## Theoretical grounding: methodeutics as a contract surface {#grounding}
 
@@ -88,13 +74,11 @@ Methodeutics is Peirce's term for the methodology of inquiry, the systematic stu
 
 *Modes of reason and the irreducible three.* Peirce 1878, 1903; Bacon 1620 (induction); Popper 1934 (falsification); Meehl 1967 (the "soft science" critique); Feynman 1974 (cargo-cult science).
 
-*Pragmatist credence and stakes-indexed belief.* Ramsey 1926 (*Truth and Probability*; subjective probability, the Dutch Book argument, belief as betting odds); James 1907 (*Pragmatism*; truth as what works); Dewey 1929 (*The Quest for Certainty*; truth as warranted assertibility). The node-level semantics of the hypothesis graph descends from this lineage.
+*Pragmatist credence.* Ramsey 1926 (*Truth and Probability*; subjective probability, the Dutch Book argument, belief as betting odds); James 1907 (*Pragmatism*; truth as what works); Dewey 1929 (*The Quest for Certainty*; truth as warranted assertibility). The node-level semantics of the hypothesis graph descends from this lineage.
 
-*Bi-abduction, tri-abduction, and compositional inference.* Bylander et al. 1991 (abductive complexity); Calcagno et al. 2009 and O'Hearn 2019 (bi-abductive shape analysis; the anti-frame/frame decomposition for sequential composition, scaled industrially in Facebook Infer); Noam Zilberstein, Saliling & Silva 2024 ([arXiv:2305.04842](https://arxiv.org/abs/2305.04842), OOPSLA), *Outcome Separation Logic*, which extends the bi-abductive lineage to branching composition under nondeterministic and probabilistic effects (their Theorem 5.1: soundness of tri-abduction for reconciling two branch preconditions). We use this as a branch-composition analogue, not as a completeness result for arbitrary abduction.
+*Bi-abduction, tri-abduction, and compositional inference.* Bylander et al. 1991 (abductive complexity); Calcagno et al. 2009 and O'Hearn 2019 (bi-abductive shape analysis; the anti-frame/frame decomposition for sequential composition, scaled industrially in Facebook Infer); Noam Zilberstein, Saliling & Silva 2024 ([arXiv:2305.04842](https://arxiv.org/abs/2305.04842), OOPSLA), *Outcome Separation Logic*, which extends the bi-abductive lineage to branching composition under nondeterministic and probabilistic effects (their Theorem 5.1: soundness of tri-abduction for reconciling two branch preconditions). These instances never reached that branching rung: recon's abduction sat at the unary-to-bi-abductive level, a single before/after diff with the frame inferred from the symptom, and none required reconciling two branch preconditions. Tri-abduction is named as the lineage's ceiling, not machinery this run exercised.
 
-*Evidence trajectories and anytime-valid inference.* de Finetti 1937 (subjective probability); Ville 1939 (martingales); Wald 1947 (sequential testing); Robbins 1967; Chernoff 1959; Kelly 1996 (capital-growth ties to e-values); Shafer 2021; Grünwald 2024; Ramdas 2023.
-
-*Shape vocabulary.* Milnor 1985; Strogatz 2014: the source of the four words (convergent / divergent / oscillatory / chaotic), borrowed as vocabulary; the dynamical-systems treatment is separate work, not relied on here.
+*Inspiration for recon's diagnostic stance.* Wald 1947 (sequential testing) and Vovk & Wang 2021 (e-values) shaped how recon treats diagnosis as evidence accumulating toward a hypothesis. No accumulator is deployed: the code under test is deterministic, so the gate routes on the binary grader verdict (§(gating)).
 
 *Directed graphs as reasoning representation.* Pearl 1988 (*Probabilistic Reasoning in Intelligent Systems*; Bayesian networks as DAGs of dependencies); Pearl 2000/2009 (*Causality*; structural causal models, d-separation, do-calculus). The data structure we use (typed nodes with directed edges) is Pearl's lineage applied to hypothesis representation rather than to causal-structure inference, with one structural departure: we do not require acyclicity. Pearl's DAG is acyclic by definition; acyclicity is what licenses d-separation and the conditional-independence factorization. Inquiry on engineered systems can concern cyclically-causal domains (cascading failure, retry storms in SRE-style debugging), so the structure must admit cycles to stay faithful. Pearl is therefore the ancestor we depart from structurally, not only the skeleton we inherit.
 
@@ -102,15 +86,15 @@ Methodeutics is Peirce's term for the methodology of inquiry, the systematic stu
 
 *Composition over the hypothesis graph.* Three of the lineages above enter the design through separate roles. The **structural skeleton** is Pearl (1988, 2000): the DAG is Pearl's representation primitive for structured belief. We borrow the typed-node/typed-edge form but relax acyclicity, not the semantics (probabilistic conditional independence, do-calculus). Nodes here are typed hypotheses; edges encode dependence and the kill conditions that fire on evidence. Because the structure no longer guarantees acyclicity, termination rests entirely on the deterministic gate (budget, attempt count, frontier closure; §(gating)), not on graph topology.
 
-The **node semantics** is credence under stakes (Ramsey 1926; James 1907; Dewey 1929). Each hypothesis-graph node carries a *belief* at a credence level, stakes-indexed and continuous, not a fact. Confident confabulation, high apparent confidence over a node that has not earned it, is the named failure mode that the Peircean stage-typing and the kill-condition discipline are jointly designed to prevent. The reasoning-mode label types *what kind* of belief the node carries; the credence types *how much*.
+The **node semantics** is credence (Ramsey 1926; James 1907; Dewey 1929). Each hypothesis-graph node carries a *belief* at a credence level, capped by its reasoning mode and continuous, not a fact. Confident confabulation, high apparent confidence over a node that has not earned it, is the named failure mode that the Peircean stage-typing and the kill-condition discipline are jointly designed to prevent. The reasoning-mode label types *what kind* of belief the node carries; the credence types *how much*.
 
-The **update semantics** is a qualitative trajectory-shape label borrowed as vocabulary from the sequential-evidence lineage (Wald 1947; Vovk & Wang 2021; Ramdas 2023), with the four-word shape vocabulary echoing dynamical systems (treated in separate work). Across audit re-entries the evidence pattern is labeled convergent / divergent / oscillatory / chaotic (§(trajectory-shape)), and the label routes the gate. We borrow the vocabulary only; we deploy no numerical e-value accumulator (the IID Bernoulli assumption SWE-bench audits violate would be required) and make no claim that this framing is epistemically superior to a binary verdict. Pearl + Ramsey + sequential-evidence vocabulary: three primitives, three roles, integrated in one data structure.
+The **update semantics** is the grader's binary verdict, written back to the active hypotheses as a kill or witness, together with a re-entry route (recon, craft, or none) that the driver follows (§(gating)). The code under test is deterministic, so one test run settles each predicate and no sequential-evidence accumulator is needed; the verdict is dispositive in a single read. Pearl's skeleton, Ramsey's credence, and a deterministic verdict→route update: three primitives, three roles, integrated in one data structure.
 
 ## Method {#method}
 
 <figure>
-  <img src="/assets/methodeutic-harness.svg" alt="The SWE-bench Pro harness. Recon writes abductive hypothesis nodes to the hypothesis graph (smem); craft reads them, derives a patch under cross-family adversarial challenge, and emits the patch to audit; audit runs the official harness, classifies the evidence trajectory into one of four shapes (convergent / divergent / oscillatory / chaotic), and writes kill or witness verdicts back to the graph; the deterministic gate routes on shape label, attempt count, budget, and frontier closure. Off-box capture commits the per-instance provenance artifact (trajectories, graph, diff, gate trace, grader output, cost ledger) to the public repo." />
-  <figcaption><strong>Figure 1.</strong> The methodeutic harness used on SWE-bench Pro. Stages are typed by Peircean mode (recon = abduction, craft = deduction, audit = induction); the gate is finite-state with no model call; the outer loop re-enters recon with an updated graph rather than retrying the patch.</figcaption>
+  <img src="/assets/methodeutic-harness.svg" alt="The SWE-bench Pro harness. Recon builds the hypothesis graph (smem) by abduction, deduction, and induction, typing each node by the mode that established it; craft reads the surviving hypotheses, derives a patch under cross-family adversarial challenge, and emits it to audit; audit runs the official harness, emits a binary verdict and a re-entry route, and writes a kill or witness classification back to the graph; the deterministic gate routes on the verdict, the route, attempt count, and budget. Off-box capture commits the per-instance provenance artifact (trajectories, graph, diff, gate trace, grader output, cost ledger) to the public repo." />
+  <figcaption><strong>Figure 1.</strong> The methodeutic harness used on SWE-bench Pro. Recon builds the hypothesis graph by Peirce's three inquiry modes (abduction, deduction, induction), typing each node by mode; craft implements, audit verifies; the gate is finite-state with no model call; the outer loop re-enters recon with an updated graph rather than retrying the patch.</figcaption>
 </figure>
 
 ### The inquiry frame {#inquiry-frame}
@@ -121,116 +105,60 @@ Code is the right substrate for this data structure because it combines three pr
 
 One instance is enough to settle the predicate in this regime. Statistics is the machinery for inferring causal relationships from noisy populations; in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable benchmark predicate for that instance. The verdict is for the predicate, not for the broader notion of root-cause correctness: hidden behaviors not covered by the executable predicate are out of scope, and we report only what the predicate checks, which is what the grader checks. Contrast medicine, where hypotheses need populations because individual responses are noisy; the per-predicate per-instance check here does not. The paper therefore reports counts, denominators, and per-repo breakdowns rather than confidence intervals or significance tests: per-predicate verdicts are already exact, and aggregating them is bookkeeping. Aggregate claims across repos, benches, or run-order remain empirical and are caveated where they appear. Portability of this regime to substrates where the per-instance response is not mechanically observable is open.
 
-The three Peircean modes become three stages with disjoint contracts and disjoint access patterns over the hypothesis graph. **Abduction (recon)** proposes candidate causes and writes hypothesis nodes with falsifiable predicates and kill conditions; no edits, no external access. **Deduction (craft)** traces each surviving hypothesis's consequences into a concrete patch; an adversarial challenger critiques the diff against the spec. **Induction (audit)** runs the test suite, takes the grader's pass/fail verdict, and, across re-entries, labels the shape of the evidence trajectory to route the gate's next move. The verdict stays binary; the shape label is the routing signal layered on top of it.
+The three Peircean modes are how recon builds the hypothesis graph; the stages downstream act on it. **Abduction**: recon proposes candidate root causes from the observed failure and writes hypothesis nodes with falsifiable predicates and kill conditions (read-only, no edits). **Deduction**: it traces each hypothesis's consequences through the code to localize the suspect set. **Induction**: it tests survivors with cheap read-only experiments (prints, intermediate data), typing each node by the mode that established it, and the mode caps its confidence (deduction 95–99%, induction 90–95%, abduction 60–85%). **Craft** then implements the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. **Audit** runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (recon, craft, or none) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
 ### Hypothesis graph as recon output {#recon-output}
 
-Recon emits a hypothesis graph document, not a patch sketch. The structure is a three-pillar synthesis. The *skeleton* (Pearl 1988, 2000) is a directed graph: nodes are typed hypotheses, edges carry dependence and kill predicates. We adopt Pearl's typed-node/typed-edge form but relax his acyclicity constraint, since inquiry can concern cyclically-causal systems (cascading failure, retry storms); termination is then bounded by the gate, not by topology (§(gating)). Every hypothesis graph committed in this artifact is in fact acyclic, no bench instance surfaced cyclic causation, so the cyclic affordance is design-justified but empirically unexercised here (§(limitations)). The *node semantics* is credence under stakes: each node carries a stakes-indexed credence in its claim; the Peircean reasoning-mode label types what kind of belief, the credence types how much. The *update semantics* is qualitative trajectory-shape classification (Wald 1947; Vovk & Wang 2021; Ramdas 2023; Milnor 1985): across audit re-entries the evidence pattern is labeled convergent / divergent / oscillatory / chaotic, and the shape label fires the kill condition. §(trajectory-shape) details the four shapes and why a deployed numerical e-value accumulator is set aside in v1 (IID violation).
+Recon emits a hypothesis graph document, not a patch sketch. The structure is a three-pillar synthesis. The *skeleton* (Pearl 1988, 2000) is a directed graph: nodes are typed hypotheses, edges carry dependence and kill predicates. We adopt Pearl's typed-node/typed-edge form but relax his acyclicity constraint, since inquiry can concern cyclically-causal systems (cascading failure, retry storms); termination is then bounded by the gate, not by topology (§(gating)). Every hypothesis graph committed in this artifact is in fact acyclic, no bench instance surfaced cyclic causation, so the cyclic affordance is design-justified but empirically unexercised here (§(limitations)). The *node semantics* is credence: each node carries a credence in its claim, capped by its reasoning mode; the Peircean reasoning-mode label types what kind of belief, the credence types how much. The *update semantics* is the grader's binary verdict: audit writes a kill or witness back to the active hypotheses and emits a re-entry route (recon, craft, or none) from a fixed table (§(gating)). The code under test is deterministic, so one run settles each predicate and no evidence accumulator is needed.
 
 Kill conditions are mechanical predicates over the evidence trajectory, not model preferences, so a node dies when its predicate fires and not before. The graph persists across iterations; re-entry adds nodes rather than overwriting. The frontier closes only when every leaf is killed or witnessed.
 
-**Worked example.** Drawn from `kimjune01/sweep/repo-hypotheses/antonmedv__fx__413.md` (one of the ~380 publicly committed graphs from the OSS deployment surface), abridged. The issue: under the `snap`-installed build of `fx`, the yank-to-clipboard keystroke flashes the dialog but the clipboard stays empty. An early recon pass converged on a documentation-only verdict; a later pass re-entered the graph and surfaced a shippable code fix the earlier passes had not generated. The graph (compressed):
+**Worked example.** A representative first-pass win on SWE-bench Pro: `flipt-io/flipt` instance `292fdaca`, scored `WIN` ("official RESOLVED") in `runs/scored/run.jsonl`, with the recon, craft, and audit transcripts and the captured patch committed under `runs/scored/artifacts.tar.zst`. The failing tests will not compile. Abduction does the first work, and here it is just generating the diff: the gap between what the tests demand and what the code supplies. The suite wants `cfg.Version == "1.0"`; the struct has no such field, the schema no such property, the testdata no such files. That gap *is* the hypothesis, *the versioning feature was never implemented*, and it names its own patch in four pieces. The committed graph records the drill-down:
 
 ```markdown
-H0: snap strict confinement blocks fx's clipboard subprocess
-  Perturbation surface: main.go:645-660 (yank handler), snap/snapcraft.yaml
-  Falsifiable predicate: clipboard.WriteAll() errors under strict confinement
-    because the bundled snap cannot exec host xclip / wl-copy binaries; the
-    handler discards the error with `_ =`.
-  Reasoning mode: deduction.  Credence: 0.95.
-  Status: WITNESSED (root cause confirmed against code + snapcraft + maintainer
-    thread).
-
-H1: switch snapcraft confinement: strict → classic
-  Status: KILLED. Snap Store manual review required; not code-only.
-H2: grant desktop / x11 / wayland plugs
-  Status: KILLED. plugs grant socket access but do not bundle the host
-    binaries the upstream clipboard library shells out to.
-H3: bundle xclip / wl-clipboard inside the snap
-  Status: KILLED. out of scope per maintainer thread.
-H4..H6: README warning / fx.wtf docs / native Go clipboard backend
-  Status: KILLED on venue, repo boundary, and library-swap scope respectively.
-
-[Re-entry: prior pass froze at "docs PR" verdict, but the frontier was not
- closed: every leaf had been killed by scope or venue rather than evidence
- against the underlying mechanism.  Audit routed back to recon.]
-
-H7: OSC 52 escape sequence as additive write path
-  Perturbation surface: copyToClipboard() wrapper; transitive dep
-    github.com/aymanbagabas/go-osc52/v2 promoted to direct.
-  Falsifiable predicate: terminal-emulator OSC 52 sequence
-    (\x1b]52;c;<base64>\a) emitted to os.Stderr (fx's TUI render channel)
-    sets the system clipboard with no external binary and no snap plug.
-  Reasoning mode: abduction (option) → deduction (stderr channel, write-only
-    use) → induction (build passes; sequence verified).  Credence: 0.80.
-  Status: WITNESSED. `go build ./...` passes; sequence correct.  Runtime
-    confirmation in a confined terminal pending.
+H₀: the configuration-versioning feature was never implemented
+  Mode: deduction.  Confidence: 99%.
+  Observation: compile fails, `cfg.Version undefined` at config_test.go:450.
+  Evidence: Config struct has no Version field (config.go:40-48); the JSON
+    schema lists no version property (flipt.schema.json:8-34); the tests
+    expect cfg.Version == "1.0" and reject "2.0"; testdata/version/*.yml absent.
+  Predicted fix: add the field, a validate() that rejects any non-"1.0"
+    version, the schema property, and the two testdata files.
+  Falsification: if those four changes do not turn the tests green, H₀ is wrong.
 ```
 
-Three structural elements are visible in the node-set: typed reasoning-mode labels (`deduction` on H0; the abduction-then-deduction-then-induction trace on H7), stakes-indexed credence (0.95 on the root cause, 0.80 on the proposed fix pending runtime confirmation), and mechanical kill predicates (H1 by Snap Store policy; H2 by the missing-binary deduction; H3–H6 by scope and venue). The H7 discovery on re-entry is the loop's intended behavior: the earlier verdict was structurally premature because H1–H6 closed by scope rather than by evidence against the underlying mechanism, leaving the frontier open. The deterministic gate routed the trajectory back to recon, which proposed H7, and audit witnessed it under a build check. The corpus of ~380 such files is the deployment trace referenced in §(results) and §(discussion).
+The graph is a single strong node, the common shape on this benchmark: the gold tests name the missing surface, so abduction generates the diff in one move and no fan of competing hypotheses is needed. Abduction starts the inquiry; deduction only lands it, when tracing the four sites confirms the gap and types the node `deduction, 99%`. Craft implements the four-part fix, and the blind challenger earns its separation here. It caught that the first draft never invoked `Config.validate()`, because `Load` only runs the validators attached to fields; craft then added the explicit call. The deterministic gate reads the binary test verdict and nothing else:
+
+```
+=== GATE F2P 2/2 PASSED ===   TestJSONSchema ✅   TestLoad ✅
+PASS_TO_PASS regressions: none
+VERDICT: RESOLVED   RE-ENTER: none
+```
+
+No model arbitrates that verdict; the grader's pass/fail decides, and audit re-runs it against the live patch (two files, +80 lines) before recording the win. `RE-ENTER: none` is the first pass closing the frontier, which is how roughly 93% of wins resolve (§(results)); the remaining ~7% route back to recon for another pass through the same gate that here declines to fire.
 
 ### Blind-blind pushout at the hypothesis stage {#blind-blind}
 
 Two frontier models from different families receive the same evidence pack with no cross-visibility, and each produces a hypothesis independently. A third pass extracts the disagreements, not the agreements: the disagreement becomes the next node in the graph; the agreement is recorded but not actionable. Adversarial filtering operates at hypothesis time, while the worktree is still untouched, rather than at patch time where the diff is already written. Sampling stochasticity alone produces real divergence even within a single model; cross-family divergence compounds it with architectural and training-corpus differences. Both are signal.
 
-### Trajectory-shape classification {#trajectory-shape}
-
-Each audit re-entry produces an outcome trace for the active hypotheses: which `FAIL_TO_PASS` tests flipped, which `PASS_TO_PASS` tests regressed, which related kill predicates fired. From that trace, across re-entries, the evaluator labels the shape with one of four qualitative classes. The four words echo dynamical-systems vocabulary; the dynamical-systems treatment is developed in separate work and is not relied on here. We make no epistemological claim in this paper: not that a four-way trajectory label is superior to a binary verdict, and not that the e-value / sequential-evidence paradigm is preferable to fixed-threshold testing. The per-instance verdict is still the grader's pass/fail (§(inquiry-frame)); the shape label is a pragmatic routing input that tells the gate what to do when a single pass hasn't yet been reached across re-entries.
-
-- **Convergent.** Evidence trends toward witnessing one hypothesis across re-entries (the test responses progressively favor it; sibling hypotheses fade).
-- **Divergent.** Evidence trends toward two or more sibling hypotheses simultaneously (the responses partition the test set rather than concentrating on one).
-- **Oscillatory.** Evidence flips between hypotheses across re-entries without stabilizing (the same node alternates witness and kill across passes).
-- **Chaotic.** No stable trend across re-entries.
-
-In practice the two load-bearing labels are convergent and divergent: these are the clean readings the gate routes on. Oscillatory and chaotic are the non-clean residue, and they have a programmer-native name: a **flaky test**. Evidence that flips between hypotheses without stabilizing (oscillatory) or shows no trend at all (chaotic) is the signature of an unreliable oracle: a test whose verdict is nondeterministic, so no amount of search converges on it. In principle, then, these shapes have two causes (the harness failing to find the fix, or the test itself being flaky), and the shape label does not by itself distinguish them. Flaky tests are a well-documented reality in production codebases; the phenomenon is real out in the wild.
-
-This curated bench, though, has none by construction (SWE-bench oracles are deterministic), so every oscillatory or chaotic instance here traces to harness search-failure, not oracle nondeterminism. The flaky-test reading of these shapes is therefore real but unexercised in this set: the bench excludes the regime, not the world. No terminal Pro or Verified verdict depends on the oscillatory/chaotic interpretation; the headline rates are the grader's binary verdicts, and the shape labels only routed re-entry. Either way they route to re-entry or to budget-exhausted termination, and we read them as a degenerate signal rather than as a validated dynamical regime of the evidence. The four labels are exhaustive (every trace falls into one), but we impose no further structure on them: no ordering, no metric, no claim that the partition carries more inferential weight than the grader's verdict. We report the labels because the gate consumes them.
-
-We do not deploy a numerical accumulator: there is no per-test-outcome multiplicative likelihood-ratio score with a fixed threshold in v1, and a formal anytime-valid accumulator would require IID Bernoulli outcomes that SWE-bench audits do not satisfy. The qualitative labels are what the gate consumes; a numerical accumulator is left as future specification, with no claim that it would resolve more instances than the labels do.
-
-The deterministic gate (§(gating)) reads the shape label emitted by the evaluator. Both the evaluator and the gate are mechanical; neither is a model call.
-
-Broad-strokes labeler (canonical implementation in `driver/shape.py`):
-
-```python
-def classify(trace):
-    # trace: list of audit re-entries, each carrying the
-    # active-hypothesis -> outcome map for FAIL_TO_PASS and
-    # PASS_TO_PASS plus fired kill predicates.
-    winners = [dominant_hypothesis(t) for t in trace]
-    if len(set(winners[-3:])) == 1 and witness_strength_increasing(trace):
-        return "convergent"
-    if multiple_hypotheses_partition_tests(trace[-1]):
-        return "divergent"
-    if winners and winners != sorted(winners) and any_node_flipped_witness_kill(trace):
-        return "oscillatory"
-    return "chaotic"
-```
-
-`dominant_hypothesis`, `witness_strength_increasing`, `multiple_hypotheses_partition_tests`, and `any_node_flipped_witness_kill` are pure functions over the captured trace; no model in the loop.
-
 ### Deterministic gating {#gating}
 
-The gate is a finite-state classifier over (trajectory shape, attempt count, budget remaining, frontier-closure status), not a model call. Outputs are `continue-into-craft`, `re-enter-recon-with-graph-update`, `terminate-success`, `terminate-budget-exhausted`, and `escalate-to-human` (private set only). No stage may decide its own termination; the gate decides instead. Its logic is published, reviewable, and frozen by the same tag as the rest of the artifact. Termination is mechanical, which is what makes the run reproducible: re-running the same evidence trace through the same gate yields the same routing.
+The gate is the driver routing on two lines audit prints, not a model call. Audit ends every pass with `VERDICT: <RESOLVED|NOT_RESOLVED|PARTIAL>` and `RE-ENTER: <recon|craft|none>`, assigned from a fixed table (`skills/audit/skill.md`): all `FAIL_TO_PASS` green with no regression resolves and re-enters nothing; a regression routes to craft to narrow the fix; a partial or ineffective patch routes to recon to re-diagnose; an empty patch routes to craft. Because the code under test is deterministic, one test run settles each predicate, so the verdict is dispositive in a single read and no sequential-evidence accumulator is needed.
 
-The gate's transition table (canonical implementation in `driver/gate.py`):
+The driver (`driver/rung5_driver.py`) parses those two lines by regex and routes the next stage, bounded by an attempt budget:
 
 ```python
-def gate(shape, attempt, budget_left, frontier_closed):
-    if budget_left <= 0:
-        return "terminate-budget-exhausted"
-    if frontier_closed and shape == "convergent":
-        return "terminate-success"
-    if shape == "convergent":
-        return "continue-into-craft"
-    if shape in ("divergent", "oscillatory"):
-        return "re-enter-recon-with-graph-update"
-    if shape == "chaotic" and attempt >= MAX_OUTER:
-        return "escalate-to-human"      # private set only
-    return "re-enter-recon-with-graph-update"
+# driver/rung5_driver.py: the driver parses audit's two final lines
+verdict, route = "UNKNOWN", "none"
+for line in reversed(out.strip().splitlines()):
+    m = re.match(r"VERDICT:\s*(RESOLVED|NOT_RESOLVED|PARTIAL)", line.strip())
+    if m and verdict == "UNKNOWN": verdict = m.group(1)
+    m = re.match(r"RE-ENTER:\s*(recon|craft|none)", line.strip())
+    if m and route == "none": route = m.group(1)
+# RESOLVED + none terminates; the budget bounds attempts; the route picks the next stage
 ```
 
-Five inputs, five outputs, no calls into the model. The same `(shape, attempt, budget_left, frontier_closed)` tuple maps to the same routing on replay.
+One harness-enforced override applies: a regression gets a single narrow craft attempt, and if the next pass routes craft again the driver overrides it to recon, since a regression that will not narrow means the approach itself conflicts with a `PASS_TO_PASS` test and grinding craft would retry the same edit. No stage decides its own termination; the verdict and route are mechanical, the budget is fixed, and re-running the same audit output through the driver yields the same routing. The logic is published and frozen by the same tag as the rest of the artifact.
 
 ### Outer-loop iteration {#outer-loop}
 
@@ -365,11 +293,11 @@ The smem is small. Hypothesis graphs in this work are per-instance, and cross-in
 
 > Both surfaces are closed. Verified: 426 / 438 eligible, frozen, Zenodo-DOI'd, public. Pro: 694 / 728 eligible = 95.3%, 0 incomplete, whole eligible set graded under the official grader at frozen tag `prereg-pro-v1`. Pro landed about 2 points below Verified (97.3%); the per-repo and loss readings below say where the gap lives.
 
-The harness ports cleanly to industrial code across both contamination regimes, each with full per-instance provenance: captured diffs, trajectories, and cost ledger committed. Verified is public and Zenodo-DOI'd; the Pro bundle is committed at the frozen tag with its DOI forthcoming. The hypothesis-graph smem records typed inquiry decisions per run (kill conditions fired, evidence trajectories classified); whether those records prove reusable across instances and across benches remains future work at cross-instance scope. The deterministic gate produces reviewable termination traces: an external auditor can replay its decision against the captured trajectory and budget, and the routing is reconstructible from the evidence trace alone.
+The harness ports cleanly to industrial code across both contamination regimes, each with full per-instance provenance: captured diffs, trajectories, and cost ledger committed. Verified is public and Zenodo-DOI'd; the Pro bundle is committed at the frozen tag with its DOI forthcoming. The hypothesis-graph smem records typed inquiry decisions per run (kill conditions fired, verdicts and routes recorded); whether those records prove reusable across instances and across benches remains future work at cross-instance scope. The deterministic gate produces reviewable termination traces: an external auditor can replay its decision against the captured trajectory and budget, and the routing is reconstructible from the evidence trace alone.
 
-Reproducibility comes from the captured trace, the frozen artifact, the deterministic gate, and the qualitative shape labels feeding it, not from Peirce. Peirce names the contract vocabulary and makes it legible; but it is the mechanical enforcement (stage contracts that reject mode-freelancing inputs, captured trajectories with hypothesis-graph snapshots, finite-state gate logic, deterministic shape-to-routing mapping) that lets the run replay.
+Reproducibility comes from the captured trace, the frozen artifact, the deterministic gate, and the verdict and route feeding it, not from Peirce. Peirce names the contract vocabulary and makes it legible; but it is the mechanical enforcement (stage contracts that reject mode-freelancing inputs, captured trajectories with hypothesis-graph snapshots, finite-state gate logic, deterministic verdict-to-routing mapping) that lets the run replay.
 
-The composition was designed for principled reasons. The hypothesis graph's shape (Peirce-typed nodes, e-value-inspired kill-conditioned edges, one-mode-per-stage write contracts, model-free gates) was designed to close known failure modes of LLM agents: mode collapse, confabulation, unauditable revision, vibes-based termination. The design rationale is independently inspectable from the artifact, and Verified shows the design clears industrial code at a 97.3% eligible rate. Pro then replicates it within about 2 points (95.3%), across a repo set with zero overlap with the development surface, and the gap is concentrated, not regime-wide. Nine of eleven Pro repos resolve above 95%; the deficit lives almost entirely in NodeBB (74.4%). The development-overlap check is the load-bearing one: the development language (Python) resolves *lower* than the never-developed languages (Go/TS/JS), so the Verified→Pro gap is not contamination-regime asymmetry leaking through; it tracks per-repo difficulty. At the per-repo level the assembly reads as bench-agnostic and contamination-regime-agnostic, with NodeBB the one repo that names where the harness is weakest.
+The composition was designed for principled reasons. The hypothesis graph's shape (Peirce-typed nodes, kill-conditioned edges, disjoint stage read/write contracts, model-free gates) was designed to close known failure modes of LLM agents: mode collapse, confabulation, unauditable revision, vibes-based termination. The design rationale is independently inspectable from the artifact, and Verified shows the design clears industrial code at a 97.3% eligible rate. Pro then replicates it within about 2 points (95.3%), across a repo set with zero overlap with the development surface, and the gap is concentrated, not regime-wide. Nine of eleven Pro repos resolve above 95%; the deficit lives almost entirely in NodeBB (74.4%). The development-overlap check is the load-bearing one: the development language (Python) resolves *lower* than the never-developed languages (Go/TS/JS), so the Verified→Pro gap is not contamination-regime asymmetry leaking through; it tracks per-repo difficulty. At the per-repo level the assembly reads as bench-agnostic and contamination-regime-agnostic, with NodeBB the one repo that names where the harness is weakest.
 
 Reasoning scaling cannot account for the lift. Bolting reasoning onto a fixed model is a single-digit lever on this bench: Sonnet 4.5 moves 77.2 → 82 on Verified with parallel test-time compute (~5 points), and extended-thinking deltas are the same order. The harness lift over the same model's bare standardized Pro score is ~50 points (43.6 → 95.3), an effect an order larger than any reasoning-budget delta, so it is not a reasoning artifact. This bounds the confound without isolating the cause: the ~50 bundles the typed-inquiry structure, generic agent-engineering (turn budget, tools, retries), and the generator's thinking-on configuration (§(models)), measured against a thinking-off and contaminated baseline. Separating the methodeutic structure from generic agent-engineering is the per-component ablation scoped in §(future-work). A mechanistic interpretation of the gap, and a qualitative read of the open-weight run's committed hypothesis graphs, are offered in the [repository's speculative analysis](https://github.com/kimjune01/swebench-pro/blob/main/docs/DISCUSSION.md#speculative-analysis-why-the-lever-is-the-harness) and labeled there as speculation.
 
@@ -397,7 +325,7 @@ SWE-bench-targeted agent harnesses include OpenHands (Wang et al. 2024), SWE-age
 
 Two concurrent developments arrived independently at adjacent points in the same design space, each carrying one of the two structural components this paper composes. Naming them explicitly is the cleanest way to state the contribution: **Theorem-of-Thought** ([Abdaljalil et al. 2025](https://arxiv.org/abs/2506.07106)) is a multi-agent framework that types reasoning into abductive, deductive, and inductive specialist agents per query: the typed-cycle component, run without a persistent typed memory across cycles. **Cognitive Memory Manager** ([Khalid & Arora, ACM CAIS AgentSkills 2026](https://openreview.net/forum?id=yCsHQnvvWY)) extracts a typed-node DAG ("reasoning graph") by observing agent execution and mines it for recurring patterns to promote to portable SKILL.md files: the typed-graph component, run without a methodeutic harness driving the writes. Neither work is a precedent in the lineage sense; each is a sibling reaching one of the two halves independently. That three labs converged on these decompositions without coordination is itself the structural evidence: typed reasoning and typed memory are landing as natural primitives in this design space. Provenance for the framing developed here is timestamped on the project blog (see [The Hypothesis Graph](https://june.kim/the-hypothesis-graph) and [Evidence has a trajectory](https://june.kim/evidence-has-a-trajectory)).
 
-What this paper composes: the methodeutic harness **writes** the typed graph prospectively (with kill conditions ahead of evidence and trajectory-shape labels at audit time), the harness **reads** the graph to drive the next move, and a deterministic gate closes the cycle on trajectory shape rather than model self-judgment. Same graph primitive as CMM, opposite epistemological direction: CMM's graph is descriptive (mined from traces); the one here is generative (it routes the run). Same Peircean typing as ToT, pinned to persistent nodes that survive across cycles rather than dissolved per query. The composition is what the bench result is testing.
+What this paper composes: the methodeutic harness **writes** the typed graph prospectively (with kill conditions ahead of evidence and a verdict written back at audit time), the harness **reads** the graph to drive the next move, and a deterministic gate closes the cycle on the audit verdict and route rather than model self-judgment. Same graph primitive as CMM, opposite epistemological direction: CMM's graph is descriptive (mined from traces); the one here is generative (it routes the run). Same Peircean typing as ToT, pinned to persistent nodes that survive across cycles rather than dissolved per query. The composition is what the bench result is testing.
 
 Table 1 lays out the cell-by-cell comparison spine for the systems treated below in §(typed-memory); the prose adds nuance the table can't carry.
 
@@ -417,7 +345,7 @@ Table 1 lays out the cell-by-cell comparison spine for the systems treated below
 <tr><td>BeliefMem (Liao et al. 2026)</td><td>Partial-observability QA</td><td>None</td><td>Candidate set; Noisy-OR probabilistic update</td><td>Probabilistic threshold</td></tr>
 <tr><td>Theorem-of-Thought (Abdaljalil et al. 2025)</td><td>General reasoning</td><td>Peirce, agent-level</td><td>Formal reasoning graph</td><td>NLI-guided Bayesian coherence</td></tr>
 <tr><td>CMM (Khalid & Arora 2026)</td><td>SE (coding agents)</td><td>7 trajectory roles, extraction-time</td><td>Typed DAG; confidence decay</td><td>Human approval + retrieval-validated threshold</td></tr>
-<tr class="ours"><td>This work</td><td>SE (industrial code)</td><td>Peirce, enforced at write time per stage</td><td>Hypothesis graph; mechanical kill predicates on trajectory shape</td><td>Deterministic finite-state</td></tr>
+<tr class="ours"><td>This work</td><td>SE (industrial code)</td><td>Peirce, enforced at write time per stage</td><td>Hypothesis graph; mechanical kill predicates on the audit verdict</td><td>Deterministic finite-state</td></tr>
 </table>
 </div>
 
@@ -470,17 +398,17 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 <thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">System</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Stopping signal</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Mechanism</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Scope</th></tr></thead>
 <tr><td>λ_A: Typed Lambda Calculus for LLM Agent Composition (2026, <a href="https://arxiv.org/abs/2604.11767">arXiv:2604.11767</a>)</td><td>Bounded fixpoint</td><td>Type-theoretic termination proof</td><td>Composition-level</td></tr>
 <tr><td>SafetyDrift (2026, <a href="https://arxiv.org/abs/2603.27148">arXiv:2603.27148</a>)</td><td>Absorbing state</td><td>Markov-chain risk analysis</td><td>Trajectory-level</td></tr>
-<tr class="ours"><td>This work</td><td>Evidence-trajectory shape (convergent / divergent / oscillatory / chaotic)</td><td>Deterministic finite-state gate over (shape, attempts, budget, frontier closure)</td><td>Per-instance</td></tr>
+<tr class="ours"><td>This work</td><td>Audit verdict + re-entry route</td><td>Deterministic finite-state gate over (verdict, route, attempts, budget)</td><td>Per-instance</td></tr>
 </table>
 </div>
 
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 3.</strong> Agent-termination disciplines. The shape-label gate this paper deploys sits at the per-instance scope on an evidence-trajectory signal, where neighboring work sits at composition- or trajectory-level on type-theoretic or risk-analytic signals.</figcaption>
+<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 3.</strong> Agent-termination disciplines. The verdict-routed gate this paper deploys sits at the per-instance scope on the audit verdict and route, where neighboring work sits at composition- or trajectory-level on type-theoretic or risk-analytic signals.</figcaption>
 
 ## Future Work {#future-work}
 
 Four directions follow from this work. A held-out submission under the same artifact, one-shot discipline. Cross-instance smem accumulation: letting the hypothesis graph grow across instances within a repo, then across repos within a domain; the current work tests the smem at per-instance scope. A clean-room ablation on post-cutoff instances (SWE-rebench), with vs without the typed-mode constraint on one fixed model, to isolate the loop's effect on the rate. Skill-level retros: which stages of the loop carry which kinds of wins, and targeted skill freezes for follow-on benches.
 
-The methodeutic-harness IR is not SWE-bench-specific. Any benchmark with falsifiable predicates and deterministic per-instance verdicts (HumanEval, MATH, theorem-proving suites, ARC, formal verification tasks, structured-output extraction) admits the same shape: abduction generates candidates, deduction derives an intervention, induction runs the predicate, the hypothesis graph carries belief and trajectory, the deterministic gate routes on shape. SWE-bench is only the workload demonstrated here; the IR itself ports.
+The methodeutic-harness IR is not SWE-bench-specific. Any benchmark with falsifiable predicates and deterministic per-instance verdicts (HumanEval, MATH, theorem-proving suites, ARC, formal verification tasks, structured-output extraction) admits the same shape: abduction generates candidates, deduction derives an intervention, induction runs the predicate, the hypothesis graph carries belief, the deterministic gate routes on the verdict. SWE-bench is only the workload demonstrated here; the IR itself ports.
 
 Beyond SWE-bench, the harness is one chapter of a broader program: a compiler from prose to executable agent behavior, of which the methodeutic harness is the intermediate representation, the hypothesis graph the typed memory, and skills the compiled units. The program is developed at length in the [methodeutics textbook](https://june.kim/reading/methodeutics); *"compiler"* is used descriptively, in the LLVM (Lattner & Adve 2004) and DSPy (Khattab et al. 2023) lineage of typed pipelines from specification to reproducible behavior. In the LLVM / GCC tradition where a compiler is built with itself, elements of this harness were developed by applying earlier versions to its own design tasks ([the longer treatment](https://june.kim/investigation)); the published receipts are from the post-bootstrap frozen artifact.
 
@@ -588,20 +516,9 @@ The headline claim, *no method documented has proved a higher SWE-bench resolve 
 - **Noam Zilberstein, Saliling & Silva 2024** ([arXiv:2305.04842](https://arxiv.org/abs/2305.04842)): Outcome Separation Logic; Theorem 5.1 establishes soundness of tri-abduction for branch composition under effects, extending bi-abduction from sequential to branching.
 - **Zeller & Hildebrandt 2002** (*Simplifying and Isolating Failure-Inducing Input*, IEEE TSE; building on Zeller 1999): delta debugging. An optimization-side adjacent: given a failure-inducing input, isolate the minimal failure-inducing subset by binary-search-shaped perturbation. The hypothesis graph in this work is methodology-shape; delta debugging is optimization-shape; both rely on the reproducible / deterministic / perturbable properties of code (§(inquiry-frame)). Worth citing as the canonical demonstration that mechanical perturbation of code is a productive inference primitive.
 
-### Anytime-valid inference and evidence trajectories
+### Sequential evidence (inspiration for recon)
 
-- **de Finetti 1937**: subjective probability foundations.
-- **Ville 1939**: martingales as the formal substrate for sequential evidence.
-- **Wald 1947**: sequential testing of statistical hypotheses; the original "evidence is time-indexed" insight.
-- **Robbins 1967; Chernoff 1959**: sequential design and stopping rules.
-- **Kelly 1996**: capital growth and the betting-theory tie to e-values.
-- **Vovk & Wang 2021** (*E-values: Calibration, combination, and applications*, Annals of Statistics): the framework for e-values as non-negative random variables with `E_{H₀}[E] ≤ 1`, calibration of p-values to e-values, combination, and anytime-valid stopping by Ville's inequality. The temporal-evidence stance in this paper (§(trajectory-shape)) borrows vocabulary from the sequential-evidence-trajectory framing; v1 deploys no formal e-value accumulator (the IID assumption SWE-bench audits violate would be required), and the paper makes no claim that e-values are epistemically preferable to p-values. That is not its venue.
-- **Shafer 2021**: the *betting* interpretation of e-values; an e-value as the wealth of a strategy that bets against the null.
-- **Grünwald 2024; Ramdas 2023**: modern syntheses of anytime-valid inference, e-processes, and safe testing.
-
-### Dynamical classification
-
-- **Milnor 1985; Strogatz 2014**: dynamical-systems literature; source of the four shape words (convergent / divergent / oscillatory / chaotic), borrowed here as vocabulary only. The dynamical-systems treatment of evidence trajectories is developed in separate work.
+- **Wald 1947** (sequential testing) and **Vovk & Wang 2021** (*E-values: Calibration, combination, and applications*, Annals of Statistics): the sequential-evidence framing that shaped recon's diagnostic stance, treating diagnosis as evidence accumulating toward a hypothesis. No e-value accumulator is deployed in the harness; the code under test is deterministic, so the gate routes on the binary grader verdict (§(gating)).
 
 ### Directed acyclic graphs as reasoning representation
 
