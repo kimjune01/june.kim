@@ -8,21 +8,21 @@ AI systems / research engineer building cognition, epistemology, and agentic wor
 
 ## Selected Research & Systems Work
 
-### SWE-bench Verified 97%: Agent Evaluation Pipeline
+### The Methodeutic Harness on SWE-bench Pro (scored 95%)
 
 May 2026
 
-- Built a reproducible recon/craft/audit agent pipeline for SWE-bench Verified, with separate diagnostic, implementation, and verification stages run against offline Docker environments.
-- Produced official-grader-verified artifacts with committed patches, summaries, failures, exclusions, and an append-only audit trail; reported 426 / 438 eligible resolved with explicit contamination and denominator caveats.
+- Published an arXiv-shape preprint on a reproducible recon/craft/audit harness for SWE-bench, with typed hypothesis graphs, separate diagnostic/implementation/audit stages, and deterministic model-free gating.
+- Produced official-grader-verified artifacts with committed patches, summaries, failures, exclusions, cost ledgers, and an append-only audit trail; reported 426 / 438 eligible resolved on SWE-bench Verified and 694 / 728 (95.3%) on SWE-bench Pro, with explicit contamination and denominator caveats.
 - Designed the system around inspectable merit: every win and loss is traceable through public artifacts, frozen skills, official evaluation reports, and re-runnable procedure.
 
-### Agentic Open-Source Contribution Pipeline
+### Agentic Open-Source Contribution Pipeline (53% merge rate)
 
 May 2026
 
 - Built and operated an agentic pipeline for finding open-source issues, generating patches, submitting PRs, and tracking maintainer outcomes across public repositories.
 - Measured merge/rejection outcomes, maintainer feedback, review latency, and failure modes across real PR workflows.
-- Produced case studies including Speedrunning Open Source, Sweep & Triage, (Issue) -> PR, and (PR) -> merged.
+- Produced case studies including Speedrunning Open Source, Sweep & Triage, (Issue) → PR, and (PR) → merged.
 
 ### Public Research: Cognition, Epistemology, and Agentic Systems
 
@@ -37,7 +37,7 @@ March - 2026
 ### Independent Contractor
 
 Applied AI Engineer  
-2025 - 2026
+2025 — 2026
 
 - Anyteam.com: Designed and shipped an accessibility data pipeline for the Sales OS and a browser-extension-based web scraper to ingest and retrieve domain knowledge via Retrieval-Augmented Generation.
 - Buildbetter.ai: Built 4 third-party integrations (Circle.so, Notion, Front, Attio) with incremental sync, OAuth2 flows, and deduplication, expanding the platform's customer data ingestion surface.
@@ -47,7 +47,7 @@ Applied AI Engineer
 ### Little Bird Software
 
 AI Engineer  
-2024 - 2025
+2024 — 2025
 
 - Designed and implemented agentic data ingestion pipelines, utilizing LLM-based condensation (Claude, GPT-4, Gemini Flash) and deduplication to reduce noise by 90%, directly improving RAG retrieval accuracy and chat grounding.
 - Architected macOS and Chrome integrations (Swift, Tauri, Rust) using Accessibility APIs to enable real-time context injection for AI agents.
@@ -57,7 +57,7 @@ AI Engineer
 ### Loom
 
 Senior Software Engineer  
-2022 - 2023
+2022 — 2023
 
 - Optimized core video infrastructure, increasing system reliability from 97% to 99.7% via multi-resolution UI implementations and Shaka Player interfacing.
 - Architected a TypeScript refactor of the Electron desktop app, reducing maintenance overhead and improving cross-platform performance.
@@ -65,7 +65,7 @@ Senior Software Engineer
 ### Youtube / Google
 
 Software Engineer  
-2019 - 2022
+2019 — 2022
 
 - Independently contributed to front-end features promoting YouTube Premium subscriptions, using C++ and Objective-C.
 - Directed the launch of a high-visibility Premium sign-up framework, resulting in a 2% lift in conversion rates impacting 50M+ users.
@@ -73,29 +73,22 @@ Software Engineer
 
 ## Earlier Experience
 
-- Loop Now Technologies (Firework) - React Native & iOS Engineer (2018-2019). Built cross-platform UI features; patented video view technology.
-- Lipsi Technologies - Senior iOS Developer (2016-2018). Scaled anonymous messaging app to #1 Lifestyle on App Store USA and 2.3M users.
-- Nano 3 Labs / Lighthouse Labs / Camvy (2013-2015). iOS development, AR prototyping, teaching, full-stack Rails.
+- Loop Now Technologies (Firework) — React Native & iOS Engineer (2018–2019). Built cross-platform UI features; patented video view technology.
+- Lipsi Technologies — Senior iOS Developer (2016–2018). Scaled anonymous messaging app to #1 Lifestyle on App Store USA and 2.3M users.
+- Nano 3 Labs / Lighthouse Labs / Camvy (2013–2015). iOS development, AR prototyping, teaching, full-stack Rails.
 
 ## Education
 
 ### Bachelor of Science (2nd degree)
 
 Simon Fraser University, Canada  
-2015 - 2017
+2015—2017
 
-- Data structures and algorithms, databases, machine learning, numerical analysis, computer architecture, networking, satisfiability, operating systems, computer vision, technical writing, security, web development, programming languages.
+- Data structures and algorithms, databases, machine learning, numerical analysis, computer architecture, networking, satisfiability, operating systems, computer vision, technical writing, security, web development, programming languages
 
 ### Bachelor of Business Administration
 
 Simon Fraser University, Canada  
-2008 - 2012
+2008—2012
 
-- Project management, management science, organizational theory, organizational behaviour, marketing, finance, accounting, business writing, business strategy, operational simulation, operations management, entrepreneurship.
-
-## Skills
-
-- AI/ML: RAG, LangChain, Agentic Workflows, Prompt Engineering, Vector Databases, Embeddings, Tool Use / Function Calling, LLM Evaluation, Model Context Protocol (MCP)
-- Models & APIs: OpenAI (GPT-4), Anthropic Claude, Google Gemini
-- Languages: Python, TypeScript, C/C++, Swift, Rust
-- Infrastructure: FastAPI, CI/CD, Git/GitHub, Claude Code
+- Project management, management science, organizational theory, organizational behaviour, marketing, finance, accounting, business writing, business strategy, operational simulation, operations management, entrepreneurship
