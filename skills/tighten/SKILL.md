@@ -38,7 +38,7 @@ Compress every paragraph in a post. Preserve the argument; cut the slack. Do not
 
 **Voice.** Short punchy sentences that land a point. Fragments used for rhythm. The author's distinctive patterns. Compression should sharpen voice, not flatten it.
 
-**Precision.** Technical terms, specific numbers, named examples. These are load-bearing. A tight paragraph with vague claims is worse than a loose paragraph with precise ones.
+**Precision.** Technical terms, specific numbers, named examples. These are load-bearing. A tight paragraph with vague claims is worse than a loose paragraph with precise ones. A plain-language gloss that carries a jargon term for the reader (the "guess-test-prune" before "methodeutics") is content, not filler. Don't compress it back down to the bare term, or you undo what readability did to make it legible.
 
 **Rhythm.** A paragraph that alternates long and short sentences has a pulse. Don't compress a long sentence that's earning its length by building momentum for the short sentence that follows.
 

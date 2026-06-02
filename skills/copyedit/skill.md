@@ -67,7 +67,7 @@ Verbatim prompt the orchestrator gives the subagent, with `<FILE_PATH>` filled i
 
 - Each step's full skill criteria apply. This pipeline composes them; it does not simplify them.
 - Apply fixes directly. Only pause for user approval when a fix touches argument structure or voice.
-- Don't over-compress (tighten's "a bit" qualifier is load-bearing). Don't over-sharpen (the fixed point is a non-zero hedge floor).
+- Don't over-compress (tighten's "a bit" qualifier is load-bearing). Don't over-sharpen (the fixed point is a non-zero hedge floor). Don't over-casualize: the pipeline's job is legibility, not informality. Never trade a precise term for a friendlier-but-vaguer one; a plain word that loses the technical meaning is worse than the jargon. Clarity means the reader reaches the content, not that the content is softened.
 - Code blocks, tables, front matter, SVGs, and reference lists are pass-through.
 - Em-dash policy: 0 in prose, reference-list separators OK. Surface revert candidates as a numbered list (bunched, not one-at-a-time).
 - Every step satisfies the monoidal contract: `step(step(x)) == step(x)` after ~2 passes. Convergence in 1-2 rounds is normal; 3+ means structural issues.
