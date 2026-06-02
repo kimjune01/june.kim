@@ -29,7 +29,9 @@ Compilers got better when [LLVM](https://llvm.org/) gave them a typed intermedia
 
 Sweep's attend stage produces one. Immune's perceive reads one. The maintainer skims one. Same artifact crosses three boundaries without lossy re-encoding. Attestation rows quote into it; PR bodies render from it; the retro pager folds against it.
 
-The competitors ([Devin](https://cognition.ai/blog/introducing-devin), [Copilot Enterprise](https://github.com/features/copilot/plans), [Codium](https://www.qodo.ai/), [Greptile](https://www.greptile.com/)) all fail this signature. They pass opaque verdicts across the boundary: a vector embedding, a confidence score, a "trust us" paragraph. The maintainer has to take the system's word for the work or replay it by hand. There is no shared schema for what crosses. You need a typed IR to have a compiler. Without one you have a recommender with a UI.
+The title holds only where the work is perturbable. Bug-fixing qualifies: the test suite is an oracle the loop reads each cycle, so recon abduces, craft acts, audit prunes. Feature-level UX does not. You cannot perturb human taste and read the verdict in-loop, so it cannot live in a hypothesis graph, and this compiler does not reach for it. The HG is the IR for the perturbable subset, and silent outside it.
+
+The competitors ([Devin](https://cognition.ai/blog/introducing-devin), [Copilot Enterprise](https://github.com/features/copilot/plans), [Codium](https://www.qodo.ai/), [Greptile](https://www.greptile.com/)) fail this signature, as far as their public surfaces show. They pass opaque verdicts across the boundary: a vector embedding, a confidence score, a "trust us" paragraph. The maintainer has to take the system's word for the work or replay it by hand. There is no shared schema for what crosses. You need a typed IR to have a compiler. Without one you have a recommender with a UI.
 
 That choice is expensive. Embeddings are cheaper than HGs; opaque verdicts are easier to produce than legible ones with cited substrates. The payoff is that every step is auditable. Maintainers verify before merging. Contributors debug before pushing. Nothing in the pipeline is un-quoted; the IR itself is the proof. Sweep and immune don't need a [SaaS](https://en.wikipedia.org/wiki/Software_as_a_service) backend or a hosted vector store, because the HG plus GitHub labels and markdown is sufficient state.
 
@@ -84,6 +86,12 @@ The **reviewer surface** is the PR-judging UI. The user sees immune's synthesis 
 The architecture admits this surface for free. The IR is prose end-to-end. The frontend renders the same hypothesis graph a maintainer reads, with the same information density, in a UI tuned for a non-developer's attention span.
 
 The political claim, plainly: credence buyers fund the compute, and the operator decides where the compute points. Aim it at concierge PRs and you get clean contribution graphs for the wealthy. Aim it at frontend users with real bugs they can describe and you get OSS bug-fixes shipped by people who couldn't have shipped them before. Same compute, different beneficiaries. Who gets routed where is the operator's policy lever; the architecture doesn't care. *Power to the prose writers and the reasoning tracers.* Prose-writing and reasoning-tracing are taught in every secondary school; software engineering is not.
+
+### Future work
+
+**Past the perturbable subset.** The HG is an IR only where an in-loop oracle exists. Bug-fixing has one; UX, design, and taste-level features do not, so they can't be perturbed and read inside the loop. Compiling them is the open problem: it needs a representation that carries intent no test can score, and a verdict that today only a human can give. Until then the honest edge of this compiler is the perturbable, and it stops there on purpose.
+
+**The frontend.** The filer and reviewer surfaces above are a spec, not a build.
 
 ### What it isn't
 
