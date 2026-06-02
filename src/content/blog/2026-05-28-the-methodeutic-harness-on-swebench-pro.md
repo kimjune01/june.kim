@@ -6,7 +6,7 @@ subtitle: "A typed hypothesis-graph inquiry, deterministically gated and audited
 tags: methodology, epistemology, coding
 ---
 
-*[Download PDF](/assets/methodeutic-harness-paper.pdf) · arxiv-shape preprint, rebuilt from this source.*
+*[Download PDF](/assets/methodeutic-harness-paper.pdf) · arxiv-shape preprint, rebuilt from this source. · [Results, code, and receipts](https://github.com/kimjune01/swebench-pro), reproducible in one prompt.*
 
 ## Abstract {-}
 
