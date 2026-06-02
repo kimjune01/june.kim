@@ -45,7 +45,7 @@ When triaging in /humanize standalone, match by shape not wording: subject + neg
 
 **Triple prefix (the filibuster).** A triple itself is fine. A triple where each item shares a repeated prefix or grammatical mold is the tell — it sounds like a politician filibustering: "its own X, its own Y, its own Z"; "no X, no Y, no Z"; "for X, for Y, for Z"; "the X of A, the X of B, the X of C." The repeated prefix pads the rhetoric without adding meaning. Drop it (one "its own" up front, then three bare items) or vary the mold so the parallel breaks. Earned cases exist (a repeated prefix that demonstrates a meaningful equivalence, e.g. cross-language parallels), but the default presumption is filibuster until proven otherwise.
 
-**AI vocabulary.** Additionally, crucial, delve, enhance, fostering, garner, highlight (verb), interplay, intricate, key (adj), landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore (verb), valuable, vibrant. Flag any occurrence.
+**AI vocabulary.** Additionally, crucial, delve, enhance, fostering, garner, highlight (verb), interplay, intricate, key (adj), landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore (verb), valuable, vibrant. Plus the clusters that hardened through 2026: inflated verbs (elevate, utilize, facilitate, streamline, harness, leverage), dramatic nouns (realm, journey, beacon, cornerstone), and decorative connectors (moreover, furthermore, consequently, hence) gluing sentences that don't need gluing. Flag any occurrence.
 
 **Copula avoidance.** "Serves as", "stands as", "represents", "functions as" instead of "is" or a direct verb. "Serves as the filter" → "is the filter". "Functions as a gate" → "gates".
 
@@ -60,6 +60,8 @@ When triaging in /humanize standalone, match by shape not wording: subject + neg
 **Deferred conclusion.** "That told me X." "That's the point: Y." "What this means is Z." "The takeaway: W." "The pattern: ..." The AI explaining its own argument back to the reader after the fact. Just state the conclusion. If the argument doesn't land without the scaffold, fix the argument, not the framing. Subform of throat-clearing, but post-hoc rather than pre-hoc — and worth flagging separately because it sneaks past the throat-clearing check by appearing to deliver content.
 
 **Inflated significance.** "Pivotal moment", "setting the stage", "marks a shift", "indelible mark", "evolving landscape". If the sentence works without the inflation, cut it.
+
+**Canned openers.** Sentences that boot up with a stock AI preamble before reaching the point: "In today's digital landscape", "In an era of X", "When it comes to X", "In the realm of X", "At its core". Cut the preamble and start at the noun. A cousin of throat-clearing, but worth its own check because it hides at paragraph and section starts where the eye skims past it.
 
 **Monotonous rhythm.** See /readability (prosody § monotonous sentence starts). Flag here only if it reads as an AI pattern rather than a rhythm problem.
 

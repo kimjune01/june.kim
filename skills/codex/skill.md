@@ -19,6 +19,7 @@ Send content to codex for a second opinion. Report the feedback verbatim. Don't 
 2. **Build the prompt.** Compose a single prompt that includes:
    - A direct review request tailored to the content type (prose, code, plan, etc.)
    - All the content, clearly delimited.
+   - **For prose meant for readers outside the author's bubble, a legibility lens:** ask codex to read as a smart non-specialist and name the first place they'd bounce, and whether they can tell what the thing is and does. The author and an in-context assistant are both too deep to see this (the curse of knowledge); an external model isn't.
 
 3. **Send to codex.** Pipe the prompt via stdin to avoid shell quoting issues:
 

@@ -92,11 +92,21 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **Flag non-definition bolds.** If the bolded phrase isn't introducing a term or labeling a structural element (list item, table header), swap to italic or remove. Excessive inline bold makes everything look like a heading and nothing stands out.
 
+### 7. Opening orientation
+
+The first sentence of the document, and of each major section, must land a concrete anchor a target reader can grasp *without already knowing the document's vocabulary*. Lead with what the thing is, what it does, or the stakes, in plain words; defer specialized terms until the reader is grounded. The test: would a smart non-specialist get past sentence one? (A real reader of a dense research README stopped before the first sentence ended, because the opener was three jargon terms deep with no hook.)
+
+**Translate, then name.** When a term is jargon to the target reader, give the plain version first and attach the name after, not the reverse. "Guess the cause, write a fix, test it, throw the guess out if it fails," *then* "that discipline is called methodeutics," reads; "applied methodeutics, Peirce's term for…" as the opener loses the reader who needed the plain version.
+
+**Scope.** If the concrete anchor already exists later in the piece, this is a reorder: move the buried hook up (squarely in readability's wheelhouse). If no plain anchor exists at all, flag that the opening needs one, but do not invent claims; surfacing a missing hook is the human's or /sharpen's call, not a fabrication.
+
 ## Cross-skill policies
 
 - **Em-dash budget: 0 in prose.** Reference-list separators (`[link](url) — description`) are exempt because they're typographic, not rhetorical. Do not introduce em-dashes in body prose for pacing, parenthetical asides, or contrast pivots. Use commas, parens, colons, or sentence breaks instead. This policy lives in `/humanize`'s patterns section; readability must honor it because the pipeline runs solo on this skill too.
 
 - **Word-shuffling only.** Reorder existing words and add/drop function words. Don't swap content words. Substance changes belong to `/sharpen` or human judgment.
+
+- **Clarity, not casualness.** Legibility means the reader reaches the content, not that the content is softened. Never trade a precise term for a friendlier but vaguer one; a plain word that loses the technical meaning is worse than the jargon it replaced. The fix for an alienating opener is to *orient* the reader (lead concrete, translate-then-name), not to dumb the substance down.
 
 ## Aggression by check
 
