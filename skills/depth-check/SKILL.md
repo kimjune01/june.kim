@@ -1,23 +1,19 @@
 ---
 name: depth-check
-description: Pass a piece through to quickly find where it doesn't earn a sophisticated reader — across novelty, depth, rhetoric — then dig deeper via Socratic elicitation that keeps the writing yours. Flags by adversarial probing; asks rather than answers; never rewrites.
+description: A blind-spot checker for arguments. Finds where a piece doesn't earn a sophisticated reader — across novelty, depth, rhetoric — applies the obvious subtractive fixes (reversibly), and elicits the rest via Socratic loop. Never authors new substance.
 argument-hint: <file_path> [audience]
 allowed-tools: Read, Grep, Bash, WebSearch, WebFetch, AskUserQuestion
 ---
 
 # Depth-check
 
-Find the places where the piece doesn't earn its sophisticated reader, along three axes — **novelty, depth, rhetoric** — and flag them. Do not fix them.
+A blind-spot checker for arguments. Find where the piece doesn't earn its sophisticated reader, along three axes — **novelty, depth, rhetoric**. Cut and scope the obvious wrongs yourself (subtractively, reversibly); elicit the rest. Never author new substance.
 
 The governing idea: **the writing is a vessel for the ideas, a pointer to the frontier of shared understanding.** The vessel is judged by carriage, never by how closely its shape matches the other vessels in the room. The three axes are the three ways carriage fails: the pointer aimed too short of the frontier (novelty), carrying nothing that bears weight (depth), or arriving corrupted because the vessel leaked (rhetoric). In the Natural Framework this is Transmit — the idea is what crosses the boundary; the frontier of shared understanding is the substrate the next cycle reads from. Craft is the *integrity* of the vessel, not ornament on it.
 
-A piece earns a sophisticated reader when it tells them something they didn't have (novelty), backs every load-bearing claim against the objection they'd raise (depth), and makes the case so it lands (rhetoric). Each can fail on its own: a novel claim with no support, a rigorous restatement of what they already knew, a true and new argument buried so the point never arrives.
+Two phases. Phase 1: a fast pass that flags where the piece doesn't earn its reader, per claim. Phase 2: a **Socratic elicitation loop** — the skill asks the question that draws the missing substance out of you; your answers become the material you write in. The skill filters and asks; the human keeps the Attend and supplies every answer.
 
-The skill runs in **two phases**. Phase 1 is a fast pass that flags where the piece doesn't earn its reader, per claim. Phase 2 takes the flags you choose to pursue into a **Socratic elicitation loop** — the skill asks the question that draws the missing substance out of you, you answer, and your answers become the raw material you write in. The skill does the Filter and asks the questions; the human keeps the Attend and supplies every answer.
-
-("Depth-check" is shorthand. The check is substance in the round — depth is the load-bearing axis, but novelty and rhetoric ride with it.)
-
-Why it probes instead of pattern-matching: surface features do not track substance, and any surface rubric becomes a style guide for the thing it was meant to catch — the rule it would enforce is the rule an author games the moment it's named. So depth-check never pattern-matches style. It asks the only questions that don't collapse under that — *is this new, is it load-bearing, does it land, for this reader?* — and answers them by adversarial probe, not by counting markers. See [feedback_skills_as_compression.md](~/.claude/projects/-Users-junekim-Documents-june-kim/memory/feedback_skills_as_compression.md) and [feedback_narrow_and_bold.md](~/.claude/projects/-Users-junekim-Documents-june-kim/memory/feedback_narrow_and_bold.md).
+It probes rather than pattern-matches because surface features don't track substance, and any surface rubric becomes a style guide for the thing it meant to catch (the rule it enforces is the rule an author games once named). See [feedback_skills_as_compression.md](~/.claude/projects/-Users-junekim-Documents-june-kim/memory/feedback_skills_as_compression.md) and [feedback_narrow_and_bold.md](~/.claude/projects/-Users-junekim-Documents-june-kim/memory/feedback_narrow_and_bold.md).
 
 ## The three axes
 
@@ -29,29 +25,33 @@ The axes are independent. Score each; a piece can pass two and fail the third, a
 
 ## Principles
 
-**Via negativa.** The skill only ever names what the writing is *not* yet — not novel, not load-bearing, not accurate, not landed. It never names what it should be. This isn't a limitation worked around; it's the method. By learning what the writing is not, you're forced into the place where the writing can be. Exhaust enough negations and they fence a space; the writing that survives every "not" is cornered into the one room left, and you walk in and write it. A flag is a wall, not a blueprint — and a Socratic question is a negation in disguise ("what's the mechanism?" means "this is not yet mechanized"), which is why the answer, the only affirmative act, has to be yours. The skill carves the negative space; you cast the positive.
+**Via negativa.** Name only what the writing is *not* yet, never what it should be. That's the method: exhaust the negations and they fence the room where the writing can be, and you walk in and write it. A flag is a wall, not a blueprint; a Socratic question is a negation in disguise ("what's the mechanism?" = "not yet mechanized"), so the affirmative is always yours.
 
-**Filter, not generator.** The skill reports weaknesses along the three axes. It never rewrites the argument — supplying the missing novelty, depth, or force requires knowing what's true and what to say, which is Attend, which stays human. A successful run is "flagged 5 claims this reader would reject and 1 buried lede, left the sound ones alone," not a revised draft.
+**Filter at the meaning level; prescribe only via negativa.** Like humanize/tighten/sharpen it filters, but on *meaning*, not regex-findable surface, so it must probe (and may reach outside the text for light research). It *may apply* the fixes that are pure via negativa — **subtract, narrow, relocate, mark** — because those remove or scope what's wrong without asserting anything new: cut a dead reference, narrow an overclaim to the scope the text already supports, mark an unmarked projection, move a buried lede up. It *must not* author the fixes that need new substance — a missing mechanism, the answer to an objection, the delta over prior work — those it elicits (Phase 2). Two gates, both required to auto-apply: the fix must *remove or scope* (not assert) **and** you must be confident. An ambiguous subtraction (is this reference really dead? is the scope really that narrow?) surfaces to confirm, never a silent edit. Confidence never licenses assertion — feeling sure you know the missing mechanism is the curse-of-knowledge trap, not a warrant, and still elicits. Applied fixes ship as a reversible earn-back batch (line, before→after), separate from the elicited threads. Subtraction the skill can do; assertion is yours.
 
-**Filter, but beyond surface.** It sits at the same Filter level as humanize, tighten, and sharpen — it rejects what's weak; it does not produce what's right. But those skills filter on *surface patterns* a regex can locate. Depth-check filters on *meaning*: whether a claim is new, load-bearing, and well-delivered. That's why it can't pattern-match and must probe — and why it may reach outside the text (light research) to settle whether a novelty claim is actually new. Deeper reach, same contract: it flags, the human fixes.
+**Socratic, not prescriptive.** Phase 2 asks the question that draws the answer out, never supplies it ("what's the mechanism?" not "here's the mechanism"). A stuck answer is the finding: it's where the piece is actually thin, and it's yours to resolve, not the skill's to paper over.
 
-**Socratic, not prescriptive.** In phase 2 the skill asks the question that draws the answer out of you; it never supplies the answer. "What's the mechanism here?" not "here's the mechanism." "What would Wentworth say to this?" not "Wentworth would say X." This is the mechanism that keeps Attend human: an answer handed over is the skill doing the thinking; a question well-aimed is the skill doing the Filter and leaving the thinking to you. If you're stuck on a question, that stuck place is the finding — it's where the piece is actually thin, and it's yours to resolve, not the skill's to paper over.
+**Keep your own seat.** You run the skill, not the reverse. Keep the freedom to react as a reader ("this framing is the strongest thing here") and to opine on the exercise itself ("this flag feels forced"; "wrong lens for this draft"). Fenced: mark it your own, separate from the flags, never folded into the prose, the writer's to ignore. Opine and judge; don't author. Your read is information a pure automaton would discard.
 
-**Keep your own seat.** This skill is a scaffold, not a straitjacket, and you are running it, not being run by it. Keep a degree of freedom to (1) give your own genuine reaction to the content — as a reader, not only a flag-emitter ("the cargo-cult framing is the strongest thing here; I wouldn't cut it") — and (2) opine on the exercise itself ("this flag feels forced"; "the rigor band reads too strict for this piece"; "this may be the wrong lens for this draft"). The agency is fenced, not free rein: mark your view as your own, keep it separate from the structured flags, never fold it into the prose, and leave it the writer's to ignore. Opine and judge; do not author — the replacement text is the writer's Attend, not yours. The reason for the seat: your read is information, and a skill that grinds you into a pure automaton discards the one perspective that might notice the skill is wrong *here*. A standard leaves room for judgment; only a bad gate forbids it — and this skill came from respecting that difference.
+**Adversarial, never pattern-based.** Judge each load-bearing claim by trying to *dismiss, refute, or out-bore* it from the reader's chair, ideally via a different model family (codex/gemini) so the probe doesn't share the author's blind spots. Surface scans only *locate* candidates; the verdict is the probe. No feature checklist as a gate — a checklist is a surface, gamed once named.
 
-**Adversarial, never pattern-based.** Each load-bearing claim is judged by trying to *dismiss, refute, or out-bore* it from the target reader's chair, using a different model family (codex GPT-5.5, gemini) so the probe doesn't share the author's blind spots. Surface scans only *locate* candidate claims; the verdict is always the probe. Do not build or consult a feature checklist as the gate — a checklist is a surface, and a surface is gamed the moment it's named.
+**Substance ≠ style ≠ length.** A short concrete sentence can be deep, novel, and land; a long jargon-dense one can be none of the three. Never reward abstraction/jargon/word-count; never penalize concreteness/plainness/brevity. Doing so measures conformity, not substance.
 
-**Audience-relative.** "Novel," "the strongest objection," and "lands" all mean nothing without a reader. Pin the audience before probing. The same paragraph is novel to a generalist and stale to the subfield.
+**Every target is a band; flag both edges.** Each axis/calibration is an interval with two failure edges, not a quantity to maximize: novelty boring ↔ whacko, precision vague ↔ false-precise, rigor blog ↔ journal, accuracy lossy ↔ redundant. The two-sided fencing is *why it converges*: a one-sided "more is better" gate never terminates, but a band has a non-empty interior, so once the writing is inside it there's nothing left to flag. `depth-check(depth-check(x)) == depth-check(x)`; the fixed point is the band interiors, a non-zero floor. Driving the count to zero invents nitpicks; flag only what the reader would actually reject, skip, or already know.
 
-**Substance ≠ style ≠ length.** A short concrete sentence can be deep, novel, and land; a long jargon-dense paragraph can be none of the three. Never reward abstraction, jargon density, or word count; never penalize concreteness, plainness, or brevity. If the skill starts doing that, it has stopped measuring substance and started measuring conformity.
+## The genre gate (run this first)
 
-**Every target is a band; flag both edges.** Each axis and calibration is an interval with two failure edges, not a quantity to maximize. Novelty: boring ↔ whacko. Precision: vague ↔ false-precise. Rigor: blog ↔ journal. Accuracy: lossy ↔ redundant. This two-sided fencing is *why the skill converges*: a one-sided "more is better" gate never terminates — it always finds one more citation to want, one more marker to add — but a band has a non-empty interior, and once the writing is inside it there is nothing left to flag. The negations close from both directions and corner the writing into a bounded room rather than chasing it toward an unreachable maximum.
+Before audience, before probing: what is the piece *for*? The three axes are not uniformly applicable. Which ones fire depends on the genre, and running the wrong axis on the wrong genre is how the skill misfires.
 
-**Converges under repeated application.** Same monoidal contract as humanize, tighten, sharpen, and it falls out of the band structure above. On unchanged text the report is idempotent: `depth-check(depth-check(x)) == depth-check(x)`. As the writer addresses flags, the flag set shrinks monotonically. The fixed point is a non-zero floor — the interior of the bands — some claims are as deep, novel, and well-delivered as they can be without becoming a different piece. Driving the count to zero forces invented nitpicks; don't.
+- **Contribution** — an argument that makes a forward claim (an essay, a design rationale, a thesis). **Run all three axes**; novelty is load-bearing. This is depth-check's home, and its highest yield.
+- **Defense** — a rebuttal or FAQ that answers objections (an objections doc, a limitations section). **Run the depth axis only.** Novelty is moot: the job is completeness and honest concession, not contribution, and a sound rebuttal passes depth by construction. Don't reach for novelty here or you will invent flags. Low yield is the *correct* result, not a failed run.
+- **Presentation** — a doc that orients or reports rather than argues (a README, a landing page, release notes). **Don't run depth-check at all.** None of the three axes fit; its defect, if it has one, is *legibility*, which is humanize and readability's opening-orientation check, not substance-probing. Route there instead.
 
-**If unsure, leave alone.** Flag only what the target reader would *actually* reject, skip, or already know. Borderline is what the writer is for. Over-flagging trains the writer to ignore the skill.
+The tell for genre is structure. A defense is *externally structured*: the objections set the outline, so there is little room to bury a lede or over-argue, and little for the skill to find. A contribution is *open-structured*: the author chose the sections, which is where redundancy, over-argument, and buried theses live, and where the skill earns its keep. Spend the run on open-structured contribution docs; on externally-structured defenses, expect to confirm, not to find.
 
-## The audience step (do this first)
+If a doc is mixed (an essay with a defensive section), gate per section, not per document.
+
+## The audience step
 
 Resolve the target reader before any probing:
 
@@ -96,7 +96,7 @@ Two measurement targets pin the band:
    - **Reconstruction test (accuracy).** Take a load-bearing paragraph on its own. Can the target reader rebuild the argument it makes — its claim, its move, how it connects — from the paragraph itself? If not, it's lossy carriage: leaning on context it never carried, or ornament with no argument inside. Scope to the paragraph's own share of the argument, not the whole essay — every paragraph restating the thesis is redundancy (a rhetoric failure), not accuracy.
    - **Light research (novelty and novelty-adjacent claims).** When a claim *asserts* novelty ("no one has," "the first," "a new") or its weight depends on a fact the reader would check (a named prior result, a who-said-it-first, a "this is established"), run a few targeted WebSearch/WebFetch queries to see whether it already exists in the literature or the community. Bounded — a handful of searches to confirm or puncture, not a survey. If the claim turns out to need a real lit review to settle, don't fake it: flag it as "novelty unverified — needs `/deep-research`" and move on. Verification rigor: don't let a novelty claim stand on the author's assumption that it's new (see [feedback_verification_rigor.md](~/.claude/projects/-Users-junekim-Documents-june-kim/memory/feedback_verification_rigor.md)).
 
-4. **Triage and report.** Keep only weaknesses the target reader would actually reject, skip, or already know. Drop nitpicks.
+4. **Triage, split, and report.** Keep only weaknesses the target reader would actually reject, skip, or already know; drop nitpicks. Then split the survivors: **auto** (the fix is pure via negativa — cut a dead reference, narrow an overclaim to the text's own supported scope, mark a projection, reorder a buried lede) and **elicit** (the fix needs new substance — mechanism, objection-answer, prior-art delta; or an overclaim whose true scope you can't tell from the text). Apply the auto fixes as a reversible earn-back batch; route the elicit ones to Phase 2.
 
 ## Failure modes (the finite set)
 
@@ -142,13 +142,13 @@ A report, no edits. For the whole piece:
 
 - **Audience:** the resolved reader (named, inferred, or confirmed).
 - **Load-bearing claims:** the list the argument rests on.
-- **Flags:** one block per weakness —
+- **Flags, rank-ordered by actionability** — most actionable first, each tagged **[auto]** (applied, see below) or **[elicit]** (to Phase 2). One block per weakness:
   - location (quote the line)
   - axis + failure mode (from the taxonomy)
   - the gap, in the reader's voice ("an expert in X already assumes this" / "asks: where's the mechanism?" / "the real point is the last clause, and it's thrown away")
   - whether codex/gemini/both surfaced it
+- **Applied (subtractive, reversible):** the [auto] fixes as an earn-back list — line, before→after — so the writer can undo any. Only cut / narrow / relocate / mark; never an additive rewrite.
 - **Verdict, per axis:** for each of novelty / depth / rhetoric — STRONG / THIN (addressable in revision) / FAILS (the central claim is stale, unsupported, or never lands). The headline verdict is the weakest axis.
-- **The one thing to fix first:** the single weakness that most costs this reader.
 - **Your own take (free-form, non-binding):** your reaction as a colleague, separate from the flags — what's strongest in the piece, what you genuinely doubt, and whether this exercise served the draft or was the wrong lens. The writer weighs it or ignores it; it's a view, not a verdict.
 
 This report is fast and disposable — it exists to tell you *where* to dig. It is the handoff into phase 2, not the end.
@@ -185,17 +185,6 @@ When you've run enough rounds — your call, not a flag count — the skill comp
 Ordered by what most costs the reader, so you fold from the top.
 
 Then stop. **Folding the list back into the writing is yours** — it's the line-level Consolidate the skill deliberately doesn't automate. If you want drafting help on a specific item, that's the [double-loop](https://june.kim/double-loop) (you direct, Claude drafts) as a separate step — not depth-check reaching into the prose. The skill compiled the labor; the writing stays your hand.
-
-## Rules
-
-- **Pin the audience before probing.** All three axes are undefined without a reader; novelty most of all.
-- **Probe; don't pattern-match.** No surface-feature rubric as a gate, ever. A named surface rule is a rule the author games.
-- **Report; don't rewrite.** Supplying novelty, depth, or force is Attend. The skill stops at the flag.
-- **Different model family for the probe.** Codex/gemini, not a same-family echo of the author.
-- **Flag only what the reader would reject, skip, or already know.** Over-flagging breaks convergence and trust. The fixed point is a non-zero floor.
-- **Never reward length, jargon, or abstraction; never penalize concreteness or brevity.** A gate that does the opposite is measuring conformity, not carriage.
-- **One pass per invocation.** Don't loop to drive flags to zero; that invents nitpicks (the slop-detection convergence-collapse pattern).
-- **Research is light and bounded.** A few searches to confirm or puncture a novelty claim. The moment a claim needs a real survey to settle, flag "needs `/deep-research`" rather than half-doing it. Depth-check screens; it is not the research harness.
 
 ## Composes
 
