@@ -272,6 +272,18 @@ One distinction the gate makes sharp. The `attest` agent's `VERDICT` is its read
   <figcaption><strong>Figure.</strong> Wall-clock per instance, all 728 eligible Pro instances. One peak at 10–15 min (median ~13 min; 84% finish inside 5–20 min), then a thin tail of heavy repos and craft-hangs on large suites. The outer loop's re-entries would show as a second, slower mode; too few instances re-enter to populate one, so the distribution stays single-peaked.</figcaption>
 </figure>
 
+### Cost profile {#cost-profile}
+
+The harness's cost is a function of its structure, and the per-instance bill splits cleanly by role. The generator (Sonnet 4.5, carrying `inquire` and `implement`) accounts for $4.73; the blind challenger (GPT-5.5, the cross-family critique inside `implement`) accounts for $0.42. Verification independence, the harness's refusal to let the generator grade its own work, therefore costs about 8% of the per-instance total on the frontier pair. Within the generator, cache-read dominates: across the run, 5.3B cache-read tokens ($1,583) against 67M output ($1,011), because the typed stages and the outer loop re-read the hypothesis graph and the trajectory rather than regenerate them. The open-weight pair holds the same shape at 12.6× lower cost: the structure ports, the weights get cheaper. Run totals and the two replication modes are in §(cost-envelope); the full per-leg derivation is in `COST_BASIS.md`.
+
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:22em"><col style="width:9em"><col style="width:9em"></colgroup>
+<thead><tr><th style="background:#f0f0f0">Role</th><th style="background:#f0f0f0; text-align:right">Frontier $/inst</th><th style="background:#f0f0f0; text-align:right">Open-weight $/inst</th></tr></thead>
+<tr><td>Generator (<code>inquire</code> + <code>implement</code>)</td><td style="text-align:right">$4.73</td><td style="text-align:right">$0.35</td></tr>
+<tr><td>Blind challenger (cross-family critique)</td><td style="text-align:right">$0.42</td><td style="text-align:right">$0.06</td></tr>
+<tr><td><strong>Per instance</strong></td><td style="text-align:right"><strong>$5.14</strong></td><td style="text-align:right"><strong>$0.41</strong></td></tr>
+</table>
+
 ## Procedure {#setup}
 
 Every choice below follows from one goal: making the harness the variable a reader can attribute the result to. The thesis is that the reasoning lives in the harness, and that only becomes legible if the harness is held fixed while everything contestable about it is exposed to audit. So one frozen harness faces every run, the same assembly against two benches at opposite contamination regimes. Grading stays with the official harnesses, so no scoring degrees of freedom are the operator's to spend. Each instance leaves a provenance trail recomputable by someone who trusts none of these claims. The setup is built to let a skeptic pin the result on the harness or rule it out.
