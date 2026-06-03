@@ -30,30 +30,55 @@ What makes the hypothesis graph an instrument of inquiry is methodeutics, Peirce
 
 At the frontier of industry, an extra point of performance costs on the order of billions: a training generation, or the inference dial cranked to xhigh and ultrathink for single-digit returns (§(discussion)). For the harness, it is about zero. The harness spends more compute per task, but the higher solve rate offsets it. None of it came from a training run, and the open-weight run (§(open-weight-run)) shows the inference core itself is a commodity.
 
-## Baseline Comparison {#central-comparison}
+## Baseline comparison {#central-comparison}
 
 Two kinds of players set the terms in agentic coding benchmarks: the labs that train the models and the benchmark makers who score them. The lab needs a measure and a marketing signal; the benchmark maker needs a control: the harness held fixed, to compare models against each other. SWE-bench Pro serves those needs with scientific rigor. But the rigor demands controlling for the variable that matters most to end users: the harness.
 
 <figure>
   <img src="/assets/methodeutic-attribution.svg" alt="Grouped bar chart of SWE-bench Pro resolve rate. Three bare models on the standardized SWE-Agent scaffold: Sonnet 4.5 at 43.6 percent, GPT-5.5 at 58.6 percent, Opus 4.7 at 64.3 percent. Two configurations of this methodeutic harness: open-weight at 93.1 percent, frontier at 95.3 percent. The harness bars stand about thirty points above the tallest bare-model bar." />
-  <figcaption><strong>Figure 2.</strong> Resolve rate on SWE-bench Pro. Bare models run on the standardized SWE-Agent scaffold (official <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public">Scale board</a>, 250-turn; Sonnet 4.5 at 43.6 ± 3.6); the harness runs the same tasks. It clears the best bare model, board-leader Opus 4.7, by 31 to 37 points, well past the ~20-point spread across model tiers. An anchor, not a clean control: the harness adds structure and a larger turn budget, and the bare figures are vendor/board-reported on differing scaffolds (reading below). Claude Mythos (a vendor-reported 77.8% on Pro) is excluded: unavailable to the public.</figcaption>
+  <figcaption><strong>Figure.</strong> Resolve rate on SWE-bench Pro. Bare models run on the standardized SWE-Agent scaffold (official <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public">Scale board</a>, 250-turn; Sonnet 4.5 at 43.6 ± 3.6); the harness runs the same tasks. It clears the best bare model, board-leader Opus 4.7, by 31 to 37 points, well past the ~20-point spread across model tiers. An anchor, not a clean control: the harness adds structure and a larger turn budget, and the bare figures are vendor/board-reported on differing scaffolds (reading below). Claude Mythos (a vendor-reported 77.8% on Pro) is excluded: unavailable to the public.</figcaption>
 </figure>
 
 Skepticism is warranted. Isn't the model just doing all the work? If you attribute it all to the strongest model present, GPT-5.5 (the stronger model, never the generator) scores **~58.6%** bare on Pro; the strongest on the whole board, Opus 4.7, **~64.3%**. This harness resolves **95.3%**, **31 to 37 points above the controlled minimal harness**, with the mechanical reasoning running on the *weaker* model. No reasoning budget from top labs closes a gap that size: the effort dial lifts a fixed model about five points (Anthropic's own [Opus 4.5 effort curve](https://www.anthropic.com/claude-opus-4-5-system-card), low to high effort, ~75 → ~81 on SWE-bench Verified at triple the output tokens, Fig. 1.1.2.A); the harness lifts the same model thirty. Model strength is a small lever here; the harness is the large one.
 
 Hold the model fixed and the shape returns from the other side: standard SWE-Agent with Sonnet 4.5 scores ~43.6%, this harness ~95.3%. Both are ReAct loops with full test-execution feedback. The baseline is a *minimal harness* in the usual sense (a ReAct loop with a goal statement); this harness is the same loop with structure on top, so testing is held constant and the gap is not "we run tests and they don't."
 
-## Attribution and Attestation {#claim}
+## Attribution and attestation {#claim}
 
 So what earns the gap, and what proves it?
 
 The structure it adds: a typed abductive inquiry stage *before* the act loop, plus two verification separations a bare loop lacks. Critique runs through a *separate blind challenger* rather than generator self-critique, and *attestation is separated from the testing agent*, so the model that ran the tests does not declare the verdict. Each, in our experience, helps on its own; we isolate none here, and the harness spends a larger turn budget besides. So read the leg as an anchor, not a clean control: it bounds *this system* against the standard one, not *any one separation* against none.
 
-We do not claim *which part* earns the lift: the typed inquiry stage, the blind challenger, the deterministic gate, the outer loop. The run rules one out: the outer loop is not the driver. Most wins land on the first pass, re-entry recovers only a small tail (§(results)), so the lift lives in the single-pass machinery, not the iteration. Decomposing the rest is a clean per-component ablation (fixed model, fixed budget, each piece on and off), and future work. The artifact-level claim needs no hedge: across two model pairs, frontier and open-weight, a cheap and fully auditable harness, not the model tier, clears the best bare model by 31 to 37 points on SWE-bench Pro, past anything reasoning scaling reaches, receipts committed.
+We do not attribute the lift to any specific part of the harness: the typed inquiry stage, the blind challenger, the deterministic gate, the outer loop. The run rules one out: the outer loop is not the driver. Most wins land on the first pass, re-entry recovers only a small tail (§(results)), so the lift lives in the single-pass machinery, not the iteration. Decomposing the rest is a clean per-component ablation (fixed model, fixed budget, each piece on and off), and future work. The artifact-level claim needs no hedge: across two model pairs, frontier and open-weight, a cheap and fully auditable harness, not the model tier, clears the best bare model by 31 to 37 points on SWE-bench Pro, past anything reasoning scaling reaches, receipts committed.
+
+<figure>
+  <svg viewBox="-30 0 1015 360" role="img" aria-label="Sankey flow of 728 eligible SWE-bench Pro instances: 694 resolve and 34 do not; of the resolved, 602 are solved on the first pass, 46 are recovered by the outer loop, and 46 predate trajectory capture." style="max-width:760px; width:100%; height:auto; margin:1em auto; display:block; font-family:system-ui,-apple-system,sans-serif;">
+    <polygon points="86,20 330,20 330,306 86,306" fill="#1d4ed8" opacity="0.16"/>
+    <polygon points="86,306 330,314 330,328 86,320" fill="#64748b" opacity="0.22"/>
+    <polygon points="346,20 560,20 560,268 346,268" fill="#1d4ed8" opacity="0.30"/>
+    <polygon points="346,268 560,276 560,295 346,287" fill="#60a5fa" opacity="0.30"/>
+    <polygon points="346,287 560,303 560,322 346,306" fill="#94a3b8" opacity="0.28"/>
+    <rect x="70" y="20" width="16" height="300" fill="#334155"/>
+    <rect x="330" y="20" width="16" height="286" fill="#1d4ed8"/>
+    <rect x="330" y="314" width="16" height="14" fill="#94a3b8"/>
+    <rect x="560" y="20" width="16" height="248" fill="#1d4ed8"/>
+    <rect x="560" y="276" width="16" height="19" fill="#60a5fa"/>
+    <rect x="560" y="303" width="16" height="19" fill="#cbd5e1"/>
+    <g fill="#334155" font-size="12.5">
+      <text x="64" y="174" text-anchor="end">728 eligible</text>
+      <text x="338" y="14" text-anchor="middle" fill="#1d4ed8" font-weight="600">Resolved · 694</text>
+      <text x="338" y="343" text-anchor="middle" fill="#64748b">Not resolved · 34</text>
+      <text x="584" y="148" text-anchor="start" fill="#1d4ed8" font-weight="600">Solved on the first pass · 602</text>
+      <text x="584" y="289" text-anchor="start">Recovered by the outer loop · 46</text>
+      <text x="584" y="316" text-anchor="start" fill="#64748b">Trajectory not captured · 46</text>
+    </g>
+  </svg>
+  <figcaption><strong>Figure.</strong> Where the 728 eligible Pro instances land. The first methodeutic pass carries <strong>602</strong> wins; the deterministic outer loop converts another <strong>46</strong> first-pass misses (about 7% of graded wins), and 46 further wins predate trajectory capture. The loop is recovery, not a grind. First-pass and recovered counts are over the 648 wins with captured trajectories (§(results)).</figcaption>
+</figure>
 
 The headline claim is narrow and falsifiable. The Verified half is discharged now; the comparative claim across both benches becomes fully unconditional once the Pro artifact is DOI-pinned (§(provenance)). No method documented in our comparative literature search (§(search)), known to us, has *demonstrated* with equivalent receipts a higher SWE-bench official-harness resolve rate at a lower audited per-instance dollar cost, reproducibly on the two most popular SWE benchmarks (Verified and Pro) under one frozen harness, than the one presented here.
 
-I do not attest; my harness does. My own part is merely a pointer: to the passing patches, the runtime logs, and the worklog I kept while running the harness through the bench. Inside the deterministic outer loop no patch advances until its tests pass, and the committed patch is itself the attestation it hands the grader: a re-gradable artifact the grader re-runs without me. Trust transfers down the chain by construction, never resting on my word. Three receipts, three independent attestors.[^verified]
+We do not attest; our harness does. Our own part is merely a pointer: to the passing patches, the runtime logs, and the worklog we kept while running the harness through the bench. Inside the deterministic outer loop no patch advances until its tests pass, and the committed patch is itself the attestation it hands the grader: a re-gradable artifact the grader re-runs without us. Trust transfers down the chain by construction, never resting on our word. Three receipts, three independent attestors.[^verified]
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:9.5em"><col><col style="width:13em"></colgroup>
@@ -67,11 +92,16 @@ I do not attest; my harness does. My own part is merely a pointer: to the passin
 
 The two properties that matter are *demonstrated* (we publish the trail that makes the numbers auditable) and *reproducibility on both benches* under one artifact.
 
-## Theoretical grounding: methodeutics as a contract surface {#grounding}
+## Theoretical grounding: methodeutics {#grounding}
 
 Peirce's *Illustrations of the Logic of Science* (1878) and *Pragmatism as the Logic of Abduction* (1903) type the operations of inquiry into three modes that are not interchangeable. **Abduction** generates explanatory hypotheses for surprising observations: *what would, if true, make this no longer surprising?* **Deduction** derives testable predictions from hypotheses: *if this hypothesis holds, what follows?* **Induction** tests predictions against evidence: *does the evidence accord with the prediction?*
 
-The modes are typed by what they cannot do. Abduction proposes content but does not test it; induction tests but introduces no new explanatory content; deduction traces consequences but invents nothing. Keep them separate and each does its one job; collapse them and you get familiar failure modes: confirmation bias (induction without abductive alternatives), confabulation (abduction without inductive grounding), free-association (no typed mode at all). That collapse is exactly what modern LLM agents do by default, since a single forward pass proposes, predicts, evaluates, and rationalizes in undifferentiated prose.
+<figure>
+  <img src="/assets/modes-of-reason-triangle-light.svg" alt="Triangle of the three Peircean modes: Observation to Theory (abduction), Theory to Experiment (deduction), Experiment to Observation (induction). Three modes, three edges, one self-correcting cycle." style="max-width:528px; width:100%; height:auto; margin:1em auto; display:block;" />
+  <figcaption><strong>Figure.</strong> The three modes as one cycle: Observation → Theory (abduction), Theory → Experiment (deduction), Experiment → Observation (induction). <code>inquire</code> traverses all three before any code is written; a partial traversal is a partial inquiry.</figcaption>
+</figure>
+
+The modes are typed by what they cannot do. Abduction proposes content but does not test it; induction tests but introduces no new explanatory content; deduction traces consequences but invents nothing. The last reading is the one that surprises: in ordinary use deduction is the mode that *proves* things, so it feels like the source of theory. In inquiry it proves nothing new. It unfolds a hypothesis into the predictions that hypothesis must answer for. The theory was abduced; deduction only makes it testable, which is why the figure runs Observation → Theory by abduction, never by deduction. Keep them separate and each does its one job; collapse them and you get familiar failure modes: confirmation bias (induction without abductive alternatives), confabulation (abduction without inductive grounding), free-association (no typed mode at all). That collapse is exactly what modern LLM agents do by default, since a single forward pass proposes, predicts, evaluates, and rationalizes in undifferentiated prose.
 
 Methodeutics is Peirce's term for the methodology of inquiry, the systematic study of how to conduct the typed-mode loop well. The framework draws on a dispersed primary-source lineage that this paper cites directly rather than through any single secondary work.
 
@@ -97,7 +127,7 @@ The **update semantics** is the grader's binary verdict, written back to the act
 
 <figure>
   <img src="/assets/methodeutic-harness.svg" alt="The SWE-bench Pro harness. Inquire builds the hypothesis graph (smem) by abduction, deduction, and induction, typing each node by the mode that established it; implement reads the surviving hypotheses, derives a patch under cross-family adversarial challenge, and emits it to attest; attest runs the official harness, emits a binary verdict and a re-entry route, and writes a kill or witness classification back to the graph; the deterministic gate routes on the verdict, the route, attempt count, and budget. Off-box capture commits the per-instance provenance artifact (trajectories, graph, diff, gate trace, grader output, cost ledger) to the public repo." />
-  <figcaption><strong>Figure 1.</strong> The methodeutic harness used on SWE-bench Pro. <code>inquire</code> builds the hypothesis graph by Peirce's three inquiry modes (abduction, deduction, induction), typing each node by mode; <code>implement</code> writes the patch, <code>attest</code> verifies; the gate is finite-state with no model call; the outer loop re-enters <code>inquire</code> with an updated graph rather than retrying the patch.</figcaption>
+  <figcaption><strong>Figure.</strong> The methodeutic harness used on SWE-bench Pro. <code>inquire</code> builds the hypothesis graph by Peirce's three inquiry modes (abduction, deduction, induction), typing each node by mode; <code>implement</code> writes the patch, <code>attest</code> verifies; the gate is finite-state with no model call; the outer loop re-enters <code>inquire</code> with an updated graph rather than retrying the patch.</figcaption>
 </figure>
 
 ### The inquiry frame {#inquiry-frame}
@@ -156,7 +186,7 @@ That committed node is the conclusion, and an inquiry that reaches one rarely ru
     <span style="color:#94a3b8; font-weight:600;">⇒</span>
     <span style="padding:2px 8px; border-radius:10px; background:#1d4ed8; color:#fff;">induction · 93%</span>
   </div>
-  <figcaption><strong>Figure 3.</strong> An in-flight inquiry trace, illustrative: GPT-5.4 following the <code>inquire</code> skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>), not this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
+  <figcaption><strong>Figure.</strong> An in-flight inquiry trace, illustrative: GPT-5.4 following the <code>inquire</code> skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>), not this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
 </figure>
 
 ### Blind-blind pushout at the hypothesis stage {#blind-blind}
@@ -167,17 +197,15 @@ Two frontier models from different families receive the same evidence pack with 
 
 The gate is the driver routing on two lines `attest` prints, not a model call. `attest` ends every pass with `VERDICT: <RESOLVED|NOT_RESOLVED|PARTIAL>` and `RE-ENTER: <recon|craft|none>`, assigned from a fixed table (`skills/audit/skill.md`): all `FAIL_TO_PASS` green with no regression resolves and re-enters nothing; a regression routes to `implement` to narrow the fix; a partial or ineffective patch routes to `inquire` to re-diagnose; an empty patch routes to `implement`. Because the code under test is deterministic, one test run settles each predicate, so the verdict is dispositive in a single read and no sequential-evidence accumulator is needed.
 
-The driver (`driver/rung5_driver.py`) parses those two lines by regex and routes the next stage, bounded by an attempt budget:
+The driver reads those two lines and routes the next stage, bounded by an attempt budget. In pseudocode (full parser: [`driver/rung5_driver.py`](https://github.com/kimjune01/swebench-pro/blob/main/driver/rung5_driver.py)):
 
-```python
-# driver/rung5_driver.py: the driver parses audit's two final lines
-verdict, route = "UNKNOWN", "none"
-for line in reversed(out.strip().splitlines()):
-    m = re.match(r"VERDICT:\s*(RESOLVED|NOT_RESOLVED|PARTIAL)", line.strip())
-    if m and verdict == "UNKNOWN": verdict = m.group(1)
-    m = re.match(r"RE-ENTER:\s*(recon|craft|none)", line.strip())
-    if m and route == "none": route = m.group(1)
-# RESOLVED + none terminates; the budget bounds attempts; the route picks the next stage
+```text
+verdict ← attest's last VERDICT line     # RESOLVED | NOT_RESOLVED | PARTIAL
+route   ← attest's last RE-ENTER line     # inquire | implement | none
+
+if verdict is RESOLVED and route is none:   stop — win
+else if attempts have reached the budget:   stop — budget exhausted
+else:                                        re-enter the stage named by route
 ```
 
 One harness-enforced override applies: a regression gets a single narrow `implement` attempt, and if the next pass routes to `implement` again the driver overrides it to `inquire`, since a regression that will not narrow means the approach itself conflicts with a `PASS_TO_PASS` test and grinding `implement` would retry the same edit. No stage decides its own termination; the verdict and route are mechanical, the budget is fixed, and re-running the same `attest` output through the driver yields the same routing. The logic is published and frozen by the same tag as the rest of the artifact.
@@ -204,7 +232,7 @@ The artifact is frozen by an annotated git tag (`prereg-pro-v1`); every scored-r
 
 Per-instance trajectories (agent sessions for each pipeline stage) are captured off-box on a polling cadence. A hypothesis graph document, captured diff, grader output, and gate trace are committed per instance, alongside a per-box ledger and cost provenance. A run earns headline status only when full provenance is published; scores alone are insufficient.
 
-## Experimental Setup {#setup}
+## Experimental setup {#setup}
 
 ### Datasets and eligibility {#datasets}
 
@@ -291,8 +319,6 @@ The provisional 2026-05-28 snapshot read 97.0% on the 402 early-order instances,
 
 *Pro (open-weight-generator pair, terminal, frozen tag `prereg-pro-v1-cheap`).* The same frozen harness with the model pair swapped to **Composer 2.5** (Kimi K2.5 fine-tune) generator + **Gemini Flash 3.5** challenger resolved **678 / 728 = 93.1%** under the same official grader: a **2.2-point gap** below the frontier pair, at median **8.4 min** per instance and economic **~$0.41/instance** (~12.6× cheaper than the frontier pair; §(open-weight-run)). Per-instance trajectories, captured diffs, gate traces, and cost ledger are committed under the shared bundle (`runs/flash-composer/`); a 60-WIN stratified re-grade of this run reproduced **60/60, 0 flips**. Read against the scaffold control (§(central-comparison)): the model-pair swap moves the rate two points while the scaffold swap moves it about fifty, so the harness is the dominant lever. This is a scaffold-vs-scaffold comparison against a public attested baseline, not a clean isolation of individual harness components (those ablations are future work, §(future-work)).
 
-
-
 *Cost (Pro ledger).* The portable figure is the **economic** basis, every leg priced at public API rates including cache: **~$5.14 per instance** for the frontier pair (Sonnet 4.5 leg ~$4.73 + GPT-5.5 ~$0.42), against ~$0.41 for the open-weight-generator pair. The operator's actual cash was far lower: most legs ran on flat subscriptions (Claude Max, codex) at ~$0 marginal, only ~310 Sonnet instances were billed to API ($813.52), plus ~$58 EC2, so marginal cash was ≈ **$870**. Cash and economic are different bases, kept separate; the full per-leg derivation and the cash-vs-economic reconciliation are in the artifact's `COST_BASIS.md`, and the per-instance ledger is committed alongside the trajectories.
 
 *Verification cost.* Verification doesn't require re-running the full bench. A representative re-grade sample (the §(re-grade) protocol uses N = 20 stratified-random WINs) costs ~$3 × N at the observed Sonnet-API rate: ~$60 for the planned re-grade. The bar to audit this work is API access, an AWS account (or equivalent compute), and discretionary spend in the tens of dollars.
@@ -335,7 +361,7 @@ One further structural observation, on token efficiency. The per-instance cost a
 
 A practitioner recommendation falls out of the two model-pair runs. For the class of problems SWE-bench Pro represents, a cheap model in the methodeutic harness is cost-effective: the open-weight Composer 2.5 configuration (§(open-weight-run)) resolves 93.1% at ~$0.41 per task, and even discounting its recall tail it genuinely resolves ~three-quarters, far above any bare model. But the raw two-point margin to the frontier pair understates what escalation buys: on contamination-free problems the genuine-capability gap is ~17 to 22 points (§(open-weight-run)), concentrated in the hard tail. So default to the cheap model for cost-sensitive work on well-trodden code; escalate to a frontier generator for novel problems and the heavy repos, where recall does not carry the cheap model. The harness stays constant; the model is the dial, and the dial matters more on genuinely new problems than the raw Pro rates suggest.
 
-## Related Work {#related-work}
+## Related work {#related-work}
 
 ### SWE-bench, contamination, and cost transparency {#rw-swebench}
 
@@ -428,7 +454,7 @@ Table 3 compares termination disciplines. The axes are *what* the system reads t
 
 <figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 3.</strong> Agent-termination disciplines. The verdict-routed gate this paper deploys sits at the per-instance scope on the audit verdict and route, where neighboring work sits at composition- or trajectory-level on type-theoretic or risk-analytic signals.</figcaption>
 
-## Future Work {#future-work}
+## Future work {#future-work}
 
 Six directions follow from this work. A held-out submission under the same artifact, one-shot discipline. Cross-instance smem accumulation: letting the hypothesis graph grow across instances within a repo, then across repos within a domain; the current work tests the smem at per-instance scope. A clean-room ablation on post-cutoff instances (SWE-rebench), with vs without the typed-mode constraint on one fixed model, to isolate the loop's effect on the rate. Skill-level retros: which stages of the loop carry which kinds of wins, and targeted skill freezes for follow-on benches. Cyclic hypothesis graphs: the data structure can relax Pearl's acyclicity to stay faithful to cyclically-causal inquiry (cascading failure, retry storms), with termination resting on the gate rather than on graph topology; every graph committed here is acyclic, so the affordance is unexercised in this corpus and its treatment is developed separately. This paper's question is *how is it this good*; the symmetric question, *how is it not good enough*, is the last direction: the gate's one job is to decide termination, and on the 34 losses it terminated runs whose captured patch did not resolve, so characterizing those terminations (budget-exhausted versus re-entry-exhausted, and whether a richer gate would recover any) reads directly where the gate's discipline trades wins for reproducibility.
 
@@ -436,7 +462,7 @@ The methodeutic-harness IR is not SWE-bench-specific. Any benchmark with falsifi
 
 Beyond SWE-bench, the harness is one chapter of a broader program: a compiler from prose to executable agent behavior, of which the methodeutic harness is the intermediate representation, the hypothesis graph the typed memory, and skills the compiled units. The program is developed at length in the [methodeutics textbook](https://june.kim/reading/methodeutics); *"compiler"* is used descriptively, in the LLVM (Lattner & Adve 2004) and DSPy (Khattab et al. 2023) lineage of typed pipelines from specification to reproducible behavior. In the LLVM / GCC tradition where a compiler is built with itself, elements of this harness were developed by applying earlier versions to its own design tasks ([the longer treatment](https://june.kim/investigation)); the published receipts are from the post-bootstrap frozen artifact.
 
-## Availability and Reproducibility {#availability}
+## Availability and reproducibility {#availability}
 
 - **Repositories.** github.com/kimjune01/swebench-pro and github.com/kimjune01/swebench-verified.
 - **Frozen artifact.** Git tag `prereg-pro-v1`, SHA committed in the worklog.
@@ -453,17 +479,17 @@ Beyond SWE-bench, the harness is one chapter of a broader program: a compiler fr
 
 **Reproducibility invitation.** *Nullius in verba.* The repository, per-instance trajectories, hypothesis graphs, gate traces, captured diffs, and cost ledger are public. The harness runs end-to-end on a frontier-vendor subscription or under ~$2k of API spend per bench (§(cost-envelope)). Replication does not require institutional credentials or enterprise access. Doubts about specific instances, regrades, or methodological claims should be filed as issues against the repository; confirmed corrections fold into the next versioned artifact.
 
-## LLM Collaboration Disclosure {-}
+## LLM collaboration disclosure {-}
 
 Per current ethics norms for AI-assisted scientific writing, LLMs enter this work in two distinct roles.
 
 *Subject of study.* The harness under evaluation (§(method), §(setup)) uses frontier LLMs as the generator and challenger; this is the paper's object of inquiry, with model versions, billing mode, and provenance disclosed in §(models) and the published artifact.
 
-*Writing aid.* The prose was drafted with Anthropic's Claude (Opus 4.7) from a human-authored outline, then edited for sharpening, tightening, and lint passes. The claims, citations, numeric results, methodology, and argument structure are the author's. No LLM served as peer reviewer or decided what to publish.
+*Writing aid.* The prose was drafted with Anthropic's Claude (Opus 4.8) from a human-authored outline, then edited for sharpening, tightening, and lint passes. The claims, citations, numeric results, methodology, and argument structure are the author's. No LLM served as peer reviewer or decided what to publish.
 
 ## Acknowledgments {-}
 
-- [Placeholder]: endorser, OpenHands community acknowledgment, prior conversations, methodeutics readers.
+We thank John Laird for endorsing this submission.
 
 ## Novelty and comparative search protocol {.appendix} {#search}
 

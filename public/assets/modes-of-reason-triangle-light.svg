@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .node-text { text-anchor: middle; font-weight: 700; font-size: 16px; fill: #334155; }
+    .node-sub { text-anchor: middle; font-size: 11px; fill: #64748b; }
+    .arrow { stroke: #64748b; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .arrow-abd { stroke: #1d4ed8; stroke-width: 2; fill: none; marker-end: url(#ahg); }
+    .label { font-size: 12px; fill: #64748b; font-weight: 600; font-style: italic; }
+    .label-abd { font-size: 12px; fill: #1d4ed8; font-weight: 600; font-style: italic; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#64748b"/>
+    </marker>
+    <marker id="ahg" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#1d4ed8"/>
+    </marker>
+  </defs>
+
+  <!-- Triangle (prominent backbone) -->
+  <polygon points="230,22 102,244 358,244" stroke="#94a3b8" stroke-width="2" fill="none" opacity="1"/>
+
+  <!-- Observation → Theory (ABDUCTION, accent), right side, clockwise -->
+  <path class="arrow-abd" d="M249,55 Q340,100 339,211"/>
+
+  <!-- Theory → Experiment (DEDUCTION), bottom, right to left -->
+  <path class="arrow" d="M320,244 Q230,290 140,244"/>
+
+  <!-- Experiment → Observation (INDUCTION), left side -->
+  <path class="arrow" d="M121,211 Q120,100 211,55"/>
+
+  <!-- Edge labels -->
+  <text class="label-abd" x="338" y="122" text-anchor="start">abduction</text>
+  <text x="338" y="137" text-anchor="start" style="font-size:10px; fill:#1d4ed8; font-style:italic;">observe → hypothesize</text>
+
+  <text class="label" x="230" y="280" text-anchor="middle">deduction</text>
+  <text x="230" y="295" text-anchor="middle" style="font-size:10px; fill:#64748b; font-style:italic;">knowledge → procedure</text>
+
+  <text class="label" x="122" y="122" text-anchor="end">induction</text>
+  <text x="122" y="137" text-anchor="end" style="font-size:10px; fill:#64748b; font-style:italic;">run → accumulate</text>
+
+  <!-- Nodes -->
+  <text class="node-text" x="230" y="28">Observation</text>
+  <text class="node-sub" x="230" y="46">what happened</text>
+
+  <text class="node-text" x="358" y="240">Theory</text>
+  <text class="node-sub" x="358" y="258">what is true</text>
+
+  <text class="node-text" x="102" y="240">Experiment</text>
+  <text class="node-sub" x="102" y="258">how to act</text>
+
+  <!-- Latin roots -->
+  <text x="338" y="153" text-anchor="start" style="font-size:9px; fill:#94a3b8; font-style:italic;">ab-ducere: lead away</text>
+  <text x="230" y="310" text-anchor="middle" style="font-size:9px; fill:#94a3b8; font-style:italic;">de-ducere: lead from</text>
+  <text x="122" y="153" text-anchor="end" style="font-size:9px; fill:#94a3b8; font-style:italic;">in-ducere: lead toward</text>
+</svg>

@@ -25,11 +25,10 @@
   <rect x="30" y="25" width="700" height="720" rx="10" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
   <text x="50" y="44" fill="#475569" font-size="10" font-weight="600" letter-spacing="1.5">PER-INSTANCE INQUIRY LOOP</text>
 
-  <!-- ============ RECON (abduction) ============ -->
+  <!-- ============ INQUIRE ============ -->
   <rect x="140" y="60" width="300" height="80" rx="8" fill="#f1f5f9" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="290" y="86" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">RECON</text>
-  <text x="290" y="103" fill="#64748b" font-size="10" text-anchor="middle" font-style="italic">abduction</text>
-  <text x="290" y="124" fill="#475569" font-size="11" text-anchor="middle">Propose hypotheses + kill conditions</text>
+  <text x="290" y="95" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">INQUIRE</text>
+  <text x="290" y="116" fill="#475569" font-size="11" text-anchor="middle">Propose hypotheses + kill conditions</text>
 
   <!-- BLIND-BLIND PUSHOUT (inset right of RECON) -->
   <rect x="480" y="62" width="240" height="76" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
@@ -78,11 +77,10 @@
   <line x1="290" y1="350" x2="290" y2="375" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
   <text x="300" y="368" fill="#64748b" font-size="9">read</text>
 
-  <!-- ============ CRAFT (deduction) ============ -->
+  <!-- ============ IMPLEMENT ============ -->
   <rect x="140" y="380" width="300" height="80" rx="8" fill="#f1f5f9" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="290" y="406" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">CRAFT</text>
-  <text x="290" y="423" fill="#64748b" font-size="10" text-anchor="middle" font-style="italic">deduction</text>
-  <text x="290" y="444" fill="#475569" font-size="11" text-anchor="middle">Derive patch + adversarial check</text>
+  <text x="290" y="415" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">IMPLEMENT</text>
+  <text x="290" y="436" fill="#475569" font-size="11" text-anchor="middle">Derive patch + adversarial check</text>
 
   <!-- CHALLENGER inset -->
   <rect x="480" y="395" width="240" height="50" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
@@ -94,11 +92,10 @@
   <line x1="290" y1="460" x2="290" y2="485" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
   <text x="300" y="478" fill="#64748b" font-size="9">patch</text>
 
-  <!-- ============ AUDIT (induction) ============ -->
+  <!-- ============ ATTEST ============ -->
   <rect x="140" y="490" width="300" height="80" rx="8" fill="#f1f5f9" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="290" y="516" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">AUDIT</text>
-  <text x="290" y="533" fill="#64748b" font-size="10" text-anchor="middle" font-style="italic">induction</text>
-  <text x="290" y="554" fill="#475569" font-size="11" text-anchor="middle">Official harness + trajectory shape</text>
+  <text x="290" y="525" fill="#3b82f6" font-size="14" font-weight="700" text-anchor="middle">ATTEST</text>
+  <text x="290" y="546" fill="#475569" font-size="11" text-anchor="middle">Official harness + trajectory shape</text>
 
   <!-- SHAPE CLASSIFIER inset -->
   <rect x="480" y="505" width="240" height="50" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
@@ -120,13 +117,13 @@
   <text x="290" y="640" fill="#64748b" font-size="10" text-anchor="middle" font-style="italic">deterministic</text>
   <text x="290" y="659" fill="#475569" font-size="10" text-anchor="middle">shape × budget × attempt × closure</text>
   <line x1="170" y1="671" x2="410" y2="671" stroke="#cbd5e1" stroke-width="0.8"/>
-  <text x="170" y="687" fill="#475569" font-size="10">→ continue-into-craft</text>
-  <text x="170" y="702" fill="#475569" font-size="10">→ re-enter-recon</text>
+  <text x="170" y="687" fill="#475569" font-size="10">→ continue-into-implement</text>
+  <text x="170" y="702" fill="#475569" font-size="10">→ re-enter-inquire</text>
   <text x="170" y="717" fill="#475569" font-size="10">→ terminate-success / budget</text>
 
   <!-- Outer loop: GATE → RECON (down left margin) -->
   <path d="M 140 665 L 50 665 L 50 100 L 140 100" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#arrow-loop)"/>
-  <text x="42" y="385" fill="#f59e0b" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 42 385)">outer loop · re-enter-recon with updated graph</text>
+  <text x="42" y="385" fill="#f59e0b" font-size="9" font-weight="600" text-anchor="middle" transform="rotate(-90 42 385)">outer loop · re-enter-inquire with updated graph</text>
 
   <!-- ============ CAPTURE → PROVENANCE ============ -->
   <line x1="290" y1="745" x2="290" y2="772" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
