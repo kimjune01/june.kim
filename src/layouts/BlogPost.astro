@@ -15,6 +15,7 @@ interface Props {
 const { title, variant = 'post', tags, image, date, slug, monospace_title } = Astro.props;
 const isWide = variant === 'post-wide';
 const isMedium = variant === 'post-medium';
+const isPaper = variant === 'post-paper';
 const isPoetry = variant === 'poetry';
 const dateStr = date.toISOString();
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
@@ -92,14 +93,14 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     <span class="logo-prompt">Home</span>
   </aside>
 
-  <main class={`fade-shift ${isWide ? 'wide' : isMedium ? 'medium' : ''}`} style="opacity:0.3;transform:translate(0,2px)">
+  <main class={`fade-shift ${isWide ? 'wide' : isMedium ? 'medium' : isPaper ? 'paper' : ''}`} style="opacity:0.3;transform:translate(0,2px)">
     {!isPoetry && (
       <noscript>
         <style>{'article .footnotes { display: block; }'}</style>
       </noscript>
     )}
 
-    <article class:list={[{ wide: isWide, medium: isMedium }]}>
+    <article class:list={[{ wide: isWide, medium: isMedium, paper: isPaper }]}>
       <div class="center">
         <h1>{monospace_title ? <code>{title}</code> : title}</h1>
       </div>
@@ -194,6 +195,41 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
         rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px
       );
     }
+
+    /* post-paper: single column, paper-shaped, serif body, tighter spacing */
+    article.paper {
+      max-width: 760px;
+      margin: 0 auto;
+      font-family: Charter, 'Source Serif Pro', 'Iowan Old Style', 'Apple Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #1a1a1a;
+    }
+    article.paper > h1, article.paper .center h1 { font-size: 1.9em; line-height: 1.2; margin-bottom: 0.4em; }
+    article.paper > h2 { font-size: 1.35em; margin-top: 1.8em; margin-bottom: 0.6em; border-bottom: 1px solid #eee; padding-bottom: 0.25em; }
+    article.paper > h3 { font-size: 1.1em; margin-top: 1.4em; margin-bottom: 0.4em; }
+    article.paper > h4 { font-size: 1.0em; margin-top: 1.1em; margin-bottom: 0.3em; font-style: italic; font-weight: normal; }
+    article.paper > p { margin: 0.7em 0; }
+    article.paper > ul, article.paper > ol { margin: 0.7em 0; padding-left: 1.5em; }
+    article.paper > ul li, article.paper > ol li { margin: 0.25em 0; }
+    article.paper > blockquote {
+      margin: 1em 0; padding: 0.5em 1em; border-left: 3px solid #ddd;
+      color: #555; font-size: 0.94em;
+    }
+    article.paper code, article.paper pre {
+      font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86em;
+    }
+    article.paper pre { line-height: 1.4; padding: 0.8em; background: #f7f7f7; border-radius: 4px; overflow-x: auto; }
+    article.paper figure { margin: 1.5em 0; }
+    article.paper figure img { max-width: 100%; height: auto; }
+    article.paper figcaption { font-size: 0.88em; color: #555; margin-top: 0.5em; text-align: center; font-style: italic; }
+    article.paper .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.5em 0; max-width: 100%; }
+    article.paper table { font-size: 13px; }
+    article.paper table th { background: #f0f0f0; font-weight: 600; }
+    article.paper a { color: #1a5490; text-decoration: underline; text-decoration-thickness: 0.5px; text-underline-offset: 2px; }
+    article.paper a:hover { color: #0d3a6e; }
+    article.paper strong { font-weight: 600; }  /* bold = definitional */
+    article.paper em { font-style: italic; }     /* italic = emphasis */
   </style>
 </body>
 </html>

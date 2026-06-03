@@ -7,6 +7,14 @@ allowed-tools: Read, Bash, Glob, AskUserQuestion
 
 # Gemini Review
 
+**STUBBED (2026-05-14): no active subscription.** When this skill is invoked, print:
+
+> /gemini is stubbed — no Gemini API subscription. Skipping. Use /codex for review.
+
+Then return without making any API calls. Do not proceed with the steps below until the stub is removed.
+
+---
+
 Send content to Gemini 3.1 Pro Preview for an independent review. Uses the Generative Language API (not Vertex AI). Report the feedback verbatim. Don't change anything until the user approves.
 
 ## When to use
