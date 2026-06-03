@@ -174,23 +174,23 @@ Code is the right substrate for this data structure because it combines three pr
 
 Because those three hold together, hypotheses about code can be tested by cheap mechanical perturbations and falsified by deterministic predicates; kill conditions are not approximations; they are executions.
 
-One instance is enough to settle the predicate in this regime. Statistics is the machinery for inferring causal relationships from noisy populations; in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable benchmark predicate for that instance. The verdict is for the predicate, not for the broader notion of root-cause correctness: hidden behaviors not covered by the executable predicate are out of scope, and we report only what the predicate checks, which is what the grader checks. Contrast medicine, where hypotheses need populations because individual responses are noisy; the per-predicate per-instance check here does not. The paper therefore reports counts, denominators, and per-repo breakdowns rather than confidence intervals or significance tests: per-predicate verdicts are already exact, and aggregating them is bookkeeping. Aggregate claims across repos, benches, or run-order remain empirical and are caveated where they appear. Portability of this regime to substrates where the per-instance response is not mechanically observable is open.
+One instance settles the predicate in this regime. Statistics infers causal relationships from noisy populations, but in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable benchmark predicate for that instance. That verdict speaks to the predicate alone: behaviors it doesn't cover are out of scope, and we report only what it checks, which is what the grader checks. Medicine needs populations because individual responses are noisy; the per-instance check here does not. So the paper reports counts, denominators, and per-repo breakdowns rather than confidence intervals or significance tests: per-instance verdicts are exact, and aggregating them is bookkeeping. Aggregate claims across repos, benches, or run-order remain empirical, and are caveated where they appear. Portability to substrates where the per-instance response is not mechanically observable is open.
 
 The three Peircean modes are how `inquire` builds the hypothesis graph, each node typed by the mode that established it and capped at that mode's confidence:
 
-<table style="max-width:660px; margin:1em auto; font-size:14px;">
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:7em"><col><col style="width:6.5em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Mode</th><th style="background:#f0f0f0">What <code>inquire</code> does</th><th style="background:#f0f0f0">Confidence cap</th></tr></thead>
-<tr><td><strong>Abduction</strong></td><td>Proposes candidate root causes from the observed failure; writes hypothesis nodes with falsifiable predicates and kill conditions (read-only)</td><td>60–85%</td></tr>
-<tr><td><strong>Deduction</strong></td><td>Traces each hypothesis's consequences through the code to localize the suspect set</td><td>95–99%</td></tr>
-<tr><td><strong>Induction</strong></td><td>Tests survivors with cheap read-only experiments (prints, intermediate data)</td><td>90–95%</td></tr>
+<thead><tr><th style="background:#f0f0f0">Mode</th><th style="background:#f0f0f0">What <code>inquire</code> does</th><th style="background:#f0f0f0">Confidence</th></tr></thead>
+<tr><td><strong>Abduction</strong></td><td>Proposes candidate root causes from the observed failure; writes hypothesis nodes with falsifiable predicates and kill conditions (read-only)</td><td>low</td></tr>
+<tr><td><strong>Deduction</strong></td><td>Traces each hypothesis's consequences through the code to localize the suspect set</td><td>high</td></tr>
+<tr><td><strong>Induction</strong></td><td>Tests survivors with cheap read-only experiments (prints, intermediate data)</td><td>moderate</td></tr>
 </table>
 
 `implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
 ### Hypothesis graph as inquiry output {#recon-output}
 
-`inquire` emits a hypothesis graph document, not a patch sketch. Its structure is the three-pillar synthesis built in §(application): Pearl's directed-graph skeleton, credence node semantics, and the grader's verdict→route update (§(gating)). Because the code under test is deterministic, one run settles each predicate, so no evidence accumulator is needed.
+`inquire` emits a hypothesis graph document, the structured analysis that precedes the patch. Its structure is the three-pillar synthesis built in §(application): Pearl's directed-graph skeleton, credence node semantics, and the grader's verdict→route update (§(gating)). Because the code under test is deterministic, one run settles each predicate, so no evidence accumulator is needed.
 
 Kill conditions are mechanical predicates over the evidence trajectory, not model preferences, so a node dies when its predicate fires and not before. The graph persists across iterations; re-entry adds nodes rather than overwriting. The frontier closes only when every leaf is killed or witnessed.
 
@@ -234,7 +234,7 @@ That committed node is the conclusion, and an inquiry that reaches one rarely ru
     <span style="color:#94a3b8; font-weight:600;">⇒</span>
     <span style="padding:2px 8px; border-radius:10px; background:#1d4ed8; color:#fff;">induction · 93%</span>
   </div>
-  <figcaption><strong>Figure.</strong> An in-flight inquiry trace, illustrative: GPT-5.4 following the <code>inquire</code> skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>), not this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
+  <figcaption><strong>Figure.</strong> An in-flight inquiry trace, illustrative: Sonnet 4.5 following the <code>inquire</code> skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>), not this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
 </figure>
 
 ### Blind-blind pushout at the hypothesis stage {#blind-blind}
@@ -243,17 +243,20 @@ Two frontier models from different families receive the same evidence pack with 
 
 ### Deterministic gating {#gating}
 
-The gate is the driver routing on two lines `attest` prints, not a model call. `attest` ends every pass with `VERDICT: <RESOLVED|NOT_RESOLVED|PARTIAL>` and `RE-ENTER: <inquire|implement|none>`, assigned from a fixed table (`skills/audit/skill.md`): all `FAIL_TO_PASS` green with no regression resolves and re-enters nothing; a regression routes to `implement` to narrow the fix; a partial or ineffective patch routes to `inquire` to re-diagnose; an empty patch routes to `implement`. Because the code under test is deterministic, one test run settles each predicate, so the verdict is dispositive in a single read and no sequential-evidence accumulator is needed.
+The gate is the driver routing on two lines `attest` prints, not a model call. `attest` ends every pass with `VERDICT: <RESOLVED|NOT_RESOLVED|PARTIAL>` and `RE-ENTER: <inquire|implement|none>`, assigned from a fixed table (`skills/audit/skill.md`): all `FAIL_TO_PASS` green with no regression resolves and re-enters nothing; a regression routes to `implement` to narrow the fix; a partial or ineffective patch routes to `inquire` to re-diagnose; an empty patch routes to `implement`. Because the code under test is deterministic, one test run settles each predicate; the verdict is dispositive in a single read and no sequential-evidence accumulator is needed.
 
 The driver reads those two lines and routes the next stage, bounded by an attempt budget. In pseudocode (full parser: [`driver/rung5_driver.py`](https://github.com/kimjune01/swebench-pro/blob/main/driver/rung5_driver.py)):
 
 ```text
-verdict ← attest's last VERDICT line     # RESOLVED | NOT_RESOLVED | PARTIAL
-route   ← attest's last RE-ENTER line     # inquire | implement | none
+verdict ← attest's last VERDICT line    # RESOLVED | NOT_RESOLVED | PARTIAL
+route   ← attest's last RE-ENTER line   # inquire | implement | none
 
-if verdict is RESOLVED and route is none:   stop (win)
-else if attempts have reached the budget:   stop (budget exhausted)
-else:                                        re-enter the stage named by route
+if verdict is RESOLVED and route is none:
+    stop (win)
+else if attempts have reached the budget:
+    stop (budget exhausted)
+else:
+    re-enter the stage named by route
 ```
 
 One harness-enforced override applies: a regression gets a single narrow `implement` attempt, and if the next pass routes to `implement` again the driver overrides it to `inquire`. A regression that will not narrow means the approach itself conflicts with a `PASS_TO_PASS` test, and grinding `implement` would retry the same edit. No stage decides its own termination; the verdict and route are mechanical, the budget is fixed, and re-running the same `attest` output through the driver yields the same routing. The logic is published and frozen by the same tag as the rest of the artifact.
@@ -263,6 +266,11 @@ One distinction the gate makes sharp. The `attest` agent's `VERDICT` is its read
 ### Outer-loop iteration {#outer-loop}
 
 `attest` failures do not retry the patch. They route back to `inquire` with the trajectory classification and the updated graph. `implement` sees a different node-set on re-entry rather than the same node twice. The attempt budget per instance is bounded. Budget exhaustion counts as a clean termination without convergence, and the loop treats it as a verdict. No peek at held-out tests at any point in the loop. The gate's inputs are local to the instance and the agent's own run.
+
+<figure>
+  <img src="/assets/wallclock-per-instance.svg" alt="Histogram of wall-clock minutes per instance across the 728 eligible SWE-bench Pro instances. Bars: 5 to 10 minutes 168 instances, 10 to 15 minutes 305 (the peak), 15 to 20 minutes 137, 20 to 30 minutes 58, 30 to 60 minutes 31, 60-plus minutes 29. One peak around 10 to 15 minutes with a thin right tail." style="max-width:560px; width:100%; height:auto; margin:1em auto; display:block;" />
+  <figcaption><strong>Figure.</strong> Wall-clock per instance, all 728 eligible Pro instances. One peak at 10–15 min (median ~13 min; 84% finish inside 5–20 min), then a thin tail of heavy repos and craft-hangs on large suites. The outer loop's re-entries would show as a second, slower mode; too few instances re-enter to populate one, so the distribution stays single-peaked.</figcaption>
+</figure>
 
 ### Fault classification (operator-side) {#fault-classification}
 

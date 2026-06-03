@@ -1,0 +1,52 @@
+<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" style="font-family: system-ui, -apple-system, sans-serif;">
+  <style>
+    .axis { stroke: #cbd5e1; stroke-width: 1; }
+    .grid { stroke: #eef2f7; stroke-width: 1; }
+    .tick { font-size: 10px; fill: #94a3b8; }
+    .xlab { font-size: 11px; fill: #475569; }
+    .count { font-size: 10px; fill: #475569; font-weight: 600; }
+    .title { font-size: 11px; fill: #64748b; }
+  </style>
+
+  <!-- gridlines + y ticks -->
+  <line class="grid" x1="68" y1="250" x2="540" y2="250"/>
+  <line class="grid" x1="68" y1="183" x2="540" y2="183"/>
+  <line class="grid" x1="68" y1="116" x2="540" y2="116"/>
+  <line class="grid" x1="68" y1="48"  x2="540" y2="48"/>
+  <text class="tick" x="60" y="254" text-anchor="end">0</text>
+  <text class="tick" x="60" y="187" text-anchor="end">100</text>
+  <text class="tick" x="60" y="120" text-anchor="end">200</text>
+  <text class="tick" x="60" y="52"  text-anchor="end">300</text>
+
+  <!-- axes -->
+  <line class="axis" x1="68" y1="35" x2="68" y2="250"/>
+  <line class="axis" x1="68" y1="250" x2="540" y2="250"/>
+
+  <!-- bars -->
+  <rect x="81"  y="137" width="52" height="113" fill="#60a5fa" opacity="0.85"/>
+  <rect x="159" y="45"  width="52" height="205" fill="#1d4ed8" opacity="0.9"/>
+  <rect x="237" y="158" width="52" height="92"  fill="#60a5fa" opacity="0.85"/>
+  <rect x="315" y="211" width="52" height="39"  fill="#60a5fa" opacity="0.85"/>
+  <rect x="393" y="229" width="52" height="21"  fill="#94a3b8" opacity="0.7"/>
+  <rect x="471" y="230" width="52" height="20"  fill="#94a3b8" opacity="0.7"/>
+
+  <!-- counts -->
+  <text class="count" x="107" y="132" text-anchor="middle">168</text>
+  <text class="count" x="185" y="40"  text-anchor="middle">305</text>
+  <text class="count" x="263" y="153" text-anchor="middle">137</text>
+  <text class="count" x="341" y="206" text-anchor="middle">58</text>
+  <text class="count" x="419" y="224" text-anchor="middle">31</text>
+  <text class="count" x="497" y="225" text-anchor="middle">29</text>
+
+  <!-- x labels -->
+  <text class="xlab" x="107" y="266" text-anchor="middle">5–10</text>
+  <text class="xlab" x="185" y="266" text-anchor="middle">10–15</text>
+  <text class="xlab" x="263" y="266" text-anchor="middle">15–20</text>
+  <text class="xlab" x="341" y="266" text-anchor="middle">20–30</text>
+  <text class="xlab" x="419" y="266" text-anchor="middle">30–60</text>
+  <text class="xlab" x="497" y="266" text-anchor="middle">60+</text>
+
+  <!-- axis titles -->
+  <text class="title" x="304" y="287" text-anchor="middle">minutes per instance</text>
+  <text class="title" x="18" y="142" text-anchor="middle" transform="rotate(-90 18 142)">instances</text>
+</svg>
