@@ -53,14 +53,19 @@ We do not claim *which part* earns the lift: the typed inquiry stage, the blind 
 
 The headline claim is narrow and falsifiable. The Verified half is discharged now; the comparative claim across both benches becomes fully unconditional once the Pro artifact is DOI-pinned (§(provenance)). No method documented in our comparative literature search (§(search)), known to us, has *demonstrated* with equivalent receipts a higher SWE-bench official-harness resolve rate at a lower audited per-instance dollar cost, reproducibly on the two most popular SWE benchmarks (Verified and Pro) under one frozen harness, than the one presented here.
 
-The four receipts grade different failure modes:
+I do not attest; my harness does. My own part is merely a pointer: to the passing patches, the runtime logs, and the worklog I kept while running the harness through the bench. Inside the deterministic outer loop no patch advances until its tests pass, and the committed patch is itself the attestation it hands the grader: a re-gradable artifact the grader re-runs without me. Trust transfers down the chain by construction, never resting on my word. Three receipts, three independent attestors.[^verified]
 
-- *Verified resolve rate* (426 / 438 eligible, Zenodo-DOI'd, trajectories and diffs committed): controlled-bench accuracy.
-- *Pro* under preregistration (terminal: 694/728 eligible = 95.3%, 0 incomplete, whole eligible set graded): contamination-resistant accuracy.
-- *OSS PR merge rate* (81 merged across 73 cold repos, 50.6%, GraphQL-verifiable): ecological maintainer grading.
-- *Economic cost ~$5.14/instance frontier and ~$0.41 open-weight at public API rates (cash far lower on flat subscriptions); ledger published*: accessibility.
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:9.5em"><col><col style="width:13em"></colgroup>
+<thead><tr><th style="background:#f0f0f0">Receipt</th><th style="background:#f0f0f0">Evidence</th><th style="background:#f0f0f0">Attestor</th></tr></thead>
+<tr><td>Pro (preregistered)</td><td>terminal: 694 / 728 = 95.3%, 0 incomplete, whole eligible set graded</td><td>Scale's official grader, re-runs the committed patch</td></tr>
+<tr><td>OSS PR merge rate</td><td>81 merged across 73 cold repos, 50.6%, GraphQL-verifiable</td><td>adversarial maintainers who merged</td></tr>
+<tr><td>Economic cost</td><td>~$5.14/instance frontier, ~$0.41 open-weight (cash far lower on flat subscriptions); ledger published</td><td>anyone, recomputing at public API rates</td></tr>
+</table>
 
-The two properties that matter are *demonstrated* (we publish the trail that makes the numbers auditable) and *reproducibility on both benches* under one artifact. Refutation is a citation showing a stronger combined receipt.
+[^verified]: SWE-bench Verified (426 / 438 eligible, Zenodo-DOI'd, trajectories and diffs committed) is the prior-generation baseline: saturated and contaminated, it ports cleanly but no longer discriminates, so it stands here as history rather than a primary receipt. Same harness, same official-grader discipline.
+
+The two properties that matter are *demonstrated* (we publish the trail that makes the numbers auditable) and *reproducibility on both benches* under one artifact.
 
 ## Theoretical grounding: methodeutics as a contract surface {#grounding}
 
