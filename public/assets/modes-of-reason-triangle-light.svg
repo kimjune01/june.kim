@@ -39,14 +39,14 @@
   <text x="122" y="137" text-anchor="end" style="font-size:10px; fill:#64748b; font-style:italic;">run → accumulate</text>
 
   <!-- Nodes -->
-  <text class="node-text" x="230" y="28">Observation</text>
-  <text class="node-sub" x="230" y="46">what happened</text>
+  <text class="node-text" x="230" y="20">Observation</text>
+  <text class="node-sub" x="230" y="38">what happened</text>
 
-  <text class="node-text" x="358" y="240">Theory</text>
-  <text class="node-sub" x="358" y="258">what is true</text>
+  <text class="node-text" x="372" y="247">Theory</text>
+  <text class="node-sub" x="372" y="265">what is true</text>
 
-  <text class="node-text" x="102" y="240">Experiment</text>
-  <text class="node-sub" x="102" y="258">how to act</text>
+  <text class="node-text" x="88" y="247">Experiment</text>
+  <text class="node-sub" x="88" y="265">how to act</text>
 
   <!-- Latin roots -->
   <text x="338" y="153" text-anchor="start" style="font-size:9px; fill:#94a3b8; font-style:italic;">ab-ducere: lead away</text>

@@ -1,0 +1,72 @@
+<svg viewBox="0 0 750 330" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #666; font-size: 11px; }
+    .dark { fill: #333; }
+    .label { font-size: 10px; fill: #888; }
+    .small { font-size: 9px; }
+    .tiny { font-size: 8px; }
+    .bold { font-weight: bold; }
+    .amber { fill: #b45309; }
+    .blue { fill: #1d4ed8; }
+    .green { fill: #15803d; }
+    .red { fill: #dc2626; }
+  </style>
+  <defs>
+    <marker id="edge" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
+    </marker>
+  </defs>
+
+  <!-- edges (under nodes) -->
+  <path d="M 170 151 L 215 43"  stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#edge)" />
+  <path d="M 170 151 L 215 115" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#edge)" />
+  <path d="M 170 151 L 215 187" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#edge)" />
+  <path d="M 170 151 L 215 259" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#edge)" />
+  <path d="M 495 115 L 525 115" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#edge)" />
+
+  <!-- root: observation -->
+  <rect x="20" y="122" width="150" height="58" rx="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="95" y="148" text-anchor="middle" class="label bold">OBSERVATION</text>
+  <text x="95" y="165" text-anchor="middle" class="small dark">light won't turn on</text>
+
+  <!-- H1: no electricity (killed) -->
+  <rect x="215" y="14" width="280" height="58" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="227" y="38" text-anchor="start" class="amber small bold">abduction · 60%</text>
+  <text x="483" y="38" text-anchor="end" class="red tiny">✗ killed: outlets live</text>
+  <text x="227" y="59" text-anchor="start" class="dark" style="font-size:11px; text-decoration:line-through">no electricity from socket</text>
+
+  <!-- H2: dimmer switch broken (witnessed) -->
+  <rect x="215" y="86" width="280" height="58" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+  <text x="227" y="110" text-anchor="start" class="green small bold">induction · 96%</text>
+  <text x="483" y="110" text-anchor="end" class="green tiny">✓ witnessed: bypass works</text>
+  <text x="227" y="131" text-anchor="start" class="dark bold" style="font-size:11px">dimmer switch broken</text>
+
+  <!-- H3: fixture dysfunctional (killed) -->
+  <rect x="215" y="158" width="280" height="58" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="227" y="182" text-anchor="start" class="amber small bold">abduction · 55%</text>
+  <text x="483" y="182" text-anchor="end" class="red tiny">✗ killed: lights on wall</text>
+  <text x="227" y="203" text-anchor="start" class="dark" style="font-size:11px; text-decoration:line-through">fixture dysfunctional</text>
+
+  <!-- H4: bulb expired (killed) -->
+  <rect x="215" y="230" width="280" height="58" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="227" y="254" text-anchor="start" class="amber small bold">abduction · 65%</text>
+  <text x="483" y="254" text-anchor="end" class="red tiny">✗ killed: lights elsewhere</text>
+  <text x="227" y="275" text-anchor="start" class="dark" style="font-size:11px; text-decoration:line-through">bulb expired</text>
+
+  <!-- deduction: derived fix, extends the witnessed node -->
+  <rect x="525" y="86" width="210" height="58" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="537" y="110" text-anchor="start" class="blue small bold">deduction</text>
+  <text x="537" y="131" text-anchor="start" class="dark" style="font-size:11px">replace dimmer switch</text>
+
+  <!-- legend -->
+  <circle cx="30" cy="312" r="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="39" y="315" class="tiny">abduction</text>
+  <circle cx="130" cy="312" r="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="139" y="315" class="tiny">deduction</text>
+  <circle cx="230" cy="312" r="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+  <text x="239" y="315" class="tiny">induction</text>
+  <text x="330" y="315" class="red tiny">✗ killed</text>
+  <text x="405" y="315" class="green tiny">✓ witnessed</text>
+  <text x="505" y="315" class="tiny">→ dependence edge</text>
+
+</svg>

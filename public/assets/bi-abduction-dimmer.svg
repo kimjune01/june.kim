@@ -1,0 +1,109 @@
+<svg viewBox="10 2 700 306" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #666; font-size: 11px; }
+    .dark { fill: #333; }
+    .accent { fill: #3b82f6; }
+    .green { fill: #2d7d2d; }
+    .red { fill: #c43c3c; }
+    .bold { font-weight: bold; }
+    .title { font-size: 12px; letter-spacing: 0.5px; fill: #333; font-weight: bold; }
+    .label { font-size: 10px; fill: #888; }
+    .small { font-size: 9px; }
+  </style>
+  <defs>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+    </marker>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaa" />
+    </marker>
+  </defs>
+
+  <!-- === LEFT: EPISODE === -->
+  <text x="150" y="14" text-anchor="middle" class="title">EPISODE</text>
+
+  <!-- BEFORE -->
+  <rect x="14" y="22" width="272" height="132" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="150" y="40" text-anchor="middle" class="label bold accent">BEFORE</text>
+
+  <rect x="26" y="56" width="76" height="40" fill="none" stroke="#ccc" stroke-width="1.5" rx="3" />
+  <text x="64" y="80" text-anchor="middle" class="small dark">dimmer</text>
+
+  <line x1="102" y1="76" x2="112" y2="76" stroke="#ccc" stroke-width="1" />
+
+  <rect x="112" y="56" width="76" height="40" fill="none" stroke="#ccc" stroke-width="1.5" rx="3" />
+  <text x="150" y="80" text-anchor="middle" class="small dark">fixture</text>
+
+  <line x1="188" y1="76" x2="198" y2="76" stroke="#ccc" stroke-width="1" />
+
+  <rect x="198" y="56" width="76" height="40" fill="none" stroke="#ccc" stroke-width="1.5" rx="3" />
+  <text x="236" y="80" text-anchor="middle" class="small dark">bulb</text>
+
+  <circle cx="88" cy="126" r="5" fill="#c43c3c" />
+  <text x="99" y="130" text-anchor="start"><tspan class="red bold" style="font-size:9px">BROKEN</tspan><tspan style="font-size:8px" fill="#888"> · cause invisible</tspan></text>
+
+  <!-- perturb arrow -->
+  <path d="M 150 156 L 150 168" stroke="#aaa" stroke-width="1" marker-end="url(#arrow-dim)" fill="none" />
+  <text x="162" y="166" class="small accent" style="font-size:8px">bypass → wall</text>
+
+  <!-- AFTER -->
+  <rect x="14" y="172" width="272" height="132" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="150" y="190" text-anchor="middle" class="label bold accent">AFTER</text>
+
+  <rect x="26" y="206" width="76" height="40" fill="none" stroke="#3b82f6" stroke-width="2" rx="3" />
+  <text x="64" y="224" text-anchor="middle" class="dark" style="font-size:9px; text-decoration:line-through">dimmer</text>
+  <text x="64" y="238" text-anchor="middle" class="accent bold" style="font-size:8px">wall bypass</text>
+
+  <line x1="102" y1="226" x2="112" y2="226" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,2" />
+
+  <rect x="112" y="206" width="76" height="40" fill="none" stroke="#ccc" stroke-width="1.5" rx="3" />
+  <text x="150" y="230" text-anchor="middle" class="small dark">fixture</text>
+
+  <line x1="188" y1="226" x2="198" y2="226" stroke="#ccc" stroke-width="1" />
+
+  <rect x="198" y="206" width="76" height="40" fill="none" stroke="#ccc" stroke-width="1.5" rx="3" />
+  <text x="236" y="230" text-anchor="middle" class="small dark">bulb</text>
+
+  <circle cx="62" cy="276" r="5" fill="#2d7d2d" />
+  <text x="73" y="280" text-anchor="start"><tspan class="green bold" style="font-size:9px">WORKING</tspan><tspan style="font-size:8px" fill="#888"> · light returns</tspan></text>
+
+  <!-- === MIDDLE: XOR === -->
+  <path d="M 298 163 L 322 163" stroke="#3b82f6" stroke-width="1.5" fill="none" />
+  <circle cx="342" cy="163" r="13" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+  <line x1="342" y1="152" x2="342" y2="174" stroke="#3b82f6" stroke-width="1.5" />
+  <line x1="331" y1="163" x2="353" y2="163" stroke="#3b82f6" stroke-width="1.5" />
+  <path d="M 362 163 L 386 163" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow-accent)" fill="none" />
+  <text x="342" y="142" text-anchor="middle" class="small accent bold">XOR</text>
+
+  <!-- === RIGHT: OUTPUT === -->
+
+  <!-- FIGURE -->
+  <rect x="398" y="22" width="308" height="130" fill="none" stroke="#3b82f6" stroke-width="1.5" rx="4" />
+  <text x="552" y="42" text-anchor="middle" class="title accent">FIGURE (the diff)</text>
+
+  <rect x="416" y="58" width="132" height="66" fill="#faf8f4" stroke="#e8e4dc" stroke-width="1" rx="3" />
+  <text x="482" y="86" text-anchor="middle" class="label dark bold">DIMMER</text>
+  <text x="482" y="104" text-anchor="middle" class="small accent">in chain → bypassed</text>
+
+  <rect x="560" y="58" width="130" height="66" fill="#faf8f4" stroke="#e8e4dc" stroke-width="1" rx="3" />
+  <text x="625" y="78" text-anchor="middle" class="label dark bold">LIGHT</text>
+  <circle cx="600" cy="100" r="5" fill="#c43c3c" />
+  <path d="M 612 100 L 638 100" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow-accent)" fill="none" />
+  <circle cx="652" cy="100" r="5" fill="#2d7d2d" />
+  <text x="625" y="118" text-anchor="middle" class="small accent">BROKEN -> WORKING</text>
+
+  <!-- GROUND -->
+  <rect x="398" y="172" width="308" height="132" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="552" y="192" text-anchor="middle" class="label">GROUND (unchanged)</text>
+
+  <rect x="430" y="212" width="110" height="40" fill="none" stroke="#e0e0e0" stroke-width="1" rx="2" />
+  <text x="485" y="230" text-anchor="middle" class="small" style="font-size:9px">fixture</text>
+  <text x="485" y="244" text-anchor="middle" class="green" style="font-size:9px">OK</text>
+
+  <rect x="564" y="212" width="110" height="40" fill="none" stroke="#e0e0e0" stroke-width="1" rx="2" />
+  <text x="619" y="230" text-anchor="middle" class="small" style="font-size:9px">bulb</text>
+  <text x="619" y="244" text-anchor="middle" class="green" style="font-size:9px">OK</text>
+
+  <text x="552" y="288" text-anchor="middle" class="small">same parts, lit once bypassed = frame</text>
+
+</svg>
