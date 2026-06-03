@@ -166,11 +166,27 @@ Throughout, the three stages are `inquire`, `implement`, and `attest`; the froze
 
 We recast each SWE-bench instance as an inquiry on an engineered system: a failure trace, a codebase, a root cause to find, and an intervention that must not regress the rest of the system. Run this way, the agent discovers like a software engineer can: it abduces a cause from the failure, traces it through the code, and tests it before it writes anything.
 
-Code is the right substrate for this data structure because it combines three properties that other inquiry domains rarely combine. It is *reproducible* (same input yields same output, modulo controlled nondeterminism), *deterministic* (causal lines from input to behavior are mechanical), and *perturbable* (single-line and single-function diffs are cheap to apply and fully observable). Because those three hold together, hypotheses about code can be tested by cheap mechanical perturbations and falsified by deterministic predicates; kill conditions are not approximations; they are executions.
+Code is the right substrate for this data structure because it combines three properties that other inquiry domains rarely combine:
+
+- **Reproducible**: same input yields same output, modulo controlled nondeterminism
+- **Deterministic**: causal lines from input to behavior are mechanical
+- **Perturbable**: single-line and single-function diffs are cheap to apply and fully observable
+
+Because those three hold together, hypotheses about code can be tested by cheap mechanical perturbations and falsified by deterministic predicates; kill conditions are not approximations; they are executions.
 
 One instance is enough to settle the predicate in this regime. Statistics is the machinery for inferring causal relationships from noisy populations; in code the per-instance response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable benchmark predicate for that instance. The verdict is for the predicate, not for the broader notion of root-cause correctness: hidden behaviors not covered by the executable predicate are out of scope, and we report only what the predicate checks, which is what the grader checks. Contrast medicine, where hypotheses need populations because individual responses are noisy; the per-predicate per-instance check here does not. The paper therefore reports counts, denominators, and per-repo breakdowns rather than confidence intervals or significance tests: per-predicate verdicts are already exact, and aggregating them is bookkeeping. Aggregate claims across repos, benches, or run-order remain empirical and are caveated where they appear. Portability of this regime to substrates where the per-instance response is not mechanically observable is open.
 
-The three Peircean modes are how `inquire` builds the hypothesis graph; the stages downstream act on it. **Abduction**: `inquire` proposes candidate root causes from the observed failure and writes hypothesis nodes with falsifiable predicates and kill conditions (read-only, no edits). **Deduction**: it traces each hypothesis's consequences through the code to localize the suspect set. **Induction**: it tests survivors with cheap read-only experiments (prints, intermediate data), typing each node by the mode that established it, and the mode caps its confidence (deduction 95–99%, induction 90–95%, abduction 60–85%). `implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
+The three Peircean modes are how `inquire` builds the hypothesis graph, each node typed by the mode that established it and capped at that mode's confidence:
+
+<table style="max-width:660px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:7em"><col><col style="width:6.5em"></colgroup>
+<thead><tr><th style="background:#f0f0f0">Mode</th><th style="background:#f0f0f0">What <code>inquire</code> does</th><th style="background:#f0f0f0">Confidence cap</th></tr></thead>
+<tr><td><strong>Abduction</strong></td><td>Proposes candidate root causes from the observed failure; writes hypothesis nodes with falsifiable predicates and kill conditions (read-only)</td><td>60–85%</td></tr>
+<tr><td><strong>Deduction</strong></td><td>Traces each hypothesis's consequences through the code to localize the suspect set</td><td>95–99%</td></tr>
+<tr><td><strong>Induction</strong></td><td>Tests survivors with cheap read-only experiments (prints, intermediate data)</td><td>90–95%</td></tr>
+</table>
+
+`implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
 ### Hypothesis graph as inquiry output {#recon-output}
 
