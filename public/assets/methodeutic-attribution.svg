@@ -39,13 +39,13 @@
     <text x="115" y="353">Sonnet 4.5</text>
     <text x="205" y="353">GPT-5.5</text>
     <text x="295" y="353">Opus 4.7</text>
-    <text x="455" y="353">open-weight</text>
-    <text x="545" y="353">frontier</text>
+    <text x="455" y="353">Open-weight</text>
+    <text x="545" y="353">Frontier</text>
   </g>
   <!-- group labels -->
   <g font-size="12" font-weight="600" text-anchor="middle">
-    <text x="205" y="380" fill="#64748b">bare model · standardized SWE-Agent</text>
-    <text x="500" y="380" fill="#1d4ed8">this methodeutic harness</text>
+    <text x="205" y="380" fill="#64748b">Base model + minimal harness</text>
+    <text x="500" y="380" fill="#1d4ed8">Methodeutic harness</text>
   </g>
   <!-- gap annotation: best bare model to harness -->
   <g stroke="#9ca3af" stroke-width="1" stroke-dasharray="3 3">
