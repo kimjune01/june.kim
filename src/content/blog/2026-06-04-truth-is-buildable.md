@@ -140,9 +140,10 @@ point. A claim whose build can never fail is not true. It is a hardcoded return 
 number that grades itself and will not show its work is `return 0.70`, a mocked test
 reporting green.
 
-This post says truth is built. It does not say how you find what to build next, which
-hypothesis to raise so the test has something to try. That move is its own methodeutic,
-and it has a name: [abduction](/abduction).
+This post says truth is built. That denies the real nothing, it only moves the real to
+where it always was, ahead of the build, the gap past the edge of the known. Crossing
+that gap is inquiry, and raising the hypothesis so the test has something to try is one
+of its three [modes of reason](/modes-of-reason), [abduction](/abduction).
 
 *Companion: [belief is the edge of knowing](/belief-is-the-edge-of-knowing) comes at the
 same edge from cognition. There is no boolean truth above belief, only confidence past a
