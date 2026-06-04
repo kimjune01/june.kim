@@ -235,7 +235,7 @@ check the artifact through them. They are mirrored to
 I retract one critique from the section above. Per-task receipts are published,
 just behind URLs the UI doesn't surface. That much is to the maintainers' credit.
 
-The review has three parts. First, the audit of the artifact: three things in
+The review has three parts. First, the audit of the artifact: four things in
 the content that do not hold up. Second, the dossier: the incentive landscape
 the artifact was built inside, which explains why the bench succeeds as
 marketing and fails as science. Third, a five-minute demonstration that the
@@ -362,6 +362,39 @@ A benchmark whose grader disagrees with an independent re-run on its own pinned
 pipeline is exposing an unresolved consistency problem in its scoring function,
 whether the maintainers have responded to it yet or not.
 
+#### The grader scores a choice the task never specifies
+
+The four golds above fail their own verifier. This is the inverse, and the harder
+one to see: a verifier whose gold passes cleanly while it scores a behavior the
+instruction never determines. Nothing looks broken. The gold passes, the verifier
+runs, the task reads healthy. What it measures is the problem.
+
+[`adaptix-name-mapping-aliases`](https://github.com/datacurve-ai/deep-swe/blob/2f0f4125/tasks/adaptix-name-mapping-aliases/instruction.md)
+adds alias support to a field-mapping config, and its entire specification of overlay
+behavior is one parenthetical: aliases are *"overlay-mergeable ... first-wins-per-field."*
+The verifier, `test_alias_overlay_first_wins_per_field`, fixes one reading of that phrase:
+when two config layers each alias the same field, the first layer's alias stays valid and
+the second layer's is discarded, so an input keyed by the second alias must raise
+`NoRequiredFieldsLoadError`. Nothing in the prose entails that. A union, where both aliases
+resolve, fits *"overlay-mergeable ... first-wins-per-field"* exactly as well. From the
+instruction alone the behavior is a coin flip, and the hidden test scores the guess: a
+solver that reads the parenthetical the other way fails the task on a convention the prose
+never stated.
+
+That makes at least this task's score a specification lottery. It grades whether the model
+guessed the author's unstated convention, not the stated feature alone, and the guess is
+invisible in a single reward; it does not wash out the way infrastructure flake does,
+because the model is not flaking, it is committing to a reading the grader happens to
+penalize. Real PRDs are vague, and a benchmark drawn from real work inherits that vagueness;
+the defect is not the underspecification but the hidden test resolving it silently and
+scoring the resolution as capability. Getting this one right from the prose is impossible or
+a coin flip, which reads as a due-diligence gap rather than anything worse, the kind a launch
+reviewed as a marketing release produces and a measurement self-audit catches. That
+self-audit is the second-reader check this post already proposes: a model reading the
+instruction beside the test flags the overlay clause as underdetermined before any solver
+runs. One task is worked through here; I make no claim about how many of the 113 share the
+property.
+
 #### A design choice with a short half-life
 
 DeepSWE publishes everything. The tasks, the harness, the verifier code, the
@@ -443,7 +476,7 @@ defensible on inspection, and probably accurate.
 
 ### The dossier
 
-Three problems with the content. Each would, on its own, prompt an editor
+Four problems with the content. Each would, on its own, prompt an editor
 query at a peer-reviewed venue. None are subtle.
 
 The dossier evidences why the bench fails as a scientific measurement. The
@@ -587,7 +620,7 @@ heatmap, tasks, trials) and the per-trial JSONs at
 for any issue you find.
 ```
 
-Five lines. No mention of the three findings above. No priming on patches,
+Five lines. No mention of the findings above. No priming on patches,
 denominators, conflicts of interest, or any specific defect. Just "audit it
 skeptically, here are the artifacts, cite specifics."
 
