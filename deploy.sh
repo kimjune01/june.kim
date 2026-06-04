@@ -114,7 +114,7 @@ done < <(comm -23 /tmp/remote-html-keys.txt /tmp/local-html-keys.txt)
 echo "    $HTML_DELETE_COUNT stale HTML files deleted"
 
 echo "==> Syncing non-HTML to S3"
-aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only --exclude "*.html"
+aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only --exclude "*.html" --exclude "*.DS_Store" --exclude "*.pytest_cache/*"
 
 echo "==> Invalidating CloudFront"
 aws cloudfront create-invalidation \
