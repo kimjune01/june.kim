@@ -7,9 +7,32 @@ CF_DIST_ID="E1G9R7V0YY4VV1"
 echo "==> Building site"
 pnpm build
 
+# junebot Lambda is the heaviest step (manifest rebuild + pip wheels + ~29 MB
+# zip + upload) and has nothing to do with a post edit. Only repackage+upload it
+# when junebot/ actually changed since it was last deployed (marker tag
+# `junebot-deployed`), or when forced with DEPLOY_JUNEBOT=1. Kept non-fatal so a
+# Lambda upload hiccup never aborts the site deploy.
 if [ -x junebot/deploy-code.sh ]; then
-  echo "==> Deploying junebot Lambda code"
-  bash junebot/deploy-code.sh
+  deploy_junebot=skip
+  if [ "${DEPLOY_JUNEBOT:-}" = "1" ]; then
+    deploy_junebot=forced
+  elif git rev-parse -q --verify refs/tags/junebot-deployed >/dev/null 2>&1; then
+    git diff --quiet refs/tags/junebot-deployed -- junebot/ || deploy_junebot=changed
+  else
+    echo "==> junebot: no baseline marker; skipping (run DEPLOY_JUNEBOT=1 to deploy and set baseline)"
+  fi
+
+  if [ "$deploy_junebot" != skip ]; then
+    echo "==> Deploying junebot Lambda code ($deploy_junebot)"
+    if bash junebot/deploy-code.sh; then
+      git tag -f junebot-deployed HEAD >/dev/null
+      echo "    junebot deployed; baseline marker -> $(git rev-parse --short HEAD)"
+    else
+      echo "    WARNING: junebot deploy failed; continuing with site deploy (marker unchanged)" >&2
+    fi
+  elif [ "${DEPLOY_JUNEBOT:-}" != "1" ] && git rev-parse -q --verify refs/tags/junebot-deployed >/dev/null 2>&1; then
+    echo "==> junebot unchanged since last deploy; skipping Lambda code update"
+  fi
 fi
 
 # ─── .html aliases ──────────────────────────────────────────────────────────
