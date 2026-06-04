@@ -1,0 +1,82 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.3 — Bijective Proof" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Bijective Proof</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">To prove two counts are equal, build a <strong>bijection</strong> between the things they count. No algebra, no induction: if every object on the left pairs with exactly one on the right, the totals must match. It is the most honest kind of proof, because it explains <em>why</em>.</p>
+    </div>
+
+    <!-- SVG: subsets <-> binary strings bijection -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 130" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="70" y="30" text-anchor="middle" fill="#60a5fa" font-size="11" fill-opacity="0.7">subset of &#123;1,2,3&#125;</text>
+        <text x="270" y="30" text-anchor="middle" fill="#f59e0b" font-size="11" fill-opacity="0.7">binary string</text>
+        <text x="70" y="60" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.8">&#123;1,3&#125;</text>
+        <text x="270" y="60" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.8">101</text>
+        <line x1="110" y1="56" x2="240" y2="56" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="70" y="90" text-anchor="middle" fill="#60a5fa" font-size="12" fill-opacity="0.8">&#123;2&#125;</text>
+        <text x="270" y="90" text-anchor="middle" fill="#f59e0b" font-size="12" fill-opacity="0.8">010</text>
+        <line x1="100" y1="86" x2="250" y2="86" stroke="currentColor" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="170" y="120" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">2³ subsets ↔ 2³ strings</text>
+      </svg>
+    </div>
+
+    <h3>Counting one set two ways</h3>
+    <p>Subsets of an n-element set correspond exactly to length-n binary strings: bit i says whether element i is in. There are 2<sup>n</sup> strings, so 2<sup>n</sup> subsets. Sort those subsets by size and you also get C(n,0)+C(n,1)+…+C(n,n). Two counts of one set, hence the identity.</p>
+
+    <SchemeRepl client:visible initialCode={`; Count subsets of {1..n} two ways.
+
+; (1) by total: there are 2^n binary strings
+(define (by-total n) (expt 2 n))
+
+; (2) by size: sum of C(n,k) over all k
+(define (choose n k)
+  (cond ((or (< k 0) (> k n)) 0)
+        ((or (= k 0) (= k n)) 1)
+        (else (+ (choose (- n 1) (- k 1)) (choose (- n 1) k)))))
+
+(define (by-size n)
+  (let loop ((k 0) (s 0))
+    (if (> k n) s (loop (+ k 1) (+ s (choose n k))))))
+
+(display "2^5         = ") (display (by-total 5)) (newline)
+(display "sum C(5,k)  = ") (display (by-size 5)) (newline)
+(display "equal?      = ") (display (= (by-total 5) (by-size 5))) (newline)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import comb
+
+by_total = lambda n: 2 ** n
+by_size  = lambda n: sum(comb(n, k) for k in range(n + 1))
+
+print("2^5        =", by_total(5))
+print("sum C(5,k) =", by_size(5))
+print("equal?     =", by_total(5) == by_size(5))
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/combinatorics/comb-02/">🧮 Ch.2 Binomial Coefficients</a> &mdash; the identity this chapter proves by counting</li>
+      <li><a href="/reading/proof-writing/">✎ Proofs</a> &mdash; bijection is one of the cleanest proof techniques</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-02/", label: "Binomial Coefficients · 2 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-04/", label: "Inclusion–Exclusion · 4 of 10" }} />
+
+  </main>
+</Layout>

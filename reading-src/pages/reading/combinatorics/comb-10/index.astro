@@ -1,0 +1,99 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.10 — Probabilistic & Extremal Methods" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Probabilistic &amp; Extremal Methods</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The frontier of combinatorics is adversarial. <strong>Pigeonhole</strong> forces structure from sheer size. <strong>Ramsey theory</strong> says total disorder is impossible: any large enough structure contains order. And the <strong>first-moment method</strong> proves something exists by showing the average is on its side, without ever constructing it.</p>
+    </div>
+
+    <!-- SVG: K6 forces a monochromatic triangle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 200 180" class="w-full max-w-[180px]" style="font-family: ui-monospace, monospace;">
+        <g stroke-width="1.2" stroke-opacity="0.5">
+          <line x1="100" y1="20" x2="160" y2="55" stroke="#f472b6"/>
+          <line x1="160" y1="55" x2="160" y2="125" stroke="#60a5fa"/>
+          <line x1="160" y1="125" x2="100" y2="160" stroke="#f472b6"/>
+          <line x1="100" y1="160" x2="40" y2="125" stroke="#60a5fa"/>
+          <line x1="40" y1="125" x2="40" y2="55" stroke="#f472b6"/>
+          <line x1="40" y1="55" x2="100" y2="20" stroke="#60a5fa"/>
+          <line x1="100" y1="20" x2="160" y2="125" stroke="#f472b6"/>
+          <line x1="100" y1="20" x2="40" y2="125" stroke="#60a5fa"/>
+          <line x1="40" y1="55" x2="160" y2="125" stroke="#f472b6"/>
+        </g>
+        <g fill="#fbbf24">
+          <circle cx="100" cy="20" r="5"/><circle cx="160" cy="55" r="5"/><circle cx="160" cy="125" r="5"/>
+          <circle cx="100" cy="160" r="5"/><circle cx="40" cy="125" r="5"/><circle cx="40" cy="55" r="5"/>
+        </g>
+        <text x="100" y="178" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">R(3,3)=6: a mono triangle is forced</text>
+      </svg>
+    </div>
+
+    <h3>Order is unavoidable</h3>
+    <p>Color the edges of the complete graph on 6 vertices with two colors however you like. A single-colored triangle is guaranteed: R(3,3) = 6. On 5 vertices you can still escape, so the threshold is sharp. The adversary picks the coloring; the structure wins anyway.</p>
+
+    <h3>Proof by averaging</h3>
+    <p>The first-moment method computes the <em>expected</em> number of a structure in a random object. If that expectation drops below 1, some object must have zero of them. No construction is offered, yet existence is certain. This is the same instinct that runs the research frontier of online and temporal combinatorics: you reason against the worst case rather than building one example, and the average certifies the bound.</p>
+
+    <SchemeRepl client:visible initialCode={`(define (choose n k)
+  (cond ((or (< k 0) (> k n)) 0)
+        ((or (= k 0) (= k n)) 1)
+        (else (+ (choose (- n 1) (- k 1)) (choose (- n 1) k)))))
+
+; Expected monochromatic triangles in a random 2-coloring of K_n.
+; Each triangle is monochromatic with probability 2*(1/2)^3 = 1/4.
+(define (expected-mono n)
+  (/ (choose n 3) 4))
+
+(display "E[mono] K5  = ") (display (expected-mono 5)) (newline)   ; 5/2
+(display "E[mono] K6  = ") (display (expected-mono 6)) (newline)   ; 5
+(display "E[mono] K10 = ") (display (expected-mono 10)) (newline)  ; 30
+
+; Pigeonhole: n+1 items into n boxes force a repeat.
+(define (forced-collision? items boxes)
+  (> items boxes))
+
+(display "366 people, 365 days, shared birthday forced? = ")
+(display (forced-collision? 366 365)) (newline)   ; #t
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import comb
+from fractions import Fraction
+
+# expected monochromatic triangles in a random 2-coloring of K_n
+def expected_mono(n):
+    return Fraction(comb(n, 3), 4)
+
+print("E[mono] K5  =", expected_mono(5))   # 5/2
+print("E[mono] K6  =", expected_mono(6))   # 5
+print("E[mono] K10 =", expected_mono(10))  # 30
+
+# pigeonhole
+print("366 into 365 forces a collision?", 366 > 365)  # True
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎲 Probability</a> &mdash; the first and second moment methods live here</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; adversarial reasoning, where the worst case certifies the optimum</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; counting bounds and the probabilistic method overlap</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-09/", label: "Pólya Enumeration · 9 of 10" }} />
+
+  </main>
+</Layout>

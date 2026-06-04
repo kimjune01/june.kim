@@ -1,0 +1,80 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.6 — Recurrence Relations" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Recurrence Relations</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>recurrence</strong> defines each term from earlier ones. Fibonacci is the archetype: f(n) = f(n−1) + f(n−2). Linear recurrences with constant coefficients always have a <strong>closed form</strong> built from the roots of a characteristic polynomial.</p>
+    </div>
+
+    <!-- SVG: fibonacci spiral-ish growth -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 120" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="20" y="70" fill="#f472b6" font-size="13" fill-opacity="0.7">1</text>
+        <text x="50" y="70" fill="#f472b6" font-size="13" fill-opacity="0.7">1</text>
+        <text x="80" y="70" fill="#60a5fa" font-size="13" fill-opacity="0.75">2</text>
+        <text x="115" y="70" fill="#60a5fa" font-size="13" fill-opacity="0.75">3</text>
+        <text x="155" y="70" fill="#f59e0b" font-size="13" fill-opacity="0.8">5</text>
+        <text x="200" y="70" fill="#f59e0b" font-size="13" fill-opacity="0.8">8</text>
+        <text x="250" y="70" fill="#f472b6" font-size="13" fill-opacity="0.85">13</text>
+        <text x="300" y="70" fill="#f472b6" font-size="13" fill-opacity="0.9">21</text>
+        <text x="170" y="100" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">each term = sum of the two before it</text>
+      </svg>
+    </div>
+
+    <h3>Iterate forward, or solve in closed form</h3>
+    <p>Computing a recurrence forward is linear and exact. But a linear recurrence also has a closed form: guess f(n) = r<sup>n</sup>, get a polynomial in r, and the roots give the basis. For Fibonacci the roots are the golden ratio and its conjugate, yielding Binet's formula.</p>
+
+    <SchemeRepl client:visible initialCode={`; Forward iteration: O(n), exact integers
+(define (fib n)
+  (let loop ((a 0) (b 1) (k 0))
+    (if (= k n) a (loop b (+ a b) (+ k 1)))))
+
+(define (fibs upto)
+  (let loop ((n 0) (acc '()))
+    (if (> n upto) (reverse acc)
+        (loop (+ n 1) (cons (fib n) acc)))))
+
+(display "fib 0..10 = ") (display (fibs 10)) (newline)
+(display "fib 30    = ") (display (fib 30)) (newline)   ; 832040
+
+; ratio of consecutive terms approaches the golden ratio
+(display "f31/f30   = ") (display (exact->inexact (/ (fib 31) (fib 30)))) (newline)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+print("fib 0..10 =", [fib(n) for n in range(11)])
+print("fib 30    =", fib(30))            # 832040
+print("f31/f30   =", fib(31) / fib(30))  # ~1.618
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/combinatorics/comb-05/">🧮 Ch.5 Generating Functions</a> &mdash; turn a recurrence into a rational generating function and read off the closed form</li>
+      <li><a href="/reading/algorithms/algo-10/">⚙ Algorithms</a> &mdash; recurrences bound divide-and-conquer running time</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-05/", label: "Generating Functions · 5 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-07/", label: "Partially Ordered Sets · 7 of 10" }} />
+
+  </main>
+</Layout>

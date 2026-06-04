@@ -1,0 +1,90 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.5 — Generating Functions" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Generating Functions</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Hang a whole sequence on the powers of x: a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>x² + … . Now combinatorial operations become algebra. <strong>Multiplying</strong> two generating functions <strong>convolves</strong> their sequences, which is exactly "choose some from here and some from there."</p>
+    </div>
+
+    <!-- SVG: convolution as combining -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 340 100" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="40" y="50" fill="#60a5fa" font-size="13" fill-opacity="0.8">A(x)</text>
+        <text x="95" y="50" fill="currentColor" font-size="14" fill-opacity="0.5">×</text>
+        <text x="120" y="50" fill="#f59e0b" font-size="13" fill-opacity="0.8">B(x)</text>
+        <text x="175" y="50" fill="currentColor" font-size="14" fill-opacity="0.5">→</text>
+        <text x="205" y="50" fill="#f472b6" font-size="12" fill-opacity="0.85">cₙ = Σ aⱼ bₙ₋ⱼ</text>
+        <text x="170" y="80" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">product of series = convolution of coefficients</text>
+      </svg>
+    </div>
+
+    <h3>Why multiplication is the whole trick</h3>
+    <p>The coefficient of x<sup>n</sup> in A(x)B(x) sums a<sub>j</sub>b<sub>n−j</sub> over all splits j. That is precisely the count of ways to take j objects of one type and n−j of another. Raising (1+x) to the n-th power therefore reproduces Pascal's row, because each factor offers "take this element or not."</p>
+
+    <SchemeRepl client:visible initialCode={`; Coefficient lists, low degree first. Convolution = polynomial product.
+(define (conv a b)
+  (let ((la (length a)) (lb (length b)))
+    (let loop ((i 0) (acc '()))
+      (if (> i (- (+ la lb) 2))
+          (reverse acc)
+          (loop (+ i 1)
+                (cons (let sum ((j 0) (s 0))
+                        (if (> j i) s
+                            (sum (+ j 1)
+                                 (+ s (* (if (< j la) (list-ref a j) 0)
+                                         (let ((m (- i j)))
+                                           (if (and (>= m 0) (< m lb)) (list-ref b m) 0)))))))
+                      acc)))))
+
+; (1 + x)^n via repeated convolution
+(define (binom-poly n)
+  (let loop ((k 0) (p '(1)))
+    (if (= k n) p (loop (+ k 1) (conv p '(1 1))))))
+
+(display "(1+x)^4 = ") (display (binom-poly 4)) (newline)  ; (1 4 6 4 1)
+(display "(1+x)^6 = ") (display (binom-poly 6)) (newline)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`def conv(a, b):
+    c = [0] * (len(a) + len(b) - 1)
+    for i, x in enumerate(a):
+        for j, y in enumerate(b):
+            c[i + j] += x * y
+    return c
+
+def binom_poly(n):
+    p = [1]
+    for _ in range(n):
+        p = conv(p, [1, 1])
+    return p
+
+print("(1+x)^4 =", binom_poly(4))  # [1, 4, 6, 4, 1]
+print("(1+x)^6 =", binom_poly(6))
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/combinatorics/comb-06/">🧮 Ch.6 Recurrence Relations</a> &mdash; generating functions solve recurrences in closed form</li>
+      <li><a href="/reading/information-theory/">📡 Information Theory</a> &mdash; generating functions count codewords by weight</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-04/", label: "Inclusion–Exclusion · 4 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-06/", label: "Recurrence Relations · 6 of 10" }} />
+
+  </main>
+</Layout>

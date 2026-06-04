@@ -1,0 +1,80 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.2 — Binomial Coefficients" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Binomial Coefficients</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">C(n,k) is the single most reused number in combinatorics. <strong>Pascal's recurrence</strong> C(n,k) = C(n−1,k−1) + C(n−1,k) builds the whole triangle from addition alone, and the <strong>binomial theorem</strong> says row n is exactly the coefficients of (x+y)<sup>n</sup>.</p>
+    </div>
+
+    <!-- SVG: Pascal recurrence -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 320 120" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <text x="120" y="40" fill="#60a5fa" font-size="14" fill-opacity="0.8">C(n-1,k-1)</text>
+        <text x="200" y="40" fill="#60a5fa" font-size="14" fill-opacity="0.8">C(n-1,k)</text>
+        <line x1="135" y1="50" x2="160" y2="80" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <line x1="215" y1="50" x2="175" y2="80" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="135" y="98" fill="#f472b6" font-size="14" fill-opacity="0.9">C(n,k)</text>
+        <text x="160" y="62" fill="currentColor" font-size="13" fill-opacity="0.4">+</text>
+      </svg>
+    </div>
+
+    <h3>The triangle is just addition</h3>
+    <p>Every interior entry is the sum of the two above it. That single rule, seeded with 1s on the edges, reproduces every binomial coefficient with no factorials at all.</p>
+
+    <h3>Row sums and the binomial theorem</h3>
+    <p>The entries of row n sum to 2<sup>n</sup> (the number of subsets of an n-set). Set x = y = 1 in the binomial theorem and that identity falls out for free.</p>
+
+    <SchemeRepl client:visible initialCode={`; Pascal's recurrence: no factorials, just addition
+(define (choose n k)
+  (cond ((or (< k 0) (> k n)) 0)
+        ((or (= k 0) (= k n)) 1)
+        (else (+ (choose (- n 1) (- k 1))
+                 (choose (- n 1) k)))))
+
+; build a full row
+(define (row n)
+  (let loop ((k 0) (acc '()))
+    (if (> k n) (reverse acc)
+        (loop (+ k 1) (cons (choose n k) acc)))))
+
+(display "row 4 = ") (display (row 4)) (newline)        ; (1 4 6 4 1)
+(display "sum   = ") (display (apply + (row 4))) (newline) ; 16 = 2^4
+(display "row 6 = ") (display (row 6)) (newline)
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import comb
+
+def row(n):
+    return [comb(n, k) for k in range(n + 1)]
+
+print("row 4 =", row(4))        # [1, 4, 6, 4, 1]
+print("sum   =", sum(row(4)))   # 16 = 2**4
+print("row 6 =", row(6))
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/combinatorics/comb-03/">🧮 Ch.3 Bijective Proof</a> &mdash; why the row sum is 2<sup>n</sup>, proven by counting subsets</li>
+      <li><a href="/reading/number-theory/"># Number Theory</a> &mdash; Lucas' theorem reads C(n,k) mod p off the digits</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-01/", label: "Counting Foundations · 1 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-03/", label: "Bijective Proof · 3 of 10" }} />
+
+  </main>
+</Layout>

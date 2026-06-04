@@ -1,0 +1,77 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.9 — Pólya Enumeration" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Pólya Enumeration</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">When two arrangements count as "the same" under symmetry, naive counting overcounts. <strong>Burnside's lemma</strong> fixes it: the number of distinct objects equals the <em>average</em> number of arrangements left unchanged by each symmetry. Pólya's theorem packages this for colorings.</p>
+    </div>
+
+    <!-- SVG: necklace rotations -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 280 140" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <circle cx="140" cy="65" r="45" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
+        <circle cx="140" cy="20" r="7" fill="#f472b6" fill-opacity="0.8"/>
+        <circle cx="185" cy="65" r="7" fill="#60a5fa" fill-opacity="0.8"/>
+        <circle cx="140" cy="110" r="7" fill="#f472b6" fill-opacity="0.8"/>
+        <circle cx="95" cy="65" r="7" fill="#60a5fa" fill-opacity="0.8"/>
+        <path d="M 170 35 A 40 40 0 0 1 175 50" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6"/>
+        <polygon points="175,50 178,42 170,44" fill="#f59e0b" fill-opacity="0.6"/>
+        <text x="140" y="135" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">rotations identify the same necklace</text>
+      </svg>
+    </div>
+
+    <h3>Average over the symmetry group</h3>
+    <p>Count colorings, then average over all symmetries the number each one fixes. For a necklace of n beads under rotation, the rotation by d fixes exactly c<sup>gcd(d,n)</sup> colorings with c colors. Average over all n rotations and you have counted necklaces, not strings.</p>
+
+    <SchemeRepl client:visible initialCode={`(define (gcd2 a b)
+  (if (= b 0) a (gcd2 b (modulo a b))))
+
+; Burnside over the cyclic group: necklaces of n beads, c colors, up to rotation.
+; rotation by d fixes c^gcd(d,n) colorings; average over the n rotations.
+(define (necklaces n c)
+  (let loop ((d 0) (sum 0))
+    (if (>= d n)
+        (/ sum n)
+        (loop (+ d 1) (+ sum (expt c (gcd2 d n)))))))
+
+(display "2-color, 4 beads = ") (display (necklaces 4 2)) (newline)  ; 6
+(display "2-color, 6 beads = ") (display (necklaces 6 2)) (newline)  ; 14
+(display "3-color, 4 beads = ") (display (necklaces 4 3)) (newline)  ; 24
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import gcd
+
+def necklaces(n, c):
+    return sum(c ** gcd(d, n) for d in range(n)) // n
+
+print("2-color, 4 beads =", necklaces(4, 2))  # 6
+print("2-color, 6 beads =", necklaces(6, 2))  # 14
+print("3-color, 4 beads =", necklaces(4, 3))  # 24
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/abstract-algebra/">🔗 Abstract Algebra</a> &mdash; Burnside counts orbits of a group action</li>
+      <li><a href="/reading/combinatorics/comb-01/">🧮 Ch.1 Counting Foundations</a> &mdash; what overcounting means, now corrected</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-08/", label: "Graph Theory · 8 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-10/", label: "Probabilistic & Extremal Methods · 10 of 10" }} />
+
+  </main>
+</Layout>

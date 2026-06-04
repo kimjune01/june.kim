@@ -1,0 +1,77 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.4 — Inclusion–Exclusion" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Inclusion–Exclusion</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">To count a union of overlapping sets, add the sizes, subtract the pairwise overlaps, add back the triples, and alternate. <strong>Inclusion–exclusion</strong> corrects for the double-counting at every level. Its most famous output is the <strong>derangement</strong>: permutations that fix nothing.</p>
+    </div>
+
+    <!-- SVG: three overlapping sets -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 300 160" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <circle cx="120" cy="70" r="55" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="180" cy="70" r="55" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="150" cy="115" r="55" fill="#f472b6" fill-opacity="0.12" stroke="#f472b6" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="150" y="20" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">|A∪B∪C| = ΣA − ΣAB + ABC</text>
+      </svg>
+    </div>
+
+    <h3>Alternating correction</h3>
+    <p>Singletons overcount the overlaps, so you subtract pairwise intersections; but now the triple is subtracted too many times, so you add it back. The signs alternate by the size of the intersecting group.</p>
+
+    <h3>Derangements</h3>
+    <p>How many permutations of n items leave nothing in place? Apply inclusion–exclusion over the "item i is fixed" events: D(n) = n!·(1 − 1/1! + 1/2! − … ± 1/n!). The ratio D(n)/n! converges to 1/e fast.</p>
+
+    <SchemeRepl client:visible initialCode={`(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+; D(n) = sum_{k=0}^n (-1)^k * n!/k!   (inclusion-exclusion)
+(define (derangements n)
+  (let loop ((k 0) (acc 0))
+    (if (> k n) acc
+        (loop (+ k 1)
+              (+ acc (* (expt -1 k)
+                        (/ (factorial n) (factorial k))))))))
+
+(display "D(1) = ") (display (derangements 1)) (newline)  ; 0
+(display "D(2) = ") (display (derangements 2)) (newline)  ; 1
+(display "D(3) = ") (display (derangements 3)) (newline)  ; 2
+(display "D(4) = ") (display (derangements 4)) (newline)  ; 9
+(display "D(5) = ") (display (derangements 5)) (newline)  ; 44
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import factorial
+
+def derangements(n):
+    return sum((-1) ** k * factorial(n) // factorial(k) for k in range(n + 1))
+
+for n in range(1, 6):
+    print(f"D({n}) =", derangements(n))   # 0 1 2 9 44
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/probability/">🎲 Probability</a> &mdash; inclusion–exclusion is the union bound made exact</li>
+      <li><a href="/reading/combinatorics/comb-05/">🧮 Ch.5 Generating Functions</a> &mdash; derangements have a clean exponential generating function</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-03/", label: "Bijective Proof · 3 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-05/", label: "Generating Functions · 5 of 10" }} />
+
+  </main>
+</Layout>

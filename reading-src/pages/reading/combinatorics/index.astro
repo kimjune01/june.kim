@@ -1,0 +1,64 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Combinatorics" favicon="🧮">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🧮 Combinatorics</h1>
+    <p class="text-gray-400 mb-2">Based on <a href="https://appliedcombinatorics.org/">Applied Combinatorics</a> by Keller &amp; Trotter, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>.</p>
+    <p class="text-gray-400 mb-6">The art of counting and structure. Compressed to runnable code, SVG diagrams, and plain English. Scheme first, Python in the fold.</p>
+
+    <!-- SVG: Pascal's triangle, the engine of counting -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 180" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <text x="180" y="28" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.8">1</text>
+        <text x="160" y="56" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.7">1</text>
+        <text x="200" y="56" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.7">1</text>
+        <text x="140" y="84" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.6">1</text>
+        <text x="180" y="84" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.8">2</text>
+        <text x="220" y="84" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.6">1</text>
+        <text x="120" y="112" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.55">1</text>
+        <text x="160" y="112" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">3</text>
+        <text x="200" y="112" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.7">3</text>
+        <text x="240" y="112" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.55">1</text>
+        <text x="100" y="140" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.5">1</text>
+        <text x="140" y="140" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.6">4</text>
+        <text x="180" y="140" text-anchor="middle" fill="#f59e0b" font-size="13" fill-opacity="0.8">6</text>
+        <text x="220" y="140" text-anchor="middle" fill="#60a5fa" font-size="13" fill-opacity="0.6">4</text>
+        <text x="260" y="140" text-anchor="middle" fill="#f472b6" font-size="13" fill-opacity="0.5">1</text>
+        <text x="180" y="170" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.35">each entry is the sum of the two above it</text>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/combinatorics/comb-01/", title: "Counting Foundations", desc: "Sum and product rules, permutations, combinations: how many ways are there?" },
+  { href: "/reading/combinatorics/comb-02/", title: "Binomial Coefficients", desc: "Pascal's triangle, the binomial theorem, and the identities that fall out of choosing" },
+  { href: "/reading/combinatorics/comb-03/", title: "Bijective Proof", desc: "Counting one set two ways: the cleanest proofs in all of mathematics" },
+  { href: "/reading/combinatorics/comb-04/", title: "Inclusion–Exclusion", desc: "Counting when sets overlap, and the derangements it produces" },
+  { href: "/reading/combinatorics/comb-05/", title: "Generating Functions", desc: "Encode a whole sequence as one power series, then do algebra on it" },
+  { href: "/reading/combinatorics/comb-06/", title: "Recurrence Relations", desc: "Fibonacci, linear recurrences, and how to solve them in closed form" },
+  { href: "/reading/combinatorics/comb-07/", title: "Partially Ordered Sets", desc: "Chains, antichains, and the Dilworth/Mirsky duality that governs them" },
+  { href: "/reading/combinatorics/comb-08/", title: "Graph Theory", desc: "Trees, matchings, and coloring: combinatorics with edges" },
+  { href: "/reading/combinatorics/comb-09/", title: "Pólya Enumeration", desc: "Burnside's lemma and counting structures up to symmetry" },
+  { href: "/reading/combinatorics/comb-10/", title: "Probabilistic & Extremal Methods", desc: "Pigeonhole at scale, Ramsey, and the first-moment method: the adversarial frontier" }
+]} icon="🧮" iconClass="text-rose-300 hover:text-rose-200" />
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video lectures: <a href="https://www.youtube.com/playlist?list=PLDDGPdw7e6Ag1EIznZ-m-qXu4XX3A0cIz">MIT 6.042 Mathematics for Computer Science</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/">🔢 Discrete Math</a> &mdash; the introductory foundations this builds above</li>
+      <li><a href="/reading/probability/">🎲 Probability</a> &mdash; the probabilistic method counts by averaging</li>
+      <li><a href="/reading/algorithms/">⚙ Algorithms</a> &mdash; graphs, flows, and counting drive algorithm design</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; adversarial counting, where the worst case certifies the bound</li>
+      <li><a href="/reading/number-theory/"># Number Theory</a> &mdash; counting residues and divisor structure</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

@@ -1,0 +1,96 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.1 — Counting Foundations" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Counting Foundations</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Two rules generate almost everything. <strong>Sum rule:</strong> if choices are mutually exclusive, add. <strong>Product rule:</strong> if choices are made in sequence, multiply. Permutations count ordered selections; combinations count unordered ones. Everything downstream is bookkeeping on top of these.</p>
+    </div>
+
+    <!-- SVG: product rule as a branching tree -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 360 170" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <circle cx="40" cy="85" r="4" fill="#f472b6" fill-opacity="0.7"/>
+        <text x="40" y="110" text-anchor="middle" fill="currentColor" font-size="9" fill-opacity="0.4">start</text>
+        <!-- 2 first choices -->
+        <line x1="44" y1="85" x2="140" y2="45" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <line x1="44" y1="85" x2="140" y2="125" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4"/>
+        <circle cx="145" cy="45" r="3.5" fill="#60a5fa" fill-opacity="0.7"/>
+        <circle cx="145" cy="125" r="3.5" fill="#60a5fa" fill-opacity="0.7"/>
+        <!-- 3 second choices each -->
+        <g stroke="#f59e0b" stroke-width="1" stroke-opacity="0.35">
+          <line x1="149" y1="45" x2="300" y2="20"/><line x1="149" y1="45" x2="300" y2="45"/><line x1="149" y1="45" x2="300" y2="70"/>
+          <line x1="149" y1="125" x2="300" y2="100"/><line x1="149" y1="125" x2="300" y2="125"/><line x1="149" y1="125" x2="300" y2="150"/>
+        </g>
+        <g fill="#f59e0b" fill-opacity="0.7">
+          <circle cx="305" cy="20" r="3"/><circle cx="305" cy="45" r="3"/><circle cx="305" cy="70" r="3"/>
+          <circle cx="305" cy="100" r="3"/><circle cx="305" cy="125" r="3"/><circle cx="305" cy="150" r="3"/>
+        </g>
+        <text x="200" y="165" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.4">2 × 3 = 6 outcomes</text>
+      </svg>
+    </div>
+
+    <h3>Permutations: order matters</h3>
+    <p>An ordered selection of <em>k</em> items from <em>n</em> is a <strong>permutation</strong>. The first slot has <em>n</em> choices, the next <em>n−1</em>, and so on: P(n,k) = n! / (n−k)!. When k = n you get n! orderings of the whole set.</p>
+
+    <h3>Combinations: order doesn't</h3>
+    <p>If the order of the chosen items is irrelevant, divide out the k! ways each unordered set could have been ordered: C(n,k) = n! / (k!(n−k)!). This is the binomial coefficient, and it runs the rest of the subject.</p>
+
+    <SchemeRepl client:visible initialCode={`; The three primitives of counting
+(define (factorial n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+; P(n,k): ordered selections of k from n
+(define (perm n k)
+  (/ (factorial n) (factorial (- n k))))
+
+; C(n,k): unordered selections of k from n
+(define (choose n k)
+  (/ (factorial n) (* (factorial k) (factorial (- n k)))))
+
+(display "5! = ") (display (factorial 5)) (newline)
+(display "P(5,2) = ") (display (perm 5 2)) (newline)   ; 20
+(display "C(5,2) = ") (display (choose 5 2)) (newline)  ; 10
+
+; a 4-digit PIN: order matters, repeats allowed -> product rule
+(display "PINs = ") (display (expt 10 4)) (newline)     ; 10000
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from math import factorial
+
+def perm(n, k):    # ordered
+    return factorial(n) // factorial(n - k)
+
+def choose(n, k):  # unordered
+    return factorial(n) // (factorial(k) * factorial(n - k))
+
+print("5! =", factorial(5))
+print("P(5,2) =", perm(5, 2))    # 20
+print("C(5,2) =", choose(5, 2))  # 10
+print("PINs =", 10 ** 4)         # 10000
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/discrete-math/levin-01/">🔢 Discrete Math Ch.1</a> &mdash; the introductory take on counting</li>
+      <li><a href="/reading/probability/">🎲 Probability</a> &mdash; counting outcomes is the foundation of discrete probability</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext next={{ href: "/reading/combinatorics/comb-02/", label: "Binomial Coefficients · 2 of 10" }} />
+
+  </main>
+</Layout>

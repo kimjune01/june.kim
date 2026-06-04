@@ -1,0 +1,90 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch.7 — Partially Ordered Sets" favicon="🧮">
+  <main>
+
+    <a href="/reading/combinatorics/" class="text-sm mb-4 inline-block">&larr; back to combinatorics</a>
+
+    <h1>Partially Ordered Sets</h1>
+    <p class="text-gray-400 text-sm mb-6">Applied Combinatorics (CC BY-SA) · <a href="https://appliedcombinatorics.org/">appliedcombinatorics.org</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A <strong>poset</strong> orders some pairs and leaves others incomparable. A <strong>chain</strong> is a fully-ordered subset; an <strong>antichain</strong> is a fully-incomparable one. <strong>Dilworth's theorem</strong> says the fewest chains needed to cover the poset equals the largest antichain: order and disorder are dual.</p>
+    </div>
+
+    <!-- SVG: divisibility poset of 12 -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 260 160" class="w-full max-w-xs" style="font-family: ui-monospace, monospace;">
+        <line x1="130" y1="140" x2="80" y2="100" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="130" y1="140" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="80" y1="100" x2="60" y2="60" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="80" y1="100" x2="130" y2="60" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="180" y1="100" x2="130" y2="60" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="60" y1="60" x2="110" y2="25" stroke="currentColor" stroke-opacity="0.3"/>
+        <line x1="130" y1="60" x2="110" y2="25" stroke="currentColor" stroke-opacity="0.3"/>
+        <text x="130" y="145" text-anchor="middle" fill="#f472b6" font-size="12">1</text>
+        <text x="80" y="105" text-anchor="middle" fill="#60a5fa" font-size="12">2</text>
+        <text x="180" y="105" text-anchor="middle" fill="#60a5fa" font-size="12">3</text>
+        <text x="60" y="58" text-anchor="middle" fill="#f59e0b" font-size="12">4</text>
+        <text x="130" y="58" text-anchor="middle" fill="#f59e0b" font-size="12">6</text>
+        <text x="110" y="22" text-anchor="middle" fill="#f472b6" font-size="12">12</text>
+      </svg>
+    </div>
+
+    <h3>The divisibility poset</h3>
+    <p>Order &#123;1, …, n&#125; by "a divides b." A chain is a tower of divisors like 1 | 2 | 4 | 12; its length is the number of prime factors counted with multiplicity, plus one. An antichain is a set of pairwise non-dividing numbers.</p>
+
+    <h3>Dilworth and Mirsky</h3>
+    <p>Dilworth: minimum chain cover = maximum antichain. Mirsky is its mirror: minimum antichain cover = longest chain. These dualities turn structural questions into optimization ones, and they are the order-theory backbone behind matching and scheduling.</p>
+
+    <SchemeRepl client:visible initialCode={`; Longest chain ending at x in the divisibility poset on 1..n.
+; chain(x) = 1 + max over proper divisors d|x of chain(d)
+(define (chain-to x)
+  (let loop ((d 1) (best 0))
+    (if (>= d x)
+        (+ 1 best)
+        (loop (+ d 1)
+              (if (= 0 (modulo x d))
+                  (max best (chain-to d))
+                  best)))))
+
+(display "longest chain to 12 = ") (display (chain-to 12)) (newline) ; 4: 1|2|4|12
+(display "longest chain to 16 = ") (display (chain-to 16)) (newline) ; 5: 1|2|4|8|16
+(display "longest chain to 30 = ") (display (chain-to 30)) (newline) ; 4: 1|2|6|30
+`} />
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`from functools import lru_cache
+
+@lru_cache(None)
+def chain_to(x):
+    best = 0
+    for d in range(1, x):
+        if x % d == 0:
+            best = max(best, chain_to(d))
+    return 1 + best
+
+print("longest chain to 12 =", chain_to(12))  # 4
+print("longest chain to 16 =", chain_to(16))  # 5
+print("longest chain to 30 =", chain_to(30))  # 4
+`} />
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/combinatorics/comb-08/">🧮 Ch.8 Graph Theory</a> &mdash; Dilworth is a matching theorem in disguise</li>
+      <li><a href="/reading/logic/">🔑 Logic</a> &mdash; partial orders underlie lattices and entailment</li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/combinatorics/comb-06/", label: "Recurrence Relations · 6 of 10" }}
+              next={{ href: "/reading/combinatorics/comb-08/", label: "Graph Theory · 8 of 10" }} />
+
+  </main>
+</Layout>
