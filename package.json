@@ -9,7 +9,10 @@
     "dev": "astro dev --port 12345",
     "dev:reading": "astro dev --config astro.config.reading.mjs",
     "prebuild": "node -e \"const y=require('js-yaml'),f=require('fs');f.writeFileSync('public/assets/parts-bin.json',JSON.stringify(y.load(f.readFileSync('src/data/parts-bin.yml','utf8'))))\"",
-    "build": "astro build && astro build --config astro.config.reading.mjs --outDir dist-reading && cp -r dist-reading/reading dist/reading && cp -rn dist-reading/_astro/* dist/_astro/",
+    "build": "pnpm run build:blog && pnpm run build:reading && pnpm run build:assemble",
+    "build:blog": "astro build",
+    "build:reading": "astro build --config astro.config.reading.mjs --outDir dist-reading",
+    "build:assemble": "cp -r dist-reading/reading dist/reading && cp -rn dist-reading/_astro/* dist/_astro/",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run"

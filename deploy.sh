@@ -4,8 +4,45 @@ set -euo pipefail
 BUCKET="www.june.kim"
 CF_DIST_ID="E1G9R7V0YY4VV1"
 
-echo "==> Building site"
-pnpm build
+echo "==> Building blog"
+pnpm run prebuild
+pnpm run build:blog
+
+# Reading is a separate, heavy Astro build (~1000 pages) and changes far less often
+# than the blog. Rebuild it only when reading-src/ or its config changed since the
+# last reading deploy (tag `reading-deployed`), when the cached build is missing, or
+# when forced with DEPLOY_READING=1. Default is to rebuild (fail-safe), so reading is
+# never silently skipped when in doubt. The assemble step always runs and repopulates
+# dist/reading from the dist-reading cache, so the HTML sync below never deletes the
+# live reading site from S3 even on a skip.
+build_reading=rebuild
+reading_reason=default
+if [ "${DEPLOY_READING:-}" = "1" ]; then
+  reading_reason=forced
+elif [ ! -d dist-reading/reading ]; then
+  reading_reason=no-cache
+elif git rev-parse -q --verify refs/tags/reading-deployed >/dev/null 2>&1; then
+  if git diff --quiet refs/tags/reading-deployed -- reading-src/ astro.config.reading.mjs; then
+    build_reading=skip
+    reading_reason=unchanged
+  else
+    reading_reason=source-changed
+  fi
+else
+  reading_reason=no-baseline
+fi
+
+if [ "$build_reading" = rebuild ]; then
+  echo "==> Building reading ($reading_reason)"
+  pnpm run build:reading
+  git tag -f reading-deployed HEAD >/dev/null 2>&1 || true
+  echo "    reading rebuilt; baseline -> $(git rev-parse --short HEAD 2>/dev/null || echo '?')"
+else
+  echo "==> reading $reading_reason since last deploy; reusing cached dist-reading"
+fi
+
+echo "==> Assembling reading into dist"
+pnpm run build:assemble
 
 # junebot Lambda is the heaviest step (manifest rebuild + pip wheels + ~29 MB
 # zip + upload) and has nothing to do with a post edit. Only repackage+upload it
@@ -90,27 +127,33 @@ md5_file() {
 }
 
 echo "==> Syncing HTML by content"
-HTML_UPLOAD_COUNT=0
 find dist -name '*.html' | sed 's#^dist/##' | sort > /tmp/local-html-keys.txt
 awk -F'\t' '$1 ~ /\.html$/ {print $1}' /tmp/s3-objects.tsv | sort > /tmp/remote-html-keys.txt
 
+# Phase 1 (local, fast): list HTML whose content hash differs from the S3 ETag.
+: > /tmp/html-to-upload.txt
 while IFS= read -r f; do
   rel="${f#dist/}"
   local_md5=$(md5_file "$f")
   s3_etag=$(awk -F'\t' -v k="$rel" '$1==k {gsub(/"/, "", $3); print $3; exit}' /tmp/s3-objects.tsv)
-  if [ "$s3_etag" != "$local_md5" ]; then
-    aws s3 cp "$f" "s3://$BUCKET/$rel" --only-show-errors
-    HTML_UPLOAD_COUNT=$((HTML_UPLOAD_COUNT + 1))
-  fi
+  [ "$s3_etag" != "$local_md5" ] && printf '%s\n' "$rel" >> /tmp/html-to-upload.txt
 done < <(find dist -name '*.html')
+HTML_UPLOAD_COUNT=$(wc -l < /tmp/html-to-upload.txt | tr -d ' ')
+
+# Phase 2 (network, parallel): upload the changed files. Sequential cp was the
+# deploy bottleneck (one round-trip per page, ~2000 pages); 16-way parallelism
+# turns ~20 minutes into ~1.
+if [ "$HTML_UPLOAD_COUNT" -gt 0 ]; then
+  xargs -P 16 -I {} aws s3 cp "dist/{}" "s3://$BUCKET/{}" --only-show-errors < /tmp/html-to-upload.txt
+fi
 echo "    $HTML_UPLOAD_COUNT HTML files uploaded"
 
 echo "==> Deleting stale HTML"
-HTML_DELETE_COUNT=0
-while IFS= read -r key; do
-  aws s3 rm "s3://$BUCKET/$key" --only-show-errors
-  HTML_DELETE_COUNT=$((HTML_DELETE_COUNT + 1))
-done < <(comm -23 /tmp/remote-html-keys.txt /tmp/local-html-keys.txt)
+comm -23 /tmp/remote-html-keys.txt /tmp/local-html-keys.txt > /tmp/html-to-delete.txt
+HTML_DELETE_COUNT=$(wc -l < /tmp/html-to-delete.txt | tr -d ' ')
+if [ "$HTML_DELETE_COUNT" -gt 0 ]; then
+  xargs -P 16 -I {} aws s3 rm "s3://$BUCKET/{}" --only-show-errors < /tmp/html-to-delete.txt
+fi
 echo "    $HTML_DELETE_COUNT stale HTML files deleted"
 
 echo "==> Syncing non-HTML to S3"
