@@ -149,6 +149,8 @@ of its three [modes of reason](/modes-of-reason), [abduction](/abduction).
 same edge from cognition. There is no boolean truth above belief, only confidence past a
 threshold. Here that confidence is something you build, and can break.*
 
+---
+
 ## Provenance endnote
 
 The search behind the verdict, kept so you can rerun it and refute me.

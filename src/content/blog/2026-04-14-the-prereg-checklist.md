@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "The Prereg Checklist"
-tags: methodology
+tags: methodology, epistemology
 ---
 
 *Part of the [methodology](/methodology) series.*
