@@ -46,7 +46,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
                                  (+ s (* (if (< j la) (list-ref a j) 0)
                                          (let ((m (- i j)))
                                            (if (and (>= m 0) (< m lb)) (list-ref b m) 0)))))))
-                      acc)))))
+                      acc))))))
 
 ; (1 + x)^n via repeated convolution
 (define (binom-poly n)

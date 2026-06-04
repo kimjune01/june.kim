@@ -56,7 +56,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define (expected-mono n)
   (/ (choose n 3) 4))
 
-(display "E[mono] K5  = ") (display (expected-mono 5)) (newline)   ; 5/2
+(display "E[mono] K5  = ") (display (expected-mono 5)) (newline)   ; 2.5
 (display "E[mono] K6  = ") (display (expected-mono 6)) (newline)   ; 5
 (display "E[mono] K10 = ") (display (expected-mono 10)) (newline)  ; 30
 
