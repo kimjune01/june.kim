@@ -71,7 +71,7 @@ or it does not. The benchmark has the same shape. Maybe the score is right. "We 
 it" is false the moment the evidence is withheld, because the measurement was never built
 where anyone could climb to it.
 
-## Truth lives in the edges
+## Truth at the edge
 
 Knowledge is a graph. A claim is a node; the citations and inferences that wire it to what
 it rests on and what it implies are the edges. Truth does not live in the nodes. It lives
@@ -173,8 +173,3 @@ The search behind the verdict, kept so you can rerun it and refute me.
 
 A second model searched independently. It confirmed the verdict and surfaced Angelo,
 which my search had missed, one blind spot caught by another.
-
----
-
-No attributed source. Find a father for the phrase that I did not, and you have falsified
-the one claim this post makes about itself. The chain is yours to climb.
