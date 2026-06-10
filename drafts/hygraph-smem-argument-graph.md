@@ -56,32 +56,44 @@ who finds the second framing more interesting, because that reader is the one
 the work is actually for. (Consistent with vision-not-pitch: state the claim,
 don't escalate to a reach argument.)
 
-Render order (inverted arc, 2026-06-10 — supersedes the old arc-check). The
-spine is now a therefore/but that climbs to the witnessed example, not to the
-number:
+Render order (RE-SPINE, 2026-06-10 — supersedes the inverted-arc-with-bench-first).
+The mechanism is now the spine and renders BEFORE the bench; the bench is cornered
+after it as an instrument note, not a pivot the argument passes through. Physical
+section order: harness → Procedure (mechanism) → Results (mechanism) → The bench,
+bounded (cornered) → Discussion.
 
-1. **Open** on Sutton's challenge (epigraph) and the headline promise: a
-   witnessed, replayable instance of discovery *beyond corpus synthesis*.
-2. **A — the substrate.** What the hygraph is; methodeutics as the encoding of
-   reasoning on pragmatist grounds (thesis-2). Carries weight.
-3. **B — condensed.** We ran it on the standard ruler; the number came back
-   high. One pass, pointer-first. The number is bait, not the point — state it,
-   bound it, move on.
-4. **C/D — the pivot (the "but").** But the bench cannot see the mechanism;
-   attribution (C) plus the determinacy audit (D) explain *why*. This is the
-   turn, not the destination — demoted, compressed, in service of E.
-5. **E — the right witness.** The single undiagnosed, guaranteed-uncontaminated
-   issue (flux #1613) where the virtue is *visible*. The proof. Heaviest
-   section after A; reproducibility lives here now (replay the inquiry).
-6. **P5 — the peak.** Escaping the convex hull = a creative act = discovery in
-   Sutton's sense. The climax the whole arc climbs to. P1–P4 are supporting
-   affordances; P5 is the payoff.
-7. **F / T — what it means, what it declares.** Accountability displaces trust;
-   merit attaches to the work; the hygraph is what makes a machine's creative
-   act checkable. Close the bookend: Sutton's challenge discharged.
+1. **Open** on Sutton's challenge (epigraph) and the pains → gap → mechanism
+   framing: agent memory without the lineage, the verification crisis, discovery
+   with no operational test; the hypothesis-shaped gap; the hygraph fills it.
+2. **A — the substrate.** What the hygraph is; motivation as a set of constraints
+   it must satisfy at once; LLM-uniqueness (first general reasoner to fill the
+   smem slot); CRUD-like operations; the two-node anatomy figure; methodeutics as
+   the encoding of reasoning on pragmatist grounds (thesis-2). Carries weight.
+3. **The harness** (vehicle, condensed). inquire/implement/attest; the `inquire`
+   skill figure. Gating + outer-loop compressed to one sentence (table stakes,
+   not a contribution).
+4. **E — Procedure + Results (the mechanism experiment), the spine.** §Procedure:
+   two arms (minimal mini-SWE-agent vs +graph, same model), essence oracle
+   (red-at-base/green-on-gold, not the PR's test), pre-cutoff blind regeneration,
+   the nine-pilot hunt, the preregistration lesson. §Results: eight nulls + one
+   divergence (flux #1613, the existence case), the int-receipt discriminator,
+   the audited 19-node trail; reproducibility lives here (replay the inquiry).
+   Renders BEFORE the bench now.
+5. **B/C/D — The bench, bounded (cornered, §8).** The number stated ONCE, framed
+   as a property of *oracle availability*, not the harness or method (any
+   competent agent handed the visible tests reaches the mid-nineties); leading
+   with it was the mistake this section corrects. Attribution: the minimal prompt
+   reaching ~94% is the attribution made plain; oracle bracket ~46 points. The
+   determinacy audit = the benchmark gap (applicability, not fault). Pointer-first:
+   the ablation statistics live in the repo, not the prose.
+6. **F / T / P — Discussion.** Accountability displaces trust; merit attaches to
+   the work; what the structure unlocks (P5 = discovery, the peak). Close the
+   bookend: Sutton's challenge discharged.
 
 Then Related work → Limitations → Future work (appendix-grade per the author;
-no logical-coherence requirement enforced there).
+no logical-coherence requirement enforced there). Note: the logical dependency
+graph below is unchanged by the re-spine — only the *render order* moved E ahead
+of B/C/D. Render order ≠ logical order.
 
 Pointer-first rule (2026-06-10, "we respect the reader"): where a repo or
 companion post holds the receipts (procedure discipline, results texture,
@@ -182,15 +194,20 @@ rather than a boast.
 - **A4.** Scope guard: power = the perturbation surface; without it the shape
   degrades to a plausibility tree (confabulation). `declared` · §3
 
-## B — The artifact (the run is real and auditable) · §8 results
+## B — The bench, bounded (oracle availability, not the method) · §8, cornered
 
-- **B1.** Pro public set, frozen harness, official grader: 694/728 frontier pair,
-  678/728 open-weight pair, 0 incomplete; per-instance receipts committed;
-  re-grades reproduce (6/6, 60/60, 0 flips; ~$3/WIN to audit). `proven` ·
-  §8.1, one bullet list   *(numbers live in body only; abstract carries none)*
+- **B1.** Pro public set, frozen harness, official grader: 95.3% frontier pair,
+  93.1% open-weight pair. **Reframed (2026-06-10):** the number is a property of
+  *oracle availability*, not the harness or method — on the public split the
+  failing tests are visible, the gate iterates against them, and any competent
+  agent handed that signal reaches the mid-nineties (oracle bracket C1 prices it).
+  Stated ONCE, named as the mistake the section corrects; the bench renders AFTER
+  the mechanism now, cornered. `proven` · §8, pointer-first
 - **B3.** OSS trace: 81 merged PRs / 73 cold repos / 50.6%; agent-selected,
-  agent-authored; GraphQL-recomputable. `proven` · §8.1 — also feeds T (merit:
-  strangers merged work, not reputation).
+  agent-authored; GraphQL-recomputable. **Not graph-dependent (2026-06-10):** a
+  minimal prompt digs the few levels most of them need; the merge rate feeds T
+  (strangers merged work on receipts, not reputation) but is NOT evidence for the
+  smem. `proven` · §7 Results notes the non-dependence, receipts in §8.
 - **B4.** Artifact claim (receipt-bar table): no documented method combines
   equal receipts + higher rate. `proven, bounded` · appendix
   *(cost-as-virtue cut 2026-06-10: cost is a measurement, and the paper's
@@ -226,7 +243,9 @@ rather than a boast.
 ## D — Instrument: Pro structurally cannot measure the smem · §10 audit
 
 - **D1.** 66% ENTAILED + 11% determined-codebase ⇒ ~77% spec-given ⇒ nothing
-  to abduce (flipt worked example is the in-paper witness, §7.2). `proven (grep)`
+  to abduce (the hygraph degenerates to a single transcription node). `proven (grep)`
+  *(flipt worked example CUT 2026-06-10 — degenerate single-node graph, weak
+  demonstration; E4 is the in-paper witness now.)*
 - **D2.** 11.4% mechanical spine + 26 two-expert = 15.0% proven underdetermined
   ⇒ lottery; no diagnosis can recover information absent from the materials.
   `proven (grep) / verified (two-family)` — self-citation is safe: rows are
@@ -461,6 +480,41 @@ Remaining (deeper sections):
 
 Next:
 - [ ] /copyedit one clean pass over the whole settled paper (user: after the rewrite).
+
+## Propagation of the RE-SPINE (2026-06-10, supersedes the inverted arc)
+
+The inverted arc still rendered the bench (B) up front as bait, then pivoted
+(C/D) to the witness (E). The re-spine moves E onto the spine BEFORE the bench
+and corners B/C/D into a single §8 ("The bench, bounded"). The motivation,
+substrate (A), epistemics (F/T), and existence case (E4) are unchanged; the
+frame is what moved. Almost a new paper, but the load-bearing bits persist.
+
+Done:
+- [x] Section reorder: harness → Procedure (mechanism) → Results (mechanism) →
+      The bench, bounded (cornered, ## with ### Number/Attribution/Audit) →
+      Discussion. Anchors preserved (autonumber resolves §(id) regardless of
+      order); {#right-regime} now on Results, {#setup} on Procedure, {#bench} new.
+- [x] Procedure + Results rewritten from the hygraph-mechanism worklog: two arms,
+      essence oracle, contamination control, nine pilots = eight nulls + one
+      divergence (flux #1613). Worklog digest is faithful (8 nulls confirmed:
+      qrtool/slang-server/fjall/bat + others; flux #1613 the divergence).
+- [x] Bench number reframed: stated once, "property of oracle availability, not
+      the harness or method"; named as the mistake; minimal prompt reaching ~94%
+      = the attribution made plain (craft-only jargon → "minimal prompt").
+- [x] Cut the flipt worked example; gating + outer-loop compressed to one
+      sentence (table stakes).
+- [x] Checkpoint committed (e0d86c3c).
+
+Next (the trim — pointer-first rule, user 2026-06-10 "we can afford to trim"):
+- [ ] **Condense B/C/D in §8 to findings + repo pointers.** Keep: the oracle-
+      bracket finding (~46 pts), the minimal-prompt-reaches-the-number attribution,
+      the audit verdict (applicability not fault = the benchmark gap). Move the
+      ablation STATISTICS (CIs, n=38/36, McNemar p=0.057, per-channel detail) to
+      the repo; the paper points instead of narrating. Preserve anchors
+      (§(oracle-bracket), §(prompt-ablation), §(perturbation) are referenced).
+- [ ] Trim §8 sub-structure: Models/Open-weight/Number subsections can collapse
+      toward the framed intro + the tables; the 5 attribution sub-analyses fold
+      to the table + one tight paragraph.
 
 Standing (unchanged):
 - [ ] E4's pending tail (maintainer merge) lands → update §11, §13 golden-ticket, possibly the abstract's promise.
