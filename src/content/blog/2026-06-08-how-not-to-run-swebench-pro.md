@@ -7,7 +7,7 @@ tags: coding, methodology
 
 I ran all 728 eligible instances of [SWE-bench Pro](https://labs.scale.com/leaderboard/swe_bench_pro_public) and resolved **694 of them, 95.3%**, under the official grader, on a fresh container, solo. Most of it billed to a $200/month Claude Max plan and a handful of EC2 boxes. No grant, no cluster, no API budget that needed sign-off. The receipts are public: [github.com/kimjune01/swebench-pro](https://github.com/kimjune01/swebench-pro). That number is a *harness* result on the public split, not a leaderboard claim and not a statement about model capability; the difference is most of what this post is about.
 
-This post is not the result. The result has [its own writeup](/the-methodeutic-harness-on-swebench-pro). This is the part nobody publishes: the operational stuff I got wrong, the one mistake that would have made the whole number meaningless, and the day I realized the number didn't mean what I thought it did. It's written for anyone building a coding harness and trying to measure whether it actually works, on consumer tokens instead of a budget that needs approval. Read it before you spend any.
+This post is not the result. The result has [its own writeup](/the-hypothesis-graph-as-semantic-memory). This is the part nobody publishes: the operational stuff I got wrong, the one mistake that would have made the whole number meaningless, and the day I realized the number didn't mean what I thought it did. It's written for anyone building a coding harness and trying to measure whether it actually works, on consumer tokens instead of a budget that needs approval. Read it before you spend any.
 
 ## I thought I'd beaten the bench. I was keeping score by the wrong rulebook.
 
