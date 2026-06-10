@@ -24,14 +24,14 @@
   <line x1="98" y1="70" x2="502" y2="70" stroke="#fde68a" stroke-width="1" />
 
   <text x="98" y="94" class="lbl">hypothesis</text>
-  <text x="196" y="94" class="dark small">the cache is stale</text>
+  <text x="196" y="94" class="dark small">the bulb is dead</text>
 
   <text x="98" y="120" class="lbl">trial</text>
   <rect x="194" y="106" width="214" height="20" rx="3" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1" />
-  <text x="202" y="120" class="dark small mono">$ clear cache; rerun</text>
+  <text x="202" y="120" class="dark small mono">swap in a fresh bulb</text>
 
   <text x="98" y="146" class="lbl">outcome</text>
-  <text x="196" y="146" class="dark small">still fails</text>
+  <text x="196" y="146" class="dark small">still dark</text>
 
   <text x="98" y="174" class="lbl">credence</text>
   <text x="196" y="174" class="amber small">50% · capped by mode</text>
@@ -48,14 +48,14 @@
   <line x1="98" y1="288" x2="502" y2="288" stroke="#bbf7d0" stroke-width="1" />
 
   <text x="98" y="312" class="lbl">hypothesis</text>
-  <text x="196" y="312" class="dark small">the index is missing</text>
+  <text x="196" y="312" class="dark small">the dimmer switch is broken</text>
 
   <text x="98" y="338" class="lbl">trial</text>
   <rect x="194" y="324" width="214" height="20" rx="3" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1" />
-  <text x="202" y="338" class="dark small mono">$ add index; rerun</text>
+  <text x="202" y="338" class="dark small mono">bypass the dimmer to the wall</text>
 
   <text x="98" y="364" class="lbl">outcome</text>
-  <text x="196" y="364" class="dark small">tests pass</text>
+  <text x="196" y="364" class="dark small">the light comes on</text>
 
   <text x="98" y="392" class="lbl">credence</text>
   <text x="196" y="392" class="green small">96% · test-backed</text>
