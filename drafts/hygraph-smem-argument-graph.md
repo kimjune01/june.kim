@@ -309,8 +309,14 @@ rather than a boast.
     opposite: its warrant does not decay because a stranger re-runs it rather
     than trusting it. Appreciating vs depreciating is verdict-vs-ledger stated
     as economics. The bench's three weaknesses, stacked: barely legible,
-    teaches nothing, untrustworthy-and-therefore-depreciating. Dosage: lands
-    in the intro + §12, NOT the abstract (avoid bench pile-on in the hook).
+    teaches nothing, untrustworthy-and-therefore-depreciating.
+    CUT 2026-06-10 (author): removed from the paper entirely as too much
+    editorializing / bench pile-on (codex flagged the same: stop hitting the
+    number, it keeps it central). The point is sound but it is opinion stacked
+    on the bench, not a finding the paper needs. Not relocated to §12 — moving
+    editorializing just relocates the problem. The load-bearing demotion stays:
+    "least insightful artifact" (once) + the instrument finding (§audit,
+    applicability-not-fault). Do not reintroduce.
 - **F3.** Persistence: reasoning that outlasts the context window
   (re-runnable, not just readable; box-death survival); provenance has no
   half-life (preserves checkability, not truth; runnable form inherits
