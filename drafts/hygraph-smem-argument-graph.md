@@ -9,6 +9,20 @@ Statuses: `proven` (receipt-backed), `null-attributed` (null with mechanism),
 
 The graph is itself the demonstration: nodes typed, warrants named, kills explicit.
 
+Render order (arc-check, 2026-06-10): therefore/but chain through Discussion;
+then Related work → Limitations → Future work, so F4's vocabulary argument sits
+adjacent to F7's answer and each limitation precedes the future-work item that
+resolves it. Sections after Discussion are appendix-grade per the author: no
+logical-coherence requirement is enforced there.
+
+Pointer-first rule (2026-06-10, "we respect the reader"): where a repo or
+companion post holds the receipts (procedure discipline, results texture,
+ablation statistics, audit detail), the paper points instead of narrating.
+The reader is here for the hypothesis graph, its construction, applications,
+and the epistemics picked up along the way. B/C/D render condensed; A, E4,
+F, P carry the weight. No apologizing for n=1: an existence proof needs one
+witness and has one.
+
 ```
                             ┌──────────────────────────────┐
                             │ T  merit attaches to the work │  declared
@@ -81,6 +95,9 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   two instances. `null-attributed` · §9.4
 - **C6.** Verdict: on Pro, smem ≈ 0 points, vocabulary = 0, aimed probe =
   sliver, oracle ≈ 46, model pair = 2.2 raw / 17–22 genuine. `proven` · §9.5
+  Framing (user, 06-10): the null is the supporting argument for "how well
+  does it work?", answered "not on the most popular coding bench, because the
+  bottleneck there is not diagnosis" — which sets up E1's flip.
 
 ## D — Instrument: Pro structurally cannot measure the smem · §10 audit
 
@@ -94,7 +111,11 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   labels); how hard the diagnosis is vs whether there is one at all.
 - **D3.** D1 + D2 + cheap visible oracle (C4) ⇒ the nulls in C are the
   *predicted signature*, not a refutation. `attributed` · §10
-- **D4.** Field implication: report determinacy-aware denominators. `declared`
+- **D4.** Field implication (determinacy-aware denominators), the flipt
+  mismatch example, the specification-lottery framing, and the tool (D6) all
+  render as ONE side-note ¶ (user, 06-10): the bench-standards critique is
+  the audit repo's own paper; this paper needs only the fraction that
+  explains its nulls. `declared, demoted to side note`
 - **D6.** The instrument generalizes: `determinacy`
   (github.com/kimjune01/determinacy) is the audit as a portable tool for any
   SWE-bench-shaped bench (TOML field-map; SWE-rebench already run; Verified
@@ -107,6 +128,11 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
 
 - **E1.** Regime spec (from C4): no handed spec, no cheap oracle, hidden cause.
   Deployment data (B3) is that regime. `derived` · §11
+  Flip (user, 06-10): the regime is most of software — every issue tracker is
+  a backlog of undiagnosed problems waiting on the one expensive step the
+  bench never exercises; flux #1613 (41 comments, maintainers stuck) is what
+  undiagnosed looks like in the wild. The bench's bottleneck is not diagnosis;
+  the world's is.
 - **E2.** Design guards: essence oracle (not the pipeline's own shipped tests;
   self-audit went 4/4 false-green), mini-SWE-agent verbatim baseline,
   pre-cutoff blind regeneration (graph = treatment, contamination doesn't
