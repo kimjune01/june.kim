@@ -1,0 +1,65 @@
+<svg viewBox="0 0 600 444" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #475569; font-size: 12px; }
+    .dark { fill: #333; }
+    .lbl { font-size: 10px; fill: #94a3b8; }
+    .small { font-size: 11px; }
+    .tiny { font-size: 9px; fill: #64748b; }
+    .bold { font-weight: bold; }
+    .amber { fill: #b45309; }
+    .green { fill: #15803d; }
+    .red { fill: #dc2626; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+  <defs>
+    <marker id="e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <!-- ===== NODE A: killed, abduction (amber) ===== -->
+  <rect x="80" y="34" width="440" height="158" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="98" y="58" class="amber small bold">H&#8321; · abduction</text>
+  <text x="502" y="58" text-anchor="end" class="red small bold">&#10007; killed</text>
+  <line x1="98" y1="70" x2="502" y2="70" stroke="#fde68a" stroke-width="1" />
+
+  <text x="98" y="94" class="lbl">hypothesis</text>
+  <text x="196" y="94" class="dark small">the cache is stale</text>
+
+  <text x="98" y="120" class="lbl">trial</text>
+  <rect x="194" y="106" width="214" height="20" rx="3" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1" />
+  <text x="202" y="120" class="dark small mono">$ clear cache; rerun</text>
+
+  <text x="98" y="146" class="lbl">outcome</text>
+  <text x="196" y="146" class="dark small">still fails</text>
+
+  <text x="98" y="174" class="lbl">credence</text>
+  <text x="196" y="174" class="amber small">50% · capped by mode</text>
+
+  <!-- edge: kill names the next -->
+  <line x1="300" y1="192" x2="300" y2="250" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+  <text x="314" y="216" class="tiny bold" fill="#475569">edge · kill names the next</text>
+  <text x="314" y="230" class="tiny">generate-edge-from-kill</text>
+
+  <!-- ===== NODE B: witnessed, induction (green) ===== -->
+  <rect x="80" y="252" width="440" height="158" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+  <text x="98" y="276" class="green small bold">H&#8322; · induction</text>
+  <text x="502" y="276" text-anchor="end" class="green small bold">&#10003; witnessed</text>
+  <line x1="98" y1="288" x2="502" y2="288" stroke="#bbf7d0" stroke-width="1" />
+
+  <text x="98" y="312" class="lbl">hypothesis</text>
+  <text x="196" y="312" class="dark small">the index is missing</text>
+
+  <text x="98" y="338" class="lbl">trial</text>
+  <rect x="194" y="324" width="214" height="20" rx="3" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1" />
+  <text x="202" y="338" class="dark small mono">$ add index; rerun</text>
+
+  <text x="98" y="364" class="lbl">outcome</text>
+  <text x="196" y="364" class="dark small">tests pass</text>
+
+  <text x="98" y="392" class="lbl">credence</text>
+  <text x="196" y="392" class="green small">96% · test-backed</text>
+
+  <!-- footer: replay invariant -->
+  <text x="300" y="432" text-anchor="middle" class="tiny">&#8635; replay &#8212; every node rebuilds from its recorded trial, by a reader who need not trust the author</text>
+</svg>
