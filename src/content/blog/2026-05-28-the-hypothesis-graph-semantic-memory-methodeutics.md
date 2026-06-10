@@ -1,8 +1,8 @@
 ---
 variant: post-paper
 autonumber: true
-title: "Draft: The Hypothesis Graph as Semantic Memory"
-subtitle: "Methodeutics is the procedural memory that writes it; merit attaches to the work, not the doer."
+title: "The Hypothesis Graph: Semantic Memory Written by Methodeutics"
+subtitle: "Merit attaches to the work, not the doer."
 tags: methodology, epistemology, coding
 ---
 

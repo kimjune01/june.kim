@@ -424,7 +424,7 @@ is the operating range where a held-out benchmark is still doing the job it
 was designed for.
 
 The "saturated" framing was the justification for replacing
-a [working benchmark](https://june.kim/the-hypothesis-graph-as-semantic-memory) and its
+a [working benchmark](https://june.kim/the-hypothesis-graph-semantic-memory-methodeutics) and its
 [public per-instance receipts](https://github.com/kimjune01/swebench-pro) with
 a marketing-shaped one before its useful life was over.
 
