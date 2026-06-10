@@ -1,0 +1,101 @@
+<svg viewBox="0 0 720 408" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #475569; font-size: 11px; }
+    .dark { fill: #333; }
+    .label { font-size: 10px; fill: #64748b; }
+    .small { font-size: 10px; }
+    .tiny { font-size: 9px; fill: #64748b; }
+    .bold { font-weight: bold; }
+    .amber { fill: #b45309; }
+    .blue { fill: #1d4ed8; }
+    .green { fill: #15803d; }
+    .red { fill: #dc2626; }
+    .ital { font-style: italic; }
+  </style>
+  <defs>
+    <marker id="e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+    <marker id="ew" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
+    </marker>
+    <marker id="el" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+    </marker>
+  </defs>
+
+  <!-- header -->
+  <text x="360" y="26" text-anchor="middle" class="dark bold" font-size="15">The inquire skill</text>
+  <text x="360" y="45" text-anchor="middle" class="ital" fill="#64748b">Peirce's three modes, run as a procedure (pmem) that writes the hypothesis graph (smem)</text>
+
+  <!-- OBSERVATION -->
+  <rect x="36" y="62" width="348" height="40" rx="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="50" y="86" class="dark small bold">OBSERVATION <tspan class="label" font-weight="normal">· a surprising fact or failure trace</tspan></text>
+  <line x1="210" y1="102" x2="210" y2="116" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+
+  <!-- ABDUCTION -->
+  <rect x="36" y="118" width="348" height="68" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="139" class="blue small bold">ABDUCTION</text>
+  <text x="50" y="157" class="dark small">propose typed hypotheses, each with a kill condition</text>
+  <text x="50" y="174" class="label ital">what would, if true, make this no longer surprising?</text>
+  <line x1="210" y1="186" x2="210" y2="200" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+
+  <!-- DEDUCTION -->
+  <rect x="36" y="202" width="348" height="68" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="223" class="blue small bold">DEDUCTION</text>
+  <text x="50" y="241" class="dark small">derive a falsifiable prediction: the exact trial</text>
+  <text x="50" y="258" class="label ital">if it holds, what command must succeed?</text>
+  <line x1="210" y1="270" x2="210" y2="284" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+
+  <!-- INDUCTION -->
+  <rect x="36" y="286" width="348" height="80" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="307" class="blue small bold">INDUCTION</text>
+  <text x="50" y="325" class="dark small">run the trial against the world</text>
+  <text x="50" y="343" class="small"><tspan class="red">refuted &#8594; kill fires</tspan>   ·   <tspan class="green">confirmed &#8594; witness</tspan></text>
+  <text x="50" y="359" class="amber tiny">deterministic predicate · no model arbitrates</text>
+
+  <!-- loop back -->
+  <path d="M 36 326 L 18 326 L 18 152 L 36 152" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#el)" />
+  <text x="13" y="239" text-anchor="middle" class="amber tiny" transform="rotate(-90 13 239)">re-enter with the updated graph, until a node is witnessed</text>
+
+  <!-- write arrows into the graph -->
+  <path d="M 384 152 L 432 200" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
+  <path d="M 384 236 L 432 232" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
+  <path d="M 384 326 L 432 264" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
+  <text x="404" y="180" class="tiny" fill="#94a3b8">write</text>
+
+  <!-- HYPOTHESIS GRAPH (smem) -->
+  <rect x="436" y="118" width="252" height="248" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+  <text x="562" y="140" text-anchor="middle" class="green small bold">HYPOTHESIS GRAPH (smem)</text>
+
+  <!-- mini graph -->
+  <!-- edges -->
+  <path d="M 470 232 L 540 188" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 470 232 L 540 232" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 470 232 L 540 276" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 575 276 L 632 276" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <!-- root -->
+  <circle cx="466" cy="232" r="7" fill="#94a3b8" />
+  <text x="466" y="252" text-anchor="middle" class="tiny">obs</text>
+  <!-- killed abduction node -->
+  <circle cx="555" cy="188" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="568" y="185" class="tiny amber" style="text-decoration:line-through">H1</text>
+  <text x="568" y="196" class="red tiny">&#10007; killed</text>
+  <!-- killed abduction node -->
+  <circle cx="555" cy="232" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="568" y="229" class="tiny amber" style="text-decoration:line-through">H2</text>
+  <text x="568" y="240" class="red tiny">&#10007; killed</text>
+  <!-- witnessed node -->
+  <circle cx="555" cy="276" r="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+  <text x="568" y="273" class="tiny green bold">H3</text>
+  <text x="568" y="284" class="green tiny">&#10003; witnessed</text>
+  <!-- deduction node -->
+  <circle cx="638" cy="276" r="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="638" y="296" text-anchor="middle" class="blue tiny">fix</text>
+
+  <text x="562" y="334" text-anchor="middle" class="label">each node typed by the mode that set it;</text>
+  <text x="562" y="348" text-anchor="middle" class="label">the credence cap travels with the type</text>
+
+  <!-- footer -->
+  <text x="360" y="392" text-anchor="middle" class="tiny ital">Named for Peirce's <tspan class="dark">inquiry</tspan>, the engine of discovery, not mere investigation.</text>
+</svg>

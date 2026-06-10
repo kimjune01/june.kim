@@ -1,0 +1,74 @@
+<svg viewBox="0 0 760 452" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #475569; font-size: 11px; }
+    .dark { fill: #333; }
+    .label { font-size: 10px; fill: #64748b; }
+    .small { font-size: 10px; }
+    .tiny { font-size: 9px; fill: #64748b; }
+    .bold { font-weight: bold; }
+    .amber { fill: #b45309; }
+    .blue { fill: #1d4ed8; }
+    .green { fill: #15803d; }
+    .red { fill: #dc2626; }
+    .ital { font-style: italic; }
+  </style>
+  <defs>
+    <marker id="e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
+    </marker>
+  </defs>
+
+  <!-- context header -->
+  <rect x="80" y="12" width="600" height="46" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="380" y="32" text-anchor="middle" class="dark bold small">flux-rs/flux #1613 · composite-sort bug in a refinement type checker</text>
+  <text x="380" y="49" text-anchor="middle" class="label">open, maintainer-stuck, 41 comments · post-cutoff (recall impossible)</text>
+
+  <!-- the variable -->
+  <text x="380" y="80" text-anchor="middle" class="ital" fill="#64748b">same model · same loop · the methodology is the only variable</text>
+
+  <!-- fork edges -->
+  <path d="M 380 86 L 225 100" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#e)" />
+  <path d="M 380 86 L 535 100" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#e)" />
+
+  <!-- graph arm -->
+  <rect x="90" y="102" width="270" height="86" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+  <text x="102" y="124" class="green small bold">GRAPH ARM</text>
+  <text x="102" y="143" class="dark small">dumped the solver constraints,</text>
+  <text x="102" y="159" class="dark small">located the live obligation</text>
+  <text x="102" y="175" class="dark small">(a FoldLocal equality at the setter)</text>
+  <text x="348" y="124" text-anchor="end" class="green tiny bold">repaired the cause</text>
+
+  <!-- minimal arm -->
+  <rect x="400" y="102" width="270" height="86" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="412" y="124" class="amber small bold">MINIMAL ARM</text>
+  <text x="412" y="143" class="dark small">gated the repair on a shape</text>
+  <text x="412" y="159" class="dark small">coincidence (an ADT carrying</text>
+  <text x="412" y="175" class="dark small">a function-sort field)</text>
+  <text x="658" y="124" text-anchor="end" class="amber tiny bold">incidental to validity</text>
+
+  <!-- converge edges -->
+  <path d="M 225 188 L 320 214" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#e)" />
+  <path d="M 535 188 L 440 214" stroke="#cbd5e1" stroke-width="1.5" fill="none" marker-end="url(#e)" />
+
+  <!-- shared suite gate -->
+  <rect x="120" y="216" width="520" height="54" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="380" y="238" text-anchor="middle" class="dark small">965-test compiletest suite + the reported program</text>
+  <text x="380" y="257" text-anchor="middle" class="green small bold">BOTH PASS &#8212; by every test the project ships, both fixes are done</text>
+
+  <!-- receipt header -->
+  <text x="380" y="296" text-anchor="middle" class="blue small bold">THE RECEIPT &#8212; off-suite, any reader reruns it</text>
+
+  <!-- discriminator box -->
+  <rect x="120" y="306" width="520" height="92" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  <text x="380" y="328" text-anchor="middle" class="dark small">soundness twin: integer components, structurally identical, valid</text>
+  <text x="200" y="350" text-anchor="middle" class="green small bold">graph fix &#10003; verifies it</text>
+  <text x="380" y="350" text-anchor="middle" class="tiny">vs</text>
+  <text x="560" y="350" text-anchor="middle" class="red small bold">minimal fix &#10007; rejects it</text>
+  <line x1="140" y1="364" x2="620" y2="364" stroke="#e2e8f0" stroke-width="1" />
+  <text x="380" y="380" text-anchor="middle" class="small">unsound twin: <tspan class="red">both reject</tspan> &#8212; the minimal fix is not broken</text>
+  <text x="380" y="393" text-anchor="middle" class="amber tiny ital">it is over-narrow: a confident false positive the suite can never catch</text>
+
+  <!-- footer -->
+  <text x="380" y="424" text-anchor="middle" class="dark small bold">The advantage is invisible to the oracle, settled only by a receipt.</text>
+  <text x="380" y="442" text-anchor="middle" class="tiny">trail flux-1613-trail-v1 · 19 nodes · 3 self-corrections in-trail · every load-bearing node replayed on a pristine base build</text>
+</svg>

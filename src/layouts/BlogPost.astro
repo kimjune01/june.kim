@@ -7,16 +7,24 @@ interface Props {
   variant?: string;
   tags?: string | string[];
   image?: string;
+  keywords?: string | string[];
   date: Date;
   slug: string;
   monospace_title?: boolean;
 }
 
-const { title, variant = 'post', tags, image, date, slug, monospace_title } = Astro.props;
-const isWide = variant === 'post-wide';
-const isMedium = variant === 'post-medium';
-const isPaper = variant === 'post-paper';
-const isPoetry = variant === 'poetry';
+const { title, variant = 'post', tags, image, keywords, date, slug, monospace_title } = Astro.props;
+const keywordsStr = Array.isArray(keywords) ? keywords.join(', ') : (keywords || '');
+
+// Variant → layout behavior. Add a variant by adding a row, not another flag.
+const VARIANTS: Record<string, { className: string; poetry?: boolean; mermaid?: boolean }> = {
+  'post-wide':   { className: 'wide', mermaid: true },
+  'post-medium': { className: 'medium' },
+  'post-paper':  { className: 'paper' },
+  'poetry':      { className: '', poetry: true },
+};
+const v = VARIANTS[variant] ?? { className: '' };
+
 const dateStr = date.toISOString();
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
 const excerpt = ''; // TODO: extract from content
@@ -30,6 +38,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title} | june.kim</title>
+  {keywordsStr && <meta name="keywords" content={keywordsStr} />}
   <link rel="canonical" href={`https://june.kim/${slug}`}>
 
   <meta property="og:type" content="article">
@@ -93,14 +102,14 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     <span class="logo-prompt">Home</span>
   </aside>
 
-  <main class={`fade-shift ${isWide ? 'wide' : isMedium ? 'medium' : isPaper ? 'paper' : ''}`} style="opacity:0.3;transform:translate(0,2px)">
-    {!isPoetry && (
+  <main class={`fade-shift ${v.className}`} style="opacity:0.3;transform:translate(0,2px)">
+    {!v.poetry && (
       <noscript>
         <style>{'article .footnotes { display: block; }'}</style>
       </noscript>
     )}
 
-    <article class:list={[{ wide: isWide, medium: isMedium, paper: isPaper }]}>
+    <article class:list={[v.className]}>
       <div class="center">
         <h1>{monospace_title ? <code>{title}</code> : title}</h1>
       </div>
@@ -111,7 +120,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
 
   </main>
 
-  {!isPoetry && (
+  {!v.poetry && (
     <a href="https://june.kim/feed.xml" class="rss-popup" id="rss-popup" title="Subscribe via RSS">
       <i class="fa fa-rss"></i>
     </a>
@@ -148,7 +157,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
   </script>
   <script async src="/assets/footnotes.js"></script>
 
-  {isWide && (
+  {v.mermaid && (
     <Fragment>
       <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
       <script is:inline>mermaid.initialize({startOnLoad:true});</script>
