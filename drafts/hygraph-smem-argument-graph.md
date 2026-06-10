@@ -235,6 +235,19 @@ rather than a boast.
   labels); how hard the diagnosis is vs whether there is one at all.
 - **D3.** D1 + D2 + cheap visible oracle (C4) ⇒ the nulls in C are the
   *predicted signature*, not a refutation. `attributed` · §10
+  - **D3-scope (author 2026-06-10, load-bearing precision).** The claim is
+    *not* "benchmarks are worthless." It is the scoped, defensible one: this
+    benchmark is not a valid measure of **our flavor of reasoning** — typed,
+    diagnostic inquiry. SWE-bench Pro measures spec-conformance, and measures
+    it fine; it simply cannot see the mechanism the hygraph encodes, because
+    ~77% of its tasks hand over the spec (nothing to diagnose) and a cheap
+    oracle lets blind iteration substitute for diagnosis. Frame it as
+    **applicability, not fault**: the bench is *not applicable* to this
+    construct, not a *bad* instrument (avoid the word "discredit" — it keeps
+    the attacking frame the narrowness is meant to drop; N/A is the cooler,
+    stronger verdict). Guards against the axe-grinding read (codex flag) and
+    keeps the general bench-critique (illegible / teaches-nothing /
+    depreciating, F2a) as supporting color, not the load-bearing claim.
 - **D4.** Field implication (determinacy-aware denominators), the flipt
   mismatch example, the specification-lottery framing, and the tool (D6) all
   render as ONE side-note ¶ (user, 06-10): the bench-standards critique is
@@ -374,11 +387,21 @@ affordance names its warrant or its honest status:
   novelty *witnessed and re-runnable*. Agents that contain what we discovered
   recall; an agent that can build and survive a hygraph discovers.
   `existence-witnessed (E4)`
-  *(framing, author 2026-06-10: the uncontaminated-issue demonstration is
-  evidence of escaping model convexity; keep the claim bold and narrow — the
-  convex-hull formulation IS the falsifiable target, don't sand it to
-  "the model generalizes." Hedge "by some definition" stays: it marks the
-  word creative as load-bearing and contestable, not decorative.)*
+  *(REFRAME 2026-06-10, codex coherence pass + author call: the "convex hull /
+  escaping convexity" framing was CUT paper-wide. It is a capability/geometry
+  claim a referee kills on sight — Balestriero, Pesenti & LeCun 2021 ("Learning
+  in High Dimension Always Amounts to Extrapolation") shows high-dim points are
+  almost always OUTSIDE the training convex hull, so "bounded by the hull" is
+  both unprovable and backwards. "Convexity" was never standard LLM vocabulary;
+  it was the author's own adaptation, pointed the wrong way. The claim is now
+  EPISTEMIC, not geometric: an unaudited model output gives no way to tell
+  discovery from recall; the recorded graph does. Keep the bold spine
+  ("discovery, not recall"; "a creative act by a definition precise enough to
+  argue with"); scope "beyond corpus synthesis" → "beyond documented corpus
+  recall"; scope every "corpus did not contain" → the audit claim (absent from
+  reachable sources, cutoff predates fix, unresolved at freeze). The five-clause
+  criterion stays as the falsifiable target — it replaces the hull as the thing
+  a skeptic must attack clause by clause.)*
 
 ## T — The declaration · abstract, §12
 
@@ -424,10 +447,14 @@ Done:
 - [x] Intro: discovery foreshadow added after the substrate ¶ (attested mechanical reasoning, old-news guard); example ¶ promoted with convex-hull / creative-act / Sutton; ladder lead-in flags importance ⟂ confidence; claim 4 sharpened to the discovery peak.
 
 Remaining (deeper sections):
-- [ ] §4 grounding → land thesis-2 callback ("encoded what it means to reason, on pragmatist grounds") at the section close.
-- [ ] §11 right-regime (E) → promote to the proof: lead with the uncontaminated witness, reproducibility-at-the-example, frame E4 as the discharge of the headline. Keep the eight nulls honest.
-- [ ] §12 discussion + P5 → make P5 the peak (discovery / beyond corpus synthesis / creative act), not the fifth affordance; F/T close the bookend (Sutton discharged).
-- [ ] Sweep B/C/D section bodies for residual "centerpiece" framing now that they are context/pivot.
+- [x] §4 grounding → thesis-2 callback landed at section close, qualified ("in a precise and limited sense... not a theory of mind, but a mechanical discipline of inquiry") to state the claim without the philosophy fight.
+- [x] §11 right-regime (E) → "what the existence proof establishes" now lands discovery / built-not-recalled / reproducibility-at-the-example / Sutton discharge. Eight nulls kept honest.
+- [x] §12 discussion + P5 → P5 reframed as the peak ("the claim the other four exist to support"); creative-act now carries an operational criterion (novel, sound, useful, corpus-absent, replayable — each clause a receipt); Sutton bookend closed. Legibility "confession" → "question" (intro de-confessed).
+- [x] B/C/D sweep → already bounded post-reversal ("the chart scales the artifact; it ranks nothing"; "what the number is not"); no centerpiece overreach found.
+- [x] §audit → "applicability, not fault" scope guard added (not "discredit"); bench is N/A to this construct, fair measure of spec-conformance.
+
+Next:
+- [ ] /copyedit one clean pass over the whole settled paper (user: after the rewrite).
 
 Standing (unchanged):
 - [ ] E4's pending tail (maintainer merge) lands → update §11, §13 golden-ticket, possibly the abstract's promise.
