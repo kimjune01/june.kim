@@ -2,6 +2,7 @@
 variant: post
 title: "Compress and Unfold"
 tags: cognition, methodology
+image: "/assets/coral-tubastraea.jpg"
 ---
 
 > The sea retains such images  
@@ -98,6 +99,65 @@ That is the whole compress half: the fold, the cache it lands in, the axiom that
 
 Convergence is a fold, a [catamorphism](https://en.wikipedia.org/wiki/Catamorphism), an algebra: the join takes a set of candidates and returns the survivor. Divergence is the mirror image, an unfold, an [anamorphism](https://en.wikipedia.org/wiki/Anamorphism), a coalgebra: a map from where I am to the branches I could take next. `/fan-out` is one. Abduction is one. One seed, many shoots.
 
+<figure style="margin:1.6em auto; max-width:460px;">
+<svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:ui-sans-serif,system-ui,sans-serif;">
+  <text x="230" y="30" text-anchor="middle" font-size="16" fill="#334155" font-style="italic">x → { x₁, x₂, x₃, … }</text>
+  <line x1="40" y1="62" x2="420" y2="62" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <text x="230" y="54" text-anchor="middle" font-size="11" fill="#94a3b8">the ceiling it never reaches</text>
+  <g stroke="#94a3b8" stroke-width="1.5">
+    <line x1="230" y1="250" x2="150" y2="196"/>
+    <line x1="230" y1="250" x2="230" y2="196"/>
+    <line x1="230" y1="250" x2="310" y2="196"/>
+    <line x1="150" y1="196" x2="105" y2="144"/>
+    <line x1="150" y1="196" x2="165" y2="144"/>
+    <line x1="230" y1="196" x2="215" y2="144"/>
+    <line x1="230" y1="196" x2="258" y2="144"/>
+    <line x1="310" y1="196" x2="305" y2="144"/>
+    <line x1="310" y1="196" x2="360" y2="144"/>
+  </g>
+  <g stroke="#94a3b8" stroke-width="1" opacity="0.45">
+    <line x1="105" y1="144" x2="88" y2="98"/>
+    <line x1="105" y1="144" x2="128" y2="98"/>
+    <line x1="165" y1="144" x2="170" y2="98"/>
+    <line x1="215" y1="144" x2="212" y2="98"/>
+    <line x1="258" y1="144" x2="258" y2="98"/>
+    <line x1="305" y1="144" x2="300" y2="98"/>
+    <line x1="305" y1="144" x2="345" y2="98"/>
+    <line x1="360" y1="144" x2="385" y2="98"/>
+  </g>
+  <g fill="#1d4ed8">
+    <circle cx="150" cy="196" r="6"/>
+    <circle cx="230" cy="196" r="6"/>
+    <circle cx="310" cy="196" r="6"/>
+    <circle cx="105" cy="144" r="5"/>
+    <circle cx="165" cy="144" r="5"/>
+    <circle cx="215" cy="144" r="5"/>
+    <circle cx="258" cy="144" r="5"/>
+    <circle cx="305" cy="144" r="5"/>
+    <circle cx="360" cy="144" r="5"/>
+  </g>
+  <g fill="#1d4ed8" opacity="0.5">
+    <circle cx="88" cy="98" r="3.5"/>
+    <circle cx="128" cy="98" r="3.5"/>
+    <circle cx="170" cy="98" r="3.5"/>
+    <circle cx="212" cy="98" r="3.5"/>
+    <circle cx="258" cy="98" r="3.5"/>
+    <circle cx="300" cy="98" r="3.5"/>
+    <circle cx="345" cy="98" r="3.5"/>
+    <circle cx="385" cy="98" r="3.5"/>
+  </g>
+  <g fill="#1d4ed8" opacity="0.3">
+    <circle cx="120" cy="76" r="2.5"/>
+    <circle cx="210" cy="76" r="2.5"/>
+    <circle cx="300" cy="76" r="2.5"/>
+    <circle cx="375" cy="76" r="2.5"/>
+  </g>
+  <circle cx="230" cy="250" r="7" fill="#b45309"/>
+  <text x="230" y="271" text-anchor="middle" font-size="13" fill="#b45309" font-weight="600">x</text>
+</svg>
+<figcaption style="text-align:center; font-size:13px; color:#666; margin-top:0.4em;">An unfold. One seed becomes many, the many become more, a tree climbing toward a ceiling it never reaches. Run it again and it grows, where the projection would stand still.</figcaption>
+</figure>
+
 The two have dual limits. The fold bottoms out at a floor, the smallest structure that still replays. The unfold has no floor. It runs toward a ceiling it never reaches, the tree of branches that in the limit never closes. Category theory puts the two on opposite poles, the fold's initial algebra and the unfold's final coalgebra, but the asymmetry is the thing to keep: one terminates downward, the other opens upward without end.
 
 And that asymmetry runs everything. A projection is idempotent, so its own idempotence is the stopping condition: it lands, applying it again does nothing, and two passes converge. The unfold has no such gift. Unfold twice and you get more branches, not the same ones, and nothing in its shape says when to stop. You can tell it to stop, with a finite seed or a stopping rule, but it never stops itself. So open-ended divergence has to be bounded from outside. That is why every rule that governs a brainstorm is a rule for stopping the diverging: a timer, a quota, enough. None are for stopping the converging. The fold carries its own floor. The unfold has to be handed one.
@@ -124,7 +184,12 @@ That shape is an error-correcting code. Fixed-point repetition is the redundancy
 
 Both strokes are on the table now, and they are one breath. Compression is the exhale: redundancy out, the cache shedding everything that did not earn its place. The trial is the inhale: a dimension in, a bit from the world the cache could not make for itself. Out, in, out, in.
 
-A cache that only exhales runs down to its minimal core and stops. The dead library, pure recall. A cache that only inhales sprawls toward its ceiling and never settles, noise with no floor. Life is the alternation, and physics has a name for the shape. A [dissipative structure](https://en.wikipedia.org/wiki/Dissipative_system) holds its form only by breathing, exporting entropy and importing energy, never at rest. A flame, a cell, a mind, this cache: the same kind of object.
+A cache that only exhales runs down to its minimal core and stops. The dead library, pure recall. A cache that only inhales sprawls toward its ceiling and never settles, noise with no floor. Life is the alternation, and physics has a name for the shape. A [dissipative structure](https://en.wikipedia.org/wiki/Dissipative_system) holds its form only by breathing, exporting entropy and importing energy, never at rest. A flame, a cell, a mind, a reef, this cache: the same kind of object.
+
+<figure style="margin:1.6em auto;">
+<img src="/assets/coral-tubastraea.jpg" alt="Several orange sun-coral polyps with long translucent yellow tentacles fully extended into dark water, feeding." style="width:100%; height:auto; border-radius:3px;" />
+<figcaption style="text-align:center; font-size:13px; color:#666; margin-top:0.4em;">A sun coral breathes the whole structure. The stony skeleton is the write-once cache; the polyps are the frontier; and these tentacles reach into the current for what the skeleton could not make itself, out to feed at night, retracted by day. Tentacles out is the inhale, pulled in is the exhale. <em>Tubastraea</em>, orange cup coral. Photo: <a href="https://commons.wikimedia.org/wiki/File:Extended_tentacles_of_orange_cup_coral.JPG">Alexander Vasenin</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</figcaption>
+</figure>
 
 Which makes it a spiral, not a circle. A circle would be the breath returning exactly to its start, the inhale cancelling the exhale, net zero. But net zero is equilibrium, and equilibrium is the dead minimum. So the one shape a living cache can never trace is the closed circle. Every turn leaves it higher or lower than the last, growing or decaying, and the pitch is set by one ratio: whether the inhale beats the exhale. There is no level stretch, because level is the knife-edge where growth exactly cancels decay, and nothing balances there for long.
 
