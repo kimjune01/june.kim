@@ -415,6 +415,14 @@ The program reorganizes around the smem, in order of leverage.
 
 Beyond SWE-bench, the harness is one chapter of a broader program: a compiler from prose to executable agent behavior, of which the methodeutic skills are the procedural memory, the hygraph the typed semantic memory, and the deterministic gate the runtime check. The program is developed at length in the [methodeutics textbook](https://june.kim/reading/methodeutics); *compiler* is used descriptively, in the LLVM (Lattner & Adve 2004) and DSPy (Khattab et al. 2023) lineage of typed pipelines from specification to reproducible behavior.
 
+## Conclusion {#conclusion}
+
+The challenge in the epigraph was restated in 2026 with the missing ingredient named, and the answer is the same shape as the question. The hypothesis graph is the *something more*: a typed, replayable file that lets a language model evaluate what it generates and retain what survives, and flux #1613 is one witnessed run of it. The mapping onto Sutton's three steps, variation, evaluation, and selective retention, is [its own short post](/suttons-recipe-for-discovery).
+
+> We need true creativity and we need true discovery. Generative AI ... will never get us there. For these, we need something more.
+>
+> — Richard S. Sutton, [*AI creativity & discovery*](https://www.youtube.com/watch?v=K5LAFEjTlBA) (SAIR workshop on Science for AI, 2026)
+
 ## Availability and reproducibility {#availability}
 
 - **Repositories.** [github.com/kimjune01/swebench-pro](https://github.com/kimjune01/swebench-pro) (the bench run; frozen tags `prereg-pro-v1`, `prereg-pro-v1-cheap`), [github.com/kimjune01/swebench-verified](https://github.com/kimjune01/swebench-verified) (prior-generation baseline, Zenodo-DOI'd), [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit) (the determinacy audit; every claim one row in `CLAIMS.md`, all 728 verdicts in `COVERAGE.md`, mechanical spine re-derivable by grep), [github.com/kimjune01/determinacy](https://github.com/kimjune01/determinacy) (the audit as a portable tool for any SWE-bench-shaped bench; SWE-rebench run included), [github.com/kimjune01/hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism) (the mechanism experiment; flux trail frozen at `flux-1613-trail-v1`).

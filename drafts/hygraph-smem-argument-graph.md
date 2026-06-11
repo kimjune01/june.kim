@@ -300,10 +300,17 @@ rather than a boast.
   (confident false positive); graph = cause-keyed (FoldLocal), generalizes;
   receipt discriminates (int-receipt VERIFY vs E0999; unsound twin both
   reject); 19 nodes, load-bearing nodes replayed, 3 in-trail self-corrections.
-  `existence (n=1)` · §11 — the live example worth more than the rate
-  (legibility confession, §2/§12). Pending tail (golden ticket): maintainer
-  merge of the trace-backed fix = external attestation; staged, awaiting
-  response; on merge, update §11 + §13.
+  `existence (n=1 instance)` · §Results (the live example worth more than the rate).
+  - **E4-replication (pilot 09, 2026-06-10, committed 979195cf).** Reproduces on
+    a SECOND model family (Sonnet 4.5), same oracle, identical split: n=1 instance
+    → n=2 models, so the advantage is the methodology, not the model. Sonnet-
+    minimal is worse than GPT-5.5-minimal, over-narrow AND **unsound** (accepts
+    the invalid T3 twin every other arm rejects). That suite-green-but-unsound fix
+    now LEADS the §Discussion "confidently wrong and impossible to verify" block
+    (recommendation #3, the field's live fear demonstrated). `existence (n=2 models)`
+  - Pending tail (golden ticket, recommendation #1): maintainer merge of the
+    trace-backed fix = external attestation; staged, awaiting response; on merge,
+    update §Results + the falsifiers (§Limitations "How to refute this").
 - **E6.** Per-loop preregistration discipline adopted (testing X / predict Y /
   refuted by Z); 3–5 audited cases or the committed null is the next paper.
   `pending` · §13
@@ -505,19 +512,52 @@ Done:
       sentence (table stakes).
 - [x] Checkpoint committed (e0d86c3c).
 
-Next (the trim — pointer-first rule, user 2026-06-10 "we can afford to trim"):
-- [ ] **Condense B/C/D in §8 to findings + repo pointers.** Keep: the oracle-
-      bracket finding (~46 pts), the minimal-prompt-reaches-the-number attribution,
-      the audit verdict (applicability not fault = the benchmark gap). Move the
-      ablation STATISTICS (CIs, n=38/36, McNemar p=0.057, per-channel detail) to
-      the repo; the paper points instead of narrating. Preserve anchors
-      (§(oracle-bracket), §(prompt-ablation), §(perturbation) are referenced).
-- [ ] Trim §8 sub-structure: Models/Open-weight/Number subsections can collapse
-      toward the framed intro + the tables; the 5 attribution sub-analyses fold
-      to the table + one tight paragraph.
+Done (trim + strengthening, committed cc177d07 / 979195cf):
+- [x] **B/C/D condensed pointer-first.** The 5 attribution sub-analyses folded to
+      the table + one paragraph ("Given the oracle, the rest adds almost nothing");
+      statistics point to the repo; oracle-bracket + minimal-prompt attribution kept.
+      Audit reduced to a vague "wrong tool for the job" (no companion paper exists
+      yet, no justification needed). Open-weight run cut to one sentence; SWE-bench
+      Verified dropped from the body. Number stated once in prose. Orphaned anchors
+      repointed (prompt-ablation/perturbation → attribution-verdict, open-weight-run
+      → models, tables → results).
+- [x] **Cross-model replication** (E4-replication) + **unsound result leads the
+      §Discussion enemy block** (#3) + **"How to refute this" falsifiers in
+      §Limitations** (#4). Anatomy figure on the dimmer example.
+- [x] **Sutton split out.** May-2026 talk briefly added to §P5 then reverted; now
+      its own post (`2026-06-10-suttons-recipe-for-discovery.md`,
+      /suttons-recipe-for-discovery), a table-driven pointer back to the paper.
+      Keeps the paper from bloating.
 
-Standing (unchanged):
-- [ ] E4's pending tail (maintainer merge) lands → update §11, §13 golden-ticket, possibly the abstract's promise.
-- [ ] E6 new existence cases → §11 grows; ≥3 upgrades "existence-grade" language.
+## TODO (recommendations + standing, 2026-06-10)
+
+**Substance multipliers** (author's hands; highest leverage for "harder to ignore"):
+- [ ] **#1 — Chase the maintainer merge of flux #1613.** External adversarial
+      attestation, the single most un-ignorable event; make it the keystone. On
+      merge: update §Results + falsifiers, possibly the abstract.
+- [ ] **#2 — One-command flux replay.** Docker / one-liner reproducing the
+      discriminator (graph VERIFY vs minimal E0999) on a clean build. Kills the
+      "I can't verify this" dismissal; bake in the toolchain PATH gotcha.
+- [ ] **More existence cases (E6).** 3–5 audited cases under the preregistered
+      protocol → upgrades "existence (n=1 instance)" language; else the committed
+      null is the next paper. (Author hunting.)
+
+**Editorial / housekeeping:**
+- [ ] **Discussion trim, pointer-first.** Most trimmable visible prose; "Truth is
+      buildable" → a pointer to /truth-is-buildable, not a re-derivation. (Attempted
+      then reverted with the Sutton experiment; redo cleanly.)
+- [ ] **Compress AI-authored paragraphs** (intro pains→gap, §Procedure, §hygraph
+      constraints/LLM-uniqueness run full); tighten, leave the author's prose alone.
+- [x] **Sutton bookend** (user 2026-06-10, paper convention). Keep the 2019 *Bitter
+      Lesson* line as the opening epigraph (after the Abstract); add a short
+      **Conclusion** that ends on the verbatim 2026 SAIR quote ("we need true
+      discovery ... generative AI will never get us there ... we need something
+      more"). Opener poses, conclusion closes; the paper is the "something more."
+      The variation/evaluation/selective-retention mapping stays in its own post
+      (/suttons-recipe-for-discovery), linked from the Conclusion. (Two epigraph
+      attributions now → em-dash budget = 2, both exempt.)
+- [ ] Standardize the one stray "falsification condition" → "kill condition" (12:1).
+- [ ] PDF rebuild (`scripts/build-paper-pdf.sh`); download link still says
+      `methodeutic-harness-paper.pdf` (stale slug).
 - [ ] Zenodo DOIs → §availability placeholders.
-- [ ] PDF rebuild (`scripts/build-paper-pdf.sh`) after content settles.
+- [ ] Push + deploy when ready (paper 979195cf, Sutton post b076399c, both unpushed).
