@@ -20,11 +20,11 @@ which to us need be nothing more
 
 than a harmony with the wave on which we move.
 
-All ugliness is a dotortion
+All ugliness is a distortion
 
 of the lovely lines and curves
 
-which sincerity makes ouf ot hands
+which sincerity makes out of hands
 
 and bodies moving in air. 
 
