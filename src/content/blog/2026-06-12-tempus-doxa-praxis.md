@@ -300,20 +300,22 @@ idle](/agent-native-epistemics) for anyone deciding what to do, a picture with n
 the world could ever redden it. There is no third way to hold it where it both guides an act
 and is sayable from where you stand.
 
-And the deepest reason is not that the picture is false but that no one can take it up. To
-examine the block, to hold all of time
-up as a thing you inspect, you would have to stand outside it. But the examining is itself
-an event in time, a part of the very block you mean to survey, so a complete examination
-would have to contain itself whole, and a thing that contains itself whole never closes: the
-survey has to include the surveying, which has to include that, with no last step. No
-standpoint inside the totality can take in the totality. Pretending the block is examinable
-is that regress wearing a metaphysics. The
-examiner only ever sees the block minus its own looking, which is to say never the block. So
-I am not refusing the picture. I am pointing out there is no seat from which to be right
-about it, and no seat from which to live by it, and in time there is no opt-out of being one
-of the things inside it. The present does to that flat picture what reading does to the
-mirror chapter: it will not run backward. You cannot rewind a cause, because the reverse gear
-was never in time. It was only ever in the picture we drew of it.
+That dilemma has a sharper form, a reductio, and it runs straight through the one law this
+essay is built on. Grant the symmetry in full. Suppose you could reference the future the way
+you reference the past, a citation that points forward, a cause that reaches back. Then the
+dependency edge closes into a loop, the present resting on a fact the present itself lays
+down, and the loop demands a fixed point it cannot have. That is the grandfather paradox, and
+it is the green light you wired to stay green, now with a clock on it, a claim certified by
+the very trial its own act decides. The escape physicists reach for is the [self-consistent
+loop](https://en.wikipedia.org/wiki/Novikov_self-consistency_principle), allowed only because
+it is locked, no free variation, the act fixed in advance. But the escape concedes
+everything. The instant a thing is referenceable it is already laid down, gripped by an edge
+that reaches it, which is to say it is past. Referenceability is pastness, and a referenceable
+future is a square circle. The locked loop is only road already paved that you have not walked
+yet, future-shaped past with the label peeling off in your hand. So the block does not abolish
+the future by knowing it; it abolishes it by making it past: all of time laid flat is all of
+time laid down, a museum that holds only the dead. You can only ever find the past. The future
+you only ever make, and the making is what turns it into the past you will later find.
 
 Which is the last and worst thing to say about Manhattan. He did not become a god by
 seeing all of time at once. He stopped being one. He climbed into the seat outside time,
