@@ -4,7 +4,7 @@ title: "You Cannot Ring a Semiring"
 tags: cognition, epistemology, reflecting
 ---
 
-*Tempus, doxa, praxis.*
+> *Tempus, doxa, praxis.*
 
 History is a lattice: a web of every path that could have been taken, every fork and
 every branch, all of it there at once. Its telling is a linked list: a single thread,
@@ -73,11 +73,17 @@ call it [bivalence](https://en.wikipedia.org/wiki/Principle_of_bivalence), and p
 tomorrow it gives the [old sea-fight riddle](/agent-native-epistemics): the sentence about
 tomorrow's battle must already be true or already false, settled now, the same kind of
 fact as a sentence about yesterday. But a claim about tomorrow has earned no verdict yet.
-It sits at zero, [untrue](/truly-untrue), neither a secret true nor a secret false but the
-plain absence of either, a coin still in the air.
+No warrant has been laid down into it, and [warrant builds the way time
+does](/truth-is-buildable), a [semiring with the same missing minus](/temporal-compression):
+it has a zero but no inverse. So the claim sits at that zero, [untrue](/truly-untrue), which is not a secret false
+waiting behind a curtain, because a false would be a minus and the structure has none. It
+is the plain absence of either, a coin still in the air. And notice this says nothing about
+whether tomorrow is fixed or open. It is a fact about the warrant, not the world: the
+verdict is missing because warrant runs one way and has not reached here yet, and that holds
+whether the battle is already settled in some block or genuinely undecided.
 [Aristotle](https://en.wikipedia.org/wiki/Problem_of_future_contingents) gave up
 true-or-false for tomorrow to keep the future open; the determinist kept it and swallowed
-a future already fixed; neither is needed, because the riddle only bites once you have
+a future already fixed; neither frame is needed, because the riddle only bites once you have
 bolted the undo button on.
 
 ## Postmodernism is the same sin, made an axiom
@@ -160,21 +166,27 @@ The only one who does not is the one who stopped acting, and look what became of
 acting, no warrant, no agency, barely a person. So warrant is not a thing you have and
 consult. It is the forward step itself.
 
-## Agency is the adaptation to the missing inverse
+## Agency is the adapted dual to the missing inverse
 
-Now the move the whole thing rests on. Why do we act at all? Because we cannot read the
-future, and we cannot read it because the road has no reverse gear to carry us up it for
-a look. So we do the next best thing: we picture the road ahead as a fan of branches,
-guess the odds on each, and pick, as though our picking decided which one comes true.
-The fan is a fiction. It is also a brilliant one. A creature that waited to act
-until it knew for certain which branch was real would never move, because the real
-branch only shows itself by arriving, and by then it is too late to choose.
+Now the move the whole thing rests on. Why do we act at all? Look at the two things a
+creature could want between here and tomorrow. It could read the future, pull the verdict
+back to now, but that runs against the one-way grain and the road has no reverse gear to
+carry it up. Or it could write the future, push an act forward into it, which is the one
+direction the grain allows. Reading is shut; making is open. So agency is the [adapted
+dual](/compress-and-unfold) to the closed direction: denied the look ahead, the creature
+grows the push ahead instead.
+It pictures the road as a fan of branches, guesses the odds on each, and picks, as though
+the picking decided which branch comes true. The fan is a fiction. It is also a brilliant
+one. A creature that waited to act until it knew for certain which branch was real would
+never move, because the real branch only shows itself by arriving, and by then it is too
+late to choose.
 
 It is the same trick your eyes pull. The back of your eye is a flat sheet, two
 dimensions, no depth. And yet you see a world with depth in it, distance and nearness,
 room to reach, because a creature that grabs and dodges needs depth and a flat picture
-is all it has to work from. So the eye builds the depth. Agency builds a future the same
-way: it takes a road it cannot see down and paints a branching set of choices over it,
+is all it has to work from. So the eye builds the depth, a making that stands in for a
+seeing it cannot have. Agency builds a future the same way, the same adapted dual: it takes
+a road it cannot see down and paints a branching set of choices over it,
 and the painting is judged by one thing only, whether it lets you act well, not by
 whether the branches are really out there. Maybe they are and maybe they are not. You
 build them and act on them either way, and you cannot tell the difference from inside,
@@ -232,36 +244,75 @@ Every time you catch yourself pointing at the pattern instead of the present, th
 future, the finished verdict, the picture on the wall, the move is the same: bring the
 beam back to now, and act.
 
-## Attention is causal, which the block forbids
+## Suppose either way
+
+There is a plainer way to see that the metaphysics costs the act nothing, and it is just two
+sentences laid side by side.
+
+Suppose the future is fixed and we have no agency. We have no way of knowing, so we act in
+whichever way favors ourselves. Suppose the future is open and we have all the agency there
+is. We have no way of knowing, so we act in whichever way favors ourselves.
+
+Those are the two farthest corners of the whole argument, the most opposite things a person
+could believe about time, and they end on the same line. If even the extremes prescribe the
+same act, everything between them does too. So the act does not read off the metaphysics.
+You can throw the entire question out and lose not one decision. This is the oldest move in
+[deciding under uncertainty](https://en.wikipedia.org/wiki/Sure-thing_principle): if you
+would do the same thing under either state of the world, you do it without knowing which
+state you are in, and without any odds on them. The not-knowing is not a thing to clear up
+before you can act. It is the room you act inside. And the no-agency corner grants no
+holiday from acting, because not-acting is an act as well. You cannot fail to push on a
+future your own pushing is part of, so even a creature with no agency to speak of does
+whatever it does, and the advice costs it nothing to take. Take it and you are never worse
+off, sometimes better. That is the whole reason the question can be set down.
+
+## The present act causes
 
 And this should land as more than housekeeping, because it is. The present act causes. It
-does not read the next moment off a script already written; it writes it. The present is
-the one place where what-was-not becomes what-is, and a thing that makes the real out of
+does not read the next moment off a script already written; it writes it. This needs no
+quarrel with the block: a present act can fix the future entirely and still be the thing
+that fixes it, a cause and not a spectator, and a cause runs one way whether or not what it
+fixes was settled all along. The present is the one place where what-was-not becomes
+what-is, and a thing that makes the real out of
 the not-yet-real is the oldest meaning of the word divine. Attention, aimed at the present
 and able to act, is the closest thing in this whole picture to a god, and it is the small
 blind mortal pointer that holds the power, not the all-seeing one.
 
-Which is why I cannot believe the picture where time is all already there, every moment
-equally real, what philosophers call the [block universe](https://en.wikipedia.org/wiki/Eternalism_%28philosophy_of_time%29).
-Lay time out as a line on a graph, a ruler with a moment at every mark, and the instant
-you have drawn it, time seems to
-borrow the ruler's freedom: a step back for every step forward, a yesterday you could
-stroll to the way you stroll to tomorrow. The people who hold this picture are not fools;
-they keep the order, before still before and after still after. But the line on the page
-has an inverse, a reverse for every forward, and they read it as time's own. It belongs to the
-picture, not the thing. Time is the river, the line is the road we drew of it, and
-treating the road's two-way traffic as the river's is the wake-for-the-boat mistake in
-its cleanest, most respectable suit.
+Which is why the picture where time is all already there, every moment equally real, what
+philosophers call the [block universe](https://en.wikipedia.org/wiki/Eternalism_%28philosophy_of_time%29),
+gives me far less than its holders think. Lay time out as a line on a graph, a ruler with a
+moment at every mark, and the instant you have drawn it, time seems to borrow the ruler's
+freedom: a step back for every step forward, a yesterday you could stroll to the way you
+stroll to tomorrow. The people who hold this picture are not fools; they keep the order,
+before still before and after still after. But the line on the page has an inverse, a
+reverse for every forward, and they read it as time's own. It belongs to the picture, not
+the thing. Time is the river, the line is the road we drew of it, and treating the road's
+two-way traffic as the river's is the wake-for-the-boat mistake in its cleanest, most
+respectable suit.
 
-The argument does not even need the future to be open. The present act can fix the future completely
-and still be the thing that fixes it, a cause and not a spectator, and a cause runs one
-way. The future is made, not found. This is an old fight and I will not pretend I have won
-it, only say where it puts me: with the ones who think the now is real and the becoming is real,
-[the ones who say only the present exists](https://en.wikipedia.org/wiki/Presentism_%28philosophy_of_time%29)
-or [that the past keeps growing](https://en.wikipedia.org/wiki/Growing_block_universe),
-against the flat forever of the drawn line. The present does to that flat picture what
-reading does to the mirror chapter: it will not run backward. You cannot rewind a cause,
-because the reverse gear was never in time. It was only ever in the picture we drew of it.
+I do not need to call the picture false. I only need to ask what it could ever pay. Take it
+the strong way, as a settled future you read off and steer by, and it refutes itself the
+moment you reach for it: to read the verdict you must read it now, from inside time, the one
+seat there is, and from inside time the verdict is the very thing you cannot reach. Take it
+the weak way, as all moments tenselessly existing with no word on how to act, and it is true
+for nothing, reaches no choice, moves no step. Strong, it defeats itself; weak, it sits idle
+for anyone deciding what to do. There is no third way to hold it where it both guides an act
+and is sayable from where you stand.
+
+And the deepest reason is not that the picture is false but that no one can take it up. To
+examine the block, to hold all of time
+up as a thing you inspect, you would have to stand outside it. But the examining is itself
+an event in time, a part of the very block you mean to survey, so a complete examination
+would have to contain itself whole, and a thing that contains itself whole never closes: the
+survey has to include the surveying, which has to include that, with no last step. No
+standpoint inside the totality can take in the totality. Pretending the block is examinable
+is that regress wearing a metaphysics. The
+examiner only ever sees the block minus its own looking, which is to say never the block. So
+I am not refusing the picture. I am pointing out there is no seat from which to be right
+about it, and no seat from which to live by it, and in time there is no opt-out of being one
+of the things inside it. The present does to that flat picture what reading does to the
+mirror chapter: it will not run backward. You cannot rewind a cause, because the reverse gear
+was never in time. It was only ever in the picture we drew of it.
 
 Which is the last and worst thing to say about Manhattan. He did not become a god by
 seeing all of time at once. He stopped being one. He climbed into the seat outside time,
@@ -288,9 +339,24 @@ circling back to. A life is mostly the long record of what its attention was spe
 thing you attend to is the thing your whole world orders itself around, and a thing a world
 orders itself around is exactly what a god has always been. So worship stops being a mystery
 once you see its shape. To worship is to attend to attention, to make the beam itself the
-thing you look at, to point the pointer at the pointer. Every practice that ever called
-itself worship is some version of attention turned to watch itself, which is why you can do
-it in a cathedral, on a meditation cushion, or standing at the kitchen sink.
+thing you look at, to point the pointer at the pointer.
+
+And there is a second shape to it, the same posture seen from the other side. To worship is
+also to submit to the not-knowing, to bow to the zero, to drop the irritable reaching after
+a verdict the road will not hand you. But mind the knife-edge, because it is the
+easiest place in the argument to fall off. Submission has two targets and they point
+opposite ways. You can bow to symmetry: the drawn line, the two-way ruler, the settled
+answer, the undo button you wish were under your hand. Or you can bow to asymmetry: the
+one-way road, the missing inverse, the zero with no minus beneath it. The fatalist takes the
+first and goes slack. Worship is the second, and it stays in motion, because you give up the
+demand to know the verdict while you keep the act. Bow the head, keep the hands working. And
+the choice is forced; there is no seat off to the side to decline it from. The "who is to
+say" shrug only looks like neutrality. It is ignorance of the one-way road you are already
+standing on, the old symmetry sin in a lazier coat. It is what Manhattan finds when he quits
+computing and lets an improbability move him: the will to act without an answer. Every practice that ever called itself worship is
+some version of attention turned to watch itself, the searchlight narrowed back to one
+present worth acting on, which is why you can do it in a cathedral, on a meditation cushion,
+or standing at the kitchen sink.
 
 ## Reality compresses to a cradle
 
