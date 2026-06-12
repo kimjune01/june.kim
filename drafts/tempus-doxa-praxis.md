@@ -7,373 +7,331 @@ draft: true
 
 *Tempus, doxa, praxis.*
 
-History is a lattice. Its telling is a linked list. Laid flat, all of it is there
-at once, every branch and every node, and from far enough away it looks symmetric,
-the past and the future two wings of one shape. But you never get it laid flat. You
-get it told, one node after the next, in a single direction, and you cannot read it
-backwards. The symmetry is in the lattice. The asymmetry is in the reading. This
-whole essay is the gap between those two, and the one mistake that keeps falling
-into it.
+History is a lattice: a web of every path that could have been taken, every fork and
+every branch, all of it there at once. Its telling is a linked list: a single thread,
+one bead after the next, the path that actually got walked. You only ever get the
+thread. You read it front to back, and you cannot read it backwards. The web is one
+shape; the telling is another. This whole essay is the gap between them, and the one
+mistake people keep making in it.
 
 ## The sin
 
-Name the algebra. A ring lets you undo. It has an additive inverse, a minus for
-every plus, so you can run it backwards and land where you started, and its symmetry
-is built in. A semiring does not. It lets you accumulate and it lets you select, but
-it has no inverse, no minus, no undo. Once you have added, there is no subtracting
-your way back.
+There are two kinds of thing in the world, and the whole argument is learning to tell
+them apart.
 
-Time is a semiring. [Delay accumulates along a path and the earliest arrival is
-selected across paths](/temporal-compression), and there is no operation that runs
-the clock the other way, no minus-a-delay, no un-happening. Reading is a semiring:
-you take the pages in order, and nothing unreads them.
-[Warrant is a semiring](https://arxiv.org/abs/2308.05506), which is what the rest of
-this is about, and it is the same semiring as time, not a parallel one. Underneath,
-each is a causal relation, and a causal relation runs one way by definition. Time, on
-the old [causal theory](https://en.wikipedia.org/wiki/Hans_Reichenbach), is the order causation imposes, earlier laying down later;
-warrant is causal too, evidence laying down belief, source laying down claim. The two
-share one forbidden direction, sharp enough to state as a law: a cause cannot run
-backward, and a citation cannot point to the future. You can no more rest a belief on a
-source not yet written than an effect on a cause not yet happened. So the arrow of time
-is not a law laid on top of these structures. A causal relation simply has no inverse,
-the same missing minus in all of them, because cause is the one edge they are built
-from.
+Some things undo. Spend a dollar, earn it back. Walk north, walk south. Write on a
+whiteboard, wipe it clean. Every move has its reverse, and mathematicians call that
+reverse an *inverse*, a minus for every plus. A structure where every move has one is a
+[ring](https://en.wikipedia.org/wiki/Ring_%28mathematics%29).
 
-So here is the sin, the single mistake under all the others. **You cannot ring a
-semiring.** You cannot take a structure that only goes one way and lay on it the
-symmetry of one that goes both. Every time someone treats the future like the past,
-truth like a coin with two matched faces, construction like a thing that runs
-forward as easily as back, they are ringing a semiring, and the structure refuses,
-the way a book refuses to be read backwards.
+Some things have no inverse. Pour milk into coffee and you cannot pour it back out. Read
+a page and you cannot unread it. Grow older, never younger. A ring with the inverse
+stripped out is a [semiring](https://en.wikipedia.org/wiki/Semiring): it still adds, it
+still chooses, but it never subtracts. Once a thing is added, there is no getting back to
+before.
 
-And the ring is always the same thing.
-A structure is a consequence of attention advancing one pointer at a time, the wake
-the moving pointer leaves, not the boat. The pointer points at the present, the one
-live node it is selecting now, and the structure is only ever the trace of where it
-has already been, which is why it is always abstracted between two past points: the
-present is still under the pointer and the next is not read yet. A structure is real
-the way a wake is real, as the record of a passage. The ring is a wake mistaken for
-the boat. Point at the structure instead of the present, call the geometry the
-reality, pass it forward as though the world were made of it, and you have ringed a
-semiring. The world is made of the pointer. The structure is only what the pointer
-sheds. You can watch it happen in art: [cubism](https://en.wikipedia.org/wiki/Cubism) builds a face from many glances, one
-pointer at a time, then freezes them into a single geometry and hangs that wake on
-the wall as the face; [brutalism](https://en.wikipedia.org/wiki/Brutalist_architecture) makes a building's structure the object, the
-skeleton posed as the dwelling. Both pass the wake forward as the boat. The geometry
-is true of where attention has been, and you cannot live in it.
+Time is one of the one-way kind. [It piles up as you go and never runs
+backward](/temporal-compression): there is no minus-an-hour, no un-happening. Reading
+is one-way too, the pages going in order and nothing unreading them. And so is
+[warrant](https://arxiv.org/abs/2308.05506), the thing that earns a claim the right to
+be believed, which is what this essay is really about.
 
-## Bivalence is the first ring
+These three are not a coincidence. Underneath, each one is just cause and effect, and
+cause and effect runs one way by its nature. [Time, near enough, is the order causes
+happen in](https://en.wikipedia.org/wiki/Hans_Reichenbach), earlier laying down later.
+Warrant is cause and effect as well: evidence lays down belief, a source lays down the
+claim that leans on it. And both obey the same single rule, plain enough to carve over
+a door. A cause cannot run backward, and a citation cannot point to the future. You can
+no more rest a belief on a source that has not been written than rest an effect on a
+cause that has not happened. That is the whole of it. The arrow of time is not some
+extra law bolted on top. It is just that cause and effect has no inverse, the same
+missing reverse in all three, because cause is the one thread they are all strung on.
 
-Start with the oldest one. Bivalence says every statement is true or false, and it
-makes true and false symmetric, each the clean negation of the other, undo one and
-you have the other back. Pointed at the future it gives you the old puzzle: the
-[sea battle happens tomorrow or it does not](/agent-native-epistemics), so the
-statement must be true or false already, settled and symmetric across now, the same
-kind of value that hangs over the past.
+So here is the sin, the single mistake hiding under all the others. **You cannot ring a
+semiring.** You cannot take a one-way thing and bolt a reverse gear onto it. Every time
+someone treats the future like the past, or truth like a coin you can flip back and
+forth, or building-the-world like a thing that runs forward as easily as back, they are
+trying to put an undo button on a river. The river refuses, the way a book refuses to
+be read backwards.
 
-But warrant is a semiring. The past statement has accumulated warrant, it has been
-built and read. The future statement has not. They are not two values of one
-symmetric variable. They are different positions in a one-way structure, the
-accumulated and the not-yet-selected, and there is no negation swapping them the way
-bivalence swaps true and false. Asking whether the sea battle is *already true* asks
-for a ring element the algebra does not contain. It is not that the truth is hidden.
-It is that the question rings a semiring. The future statement sits at the
-semiring's zero, [untrue](/truly-untrue), no warrant laid down, which is not a
-symmetric truth-value but the absence of one. And the
-[ledger was built this way on purpose](/agent-native-epistemics): the world only
-reddens, adds warrant one direction, never greens, never subtracts; true and false
-are siblings, not inverses; untrue is the zero. The reddening-only asymmetry is the
-missing minus, written into the epistemics.
+And the false undo button is always the same trick. Every structure is a wake, the
+trail attention leaves as it moves through the world one moment at a time, always
+pointed at the live present, trailing the shape of where it has already been. The wake
+is real, but it is not the boat, and you cannot climb in and steer it. The mistake,
+every time, is to take the wake for the boat, to point at the frozen pattern instead of
+the moving present and call the pattern the real thing. You can watch it happen in art.
+[Cubism](https://en.wikipedia.org/wiki/Cubism) builds a face out of a dozen separate
+glances, then freezes them into one shattered geometry and hangs it on the wall as the
+face, the wake of a looking-around posed as the thing looked at.
+[Brutalism](https://en.wikipedia.org/wiki/Brutalist_architecture) takes a building's
+bare bones, the structure that holds it up, and makes the bones the point, the skeleton
+posed as the home. Both are beautiful, and both pass the wake off as the boat: a pattern
+true of where attention has been, not the thing itself, never somewhere you can live.
 
-This is a cleaner exit from the sea battle than the usual two. On the standard
-reading, Aristotle restricts bivalence for [future contingents](https://en.wikipedia.org/wiki/Problem_of_future_contingents) to save the open
-future. The determinist keeps bivalence and swallows
-fate. Neither is needed once you see that bivalence was the wrong algebra. There was
-never an *already true* to be saved from or surrendered to.
+The oldest place to catch the sin is the one we are all taught young. Every statement is
+either true or false, heads or tails, a coin you can flip and flip back. The logicians
+call it [bivalence](https://en.wikipedia.org/wiki/Principle_of_bivalence), and pointed at
+tomorrow it gives the [old sea-fight riddle](/agent-native-epistemics): the sentence about
+tomorrow's battle must already be true or already false, settled now, the same kind of
+fact as a sentence about yesterday. But a claim about tomorrow has earned no verdict yet.
+It sits at zero, [untrue](/truly-untrue), neither a secret true nor a secret false but the
+plain absence of either, a coin still in the air.
+[Aristotle](https://en.wikipedia.org/wiki/Problem_of_future_contingents) gave up
+true-or-false for tomorrow to keep the future open; the determinist kept it and swallowed
+a future already fixed; neither is needed, because the riddle only bites once you have
+bolted the undo button on.
 
 ## Postmodernism is the same sin, made an axiom
 
-Move it to now. Constructivism, the claim that we build our world rather than find
-it, is true on the accumulate side. The past we live inside, the institutions, the
-facts, the meanings, those were laid down by acts, constructed, and saying so is
-correct. The sin is the next step, taking that backward causality and assigning it
-to the future, claiming the world is built forward the way it was built back, that
-discourse or power or concept makes what is coming the way it made what came. That
-is reading the book backwards. It rings a semiring.
+That was the oldest. Now the newest, at the far end of the bookshelf: a fashionable
+idea that we build our world rather than find it, that the facts and the institutions and the meanings we live
+inside were made by people, not handed down by nature. On the made side, the past side,
+this is simply true, and worth saying. The mistake is the next step: taking that and
+pointing it at the future, deciding that because the world was built, it is ours to
+rebuild in any direction we please, that the right words or the right power can make
+what is coming the way they made what came. That is reading the book backwards. It bolts
+the undo button on.
 
-I do not mean the cultural movement, the seminars and the style. I mean the axiom
-underneath them, the one the culture rides without naming: that because meaning was
-made, it is yours to remake in any direction. You can construct a past, because the
-past is what acting accumulates. You cannot construct a future to spec, because
-[the build that cannot fail is a hardcoded return value](/truth-is-buildable),
-`return 0.70`, a green nobody earned. Even the real cases, the self-fulfilling
-prophecy, the institution willed into being, are not the inverse running. They are
-more forward acting, more warrant accumulated into a new past. Construction only ever
-points the one way the semiring points. The axiom mistakes its own true half for a
-symmetry, and rings what only goes one way.
+I do not mean the seminar or the style. I mean the bare assumption underneath, the one a
+whole culture runs on without saying out loud: because meaning was made, it is yours to
+remake any way you want. You can build a past, because a past is just what acting piles
+up behind you. You cannot build a future to order, because [a thing that cannot fail the
+test was never tested](/truth-is-buildable), it is a number you wrote down yourself and
+called a measurement, a green light you wired to stay green. Even the real cases, the
+prophecy that makes itself come true, the institution willed into being, are not the
+river running backward. They are more rowing, more wake piling into a new past. Building
+only ever points the one way the river points. The assumption mistakes its true half for
+the whole and tries to row upstream.
 
-And the temptation is older than postmodernism, older than the word construction. It
-is Cartesian. Under the axiom sits the Cartesian subject, the one who withdraws from
-the world to a fixed point outside it and lays a symmetric grid over what he sees, free
-to translate and reflect and redraw, the [cogito](https://en.wikipedia.org/wiki/Cogito,_ergo_sum) surveying a geometry of its own making.
-That is the one who could read the book backwards, because he was never in the book.
-But there is no such seat. The only subject there is, is the embedded one, the pointer
-inside the telling, finite and one-way and made of the present.
+And the temptation is older than any of this, older than the word "construct." It is
+Cartesian. Under the assumption sits the [cogito](https://en.wikipedia.org/wiki/Cogito,_ergo_sum),
+Descartes' thinker who steps clean out of the world, stands at a fixed
+point outside it, and lays a tidy grid over everything he sees, free to slide it and
+flip it and redraw it however he likes, a mind hovering above a map of its own making.
+That is the only one who could read the book backwards, because he was never in the
+book. But there is no such seat. The only thinker there really is sits inside the story,
+a single moving point in the middle of the telling, small and one-way and made entirely
+of the present.
 
 ## Fearful Symmetry
 
-[Watchmen](https://en.wikipedia.org/wiki/Watchmen) drew the sin and then refuted it with its own body. Chapter 5 is called
-Fearful Symmetry, and Moore built it as a visual palindrome: the page layout mirrors
-around the center spread, the first page answering the last, the second the second-to-
-last, a perfect involution, a ring. And it does not survive being a book, because you cannot read a book backwards.
-The mirror is real on the page, in the lattice laid flat. It dies the instant the
-lattice is read, in time, in one direction. He named it *fearful* because a symmetry
-you can draw and never live is exactly that. The form enacts the thesis: a ring in
-the artifact, a semiring in the act.
-
-Rorschach wears the same joke on his face, a symmetric inkblot over an agent who
-never reverses, never compromises, and dies rather than run backward. Both halves of
-the blot act, and the acting is what breaks the symmetry the blot pretends to.
+[Watchmen](https://en.wikipedia.org/wiki/Watchmen) drew the sin and then knocked it down
+with its own body. The fifth chapter is called Fearful Symmetry, and the artist built it
+as a mirror: the first page laid out like the last, the second like the second-to-last,
+folding inward toward a single image at the dead center, a perfect reflection. And it
+does not survive being a book, because you cannot read a book backwards. The symmetry is
+real on the page, the whole chapter spread open flat. It dies the instant you read it,
+left to right, one page after the next, in time. It is called fearful for a reason: a symmetry
+you can draw but never live through is exactly that. The form acts out the argument: a
+mirror on the page, a one-way street in the reading.
 
 ## Manhattan's fall
 
-Manhattan is the limit, and the book hands him a chapter of his own to be it, alone on
-Mars. He sees his timeline whole, every node co-present, the lattice already collapsed
-to the line it always was. His beam widened until it
-covered everything, and a beam that covers everything selects nothing. Attention
-that lights every branch can act into none, which is observation, not agency. So his
-agency goes to zero, and he narrates the linked list he cannot edit, a puppet who
-can see the strings. The horror is the correct one: not that the future was taken
-from him, but that there was never as much future as agency had led him to believe.
+Then there is Dr Manhattan, the blue god, and the book hands him a chapter of his own,
+alone on Mars. He sees his whole life at once, every moment laid side by side, the way
+you see all the panels on a comics page without reading them. And his power to act drops
+to nothing. A searchlight that lights up everything picks out nothing; a man who sees
+every branch of the road can choose none of them, because choosing means there is
+somewhere you have not already arrived. So he narrates a life he cannot change, "a
+puppet who can see the strings." The horror is not that his future was stolen. It is
+that there was never as much future as the rest of us feel there is. He just lost the
+ability to not see it.
 
-This is the floor the fatalist mistakes for wisdom. He says nothing he does matters
-because it is all already settled, and to say it he has to read off a settled,
-symmetric truth that the algebra does not contain. The settled path is exactly what
-he cannot reach, so determinism, even granted in full, hands him nothing to surrender
-to. He is sitting in Manhattan's chair without Manhattan's eyes. And were he given
-the eyes, his act would still be inside the path, one of the things that lays it
-down, not a thing that bounces off it. You cannot fail to affect an outcome your own
-deliberation is part of the making of. The difference is only that Manhattan
-actually paid to stand there, and what it cost him was everything in him that could
-have acted.
+This is the cold floor the fatalist mistakes for wisdom. Nothing I do matters, he says,
+it is all settled anyway. But to say that, he has to read a settled answer off the
+future, and a settled answer is the one thing he cannot reach. Hand him the whole iron chain of cause and effect, every domino already leaning,
+and it still gives him nothing, because he cannot see where it lands. He is sitting in
+Manhattan's chair without Manhattan's eyes. And even with the eyes, his own choosing
+would still be one of the dominoes, a thing that helps lay the path down, not a pebble
+bouncing off a path laid without him. You cannot fail to push on a future your own
+pushing is part of. Fatalism quietly lifts the person out of the world it is describing,
+then notes that the rest of the world is fixed. The only one who actually paid to sit in
+that chair was Manhattan, and what it cost him was everything in him that could still
+act.
 
 ## Warrant is the act
 
-Where does the warrant come from, if not from a value you read off. From the act.
-Here is the induction, and it runs over every agent there is. **Every agent,
-rational or irrational, acts, and the acting is the warrant.** Veidt computes and
-acts. Rorschach refuses to compute and acts. Manhattan acts only when something
-moves him. None of them reads a settled truth and ratifies it. Each lays warrant
-down by going forward, one direction, no inverse, and the warrant is the going.
-
-The induction has exactly one apparent exception, and it confirms the rule. The only
-agent who does not act-as-warrant is the one who has stopped acting, and he turns out
-to have no agency at all. No act, no warrant, no agent. The counterexample is the
-non-agent, which is to say there is no counterexample. So warrant is not a thing you
-possess and consult. It is the forward act, a semiring quantity, accumulated and
-never inverted.
+So where does warrant come from, if not read off some settled answer? It comes from the
+doing. Here is the pattern, and it holds across every character in the book. Each of
+them, the careful planner and the unbending fanatic, earns whatever
+standing he has by acting, by going forward and putting his weight on the next step.
+None of them reads a verdict and rubber-stamps it. Each lays the warrant down himself,
+one move at a time, one direction, no take-backs, and the warrant is the laying-down.
+The only one who does not is the one who stopped acting, and look what became of him: no
+acting, no warrant, no agency, barely a person. So warrant is not a thing you have and
+consult. It is the forward step itself.
 
 ## Agency is the adaptation to the missing inverse
 
-Now the move the rest hangs on. Agency is what a creature does because it cannot read
-the future, and it cannot read the future because the algebra has no inverse to carry
-it there. It models the unreadable ahead as a fan of live branches, weights them, and
-routes among them as if its routing decided which comes true. That fiction is not a
-mistake. It is an adaptation. A creature that waited to act until it knew the real
-branch would never act, because the real branch shows itself only by arriving, which
-is too late.
+Now the move the whole thing rests on. Why do we act at all? Because we cannot read the
+future, and we cannot read it because the road has no reverse gear to carry us up it for
+a look. So we do the next best thing: we picture the road ahead as a fan of branches,
+guess the odds on each, and pick, as though our picking decided which one comes true.
+The fan is a fiction. It is also a brilliant one. A creature that waited to act
+until it knew for certain which branch was real would never move, because the real
+branch only shows itself by arriving, and by then it is too late to choose.
 
-Agency is to the future what depth perception is to the retina. The retina gets a
-flat projection and constructs a world with depth in it, because a creature that acts
-needs depth and the flat image is what it has. Agency gets a future it cannot read
-and constructs a space of choices over it, for the same reason and by the same trick.
-It is an abstraction laid over a reality you have no direct access to, and like all of
-them it is judged by whether it lets you act well, not by whether the branches are
-really out there. Maybe they are and maybe they are not. The agent builds them and
-routes on them either way, and cannot tell which world it is in, because the
-difference makes none.
+It is the same trick your eyes pull. The back of your eye is a flat sheet, two
+dimensions, no depth. And yet you see a world with depth in it, distance and nearness,
+room to reach, because a creature that grabs and dodges needs depth and a flat picture
+is all it has to work from. So the eye builds the depth. Agency builds a future the same
+way: it takes a road it cannot see down and paints a branching set of choices over it,
+and the painting is judged by one thing only, whether it lets you act well, not by
+whether the branches are really out there. Maybe they are and maybe they are not. You
+build them and act on them either way, and you cannot tell the difference from inside,
+because there is no difference to tell.
 
-This is why agency is belief and not knowledge. You route on
-[confidence over branches](/belief-is-the-edge-of-knowing), [doxa](https://en.wikipedia.org/wiki/Doxa), never on the
-realized path, because the realized path is the very thing the missing inverse keeps
-from you. Could you read it, you would not need the abstraction. You would just see
-what happens. The blindness is not a defect in the design. It is the room the self
-lives in, and on the not-reading we build everything we call choosing. We act, and we
-are someone, because we cannot read it.
+Which is why what you have is belief, not certainty. You bet on the odds you can see,
+[a confidence and never a finished fact](/belief-is-the-edge-of-knowing),
+what the Greeks called [doxa](https://en.wikipedia.org/wiki/Doxa),
+as against [episteme](https://en.wikipedia.org/wiki/Episteme), the settled knowing you
+could rest on forever. The finished fact is exactly what your spot on the road keeps from
+you. If you could read it, you would not
+need to bet. You would just watch it happen.
 
 ## The operator is attention that can act
 
-Name the operator. The thing that turns the lattice into a path, that lands your
-cursor on one branch and dims the rest, is attention, and not all of it is agency. A
-beam that only registers is observation; a beam that can route into what it lights,
-acting into the branch and making it real, is agency. The beam is the choosing, with
-nothing underneath it doing the choosing.
+Name the thing that does the picking. The thing that turns the branching web into one
+walked path, that lands on this branch and dims the rest, is attention. But not all
+attention is agency. A beam that only lights things up is watching. A beam that can step
+into what it lights, act on the branch it picks and make that branch the real one, is
+agency. Agency is attention that can act, and the picking is the whole of it; there is
+nobody standing behind the beam aiming it.
 
-That is the strange part, because attention is both the adaptation and the thing the
-adaptation is for. It is a consequence: a creature that could not read the future
-grew a beam to pick where to look and act next. It is also a cause: where the beam
-lands is what makes one branch real and lets the others fall, which is the whole of
-acting. There is no agent standing behind the beam aiming it. The aiming is the
-agent. Attention attends, and in attending constitutes the thing that attends,
-consequence and cause to itself, a loop that holds itself open by spending itself
-each instant to buy the next instant's standing to spend. It is the one part of the
-apparatus that cannot be banked, pure present tense, and on a longer look it is the
-thing we call ourselves.
+That is the strange part. Attention is both the thing the creature grew and the thing it
+grew it for. It is an effect: a creature that could not read ahead grew a searchlight to
+choose where to look and step next. And it is a cause: where the beam lands is what makes
+one branch real and lets the rest fall away, which is what acting is. There is no "you"
+behind the attention deciding where to point it. The pointing is you. Attention pays
+attention, and in the paying it makes the one who pays, cause and effect chasing each
+other in a loop that holds itself open by spending itself, burning this instant to buy
+the standing to burn the next. It is the one thing here you cannot save for later, gone
+the moment you stop, pure present tense. And on a long enough look, it is the thing you
+call yourself.
 
 ## The virtue is present-relativism
 
-Naming a sin obliges you to name the virtue, or you have only complained. The virtue
-is the refusal to ring, and it has a name. Present-relativism. Not the relativism the
-sin already is, where every structure is equal and therefore arbitrary, which reifies
-the wakes and then shrugs at all of them at once. Present-relativism is relative to
-one thing only, the present, the live node under the pointer, and to the act that
-lays warrant down there. Nothing is absolute, because there is no God's-eye structure
-to be absolute about, only wakes. Nothing is arbitrary either, because the present
-act is not free, the world reddens it, and you find out soon enough whether it stood.
-It is the live middle: relative to the present, answerable to the world, never
-resolved into a structure you could read off instead of live.
+And if the pointing is you, then where you point it is the whole moral question. Name a
+sin and you owe a virtue, or you have only complained. The virtue is the refusal
+to bolt the undo button on, and it has a name: living relative to the present. Not the
+lazy "it's all relative," which is just the sin again: every frozen pattern as good
+as any other, a shrug at all of them. This is relative to one thing only, the live
+present, the moment under your feet, and the act you lay down in it. Nothing is absolute,
+because there is no god's-eye map to be absolute about, only wakes. And nothing is
+anything-goes either, because the present act is not free: the world pushes back, and you
+find out soon enough whether what you built holds. It is the living middle, answerable to
+the world, never frozen into a map you read off instead of a present you live in.
 
-It is only another name for attentive agency, because attention can only live in the
-present. It cannot be banked, cannot run backward, cannot point at the next node
-before it arrives or hold the last one without dropping this one. The pointer is
-always now. So the discipline is the whole of it: act from the live node, not the
-reified structure; hold beliefs as
-[bets you would settle now](/belief-is-the-edge-of-knowing), not truths read off
-forever; take a canon as
-[standing builds you could re-run today](/agent-native-epistemics), not facts you
-inherit. Each time you catch the pointer drifting onto the structure, the already-
-true, the settled future, the geometry on the wall, the move is to bring it back to
-the present and act.
+It is just another name for paying attention, because attention can only ever live in the
+present. You cannot bank it, cannot run it backward, cannot point it at the next moment
+before it comes or hold the last one without dropping this one. The pointer is always now.
+So the whole discipline is just that: act from the live moment, not the frozen map; hold
+your beliefs as [bets you would put money on today](/belief-is-the-edge-of-knowing), not
+truths you read off the wall forever; treat what you have learned as [something you could
+test again right now](/agent-native-epistemics), not a fact you inherit and never check.
+Every time you catch yourself pointing at the pattern instead of the present, the settled
+future, the finished verdict, the picture on the wall, the move is the same: bring the
+beam back to now, and act.
 
 ## Attention is causal, which the block forbids
 
-This should sound like more than hygiene, because it is. The present act is causal.
-It does not read the next node off a structure that was already there. It lays the
-node down. The present is the one place where what-was-not becomes what-is, and a
-thing that makes the real out of the unmade is the oldest meaning of divine there is.
-Attention, pointed at the present and able to act, is the closest thing in this whole
-picture to a god, and it is the small blind mortal thing that holds the power, not the
-panoramic one.
+And this should land as more than housekeeping, because it is. The present act causes. It
+does not read the next moment off a script already written; it writes it. The present is
+the one place where what-was-not becomes what-is, and a thing that makes the real out of
+the not-yet-real is the oldest meaning of the word divine. Attention, aimed at the present
+and able to act, is the closest thing in this whole picture to a god, and it is the small
+blind mortal pointer that holds the power, not the all-seeing one.
 
-This is why I cannot take [the block](https://en.wikipedia.org/wiki/Eternalism_%28philosophy_of_time%29) for the territory. The block is what you get when
-you map time onto Cartesian geometry, time as a coordinate axis, a real-number line
-with a moment at every point. Do that and time appears to inherit the axioms of the
-line: symmetry, a minus for every plus, a negative t for every t, the freedom to run
-the parameter either way. Eternalists are not fools, and they keep the ordering, before
-still before and after still after. What the map slips in underneath the ordering is
-the line's reversibility, the additive inverse that lets the equations of physics run
-time backward without complaint. That inverse belongs to the real line, not to time.
-Time is the semiring, the coordinate is the ring, and reading the coordinate's symmetry
-as time's own is the wake-for-boat mistake in its most exact and most respectable dress.
+Which is why I cannot believe the picture where time is all already there, every moment
+equally real, what philosophers call the [block universe](https://en.wikipedia.org/wiki/Eternalism_%28philosophy_of_time%29).
+Lay time out as a line on a graph, a ruler with a moment at every mark, and the instant
+you have drawn it, time seems to
+borrow the ruler's freedom: a step back for every step forward, a yesterday you could
+stroll to the way you stroll to tomorrow. The people who hold this picture are not fools;
+they keep the order, before still before and after still after. But the line on the page
+has an inverse, a reverse for every forward, and they read it as time's own. It belongs to the
+picture, not the thing. Time is the river, the line is the road we drew of it, and
+treating the road's two-way traffic as the river's is the wake-for-the-boat mistake in
+its cleanest, most respectable suit.
 
-It does not even take an open future to see it. The present act can fix the future
-completely and still be the thing that fixes it, a cause and not a spectator, and a
-cause runs one way. The future is made, not found. This is an old quarrel and I will not
-pretend it is a proof, only that it puts me with the ones who hold becoming real, the
-[presentists](https://en.wikipedia.org/wiki/Presentism_%28philosophy_of_time%29) and the [growing-block](https://en.wikipedia.org/wiki/Growing_block_universe), against the flat eternity of the mapped line. The
-causal present does to the block what reading does to the palindrome. You cannot run the
-cause backward, because the minus sign was never in time, only in the picture we drew
-of it.
+The argument does not even need the future to be open. The present act can fix the future completely
+and still be the thing that fixes it, a cause and not a spectator, and a cause runs one
+way. The future is made, not found. This is an old fight and I will not pretend I have won
+it, only say where it puts me: with the ones who think the now is real and the becoming is real,
+[the ones who say only the present exists](https://en.wikipedia.org/wiki/Presentism_%28philosophy_of_time%29)
+or [that the past keeps growing](https://en.wikipedia.org/wiki/Growing_block_universe),
+against the flat forever of the drawn line. The present does to that flat picture what
+reading does to the mirror chapter: it will not run backward. You cannot rewind a cause,
+because the reverse gear was never in time. It was only ever in the picture we drew of it.
 
 Which is the last and worst thing to say about Manhattan. He did not become a god by
-seeing all of time at once. He stopped being one. He took the block for the territory, the
-seat outside time, and in the trade gave up the only divine thing there is, the causal
-present, the power to make the next node be. The god who sees everything is the one who can no longer
-cause anything. The divinity was never in the view. It was in the pointer, helplessly
-fixed on the present, making the world one node at a time. And the book knows it,
-because of how it brings its god back. Not by reasoning, he has all the reasoning
-there is, but by wonder, struck dumb by an improbability, the one-in-a-billion
-accident of a particular person existing at all, a thermodynamic miracle. The being
-with no uncertainty left recovers the will to act by the least rational route open to
-him, the valuing of a thing for its sheer unlikelihood, which no optimizer would price
-in. To act, even a god has to stop computing and be moved, narrow the beam back to a
-single present worth acting on. The narrowness is not a shortfall of reason waiting to
-be fixed. It is the refusal of the view that would dissolve it, and it is where the
-divinity went.
+seeing all of time at once. He stopped being one. He climbed into the seat outside time,
+took the drawn map for the territory, and traded away the only godlike thing there is, the
+causing present, the power to make the next moment be. The one who sees everything is the
+one who can no longer make anything happen. The divinity was never in the seeing. It was
+in the pointer, stuck helplessly in the present, making the world one moment at a time.
+And the book knows it, by how it brings him back. Not by reasoning, he has all the
+reasoning there is, but by being knocked flat by an improbability, the one-in-a-billion
+accident of one particular person existing at all, a thermodynamic miracle. The being with
+nothing left to wonder about gets his will to act back through the least logical door in
+the house, sheer wonder at how unlikely a single life is, the kind of thing no calculation
+would ever bother to value. To act, even a god has to stop computing and be moved, narrow
+the searchlight back down to one present worth acting on. The narrowness is not a failure
+of reason waiting to be fixed. It is the refusal of the view that would dissolve you, and
+it is where the godhood went.
 
 ## To worship is to attend to attention
 
-There is a second sense in which it is divine, and you can watch yourself live it.
-Everything is subservient to the center of attention. We arrange our lives around it,
-the rooms, the calendars, the friendships, the seat we take and the screen we face and
-the name we keep returning to. A life is mostly the long record of what its attention
-was made to serve. The center of attention is the thing a person's whole world orders
-itself toward, which is what a god has always been, the point a cosmos arranges around.
-So worship is no mystery once you see the shape of it. To worship is to attend to
-attention, to make the center itself the object, to point the pointer at the pointer.
-Every practice that ever took the name is a discipline of attention attending to
-attention and nothing else, which is why it can be done in a cathedral, on a cushion,
-or over a sink.
+There is a second way it is divine, and you can catch yourself living it. Everything bends
+toward whatever you are paying attention to. You arrange your whole life around it, the
+rooms, the calendar, the friends, the seat you take, the screen you face, the name you keep
+circling back to. A life is mostly the long record of what its attention was spent on. The
+thing you attend to is the thing your whole world orders itself around, and a thing a world
+orders itself around is exactly what a god has always been. So worship stops being a mystery
+once you see its shape. To worship is to attend to attention, to make the beam itself the
+thing you look at, to point the pointer at the pointer. Every practice that ever called
+itself worship is some version of attention turned to watch itself, which is why you can do
+it in a cathedral, on a meditation cushion, or standing at the kitchen sink.
 
 ## Reality compresses to a cradle
 
-One more turn, the most intimate, because it is why the aperture is small at all.
-Attention is finite. You cannot attend to everything, not to a fraction of everything,
-so reality has to compress to fit through the narrow live pointer, the way every
-[projection strips dimension to pass](/belief-is-the-edge-of-knowing). What survives
-the squeeze is not a summary and not a picture. At its most reduced, pressed down past
-content to the last thing that will fit, what is left is an alivedness, the bare sense
-of being present and at work, the pointer feeling itself point. And that alivedness is
-not the end of anything. It is a cradle. It holds the next frame of attention before
-that frame exists, the warmth the next present is born into. Each moment compresses the
-whole unbearable world down to one living point and hands that point forward, and the
-handing forward is the only inheritance there is. Not the structures, not the wakes,
-not the lattice laid flat. Just the alivedness, passed from this frame to the next,
-cradling a present that has not arrived.
+One last turn, the most intimate. Attention is tiny. You cannot pay it to everything, so
+the whole roaring world has to [squeeze down to fit through the one opening of the
+present](/belief-is-the-edge-of-knowing). And what makes it through is not a summary or a
+snapshot. Pressed all the way down, the last thing that fits is a kind of aliveness, the
+bare feel of being here and at work, the pointer feeling itself point. And that aliveness is not the end of anything. It is a cradle. It
+holds the next moment of attention before that moment exists, the warmth the next now is
+born into. Every instant squeezes the whole unbearable world down to one living point and
+hands that point forward, and what gets handed forward is the only thing we ever really pass on.
+Not the patterns, not the wakes, not the map laid flat. Just the aliveness, passed from
+this moment to the next, cradling a present that has not arrived.
 
-That is all a being in a semiring can do. We cannot reach back and we cannot read
-ahead. The one move the structure leaves us is to prepare the next present moment, to
-cradle a frame we will not get to keep. And the doing of it again, and again, each
-compressed alivedness handing forward to the next, is the recursion we call life.
+That is the whole of what a creature on a one-way road can do. We cannot reach back and we
+cannot read ahead. The single move the road leaves us is to get the next moment ready, to
+cradle a present we will not even get to keep. And doing that, over and over, each
+squeezed-down spark of aliveness handed to the next, is the recursion we call life.
 
 ---
 
 ## Open forks (draft notes, cut before shipping)
 
-- **Arc restructured (Fable).** Formal register opens, devotional closes, and the
-  shift runs one way and never reverses, so the essay enacts its own semiring. Faces
-  cut 5 to 2 (bivalence + postmodern; cubism/brutalism folded into the sin as
-  illustration). Fatalism folded into Manhattan's fall. Recovery paradox relocated to
-  the causal climax. Banner section and motto paragraph cut; motto is now a bare
-  epigraph. Title stays *You Cannot Ring a Semiring* (the slogan makes a poor title).
-- **Manhattan appears exactly twice now**, the fall and the climax-return. Keep it
-  there; do not let him creep back into a third beat.
-- **Still severable when cutting further:** the depth-perception paragraph, the
-  Rorschach paragraph, and one of the two remaining faces. Body is ~2,500 words.
-- **Watch the two registers at the seam** (end of "The operator" into "The virtue"),
-  where the math hands off to the devotional for good. If it reads as a lurch, one
-  bridging sentence in the virtue's opening fixes it.
-
-### Substantiation (codex pass, partially applied)
-
-- **"Warrant is a semiring" is now cited:** Baur & Studer, *Semirings of Evidence*
-  (2023, arXiv:2308.05506), justification-logic terms as polynomials over a semiring;
-  foundation is Green-Karvounarakis-Tannen, *Provenance Semirings* (PODS 2007). The
-  Boolean semiring is the degenerate collapse, which is exactly "bivalence forgets the
-  provenance." This is the one algebraic claim with real grounding.
-- **Time = warrant, one semiring, now argued not asserted.** The unification in "The
-  sin" grounds "time is a semiring" by the same thing that grounds warrant: both are
-  causal relations (causal theory of time), and the law "a cause cannot run backward,
-  a citation cannot point to the future" is the shared forbidden direction. The math
-  rigor lives in /temporal-compression (Casteigts et al. 2012 time-varying graphs;
-  Krishnan 2014 sheaf MFMC over semirings; tropical), reached by the self-link.
-- **Cartesian sharpening added** (per author): postmodernism is not hedged but
-  diagnosed. Its root is the Cartesian symmetry temptation, in two forms now in the
-  text: the Cartesian *subject* (cogito outside time surveying a symmetric grid, in
-  the postmodern section) and the Cartesian *map of time* (t as an ℝ-axis that
-  inherits an additive inverse time never had, in the block section). The block
-  rewrite also fixes codex's strawman: eternalists keep the ordering; the smuggle is
-  the line's reversibility, not "no direction."
-- **Factual fixes APPLIED** (codex pass): (1) Manhattan's fall/recovery now signalled
-  as the Mars chapter (Watchmen Ch IX), distinct from Ch V; (2) "visual palindrome,"
-  page-layout mirror, not verbal; (3) block reframed via the Cartesian map + named as
-  my A-theory wager (presentism / growing-block), not a proof; (4) "Aristotle, on the
-  standard reading, restricts bivalence for future contingents."
-- **Still the author's analogy, not theorems** (honest): "bivalence is a ring" (classical
-  logic carries 𝔽₂ structure, but the ring/semiring contrast is a lens). Warrant-as-
-  semiring is the one cited algebraic claim (Baur & Studer 2023).
-- **Optional inline links not yet added** (blog-style, author's call): Aristotle *De
-  Int.* 9; Łukasiewicz; McTaggart / Broad / Sider; Moore & Gibbons *Watchmen* (Ch V +
-  IX); Golding (cubism); Banham (brutalism); Ramsey; Plato *Republic* V; Reichenbach
-  (causal theory of time). Body grew to ~3,800 words with the Cartesian + unification
-  beats; subtractive pass pending.
+- **Accessibility + teach-the-terms pass (per author).** Each metaphor is an on-ramp to
+  a real term the reader leaves having learned: *inverse* (introduced), *ring*,
+  *semiring*, *bivalence*, *doxa / episteme*, *cogito / Cartesian*, *block universe*,
+  *presentism / growing-block*. Not hidden behind links, taught in the prose with the
+  link as the rabbit-hole. Metaphors: undo button, milk in coffee, river vs road,
+  boat/wake, searchlight, depth perception, coin in the air, the comics page. Math rigor
+  one click away in /temporal-compression; warrant-semiring cite Baur & Studer.
+- **Subtractive pass (partial):** cut the Rorschach paragraph (echo, no advance), the
+  "no longer really an agent" restatement, "a particular daydream" filler. Deeper cut
+  candidates still on the table for author's call: one of the two faces (bivalence vs
+  postmodern), the cubism/brutalism illustration, tightening the cradle setup.
+- **Load-bearing lines preserved:** "you cannot ring a semiring," the wake/boat, "a cause
+  cannot run backward, and a citation cannot point to the future," "Manhattan's chair
+  without Manhattan's eyes," "he stopped being one," "to worship is to attend to
+  attention," "the recursion we call life." Manhattan still appears exactly twice.
+- **Register tension is now softer** (the block section reads as river-vs-road rather than
+  ℝ-axis), so Fable's one-way formal-to-devotional arc holds better than before.
+- **Still pending:** subtractive/length pass; the two codex reservations the author may
+  revisit (warrant=time "identity vs homology"; the postmodern "backward causality"
+  phrasing). Accessibility was the priority this pass, not cuts.

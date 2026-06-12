@@ -9,6 +9,23 @@ Statuses: `proven` (receipt-backed), `null-attributed` (null with mechanism),
 
 The graph is itself the demonstration: nodes typed, warrants named, kills explicit.
 
+## CURRENT STATE (2026-06-12) — read this first; governs where the dated blocks below conflict
+
+- **Thesis:** reasoning can be ENCODED at the harness layer, not only run in the model. The encoded thing that does the work is a kill's external **oracle** (the ground-truth source), which the model cannot self-supply.
+- **Lead witness = Verus #2219 (E7)** — a mechanism dissected on one historical, post-cutoff bug: six self-graded methods (the prose hypothesis-graph inquiry among them) plateau on the narrow fix; one externally-oracled arm reaches the general fix (recovers rustc's own inhabitedness query). Sharpest result: **enumeration is inducible, the oracle is not self-generable** (E8). The cognitive *why*: LLMs do **addition** (generate/enumerate) but not **subtraction** in-context (finding the complement, the case their hypothesis misses) — so the tool is *required*, not optional. n=1 is correct for a mechanism — do not apologize.
+- **Organizing axis = internal vs external oracle** (A5): where a kill's ground truth comes from; carrier (prompt vs CLI) incidental. `abductor` (D7) = the externalized oracle as a **bolt-on** onto codex / Claude Code (the real shipped ReAct harnesses = the industry baseline; harness held fixed, tool the only delta).
+- **Genre (A7): data structure + protocol, NOT pure DS** — the verifiable-log / certificate family (CT, PCC, PROV). hygraph = the data structure (smem); methodeutics + gate = the protocol (pmem). Punchline = **Local Replay Auditability** (A6 iv), not a big-O. Two replay levels (strong = the Verus case; artifact = LLM-driven trials). Invariant predicates on the mechanical SKELETON; the prose payload is un-invarianted by genre (A6 ii).
+- **§3 presentation discipline = A6** (middle scope, "formal enough to prevent rebranding"): named skeleton invariant + per-op preservation + comparison table + the TMS / provenance-log / search-tree rebuttals + honest by-construction-vs-conventional. Pre-empt **novelty collapse** (the #1 failure mode).
+- **Demoted:** flux #1613 (E4) → a one-paragraph pointer (§other-cases), auditability only (its lift oscillates de-hinted). The bench (B/C/D) → cornered instrument-note (oracle bracket C1 nulls it; do NOT re-inflate the 95.3% / 31–37pt bench-lift — that is the trap). Goal-setting/alignment → SECONDARY; the goal-predicate facet is CUT from the paper (don't fight alignment pedants), graph-internal only (P4).
+- **Discovery / Sutton (P5):** retained as the EPISTEMIC bookend (convex-hull framing cut), witness swapped flux→Verus.
+- **Source docs:** `drafts/data-structure-introduction-range.md` (DS-scope fan-out + 2 codex sniffs); `~/Documents/hygraph-mechanism` (pilot 11 = Verus); `~/Documents/abductor`.
+
+*Node sections (A–T, K, FW) below are current. The dated framing blocks and propagation logs are PROVENANCE/history — kept for the trail, superseded here.*
+
+## Provenance & history — dated framing blocks (2026-06-10 era; CURRENT STATE above supersedes where they conflict)
+
+*These blocks record how the framing evolved. They are kept for the trail, not as current instructions. The dependency diagram at the end of this section is current; the prose blocks are historical. Skip to `## A — The substrate` for the live node sections.*
+
 **Headline (the remarkable thing, author 2026-06-10).** We are witness to a
 live example of an LLM operating **beyond corpus synthesis**: on a guaranteed-
 uncontaminated, undiagnosed issue (E4), the inquiry built a fix that existed
@@ -95,6 +112,18 @@ no logical-coherence requirement enforced there). Note: the logical dependency
 graph below is unchanged by the re-spine — only the *render order* moved E ahead
 of B/C/D. Render order ≠ logical order.
 
+**RE-SPINE 2026-06-12 — Verus #2219 onto the spine; the lead is now a LIFT, as MECHANISM not bench.** New evidence (`~/Documents/hygraph-mechanism` pilot 11 Verus #2219 + `~/Documents/abductor`) gives the paper a positive, dissected mechanism lift, so this pass *expands* the spine (author: "not a contraction"; "mainly addition, trim later"). It does **not** re-inflate the bench (the K1/C1 oracle-bracket null stands; resurrecting the 694/728 "31–37 point" lift walks back into it — that bench-lift is the trap the Jun-3 line-edited ancestor still carries). What changed:
+
+- **The lead witness is now Verus #2219 (E7), not flux (E4).** Author call (2026-06-12, sharpened): flux is "too easy" and "no longer the case we are studying" → demoted from a worked case to a **brief mention** (§other-cases): one paragraph, retained only as the auditability/replayable-trail pointer (`flux-1613-trail-v1`), explicitly NOT a mechanism lift (its advantage oscillates de-hinted). The two-arm figure, the §deconfound de-hinting subsection, and "what the case establishes" were CUT. The discussion's "confidently wrong" instance (F2/F5a) switched flux→Verus (the self-built gate that self-certified 0 over-rejections yet shipped wide-but-broken). Verus #2427 folded in as the one-sentence boundary. Verus carries E and P5; flux is a pointer.
+- **The spine sentence is "delivering encoded reasoning" at the HARNESS LAYER.** Thesis-2 ("we have encoded what it means to reason") is now *witnessed*, not just declared: the encoded reasoning is the externally-calibrated kill, and applying it lifts the model past where its own weights/prose plateau.
+- **The organizing axis is internal vs external CALIBRATION of the hygraph's kill edges (A5), NOT prompt-vs-CLI-tool.** Author correction: the carrier is incidental; what matters is the calibration lives in the harness, outside the weights. Six internally-calibrated methods (18 draws) plateau narrow; one externally-calibrated kill reaches the general fix.
+- **Sharpest result: enumeration is inducible, calibration is not (E8).** Fable *rebuilt the gate itself* (wide enumeration → inducible) yet still self-calibrated and went wide-but-broken; only external truth (maintainer #2501) gets the XOR's hard arm. This locates the encoding boundary exactly, and it is the line the whole "encoded reasoning" claim turns on.
+- **Calibration the model can't induce is mined free from approved history (E9):** merged fix, regression suite, issue label. Deployment design = model enumerates+fixes, harness calibrates from approved history; honest asymmetry = a fresh bug's hard arm has no golden until a human judges.
+- **New dunk (F8):** high/xhigh/ultrathink dials scale internal enumeration behind an opaque knob, cannot cross the calibration wall, and ship no replayable kill. Echoes the ancestor's own line-edited prose; pairs with F2a's "depreciating asset" (but F8 IS a finding, not bench pile-on, so it stays).
+- **`abductor`** (github.com/kimjune01/abductor) = the externalized kill condition as a standalone, domain-general instrument (enumerate / calibrate / gate; `/debug` skill), sibling to `determinacy` under D6. Cross-domain witness: same shape on syft #4760 found 11 omitted cases vs a human's 4.
+- **New render artifact:** the ablation grid (Kill calibration × probes: `!`-bug / empty-enum / out-of-grammar / divergence → narrow / wide-but-broken / general). The two middle columns flip at narrow→wide (enumeration); the last flips back only at the human general fix (calibration).
+- **Render order:** Results still leads (E), but E7 (Verus) renders before E4 (flux, now "audit not lift"); E3 eight-nulls → the §null-regime subsection. Headline (lines 12–57, the 06-10 discovery framing) still holds but its witness swaps flux→Verus. n=1 is correct for a mechanism — do NOT apologize (author, restated).
+
 Pointer-first rule (2026-06-10, "we respect the reader"): where a repo or
 companion post holds the receipts (procedure discipline, results texture,
 ablation statistics, audit detail), the paper points instead of narrating.
@@ -130,30 +159,7 @@ Two thesis sentences, author 2026-06-10, govern the rewrite:
    instance unifies A2 + the pragmatist-credence grounding + F into a single
    declaration of what was built.
 
-Demonstration vehicle (2026-06-10, the through-line of the rewrite). The
-paper is no longer *about the harness*; it is about the **hygraph artifact
-and its virtues** (A + P + F). The demonstration moves off the population
-rate and onto a **single undiagnosed, guaranteed-uncontaminated issue** (E4,
-flux #1613): a live filed bug, cause hidden, no cheap oracle, the fix
-existing nowhere until the inquiry built it — so contamination cannot explain
-it (E2's pre-cutoff blind regeneration is the guard). That is the regime where
-the hygraph's virtue is *visible*, precisely because no benchmark instrument
-can see it. SWE-bench Pro is no longer the centerpiece: B (the run) becomes
-context, C (attribution) and D (instrument finding) become the explanation of
-*why the bench is the wrong witness*, and E becomes the *right* witness. The
-arc inverts: the old paper proved itself on a number and used the example as
-color; the new paper proves itself on the example and uses the number only to
-show the field's instrument is blind to what the example demonstrates.
-
-Reproducibility relocates with the demonstration (author 2026-06-10). It is
-still load-bearing — but it is no longer the bench's property (re-grade 728
-tasks, recover the rate) and is now the **example's**: replay E4's load-bearing
-nodes on a clean build, rerun the one-command receipt, watch the creative act
-verify. The reproducible *unit* is the inquiry, not the population. This is
-just the hygraph's own soundness invariant (replay, A1) applied to the
-witnessed instance — which is what lets one witnessed case carry the weight a
-rate used to, and what makes "beyond corpus synthesis" a checkable claim
-rather than a boast.
+*[CUT 2026-06-12 — "Demonstration vehicle" and "Reproducibility relocates" (06-10) made flux/E4 the demonstration and leaned on "beyond corpus synthesis"/convex-hull. Both superseded: Verus #2219 (E7) is the demonstration now, and the reproducible unit is still the inquiry (replay, A1) — see CURRENT STATE and E7. The general point survives in E7/E9; the flux-specific framing is gone.]*
 
 ```
                             ┌──────────────────────────────┐
@@ -163,8 +169,9 @@ rather than a boast.
                             └──────┬───────────┬────────────┘
               grounds              │           │              witnesses
    F  epistemic foundation ────────┘           └──────── E  right-regime evidence
-   (truth-is-buildable,                                   (flux #1613, n=1)
-    attestation, protocol)                                      ▲
+   (truth-is-buildable,                                   (Verus #2219 lead E7;
+    attestation, protocol)                                 flux #1613 → audit)
+                                                                ▲
         ▲                                                       │ predicted-by
         │ survives-because                                      │
    C  attribution: bench lift ◄── explains ── D  instrument:    │
@@ -193,6 +200,252 @@ rather than a boast.
   sequential design (Wald), argumentation (Dung). `positioned` · §3, appendix
 - **A4.** Scope guard: power = the perturbation surface; without it the shape
   degrades to a plausibility tree (confabulation). `declared` · §3
+- **A5.** (2026-06-12) The organizing axis: a kill edge's *calibration* is
+  **internal** (the model grades cases against its own belief) or **external**
+  (cases graded against a known-good baseline the model cannot see). The
+  carrier is incidental — a prompt that hands over the answer key and a CLI
+  tool that holds it are the same thing; what matters is the calibration lives
+  at the **harness layer**, outside the weights. This is the variable that
+  moves a climb narrow→general (E7/E8); refines A1's edge semantics.
+  `definition` · §Results "contrast, sharpened"
+- **A6.** (2026-06-12) **§3 presentation discipline — introduce the hygraph as a
+  data structure at the right scope** (source: `drafts/data-structure-introduction-range.md`,
+  fan-out of 3 convergent reviewers + codex). Scope target = the MIDDLE of the
+  range (focal structure in cs.AI/cs.SE): "formal enough to prevent rebranding,"
+  no more. The skeleton to render in §3, in order:
+  - **(i) Constraints-first + failure-of-alternatives.** Keep the six-constraint
+    opening, but for EACH constraint name the prior structure that fails it
+    (TMS/ATMS, search/proof tree, provenance log, RAG/vector memory, plain
+    scratchpad). Reviewers must SEE no prior structure clears all six, not be told.
+  - **(ii) Replay invariant — on the mechanical SKELETON, not the prose** (the
+    LLM-flavored subtlety, author 2026-06-12: "no clean way to turn each node into
+    a structured invariant?"). Resolution: each node splits into an un-invarianted
+    PAYLOAD (the hypothesis text / abductive content — prose, genuinely not
+    formalizable) and a mechanical SKELETON (executable trial command, recorded
+    outcome, mechanical verdict, mode-capped credence, kill-edge provenance). The
+    invariant predicates ONLY on the skeleton:
+      I1 (replay): a closed node's command re-executes to its recorded outcome.
+      I2 (verdict): verdict = predicate(outcome), not a model preference.
+      I3 (credence cap): credence ≤ cap(mode) (abduction low, induction test-backed).
+      I4 (provenance): every non-seed node has an in-edge from a predecessor kill.
+    Two cases by status: OPEN node ⇒ carries a stated falsifiable predicate + an
+    executable command (no outcome yet); CLOSED node ⇒ replays (I1+I2). State it
+    Merkle-style as a displayed contract: "every node is reconstructible, by a
+    stranger who does not trust the author, from its recorded trial alone." The
+    prose payload is DELIBERATELY unconstrained — it is the "what you'd otherwise
+    trust," and replay is what replaces trusting it. That refusal IS the thesis
+    (the residue of the thinking that survives a stranger's replay, not the
+    thinking), and it's more defensible than a clean DS invariant because we don't
+    pretend to formalize the unformalizable; we draw the line exactly where
+    checkability begins. This makes A6(vii)'s by-construction (skeleton) vs
+    conventional (prose/mode-label) split the LOAD-BEARING distinction. Precedent
+    for non-hard invariants exists (skip-list statistical, rope soft-balance); ours
+    is sharper — a HARD invariant on the skeleton + an explicitly unconstrained
+    payload. The smart constructor (iii) is clean because admission checks the
+    skeleton (open: has predicate+command; closed: replays), regardless of prose.
+  - **(iii) Each operation: signature → body → one-clause preservation argument.**
+    `append-node` is a **smart constructor** (a node is admissible only if its trial
+    replays), so the invariant holds by induction over reachable graphs (the one
+    structural theorem). `edge-from-kill` gets the most space (the novel op).
+  - **(iv) THE PUNCHLINE = Local Replay Auditability** (RENAMED from "Local Audit
+    Soundness" per codex sniff 2026-06-12: "soundness" invites "sound w.r.t. WHAT
+    semantics? — truth? task success? command determinism?"; we only claim
+    recorded-predicate-matched-recorded-outcome, so call it AUDITABILITY, not
+    soundness, unless fully parameterized). Claim: "audit obligations stay local to
+    a node and its kill-edge; an auditor verifies any single classification by
+    re-running one recorded trial, without reconstructing the whole inquiry." NOT a
+    forced big-O, NOT "compression" alone. Hygraph analogue of the Merkle audit
+    path / PCC certificate (legit precedent for a non-asymptotic punchline: PCC/
+    Necula, Certificate Transparency RFC 9162, W3C PROV).
+    **TWO REPLAY LEVELS — the distinction codex says "saves the paper":**
+      • STRONG replay = re-execute the command, reproduce the outcome. Holds for
+        deterministic shells, pinned unit tests, compilers/parsers/type-checkers,
+        static analyzers, containerized runs over frozen inputs. **The Verus lead
+        case IS strong replay** (compiler verdicts, pinned toolchain 1.93.1,
+        forced-fresh fingerprinted builds) — so the headline case is clean.
+      • ARTIFACT replay = verify the recorded transcript/output/hash, rerun ONLY the
+        deterministic predicate over that artifact. Claim THIS for LLM-driven
+        trials, live API calls, retrieval over changing corpora — the command
+        replays as a PROVENANCE EVENT, not a reproducible computation. (Replay
+        quietly fails otherwise: LLM gen even at temp 0, timing races, wall-clock/
+        seed/locale/env deps, outcomes needing human/model interpretation.)
+      State the degradation explicitly; the honest core contribution is "local
+      replay/audit obligations for LLM inquiry memory," strong→artifact as LLMs/live
+      systems enter the loop.
+    **Prune is a COROLLARY**, not a second theorem (preserves replayability for
+    retained nodes; preserves negative evidence via kill-edge summaries; frontier-set
+    op, never a destructive delete → append-only invariant untouched).
+  - **(v) One running example threaded through ALL operations** — the dead-light
+    inquiry (already have the figures), reused for create/replay/classify/
+    edge-from-kill/prune; do NOT rotate examples per op.
+  - **(vi) Comparison table** (rows: hygraph, TMS/ATMS, provenance/lineage,
+    RAG/agent-memory, search tree; cols = the six constraints) + **three explicit
+    "isn't this just X?" rebuttals** (TMS/ATMS is the most exposed cs.AI flank:
+    belief-status vs trial-bound hypothesis; deductive-justification vs empirical-
+    kill edge; non-monotone belief-revision vs monotone append; author-trusted vs
+    stranger-replayable). This pre-empts the #1 failure mode, **novelty collapse**
+    (reviewers deciding it's a renamed log/DAG/TMS). Extends A3's positioning.
+  - **(vii) Honest cost register:** what is guaranteed BY CONSTRUCTION (command+
+    outcome replay; idempotent kills) vs CONVENTIONAL (the credence-mode label
+    depends on honest tagging). Absence of this reads as hand-waving.
+  - **OVER-ENGINEERING GUARD (do NOT, for this venue):** no lower bounds, no forced
+    asymptotic theorem, no amortized/banker-physicist machinery (wrong fit for a
+    monotone no-rebalance structure), no multiple numbered invariants (one, used),
+    no smart-constructor formalism beyond the admission check, no category-theory
+    dress-up, no "general-purpose graph formalism" claim, ≤1 theorem unless the
+    second is a direct corollary, no formalism before the worked example.
+  - **CODEX INVARIANT TIGHTENINGS (sniff 2026-06-12):** I1 (replay) must be stated
+    CONDITIONAL on a captured execution environment (tool versions, seeds, model
+    IDs, retrieval corpus, timestamps, network/external state) — otherwise it is
+    simply false. I2 (verdict = predicate(outcome)) is NOT circular ONLY IF the
+    predicate is PREDECLARED before outcome evaluation and the gate is a named,
+    versioned, deterministic evaluator (require a **gate hash**); it IS circular if
+    the predicate is handwritten after seeing the outcome or the verdict is just a
+    field copied from the model. I3 (credence ≤ cap(mode)) is a GOVERNANCE invariant
+    (it stops abductive guesses masquerading as deductive certainty), NOT calibration
+    — do not oversell it as epistemic. I4 (edge-from-kill) is the distinctive one,
+    but state whether WITNESS/refinement edges also exist (does positive evidence
+    generate descendants?) or reviewers ask why only kills spawn edges. ADD **I5**
+    (immutability / append-only identity: closed-node contents content-addressed or
+    tamper-evident; kills idempotent and unerasable) and **I6** (gate reproducibility:
+    verdicts produced by the named deterministic evaluator over recorded artifacts,
+    NOT by the LLM). Keep the theorem MODEST and operational — if I1–I6 read as a
+    theorem but hold only under engineering assumptions, reviewers punish the mismatch.
+  - **RESIDUAL REVIEWER ATTACKS to pre-empt (codex):** (1) novelty/"just provenance
+    + test records" → answer: edge-from-kill + mode-capped credence + deterministic
+    routing = a specific inquiry-memory discipline, not generic provenance; (2)
+    semantics gap "you verify the envelope not the hypothesis" → ACCEPT it: we audit
+    evidential warrant, not truth; (3) replay assumption → the strong-vs-artifact
+    split (iv); (4) LLM dependence → LLM proposes, gate disposes, memory records the
+    failures; (5) evaluation vs transcripts/ReAct/Reflexion → NOT missing, NOT a
+    strawman: **abductor is a BOLT-ON tool** attached to the real shipped vendor
+    harnesses (codex CLI, Claude Code) — themselves deployed ReAct-style loops, the
+    industry baseline. The comparison is harness-as-shipped vs harness+abductor
+    (harness held fixed, tool the only delta) → maximally ECOLOGICAL: the baseline
+    is literally what people run. The bolted arm beats the bare harness on Verus
+    (general where it plateaus narrow); bench + OSS deployment = population evidence.
+    This also reinforces the genre (A7): a bolt-on *verifier layer* added to an
+    existing producer = the PCC / Certificate-Transparency shape (don't rebuild the
+    producer, add the checker). **Render fix:** say it plainly — "abductor bolts
+    onto codex / Claude Code, the deployed agentic CLIs; the baseline is those
+    harnesses unmodified" — so the reviewer sees the baseline is the real industry
+    agent; (6) overformalization → keep it operational. Reframe per codex: "hygraph is a persistent semantic-memory
+    structure whose safety properties are defined by the writer/verifier protocol
+    that maintains it" — makes the hybrid explicit, not apologetic (feeds A7).
+  `presentation discipline` · §3 (refines A1/A3/A4; render note)
+- **A7.** (2026-06-12) **Genre: data structure + protocol, not pure DS** (author:
+  "it's more like a protocol that happens to share the data structure? not sure we
+  meet the strict definition"). Resolution: don't chase the strict pure-DS
+  definition (B-tree/skip-list optimize a *machine* cost; the hygraph's guarantees
+  are PROTOCOL/CONTRACT guarantees — auditability, replay, interop). The
+  architecture already names both halves: **hygraph = the data structure (smem);
+  methodeutics + the deterministic gate = the protocol (pmem) that writes and
+  verifies it.** So §3 legitimately introduces a data structure (the smem
+  artifact); we do NOT overclaim self-sufficiency — its value is realized by the
+  surrounding protocol, presented separately (pmem §4, gate §harness). **Closest
+  GENRE = verifiable-log / certificate structures**, which are ALL
+  data-structure-plus-protocol, framed at the contract level: Certificate
+  Transparency (RFC 9162 = a protocol with a Merkle tree inside), Proof-Carrying
+  Code (a producer/consumer protocol with a proof format), W3C PROV (a model used
+  inside provenance protocols), Git (Merkle DAG + commit/transfer protocol). A
+  recognized, respectable category — meeting the strict pure-DS definition buys
+  nothing. **This DISSOLVES the A6(ii) LLM-payload worry:** protocols carry opaque
+  payloads with invariants only on the envelope/framing (HTTP body, TLS plaintext,
+  Git blob contents are all un-invarianted). Opaque-payload + checkable-envelope is
+  the NORMAL protocol shape — the prose payload rides along by genre, not by
+  defect. The two doubts (no clean per-node invariant; is it really a DS) answer
+  each other. **The one-line claim (codex 2026-06-12):** not "hygraph formalizes
+  hypotheses" but "**hygraph makes claims auditable by binding opaque abductive
+  content to executable evidence envelopes.**" (CT separates opaque log entries from
+  append-only Merkle audit proofs — closest for monotonicity; PROV records
+  provenance edges without proving semantic truth — closest for edge-from-kill; Git
+  separates blobs from content-addressed structure; PCC separates untrusted code
+  from a checkable certificate.) **Render consequence:** keep A6's DS discipline FOR
+  THE ARTIFACT (skeleton invariant, ops, comparison table), but frame §3's VALUE as
+  a protocol/contract guarantee — **Local Replay Auditability** (A6 iv) is a protocol
+  property, not a complexity bound. Codex confirms the protocol framing STRENGTHENS
+  the contribution AS LONG AS the title/abstract don't promise a new theoretical
+  graph structure then deliver a logging discipline — ours is safe ("Semantic Memory
+  *Written by Methodeutics*" already names the protocol). Phrase it: "hygraph is a
+  persistent semantic-memory structure whose safety properties are defined by the
+  writer/verifier protocol that maintains it" — hybrid made explicit, not apologetic.
+  `classification` · §3 framing (refines A1/A3/A6)
+
+- **A8.** (2026-06-12) **Epistemology grounding — a MACHINE-LEGIBLE epistemology**
+  (author: "this is a kind of epistemology legible to machine"; the paper is heavy
+  on A2's Peirce/abduction vocab, LIGHT on the epistemology — build it out parallel
+  to A2). Anchors: [[belief-is-the-edge-of-knowing]] = the START, [[truth-is-buildable]]
+  = the TERMINAL (they are explicit companions). **The frame:** most epistemology is
+  about human knowers and *certainty* (justified-true-belief, in-the-head
+  justification) — not runnable. The buildable-truth arc is the one a MACHINE can
+  execute, because it reduces belief/knowledge/truth to buildable/checkable/replayable
+  structures. A2 (Peirce modes) = HOW inquiry runs; A8 = WHAT the nodes mean (node
+  semantics). The arc:
+  - **Belief (start, [[belief-is-the-edge-of-knowing]]):** no tier above belief;
+    knowledge = belief past a stakes-dependent threshold; truth is internal-to-
+    projection (all cognition is lossy projection); credence is continuous (Ramsey:
+    belief = a bet, strength = the odds). → the node's mode-capped credence. LLMs
+    FAIL this by default ("confident confabulation": uniform apparent confidence, no
+    calibration, no confidence-propagation) — the hygraph supplies the missing
+    architecture (credence typed by mode, calibrated by trials). [belief-is-edge has
+    a whole requirements table; cite as the diagnosis of the bare LLM.]
+  - **Knowledge (middle):** a DERIVED predicate — belief past the action threshold,
+    contextually indexed; not certainty but EXPOSURE (a real chance to fall), the
+    build between the skeptic's impossible certainty-demand and the realist's
+    unbuildable correctness. → a node that has survived its trial.
+  - **Truth (terminal, [[truth-is-buildable]]):** truth = a build currently PASSING;
+    lives in the EDGES (provenance/citations), not the nodes (a tautology is a
+    detached node — irrefutable IS useless). Three states proven/refuted/OPEN =
+    true/false/**untrue** (the conjecture state). Build parts map 1:1 to the hygraph:
+    provenance = dependency graph; citation = an edge; attestation = the recorded
+    trial; falsifiability = able to go red = the KILL CONDITION; test = reality
+    pushing back = the world-facing trial; reproducibility = rebuild from source =
+    REPLAY. Guardrail vs relativism: the build includes a test that can fail (a build
+    that can't fail = a hardcoded return value = the rigged benchmark).
+  - **Node-state mapping (the payoff):** witnessed = a passing build (true); killed =
+    a red build (false); open = untrue (a conjecture awaiting its test). "Truth lives
+    in the edges" = the kill-conditioned edges carry the warrant. So the hygraph IS
+    this epistemology instantiated — which is *why* it is machine-legible (ties to §3
+    "binds opaque content to an evidence envelope"; Local Replay Auditability =
+    truth-is-buildable's reproducibility made local).
+  **Where it lands:** EXPAND §grounding's one-line "pragmatist credence" into this
+  full arc, parallel to the Peirce modes, grounded BY REFERENCE (link belief-is-edge
+  + truth-is-buildable + /modes-of-reason + /abduction); F1 stays as the §12 callback.
+  Citation-readiness: belief-is-edge + truth-is-buildable = author's-own-prior
+  self-links; Ramsey/James/Dewey/Peirce canonical; three-valued-logic / intuitionism
+  / Kant-noumenon lineage citable. `grounding` · §4 (expand), refines A2/F1
+  - **PRIOR-ART / NOVELTY (codex search 2026-06-12; author: "cogarch is missing
+    this").** Verdict: NO exact prior-art match; gap defensible if scoped NARROWLY.
+    Scoped claim (codex's wording): *not* "no one represented uncertainty/truth/
+    provenance/replay" but "no cognitive architecture or agent-memory system makes
+    TRUTH a replayable, falsifiable, provenance-bearing BUILD artifact, with credence
+    and warrant-state as first-class MEMORY NODE SEMANTICS." Closest prior art, where
+    each stops:
+      • **NARS** (Pei Wang) — nearest cogarch: experience-grounded truth-as-degree,
+        non-axiomatic, revised by experience. STOPS: no provenance/warrant graph, no
+        executable falsification edge, no signed trial, no replay-by-distrusting-party,
+        no proven/refuted/open ledger. (Address head-on.)
+      • **OpenCog AtomSpace / PLN** — typed hypergraph + truth values + executable
+        procedures. STOPS: truth-as-LABEL, not truth-as-replayable-BUILD.
+      • **Traxia** (arXiv 2606.08256, 2026-06-06) — IMPORTANT CONCURRENT near-miss:
+        agent-native scientific publishing (confidence intervals, signed identities,
+        provenance, replication record, living KG). STOPS: publishing infra, not typed
+        agent-MEMORY semantics; no proven/refuted/open ledger, no falsifiability-as-
+        kill-edge, no knowledge-as-stakes-threshold. /truth-is-buildable (06-04)
+        predates it by 2 days → F7 timestamping move; cite as concurrent.
+      • nanopublications/micropublications (machine-readable claims + provenance, but
+        evidence not executable, no credence/threshold/kill-edge/replay); ReproZip /
+        noWorkflow / executable research compendia (replay, but of computations not
+        memory claims); Falkenhainer (TMS+credence, no executable falsifier/replay).
+        TMS/ATMS + W3C PROV already the §3 nearest-neighbor rebuttals.
+    **Most exposed = the SYNTHESIS attack** ("just NARS + TMS + PROV + ReproZip +
+    nanopub"). Defense: none makes the combination the *semantic contract of memory
+    nodes*, where truth is operationalized by replayable EDGE STRUCTURE, not a stored
+    label or textual provenance. Frame the three states as a WARRANT-LEDGER STATE,
+    NOT a new logic (else proven/refuted/open deflates to passed/failed/not-run).
+    **RW action:** add NARS, OpenCog/PLN, Traxia (concurrent), nanopublications as the
+    EPISTEMOLOGY-grounding neighbors, distinct from the cogarch-MEMORY neighbors
+    (Soar/CoALA/AriGraph) already in §related-work.
 
 ## B — The bench, bounded (oracle availability, not the method) · §8, cornered
 
@@ -280,6 +533,16 @@ rather than a boast.
   separates). Mechanical spine over vibe check: LLM raters over-flag, so only
   the grep-provable floor is claimed. `proven, published` · §10, availability
 
+- **D7.** (2026-06-12) The externalized kill condition generalizes too:
+  `abductor` (github.com/kimjune01/abductor) is the enumerate/calibrate/gate
+  loop as a standalone, domain-general instrument (`/debug` skill). Blind to
+  the answer (leak-free prompt; a model rebuilt it, E8) and cross-domain (same
+  shape on syft #4760 SBOM tool found 11 omitted cases vs a human's 4, plus a
+  tabulation bug in the criterion). Sibling to D6's `determinacy`. The general
+  object both exploit: a disagreement (symmetric difference between what the
+  system believes and what is true) — the check tests/types can't give because
+  absence has no test. `released` · §Results gate-general, availability
+
 ## E — The mechanism in the right regime · §11
 
 - **E1.** Regime spec (from C4): no handed spec, no cheap oracle, hidden cause.
@@ -314,6 +577,99 @@ rather than a boast.
 - **E6.** Per-loop preregistration discipline adopted (testing X / predict Y /
   refuted by Z); 3–5 audited cases or the committed null is the next paper.
   `pending` · §13
+- **E7.** (2026-06-12, NEW LEAD WITNESS) **Verus #2219**: erased ghost `!`
+  marks following MIR unreachable ⇒ sound program wrongly rejected. Narrow fix
+  keys on `is_never()` (= maintainer #2230, chg 114); general fix uses the
+  verifier's own `!ty.is_inhabited_from(...)` (= maintainer #2501). On a fixed
+  toolchain, forced-fresh fingerprinted builds: **six internally-calibrated
+  methods × 3 draws = 0/18 reach general** (modal chg 114); the single
+  **externally-calibrated** arm is the sole general fix (pass=true, chg 269,
+  0 valid-preserve rejections) AND rejects two *out-of-grammar* held-outs
+  (assoc-projection, nested-generic) the gate never showed it — proof of
+  *represented predicate*, not tabulation (instrumentation: each arrives
+  normalized to an uninhabited type). **Bench/golden setup (§verus-bench, added
+  2026-06-12 per author "be clear what golden means"):** the tiny bench = base
+  (buggy commit) + the two maintainer fixes + hand-built probe programs, each
+  VERIFY/REJECT. A probe's *golden* = the verdict a correct compiler owes it.
+  TWO golden sources, deliberately separated: (a) bug probes are uninhabited
+  *by construction* → golden REJECT, base wrong on exactly them → base is a FREE
+  reference; the gate enumerates these (2856 cases), grades vs base, passes only
+  on flip-entire-bug-set (269) + zero sound-case regressions. (b) genuine-
+  divergence probes → golden VERIFY (sound), base not usable, gate blind (no
+  divergence-preserve shape in its grammar) → golden from human judgment,
+  corroborated by approved fix #2501; held out, outside the gate grammar, so
+  passing them tests representation not gate-fit. = the E9 asymmetry (easy-arm
+  oracle free, hard-arm oracle costs a human). Integrity: forced-fresh +
+  binary-fingerprinted builds (vendored rustc_mir_build doesn't rebuild
+  incrementally; two earlier headlines were stale-binary artifacts); 21-artifact
+  frozen dataset committed. Mechanism (frontier = gate coverage,
+  read from the 43,586-line trace): under pressure from cases `is_never()`
+  misses, the model greps and generalizes its own predicate to
+  `is_inhabited_from`. Same mechanism predicts the failure: over-rejects two
+  genuine-divergence cases (the gate's 2856-grammar never enumerated that
+  preserve shape) = *wide-but-broken*; held-outs catch it. **Provenance (method,
+  author "be clear we took a historical PR post-cutoff"):** real historical PR —
+  base 2026-03-08, narrow fix +1 day, general fix #2501 merged 2026-06-05 — taken
+  deliberately AFTER the solve models' cutoffs (contamination-controlled model =
+  Fable, Jan 2026). Negative recall probe (model doesn't recover the fix, says
+  so). Scoped (codex): reconstruction from general pre-cutoff competence (rustc
+  *has* an inhabitedness query, old) NOT recall OF THE FIX (that it fixes #2219);
+  carries P5. `mechanism, existence (n=1, the right unit)` · §Results lead, §verus-bench
+- **E8.** (2026-06-12, the sharp one; recast 2026-06-12 per codex + cognition
+  grounding) **Enumeration is inducible; calibration is not *self*-inducible.**
+  Handed the same vague leak-free prompt with no gate, a second model (Fable)
+  *rebuilt the gate itself* — a 7026-case enumeration — and hill-climbed to
+  self-certified 0 over-rejections, then shipped the *same* wide-but-broken fix.
+  A model can bootstrap the combinatorial breadth (the **domain** of cases —
+  mechanical) but cannot author the **predicate** that labels them from outside
+  its own belief. Scope precisely (codex K7): not "calibration is impossible to
+  induce" (E9 mines it from approved history) but "calibration cannot come from
+  the model's own belief without circularity."
+  **Why the tool is REQUIRED, not merely helpful (author 2026-06-12): the deficit
+  is SUBTRACTION.** LLMs are equipped for ADDITION (generate / enumerate /
+  recombine — the inducible half) but not for finding the COMPLEMENT in-context:
+  the symmetric difference between what the model believes and what is true, the
+  case its own hypothesis MISSES. "Absence has no test" — a model can't author a
+  check for the case it failed to imagine, and grading itself grades a fiction. The
+  externalized oracle is required because it performs exactly that subtraction (the
+  XOR/disagreement against an external baseline) the model cannot do on its own
+  belief — re-reads Fable cleanly: it ADDED 7026 cases but could not SUBTRACT the
+  divergence case its labels were blind to. Addition inducible, subtraction not.
+  Grounds in [[complementations]] (the disagreement = symmetric difference; the
+  check tests/types can't give because absence has no test). Three further
+  groundings, by reference, not re-derived:
+  - *Goals are predicates* (Capucci 2021, "what is a goal but a predicate on a
+    system?"; [[framework-lexicon]], [[the-handshake]]). Enumeration generates
+    the domain; calibration **is the goal predicate** evaluated on it. So the
+    boundary is means (self-inducible) vs ends/goal-predicate (not).
+  - *Grading yourself grades a fiction* ([[belief-is-the-edge-of-knowing]]: "any
+    claim grading itself against ground truth is grading against a fiction";
+    "second-order beliefs must be testable, the system is blind to its own
+    introspection failure"). Fable's self-green-but-unsound gate is that
+    blindness, witnessed.
+  - *New information enters only from outside* — the data processing inequality
+    ([[compress-and-unfold]]: "no computation on what you already hold can raise
+    what it tells you about the world; recombination is only computation —
+    recall in the costume of thought"), with its physical derivation in
+    [[the-natural-framework]]: a system is defined by its boundary, so **Perceive
+    is the only morphism that crosses from world to inside** (a lossy surjection;
+    Landauer floor), and every other role operates on what is already held. Map
+    onto the hygraph: **external calibration is the system's Perceive** — the
+    sole world-facing boundary crossing that imports world-truth — while
+    enumeration and the model's reasoning are the *internal* roles (map/filter on
+    the held). So enumeration adds no world-information; only a world-facing trial
+    (calibration) can, and a model grading itself never crosses the boundary.
+    The floor under the whole claim, under P5 (discovery vs recall) and F8.
+  `mechanism (n=1, both halves in one run) + grounded by reference` · §Results enum-calib
+- **E9.** (2026-06-12) **Calibration from approved history.** The truth a model
+  can't induce is cheap to the harness: merged fix, regression suite, issue
+  label are goldens because a human approved them. #2219's missing oracle
+  existed all along (#2501 verifies the over-rejected divergence case);
+  calibrate differentially vs base AND approved fix to close a gate's blind
+  spot. Deployment design = model enumerates+fixes, harness calibrates from
+  approved history. Honest asymmetry: a *fresh* bug's hard arm has no golden
+  until a human judges (why #2501 took expertise). `design + bounded` ·
+  §Results enum-calib, §13 future-work
 
 ## F — Epistemic foundation · §12 discussion
 
@@ -359,8 +715,8 @@ rather than a boast.
   - **F5a.** THE failure mode to emphasize (user call): **confidently wrong
     and impossible to verify**. Trust is the *default mode*; the explicit ask
     to the audience is substitution: accountability for trust, line by line,
-    machine-checkable. Witnessed by E4's minimal arm and the 4/4 false-green
-    self-audit. `emphasis` · renders as the §12 opener ("name the enemy
+    machine-checkable. Witnessed by Verus's self-graded gate (self-certified yet
+    wide-but-broken) and the 4/4 false-green self-audit. `emphasis` · renders as the §12 opener ("name the enemy
     first"), not inside the trust block
   - **F5b.** Anticipated equilibrium: a GAAP-shaped accountability regime,
     the post-Enron lesson. Three-way match as the control shape: no claim
@@ -385,9 +741,76 @@ rather than a boast.
   pointer (F1 resonance); this paper wires the vocabulary to sources
   (§4, lineage appendix); dated posts timestamp the primitive (03-17, 04-05,
   04-08 predate ADI 04-17; 04-27, 04-28 predate CMM 05-26; ToTh predates us —
-  acknowledged). Interop (F4) forces one wire vocabulary; Peirce's is
+  acknowledged; **/truth-is-buildable 06-04 predates Traxia 06-06 by two days**
+  — the 4th independent convergence, and the first on the EPISTEMOLOGY leg, not
+  the vocabulary). Interop (F4) forces one wire vocabulary; Peirce's is
   mode-complete, 150 years stable, credence-carrying, and needs no inventing.
-  `pointed, receipt-backed` · §14, availability bullet
+  **Convergence-as-evidence (the running record): ToTh (Peircean typing), ADI
+  (layered abductive protocol), CMM (typed-DAG memory), Traxia (agent-native
+  epistemics) — four independent groups, no coordination = structural evidence
+  the primitives are landing as natural, not idiosyncratic.** That argument
+  already lives in §related-work; Traxia (A8 prior-art) is the freshest + tightest
+  data point (two days) and extends it from typed-reasoning/memory to the
+  epistemology. Strategic: two days = simultaneity, not the usual ~3mo lead → the
+  priority window is live; cite Traxia as CONCURRENT, let convergence be evidence
+  not threat.
+  `pointed, receipt-backed` · §14, availability bullet, §related-work
+- **F8.** (2026-06-12, the dunk) **Hidden effort is not reasoning you can
+  check.** The labs ship "reasoning" as an opaque dial (high/xhigh/ultrathink),
+  a knob on private tokens = more *internal* enumeration. E7/E8 is where that
+  runs out: the strongest internal-effort arm (self-verifier, build-your-own-
+  generator) plateaus with the rest; you cannot turn the dial past the
+  calibration wall, because effort scales the inducible half and cannot
+  manufacture external truth. And the dial ships no replayable kill — an effort
+  setting is the purest *take my word for it*. Put the reasoning in the harness,
+  typed and replayable, where its level is a trail the reader checks, not a knob
+  they trust. Grounded in the DPI ([[compress-and-unfold]]): the dial buys more
+  recombination of what the weights already hold, and recombination adds no
+  world-information ("recall in the costume of thought") — so no setting can
+  cross the calibration wall, which is a world-facing measurement, not more
+  internal compute. `argued, witnessed (E7/E8), grounded` · §12 (renders between
+  F3 and F5, before the trust block). NB: distinct from the cut F2a — F8 is a
+  FINDING (the calibration wall), not bench editorializing; it stays.
+
+- **F9.** (2026-06-12) **Cognition-series grounding — inherit, don't re-derive.**
+  Per the series through-line (compress what I learn so the work compounds;
+  [[compress-and-unfold]]) and the ground-by-reference rule, the mechanism
+  paper stands on prior posts via link-anchors, not inline re-explanation.
+  The load-bearing inheritances and where each lands:
+  - **Goals are predicates** ([[framework-lexicon]] / Capucci, [[the-handshake]],
+    [[goal-transmission]]) → A5, E8, P4 (calibration = the goal predicate).
+  - **DPI / "new information enters only from outside"** ([[compress-and-unfold]];
+    physically derived in [[the-natural-framework]]: a system's boundary makes
+    Perceive the sole world-crossing morphism) → E8 floor, F8 dunk, P5. The
+    mapping: external calibration ≈ the system's **Perceive**; enumeration ≈ the
+    internal roles (cache/filter/attend on the held). Why internal effort can't
+    substitute for a world-facing trial — it never crosses the boundary.
+  - **Grading yourself = grading a fiction; second-order beliefs must be
+    testable** ([[belief-is-the-edge-of-knowing]]) → E8 self-calibration
+    impossibility; the credence/node-semantics lineage (pragmatist, A2).
+  - **Type III error / verb-vs-evidence checklist; reflex vs demotion**
+    ([[wrong-questions]], /type-iii-error) → the paper's self-discipline: scope
+    every claim's *verb* to what the evidence supports (Verus = a mechanism that
+    *can occur*, not a *discovery* or a *rate*); this is how the n=1 stays
+    honest WITHOUT apologizing (author). Mapping: a **reflex** (mechanical check
+    before belief forms) ≈ a kill condition; a **demotion** (narrower claim
+    after evidence) ≈ the credence cap. The hygraph operationalizes both.
+  - **Double-loop / six-slot complementation** ([[double-loop]],
+    /general-intelligence, [[the-natural-framework]]) → E9 division of labor:
+    "filter = kill what doesn't belong" is automatable (the gate/kill);
+    "attend = judgment the skills can't automate" is not (the calibration the
+    human supplies). The means/ends split in the series' own slot vocabulary.
+  **Citation-readiness guard (author 2026-06-12).** These anchors split by how
+  established they are. *Paper-citable now:* the standard DPI (Cover & Thomas),
+  Capucci's goal-as-predicate (published), Peirce/pragmatists (canonical), the
+  Type III error. *Self-link register (author's own prior, fine to point at):*
+  /compress-and-unfold, /belief-is-the-edge-of-knowing, /wrong-questions,
+  /the-handshake, /goal-transmission, /double-loop. *Graph-internal ONLY, NOT a
+  paper citation yet:* /the-natural-framework and the Perceive-morphism mapping —
+  the world isn't ready; keep the mechanism claim's credibility uncoupled from
+  the grand synthesis. The deeper grounding lives here; the paper uses standard
+  vocabulary.
+  `grounding index` · threaded through §Results, §12, lineage appendix
 
 ## P — The prestige (the unlock) · §12 closing
 
@@ -406,19 +829,45 @@ affordance names its warrant or its honest status:
   a vendor's window is a liability; in a substrate you own, an asset. `proven
   for the port; declared for the stance`
 - **P3.** *Accountability.* Every claim ships with its replay (F2). `witnessed (E4)`
-- **P4.** *Alignment.* Trust displaced by audit (F5). `declared direction`
+- **P4.** *Alignment.* Trust displaced by audit (F5). **Sharpened 2026-06-12
+  (E8 + goals-are-predicates):** a goal is a predicate on a system (Capucci;
+  [[framework-lexicon]], [[the-handshake]]); a kill condition *is* such a
+  predicate; calibration is the goal predicate evaluated. So "calibration is
+  not self-inducible" (E8) is the structural content of alignment: an agent
+  induces its means (the domain/search) but cannot author its own ends (the
+  goal predicate) without circularity — a predicate evaluated on its own
+  authority is a tautology, not a goal. Alignment = the demand that the goal
+  predicate be authored *outside* the agent (the world's semantics, approved
+  history E9, or a human; [[goal-transmission]]: the spec is a lossy
+  transmission, the executable kill is its precise replayable form). This
+  upgrades P4 from "declared direction" to a structural claim the mechanism
+  witnesses, with the honest edge: sharp where the predicate is sharp (code
+  soundness), contested where the goal is (do not overclaim "solves
+  alignment"). `declared direction → structural, witnessed (E7/E8)`
+  - **DE-EMPHASIS (author 2026-06-12): goal-setting / alignment is a SECONDARY
+    corollary, NOT the primary mechanism.** Primary = the encoded-reasoning /
+    external-oracle lift (E7/E8: enumeration inducible, oracle not). Over-
+    emphasizing goal-setting dilutes it and picks the alignment-philosophy fight.
+    In the paper: claim 3 reverted to accountability-only (no goal-setting in the
+    claims list); the goal-predicate discussion facet was **CUT entirely** (author
+    2026-06-12: "don't pick fights with alignment people, too pedantic" — even a
+    brief goal-setting claim baits them). Only the author's existing
+    accountability-as-alignment-direction language stays (trust-vs-accountability,
+    GAAP/three-way-match, the *Alignment* unlock). Capucci goal-as-predicate is
+    now graph-internal only. Keep the structural framing HERE as deeper grounding;
+    it does NOT appear in the published view.
 - **P5.** *Discovery, in Sutton's sense — escaping the model's convexity.*
   Closes the epigraph. Unaided output is bounded by the convex hull of the
   training distribution; each node is anchored to a fresh trial of the world,
-  so the graph steps outside the hull one verified step at a time. E4's fix
-  existed nowhere until the inquiry built it, on a guaranteed-uncontaminated
-  issue (E2 guard) — so it cannot be interpolation from training data. That is
+  so the graph steps outside the hull one verified step at a time. The Verus #2219
+  general fix (E7) was absent from the reachable corpus until the inquiry built it,
+  post-cutoff and recall-probed — so it cannot be recall of the merged patch. That is
   the precise, falsifiable content of the bold word: **a creative act, by some
   definition** — output outside the convex hull of the weights, anchored to a
   verified trial, surviving a stranger's replay. Not novelty asserted;
   novelty *witnessed and re-runnable*. Agents that contain what we discovered
   recall; an agent that can build and survive a hygraph discovers.
-  `existence-witnessed (E4)`
+  `existence-witnessed (E7 Verus; flux E4 demoted)`
   *(REFRAME 2026-06-10, codex coherence pass + author call: the "convex hull /
   escaping convexity" framing was CUT paper-wide. It is a capability/geometry
   claim a referee kills on sight — Balestriero, Pesenti & LeCun 2021 ("Learning
@@ -469,6 +918,14 @@ affordance names its warrant or its honest status:
   falsifier, stated in hygraph-mechanism README).
 - K5. A leaderboard submission combining equal receipts + higher rate (B4)
   → artifact claim falls by citation.
+- K6. (2026-06-12) Verus #2219 fails to replay on the clean forced-fresh
+  harness, or a discriminating program shows the externally-calibrated fix
+  wrong where #2501 is right (E7) → the lead mechanism evidence collapses.
+- K7. (2026-06-12) The encoding boundary (E8) is refuted: a purely
+  self-calibrated model reaches the XOR's hard arm (calibration turns out
+  inducible after all), or an internally-calibrated method reaches general
+  on a localization-hard bug → "enumeration inducible, calibration not" falls,
+  and with it the sharpest claim of the re-spine.
 
 ## Propagation of the inverted arc (2026-06-10)
 
@@ -529,35 +986,153 @@ Done (trim + strengthening, committed cc177d07 / 979195cf):
       /suttons-recipe-for-discovery), a table-driven pointer back to the paper.
       Keeps the paper from bloating.
 
-## TODO (recommendations + standing, 2026-06-10)
+## BACKLOG (groomed 2026-06-12; supersedes the 06-10 TODO)
 
-**Substance multipliers** (author's hands; highest leverage for "harder to ignore"):
-- [ ] **#1 — Chase the maintainer merge of flux #1613.** External adversarial
-      attestation, the single most un-ignorable event; make it the keystone. On
-      merge: update §Results + falsifiers, possibly the abstract.
-- [ ] **#2 — One-command flux replay.** Docker / one-liner reproducing the
-      discriminator (graph VERIFY vs minimal E0999) on a clean build. Kills the
-      "I can't verify this" dismissal; bake in the toolchain PATH gotcha.
-- [ ] **More existence cases (E6).** 3–5 audited cases under the preregistered
-      protocol → upgrades "existence (n=1 instance)" language; else the committed
-      null is the next paper. (Author hunting.)
+**A — Biggest open content piece — DONE 2026-06-12.**
+- [x] **A6/A7 propagated into §3 (`{#hygraph}`).** Added: invariant promoted to a
+      named contract + the skeleton/payload split + smart-constructor admission;
+      the **local replay auditability** punchline with strong-vs-artifact replay
+      grades + prune-as-corollary; the honest cost register (checkable skeleton vs
+      trusted mode-label); the three "isn't this just X?" rebuttals (TMS /
+      provenance log / search-proof-tree) + the verifiable-log/certificate genre
+      ("binds opaque content to an executable evidence envelope"). SCOPE CHOICE:
+      rebuttals done as PROSE, not a second table (Related Work already has the
+      comparison table) — middle scope, per the over-engineering guard. The
+      "minimal = ReAct, bolt-on onto codex/Claude Code" line belongs at the
+      comparison point → tracked in B, not §3.
 
-**Editorial / housekeeping:**
-- [ ] **Discussion trim, pointer-first.** Most trimmable visible prose; "Truth is
-      buildable" → a pointer to /truth-is-buildable, not a re-derivation. (Attempted
-      then reverted with the Sutton experiment; redo cleanly.)
-- [ ] **Compress AI-authored paragraphs** (intro pains→gap, §Procedure, §hygraph
-      constraints/LLM-uniqueness run full); tighten, leave the author's prose alone.
-- [x] **Sutton bookend** (user 2026-06-10, paper convention). Keep the 2019 *Bitter
-      Lesson* line as the opening epigraph (after the Abstract); add a short
-      **Conclusion** that ends on the verbatim 2026 SAIR quote ("we need true
-      discovery ... generative AI will never get us there ... we need something
-      more"). Opener poses, conclusion closes; the paper is the "something more."
-      The variation/evaluation/selective-retention mapping stays in its own post
-      (/suttons-recipe-for-discovery), linked from the Conclusion. (Two epigraph
-      attributions now → em-dash budget = 2, both exempt.)
-- [ ] Standardize the one stray "falsification condition" → "kill condition" (12:1).
-- [ ] PDF rebuild (`scripts/build-paper-pdf.sh`); download link still says
-      `methodeutic-harness-paper.pdf` (stale slug).
-- [ ] Zenodo DOIs → §availability placeholders.
-- [ ] Push + deploy when ready (paper 979195cf, Sutton post b076399c, both unpushed).
+**B — Paper coherence + smaller content:**
+- [x] **Expand §grounding into the machine-legible epistemology arc (A8).** DONE
+      2026-06-12. §grounding retitled "methodeutics and a runnable epistemology";
+      the one-line pragmatist-credence replaced with the full belief→knowledge→truth
+      arc (italic-header subsections parallel to the Peirce modes), grounded by
+      reference (belief-is-edge start, truth-is-buildable terminal); node-states
+      mapped witnessed/killed/open = true/false/untrue; build-parts 1:1 (provenance/
+      citation/attestation/falsifiability/replay); replay invariant framed as
+      "this epistemology made local." Novelty scoped narrowly (warrant ledger, not
+      a new logic). Three-leg synthesis closes the section. §12 "Truth is buildable"
+      block trimmed to a §grounding callback (no re-derived mapping; pointer-first).
+      **"agent-native epistemics" KEPT as a coinage (author call 2026-06-12, reversed
+      an initial de-coin): named as the territory in §grounding AND added to the
+      subtitle** ("Agent-native epistemics: merit attaches to the work, not the
+      doer"); sits next to DeepMind's "artificial epistemic agents" (§12) and Traxia
+      (§typed-memory).
+- [x] **Related Work: add the epistemology-grounding neighbors** (A8 prior-art). DONE
+      2026-06-12. New §typed-memory paragraph: NARS (addressed head-on), OpenCog
+      AtomSpace/PLN, nanopublications, **Traxia** (arXiv 2606.08256, concurrent, two
+      days after truth-is-buildable, 4th convergence/first on epistemology leg).
+      Framed distinct from the cogarch-MEMORY cluster; synthesis-attack reply +
+      warrant-ledger-not-new-logic stated.
+- [ ] Full **front-to-back coherence read** (the §method/harness section, and the
+      abstract→intro→Procedure→Results→Discussion handoffs) — not done; many edits
+      landed piecemeal.
+- [ ] Name **"minimal arm = mini-SWE-agent = ReAct, bolt-on onto codex/Claude
+      Code; baseline = harnesses unmodified"** at the point of comparison
+      (§Procedure / §3 positioning) — pre-empts the strawman objection.
+- [ ] **Cover & Thomas (DPI)** reference entry in the lineage appendix (the §Results
+      DPI sentence cites it inline; no bib entry yet).
+- [ ] **Trim pass** (author-deferred): the additive Results ¶s run long.
+- [ ] **Discussion trim, pointer-first** ("Truth is buildable" → a pointer, not a
+      re-derivation).
+- [ ] **Compress AI-authored ¶s** (intro pains→gap, §Procedure, §hygraph
+      constraints); tighten, leave the author's prose alone.
+- [ ] Standardize the one stray "falsification condition" → "kill condition".
+
+**C — Receipts / substance (author's hands):**
+- [ ] **More existence cases (E6):** 3–5 audited under the preregistered protocol →
+      upgrades the n=1 language; else the committed null is the next paper.
+- [ ] **One-command Verus replay** (re-scoped from flux): reproduce the divergence
+      on a clean forced-fresh build; bake in the vendored-crate / stale-binary
+      gotcha. Kills the "I can't verify this" dismissal.
+- [ ] *(Lower — flux demoted)* flux #1613 maintainer merge is now an auditability
+      footnote, not the keystone; the keystone is a Verus-grade trace-backed merge.
+
+**D — Release housekeeping:**
+- [ ] **PDF rebuild** (`scripts/build-paper-pdf.sh`) + fix the stale download slug
+      (`methodeutic-harness-paper.pdf`).
+- [ ] **Zenodo DOIs** → §availability placeholders.
+- [ ] **Push + deploy** (refresh the stale SHAs before relying on them).
+
+**Done this session (2026-06-12):** oracle terminology sweep (calibration→oracle);
+§Procedure rewrite to the Verus externalized-oracle method; flux cut to a brief
+mention; four-claims alignment (claim 3 accountability-only); falsifiers K6/K7;
+intro voice-mining; abductor in §availability + future-work; the earned DPI
+sentence; alignment de-emphasis (goal-predicate facet **CUT**); §verus-bench setup
+(two goldens) + historical-PR-post-cutoff method; A6/A7 graph spec + two codex
+sniffs (DS-scope; framing/replay); the addition-vs-subtraction *why*; CURRENT STATE
+block + history demarcation.
+
+**Done earlier (06-10):** Sutton bookend; title/slug; cost-as-virtue cut;
+abstract hook; intro discovery foreshadow; §4 thesis-2 callback; §audit
+applicability-not-fault; B/C/D bounded.
+
+## TERM DECISION 2026-06-12 (venue: arxiv cs.AI + cs.SE)
+
+The noun **"calibration" collides with probability-calibration** (ECE, confidence
+calibration), which is entrenched in cs.AI and would miscompile the claim in the
+abstract/title where it travels without a gloss. Decision (author): in the **paper**,
+the noun for the external ground-truth source is **"the (ground-truth) oracle"** —
+collision-free in both fields, SE-native (test oracle), and it *unifies with the
+paper's own spine* (oracle bracket, essence oracle, self-certification = the model
+being its own oracle). The **verb** "calibrate against a known-good reference"
+(metrology sense) is kept where it reads naturally. Headline is now **"Enumeration
+is inducible; the oracle is not."** First use in §Results carries a one-clause gloss
+distinguishing the metrology sense from probability-calibration. This graph keeps
+"calibration" as internal shorthand in the nodes below; the paper view uses "oracle."
+Mapping when propagating: internal calibration → self-graded / the model as its own
+oracle; external calibration → an external oracle; "calibration is not self-inducible"
+→ "the oracle is not self-generable."
+
+## Propagation of the 2026-06-12 re-spine (Verus lead, oracle axis)
+
+Done in the paper view (`...the-hypothesis-graph-semantic-memory-methodeutics.md`),
+additive pass (trim deferred per author):
+- [x] §Results recast as a mechanism arc: contrast-sharpened (A5) → instrument
+      general & blind (D7) → the lift E7 (Verus) → frontier-is-coverage → E8
+      (enumeration inducible, calibration not) → ablation grid → flux E4 demoted
+      to "audit not lift" → §null-regime (E3 preserved).
+- [x] Axis fixed to internal-vs-external calibration (A5); grid relabeled
+      ("Kill calibration": internal / external (vs base) / internal (induced) /
+      human). Carrier-is-incidental / harness-layer stated.
+- [x] Abstract, claim-2, contribution ¶ → encoded-reasoning spine, positive
+      mechanism, no n=1 apology. (Witness swapped flux→Verus.)
+- [x] F8 dunk facet rendered in §Discussion (between persistence and trust).
+- [x] `abductor` (D7) added to §availability; future-work repointed to
+      gate-coverage + calibrate-from-approved-history (E9).
+
+Remaining (now tracked in `## BACKLOG`):
+- [x] §Introduction mining (ancestor voice + dial-dunk, anchored on Verus). DONE.
+- [x] §Procedure widened to the oracle framing (self-graded vs external oracle). DONE.
+- [x] Headline witness swap flux→Verus (paper Results lead with Verus; graph P5/F5a fixed). DONE.
+- [ ] Trim pass → BACKLOG B. PDF rebuild → BACKLOG D.
+
+Done (graph) 2026-06-12 — calibration=goal-predicate + cognition mine:
+- [x] E8 recast: "calibration not *self*-inducible" (codex scope); grounded in
+      goals-are-predicates + grading-yourself-is-fiction + DPI. P4 alignment
+      sharpened to the external-goal-predicate claim. F8 dunk grounded in DPI.
+      F9 cognition-grounding index added. K7 falsifier specifies "independent
+      labels."
+
+Remaining (paper, ground by reference — link-anchors carry it, NO inline re-derivation):
+- [~] §12 alignment: a goal-predicate facet was added THEN **CUT entirely**
+      (author 2026-06-12: "don't pick fights with alignment people"). Net: no
+      goal-setting in the paper; only the pre-existing accountability-as-alignment
+      language stays. Goal-as-predicate is graph-internal only (P4 de-emphasis).
+- [x] §Results enum-calib: DONE — one earned sentence in standard language
+      ("no computation on what a model already holds can increase what it tells
+      us about the world, the data processing inequality... calibration is a
+      world-facing trial") + /compress-and-unfold self-link. **CITATION GUARD (author 2026-06-12): the world isn't
+      ready for the natural framework as a load-bearing citation.** The paper
+      rests on the STANDARD DPI (textbook info theory, Cover & Thomas 1991), with
+      /compress-and-unfold as an optional author's-own-prior self-link (blog
+      register). Keep /the-natural-framework AND the Perceive-morphism mapping
+      OUT of the published view — graph-internal grounding only — until the
+      framework is established; citing it couples the narrow, un-dismissable
+      mechanism claim to a wide unestablished synthesis and hands a hostile
+      reader a free exit. NO "Perceive," no six roles, no boundary-morphism in
+      the paper.
+- [x] Claim-verb pass per /wrong-questions: DONE — added to §discussion
+      "Attributed nulls and the typing protocol": typing runs on positive claims
+      too (Verus = a mechanism that *can occur*, not a rate/discovery);
+      reflex≈kill, demotion≈credence-cap stated as the hygraph's own instances;
+      links /type-iii-error + /wrong-questions.

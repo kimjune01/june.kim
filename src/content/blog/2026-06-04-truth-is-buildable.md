@@ -139,6 +139,12 @@ build. A determinate fact, seen through a frame with no derivation for it, shows
 untrue, and snaps onto the ladder the moment a build arrives. The world was never the thing
 with three states. The ledger was.
 
+Kant named the far side the [noumenon](https://plato.stanford.edu/entries/kant-transcendental-idealism/),
+the thing in itself, which a knower can think but never hold. We work only the near side,
+the appearance the build constitutes. The post departs from him on one point. The far side
+still pushes back. It never shows itself, but it reddens a wrong build, and that one bit is
+the whole of the contact.
+
 ## Truth at the edge
 
 Where does truth live? Knowledge is a graph. A claim is a node; the citations and inferences that wire it to what
