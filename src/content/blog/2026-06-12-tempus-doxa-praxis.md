@@ -295,8 +295,9 @@ the strong way, as a settled future you read off and steer by, and it refutes it
 moment you reach for it: to read the verdict you must read it now, from inside time, the one
 seat there is, and from inside time the verdict is the very thing you cannot reach. Take it
 the weak way, as all moments tenselessly existing with no word on how to act, and it is true
-for nothing, reaches no choice, moves no step. Strong, it defeats itself; weak, it sits idle
-for anyone deciding what to do. There is no third way to hold it where it both guides an act
+for nothing, reaches no choice, moves no step. Strong, it defeats itself; weak, it [sits
+idle](/agent-native-epistemics) for anyone deciding what to do, a picture with no edge where
+the world could ever redden it. There is no third way to hold it where it both guides an act
 and is sayable from where you stand.
 
 And the deepest reason is not that the picture is false but that no one can take it up. To
