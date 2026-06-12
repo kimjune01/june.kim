@@ -6,7 +6,12 @@ tags: cognition, epistemology, reflecting
 
 > *Tempus, doxa, praxis.*
 
-History is a lattice: a web of every path that could have been taken, every fork and
+A second ago, "you will read this" was a sentence about the future. Now it is a sentence about
+the past. In between, you clicked. Was the sentence already true before the click, settled
+somewhere, waiting for you to catch up? Or did the click write it? Answer that for one click and
+you have answered it for everything you will ever do.
+
+[History is a lattice](/history-is-a-lattice): a web of every path that could have been taken, every fork and
 every branch, all of it there at once. Its telling is a linked list: a single thread,
 one bead after the next, the path that actually got walked. You only ever get the
 thread. You read it front to back, and you cannot read it backwards. The web is one
@@ -67,8 +72,9 @@ bare bones, the structure that holds it up, and makes the bones the point, the s
 posed as the home. Both are beautiful, and both pass the wake off as the boat: a pattern
 true of where attention has been, not the thing itself, never somewhere you can live.
 
-The oldest place to catch the sin is the one we are all taught young. Every statement is
-either true or false, heads or tails, a coin you can flip and flip back. The logicians
+The question you opened with, whether the sentence was already true, is the oldest place to
+catch the sin. We are taught its tidy form young: every statement is either true or false,
+heads or tails, a coin you can flip and flip back. The logicians
 call it [bivalence](https://en.wikipedia.org/wiki/Principle_of_bivalence), and pointed at
 tomorrow it gives the [old sea-fight riddle](/agent-native-epistemics): the sentence about
 tomorrow's battle must already be true or already false, settled now, the same kind of
