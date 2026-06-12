@@ -2,7 +2,6 @@
 variant: post-medium
 title: "You Cannot Ring a Semiring"
 tags: cognition, epistemology, reflecting
-draft: true
 ---
 
 *Tempus, doxa, praxis.*
@@ -84,7 +83,7 @@ bolted the undo button on.
 ## Postmodernism is the same sin, made an axiom
 
 That was the oldest. Now the newest, at the far end of the bookshelf: a fashionable
-idea that we build our world rather than find it, that the facts and the institutions and the meanings we live
+idea that we build our world rather than find it, that the facts and institutions and meanings we live
 inside were made by people, not handed down by nature. On the made side, the past side,
 this is simply true, and worth saying. The mistake is the next step: taking that and
 pointing it at the future, deciding that because the world was built, it is ours to
@@ -310,28 +309,3 @@ That is the whole of what a creature on a one-way road can do. We cannot reach b
 cannot read ahead. The single move the road leaves us is to get the next moment ready, to
 cradle a present we will not even get to keep. And doing that, over and over, each
 squeezed-down spark of aliveness handed to the next, is the recursion we call life.
-
----
-
-## Open forks (draft notes, cut before shipping)
-
-- **Accessibility + teach-the-terms pass (per author).** Each metaphor is an on-ramp to
-  a real term the reader leaves having learned: *inverse* (introduced), *ring*,
-  *semiring*, *bivalence*, *doxa / episteme*, *cogito / Cartesian*, *block universe*,
-  *presentism / growing-block*. Not hidden behind links, taught in the prose with the
-  link as the rabbit-hole. Metaphors: undo button, milk in coffee, river vs road,
-  boat/wake, searchlight, depth perception, coin in the air, the comics page. Math rigor
-  one click away in /temporal-compression; warrant-semiring cite Baur & Studer.
-- **Subtractive pass (partial):** cut the Rorschach paragraph (echo, no advance), the
-  "no longer really an agent" restatement, "a particular daydream" filler. Deeper cut
-  candidates still on the table for author's call: one of the two faces (bivalence vs
-  postmodern), the cubism/brutalism illustration, tightening the cradle setup.
-- **Load-bearing lines preserved:** "you cannot ring a semiring," the wake/boat, "a cause
-  cannot run backward, and a citation cannot point to the future," "Manhattan's chair
-  without Manhattan's eyes," "he stopped being one," "to worship is to attend to
-  attention," "the recursion we call life." Manhattan still appears exactly twice.
-- **Register tension is now softer** (the block section reads as river-vs-road rather than
-  ℝ-axis), so Fable's one-way formal-to-devotional arc holds better than before.
-- **Still pending:** subtractive/length pass; the two codex reservations the author may
-  revisit (warrant=time "identity vs homology"; the postmodern "backward causality"
-  phrasing). Accessibility was the priority this pass, not cuts.
