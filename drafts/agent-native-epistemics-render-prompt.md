@@ -15,12 +15,12 @@ from scratch what a prior post already says well. Compose, cite the edge, move o
 
 ## Inputs (read in this order)
 
-1. `drafts/agent-native-epistemics-argument-graph.md` — THE SOURCE OF TRUTH. Read
+1. `drafts/what-cannot-be-false-cannot-be-true-argument-graph.md` — THE SOURCE OF TRUTH. Read
    `## CURRENT STATE`, then the act-structured nodes (ACT I / ACT II / CODA /
    REFERENCE), then `## Section render order` (the AUTHORITATIVE section sequence +
    per-section node manifest + render notes), then `## Citation map (pre-render)`
    (what each node may cite, with `own` = no external cite).
-2. `src/content/blog/2026-06-12-agent-native-epistemics.md` — the paper view. The
+2. `src/content/blog/2026-06-12-what-cannot-be-false-cannot-be-true.md` — the paper view. The
    abstract, intro, and §phenomenon are WRITTEN (but the abstract and intro are
    STALE, see Procedure); everything from §belief is to render. Match its frontmatter
    (`variant: post-paper`, `autonumber: true`) and the §(id) cross-reference tokens.

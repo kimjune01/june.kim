@@ -76,7 +76,7 @@ The question you opened with, whether the sentence was already true, is the olde
 catch the sin. We are taught its tidy form young: every statement is either true or false,
 heads or tails, a coin you can flip and flip back. The logicians
 call it [bivalence](https://en.wikipedia.org/wiki/Principle_of_bivalence), and pointed at
-tomorrow it gives the [old sea-fight riddle](/agent-native-epistemics): the sentence about
+tomorrow it gives the [old sea-fight riddle](/what-cannot-be-false-cannot-be-true): the sentence about
 tomorrow's battle must already be true or already false, settled now, the same kind of
 fact as a sentence about yesterday. But a claim about tomorrow has earned no verdict yet.
 No warrant has been laid down into it, and [warrant builds the way time
@@ -245,7 +245,7 @@ before it comes or hold the last one without dropping this one. The pointer is a
 So the whole discipline is just that: act from the live moment, not the frozen map; hold
 your beliefs as [bets you would put money on today](/belief-is-the-edge-of-knowing), not
 truths you read off the wall forever; treat what you have learned as [something you could
-test again right now](/agent-native-epistemics), not a fact you inherit and never check.
+test again right now](/what-cannot-be-false-cannot-be-true), not a fact you inherit and never check.
 Every time you catch yourself pointing at the pattern instead of the present, the settled
 future, the finished verdict, the picture on the wall, the move is the same: bring the
 beam back to now, and act.
@@ -302,7 +302,7 @@ moment you reach for it: to read the verdict you must read it now, from inside t
 seat there is, and from inside time the verdict is the very thing you cannot reach. Take it
 the weak way, as all moments tenselessly existing with no word on how to act, and it is true
 for nothing, reaches no choice, moves no step. Strong, it defeats itself; weak, it [sits
-idle](/agent-native-epistemics) for anyone deciding what to do, a picture with no edge where
+idle](/what-cannot-be-false-cannot-be-true) for anyone deciding what to do, a picture with no edge where
 the world could ever redden it. There is no third way to hold it where it both guides an act
 and is sayable from where you stand.
 

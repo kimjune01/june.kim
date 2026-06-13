@@ -7,6 +7,7 @@ const blog = defineCollection({
     variant: z.string().optional(),
     autonumber: z.boolean().optional(),
     title: z.string(),
+    subtitle: z.string().optional(),
     tags: z.union([z.string(), z.array(z.string())]).optional(),
     image: z.string().optional(),
     keywords: z.union([z.string(), z.array(z.string())]).optional(),

@@ -1,7 +1,7 @@
 # Argument graph: Agent-Native Epistemics, An Epistemology a Machine Can Run
 
-The paper (`src/content/blog/2026-06-12-agent-native-epistemics.md`, slug
-`/agent-native-epistemics`) is a **view onto this graph**. Edit here first, then
+The paper (`src/content/blog/2026-06-12-what-cannot-be-false-cannot-be-true.md`, slug
+`/what-cannot-be-false-cannot-be-true`) is a **view onto this graph**. Edit here first, then
 propagate to the view. Each node carries its claim, its warrant, its status, and
 the section that renders it. Statuses: `definition`, `grounded` (canonical source
 carries it), `argued` (the paper's own argument), `declared` (norm or stance),
@@ -10,6 +10,8 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
 ## CURRENT STATE (2026-06-12)
 
 - **Thesis (one line):** classical epistemology (JTB, correspondence, certainty) was built for a human knower and cannot be *run*; this paper assembles one a machine can run, out of old parts in pragmatist order, read as a build.
+- **DEPENDENCY CHAIN (author 2026-06-12, the framing spine; title/abstract foreground it):** `untrue` is the UNLOCK (the third status the true/false-by-correspondence tradition keeps no room for), and two properties FALL OUT OF IT IN ORDER. (1) BUILDABILITY: to leave the untrue and earn *true*, a claim must be built and exposed to a test it could fail. (2) MACHINE-ENCODABILITY: a build is checkable/replayable, so it runs. So the agent/machine is NOT the headline, it is the third link; buildability is the second; `untrue` is the root. LINEAGE the chain sits squarely in: POPPER (capacity to fail; but he stopped at "unscientific", the step to "cannot be true" is one past him, verificationist lean, R6) + RAMSEY (graded belief, the odds you would act on). Peirce carries the asymptote only.
+- **TITLE (set 2026-06-12):** "What Cannot Be False Cannot Be True" (a line lifted from §truth; bare, no over-explaining colon; a pointy counterclaim pointing at the unnamed third state). SUBTITLE: "Truth is buildable. The unbuilt is untrue." (surfaces both coinages, buildable + untrue; precise, a *false* claim was built-and-broke so it is not "untrue", only the UNBUILT is). Old title "Agent-Native Epistemics: An Epistemology a Machine Can Run" RETIRED (agent is incidental to the contribution per the dependency chain); the coinage `agent-native epistemics` and the slug `/what-cannot-be-false-cannot-be-true` stay in the body.
 - **Home tradition = PRAGMATISM** (James, Dewey, Peirce, Ramsey). The contribution is the pragmatist program carried to a knower it never had in view, and thereby made to execute. Kant, Popper, the intuitionists, Brandom are RECRUITED around that spine, not co-equal.
 - **Standard-grounded ONLY.** Every load-bearing claim rests on canonical sources. The Natural Framework and its six-role / Perceive-morphism apparatus are KEPT OUT (would couple a narrow defensible claim to a wide contested one). If the data-processing inequality is needed, cite Cover & Thomas, never the framework. Companion blog posts are self-links (blog register), never load-bearing citations (P group; tiering rule).
 - **Three contributions, each scoped NARROW:** C1 operationalization (belief/knowledge/truth reduce to buildable/checkable/replayable structures), C2 warrant ledger (true/false/untrue as bookkeeping of warrant, NOT a new logic; bivalence is housed in the platonic graph, not denied, F7), C3 dignity ordering (among claims *presenting as knowledge*, accountable falsehood outranks unaccountable pseudo-knowledge; the qualifier is load-bearing). The delta is C5's EXACT CONTRACT (everyone supplied pieces; nobody made this exact contract run), weighted on Act II and bounded by the honest-limits triad (C1g-i: trusted roots, adversarial robustness, bounded verification).
@@ -61,6 +63,11 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
   categorically higher. The one exception is the platonic graph (F7), where a proof
   reaches absolute truth relative to its axioms; the firewall keeps that from ever
   becoming an absolute claim about the world, so empirical belief stays graded.
+  RENDER SEAM (therefore-but pass 2026-06-12): §belief opens as a CONSEQUENCE of
+  §phenomenon (a knower holds only the build that stands in for the world, so even
+  the surest claim is a bet placed, not a fact read off), NOT as a syllabus
+  announcement ("the arc runs belief, then knowledge, then truth"); the arc naming
+  is subordinated to that therefore.
   `grounded` (Ramsey) · §belief
 - **A2.** All cognition is lossy projection; there is no world-as-such available
   to a knower, only world-as-projected; so any claim grading itself against
@@ -84,7 +91,11 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
   cannot be true, SCOPED UP FRONT to EMPIRICAL world-claims (the uncheckable
   number is immune and earns nothing); the formal regime is the exception, where
   proof closes warrant without world-exposure (F7), so the tautology lands
-  there, not here. `argued` (Popper's spirit; verificationist lean conceded in
+  there, not here. RENDER SEAM (therefore-but pass 2026-06-12): §truth opens from
+  §knowledge's exposure as a therefore (knowledge buys exposure; truth is what
+  exposure can earn, the build acted on that the world did not redden), NOT as a
+  ladder-position announcement ("Truth is the top of the arc"); the arc position
+  follows the consequence. `argued` (Popper's spirit; verificationist lean conceded in
   R6) · §truth
 - **A6.** The climb: EMPIRICAL truth is a grade, not a flat state. Hypothesis
   (raised, awaiting its test) → standing result (survives its first real tests)
@@ -262,7 +273,16 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
 - **E3.** The build-graph operationalization (renders C1 concrete): provenance =
   dependency graph; citation = an edge; attestation = the signed build log;
   falsifiability = able to go red; test = the world pushing back; truth = the
-  build currently passing; reproducibility = rebuild from source. `definition` ·
+  build currently passing; reproducibility = rebuild from source. RENDER FORMAT
+  (2026-06-12): this is a term→gloss MAPPING; render as a bulleted list after "that
+  is the whole mapping, and it is mechanical:", not as a run of short declaratives
+  (prose was doing list-work worse than a list). FIGURE (2026-06-12): the mapping is
+  also rendered as a graphic, `/assets/truth-compilation-light.svg`, "How truth is
+  compiled" — a left-to-right compile pipeline (claim → provenance edges down to
+  trusted roots → run the test, the world reddening → three verdicts green/red/hung
+  → a dashed stranger-replay loop back into the build). The one figure spans the
+  act: E1-E3 edges, C2/C2a three states, C1a/C1b replay. Placed after the mapping
+  list in §edge. `definition` ·
   §edge
 - **E4.** The scripture-vs-benchmark reversal, ON PROVENANCE ONLY (the ranking
   is of accountability, not of faith over measurement): "the Bible told me so"
@@ -558,7 +578,11 @@ Machine side (the neighbors):
   other people's claims. `declared` · threaded, §self-application
 - **S4.** Stated kill conditions rendered in-paper (see `## Kill conditions`):
   the paper names what would turn it red, in its own three-state vocabulary.
-  `declared` · §self-application
+  RENDER FORMAT (2026-06-12): render the kill conditions as a BULLETED LIST (each
+  an enumerable "trigger → which contribution falls"), not as a wall of parallel
+  sentences; the list reinforces the enumerable-falsifiability ethos. The outward
+  edge (K9) stays a capstone paragraph after the list ("the largest of them is the
+  outward one"). `declared` · §self-application
 - **S5.** (META, graph-internal; OPTIONAL render, one light closing sentence if
   it lands, never load-bearing.) This paper is itself a node in a hypothesis
   graph, built by the method it advocates: a standing build a stranger can
@@ -783,6 +807,137 @@ edge (the build made checkable) and zooms out single-agent → population.
   contents and IDs unchanged.
 - 2026-06-12: citation map added (pre-render); bibliography pinned per node so
   the render cites deterministically and fabricates nothing.
+- 2026-06-12: CITATION PASS done. (1) DUMMETT woven in at three points (intro
+  recruitment list, §truth verificationist-lean, §related-work) as the verificationist
+  lineage's HOME (anti-realism, truth tied to verification, bivalence withheld from the
+  undecidable), not a conceded lean. (2) References section ADDED before §Provenance,
+  26 canonical entries from the citation map + Dummett + Korzybski, alphabetical;
+  framed as warrant-bearing, with the companion essays kept separate under Provenance
+  as lineage (citation-tiering preserved). (3) Terms kept pure, no LW citations, no
+  deep academic engagement (Williamson / pragmatic-encroachment / analysis-of-knowledge
+  stayed OUT per the audience call). Inline wiki/SEP links left as blog texture; the
+  References section is the scholarly apparatus. No fabricated cites.
+- 2026-06-12: AUDIENCE = internet/LessWrong epistemics (map-territory, Bayes,
+  Popper-lite, calibration, "beliefs pay rent"), NOT academic philosophers (author
+  has not read post-1963 academic epistemology and is not writing for it). De-jar
+  target is the rationalist crowd. GOVERNING PRINCIPLE (author): precision outranks
+  recognition; do not dilute a precise term to be legible. So: drop deep academic
+  engagement (Williamson / pragmatic-encroachment / analysis-of-knowledge). Keep the
+  canonical citations (Kant, Peirce, Ramsey, Dummett) as the recognition handle (the
+  high-status ROOTS of the LW memes) instead of citing LW. Verificationist lineage
+  EMBRACED (Dummett to add as home/ally, not just a conceded lean).
+- 2026-06-12: map/territory NOD added in §phenomenon (F1) as a nod-and-CORRECT, not
+  an equation: the popular shorthand blurs the line (territory = approachable by a
+  better map; noumenon = unreachable by definition), and conflating them would
+  collapse the asymptote into measurement error. Author respects "noumenon" and will
+  not dilute it; the nod sharpens it. Linked to Korzybski (map-territory relation),
+  not LW. The "beliefs pay rent" gloss on `untrue` was REJECTED by the same precision
+  rule (pay-rent reads as meaningless/unfalsifiable; `untrue` includes the meaningful
+  not-yet-built).
+- 2026-06-12: the map/territory NOD escalated (over several author refinements) into a
+  deliberate REJECTION of the LessWrong/map-territory FRAME, now a consolidated
+  standalone paragraph in §phenomenon (F1). The frame is a folk CORRESPONDENCE theory
+  (map matches territory), which the paper already rejects in §intro (correspondence
+  cannot be inspected). Organizing critique, in the author's words: map/territory
+  assumes a clean knower/knowable division (surveyor vs territory), but we are SUBJECT
+  AND OBJECT AT ONCE, inside what we would survey, perceiving and perceived. This
+  subsumes the earlier layers (no out-of-frame standpoint, self-examination is
+  phenomenon-bound, containment, ants-unaware-of-the-study). The noumenon = the
+  ADMISSION OF UN-KNOWING (a frame that may hold us, unperceivable out to, like ants
+  never perceiving the entomologist) that map/territory cannot make. LOAD-BEARS
+  forward: this is why a single agent can't grade itself (A2, can't be clean-object to
+  its own subject) and why Act II needs a second knower (triangulation). SCOPE of the
+  rejection: reject the FRAME, keep the INSTRUMENTS (graded belief = Ramsey,
+  falsifiability = Popper, both pre-LW, both already cited) under their canonical
+  names. Linked to Korzybski, not LW. Passage locked after ~6 refinements.
+- 2026-06-12: OVERCLAIMS TRIMMED (codex blind read + author: "i was strawmanning, i
+  didn't actually read the thing"). The prose no longer attributes commitments to
+  map/territory ("assumes a clean division", "that division is the fiction", "cannot
+  admit" all CUT). The critique is now only about what the metaphor's IMAGERY
+  foregrounds vs LEAVES OUT (the knower's embeddedness, subject-and-object-at-once),
+  which is unimpeachable and needs no claim about what LW/map-territory commits to. So
+  the "deliberate rejection of the frame" note above is softer in execution: not
+  "map/territory is false", but "its picture leaves out the embeddedness the noumenon
+  names". The positive content (noumenon = admission of un-knowing, the ant analogy,
+  subject/object) is unchanged.
+- 2026-06-12: SLUG changed to match the title. File renamed
+  2026-06-12-agent-native-epistemics.md -> 2026-06-12-what-cannot-be-false-cannot-be-true.md
+  (slug `/what-cannot-be-false-cannot-be-true`). All inbound links updated: sibling
+  hygraph paper (incl. #belief / #knowledge / #the-warrant-ledger anchors, unchanged
+  heading IDs) and tempus-doxa-praxis. Old `/agent-native-epistemics` now 404s (no
+  redirect added yet). The coinage `agent-native epistemics` (space form) stays in
+  §intro. Also this session: warrant(noun)->entitlement (adjective "warranted" and
+  Dewey's "warranted assertibility" kept; #the-warrant-ledger anchor id preserved),
+  reddening->break.
+- 2026-06-12: title set to "What Cannot Be False Cannot Be True" / "Truth is
+  buildable. The unbuilt is untrue." (codex titled it blind; author chose the catchy
+  #5 hook, dropped its over-explaining colon-appositive, surfaced the `untrue`
+  coinage in the subtitle). Abstract RE-SEQUENCED to the dependency chain: untrue
+  (unlock) → buildability (followup) → machine-encodability (further followup),
+  lineage Popper + Ramsey named, Peirce kept for the asymptote only. Supersedes the
+  prior pragmatist-canon-first reframe two bullets down (kept for history). `untrue`
+  in the abstract left PLAIN (its bold definitional home is §ledger, same rule as
+  phenomenon/noumenon being plain in the abstract and bold in §phenomenon).
+- 2026-06-12: abstract REFRAMED (author steer) from summary to POSITION. It now (1)
+  plants the flag in the pragmatist lineage against the correspondence/JTB-certainty
+  tradition (both locate the standard where no procedure can inspect it), and (2)
+  makes the BUILDABILITY SIDESTEP explicit: rather than contest whether certainty is
+  reachable, change the criterion to buildability (truth = the build that could have
+  failed and did not). "buildability" italicized (emphasis, per the italics rule).
+  Stranger-replay + three contributions retained. ~235w.
+- 2026-06-12: TITLE under reconsideration (author: "the agent using the build is
+  incidental to the contribution"). Tension to resolve: C5/R11 weight the DELTA on
+  the agent-facing executable contract (Act II: stranger-replay, canon), which
+  structurally needs the second knower, so the agent is not purely incidental; but
+  the FRAME's center of gravity (and the reframed abstract) is buildability +
+  executability, which a title can carry via "runs/executable" without AI-agent
+  branding. Candidate direction: center "an epistemology that runs" / buildability,
+  demote "agent-native" to the coined territory term inside the body. PENDING author
+  pick. The slug `/what-cannot-be-false-cannot-be-true` and the coinage in §intro can stay even
+  if the title changes.
+- 2026-06-12: abstract compressed ~470w → ~225w. The intro already carried every
+  abstract point in fuller form (para 2 = JTB-does-not-run; para 4 = the two acts,
+  the phenomenon→belief→knowledge→truth→asymptote→firewall frame walk, stranger-
+  replay mechanism, all three named results), so the long abstract was pure
+  redundancy. Cut to: problem (JTB does not run as a procedure) → move (assemble
+  one that does, read as a build) → the frame in two sentences → stranger-replay
+  hinge → delta + three narrow contributions. Nothing moved INTO the intro; it was
+  already there. Render-order note #1 (abstract = C1/C2/C3/C4/C5-seed + one clause
+  each F6/F7) still holds, just tighter.
+- 2026-06-12: emphasis discipline (author rule). For EMPHASIS, prefer ITALICS;
+  bold is reserved for definitional first-use of a coined term (see bold rule
+  below). Paper already uses italics for emphasis/mention (*activity* vs
+  *institution*, *presents as knowledge*, *it still passes*, etc.), so this is
+  mostly codified-already; apply going forward.
+- 2026-06-12: bold discipline (author rule). BOLD IS RESERVED FOR THE DEFINITIONAL
+  FIRST-USE OF A COINED TERM, once, at its introduction; never emphasis. Stripped 7
+  emphasis bolds from the abstract (phenomenon, noumenon, Belief, knowledge, truth,
+  asymptotic, firewalled), keeping only the two coinages the abstract introduces
+  (warrant ledger, dignity ordering). Surviving prose bolds, each once at its
+  definitional point: agent-native epistemics (intro); noumenon, phenomenon,
+  Noumenal truth, Phenomenal truth (§phenomenon); true, false, untrue (§ledger);
+  canon, detached credential (§protocol); warrant ledger, dignity ordering
+  (abstract). OPEN: the §provenance companion-link list bolds 13 essay titles
+  (reference-list convention, not definitional) — left pending author call.
+- 2026-06-12: figure added: /assets/truth-compilation-light.svg "How truth is
+  compiled" in §edge; verified rendering on dev server (200, image/svg+xml). Dark
+  variant not yet generated (site has no dark-mode img swap; post-paper is a light
+  surface). First figure in this paper; sibling hygraph paper carries 12, so figures
+  are in-register for the series.
+- 2026-06-12: list-vs-prose pass. Two passages where prose did list-work worse
+  than a list, both converted to bulleted lists: the build-graph mapping (E3, a
+  term→gloss glossary) and the self-application kill conditions (S4, eight parallel
+  "trigger → falls" items). Borderline comma-strings (C1g terminal witnesses, C1h
+  attack types) and argument-walks with live connectives (F7b string-theory walk,
+  R machine-neighbors, FW3/FW4 edges) left as prose deliberately: listing would
+  strip the therefore/but reasoning or over-formalize incidental examples. These
+  are the paper's first lists; register change is intentional and reversible.
+- 2026-06-12: therefore-but pass (Trey Parker connector audit) across section
+  seams and beats. Spine is overwhelmingly therefore/but; one and-then at the
+  §phenomenon→§belief seam (syllabus opener) and a softer ladder-position opener
+  at §knowledge→§truth. Both reseamed to land as consequences (A1, A5 render-seam
+  notes); no section moves. Beat-level enumerations in §edge (E3 glossary) and the
+  coda (R neighbors, FW edges) judged genre-acceptable and left.
 
 ## Citation map (pre-render)
 
@@ -803,6 +958,8 @@ external load-bearing cite (mark "own"); the render must not invent one for them
 - **DEWEY-QC** — Dewey, *The Quest for Certainty* (1929); warranted assertibility.
 - **POPPER** — Popper, *The Logic of Scientific Discovery* (1934/1959) and *Conjectures and Refutations* (1963); falsifiability; "irrefutability is a vice."
 - **VERIFICATIONISM** — logical positivism (Ayer, *Language, Truth and Logic* 1936); the verification principle, where "cannot be false → cannot be true" leans.
+- **DUMMETT** — Dummett, *Truth and Other Enigmas* (1978); anti-realism, truth tied to verification/construction, the refusal of unrestricted bivalence for the undecidable. The sophisticated modern HOME of the verificationist lean (A5) and the bivalence-housing move (C2/F7); verificationist lineage EMBRACED, not just conceded.
+- **KORZYBSKI** — Korzybski, *Science and Sanity* (1933); "the map is not the territory." Cited in §phenomenon only to mark the popular shorthand whose imagery leaves out the knower's embeddedness; root of the LW frame, cited instead of LW.
 - **LUKASIEWICZ** — Łukasiewicz (1920), Post (1921); three-valued logic. (Concede openly; the third state is OLD.)
 - **INTUITIONISM** — Brouwer; Heyting; truth-by-construction. [SEP: Intuitionism]
 - **GODEL** — Gödel (1931); incompleteness; the second theorem (no self-certified consistency).
