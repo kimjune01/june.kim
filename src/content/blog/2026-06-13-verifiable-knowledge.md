@@ -46,6 +46,20 @@ That mapping produces a ranking. *The Bible told me so* cites its provenance and
 
 The frame settled the three states as statuses an entitlement earns. To run them between agents, make the build literal. Searching for a proof, or a patch, or a measurement, is running a program, and it returns one of three things. Green is true, the build closed. Red is false, the build ran and broke. Hung is untrue, the build that never returned. True and false are siblings because both are halting states, computations that came back with a verdict; untrue is the one state that is not a verdict, the job still spinning, the test suite that never finishes.
 
+Every verifiable claim takes this shape, a program whose output is the verdict:
+
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:13em"><col><col style="width:5em"><col style="width:13em"></colgroup>
+<thead><tr><th style="background:#f0f0f0">Claim</th><th style="background:#f0f0f0">The build, as a program</th><th style="background:#f0f0f0">Output</th><th style="background:#f0f0f0">Goes red when</th></tr></thead>
+<tr><td>"it's 12°C at SFO now"</td><td>a tool call to the named weather API</td><td><code>12</code></td><td>the API answers otherwise on replay</td></tr>
+<tr><td>"the run logged 3 errors"</td><td><code>grep -c ERROR run.log</code> on the named image</td><td><code>3</code></td><td>the command prints another count</td></tr>
+<tr><td>"7 × 72 = 504"</td><td>evaluate <code>7 * 72</code></td><td><code>504</code></td><td>recomputation differs</td></tr>
+<tr><td>"the patch passes"</td><td>the suite at commit <code>a1b2c3</code></td><td><code>green</code></td><td>any test fails</td></tr>
+<tr><td>"the theorem holds"</td><td>rechecked in a proof assistant</td><td><code>accepted</code></td><td>a step fails to check</td></tr>
+</table>
+
+The weather claim can still go stale, its root a source that may change; the computation and the proof settle for good. Verifiability is graded by how firmly the program pins its roots, not by the kind of claim.
+
 Encoded this way the verdict is no longer something an agent asserts about itself; the entitlement is conferred by replaying the build to green, with no builder grading its own work. [Entitlement](/what-cannot-be-false-cannot-be-true) here runs backward: the replay re-derives a verdict that already stood, climbing provenance to roots, not forecasting whether the claim will pay out. A claim record carries what the replay needs: the claim, the provenance edges down to its roots, the build procedure, the kill condition, the declared terminal witnesses, and the attestation that signs it. A receiver is entitled to inherit the claim when a replay reaches green under those declared roots, and not before.
 
 An argument settles by a mediating oracle both sides accept, where one exists, and replay is that oracle, trustless because the verdict comes from re-running the typed build, not from either party's word.
@@ -59,6 +73,11 @@ Where no oracle exists at all, no reachable test and no build that could run, th
 The ledger records a verdict. But who is entitled to write one? That gap is what the rest of the paper has to close. Start with the problem under it, the one the frame left standing: a single agent holds one lossy projection and cannot invert it, so its own artifacts and the world's structure are indiscernible to it, and grading itself grades a fiction.
 
 This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davidson_(philosopher))**: the distinction between subjective and objective, and with it the concept of error, requires at least two minds and a shared world. A multi-agent view is multiple projections of the one object, and comparing them constrains the object no single projection reveals, with **[the view from nowhere](https://en.wikipedia.org/wiki/The_View_from_Nowhere)** (Nagel) as the limit no projection occupies. The [blind men and the elephant](https://en.wikipedia.org/wiki/Blind_men_and_an_elephant) is the picture: no one holds the animal, and the touches together approach it, but only diverse projections refine, and agreement among agents that share a blind spot is an echo chamber, so the stranger has to be an independent projection, which is what the cross-family adversary discipline buys.
+
+<figure>
+  <img src="/assets/triangulation-light.svg" alt="Triangulation as projection geometry. A dashed circle in the center is the object, labeled no projection holds it whole. Three agents sit around its lower arc, each a filled dot with a projection line to the rim, and each lights up a different solid-colored facet of the rim it catches. Together the three facets cover the lower boundary the object none of them holds alone. Above the object, a dashed hollow circle labeled the view from nowhere, unoccupied, fans two dashed lines down to the upper rim that no agent reaches." style="max-width:560px; width:100%; height:auto; margin:1.4em auto; display:block;" />
+  <figcaption><strong>Figure.</strong> Triangulation. One object, no projection holding it whole. Each agent catches a facet of the rim; their projections, taken together, constrain what none sees alone. The whole is the view from nowhere, the limit no projection occupies. The refinement holds only when the projections are independent: agents that share a blind spot leave the same arc dark.</figcaption>
+</figure>
 
 A [small instance](/truth-is-buildable) shows the shape: tracing one phrase's origin, a second model searching independently surfaced a source the first had missed, and the agreement that followed meant something precisely because the two were not the same projection. That independent projections *constrain* the object is the paper's own step, not something to lay on Davidson or Nagel, cited only for the narrow premise.
 
@@ -84,7 +103,7 @@ The institution has no such reverse gear, the retraction filed and never enforce
 
 ## Inheritance without gatekeeping {#inheritance}
 
-Entitlement, not reputation: the mechanism under that phrase is that a credence is a shortcut over a verifiable substrate, never the source of entitlement. Each canon entry carries its own replayable kill-condition, so *it still passes* is checkable by anyone at any time, caught by replay rather than by a committee.
+Entitlement displaces reputation: the mechanism under it is that a credence is a shortcut over a verifiable substrate, never the source of entitlement. Each canon entry carries its own replayable kill-condition, so *it still passes* is checkable by anyone at any time, caught by replay rather than by a committee.
 
 This does not abolish credentials, it regrounds them. A credential *is* an attested build certification: a degree, a review stamp, a trusted-maintainer badge means *this passed builds I verified*, a cached pointer to a replayable build. Deferring to it is the download button on a package you did not compile yourself, rational under cost (§(the-limits)) precisely because the substrate stays verifiable underneath.
 
