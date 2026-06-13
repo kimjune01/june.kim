@@ -131,6 +131,289 @@ machine runs it) → hygraph is where it runs.
 operationalized-epistemology precedent (the "epistemology that became a specification"). Strengthens
 C5: the protocol register has canonical prior art, which is evidence for the natural-primitives thesis.
 
+## BEATS PORTED FROM /tempus-doxa-praxis (2026-06-13) — "You Cannot Ring a Semiring"
+
+Companion essay (P10, self-link, TEXTURE not load-bearing; the warrant still rests on the canonical
+anchor each beat names — tiering rule). Recruited mostly into Paper 1 (the depth the epistemology genre
+flexes), two into Paper 2. Each beat → node · the phrasing/intuition to recruit.
+
+PAPER 1:
+- **B1. The semiring (THE port).** Warrant builds one way, like time and cause — a SEMIRING: a zero, no
+  inverse. `untrue` is that zero; `false` would be a *minus* the structure does not have, so untrue is
+  NOT a hidden false, it is the plain absence of either, "a coin still in the air." → C2/C2a, §trichotomy.
+  The structural spine of the boundary-redraw and the one-ladder's foot. ANCHOR: ring/semiring are
+  textbook algebra (load-bearing on the standard defs); the application to warrant is the paper's OWN
+  (`argued`); tempus = companion.
+- **B2. The sea-battle (a trap rung).** Bivalence pointed at tomorrow = the sea-fight riddle; a claim no
+  warrant has reached has earned no verdict, so it sits at the zero, `untrue`. KEY SCOPE: a fact about the
+  WARRANT, not the world — it says nothing about whether tomorrow is fixed or open (Aristotle dropped
+  bivalence to keep the future open, the determinist kept it; neither move is needed — the riddle only
+  bites once you bolt the undo button on). → §trichotomy, a domain for the bivalence-trap device.
+  ANCHOR: Aristotle, future contingents (already in graph S2).
+- **B3. Doxa vs episteme.** What you have is belief — doxa, a bet on the odds — not episteme, the settled
+  knowing you could rest on forever; episteme is exactly what your spot on the road keeps from you. → A1,
+  §belief: the classical handle for no-tier-above-belief. ANCHOR: Plato/Greek (canonical). NO EPIGRAPH:
+  the "Tempus, doxa, praxis" slogan stays OUT of the paper, blog-register only (author 2026-06-13).
+- **B4. No seat outside the world (anti-Cartesian).** The cogito steps clean out, lays a grid, free to
+  flip it — the only knower who could read the book backwards, because he was never in the book. There is
+  no such seat: the knower sits inside the story, one-way, made of the present. → F1/F2 (knower is
+  subject-and-object, inside) + A2 (no god's-eye view → cannot self-grade). Ties phenomenon/noumenon to
+  the self-grading hinge. ANCHOR: Descartes (named to break, not endorse).
+- **B5. The eye builds depth (adapted dual).** A flat retina, yet you see depth — a *making* that stands in
+  for a seeing it cannot have. → A2, lossy projection: the build stands in for the world; grading against
+  "ground truth" grades a construction. ANCHOR: own (`argued`); companion /compress-and-unfold for the
+  adapted-dual; standard sensory facts.
+- **B6. The reality leash = present-relativism.** Nothing absolute (no god's-eye map to be absolute about),
+  nothing anything-goes (the world pushes back, you find out soon enough whether what you built holds) —
+  the living middle, answerable to the world. → F4: maps exactly onto "no reddening = idealism, seeing the
+  world-in-itself = naive realism, phenomenal truth is the load-bearing middle." Recruit the
+  wake-for-the-boat warning against "it's all relative" (that shrug IS the sin, not the view).
+- **B7. The green light wired to stay green.** A thing that cannot fail the test was never tested — a number
+  you wrote down yourself and called a measurement, a green light you wired to stay green. → E5 guardrail
+  (the single-knower reality leash; same family as `return 0.70`). The vivid phrasing port.
+
+PAPER 2:
+- **B8. A citation cannot point to the future (the edge is causal/one-way).** Provenance edges are one-way
+  like cause: a citation cannot rest on a source not yet written. The grandfather paradox / self-consistent
+  loop = "the green light with a clock on it," a claim certified by the very trial its own act decides →
+  ties E2 (provenance = falsification channel, an acyclic/causal DAG) and the bad-faith defeat-device /
+  E5 (a loop that certifies itself). ANCHOR: own (`argued`); Reichenbach (time-as-causal-order) as companion texture.
+- **B9. Wake vs boat → activity vs institution.** Every structure is a wake, the frozen trail attention
+  leaves, pointed at the live present; the sin is taking the wake for the boat. → C1d: a canon of the
+  ACTIVITY (live builds that still pass) vs the INSTITUTION (a frozen credentialed corpus). Sharpens
+  activity-vs-institution and the detached-credential pathology (C1e).
+
+NOTE (tiering): intuition pumps + phrasing, filed as companion self-links; every load-bearing claim keeps
+its canonical anchor (semiring=algebra, sea-battle=Aristotle, doxa/episteme=Plato, arrow-of-time=Reichenbach).
+Do NOT let the essay's metaphors become the warrant.
+
+## THEREFORE-BUT AUDIT (2026-06-13) — ebbs & flows, for the prose pass
+
+Both papers' SECTION orders PASS the Trey-Parker connector test (therefore/but throughout, no
+and-then between sections, NO reorder needed):
+- **PAPER 1:** phenomenon →[∴ a knower works only builds] belief →[∴ knowledge is belief past a
+  threshold] knowledge →[∴ truth is what exposure earns] truth →[BUT one regime escapes: math]
+  two-graphs →[∴ the empirical states are a three-state ledger] trichotomy →[∴ a ranking falls out]
+  dignity. Coda: related work → conclusion.
+- **PAPER 2:** intro [picks up P1's self-certification problem] →[∴ first, what is there to check]
+  edges →[∴ the build returns a verdict, one of three] ledger →[BUT who may write the verdict?]
+  triangulation →[∴ a population accumulates a canon] protocol/canon →[BUT three limits keep it
+  honest] limits. Coda: related work → self-application → future work → conclusion. (§edge flags the
+  deferral: "who checks is §triangulation's question; this section says what there is to check" — a
+  held question, released in §triangulation. Good ebb/flow, keep.)
+
+TWO within-flow FIXES (Paper 1), not reorders:
+- **(a) Asymptote seam is an AND-THEN.** The folded asymptote opens "*And* the climb has no top" —
+  the weak connector. Re-seam to therefore/but: the facts near the top hold only on sufferance, SO the
+  climb has no summit (∴), or "BUT the climb has no top." Pick one; kill the "and".
+- **(b) ONE-LADDER by CALLBACK, not by moving the asymptote.** The asymptote must STAY before §two-graphs
+  (it sets up the empirical-asymptotic vs formal-absolute contrast — moving it down breaks that ∴-chain).
+  Deliver the one-ladder unification at §trichotomy via callback: state the three states as the FOOT of
+  the same ladder whose TOP is §truth's asymptote (untrue not-yet-on / false fell-off / true climbing /
+  certified-correspondence never-reached). §truth ends high (the unreachable summit), §trichotomy ends
+  grounded (untrue, the foot) — the ladder bookended across the BUT of §two-graphs.
+
+BEAT SLOTTING (ported tempus beats land INSIDE existing sections, no flow disruption): B4/B6 → §phenomenon;
+B3/B5 → §belief; B7 → §truth; B1/B2 → §trichotomy (B2 sea-battle ALSO an intro trap-spring, resolved at
+§trichotomy); B8 → §edge (P2); B9 → §protocol-and-canon (P2). The bivalence-trap device (P1) is sprung
+across §belief→§knowledge→§truth→§trichotomy, so its rungs ride the existing ∴-chain, not a new sequence.
+
+## TYPE FRAMING (2026-06-13) — the two-graph barrier is a TYPE separation
+
+The F7-group separation of empirical vs formal truth is a separation of ENTITLEMENT TYPES, and the
+characteristic crossing error is a **TYPE MISMATCH** (precise; SUPERSEDES "firewall"). Two entitlement types:
+- EMPIRICAL entitlement: earned by exposure to a world-test that can break (graded, asymptotic).
+- FORMAL entitlement: earned by proof against axioms (absolute within the system, no external noumenon).
+The barrier is NOT a sealed wall — math freely REPRESENTS empirical structure, so a model crosses as an
+empirical hypothesis (an OPEN node awaiting a world-kill). What does NOT cross is the entitlement TYPE: spending
+formal entitlement (self-consistency) as if it were empirical entitlement (a passed world-test) is a TYPE MISMATCH.
+F7a's "characteristic error" = exactly this type mismatch; F7b string theory = a tight WORKED type-mismatch
+example (platonic warrant presented as empirical), NOT a whole-apparatus showcase (re-billed 2026-06-13 per
+author — resolves codex's cut-worry by downgrading the billing, not cutting the example).
+TERMS: RETIRE "firewall"; keep Einstein's "wall" ("Geometry and Experience") as the supporting image for the
+type boundary; the precise mechanism is non-convertible entitlement types / type mismatch. DOVETAILS: codex
+independently called it "type separation"; rhymes with the `untrue` split (DEFINED in P1 as a status, ENCODED
+in P2 as a build-state — also a type separation) and with Paper 2's protocol/type register. AUDIENCE FIT:
+"type error / type mismatch" is native LW/rationalist vernacular. SCOPE: own (`argued`), grounded on Einstein
++ the standard type-error notion; NOT the Natural Framework. APPLIES throughout F7/F7a/F7b and all P1
+§two-graphs prose at the prose pass.
+TERM (reaffirmed 2026-06-13): the noun is ENTITLEMENT, not "warrant" (per the 2026-06-12 decision; keep the
+adjective "warranted" + Dewey's "warranted assertibility" + the #the-warrant-ledger anchor id). So the type
+framing is ENTITLEMENT TYPES, and the type mismatch is empirical-vs-formal ENTITLEMENT. Graph-internal node
+text still uses "warrant" as shorthand in places — render it as "entitlement" in prose; do NOT seed "warrant".
+Fixed this round: the paper's stray "warrant" nouns from the firewall edits (intro + §two-graphs ×3, and the
+"not as warrant" line) + the TYPE FRAMING / F7a notes. STILL TO FIX when touched: the B1 semiring beat
+("warrant builds one way…") → entitlement.
+
+## BOLD & ATTRIBUTION — PAPER 2 (CS audience) (2026-06-13)
+
+For the CS/agent reader, Paper 2 BOLDS the key inherited philosophy terms at their FIRST introduction,
+WITH attribution (the attribution is the tell that the term is borrowed, not coined). This extends the bold
+discipline (bold = definitional first-use of a key term, ONCE; later uses plain) to cover introduced
+philosophy lingo in Paper 2, not just the paper's own coinages. SELECTIVE — "some," the load-bearing terms a
+practitioner won't already hold, not every philosophical word. Two classes, each bolded once at first use:
+- OWN COINAGES (NO attribution): **canon**, **detached credential**, **entitlement ledger**, **agent-native
+  epistemics**; the title **verifiable knowledge**.
+- BORROWED PHILOSOPHY (WITH attribution), e.g.: **entitlement** (Brandom; **inferentialism** / Sellars's space
+  of reasons), **triangulation** (Davidson), **community of inquiry** (Peirce), **fallibilism** (Peirce),
+  **the view from nowhere** (Nagel). Foreign-phrase exception: *nullius in verba* (Royal Society motto) stays
+  ITALIC + attributed, not bold (foreign-phrase convention).
+NOT emphasis-bold (which stays banned, italics rule) — this is DEFINITIONAL bold, the textbook/spec convention
+of bolding a defined term at its definition, which is in-register for Paper 2's protocol/postulate-set form.
+SCOPE: Paper 2 only. PAPER 1 keeps the stricter rule (bold = its own coinages / key terms it defines:
+phenomenon, noumenon, untrue, …); it does not flag philosophy lingo its LW/rationalist audience already holds.
+Links (wiki/SEP) can co-exist with the bold; the existing E1/C1b in-prose attributions ("Brandom's
+inferentialism", "Davidson's triangulation") just gain the bold at first use.
+
+## POLYCHRONICITY THROUGH-LINE (2026-06-13) — time fits the epistemology's own shape
+
+Author's worldview, developed live; ties /tempus-doxa-praxis + Paper 1 + Paper 2 into one structure.
+CAPTURE for the polish pass and to CLOSE the Novikov line in tempus (it was left unclosed).
+
+THE SHAPE. The epistemology's structure is: subjective per-frame projections → a SHARED MODEL coordinated
+across them (the canon / the view-from-nowhere limit) → never the noumenon (no frameless access). TIME is
+just that shape applied to *now*:
+- POLYCHRONIC / per-frame / async = the subjective projections, the real substrate (relativity: no absolute
+  simultaneity, no global "now").
+- MONOCHRONIC global time = the SHARED MODEL agents coordinate on, the temporal view-from-nowhere; phenomenal,
+  intersubjective, approached and never occupied. "A model we share," NOT noumenal — canon-shaped (a
+  coordinated construct, not a given). tempus already has it latent: "Time is the river, the line is the road
+  we drew of it" — the river (one-way, real) = polychronic substrate; the drawn line/road (two-way, inverse) =
+  the monochronic MODEL.
+- NO noumenal global timeline.
+
+THE BIVALENCE TIE. bivalence-about-the-future ⟺ monochronicity (one settled timeline, tomorrow already
+true/false). `untrue` ⟺ polychronicity (from this frame the future is not referenceable, no entitlement yet,
+so untrue, not true-or-false). The sea-battle's untrue verdict IS the polychronic move.
+
+THE NOVIKOV CLOSE (tempus). The dismissal ("referenceability is pastness, causality can't loop, a referenceable
+future is a square circle") grounds out ONLY from the subjective frame, where the present is privileged. That
+frame-relativity is the unclosed step. Admitting it = rejecting monochronicity for polychronicity, and the
+terminal argument is PERMITTED inside a subjective framework precisely because it is frame-relative. The
+provenance DAG is the per-frame causal partial order (Lamport happens-before / causal consistency); its
+acyclicity is both the Novikov no-loop and what makes replay deterministic.
+
+WHY THE PROTOCOL DOESN'T CARE (Paper 2). Knowledge interop never needed a global clock. Agents are async actors
+(Hewitt), each in its own frame; the build carries its own causal order (the provenance DAG), and a stranger
+replays it later, in its frame, at its pace. Polychronicity is the NATIVE setting of an async causal-order
+protocol, not a problem to manage. Any shared "global time" is a derived coordination model (like agreeing a
+clock), exactly as the canon is a shared standing-build record without being noumenal truth.
+
+PLACEMENT (scope-clean): Paper 2 gets the OPERATIONAL version (async, no global clock, provenance DAG = causal
+order, replay in any frame; distributed-systems framing the CS audience holds), in §protocol-and-canon or the
+interop intro. tempus gets the METAPHYSICAL close (frame-relativity → polychronicity; monochronic time = shared
+model, the river/road already there). Paper 1 stays LIGHT (time is out of its frame; the sea-battle keeps "a
+fact about the warrant, not the world," the frame-relative gesture). Grounded on relativity (no absolute
+simultaneity) + the actor model + Lamport causal order; NOT the Natural Framework.
+
+RECURSIVE TOP (author 2026-06-13; DO NOT state in the paper): the worldview is itself a shared model, so it
+exists only by being written and shared, the canon move one level up. The paper already ENACTS this via
+self-application ("this paper is itself a node ... a standing build a stranger can replay") — show, not tell.
+Do NOT add a meta-sentence asserting "this worldview is a shared model"; that would be telling where the paper
+shows, and faintly self-undermining. The act of writing-and-sharing IS the claim, demonstrated.
+
+APPLIED 2026-06-13 (prose): Paper 2 §protocol-and-canon gained the async/causal-order paragraph (actors,
+no global clock, provenance DAG = causal order, replay in any frame, shared-now = a coordination model),
++ an EMPIRICAL GROUNDING sentence: data-center clocks drift, distributed systems coordinate anyway by
+maintaining a shared time as a serviceable fiction (NTP-shaped) and falling back on causal order (Lamport /
+causal consistency / Spanner TrueTime's bounded uncertainty). This makes the async claim operational fact,
+not speculation, and is Paper 2's domain — tempus stays purely metaphysical, no engineering;
+/tempus-doxa-praxis closed the Novikov line (frame-relativity → polychronicity, no global timeline, the
+shared now is a model we keep). Paper 1 untouched (time stays out of its frame).
+
+DEMOTED 2026-06-13 (flow pass, author: "async is less supporting argument, more rebuttal — leave it a
+mention/closure for the curious reader"): the async/causal-order material is NOT load-bearing for the canon
+argument; it answers the "but agents share no clock" objection. So compressed 8 sentences → 4 and moved from
+mid-§protocol-and-canon (where it interrupted the entitlement-not-reputation thread, ¶1→¶3) to the SECTION
+CLOSER, framed as a loose-end rebuttal ("for the reader who presses it"). Dropped the recursive shared-now-is-
+a-shared-model line (blog-register metaphysics, per the guardrail) and the "one level up, over claims" coda.
+Kept: actors-in-own-frames, provenance DAG = causal order, replay-in-any-frame, data-center serviceable-fiction
+grounding. The interruption fix is free: ¶3's "entitlement, not reputation" now picks up directly from ¶1.
+
+SPLIT 2026-06-13 (flow pass, heuristic: "an 'and' in a section title can indicate a break"): §protocol-and-canon
+was the fatigue point AND carried two jobs, so it split in two:
+  - §the-canon {#the-canon} — protocol → canon, activity-not-institution, retraction propagates up the edges (old ¶1).
+  - §inheritance {#inheritance} "Inheritance without gatekeeping" — credentials regrounded (credence = shortcut
+    over verifiable substrate, credential = attested build, detached-credential pathology), the fallibilist stance
+    (truth ≠ blind canon-inheritance, always-CAN-verify), + the async loose-end closer (old ¶2/¶3/¶4).
+Also fixed a swallowed paragraph break (old ¶1/¶2 had no blank line, rendering as one paragraph). §inheritance
+opener reworked to stand alone ("Entitlement, not reputation: the mechanism under that phrase ..."). Anchor
+{#protocol-and-canon} retired; no published page linked it (only planning-doc labels + internal §(the-limits)).
+HEURISTIC VERDICTS on the other two "and" sections: §phenomenon "Phenomenon and noumenon" KEPT (true dyad, the
+section is the boundary BETWEEN them); §self-application "Self-application and falsifiers" KEPT (hendiadys — the
+falsifier list IS the self-application).
+
+RHETORICAL-QUESTION LEADS 2026-06-13 (flow pass, heuristic: "sections/paragraphs can use a rhetorical question
+to direct the reader into the resolution"). Discipline: SURFACE questions the prose already implies, don't bolt
+new ones on every section (density → tic, cuts against the orientation it buys). Applied two:
+  - P2 §triangulation opener: "The ledger records a verdict. But who is entitled to write one?" (was a flattened
+    declarative; the Q is the section's spine → distrusting-stranger resolution).
+  - P1 §belief: "Why does the ceiling bind a machine, and not just a person?" (was a clunky nominalized question
+    "Why ... is the next move"; now directs into the lossy-projection answer).
+Device now spaced: P2 §truth-at-the-edge ("Where does entitlement live in a build?") + §triangulation; P1 §belief
++ the reduction question in §the-two-graphs ("can anything refute it?"). DECLINED to convert strong declarative
+openers (§truth "Exposure is what knowledge buys"; §the-two-graphs "There is one regime where none of that holds").
+
+"KILL" LEXICON 2026-06-13 (flow pass, author: "'kill' is for refute; in hygraph we kept it for the pair with
+its opposite [kill⇄survive] — does it apply here?"). VERDICT split by register:
+  - P2 (Verifiable Knowledge, operational): KEEP. "kill condition / kill-conditioned / replay kills" is standing
+    technical vocab, sibling to hygraph; pairs with survive-the-replay / stood / green. The hygraph rationale
+    transfers one level up. (18 uses, unchanged.)
+  - P1 (What Cannot Be False, epistemology): REMOVED, harmonized to verificationist lineage. P1's native verb is
+    "break" (built-and-stood / built-and-broke, 29×); no kill⇄survive pair exists, so the hygraph rationale does
+    NOT transfer. All 5 "kill" were "kill edge", crammed into the string-theory passage, competing with Popper's
+    own "falsifier" in the section that argues with Popper. Swaps: "no kill edge" → "nothing could refute it"
+    (+ folded the redundant restatement, one beat cut); "is there a kill edge?" → "can anything refute it?";
+    "the kill edge is" → "a reachable refutation is"; "awaiting a world-facing kill" → "...test" (awaits a trial
+    that could go either way, so "test" not "refutation"). P1 kill count now 0; refut* now 10.
+  - EQUIVALENCE MENTION (P2 §truth-at-the-edge, falsifiability bullet): "the test whose firing is the claim's
+    kill condition, the operational form of what the companion paper calls refutation." One mention, placed in
+    the mapping list (which is already a set of equivalences), so the two vocabularies (P2 "kill condition" ⟷
+    P1 "refutation") are bridged once without P2 dropping its native operational term.
+
+COPYEDIT PASS 2026-06-13 (/copyedit inline both papers + /not-but, author: "light touch"). Pipeline
+humanize→tighten→readability→flavor→codex→sharpen→not-but. Both stayed at the fallibilist hedge floor; sharpen
+found ~0. Net P1 6499→~6560 (+; two disambiguation sentences outweigh cuts), P2 5842→~5760 (−; tightening).
+Author-steered ARGUMENT improvements (not mere copyedit), surfaced by codex:
+  - P1 §truth: empirical truth is a LABEL more than a property ("the name the one graded bet wears once a test
+    it could have failed leaves it standing") — dissolves the "degrees of one bet" vs "truth earned by exposure"
+    seam; consistent with §trichotomy "entitlement states, not truth values".
+  - P1 §truth: "cannot be false" DISAMBIGUATED ONCE at the thesis line — means "no test could expose it as false",
+    not a metaphysical guarantee; "the noumenal fact, true or false, stays out of reach either way".
+  - P1 §two-graphs: string-theory charge DEPERSONALIZED — about the WORK not the people ("the problem is epistemic,
+    not a failure of the work's rigor. Depth is not the bottleneck, a reachable refutation is").
+  - P1 §trichotomy: "knowably forever" → "knowably forever hung".
+  - P2 falsifier #1 scoped to "an entitled claim" (else perceptual/testimonial knowledge is a cheap fake-refute);
+    P2 "formal proof" → "published proof" (Kempe wasn't formal); P2 forecast "survives" → "scales" (matched its own
+    "thin shell" refinement); P2 Provenance boilerplate scoped ("stands on its own as the protocol companion").
+  - P2 Traxia "posted two days after the first informal statement" CUT (priority-fencing, sober register; "concurrent
+    work" + "convergence is evidence" carry it). KEPT: "no such reverse gear" ("such" already scopes to the canon's
+    mechanical propagation), "Entitlement, not reputation:" opener (deliberate split handoff).
+  - Flavor links added: P1 Plato, string theory, P-versus-NP; P2 Sellars, Łukasiewicz, truth-maintenance systems,
+    proof-carrying code (aggressive-linking style → unlinked first-mentions stick out).
+/NOT-BUT (deterministic grep + triage): 54 negations, only 2 dead-weight (both P2, both LOCAL DENSITY not hollow
+contrast), varied not deleted: §truth-at-the-edge "of accountability, not of faith over measurement" → clause;
+§economic-edge "search complexity, not a worse signal-to-noise" → dropped (paragraph's opener already says it).
+The other 48 EARNED (fence-work / iconic thesis lines); confirms the papers' "X, not Y" is load-bearing, not tic.
+SECOND NOT-BUT PASS (author insight: "the not-but is an AI tell that turns human readers off EVEN when the
+contrast is earned; use 'in contrast'/'as opposed to'/'instead of' kinds of substitutes"). So the construction
+itself is the tell, independent of whether the contrast is load-bearing. Varied 22 non-iconic earned hits (11
+P1, 11 P2): kept the contrast, changed the construction via a DIVERSE palette (positive recast, period-split,
+"; it is", "in contrast to", "without", "while leaving", "never", "though no more", "with no", "as opposed to",
+"less X than Y", full negated clause) — zero "rather than" (already ~25× each), zero em-dashes, no single device
+>2×. KEPT literal only the iconic thesis lines (P1: "not opposites but siblings", "not denied but housed",
+"not certainty but exposure", "not its negative but a verdict"; P2: "conferred not by an agent grading itself
+but by a distrusting stranger", "united not by shared beliefs but by shared protocol", "useful architecture,
+not a new epistemology"). Result: P1 full "not X but Y" 8→4 (iconic), P2 6→0. UPDATED the /not-but SKILL.md with
+this insight: triage is now THREE-way (dead-weight / iconic / earned-but-varyable), + the substitute palette +
+device-tally report. The varyable bucket is the skill's main yield on already-tight prose.
+
+REGISTER GUARDRAIL (author 2026-06-13, "not trying to summon a cult"): the papers stay SOBER and technical.
+NO slogans, NO Latin-triad epigraphs, NO manifesto register. The grand/metaphysical material (polychronicity,
+the recursive self-model, present-relativism, the worship turn) lives in the BLOG companions (tempus etc.),
+NOT in the papers. Paper 1 = sober epistemology; Paper 2 = sober protocol spec. Keep the vivid edge that is
+already earned (see audience-register), but do not let the worldview tip into movement-building.
+
 ## CURRENT STATE (2026-06-12)
 
 - **Thesis (one line):** classical epistemology (JTB, correspondence, certainty) was built for a human knower and cannot be *run*; this paper assembles one a machine can run, out of old parts in pragmatist order, read as a build.
@@ -312,7 +595,7 @@ C5: the protocol register has canonical prior art, which is evidence for the nat
   NOT "credence 1", a Bayesian never quite reaches it on a long proof. The
   absoluteness belongs to the STANDARD, not to any checker; checking a proof is
   itself a replayable build, which folds the four-color worry into the paper's own
-  vocabulary.) THE FIREWALL: the platonic
+  vocabulary.) THE TYPE BOUNDARY (Einstein's wall; see `## TYPE FRAMING`): the platonic
   graph's absolute truth NEVER touches the empirical graph (Einstein 1921,
   *Geometry and Experience*: "as far as the laws of mathematics refer to reality,
   they are not certain; and as far as they are certain, they do not refer to
@@ -333,14 +616,17 @@ C5: the protocol register has canonical prior art, which is evidence for the nat
   structural claims about the world, but consistency CANNOT SUBSTITUTE FOR REALITY
   (Einstein 1921). A mathematical model of the world is an empirical HYPOTHESIS, an
   OPEN node in the empirical graph awaiting a world-facing kill; its platonic
-  self-consistency is platonic-graph warrant, NOT empirical warrant. Importing the
-  former across the firewall as if it were the latter is THE error. The exact DUAL
+  self-consistency is platonic-graph entitlement, NOT empirical entitlement. Spending the
+  former as if it were the latter is a TYPE MISMATCH (formal entitlement used where
+  empirical entitlement is required) — THE characteristic error (see `## TYPE FRAMING`).
+  The exact DUAL
   of the withheld benchmark: that hides its empirical test, this lacks one and
   borrows a platonic substitute (/auditing-deepswe). `argued + grounded`
   (Einstein 1921) · §two-graphs, sets up F7b
-- **F7b.** STRING THEORY, THE WORKED WITNESS (the one example that exercises the
-  WHOLE apparatus; render as a full passage, not a one-line illustration; CHARITABLE
-  and DATED per author 2026-06-12). The machine, one move at a time:
+- **F7b.** STRING THEORY — a tight WORKED TYPE-MISMATCH EXAMPLE supporting the type boundary
+  (RE-BILLED 2026-06-13: NOT a whole-apparatus showcase; it illustrates the crossing error —
+  platonic warrant presented as empirical — so keep it tight; CHARITABLE and DATED). The moves,
+  briefly:
   - LEDGER (C2): empirically UNTRUE. No passing world-facing build, and not refuted,
     so neither true nor false.
   - GRADIENT (C2a): untrue-and-STALLED, not untrue-in-motion. A healthy conjecture
@@ -848,6 +1134,11 @@ these are the author's own priors, linked for lineage and texture.
   motivating case.
 - **P9.** /type-iii-error + /wrong-questions + /wrong-again → S3: the
   verb-scoping reflex; why "presents as knowledge" matters.
+- **P10.** /tempus-doxa-praxis ("You Cannot Ring a Semiring") → Paper 1 depth (B1-B7) + Paper 2 (B8-B9),
+  see `## BEATS PORTED`: warrant as a semiring (zero, no inverse) so `untrue` is the zero and `false` the
+  missing minus; the sea-battle; doxa vs episteme; no-seat-outside (anti-Cartesian); the eye builds depth;
+  present-relativism = the reality leash; the green light wired to stay green; a citation cannot point to
+  the future; wake vs boat = activity vs institution. Companion texture, canonical anchors kept load-bearing.
 
 ## Kill conditions (what would break the paper)
 
