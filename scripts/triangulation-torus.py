@@ -11,8 +11,8 @@ R = 2.4
 r = 1.0
 tilt = math.radians(58.0)
 
-cx, cy = 360.0, 152.0
-target = (248.0, 94.0, 472.0, 210.0)
+cx, cy = 360.0, 116.0
+target = (252.0, 62.0, 468.0, 170.0)
 
 stroke = "#adadad"
 hidden_stroke = "#c2c2c2"
