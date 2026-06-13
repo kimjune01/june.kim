@@ -771,7 +771,7 @@ edge (the build made checkable) and zooms out single-agent → population.
 
 **ACT I — The Frame: what truth is for a machine**
 1. **Abstract**: C1, C2, C3, C4, C5-seed, F3/F4, + one clause each F6/F7. *(written, STALE, must re-render: no asymptote, no two graphs, no Act II; bivalence clause predates F7)*
-2. **Introduction**: thesis, R1, R12, recruitment list, C4, C5-razor-seed. *(written, needs an asymptote/two-graph clause + Act II foreshadow)*
+2. **Introduction**: thesis, R1, R12, recruitment POINTER (not the one-by-one list; "§related-work names each borrowing", per 2026-06-13 length pass), C4, C5-razor-seed. *(written)*
 3. **Phenomenon and noumenon**: F1-F5 (+ one-sentence F6 seed). *(written, holds; add the seed)*
 4. **Belief**: A1 (forward-pointer to §two-graphs), A2. *(pending)*
 5. **Knowledge**: A3, A4, A7 (F2 callback). *(pending)*
@@ -817,6 +817,38 @@ edge (the build made checkable) and zooms out single-agent → population.
   deep academic engagement (Williamson / pragmatic-encroachment / analysis-of-knowledge
   stayed OUT per the audience call). Inline wiki/SEP links left as blog texture; the
   References section is the scholarly apparatus. No fabricated cites.
+- 2026-06-12: THROAT-CLEARING + "honest" scrub (author: both are AI tells). Cut the
+  self-announcing meta ("worth stating/saying/drawing", "so it goes first", "so take
+  it slowly", "earns a full walk", "wants its scope set", "naming the lean here", "and
+  the paper says so") — just say the thing. Scrubbed "honest/honestly" from the prose
+  (replaced with the precise word: openly, from overreaching, a cost, the price,
+  stated exactly, or nothing); §honest-limits section RETITLED to "The limits" with
+  the #the-honest-limits anchor kept so §() cross-refs still resolve. Graph node
+  labels (C1g-i "THE HONEST LIMITS") left as internal authoring labels.
+- 2026-06-12: more tells scrubbed + bold corrected (author). SELF-CONGRATULATION cut:
+  "scoped to survive a skeptic", "made boldly", "quietly earns its keep", "a ranking
+  nobody expects", "scoped to survive". ABSTRACT BOLD fixed: bold the core coinage
+  **untrue** (the unlock the title/subtitle/chain point at), UN-bold "entitlement
+  ledger" and "dignity ordering" (descriptive compounds, not coinages); §ledger
+  trichotomy un-bolded too so `untrue` is bold exactly once. ANCHOR fully renamed
+  #the-honest-limits -> #the-limits (heading + both §() cross-refs; no inbound links).
+  METHODEUTIC now mentioned in prose (§self-application): the three modes of reason
+  named as "Peirce's methodeutic" (previously the word only appeared in the sibling's
+  slug). Surviving prose bolds: agent-native epistemics, noumenon, phenomenon,
+  Noumenal truth, Phenomenal truth, canon, detached credential, untrue.
+- 2026-06-12: abstract opening de-dunked (author: "too easy of a dunk"; "the better
+  dunk is the trichotomy, the null"). Cut "Classical epistemology asked how a knower
+  reaches certainty, and split every claim into true or false by a correspondence no
+  procedure can inspect" (strawman: the field abandoned certainty; sneers at
+  correspondence). Replaced with the POSITIVE precision move: "Truth is usually scored
+  as a binary, true or false. The binary has no value for the claim that was never put
+  to the test ... neither true nor false but untrue, the null." GUARD: framed as the
+  null / no-verdict state (evaluation status), NOT a third truth-value, to stay
+  consistent with C2's "not a new logic, bivalence not denied". OPEN: intro para 2
+  still says "the prize to be certainty" (same family), but it is qualified two
+  sentences later ("merits ... as a procedure it is underspecified") and threads to
+  §knowledge's skeptic-reply (certainty as the demand to drop); left pending author
+  call on whether to align it.
 - 2026-06-12: AUDIENCE = internet/LessWrong epistemics (map-territory, Bayes,
   Popper-lite, calibration, "beliefs pay rent"), NOT academic philosophers (author
   has not read post-1963 academic epistemology and is not writing for it). De-jar
@@ -938,6 +970,36 @@ edge (the build made checkable) and zooms out single-agent → population.
   at §knowledge→§truth. Both reseamed to land as consequences (A1, A5 render-seam
   notes); no section moves. Beat-level enumerations in §edge (E3 glossary) and the
   coda (R neighbors, FW edges) judged genre-acceptable and left.
+- 2026-06-13: LENGTH PASS (human feedback: too long, "explains where it should
+  cite"; author principle: a paper left long offloads unfinished work onto the
+  reader, cutting is care). Dedup + compress on the VIEW, −639 words net, NO node
+  dropped, every node still renders. This is render-compression, not a graph edit;
+  logged here so the view stays propagated. What compressed, by node:
+  · INTRO recruitment roll-call (Popper/intuitionists/Kant/Brandom enumerated)
+    → kept the C5 framing + a "§(related-work) names each borrowing" pointer;
+    the one-by-one list is R1–R12's job. Render-order #2 updated below.
+  · A2 lossy-projection re-derivation → one sentence + link to /belief-is-the-edge.
+  · F1 map/territory restatement → trimmed, voice kept.
+  · F7b → the two COMMENTARY paragraphs (A5-double-duty + charity/fallibilism)
+    merged into one; the bulleted machine-walk left FULL (render rule holds).
+  · F6b physics, A4 skeptic, A7/E4 guardrail repeats, E-opener JTB repeat → trimmed.
+  · C1b Davidson re-derivation → compressed + /truth-is-buildable link on the
+    blind-spot instance. C1a/C1c lightly tightened.
+  · C1d/C1e/C1f → the three mega-paragraphs compressed; /science-on-trial four-term
+    enumeration (P5) cut to a link; nullius + /science-on-trial now each appear
+    ONCE (fixes render-order #12, was duplicated across C1e/C1f).
+  · FW3/FW4 → both open-edge passages compressed (longest prose in the paper; they
+    are conjectures, did not need full re-derivation).
+  Anchor links ADDED where prose had re-explained a prior post (tiering preserved,
+  P group / self-links, never load-bearing): belief-is-the-edge (A2), auditing-deepswe
+  (E5/A7), science-on-trial (C1d), complementations (C1e), compress-and-unfold (FW4),
+  truth-is-buildable (C1b). All 11 §() cross-refs still resolve.
+  REMAINING length lives in STRUCTURE, not prose (author declined structural cut
+  this round): candidate graph-level levers parked for a future pass — fold
+  §the-asymptote (F6/F6a/F6b) into §truth's tail; merge the three §limits subnodes
+  (C1g/C1h/C1i) into one paragraph; trim the N-atoms case (A7) which renders across
+  §knowledge AND §truth. These are node/section merges, so they must be decided
+  HERE first, not in the view.
 
 ## Citation map (pre-render)
 
