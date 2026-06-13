@@ -42,7 +42,7 @@ The `!` above a WoW quest giver is conveyance. The damage number that flies off 
 
 Product design calls these things "affordances," "feedback," "discoverability," "onboarding." Game design calls them all one thing because they serve one function: the player should never have to ask "what just happened?" or "what do I do next?" If they do, conveyance failed.
 
-The difference between a game with good conveyance and one without it is the difference between an interface that teaches through use and one that requires a manual. Every pattern below is a conveyance pattern. Some convey available actions. Some convey progress. Some convey state. All of them answer questions the user didn't have to ask.
+The difference between a game with good conveyance and one without it is the difference between an interface that teaches through use and one that requires a manual. Every pattern below is a conveyance pattern.
 
 ### The quest system
 

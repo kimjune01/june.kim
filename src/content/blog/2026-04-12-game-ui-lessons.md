@@ -4,7 +4,7 @@ title: "Game UI Lessons"
 tags: design
 ---
 
-Nobody needs to play a videogame. There's no utility to fall back on. No bank account, no tax filing, no work email that forces you to stay. The interface is the entire product. A player who doesn't enjoy the first five minutes alt-tabs and never comes back. No sunk cost, no data lock-in, no switching cost. The only moat is how the game feels.
+Nobody needs to play a videogame. There's no utility to fall back on. No bank account, no tax filing, no work email that forces you to stay. The interface is the entire product. A player who doesn't enjoy the first five minutes alt-tabs and never comes back. The only moat is how the game feels.
 
 This makes game UI the most brutally competitive design environment that exists. Apps compete for a purchase. Games compete for every second of attention against other games that are also pure interface. Bad game UI doesn't survive long enough to ship a sequel.
 

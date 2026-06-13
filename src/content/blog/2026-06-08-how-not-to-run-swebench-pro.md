@@ -23,8 +23,6 @@ And the part that stung, because it's the subject of this whole post: some of my
 
 How I found out is the lesson under the lesson: **the rulebook wasn't in the repo, it was in the paper.** The runnable code, the grader, the dataset, the harness, will happily let you run a task and tell you nothing about whether it's the *bench's* task. I had to read pages 4–9 of the [Scale paper](https://arxiv.org/abs/2509.16941) to learn what Pro actually does: it hands the agent the problem, requirements, and interface, and *holds the `fail2pass` tests out* for grading. It is not a red-to-green task. My early setup restored the gold tests, stood up a gate, and iterated to green, a different and much easier task that the code never warned me I'd wandered into. The cost of not reading the paper first was about a week and a thousand dollars of compute on a number that couldn't be interpreted ([WORKLOG, "Why the 94% was never a leaderboard number"](https://github.com/kimjune01/swebench-pro/blob/main/docs/WORKLOG.md)). The cheap probe I'd skipped: a surprising number is a stop sign, and the first thing to read when you hit one is the source that *defines* the task, not the source that runs it.
 
-The rest of this post is the rulebook I should have been reading from the start.
-
 ## Rule one: don't hand over the oracle
 
 SWE-bench grades a patch by running the project's own test suite. Each instance ships with a *test patch*: the new or modified tests a correct fix has to pass. That test patch is the answer key. In the literature it's the **oracle**, and the single fastest way to inflate your number is to hand it to the agent. It leaks through two surfaces that fail in opposite directions.

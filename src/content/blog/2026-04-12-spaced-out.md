@@ -37,7 +37,7 @@ Use the smallest gap for parts of the same control. A middle gap for sibling con
 }
 ```
 
-Six tokens is often enough for a small site. The numbers matter less than the ordering: if two things are semantically closer, their gap should be visually smaller than the gap around the group.
+Six tokens is often enough for a small site. The numbers matter less than the ordering.
 
 ### The scale
 
