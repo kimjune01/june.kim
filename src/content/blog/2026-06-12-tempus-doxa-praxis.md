@@ -323,6 +323,18 @@ the future by knowing it; it abolishes it by making it past: all of time laid fl
 time laid down, a museum that holds only the dead. You can only ever find the past. The future
 you only ever make, and the making is what turns it into the past you will later find.
 
+And that argument holds from where you stand, inside the present, and only from there. The
+privileged now that ends the regress, that makes referenceability pastness and bars the loop, is
+a fact about a frame and not about the world: your seat, not one the universe keeps. Step to
+another mover and the now steps with them. So there is no single clock striking the same instant
+for all, no one timeline the block could lay flat. That shared now is a model we keep between us,
+not a thing that exists out past every frame. What is real is the many one-way roads, each with
+its own present and its own order of causes. Trading the one clock for the many is no loss; it is
+what lets the argument ground out at all, since a thing only ever terminates from a present, and
+there is always more than one. And nothing passed between movers needs the missing clock: a wake
+handed on carries its own before and after, and whoever picks it up reads that order off the
+thing, not off a time they share. We are out of step by nature, and the world composes anyway.
+
 Which is the last and worst thing to say about Manhattan. He did not become a god by
 seeing all of time at once. He stopped being one. He climbed into the seat outside time,
 took the drawn map for the territory, and traded away the only godlike thing there is, the
