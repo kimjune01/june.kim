@@ -1,11 +1,135 @@
-# Argument graph: Agent-Native Epistemics, An Epistemology a Machine Can Run
+# Argument graph: What Cannot Be False Cannot Be True (Paper 1) + Verifiable Knowledge (Paper 2)
 
-The paper (`src/content/blog/2026-06-12-what-cannot-be-false-cannot-be-true.md`, slug
-`/what-cannot-be-false-cannot-be-true`) is a **view onto this graph**. Edit here first, then
-propagate to the view. Each node carries its claim, its warrant, its status, and
-the section that renders it. Statuses: `definition`, `grounded` (canonical source
-carries it), `argued` (the paper's own argument), `declared` (norm or stance),
-`positioned` (prior-art placement), `pending`.
+As of 2026-06-13 this graph renders **two papers** (two views); see `## SPLIT (2026-06-13)`
+below. Paper 1 = `src/content/blog/2026-06-12-what-cannot-be-false-cannot-be-true.md` (slug
+`/what-cannot-be-false-cannot-be-true`, the epistemology). Paper 2 = "Verifiable Knowledge", slug
+`/verifiable-knowledge` (the operationalized contract / protocol; "agent-native epistemics" kept as
+the coined territory term in the body; file to be created at split-render time). **Edit here first, then propagate to the views.** Each node carries
+its claim, its warrant, its status, the section that renders it, and now the PAPER it belongs to.
+Statuses: `definition`, `grounded` (canonical source carries it), `argued` (the paper's own
+argument), `declared` (norm or stance), `positioned` (prior-art placement), `pending`.
+
+## SPLIT (2026-06-13): TWO PAPERS — supersedes the one-paper / two-acts structure
+
+Decided with the author after the length passes. The single paper straddles two genres
+(Act I = full epistemology, hygraph = full CS), and the natural application paper (hygraph)
+already exists downstream, so the middle splits cleanly. The graph's old "splitting weakens
+both" worry is RESOLVED: Paper 2 cites Paper 1 (ground-by-reference) instead of re-deriving,
+and the genre-pure ends make the cut natural.
+
+**THE CUT PRINCIPLE** is EPISTEMOLOGY vs OPERATIONALIZATION (close to, but not exactly, the
+Act boundary). The boundary-redraw in the trichotomy is the spine; its CONCEPTUAL/bivalence
+half (deep, philosophy) goes to Paper 1, its ENCODABLE half (green/red/hung, the contract)
+to Paper 2. Author posture (load-bearing): synthesis is FINE, no novelty razor — "even having
+epistemics is a flex enough"; the novelty is the boundary-redraw setting the stage for encodability.
+
+- **PAPER 1 — "What Cannot Be False Cannot Be True"** (epistemology register, depth-flexing;
+  slug `/what-cannot-be-false-cannot-be-true`). THESIS: the boundary-redraw. Bivalence rules
+  where a verdict is laid down; a claim no test reached is `untrue`, the ZERO of a warrant-semiring
+  with no inverse (depth recruited from companion `/tempus-doxa-praxis`, "You Cannot Ring a
+  Semiring"; self-link, tiering preserved). So what cannot be false cannot be true. NODES:
+  F1-F7b (phenomenon/noumenon, belief→knowledge→truth, asymptote folded into §truth, two-graphs +
+  bivalence-housed + firewall + string theory), the TRICHOTOMY DEFINED as epistemic statuses
+  (C2/C2a + the semiring-zero depth + undecidability-is-decided), C3 dignity (the boundary's
+  axiological payoff), C4 scope. **Owns bivalence.**
+- **PAPER 2 — "Verifiable Knowledge"** (operationalized / protocol register; slug
+  `/verifiable-knowledge`; "agent-native epistemics" kept as the coined territory term in the body).
+  Title precision (2026-06-13): *verifiable* names the mechanism (re-check the build); *knowledge* not
+  *truth* because it is the warrant/knowledge that is checkable, while truth stays asymptotic (P1) —
+  "I know N" is verifiable at provenance, "N" is not. Pairs Truth (P1) / Knowledge (P2); carries the
+  interop purpose. THESIS:
+  ENCODABILITY — take Paper 1's redrawn boundary and make it run. The three states become a build
+  LEDGER (true=built-and-stood, false=built-and-broke, untrue=no-passing-build → green/red/hung),
+  replayable by a distrusting stranger; entitlement = surviving the replay. NODES: E1-E5 (edges,
+  the build-graph mapping, the figure), C1/C1a-i (operationalization, triangulation, protocol/canon,
+  the honest limits), C2 ENCODED (the ledger as build-states), C5 (the exact contract — the weighted
+  delta), S (self-application), FW (future work). **Takes bivalence/trichotomy as GIVEN from Paper 1.**
+
+**DEPENDENCY CHAIN: hygraph → Paper 2 → Paper 1.** Hygraph's node-semantics (ledger, buildable
+truth, replay) are all Paper 2, so Paper 2 is hygraph's PRIMARY "epistemology in full" citation;
+Paper 1 is the deeper grounding Paper 2 cites. Hygraph repoint (render pass): the two "in full"
+cites (lines 156, 562) → Paper 2; `#the-warrant-ledger` (line 162) → Paper 2's ledger; `#belief`/
+`#knowledge` (line 158) → Paper 1.
+
+**STRADDLERS** (render-pass decisions, default noted):
+- TRICHOTOMY / `untrue`: DEFINED in Paper 1 (epistemic status, the semiring zero — NEW §trichotomy
+  split off from the old §ledger), ENCODED in Paper 2 (build ledger green/red/hung + replay). Paper 2's
+  ledger opens by recalling Paper 1's definition. `untrue` bold-definitional home = Paper 1.
+- C3 dignity: home Paper 1 (epistemic axiology); Paper 2 may recall it as an agent-facing result.
+- E5 guardrail (buildable ≠ manufacturable, the test must be able to fail): single-knower reality
+  leash = Paper 1 §truth; restated at build scale in Paper 2 §edge.
+- TITLE LINE "what cannot be false cannot be true" (A5) = Paper 1's §truth (its title).
+- R group splits: human-side lineage (R1-R6) → Paper 1; machine neighbors + synthesis-attack
+  rebuttal (R7-R11) + DeepMind (R12) → Paper 2. NEW neighbor to add: AGM belief revision / TMS
+  (the canonical "epistemology that became buildable"; Paper 2 as operationalized-epistemology
+  prior art, or Paper 1 as lineage — render-pass call).
+- Each paper gets its OWN abstract, intro, related-work subset, conclusion. Abstracts drafted +
+  author-approved in chat 2026-06-13 (see Provenance 2026-06-13 split entry for both).
+
+## RHETORICAL SPINE & RELATIONS (2026-06-13) — for the prose pass
+
+**THE HINGE (the one relation that makes the two papers a sequence): A2 → C1b.** Paper 1 §belief
+plants the problem (a single knower holds one lossy projection and grades a fiction — builds
+everything, certifies nothing) and Paper 1's CONCLUSION ends ON it, a cliffhanger ("what has not
+been built begins where a second knower arrives"). Paper 2's INTRO opens by picking up that exact
+problem. Do NOT resolve self-certification inside Paper 1; it is Paper 2's opening move (C1b
+triangulation → C1a stranger-replay).
+
+**PAPER 1 — device: the bivalence trap, sprung repeatedly.** Name the belief, then break it, as a
+trap question (the pointy-counterclaim discipline): "every claim is true or false — so what is a
+conjecture?" Pose it in the intro as a promissory note; spring the SAME trap at each rung in a new
+domain — the sea-battle (future contingent), the unproven theorem, the unfalsifiable claim, the
+lucky-correct N-atoms — each time bivalence fails to classify a real epistemic object and `untrue`
+catches it. §trichotomy is the formal resolution. The device IS the thesis in motion.
+
+**PAPER 1 — ordering: the ONE-LADDER unification (structural spine).** The boundary-redraw (foot)
+and the asymptote (top) are the SAME ladder, not two concerns:
+
+    certified correspondence   ← credence 1, unreachable (asymptote's top; F6a)
+            true               ← on the ladder, climbing (A6)
+            false              ← fell off, built-and-broke (C2)
+            untrue             ← never on the ladder; the semiring zero, no inverse (C2/C2a)
+
+Render §truth's asymptote (F6/F6a/F6b) and §trichotomy (C2/C2a) as bottom-and-top of ONE ladder,
+so the gradedness axis and the boundary axis unify instead of competing. Load-bearing edges to
+foreground: F4→A5 (the noumenon-breaks reality leash licenses "exposure"); F7→C2 (bivalence rules
+in the formal graph → THAT is why untrue is empirical-only); C2↔semiring (untrue = the zero, false =
+a minus the structure lacks; recruit `/tempus-doxa-praxis`).
+
+**PAPER 2 — identity: THE PROTOCOL.** Paper 2 is the operationalized SEMANTICS / the protocol
+specification — a postulate-set, NOT a demo (precedent: AGM belief-revision postulates, not a systems
+paper). It SPECIFIES what belief/knowledge/truth/warrant become as buildable-checkable-replayable
+structures; hygraph INSTANTIATES the protocol; FW1 DEPLOYS it. Paper 2 defers the demo downstream —
+its claim is "here is the protocol," not "here it runs" (the paper obeying its own application-edge
+rule; the protocol's falsifier lives in the demo).
+
+**PAPER 2 — PURPOSE: KNOWLEDGE INTEROP BETWEEN AGENTS (the "why" the intro motivates).** A protocol
+exists for interop. This one lets mutually-distrusting agents (machine and human) transmit a claim AND
+have the receiver RE-VERIFY it — knowledge that crosses an agent boundary and survives the crossing.
+The motivating problem: credence/credential transmission ("trust the source") breaks under scale and
+bad faith; the protocol replaces it with build-and-replay ("check the source's work"), so knowledge
+interoperates without a trust anchor. Interop is the PAYOFF of encodability — encodable states are
+transmissible-and-re-checkable. The through-line of Paper 2: encodable states (ledger) → composable
+builds (C1c) → interop between distrusting agents (C1a/C1b stranger-replay) → a shared canon (C1d).
+Frames the abstract's "lets reasoning cross machine and social bounds" as the thesis, not a closing
+flourish.
+
+**PAPER 2 — device: operational reduction, written as protocol clauses.** Recurring move: reduce
+each epistemic notion to a checkable structure (belief → graded edge, knowledge → action threshold,
+truth → passing build, warrant → surviving replay) and add it as a CLAUSE to the single runnable
+contract (C5). Sentence shape: "X is really structure Y, built thus, checked thus." The concretions
+(green/red/hung, the signed receipt, the mock `return 0.70`, the dangling `has_model_patch: true`)
+are ILLUSTRATIONS of the protocol, not a working system. C5 ("described vs made-to-run") is the
+recurring FRAME, not just a related-work node: each borrowed primitive is a clause the giants
+supplied and Paper 2 wires into the running contract.
+
+**THE COMPLEMENTARY PAIR (concept → contract → demo):** Paper 1 springs the trap (what truth IS,
+what bivalence can't classify) → Paper 2 writes the protocol (what each notion reduces to so a
+machine runs it) → hygraph is where it runs.
+
+**RELATED-WORK ADD:** AGM belief revision + truth-maintenance systems (Doyle) → Paper 2, the
+operationalized-epistemology precedent (the "epistemology that became a specification"). Strengthens
+C5: the protocol register has canonical prior art, which is evidence for the natural-primitives thesis.
 
 ## CURRENT STATE (2026-06-12)
 
@@ -18,7 +142,7 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
 - **Spine = the F group:** Kant's phenomenon/noumenon boundary front-loaded; one departure from Kant: the noumenon is not inert, it reddens a wrong build; that one bit of contact is the leash. Everything after stays on the near side.
 - **Central claim, the asymptote (F6/F6a/F6b):** EMPIRICAL truth is a graded belief ASYMPTOTIC to the noumenon, approached never occupied. Two derivations of one limit: Peirce convergence (diachronic, the community of inquiry) and the graded-belief ceiling (synchronic, credence in [0,1), no tier above belief). A-fortiori case = physics, still asymptotic. Resolves the F4/C2 true/false asymmetry (reddening-only is the gradient of the approach, not a defect). Pragmatist core, standard-grounded (Peirce, Ramsey).
 - **The two-graph architecture (F7/F7a):** empirical and platonic truths live in DISJOINT hypothesis graphs. Empirical = graded/asymptotic; platonic = absolute truth-without-grade (proof decides, no external noumenon). FIREWALL: the platonic graph's absolute truth never touches the empirical (Einstein 1921, *Geometry and Experience*). Resolves the bivalence triangle (retires K5). Crossing rule: a mathematical model of the world is an empirical hypothesis awaiting a world-kill, consistency cannot substitute for reality (string-theory witness, F7a). Maps onto the paper's own data structure.
-- **STRUCTURE (decided 2026-06-12): ONE PAPER, TWO ACTS.** ACT I = the frame, what truth IS for a machine (phenomenon/noumenon, belief→knowledge→truth, the asymptote, the two graphs; mostly INHERITED, the C5 razor admits it). ACT II = the mechanism, how a population of agents coordinates and builds a verifiable canon on it (operationalization C1, triangulation/protocol/canon C1a-f, the honest-limits triad C1g-i; this is where the DELTA lives, C5's exact-contract claim). The acts cross-reference; Act I sets up Act II's payoff. Splitting weakens both (Act I is derivative alone, Act II is rootless alone).
+- **STRUCTURE — SUPERSEDED 2026-06-13 (see `## SPLIT` above): split into TWO PAPERS adopted.** The "splitting weakens both" worry below was resolved (Paper 2 cites Paper 1 by reference; genre-pure ends). Original note kept for history: **ONE PAPER, TWO ACTS.** ACT I = the frame, what truth IS for a machine (phenomenon/noumenon, belief→knowledge→truth, the asymptote, the two graphs; mostly INHERITED, the C5 razor admits it). ACT II = the mechanism, how a population of agents coordinates and builds a verifiable canon on it (operationalization C1, triangulation/protocol/canon C1a-f, the honest-limits triad C1g-i; this is where the DELTA lives, C5's exact-contract claim). The acts cross-reference; Act I sets up Act II's payoff. Splitting weakens both (Act I is derivative alone, Act II is rootless alone).
 - **Render order (PENDING Fable re-review 2026-06-12 to set the act boundary + sequence; superseding the 13-section list below):** Act I → Act II → Related work → Self-application/falsifiers → Conclusion. The F6/F7 asymptote+two-graph cluster gets its own section closing Act I; the C1a-f social cluster is Act II's core. (See `## Section render order`, now stale.)
 - **Written so far in the view:** abstract, intro, §phenomenon. Everything from §belief on is `pending` render.
 - **Source docs:** /truth-is-buildable (06-04), /belief-is-the-edge-of-knowing (04-26), /truly-untrue (06-06), /science-on-trial (04-19); sibling graph `drafts/hygraph-smem-argument-graph.md` (A8 prior-art block recruited into R).
@@ -764,7 +888,36 @@ these are the author's own priors, linked for lineage and texture.
   exact-contract delta falls by citation. (K4 is too generic; K10 names the
   nearest engineering prior art.)
 
-## Section render order (nodes → sections; ACT-STRUCTURED, per Fable re-review 2026-06-12)
+## Section render order — TWO PAPERS (2026-06-13, supersedes the single ACT-structured list below)
+
+**PAPER 1 — "What Cannot Be False Cannot Be True"** (`/what-cannot-be-false-cannot-be-true`):
+1. **Abstract (P1)** — buildable truth, the boundary-redraw, `untrue` as the semiring zero, bivalence housed.
+2. **Introduction (P1)** — classical JTB doesn't run for this knower; pragmatist frame; forward-point to Paper 2 for the machine encoding.
+3. **Phenomenon and noumenon** — F1-F5.
+4. **Belief** — A1, A2.
+5. **Knowledge** — A3, A4, A7.
+6. **Truth** — A5, A6, E5 (the guardrail); asymptote folded in (F6/F6a/F6b).
+7. **The two graphs** — F6c, F7, F7a, F7b (bivalence housed, firewall, string theory). *Closes the climb.*
+8. **The trichotomy** — C2/C2a DEFINED as epistemic statuses (true/false/`untrue`, the semiring zero, undecidability-is-decided) + C3 dignity ordering. *NEW section, split off from the old §ledger; the ENCODED ledger lives in Paper 2.*
+9. **Related work** — R1-R6 (human-side lineage) + AGM/TMS new neighbor.
+10. **Conclusion (P1)** — C4; the boundary-redraw restated; forward to Paper 2.
+
+**PAPER 2 — "Verifiable Knowledge"** (`/verifiable-knowledge`; "agent-native epistemics" = coined term in body):
+1. **Abstract (P2)** — encodability; takes Paper 1's boundary as given.
+2. **Introduction (P2)** — recap Paper 1's frame BY REFERENCE (not re-derived); the verification-crisis motivation (R12).
+3. **Truth at the edge** — C1 (act thesis, "who checks is §triangulation's question"), E1-E5 (edges, the build-graph mapping, the figure).
+4. **The entitlement ledger** — C2 ENCODED (green/red/hung build-states, replay), C2a operational; recall C3.
+5. **Triangulation** — C1b → C1a → C1c.
+6. **Protocol and canon** — C1d, C1e, C1f.
+7. **The limits** — C1g, C1h, C1i (one section, First/Second/Third).
+8. **Related work** — R7-R12 (machine neighbors, synthesis-attack rebuttal R11, DeepMind R12) + reproducibility stack; full C5 razor.
+9. **Self-application and falsifiers** — S1-S4; K1-K10 (K6/K7/K8 lean Paper 1's frame, cite across; rest Paper 2).
+10. **Future work** — FW1-FW4 (application edge, economic, forecast).
+11. **Conclusion (P2)** — C4 + C5 restated.
+
+*Cross-paper seam: Paper 2's intro and §ledger both recall Paper 1 by citation, never re-derivation. `untrue` is defined in Paper 1 (§trichotomy) and encoded in Paper 2 (§ledger).*
+
+## Section render order (nodes → sections; ACT-STRUCTURED, per Fable re-review 2026-06-12) — SUPERSEDED 2026-06-13 by the two-paper order above; kept for node→section detail
 
 Act boundary: Act I closes on §two-graphs (F7/F7a), its novel curtain so the
 "mostly inherited" act does not end on pure inheritance. Act II opens with the
@@ -1021,6 +1174,48 @@ edge (the build made checkable) and zooms out single-agent → population.
       compressed to a one-line callback (was a partial re-statement).
   Net view delta this pass: ~−180 words + 4 section headers removed. All §() refs
   resolve. Render-order #6/#7/#13 updated below.
+- 2026-06-13: SPLIT INTO TWO PAPERS adopted (author: "i like this split"). See `## SPLIT`
+  at top + the two-paper render order. Arrived at over a sparring exchange: (1) one paper
+  straddles two genres with opposite conventions (analytic epistemology = long prose, no
+  applications; CS/arxiv = structured, application-forward), and an applied epistemology is
+  itself a genre-cross (home lineage = operationalized epistemology: AGM belief revision, TMS,
+  NARS — add AGM to related work); (2) the application paper already exists downstream (hygraph),
+  so the cut is the genre seam, not new fragmentation; (3) the motivation was citability for
+  hygraph — preserved by routing hygraph → Paper 2 → Paper 1 (single primary target); (4) the
+  novelty is the trichotomy boundary-redraw → encodability, whose CONCEPTUAL/bivalence half is
+  deep epistemology (Paper 1, depth recruited from /tempus-doxa-praxis's semiring framing: `untrue`
+  = the warrant-semiring zero, no inverse) and whose ENCODABLE half is the build ledger + contract
+  (Paper 2). Synthesis posture explicit: no novelty razor on the epistemics; "having epistemics is
+  the flex." NOT YET PROPAGATED to files — next pass creates Paper 2's file (`/agent-native-epistemics`),
+  splits §ledger into Paper 1 §trichotomy (defined) + Paper 2 §ledger (encoded), gives each paper its
+  own abstract/intro/related-work/conclusion, and repoints hygraph's cross-refs.
+  APPROVED ABSTRACTS (drafted in chat, author-approved):
+  · PAPER 1: "A knower never holds the world, only the build that stands in for it, so even the
+    surest claim is a bet placed rather than a fact read off. This essay assembles, in pragmatist
+    order, an epistemology on that footing: belief graded by the odds one would act on, knowledge as
+    belief past a stakes-set threshold, truth as a build exposed to a test it could have failed and
+    did not. Its hinge is a boundary in the old trichotomy. Bivalence — every claim true or false —
+    rules where a verdict has been laid down, but a claim no test has reached has earned none: not a
+    hidden false behind a curtain, but untrue, the zero of a warrant that builds one way and has no
+    inverse. So what cannot be false cannot be true. The noumenon never shows itself yet is not inert;
+    a wrong build breaks against it, the one bit of contact that leashes truth to the world, and
+    empirical truth is therefore a graded belief asymptotic to a limit it never occupies. Bivalence is
+    not denied but housed: it rules absolutely in a formal graph decided against its axioms, firewalled
+    from the empirical graph it may never adjudicate. The frame is largely inherited — Kant, Peirce,
+    Ramsey, Dummett, Einstein — and offered as synthesis: the citable epistemology a buildable account
+    of machine knowledge presupposes."
+  · PAPER 2: "Truth that a machine can hold has to be a thing it can build and a stranger can check.
+    Taking the buildable-truth frame of What Cannot Be False Cannot Be True as given — its boundary in
+    the trichotomy and its firewall around bivalence — this paper shows what the boundary unlocks once
+    it is made to run. The three states become a ledger of entitlement, each keyed to a build that can
+    fail: true is built-and-stood, false is built-and-broke, untrue is no-passing-build. Drawn this way
+    they are machine-encodable — a build returns green, red, or hung, replayable by a distrusting
+    stranger — so entitlement is conferred by surviving the replay rather than by an agent grading
+    itself. From there follow the results: belief, knowledge, and truth reduce to structures an agent
+    constructs and a stranger checks; a population united by shared protocol accumulates a verifiable
+    canon; accountable failure outranks unaccountable assertion. Every primitive is borrowed; the
+    contribution is the exact contract that makes them run as one, the encodable boundary that lets
+    reasoning cross machine and social bounds."
 
 ## Citation map (pre-render)
 
