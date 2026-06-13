@@ -108,7 +108,8 @@ carries it), `argued` (the paper's own argument), `declared` (norm or stance),
   is N") is out of reach, can be true by luck and never knowledge; the
   knowledge-claim ("I know N") is testable at the level of provenance, demand the
   build and there is none. Knowing is a build; a build shows its chain or it
-  does not. `argued` · §knowledge or §truth (placement open)
+  does not. `argued` · §knowledge (HOME, full treatment); §truth carries a one-line
+  callback only (placement resolved 2026-06-13; was partially re-stated in both)
 
 ## F (part 2): The asymptote and the two graphs
 
@@ -775,16 +776,16 @@ edge (the build made checkable) and zooms out single-agent → population.
 3. **Phenomenon and noumenon**: F1-F5 (+ one-sentence F6 seed). *(written, holds; add the seed)*
 4. **Belief**: A1 (forward-pointer to §two-graphs), A2. *(pending)*
 5. **Knowledge**: A3, A4, A7 (F2 callback). *(pending)*
-6. **Truth**: A5, A6 ("standing result" rung, not "theorem"), E5 preview; P5/P7/P8. *(pending)*
-7. **The asymptote**: F6 (scoped empirical), F6a (weld to §belief), F6b (a-fortiori; the regulative-hope hedge). *(pending)*
-8. **The two graphs**: F6c (pivot in), F7, F7a (crossing rule out). *Act I curtain, closes on a contribution.* *(pending)*
+6. **Truth**: A5, A6 ("standing result" rung, not "theorem"), E5 preview; A7 callback (one line, home is §knowledge); THEN the asymptote folded in as the section tail — F6 (scoped empirical), F6a (the two-derivation weld), F6b (a-fortiori physics; the regulative-hope hedge) — per 2026-06-13 structural pass; P5/P7/P8. *(rendered)*
+7. *(FOLDED into #6 on 2026-06-13; was "The asymptote". #the-asymptote anchor retired; 4 inbound §() refs repointed to §(truth).)*
+8. **The two graphs**: F6c (pivot in), F7, F7a (crossing rule out). *Act I curtain, closes on a contribution.* *(rendered)*
 
 **ACT II — The Mechanism: how a population builds a canon**
 9. **Truth at the edge**: C1 (act thesis, forward-pointer "who checks is §triangulation's question"), E1-E5. *(pending)*
 10. **The warrant ledger**: C2 (regime-relative strength), C2a, C3. *(pending)*
 11. **Triangulation**: prose order C1b → C1a → C1c (problem before solution; recall A2 first). *(pending)*
 12. **Protocol and canon**: C1d, C1e (labor-honesty clause; C1e renders here now, formerly tagged §why-agent-native), C1f. *(pending; cite /science-on-trial once, nullius in verba once)*
-13. **The honest limits**: C1g, C1h, C1i (trusted roots, adversarial robustness, bounded verification; they bound C1e/C1f so Act II does not read utopian). *(pending)*
+13. **The honest limits**: C1g, C1h, C1i (trusted roots, adversarial robustness, bounded verification; they bound C1e/C1f so Act II does not read utopian). Rendered as ONE section, no ### subheaders — the three are re-led First/Second/Third in prose (2026-06-13 structural pass). *(rendered)*
 
 **CODA**
 14. **Related work**: R1-R12, full C5 razor at R11. *(pending)*
@@ -1000,6 +1001,26 @@ edge (the build made checkable) and zooms out single-agent → population.
   (C1g/C1h/C1i) into one paragraph; trim the N-atoms case (A7) which renders across
   §knowledge AND §truth. These are node/section merges, so they must be decided
   HERE first, not in the view.
+- 2026-06-13: STRUCTURAL PASS (author: "do all those 3 things"). Executed the three
+  parked levers as GRAPH decisions, then propagated to the view.
+  (1) §the-asymptote FOLDED into §truth's tail. F6/F6a/F6b stop being their own
+      section; they render as the closing block of §truth (truth-is-graded → and
+      asymptotic to the noumenon). Folding licensed a COMPRESS of the F6 setup and
+      the F6a two-derivation weld (~140w beyond the header). The #the-asymptote
+      anchor is RETIRED; its 4 inbound §() refs (in §phenomenon close, §ledger/C2a,
+      §triangulation/C1a, §protocol/C1d) repointed to §(truth). TRADEOFF noted: the
+      asymptote is the "central claim" (F6a one-liner), so demoting it from a named
+      section is a real cost; kept its one-sentence statement ("subjective truth is
+      a graded belief asymptotic to the noumenon") intact and prominent in the block.
+      §the-two-graphs (F7) remains the Act I curtain; flow truth(+asymptote)→two-graphs
+      preserves the firewall setup.
+  (2) §the-limits (C1g/C1h/C1i) merged to ONE section, the three ### subheaders
+      (Replay bottoms out / Bad faith / When replay is infeasible) dropped, the three
+      paragraphs kept and re-led First/Second/Third so the enumeration survives as prose.
+  (3) A7 (N-atoms) HOME fixed to §knowledge (full treatment); the §truth occurrence
+      compressed to a one-line callback (was a partial re-statement).
+  Net view delta this pass: ~−180 words + 4 section headers removed. All §() refs
+  resolve. Render-order #6/#7/#13 updated below.
 
 ## Citation map (pre-render)
 
