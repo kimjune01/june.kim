@@ -73,10 +73,10 @@ Prior structures clear part of this; the table scores the strong version of each
 <colgroup><col style="width:19em"><col><col><col><col></colgroup>
 <thead><tr>
 <th style="background:#f0f0f0; padding:5px 7px; text-align:left;">Structure</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="a hypothesis still under consideration, not verified facts or established chunks">holds the unproven</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="each claim bound to an executable test that can prove it wrong">bound to a falsifiable trial</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="a stranger reruns the recorded trial instead of re-deriving the reasoning or trusting the author">checkable without trust</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="the trail persists past the context window, not discarded once a patch passes">survives agent context</th>
+<th style="background:#f0f0f0; padding:5px 4px;" title="a hypothesis still under consideration, not verified facts or established chunks">holds hypotheses</th>
+<th style="background:#f0f0f0; padding:5px 4px;" title="each claim bound to an executable test that can prove it wrong">kill condition</th>
+<th style="background:#f0f0f0; padding:5px 4px;" title="a stranger reruns the recorded trial instead of re-deriving the reasoning or trusting the author">independently verifiable</th>
+<th style="background:#f0f0f0; padding:5px 4px;" title="the trail persists past the context window, not discarded once a patch passes">persistent memory</th>
 </tr></thead>
 <tbody>
 <tr><td><strong>Hypothesis graph</strong> <span style="color:#888;">(this work)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td></tr>
