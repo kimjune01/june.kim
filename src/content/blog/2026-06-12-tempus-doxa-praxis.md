@@ -395,4 +395,4 @@ this moment to the next, cradling a present that has not arrived.
 That is the whole of what a creature on a one-way road can do. We cannot reach back and we
 cannot read ahead. The single move the road leaves us is to get the next moment ready, to
 cradle a present we will not even get to keep. And doing that, over and over, each
-squeezed-down spark of aliveness handed to the next, is the recursion we call life.
+squeezed-down spark of aliveness handed to the next, is the recursion we call consciousness.
