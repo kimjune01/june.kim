@@ -165,7 +165,7 @@ PAPER 1:
   adapted-dual; standard sensory facts.
 - **B6. The reality leash = present-relativism.** Nothing absolute (no god's-eye map to be absolute about),
   nothing anything-goes (the world pushes back, you find out soon enough whether what you built holds) —
-  the living middle, answerable to the world. → F4: maps exactly onto "no reddening = idealism, seeing the
+  the living middle, answerable to the world. → F4: maps exactly onto "no refutation = idealism, seeing the
   world-in-itself = naive realism, phenomenal truth is the load-bearing middle." Recruit the
   wake-for-the-boat warning against "it's all relative" (that shrug IS the sin, not the view).
 - **B7. The green light wired to stay green.** A thing that cannot fail the test was never tested — a number
@@ -422,8 +422,8 @@ already earned (see audience-register), but do not let the worldview tip into mo
 - **Home tradition = PRAGMATISM** (James, Dewey, Peirce, Ramsey). The contribution is the pragmatist program carried to a knower it never had in view, and thereby made to execute. Kant, Popper, the intuitionists, Brandom are RECRUITED around that spine, not co-equal.
 - **Standard-grounded ONLY.** Every load-bearing claim rests on canonical sources. The Natural Framework and its six-role / Perceive-morphism apparatus are KEPT OUT (would couple a narrow defensible claim to a wide contested one). If the data-processing inequality is needed, cite Cover & Thomas, never the framework. Companion blog posts are self-links (blog register), never load-bearing citations (P group; tiering rule).
 - **Three contributions, each scoped NARROW:** C1 operationalization (belief/knowledge/truth reduce to buildable/checkable/replayable structures), C2 warrant ledger (true/false/untrue as bookkeeping of warrant, NOT a new logic; bivalence is housed in the platonic graph, not denied, F7), C3 dignity ordering (among claims *presenting as knowledge*, accountable falsehood outranks unaccountable pseudo-knowledge; the qualifier is load-bearing). The delta is C5's EXACT CONTRACT (everyone supplied pieces; nobody made this exact contract run), weighted on Act II and bounded by the honest-limits triad (C1g-i: trusted roots, adversarial robustness, bounded verification).
-- **Spine = the F group:** Kant's phenomenon/noumenon boundary front-loaded; one departure from Kant: the noumenon is not inert, it reddens a wrong build; that one bit of contact is the leash. Everything after stays on the near side.
-- **Central claim, the asymptote (F6/F6a/F6b):** EMPIRICAL truth is a graded belief ASYMPTOTIC to the noumenon, approached never occupied. Two derivations of one limit: Peirce convergence (diachronic, the community of inquiry) and the graded-belief ceiling (synchronic, credence in [0,1), no tier above belief). A-fortiori case = physics, still asymptotic. Resolves the F4/C2 true/false asymmetry (reddening-only is the gradient of the approach, not a defect). Pragmatist core, standard-grounded (Peirce, Ramsey).
+- **Spine = the F group:** Kant's phenomenon/noumenon boundary front-loaded; one departure from Kant: the noumenon is not inert, it refutes a wrong build; that one bit of contact is the leash. Everything after stays on the near side.
+- **Central claim, the asymptote (F6/F6a/F6b):** EMPIRICAL truth is a graded belief ASYMPTOTIC to the noumenon, approached never occupied. Two derivations of one limit: Peirce convergence (diachronic, the community of inquiry) and the graded-belief ceiling (synchronic, credence in [0,1), no tier above belief). A-fortiori case = physics, still asymptotic. Resolves the F4/C2 true/false asymmetry (refutation-only is the gradient of the approach, not a defect). Pragmatist core, standard-grounded (Peirce, Ramsey).
 - **The two-graph architecture (F7/F7a):** empirical and platonic truths live in DISJOINT hypothesis graphs. Empirical = graded/asymptotic; platonic = absolute truth-without-grade (proof decides, no external noumenon). FIREWALL: the platonic graph's absolute truth never touches the empirical (Einstein 1921, *Geometry and Experience*). Resolves the bivalence triangle (retires K5). Crossing rule: a mathematical model of the world is an empirical hypothesis awaiting a world-kill, consistency cannot substitute for reality (string-theory witness, F7a). Maps onto the paper's own data structure.
 - **STRUCTURE — SUPERSEDED 2026-06-13 (see `## SPLIT` above): split into TWO PAPERS adopted.** The "splitting weakens both" worry below was resolved (Paper 2 cites Paper 1 by reference; genre-pure ends). Original note kept for history: **ONE PAPER, TWO ACTS.** ACT I = the frame, what truth IS for a machine (phenomenon/noumenon, belief→knowledge→truth, the asymptote, the two graphs; mostly INHERITED, the C5 razor admits it). ACT II = the mechanism, how a population of agents coordinates and builds a verifiable canon on it (operationalization C1, triangulation/protocol/canon C1a-f, the honest-limits triad C1g-i; this is where the DELTA lives, C5's exact-contract claim). The acts cross-reference; Act I sets up Act II's payoff. Splitting weakens both (Act I is derivative alone, Act II is rootless alone).
 - **Render order (PENDING Fable re-review 2026-06-12 to set the act boundary + sequence; superseding the 13-section list below):** Act I → Act II → Related work → Self-application/falsifiers → Conclusion. The F6/F7 asymptote+two-graph cluster gets its own section closing Act I; the C1a-f social cluster is Act II's core. (See `## Section render order`, now stale.)
@@ -450,13 +450,13 @@ already earned (see audience-register), but do not let the worldview tip into mo
   The side a knower works; naming it phenomenal licenses the word *truth* for
   something less than correspondence-forever without demoting it to belief.
   `definition` · §phenomenon
-- **F4.** THE ONE DEPARTURE FROM KANT: the noumenon is not inert. A wrong build
-  reddens (bridge falls, program crashes, counterexample arrives), and the failed
+- **F4.** THE ONE DEPARTURE FROM KANT: the noumenon is not inert. It
+  refutes a wrong build (bridge falls, program crashes, counterexample arrives), and the failed
   build is a PHENOMENAL event constrained by reality, not a signal received from
   the thing in itself; we never touch the noumenon, reality only constrains which
   builds stand. That one bit of constraint, *this build is wrong*, is the whole
   leash.
-  Guards both flanks: no reddening = idealism; seeing the world in itself =
+  Guards both flanks: no refutation = idealism; seeing the world in itself =
   naive realism. Phenomenal truth is the load-bearing middle. `argued` · §phenomenon
 - **F5.** Convention: from §phenomenon on, unqualified *truth* means the
   phenomenal kind. The noumenon returns only to do its one job, break things.
@@ -480,7 +480,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   to a knower, only world-as-projected; so any claim grading itself against
   ground truth grades against a fiction. SCOPE GUARD (so this does not undercut
   F4/F6): no absolute ground truth is AVAILABLE to grade against, which is not
-  to say no real constraint exists; reality still reddens a wrong build, you
+  to say no real constraint exists; reality still refutes a wrong build, you
   just cannot grade against it directly. Feeds F1 (why the boundary binds
   machines too). `argued` · §belief
 - **A3.** Knowledge: a DERIVED predicate. Belief past a stakes-dependent action
@@ -500,7 +500,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   proof closes warrant without world-exposure (F7), so the tautology lands
   there, not here. RENDER SEAM (therefore-but pass 2026-06-12): §truth opens from
   §knowledge's exposure as a therefore (knowledge buys exposure; truth is what
-  exposure can earn, the build acted on that the world did not redden), NOT as a
+  exposure can earn, the build acted on that the world did not refute), NOT as a
   ladder-position announcement ("Truth is the top of the arc"); the arc position
   follows the consequence. `argued` (Popper's spirit; verificationist lean conceded in
   R6) · §truth
@@ -527,7 +527,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   opinion which is fated to be ultimately agreed to by all who investigate", *How
   to Make Our Ideas Clear* 1878), so the asymptote IS the pragmatist core, the
   home tradition stated in one line, not a borrowed patch. Resolves the F4/C2
-  asymmetry: the world reddening-only (never greening) is the GRADIENT that drives
+  asymmetry: the world refuting-only (never confirming) is the GRADIENT that drives
   the approach. Each false-signal is a confirmed prune; the survivors converge on
   a limit the curve never touches. The asymmetry is the engine, not a defect.
   "True" is uncertified precisely because a knower is never AT the limit, only on
@@ -554,7 +554,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   noumenon is the paper's spine in one sentence. `grounded + argued` (Ramsey +
   regularity/Cromwell; belief-is-edge) · §phenomenon, §belief, callback §truth
 - **F6b.** THE A-FORTIORI CASE: physics. The most closely studied empirical
-  domain is STILL asymptotic. Newton stood until Mercury's perihelion reddened
+  domain is STILL asymptotic. Newton stood until Mercury's perihelion refuted
   it, gave way to general relativity, which itself strains where it meets the
   quantum (a successor still pending, not yet in hand); each a better-standing
   build, none the final correspondence, the succession itself the asymptote drawn. If even physics, the hardest-tested knowledge there is,
@@ -565,10 +565,10 @@ already earned (see audience-register), but do not let the worldview tip into mo
   true, never unbreakable). `argued` (history of physics:
   Newton, Mercury/GR, QM) · §phenomenon or §truth (placement open)
 - **F6c.** TWO REGIMES, and math is the DETACHED one. Empirical truth (F6/F6b)
-  answers to the world and is asymptotic to the PHYSICAL noumenon; reality reddens
+  answers to the world and is asymptotic to the PHYSICAL noumenon; reality refutes
   it. Mathematical truth is detached from reality itself: it answers only to its
   axioms, and SELF-CONSISTENCY (proof, the absence of contradiction) is the whole
-  tester. No world-signal reddens a theorem; a counterexample or an inconsistency
+  tester. No world-signal refutes a theorem; a counterexample or an inconsistency
   does, both internal. So the noumenal-asymptote headline is scoped to EMPIRICAL
   truth; formal truth is buildable-but-detached. THIS IS WHY math is the cleanest
   ledger case (S2: untrue conjecture → proven/refuted, crisp migrations): the test
@@ -584,7 +584,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
 - **F7.** THE TWO-GRAPH ARCHITECTURE (resolves the bivalence triangle). Empirical
   and platonic truths live in DISJOINT hypothesis graphs. (i) EMPIRICAL graph:
   truth graded, asymptotic to the noumenon (F6), credence in [0,1), the world
-  reddens, no node absolute. (ii) PLATONIC graph: truth DECISIVE within a
+  refutes, no node absolute. (ii) PLATONIC graph: truth DECISIVE within a
   stipulated formal system where proof is available, truth-WITHOUT-grade; warrant
   complete relative to its axioms, reachable because the regime has NO external
   noumenon, the system is closed; where proof or refutation exists, warrant closes
@@ -621,8 +621,17 @@ already earned (see audience-register), but do not let the worldview tip into mo
   empirical entitlement is required) — THE characteristic error (see `## TYPE FRAMING`).
   The exact DUAL
   of the withheld benchmark: that hides its empirical test, this lacks one and
-  borrows a platonic substitute (/auditing-deepswe). `argued + grounded`
-  (Einstein 1921) · §two-graphs, sets up F7b
+  borrows a platonic substitute (/auditing-deepswe).
+  EFFECTIVENESS (fresh-reader objection, 2026-06-13): if the platonic graph is
+  firewalled, why is math so "unreasonably effective" at physics (Wigner)? IN-FRAME
+  ANSWER: formal structure is what empirical hypotheses are BUILT from; the entitlement
+  still comes from the world-test, not the formalism; the structures we call effective
+  are the ones whose builds STOOD (survivorship, never confirmed across the wall, only
+  kept standing). Does NOT dissolve the residual puzzle (why the world is compressible
+  at all), itself an empirical fact on the empirical side of the wall. Point of adding
+  it: a fresh reader who is not shown the objection reads the wall as DECREED; naming it
+  with the in-frame answer is what makes the wall read as ARGUED. `argued + grounded`
+  (Einstein 1921; Wigner 1960) · §two-graphs, sets up F7b
 - **F7b.** STRING THEORY — a tight WORKED TYPE-MISMATCH EXAMPLE supporting the type boundary
   (RE-BILLED 2026-06-13: NOT a whole-apparatus showcase; it illustrates the crossing error —
   platonic warrant presented as empirical — so keep it tight; CHARITABLE and DATED). The moves,
@@ -633,7 +642,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
     says "I am untrue, here is the test"; string theory's test sits past anything we
     can probe (Planck-scale).
   - THE CHARGE (Woit *Not Even Wrong*; Smolin): not-even-falsifiable. The landscape
-    (~10^500 vacua) accommodates almost any data, so nothing reddens it = NO KILL EDGE.
+    (~10^500 vacua) accommodates almost any data, so nothing refutes it = NO KILL EDGE.
   - E1 + A5 + C3 FIRE TOGETHER: no kill edge means irrefutable = useless = EDGELESS,
     a DETACHED node, a platonic structure with no edge to reality presented as physics
     (E1); cannot be false, so cannot be phenomenally true (A5); the "not even wrong"
@@ -658,7 +667,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
     intelligence is not the bottleneck, the KILL EDGE is; even maximal brilliance,
     with no reachable falsifier, stalls (the human mirror of "more internal effort
     cannot cross the calibration wall"). And "from how we see it TODAY": this verdict
-    is itself a dated, reddenable standing build, held to the paper's own standard;
+    is itself a dated, refutable standing build, held to the paper's own standard;
     if a kill edge ever lands (swampland-style falsifiability), it updates. C3
     protects the honestly-labeled program; the error is presenting the platonic build
     AS the empirical result, or quietly dropping that the test is out of reach.
@@ -690,7 +699,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   (prose was doing list-work worse than a list). FIGURE (2026-06-12): the mapping is
   also rendered as a graphic, `/assets/truth-compilation-light.svg`, "How truth is
   compiled" — a left-to-right compile pipeline (claim → provenance edges down to
-  trusted roots → run the test, the world reddening → three verdicts green/red/hung
+  trusted roots → run the test, the world answers → three verdicts green/red/hung
   → a dashed stranger-replay loop back into the build). The one figure spans the
   act: E1-E3 edges, C2/C2a three states, C1a/C1b replay. Placed after the mapping
   list in §edge. `definition` ·
@@ -704,7 +713,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
 - **E5.** Relativism guardrail: buildable does not mean manufacturable to spec.
   The build includes a test that can fail; a build that can never fail is a
   hardcoded return value, `return 0.70`, a mocked test reporting green. Pairs
-  with F4 (the world must be able to redden it). `argued` · §edge, also §truth
+  with F4 (the world must be able to refute it). `argued` · §edge, also §truth
 
 ## C — The three contributions, scoped narrow · §why-agent-native, §ledger
 
@@ -923,7 +932,7 @@ Human side (the parts bin):
   lives; a machine that builds inquiry into an inspectable structure can.
   `grounded + positioned` · §intro, §related-work
 - **R2.** Kant: the frame (F group), recruited for the boundary only; the
-  reddening departure is ours and is flagged as such. `positioned` · §phenomenon
+  refutation departure is ours and is flagged as such. `positioned` · §phenomenon
 - **R3.** Popper: capacity to fail as the mark of a claim that says anything;
   "irrefutability is not a virtue but a vice" is narrower than ours
   (unscientific, not untrue), concede the widening. `grounded + positioned`
@@ -1013,7 +1022,7 @@ Machine side (the neighbors):
   claim, and its WARRANT lives in the outward edge (E1). Future work is not
   "more research" but the specific edge that keeps the paper accountable: deploy
   the framework, measure whether the claimed accountability and coordination
-  actually emerge, and let the result redden or confirm the epistemology. Closes
+  actually emerge, and let the result refute or confirm the epistemology. Closes
   the loop on C5: the delta is operationalization, so application is its proof.
   Witnesses already on this edge: the hygraph paper, abductor, the agent harnesses.
   `declared + argued` · §future-work, ties E1 + S-group + C5
@@ -1158,7 +1167,7 @@ these are the author's own priors, linked for lineage and texture.
   delta vanishes. (RETIRED by F7: bivalence is housed in the platonic graph, the
   three states stay warrant-states; kept here as the test F7 must keep passing.)
 - K6. Exhibit a claim the paper must call phenomenally true that the world could
-  not in principle redden → F4's leash breaks and the view collapses into the
+  not in principle refute → F4's leash breaks and the view collapses into the
   idealism it disclaims.
 - K7. Exhibit a rational, certified credence-1 EMPIRICAL state (a tier above
   belief for a world-claim), or an empirical claim that could never be demoted
@@ -1507,7 +1516,25 @@ edge (the build made checkable) and zooms out single-agent → population.
     canon; accountable failure outranks unaccountable assertion. Every primitive is borrowed; the
     contribution is the exact contract that makes them run as one, the encodable boundary that lets
     reasoning cross machine and social bounds."
-
+- 2026-06-13: REGISTER FIX, redden/break -> refute (reverses the 2026-06-12 `reddening->break`
+  above). Author: "breaking a build is too much CS, not enough epistemics." `refute` is the native
+  epistemic verb and pairs with `confirm` (the dyad the asymmetry argument turns on: world refutes,
+  never confirms). Swapped the coined `redden` vocabulary throughout (reddens/reddened/reddenable/
+  reddening -> refute/refuted/refutable/refutation; the red/green CI pair `reddening-only / never
+  greening` -> `refuting-only / never confirming`). KEPT as deliberate non-CS uses: "a wrong build
+  breaks against it" (F-spine + Paper 1 abstract, waves-against-rock physical image), the built/broken
+  music and breaks/builds wordplay in the prose view, and the green/red/hung verdict shorthand.
+- 2026-06-13: TWO-GRAPHS PRESENTATION PASS (fresh-reader feedback: the type-split reads as
+  ASSERTED; Einstein's epigram lands like a QED). Taken as a PRESENTATION problem, not substance
+  (the crossing rule F7a IS the argument; it was just rendered downstream of the wall). Three
+  render moves in §two-graphs: (1) INVERT the order, lead with where each entitlement is earned
+  (empirical = surviving a world-test; platonic = proof against axioms, no world in the loop) so
+  the wall FALLS OUT of the argument instead of being decreed; was "from the wall falls a crossing
+  rule". (2) Einstein is a CUTE BOLSTER, not authority-deference (author): keep the epigram, just
+  position it AFTER the argument so it reads as the compression it is, not the proof. (3) NAME the
+  effectiveness objection (Wigner) in one short paragraph with the in-frame survivorship answer +
+  one-sentence compressibility bound (new F7a point). String theory (F7b) then reads as the wall
+  sorting. No renormalization worked example (considered, left out as substance-adding).
 ## Citation map (pre-render)
 
 Two tiers, held apart (the tiering rule). LOAD-BEARING = canonical sources only;
