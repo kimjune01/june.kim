@@ -47,12 +47,16 @@ grep -oE '/assets/[a-z0-9-]+\.svg' "$SRC" | sort -u | while read -r ref; do
 done
 
 echo "==> Preprocessing markdown"
-# Strip Astro YAML frontmatter; rewrite /assets/*.svg -> tempdir PNGs;
-# convert inline-math backticks for common math identifiers so pandoc renders LaTeX math.
+# Strip Astro YAML frontmatter; rewrite /assets/*.svg -> tempdir PNGs; turn the
+# raw-HTML <figure>/<img> blocks into markdown images so pandoc actually embeds
+# the rasterized figures; convert inline-math backticks for common math
+# identifiers; fold glyphs the PDF font lacks (arrows, >=, check/cross) to ASCII.
 sed '1{/^---$/!q;};1,/^---$/d' "$SRC" \
   | sed -E "s|/assets/([a-z0-9-]+)\.svg|$TMPDIR/\1.png|g" \
+  | sed -E 's#<img[^>]*src="([^"]+)"[^>]*>#\n![](\1)\n#g' \
+  | sed -E 's#</?figure[^>]*>##g; s#</?figcaption[^>]*>##g' \
   | sed -E 's/`(S_n|p_0|p_1|p₀|p₁|ε|X_i|FAIL_TO_PASS|PASS_TO_PASS|H|T|N|K)`/$\1$/g' \
-  | sed 's/✓/Y/g; s/·/—/g' \
+  | sed 's/✓/Y/g; s/✗/N/g; s/◐/~/g; s/·/—/g; s/→/->/g; s/⇒/=>/g; s/≥/>=/g; s/≤/<=/g' \
   > "$TMPDIR/paper.md"
 
 echo "==> Compiling with pandoc + tectonic"
