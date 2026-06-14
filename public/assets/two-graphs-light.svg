@@ -43,13 +43,13 @@
     <path d="M490,215 L445,265"/>
     <path d="M530,123 L490,215"/>
   </g>
-  <g fill="#ffffff" stroke="#1d1d1d" stroke-width="1.7">
-    <circle cx="450" cy="140" r="9"/>
-    <circle cx="530" cy="123" r="9"/>
-    <circle cx="585" cy="185" r="9"/>
-    <circle cx="490" cy="215" r="9"/>
-    <circle cx="570" cy="245" r="9"/>
-    <circle cx="445" cy="265" r="9"/>
+  <g fill="#1d1d1d">
+    <circle cx="450" cy="140" r="8"/>
+    <circle cx="530" cy="123" r="8"/>
+    <circle cx="585" cy="185" r="8"/>
+    <circle cx="490" cy="215" r="8"/>
+    <circle cx="570" cy="245" r="8"/>
+    <circle cx="445" cy="265" r="8"/>
   </g>
   <text x="515" y="342" text-anchor="middle" font-size="15" letter-spacing="2.5" fill="#1d1d1d">formal</text>
 </svg>
