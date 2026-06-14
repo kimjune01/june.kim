@@ -7,7 +7,7 @@ tags: methodology, epistemology, coding
 keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cognitive architectures, LLM agents, provenance, auditability, falsifiability, machine epistemics, post-cutoff evaluation
 ---
 
-*[Download PDF](/assets/methodeutic-harness-paper.pdf) · arxiv-shape preprint, rebuilt from this source. · Receipts: [the bench run](https://github.com/kimjune01/swebench-pro) · [the determinacy audit](https://github.com/kimjune01/swebench-pro-audit) · [the mechanism experiment](https://github.com/kimjune01/hygraph-mechanism), each reproducible from its own committed artifacts.*
+*[Download PDF](/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf) · arxiv-shape preprint, rebuilt from this source. · Receipts: [the bench run](https://github.com/kimjune01/swebench-pro) · [the determinacy audit](https://github.com/kimjune01/swebench-pro-audit) · [the mechanism experiment](https://github.com/kimjune01/hygraph-mechanism), each reproducible from its own committed artifacts.*
 
 ## Abstract {-}
 
@@ -634,7 +634,7 @@ The result is narrow. In the domain where every step is checkable, an agent's re
 - **OSS deployment trace.** ~385 hypothesis graphs at [`kimjune01/sweep/repo-hypotheses/`](https://github.com/kimjune01/sweep), one per investigated issue; PR-level outcomes pinned at `kimjune01/kimjune01@paper-2026-05-28`.
 - **Replication.** Boxes, budget, the per-instance cost ledger (`COST_BASIS.md`), and the step-by-step rerun live in the run repo and the field guide [How Not to Run SWE-bench Pro](/how-not-to-run-swebench-pro).
 - **Companion writing.** The instrument story and field guide: [How Not to Run SWE-bench Pro](/how-not-to-run-swebench-pro). The error corrected here, from the inside: [Precisely Wrong](/type-iii-error). The epistemology the discussion rests on: [Verifiable Knowledge](/verifiable-knowledge) and its frame [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true); its buildable-truth core in brief: [Truth Is Buildable](/truth-is-buildable). Dated provenance posts establish parallel rather than derivative development: *Theory is load-bearing* (2026-03-17), *The proof manual* (2026-04-05), and *Type the question* (2026-04-08) predate ADI (2026-04-17); *Evidence has a trajectory* (2026-04-27) and *The Hypothesis Graph* (2026-04-28) predate CMM (2026-05-26).
-- **PDF.** Arxiv-shape build at [/assets/methodeutic-harness-paper.pdf](/assets/methodeutic-harness-paper.pdf), rebuilt from this markdown source by `scripts/build-paper-pdf.sh`; the source is canonical.
+- **PDF.** Arxiv-shape build at [/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf](/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf), rebuilt from this markdown source by `scripts/build-paper-pdf.sh`; the source is canonical.
 - **DOI.** Prior-generation verified artifact: Zenodo-DOI'd. Mechanism experiment ([hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism)): [10.5281/zenodo.20691973](https://doi.org/10.5281/zenodo.20691973). Pro bundle ([swebench-pro](https://github.com/kimjune01/swebench-pro)): [10.5281/zenodo.20691977](https://doi.org/10.5281/zenodo.20691977). This paper: DOI pending.
 - **License.** Skills released under **CC-BY-SA-NS** ([june.kim/cc-by-sa-ns](https://june.kim/cc-by-sa-ns)); repo-level terms in each `LICENSE.md`. The harness an outsider clones is the same harness that produced the published numbers.
 
