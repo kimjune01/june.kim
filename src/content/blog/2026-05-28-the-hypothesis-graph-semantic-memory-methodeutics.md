@@ -70,7 +70,7 @@ So here are the four claims:
 
 The instrument is the systems contribution; the epistemology is what it makes possible: a position on what makes a claim checkable, what agents owe the people who act on their outputs, and where merit attaches. The instrument is concrete, the epistemological claim primary, and it survives exactly where the benchmark result nulls.
 
-This work is unincentivized public research. Its only standing is the auditable trail: every claim above ties to a committed receipt, the nulls included.
+This work is independently funded by the author. Its only standing is the auditable trail: every claim above ties to a committed receipt, the nulls included.
 
 ## The hypothesis graph {#hygraph}
 
