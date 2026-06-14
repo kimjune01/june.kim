@@ -805,11 +805,19 @@ affordance names its warrant or its honest status:
   degrades as the diff / case-space grows: langing a large structured operation
   is the failure mode /dont-lang-what-you-can-math already names (code-as-input →
   hallucination). NOT model size (author correction 2026-06-13: "especially large
-  ones" = large diffs). EXTERNAL SUPPORT: context-length research — **context rot**
-  (Chroma, 2025) and **lost-in-the-middle** (Liu et al., TACL 2024) — finds
-  in-context performance degrades with input size; the published anchor under the
-  diff-size claim (VERIFY exact cites at render; tier the load-bearing weight on
-  the peer-reviewed lost-in-the-middle, context rot as the named phenomenon).
+  ones" = large diffs). GROUNDING (author override 2026-06-13, render pass): the
+  diff-size claim is a **CONTEXT-ROT story, NOT a lost-in-the-middle story**.
+  lost-in-the-middle is POSITIONAL (mid-context placement) and was CUT as a lazy/
+  bandwagon cite (codex concurred: it grades placement, not size; author: "you're
+  just wanting to cite it because everyone else cites it"). The real, author-owned
+  ground = **/context-synthesis-is-quadratic** (self-link): the XOR is a SYNTHESIS
+  task (relate cases pairwise to find the mishandled one), so its load grows with
+  the SQUARE of the case-space where a fact-lookup grows linearly → super-linear
+  in-context degradation. **context rot** (Chroma 2025) kept as the named
+  phenomenon (fall-off as input grows), scoped honestly: names the shape, NOT a
+  measurement of XOR degradation; flag the missing direct measurement rather than
+  borrow a result that grades something else. /dont-lang-what-you-can-math = the
+  math-vs-lang framing.
   TWO REGIMES: (i) ENDPOINT, by construction, NO experiment — when the XOR's
   operands exceed the context window, in-context computation is impossible by
   definition, so externalization is the ONLY option at scale, not merely better
@@ -1078,19 +1086,102 @@ What changed (graph, this file):
       grounded by reference to /dont-lang-what-you-can-math) + **K9**.
 
 Remaining (paper view `...the-hypothesis-graph-semantic-memory-methodeutics.md`),
-NOT yet rendered — author to confirm declaration wording before prose pass:
-- [ ] Abstract + §intro claims: foreground T3 (abduction the missing mode; XOR a
-      math op the field langs; triad completion lifts capability). Keep claim-2's
-      encoded-reasoning spine; add the abduction name over it.
-- [ ] §right-regime: state beats 1–2 plainly (it works; existence + necessity);
-      fold codex from "negative case" to "even brute force attempts the XOR";
-      present multi-model as coverage-bound necessity NOT a scoreboard, with the
-      attractor + retraction caveats; MAGNIFY the climb (the inventoried beats).
-- [ ] De-frame "mechanism": cut the 33× reliance to where a literal causal claim
-      is made; retitle "Results: the mechanism, in full" off the crutch word.
-- [ ] §grounding / §application: confirm still load-bearing for beats 3–4 (the
-      triad + CRUD + epistemic grounding = why the math op is buildable/grounded).
-- [ ] §future-work: add FW2 (own conjecture node) + FW3, each with its kill;
-      /dont-lang-what-you-can-math as the FW3 ground-by-reference anchor.
-- [ ] Citation guard holds: XOR-necessity synthesis stays a self-link, not a
-      load-bearing citation; rest on standard DPI (Cover & Thomas).
+render pass 2026-06-13 (build verified, 503 pages, anchors resolve):
+- [x] **Abstract + §intro claims: T3 foregrounded — APPROVED ("commit, but soften")
+      + committed 2026-06-13.** Epigraph + amnesiac-contractor opening left intact
+      (proposed-first, not overwritten). Abstract: two sentences seat abduction as
+      the unnamed third mode (field owns deduction=compiler/types, induction=tests/
+      benchmarks) + XOR-as-math-op tethered to the external oracle; SOFTENED per
+      author — jewel stays primary ("holding all three as kill-graded nodes is what
+      the graph is for, and one facet it lets you externalize is that abductive
+      step"), NOT "first-class / sharpest demonstrated power"; closing "Externalizing
+      that one step thus delivers...". Intro "more vs the other answer" ¶: abduction-
+      as-missing-mode beat added, XOR tethered to §(application) (never floats free).
+      Claim-2 retitled "A mechanism, dissected: abduction externalized"; closing
+      clause → "deliver the abductive step the model does not reach alone". Encoded-
+      reasoning spine + DPI + Verus witness + merit close all preserved. No em-dashes.
+- [x] §right-regime / §enum-calib: multi-model robustness rendered as a "*Not one
+      model's artifact*" paragraph after the corrected-calibration ¶. Retraction-safe:
+      "workflows" not "families", "behavioral carve-out" not "same mechanism",
+      "recall not required, not excluded", efficiency/endpoint NOT claimed (retracted),
+      MANDATORY attractor caveat present (gate-funnelled, not independent
+      rediscovery), codex-CLI does-not-clear-in-either-protocol + fairness control,
+      read as coverage-bound NOT a scoreboard; necessity typed as the FW2 conjecture
+      (no "must" in the empirical wording). Source: hygraph-mechanism RESULTS.md
+      (Fable/Sonnet 4.6 clean, Composer 2.5 dirty, all near-A, same ho5 miss).
+- [x] De-frame "mechanism": light pass. Retitle already in place ("Results: the
+      mechanism, in full"). Softened 3 crutch uses to "lift"/"capability lift"
+      (§other-cases ×2, §null-regime ×1); kept the literal causal uses (frontier
+      "the same mechanism predicts its own failure"; §audit "predicted signature of
+      a mechanism"; §discussion "a mechanism that can occur"; the "mechanism
+      experiment" repo name). Count 33→~30; the keystone causal claims stay bold.
+- [x] §grounding / §application: confirmed load-bearing and left intact — the
+      three-modes figure + "Peirce alone named abduction" (§grounding) and the
+      bi-abduction diff figure "the XOR isolates the figure from the ground"
+      (§application) already tether the math-op claim; the proposed abstract/intro
+      point the XOR claim at §(application) so it never floats free.
+- [x] §future-work: FW2 (XOR is the necessary, necessarily-external operation of
+      inquiry; cross-paper spine kept as self-links/suggestive, K8 kill stated) +
+      FW3 (in-context abduction degrades with diff size; endpoint-by-construction vs
+      graded-interior; lost-in-the-middle Liu TACL 2024 + context rot Chroma 2025 at
+      conjecture grade, verify-at-camera-ready; /dont-lang-what-you-can-math anchor;
+      K9 kill stated) added as two conjecture bullets after "Coverage as the design
+      lever". §enum-calib forward-points to them.
+- [x] Citation guard holds: XOR-necessity synthesis (WCBF/VK/compress-and-unfold)
+      rendered as SELF-LINKS "suggestive rather than evidential", not load-bearing
+      cites; the boundary still rests on standard DPI (Cover & Thomas, §enum-calib).
+
+## Codex substantiation pass + author corrections (2026-06-13, render pass 2)
+
+Codex review run focused on substantiation (not prose). Build green throughout
+(503 pages). Applied, with author overrides that SUPERSEDE earlier node guidance:
+
+- [x] **No novelty over abduction (author override, supersedes T3 "unnamed third
+      mode").** Infer (bi-abduction) and Voyager (observe-hypothesize-test) BOTH did
+      abduction, with success — paper now says so explicitly and disclaims novelty
+      over the mode. Contribution reframed: abduction *fits in a harness, graded
+      from outside the model, and lifts where nothing else did*. All "first"/
+      "unnamed"/"no tradition built that one"/"first general reasoner" claims CUT
+      (not hedged — author: "we're not playing territory-grabbing games; novelty is
+      the XOR discovery + epistemology + the composition"). Abstract + intro + §3
+      reworded; ToTh "Peirce" table cell fixed to "abduction/deduction/induction…
+      (no Peirce cite)" to match the Related-Work text (codex caught the contradiction).
+- [x] **XOR = bi-abduction, tether made EXPLICIT (author: "XOR is just a coded term
+      for bi-abduction, we weren't making the link explicit enough").** "math op"
+      scoped to "this harness operationalizes"; new identity sentence in §application
+      names the XOR as shorthand for bi-abduction's figure/ground split (Calcagno/
+      O'Hearn cited for what bi-abduction actually establishes, not for "XOR").
+      Resolves codex's "floats free as a redefinition" flag by tethering harder, not
+      softening away.
+- [x] **DPI demoted to theoretic motivation (author: "DPI is mostly theoretic,
+      proving it is out of scope").** §enum-calib DPI ¶ reworded "offered as
+      motivation rather than proof… turning this into a theorem… is out of scope";
+      Cover & Thomas kept, /compress-and-unfold self-link kept.
+- [x] **FW3 regrounded (author: "large XOR is a context-rot story, not a
+      lost-in-the-middle story"; "lost-in-the-middle is a lazy citation").**
+      lost-in-the-middle CUT entirely. New ground = **/context-synthesis-is-quadratic**
+      (author's own prior, self-link): XOR is a SYNTHESIS task → load grows with the
+      SQUARE of the case-space → super-linear in-context degradation. context rot
+      (Chroma 2025) kept as the named phenomenon, scoped (names the shape, not a
+      measurement); missing direct measurement flagged, not papered over. See FW3
+      node above (updated). FW2 kill sharpened to codex's operational form (de-
+      tautologized: "self-authored labels only, no external label/replay/human-
+      approved reference/environmental execution before the discriminating step").
+- [x] **Multi-model wording tightened** (codex residuals): "reach"→"driven to";
+      "recall not required for this fix-class"→"these runs do not require a recall
+      explanation for this case"; "every instance reaches for"→"every successful run
+      here uses the same externally supplied discriminator"; budget-artifact phrasing.
+- [x] **NEW §bench framing (author, approved → §bench de-frame): observability /
+      reliability / attribution, NOT performance.** Added ¶ to the §bench opener:
+      benches grade performance, but a harness is bottlenecked on observability,
+      reliability, attribution; the four intro problems are all of that kind; grounded
+      on the existing null + SWE-Effi (gate×oracle fixed → model tier moves ~2pts).
+      Author's "no harness lift with stronger models since 2025" intuition kept as
+      MOTIVATION only — the substantiated kernel (SWE-Effi + pair-swap) is stated, the
+      bald temporal claim is NOT asserted (no receipt).
+- [x] "debugging tools discard the search" softened (codex: some keep logs) →
+      "do not persist the search as a typed, replayable hypothesis graph".
+
+NOT yet done: nothing committed to git (author to confirm). PDF rebuild still pending
+(BACKLOG D). Cover & Thomas + context-rot + Capucci bib entries still owed in lineage
+appendix if the inline cites are to resolve formally.
