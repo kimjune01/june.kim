@@ -552,6 +552,31 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   approved history. Honest asymmetry: a *fresh* bug's hard arm has no golden
   until a human judges (why #2501 took expertise). `design + bounded` ·
   §Results enum-calib, §13 future-work
+  - **MEASURED CORRECTION (2026-06-14, K3 control run; force-graded #2501 at its own
+    toolchain 1.95.0; logs/gold2501/, hygraph-mechanism master a35cd78/102bc4b).**
+    #2219's two divergence probes are NOT equal. **t3 = in-bar** (#2501 VERIFIES it;
+    the corrected-gate arm must preserve it). **ho5 = a STRETCH GOAL beyond #2501's
+    bar** — #2501's PR body (approved by Hawblitzel) trusts divergence only for a
+    non-spec `!` return, "overly conservative because there might be other uninhabited
+    types"; ho5 (`mk::<!>()`) is one of those, so **#2501 over-rejects ho5 BY DESIGN,
+    soundly.** TWO claims FLIPPED + propagated: (1) the **ho5-based anti-recall leg is
+    VOID** — gold also misses ho5, so "gold is finer / clears a case the arms miss"
+    cannot separate memorizer from reconstructor; anti-recall now rests on clean
+    models (Fable/Sonnet) + #2501-merged-2026-06-05 postdating Composer's 2026-05-18
+    ship. (2) **"#2501 is the genuinely finer fix neither automated arm captured" has
+    NO behavioral support** — force-graded, the three corrected-gate near-A arms
+    (Fable clean, Composer dirty, Sonnet clean) return the SAME verdicts as #2501 on
+    ALL 8 probes (t1,t2,t3,h2×2,ho5,p1,seal); "finer" downgraded to a SOURCE/impl
+    claim (different code, identical behavior). NET (stronger for the thesis): with
+    the divergence golden supplied, the corrected arm reaches the **merged human
+    fix's behavior on every graded probe** (scope: n=1/workflow, these probes, full
+    269-case-check not co-gradeable across toolchains). Endpoint reframed paper-wide:
+    NOT "model falls short of the finer human fix / ho5 a shortfall" but "calibration
+    closes the gap to the shipped human bar; the residual (ho5) is beyond that bar,
+    #2501 declines it too." Supersedes the inferred-ho5 hedge (render pass 5) and
+    kills the K3 open control. Receipts: hygraph-mechanism LESSONS 12 (right) vs 13
+    (was wrong, now fixed); E7's "#2501 = represented predicate" already demoted to
+    mode-gate (pass 4); this corrects the divergence/finer-fix half.
 
 ## F — Epistemic foundation · §12 discussion
 
@@ -1308,3 +1333,44 @@ a logged, unrun control).
       the paper; the new receipts row (pass=false, crash=1250, p1 over-rej) corroborates
       it — no paper change needed. clean_regrade stat-order fix is repo-internal.
 Build verified (503 pages). june.kim committed; receipts branch commit local (unpushed).
+
+## ho5 force-grade reclassification (2026-06-14, render pass 6) — author: "edit and propagate"
+
+Pulled hygraph-mechanism master again: the K3 control was RUN. #2501 force-graded at
+its own toolchain → **over-rejects ho5**, inverting the inferred claim. ho5 reclassified
+as a STRETCH GOAL beyond #2501's shipped bar; t3 is the in-bar divergence case #2501
+verifies. The three corrected-gate near-A arms match #2501 on all 8 probes. Two claims
+flipped (see E9 MEASURED CORRECTION). Propagated paper-wide (10 edits, build green):
+
+- [x] **Abstract + intro claim-2:** endpoint reframed from "fully sound general fix is
+      the maintainer's / remaining gap is coverage" → "supplying the coverage carries
+      the model to the merged human fix's behavior on every graded probe; remaining gap
+      is coverage, not capability."
+- [x] **§verus-bench (hard probes):** the two divergence probes split — in-bar (human
+      fix preserves, golden corroborated by the shipped bar) vs stretch (human fix
+      declines too, golden = operator ideal not a shipped behavior).
+- [x] **§verus:** handed-gate fix "not yet the maintainer's sound one" → "not yet the
+      merged human fix … in-bar divergence case the human fix preserves."
+- [x] **§frontier:** dropped "#2501 is the genuinely finer fix neither automated arm
+      captured" (no behavioral support); the gap closes once calibration is supplied
+      (§enum-calib reaches human-fix behavior). The two over-rejected divergence cases
+      split into in-bar (real flaw) vs stretch (human fix declines too, not a flaw).
+- [x] **§enum-calib:** corrected arm "matches the merged human fix on every probe …
+      closes the gap to the shipped human bar; residual sits beyond that bar, not below
+      it." Asymmetry ¶: the hardest look-alike is declined even by the human fix.
+- [x] **Multi-model "Not one model's artifact" ¶:** near-A recast from "wide-but-broken
+      carve-out" → matches #2501 on every probe (preserve in-bar divergence, decline the
+      stretch case the human fix declines). The ho5 anti-recall leg **withdrawn in-text**
+      ("one earlier anti-recall argument is withdrawn here, because the control … was
+      finally run … the human fix is behaviorally identical … cannot separate a
+      memorizer from a reconstructor"). Recall now rests on clean models + the dated
+      #2501-postdates-Composer anchor.
+- [x] **Ablation table caption:** removed the (now stale) inferred-toolchain caveat;
+      column relabeled the in-bar divergence; added that a harder stretch case is
+      declined even by #2501; fixed "no automated arm makes that move" → the wide gates
+      shown don't, but supplying the divergence golden moves a corrected arm to the
+      human fix's behavior. (Table cells unchanged: divergence column = the in-bar case,
+      #2501 ✓ measured, handed/self-built ✗.)
+- [x] E9 MEASURED CORRECTION node added; E7 mode-gate correction (pass 4) already
+      governs the predicate half. K3 open control closed.
+Build verified (503 pages).
