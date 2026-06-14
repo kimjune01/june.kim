@@ -1279,3 +1279,32 @@ Triggered by author Q ("is the general fix live on their repo"). Verified live v
       the lift — that is the codex-arm ROUTE (accurate as trace), but the operative-
       mechanism gloss is now the mode gate; left as provenance, governed by this note.
 Build verified (503 pages). Committed.
+
+## Pull hygraph-mechanism + propagate (2026-06-13, render pass 5)
+
+Pulled the receipts (branch `pilots-11-fable-minimal-ablation` @ 43ac2d0). The new
+commit added the matched-codex table row and, the load-bearing change, flagged
+**`#2501`-clears-`ho5` as INFERRED, not force-graded** (#2501 is at toolchain 1.95.0,
+not co-gradeable with the base-toolchain 1.93.1 arms; force-grading gold-on-`ho5` is
+a logged, unrun control).
+
+- [x] **Paper (§enum-calib multi-model ¶): hedged the anti-recall claim.** Was stated
+      as fact ("the human general fix is finer… clearing `ho5`… so a model that had
+      memorized the gold would have cleared it"). Now contingent: "appears finer…
+      would mean… but that `ho5` clearance is inferred, not force-graded here (#2501 at
+      a different toolchain, not co-gradeable); logged as an open control, and the
+      argument leans on it." The Fable/Sonnet recall-not-required point is unaffected
+      (that is force-graded).
+- [x] **Paper (ablation table caption): added the toolchain caveat** so the table's
+      "#2501 clears divergence" does not assert more than was graded ("the maintainer
+      fix's clearance of the hardest divergence probe is inferred from #2501 at its own
+      toolchain, not force-graded alongside these arms").
+- [x] **Receipts correction (hygraph-mechanism, branch, commit 823b811, NOT pushed):**
+      `MECHANISM-dissection.md` step 5 said "this is the lift: the verifier's own
+      general query" — corrected to the mode-gated-approximation framing inline, citing
+      the live `gh pr diff 2501` (keeps `is_never`, gates by call context) + the
+      RESULT-corrected cross-model redundancy. The receipts now match the paper.
+- [~] Multi-model "matched-codex rerun leaves the divergence wall standing" already in
+      the paper; the new receipts row (pass=false, crash=1250, p1 over-rej) corroborates
+      it — no paper change needed. clean_regrade stat-order fix is repo-internal.
+Build verified (503 pages). june.kim committed; receipts branch commit local (unpushed).
