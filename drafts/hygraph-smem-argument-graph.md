@@ -1185,3 +1185,45 @@ Codex review run focused on substantiation (not prose). Build green throughout
 NOT yet done: nothing committed to git (author to confirm). PDF rebuild still pending
 (BACKLOG D). Cover & Thomas + context-rot + Capucci bib entries still owed in lineage
 appendix if the inline cites are to resolve formally.
+
+## Codex argumentation+order sniff (2026-06-13, render pass 3)
+
+Sniff requested: argumentation + ORDER only, not prose. Applied Root A + Root B +
+honesty scoping; declined the structural reorders (codex conceded the spine is
+"basically right"; author concurred). Build green (503 pages).
+
+- [x] **ROOT A — align the top to what the body earns (codex soundness #1/#5/#6/#9).**
+      The contradiction: abstract/intro/§verus said "sound, general fix" / "recovers
+      the verifier's own decision procedure", but §frontier reveals wide-but-broken.
+      FIX: the model's external-gate fix is now "the verifier's own inhabitedness
+      query, a markedly more general fix bounded by gate coverage"; the *fully sound
+      general fix is the maintainer's (#2501)*. §verus reveals wide-but-broken AT the
+      point of the claim (in place, not a reorder). Intro claim-2 now types Verus as
+      "a mechanism that *can occur*, not a rate or a general boundary claim
+      (§right-regime, §limitations)" — existence framing pulled forward (#9).
+- [x] **ROOT B — graph=substrate vs oracle=intervention + axis tightened (soundness
+      #2/#7).** §right-regime now states plainly: the graph is NOT what moves the
+      number (every arm writes the same graph), the external oracle is; the graph is
+      the persistent replayable SUBSTRATE + the contributed object + the reason it's
+      auditable, and the experiment isolates ONE variable within it. Protects
+      jewel-not-facet without overclaiming the graph as the causal lever. Axis
+      tightened: externality is NECESSARY NOT SUFFICIENT — thin coverage → wide-but-
+      broken (§frontier); the real axis is whether the externally-supplied labels SPAN
+      the needed distinction.
+- [x] **Honesty #3** — "the oracle is not" scoped in §enum-calib: "at least not here…
+      scoped to that circularity, not a proof that no model could ever induce an
+      oracle from some other source." (matches the E8/K7 graph scoping.)
+- [x] **Honesty #4** — abstract DPI overclaim removed: "because by the data processing
+      inequality no internal computation imports the world-truth" → "since the missing
+      truth enters only from a world-facing trial, never from recombining what the
+      weights already hold." DPI now appears ONLY in §enum-calib, already demoted to
+      motivation/out-of-scope. Abstract/§enum-calib no longer inconsistent.
+- [x] **Honesty #8** — bench circularity defused in §setup: the regime is the audit's
+      INDEPENDENT complement ("marked it out independently, and before these results"),
+      not chosen because the method wins there. Foregrounds the audit criterion ahead
+      of the null.
+- [~] DECLINED (codex order #3/#5/#6/#7-order; soundness #10): move gate-general after
+      verus-bench, split enum-calib, reorder discussion, replay-auditability scoping.
+      Spine kept; higher risk/effort, low argument gain. Revisit only if a later read
+      snags. #10 (replay = checkability not sufficiency) already stated in §hygraph +
+      §limitations; left as-is.
