@@ -9,16 +9,26 @@ Statuses: `proven` (receipt-backed), `null-attributed` (null with mechanism),
 
 The graph is itself the demonstration: nodes typed, warrants named, kills explicit.
 
-## CURRENT STATE (2026-06-12) — read this first; governs where the dated blocks below conflict
+## CURRENT STATE (2026-06-13) — read this first; governs where the dated blocks below conflict
 
-- **Thesis:** reasoning can be ENCODED at the harness layer, not only run in the model. The encoded thing that does the work is a kill's external **oracle** (the ground-truth source), which the model cannot self-supply.
+- **Full altitude (one breath):** this is the *discovery of the one operation coding agents have been misdelegating to scale* — **abduction**, the XOR of diffs, a math op the field tries to buy with bigger models and longer context when it should be **computed**. Abduction is uniquely that operation: deduction and induction are already externalized (the compiler, the test suite); abduction alone still runs in-context. Encode it at the harness layer and you observe a performance lift through this specific operation; context-length research (**context rot**; lost-in-the-middle) says why scale won't fix it (in-context degrades with size). From the theory a **data structure falls out as a consequence** — the hypothesis graph — which, implemented, has the four properties and solves problems industry complains loudly about (verification crisis, agent trust, lost reasoning, review bottleneck). LOGICAL order = discovery → why (theory) → DS-as-consequence → properties / problems-solved; RENDER order is free (the view leads with the result, corners the bench).
+- **The trilogy & root-not-patch (2026-06-13):** to make the hypothesis graph *epistemically grounded* rather than a bolt-on, the author wrote two companions FIRST — the **epistemic paper** (/what-cannot-be-false-cannot-be-true: the frame, trichotomy + buildable truth) and the **protocol paper** (/verifiable-knowledge: knowledge between distrusting agents). This is the third, the **data structure**. Recipe: borrow **pragmatist inquiry** (Peirce's methodeutic — abduction / deduction / induction) and mash it with the **epistemics** (WCBF / VK) → the hygraph. Posture = **fix the problem at the root, not patch it over**: the industry patches with scale / longer context / RAG; the trilogy goes to the epistemic root (what entitles a claim to count as knowledge) and the data structure falls out as a consequence. This is the contrast under "misdelegating to scale" — scale is the patch, the trilogy is the root fix. CITATION TIERING: the two companions are grounded BY REFERENCE (author's-own-prior self-links / provenance), NOT load-bearing external citations; published claims still rest on standard results.
+- **The surprise, located (2026-06-13):** nothing observed is a surprise *under the hood* — the theory predicts every mechanical step (XOR is a math op; in-context degrades with diff size; externalizing it lifts). THE surprise is an **attribution** result: the **minimal necessary composition** that lifts performance over a *minimal-prompt + generic-advice* baseline. Generic rigor, methodeutic prompt vocabulary, and the bare task all come back NULL (§attribution); more scale is null for this band; the only load-bearing ingredient is the externalized abductive operation (enumerate → calibrate against an EXTERNAL oracle → gate). It is MINIMAL (strip almost everything and it still lifts) yet NECESSARY (substitute generic advice and the lift vanishes). That is the honest core: you would predict good-reasoning advice helps, and it does not; one specific composition does. CONSEQUENCE (not the surprise itself): that composition **dismisses the necessity for more scale** on the generalization-and-investigation band (localization-hard, verification-bottlenecked; the band §null-regime already fences) — bold + falsifiable, KILL K10. WHY scale won't close it: context rot / in-context XOR degrades with diff size (FW3). The cheapness (harness layer, no training, no GPUs) is the diagnostic confirmation, not the headline: a misdelegation fixes cheap, a capability gap would cost a training run, so the training-free lift is evidence FOR the diagnosis, and the weights never moved so the delta IS the encoding. The paper is itself inquiry in three modes: abduct the operation, deduce the harness fix must follow, induce it on the Verus receipt.
+- **The goal reframe (2026-06-13): generalize beyond induction.** Benchmarks re-solve bugs that already have fixes (induction: fit the visible tests, recall the known answer); that is not the capability that matters, and "we don't need to fix bugs that already got fixed." What we need is coding agents that **generalize beyond induction** — reach a sound *general* rule from incomplete evidence, covering cases never shown. That leap IS abduction (the missing mode): the narrow fix is the inductive fit (passes the reported case), the general fix is the abductive generalization (the predicate covering unseen held-outs). The Verus case is **one instance** of an agent doing it: the general fix rejects two OUT-OF-GRAMMAR held-outs (`<u8 as Tr>::A`, `G<G<Void>>`) it never saw, proving it *represents* the predicate rather than *tabulating* the inductive set. The mode-theoretic statement of the existing "beyond corpus synthesis / Sutton discovery" framing: not interpolating the evidence, reaching the rule. ALSO why the bench is the wrong instrument (it grades induction, the spec handed over: §audit). Existence-grade (n=1 instance), honestly typed.
+- **Thesis:** reasoning can be ENCODED at the harness layer, not only run in the model. The encoded thing that does the work is a kill's external **oracle** (the ground-truth source), which the model cannot self-supply. The encoded thing has a name: **abduction**, the unnamed third Peircean mode (T3).
 - **Lead witness = Verus #2219 (E7)** — a mechanism dissected on one historical, post-cutoff bug: six self-graded methods (the prose hypothesis-graph inquiry among them) plateau on the narrow fix; one externally-oracled arm reaches the general fix (recovers rustc's own inhabitedness query). Sharpest result: **enumeration is inducible, the oracle is not self-generable** (E8). The cognitive *why*: LLMs do **addition** (generate/enumerate) but not **subtraction** in-context (finding the complement, the case their hypothesis misses) — so the tool is *required*, not optional. n=1 is correct for a mechanism — do not apologize.
 - **Organizing axis = internal vs external oracle** (A5): where a kill's ground truth comes from; carrier (prompt vs CLI) incidental. `abductor` (D7) = the externalized oracle as a **bolt-on** onto codex / Claude Code (the real shipped ReAct harnesses = the industry baseline; harness held fixed, tool the only delta).
 - **Genre (A7): data structure + protocol, NOT pure DS** — the verifiable-log / certificate family (CT, PCC, PROV). hygraph = the data structure (smem); methodeutics + gate = the protocol (pmem). Punchline = **Local Replay Auditability** (A6 iv), not a big-O. Two replay levels (strong = the Verus case; artifact = LLM-driven trials). Invariant predicates on the mechanical SKELETON; the prose payload is un-invarianted by genre (A6 ii).
 - **§3 presentation discipline = A6** (middle scope, "formal enough to prevent rebranding"): named skeleton invariant + per-op preservation + comparison table + the TMS / provenance-log / search-tree rebuttals + honest by-construction-vs-conventional. Pre-empt **novelty collapse** (the #1 failure mode).
 - **Demoted:** flux #1613 (E4) → a one-paragraph pointer (§other-cases), auditability only (its lift oscillates de-hinted). The bench (B/C/D) → cornered instrument-note (oracle bracket C1 nulls it; do NOT re-inflate the 95.3% / 31–37pt bench-lift — that is the trap). Goal-setting/alignment → SECONDARY; the goal-predicate facet is CUT from the paper (don't fight alignment pedants), graph-internal only (P4).
 - **Discovery / Sutton (P5):** retained as the EPISTEMIC bookend (convex-hull framing cut), witness swapped flux→Verus.
-- **Source docs:** `drafts/data-structure-introduction-range.md` (DS-scope fan-out + 2 codex sniffs); `~/Documents/hygraph-mechanism` (pilot 11 = Verus); `~/Documents/abductor`.
+- **The arc (2026-06-13 re-spine) = four beats:** (1) *yes, it works*, plainly — externalized abduction lifts the model narrow→general (no coyness, no n=1 apology); (2) *existence + necessity-across-models* — one bug dissected END to END (existence) AND every model REACHES FOR the same operation (authored tool / in-context regeneration / brute force), so the lift tracks the OPERATION and its coverage, not model identity (necessity); (3) *hold up, WHY it works* — the encoding boundary (enumeration inducible, oracle not; DPI; abduction can't run in-context); (4) *how it fits the data structure we give the world* — the hygraph + methodeutics, grounded in WCBF/VK. §grounding + §application are the LOAD-BEARING support for beats 3–4, not decoration (author constraint: "theory sections still supporting").
+- **The operation = XOR-on-diffs (math, not lang).** Abduction's engine is the symmetric difference between what the fix changes and what the true predicate requires (the cases the hypothesis mishandles); the gate's `mishandles` count IS that XOR made numeric. The abductor *maths* the XOR instead of *langing* it — the rigorous, receipted instance of [Don't LLM What You Can Code](/dont-lang-what-you-can-math) applied to abduction, the one mode the field still langs.
+- **Multi-model evidence (merged to hygraph-mechanism master 2026-06-13, branch `pilots-11-fable-minimal-ablation`):** under the external corrected gate (gate2), Fable 5 (clean), Sonnet 4.6 (clean), Composer 2.5 (dirty) all reach "near-A" (general on the bug arm, clear calibrated divergence p1/p2, generalize to sealed held-outs) with the SAME carve-out and the SAME residual (`ho5` over-reject); codex-CLI does not pass in either protocol. Read as NECESSITY (operation universally attempted) + COVERAGE-BOUND lift, NOT a model scoreboard. RETRACTION-SAFE WORDING (codex review 2026-06-13, committed): "workflows" not "families" (model+harness confounded); "same behavioral carve-out" not "same mechanism" (Composer's impl differs); "recall not required, not excluded" (Composer dirty; clean precedent = Fable+Sonnet); "efficiency not endpoint" RETRACTED; MANDATORY caveat — shared `ho5` miss is likely the gate FUNNELING models to one attractor, NOT independent rediscovery of the true predicate.
+- **Two inferred mechanisms (2026-06-13), beat 3:** (a) *LLMs are weak at in-context XOR* — finding the case their own hypothesis misses self-mislabels (grades the complement against the belief under test: the v7 beat); INFERENCE-grade, grounded in enum-calib + DPI + addition/subtraction (/compress-and-unfold). (b) *In-context abduction degrades with DIFF SIZE* — not model size; the bigger the diff, the bigger the structured operation the in-context XOR ranges over (2856/7026-case grammars), and langing a large structured op is the failure mode /dont-lang-what-you-can-math already names. CONJECTURE-grade (FW3/K9); receipts do NOT establish the size-dependence (Verus is one diff size) — state as a named killed conjecture, never a finding.
+- **De-frame "mechanism" (note, 2026-06-13):** the word carries 33 occurrences in the paper view, leaning on the noun as a rhetorical crutch. The CLAIM stays bold ("it works"); the WORD comes out of the framing/headings where it does persuasive work. Earn it by shown gears (magnify the climb) + cross-model reproduction, not repetition. n=1 stays the right unit for the DISSECTION; multi-model is robustness OF that one dissection (existence + necessity, not a rate).
+- **Magnification (beat-2/3 craft, 2026-06-13):** §right-regime cites the 43,586-line trace but never shows it. Pull concrete beats: 281 case-check calls; plateau-then-break (`over-rej: p1` x5 → breakthrough); the grep discovering rustc's inhabitedness query (the lift); `is_never()`→`is_inhabited_from` before/after; the two out-of-grammar held-outs caught (`<u8 as Tr>::A`, `G<G<Void>>`); the v7 self-mislabel smoking gun. Inventoried from `~/Documents/hygraph-mechanism`.
+- **Source docs:** `drafts/data-structure-introduction-range.md` (DS-scope fan-out + 2 codex sniffs); `~/Documents/hygraph-mechanism` (pilot 11 = Verus; multi-model merged 2026-06-13); `~/Documents/abductor`.
 
 *Node sections (A–T, K, FW) below are current. The dated framing blocks and propagation logs are PROVENANCE/history — kept for the trail, superseded here.*
 
@@ -894,6 +904,19 @@ affordance names its warrant or its honest status:
 - **T2.** Publishing attributed nulls is part of the same posture: an
   unexplained null says stop; an attributed null says where to point the next
   instrument. `declared` · §12
+- **T3.** (2026-06-13) *Abduction is the unnamed, underappreciated operation in
+  agent-SWE.* The field operationalized **deduction** (compiler / types / proof)
+  and **induction** (tests / benchmarks); the third Peircean mode — form the
+  hypothesis, find the case it cannot explain — runs implicitly and ungraded
+  inside the weights. Its engine is **XOR-on-diffs**, a MATH op (the symmetric
+  difference between what the fix changes and what the true predicate requires),
+  not a LANG op; the abductor *maths* it instead of *langing* it
+  (/dont-lang-what-you-can-math). Seated in the triad (the hygraph holds
+  abduction / deduction / induction as CRUD-able, kill-graded nodes),
+  externalized abduction **expands capability** on reasoning tasks (the model
+  reaches a rule it does not reach alone). The instrument hooks the reader; the
+  data structure is the gift. `declared` · abstract, §intro claims, §grounding,
+  §discussion
 
 ## FW — future-work nodes added post-rewrite · §13
 
@@ -905,6 +928,31 @@ affordance names its warrant or its honest status:
   neither the question nor the credit (F5c: their alignment is obedience/
   conformance). Instrument design: reward pinning the spec before building.
   `future work` · §13
+- **FW2.** (2026-06-13) *XOR-on-diffs is the necessary operation of inquiry.*
+  Inquiry contracts H △ T, the symmetric difference between what you believe and
+  what is true; every warrant-producing step locates a member (a case the
+  hypothesis mishandles) and removes it. Generation cannot find it (addition has
+  no floor); only a disagreement evaluated against an external reference can — so
+  the operation is necessary AND **necessarily external**. The cross-paper spine
+  (WCBF refutation = finding a member of H △ T; VK stranger-replay = computing
+  the XOR against the build; /compress-and-unfold fold = the contraction step),
+  but **kept graph-internal as a conjecture in the paper view** — CITATION GUARD:
+  the cross-paper synthesis is author's-own-prior, NOT a load-bearing citation;
+  the published claim rests on standard results, the synthesis stays a self-link.
+  Own conjecture node in §future-work. `future work / conjecture` · §future-work
+  · KILL K8
+- **FW3.** (2026-06-13) *In-context abduction degrades with DIFF SIZE.* Holding
+  the harness fixed, a model's ability to self-compute the XOR over a diff
+  degrades as the diff / case-space grows: langing a large structured operation
+  is the failure mode /dont-lang-what-you-can-math already names (code-as-input →
+  hallucination). NOT model size (author correction 2026-06-13: "especially large
+  ones" = large diffs). EXTERNAL SUPPORT: context-length research — **context rot**
+  (Chroma, 2025) and **lost-in-the-middle** (Liu et al., TACL 2024) — finds
+  in-context performance degrades with input size; the published anchor under the
+  diff-size claim (VERIFY exact cites at render; tier the load-bearing weight on
+  the peer-reviewed lost-in-the-middle, context rot as the named phenomenon).
+  Conjecture-grade; the Verus receipt is one diff size.
+  `future work / conjecture` · §future-work · KILL K9
 
 ## Kill conditions (what would break the paper)
 
@@ -926,6 +974,12 @@ affordance names its warrant or its honest status:
   inducible after all), or an internally-calibrated method reaches general
   on a localization-hard bug → "enumeration inducible, calibration not" falls,
   and with it the sharpest claim of the re-spine.
+- K8. (2026-06-13) XOR-necessity (FW2) dies: exhibit inquiry reaching a sound
+  generalization that carries warrant, with NO step computing disagreement
+  against a reference outside the inquirer's own belief. Lucky guesses don't
+  count (no warrant); already-solved cases don't count (H △ T already empty).
+- K9. (2026-06-13) Diff-size degradation (FW3) dies: a within-harness sweep over
+  diff / case-space size shows in-context XOR accuracy flat or rising with size.
 
 ## Propagation of the inverted arc (2026-06-10)
 
@@ -1136,3 +1190,42 @@ Remaining (paper, ground by reference — link-anchors carry it, NO inline re-de
       too (Verus = a mechanism that *can occur*, not a rate/discovery);
       reflex≈kill, demotion≈credence-cap stated as the hygraph's own instances;
       links /type-iii-error + /wrong-questions.
+
+## Propagation of the 2026-06-13 re-spine (abduction declared; multi-model; XOR=math)
+
+Trigger: author session 2026-06-13. The lift is no longer framed as "a mechanism
+shown once"; it is framed as **abduction, the unnamed third mode, externalized as
+a math op** (T3), shown on one bug (existence) and reached-for by every model
+(necessity), explained by the encoding boundary, and seated in the data structure.
+New evidence merged to `hygraph-mechanism` master (branch
+`pilots-11-fable-minimal-ablation`): multi-model gate2 (Fable / Sonnet / Composer
+near-A; codex-CLI out) + fairness control + codex retraction.
+
+What changed (graph, this file):
+- [x] CURRENT STATE → 2026-06-13: four-beat arc; XOR-on-diffs = math-not-lang;
+      multi-model evidence + retraction-safe wording; two inferred mechanisms;
+      de-frame "mechanism"; magnification inventory. Thesis bullet names abduction.
+- [x] **T3** added (the declaration): abduction unnamed/underappreciated; triad
+      completion expands capability; instrument hooks, data structure is the gift.
+- [x] **FW2** (XOR-on-diffs is the necessary, necessarily-external operation of
+      inquiry; cross-paper spine, graph-internal conjecture) + **K8**.
+- [x] **FW3** (in-context abduction degrades with DIFF size, not model size;
+      grounded by reference to /dont-lang-what-you-can-math) + **K9**.
+
+Remaining (paper view `...the-hypothesis-graph-semantic-memory-methodeutics.md`),
+NOT yet rendered — author to confirm declaration wording before prose pass:
+- [ ] Abstract + §intro claims: foreground T3 (abduction the missing mode; XOR a
+      math op the field langs; triad completion lifts capability). Keep claim-2's
+      encoded-reasoning spine; add the abduction name over it.
+- [ ] §right-regime: state beats 1–2 plainly (it works; existence + necessity);
+      fold codex from "negative case" to "even brute force attempts the XOR";
+      present multi-model as coverage-bound necessity NOT a scoreboard, with the
+      attractor + retraction caveats; MAGNIFY the climb (the inventoried beats).
+- [ ] De-frame "mechanism": cut the 33× reliance to where a literal causal claim
+      is made; retitle "Results: the mechanism, in full" off the crutch word.
+- [ ] §grounding / §application: confirm still load-bearing for beats 3–4 (the
+      triad + CRUD + epistemic grounding = why the math op is buildable/grounded).
+- [ ] §future-work: add FW2 (own conjecture node) + FW3, each with its kill;
+      /dont-lang-what-you-can-math as the FW3 ground-by-reference anchor.
+- [ ] Citation guard holds: XOR-necessity synthesis stays a self-link, not a
+      load-bearing citation; rest on standard DPI (Cover & Thomas).
