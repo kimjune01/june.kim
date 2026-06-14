@@ -448,8 +448,21 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   `pending` · §13
 - **E7.** (2026-06-12, NEW LEAD WITNESS) **Verus #2219**: erased ghost `!`
   marks following MIR unreachable ⇒ sound program wrongly rejected. Narrow fix
-  keys on `is_never()` (= maintainer #2230, chg 114); general fix uses the
-  verifier's own `!ty.is_inhabited_from(...)` (= maintainer #2501). On a fixed
+  keys on `is_never()` (= maintainer #2230, chg 114); general fix #2501.
+  **FACTUAL CORRECTION (2026-06-13, live-PR verified via gh on verus-lang/verus,
+  render pass 4):** the earlier claim "general fix uses `!ty.is_inhabited_from(...)`
+  (= #2501)" was WRONG and is fixed in the paper. #2501's actual diff KEEPS
+  `is_never` and gates it by call context (`record_call_inhabitedness`,
+  conservative on proof-block `!`-returns) — i.e. #2501 IS the mode gate, the finer
+  fix that separates erased-ghost artifact from real divergence. The
+  `!ty.is_inhabited_from(...)` predicate was the MODEL's (codex arm) over-broad
+  route, behaviorally REDUNDANT (Fable reaches identical grading with no
+  inhabitedness query → operative mechanism = the mode gate, not the inhabitedness
+  oracle; per pilots/11 RESULT-corrected.md 2026-06-12). So "the model recovered
+  the verifier's own decision procedure" OVERSTATES — render now: model widens to a
+  mode-gated APPROXIMATION under gate pressure, wide-but-broken; #2501 is finer.
+  Live status: #2219 CLOSED 2026-06-05, #2230 MERGED 2026-03-09, #2501 MERGED
+  2026-06-05 (the merge that closed #2219). On a fixed
   toolchain, forced-fresh fingerprinted builds: **six internally-calibrated
   methods × 3 draws = 0/18 reach general** (modal chg 114); the single
   **externally-calibrated** arm is the sole general fix (pass=true, chg 269,
@@ -1227,3 +1240,42 @@ honesty scoping; declined the structural reorders (codex conceded the spine is
       Spine kept; higher risk/effort, low argument gain. Revisit only if a later read
       snags. #10 (replay = checkability not sufficiency) already stated in §hygraph +
       §limitations; left as-is.
+
+## Live-PR honesty correction (2026-06-13, render pass 4) — author: "we do as much honesty as we can"
+
+Triggered by author Q ("is the general fix live on their repo"). Verified live via
+`gh` on verus-lang/verus, and caught a FACTUAL ERROR the verification exposed.
+
+- [x] **Live status confirmed:** #2219 CLOSED 2026-06-05; #2230 (narrow) MERGED
+      2026-03-09; #2501 (general) MERGED 2026-06-05 (the merge that closed #2219).
+      Provenance in the paper (base 2026-03-08 → narrow next day → general 2026-06-05)
+      is accurate; post-cutoff for Fable (Jan 2026) holds.
+- [x] **FACTUAL FIX — #2501 mis-attribution.** Paper said "the general fix replaces
+      `is_never()` with the verifier's own inhabitedness query `!ty.is_inhabited_from`,
+      which is what #2501 does." FALSE per #2501's live diff: #2501 KEEPS `is_never`
+      and gates it by call context (`record_call_inhabitedness`, conservative on
+      proof-block `!`-returns) = the MODE GATE, the finer fix. `is_inhabited_from`
+      was the MODEL's over-broad route, behaviorally redundant (Fable: identical
+      grading, no inhabitedness query). Corrected §verus line: #2501 described as
+      mode-gated/context-aware, not is_inhabited_from.
+- [x] **Lift recast to a mode-gated approximation (max honesty, per RESULT-corrected.md
+      2026-06-12).** §frontier now states the cross-model correction: the
+      inhabitedness query the codex arm routed through is behaviorally redundant; the
+      operative mechanism is the mode gate; "the model recovered the verifier's own
+      decision procedure / reached the verifier's true oracle" OVERSTATES → "widens to
+      a mode-gated approximation under external pressure." Held-outs still earn
+      represents-not-tabulates (the rule it represents is the coarse mode gate).
+- [x] Knock-on overclaims scrubbed: abstract + intro "onto the verifier's own
+      inhabitedness query" → "onto a markedly more general fix"; §verus "reach the
+      general inhabitedness predicate" → "break off the narrow plateau to a wider
+      fix" + "reused the real oracle" → "applies its own general predicate";
+      §gate-general "discover the verifier's own inhabitedness query" → "grep out
+      rustc's own machinery for uninhabited types"; §verus-bench recall probe
+      de-conflated ("the model's solution is reconstruction from prior competence,
+      not recall of the post-cutoff patch"); table caption "inhabitedness
+      generalization" → "uninhabited-return generalization".
+- [x] E7 node corrected above with the live-PR verification + the mis-attribution fix.
+      NB: line-18 mechanism-bar prose still narrates `is_never()→is_inhabited_from` as
+      the lift — that is the codex-arm ROUTE (accurate as trace), but the operative-
+      mechanism gloss is now the mode gate; left as provenance, governed by this note.
+Build verified (503 pages). Committed.
