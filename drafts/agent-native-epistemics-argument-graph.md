@@ -28,14 +28,14 @@ epistemics is a flex enough"; the novelty is the boundary-redraw setting the sta
   where a verdict is laid down; a claim no test reached is `untrue`, the ZERO of a warrant-semiring
   with no inverse (depth recruited from companion `/tempus-doxa-praxis`, "You Cannot Ring a
   Semiring"; self-link, tiering preserved). So what cannot be false cannot be true. NODES:
-  F1-F7b (phenomenon/noumenon, belief→knowledge→truth, asymptote folded into §truth, two-graphs +
+  F1-F7b (phenomenon/noumenon, belief→knowledge→truth, graded ceiling folded into §truth, two-graphs +
   bivalence-housed + firewall + string theory), the TRICHOTOMY DEFINED as epistemic statuses
   (C2/C2a + the semiring-zero depth + undecidability-is-decided), C3 dignity (the boundary's
   axiological payoff), C4 scope. **Owns bivalence.**
 - **PAPER 2 — "Verifiable Knowledge"** (operationalized / protocol register; slug
   `/verifiable-knowledge`; "agent-native epistemics" kept as the coined territory term in the body).
   Title precision (2026-06-13): *verifiable* names the mechanism (re-check the build); *knowledge* not
-  *truth* because it is the warrant/knowledge that is checkable, while truth stays asymptotic (P1) —
+  *truth* because it is the warrant/knowledge that is checkable, while truth stays graded and uncertified (P1) —
   "I know N" is verifiable at provenance, "N" is not. Pairs Truth (P1) / Knowledge (P2); carries the
   interop purpose. THESIS:
   ENCODABILITY — take Paper 1's redrawn boundary and make it run. The three states become a build
@@ -85,13 +85,16 @@ catches it. §trichotomy is the formal resolution. The device IS the thesis in m
 **PAPER 1 — ordering: the ONE-LADDER unification (structural spine).** The boundary-redraw (foot)
 and the asymptote (top) are the SAME ladder, not two concerns:
 
-    certified correspondence   ← credence 1, unreachable (asymptote's top; F6a)
+    certified correspondence   ← credence 1, unreachable (no tier above belief; F6a)
             true               ← on the ladder, climbing (A6)
-            false              ← fell off, built-and-broke (C2)
+            false              ← fell off, built-and-refuted (C2)
             untrue             ← never on the ladder; the semiring zero, no inverse (C2/C2a)
 
-Render §truth's asymptote (F6/F6a/F6b) and §trichotomy (C2/C2a) as bottom-and-top of ONE ladder,
-so the gradedness axis and the boundary axis unify instead of competing. Load-bearing edges to
+Render §truth's graded ceiling (F6/F6a/F6b) and §trichotomy (C2/C2a) as bottom-and-top of ONE ladder,
+so the gradedness axis and the boundary axis unify instead of competing. (NOTE 2026-06-14: the top is
+the CLOSED ceiling — no state above belief — not an asymptote approached; the ladder keeps its shape,
+the reason for the unreachable top changed. "built-and-refuted": the iconic §trichotomy parallel
+"built and stood / built and broke" is the author's call to keep or sweep to "refuted", see F5.) Load-bearing edges to
 foreground: F4→A5 (the noumenon-breaks reality leash licenses "exposure"); F7→C2 (bivalence rules
 in the formal graph → THAT is why untrue is empirical-only); C2↔semiring (untrue = the zero, false =
 a minus the structure lacks; recruit `/tempus-doxa-praxis`).
@@ -203,15 +206,17 @@ and-then between sections, NO reorder needed):
   held question, released in §triangulation. Good ebb/flow, keep.)
 
 TWO within-flow FIXES (Paper 1), not reorders:
-- **(a) Asymptote seam is an AND-THEN.** The folded asymptote opens "*And* the climb has no top" —
+- **(a) Graded-ceiling seam is an AND-THEN.** The folded ceiling opens "*And* the climb has no top" —
   the weak connector. Re-seam to therefore/but: the facts near the top hold only on sufferance, SO the
-  climb has no summit (∴), or "BUT the climb has no top." Pick one; kill the "and".
-- **(b) ONE-LADDER by CALLBACK, not by moving the asymptote.** The asymptote must STAY before §two-graphs
-  (it sets up the empirical-asymptotic vs formal-absolute contrast — moving it down breaks that ∴-chain).
-  Deliver the one-ladder unification at §trichotomy via callback: state the three states as the FOOT of
-  the same ladder whose TOP is §truth's asymptote (untrue not-yet-on / false fell-off / true climbing /
-  certified-correspondence never-reached). §truth ends high (the unreachable summit), §trichotomy ends
-  grounded (untrue, the foot) — the ladder bookended across the BUT of §two-graphs.
+  climb has no summit (∴), or "BUT the climb has no top." Pick one; kill the "and". (Revised 2026-06-14:
+  the "no top" reason is now the closed ceiling — nothing above belief — not an asymptote.)
+- **(b) ONE-LADDER by CALLBACK, not by moving the graded ceiling.** The graded ceiling must STAY before
+  §two-graphs (it sets up the empirical-graded-never-absolute vs formal-absolute contrast — moving it
+  down breaks that ∴-chain). Deliver the one-ladder unification at §trichotomy via callback: state the
+  three states as the FOOT of the same ladder whose TOP is §truth's closed ceiling (untrue not-yet-on /
+  false fell-off / true climbing / certified-correspondence never-occupied). §truth ends high (the
+  unreachable top), §trichotomy ends grounded (untrue, the foot) — the ladder bookended across the BUT
+  of §two-graphs.
 
 BEAT SLOTTING (ported tempus beats land INSIDE existing sections, no flow disruption): B4/B6 → §phenomenon;
 B3/B5 → §belief; B7 → §truth; B1/B2 → §trichotomy (B2 sea-battle ALSO an intro trap-spring, resolved at
@@ -222,7 +227,7 @@ across §belief→§knowledge→§truth→§trichotomy, so its rungs ride the ex
 
 The F7-group separation of empirical vs formal truth is a separation of ENTITLEMENT TYPES, and the
 characteristic crossing error is a **TYPE MISMATCH** (precise; SUPERSEDES "firewall"). Two entitlement types:
-- EMPIRICAL entitlement: earned by exposure to a world-test that can break (graded, asymptotic).
+- EMPIRICAL entitlement: earned by exposure to a world-test that can refute (graded, refutable, never absolute).
 - FORMAL entitlement: earned by proof against axioms (absolute within the system, no external noumenon).
 The barrier is NOT a sealed wall — math freely REPRESENTS empirical structure, so a model crosses as an
 empirical hypothesis (an OPEN node awaiting a world-kill). What does NOT cross is the entitlement TYPE: spending
@@ -423,7 +428,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
 - **Standard-grounded ONLY.** Every load-bearing claim rests on canonical sources. The Natural Framework and its six-role / Perceive-morphism apparatus are KEPT OUT (would couple a narrow defensible claim to a wide contested one). If the data-processing inequality is needed, cite Cover & Thomas, never the framework. Companion blog posts are self-links (blog register), never load-bearing citations (P group; tiering rule).
 - **Three contributions, each scoped NARROW:** C1 operationalization (belief/knowledge/truth reduce to buildable/checkable/replayable structures), C2 warrant ledger (true/false/untrue as bookkeeping of warrant, NOT a new logic; bivalence is housed in the platonic graph, not denied, F7), C3 dignity ordering (among claims *presenting as knowledge*, accountable falsehood outranks unaccountable pseudo-knowledge; the qualifier is load-bearing). The delta is C5's EXACT CONTRACT (everyone supplied pieces; nobody made this exact contract run), weighted on Act II and bounded by the honest-limits triad (C1g-i: trusted roots, adversarial robustness, bounded verification).
 - **Spine = the F group:** Kant's phenomenon/noumenon boundary front-loaded; one departure from Kant: the noumenon is not inert, it refutes a wrong build; that one bit of contact is the leash. Everything after stays on the near side.
-- **Central claim, the asymptote (F6/F6a/F6b):** EMPIRICAL truth is a graded belief ASYMPTOTIC to the noumenon, approached never occupied. Two derivations of one limit: Peirce convergence (diachronic, the community of inquiry) and the graded-belief ceiling (synchronic, credence in [0,1), no tier above belief). A-fortiori case = physics, still asymptotic. Resolves the F4/C2 true/false asymmetry (refutation-only is the gradient of the approach, not a defect). Pragmatist core, standard-grounded (Peirce, Ramsey).
+- **Central claim — SUPERSEDED 2026-06-14 (asymptote SIDESTEPPED, see F6; kept for history):** ~~EMPIRICAL truth is a graded belief ASYMPTOTIC to the noumenon, approached never occupied. Two derivations of one limit: Peirce convergence (diachronic) and the graded-belief ceiling (synchronic).~~ NOW: empirical truth is GRADED BY EXPOSURE, never absolute; the knower is a PART OF THE WORLD (Dewey, downstream of Peirce), so there is no external target to approach. The diachronic Peirce-convergence derivation is cut; the synchronic ceiling stays (credence in [0,1), no tier above belief), re-voiced — the top is closed because nothing is above belief, not because a limit is approached. A-fortiori physics = exposure-ordering, not an asymptote. Pragmatist lineage, standard-grounded (Dewey, Ramsey; Peirce kept for Secondness only).
 - **The two-graph architecture (F7/F7a):** empirical and platonic truths live in DISJOINT hypothesis graphs. Empirical = graded/asymptotic; platonic = absolute truth-without-grade (proof decides, no external noumenon). FIREWALL: the platonic graph's absolute truth never touches the empirical (Einstein 1921, *Geometry and Experience*). Resolves the bivalence triangle (retires K5). Crossing rule: a mathematical model of the world is an empirical hypothesis awaiting a world-kill, consistency cannot substitute for reality (string-theory witness, F7a). Maps onto the paper's own data structure.
 - **STRUCTURE — SUPERSEDED 2026-06-13 (see `## SPLIT` above): split into TWO PAPERS adopted.** The "splitting weakens both" worry below was resolved (Paper 2 cites Paper 1 by reference; genre-pure ends). Original note kept for history: **ONE PAPER, TWO ACTS.** ACT I = the frame, what truth IS for a machine (phenomenon/noumenon, belief→knowledge→truth, the asymptote, the two graphs; mostly INHERITED, the C5 razor admits it). ACT II = the mechanism, how a population of agents coordinates and builds a verifiable canon on it (operationalization C1, triangulation/protocol/canon C1a-f, the honest-limits triad C1g-i; this is where the DELTA lives, C5's exact-contract claim). The acts cross-reference; Act I sets up Act II's payoff. Splitting weakens both (Act I is derivative alone, Act II is rootless alone).
 - **Render order (PENDING Fable re-review 2026-06-12 to set the act boundary + sequence; superseding the 13-section list below):** Act I → Act II → Related work → Self-application/falsifiers → Conclusion. The F6/F7 asymptote+two-graph cluster gets its own section closing Act I; the C1a-f social cluster is Act II's core. (See `## Section render order`, now stale.)
@@ -440,6 +445,66 @@ already earned (see audience-register), but do not let the worldview tip into mo
   never holdable; phenomenon = the appearance a build constitutes; every cognizer,
   human or machine, works the phenomenon. `grounded` (Kant, SEP transcendental
   idealism) · §phenomenon
+- **F1a.** THE CARTOGRAPHER DISPLACEMENT (author 2026-06-14; sharpens the existing
+  map/territory rejection, log 2026-06-12). The map/territory shorthand smuggles a
+  *cartographer* — a surveyor standing outside both map and territory, holding them up
+  to read the match. There is no such position. The knower is an agent INSIDE the frame,
+  with no surveyor outside it; knowing needs no cartographer. Drop the cartographer,
+  KEEP the resistance: the world still enters, not by being mapped but by REFUTING the
+  build (ties F4's one-bit leash). Korzybski turned: "the map is not the territory" is a
+  warning issued FROM the vantage the view denies. THE REDUCTIO (author 2026-06-14): the
+  question that kills the cartographer frame is *who maps the cartographer?* — in the
+  abstract it has no terminus, an infinite regress of surveyors-of-surveyors (same shape
+  as "if we claim to know how we know, where does it stop?"). The regress dissolves the
+  moment the agent admits it cannot escape the world it resides in: there is no outer
+  mapper to demand, because knowing is the agent's own activity from inside, answerable
+  to refutation. So the chain STOPS AT THE PROOF — the replayable build the agent re-runs
+  from within, not an external certifier (ties F7's "checking a proof is itself a
+  replayable build"). Empirically the terminus is the world-trial a build survives;
+  formally it is the proof that closes entitlement internally; either way the chain ends
+  at a build, never at an Archimedean vantage. CODEX-FIX 2026-06-14 (lead operational,
+  dramatize with the regress): the regress is a PRESSURE POINT, not the kill — a
+  correspondence theorist dodges "who maps the cartographer?" by calling the map–territory
+  relation primitive/semantic/causal. The LOAD-BEARING objection is OPERATIONAL: "compare
+  map to territory from outside both" names a certification condition NO AGENT CAN
+  INSTANTIATE. Render the operational point as the foundation; use the regress to
+  dramatize, not to carry the weight. THE VERDICT (author 2026-06-14,
+  self-application — the displacement is the paper's OWN ruling, not an external
+  preference): run the cartographer model through the paper's machine. It is INTERNALLY
+  CONSISTENT (platonic/formal coherence) but meets no empirical test, because the external
+  surveyor it requires is unbuildable and no world-trial could refute it. Internally
+  consistent, empirically edgeless: it CANNOT BE FALSE, so it cannot be true — UNTRUE (C2),
+  an IRREFUTABLE MODEL (the string-theory pattern, F7b) and a TYPE MISMATCH (F7a), formal
+  entitlement (self-consistency) passed off as an empirical account of how knowing works.
+  (Author 2026-06-14: "exact dual" dropped as an unnecessary claim — it overstated string
+  theory's verdictlessness; "irrefutable model" is tighter and native to the paper's own
+  Popperian sense, irrefutable = the vice, already established at R6/F7b. "Internally
+  consistent" is already stated earlier in the verdict, so the label's new payload is the
+  irrefutability.) THE VERDICT IS
+  CONDITIONAL (author 2026-06-14: "map-and-territory would be true or false if it's testable"):
+  the frame is not intrinsically untrue — it would be true OR false if it were TESTABLE. It lands at
+  untrue ONLY because the cartographer version makes no refutable claim; supply a testable one and it
+  earns a verdict. This is the kill condition read from the CLAIM's side, and it keeps the ruling fair —
+  the frame is CLASSIFIED by its testability, not condemned. CODEX-FIX 2026-06-14 (narrow the target,
+  block the motte-and-bailey): rule the LITERALIZED cartographer model — "knowing requires an external
+  comparer who inspects representation and reality from outside the world" — untrue, NOT "the
+  map/territory frame" as a metaphor (that attacks a cartoon). The verdict applies ONLY when the
+  metaphor is promoted into an ACCOUNT OF EPISTEMIC ENTITLEMENT. Taxonomy: as metaphor → no
+  verdict-bearing claim; as formal schema → internally coherent/incoherent; as an empirical account of
+  knowing → untrue unless it yields a refutable build. RENDER GUARD (author
+  2026-06-14: "it's poking a hornet's nest, and I'm ok with it because I'm an outsider, i have no
+  reputation to protect"): KEEP the verdict — but state it as the paper's machine ruling WITH ITS OWN
+  KILL CONDITION (exhibit a buildable external vantage, a way to compare map to territory without
+  another map, and the verdict flips), NOT as a dunk on LW/rationalism. Attack the FRAME's structural
+  load (it needs an unbuildable surveyor), never a caricature of what anyone commits to — preserves the
+  2026-06-12 charitable-reading note and the de-dunk discipline. Brave-and-falsifiable, not brave. The
+  verdict is itself a dated, refutable standing build (same posture as the string-theory verdict, F7b).
+  SCOPE (sober register, per the
+  no-cult-register line): a MENTION, a substitution of a sounder frame for a weaker one —
+  NOT the full participatory/perturbation/regress derivation, which stays in the blog
+  companion (the reductio is stated, not walked). This is the §phenomenon statement of the
+  frame the §truth asymptote-sidestep (F6/F6a/F6b, revised 2026-06-14) later cashes out:
+  agent-inside, no surveyor, world refutes — same move, two locations. `argued` · §phenomenon
 - **F2.** Noumenal truth = correspondence to the world in itself: if MODELED as
   correspondence truth it is classically bivalent (excluded middle holds in the
   model), and inaccessible in the same breath; the bivalence belongs to the
@@ -459,7 +524,9 @@ already earned (see audience-register), but do not let the worldview tip into mo
   Guards both flanks: no refutation = idealism; seeing the world in itself =
   naive realism. Phenomenal truth is the load-bearing middle. `argued` · §phenomenon
 - **F5.** Convention: from §phenomenon on, unqualified *truth* means the
-  phenomenal kind. The noumenon returns only to do its one job, break things.
+  phenomenal kind. The noumenon returns only to do its one job, refute builds.
+  TERM (author 2026-06-14): use *refute*, not *break* — the epistemic verb, not
+  the physical one; sweep the rendered §phenomenon "break/breaks" usages to "refute".
   `declared` · §phenomenon close
 
 ## A — The arc (belief → knowledge → truth) · §belief, §knowledge, §truth
@@ -511,65 +578,100 @@ already earned (see audience-register), but do not let the worldview tip into mo
   platonic graph (F7) and the word in an empirical climb is a firewall violation
   in the paper's own terms. The platonic graph has its own non-graded ladder
   (conjecture → proof), which is the point of the two regimes. `argued` · §truth
-- **A7.** The two-claims split (the N-atoms case): the world-claim ("the number
-  is N") is out of reach, can be true by luck and never knowledge; the
-  knowledge-claim ("I know N") is testable at the level of provenance, demand the
-  build and there is none. Knowing is a build; a build shows its chain or it
-  does not. `argued` · §knowledge (HOME, full treatment); §truth carries a one-line
-  callback only (placement resolved 2026-06-13; was partially re-stated in both)
+- **A7.** The two-claims split (the N-atoms case), recast on UNBUILDABILITY alone
+  (author 2026-06-14, riding Dewey, no noumenon: "can't prove the fact, can't prove
+  its inquiry"). Two claims, both unbuildable, at different levels, yielding different
+  verdicts. (i) The world-claim ("the number is N") — you cannot build the FACT: no
+  inquiry reaches it, no passing build, so UNTRUE. NOT "true by luck" — luck never
+  enters, because there is no entitlement either way (the old "out of reach / right by
+  luck" line was the determinate-but-inaccessible residue Dewey discharges; cut it).
+  (ii) The knowledge-claim ("I know N") — you cannot VERIFY the inquiry: it asserts an
+  entitlement, you demand the chain, there is none, refuted at the level of provenance,
+  so FALSE. Knowing is a build; a build shows its chain or it does not. THE WORD SPLIT
+  (author 2026-06-14, foreshadows Paper 2): the FACT level is *buildable* (truth — the
+  constructive/exposure side, the subtitle "the unbuilt is untrue"); the ENTITLEMENT level
+  is *verifiable* (knowledge — the checking/replay side). So the fact is UNBUILDABLE →
+  untrue; the knowledge-claim is UNVERIFIABLE → false at provenance. Paper 1 ending on
+  verifiable entitlement hands the baton to Paper 2 (*Verifiable Knowledge*). No
+  noumenal-determinacy backstop. `argued` · §knowledge (HOME, full treatment); §truth
+  carries a one-line callback only
 
 ## F (part 2): The asymptote and the two graphs
 
-- **F6.** EMPIRICAL TRUTH IS ASYMPTOTIC TO THE NOUMENON (scope at first utterance;
-  the formal regime is separate, F6c/F7). Phenomenal truth never reaches
-  correspondence-forever, but the sequence of standing builds APPROACHES it under
-  inquiry. This is Peirce's convergence (truth = the ideal limit of inquiry, "the
-  opinion which is fated to be ultimately agreed to by all who investigate", *How
-  to Make Our Ideas Clear* 1878), so the asymptote IS the pragmatist core, the
-  home tradition stated in one line, not a borrowed patch. Resolves the F4/C2
-  asymmetry: the world refuting-only (never confirming) is the GRADIENT that drives
-  the approach. Each false-signal is a confirmed prune; the survivors converge on
-  a limit the curve never touches. The asymmetry is the engine, not a defect.
-  "True" is uncertified precisely because a knower is never AT the limit, only on
-  the way to it (fallibilism with a geometry). Grounds A6's climb (hypothesis →
-  standing result → fact = the curve; "fact, test retired" = far enough up the asymptote
-  that re-checking stops). HONEST HEDGE (scope, do not overclaim): convergence is
-  Peirce's regulative ideal (his word: "hope"; cf. Misak), the structure that
-  organizes inquiry, NOT a theorem that inquiry must converge; state it as the
-  approach being the only access we have, not a guaranteed limit. `grounded`
-  (Peirce convergence) · §phenomenon, callback §truth + §ledger
-- **F6a.** WHY asymptotic, two derivations of one limit. (i) DIACHRONIC, Peirce
-  convergence (F6): the community of inquiry approaching its fated limit across
-  time. (ii) SYNCHRONIC, the graded-belief ceiling: now, for one knower,
-  subjective (phenomenal) truth is limited to a GRADED BELIEF, credence in [0,1)
-  (regularity / Cromwell's rule keeps the 1 off contingents; Ramsey grades the
-  belief, A1), and there is NO TIER ABOVE BELIEF (belief-is-edge, A1/A3), so
-  "true" is only ever credence high enough to act on, never a state where the
-  grade reaches 1. The limit, credence 1, would be the impossible
-  certified-correspondence state, unreachable because no-tier-above-belief means
-  no grade-equals-1 state. Both derivations say the limit is approached, never
-  occupied. THE JOINT:
-  this welds the F group (phenomenon/noumenon/asymptote) to the A group (belief,
-  no tier above it). Subjective truth = a graded belief asymptotic to the
-  noumenon is the paper's spine in one sentence. `grounded + argued` (Ramsey +
+- **F6.** EMPIRICAL TRUTH IS GRADED BY EXPOSURE, NEVER ABSOLUTE — the asymptote
+  SIDESTEPPED (author 2026-06-14; supersedes the asymptote-to-the-noumenon framing
+  below, kept in history at line ~426 and the render log). The knower is a PART OF
+  THE WORLD in which the knowing happens (Dewey's participatory turn): there is no
+  standpoint outside the world from which target-contact could be CERTIFIED — reality
+  refutes builds, it never stamps one as finally correspondent — so "target reached"
+  is not an available verdict, and empirical truth is the build presently standing,
+  GRADED by how much exposure it has survived. (CODEX-FIX 2026-06-14: the inference is
+  NOT "inside the world, therefore no external target" — that is a non-sequitur, a hiker
+  is inside the landscape and still approaches the mountain. The claim is no available
+  CERTIFICATION of target-contact, not no reality.) The world refuting-only (never
+  confirming) gives the grade its DIRECTION: a PARTIAL order — refutation demotes,
+  wider exposure promotes, but the machine need not rank every pair — ordered AWAY FROM
+  demonstrated failure, never TOWARD a destination (anti-relativism needs the asymmetry,
+  not a total order; some builds stay incomparable until exposure creates a dominance
+  relation). "True" is uncertified not because a knower is forever short of a limit, but
+  because there is no entitlement STRONGER THAN warranted standing under exposure — truth
+  is a status a build earns, which credence only tracks imperfectly (the ceiling, F6a;
+  GUARD against psychologism: this is NOT "truth = high credence").
+  LINEAGE (the demotion is internal to pragmatism, done by pragmatism's own next
+  figure, so it costs no authority): Peirce posited convergence — truth = the ideal
+  limit of inquiry, "the opinion fated to be ultimately agreed", *How to Make Our
+  Ideas Clear* 1878 — as a regulative HOPE, keeping an external target. Dewey,
+  DOWNSTREAM of Peirce, drops the fated limit by making the knower a participant
+  (inquiry-as-action, warranted assertibility). We stand with Dewey; convergence is
+  NAMED AND DECLINED as the spectator residue (a target is what a surveyor
+  approaches; an agent inside the world has none — ties F1a's cartographer
+  displacement). Peirce kept only for Secondness (F4). Grounds A6's climb
+  (hypothesis → standing result → fact = accumulating exposure; "fact, test retired"
+  = survived so wide a trial that re-checking stops, not arrival at a limit). The
+  F4/C2 asymmetry resolves the same way: refutation-only is the ordering, not a
+  defect. `argued` (Dewey participatory turn; Peirce declined; the
+  no-tier-above-belief ceiling) · §phenomenon, callback §truth
+- **F6a.** WHY graded, and why there is no top — ONE derivation, the synchronic
+  ceiling (revised 2026-06-14: the diachronic-convergence derivation is cut with the
+  asymptote, F6). For one knower, now, subjective (phenomenal) truth is limited to a
+  GRADED BELIEF, credence in [0,1) (regularity / Cromwell's rule keeps the 1 off
+  contingents; Ramsey grades the belief, A1), and there is NO TIER ABOVE BELIEF
+  (belief-is-edge, A1/A3), so "true" is only ever credence high enough to act on,
+  never a state where the grade reaches 1. Credence 1 would be the impossible
+  certified-correspondence state — unreachable NOT because it is approached-forever,
+  but because no-tier-above-belief means there is no grade-equals-1 state to occupy.
+  The top is closed for a STRUCTURAL reason (nothing above belief), not a GEOMETRIC
+  one (a limit forever short). RENDER GUARD (codex 2026-06-14): do NOT voice this as
+  "credence climbs toward one and never arrives" — that re-imports the asymptote in
+  Bayesian clothing (a credence-asymptote swapped for the noumenal one), the exact thing
+  the sidestep removes, and it is inherited verbatim from the current post l.72. Voice it
+  as "the next morning remains an exposure" / "stands on sufferance" / "a test it could
+  fail," never as approach-to-1. The ceiling blocks ABSOLUTISM, not relativism — it must
+  be paired with F6's exposure-ordering DIRECTION sentence (partial order, away from
+  demonstrated failure) or §truth reads as relativist. THE JOINT: this welds the F group (phenomenon/
+  noumenon, the refutation leash) to the A group (belief, no tier above it).
+  Subjective truth = a graded belief with no state above it, standing on sufferance
+  — the paper's spine in one sentence. `grounded + argued` (Ramsey +
   regularity/Cromwell; belief-is-edge) · §phenomenon, §belief, callback §truth
 - **F6b.** THE A-FORTIORI CASE: physics. The most closely studied empirical
-  domain is STILL asymptotic. Newton stood until Mercury's perihelion refuted
-  it, gave way to general relativity, which itself strains where it meets the
-  quantum (a successor still pending, not yet in hand); each a better-standing
-  build, none the final correspondence, the succession itself the asymptote drawn. If even physics, the hardest-tested knowledge there is,
-  only ever holds a graded belief approaching the noumenon and never arriving,
-  then a fortiori everything softer does. Pre-empts the "settled science is just
-  true" objection: a retired test is far up the curve, not at the limit (Newton
-  was a fact, then re-scoped to a bounded domain where it stays approximately
-  true, never unbreakable). `argued` (history of physics:
-  Newton, Mercury/GR, QM) · §phenomenon or §truth (placement open)
+  domain is STILL graded and refutable. Newton stood until Mercury's perihelion
+  refuted it, gave way to general relativity, which itself strains where it meets
+  the quantum (a successor still pending, not yet in hand); each a build standing
+  under WIDER trial than the last, none the final correspondence. The succession is
+  an ordering by exposure, not an approach to a drawn limit. If even physics, the
+  hardest-tested knowledge there is, only ever holds a graded belief standing on
+  sufferance, then a fortiori everything softer does. Pre-empts the "settled
+  science is just true" objection: a retired test means a build has survived so wide
+  a trial that re-checking stops, NOT that it reached a limit (Newton was a fact,
+  then re-scoped to a bounded domain where it stays approximately true, never beyond
+  refutation). `argued` (history of physics: Newton, Mercury/GR, QM) · §phenomenon
+  or §truth (placement open)
 - **F6c.** TWO REGIMES, and math is the DETACHED one. Empirical truth (F6/F6b)
-  answers to the world and is asymptotic to the PHYSICAL noumenon; reality refutes
-  it. Mathematical truth is detached from reality itself: it answers only to its
+  answers to the world — graded and refutable, the agent being part of the world
+  that refutes it; reality refutes it. Mathematical truth is detached from reality itself: it answers only to its
   axioms, and SELF-CONSISTENCY (proof, the absence of contradiction) is the whole
   tester. No world-signal refutes a theorem; a counterexample or an inconsistency
-  does, both internal. So the noumenal-asymptote headline is scoped to EMPIRICAL
+  does, both internal. So the graded-refutable headline is scoped to EMPIRICAL
   truth; formal truth is buildable-but-detached. THIS IS WHY math is the cleanest
   ledger case (S2: untrue conjecture → proven/refuted, crisp migrations): the test
   is internal and, where decidable, decisive, with no noumenal remainder to muddy
@@ -583,14 +685,14 @@ already earned (see audience-register), but do not let the worldview tip into mo
   S2 + C2a
 - **F7.** THE TWO-GRAPH ARCHITECTURE (resolves the bivalence triangle). Empirical
   and platonic truths live in DISJOINT hypothesis graphs. (i) EMPIRICAL graph:
-  truth graded, asymptotic to the noumenon (F6), credence in [0,1), the world
+  truth graded and refutable, never absolute (F6), credence in [0,1), the world
   refutes, no node absolute. (ii) PLATONIC graph: truth DECISIVE within a
   stipulated formal system where proof is available, truth-WITHOUT-grade; warrant
   complete relative to its axioms, reachable because the regime has NO external
   noumenon, the system is closed; where proof or refutation exists, warrant closes
   internally (both internal), otherwise the node stays open relative to the system
   (Gödel: many statements are undecided relative to a system); the
-  asymptote-forcing gap is absent. (Render guards, Fable: NOT "a
+  world-trial gap is absent. (Render guards, Fable: NOT "a
   complete tester", Gödel's second theorem forbids self-certified consistency;
   NOT "credence 1", a Bayesian never quite reaches it on a long proof. The
   absoluteness belongs to the STANDARD, not to any checker; checking a proof is
@@ -925,11 +1027,19 @@ THE HONEST LIMITS (C1g-C1i, added per codex sniff 2026-06-12; render as one shor
 ## R — Related work / prior art · §related-work (recruited in §intro)
 
 Human side (the parts bin):
-- **R1.** Pragmatism, the home: truth as what survives inquiry, not what
-  corresponds (James 1907, Dewey 1929, Peirce); belief as disposition to act
-  (Ramsey 1926); paper doubt dropped (Peirce). What they could not finish,
-  lacking the knower: a human cannot expose the inner state where justification
-  lives; a machine that builds inquiry into an inspectable structure can.
+- **R1.** Pragmatism, the home, LED BY DEWEY (promoted 2026-06-14, author: "the OG of
+  wall-breaking epistemics" — Peirce planted the seed, Dewey made wall-breaking the whole
+  program, *The Quest for Certainty* attacking the spectator theory by name; Dewey-leads /
+  Peirce-upstream, so "downstream of Peirce" still carries the authority). The stance the
+  paper now occupies: truth as what survives inquiry, not what corresponds; the knower a
+  PARTICIPANT in the world it inquires into, so inquiry has no external limit to approach
+  (Dewey 1929, the spectator-theory critique). The rest of the lineage folds to the
+  collective: truth fixed to action (James 1907, folded — carries no step Dewey doesn't),
+  belief as a disposition to act whose strength is the odds (Ramsey 1926), paper doubt
+  dropped and SECONDNESS kept (Peirce); Peirce's convergence NAMED AND DECLINED as spectator
+  residue (F6; Misak 1991, the regulative-hope scope — now §related-work's home for it).
+  What they could not finish, lacking the knower: a human cannot expose the inner state
+  where justification lives; a machine that builds inquiry into an inspectable structure can.
   `grounded + positioned` · §intro, §related-work
 - **R2.** Kant: the frame (F group), recruited for the boundary only; the
   refutation departure is ours and is flagged as such. `positioned` · §phenomenon
@@ -1535,6 +1645,124 @@ edge (the build made checkable) and zooms out single-agent → population.
   effectiveness objection (Wigner) in one short paragraph with the in-frame survivorship answer +
   one-sentence compressibility bound (new F7a point). String theory (F7b) then reads as the wall
   sorting. No renormalization worked example (considered, left out as substance-adding).
+- 2026-06-14: ASYMPTOTE SIDESTEPPED — the spine reframe (author: "as dewey made it clear, it's
+  not an asymptote. we're clearly in that lineage, so we are no longer making the distinction,
+  sidestepping it as to make the agent a part of the world in which the knowing happens"). MOVE:
+  empirical truth is GRADED BY EXPOSURE, never absolute; the knower is a PART OF THE WORLD in which
+  the knowing happens (Dewey's participatory turn), so there is no standpoint outside the world from
+  which a limit could be set and no external target to approach. WHY IT COSTS NO AUTHORITY (author:
+  "citing dewey is as powerful as peirce because dewey is downstream of peirce, it's in the
+  lineage"): the demotion is INTERNAL to pragmatism — Peirce posited convergence as a regulative
+  hope (external target); Dewey, downstream, dropped the fated limit by making the knower a
+  participant. We stand with Dewey; Peirce's convergence is NAMED AND DECLINED as the spectator
+  residue; Peirce kept only for Secondness (F4). NODES CHANGED: F6 (rewritten, `grounded`→`argued`),
+  F6a (cut the diachronic-convergence derivation, kept + re-voiced the synchronic ceiling — top
+  closed because nothing is above belief, not approached-forever), F6b (physics = exposure-ordering,
+  not "the asymptote drawn"), F6c + F7 ("asymptotic to the noumenon"→"graded and refutable, never
+  absolute"; "asymptote-forcing gap"→"world-trial gap"), one-ladder spine (lines ~85–97: top relabel
+  "asymptote's top"→"no tier above belief"; ladder keeps its shape, the REASON for the unreachable
+  top changed), therefore-but audit (a)/(b), type-framing (225), SPLIT line 31, line 38 (Paper 2
+  title rationale "truth stays asymptotic"→"graded and uncertified"), line ~426 central-claim note
+  marked SUPERSEDED (kept for history). Posture unchanged: this does NOT touch the one defended thing
+  (the trichotomy/entitlement redraw), the two-graph type boundary, or F4's leash. Net shorter
+  (F6a's two-derivation weld collapses to one).
+- 2026-06-14: CARTOGRAPHER DISPLACEMENT added as F1a (author: "the metaphysics is worth a mention to
+  displace the map-and-territory framing, as an agent inside the frame that doesn't depend on a
+  cartographer"). Sharpens the 2026-06-12 map/territory rejection: the shorthand smuggles a SURVEYOR
+  outside both map and territory; there is no such position; the agent is INSIDE the frame and needs
+  no cartographer. DROP the cartographer, KEEP the resistance (world enters by REFUTING the build,
+  ties F4). Korzybski turned (the warning is issued from the denied vantage). THE REDUCTIO (author:
+  "who maps the cartographer?" + "if we claim to know how we know, where does it stop? It doesn't, in
+  abstract. But if the framing is that we cannot escape the world we reside in, then the knowing stops
+  at the proof"): the regress of surveyors-of-surveyors has no terminus in the abstract; it dissolves
+  once the agent admits it cannot escape the world, and the chain STOPS AT THE PROOF — the replayable
+  build re-run from within (ties F7's "checking a proof is itself a replayable build"), empirically
+  the world-trial survived, formally the proof that closes entitlement, never an Archimedean vantage.
+  SOBER SCOPE (no-cult-register): a MENTION + the reductio STATED, not the full participatory/
+  perturbation/regress derivation, which stays in the blog companion. Same move as the asymptote
+  sidestep, in §phenomenon instead of §truth. THE VERDICT (author: "map-and-cartographer model is
+  internally consistent but doesn't meet the empirical, it's untrue"): the displacement is the paper's
+  OWN trichotomy applied to the rival frame — internally consistent (platonic coherence), no empirical
+  edge (the surveyor is unbuildable), so cannot-be-false → cannot-be-true → UNTRUE; an irrefutable model
+  (the string-theory pattern, F7b), a type mismatch (F7a). Self-applying, not an external preference.
+- 2026-06-14: REFUTE reaffirmed (author: "'breaking' is not a term we use. 'refute' is the more
+  epistemic term"). F5 "break things"→"refute builds" + a TERM note; one-ladder "built-and-broke"→
+  "built-and-refuted". OPEN AUTHOR CALL: the 2026-06-13 register fix KEPT a few deliberate physical
+  "break" images (Paper 1 abstract "a wrong build breaks against it", the built/broke wordplay); today's
+  flat "we don't use breaking" may want those swept too — flagged, not reversed unilaterally.
+- 2026-06-14: ON NOVELTY/ONE-THING (author: "i don't need novelty for this paper to be legitimate";
+  "i'd rather have one clean thing to defend than two loose ones"). Confirms the graph's existing
+  C4/C5/SPLIT posture: the ONE defended thing is the trichotomy/entitlement redraw; the breaking-insight
+  goes to Peirce/Dewey (F4 render note already concedes it), the half-step (replayable build) is the
+  machine delta whose HOME is Paper 2 (VK), not a second Paper-1 thesis. The rendered POST still carries
+  a leftover "the paper's own additions to the frame are two" line (§two-graphs + conclusion) — COLLAPSE
+  to one (the entitlement redraw) at propagation.
+- 2026-06-14: PROPAGATION PENDING (graph edited first per the edit-here-first rule; views not yet
+  updated). TO RENDER into `2026-06-12-what-cannot-be-false-cannot-be-true.md`: (1) §phenomenon — drop
+  the asymptote/"approach it without ever arriving" line; add the cartographer mention + reductio.
+  (2) abstract — drop the "asymptotic to a noumenon" clause. (3) §truth — cut the "what inquiry keeps
+  approaching" + "two derivations of the one limit" paragraphs (the Cromwell machinery), recast the
+  ceiling (no tier above belief) and the physics case (exposure-ordering). (4) collapse "two own
+  additions"→one. (5) break→refute sweep per the open author call. CONSISTENCY CHECK NEEDED: Paper 2
+  cross-refs to F6's asymptote (graph lines ~ C1b triangulation "F6's asymptote mechanism") and the
+  PUBLISHED Verifiable Knowledge text, which may still say "asymptotic" — reconcile when Paper 2 is next touched.
+- 2026-06-14: CODEX SNIFF on the two reframes (asymptote sidestep + cartographer verdict). Argument-fixes
+  FOLDED INTO THE GRAPH: (1) F6 — the inference "inside the world, therefore no external target" was a
+  non-sequitur (a hiker is inside the landscape and approaches the mountain); recast to "no available
+  CERTIFICATION of target-contact," reality refutes but never stamps a build correspondent. (2) F6 — added
+  the exposure-ordering DIRECTION explicitly: a PARTIAL order, away from demonstrated failure, never toward a
+  destination (the ceiling blocks absolutism, not relativism; needed the asymmetry stated). (3) F6 — psychologism
+  guard: "no entitlement stronger than warranted standing under exposure," NOT "truth = high credence." (4) F6a —
+  RENDER GUARD: do not voice the ceiling as "credence climbs toward one and never arrives" (re-imports the
+  asymptote in Bayesian clothing; inherited verbatim from post l.72) — use "the next morning remains an
+  exposure." (5) F1a — lead the cartographer kill OPERATIONALLY ("a certification condition no agent can
+  instantiate"), regress as dramatization only; narrow the untrue verdict to the LITERALIZED model promoted
+  into an account of entitlement (block the motte-and-bailey). TONE-CALLS HELD (author posture: outsider, keep
+  bold + falsifiable): "spectator residue" (F6) HELD, not cut. "exact dual of string theory" (F1a) RESOLVED
+  2026-06-14 → "an IRREFUTABLE MODEL (the string-theory pattern)": author dropped "exact dual" as an unnecessary
+  claim (it overstated string theory's verdictlessness); "irrefutable" is tighter and native to the paper's
+  Popperian sense (irrefutable = the vice, R6/F7b), with "internally consistent" already stated earlier in the verdict.
+- 2026-06-14: FAN-OUT (pragmatist-lineage deferral for a contemporary audience; k=4, log
+  `drafts/fan-out-pragmatist-lineage-deferral.md`). All four angles converged + codex-pruned. VALIDATED
+  RENDER DIRECTIVES for the post propagation (graph records them; the cuts ARE the same edits as the asymptote
+  sidestep propagation, one pass): (1) §phenomenon — drop "beliefs are not the world" (audience holds map≠territory
+  cold), open on the cartographer displacement; add a half-line naming the denied position ("the picture quietly
+  installs a viewer outside both"). (2) §truth — DELETE the "what inquiry keeps approaching"/asymptote paragraph
+  AND the diachronic half of "two derivations"; keep only the structural ceiling, re-voiced; ADD the direction
+  sentence: "Inquiry has direction without a destination: beliefs partially ordered by survived exposure, away
+  from demonstrated failure rather than toward certified correspondence." KILL the "climbs toward one and never
+  arrives" credence-asymptote (the bug codex caught). (3) §truth — compress physics a-fortiori, keep the shape.
+  (4) §related-work — Dewey/Peirce split (Dewey the stance, Peirce for Secondness + declined convergence); FOLD
+  JAMES into "the pragmatists" (no distinct step; his dated cite lives once in §related-work). (5) Ramsey/Peirce/
+  Dewey each NAMED ONCE at the rung doing distinct work; the intro pointer "§related-work names each borrowing"
+  fires ONCE, licensing downstream folds. (6) Modern re-groundings (Varela; Woodward/Pearl) COMPANION-ONLY — home
+  is the cognition companion /belief-is-the-edge-of-knowing (open: confirm); optional Varela-specific footnote
+  (mutual-constraint wing only, never "enactivism"-as-school, never Hutto–Myin); Pearl kept out entirely.
+  FEYNMAN (author aside): "what I cannot create, I do not understand" = the buildable-truth thesis; "cargo cult
+  science" = the practitioner-native name for the edgeless untrue claim (candidate in-line witness at E5 / the
+  dignity floor, NOT an epigraph) — BUT Feynman is a method-pragmatist + target-REALIST, so cite him for
+  build/refutation/cargo-cult, NEVER for the no-target move. Open author questions logged in the fan-out file
+  (Misak's fate in §truth; abstract "Peirce codified its inquiry"; promote Dewey to lead R1; re-lead §knowledge
+  on the action verb — H2 says HOLD).
+- 2026-06-14: VERIFIABLE vs BUILDABLE — DIVISION OF LABOR (author: "'verifiability' is better than
+  'buildability'" + "foreshadows the next paper too"). NOT a global swap (would collide with the subtitle
+  "Truth is buildable. The unbuilt is untrue." and with Paper 2's title *Verifiable Knowledge*). RULE:
+  TRUTH stays *buildable* (the constructive/exposure side, Dewey's build, the subtitle; "the unbuilt is
+  untrue" is crisper than "the unverifiable is untrue"); ENTITLEMENT/KNOWLEDGE is *verifiable* (the
+  checking/replay side). Verifiability is the sharper word for the VERDICT property ("cannot be false" =
+  cannot be verified-refuted = unverifiable; the cartographer/string-theory cases are untrue because
+  IRREFUTABLE = unverifiable) and it dodges the "manufactured truth" misreading "buildable" invites (E5).
+  APPLIED: A7 clause (ii) "cannot build the inquiry" → "cannot VERIFY the inquiry." FORESHADOW: Paper 1
+  ending on verifiable entitlement hands the baton to Paper 2; flag a one-line §truth/§knowledge nod at
+  render so the sequel is set up, not announced. NOT reconsidering "buildable truth" wholesale.
+- 2026-06-14: PENDING — §PHENOMENON RE-SPINE (ride Dewey, demote Kant). Decided in chat: §phenomenon
+  opens on Dewey (knower is part of the world it inquires into), F4 stops being "THE DEPARTURE FROM KANT"
+  and just IS resistance-realism (the world refutes), the abstract's "phenomenon/noumenon boundary"
+  spine-line + keyword go, two-graphs "answers to the physical noumenon" → "answers to the world." A7
+  already recast on unbuildability/unverifiability (no noumenal-determinacy backstop), which strands F2
+  (noumenal-truth-as-correspondence; its only remaining job, housing bivalence, the formal graph already
+  does). OPEN FORK (gates the cut): keep ONE residual noumenon nod at the two-graphs ("no external reality
+  to answer to," marks the formal regime closed) vs FULLY noumenon-free. Author's call pending; NOT yet executed.
 ## Citation map (pre-render)
 
 Two tiers, held apart (the tiering rule). LOAD-BEARING = canonical sources only;
