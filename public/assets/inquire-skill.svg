@@ -50,7 +50,7 @@
   <!-- INDUCTION -->
   <rect x="36" y="286" width="348" height="80" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
   <text x="50" y="307" class="blue small bold">INDUCTION</text>
-  <text x="50" y="325" class="dark small">run the trial against the world</text>
+  <text x="50" y="325" class="dark small">run the trial against the codebase</text>
   <text x="50" y="343" class="small"><tspan class="red">refuted &#8594; kill fires</tspan>   ·   <tspan class="green">confirmed &#8594; witness</tspan></text>
   <text x="50" y="359" class="amber tiny">deterministic predicate · no model arbitrates</text>
 
