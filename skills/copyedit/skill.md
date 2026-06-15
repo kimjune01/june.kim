@@ -23,7 +23,7 @@ Both modes share the same step definitions and the same monoidal contract. Defau
 3. **Tighten.** Same shape: subagent with the tighten skill, apply fixes, re-read.
 4. **Readability.** Same shape.
 5. **Flavor.** Subagent scans for unlinked pop culture refs, proper nouns, named theories, historical figures. Web-search for canonical URLs. Apply links.
-6. **Codex review.** Send current state to codex (`codex exec`, default model). If rate-limited, try gemini. If both unavailable, skip with a note. Apply feedback you agree with directly. Bunch ambiguous reservations for the user.
+6. **Codex review.** Send current state to codex (`codex exec`, default model). If rate-limited, skip with a note. Apply feedback you agree with directly. Bunch ambiguous reservations for the user.
 7. **Sharpen.** Subagent with the sharpen skill, apply lazy-hedge fixes directly. Narrow-preserving invariant: rewrites must not widen claims. Especially important right after codex.
 8. **Convergence check.** Launch a humanize subagent on the result. If it finds anything substantive, go back to step 2. Hard cap at 5 rounds; if round 5 still produces substantive changes, flag oscillation and stop.
 9. **Final report.** Word count delta + step-by-step summary of what changed.
@@ -56,7 +56,7 @@ Verbatim prompt the orchestrator gives the subagent, with `<FILE_PATH>` filled i
 > 2. **Tighten.** Apply `/Users/junekim/.claude/skills/tighten/SKILL.md`. "A bit" damping: don't over-compress.
 > 3. **Readability.** Apply `/Users/junekim/.claude/skills/readability/SKILL.md`. Prosody, structure, pacing.
 > 4. **Flavor.** Apply `/Users/junekim/.claude/skills/flavor/skill.md`. Web-search for canonical URLs and apply hyperlinks inline.
-> 5. **Codex review.** Send the current file to codex (`codex exec "..."`, default model). If codex is rate-limited, try gemini (`/Users/junekim/.claude/skills/gemini/skill.md`). If both unavailable, skip and note. Apply feedback directly. Bunch judgment-call reservations.
+> 5. **Codex review.** Send the current file to codex (`codex exec "..."`, default model). If codex is rate-limited, skip and note. Apply feedback directly. Bunch judgment-call reservations.
 > 6. **Sharpen.** Apply `/Users/junekim/.claude/skills/sharpen/skill.md`. Narrow-preserving invariant.
 >
 > Pass-through (don't touch): front matter, code blocks, markdown tables, SVG/img tags, reference lists at the bottom of the post.

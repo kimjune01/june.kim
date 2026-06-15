@@ -16,8 +16,7 @@ Phases 1-6 are self-contained — they use only the tools in `allowed-tools`. Ph
 | Skill | Used in | Purpose | Fallback if missing |
 |-------|---------|---------|-------------------|
 | `/codex` | Phase 2 (filter) | Structural review of hypotheses | `cat <<'EOF' \| codex exec -` directly |
-| `/gemini` | Phase 7 (hunt) | Adversarial logic-tracing review | Skip — codex can substitute, just weaker on logic tracing |
-| `/bug-hunt` | Phase 7 | Multi-pass adversarial loop (codex impl, gemini review) | Run manually in rounds |
+| `/bug-hunt` | Phase 7 | Multi-pass adversarial loop (codex impl, codex review) | Run manually in rounds |
 
 If the target machine doesn't have `codex` CLI installed, Phases 1-6 still work but Claude's abductions go unfiltered. Expect one-pass overclaiming — downgrade confidence on surviving hypotheses by ~10% and flag in the graph document that codex filtering was unavailable. Phase 7 degrades to manual review (Claude alone, no adversarial second opinion). Phase 8 (ship) only needs `git` and `gh`.
 
@@ -66,12 +65,12 @@ Pull individual fields with `--field`: `sweep project-info pyro-ppl/pyro --field
 
 ## Blind-blind pushout at dispatch
 
-Before opening the hypothesis graph, run the same evidence pack through a second frontier model in parallel and merge the two outputs. The maintainer's attention is non-renewable; cheap-to-vary the hypothesis stage matters more than cheap-to-vary the implementation stage. The qa volley (codex + gemini) is a second-pass check at the wrong layer — by then the worktree is already written.
+Before opening the hypothesis graph, run the same evidence pack through a second frontier model in parallel and merge the two outputs. The maintainer's attention is non-renewable; cheap-to-vary the hypothesis stage matters more than cheap-to-vary the implementation stage. The qa volley (codex) is a second-pass check at the wrong layer — by then the worktree is already written.
 
 **Pattern** (cribbed from [Blind, Blind, Merge](https://june.kim/blind-blind-merge)):
 
 1. **Primary** — this agent (`SWEEP_MODEL_INVESTIGATE_PRIMARY`, default opus) produces hypothesis A: root cause + proposed fix shape + evidence trajectory.
-2. **Pushout** — dispatch the same evidence pack to a second model (`SWEEP_MODEL_INVESTIGATE_PUSHOUT`, default sonnet — swap to codex/gemini when acceptance rate justifies the cost) for hypothesis B. The second model sees no part of A. Identical one-sentence directive.
+2. **Pushout** — dispatch the same evidence pack to a second model (`SWEEP_MODEL_INVESTIGATE_PUSHOUT`, default sonnet — swap to codex when acceptance rate justifies the cost) for hypothesis B. The second model sees no part of A. Identical one-sentence directive.
 3. **Merge** — a third pass extracts the **disagreements** between A and B. Agreement is low-entropy (training overlap, surface convergence); disagreement is where the actual signal lives. The merge document's prominent section is "Where A and B diverge"; the agreed-upon hypothesis is a footnote.
 
 **What to ship downstream:**
@@ -152,7 +151,7 @@ k should track your uncertainty about *where/why*, not be a fixed number.
    ```
    Fix issues codex finds. Five rounds max per hypothesis.
 
-   **Codex/Gemini review findings are hypothesis generators.** When a reviewer flags a risk, edge case, or untested assumption, don't just "soften the claim" — add the concern as a new open hypothesis in the graph with a concrete perturbation. A reviewer saying "prune might misclassify cache kernels" is an abduction: it proposes a failure mode. Treat it like any other abduction — design a perturbation, run it, classify the trajectory.
+   **Codex review findings are hypothesis generators.** When a reviewer flags a risk, edge case, or untested assumption, don't just "soften the claim" — add the concern as a new open hypothesis in the graph with a concrete perturbation. A reviewer saying "prune might misclassify cache kernels" is an abduction: it proposes a failure mode. Treat it like any other abduction — design a perturbation, run it, classify the trajectory.
 
    This prevents review feedback from decaying into vague caveats. Each concern either gets tested (and confirmed or killed) or stays visible as an open frontier edge.
 
@@ -213,7 +212,7 @@ Write the final graph document with:
    - Abduction (proposed from observation): 60-85% confidence
 5. **Pruning log** — what died, which experiment or codex round killed it
 
-6. **Gemini volley.** Send the hypothesis graph to `/gemini`: "Review this diagnosis. Is the causal chain sound? Any overclaimed conclusions? Any alternative explanations that fit the same evidence? Any experiments that should have been run but weren't?" Apply feedback, re-send. Five rounds max. The volley [won't converge to zero findings](https://june.kim/does-iteration-mitigate-slop-slope) — it oscillates. That's fine. Iterate enough that the structure is sound; unresolved gaps become frontier edges in the graph.
+6. **Codex volley.** Send the hypothesis graph to codex (`codex exec`): "Review this diagnosis. Is the causal chain sound? Any overclaimed conclusions? Any alternative explanations that fit the same evidence? Any experiments that should have been run but weren't?" Apply feedback, re-send. Five rounds max. The volley [won't converge to zero findings](https://june.kim/does-iteration-mitigate-slop-slope) — it oscillates. That's fine. Iterate enough that the structure is sound; unresolved gaps become frontier edges in the graph.
 
 If the diagnosis implies a code change, continue to Phase 4.5 and the prework/ship pipeline. If the frontier is still open, return to Phase 3. Don't stop to ask — the graph document records the state.
 
@@ -249,7 +248,7 @@ When a surviving hypothesis implies a code change, build the [prework](https://j
 
 2. **Derisk.** Run `extract.py` to confirm the bug exists in the target. If it doesn't, the diagnosis was wrong — go back to Phase 2. This is the most important step. Without it, the prework is speculative.
 
-3. **Gemini volley.** Send the fix diff + the original issue to `/gemini`: "Does this fix solve the reported problem? Does it introduce new risks? Is it the minimal change, or is there unnecessary scope creep?" Apply feedback, re-send. Five rounds max.
+3. **Codex volley.** Send the fix diff + the original issue to codex (`codex exec`): "Does this fix solve the reported problem? Does it introduce new risks? Is it the minimal change, or is there unnecessary scope creep?" Apply feedback, re-send. Five rounds max.
 
 ### Phase 5.5: Regression check (before benchmark)
 
@@ -281,7 +280,7 @@ Measure the candidate fix on the target system.
 
 ### Phase 7: Bug hunt
 
-Run `/bug-hunt` on the candidate fix. Codex first (structural), Gemini second (logic tracing), iterated to convergence.
+Run `/bug-hunt` on the candidate fix. Codex (structural), iterated to convergence.
 
 **Critical rule: if the bug hunt kills the fix, re-enter the hypothesis graph.** The kill condition from the bug hunt is a new observation. Classify its trajectory shape and follow the edge:
 - Bug hunt finds a regression on a specific layout/shape → **oscillatory**. Split the hypothesis.
@@ -379,7 +378,7 @@ Interrogate → Prework → Benchmark → Bug hunt → Ship        │
 - If someone else's PR addresses the same issue: link to it in the graph document and stop. The investigation becomes evidence for their PR, not a competing one.
 
 **Halt condition:** the outer loop terminates when:
-- Bug hunt converges (both codex and Gemini report zero new findings) AND the PR ships, OR
+- Bug hunt converges (codex reports zero new findings) AND the PR ships, OR
 - The human redirects, OR
 - Frontier closes (all edges classified, no open hypotheses), OR
 - Three consecutive iterations produce the same diagnosis (fixed point), OR
@@ -430,5 +429,5 @@ Phase 5: experiment repo with reference, propose, validate, extract, compat, ben
 Phase 6: benchmark candidate fix (remove GROUP + wider UPCAST). +74% bandwidth.
 Phase 7: bug hunt kills the fix — nn.Linear's transposed weights regress 25%.
 → Re-enter Phase 2: oscillatory → split. UPCAST alone survives. Re-benchmark: +62-105%.
-→ Bug hunt round 2: codex zero, Gemini zero. Converged.
+→ Bug hunt round 2: codex zero. Converged.
 Phase 8: one-number PR, experiment repo as provenance. CI passes.

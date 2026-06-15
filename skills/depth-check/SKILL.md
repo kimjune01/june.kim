@@ -33,7 +33,7 @@ The axes are independent. Score each; a piece can pass two and fail the third, a
 
 **Keep your own seat.** You run the skill, not the reverse. Keep the freedom to react as a reader ("this framing is the strongest thing here") and to opine on the exercise itself ("this flag feels forced"; "wrong lens for this draft"). Fenced: mark it your own, separate from the flags, never folded into the prose, the writer's to ignore. Opine and judge; don't author. Your read is information a pure automaton would discard.
 
-**Adversarial, never pattern-based.** Judge each load-bearing claim by trying to *dismiss, refute, or out-bore* it from the reader's chair, ideally via a different model family (codex/gemini) so the probe doesn't share the author's blind spots. Surface scans only *locate* candidates; the verdict is the probe. No feature checklist as a gate — a checklist is a surface, gamed once named.
+**Adversarial, never pattern-based.** Judge each load-bearing claim by trying to *dismiss, refute, or out-bore* it from the reader's chair, ideally via a different model family (codex) so the probe doesn't share the author's blind spots. Surface scans only *locate* candidates; the verdict is the probe. No feature checklist as a gate — a checklist is a surface, gamed once named.
 
 **Substance ≠ style ≠ length.** A short concrete sentence can be deep, novel, and land; a long jargon-dense one can be none of the three. Never reward abstraction/jargon/word-count; never penalize concreteness/plainness/brevity. Doing so measures conformity, not substance.
 
@@ -80,7 +80,7 @@ Two measurement targets pin the band:
 
 1. **Extract the load-bearing claims.** Read the piece. List the claims the argument rests on — the ones that, if false or stale, sink it. Ignore connective tissue and asides. Grep locates; the judgment of "load-bearing" is yours.
 
-2. **Probe each claim adversarially, on all three axes.** For the claims that matter most, run codex and gemini (different families); a single family is fine for a quick pass. The probe asks:
+2. **Probe each claim adversarially, on all three axes.** For the claims that matter most, run codex as the adversarial probe. The probe asks:
    - **Novelty:** would this reader already know or assume this? What, if anything, here is new to them?
    - **Depth:** what's the strongest objection, and is it engaged? Is the mechanism shown or only asserted?
    - **Rhetoric:** is the strongest version of this claim the one on the page? Is the key move buried, flattened, or delivered with its weight?
@@ -146,7 +146,7 @@ A report, no edits. For the whole piece:
   - location (quote the line)
   - axis + failure mode (from the taxonomy)
   - the gap, in the reader's voice ("an expert in X already assumes this" / "asks: where's the mechanism?" / "the real point is the last clause, and it's thrown away")
-  - whether codex/gemini/both surfaced it
+  - whether codex surfaced it
 - **Applied (subtractive, reversible):** the [auto] fixes as an earn-back list — line, before→after — so the writer can undo any. Only cut / narrow / relocate / mark; never an additive rewrite.
 - **Verdict, per axis:** for each of novelty / depth / rhetoric — STRONG / THIN (addressable in revision) / FAILS (the central claim is stale, unsupported, or never lands). The headline verdict is the weakest axis.
 - **Your own take (free-form, non-binding):** your reaction as a colleague, separate from the flags — what's strongest in the piece, what you genuinely doubt, and whether this exercise served the draft or was the wrong lens. The writer weighs it or ignores it; it's a view, not a verdict.
@@ -191,7 +191,6 @@ Then stop. **Folding the list back into the writing is yours** — it's the line
 | Step | Skill | Notes |
 |------|-------|-------|
 | 2 | `/codex` | Three-axis skeptic probe, structural |
-| 2 | `/gemini` | Same probe, different family — logic and inverted-claim catch |
 
 Boundary with the prose skills: depth-check's **rhetoric** axis is *argument-level* — is the strongest case made, in an order that lands. It does **not** touch sentence prosody, pacing, or AI tics; that's `/readability` and `/humanize`. Sequence: depth-check decides *whether the piece is worth saying to this reader and whether the case lands*; humanize/tighten/sharpen/readability/copyedit decide *how it reads* once it is. Run depth-check first — there's no point polishing prose whose central claim is stale or unsupported.
 

@@ -68,7 +68,7 @@ After agents return, codex filters for consensus. Update glossary: all agree →
 
 ### Phase 4: Codex sniff + Elicitation (Attend — mandatory)
 
-Before presenting to the human, send S.md to codex for review. Apply obvious improvements directly (framework leaks, weak provenance, miscalibrated confidence, missing discrepancy flags). Present only the ambiguous or debatable points to the human alongside the elicitation questions. This narrows the human's Attend to what actually requires judgment. **If codex is unavailable**, try Gemini as the reviewer. If neither is available, perform a self-review pass applying the same criteria. Log which reviewer was used or skipped.
+Before presenting to the human, send S.md to codex for review. Apply obvious improvements directly (framework leaks, weak provenance, miscalibrated confidence, missing discrepancy flags). Present only the ambiguous or debatable points to the human alongside the elicitation questions. This narrows the human's Attend to what actually requires judgment. **If codex is unavailable**, perform a self-review pass applying the same criteria. Log which reviewer was used or skipped.
 
 The agent does Perceive (read sources), Cache+Filter (translate, dedupe, file), and optionally fan-out (diverge/converge on thin sources). But mapping foreign vocabulary to framework roles is a judgment call. The agent proposes candidates; the human selects. This step is Attend — without it, the pipeline emits unattended Cache. **If the human is unavailable, the pipeline stops. There is no fallback.**
 

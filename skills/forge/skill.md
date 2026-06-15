@@ -53,15 +53,13 @@ Override with `--build CMD` and `--test CMD` in the argument. When overridden, u
    If all items pass, print the resolved config (spec source, build cmd, test cmd, scope strategy) and proceed. No confirmation needed — the checklist *is* the gate.
 
 1. **Volley (sharpen).** Take the spec and sharpen it into testable claims. Converge in two rounds — if the spec doesn't stabilize, it was underspecified (fail back to human).
-2. **Hunt (spec).** Before writing any code, hunt the spec itself. Two reviewers, sequentially:
-   - **Codex first** (structural): Send the sharpened spec to codex with relevant source files. Look for: internal contradictions, assumptions that don't match the codebase (wrong API shapes, nonexistent modules, stale interfaces), underspecified edges that will force implementation guesses. When the spec touches UI, also check structural design: missing states (empty, loading, error, partial), accessibility gaps, interaction patterns. Fix findings, re-hunt codex until zero new issues.
-   - **Gemini second** (adversarial logic): Send the codex-approved spec to Gemini 3.1 Pro via `/gemini`. Gemini is better at tracing logic through decision trees, catching inverted boolean conditions, and verifying that code-level operations match prose-level intent. Fix findings, re-send to Gemini until approved.
+2. **Hunt (spec).** Before writing any code, hunt the spec itself with codex.
+   - **Codex** (structural): Send the sharpened spec to codex with relevant source files. Look for: internal contradictions, assumptions that don't match the codebase (wrong API shapes, nonexistent modules, stale interfaces), underspecified edges that will force implementation guesses. When the spec touches UI, also check structural design: missing states (empty, loading, error, partial), accessibility gaps, interaction patterns. Fix findings, re-hunt codex until zero new issues.
    
-   A spec bug that survives both reviewers propagates through every downstream step. The most valuable reviewer is the one that disagrees with the other.
+   A spec bug that survives review propagates through every downstream step.
 3. **Merge (implement).** Blind-blind-merge. Two models (opus + codex), same spec, separate directories. Compare implementations, pick the structurally stronger one per component, synthesize. See Merge Tactics below.
-4. **Hunt (code).** Two-reviewer hunt against the merged implementation:
+4. **Hunt (code).** Codex hunt against the merged implementation:
    - **Codex** (`/bug-hunt`): adversarial codex review iterated to convergence. See the bug-hunt skill for the full protocol.
-   - **Gemini** (`/gemini`): send the implementation + spec to Gemini 3.1 Pro for a logic-tracing pass. Gemini catches inverted conditions, off-by-one errors in decision trees, and mismatches between spec and code that codex tends to miss.
    
    If a bug traces back to a spec defect that survived step 2, fix the spec first, then re-merge from the corrected spec rather than patching the implementation.
 5. **Volley (clean).** Review the implementation against the spec. Clean up naming, remove dead code, ensure tests pass. Converge in two rounds. The output is a PR-ready branch.
@@ -78,7 +76,7 @@ opus  ──→ dir-a/ ──┐
 codex ──→ dir-b/ ──┘
 ```
 
-Gemini does NOT implement. It reviews in step 4 (hunt). Opus and codex are the implementers.
+Opus and codex are the implementers.
 
 ### Split-scope: frontend/backend separation
 

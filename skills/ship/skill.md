@@ -52,7 +52,6 @@ Ship all `dripped` entries that pass the org gate. Use when you're watching and 
 5. **AI policy check (hard block).** Run `~/.sweep/bin/ai-policy <owner/repo>`. If `detected: true`, evict the repo and skip. Checks CONTRIBUTING.md, AGENTS.md, and org-level `.github` files. This is the last line of defense — actionable and triage should have caught it, but ship verifies.
 6. **Banlist (enforced by hook, not by ship).** `~/.sweep/banlist.txt` is checked by the `gate-pr-create.sh` PreToolUse hook. If the repo is banned, `gh pr create` is blocked at the system level. Ship doesn't need to check — the hook is the enforcement. But ship should still skip banned repos early to avoid wasting time on push + gate file prep.
 6. **Verify gate attestation.** Load `~/.sweep/gates/<owner>-<repo>.gate`. Check:
-   - `gemini_verdict` is `"pass"`
    - `codex_verdict` is `"pass"`
    - `test_attestation` is present and non-empty
    - If any field is missing, empty, or not `"pass"`: mark entry back to `triaged` in the drip queue (so `/qa` and `/drip` re-run on the next tick), log the reason, skip. This is the feedback loop: ship validates what drip stamped.

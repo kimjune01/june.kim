@@ -95,7 +95,7 @@ SOAP complete. Four files in `soap/`: S.md, O.md, A.md, P.md. Each one traces ba
 
 ## Convergence
 
-Each skill converges individually (self-check loop, hard stop at 10 passes). Codex sniffs before every human gate, fixing obvious issues so the human only Attends ambiguities. **If codex is unavailable**, try Gemini as the reviewer. If neither is available, the agent performs a self-review pass applying the same criteria (framework leaks, weak provenance, miscalibrated confidence). Log which reviewer was used or skipped so the human knows the Filter strength. The composed pipeline converges because:
+Each skill converges individually (self-check loop, hard stop at 10 passes). Codex sniffs before every human gate, fixing obvious issues so the human only Attends ambiguities. **If codex is unavailable**, the agent performs a self-review pass applying the same criteria (framework leaks, weak provenance, miscalibrated confidence). Log which reviewer was used or skipped so the human knows the Filter strength. The composed pipeline converges because:
 
 1. Each skill's postcondition matches the next skill's precondition
 2. Each skill is individually convergent
