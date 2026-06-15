@@ -83,7 +83,7 @@ lucky-correct N-atoms — each time bivalence fails to classify a real epistemic
 catches it. §trichotomy is the formal resolution. The device IS the thesis in motion.
 
 **PAPER 1 — ordering: the ONE-LADDER unification (structural spine).** The boundary-redraw (foot)
-and the asymptote (top) are the SAME ladder, not two concerns:
+and the closed ceiling (top) are the SAME ladder, not two concerns:
 
     certified correspondence   ← credence 1, unreachable (no tier above belief; F6a)
             true               ← on the ladder, climbing (A6)
@@ -851,8 +851,12 @@ already earned (see audience-register), but do not let the worldview tip into mo
   single projection reveals, and the agreement of INDEPENDENT projections is the
   mark of the objective (Nagel's view-from-nowhere as the limit). Metaphor: the
   blind men (monks) and the elephant, no one holds it, the touches together
-  approach it. THIS IS F6's asymptote mechanism: convergence across projections
-  approaches the noumenon, never reaching it. INDEPENDENCE CAVEAT (load-bearing):
+  constrain it. The object is the limit independent projections triangulate, pinned
+  tighter by every added diverse view and held by no single one. (Revised 2026-06-14:
+  this is triangulation's OWN robustness mechanism, NOT "F6's asymptote" — F6 no longer
+  routes through a noumenal asymptote; convergence here is across PROJECTIONS constraining
+  an object, grounded in Davidson/Nagel, a different thing from the retired Paper-1
+  truth-asymptote.) INDEPENDENCE CAVEAT (load-bearing):
   only DIVERSE projections refine; agreement among agents sharing a blind spot is
   an echo chamber, not objectivity, so the stranger must be an INDEPENDENT
   projection (grounds the blind cross-family adversary discipline). GROUND
@@ -1741,9 +1745,13 @@ edge (the build made checkable) and zooms out single-agent → population.
   (2) abstract — drop the "asymptotic to a noumenon" clause. (3) §truth — cut the "what inquiry keeps
   approaching" + "two derivations of the one limit" paragraphs (the Cromwell machinery), recast the
   ceiling (no tier above belief) and the physics case (exposure-ordering). (4) collapse "two own
-  additions"→one. (5) break→refute sweep per the open author call. CONSISTENCY CHECK NEEDED: Paper 2
-  cross-refs to F6's asymptote (graph lines ~ C1b triangulation "F6's asymptote mechanism") and the
-  PUBLISHED Verifiable Knowledge text, which may still say "asymptotic" — reconcile when Paper 2 is next touched.
+  additions"→one. (5) break→refute sweep per the open author call. CONSISTENCY CHECK DONE 2026-06-14:
+  (a) the published Verifiable Knowledge post (`2026-06-13-verifiable-knowledge.md`) had one stale
+  cross-ref, "never collides with the asymptote" → reworded to "truth that only ever stands on sufferance"
+  (committed 9017a516); its line-20 "Bayesian representation asymptotes to zero" is a different,
+  unrelated asymptote, left as is. (b) the graph's C1b triangulation node "F6's asymptote mechanism"
+  reworded — triangulation's projection-convergence is its OWN robustness mechanism (Davidson/Nagel),
+  distinct from the retired Paper-1 truth-asymptote. (c) one-ladder intro "asymptote (top)" → "closed ceiling (top)".
 - 2026-06-14: CODEX SNIFF on the two reframes (asymptote sidestep + cartographer verdict). Argument-fixes
   FOLDED INTO THE GRAPH: (1) F6 — the inference "inside the world, therefore no external target" was a
   non-sequitur (a hiker is inside the landscape and approaches the mountain); recast to "no available
