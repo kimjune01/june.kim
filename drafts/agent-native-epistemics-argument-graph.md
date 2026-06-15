@@ -1228,6 +1228,34 @@ Machine side (the neighbors):
     dominate.)
   `declared, OPEN speculative edge` (FW2 frame; /compress-and-unfold self-link; DPI
   Cover & Thomas; Shannon; cata/anamorphism) · §future-work, ties FW1 + FW3 + C2a + C2
+- **FW5.** (OPEN SPECULATIVE EDGE, honestly typed per FW2; the VERIFICATION-ALLOCATION
+  problem, author 2026-06-14, from the proof-of-trust thread.) "Which channel do I trust
+  to choose which knowledge to verify, in the absence of authority?" Once replay is cheap
+  and universal, the binding scarcity moves from verification to SELECTION: which nodes do
+  you spend the rate-limited inhale (FW4) on? The protocol guarantees you CAN verify any
+  node; it says nothing about which you SHOULD, and "which" is where the decisions and the
+  power live (the curation / docket layer). RISK — the DKIM/Gmail equilibrium: an open,
+  replayable verify-floor is compatible with, and may CAUSE, a centralized CLOSED curation
+  layer on top (reputation re-enters as the selection heuristic, §6's credence shortcut
+  promoted to driver). DESIGN/KILL target: force the allocation signal ON-GRAPH (derivable
+  from the public canon — provenance depth, independent citations, fired kills) so curation
+  is itself a replayable build with a kill condition; allow it OFF-GRAPH (private behavioral
+  telemetry) and the gatekeeper re-forms around whoever holds the most data. Trust-as-
+  topology (proof-of-trust) is one candidate on-graph signal: forgery-resistant but
+  intent-blind and incumbent-weighted (still open). `declared, OPEN speculative edge`
+  (FW2 frame; proof-of-trust + DKIM as prior art) · §future-work, ties FW3 + FW4 + C1b/C1d
+- **FW6.** (OPEN SPECULATIVE EDGE, honestly typed per FW2; VERIFICATION DISAGREEMENT,
+  author 2026-06-14.) "Handling disagreements between independent verifications." When
+  independent replays of the same build return DIFFERENT verdicts, how is the split
+  adjudicated? Triangulation (C1b) assumes independent projections CONSTRAIN the object, but
+  n projections can genuinely disagree (calibration drift, ambiguous or underpowered world-
+  trials, the fuzzy empirical floor of §9.3) or share a blind spot and FALSELY AGREE (the
+  verifier monoculture / defeat-device, C1's honest limits). The protocol returns a verdict
+  per verifier, not a rule for a split. OPEN: a disagreement-resolution policy that does NOT
+  smuggle an AUTHORITY back in (which would undo the no-gatekeeper aim) — candidates: weight
+  by engineered independence, majority over diverse lenses, escalate to a wider world-trial,
+  or treat a persistent split as itself a status (untrue-pending, not yet adjudicable).
+  `declared, OPEN speculative edge` (FW2 frame) · §future-work, ties C1b + C1g-i + FW5
 
 # REFERENCE (not rendered as body sections)
 
@@ -1322,7 +1350,7 @@ these are the author's own priors, linked for lineage and texture.
 7. **The limits** — C1g, C1h, C1i (one section, First/Second/Third).
 8. **Related work** — R7-R12 (machine neighbors, synthesis-attack rebuttal R11, DeepMind R12) + reproducibility stack; full C5 razor.
 9. **Self-application and falsifiers** — S1-S4; K1-K10 (K6/K7/K8 lean Paper 1's frame, cite across; rest Paper 2).
-10. **Future work** — FW1-FW4 (application edge, economic, forecast).
+10. **Future work** — FW1-FW6 (application edge, economic, forecast, verification-allocation, verification-disagreement).
 11. **Conclusion (P2)** — C4 + C5 restated.
 
 *Cross-paper seam: Paper 2's intro and §ledger both recall Paper 1 by citation, never re-derivation. `untrue` is defined in Paper 1 (§trichotomy) and encoded in Paper 2 (§ledger).*
@@ -1353,7 +1381,7 @@ edge (the build made checkable) and zooms out single-agent → population.
 **CODA**
 14. **Related work**: R1-R12, full C5 razor at R11. *(pending)*
 15. **Self-application and falsifiers**: S1-S4 (S5 optional light turn), K1-K10 in-paper. *(pending)*
-16. **Future work**: FW1 (the outward falsifiability edge to application), FW2 (the open-conjecture frontier; rehomes the scope-guarded vision as honestly-typed speculative edges), FW3 (the economic / search-complexity open edge: verify<generate 1:1, agent fleets turn many:1 into many:many, the filtering rule is the load-bearing variable), FW4 (the forecast: under unbounded generation, untrue is the only classification that survives, because true/false cost the rate-limited inhale and untrue is the free default; grounds in /compress-and-unfold). *(pending)*
+16. **Future work**: FW1 (the outward falsifiability edge to application), FW2 (the open-conjecture frontier; rehomes the scope-guarded vision as honestly-typed speculative edges), FW3 (the economic / search-complexity open edge: verify<generate 1:1, agent fleets turn many:1 into many:many, the filtering rule is the load-bearing variable), FW4 (the forecast: under unbounded generation, untrue is the only classification that survives, because true/false cost the rate-limited inhale and untrue is the free default; grounds in /compress-and-unfold), FW5 (verification-allocation: once replay is cheap, trust becomes which-to-verify; force the allocation signal on-graph or the gatekeeper re-forms, DKIM/proof-of-trust prior art), FW6 (verification-disagreement: adjudicating a split between independent verifications without smuggling an authority back in). *(pending)*
 17. **Conclusion**: C4 + C5 restated; F4 + F6 callback (standing on sufferance, on the way to a limit never occupied). *(pending)*
 
 ## Provenance
@@ -1697,8 +1725,18 @@ edge (the build made checkable) and zooms out single-agent → population.
   machine delta whose HOME is Paper 2 (VK), not a second Paper-1 thesis. The rendered POST still carries
   a leftover "the paper's own additions to the frame are two" line (§two-graphs + conclusion) — COLLAPSE
   to one (the entitlement redraw) at propagation.
-- 2026-06-14: PROPAGATION PENDING (graph edited first per the edit-here-first rule; views not yet
-  updated). TO RENDER into `2026-06-12-what-cannot-be-false-cannot-be-true.md`: (1) §phenomenon — drop
+- 2026-06-14: PROPAGATION DONE (post brought in line with the graph; §phenomenon retitled "Working the
+  phenomenon" — author: the section is no longer a Kant primer, it does the participatory move).
+  Executed: §phenomenon re-spined (single noumenon anchor, cartographer + reductio + untrue verdict,
+  resistance-realism, asymptote pointer dropped); §truth asymptote/two-derivations paragraphs cut and
+  recast to ceiling + direction (no credence-asymptote); §knowledge N-atoms recast on un-buildability/
+  un-verifiability; "frame complete" two-additions→one + Peirce-asymptote→Dewey; trichotomy "go red"→
+  "refuted at any step", "built and failed"; §related-work Dewey-led + James folded + Misak rehomed;
+  §two-graphs + figure + abstract de-noumenoned/de-asymptoted; break→refute swept. Open: one noumenon
+  remains in §related-work (the Kant attribution, kept as honest citation); frontmatter keyword left.
+  Below is the original pending checklist, kept for history:
+- 2026-06-14: PROPAGATION (original checklist; graph edited first per the edit-here-first rule).
+  TO RENDER into `2026-06-12-what-cannot-be-false-cannot-be-true.md`: (1) §phenomenon — drop
   the asymptote/"approach it without ever arriving" line; add the cartographer mention + reductio.
   (2) abstract — drop the "asymptotic to a noumenon" clause. (3) §truth — cut the "what inquiry keeps
   approaching" + "two derivations of the one limit" paragraphs (the Cromwell machinery), recast the
@@ -1766,7 +1804,7 @@ edge (the build made checkable) and zooms out single-agent → population.
   use of the WORD goes in §phenomenon as the ORIENTING LANDMARK (the world in itself, thinkable never holdable
   — the familiar Kantian anchor the Dewey-unfamiliar reader needs), then RIDE DEWEY from there; everywhere
   else (two-graphs, §truth) says "the world"/"reality," NOT noumenon. F4 keeps the leash but as resistance-
-  realism (the world refutes), no longer billed as "THE DEPARTURE FROM KANT." Now EXECUTING in the post propagation.
+  realism (the world refutes), no longer billed as "THE DEPARTURE FROM KANT." DONE 2026-06-14 (propagated; §phenomenon retitled "Working the phenomenon").
 ## Citation map (pre-render)
 
 Two tiers, held apart (the tiering rule). LOAD-BEARING = canonical sources only;
@@ -1848,4 +1886,5 @@ external load-bearing cite (mark "own"); the render must not invent one for them
 - **S3** own (verb-scoping) · type-iii-error, wrong-questions, wrong-again
 - **S4, S5** own (declared / meta) · —
 - **FW1, FW2, FW3** own (declared; all open speculative edges) · — (FW2 rehomes the scope-guarded vision; FW3 = the economic/search-complexity argument, honestly typed)
+- **FW5, FW6** own (declared, open speculative edges; author 2026-06-14) · proof-of-trust + DKIM as prior art for FW5 — (FW5 = verification-allocation/curation; FW6 = verification-disagreement)
 - **FW4** own (declared, open edge) · /compress-and-unfold (self-link) — load-bearing on STANDARD sources (DPI Cover & Thomas; Shannon; catamorphism/anamorphism duality), NF kept out
