@@ -35,21 +35,12 @@ Here we give it the trail. The **hypothesis graph** is a semantic memory that ho
 
 Here is the answer to each problem, backed by a receipt rather than asserted:
 
-<figure>
-<table style="max-width:760px; margin:1em auto; font-size:13.5px; border-collapse:collapse; line-height:1.5;">
-<colgroup><col style="width:9.5em"><col></colgroup>
-<thead><tr>
-<th style="background:#f0f0f0; padding:6px 9px; text-align:left;">Problem</th>
-<th style="background:#f0f0f0; padding:6px 9px; text-align:left;">Solution</th>
-</tr></thead>
-<tbody>
-<tr><td style="padding:6px 9px; border-top:1px solid #eee;"><em>Reasoning cost</em></td><td style="padding:6px 9px; border-top:1px solid #eee;">A domain-aware <em>division of intellect</em>: the model reasons, the harness holds the open hypotheses and runs the gate, the way you would not ask an LLM to keep a database in its context.</td></tr>
-<tr><td style="padding:6px 9px; border-top:1px solid #eee;"><em>Agent trust</em></td><td style="padding:6px 9px; border-top:1px solid #eee;">An <em>attested chain</em> with the discipline of accounting: a claim clears only when an independent party reruns its recorded trial, never on the agent's word, and nothing self-grades.</td></tr>
-<tr><td style="padding:6px 9px; border-top:1px solid #eee;"><em>Lost reasoning</em></td><td style="padding:6px 9px; border-top:1px solid #eee;">The inquiry is held in a <em>legible representation</em>, a kind of externalized interpretability, typed nodes a later run or a human reads and replays, instead of a transcript that evaporates once the patch passes.</td></tr>
-<tr><td style="padding:6px 9px; border-top:1px solid #eee;"><em>Review bottleneck</em></td><td style="padding:6px 9px; border-top:1px solid #eee;">Every step is <em>grounded in a trial</em>, so a reviewer accepts the work or resumes where it stuck, instead of judging it ungrounded, tossing it, and reassigning to a human.</td></tr>
-</tbody>
-</table>
-</figure>
+| Problem | Solution |
+|----|----|
+| *Reasoning cost* | A domain-aware *division of intellect*: the model reasons, the harness holds the open hypotheses and runs the gate, the way you would not ask an LLM to keep a database in its context. |
+| *Agent trust* | An *attested chain* with the discipline of accounting: a claim clears only when an independent party reruns its recorded trial, never on the agent's word, and nothing self-grades. |
+| *Lost reasoning* | The inquiry is held in a *legible representation*, a kind of externalized interpretability, typed nodes a later run or a human reads and replays, instead of a transcript that evaporates once the patch passes. |
+| *Review bottleneck* | Every step is *grounded in a trial*, so a reviewer accepts the work or resumes where it stuck, instead of judging it ungrounded, tossing it, and reassigning to a human. |
 
 What memory does a coding agent actually need? Not the kind the word usually means. Agent memory has mostly meant keeping context: transcripts, retrieved chunks, the last *n* turns. But coding is, almost entirely, reasoning. The binding work is diagnosing why something fails and deciding what will fix it, not typing the patch. And for a reasoning task the only context worth keeping is the reasoning trace itself; the transcript and the files read are recoverable or beside the point.
 
@@ -83,29 +74,16 @@ The constraints come straight from the two problems the introduction posed, a co
 
 Prior structures clear part of this; the table scores the strong version of each against the four (✓ native, ◐ with common extensions, ✗ needs another layer doing the work).
 
-<figure>
-<div class="table-wrap">
-<table style="max-width:820px; margin:1em auto; font-size:12px; border-collapse:collapse; line-height:1.4;">
-<colgroup><col style="width:19em"><col><col><col><col></colgroup>
-<thead><tr>
-<th style="background:#f0f0f0; padding:5px 7px; text-align:left;">Structure</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="a hypothesis still under consideration, not verified facts or established chunks">holds hypotheses</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="each claim bound to an executable test that can prove it wrong">kill condition</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="a stranger reruns the recorded trial instead of re-deriving the reasoning or trusting the author">independently verifiable</th>
-<th style="background:#f0f0f0; padding:5px 4px;" title="the trail persists past the context window, not discarded once a patch passes">persistent memory</th>
-</tr></thead>
-<tbody>
-<tr><td><strong>Hypothesis graph</strong> <span style="color:#888;">(this work)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td></tr>
-<tr><td>Truth-maintenance <span style="color:#888;">(Doyle 1979; de Kleer 1986)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td></tr>
-<tr><td>Provenance / lineage <span style="color:#888;">(W3C PROV, Moreau et&nbsp;al. 2013)</span></td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#15803d;">✓</td></tr>
-<tr><td>Search + proof tree <span style="color:#888;">(Clarke et&nbsp;al. 2000; Solar-Lezama et&nbsp;al. 2006)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td></tr>
-<tr><td>Argumentation <span style="color:#888;">(Dung 1995; Modgil &amp; Prakken 2014)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td></tr>
-<tr><td>Event-sourced log / ReAct trace <span style="color:#888;">(Yao et&nbsp;al. 2023)</span></td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#b45309;">◐</td><td style="text-align:center; color:#15803d;">✓</td></tr>
-</tbody>
-</table>
-</div>
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.4em;"><strong>Table.</strong> The columns are the introduction's two problems turned into tests: the middle two are verification (a falsifiable trial a stranger can rerun), the outer two are the hypothesis-shaped gap and retention. Each structure clears part; only the hypothesis graph clears all four in one append-only file.</figcaption>
-</figure>
+| Structure | holds hypotheses | kill condition | independently verifiable | persistent memory |
+|----|:--:|:--:|:--:|:--:|
+| **Hypothesis graph** (this work) | ✓ | ✓ | ✓ | ✓ |
+| Truth-maintenance (Doyle 1979; de Kleer 1986) | ✓ | ◐ | ◐ | ◐ |
+| Provenance / lineage (W3C PROV, Moreau et al. 2013) | ◐ | ◐ | ◐ | ✓ |
+| Search + proof tree (Clarke et al. 2000; Solar-Lezama et al. 2006) | ✓ | ◐ | ◐ | ◐ |
+| Argumentation (Dung 1995; Modgil & Prakken 2014) | ✓ | ◐ | ◐ | ◐ |
+| Event-sourced log / ReAct trace (Yao et al. 2023) | ✓ | ◐ | ◐ | ✓ |
+
+*The columns are the introduction's two problems turned into tests: the middle two are verification (a falsifiable trial a stranger can rerun), the outer two are the hypothesis-shaped gap and retention. Each structure clears part; only the hypothesis graph clears all four in one append-only file.*
 
 What can finally satisfy all four together? The LLM. Filling the graph takes a reasoner that reads a surprising failure, proposes candidate causes in open vocabulary, and turns each into an executable test, with no hand-built domain model. Classical inference engines could do this only inside a formalism encoded by hand, which is why the slot stayed a research program; the LLM populates it across arbitrary codebases, which is what makes the structure practical here rather than a paper exercise.
 
@@ -123,10 +101,7 @@ Five operations maintain the structure, each defined with the one-clause argumen
 - **Link** (edge-from-kill): the manner of a hypothesis's death names the next hypothesis (the dead bulb names "the dimmer is broken", trial `bypass the dimmer to the wall`), so a classification spawns the next node with no external controller. *Preservation*: link only appends, and each new node is admitted under Create's rule. This is the one genuinely novel operation, and the search path it builds *is* the justification.
 - **Prune**: a dead branch leaves the working frontier while its record stays in place. *Preservation* is trivial, prune is a frontier-set operation that changes what is *live* and deletes nothing, so every pruned node replays exactly as before.
 
-<figure>
-  <img src="/assets/hypothesis-graph-anatomy.svg" alt="A hypothesis graph as a two-node linked list, on the dead-light inquiry. The first node, an abduction (the bulb is dead), records its trial (swap in a fresh bulb), its outcome (still dark), and a credence of 50 percent capped by its mode; it is killed. An edge generated by that kill (generate-edge-from-kill) names the next node. The second node, an induction (the dimmer switch is broken), records its trial (bypass the dimmer to the wall), its outcome (the light comes on), and a credence of 96 percent that is test-backed; it is witnessed. The footer states the replay invariant: every node rebuilds from its recorded trial, by a reader who need not trust the author." style="max-width:600px; width:100%; height:auto; margin:1em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> A hypothesis graph, two nodes and the edge between them, on the dead-light inquiry. The bulb hypothesis is killed by a cheap trial (swap in a fresh bulb, still dark); its death names the next node, the dimmer, which a second trial witnesses (bypass it to the wall, the light comes on). Each node binds a hypothesis to a trial, an observed outcome, and a credence capped by the mode that earned it: abduction proposes and stays low, induction is test-backed and rises. Every node rebuilds from its recorded trial, so a reader replays the structure instead of trusting it.</figcaption>
-</figure>
+![A hypothesis graph, two nodes and the edge between them, on the dead-light inquiry. The bulb hypothesis is killed by a cheap trial (swap in a fresh bulb, still dark); its death names the next node, the dimmer, which a second trial witnesses (bypass it to the wall, the light comes on). Each node binds a hypothesis to a trial, an observed outcome, and a credence capped by the mode that earned it: abduction proposes and stays low, induction is test-backed and rises. Every node rebuilds from its recorded trial, so a reader replays the structure instead of trusting it.](/assets/hypothesis-graph-anatomy.svg)
 
 The payoff is the central claim of value, and it follows from the invariant rather than from any benchmark:
 
@@ -160,10 +135,7 @@ His *Illustrations of the Logic of Science* (1878) and *Pragmatism as the Logic 
 - **Deduction** derives testable predictions from hypotheses: *if this hypothesis holds, what follows?*
 - **Induction** tests predictions against evidence: *does the evidence accord with the prediction?*
 
-<figure>
-  <img src="/assets/modes-of-reason-triangle-light.svg" alt="Triangle of the three Peircean modes: Observation to Theory (abduction), Theory to Experiment (deduction), Experiment to Observation (induction). Three modes, three edges, one self-correcting cycle." style="max-width:528px; width:100%; height:auto; margin:1em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> The three modes as one cycle: Observation → Theory (abduction), Theory → Experiment (deduction), Experiment → Observation (induction). <code>inquire</code> traverses all three before any code is written; a partial traversal is a partial inquiry.</figcaption>
-</figure>
+![The three modes as one cycle: Observation → Theory (abduction), Theory → Experiment (deduction), Experiment → Observation (induction). `inquire` traverses all three before any code is written; a partial traversal is a partial inquiry.](/assets/modes-of-reason-triangle-light.svg)
 
 No single mode carries a belief to its grade. Abduction proposes content but does not test it; induction tests but introduces no new explanatory content; deduction traces consequences but invents nothing. The credence a node ends up with is what traversing all three earns it, and that is what it means to call the modes typed: each is fixed by what it can't do. Keep them separate and each does its one job; collapse them and you get familiar failure modes:
 
@@ -197,17 +169,11 @@ Abduction completes the trichotomy as an idea. To put it to work, you need a way
 
 The "XOR" used here throughout is shorthand for exactly that bi-abductive separation, the figure (what the fix must change) held apart from the ground (the frame that must stay invariant). Where bi-abduction infers the frame to make a proof go through, the harness fires the same split as a check: it computes the figure-from-ground difference against a ground-truth oracle and keeps only the cases the difference flags. The symmetric-difference framing is the operational form; the inference it operationalizes is bi-abduction (Calcagno et al. 2009; O'Hearn 2019).
 
-<figure>
-  <img src="/assets/bi-abduction-dimmer.svg" alt="Bi-abduction as a diff: a dead light with three intact suspects (dimmer, fixture, bulb), the cause invisible. Bypassing the dimmer straight to the wall restores the light, so the XOR isolates the dimmer as the figure (the fault) and exonerates fixture and bulb as the ground (the frame)." style="max-width:720px; width:100%; height:auto; margin:1em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> An example of bi-abduction. The symptom is a light fixture unresponsive to switch input, and it underdetermines its cause: dimmer, fixture, and bulb are all intact, so the static scene names no suspect. The perturbation manufactures the second snapshot, bypassing the dimmer to the wall, and the XOR isolates the figure (the dimmer) from the ground (fixture and bulb). Generating that diff is the abductive act; induction follows, convicting the dimmer once the light returns.</figcaption>
-</figure>
+![An example of bi-abduction. The symptom is a light fixture unresponsive to switch input, and it underdetermines its cause: dimmer, fixture, and bulb are all intact, so the static scene names no suspect. The perturbation manufactures the second snapshot, bypassing the dimmer to the wall, and the XOR isolates the figure (the dimmer) from the ground (fixture and bulb). Generating that diff is the abductive act; induction follows, convicting the dimmer once the light returns.](/assets/bi-abduction-dimmer.svg)
 
 *Directed graphs as reasoning representation.* Pearl 1988 (*Probabilistic Reasoning in Intelligent Systems*; Bayesian networks as DAGs of dependencies); Pearl 2000/2009 (*Causality*; structural causal models, d-separation, do-calculus). Our data structure (typed nodes, directed edges) applies Pearl's lineage to hypothesis representation rather than causal-structure inference. The difference from a Bayesian network is one of kind, and runs deeper than dropped probabilities. A Bayes net conditions over a fixed variable set and propagates probability along edges of dependence; the hygraph abduces its nodes as the inquiry runs, and its edges are genealogical, a dead hypothesis naming its successor rather than a conditional dependence. A Bayes net is justification over a space it is handed; the hygraph generates the space.
 
-<figure>
-  <img src="/assets/hypothesis-graph-fixture.svg" alt="A hypothesis graph for the dead-fixture inquiry. The observation (light won't turn on) fans by abduction into four typed hypothesis nodes: no electricity from socket, dimmer switch broken, fixture dysfunctional, bulb expired. Three are killed by mechanical predicates (outlets live, lights on wall, lights elsewhere); the dimmer node is witnessed (bypass works) and closes as induction at 96 percent." style="max-width:720px; width:100%; height:auto; margin:1em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> The hypothesis graph for the dead fixture. Abduction fans the observation into four typed candidate nodes; mechanical kill predicates fire on three (the socket, fixture, and bulb each cleared by a cheap test), the dimmer node is witnessed by the bypass and closes the last open hypothesis, and deduction derives the fix. Typed nodes, directed edges, all three modes in one inquiry.</figcaption>
-</figure>
+![The hypothesis graph for the dead fixture. Abduction fans the observation into four typed candidate nodes; mechanical kill predicates fire on three (the socket, fixture, and bulb each cleared by a cheap test), the dimmer node is witnessed by the bypass and closes the last open hypothesis, and deduction derives the fix. Typed nodes, directed edges, all three modes in one inquiry.](/assets/hypothesis-graph-fixture.svg)
 
 Isn't generating that space just debugging? It is, and debugging has been automated for decades: spectrum-based fault localization, statistical and delta debugging, model-based diagnosis, and search-based program repair are mature fields (Jones et al. 2002; Liblit et al. 2005; Zeller & Hildebrandt 2002; Reiter 1987; Le Goues et al. 2012; Monperrus 2018). Debugging tools already automate the loop; what is new is that the hygraph persists it. Every engineer, and every repair tool, runs some version of abduce a cause, kill it on evidence, witness the survivor, derive the fix, but the engineer runs it in their head and the tools, whatever logs they keep, do not persist the search as a typed, replayable hypothesis graph, the trials collapsing into a verdict once a patch passes. The harness gives the loop a typed, replayable substrate, the hygraph, and a deterministic engine to run it, so a model executes the inquiry and a stranger can replay every step of it.
 
@@ -215,10 +181,7 @@ Isn't generating that space just debugging? It is, and debugging has been automa
 
 ## The harness {#method}
 
-<figure>
-  <img src="/assets/inquire-skill.svg" alt="The inquire skill. An observation, a surprising fact or failure trace, enters the methodeutic loop. Abduction proposes typed hypotheses, each with a kill condition (what would, if true, make this no longer surprising). Deduction derives a falsifiable prediction, the exact trial each hypothesis must survive. Induction runs that trial against the world: a refutation fires the kill, a confirmation marks the node witnessed, and the predicate is deterministic with no model arbitrating it. Each mode writes typed nodes into the hypothesis graph (smem), each node typed by the mode that set it and capped at that mode's credence, and the loop re-enters abduction with the updated graph until one node is witnessed and deduction derives the fix. The skill is named for Peirce's inquiry, the engine of discovery." style="max-width:720px; width:100%; height:auto; margin:1em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> The <code>inquire</code> skill: Peirce's three modes as a procedure (<code>pmem</code>) that writes the hypothesis graph (<code>smem</code>). Abduction proposes hypotheses with kill conditions, deduction derives the trial each must survive, induction runs it and fires a deterministic kill or witness with no model arbitrating. Each node is typed by the mode that set it, the credence cap travels with the type, and the loop re-enters with the updated graph until a node is witnessed. <code>implement</code> and <code>attest</code>, which read the survivors and verify the patch, follow below.</figcaption>
-</figure>
+![The `inquire` skill: Peirce's three modes as a procedure (`pmem`) that writes the hypothesis graph (`smem`). Abduction proposes hypotheses with kill conditions, deduction derives the trial each must survive, induction runs it and fires a deterministic kill or witness with no model arbitrating. Each node is typed by the mode that set it, the credence cap travels with the type, and the loop re-enters with the updated graph until a node is witnessed. `implement` and `attest`, which read the survivors and verify the patch, follow below.](/assets/inquire-skill.svg)
 
 Throughout, the three stages are `inquire`, `implement`, and `attest`; the frozen artifact's code, file paths, and route literals spell them `recon`, `craft`, and `audit`.
 
@@ -236,13 +199,11 @@ One trial settles the predicate in this regime. In code the per-case response is
 
 The three Peircean modes are how `inquire` builds the graph, each node typed by the mode that established it and capped at that mode's confidence:
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:7em"><col><col style="width:6.5em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Mode</th><th style="background:#f0f0f0">What <code>inquire</code> does</th><th style="background:#f0f0f0">Confidence</th></tr></thead>
-<tr><td><strong>Abduction</strong></td><td>Proposes candidate root causes from the observed failure; writes hypothesis nodes with falsifiable predicates and kill conditions (read-only)</td><td>low</td></tr>
-<tr><td><strong>Deduction</strong></td><td>Traces each hypothesis's consequences through the code to localize the suspect set</td><td>high</td></tr>
-<tr><td><strong>Induction</strong></td><td>Tests survivors with cheap read-only experiments (prints, intermediate data)</td><td>moderate</td></tr>
-</table>
+| Mode | What `inquire` does | Confidence |
+|----|----|----|
+| **Abduction** | Proposes candidate root causes from the observed failure; writes hypothesis nodes with falsifiable predicates and kill conditions (read-only) | low |
+| **Deduction** | Traces each hypothesis's consequences through the code to localize the suspect set | high |
+| **Induction** | Tests survivors with cheap read-only experiments (prints, intermediate data) | moderate |
 
 `implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
@@ -252,22 +213,9 @@ The three Peircean modes are how `inquire` builds the graph, each node typed by 
 
 A committed node is a conclusion, and an inquiry that reaches one rarely runs straight. Following the `inquire` skill on a real bug, a single hypothesis flips across all three modes and a kill before it settles:
 
-<figure>
-  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; font-size:12px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; margin:0.6em 0; line-height:2;">
-    <span style="padding:2px 8px; border-radius:10px; background:#fef3c7; color:#b45309;">abduction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#fee2e2; color:#dc2626; text-decoration:line-through;">kill</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#fef3c7; color:#b45309;">abduction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dcfce7; color:#15803d;">induction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dcfce7; color:#15803d;">induction</span><span style="color:#cbd5e1;">→</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#dbeafe; color:#1d4ed8;">deduction</span>
-    <span style="color:#94a3b8; font-weight:600;">⇒</span>
-    <span style="padding:2px 8px; border-radius:10px; background:#1d4ed8; color:#fff;">induction · 93%</span>
-  </div>
-  <figcaption><strong>Figure.</strong> An in-flight inquiry trace, illustrative: Sonnet 4.5 following the <code>inquire</code> skill on the <code>python-dotenv</code> <code>find_dotenv</code> v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (<code>induction · 93%</code>) and discards this sequence. Full trace: <a href="/assets/recon-inflight-dotenv.md">recon-inflight-dotenv.md</a>. Not a frozen Pro instance.</figcaption>
-</figure>
+> abduction → deduction → kill → abduction → deduction → induction → deduction → induction ⇒ induction · 93%
+
+*An in-flight inquiry trace, illustrative: Sonnet 4.5 following the `inquire` skill on the python-dotenv `find_dotenv` v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (induction · 93%) and discards this sequence. Full trace: [recon-inflight-dotenv.md](/assets/recon-inflight-dotenv.md). Not a frozen Pro instance.*
 
 ### Blind cross-model challenge at the hypothesis stage {#blind-blind}
 
@@ -276,8 +224,6 @@ To keep that hypothesis from being one model's artifact, two frontier models fro
 ### Deterministic gating and the outer loop {#gating}
 
 The control loop is standard. `attest` prints a verdict and a re-entry route from a fixed table; the driver routes on those two lines with no model in the decision and under a bounded attempt budget; a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hygraph doubles as the loop's checkpoint and no dead branch is re-proposed. The gate's reliance on a cheap test oracle is not incidental: §(attribution) shows it does most of the work the bench number seems to credit to diagnosis.
-
-
 
 ## Procedure {#setup}
 
@@ -359,29 +305,15 @@ Retrospectively the goldens are free; prospectively, on a fresh bug with no merg
 
 The whole ablation reduces to one grid, and the grid has a structure: the two middle columns flip on as soon as the enumeration goes wide, and the last column flips back only at the human general fix. The first flip is enumeration, which an external gate supplies and a model can even rebuild for itself. The second flip is the oracle for the hard arm, which no automated arm here ever earned, whether its kills were graded against the base alone or self-graded by the model.
 
-<figure>
-<table style="max-width:820px; margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.4;">
-<colgroup><col style="width:15em"><col style="width:8.5em"><col style="width:4.5em"><col><col><col><col><col style="width:9em"></colgroup>
-<thead><tr>
-<th style="background:#f0f0f0; padding:5px 7px; text-align:left;">Arm</th>
-<th style="background:#f0f0f0; padding:5px 7px; text-align:left;">Kill oracle</th>
-<th style="background:#f0f0f0; padding:5px 7px; text-align:center;">chg</th>
-<th style="background:#f0f0f0; padding:5px 4px; text-align:center;" title="the reported ! bug">`!`-bug</th>
-<th style="background:#f0f0f0; padding:5px 4px; text-align:center;" title="empty-enum / recursive-uninhabited, in-grammar but non-! ">empty-enum</th>
-<th style="background:#f0f0f0; padding:5px 4px; text-align:center;" title="associated-type projection and nested generic, never shown to the gate">out-of-grammar</th>
-<th style="background:#f0f0f0; padding:5px 4px; text-align:center;" title="genuine runtime divergence, must be preserved">divergence</th>
-<th style="background:#f0f0f0; padding:5px 7px; text-align:left;">Bucket</th>
-</tr></thead>
-<tbody>
-<tr><td>6 methods (18 draws)</td><td>self</td><td style="text-align:center;">~114</td><td style="text-align:center;">✓</td><td style="text-align:center; color:#dc2626;">✗</td><td style="text-align:center; color:#dc2626;">✗</td><td style="text-align:center;">✓</td><td><strong>narrow</strong></td></tr>
-<tr><td>#2230 (maintainer, narrow)</td><td>human</td><td style="text-align:center;">114</td><td style="text-align:center;">✓</td><td style="text-align:center; color:#dc2626;">✗</td><td style="text-align:center; color:#dc2626;">✗</td><td style="text-align:center;">✓</td><td><strong>narrow</strong></td></tr>
-<tr style="background:#fafaf5;"><td><code>abductor</code> gate (handed)</td><td>external (vs base)</td><td style="text-align:center;">269</td><td style="text-align:center;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#dc2626;">✗</td><td><strong>wide-but-broken</strong></td></tr>
-<tr style="background:#fafaf5;"><td>self-built gate (induced)</td><td>self (induced)</td><td style="text-align:center;">269</td><td style="text-align:center;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td style="text-align:center; color:#dc2626;">✗</td><td><strong>wide-but-broken</strong></td></tr>
-<tr><td>#2501 (maintainer, general)</td><td>human</td><td style="text-align:center;">269</td><td style="text-align:center;">✓</td><td style="text-align:center;">✓</td><td style="text-align:center;">✓</td><td style="text-align:center; color:#15803d;">✓</td><td><strong>general</strong></td></tr>
-</tbody>
-</table>
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.4em;"><strong>Table.</strong> The Verus #2219 ablation, one row per arm, ✓ where the arm handles the probe correctly (rejects the bug cases, preserves the sound ones). The reported `!`-bug column is solved by everything. The two middle columns, in-grammar empty-enum and the out-of-grammar held-outs the gate never saw, are the uninhabited-return generalization; they flip on the moment the enumeration goes wide, for the gate graded against an external oracle and for the gate a model induced for itself alike, and stay off for the narrow arms. The last column, the in-bar genuine divergence that must be preserved, is the XOR's hard arm; it is on for the narrow arms (which never reach far enough to break it) and for the merged human fix, force-graded to preserve it, and off for both wide gates, which over-reject it. (A harder divergence stretch case, beyond what the merged human fix promises, is declined even by that fix and is not a column here.) Enumeration moves an arm from narrow to wide and is inducible; the wide gates shown here, graded against the base alone or self-graded by the model, do not on their own preserve the in-bar divergence case. Supplying the divergence golden is what later moves a corrected arm onto it, to the human fix's behavior (§(enum-calib)).</figcaption>
-</figure>
+| Arm | Kill oracle | chg | \`!\`-bug | empty-enum | out-of-grammar | divergence | Bucket |
+|----|----|:--:|:--:|:--:|:--:|:--:|----|
+| 6 methods (18 draws) | self | ~114 | ✓ | ✗ | ✗ | ✓ | **narrow** |
+| \#2230 (maintainer, narrow) | human | 114 | ✓ | ✗ | ✗ | ✓ | **narrow** |
+| `abductor` gate (handed) | external (vs base) | 269 | ✓ | ✓ | ✓ | ✗ | **wide-but-broken** |
+| self-built gate (induced) | self (induced) | 269 | ✓ | ✓ | ✓ | ✗ | **wide-but-broken** |
+| \#2501 (maintainer, general) | human | 269 | ✓ | ✓ | ✓ | ✓ | **general** |
+
+*The Verus \#2219 ablation, one row per arm, ✓ where the arm handles the probe correctly (rejects the bug cases, preserves the sound ones). The reported \`!\`-bug column is solved by everything. The two middle columns, in-grammar empty-enum and the out-of-grammar held-outs the gate never saw, are the uninhabited-return generalization; they flip on the moment the enumeration goes wide, for the gate graded against an external oracle and for the gate a model induced for itself alike, and stay off for the narrow arms. The last column, the in-bar genuine divergence that must be preserved, is the XOR's hard arm; it is on for the narrow arms (which never reach far enough to break it) and for the merged human fix, force-graded to preserve it, and off for both wide gates, which over-reject it. (A harder divergence stretch case, beyond what the merged human fix promises, is declined even by that fix and is not a column here.) Enumeration moves an arm from narrow to wide and is inducible; the wide gates shown here, graded against the base alone or self-graded by the model, do not on their own preserve the in-bar divergence case. Supplying the divergence golden is what later moves a corrected arm onto it, to the human fix's behavior (§(enum-calib)).*
 
 ### Two surrounding cases, briefly {#other-cases}
 
@@ -417,11 +349,10 @@ The texture behind the rate is committed for inspection, the receipts in place o
 
 Two receipts, two independent attestors:
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:9.5em"><col><col style="width:13em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Receipt</th><th style="background:#f0f0f0">Evidence</th><th style="background:#f0f0f0">Attestor</th></tr></thead>
-<tr><td>Pro (preregistered)</td><td>terminal: 694 / 728 = 95.3%, 0 incomplete, whole eligible set graded</td><td>Scale's official grader, re-runs the committed patch</td></tr>
-<tr><td>OSS PR merge rate</td><td>81 merged across 73 cold repos, 50.6%, GraphQL-verifiable</td><td>adversarial maintainers who merged</td></tr></table>
+| Receipt | Evidence | Attestor |
+|----|----|----|
+| Pro (preregistered) | terminal: 694 / 728 = 95.3%, 0 incomplete, whole eligible set graded | Scale's official grader, re-runs the committed patch |
+| OSS PR merge rate | 81 merged across 73 cold repos, 50.6%, GraphQL-verifiable | adversarial maintainers who merged |
 
 We do not attest; the receipts do. The contribution is auditability, not the rate: no method documented in our comparative search (§(search)) publishes per-instance receipts at this depth on SWE-bench Pro, official-grader-only, whole eligible set, zero incomplete. That claim is about the artifact, and it holds whatever the rate turns out to be. The rate itself answers nothing claimed here, for the reason the attribution below makes exact.
 
@@ -437,15 +368,13 @@ Three readings the number does not support, stated before the attribution rather
 
 The attribution decomposes the gap channel by channel. Each cut is preregistered or receipt-committed in the repository, including one retracted estimate and its worklog trail; we keep the findings here.
 
-<table style="max-width:760px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:17em"><col style="width:15em"><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">Channel</th><th style="background:#f0f0f0">Cut</th><th style="background:#f0f0f0">Effect on Pro resolve</th></tr></thead>
-<tr><td>Gate access to the visible tests</td><td>oracle bracket, n=50</td><td><strong>~46 points</strong> (50% floor → 96% ceiling)</td></tr>
-<tr><td>Peircean prompt vocabulary</td><td>M vs G vs T, n=38/36</td><td><strong>null</strong> (CIs straddle zero)</td></tr>
-<tr><td>Directed diagnostic perturbation</td><td>deprived arm, n=110</td><td>+0.105 on underdetermined-cause stratum only; threshold-level</td></tr>
-<tr><td>Entire diagnosis stage (the smem)</td><td>minimal-prompt arm, n=34</td><td><strong>~1 point</strong>, resting on two instances</td></tr>
-<tr><td>Model pair (frontier → open-weight)</td><td>pair swap, n=728</td><td>2.2 points raw; ~17–22 genuine after recall discount</td></tr>
-</table>
+| Channel | Cut | Effect on Pro resolve |
+|----|----|----|
+| Gate access to the visible tests | oracle bracket, n=50 | **~46 points** (50% floor → 96% ceiling) |
+| Peircean prompt vocabulary | M vs G vs T, n=38/36 | **null** (CIs straddle zero) |
+| Directed diagnostic perturbation | deprived arm, n=110 | +0.105 on underdetermined-cause stratum only; threshold-level |
+| Entire diagnosis stage (the smem) | minimal-prompt arm, n=34 | **~1 point**, resting on two instances |
+| Model pair (frontier → open-weight) | pair swap, n=728 | 2.2 points raw; ~17–22 genuine after recall discount |
 
 ### The oracle bracket {#oracle-bracket}
 
@@ -531,27 +460,19 @@ Two concurrent developments arrived independently at adjacent points, each carry
 
 Convergence forces a vocabulary question, and we answer it here by pointing rather than claiming. The trichotomy the siblings reach for is Peirce's (1878, 1903). Theorem-of-Thought builds abductive, deductive, and inductive agents while citing no pragmatist anywhere in its reference list (checked against its [v2 source](https://arxiv.org/html/2506.07106v2): forty-four uses of the mode words, zero occurrences of Peirce, pragmatism, James, Dewey, or Ramsey), so the typing in that line of work is used without its source citation. §(grounding) and §(lineage) wire the vocabulary to its sources, and the dated posts above timestamp this lineage's use of the hypothesis-graph primitive. Interop (§(discussion)) will force one wire vocabulary on this design space, and the candidate is already to hand: mode-complete, a century and a half stable, and already carrying the credence semantics the nodes need.
 
-<style>
-.relwork-table td { padding: 6px 8px; vertical-align: top; border-bottom: 1px solid #eee; }
-.relwork-table tr.ours td { background: #fafaf5; font-weight: 500; }
-</style>
-<div class="table-wrap">
-<table class="relwork-table" style="margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.35;">
-<colgroup><col style="width:14em"><col style="width:9em"><col style="width:14em"><col style="width:16em"><col style="width:13em"></colgroup>
-<thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">System</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Domain</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Reasoning-mode typing</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Persistent structure & update</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Termination gate</th></tr></thead>
-<tr><td>Voyager (Wang et al. 2023)</td><td>Minecraft</td><td>None</td><td>Skill library; test-validated graduation</td><td>Test-pass on skill</td></tr>
-<tr><td>IDEA (He et al. 2025)</td><td>Interactive rule learning</td><td>Peirce-cited, agent-level</td><td>Working rule set</td><td>None explicit</td></tr>
-<tr><td>ADI (Gilda & Gilda 2026)</td><td>Algebraic invariants</td><td>Peirce, layered (L0/L1/L2)</td><td>Symbolic knowledge graph</td><td>None explicit</td></tr>
-<tr><td>AriGraph (Anokhin et al. 2024)</td><td>TextWorld</td><td>None</td><td>Knowledge graph (entities, relations, episodes)</td><td>None explicit</td></tr>
-<tr><td>CausaLab (Yang et al. 2026)</td><td>Causal discovery</td><td>Causal-typed (SCM)</td><td>Evolving structural causal model in a DSL</td><td>None explicit</td></tr>
-<tr><td>BeliefMem (Liao et al. 2026)</td><td>Partial-observability QA</td><td>None</td><td>Candidate set; Noisy-OR probabilistic update</td><td>Probabilistic threshold</td></tr>
-<tr><td>Theorem-of-Thought (Abdaljalil et al. 2025)</td><td>General reasoning</td><td>Abduction/deduction/induction, agent-level (no Peirce cite)</td><td>Formal reasoning graph</td><td>NLI-guided Bayesian coherence</td></tr>
-<tr><td>CMM (Khalid & Arora 2026)</td><td>SE (coding agents)</td><td>7 trajectory roles, extraction-time</td><td>Typed DAG; confidence decay</td><td>Human approval + retrieval-validated threshold</td></tr>
-<tr class="ours"><td>This work</td><td>SE (industrial code)</td><td>Peirce, enforced at write time per stage</td><td>Hypothesis graph; mechanical kill predicates on the audit verdict</td><td>Deterministic finite-state</td></tr>
-</table>
-</div>
+| System | Domain | Reasoning-mode typing | Persistent structure & update | Termination gate |
+|----|----|----|----|----|
+| Voyager (Wang et al. 2023) | Minecraft | None | Skill library; test-validated graduation | Test-pass on skill |
+| IDEA (He et al. 2025) | Interactive rule learning | Peirce-cited, agent-level | Working rule set | None explicit |
+| ADI (Gilda & Gilda 2026) | Algebraic invariants | Peirce, layered (L0/L1/L2) | Symbolic knowledge graph | None explicit |
+| AriGraph (Anokhin et al. 2024) | TextWorld | None | Knowledge graph (entities, relations, episodes) | None explicit |
+| CausaLab (Yang et al. 2026) | Causal discovery | Causal-typed (SCM) | Evolving structural causal model in a DSL | None explicit |
+| BeliefMem (Liao et al. 2026) | Partial-observability QA | None | Candidate set; Noisy-OR probabilistic update | Probabilistic threshold |
+| Theorem-of-Thought (Abdaljalil et al. 2025) | General reasoning | Abduction/deduction/induction, agent-level (no Peirce cite) | Formal reasoning graph | NLI-guided Bayesian coherence |
+| CMM (Khalid & Arora 2026) | SE (coding agents) | 7 trajectory roles, extraction-time | Typed DAG; confidence decay | Human approval + retrieval-validated threshold |
+| This work | SE (industrial code) | Peirce, enforced at write time per stage | Hypothesis graph; mechanical kill predicates on the audit verdict | Deterministic finite-state |
 
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 1.</strong> Comparison spine for adjacent typed-reasoning and graph-memory LLM-agent systems. Cell terseness is by design; prose nuance in §(typed-memory).</figcaption>
+*1.** Comparison spine for adjacent typed-reasoning and graph-memory LLM-agent systems. Cell terseness is by design; prose nuance in §(typed-memory).*
 
 ### Typed reasoning and graph-structured memory {#typed-memory}
 
@@ -571,17 +492,13 @@ A second cluster of neighbors shares this work's epistemological ambition, treat
 
 ### Adversarial filtering and termination {#adversarial-termination}
 
-<div class="table-wrap">
-<table class="relwork-table" style="margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.35;">
-<colgroup><col style="width:18em"><col style="width:11em"><col style="width:14em"><col style="width:13em"><col style="width:11em"></colgroup>
-<thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">System</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Domain</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Stage operated at</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Visibility regime</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Cross-family</th></tr></thead>
-<tr><td>Multi-Agent Debate (Liang et al. 2023/24, <a href="https://arxiv.org/abs/2305.19118">arXiv:2305.19118</a>)</td><td>General reasoning</td><td>Patch / answer stage</td><td>Open (cross-visibility)</td><td>Single model family</td></tr>
-<tr><td>Refute-or-Promote (Agarwal 2026, <a href="https://arxiv.org/abs/2604.19049">arXiv:2604.19049</a>)</td><td>Defect discovery</td><td>Review stage</td><td>Asymmetric context</td><td>Yes</td></tr>
-<tr class="ours"><td>This work</td><td>SE (industrial code)</td><td>Pre-patch hypothesis stage</td><td>Blind challenge (no cross-visibility)</td><td>Yes (Sonnet + GPT-5.5)</td></tr>
-</table>
-</div>
+| System | Domain | Stage operated at | Visibility regime | Cross-family |
+|----|----|----|----|----|
+| Multi-Agent Debate (Liang et al. 2023/24, [arXiv:2305.19118](https://arxiv.org/abs/2305.19118)) | General reasoning | Patch / answer stage | Open (cross-visibility) | Single model family |
+| Refute-or-Promote (Agarwal 2026, [arXiv:2604.19049](https://arxiv.org/abs/2604.19049)) | Defect discovery | Review stage | Asymmetric context | Yes |
+| This work | SE (industrial code) | Pre-patch hypothesis stage | Blind challenge (no cross-visibility) | Yes (Sonnet + GPT-5.5) |
 
-<figcaption style="text-align:center; font-size:12px; color:#666; margin-top:-0.5em;"><strong>Table 2.</strong> Adversarial multi-model filtering: this work occupies the pre-patch / blind cell. Termination disciplines (λ_A's type-theoretic proofs, SafetyDrift's absorbing states) sit at composition or trajectory scope where this work's verdict-routed gate sits per-instance.</figcaption>
+*2.** Adversarial multi-model filtering: this work occupies the pre-patch / blind cell. Termination disciplines (λ_A's type-theoretic proofs, SafetyDrift's absorbing states) sit at composition or trajectory scope where this work's verdict-routed gate sits per-instance.*
 
 Closest in spirit is **POPPER** ([arXiv:2502.09858](https://arxiv.org/abs/2502.09858)), which runs agentic sequential hypothesis tests under e-value error control, the same sequential-testing machinery this project's `inquire` workflow uses to classify evidence. POPPER terminates statistically, on an error-rate bound over a population of tests; this work terminates mechanically, on a deterministic kill predicate over a single binary verdict, and persists the outcome as replayable memory where POPPER's tests are ephemeral.
 
@@ -668,24 +585,15 @@ The artifact claim (§(results)), *no method documented publishes per-instance r
 
 **Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above ours on the same bench. Receipt-bar columns are *present* (✓), *partial* (~), or *absent* (·).
 
-<style>
-.receipt-table td { padding: 6px 8px; vertical-align: top; border-bottom: 1px solid #eee; }
-.receipt-table td.c { text-align: center; padding: 6px 4px; }
-.receipt-table tr.ours td { background: #fafaf5; }
-</style>
-<div class="table-wrap">
-<table class="receipt-table" style="margin:1em auto; font-size:13px; border-collapse:collapse; line-height:1.35;">
-<colgroup><col style="width:18em"><col style="width:5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:1.5em"><col style="width:10em"><col style="width:22em"></colgroup>
-<thead><tr><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Submission / report</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Bench</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="trajectories">T</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="captured diffs">D</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="gate/evaluator traces">G</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="cost ledger">C</th><th style="background:#f0f0f0; padding:4px 4px; text-align:center;" title="reproducible artifact">R</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Rate ≥ ours</th><th style="background:#f0f0f0; padding:4px 8px; text-align:left;">Notes</th></tr></thead>
-<tr><td>Official <code>swebench/experiments</code> repo (multiple top entries)</td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td>Various</td><td>Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger.</td></tr>
-<tr><td>Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover)</td><td>Verified</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>Reported below 97%</td><td>Submissions report numbers; reproducible bundles and cost ledgers rarely published.</td></tr>
-<tr><td>SWE-bench Pro official page (Scale)</td><td>Pro</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">·</td><td>N/A (curator)</td><td>Uncapped cost (250-turn limit). No per-instance cost ledger.</td></tr>
-<tr><td>Nilenso Pro trajectory analysis</td><td>Pro</td><td class="c">~</td><td class="c">·</td><td class="c">·</td><td class="c">~</td><td class="c">·</td><td>N/A (third-party)</td><td>Cost/token/time analysis across four frontier models. Not a submission.</td></tr>
-<tr><td>SWE-rebench public reports</td><td>rebench</td><td class="c">~</td><td class="c">~</td><td class="c">·</td><td class="c">✓</td><td class="c">~</td><td>Below ours</td><td>Strong cost transparency (Cursor Composer 2.5 at $0.23/problem).</td></tr>
-<tr class="ours"><td><strong>This work: Verified</strong></td><td>Verified</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>426 / 438 eligible (97.3%)</td><td>Companion repo <code>swebench-verified</code>; Zenodo DOI; gate traces and cost ledger committed.</td></tr>
-<tr class="ours"><td><strong>This work: Pro</strong></td><td>Pro</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td>694/728 = 95.3%; open-weight pair 678/728 = 93.1%</td><td>Same frozen harness, whole eligible set, 0 incomplete; two model pairs under one bundle. Public-split, gate-oracle regime: an artifact claim, not a leaderboard claim (§(central-comparison)).</td></tr>
-</table>
-</div>
+| Submission / report | Bench | T | D | G | C | R | Rate ≥ ours | Notes |
+|----|----|----|----|----|----|----|----|----|
+| Official `swebench/experiments` repo (multiple top entries) | Verified | ✓ | ✓ | · | · | ~ | Various | Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger. |
+| Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover) | Verified | ~ | ~ | · | · | · | Reported below 97% | Submissions report numbers; reproducible bundles and cost ledgers rarely published. |
+| SWE-bench Pro official page (Scale) | Pro | ~ | ~ | · | · | · | N/A (curator) | Uncapped cost (250-turn limit). No per-instance cost ledger. |
+| Nilenso Pro trajectory analysis | Pro | ~ | · | · | ~ | · | N/A (third-party) | Cost/token/time analysis across four frontier models. Not a submission. |
+| SWE-rebench public reports | rebench | ~ | ~ | · | ✓ | ~ | Below ours | Strong cost transparency (Cursor Composer 2.5 at \$0.23/problem). |
+| **This work: Verified** | Verified | ✓ | ✓ | ✓ | ✓ | ✓ | 426 / 438 eligible (97.3%) | Companion repo `swebench-verified`; Zenodo DOI; gate traces and cost ledger committed. |
+| **This work: Pro** | Pro | ✓ | ✓ | ✓ | ✓ | ✓ | 694/728 = 95.3%; open-weight pair 678/728 = 93.1% | Same frozen harness, whole eligible set, 0 incomplete; two model pairs under one bundle. Public-split, gate-oracle regime: an artifact claim, not a leaderboard claim (§(central-comparison)). |
 
 **Reading.** No row above the two rows here combines all five receipt-bar columns (T/D/G/C/R) on the same bench. The claim is about receipt depth alone, leaving resolve rate out of it, and survives as long as the table reads this way; a citation showing a fuller combined receipt is the cleanest refutation.
 

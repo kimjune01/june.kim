@@ -7,6 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 // Auto-numbers section headings on posts with `autonumber: true`. See the
 // plugin file for the authoring syntax. Runs during `astro dev` and `astro build`.
 import remarkSectionNumbers from './src/plugins/remark-section-numbers.mjs';
+// Wraps lone-image paragraphs in <figure><figcaption> (caption from alt) so
+// clean-markdown figures render with captions. See the plugin header.
+import rehypeFigures from './src/plugins/rehype-figures.mjs';
 
 export default defineConfig({
   integrations: [react(), mdx(), sitemap()],
@@ -19,6 +22,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkSectionNumbers],
+    rehypePlugins: [rehypeFigures],
     shikiConfig: {
       theme: 'github-light',
     },
