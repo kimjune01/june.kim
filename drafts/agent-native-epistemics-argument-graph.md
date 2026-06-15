@@ -1761,8 +1761,12 @@ edge (the build made checkable) and zooms out single-agent → population.
   spine-line + keyword go, two-graphs "answers to the physical noumenon" → "answers to the world." A7
   already recast on unbuildability/unverifiability (no noumenal-determinacy backstop), which strands F2
   (noumenal-truth-as-correspondence; its only remaining job, housing bivalence, the formal graph already
-  does). OPEN FORK (gates the cut): keep ONE residual noumenon nod at the two-graphs ("no external reality
-  to answer to," marks the formal regime closed) vs FULLY noumenon-free. Author's call pending; NOT yet executed.
+  does). FORK RESOLVED 2026-06-14 → KEEP-ONE noumenon (author: "single noumenon fits the audience better
+  because i would imagine even an epistemic person is unfamiliar with dewey's work"). PLACEMENT: the single
+  use of the WORD goes in §phenomenon as the ORIENTING LANDMARK (the world in itself, thinkable never holdable
+  — the familiar Kantian anchor the Dewey-unfamiliar reader needs), then RIDE DEWEY from there; everywhere
+  else (two-graphs, §truth) says "the world"/"reality," NOT noumenon. F4 keeps the leash but as resistance-
+  realism (the world refutes), no longer billed as "THE DEPARTURE FROM KANT." Now EXECUTING in the post propagation.
 ## Citation map (pre-render)
 
 Two tiers, held apart (the tiering rule). LOAD-BEARING = canonical sources only;

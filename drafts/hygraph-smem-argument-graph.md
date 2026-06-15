@@ -1013,7 +1013,7 @@ Done (trim + strengthening, committed cc177d07 / 979195cf):
       footnote, not the keystone; the keystone is a Verus-grade trace-backed merge.
 
 **D — Release housekeeping:**
-- [ ] **PDF rebuild** (`scripts/build-paper-pdf.sh`) + fix the stale download slug
+- [x] **PDF rebuild** (now via [md2arxiv](https://github.com/kimjune01/md2arxiv); migrated out of this repo) + stale download slug fixed
       (`methodeutic-harness-paper.pdf`).
 - [ ] **Zenodo DOIs** → §availability placeholders.
 - [ ] **Push + deploy** (refresh the stale SHAs before relying on them).
