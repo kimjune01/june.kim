@@ -7,7 +7,9 @@ tags: epistemology, cognition, methodology
 keywords: epistemology, machine knowledge, agent epistemics, falsifiability, pragmatism, intuitionism, entitlement, bivalence, verifiable truth, phenomenon and noumenon
 ---
 
+<!-- pdf-skip -->
 *The epistemology behind [The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics), and the frame its companion paper [Verifiable Knowledge](/verifiable-knowledge) runs as a protocol. The argument was first stated informally across [Truth Is Buildable](/truth-is-buildable) (2026-06-04) and [Belief Is the Edge of Knowing](/belief-is-the-edge-of-knowing); this is the consolidated, citable version.*
+<!-- /pdf-skip -->
 
 ## Abstract {-}
 
@@ -59,7 +61,7 @@ The precise split is between a claim about the world and a claim about your enti
 
 Knowledge exposes a claim to the world, and what the world cannot kill earns the name true. It is a subjective label more than an objective property: it has outlived a test that could have killed it. That exposure fixes the order: the capacity to be false comes first, the right to say true only after. The N-atoms case (§(knowledge)) ran this in miniature: luck runs no risk, so the lucky-correct number is never knowledge, while the claim to *know* it stuck its neck out. A claim that runs no risk of being wrong never reaches the question of truth at all. *Cannot be false* means just this: no test could expose it as false, so no test could establish it either. *What cannot be false cannot be true.*
 
-A tautology as a theorem flags true in classical epistemics, but it is untrue in ours. Conjectures relative to established axioms can be proven wrong, and that risk grants them uberty, a rightful surprise (§(the-two-graphs)). An empirical claim can be true if it can be tested to a false verdict. Some possibility of a negative result makes the positive one useful. Both stand or fall by verification, which is why the unverifiable is untrue: the move from *cannot be false* to *cannot be true* is the one the [verificationists](https://en.wikipedia.org/wiki/Verificationism) made, [Dummett](https://en.wikipedia.org/wiki/Michael_Dummett) gave its rigorous modern form by tying truth to what can be verified and withholding bivalence from the rest, and [Popper](https://en.wikipedia.org/wiki/Falsifiability) circled without quite making.
+A tautology cannot be false, and says nothing for it: true to its axioms, untrue of the world. Conjectures relative to established axioms can be proven wrong, and that risk grants them uberty, a rightful surprise (§(the-two-graphs)). An empirical claim can be true if it can be tested to a false verdict. Some possibility of a negative result makes the positive one useful. Both stand or fall by verification, which is why the unverifiable is untrue: the move from *cannot be false* to *cannot be true* is the one the [verificationists](https://en.wikipedia.org/wiki/Verificationism) made, [Dummett](https://en.wikipedia.org/wiki/Michael_Dummett) gave its rigorous modern form by tying truth to what can be verified and withholding bivalence from the rest, and [Popper](https://en.wikipedia.org/wiki/Falsifiability) circled without quite making.
 
 Truth is a story of survival: a hypothesis newborn, deduced and waiting on a test it has not yet faced, untrue but already in motion; a standing result that has survived its first real trials; a fact that has survived so many the test is retired and the claim taken whole, as if nothing could kill it. The grade of a truth, and the arbitrary labels we give it, indicate only how much it has survived.
 
@@ -109,7 +111,28 @@ From the three states falls an ordering of dignity. Among claims *presenting as 
 
 Asked whether the work is done, one answer is *yes* and another is *go check*. The first asks to be taken on trust; the second hands over the test and invites refutation. Epistemically the second is the stronger, the only one that could earn a verdict at all.
 
-Engineering is a full-contact sport between theory and reality, where the test rests those verdicts, or those people. Its own philosophy says as much: a specification is a conjecture the world can break, and failure is the name engineering gives the refutation ([Blockley and Henderson 1980](https://doi.org/10.1680/iicep.1980.2208); [Staples 2015](https://doi.org/10.1007/s11229-014-0571-6)). The ethos is no philosopher's invention. The organizations that cannot afford to be wrong already mandate it: NASA's systems-engineering handbook requires every requirement to be verifiable and its acceptance test named before anything is built ([NASA Systems Engineering Handbook 2016](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)). The night before [*Challenger*](https://en.wikipedia.org/wiki/Space_Shuttle_Challenger_disaster) flew, engineers warned the cold would breach the O-ring seals and urged delay; the no-launch recommendation was pressed until it reversed to a *go*, and the booster failed the next morning as the unrun test would have shown ([Rogers Commission 1986](https://www.nasa.gov/history/rogersrep/genindex.htm); [Feynman's appendix](https://www.nasa.gov/history/rogersrep/v2appf.htm): *nature cannot be fooled*). If you're looking for a test for the inadequacy of untruthfulness, NASA already prescribed it.
+## Meeting reality {#meeting-reality}
+
+Engineering is a full-contact sport: a build carries real weight and the world collects without appeal. A specification is a conjecture the world can break, and failure is the name engineering gives the refutation ([Blockley and Henderson 1980](https://doi.org/10.1680/iicep.1980.2208); [Staples 2015](https://doi.org/10.1007/s11229-014-0571-6)). The organizations that cannot afford to be wrong already mandate it: NASA's systems-engineering handbook requires every requirement to be verifiable and its acceptance test named before anything is built ([NASA Systems Engineering Handbook 2016](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)).
+
+Its thinkers reached the test as truth's proxy from every direction:
+
+- [Vincenti](https://en.wikipedia.org/wiki/What_Engineers_Know_and_How_They_Know_It), from aeronautical history: engineers generate what they know by variation and selection.
+- [Petroski](https://en.wikipedia.org/wiki/Henry_Petroski), from structural failure: a standing structure only fails to refute its design, while a collapse teaches what no success can.
+- Koen, from the engineering method itself: every rule is a fallible heuristic, justified by nothing but the change it causes.
+- [Oreskes and colleagues](https://doi.org/10.1126/science.263.5147.641), from numerical modeling: validation is impossible, the model broken by data and never confirmed by it.
+
+Each reached from practice what Popper reached from logic.
+
+When the standard lapses, the failure reports name the same root cause:
+
+- [*Challenger*](https://en.wikipedia.org/wiki/Space_Shuttle_Challenger_disaster): the agency that had mandated a named test for every requirement overrode its own engineers, whose cold-weather warning was pressed until the no-launch call reversed to *go*; the booster failed the next morning as the unrun test would have shown ([Rogers Commission 1986](https://www.nasa.gov/history/rogersrep/genindex.htm); [Feynman](https://www.nasa.gov/history/rogersrep/v2appf.htm): *nature cannot be fooled*).
+- [Hyatt Regency](https://en.wikipedia.org/wiki/Hyatt_Regency_walkway_collapse): a walkway connection redesigned and approved with the load never re-run ([NBS BSS 143, 1982](https://doi.org/10.6028/NBS.BSS.143)).
+- [Chernobyl](https://en.wikipedia.org/wiki/Chernobyl_disaster): a reactor instability known to its designers and withheld from the operators, who trusted a machine no one had let them verify ([INSAG-7, 1992](https://www-pub.iaea.org/MTCD/Publications/PDF/Pub913e_web.pdf)).
+
+The flag over each was different; the regime was the same, trust standing in for a test.
+
+*What cannot be false cannot be true* is no axiom held above its own rule. As a theory of knowledge it is refutable, and so can be true. So here's the test: does *untrue* make its distinction where theory meets reality? The thesis is untrue until tested.
 
 ## Related work {#related-work}
 
@@ -146,21 +169,27 @@ Canonical sources the argument rests on. The author's companion essays, which wo
 - Gettier, E. (1963). "Is Justified True Belief Knowledge?" *Analysis* 23.
 - Gödel, K. (1931). "On Formally Undecidable Propositions of *Principia Mathematica* and Related Systems I."
 - Heyting, A. (1956). *Intuitionism: An Introduction*. North-Holland. (the constructivist program founded by L. E. J. Brouwer)
+- International Nuclear Safety Advisory Group (1992). *The Chernobyl Accident: Updating of INSAG-1* (INSAG-7). IAEA Safety Series 75-INSAG-7. [www-pub.iaea.org](https://www-pub.iaea.org/MTCD/Publications/PDF/Pub913e_web.pdf)
 - James, W. (1907). *Pragmatism: A New Name for Some Old Ways of Thinking*.
 - Kant, I. (1781/1787). *Critique of Pure Reason*.
+- Koen, B. V. (2003). *Discussion of the Method: Conducting the Engineer's Approach to Problem Solving*. Oxford University Press.
 - Korzybski, A. (1933). *Science and Sanity*.
 - Lewis, C. I. (1929). *Mind and the World-Order: Outline of a Theory of Knowledge*. Charles Scribner's Sons.
 - Łukasiewicz, J. (1920). "On Three-Valued Logic"; and Post, E. (1921). "Introduction to a General Theory of Elementary Propositions."
 - Marr, D. (1982). *Vision: A Computational Investigation into the Human Representation and Processing of Visual Information*. W. H. Freeman.
+- Marshall, R. D., et al. (1982). *Investigation of the Kansas City Hyatt Regency Walkways Collapse*. NBS Building Science Series 143, National Bureau of Standards. [doi:10.6028/NBS.BSS.143](https://doi.org/10.6028/NBS.BSS.143)
 - Misak, C. (1991). *Truth and the End of Inquiry: A Peircean Account of Truth*. Oxford University Press.
 - NASA (2016). *NASA Systems Engineering Handbook*, NASA/SP-2016-6105 Rev2. [nasa.gov](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)
+- Oreskes, N., Shrader-Frechette, K., & Belitz, K. (1994). "Verification, Validation, and Confirmation of Numerical Models in the Earth Sciences." *Science* 263 (5147): 641-646. [doi:10.1126/science.263.5147.641](https://doi.org/10.1126/science.263.5147.641)
 - Peirce, C. S. (1877). "The Fixation of Belief"; and (1878) "How to Make Our Ideas Clear." *Popular Science Monthly*.
+- Petroski, H. (1985). *To Engineer Is Human: The Role of Failure in Successful Design*. St. Martin's Press.
 - Popper, K. (1959). *The Logic of Scientific Discovery*; and (1963) *Conjectures and Refutations*.
 - Ramsey, F. P. (1926). "Truth and Probability." In *The Foundations of Mathematics* (1931).
 - Rogers Commission (1986). *Report of the Presidential Commission on the Space Shuttle Challenger Accident*; incl. R. P. Feynman, Appendix F, "Personal Observations on the Reliability of the Shuttle." [nasa.gov/history/rogersrep](https://www.nasa.gov/history/rogersrep/genindex.htm)
 - Schlick, M. (1936). "Meaning and Verification." *The Philosophical Review* 45 (4).
 - Staples, M. (2015). "Critical Rationalism and Engineering: Methodology." *Synthese* 192 (1). [doi:10.1007/s11229-014-0571-6](https://doi.org/10.1007/s11229-014-0571-6)
 - Vaughan, D. (1996). *The Challenger Launch Decision: Risky Technology, Culture, and Deviance at NASA*. University of Chicago Press.
+- Vincenti, W. G. (1990). *What Engineers Know and How They Know It: Analytical Studies from Aeronautical History*. Johns Hopkins University Press.
 - Weinberg, J. M., Nichols, S., & Stich, S. (2001). "Normativity and Epistemic Intuitions." *Philosophical Topics* 29 (1-2).
 - Wittgenstein, L. (1921/1922). *Tractatus Logico-Philosophicus*. Trans. C. K. Ogden. Kegan Paul.
 - Woit, P. (2006). *Not Even Wrong*. Basic Books.
