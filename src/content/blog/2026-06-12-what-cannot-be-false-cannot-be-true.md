@@ -126,7 +126,7 @@ Everything above is inherited. Dummett drew the line between the knowable and th
 
 ## Conclusion {#conclusion}
 
-Bivalence rules where a verdict is laid down, the unverifiable is untrue, and what cannot be false cannot be true. The scope is the empirical and formal domains, expanding truth by linking new knowledge to old.
+Bivalence rules where a verdict is laid down, the unverifiable is untrue, and what cannot be false cannot be true, across the empirical and formal domains. Truth expands by linking new knowledge to old.
 
 We are already running on one standard or another, whether or not we ever chose it. Trust and test are the two: one asserted bona fide, the other handed over to refutation. They cannot both settle the same claim. To run on verification is to stop letting some other people decide what is true for us. The choice falls before any verdict. It is ours, and it is a commitment.
 
