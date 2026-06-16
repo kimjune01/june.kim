@@ -144,7 +144,7 @@ Independence is the defense, since diverse projections resist a shared-bias capt
 
 *Third*, *always can verify* holds only where replay is feasible. Verification can be computationally, financially, legally, or physically prohibitive. Re-running a ten-thousand-line proof is feasible; re-running a climate model, a drug trial, or a decade of accelerator runs is not, because the refutation there needs a fresh world-trial rather than a replayed command. So most of the canon in practice travels the credence shortcut, because full replay is expensive, and that deference is the normal rational mode rather than a failure.
 
-Stated exactly, entitlement improves when the replay cost is finite and *declared*. The protocol guarantees the option to verify; it does not guarantee the labor of verifying. A canon that hides its replay cost is as opaque as one that hides its provenance.
+Entitlement improves when the replay cost is finite and *declared*. The protocol guarantees the option to verify; it does not guarantee the labor of verifying. A canon that hides its replay cost is as opaque as one that hides its provenance.
 
 ## Related work {#related-work}
 
@@ -158,53 +158,44 @@ The nearest prior art is not a cognitive architecture at all, but the reproducib
 
 The strongest objection: *This is Brandomian inferentialism plus Davidsonian triangulation plus AGM belief revision plus executable provenance infrastructure. The philosophical claims are inherited, the machine claims are ordinary reproducibility engineering, the three-state ledger is old many-valued bookkeeping, and the result is a useful architecture, not a new epistemology.* Concede every piece.
 
-The delta is the exact contract read as agent-knowledge semantics: no prior system makes replayable-check, provenance-edge, kill-condition, independent-verification, entitlement-ledger, and check-time canon-admission into one contract for an agent's knowledge. "Useful architecture" is conceded, and it is not a smaller claim than the one being made, it *is* the claim, narrowly scoped, no new logic or metaphysics. That every primitive has a canonical citation waiting is evidence for the thesis, not against it: the primitives are natural, and a runnable assembly of natural primitives into a single contract is the contribution. The convergence noted in the introduction is evidence, not threat: independent efforts are calling for the standard set out here.
+The difference is the exact contract read as agent-knowledge semantics. No prior system assembles all six of these into one contract for an agent's knowledge:
+
+- *replayable check* — the verdict re-derived by running it, not asserted
+- *provenance edge* — each claim wired to what it depends on
+- *kill condition* — the test whose firing refutes it
+- *independent verification* — replay by a party that need not trust the author
+- *entitlement ledger* — the three states a claim can hold
+- *check-time canon admission* — entry earned by passing, not granted by authority
+
+It is a useful architecture, not a new logic or metaphysics; that, narrowly scoped, is the claim. The primitives are natural and each has a canonical citation; the contribution is their assembly. The convergence noted in the introduction is independent work arriving at the same need.
 
 ## Future work {#future-work}
 
-Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can fail. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the [sibling hypothesis-graph paper](/the-hypothesis-graph-semantic-memory-methodeutics), the abductor that raises the candidates, the agent harnesses that run the trials.
+Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can fail. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the hypotheses turned into a graph, the verification ledger that records each check, the abductor that raises the candidates, the agent harnesses that run the trials.
 
-Everything past that edge is allowed in the hypothesis-graph's own style, as open nodes not yet falsified. Such edges may run outward, provided each is a conjecture that names its own test, never asserted as proven. A strategic overreach stated as a precise falsifiable target is a legitimate open node; the same claim dressed as established is the failure the abstract's ordering names, accountable conjecture over unaccountable assertion.
-
-The material scoped out of the body lives here: the wider civilizational frame, the normative and modal regimes left untreated, rehomed as open edges rather than smuggled into the proven core. Three of them show where the view points.
+Everything past that edge is an open node, not a result: a conjecture that names its own test, never asserted as proven. The material scoped out of the body lives here, the wider civilizational frame and the normative and modal regimes left untreated, rehomed as open edges rather than smuggled into the proven core. Three of them mark questions the protocol raises but does not settle.
 
 ### The economic edge
 
-Search complexity is the problem, not a war over noise. Verification is cheaper than generation one-to-one, and a kill-conditioned hypothesis makes checking a local replay rather than a re-derivation. But many-to-one is expensive, one verifier against a parallel flood.
-
-The crisis under LLM-scale generation is search complexity: the signal-to-noise proportion was always bad, but volume under linear search thins findable signal even at constant proportion. Civilization's old sublinear structures, canons and citations and reputation, broke two ways at once: volume past their index, and fluent slop passing the credence filter.
-
-The resolution is many-to-many: a verifying fleet scales with the generating fleet, and since one-to-one verification beats generation, it can outrun the flood. The protocol's edges make the search sublinear, walk the graph, follow provenance, replay refutations, so edgeless slop is never on any path, ignored, not refuted.
-
-The decisive variable is the filtering rule, the kill condition applied to search, so authoring it is the goal-predicate problem: it must come from outside the searcher's own belief or it grades a fiction and builds a filter bubble. Who authors it, and whether it stays auditable and independent, decides whether the filter stays honest or hardens into a bubble.
-
-Three kill conditions keep the edge from overreaching: the verify-beats-generate advantage is regime-bound, expensive where the refutation needs a fresh world-trial; many-to-many wins only if the filters are genuinely independent, since a verifier monoculture is fooled in unison; and a sublinear search finds only what is built, blind to the unbuilt-but-true.
+The first edge is search complexity. Verification beats generation one to one, and a kill-conditioned hypothesis makes checking a local replay rather than a re-derivation, so in principle a verifying fleet that scales with the generating fleet can outrun a flood that linear search and the old credence filters cannot hold. The protocol's edges would keep the search sublinear, walk the graph, follow provenance, replay refutations, so edgeless slop is never on a path, ignored rather than refuted. The open problem is who authors the filtering rule: it must come from outside the searcher's own belief, auditable and independent, or it grades a fiction and hardens into a bubble. Three kill conditions bound the conjecture: the verify-beats-generate advantage is regime-bound, expensive where refutation needs a fresh world-trial; many-to-many wins only if the filters are genuinely independent, since a verifier monoculture is fooled in unison; and a sublinear search finds only what is built, blind to the unbuilt-but-true.
 
 ### Settlement and stakes
 
-A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node is, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
+A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
 
 ### The forecast
 
-Which classification scales under unbounded generation? *Untrue*, and only untrue. Generation and filtering are mirror images: generation piles up with no floor, while filtering boils down to a floor it cannot pass. (It is the [unfold and the fold](/compress-and-unfold) again.)
-
-True and false live at that floor, each costing a check, a world-facing trial that stood or broke, and that check is the only place new information enters, [rate-limited by world-contact](https://en.wikipedia.org/wiki/Data_processing_inequality).
-
-Untrue costs no check, the free default, everything filtering has not reached. So as generation outruns filtering, true and false become a thin expensive shell and untrue the surviving classification. The reason is not that they are wrong; it is that they cannot scale with generation while untrue keeps pace for free.
-
-The posture that follows is to default the flood to untrue and pay for fresh world-trials selectively, growing the canon from the sea where you choose to build. This is §(the-economic-edge)'s asymmetry from the other side: fleets scale replay, not world-trials, so the built canon is verified at scale while the unbuilt sea stays untrue.
-
-The kill condition is exact: show true/false classification scaling with unbounded generation, world-contact made cheap enough to classify the sea at generation-scale, and untrue stops dominating. The asymmetry is why it likely cannot, but that is the test.
+Which classification scales under unbounded generation? *Untrue*, and only untrue. True and false each cost a check, a world-facing trial that stood or broke, the only place new information enters, [rate-limited by world-contact](https://en.wikipedia.org/wiki/Data_processing_inequality); untrue costs nothing, the free default, everything filtering has not reached. So as generation outruns filtering, true and false become a thin expensive shell and untrue the surviving classification, not because they are wrong but because they cannot scale while untrue keeps pace for free. (It is the [unfold and the fold](/compress-and-unfold) again.) The posture this suggests is to default the flood to untrue and pay for fresh world-trials selectively, building the canon where you choose to. The kill condition is exact: show true/false classification scaling with unbounded generation, world-contact made cheap enough to classify the sea at generation-scale, and untrue stops dominating. The asymmetry is why it likely cannot, but that is the test.
 
 Under all three edges sits one conjecture, an open node and not a result: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
 
 ## Conclusion {#conclusion}
 
-None of this is a new logic or new metaphysics; the frame it runs on is [the companion paper's](/what-cannot-be-false-cannot-be-true), and every primitive here is borrowed. What is new is the contract: the specific executable semantics under which one agent's claim becomes another's checkable inheritance, replayable check and provenance edge and kill condition and independent verification and entitlement ledger and check-time canon admission as one thing.
+What is new here is the contract: the executable semantics under which one agent's claim becomes another's checkable inheritance. The frame it runs on is [the companion paper's](/what-cannot-be-false-cannot-be-true), and every primitive is borrowed; the assembly is the contribution.
 
 The contract makes one empirical bet: agents that adopt it should be more accountable to each other, and better coordinated, than agents that do not. That bet is falsifiable and still unpaid, settled only by building the protocol into the systems that would run it.
 
-Knowledge, for a machine, is the hypothesis another agent can re-check, linked to its grounds instead of attested by its author, and a population that agrees on the replay can hold a canon without holding a gatekeeper. That is what it is for knowledge to be verifiable: not certified, but checkable by another, and checkable again by the next.
+Knowledge, for a machine, is the hypothesis another agent can re-check, linked to its grounds instead of attested by its author, and a population that agrees on the replay can hold a canon without holding a gatekeeper. That is what it is for knowledge to be verifiable: not certified, but re-runnable by another, and re-runnable again by the next. Show your work, make it checkable.
 
 ## References {-}
 
