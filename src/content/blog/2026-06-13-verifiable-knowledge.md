@@ -15,7 +15,7 @@ Large language model (LLM)-based agents cannot be held accountable. Even with pe
 
 ## Introduction {#introduction}
 
-How did you feel when your coding agent told you that it was done, but it clearly wasn't? It said *done* but it never checked if it was. The word meant nothing. Anyone can justify truth to themselves; untested, it stays untrue. [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true) presents this argument. Belief, knowledge, truth: their bitwise representation doesn't distinguish them. So what does? How the data became entitled is the proof, and that proof is bitwise: the test results the claim survived. That's how a machine verifies knowledge.
+How did you feel when your coding agent told you that it was done, but it clearly wasn't? It said *done* but it never checked if it was. The word meant nothing. Anyone can justify a belief to themselves; untested, it stays untrue. [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true) presents this argument. Belief, knowledge, truth: their bitwise representation doesn't distinguish them. So what does? How the data became entitled is the proof, and that proof is bitwise: the test results the claim survived. That's how a machine verifies knowledge.
 
 Confidence is a vibe, and a vibe doesn't encode. *I'm absolutely sure* has no bitwise form another agent could check, none to verify tomorrow, none for anyone else. That's the problem of knowledge interop: one agent makes a claim, another must trust it blind or start from ground zero. Anywhere in between needs a representation of knowledge, a semantic memory, for partial work to be checked. A chain of attestation breaks at a single forged link, and a chain of independent Bayesian credences, each below one, multiplies toward zero. Neither survives a distrusting auditor. Is there a truth contract that does?
 
@@ -48,7 +48,7 @@ The kill condition travels two ways, from the system to what it tests, or from a
 
 That mapping produces a ranking. Even *a Bible verse citation* cites its provenance and names its axiom openly, a complete stack trace you can follow to a root that is an axiom and not a measurement, then decide for yourself whether to accept it.
 
-By contrast, a withheld measurement cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the decimal point ranks below the scripture citation: more accountable, though no more falsifiable as a claim about the world. The scope matters: the claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked pass.
+By contrast, a withheld measurement cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the withheld measurement ranks below the scripture citation: more accountable, though no more falsifiable as a claim about the world. The scope matters: the claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked pass.
 
 ## The entitlement ledger {#the-warrant-ledger}
 
@@ -87,9 +87,9 @@ This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davids
   <figcaption><strong>Figure.</strong> Triangulation. One solid, a torus, seen from three places. From below the axis it is a ring; from an oblique angle the hole vanishes into a solid oval; from inside the hole it is a hyperbola, the saddle wall flaring away, with no ring or hole in sight. No one view reveals the torus, and each alone misleads, yet the independent projections together pin the shape none holds whole. The observer in the middle is the sharpest case: surest of what it sees, least able to tell it sits inside a donut.</figcaption>
 </figure>
 
-That independent projections *constrain* the object is the step taken here, not Davidson's or Nagel's. Each additional constraint reveals the shape further.
+That independent projections *constrain* the object is the step taken here. Each additional constraint reveals the shape further.
 
-The one move a machine adds: entitlement is conferred not by an agent grading itself but by another agent replaying the trace. What a human community of inquiry pays for in years of independent replication, a machine pays for in a single re-run: it emits a replayable trace, and another agent runs the same convergence now. A machine improves its entitlement by becoming checkable by another projection, not by getting smarter.
+The one move a machine adds: entitlement is conferred not by an agent grading itself but by another agent replaying the trace. What a human community of inquiry pays for in years of independent re-checking, a machine pays for in a single re-run: it emits a replayable trace, and another agent re-runs the same check now. A machine improves its entitlement by becoming checkable by another projection, not by getting smarter.
 
 It optimizes not self-attestation but verification cost, methods and claims laid bare for the recipient to inspect. Shared across a population, that is the protocol's prerequisite.
 
@@ -173,7 +173,7 @@ It is a useful architecture, not a new logic or metaphysics; that, narrowly scop
 
 Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can fail. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the hypotheses turned into a graph, the verification ledger that records each check, the abductor that raises the candidates, the agent harnesses that run the trials.
 
-Everything past that edge is an open node, not a result: a conjecture that names its own test, never asserted as proven. The material scoped out of the body lives here, the wider civilizational frame and the normative and modal regimes left untreated, rehomed as open edges rather than smuggled into the proven core. Two of them mark questions the protocol raises but does not settle.
+Everything past that edge is an open node, not a result: a conjecture that names its own test. What the body scoped out lives here, as open edges, not in the proven core.
 
 ### The economic edge
 
@@ -183,7 +183,7 @@ The first edge is economic: verification beats generation one to one, so a verif
 
 A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
 
-Under both edges sits one conjecture, an open node and not a result: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
+Under both edges sits one conjecture, an open node: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
 
 ## Conclusion {#conclusion}
 
@@ -191,7 +191,7 @@ What is new here is the contract: the executable semantics under which one agent
 
 The contract makes one empirical bet: agents that adopt it should be more accountable to each other, and better coordinated, than agents that do not. That bet is falsifiable and still unpaid, settled only by building the protocol into the systems that would run it.
 
-Knowledge, for a machine, is the hypothesis another agent can re-check, linked to its grounds instead of attested by its author, and a population that agrees on the replay can hold a canon without holding a gatekeeper. That is what it is for knowledge to be verifiable: not certified, but re-runnable by another, and re-runnable again by the next. Show your work, make it checkable.
+Knowledge, for a machine, is the hypothesis another agent can re-check, linked to its grounds instead of attested by its author, and a population that agrees on the replay can hold a canon without holding a gatekeeper. That is what it is for knowledge to be verifiable: re-runnable by another, and re-runnable again by the next. Show your work, make it checkable.
 
 ## References {-}
 
