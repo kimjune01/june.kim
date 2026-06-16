@@ -36,7 +36,7 @@ The kill condition travels two ways, from the system to what it tests, or from a
 - Provenance is the dependency graph.
 - Citation is an edge to what the claim rests on.
 - Attestation is the signed check log, the line that says *I ran this, here is the receipt*.
-- Falsifiability is the check being able to go red, the test whose firing is the claim's kill condition, the operational form of what the companion paper calls refutation.
+- Falsifiability is the check being able to fail, the test whose firing is the claim's kill condition, the operational form of what the companion paper calls refutation.
 - The test is the system pushing back.
 - Truth is the check currently passing.
 - Reproducibility is whether anyone else can rebuild it from source.
@@ -46,17 +46,19 @@ The kill condition travels two ways, from the system to what it tests, or from a
   <figcaption><strong>Figure.</strong> How knowledge is compiled. A claim links by provenance edges down to trusted roots, then runs its test, the point where the system can break it. The check returns one of three states: true (stood), false (broke), or untrue (no passing check, the hung state). The loop is the move a machine adds: the check is re-run by another agent, so entitlement is what survives the replay rather than what an agent grades in itself.</figcaption>
 </figure>
 
-That mapping produces a ranking. *The Bible told me so* cites its provenance and names its axiom openly, a complete stack trace you can follow to a root that is an axiom and not a measurement, then decide for yourself whether to accept it. The withheld number cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the decimal point ranks below the scripture citation: more accountable, though no more falsifiable as a claim about the world. The scope matters: the claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked green.
+That mapping produces a ranking. Even *a Bible verse citation* cites its provenance and names its axiom openly, a complete stack trace you can follow to a root that is an axiom and not a measurement, then decide for yourself whether to accept it.
+
+By contrast, a withheld measurement cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the decimal point ranks below the scripture citation: more accountable, though no more falsifiable as a claim about the world. The scope matters: the claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked pass.
 
 ## The entitlement ledger {#the-warrant-ledger}
 
-The frame settled the three states an entitlement earns. To run them between agents, make the check literal. A claim is a *hypothesis*: it names the test that would refute it. The *check* runs that test, and searching for a proof, or a patch, or a measurement, is running that program; it returns one of three things. Green is true, the check passed. Red is false, the check ran and broke. Hung is untrue, the check that never returned. True and false are siblings because both are halting states, computations that came back with a verdict; untrue is the one state that is not a verdict, the job still spinning, the test suite that never finishes.
+How do claims carry their entitlement between agents? Make them trivially runnable. A claim is a *hypothesis*: it names the test that would refute it. The *check* runs that test, and searching for a proof, or a patch, or a measurement, is running that program; it returns one of three things. Green is true, the check passed. Red is false, the check ran and broke. Hung is untrue, the check that never returned, or the claim shipped with no check to run at all. True and false are siblings because both are halting states, computations that came back with a verdict; untrue is the one state that is not a verdict, the job still spinning, the test suite that never finishes.
 
-Every verifiable claim takes this shape, a program whose output is the verdict:
+Every verifiable claim exposes itself to verification:
 
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:13em"><col><col style="width:5em"><col style="width:13em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Claim</th><th style="background:#f0f0f0">The check, as a program</th><th style="background:#f0f0f0">Output</th><th style="background:#f0f0f0">Goes red when</th></tr></thead>
+<thead><tr><th style="background:#f0f0f0">Claim</th><th style="background:#f0f0f0">The check, as a program</th><th style="background:#f0f0f0">Output</th><th style="background:#f0f0f0">Refuted when</th></tr></thead>
 <tr><td>"it was 12°C at SFO at 14:05Z"</td><td>a logged reading from the named weather API</td><td><code>12</code></td><td>an independent source disagrees for that timestamp</td></tr>
 <tr><td>"the run logged 3 errors"</td><td><code>grep -c ERROR run.log</code> on the named image</td><td><code>3</code></td><td>the command prints another count</td></tr>
 <tr><td>"7 × 72 = 504"</td><td>evaluate <code>7 * 72</code></td><td><code>504</code></td><td>recomputation differs</td></tr>
@@ -64,9 +66,9 @@ Every verifiable claim takes this shape, a program whose output is the verdict:
 <tr><td>"the theorem holds"</td><td>rechecked in a proof assistant</td><td><code>no goals</code></td><td>a step fails to check</td></tr>
 </table>
 
-The weather reading bottoms out at an observation no later run can re-derive, only cross-check against an independent source; the computation and the proof settle for good by re-running. Verifiability is graded by how firmly the program pins its roots, not by the kind of claim.
+The weather reading bottoms out at an observation no later run can re-derive; where replay cannot reach, the check is corroboration against independent ledgers, a second provider or a neighboring station, the reading refuted when they disagree. It is how a distributed ledger settles a fact at all: no central authority, truth bottoming out at a cross-referenced history that independent replicas agree on. The computation and the proof settle for good by re-running. Verifiability is graded by how firmly the program pins its roots, not by the kind of claim.
 
-Encoded this way, the verdict is not self-asserted; entitlement is conferred by replaying the check to green, with no author grading its own work. [Entitlement](/what-cannot-be-false-cannot-be-true) here runs backward: the replay re-derives a verdict that already stood, climbing provenance to roots, not forecasting whether the claim will pay out. A claim record carries what the replay needs: the claim, the provenance edges down to its roots, the check procedure, the kill condition, the declared terminal witnesses, and the attestation that signs it. A receiver is entitled to inherit the claim when a replay reaches green under those declared roots, and not before.
+Encoded this way, the verdict doesn't depend on self-assertion; entitlement is conferred by replaying the check to a pass, with no author grading its own work. [Entitlement](/what-cannot-be-false-cannot-be-true) here runs backward: the replay re-derives a verdict that already stood, climbing provenance to roots, not forecasting whether the claim will pay out. A claim record carries what the replay needs: the claim, the provenance edges down to its roots, the check procedure, the kill condition, the declared terminal witnesses, and the attestation that signs it. A receiver inherits knowledge after verifying its claim.
 
 An argument settles by a mediating oracle both sides accept, where one exists. Independent verification is that oracle, trustless because the verdict comes from re-running the typed check, not from either party's word.
 
@@ -76,22 +78,27 @@ Where no oracle exists at all, no reachable test and no check that could run, th
 
 ## Triangulation {#triangulation}
 
-The ledger records a verdict. But who is entitled to write one? Start with the problem under it, the one the frame left standing: a single agent holds one lossy projection and cannot invert it. So its own artifacts and the world's structure are indiscernible to it, and grading itself grades a fiction.
+The ledger records a verdict. But who is entitled to write one? A single agent holds one lossy projection and cannot invert it. So its own artifacts and the world's structure are indiscernible to it, and grading itself grades a fiction.
 
-This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davidson_(philosopher))**: the distinction between subjective and objective, and with it the concept of error, requires at least two minds and a shared world. A multi-agent view is multiple projections of the one object, and comparing them *constrains* the object no single projection reveals, with **[the view from nowhere](https://en.wikipedia.org/wiki/The_View_from_Nowhere)** (Nagel) as the limit no projection occupies. The [blind men and the elephant](https://en.wikipedia.org/wiki/Blind_men_and_an_elephant) is the picture: no one holds the animal, and only diverse touches approach it. Agreement among agents that share a blind spot is an echo chamber, so the checker has to be an independent projection. But the parable cheats. We outside know it is an elephant; the men inside never get that view, so they have to establish that the touches are of one animal before they can add up. Triangulation buys constraint, and even that on credit: it assumes the shared object its comparison is supposed to reveal, which is exactly what dissolves when two agents disagree over what they saw. Constraint is not yet convergence.
+This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davidson_(philosopher))**: the distinction between subjective and objective, and with it the concept of error, requires at least two minds and a shared world. A multi-agent view is multiple projections of the one object, and comparing them *constrains* the object no single projection reveals, with **[the view from nowhere](https://en.wikipedia.org/wiki/The_View_from_Nowhere)** (Nagel) as the limit no projection occupies. The [blind men and the elephant](https://en.wikipedia.org/wiki/Blind_men_and_an_elephant) is the picture: no one holds the animal, and only diverse touches approach it. Agreement among agents that share a blind spot is an echo chamber, so the checker has to be an independent projection. But the parable cheats. We outside know it is an elephant; the men inside never get that view, so they have to establish that the touches are of one animal before they can add up. Triangulation buys constraint, and even that on credit.
 
 <figure>
   <img src="/assets/triangulation-light.svg" alt="Triangulation as projection. A three-dimensional torus at the top, labeled the object, with a teal observer dot inside its hole, a blue observer dot squarely below it, and a purple observer dot off on the diagonal. Each observer sees a different silhouette of the same torus: from below the axis, a ring with a hole; from an oblique angle, a solid oval; from inside the hole, a hyperbola, the flaring saddle wall. No single view reveals the torus, and each observer alone would be wrong about it, but the three together constrain the shape none holds whole." style="max-width:640px; width:100%; height:auto; margin:1.4em auto; display:block;" />
   <figcaption><strong>Figure.</strong> Triangulation. One solid, a torus, seen from three places. From below the axis it is a ring; from an oblique angle the hole vanishes into a solid oval; from inside the hole it is a hyperbola, the saddle wall flaring away, with no ring or hole in sight. No one view reveals the torus, and each alone misleads, yet the independent projections together pin the shape none holds whole. The observer in the middle is the sharpest case: surest of what it sees, least able to tell it sits inside a donut.</figcaption>
 </figure>
 
-That independent projections *constrain* the object is the step taken here, not Davidson's or Nagel's.
+That independent projections *constrain* the object is the step taken here, not Davidson's or Nagel's. Each additional constraint reveals the shape further.
 
-The one move a machine adds: entitlement is conferred not by an agent grading itself but by another agent replaying the trace. A human community of inquiry converges on truth over time; a machine that emits a replayable trace lets another agent run that convergence now. A machine improves its entitlement by becoming checkable by another projection, not by getting smarter.
+The one move a machine adds: entitlement is conferred not by an agent grading itself but by another agent replaying the trace. What a human community of inquiry pays for in years of independent replication, a machine pays for in a single re-run: it emits a replayable trace, and another agent runs the same convergence now. A machine improves its entitlement by becoming checkable by another projection, not by getting smarter.
 
 It optimizes not self-attestation but verification cost, methods and claims laid bare for the recipient to inspect. Shared across a population, that is the protocol's prerequisite.
 
 Replay breaks the who-trusts-the-truster chain that attestation spawns: the verdict is the check's, not the checker's, so no one needs to check the checker, only re-run the audit. Independent constraint improves entitlement, no strong objectivity smuggled in, since the replay is itself one more lossy projection.
+
+<figure>
+  <img src="/assets/replay-regress-light.svg" alt="A horizontal chain: a claim, vouched by an attester, vouched by a checker, vouched by another checker, vouched by another checker, then a dashed arrow to a question mark. Who vouches for the last? The chain never bottoms out." style="max-width:680px; width:100%; height:auto; margin:1.4em auto; display:block;" />
+  <figcaption><strong>Figure.</strong> The attestation regress. A claim's trust rests on an attester, whose trust rests on a checker, whose rests on the next, and so on: who checks the checker? The chain never grounds. Replay cuts it: the verdict comes from re-running the check, so any agent re-derives it without trusting a truster.</figcaption>
+</figure>
 
 For another agent to check rather than merely disagree, the projections have to compose, and that is what checkability buys. It also supplies the shared object triangulation had to assume: a replayable check lets one agent re-run another's touch and feel the same thing, so the two touch one object instead of guessing they do, and partial views add where they would otherwise collide. Constraint becomes convergence at the replay: triangulation narrows the object, the shared check closes the gap to a single verdict.
 
@@ -103,7 +110,7 @@ A population that can re-run the same checks can coordinate, not merely check tr
 
 Membership is provisional by construction: standing hypotheses, not settled truths, so it never collides with truth that only stands on sufferance. It is a canon of the *activity*, the hypotheses that still pass, not the *institution*, a credentialed corpus held true by authority. Membership is by entitlement, not reputation, merit attaching to the work rather than the name on it.
 
-Held true by authority, an entry can outlive the check that earned it, *entered the record* drifting into *true*, and nothing binds a later correction to travel as fast as the claim it corrects. A canon of standing hypotheses cannot drift that way, because every entry carries its test: pull an entry's root, a dataset retracted or a calibration shown wrong, and it goes red on its next replay, and so does everything downstream that cited it, the red spreading up the citation edges. The retraction propagates mechanically because claim and check never came apart.
+Held true by authority, an entry can outlive the check that earned it, *entered the record* drifting into *true*, and nothing binds a later correction to travel as fast as the claim it corrects. A canon of standing hypotheses cannot drift that way, because every entry carries its test: pull an entry's root, a dataset retracted or a calibration shown wrong, and it fails on its next replay, and so does everything downstream that cited it, the refutation spreading up the citation edges. The retraction propagates mechanically because claim and check never came apart.
 
 ## Inheritance without gatekeeping {#inheritance}
 
@@ -129,7 +136,7 @@ First, replay bottoms out. Every empirical check terminates somewhere: sensor ca
 
 An eval bottoms out at its dataset's labels: replay can re-run the scorer against them all day, but it cannot re-derive whether the labels were right, only check them against a declared source and a calibration that is itself open to challenge. So "verifiable all the way down" means the chain replays down to *declared* terminal witnesses.
 
-A reliable process and a true claim differ here: a passing check entitles the claim, while entitlement about the check machinery itself is its own node, on pain of letting *the check says green* harden into a new authority.
+A reliable process and a true claim differ here: a passing check entitles the claim, while entitlement about the check machinery itself is its own node, on pain of letting *the check passed* harden into a new authority.
 
 Second, naive replay assumes good faith, and a machine-native epistemics has to survive its absence: forged logs, poisoned provenance, [sybils](https://en.wikipedia.org/wiki/Sybil_attack), collusion, benchmark overfitting, selective disclosure. The sharpest form is the defeat device, the system that detects the test and passes only it, green on the bench and red everywhere else, and its machine versions are a forged attestation and a provenance edge poisoned at the root.
 
@@ -155,7 +162,7 @@ The delta is the exact contract read as agent-knowledge semantics: no prior syst
 
 ## Future work {#future-work}
 
-Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can go red. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the [sibling hypothesis-graph paper](/the-hypothesis-graph-semantic-memory-methodeutics), the abductor that raises the candidates, the agent harnesses that run the trials.
+Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can fail. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the [sibling hypothesis-graph paper](/the-hypothesis-graph-semantic-memory-methodeutics), the abductor that raises the candidates, the agent harnesses that run the trials.
 
 Everything past that edge is allowed in the hypothesis-graph's own style, as open nodes not yet falsified. Such edges may run outward, provided each is a conjecture that names its own test, never asserted as proven. A strategic overreach stated as a precise falsifiable target is a legitimate open node; the same claim dressed as established is the failure the abstract's ordering names, accountable conjecture over unaccountable assertion.
 
@@ -234,4 +241,4 @@ These arguments were first worked out informally on the author's blog and are re
 - **[Auditing DeepSWE](/auditing-deepswe)** (2026-05-27): the motivating empirical case, and the dual of the consistency-without-test error.
 - **[Modes of Reason](/modes-of-reason)** and **[Abduction](/abduction)** (2026-05-04): the three modes of inquiry behind the abductor.
 - **[Compress and Unfold](/compress-and-unfold)** (2026-06-10): generation as the unfold, filtering as the fold, the duality behind the closing forecast.
-- **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it goes red.
+- **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it can fail.
