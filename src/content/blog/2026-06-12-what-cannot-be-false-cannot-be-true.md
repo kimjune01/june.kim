@@ -122,17 +122,17 @@ Engineering is a full-contact sport between theory and reality, where the test r
 
 [Popper](https://en.wikipedia.org/wiki/Falsifiability) supplies the capacity to fail as the mark of a claim that says anything, his "irrefutability is a vice" narrower than the line here, unscientific rather than untrue. Truth-by-construction and a [third status](https://en.wikipedia.org/wiki/Three-valued_logic) are a century old (Brouwer; Łukasiewicz 1920; Aristotle's sea battle first).
 
-Everything above is inherited. The one line redrawn here is the third value's: for the logicians it was a value in the logic, where bivalence breaks; here it is not a value in the world but a status in the ledger of entitlement, not-yet-verified and ranked below false, Popper's spirit and not the logicians'.
+Everything above is inherited. Dummett drew the line between the knowable and the real, then collapsed it onto the knowable: truth became verification, the real beyond it dropped, the logic intuitionistic to match. Here the line stays open. The third value is that gap held wide, a status in the knower's ledger of entitlement, not-yet-verified and ranked below false, the indeterminacy in the knowing and not the world.
 
 ## Conclusion {#conclusion}
 
 Bivalence rules where a verdict is laid down, the unverifiable is untrue, and what cannot be false cannot be true. The scope is the empirical and formal domains, expanding truth by linking new knowledge to old.
 
-A single principle of verifiability governs truth across academic and social domains, establishing a regime that displaces deference to trust imposition. Only one regime can remain self-consistent among many. The choice is between trust and test, and that is a commitment.
+We are already running on one standard or another, whether or not we ever chose it. Trust and test are the two: one asserted bona fide, the other handed over to refutation. They cannot both settle the same claim. To run on verification is to stop letting some other people decide what is true for us. The choice falls before any verdict. It is ours, and it is a commitment.
 
 A knower works only the phenomenon, and the world makes contact only by refutation. So every truth a knower holds is a claim that could have fallen but has not yet, still standing without ever being certified, because the knower's limit is at untruth, ever expanding. It's all we can do as knowers, to act on the untrue.
 
-We can assemble every structure in the universe and project them as individuals: but by acting, we expose truth by sharing tests, verifying and refuting. So how can you be sure of what you're sure of? You have to go and check.
+We can assemble every structure in the universe on our own, but by acting we expose truth by sharing tests, verifying and refuting. So how can you be sure of what you're sure of? You have to go and check.
 
 ## References {-}
 
