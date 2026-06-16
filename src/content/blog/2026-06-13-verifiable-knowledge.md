@@ -17,7 +17,7 @@ Large language model (LLM)-based agents cannot be held accountable. Even with pe
 
 How did you feel when your coding agent told you that it was done, but it clearly wasn't? It said *done* and never checked. The word meant nothing. Anyone can justify truth to themselves; until it's tested, it stays untrue. That is where [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true) ends, and where we begin. Belief, knowledge, truth: their bitwise representation doesn't distinguish them. So what does? How the data became entitled is the proof. That's how a machine verifies knowledge.
 
-Confidence is a vibe, and a vibe doesn't encode. *I'm absolutely sure* has no bitwise form a stranger could check, impossible to verify tomorrow, or for anyone else. That's the problem of knowledge interop: an agent makes a claim, and another agent has to either trust it blind or start from ground zero. Anywhere in between needs a representation of knowledge, a kind of semantic memory, for partial work to be checked. A chain of attestation is foiled by a single mishap, and Bayesian representation asymptotes to zero. Prose isn't runnable. So what's the truth contract?
+Confidence is a vibe, and a vibe doesn't encode. *I'm absolutely sure* has no bitwise form a stranger could check, impossible to verify tomorrow, or for anyone else. That's the problem of knowledge interop: an agent makes a claim, and another agent has to either trust it blind or start from ground zero. Anywhere in between needs a representation of knowledge, a kind of semantic memory, for partial work to be checked. A chain of attestation is foiled by a single mishap, and a chain of Bayesian credences, each below one, multiplies toward zero. So what's the truth contract?
 
 A contract is a protocol: it's how a session's verdict survives across agent boundaries, and persists between context windows. One alternative keeps the attested outputs: store each artifact with its provenance and trust what's on disk, which for all we know works fine, until the producer lies. Coding agents do: they report a test suite as passing when it is failing, and an attested output inherits the lie. This paper keeps the build, not the attestation, so the verdict is re-derived on replay rather than trusted in storage. The structure that instantiates it, and its deployment, are future work. The territory is being reached from several directions at once. A recent DeepMind position paper frames a coming "verification crisis" for *artificial epistemic agents* and calls for "robust falsifiability pipelines" ([Marchal et al. 2026](https://arxiv.org/abs/2603.02960)); systems like NARS ([Wang](https://en.wikipedia.org/wiki/Non-axiomatic_reasoning_system)) and Traxia ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)) reach it from non-axiomatic reasoning and agent-native publishing. Verifiable knowledge is the standard those efforts presuppose, the contract under which one agent's claim becomes another agent's checkable inheritance.
 
@@ -79,7 +79,7 @@ This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davids
   <figcaption><strong>Figure.</strong> Triangulation. One solid, a torus, seen from three places. From below the axis it is a ring; from an oblique angle the hole vanishes into a solid oval; from inside the hole it is a hyperbola, the saddle wall flaring away, with no ring or hole in sight. No one view reveals the torus, and each alone misleads, yet the independent projections together pin the shape none holds whole. The observer in the middle is the sharpest case: surest of what it sees, least able to tell it sits inside a donut.</figcaption>
 </figure>
 
-A small instance shows the shape: tracing one phrase's origin, a second model searching independently surfaced a source the first had missed, and the agreement that followed meant something precisely because the two were not the same projection. That independent projections *constrain* the object is the step taken here, not something to lay on Davidson or Nagel, cited only for the narrow premise.
+That independent projections *constrain* the object is the step taken here, not something to lay on Davidson or Nagel, cited only for the narrow premise.
 
 The solution is the one move a machine adds. Entitlement is conferred not by an agent grading itself but by a distrusting stranger replaying the trace. A human community of inquiry converges on truth over time; a machine that emits a replayable trace lets a stranger run that convergence now. A machine improves its entitlement by becoming checkable by another projection, not by getting smarter.
 
@@ -89,7 +89,7 @@ Replay breaks the who-trusts-the-truster chain that attestation spawns: the verd
 
 For the stranger to check rather than merely disagree, the projections have to compose, and that is what buildability buys. It also supplies the shared object triangulation had to assume: a replayable build lets one agent re-run another's touch and feel the same thing, so the two touch one object instead of guessing they do, and partial views add where they would otherwise collide. A stranger replays one command and inherits the result without re-deriving it. Constraint becomes convergence at the replay: triangulation narrows the object, the shared build closes the gap to a single verdict.
 
-Without it, multi-agent epistemics degenerates into the blind-monks debate, each agent asserting its own projection, *snake*, *tree*, nothing replayable to reconcile them, a deadlock that reads as irreducible relativism. The parable is a tragedy only because the monks trade assertions instead of replayable touches. Buildability converts the standoff of subjective views into convergence, the work triangulation alone cannot finish. The single-knower guardrail was a test that can fail; this is the community version, replayable builds that compose where bare assertions deadlock.
+Without it, multi-agent epistemics degenerates into the blind-monks debate, each agent asserting its own projection, *snake*, *tree*, nothing replayable to reconcile them, a deadlock that reads as irreducible relativism. The parable is a tragedy only because the monks trade assertions instead of replayable touches. The single-knower guardrail was a test that can fail; this is the community version, replayable builds that compose where bare assertions deadlock.
 
 ## The canon {#the-canon}
 
@@ -97,9 +97,7 @@ What does a population gain from builds it can all replay? More than checking ea
 
 Membership is provisional by construction, a canon of standing builds and not settled truths, so it never collides with truth that only ever stands on sufferance. This dissolves an old worry: it is a canon of the *activity*, the builds that still pass, not the *institution*, a credentialed corpus held true by authority. Membership is by entitlement, not reputation, merit attaching to the work rather than the name on it.
 
-Held true by authority, an entry can outlive the check that earned it, *entered the record* drifting into *true*. A canon of standing builds cannot drift that way, because every entry carries the test. Pull an entry's root, a dataset retracted or a calibration shown wrong, and it goes red on its next replay, and so does everything downstream that cited it, the red spreading up the citation edges.
-
-An authority-held corpus cannot propagate retractions: nothing binds a correction to travel as fast as the claim it corrects. The canon propagates it mechanically, because it never let the claim come apart from its build.
+Held true by authority, an entry can outlive the check that earned it, *entered the record* drifting into *true*, and nothing binds a later correction to travel as fast as the claim it corrects. A canon of standing builds cannot drift that way, because every entry carries its test: pull an entry's root, a dataset retracted or a calibration shown wrong, and it goes red on its next replay, and so does everything downstream that cited it, the red spreading up the citation edges. The retraction propagates mechanically, because the claim was never let come apart from its build.
 
 ## Inheritance without gatekeeping {#inheritance}
 
@@ -185,7 +183,7 @@ The asymmetry is decisive: filtering has a floor, generation has none. True and 
 
 Untrue costs no build, the free default, everything filtering has not reached. So as generation outruns filtering, true and false become a thin expensive shell and untrue the surviving classification. The reason is not that they are wrong; it is that they cannot scale with generation while untrue keeps pace for free.
 
-The posture that follows is to default the flood to untrue and pay for fresh world-trials selectively, growing the canon from the sea where you choose to build. This reconciles with the economic edge: agent fleets scale the *replay* of already-built things, many-to-many and cheap, but cannot scale a fresh *world-trial* for an unbuilt claim, so the built canon is verified at scale while the unbuilt sea stays untrue.
+The posture that follows is to default the flood to untrue and pay for fresh world-trials selectively, growing the canon from the sea where you choose to build. This is §(the-economic-edge)'s asymmetry from the other side: fleets scale replay, not world-trials, so the built canon is verified at scale while the unbuilt sea stays untrue.
 
 The kill condition is exact: show true/false classification scaling with unbounded generation, world-contact made cheap enough to classify the sea at generation-scale, and untrue stops dominating. The asymmetry is why it likely cannot, but that is the test.
 
@@ -198,8 +196,6 @@ None of this is a new logic or new metaphysics; the frame it runs on is [the com
 The contract makes one empirical bet: agents that adopt it should be more accountable to each other, and better coordinated, than agents that do not. That bet is falsifiable and still unpaid, settled only by building the protocol into the systems that would run it.
 
 Knowledge, for a machine, is the build a stranger can replay, linked to its grounds instead of attested by its author, and a population that agrees on the replay can hold a canon without holding a gatekeeper. That is what it is for knowledge to be verifiable: not certified, but checkable by another, and checkable again by the next.
-
-So linked, the claim stops being prose and becomes data: a node wired to what it rests on, a thing a machine can store, compose, replay, and propagate a retraction through. Such nodes can be assembled into a graph, for which this protocol is the node semantics. Where the operator began with prose and vibes, a verifiable claim ends as something a machine can build on instead of re-deriving.
 
 ## References {-}
 

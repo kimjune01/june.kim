@@ -1847,6 +1847,35 @@ edge (the build made checkable) and zooms out single-agent → population.
   — the familiar Kantian anchor the Dewey-unfamiliar reader needs), then RIDE DEWEY from there; everywhere
   else (two-graphs, §truth) says "the world"/"reality," NOT noumenon. F4 keeps the leash but as resistance-
   realism (the world refutes), no longer billed as "THE DEPARTURE FROM KANT." DONE 2026-06-14 (propagated; §phenomenon retitled "Working the phenomenon").
+- 2026-06-16: PAPER 2 LINE-EDIT + DEDUP PASS (edited directly in the post; graph updated after, per author
+  "we have the graph to fall back on, so edit boldly" + "link to other sections instead of repetition").
+  FRESH-READER REVIEW (Sonnet, cold read): central claim landed; flagged seven snags, triaged with author.
+  SUBTRACTIONS (intro/§truth-at-the-edge E-group): cut "Prose isn't runnable." (fourth-beat redundant with
+  the attestation/Bayesian failure pair; "runnable" still pays off at C5). Bayesian referent supplied —
+  "Bayesian representation asymptotes to zero" → "a chain of Bayesian credences, each below one, multiplies
+  toward zero" (the product down a chain was the missing referent). §triangulation (C1b): cut the
+  second-model blind-spot HALF-ANECDOTE ("a second model surfaced a source the first had missed") — Sonnet:
+  "a gesture at an instance, not an instance," did no evidentiary work; kept the clean attribution move
+  ("independent projections *constrain* the object is the step taken here, cited only for the narrow
+  premise"). The lived case stays in the /truth-is-buildable companion (P group), not asserted as evidence here.
+  CONCLUSION: cut the forward-link final ¶ ("So linked, the claim stops being prose and becomes data...") —
+  read as a bridge to the hygraph paper, deflated the close; the conclusion now lands on "checkable by
+  another, and checkable again by the next." Future-work already carries the hygraph handoff, so the link
+  isn't lost. DEDUP (3 trims): (1) §triangulation — "constraint → convergence via replay" was stated 3× in
+  4 ¶ (L75 setup, L90 close, L92); cut the L92 restatement sentence, kept the blind-monks negative case +
+  the single-knower→community guardrail callback. (2) §the-canon — merged the two near-identical
+  "authority-corpus can't update / canon propagates mechanically" ¶ (drift + retraction-propagation are
+  the one "claim never detaches from its build" point) into one. (3) §forecast — the reconciliation ¶
+  re-narrated the economic edge; replaced with a CROSS-REF token §(the-economic-edge) ("this is
+  §(the-economic-edge)'s asymmetry from the other side"), per the link-don't-repeat rule. KEPT as deliberate
+  (NOT cut): the bookended six-primitive enumeration (abstract / C5 / conclusion), the world-trial-can't-scale
+  asymmetry threaded across §the-limits + future-work (central, intentional), the entitlement=survives-replay
+  restatements (the one move, recontextualized each time). DISMISSED two Sonnet snags: abstract "entitlement"
+  (it says "burden of proof" — better for a cold reader, author-confirmed; "entitlement" earns its meaning
+  across the body), and "verify-beats-generate asserted" (it IS returned to at §(the-economic-edge)'s first
+  kill condition, and it sits inside open-conjecture future-work). LEFT as-is (author call): the DeepMind
+  quote-within-cite (genuine convergence signal) and the L90 "buildability supplies the shared object" hinge
+  (the surrounding "re-run another's touch, feel the same thing" already shows it).
 ## Citation map (pre-render)
 
 Two tiers, held apart (the tiering rule). LOAD-BEARING = canonical sources only;
