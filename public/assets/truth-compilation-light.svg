@@ -8,22 +8,22 @@
     </marker>
   </defs>
 
-  <!-- exposure / the world pushing back -->
-  <text x="310" y="22" text-anchor="middle" font-size="11" fill="#777">exposure · the world breaks a wrong build</text>
+  <!-- exposure / the system pushing back -->
+  <text x="310" y="22" text-anchor="middle" font-size="11" fill="#777">exposure · the system breaks a wrong check</text>
   <line x1="310" y1="30" x2="310" y2="56" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <!-- claim node -->
   <rect x="30" y="58" width="140" height="44" rx="8" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
   <text x="100" y="85" text-anchor="middle" font-size="15" fill="#222">a claim</text>
 
-  <!-- claim -> build -->
+  <!-- claim -> check -->
   <line x1="170" y1="80" x2="246" y2="80" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- build / run the test -->
+  <!-- check / run the test -->
   <rect x="250" y="58" width="120" height="44" rx="8" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
   <text x="310" y="85" text-anchor="middle" font-size="15" fill="#222">run the test</text>
 
-  <!-- build -> three verdicts -->
+  <!-- check -> three verdicts -->
   <line x1="370" y1="80" x2="502" y2="62" stroke="#555" stroke-width="1.4" marker-end="url(#arrow)"/>
   <line x1="370" y1="80" x2="502" y2="94" stroke="#555" stroke-width="1.4" marker-end="url(#arrow)"/>
   <line x1="370" y1="80" x2="502" y2="126" stroke="#555" stroke-width="1.4" marker-end="url(#arrow)"/>
@@ -31,15 +31,15 @@
   <!-- verdicts -->
   <circle cx="514" cy="62" r="7" fill="#1a8a3a" stroke="#0f5c26" stroke-width="1"/>
   <text x="530" y="60" font-size="14" fill="#222" font-weight="600">TRUE</text>
-  <text x="530" y="74" font-size="11" fill="#777">built and stood</text>
+  <text x="530" y="74" font-size="11" fill="#777">ran and stood</text>
 
   <circle cx="514" cy="98" r="7" fill="#c0392b" stroke="#7d2519" stroke-width="1"/>
   <text x="530" y="96" font-size="14" fill="#222" font-weight="600">FALSE</text>
-  <text x="530" y="110" font-size="11" fill="#777">built and broke</text>
+  <text x="530" y="110" font-size="11" fill="#777">ran and broke</text>
 
   <circle cx="514" cy="134" r="7" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="3 2.5"/>
   <text x="530" y="132" font-size="14" fill="#222" font-weight="600">UNTRUE</text>
-  <text x="530" y="146" font-size="11" fill="#777">no passing build (hung)</text>
+  <text x="530" y="146" font-size="11" fill="#777">no passing check (hung)</text>
 
   <!-- provenance edges down to roots -->
   <text x="92" y="132" text-anchor="middle" font-size="11" fill="#777">provenance edges</text>
@@ -56,9 +56,9 @@
 
   <text x="150" y="262" text-anchor="middle" font-size="11" fill="#999">terminal witnesses: trusted roots where replay bottoms out</text>
 
-  <!-- stranger replay loop: verdict back into the build -->
+  <!-- stranger replay loop: verdict back into the check -->
   <path d="M 600 140 C 600 330, 310 330, 310 106" fill="none" stroke="#9a9a9a" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#arrowMuted)"/>
-  <text x="455" y="350" text-anchor="middle" font-size="11.5" fill="#777">a distrusting stranger replays the build</text>
+  <text x="455" y="350" text-anchor="middle" font-size="11.5" fill="#777">a distrusting stranger replays the check</text>
   <text x="455" y="366" text-anchor="middle" font-size="11.5" fill="#777">entitlement is what survives that replay</text>
 </svg>
  
