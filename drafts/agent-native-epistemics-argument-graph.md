@@ -195,7 +195,7 @@ Do NOT let the essay's metaphors become the warrant.
 Both papers' SECTION orders PASS the Trey-Parker connector test (therefore/but throughout, no
 and-then between sections, NO reorder needed):
 - **PAPER 1:** phenomenon →[∴ a knower works only builds] belief →[∴ knowledge is belief past a
-  threshold] knowledge →[∴ truth is what exposure earns] truth →[BUT one regime escapes: math]
+  threshold] knowledge →[∴ truth is what exposure earns] truth →[BUT one graph stands apart: math]
   two-graphs →[∴ the empirical states are a three-state ledger] trichotomy →[∴ a ranking falls out]
   dignity. Coda: related work → conclusion.
 - **PAPER 2:** intro [picks up P1's self-certification problem] →[∴ first, what is there to check]
@@ -563,7 +563,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   thing belief never has, EXPOSURE, a test it could have failed. Capacity to be
   false comes first; the right to say true is earned after. What cannot be false
   cannot be true, SCOPED UP FRONT to EMPIRICAL world-claims (the uncheckable
-  number is immune and earns nothing); the formal regime is the exception, where
+  number is immune and earns nothing); the formal graph is the exception, where
   proof closes warrant without world-exposure (F7), so the tautology lands
   there, not here. RENDER SEAM (therefore-but pass 2026-06-12): §truth opens from
   §knowledge's exposure as a therefore (knowledge buys exposure; truth is what
@@ -577,7 +577,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   REGIME PURITY (Fable): do NOT use "theorem" as a rung here, it lives in the
   platonic graph (F7) and the word in an empirical climb is a firewall violation
   in the paper's own terms. The platonic graph has its own non-graded ladder
-  (conjecture → proof), which is the point of the two regimes. `argued` · §truth
+  (conjecture → proof), which is the point of the two graphs. `argued` · §truth
 - **A7.** The two-claims split (the N-atoms case), recast on UNBUILDABILITY alone
   (author 2026-06-14, riding Dewey, no noumenon: "can't prove the fact, can't prove
   its inquiry"). Two claims, both unbuildable, at different levels, yielding different
@@ -666,7 +666,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   then re-scoped to a bounded domain where it stays approximately true, never beyond
   refutation). `argued` (history of physics: Newton, Mercury/GR, QM) · §phenomenon
   or §truth (placement open)
-- **F6c.** TWO REGIMES, and math is the DETACHED one. Empirical truth (F6/F6b)
+- **F6c.** TWO GRAPHS, and math is the DETACHED one. Empirical truth (F6/F6b)
   answers to the world — graded and refutable, the agent being part of the world
   that refutes it; reality refutes it. Mathematical truth is detached from reality itself: it answers only to its
   axioms, and SELF-CONSISTENCY (proof, the absence of contradiction) is the whole
@@ -688,7 +688,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   truth graded and refutable, never absolute (F6), credence in [0,1), the world
   refutes, no node absolute. (ii) PLATONIC graph: truth DECISIVE within a
   stipulated formal system where proof is available, truth-WITHOUT-grade; warrant
-  complete relative to its axioms, reachable because the regime has NO external
+  complete relative to its axioms, reachable because the graph has NO external
   noumenon, the system is closed; where proof or refutation exists, warrant closes
   internally (both internal), otherwise the node stays open relative to the system
   (Gödel: many statements are undecided relative to a system); the
@@ -708,7 +708,7 @@ already earned (see audience-register), but do not let the worldview tip into mo
   above belief" = no absolute WORLD-claim, the platonic exception never crosses.
   Gödel: proven theorems stay absolute, incompleteness only gives the platonic
   graph its own permanently-open region. ONTOLOGY DISCLAIMED (author 2026-06-12,
-  do not pick the platonism fight): "platonic" names the regime's BEHAVIOR
+  do not pick the platonism fight): "platonic" names the formal graph's BEHAVIOR
   (absolute, detached), not a metaphysics of abstract objects; truth here is
   RELATIVE-TO-AXIOMS, internal to the chosen system. The absoluteness is the proof
   closing the gap within a stipulated game, no commitment to mathematical
@@ -986,7 +986,7 @@ THE HONEST LIMITS (C1g-C1i, added per codex sniff 2026-06-12; render as one shor
   openly (R4); the narrow delta is where the third state lives. `definition +
   argued` · §ledger
 - **C2a.** Untrue deepened (from /truly-untrue): in the FORMAL, decidable cases,
-  true and false are halting states; in the EMPIRICAL regime they are reopenable
+  true and false are halting states; in the EMPIRICAL graph they are reopenable
   ledger states (fallibilism, F6), not final halts; untrue is the hung build.
   The third state has structure: decidable
   systems = knowably temporary, provable non-halting = knowably forever,
@@ -1002,11 +1002,32 @@ THE HONEST LIMITS (C1g-C1i, added per codex sniff 2026-06-12; render as one shor
 - **C4.** Scope guard, stated in the paper's own voice: none of this is a new
   theory of truth, a new logic, or new metaphysics. Old parts, pragmatist order,
   read as a build; the claim is that the assembly RUNS. DOMAIN SCOPE (author
-  2026-06-12, do not overscope): the paper treats the EMPIRICAL and FORMAL regimes
+  2026-06-12, do not overscope): the paper treats the EMPIRICAL and FORMAL domains
   only; it does NOT claim these exhaust truth, and normative / modal / aesthetic
   claims are explicitly out of scope (not a third graph, not a taxonomy, just out
   of frame). Narrowing, not branching. `declared` · abstract,
   intro, conclusion
+- **C4a.** THE ACCOUNT IS ITSELF A REGIME (exclusivity; the conclusion's closing
+  move). WCBF is a regime — a single STANDARD OF ENTITLEMENT, an answer to what
+  earns the word *true* — not the only conceivable one. Rivals: JTB, vibes /
+  intuition, faith / authority; the lived pair is "go check" vs "yes sir"
+  (§trichotomy social clash, /go-check companion). A regime GOVERNS ACROSS DOMAINS
+  (spans the empirical and formal graphs at once — by world-test and by proof) and
+  is EXCLUSIVE: only one governs at a time, because two standards returning
+  incompatible verdicts on one claim cannot both hold it (no JTB + WCBF together).
+  The choice is PRIOR to any verdict — not which claims are true, but which test is
+  allowed to decide — so C4's scope is a JURISDICTION, not a hedge. REACH DIFFERS
+  BY REGIME: authoritarian / faith regimes are TOTALIZING (claim every domain, rule
+  empirical fact by decree); WCBF is CONSTITUTIONAL (jurisdiction limited to where
+  verification reaches, refuses normative / modal / aesthetic = C4), so overreach
+  across domains is itself the authoritarian move, and the §trichotomy "regime that
+  earns nothing" is the trust regime annexing ground it cannot govern. METAPHOR
+  (empire spans planets; planets persist across regime change, the law over them
+  changes) KEPT OUT of paper prose — blog / companion flavor; the paper ENACTS the
+  regime, does not crow about founding one. SCOPE GUARD (do not over-grow in Paper
+  1): if this expands to WCBF-vs-rivals at length it is companion / separate work;
+  here it is one closing paragraph. `argued` (author 2026-06-15) · §conclusion,
+  adjacent C4 · positive-charge twin of C4's scope guard
 - **C5.** THE DELTA RAZOR (the #2 novelty defense; GOVERNS every render of a
   borrowed idea). NARROWED per codex sniff 2026-06-12: "everyone described it,
   nobody made it RUN" is TOO BLUNT, because many ran PARTS (NARS ran graded truth,
@@ -1149,7 +1170,7 @@ Machine side (the neighbors):
   names. So FW1's outward edge is a FRONTIER of honestly-open conjectures, each
   with its application-trial. PAYOFF: the material scope-guarded OUT of the body
   (the civilization / buildable-linguistic-precision frame, C1d guard; the
-  normative/modal regime, C4 guard) lives HERE as honestly-typed open edges; the
+  normative/modal domain, C4 guard) lives HERE as honestly-typed open edges; the
   body stays narrow-and-proven while the frontier carries the vision. `declared`
   · §future-work, ties C2a + C3 + FW1 + (rehomes C1d/C4 guards)
 - **FW3.** (OPEN SPECULATIVE EDGE, honestly typed per FW2; the economic / search-
@@ -1346,9 +1367,16 @@ these are the author's own priors, linked for lineage and texture.
 5. **Knowledge** — A3, A4, A7.
 6. **Truth** — A5, A6, E5 (the guardrail); asymptote folded in (F6/F6a/F6b).
 7. **The two graphs** — F6c, F7, F7a, F7b (bivalence housed, firewall, string theory). *Closes the climb.*
+   RENDER (2026-06-15, §the-two-graphs line-edit + reorder pass):
+   - REORDER: string theory (F7b) now renders BEFORE the architecture (F7/F7a), not after. The section opens on the concrete case — "String theory mistook math for physics" — and F7 then reads as the GENERALIZATION the case forces ("So the architecture that keeps them apart is two disjoint hypothesis graphs"). Author rationale: the abstraction is a compression/generalization, so lead with the instance. Render order within §the-two-graphs is now F6c → F7b (string theory) → F7 (architecture) + figure → boundary-of-type → F7a crossing → F7a effectiveness → close. F7b's tail claim ("witness AND proof A5 needs F7") re-voiced to forward-point: "the case that shows the line needs a boundary under it"; "The boundary rescues that step" → "Scoping that step to phenomenal truth rescues it" (boundary not built yet at that point).
+   - REGIME → GRAPH/DOMAIN (terminology, author 2026-06-15): "regime" is RESERVED for the epistemology level — a standard of entitlement, an answer to what earns the word *true* (WCBF, JTB, vibes, faith; the "go check"/"yes sir" pair). Empirical and formal are NOT regimes; they are the two GRAPHS/DOMAINS the WCBF regime ranges over. Justification: regimes are mutually exclusive (one in control at a time, no JTB+WCBF together), but the two graphs COEXIST (the trichotomy spans both) — coexistence alone disqualifies them; and the word carries a governance charge (authoritarian = rule-by-authority = the "yes sir" stance), which belongs at the epistemology level. Swept the rendered prose: "formal/empirical/closed/two regimes" → "graph" (inside the architecture) or "domain" (scope level: §46, §conclusion). KEPT the one charged use (§trichotomy social para "run on the regime that earns nothing" = the trust/"yes sir" regime). FLAG (source-of-truth correction, logged NOT yet applied to node text): the NODES still carry the deprecated sense — F6c titled "TWO REGIMES", F7/F7a scattered "regime" for the formal side — reconceive as graphs/domains when next editing those nodes.
+   - NAMING (formal vs platonic): lead with "formal graph" in F7's render (matches the figure label + §46/§truth), so "platonic" debuts at its own ontology-disclaimer clause rather than cold at first use; "platonic" stays the glossed behavioral name thereafter.
+   - PUN (load-bearing, author "paronomasia"): F7b's "a platonic structure with no edge to reality" → "a formal structure with no STRINGS to reality" — string-theory wordplay that IS the verdict (no tether/edge to the world), paid off by the existing "the universe simply stringy" later in the node. De-ref'd "open node" → "open hypothesis" (nodes belong to the not-yet-rendered graph picture at that point).
+   - Earlier same-day F6c/F7 line edits: opener "There is one regime where none of that holds / Mathematics is the detached case" → "Unlike physics, mathematics has no empirical tests" (supersedes the DECLINED-to-convert openers note in the RHETORICAL SPINE list); folded the doubled "internal test"; compressed F7's platonic monster-sentence; dropped the "two cautions" clause-count scaffold ("The absoluteness belongs to the standard, not to any checker").
 8. **The trichotomy** — C2/C2a DEFINED as epistemic statuses (true/false/`untrue`, the semiring zero, undecidability-is-decided) + C3 dignity ordering. *NEW section, split off from the old §ledger; the ENCODED ledger lives in Paper 2.*
 9. **Related work** — R1-R6 (human-side lineage) + AGM/TMS new neighbor.
 10. **Conclusion (P1)** — C4; the boundary-redraw restated; forward to Paper 2.
+   RENDER (2026-06-15, NEW ¶ — regime exclusivity): added a conclusion paragraph stating the account is ITSELF a regime — a single standard of entitlement governing what earns the word *true* across both domains (graphs) at once — and that regimes are EXCLUSIVE: only one governs at a time, so running on verification is to REFUSE justified-true-belief, intuition, and authority as the thing that settles a claim (two standards returning incompatible verdicts on one claim cannot both hold it). The choice is PRIOR to any verdict: not which claims are true, but which test is allowed to decide. Renders as a ¶ after the scope paragraph ("narrowing, not branching"), before the closing "picture". CONCEPT SEED (author thread 2026-06-15; galactic-empire metaphor KEPT OUT of paper prose as blog/companion flavor): a regime SPANS domains like an empire spans planets — the planets persist across regime change, the law over them changes; authoritarian regimes are TOTALIZING (faith claims every domain, rules empirical fact by decree), WCBF is CONSTITUTIONAL (limits jurisdiction to where verification reaches, refuses normative/modal/aesthetic = the §conclusion scope guard; overreach across domains is the authoritarian move). FLAG: if the regime frame grows (WCBF as one regime among rivals), this wants a proper node near C4 rather than a render-only addition — logged here as the seed. Cross-ref: ties the single charged "regime" use in §trichotomy (the "yes sir" regime that earns nothing) to the conclusion's WCBF-as-regime.
 
 **PAPER 2 — "Verifiable Knowledge"** (`/verifiable-knowledge`; "agent-native epistemics" = coined term in body):
 1. **Abstract (P2)** — encodability; takes Paper 1's boundary as given.
