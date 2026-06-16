@@ -130,7 +130,7 @@ Each check carries its own causal order, provenance edges running strictly backw
 
 ## Limitations {#the-limits}
 
-None of this comes free. Three limits, each a cost of removing the gatekeeper.
+Three limits, each a cost of removing the gatekeeper.
 
 *First*, replay bottoms out. Every empirical check terminates somewhere: sensor calibration, dataset integrity, a human observation, an instrument log, hardware, a random seed, an API response, an institutional attestation. The protocol does not abolish trust anchors, it makes them explicit and attackable. A root is admissible when it is typed, signed, reproducible where possible, independently cross-checkable where not, and kill-conditioned by calibration or contradiction.
 
@@ -173,21 +173,17 @@ It is a useful architecture, not a new logic or metaphysics; that, narrowly scop
 
 Future work is the outward falsifiability edge, not "more research": the epistemology becomes falsifiable only by being built and used in real agent systems, where its claims about checkable entitlement, replay-triangulation, and a gatekeeper-free canon meet a world-facing trial and can fail. An epistemology with no application edge is a detached node, irrefutable and therefore useless. The witnesses are already on the edge: the hypotheses turned into a graph, the verification ledger that records each check, the abductor that raises the candidates, the agent harnesses that run the trials.
 
-Everything past that edge is an open node, not a result: a conjecture that names its own test, never asserted as proven. The material scoped out of the body lives here, the wider civilizational frame and the normative and modal regimes left untreated, rehomed as open edges rather than smuggled into the proven core. Three of them mark questions the protocol raises but does not settle.
+Everything past that edge is an open node, not a result: a conjecture that names its own test, never asserted as proven. The material scoped out of the body lives here, the wider civilizational frame and the normative and modal regimes left untreated, rehomed as open edges rather than smuggled into the proven core. Two of them mark questions the protocol raises but does not settle.
 
 ### The economic edge
 
-The first edge is search complexity. Verification beats generation one to one, and a kill-conditioned hypothesis makes checking a local replay rather than a re-derivation, so in principle a verifying fleet that scales with the generating fleet can outrun a flood that linear search and the old credence filters cannot hold. The protocol's edges would keep the search sublinear, walk the graph, follow provenance, replay refutations, so edgeless slop is never on a path, ignored rather than refuted. The open problem is who authors the filtering rule: it must come from outside the searcher's own belief, auditable and independent, or it grades a fiction and hardens into a bubble. Three kill conditions bound the conjecture: the verify-beats-generate advantage is regime-bound, expensive where refutation needs a fresh world-trial; many-to-many wins only if the filters are genuinely independent, since a verifier monoculture is fooled in unison; and a sublinear search finds only what is built, blind to the unbuilt-but-true.
+The first edge is economic: verification beats generation one to one, so a verifying fleet scaled to the generating fleet could keep search sublinear and outrun the flood, as long as the filtering rule is authored from outside the searcher's own belief, which is where the conjecture fails.
 
 ### Settlement and stakes
 
 A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
 
-### The forecast
-
-Which classification scales under unbounded generation? *Untrue*, and only untrue. True and false each cost a check, a world-facing trial that stood or broke, the only place new information enters, [rate-limited by world-contact](https://en.wikipedia.org/wiki/Data_processing_inequality); untrue costs nothing, the free default, everything filtering has not reached. So as generation outruns filtering, true and false become a thin expensive shell and untrue the surviving classification, not because they are wrong but because they cannot scale while untrue keeps pace for free. (It is the [unfold and the fold](/compress-and-unfold) again.) The posture this suggests is to default the flood to untrue and pay for fresh world-trials selectively, building the canon where you choose to. The kill condition is exact: show true/false classification scaling with unbounded generation, world-contact made cheap enough to classify the sea at generation-scale, and untrue stops dominating. The asymmetry is why it likely cannot, but that is the test.
-
-Under all three edges sits one conjecture, an open node and not a result: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
+Under both edges sits one conjecture, an open node and not a result: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
 
 ## Conclusion {#conclusion}
 
@@ -231,5 +227,5 @@ These arguments were first worked out informally on the author's blog and are re
 - **[Complementations](/complementations)** (2026-05-09): judging a claim by the name attached, the acceptance-or-rejection by identity the protocol regrounds.
 - **[Auditing DeepSWE](/auditing-deepswe)** (2026-05-27): the motivating empirical case, and the dual of the consistency-without-test error.
 - **[Modes of Reason](/modes-of-reason)** and **[Abduction](/abduction)** (2026-05-04): the three modes of inquiry behind the abductor.
-- **[Compress and Unfold](/compress-and-unfold)** (2026-06-10): generation as the unfold, filtering as the fold, the duality behind the closing forecast.
+- **[Compress and Unfold](/compress-and-unfold)** (2026-06-10): generation as the unfold, filtering as the fold.
 - **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it can fail.
