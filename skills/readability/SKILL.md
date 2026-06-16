@@ -35,7 +35,7 @@ Read sentences aloud in your head. Flag where the rhythm breaks. **Scope: word-s
 
 #### What this check is NOT
 
-- **Not power-verb-over-copula.** That's a substance change. If a sentence reads better with a different verb, leave it for /sharpen or a human pass. Readability changes *order*, not *vocabulary*.
+- **Prosody is reorder-only; verb activation lives in check 8.** Within *this* check, change order, not vocabulary. A meaning-preserving passive→active or copula→verb swap is a real readability fix, but it belongs to *Active verbs* (check 8), not here. A *bolder* verb that sharpens the claim or adds an image is still /sharpen's, not either check's.
 - **Not voice tightening.** "Sweep takes" → "Sweep eats" is a taste call, not a rhythm fix.
 - **Not introducing em-dashes.** Em-dash budget is 0 in prose throughout the pipeline.
 - **Not adding new content words** for image or impact.
@@ -100,11 +100,22 @@ The first sentence of the document, and of each major section, must land a concr
 
 **Scope.** If the concrete anchor already exists later in the piece, this is a reorder: move the buried hook up (squarely in readability's wheelhouse). If no plain anchor exists at all, flag that the opening needs one, but do not invent claims; surfacing a missing hook is the human's or /sharpen's call, not a fabrication.
 
+### 8. Active verbs
+
+A dedicated pass for verbs, after the reorder-based fixes. Where a sentence carries its meaning through a passive ("is foiled by"), a copula plus nominalization ("is a violation of"), or a weak light verb ("makes a comparison," "does the work of"), replace it with the single active verb the sentence already implies — **if and only if the meaning is identical**. The test is entailment, not vividness: "a forged link foils the chain" is already inside "the chain is foiled by a forged link," so activating it is free. Reaching for a *bolder* verb that sharpens the claim or adds an image is /sharpen's job, not this one.
+
+- **Passive with a named actor → active.** Surface the doer as subject. (Overlaps the buried-actor prosody check; do it here too.)
+- **Copula + abstract noun → the verb inside the noun.** "is a violation of" → "violates," "is the cause of" → "causes."
+- **Light verb + content noun → the content verb.** "makes a comparison" → "compares," "performs a check on" → "checks."
+- **Keep the passive** when the actor is unknown or irrelevant, or when the object is deliberately topicalized — a refrain like "entitlement is conferred by…" where *entitlement* must stay the subject. Activity is not worth losing the topic, and a motif repeated on purpose outranks the rule.
+
+The boundary: this check *activates the latent verb*; /sharpen *escalates to a stronger one*. If activating tempts you toward a verb the sentence didn't already imply, stop and leave it for /sharpen.
+
 ## Cross-skill policies
 
 - **Em-dash budget: 0 in prose.** Reference-list separators (`[link](url) — description`) are exempt because they're typographic, not rhetorical. Do not introduce em-dashes in body prose for pacing, parenthetical asides, or contrast pivots. Use commas, parens, colons, or sentence breaks instead. This policy lives in `/humanize`'s patterns section; readability must honor it because the pipeline runs solo on this skill too.
 
-- **Word-shuffling only.** Reorder existing words and add/drop function words. Don't swap content words. Substance changes belong to `/sharpen` or human judgment.
+- **Word-shuffling, plus meaning-preserving verb activation.** Reorder existing words and add/drop function words. The one content-word change allowed is activating a verb (check 8): a passive, copula, or light verb becomes the active verb the sentence already entails, meaning identical. Any verb swap that *changes* force, scope, or image is substance and belongs to `/sharpen` or human judgment.
 
 - **Clarity, not casualness.** Legibility means the reader reaches the content, not that the content is softened. Never trade a precise term for a friendlier but vaguer one; a plain word that loses the technical meaning is worse than the jargon it replaced. The fix for an alienating opener is to *orient* the reader (lead concrete, translate-then-name), not to dumb the substance down.
 
@@ -121,6 +132,8 @@ A single readability pass should apply prosody fixes at a rate of roughly one pe
 - *"It's technically grammatical."* Grammatical and clunky are independent. The reader re-reads a grammatical stumble at the same cost as an ungrammatical one.
 
 **The symmetric failure is just as real: do not manufacture fixes to hit a count.** Ten is a *smell, not a quota*. "Fewer than ten" means re-read suspiciously, not produce ten. A genuinely clean sentence stays clean; restructuring prose that was already right to look productive is the same miscalibration pointed the other way, and it *damages* the text. The target is *every real stumble fixed and none invented*. If an honest read-aloud of a well-tuned section finds three, three is the answer — provided you actually read it aloud and didn't wave it through. Both directions are failures: leaving a stumble because you're timid, and inventing one because you're chasing a number. The skill wants your ear, not your compliance.
+
+**Active verbs (check 8) sits with prosody on the uncapped side.** Every meaning-preserving passive or light verb is fair game, and like prosody, activating one sentence can expose a flat verb in the next. But hold the entailment line: the moment activation tempts you toward a verb the sentence didn't already imply, stop and leave it for /sharpen. The fail mode here is not timidity but overreach, dressing up a copula as a vivid claim the original never made.
 
 The other five checks (titles, emoji H1s, paragraph sizing, section sizing, bold/italic) are damped. Once they land, they're settled. A second pass on those should find little.
 
