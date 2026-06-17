@@ -13,7 +13,7 @@ Sister skill to `/humanize`. Where humanize scans broadly across many patterns, 
 
 **The construction is a tell even when the contrast is real.** Human readers are turned off by the *shape* of "not X but Y" regardless of whether the X-versus-Y distinction is load-bearing. This is the insight that makes the skill more than a filler-cutter: a triage that stops at "earned vs dead-weight" leaves a dense paper riddled with earned negations that still read as machine-written. So triage has **three** outcomes, not two:
 
-- **Dead-weight** — the negation is filler; Y stands alone. Cut it.
+- **Dead-weight** — the negation is filler; Y stands alone. Cut it. **Two sharpeners for tail-attached negations (`X, not Y` / `X — not Y`), which are often remnants of an earlier not-but recast:** (a) judge redundancy at *paragraph* scope, not sentence scope — a tail can parse fine in its own sentence and still be dead because the paragraph already planted the positive; (b) the *own-sentence test* — if the negated point is important enough to keep, it earns its own sentence; if it cannot stand as one, cut it. A tail that is neither paragraph-novel nor sentence-worthy is dead-weight.
 - **Iconic** — a thesis line whose force *is* the antithesis ("True and false are not opposites but siblings"). Keep the literal construction. These are rare; protect them.
 - **Earned-but-varyable** — the contrast is real and must survive, but the syntax should change. This is the COMMON case in argumentative prose. Keep the contrast, recast the construction. Never delete the distinction.
 
@@ -49,7 +49,7 @@ The earned-but-varyable bucket is the skill's main yield on already-tight prose,
 3. **Triage (subagent).** Dispatch to the `not-but` subagent (defined in `~/agents/not-but.md`, or fallback to `general-purpose` if not registered). Pass:
    - The file path
    - The deduplicated list of hits with line numbers and matched lines
-   - The rubric, in two questions: (1) *Can the sentence be replaced by just stating Y, with no loss of meaning?* If yes → **dead-weight**. (2) If no (the contrast is real), *is this a thesis line whose whole force is the antithesis?* If yes → **iconic** (keep literal); if no → **earned-but-varyable** (recast the construction, keep the contrast). Most real contrasts in dense prose are varyable, not iconic.
+   - The rubric, in two questions: (1) *Can the sentence be replaced by just stating Y, with no loss of meaning?* If yes → **dead-weight**. Judge this at *paragraph* scope, not just the sentence; for tail-attached negations also apply the own-sentence test (see the three outcomes above). (2) If no (the contrast is real), *is this a thesis line whose whole force is the antithesis?* If yes → **iconic** (keep literal); if no → **earned-but-varyable** (recast the construction, keep the contrast). Most real contrasts in dense prose are varyable, not iconic.
 
    The subagent reads context, applies the rubric, and returns a per-hit verdict of **dead-weight / iconic / earned-but-varyable** (see the three outcomes above). Pass it two more things:
    - **The iconic-keep list** for this document, if known (the handful of thesis lines whose antithesis is the point). When unknown, instruct the subagent to nominate them conservatively and default everything else to varyable.
