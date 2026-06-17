@@ -736,7 +736,13 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   to one node where VK runs them across a population. **RENDER RULE:** borrowed
   epistemology is cite-not-repeat; the only in-paper epistemology is the local
   consequence for a node + its kill edge. Executes F9 (inherit, don't re-derive) +
-  citation-tiering. `render rule` · §grounding, §related-work (429 OPEN)
+  citation-tiering. **CONNECTIVE-TISSUE COROLLARY** (author 2026-06-16: "we can
+  borrow arguments such that it ties the sections together"): borrowing the
+  argument is ALSO the spine — the once-stated §grounding rules of engagement get
+  re-invoked across §discussion (node semantics → trace force), §related-work
+  (entitlement ledger → memory-node contract; §429 deferral DONE, threads home to
+  §grounding), and §hygraph (replay invariant). Cite-not-repeat the DERIVATION;
+  reuse the FRAME to thread the paper. `render rule` · §grounding, §discussion, §related-work, §hygraph
 
 ## P — The prestige (the unlock) · §12 closing
 
