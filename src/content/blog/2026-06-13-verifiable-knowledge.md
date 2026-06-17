@@ -48,7 +48,7 @@ The kill condition travels two ways, from the system to what it tests, or from a
 
 That mapping produces a ranking. Even *a Bible verse citation* cites its provenance and names its axiom openly, a complete stack trace you can follow to a root that is an axiom and not a measurement, then decide for yourself whether to accept it.
 
-By contrast, a withheld measurement cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the withheld measurement ranks below the scripture citation: more accountable, though no more falsifiable as a claim about the world. The scope matters: the claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked pass.
+By contrast, a withheld measurement cites a procedure it will not show, a dangling pointer where the evidence should sit. On provenance, and only on provenance, the withheld measurement ranks below the scripture citation: more accountable, because naming the axiom hands you the principle to reject, though no more falsifiable as a claim about the world. A disagreement resolves where its axiom is exposed, not where a proxy buries it: whether hiring is a matter of merit or of humanity is arguable in a way that a hire/no-hire threshold, which has already chosen merit, is not. The claim that can be argued with is worth more than the claim that hides the target. And the checkable guardrail holds at this scale too: checkable never means manufacturable to spec, the check has to carry a test that can fail, and a check whose test can never fail is `return 0.70`, a mocked pass.
 
 ## The entitlement ledger {#the-warrant-ledger}
 
@@ -175,15 +175,11 @@ Future work is the outward falsifiability edge, not "more research": the epistem
 
 Everything past that edge is an open node, not a result: a conjecture that names its own test. What the body scoped out lives here, as open edges, not in the proven core.
 
-### The economic edge
-
-The first edge is economic: verification beats generation one to one, so a verifying fleet scaled to the generating fleet could keep search sublinear and outrun the flood, as long as the filtering rule is authored from outside the searcher's own belief, which is where the conjecture fails.
-
 ### Settlement and stakes
 
 A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
 
-Under both edges sits one conjecture, an open node: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
+Under it sits one conjecture, an open node: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
 
 ## Conclusion {#conclusion}
 
