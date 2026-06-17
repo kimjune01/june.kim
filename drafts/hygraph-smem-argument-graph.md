@@ -317,6 +317,46 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
     EPISTEMOLOGY-grounding neighbors, distinct from the cogarch-MEMORY neighbors
     (Soar/CoALA/AriGraph) already in §related-work.
 
+- **A9.** (2026-06-16) **Survey-grounded problem barrage (intro) — join the
+  conversation by citation, don't assert it.** The intro opens on the consensus
+  that the binding constraint is the *harness*, not the model, each of the loud
+  industry problems (verification, retention, review/provenance — the T-node's
+  "verification crisis / agent trust / lost reasoning / review bottleneck") backed
+  by a survey or position paper, so the framing reads as joining a live field
+  rather than coining one (author: "this should be paper-grade", "join the
+  conversation by way of citation"). Codex `/fan-out` over the SURVEY/POSITION
+  literature surfaced the candidates; **every cite VERIFIED live against arXiv
+  2026-06-16** (codex confidence flags were honest on existence, sloppy on detail
+  — missed the lead's id, half-quoted one framing — so codex ≠ verification):
+  - **Roychoudhury, Pasareanu, Pradel & Ray 2025**, "Agentic AI Software
+    Engineers: Programming with Trust" (arXiv:2502.13767; also CACM 10.1145/3769314)
+    — the POSITION paper whose "programming with trust" thesis this paper answers
+    (verification/testing/analysis as the harness's job). **Pradel also co-authors
+    the already-cited Wang, Pradel & Liu (ICSE 2026)** → the barrage joins a
+    coherent Pradel-anchored trust line, not a random survey. Lead cite.
+  - **Liu et al. 2024**, "Large Language Model-Based Agents for Software
+    Engineering: A Survey" (arXiv:2409.02977) — Agent4SE organized around
+    verification / static-check / testing / debug / repair.
+  - **Yehudai et al. 2025**, "Survey on Evaluation of LLM-based Agents"
+    (arXiv:2503.16416; no leading "A" in title) — final-output scoring misses
+    in-run reasoning and failure causes, calls for trajectory-level eval → backs
+    the review-bottleneck + provenance problems.
+  - **Wang et al. 2025**, "AI Agentic Programming: A Survey of Techniques,
+    Challenges, and Opportunities" (arXiv:2508.11126) — §5.6 *Scalable Memory*:
+    LLMs "lack persistent, structured memory mechanisms" so agents "repeat errors,
+    forget past successes" = the survey-grade cite for the RETENTION problem
+    (CoALA/Sumers stays as the cogarch-lineage instance, not displaced).
+  CITATION TIERING (per F9 / edge-substantiation): these are ESTABLISHED
+  peer-reviewed/arXiv surveys → cite aggressively (they shrink the "asserted
+  problem" surface a skeptic can attack); the trilogy companions stay self-links,
+  not load-bearing cites. QUARANTINED: "Evidence Tracing… Provenance"
+  (arXiv:2606.04990, codex `[LIKELY]`) — unverifiable + future-dated, DROPPED;
+  a confident fake is poison. RENDER DUTY: intro cites carry inline arXiv links
+  (done); thread Roychoudhury (min.) into §rw-scaffolds so the lead cite is not an
+  intro-orphan; VERIFY every cite still says what we claim at final render.
+  `cited, verified` · §intro barrage, §rw-scaffolds, §rw-swebench (extends T's
+  industry-problems framing; refines A3 positioning)
+
 ## B — The bench, bounded (oracle availability, not the method) · §8, cornered
 
 - **B1.** Pro public set, frozen harness, official grader: 95.3% frontier pair,
@@ -921,6 +961,22 @@ affordance names its warrant or its honest status:
 
 Re-spines and render passes, newest first. Full detail in this file's git history.
 
+- **2026-06-16 (intro barrage + survey grounding, A9)** — Intro reopened on a
+  **cited problem barrage** (the field's own framing, "join the conversation by
+  citation"), dropping the *nullius in verba* epigraph (wrong register). Four
+  SURVEY/POSITION cites, codex `/fan-out`-surfaced and **all VERIFIED live vs
+  arXiv**: Roychoudhury et al. 2025 (Programming with Trust, 2502.13767, lead),
+  Liu et al. 2024 (Agent4SE survey, 2409.02977), Yehudai et al. 2025 (eval survey,
+  2503.16416), Wang et al. 2025 (agentic-programming survey, 2508.11126, §5.6 for
+  retention). Anchored in §rw-scaffolds (Roychoudhury/Liu/Wang) + §rw-swebench
+  (Yehudai → grade-the-trace) so none is an intro-orphan. Quarantined the
+  future-dated 2606.04990. Barrage absorbs the problem-establishing work →
+  verification ¶ compressed (5→3 sentences, dropped its redundant converging/Marchal
+  closer; Marchal stays at §discussion). Abstract closer reworked to the
+  three-payoff promise (verifiable accountability, coordinated concurrency,
+  efficient reasoning retention) at no training cost, employable today; "comparator"
+  surfaced as a real term in §enum-calib. PENDING: retention-¶ recast + intro
+  36/38 merge (compression mid-flight).
 - **2026-06-16** — Abstract → single-paragraph **claims-only trailer** (no citations, no supporting args; folded from 4 ¶ → 1, then leaned to claims). §grounding **epistemology half → compact "rules of engagement" pointer to VK** (executes F9 / citation-tiering: companions are self-links, not load-bearing cites); **methodeutics half kept as a full lecture** (author: "nowhere teaches the loop better; I didn't write VK so I could repeat it"). Read VK in full — **relation confirmed: VK = protocol/semantics, hygraph = the data structure that instantiates it AND VK's own falsifiability edge** (VK names the hygraph as such). Dedup pass: prose↔caption + §frontier/§null-regime cross-refs; table-caption markdown fix. Prosody pass (whole paper, agent-scanned + filtered): restored the abstract -uction sing-song (the adjective drumbeat was the clog, not the rhyme), split breath-too-long sentences, fixed stammers (was…was, on…on, treating…treating, evidence→receipts adds r-alliteration), elided slack connectives. RULE LEARNED: prosody = music (rhythm/stress/rhyme), NOT tic-removal — keep rhyme/alliteration/tricolons, fix only tongue-clogs/stammers/garden-paths. Trim pass (redundant sentences, ~70 words): cut 3 echoes — §verus-design oracle-tally restate, §hygraph bottleneck preview (home is §limitations), §enum-calib self-grading recap; paper already tight from prior dedup, so a short list is correct. Protected: easy/hard-arm threading, the §discussion 7026-retelling (new argument), the borrowed-frame connective tissue.
 - **2026-06-14** — ho5 force-grade reclassification (pass 6).
 - **2026-06-13** — Pull hygraph-mechanism + propagate (pass 5); live-PR honesty correction (pass 4); codex argumentation+order sniff (pass 3); codex substantiation + edge-substantiation map (pass 2); re-spine: **abduction declared the unnamed mode (T3), multi-model evidence, XOR = math-op**.
