@@ -98,7 +98,7 @@ That gap is the opportunity.
 
 ## The prophecy
 
-Meritocracy is the only virtue that survives the AI cat-5 storm. Every other social currency rides on signals the storm shreds: provenance gets faked, references get prompted, prestige gets generated, gatekeeping gets bypassed. What survives is the artifact a stranger can inspect with their own eyes. The storm tears down everything that wasn't already load-bearing. Merit is what's left when the wind stops.
+Meritocracy is the only virtue that survives the AI cat-5 storm. Every other social currency rides on signals the storm shreds: provenance gets faked, references get prompted, prestige gets generated, gatekeeping gets bypassed. What survives is the artifact a stranger can inspect with their own eyes. The storm tears down everything that wasn't already essential. Merit is what's left when the wind stops.
 
 ## New Regime
 

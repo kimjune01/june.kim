@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 24 900 262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <!-- the object: one rounded record, claim | proof -->
+  <rect x="30" y="40" width="840" height="230" rx="16" fill="#ffffff" stroke="#333" stroke-width="1.5"/>
+  <line x1="310" y1="40" x2="310" y2="270" stroke="#333" stroke-width="1.1"/>
+
+  <!-- field labels -->
+  <text x="170" y="66" text-anchor="middle" font-size="11" fill="#999" letter-spacing="1.5">CLAIM</text>
+  <text x="590" y="66" text-anchor="middle" font-size="11" fill="#999" letter-spacing="1.5">PROOF</text>
+
+  <!-- ============ CLAIM: the relation, beside a plain right triangle ============ -->
+  <text x="112" y="173" text-anchor="middle" font-size="18" fill="#1a6b5f" font-weight="600">a&#178; + b&#178; = c&#178;</text>
+  <polygon points="205,195 287,195 205,137" fill="none" stroke="#333" stroke-width="1.3"/>
+  <path d="M205,183 L217,183 L217,195" fill="none" stroke="#888" stroke-width="1"/>
+  <text x="246" y="211" text-anchor="middle" font-size="12" fill="#333" font-style="italic">a</text>
+  <text x="197" y="170" text-anchor="end" font-size="12" fill="#333" font-style="italic">b</text>
+  <text x="252" y="162" font-size="12" fill="#555" font-style="italic">c</text>
+
+  <!-- ============ PROOF, left square: four triangles leave a-squared and b-squared ============ -->
+  <rect x="390" y="92" width="150" height="150" fill="#ffffff" stroke="#333" stroke-width="1.4"/>
+  <rect x="450" y="92" width="90" height="90" fill="#cbe6e1" stroke="#2c8377" stroke-width="1.1"/>
+  <rect x="390" y="182" width="60" height="60" fill="#cbe6e1" stroke="#2c8377" stroke-width="1.1"/>
+  <polygon points="390,92 450,92 390,182" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="450,92 450,182 390,182" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="450,182 540,182 450,242" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="540,182 540,242 450,242" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <text x="420" y="84" text-anchor="middle" font-size="12" fill="#333" font-style="italic">b</text>
+  <text x="495" y="84" text-anchor="middle" font-size="12" fill="#333" font-style="italic">a</text>
+  <text x="382" y="141" text-anchor="end" font-size="12" fill="#333" font-style="italic">a</text>
+  <text x="382" y="216" text-anchor="end" font-size="12" fill="#333" font-style="italic">b</text>
+
+  <!-- ============ PROOF, right square: the same four leave c-squared ============ -->
+  <rect x="630" y="92" width="150" height="150" fill="#ffffff" stroke="#333" stroke-width="1.4"/>
+  <polygon points="720,92 780,182 690,242 630,152" fill="#cbe6e1" stroke="#2c8377" stroke-width="1.1"/>
+  <polygon points="630,92 720,92 630,152" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="780,92 780,182 720,92" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="780,242 690,242 780,182" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <polygon points="630,242 630,152 690,242" fill="#f2f1ec" stroke="#333" stroke-width="1"/>
+  <text x="757" y="134" font-size="12" fill="#555" font-style="italic">c</text>
+  <text x="652" y="200" text-anchor="end" font-size="12" fill="#555" font-style="italic">c</text>
+</svg>
