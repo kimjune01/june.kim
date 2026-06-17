@@ -1,0 +1,32 @@
+<svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #666; }
+    .dark { fill: #333; }
+    .bold { font-weight: bold; }
+    .reg { fill: #888; font-weight: normal; }
+    .sub { font-size: 9px; fill: #999; }
+    .center { fill: #333; }
+  </style>
+  <path d="M 150.00 50.00 A 112 112 0 1 1 56.74 224.02 L 100.04 195.23 A 60 60 0 1 0 150.00 102.00 Z" fill="#2d7d2d" stroke="#fff" stroke-width="1.5" />
+  <path d="M 56.74 224.02 A 112 112 0 0 1 38.42 152.35 L 90.22 156.83 A 60 60 0 0 0 100.04 195.23 Z" fill="#7bb661" stroke="#fff" stroke-width="1.5" />
+  <path d="M 38.42 152.35 A 112 112 0 0 1 72.18 81.45 L 108.31 118.85 A 60 60 0 0 0 90.22 156.83 Z" fill="#c43c3c" stroke="#fff" stroke-width="1.5" />
+  <path d="M 72.18 81.45 A 112 112 0 0 1 92.06 66.15 L 118.96 110.65 A 60 60 0 0 0 108.31 118.85 Z" fill="#e0883c" stroke="#fff" stroke-width="1.5" />
+  <path d="M 92.06 66.15 A 112 112 0 0 1 150.00 50.00 L 150.00 102.00 A 60 60 0 0 0 118.96 110.65 Z" fill="#bbbbbb" stroke="#fff" stroke-width="1.5" />
+  <text x="150" y="158" text-anchor="middle" class="center bold" style="font-size:18px">728</text>
+  <text x="150" y="174" text-anchor="middle" class="sub">public tasks</text>
+  <rect x="300" y="65" width="12" height="12" rx="2" fill="#2d7d2d" />
+  <text x="320" y="73" class="dark bold" style="font-size:10px">ENTAILED <tspan class="reg">· 478 (66%)</tspan></text>
+  <text x="320" y="85" class="sub">prose determines the fix</text>
+  <rect x="300" y="103" width="12" height="12" rx="2" fill="#7bb661" />
+  <text x="320" y="111" class="dark bold" style="font-size:10px">DETERMINED <tspan class="reg">· 78 (11%)</tspan></text>
+  <text x="320" y="123" class="sub">codebase fixes it, gold matches</text>
+  <rect x="300" y="141" width="12" height="12" rx="2" fill="#c43c3c" />
+  <text x="320" y="149" class="dark bold" style="font-size:10px">underdetermined <tspan class="reg">· 83 (11.4%)</tspan></text>
+  <text x="320" y="161" class="sub">proven, mechanical (grep/grade)</text>
+  <rect x="300" y="179" width="12" height="12" rx="2" fill="#e0883c" />
+  <text x="320" y="187" class="dark bold" style="font-size:10px">underdetermined <tspan class="reg">· 26 (3.6%)</tspan></text>
+  <text x="320" y="199" class="sub">proven, two-expert reading</text>
+  <rect x="300" y="217" width="12" height="12" rx="2" fill="#bbbbbb" />
+  <text x="320" y="225" class="dark bold" style="font-size:10px">rater-pending <tspan class="reg">· 63 (9%)</tspan></text>
+  <text x="320" y="237" class="sub">not counted</text>
+</svg>
