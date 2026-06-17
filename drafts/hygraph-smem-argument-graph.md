@@ -21,6 +21,7 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
 - **Thesis + lead witness + axis:** reasoning can be ENCODED at the harness layer, the load-bearing encoded thing being a kill's external **oracle** the model cannot self-supply (= abduction, the unnamed third mode; T3). Lead witness **Verus #2219 (E7)**: six self-graded methods plateau on the narrow fix, one externally-oracled arm reaches the general fix (recovers rustc's inhabitedness query). Sharpest = **enumeration inducible, oracle not self-generable (E8)**; cognitive why = addition (enumerate) not subtraction (find the complement) in-context. n=1 is correct for a mechanism — do not apologize. **Axis (A5)** = internal vs external oracle (carrier prompt-vs-CLI incidental); `abductor` (D7) = the external oracle as a **bolt-on** onto codex / Claude Code (industry harness fixed, tool the only delta).
 - **Evidence shape & framing craft:** multi-model gate2 (merged hygraph-mechanism master 2026-06-13, branch `pilots-11-fable-minimal-ablation`): Fable (clean), Sonnet 4.6 (clean), Composer 2.5 (dirty) all near-A with the SAME carve-out + SAME `ho5` residual; codex-CLI out → read as NECESSITY + COVERAGE-BOUND, NOT a scoreboard. RETRACTION-SAFE (codex review 2026-06-13): "workflows" not "families"; "behavioral carve-out" not "same mechanism"; "recall not required, not excluded"; "efficiency/endpoint" RETRACTED; MANDATORY caveat — shared `ho5` miss is gate-funneled attractor, NOT independent rediscovery. NECESSITY vs RECEIPT (codex-sniff #5 adjudicated): "every instance reaches for the same operation, because that is how inquiry works" is a THEORY claim (FW2, necessity — we dissected one instance and took the XOR out to a CLI); the multi-model RECEIPT stays scoped (same behavioral carve-out, gate-funneled attractor, NOT independent rediscovery). The convergence is CONSISTENT-WITH / predicted-by the necessity; the receipt does not prove it. Do NOT let "must reach for it" leak into the empirical wording. Two inferred mechanisms (beat 3): (a) weak in-context XOR (self-mislabel: v7; INFERENCE-grade, rests on IN-TRACE enum-calib/v7 — the receipt; /compress-and-unfold a self-link; DPI demoted, not load-bearing); (b) degrades with DIFF size not model size (CONJECTURE FW3/K9; supported by context rot / lost-in-the-middle). De-frame "mechanism" (33× → earn by shown gears + cross-model, not repetition); n=1 stays the dissection unit, multi-model is its robustness. MAGNIFY the climb: 281 gate calls, plateau-then-break, the grep finding `is_inhabited_from`, before/after predicate, the held-outs, v7.
 - **Genre + presentation (A6/A7):** data structure + protocol (verifiable-log / certificate family: CT, PCC, PROV), NOT pure DS — hygraph = DS (smem), methodeutics + gate = protocol (pmem). Punchline = **Local Replay Auditability** (A6 iv), not big-O; two replay levels (strong = Verus; artifact = LLM trials); invariants on the mechanical SKELETON, prose payload un-invarianted (A6 ii). §3 discipline (A6) = middle scope: named skeleton invariant + per-op preservation + comparison table + TMS/provenance-log/search-tree rebuttals; pre-empt **novelty collapse** (#1 failure mode).
+- **Abstract = trailer; epistemology = cited, not re-argued (2026-06-16):** the abstract is a single-paragraph **claims-only trailer** — no citations, no supporting arguments, no mechanism math (those live in intro/body, "it's the trailer for the show, don't have to say everything"). §grounding splits by render rule: **lecture methodeutics in full, cite the borrowed epistemology** (VK / WCBF / Truth-Is-Buildable do the arguing; here only the rules of engagement + the local node consequence). See **F10**. Next: §related-work (~429) re-runs VK's epistemology related-work → defer to VK (OPEN).
 - **Demoted / guards:** flux #1613 (E4) → one-paragraph auditability pointer (§other-cases), not a lift (oscillates de-hinted). Bench (B/C/D) → cornered instrument-note (oracle bracket C1 nulls it); do NOT re-inflate the 95.3% / 31–37pt bench-lift (the trap). Alignment/goal-setting → CUT from the paper (don't fight pedants), graph-internal only (P4).
 - **Source docs:** `drafts/data-structure-introduction-range.md`; `~/Documents/hygraph-mechanism` (pilot 11 = Verus; multi-model merged 2026-06-13); `~/Documents/abductor`.
 
@@ -719,6 +720,24 @@ The graph is itself the demonstration: nodes typed, warrants named, kills explic
   vocabulary.
   `grounding index` · threaded through §Results, §12, lineage appendix
 
+- **F10.** (2026-06-16) **§grounding split: lecture the loop, cite the epistemology.**
+  Two halves, opposite render rules. **METHODEUTICS** (Peirce's three modes, the
+  inquiry loop; §grounding + §application) = the ONE thing taught in full inline
+  (author: "nowhere teaches the loop better; I looked"). Keep the lecture; add a
+  [methodeutics textbook](/reading/methodeutics) pointer in References later (a
+  pointer, not a cut). **EPISTEMOLOGY** (truth / warrant / JTB / belief-knowledge /
+  the three entitlement states) = BORROWED; compressed 06-16 from six ¶ to a small
+  pointer + a 4-bullet **rules of engagement** (credence-not-boolean; knowledge =
+  survived belief; three states witnessed/killed/open → true/false/untrue; truth in
+  the edges = WCBF made mechanical), with the trilogy doing the arguing. **RELATION**
+  (read VK in full 06-16): VK = protocol/semantics, this paper = the data structure
+  that instantiates it AND VK's own falsifiability edge (VK names the hygraph as
+  such). The three states map exactly onto VK's ledger (green/red/hung), scoped here
+  to one node where VK runs them across a population. **RENDER RULE:** borrowed
+  epistemology is cite-not-repeat; the only in-paper epistemology is the local
+  consequence for a node + its kill edge. Executes F9 (inherit, don't re-derive) +
+  citation-tiering. `render rule` · §grounding, §related-work (429 OPEN)
+
 ## P — The prestige (the unlock) · §12 closing
 
 What the data structure makes possible; the payoff act. **P5 is the peak** —
@@ -892,485 +911,26 @@ affordance names its warrant or its honest status:
 - K9. (2026-06-13) Diff-size degradation (FW3) dies: a within-harness sweep over
   diff / case-space size shows in-context XOR accuracy flat or rising with size.
 
-## Propagation of the inverted arc (2026-06-10)
+## Changelog (compressed 2026-06-16; git holds the verbatim per-pass prose)
 
-Done:
-- [x] Title + slug → *The Hypothesis Graph: Semantic Memory Written by Methodeutics*; draft marker dropped; redirect stubs removed.
-- [x] Cost-as-virtue cut paper-wide (B4/K5); cost survives only as a receipt/ledger; replication narration → repo pointer.
-- [x] Abstract rewritten as **hook + bold promise** (beyond corpus synthesis, discovery-not-recall, hygraph as the instrument, bench demoted to "least insightful artifact"). Methodology/ablation/audit detail kept in the intro/body, not the abstract.
-- [x] Intro: discovery foreshadow added after the substrate ¶ (attested mechanical reasoning, old-news guard); example ¶ promoted with convex-hull / creative-act / Sutton; ladder lead-in flags importance ⟂ confidence; claim 4 sharpened to the discovery peak.
+Re-spines and render passes, newest first. Full detail in this file's git history.
 
-Remaining (deeper sections):
-- [x] §4 grounding → thesis-2 callback landed at section close, qualified ("in a precise and limited sense... not a theory of mind, but a mechanical discipline of inquiry") to state the claim without the philosophy fight.
-- [x] §11 right-regime (E) → "what the existence proof establishes" now lands discovery / built-not-recalled / reproducibility-at-the-example / Sutton discharge. Eight nulls kept honest.
-- [x] §12 discussion + P5 → P5 reframed as the peak ("the claim the other four exist to support"); creative-act now carries an operational criterion (novel, sound, useful, corpus-absent, replayable — each clause a receipt); Sutton bookend closed. Legibility "confession" → "question" (intro de-confessed).
-- [x] B/C/D sweep → already bounded post-reversal ("the chart scales the artifact; it ranks nothing"; "what the number is not"); no centerpiece overreach found.
-- [x] §audit → "applicability, not fault" scope guard added (not "discredit"); bench is N/A to this construct, fair measure of spec-conformance.
+- **2026-06-16** — Abstract → single-paragraph **claims-only trailer** (no citations, no supporting args; folded from 4 ¶ → 1, then leaned to claims). §grounding **epistemology half → compact "rules of engagement" pointer to VK** (executes F9 / citation-tiering: companions are self-links, not load-bearing cites); **methodeutics half kept as a full lecture** (author: "nowhere teaches the loop better; I didn't write VK so I could repeat it"). Read VK in full — **relation confirmed: VK = protocol/semantics, hygraph = the data structure that instantiates it AND VK's own falsifiability edge** (VK names the hygraph as such). Dedup pass: prose↔caption + §frontier/§null-regime cross-refs; table-caption markdown fix.
+- **2026-06-14** — ho5 force-grade reclassification (pass 6).
+- **2026-06-13** — Pull hygraph-mechanism + propagate (pass 5); live-PR honesty correction (pass 4); codex argumentation+order sniff (pass 3); codex substantiation + edge-substantiation map (pass 2); re-spine: **abduction declared the unnamed mode (T3), multi-model evidence, XOR = math-op**.
+- **2026-06-12** — Re-spine: **Verus lead, internal-vs-external oracle axis (A5)**; §grounding expanded to the runnable-epistemology arc (now re-compressed 06-16); A6/A7 §3 presentation discipline (replay invariant on the skeleton, Local Replay Auditability punchline); TERM DECISION (venue arxiv cs.AI + cs.SE).
+- **2026-06-10** — RE-SPINE (E onto the spine before the bench; B/C/D cornered into §8); inverted arc; abstract as hook+promise; Sutton split to its own post.
 
-Next:
-- [ ] /copyedit one clean pass over the whole settled paper (user: after the rewrite).
+## OPEN
 
-## Propagation of the RE-SPINE (2026-06-10, supersedes the inverted arc)
-
-The inverted arc still rendered the bench (B) up front as bait, then pivoted
-(C/D) to the witness (E). The re-spine moves E onto the spine BEFORE the bench
-and corners B/C/D into a single §8 ("The bench, bounded"). The motivation,
-substrate (A), epistemics (F/T), and existence case (E4) are unchanged; the
-frame is what moved. Almost a new paper, but the load-bearing bits persist.
-
-Done:
-- [x] Section reorder: harness → Procedure (mechanism) → Results (mechanism) →
-      The bench, bounded (cornered, ## with ### Number/Attribution/Audit) →
-      Discussion. Anchors preserved (autonumber resolves §(id) regardless of
-      order); {#right-regime} now on Results, {#setup} on Procedure, {#bench} new.
-- [x] Procedure + Results rewritten from the hygraph-mechanism worklog: two arms,
-      essence oracle, contamination control, nine pilots = eight nulls + one
-      divergence (flux #1613). Worklog digest is faithful (8 nulls confirmed:
-      qrtool/slang-server/fjall/bat + others; flux #1613 the divergence).
-- [x] Bench number reframed: stated once, "property of oracle availability, not
-      the harness or method"; named as the mistake; minimal prompt reaching ~94%
-      = the attribution made plain (craft-only jargon → "minimal prompt").
-- [x] Cut the flipt worked example; gating + outer-loop compressed to one
-      sentence (table stakes).
-- [x] Checkpoint committed (e0d86c3c).
-
-Done (trim + strengthening, committed cc177d07 / 979195cf):
-- [x] **B/C/D condensed pointer-first.** The 5 attribution sub-analyses folded to
-      the table + one paragraph ("Given the oracle, the rest adds almost nothing");
-      statistics point to the repo; oracle-bracket + minimal-prompt attribution kept.
-      Audit reduced to a vague "wrong tool for the job" (no companion paper exists
-      yet, no justification needed). Open-weight run cut to one sentence; SWE-bench
-      Verified dropped from the body. Number stated once in prose. Orphaned anchors
-      repointed (prompt-ablation/perturbation → attribution-verdict, open-weight-run
-      → models, tables → results).
-- [x] **Cross-model replication** (E4-replication) + **unsound result leads the
-      §Discussion enemy block** (#3) + **"How to refute this" falsifiers in
-      §Limitations** (#4). Anatomy figure on the dimmer example.
-- [x] **Sutton split out.** May-2026 talk briefly added to §P5 then reverted; now
-      its own post (`2026-06-10-suttons-recipe-for-discovery.md`,
-      /suttons-recipe-for-discovery), a table-driven pointer back to the paper.
-      Keeps the paper from bloating.
-
-## BACKLOG (groomed 2026-06-12; supersedes the 06-10 TODO)
-
-**A — Biggest open content piece — DONE 2026-06-12.**
-- [x] **A6/A7 propagated into §3 (`{#hygraph}`).** Added: invariant promoted to a
-      named contract + the skeleton/payload split + smart-constructor admission;
-      the **local replay auditability** punchline with strong-vs-artifact replay
-      grades + prune-as-corollary; the honest cost register (checkable skeleton vs
-      trusted mode-label); the three "isn't this just X?" rebuttals (TMS /
-      provenance log / search-proof-tree) + the verifiable-log/certificate genre
-      ("binds opaque content to an executable evidence envelope"). SCOPE CHOICE:
-      rebuttals done as PROSE, not a second table (Related Work already has the
-      comparison table) — middle scope, per the over-engineering guard. The
-      "minimal = ReAct, bolt-on onto codex/Claude Code" line belongs at the
-      comparison point → tracked in B, not §3.
-
-**B — Paper coherence + smaller content:**
-- [x] **Expand §grounding into the machine-legible epistemology arc (A8).** DONE
-      2026-06-12. §grounding retitled "methodeutics and a runnable epistemology";
-      the one-line pragmatist-credence replaced with the full belief→knowledge→truth
-      arc (italic-header subsections parallel to the Peirce modes), grounded by
-      reference (belief-is-edge start, truth-is-buildable terminal); node-states
-      mapped witnessed/killed/open = true/false/untrue; build-parts 1:1 (provenance/
-      citation/attestation/falsifiability/replay); replay invariant framed as
-      "this epistemology made local." Novelty scoped narrowly (warrant ledger, not
-      a new logic). Three-leg synthesis closes the section. §12 "Truth is buildable"
-      block trimmed to a §grounding callback (no re-derived mapping; pointer-first).
-      **"agent-native epistemics" KEPT as a coinage (author call 2026-06-12, reversed
-      an initial de-coin): named as the territory in §grounding AND added to the
-      subtitle** ("Agent-native epistemics: merit attaches to the work, not the
-      doer"); sits next to DeepMind's "artificial epistemic agents" (§12) and Traxia
-      (§typed-memory).
-- [x] **Related Work: add the epistemology-grounding neighbors** (A8 prior-art). DONE
-      2026-06-12. New §typed-memory paragraph: NARS (addressed head-on), OpenCog
-      AtomSpace/PLN, nanopublications, **Traxia** (arXiv 2606.08256, concurrent, two
-      days after truth-is-buildable, 4th convergence/first on epistemology leg).
-      Framed distinct from the cogarch-MEMORY cluster; synthesis-attack reply +
-      warrant-ledger-not-new-logic stated.
-- [ ] Full **front-to-back coherence read** (the §method/harness section, and the
-      abstract→intro→Procedure→Results→Discussion handoffs) — not done; many edits
-      landed piecemeal.
-- [ ] Name **"minimal arm = mini-SWE-agent = ReAct, bolt-on onto codex/Claude
-      Code; baseline = harnesses unmodified"** at the point of comparison
-      (§Procedure / §3 positioning) — pre-empts the strawman objection.
-- [ ] **Cover & Thomas (DPI)** reference entry in the lineage appendix (the §Results
-      DPI sentence cites it inline; no bib entry yet).
-- [ ] **Trim pass** (author-deferred): the additive Results ¶s run long.
-- [ ] **Discussion trim, pointer-first** ("Truth is buildable" → a pointer, not a
-      re-derivation).
-- [ ] **Compress AI-authored ¶s** (intro pains→gap, §Procedure, §hygraph
-      constraints); tighten, leave the author's prose alone.
-- [ ] Standardize the one stray "falsification condition" → "kill condition".
-
-**C — Receipts / substance (author's hands):**
-- [ ] **More existence cases (E6):** 3–5 audited under the preregistered protocol →
-      upgrades the n=1 language; else the committed null is the next paper.
-- [ ] **One-command Verus replay** (re-scoped from flux): reproduce the divergence
-      on a clean forced-fresh build; bake in the vendored-crate / stale-binary
-      gotcha. Kills the "I can't verify this" dismissal.
-- [ ] *(Lower — flux demoted)* flux #1613 maintainer merge is now an auditability
-      footnote, not the keystone; the keystone is a Verus-grade trace-backed merge.
-
-**D — Release housekeeping:**
-- [x] **PDF rebuild** (now via [md2arxiv](https://github.com/kimjune01/md2arxiv); migrated out of this repo) + stale download slug fixed
-      (`methodeutic-harness-paper.pdf`).
-- [ ] **Zenodo DOIs** → §availability placeholders.
-- [ ] **Push + deploy** (refresh the stale SHAs before relying on them).
-
-**Done this session (2026-06-12):** oracle terminology sweep (calibration→oracle);
-§Procedure rewrite to the Verus externalized-oracle method; flux cut to a brief
-mention; four-claims alignment (claim 3 accountability-only); falsifiers K6/K7;
-intro voice-mining; abductor in §availability + future-work; the earned DPI
-sentence; alignment de-emphasis (goal-predicate facet **CUT**); §verus-bench setup
-(two goldens) + historical-PR-post-cutoff method; A6/A7 graph spec + two codex
-sniffs (DS-scope; framing/replay); the addition-vs-subtraction *why*; CURRENT STATE
-block + history demarcation.
-
-**Done earlier (06-10):** Sutton bookend; title/slug; cost-as-virtue cut;
-abstract hook; intro discovery foreshadow; §4 thesis-2 callback; §audit
-applicability-not-fault; B/C/D bounded.
-
-## TERM DECISION 2026-06-12 (venue: arxiv cs.AI + cs.SE)
-
-The noun **"calibration" collides with probability-calibration** (ECE, confidence
-calibration), which is entrenched in cs.AI and would miscompile the claim in the
-abstract/title where it travels without a gloss. Decision (author): in the **paper**,
-the noun for the external ground-truth source is **"the (ground-truth) oracle"** —
-collision-free in both fields, SE-native (test oracle), and it *unifies with the
-paper's own spine* (oracle bracket, essence oracle, self-certification = the model
-being its own oracle). The **verb** "calibrate against a known-good reference"
-(metrology sense) is kept where it reads naturally. Headline is now **"Enumeration
-is inducible; the oracle is not."** First use in §Results carries a one-clause gloss
-distinguishing the metrology sense from probability-calibration. This graph keeps
-"calibration" as internal shorthand in the nodes below; the paper view uses "oracle."
-Mapping when propagating: internal calibration → self-graded / the model as its own
-oracle; external calibration → an external oracle; "calibration is not self-inducible"
-→ "the oracle is not self-generable."
-
-## Propagation of the 2026-06-12 re-spine (Verus lead, oracle axis)
-
-Done in the paper view (`...the-hypothesis-graph-semantic-memory-methodeutics.md`),
-additive pass (trim deferred per author):
-- [x] §Results recast as a mechanism arc: contrast-sharpened (A5) → instrument
-      general & blind (D7) → the lift E7 (Verus) → frontier-is-coverage → E8
-      (enumeration inducible, calibration not) → ablation grid → flux E4 demoted
-      to "audit not lift" → §null-regime (E3 preserved).
-- [x] Axis fixed to internal-vs-external calibration (A5); grid relabeled
-      ("Kill calibration": internal / external (vs base) / internal (induced) /
-      human). Carrier-is-incidental / harness-layer stated.
-- [x] Abstract, claim-2, contribution ¶ → encoded-reasoning spine, positive
-      mechanism, no n=1 apology. (Witness swapped flux→Verus.)
-- [x] F8 dunk facet rendered in §Discussion (between persistence and trust).
-- [x] `abductor` (D7) added to §availability; future-work repointed to
-      gate-coverage + calibrate-from-approved-history (E9).
-
-Remaining (now tracked in `## BACKLOG`):
-- [x] §Introduction mining (ancestor voice + dial-dunk, anchored on Verus). DONE.
-- [x] §Procedure widened to the oracle framing (self-graded vs external oracle). DONE.
-- [x] Headline witness swap flux→Verus (paper Results lead with Verus; graph P5/F5a fixed). DONE.
-- [ ] Trim pass → BACKLOG B. PDF rebuild → BACKLOG D.
-
-Done (graph) 2026-06-12 — calibration=goal-predicate + cognition mine:
-- [x] E8 recast: "calibration not *self*-inducible" (codex scope); grounded in
-      goals-are-predicates + grading-yourself-is-fiction + DPI. P4 alignment
-      sharpened to the external-goal-predicate claim. F8 dunk grounded in DPI.
-      F9 cognition-grounding index added. K7 falsifier specifies "independent
-      labels."
-
-Remaining (paper, ground by reference — link-anchors carry it, NO inline re-derivation):
-- [~] §12 alignment: a goal-predicate facet was added THEN **CUT entirely**
-      (author 2026-06-12: "don't pick fights with alignment people"). Net: no
-      goal-setting in the paper; only the pre-existing accountability-as-alignment
-      language stays. Goal-as-predicate is graph-internal only (P4 de-emphasis).
-- [x] §Results enum-calib: DONE — one earned sentence in standard language
-      ("no computation on what a model already holds can increase what it tells
-      us about the world, the data processing inequality... calibration is a
-      world-facing trial") + /compress-and-unfold self-link. **CITATION GUARD (author 2026-06-12): the world isn't
-      ready for the natural framework as a load-bearing citation.** The paper
-      rests on the STANDARD DPI (textbook info theory, Cover & Thomas 1991), with
-      /compress-and-unfold as an optional author's-own-prior self-link (blog
-      register). Keep /the-natural-framework AND the Perceive-morphism mapping
-      OUT of the published view — graph-internal grounding only — until the
-      framework is established; citing it couples the narrow, un-dismissable
-      mechanism claim to a wide unestablished synthesis and hands a hostile
-      reader a free exit. NO "Perceive," no six roles, no boundary-morphism in
-      the paper.
-- [x] Claim-verb pass per /wrong-questions: DONE — added to §discussion
-      "Attributed nulls and the typing protocol": typing runs on positive claims
-      too (Verus = a mechanism that *can occur*, not a rate/discovery);
-      reflex≈kill, demotion≈credence-cap stated as the hygraph's own instances;
-      links /type-iii-error + /wrong-questions.
-
-## Propagation of the 2026-06-13 re-spine (abduction declared; multi-model; XOR=math)
-
-Trigger: author session 2026-06-13. The lift is no longer framed as "a mechanism
-shown once"; it is framed as **abduction, the unnamed third mode, externalized as
-a math op** (T3), shown on one bug (existence) and reached-for by every model
-(necessity), explained by the encoding boundary, and seated in the data structure.
-New evidence merged to `hygraph-mechanism` master (branch
-`pilots-11-fable-minimal-ablation`): multi-model gate2 (Fable / Sonnet / Composer
-near-A; codex-CLI out) + fairness control + codex retraction.
-
-What changed (graph, this file):
-- [x] CURRENT STATE → 2026-06-13: four-beat arc; XOR-on-diffs = math-not-lang;
-      multi-model evidence + retraction-safe wording; two inferred mechanisms;
-      de-frame "mechanism"; magnification inventory. Thesis bullet names abduction.
-- [x] **T3** added (the declaration): abduction unnamed/underappreciated; triad
-      completion expands capability; instrument hooks, data structure is the gift.
-- [x] **FW2** (XOR-on-diffs is the necessary, necessarily-external operation of
-      inquiry; cross-paper spine, graph-internal conjecture) + **K8**.
-- [x] **FW3** (in-context abduction degrades with DIFF size, not model size;
-      grounded by reference to /dont-lang-what-you-can-math) + **K9**.
-
-Remaining (paper view `...the-hypothesis-graph-semantic-memory-methodeutics.md`),
-render pass 2026-06-13 (build verified, 503 pages, anchors resolve):
-- [x] **Abstract + §intro claims: T3 foregrounded — APPROVED ("commit, but soften")
-      + committed 2026-06-13.** Epigraph + amnesiac-contractor opening left intact
-      (proposed-first, not overwritten). Abstract: two sentences seat abduction as
-      the unnamed third mode (field owns deduction=compiler/types, induction=tests/
-      benchmarks) + XOR-as-math-op tethered to the external oracle; SOFTENED per
-      author — jewel stays primary ("holding all three as kill-graded nodes is what
-      the graph is for, and one facet it lets you externalize is that abductive
-      step"), NOT "first-class / sharpest demonstrated power"; closing "Externalizing
-      that one step thus delivers...". Intro "more vs the other answer" ¶: abduction-
-      as-missing-mode beat added, XOR tethered to §(application) (never floats free).
-      Claim-2 retitled "A mechanism, dissected: abduction externalized"; closing
-      clause → "deliver the abductive step the model does not reach alone". Encoded-
-      reasoning spine + DPI + Verus witness + merit close all preserved. No em-dashes.
-- [x] §right-regime / §enum-calib: multi-model robustness rendered as a "*Not one
-      model's artifact*" paragraph after the corrected-calibration ¶. Retraction-safe:
-      "workflows" not "families", "behavioral carve-out" not "same mechanism",
-      "recall not required, not excluded", efficiency/endpoint NOT claimed (retracted),
-      MANDATORY attractor caveat present (gate-funnelled, not independent
-      rediscovery), codex-CLI does-not-clear-in-either-protocol + fairness control,
-      read as coverage-bound NOT a scoreboard; necessity typed as the FW2 conjecture
-      (no "must" in the empirical wording). Source: hygraph-mechanism RESULTS.md
-      (Fable/Sonnet 4.6 clean, Composer 2.5 dirty, all near-A, same ho5 miss).
-- [x] De-frame "mechanism": light pass. Retitle already in place ("Results: the
-      mechanism, in full"). Softened 3 crutch uses to "lift"/"capability lift"
-      (§other-cases ×2, §null-regime ×1); kept the literal causal uses (frontier
-      "the same mechanism predicts its own failure"; §audit "predicted signature of
-      a mechanism"; §discussion "a mechanism that can occur"; the "mechanism
-      experiment" repo name). Count 33→~30; the keystone causal claims stay bold.
-- [x] §grounding / §application: confirmed load-bearing and left intact — the
-      three-modes figure + "Peirce alone named abduction" (§grounding) and the
-      bi-abduction diff figure "the XOR isolates the figure from the ground"
-      (§application) already tether the math-op claim; the proposed abstract/intro
-      point the XOR claim at §(application) so it never floats free.
-- [x] §future-work: FW2 (XOR is the necessary, necessarily-external operation of
-      inquiry; cross-paper spine kept as self-links/suggestive, K8 kill stated) +
-      FW3 (in-context abduction degrades with diff size; endpoint-by-construction vs
-      graded-interior; lost-in-the-middle Liu TACL 2024 + context rot Chroma 2025 at
-      conjecture grade, verify-at-camera-ready; /dont-lang-what-you-can-math anchor;
-      K9 kill stated) added as two conjecture bullets after "Coverage as the design
-      lever". §enum-calib forward-points to them.
-- [x] Citation guard holds: XOR-necessity synthesis (WCBF/VK/compress-and-unfold)
-      rendered as SELF-LINKS "suggestive rather than evidential", not load-bearing
-      cites; the boundary still rests on standard DPI (Cover & Thomas, §enum-calib).
-
-## Codex substantiation pass + author corrections (2026-06-13, render pass 2)
-
-Codex review run focused on substantiation (not prose). Build green throughout
-(503 pages). Applied, with author overrides that SUPERSEDE earlier node guidance:
-
-- [x] **No novelty over abduction (author override, supersedes T3 "unnamed third
-      mode").** Infer (bi-abduction) and Voyager (observe-hypothesize-test) BOTH did
-      abduction, with success — paper now says so explicitly and disclaims novelty
-      over the mode. Contribution reframed: abduction *fits in a harness, graded
-      from outside the model, and lifts where nothing else did*. All "first"/
-      "unnamed"/"no tradition built that one"/"first general reasoner" claims CUT
-      (not hedged — author: "we're not playing territory-grabbing games; novelty is
-      the XOR discovery + epistemology + the composition"). Abstract + intro + §3
-      reworded; ToTh "Peirce" table cell fixed to "abduction/deduction/induction…
-      (no Peirce cite)" to match the Related-Work text (codex caught the contradiction).
-- [x] **XOR = bi-abduction, tether made EXPLICIT (author: "XOR is just a coded term
-      for bi-abduction, we weren't making the link explicit enough").** "math op"
-      scoped to "this harness operationalizes"; new identity sentence in §application
-      names the XOR as shorthand for bi-abduction's figure/ground split (Calcagno/
-      O'Hearn cited for what bi-abduction actually establishes, not for "XOR").
-      Resolves codex's "floats free as a redefinition" flag by tethering harder, not
-      softening away.
-- [x] **DPI demoted to theoretic motivation (author: "DPI is mostly theoretic,
-      proving it is out of scope").** §enum-calib DPI ¶ reworded "offered as
-      motivation rather than proof… turning this into a theorem… is out of scope";
-      Cover & Thomas kept, /compress-and-unfold self-link kept.
-- [x] **FW3 regrounded (author: "large XOR is a context-rot story, not a
-      lost-in-the-middle story"; "lost-in-the-middle is a lazy citation").**
-      lost-in-the-middle CUT entirely. New ground = **/context-synthesis-is-quadratic**
-      (author's own prior, self-link): XOR is a SYNTHESIS task → load grows with the
-      SQUARE of the case-space → super-linear in-context degradation. context rot
-      (Chroma 2025) kept as the named phenomenon, scoped (names the shape, not a
-      measurement); missing direct measurement flagged, not papered over. See FW3
-      node above (updated). FW2 kill sharpened to codex's operational form (de-
-      tautologized: "self-authored labels only, no external label/replay/human-
-      approved reference/environmental execution before the discriminating step").
-- [x] **Multi-model wording tightened** (codex residuals): "reach"→"driven to";
-      "recall not required for this fix-class"→"these runs do not require a recall
-      explanation for this case"; "every instance reaches for"→"every successful run
-      here uses the same externally supplied discriminator"; budget-artifact phrasing.
-- [x] **NEW §bench framing (author, approved → §bench de-frame): observability /
-      reliability / attribution, NOT performance.** Added ¶ to the §bench opener:
-      benches grade performance, but a harness is bottlenecked on observability,
-      reliability, attribution; the four intro problems are all of that kind; grounded
-      on the existing null + SWE-Effi (gate×oracle fixed → model tier moves ~2pts).
-      Author's "no harness lift with stronger models since 2025" intuition kept as
-      MOTIVATION only — the substantiated kernel (SWE-Effi + pair-swap) is stated, the
-      bald temporal claim is NOT asserted (no receipt).
-- [x] "debugging tools discard the search" softened (codex: some keep logs) →
-      "do not persist the search as a typed, replayable hypothesis graph".
-
-NOT yet done: nothing committed to git (author to confirm). PDF rebuild still pending
-(BACKLOG D). Cover & Thomas + context-rot + Capucci bib entries still owed in lineage
-appendix if the inline cites are to resolve formally.
-
-## Codex argumentation+order sniff (2026-06-13, render pass 3)
-
-Sniff requested: argumentation + ORDER only, not prose. Applied Root A + Root B +
-honesty scoping; declined the structural reorders (codex conceded the spine is
-"basically right"; author concurred). Build green (503 pages).
-
-- [x] **ROOT A — align the top to what the body earns (codex soundness #1/#5/#6/#9).**
-      The contradiction: abstract/intro/§verus said "sound, general fix" / "recovers
-      the verifier's own decision procedure", but §frontier reveals wide-but-broken.
-      FIX: the model's external-gate fix is now "the verifier's own inhabitedness
-      query, a markedly more general fix bounded by gate coverage"; the *fully sound
-      general fix is the maintainer's (#2501)*. §verus reveals wide-but-broken AT the
-      point of the claim (in place, not a reorder). Intro claim-2 now types Verus as
-      "a mechanism that *can occur*, not a rate or a general boundary claim
-      (§right-regime, §limitations)" — existence framing pulled forward (#9).
-- [x] **ROOT B — graph=substrate vs oracle=intervention + axis tightened (soundness
-      #2/#7).** §right-regime now states plainly: the graph is NOT what moves the
-      number (every arm writes the same graph), the external oracle is; the graph is
-      the persistent replayable SUBSTRATE + the contributed object + the reason it's
-      auditable, and the experiment isolates ONE variable within it. Protects
-      jewel-not-facet without overclaiming the graph as the causal lever. Axis
-      tightened: externality is NECESSARY NOT SUFFICIENT — thin coverage → wide-but-
-      broken (§frontier); the real axis is whether the externally-supplied labels SPAN
-      the needed distinction.
-- [x] **Honesty #3** — "the oracle is not" scoped in §enum-calib: "at least not here…
-      scoped to that circularity, not a proof that no model could ever induce an
-      oracle from some other source." (matches the E8/K7 graph scoping.)
-- [x] **Honesty #4** — abstract DPI overclaim removed: "because by the data processing
-      inequality no internal computation imports the world-truth" → "since the missing
-      truth enters only from a world-facing trial, never from recombining what the
-      weights already hold." DPI now appears ONLY in §enum-calib, already demoted to
-      motivation/out-of-scope. Abstract/§enum-calib no longer inconsistent.
-- [x] **Honesty #8** — bench circularity defused in §setup: the regime is the audit's
-      INDEPENDENT complement ("marked it out independently, and before these results"),
-      not chosen because the method wins there. Foregrounds the audit criterion ahead
-      of the null.
-- [~] DECLINED (codex order #3/#5/#6/#7-order; soundness #10): move gate-general after
-      verus-bench, split enum-calib, reorder discussion, replay-auditability scoping.
-      Spine kept; higher risk/effort, low argument gain. Revisit only if a later read
-      snags. #10 (replay = checkability not sufficiency) already stated in §hygraph +
-      §limitations; left as-is.
-
-## Live-PR honesty correction (2026-06-13, render pass 4) — author: "we do as much honesty as we can"
-
-Triggered by author Q ("is the general fix live on their repo"). Verified live via
-`gh` on verus-lang/verus, and caught a FACTUAL ERROR the verification exposed.
-
-- [x] **Live status confirmed:** #2219 CLOSED 2026-06-05; #2230 (narrow) MERGED
-      2026-03-09; #2501 (general) MERGED 2026-06-05 (the merge that closed #2219).
-      Provenance in the paper (base 2026-03-08 → narrow next day → general 2026-06-05)
-      is accurate; post-cutoff for Fable (Jan 2026) holds.
-- [x] **FACTUAL FIX — #2501 mis-attribution.** Paper said "the general fix replaces
-      `is_never()` with the verifier's own inhabitedness query `!ty.is_inhabited_from`,
-      which is what #2501 does." FALSE per #2501's live diff: #2501 KEEPS `is_never`
-      and gates it by call context (`record_call_inhabitedness`, conservative on
-      proof-block `!`-returns) = the MODE GATE, the finer fix. `is_inhabited_from`
-      was the MODEL's over-broad route, behaviorally redundant (Fable: identical
-      grading, no inhabitedness query). Corrected §verus line: #2501 described as
-      mode-gated/context-aware, not is_inhabited_from.
-- [x] **Lift recast to a mode-gated approximation (max honesty, per RESULT-corrected.md
-      2026-06-12).** §frontier now states the cross-model correction: the
-      inhabitedness query the codex arm routed through is behaviorally redundant; the
-      operative mechanism is the mode gate; "the model recovered the verifier's own
-      decision procedure / reached the verifier's true oracle" OVERSTATES → "widens to
-      a mode-gated approximation under external pressure." Held-outs still earn
-      represents-not-tabulates (the rule it represents is the coarse mode gate).
-- [x] Knock-on overclaims scrubbed: abstract + intro "onto the verifier's own
-      inhabitedness query" → "onto a markedly more general fix"; §verus "reach the
-      general inhabitedness predicate" → "break off the narrow plateau to a wider
-      fix" + "reused the real oracle" → "applies its own general predicate";
-      §gate-general "discover the verifier's own inhabitedness query" → "grep out
-      rustc's own machinery for uninhabited types"; §verus-bench recall probe
-      de-conflated ("the model's solution is reconstruction from prior competence,
-      not recall of the post-cutoff patch"); table caption "inhabitedness
-      generalization" → "uninhabited-return generalization".
-- [x] E7 node corrected above with the live-PR verification + the mis-attribution fix.
-      NB: line-18 mechanism-bar prose still narrates `is_never()→is_inhabited_from` as
-      the lift — that is the codex-arm ROUTE (accurate as trace), but the operative-
-      mechanism gloss is now the mode gate; left as provenance, governed by this note.
-Build verified (503 pages). Committed.
-
-## Pull hygraph-mechanism + propagate (2026-06-13, render pass 5)
-
-Pulled the receipts (branch `pilots-11-fable-minimal-ablation` @ 43ac2d0). The new
-commit added the matched-codex table row and, the load-bearing change, flagged
-**`#2501`-clears-`ho5` as INFERRED, not force-graded** (#2501 is at toolchain 1.95.0,
-not co-gradeable with the base-toolchain 1.93.1 arms; force-grading gold-on-`ho5` is
-a logged, unrun control).
-
-- [x] **Paper (§enum-calib multi-model ¶): hedged the anti-recall claim.** Was stated
-      as fact ("the human general fix is finer… clearing `ho5`… so a model that had
-      memorized the gold would have cleared it"). Now contingent: "appears finer…
-      would mean… but that `ho5` clearance is inferred, not force-graded here (#2501 at
-      a different toolchain, not co-gradeable); logged as an open control, and the
-      argument leans on it." The Fable/Sonnet recall-not-required point is unaffected
-      (that is force-graded).
-- [x] **Paper (ablation table caption): added the toolchain caveat** so the table's
-      "#2501 clears divergence" does not assert more than was graded ("the maintainer
-      fix's clearance of the hardest divergence probe is inferred from #2501 at its own
-      toolchain, not force-graded alongside these arms").
-- [x] **Receipts correction (hygraph-mechanism, branch, commit 823b811, NOT pushed):**
-      `MECHANISM-dissection.md` step 5 said "this is the lift: the verifier's own
-      general query" — corrected to the mode-gated-approximation framing inline, citing
-      the live `gh pr diff 2501` (keeps `is_never`, gates by call context) + the
-      RESULT-corrected cross-model redundancy. The receipts now match the paper.
-- [~] Multi-model "matched-codex rerun leaves the divergence wall standing" already in
-      the paper; the new receipts row (pass=false, crash=1250, p1 over-rej) corroborates
-      it — no paper change needed. clean_regrade stat-order fix is repo-internal.
-Build verified (503 pages). june.kim committed; receipts branch commit local (unpushed).
-
-## ho5 force-grade reclassification (2026-06-14, render pass 6) — author: "edit and propagate"
-
-Pulled hygraph-mechanism master again: the K3 control was RUN. #2501 force-graded at
-its own toolchain → **over-rejects ho5**, inverting the inferred claim. ho5 reclassified
-as a STRETCH GOAL beyond #2501's shipped bar; t3 is the in-bar divergence case #2501
-verifies. The three corrected-gate near-A arms match #2501 on all 8 probes. Two claims
-flipped (see E9 MEASURED CORRECTION). Propagated paper-wide (10 edits, build green):
-
-- [x] **Abstract + intro claim-2:** endpoint reframed from "fully sound general fix is
-      the maintainer's / remaining gap is coverage" → "supplying the coverage carries
-      the model to the merged human fix's behavior on every graded probe; remaining gap
-      is coverage, not capability."
-- [x] **§verus-bench (hard probes):** the two divergence probes split — in-bar (human
-      fix preserves, golden corroborated by the shipped bar) vs stretch (human fix
-      declines too, golden = operator ideal not a shipped behavior).
-- [x] **§verus:** handed-gate fix "not yet the maintainer's sound one" → "not yet the
-      merged human fix … in-bar divergence case the human fix preserves."
-- [x] **§frontier:** dropped "#2501 is the genuinely finer fix neither automated arm
-      captured" (no behavioral support); the gap closes once calibration is supplied
-      (§enum-calib reaches human-fix behavior). The two over-rejected divergence cases
-      split into in-bar (real flaw) vs stretch (human fix declines too, not a flaw).
-- [x] **§enum-calib:** corrected arm "matches the merged human fix on every probe …
-      closes the gap to the shipped human bar; residual sits beyond that bar, not below
-      it." Asymmetry ¶: the hardest look-alike is declined even by the human fix.
-- [x] **Multi-model "Not one model's artifact" ¶:** near-A recast from "wide-but-broken
-      carve-out" → matches #2501 on every probe (preserve in-bar divergence, decline the
-      stretch case the human fix declines). The ho5 anti-recall leg **withdrawn in-text**
-      ("one earlier anti-recall argument is withdrawn here, because the control … was
-      finally run … the human fix is behaviorally identical … cannot separate a
-      memorizer from a reconstructor"). Recall now rests on clean models + the dated
-      #2501-postdates-Composer anchor.
-- [x] **Ablation table caption:** removed the (now stale) inferred-toolchain caveat;
-      column relabeled the in-bar divergence; added that a harder stretch case is
-      declined even by #2501; fixed "no automated arm makes that move" → the wide gates
-      shown don't, but supplying the divergence golden moves a corrected arm to the
-      human fix's behavior. (Table cells unchanged: divergence column = the in-bar case,
-      #2501 ✓ measured, handed/self-built ✗.)
-- [x] E9 MEASURED CORRECTION node added; E7 mode-gate correction (pass 4) already
-      governs the predicate half. K3 open control closed.
-Build verified (503 pages).
+- **[cite-not-repeat] §related-work (~line 429)** re-runs VK's *entire* epistemology related-work (NARS, OpenCog/PLN, Traxia, Nanopublications + the "this is just NARS + provenance + executable-research, concede every piece" synthesis charge) → **defer to VK §related-work**, keep only the data-structure / memory-node angle. *(this session's next target)*
+- **[cite-not-repeat]** Discussion trim, pointer-first ("**Truth is buildable**" block → a pointer, not re-argued; codex #10).
+- "verifiable knowledge" rides VK's DOI as a **cited primitive** — no in-paper redefinition; add the VK DOI to §grounding + §availability when minted.
+- Front-to-back coherence read (the §method/harness handoffs).
+- Trim pass: additive Results ¶s run long; compress AI-authored ¶s (intro pains→gap, §Procedure, §hygraph).
+- Name the minimal arm = mini-SWE-agent / ReAct, **bolt-on onto codex / Claude Code**, at the comparison point.
+- Standardize the one stray "falsification condition" → "kill condition".
+- Cover & Thomas (DPI) entry in the lineage appendix.
+- One-command Verus replay; flux #1613 auditability pointer (demoted, §other-cases).
+- *(next paper)* 3–5 audited existence cases under the preregistered protocol (E6).
+- Push + deploy: refresh the stale SHAs before relying on them.
