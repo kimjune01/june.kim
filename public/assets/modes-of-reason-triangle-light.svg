@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" font-family="system-ui, -apple-system, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -18 460 348" width="684" height="517" font-family="system-ui, -apple-system, sans-serif">
   <style>
     .node-text { text-anchor: middle; font-weight: 700; font-size: 16px; fill: #334155; }
     .node-sub { text-anchor: middle; font-size: 11px; fill: #64748b; }
@@ -39,14 +39,14 @@
   <text x="122" y="137" text-anchor="end" style="font-size:10px; fill:#64748b; font-style:italic;">run → accumulate</text>
 
   <!-- Nodes -->
-  <text class="node-text" x="230" y="20">Observation</text>
-  <text class="node-sub" x="230" y="38">what happened</text>
+  <text class="node-text" x="230" y="4">Observation</text>
+  <text class="node-sub" x="230" y="20">what happened</text>
 
-  <text class="node-text" x="372" y="247">Theory</text>
-  <text class="node-sub" x="372" y="265">what is true</text>
+  <text class="node-text" x="384" y="254">Theory</text>
+  <text class="node-sub" x="384" y="272">what is true</text>
 
-  <text class="node-text" x="88" y="247">Experiment</text>
-  <text class="node-sub" x="88" y="265">how to act</text>
+  <text class="node-text" x="76" y="254">Experiment</text>
+  <text class="node-sub" x="76" y="272">how to act</text>
 
   <!-- Latin roots -->
   <text x="338" y="153" text-anchor="start" style="font-size:9px; fill:#94a3b8; font-style:italic;">ab-ducere: lead away</text>

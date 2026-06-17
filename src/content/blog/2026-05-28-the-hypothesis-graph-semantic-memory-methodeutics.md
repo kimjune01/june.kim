@@ -6,7 +6,7 @@ tags: methodology, epistemology, coding
 keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cognitive architectures, LLM agents, provenance, auditability, falsifiability, machine epistemics, post-cutoff evaluation
 ---
 
-*[Download PDF](/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf) · arxiv-shape preprint, rebuilt from this source. · Receipts: [the bench run](https://github.com/kimjune01/swebench-pro) · [the determinacy audit](https://github.com/kimjune01/swebench-pro-audit) · [the mechanism experiment](https://github.com/kimjune01/hygraph-mechanism), each reproducible from its own committed artifacts.*
+*[Download PDF](/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf) · arxiv-shape preprint, rebuilt from this source. · Receipts: [the bench run](https://github.com/kimjune01/swebench-pro) ([DOI](https://doi.org/10.5281/zenodo.20691978)) · [the determinacy audit](https://github.com/kimjune01/swebench-pro-audit) ([DOI](https://doi.org/10.5281/zenodo.20738220)) · [the mechanism experiment](https://github.com/kimjune01/hygraph-mechanism) ([DOI](https://doi.org/10.5281/zenodo.20691974)), each reproducible from its own committed artifacts.*
 
 ## Abstract {-}
 
@@ -162,15 +162,20 @@ The "XOR" used throughout is shorthand for that bi-abductive separation: the fig
 
 Isn't generating that space just debugging? It is, and debugging has been automated for decades: spectrum-based fault localization, statistical and delta debugging, model-based diagnosis, and search-based program repair are mature fields (Jones et al. 2002; Liblit et al. 2005; Zeller & Hildebrandt 2002; Reiter 1987; Le Goues et al. 2012; Monperrus 2018). Debugging tools already automate the loop; what is new is that the hypothesis graph persists it. Every engineer, and every repair tool, runs some version of abduce a cause, kill it on evidence, witness the survivor, derive the fix. But the engineer runs it in their head, and the tools, whatever logs they keep, do not persist the search as a typed, replayable hypothesis graph.
 
-This loop ships as a tool. *abductor* ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)) externalizes the diff generation outside the context window, so a model has to represent the rule instead of tabulating the case in front of it: it enumerates a space wider than the model's hypothesis, calibrates each case against a known-good baseline, and exposes one pass/fail gate, with the answer key held outside the model's view. A failing case is a counterexample that forces the next fix, and the search records itself as the hypothesis graph, fixes as nodes and counterexamples as edges.
+We implement this loop as a tool. *abductor* ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)) externalizes the diff generation outside the context window, so a model has to represent the rule instead of tabulating the case in front of it: it enumerates a space wider than the model's hypothesis, calibrates each case against a known-good baseline, and exposes one pass/fail gate, with the answer key held outside the model's view. A failing case is a counterexample that forces the next fix, and the search records itself as the hypothesis graph, fixes as nodes and counterexamples as edges.
 
-## The inquiry harness {#method}
+## The methodeutic harness {#method}
 
-![The `inquire` skill: Peirce's three modes as a procedure that writes the hypothesis graph (`smem`). Abduction proposes hypotheses with kill conditions, deduction derives the trial each must survive, induction runs it and fires a deterministic kill or witness with no model arbitrating. Each node is typed by the mode that set it, the credence cap travels with the type, and the loop re-enters with the updated graph until a node is witnessed. `implement` and `attest`, which read the survivors and verify the patch, follow below.](/assets/inquire-skill.svg)
+How do epistemology and debugging become an agentic harness? The loop that writes the graph needs four things:
 
-The hypothesis and its judge are the same weights. A model grading its own kill asks the source of a possible error to certify that error absent, and the two are correlated: where it is wrong about the cause it is wrong about the check, so a confirmation cannot catch the bias that produced it. Stopping is no safer, since a model ends an inquiry when it feels resolved, which is when its confidence runs high, and confidence parts from correctness precisely on the bugs that are hard. Both judgments have to be sourced outside the weights. This is the axis the whole method turns on: a kill is graded against an *internal* oracle, the model's own belief, or an *external* one, a reference the model cannot see, and only the external kill carries warrant. So two layers of determinism bracket the inference engine: a deterministic tool inside its reach holds the external oracle, settling each kill from outside its belief, and an outer driver gates the loop on a fixed table, settling termination with no model in it. The engine reasons in between, the one fallible layer.
+- **Iteration.** One pass can't be trusted, so the loop re-enters on failure.
+- **Deterministic oracle.** A model can't be trusted to catch its own bias, so the check comes from outside the weights.
+- **Three modes of reasoning.** Abduction, deduction, and induction stay typed and separate, each capped at its own confidence.
+- **Semantic memory.** The reasoning is recorded into the hypothesis graph and survives the context window.
 
-Throughout, the three stages are `inquire`, `implement`, and `attest`; the frozen artifact's code, file paths, and route literals spell them `recon`, `craft`, and `audit`.
+Concretely, this is a skill with a tool call in a loop: the outer deterministic driver invokes an agent via the `inquire` skill, who accesses the deterministic `abductor` tool. It mechanizes the XOR operation.
+
+![The `inquire` skill: Peirce's three modes as a procedure that writes the hypothesis graph. Induction fires a deterministic kill or witness with no model arbitrating. `implement` and `attest`, which read the survivors and verify the patch, follow below.](/assets/inquire-skill.svg)
 
 ### The inquiry frame {#inquiry-frame}
 
@@ -211,6 +216,10 @@ To keep that hypothesis from being one model's artifact, two frontier models fro
 ### Deterministic gating and the outer loop {#gating}
 
 The control loop is standard: the driver routes on `attest`'s verdict and re-entry route under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hypothesis graph doubles as the loop's checkpoint and no dead branch is re-proposed. That leaves the inner layer still owed a demonstration. The external oracle the opening made the crux is what the gate leans on, and §(right-regime) isolates it on a single bug, where it does most of the work the bench number seems to credit to diagnosis.
+
+### Artifact availability {#artifact}
+
+All code and data are openly available, each developed in a public repository and archived under a DOI for permanence. `abductor`, the tool that mechanizes the gate, is developed at [github.com/kimjune01/abductor](https://github.com/kimjune01/abductor) and archived at [doi.org/10.5281/zenodo.20738162](https://doi.org/10.5281/zenodo.20738162) (v1.0.0, AGPL-3.0). The mechanism experiment of §(right-regime) is developed at [github.com/kimjune01/hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism) and archived at [doi.org/10.5281/zenodo.20691974](https://doi.org/10.5281/zenodo.20691974) (v1.0.0, CC BY-SA 4.0); the archive carries the preregistration, the rebuild-confirmed dataset, the regrade script, and the climb traces. Every reported result reproduces from the committed inputs of the archived version.
 
 ## The mechanism: Verus #2219 {#right-regime}
 

@@ -1,4 +1,4 @@
-<svg viewBox="0 0 720 408" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 608 274" xmlns="http://www.w3.org/2000/svg">
   <style>
     text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #475569; font-size: 11px; }
     .dark { fill: #333; }
@@ -24,78 +24,64 @@
     </marker>
   </defs>
 
-  <!-- header -->
-  <text x="360" y="26" text-anchor="middle" class="dark bold" font-size="15">The inquire skill</text>
-  <text x="360" y="45" text-anchor="middle" class="ital" fill="#64748b">Peirce's three modes, run as a procedure (pmem) that writes the hypothesis graph (smem)</text>
-
+  <g transform="translate(0,-50)">
   <!-- OBSERVATION -->
-  <rect x="36" y="62" width="348" height="40" rx="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
-  <text x="50" y="86" class="dark small bold">OBSERVATION <tspan class="label" font-weight="normal">· a surprising fact or failure trace</tspan></text>
-  <line x1="210" y1="102" x2="210" y2="116" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+  <rect x="36" y="62" width="240" height="40" rx="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="50" y="86" class="dark small bold">Observation | Goal | Defect</text>
+  <line x1="156" y1="104" x2="156" y2="118" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
 
   <!-- ABDUCTION -->
-  <rect x="36" y="118" width="348" height="68" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
-  <text x="50" y="139" class="blue small bold">ABDUCTION</text>
-  <text x="50" y="157" class="dark small">propose typed hypotheses, each with a kill condition</text>
-  <text x="50" y="174" class="label ital">what would, if true, make this no longer surprising?</text>
-  <line x1="210" y1="186" x2="210" y2="200" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+  <rect x="36" y="122" width="240" height="40" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="146" class="blue small bold">ABDUCTION <tspan class="label" font-weight="normal">· generate hypotheses</tspan></text>
+  <line x1="156" y1="164" x2="156" y2="178" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
 
   <!-- DEDUCTION -->
-  <rect x="36" y="202" width="348" height="68" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
-  <text x="50" y="223" class="blue small bold">DEDUCTION</text>
-  <text x="50" y="241" class="dark small">derive a falsifiable prediction: the exact trial</text>
-  <text x="50" y="258" class="label ital">if it holds, what command must succeed?</text>
-  <line x1="210" y1="270" x2="210" y2="284" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
+  <rect x="36" y="182" width="240" height="40" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="206" class="blue small bold">DEDUCTION <tspan class="label" font-weight="normal">· design experiment</tspan></text>
+  <line x1="156" y1="224" x2="156" y2="238" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#e)" />
 
   <!-- INDUCTION -->
-  <rect x="36" y="286" width="348" height="80" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
-  <text x="50" y="307" class="blue small bold">INDUCTION</text>
-  <text x="50" y="325" class="dark small">run the trial against the codebase</text>
-  <text x="50" y="343" class="small"><tspan class="red">refuted &#8594; kill fires</tspan>   ·   <tspan class="green">confirmed &#8594; witness</tspan></text>
-  <text x="50" y="359" class="amber tiny">deterministic predicate · no model arbitrates</text>
+  <rect x="36" y="242" width="240" height="40" rx="5" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="50" y="266" class="blue small bold">INDUCTION <tspan class="label" font-weight="normal">· run the trial</tspan></text>
 
   <!-- loop back -->
-  <path d="M 36 326 L 18 326 L 18 152 L 36 152" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#el)" />
-  <text x="13" y="239" text-anchor="middle" class="amber tiny" transform="rotate(-90 13 239)">re-enter with the updated graph, until a node is witnessed</text>
+  <path d="M 36 262 L 18 262 L 18 142 L 36 142" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#el)" />
 
   <!-- write arrows into the graph -->
-  <path d="M 384 152 L 432 200" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
-  <path d="M 384 236 L 432 232" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
-  <path d="M 384 326 L 432 264" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
-  <text x="404" y="180" class="tiny" fill="#94a3b8">write</text>
+  <path d="M 276 142 L 332 158" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
+  <path d="M 276 202 L 332 172" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
+  <path d="M 276 262 L 332 186" stroke="#cbd5e1" stroke-width="1.3" fill="none" marker-end="url(#ew)" />
 
   <!-- HYPOTHESIS GRAPH (smem) -->
-  <rect x="436" y="118" width="252" height="248" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
-  <text x="562" y="140" text-anchor="middle" class="green small bold">HYPOTHESIS GRAPH (smem)</text>
+  <rect x="336" y="62" width="252" height="220" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+  <text x="462" y="86" text-anchor="middle" class="green small bold">HYPOTHESIS GRAPH</text>
 
   <!-- mini graph -->
   <!-- edges -->
-  <path d="M 470 232 L 540 188" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
-  <path d="M 470 232 L 540 232" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
-  <path d="M 470 232 L 540 276" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
-  <path d="M 575 276 L 632 276" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 370 172 L 440 128" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 370 172 L 440 172" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 370 172 L 440 216" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
+  <path d="M 475 216 L 532 216" stroke="#cbd5e1" stroke-width="1.3" fill="none" />
   <!-- root -->
-  <circle cx="466" cy="232" r="7" fill="#94a3b8" />
-  <text x="466" y="252" text-anchor="middle" class="tiny">obs</text>
+  <circle cx="366" cy="172" r="7" fill="#94a3b8" />
+  <text x="366" y="192" text-anchor="middle" class="tiny">obs</text>
   <!-- killed abduction node -->
-  <circle cx="555" cy="188" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
-  <text x="568" y="185" class="tiny amber" style="text-decoration:line-through">H1</text>
-  <text x="568" y="196" class="red tiny">&#10007; killed</text>
+  <circle cx="455" cy="128" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="468" y="125" class="tiny amber" style="text-decoration:line-through">H1</text>
+  <text x="468" y="136" class="red tiny">&#10007; killed</text>
   <!-- killed abduction node -->
-  <circle cx="555" cy="232" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
-  <text x="568" y="229" class="tiny amber" style="text-decoration:line-through">H2</text>
-  <text x="568" y="240" class="red tiny">&#10007; killed</text>
+  <circle cx="455" cy="172" r="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="468" y="169" class="tiny amber" style="text-decoration:line-through">H2</text>
+  <text x="468" y="180" class="red tiny">&#10007; killed</text>
   <!-- witnessed node -->
-  <circle cx="555" cy="276" r="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
-  <text x="568" y="273" class="tiny green bold">H3</text>
-  <text x="568" y="284" class="green tiny">&#10003; witnessed</text>
+  <circle cx="455" cy="216" r="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+  <text x="468" y="213" class="tiny green bold">H3</text>
+  <text x="468" y="224" class="green tiny">&#10003; witnessed</text>
   <!-- deduction node -->
-  <circle cx="638" cy="276" r="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
-  <text x="638" y="296" text-anchor="middle" class="blue tiny">fix</text>
-
-  <text x="562" y="334" text-anchor="middle" class="label">each node typed by the mode that set it;</text>
-  <text x="562" y="348" text-anchor="middle" class="label">the credence cap travels with the type</text>
+  <circle cx="538" cy="216" r="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5" />
+  <text x="538" y="236" text-anchor="middle" class="blue tiny">fix</text>
 
   <!-- footer -->
-  <text x="360" y="392" text-anchor="middle" class="tiny ital">Named for Peirce's <tspan class="dark">inquiry</tspan>, the engine of discovery, not mere investigation.</text>
+  <text x="304" y="308" text-anchor="middle" class="tiny ital">Named for Peirce's <tspan class="dark">inquiry</tspan>, the engine of discovery.</text>
+  </g>
 </svg>
