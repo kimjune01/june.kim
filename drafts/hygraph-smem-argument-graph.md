@@ -923,7 +923,7 @@ Re-spines and render passes, newest first. Full detail in this file's git histor
 
 ## OPEN
 
-- **[cite-not-repeat] §related-work (~line 429)** re-runs VK's *entire* epistemology related-work (NARS, OpenCog/PLN, Traxia, Nanopublications + the "this is just NARS + provenance + executable-research, concede every piece" synthesis charge) → **defer to VK §related-work**, keep only the data-structure / memory-node angle. *(this session's next target)*
+- ~~**[cite-not-repeat] §related-work (~line 420)** re-ran VK's epistemology related-work (NARS, OpenCog/PLN, Traxia, Nanopublications + the synthesis charge)~~ **DONE 2026-06-16** — deferred the per-system adjudication + synthesis charge to [VK §related-work](/verifiable-knowledge#related-work); kept the cluster, Traxia convergence, and the memory-node contract (~270→~140 words).
 - **[cite-not-repeat]** Discussion trim, pointer-first ("**Truth is buildable**" block → a pointer, not re-argued; codex #10).
 - "verifiable knowledge" rides VK's DOI as a **cited primitive** — no in-paper redefinition; add the VK DOI to §grounding + §availability when minted.
 - Front-to-back coherence read (the §method/harness handoffs).
