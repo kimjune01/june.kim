@@ -1,0 +1,86 @@
+<svg viewBox="0 0 560 558" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #666; font-size: 11px; }
+    .dark { fill: #333; }
+    .accent { fill: #3b82f6; }
+    .green { fill: #2d7d2d; }
+    .red { fill: #c43c3c; }
+    .bold { font-weight: bold; }
+    .label { font-size: 10px; fill: #888; }
+    .small { font-size: 9px; }
+    .mono { fill: #333; }
+  </style>
+  <defs>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c43c3c" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2d7d2d" />
+    </marker>
+    <marker id="arrow-dim" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaa" />
+    </marker>
+  </defs>
+
+  <!-- === THE CAUSE CHAIN === -->
+
+  <!-- node 1 -->
+  <rect x="130" y="20" width="300" height="44" fill="#faf8f4" stroke="#e8e4dc" stroke-width="1.5" rx="4" />
+  <text x="280" y="39" text-anchor="middle" class="dark bold" style="font-size:11px">ghost expression of type <tspan class="accent">!</tspan></text>
+  <text x="280" y="54" text-anchor="middle" class="small">specification / proof term</text>
+
+  <path d="M 280 64 L 280 88" stroke="#c43c3c" stroke-width="1.3" marker-end="url(#arrow-red)" fill="none" />
+
+  <!-- node 2 -->
+  <rect x="130" y="90" width="300" height="44" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="280" y="109" text-anchor="middle" class="dark" style="font-size:11px">erased before compilation</text>
+  <text x="280" y="124" text-anchor="middle" class="small">no runtime effect</text>
+
+  <path d="M 280 134 L 280 158" stroke="#c43c3c" stroke-width="1.3" marker-end="url(#arrow-red)" fill="none" />
+
+  <!-- node 3 -->
+  <rect x="130" y="160" width="300" height="44" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="280" y="179" text-anchor="middle" class="dark" style="font-size:11px">MIR still marks the next block unreachable</text>
+  <text x="280" y="194" text-anchor="middle" class="small red">the erased term is read as diverging</text>
+
+  <path d="M 280 204 L 280 228" stroke="#c43c3c" stroke-width="1.3" marker-end="url(#arrow-red)" fill="none" />
+
+  <!-- node 4 -->
+  <rect x="130" y="230" width="300" height="44" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="280" y="249" text-anchor="middle" class="dark" style="font-size:11px">Verus prunes a control-flow edge that is <tspan class="red bold">live</tspan></text>
+  <text x="280" y="264" text-anchor="middle" class="small">reachable code treated as dead</text>
+
+  <path d="M 280 274 L 280 298" stroke="#c43c3c" stroke-width="1.3" marker-end="url(#arrow-red)" fill="none" />
+
+  <!-- node 5 -->
+  <rect x="130" y="300" width="300" height="44" fill="none" stroke="#ddd" stroke-width="1.5" rx="4" />
+  <text x="280" y="319" text-anchor="middle" class="dark" style="font-size:11px">that code is never checked</text>
+  <text x="280" y="334" text-anchor="middle" class="small">nothing fails; the symptom is silence</text>
+
+  <path d="M 280 344 L 280 368" stroke="#c43c3c" stroke-width="1.3" marker-end="url(#arrow-red)" fill="none" />
+
+  <!-- node 6: unsoundness -->
+  <rect x="130" y="370" width="300" height="46" fill="#fdeeee" stroke="#c43c3c" stroke-width="2" rx="4" />
+  <text x="280" y="390" text-anchor="middle" class="red bold" style="font-size:12px; letter-spacing:0.5px">UNSOUNDNESS</text>
+  <text x="280" y="406" text-anchor="middle" class="small dark">a program owed REJECT verifies vacuously</text>
+
+  <!-- === THE FIX AXIS === -->
+  <text x="280" y="448" text-anchor="middle" class="label">the correct fix turns on one axis: identical at <tspan class="accent bold">!</tspan>, opposite handling</text>
+
+  <!-- fork arrows -->
+  <path d="M 200 416 L 165 470" stroke="#aaa" stroke-width="1.2" marker-end="url(#arrow-dim)" fill="none" />
+  <path d="M 360 416 L 395 470" stroke="#aaa" stroke-width="1.2" marker-end="url(#arrow-dim)" fill="none" />
+
+  <!-- left arm: keep -->
+  <rect x="40" y="472" width="220" height="70" fill="none" stroke="#2d7d2d" stroke-width="1.5" rx="4" />
+  <text x="150" y="492" text-anchor="middle" class="green bold" style="font-size:10px">ghost-erased uninhabited</text>
+  <text x="150" y="509" text-anchor="middle" class="small dark">code actually runs</text>
+  <text x="150" y="531" text-anchor="middle" class="green bold" style="font-size:12px">KEEP the edge</text>
+
+  <!-- right arm: prune -->
+  <rect x="300" y="472" width="220" height="70" fill="none" stroke="#999" stroke-width="1.5" rx="4" />
+  <text x="410" y="492" text-anchor="middle" class="dark bold" style="font-size:10px">genuine runtime divergence</text>
+  <text x="410" y="509" text-anchor="middle" class="small dark">code really is dead</text>
+  <text x="410" y="531" text-anchor="middle" class="dark bold" style="font-size:12px">PRUNE the edge</text>
+
+</svg>
