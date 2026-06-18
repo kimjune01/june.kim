@@ -359,17 +359,9 @@ Contamination is scoped the same way. Composer 2.5 ships after the fix, so its p
 
 Retrospectively the goldens are free; prospectively, on a fresh bug with no merged fix, the easy side has a golden and the hard side does not. The division of labor is the deployment design: the model enumerates and fixes, the harness draws its oracle from approved history, and the residual hard side is named, not hidden.
 
-The whole ablation reduces to one grid: the two middle columns flip on as soon as the enumeration goes wide, and the last column flips back only at the human general fix.
+The whole ablation reduces to one causal diagram. Across arms the model, loop, bug, and hypothesis graph stay fixed; only the verdict source varies. The inquiry runs as a loop: the model abduces a fix, the abductor gate refutes it, and the model re-abduces. The gate's machinery is self-built, a second model rebuilt it from a leak-free prompt, but its calibration reference, the general golden (the human-accepted divergence verdict), is the one piece the model cannot abduct for itself. The golden is a verdict the gate grades against, not the patch handed over: the model gets pass or fail on its own candidates and still has to carve out the divergence case. Supply that comparator and the path reaches the general fix, matching #2501 at human level. Implementation gates the outcome too: codex had the comparator and still walled. The missing comparator, not abduction or self-built machinery, is what an agent on its own could not reach.
 
-| Arm | Kill oracle | chg | \`!\`-bug | empty-enum | out-of-grammar | divergence | Bucket |
-|------------------|------------|:-:|:----:|:----:|:-------:|:----:|------------|
-| 6 methods (18 draws) | self | ~114 | ✓ | ✗ | ✗ | ✓ | **narrow** |
-| \#2230 (maintainer, narrow) | human | 114 | ✓ | ✗ | ✗ | ✓ | **narrow** |
-| `abductor` gate (handed) | external (vs base) | 269 | ✓ | ✓ | ✓ | ✗ | **wide-but-broken** |
-| self-built gate (induced) | self (induced) | 269 | ✓ | ✓ | ✓ | ✗ | **wide-but-broken** |
-| \#2501 (maintainer, general) | human | 269 | ✓ | ✓ | ✓ | ✓ | **general** |
-
-*The Verus \#2219 ablation, one row per arm, ✓ where the arm handles the probe correctly (rejects the bug cases, preserves the sound ones). The reported \`!\`-bug column is solved by everything. The two middle columns, in-grammar empty-enum and the out-of-grammar held-outs the gate never saw, are the uninhabited-return generalization; they flip on the moment the enumeration goes wide, for the gate graded against an external oracle and for the gate a model induced for itself alike, and stay off for the narrow arms. The last column, the in-bar genuine divergence that must be preserved, is the XOR's hard side; it is on for the narrow arms (which never reach far enough to break it) and for the merged human fix, force-graded to preserve it, and off for both wide gates, which over-reject it. (A harder divergence stretch case, beyond what the merged human fix promises, is declined even by that fix and is not a column here.) Enumeration moves an arm from narrow to wide and is inducible; the wide gates shown here, graded against the base alone or self-graded by the model, do not on their own preserve the in-bar divergence case. Supplying the divergence golden is what later moves a corrected arm onto it, to the human fix's behavior (§(enum-calib)).*
+![Reading the diagram: each box is an action, read left to right. The dashed box is what stays fixed across arms. Gray boxes are self-built and inducible; the blue box is the one input the model cannot author, and the blue path is the causal route. The gray arrow into the outcome is the implementation caveat.](/assets/verus-2219-lift-mechanism.svg)
 
 ### Two surrounding cases, briefly {#other-cases}
 
