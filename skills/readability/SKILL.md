@@ -1,48 +1,24 @@
-# Readability: Prosody, Structure, and Pacing
+---
+name: readability
+description: Document shape and pacing — section titles, emoji H1s, paragraph and section sizing, bold vs italic, opening orientation. Sentence-level rhythm and cohesion live in /flow; the word layer in /humanize.
+argument-hint: <file_path>
+allowed-tools: Read, Edit, Grep, AskUserQuestion
+---
 
-Scan a blog post for rhythm problems, oversized sections, weak titles, and paragraph imbalance. This skill handles the structural layer — how the post *feels* to read aloud — while humanize handles the word layer.
+# Readability: Structure and Pacing
+
+Scan a post for oversized sections, weak titles, paragraph imbalance, and orientation gaps — how the post is *shaped* on the page. Sentence-level rhythm and between-sentence cohesion belong to `/flow`; the word layer belongs to `/humanize`. This skill handles everything above the sentence.
 
 ## Process
 
 1. Read the file.
-2. Run all six checks below.
-3. Apply all fixes directly. Prosody fixes especially — be liberal with these. If a sentence sounds better restructured, restructure it.
-4. Report what changed. Re-read the result. If anything still drags or stumbles, fix it.
+2. Run the six checks below.
+3. Apply fixes directly. These are damped: once a title, a split, or a bold/italic call lands, it settles.
+4. Re-read. If a section still drags or a paragraph still sprawls, fix it.
 
 ## Checks
 
-### 1. Prosody
-
-Read sentences aloud in your head. Flag where the rhythm breaks. **Scope: word-shuffling only.** Reorder existing words and clauses. Add or drop function words (articles, prepositions, conjunctions) to fix stress patterns. Do not swap content words. Do not change verbs. Do not introduce em-dashes (the em-dash budget is 0 in prose; see *Cross-skill policies* below). If a fix requires substituting a different verb, that's a taste call, not a rhythm fix — leave it for /sharpen or the human.
-
-**Stress collisions.** Consecutive stressed syllables with no unstressed buffer: "big black block" → "a big dark block." A function word between downbeats fixes it.
-
-**Stress gaps.** Three or more unstressed syllables in a row: "the implementation of the" is a valley. Reorder so stress falls every 2-3 syllables.
-
-**Dangling prepositions.** The sentence dies on "of" or "for" or "to." Restructure so the final word carries weight. Restructure means *reorder the same words*, not *find a stronger word*.
-
-**Buried actors (cleft + passive).** Find the actor in the sentence and move it to subject position. *"It's what every framework is scrambling to bolt on"* (cleft) → *"Every framework is scrambling to bolt it on."* *"The bug was caused by a race condition"* (passive) → *"A race condition caused the bug."* Identify the doer; make it the subject. This is a reordering, not a word substitution. Keep the cleft when the topic genuinely sits in the predicate (*"It's not the algorithm that matters, it's the data"*) or when the actor is unknown or irrelevant (*"The file was deleted overnight"* — by whom doesn't matter).
-
-**Monotonous sentence starts.** 3+ consecutive sentences starting with the same word or structure. Vary the opener: invert, use a dependent clause, start with the object. Reorder; don't substitute.
-
-**Parallel structure mismatch.** List items that don't match meter. Fix by making items the same shape using the existing words.
-
-**Contrast pairs as separate sentences.** Two consecutive sentences with the same structure that say opposite things ("X does A. Y does B.") often read stronger joined by a semicolon. The semicolon signals the contrast is intentional; the period makes it look accidental. Flag when the parallel is exact enough that a semicolon would land the opposition in one breath.
-
-**Run-on mid-register.** Sentences over 20 words where every word is mid-frequency and mid-stress. Try restructuring first: move a strong word to the end, add a colon pivot, or join with a conjunction. Split only when restructuring can't save it. Word substitution is off-limits.
-
-**Clause ordering for flow.** Each sentence starts where the previous one ended. Given-before-new: the known thing comes first, the new thing lands last. "The team's coverage comes from overlapping T's" flows into "Fixed hours in a release cycle mean depth costs breadth" because coverage → constraint is a natural handoff. Reversing either sentence breaks the thread. When flow and emphasis align, the sentence works on both passes. When they conflict, prefer flow — the reader who stumbles never reaches the punch. Flag sentences where reordering clauses would connect better to the surrounding context. Only flag when the last noun of sentence N-1 and the first noun of sentence N have no semantic connection — that's the gap the reader has to jump. Don't flag deliberate breaks: "but" sentences, parallel structures, or contrast pairs that intentionally start somewhere new.
-
-#### What this check is NOT
-
-- **Prosody is reorder-only; verb activation lives in check 8.** Within *this* check, change order, not vocabulary. A meaning-preserving passive→active or copula→verb swap is a real readability fix, but it belongs to *Active verbs* (check 8), not here. A *bolder* verb that sharpens the claim or adds an image is still /sharpen's, not either check's.
-- **Not voice tightening.** "Sweep takes" → "Sweep eats" is a taste call, not a rhythm fix.
-- **Not introducing em-dashes.** Em-dash budget is 0 in prose throughout the pipeline.
-- **Not adding new content words** for image or impact.
-
-The skill should make the same words read better in the same order, sometimes with the order shuffled. Anything more is out of scope.
-
-### 2. Section titles
+### 1. Section titles
 
 **Argue, don't label.** "The experiment" is a topic. "Fifteen decisions, one sentence" is an argument. Prefer titles that compress the claim.
 
@@ -54,7 +30,7 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **Hierarchy.** h2 sections should be parallel in scope. Flag imbalance.
 
-### 3. Emoji H1s
+### 2. Emoji H1s
 
 **Lightweight diagrams.** When a paragraph explains a relationship that a line of emojis could show at a glance, the emoji H1 is simpler than both the paragraph and an SVG. Flag paragraphs where a reader would understand faster from a few glyphs than from the prose.
 
@@ -62,7 +38,7 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **Format.** H1 heading, mostly emojis. Arrows or `vs.` when the relationship needs them. No prose. The line *replaces* a paragraph; it doesn't caption one.
 
-### 4. Paragraph sizing
+### 3. Paragraph sizing
 
 **Target: 2-5 sentences.** Single-sentence paragraphs fine for emphasis (max 2 per post). 6+ sentences usually means two ideas merged.
 
@@ -70,11 +46,11 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **3+ single-sentence paragraphs in a row:** bullet-point energy in prose clothing. Make it a list or combine.
 
-**Inline enumerations.** A sentence with 3+ comma-separated items (especially with parenthetical details per item) scans faster as a bulleted list. Flag sentences like "X (detail), Y (detail), Z (detail), and more" — the reader's eye is already parsing vertically. Convert to a list. This applies especially to: sequences of named examples with annotations, pipeline stages with descriptions, and evidence lists with citations.
+**Inline enumerations.** A sentence with 3+ comma-separated items (especially with parenthetical details per item) scans faster as a bulleted list. Flag sentences like "X (detail), Y (detail), Z (detail), and more" — the reader's eye is already parsing vertically. Convert to a list. This applies especially to: sequences of named examples with annotations, pipeline stages with descriptions, and evidence lists with citations. (Weigh against rhetorical momentum: a deliberate rapid-fire cascade — "it kept winning, and winning, and winning" — sometimes earns the run-on. When in doubt, surface the choice.)
 
 **Long sentence alone:** a 40-word sentence standing as a paragraph has no breathing room. Pair it.
 
-### 5. Section sizing
+### 4. Section sizing
 
 **Target: 2-4 paragraphs.** One-paragraph sections fine for transitions (max 2 per post). 5+ paragraphs usually means two ideas.
 
@@ -84,7 +60,7 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **Pacing.** Sections should alternate in weight. Flag 3+ heavy sections (4+ paragraphs each) without a breather.
 
-### 6. Bold vs italic
+### 5. Bold vs italic
 
 **Bold is for definitions and terms of art.** A word is bold when the reader needs to learn it: a new concept, a named pattern, a key distinction. Bold says "remember this."
 
@@ -92,51 +68,24 @@ The skill should make the same words read better in the same order, sometimes wi
 
 **Flag non-definition bolds.** If the bolded phrase isn't introducing a term or labeling a structural element (list item, table header), swap to italic or remove. Excessive inline bold makes everything look like a heading and nothing stands out.
 
-### 7. Opening orientation
+### 6. Opening orientation
 
 The first sentence of the document, and of each major section, must land a concrete anchor a target reader can grasp *without already knowing the document's vocabulary*. Lead with what the thing is, what it does, or the stakes, in plain words; defer specialized terms until the reader is grounded. The test: would a smart non-specialist get past sentence one? (A real reader of a dense research README stopped before the first sentence ended, because the opener was three jargon terms deep with no hook.)
 
 **Translate, then name.** When a term is jargon to the target reader, give the plain version first and attach the name after, not the reverse. "Guess the cause, write a fix, test it, throw the guess out if it fails," *then* "that discipline is called methodeutics," reads; "applied methodeutics, Peirce's term for…" as the opener loses the reader who needed the plain version.
 
-**Scope.** If the concrete anchor already exists later in the piece, this is a reorder: move the buried hook up (squarely in readability's wheelhouse). If no plain anchor exists at all, flag that the opening needs one, but do not invent claims; surfacing a missing hook is the human's or /sharpen's call, not a fabrication.
-
-### 8. Active verbs
-
-A dedicated pass for verbs, after the reorder-based fixes. Where a sentence carries its meaning through a passive ("is foiled by"), a copula plus nominalization ("is a violation of"), or a weak light verb ("makes a comparison," "does the work of"), replace it with the single active verb the sentence already implies — **if and only if the meaning is identical**. The test is entailment, not vividness: "a forged link foils the chain" is already inside "the chain is foiled by a forged link," so activating it is free. Reaching for a *bolder* verb that sharpens the claim or adds an image is /sharpen's job, not this one.
-
-- **Passive with a named actor → active.** Surface the doer as subject. (Overlaps the buried-actor prosody check; do it here too.)
-- **Copula + abstract noun → the verb inside the noun.** "is a violation of" → "violates," "is the cause of" → "causes."
-- **Light verb + content noun → the content verb.** "makes a comparison" → "compares," "performs a check on" → "checks."
-- **Keep the passive** when the actor is unknown or irrelevant, or when the object is deliberately topicalized — a refrain like "entitlement is conferred by…" where *entitlement* must stay the subject. Activity is not worth losing the topic, and a motif repeated on purpose outranks the rule.
-
-The boundary: this check *activates the latent verb*; /sharpen *escalates to a stronger one*. If activating tempts you toward a verb the sentence didn't already imply, stop and leave it for /sharpen.
+**Scope.** If the concrete anchor already exists later in the piece, this is a reorder: move the buried hook up (squarely in scope). If no plain anchor exists at all, flag that the opening needs one, but do not invent claims; surfacing a missing hook is the human's or /sharpen's call, not a fabrication.
 
 ## Cross-skill policies
 
-- **Em-dash budget: 0 in prose.** Reference-list separators (`[link](url) — description`) are exempt because they're typographic, not rhetorical. Do not introduce em-dashes in body prose for pacing, parenthetical asides, or contrast pivots. Use commas, parens, colons, or sentence breaks instead. This policy lives in `/humanize`'s patterns section; readability must honor it because the pipeline runs solo on this skill too.
-
-- **Word-shuffling, plus meaning-preserving verb activation.** Reorder existing words and add/drop function words. The one content-word change allowed is activating a verb (check 8): a passive, copula, or light verb becomes the active verb the sentence already entails, meaning identical. Any verb swap that *changes* force, scope, or image is substance and belongs to `/sharpen` or human judgment.
+- **Em-dash budget: 0 in prose.** Reference-list separators (`[link](url) — description`) are exempt because they're typographic, not rhetorical. Do not introduce em-dashes in titles or body prose. Use commas, parens, colons, or sentence breaks instead.
 
 - **Clarity, not casualness.** Legibility means the reader reaches the content, not that the content is softened. Never trade a precise term for a friendlier but vaguer one; a plain word that loses the technical meaning is worse than the jargon it replaced. The fix for an alienating opener is to *orient* the reader (lead concrete, translate-then-name), not to dumb the substance down.
 
 ## Aggression by check
 
-Prosody is **uncapped**. The other checks have natural ceilings; prosody does not. Read every sentence aloud. If any sentence has a stress collision, a stress gap, a dangling preposition, a buried actor, a copula where a power verb would carry, or a clause order that breaks the given-before-new flow, rewrite it. Default to restructuring. The fail mode is leaving a clunky sentence alone because "it's technically grammatical." A clunky sentence the reader has to re-read is a cost; the cost compounds across the post.
+All six checks here are **damped**. Once they land, they're settled — a second pass should find little. This is the opposite of `/flow`, whose prosody and cohesion passes are uncapped and keep finding things. Run the structural checks once, decisively, and move on.
 
-A single readability pass should apply prosody fixes at a rate of roughly one per two or three sentences, not three or four per document. The count scales with length: a 1500-word post yields dozens, a 6000-word paper yields *more*, never fewer. If your pass found fewer than ten prosody changes on anything past a few paragraphs, you read too generously. Go again, this time committing to read aloud and edit on every stumble.
+The one check with a reorder/flag boundary is **opening orientation**: moving a buried hook up is in scope and you should just do it; inventing a hook that doesn't exist is not, and that goes to /sharpen or the human.
 
-**Excuses that mean you under-read.** Each of these is the timidity prior talking, not a real reason to leave a stumble alone. Name it and override it:
-
-- *"The document is long / dense / already heavily edited."* Length scales the fix count *up*: more sentences, more stumbles. Prior editing for argument, structure, and word choice is orthogonal to prosody. "Polished" describes substance; rhythm is a separate, uncorrelated pass, so a much-revised paragraph can have every sentence un-tuned. Dense technical prose is the *most* prone to buried actors and dangling tails, not exempt from them. Density is content; rhythm is delivery.
-- *"It's a judgment call, so I'll flag it instead of fixing it."* Within word-shuffling scope, the judgment is yours to make *and apply*. The diff is the review. Applying a fix and showing it is not the same as deciding for the human; do not silently downgrade "this needs a decision" into "this needs the human's decision" and leave the sentence alone. Flag only what genuinely exceeds the scope (a content-word swap, a claim change), not what merely requires you to choose.
-- *"It's technically grammatical."* Grammatical and clunky are independent. The reader re-reads a grammatical stumble at the same cost as an ungrammatical one.
-
-**The symmetric failure is just as real: do not manufacture fixes to hit a count.** Ten is a *smell, not a quota*. "Fewer than ten" means re-read suspiciously, not produce ten. A genuinely clean sentence stays clean; restructuring prose that was already right to look productive is the same miscalibration pointed the other way, and it *damages* the text. The target is *every real stumble fixed and none invented*. If an honest read-aloud of a well-tuned section finds three, three is the answer — provided you actually read it aloud and didn't wave it through. Both directions are failures: leaving a stumble because you're timid, and inventing one because you're chasing a number. The skill wants your ear, not your compliance.
-
-**Active verbs (check 8) sits with prosody on the uncapped side.** Every meaning-preserving passive or light verb is fair game, and like prosody, activating one sentence can expose a flat verb in the next. But hold the entailment line: the moment activation tempts you toward a verb the sentence didn't already imply, stop and leave it for /sharpen. The fail mode here is not timidity but overreach, dressing up a copula as a vivid claim the original never made.
-
-The other five checks (titles, emoji H1s, paragraph sizing, section sizing, bold/italic) are damped. Once they land, they're settled. A second pass on those should find little.
-
-Prosody can keep finding things across multiple passes and that is fine. Restructuring sentence N often surfaces a rhythm problem in sentence N+1 that was masked by the worse sentence next to it. The pipeline's monoidal contract holds at the post level (eventually the prose stops needing fixes) but prosody's per-pass ceiling is *the rhythm of the post*, not *one and done*.
-
-A technically perfect sentence that loses voice is worse than an imperfect one that sounds like a person, but most prosody fixes improve both. When in doubt, restructure.
+Pacing and sizing are judgment calls about the *shape* of the argument, not its wording — when a split or merge would change which ideas sit together, surface it rather than deciding silently.

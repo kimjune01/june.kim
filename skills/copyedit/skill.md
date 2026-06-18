@@ -1,18 +1,18 @@
 ---
 name: copyedit
-description: Run humanize → tighten → readability → flavor → codex → sharpen in a loop until convergence. The mechanical pass before line editing.
+description: Run humanize → tighten → readability → flow → flavor → codex → sharpen in a loop until convergence. The mechanical pass before line editing.
 argument-hint: <file_path> [--script]
 allowed-tools: Read, Edit, Grep, Glob, Bash, Skill, WebSearch, WebFetch, Agent
 ---
 
 # Copyedit
 
-Two modes, same pipeline (humanize → tighten → readability → flavor → codex → sharpen). The user picks.
+Two modes, same pipeline (humanize → tighten → readability → flow → flavor → codex → sharpen). The user picks.
 
 | Mode | Invocation | Shape | When |
 |------|------------|-------|------|
 | **Inline (default)** | `/copyedit <file>` | Orchestrator runs each step itself by launching one subagent per step, applying fixes between steps, and reporting each step's deltas to the user in real time. | The user wants to watch the pipeline and intervene per step. Good for new posts where surprises matter. |
-| **Scripted** | `/copyedit <file> --script` | Orchestrator launches one subagent per round that runs all six steps end-to-end and edits in place. Convergence decided by `diff -q` against the round's snapshot. Zero diff = converged. | The user trusts the pipeline and wants the deltas not the play-by-play. Good for late-stage drafts and re-runs. |
+| **Scripted** | `/copyedit <file> --script` | Orchestrator launches one subagent per round that runs all seven steps end-to-end and edits in place. Convergence decided by `diff -q` against the round's snapshot. Zero diff = converged. | The user trusts the pipeline and wants the deltas not the play-by-play. Good for late-stage drafts and re-runs. |
 
 Both modes share the same step definitions and the same monoidal contract. Default to inline if the flag is absent.
 
@@ -21,12 +21,13 @@ Both modes share the same step definitions and the same monoidal contract. Defau
 1. Read the file. Note word count.
 2. **Humanize.** Launch an opus subagent with the humanize skill definition and the post. It returns proposed changes. Apply mechanical fixes directly, flag argument-touching changes for the user. Re-read.
 3. **Tighten.** Same shape: subagent with the tighten skill, apply fixes, re-read.
-4. **Readability.** Same shape.
-5. **Flavor.** Subagent scans for unlinked pop culture refs, proper nouns, named theories, historical figures. Web-search for canonical URLs. Apply links.
-6. **Codex review.** Send current state to codex (`codex exec`, default model). If rate-limited, skip with a note. Apply feedback you agree with directly. Bunch ambiguous reservations for the user.
-7. **Sharpen.** Subagent with the sharpen skill, apply lazy-hedge fixes directly. Narrow-preserving invariant: rewrites must not widen claims. Especially important right after codex.
-8. **Convergence check.** Launch a humanize subagent on the result. If it finds anything substantive, go back to step 2. Hard cap at 5 rounds; if round 5 still produces substantive changes, flag oscillation and stop.
-9. **Final report.** Word count delta + step-by-step summary of what changed.
+4. **Readability.** Same shape: subagent with the readability skill (document shape — titles, sizing, pacing, bold/italic, orientation). Damped.
+5. **Flow.** Same shape: subagent with the flow skill (sentence-level — prosody, seam cohesion, active verbs). Uncapped; expect more changes here than in any other step.
+6. **Flavor.** Subagent scans for unlinked pop culture refs, proper nouns, named theories, historical figures. Web-search for canonical URLs. Apply links.
+7. **Codex review.** Send current state to codex (`codex exec`, default model). If rate-limited, skip with a note. Apply feedback you agree with directly. Bunch ambiguous reservations for the user.
+8. **Sharpen.** Subagent with the sharpen skill, apply lazy-hedge fixes directly. Narrow-preserving invariant: rewrites must not widen claims. Especially important right after codex.
+9. **Convergence check.** Launch a humanize subagent on the result. If it finds anything substantive, go back to step 2. Hard cap at 5 rounds; if round 5 still produces substantive changes, flag oscillation and stop.
+10. **Final report.** Word count delta + step-by-step summary of what changed.
 
 The orchestrator reports each step's deltas to the user as it goes. The user can interject at any step.
 
@@ -50,14 +51,15 @@ The orchestrator reports each step's deltas to the user as it goes. The user can
 
 Verbatim prompt the orchestrator gives the subagent, with `<FILE_PATH>` filled in:
 
-> Run the copyedit pipeline once on `<FILE_PATH>`. Six steps, serial, edit in place. Do not loop; the orchestrator handles convergence based on diff.
+> Run the copyedit pipeline once on `<FILE_PATH>`. Seven steps, serial, edit in place. Do not loop; the orchestrator handles convergence based on diff.
 >
 > 1. **Humanize.** Apply `/Users/junekim/.claude/skills/humanize/SKILL.md` patterns. Em-dash budget is 0 in prose (reference-list separators OK). Apply all mechanical fixes directly.
 > 2. **Tighten.** Apply `/Users/junekim/.claude/skills/tighten/SKILL.md`. "A bit" damping: don't over-compress.
-> 3. **Readability.** Apply `/Users/junekim/.claude/skills/readability/SKILL.md`. Prosody, structure, pacing.
-> 4. **Flavor.** Apply `/Users/junekim/.claude/skills/flavor/skill.md`. Web-search for canonical URLs and apply hyperlinks inline.
-> 5. **Codex review.** Send the current file to codex (`codex exec "..."`, default model). If codex is rate-limited, skip and note. Apply feedback directly. Bunch judgment-call reservations.
-> 6. **Sharpen.** Apply `/Users/junekim/.claude/skills/sharpen/skill.md`. Narrow-preserving invariant.
+> 3. **Readability.** Apply `/Users/junekim/.claude/skills/readability/SKILL.md`. Document shape: titles, emoji H1s, paragraph/section sizing, bold/italic, opening orientation. Damped — once it lands, it settles.
+> 4. **Flow.** Apply `/Users/junekim/.claude/skills/flow/SKILL.md`. Sentence-level, reorder-only: prosody, between-sentence cohesion (the known-new contract), active verbs. Uncapped — read aloud and walk the seams.
+> 5. **Flavor.** Apply `/Users/junekim/.claude/skills/flavor/skill.md`. Web-search for canonical URLs and apply hyperlinks inline.
+> 6. **Codex review.** Send the current file to codex (`codex exec "..."`, default model). If codex is rate-limited, skip and note. Apply feedback directly. Bunch judgment-call reservations.
+> 7. **Sharpen.** Apply `/Users/junekim/.claude/skills/sharpen/skill.md`. Narrow-preserving invariant.
 >
 > Pass-through (don't touch): front matter, code blocks, markdown tables, SVG/img tags, reference lists at the bottom of the post.
 >
