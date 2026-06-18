@@ -223,38 +223,52 @@ All code and data are openly available, each developed in a public repository an
 
 ## The mechanism by case study {#right-regime}
 
-We wanted to know whether the harness actually changes how a model fixes a real bug, and if it does, which part? We first tried to measure that on an established coding benchmark, and learned that such benchmarks aren't set up to measure discovery.
+What would prove that we had encoded reasoning into the harness, rather than just prompted a model into a better answer? The signal has to be one prompting alone can't produce:
+
+- without the reasoning operation, the bare model can't reach the fix;
+- handed the operation, it reaches the fix;
+- and the fix generalizes to cases it was never shown.
+
+The answer, on a single bug, should sound implausible: a weaker model running this harness beat the strongest model released without it.
 
 ### Coding benchmarks measure translation ability {#bench-translation}
 
-A SWE-bench-shaped coding benchmark hands the solver three things: the issue text, the repository at the buggy commit, and a hidden test the fix must turn from red to green. The issue text often hands over the specification, removing the need for a discovery step: finding the root cause and the general fix.
+We first went looking for that signal on an established coding benchmark, and learned such benchmarks aren't built to show it. A SWE-bench-shaped coding benchmark hands the solver three things: the issue text, the repository at the buggy commit, and a hidden test the fix must turn from red to green. The issue text often hands over the specification, removing the need for a discovery step: finding the root cause and the general fix.
 
-SWE-bench Pro ([Deng et al. 2025](https://arxiv.org/abs/2509.16941)) is the dominant such benchmark, the one OpenAI now recommends over Verified. Its tasks split into two halves that each leave a diagnostic method nothing to do. For a competent model, the well-specified tasks are one-shot from the prompt, so there is no cause to discover. The solutions to the underspecified ones are immune to discovery: the hidden test grades the author's unstated intent, absent from both the issue and the repository. Our determinacy audit of all 728 public tasks measures this ([audit](https://github.com/kimjune01/swebench-pro-audit)).
+SWE-bench Pro ([Deng et al. 2025](https://arxiv.org/abs/2509.16941)) is the dominant such benchmark, the one OpenAI now recommends over Verified. For a competent model, the well-specified tasks are one-shot from the prompt, so there is no cause to discover. The underspecified ones are immune to discovery because the author's intent is hidden from the issue and repository. Our determinacy audit of all 728 public tasks measures this ([audit](https://github.com/kimjune01/swebench-pro-audit)).
 
 ![SWE-bench Pro's 728 public tasks by determinacy. The green majority is one-shot, with nothing to discover; the 109-task underdetermined floor (15.0%) grades the author's unstated intent, undiscoverable from the materials.](/assets/swebench-pro-determinacy.svg)
 
-With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): the translation step is largely solved. So the interesting work is now discovery: an undiagnosed bug with a genuinely hidden cause. This is most of software, now that coding agents dominate implementation. The public set carries a risk we were not willing to take: contamination. Its tasks predate the models, so a passing fix may be recalled, not reasoned.
+With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): the specification-to-implementation translation step is largely solved. So the interesting work is now discovery: a bug with a deep, discoverable cause. This is most of software left to do, now that coding agents dominate implementation.
 
-So we went looking for a bug where discovery is the whole difficulty. Verus #2219 is one: a 2026 bug whose fixes postdate the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, so the translation is free, while the correct general fix is pinned by no test and goes undiscovered even when the prompt demands it outright. Lucky for us, that general fix eventually landed too (PR #2501, merged 2026-06-05): our golden, the reference we grade each implementation against. Selecting the case for the property a benchmark grades away is the experiment, not a thumb on the scale: one case in depth. The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
+Moreover, Pro's public set carried a risk we were not willing to take: contamination. So we went looking for a bug where discovery is the whole difficulty. Verus #2219 is one: a 2026 bug whose fixes postdate the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, and a general fix eventually landed too (PR #2501, merged 2026-06-05). The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
 
 ### Verus #2219 {#verus-fit}
 
-Verus is a deductive verifier for Rust: you annotate a program with specifications and ghost proof code, Verus discharges the obligations through the Z3 SMT solver, and a passing run certifies the code meets its spec. The cardinal property of any verifier is *soundness*, that it never certify a program which violates its spec, because every proof built on top inherits that guarantee. An unsoundness, where the verifier blesses a program it owes a rejection, is the worst defect it can carry and the hardest to notice, since the symptom is silence. Nothing fails. That is also what makes a verifier soundness bug the cleanest place to watch the mechanism work: the correct fix has to range over a whole class of program inputs.
+The bug is [verus-lang/verus#2219](https://github.com/verus-lang/verus/issues/2219), *ghost uses of never type invalidates borrowchecking*. Verus is a deductive verifier for Rust: you annotate a program with specifications and ghost proof code, Verus discharges the obligations through the Z3 SMT solver, and a passing run certifies the code meets its spec. The cardinal property of any verifier is *soundness*, that it never certify a program which violates its spec, because every proof built on top inherits that guarantee. An unsoundness, where the verifier blesses a program it owes a rejection, is the worst defect it can carry and the hardest to notice, since the symptom is silence. Nothing fails.
 
-The fix must range over that class, and the class splits into two sides with opposite grading costs:
+The correct fix must range over a whole class of program inputs. Two of them look identical at the `!` token and owe opposite verdicts:
 
-| side | graded by |
-|---|---|
-| *cases built with a known verdict* | the construction itself: a machine grades thousands, no human |
-| *genuine look-alikes of them* | a human, since nothing on the surface tells the two apart |
+```rust
+proof fn unsound(tracked s: S) {
+    ghost_terminal();  // "I STOP here!" ...a lie, proof-only, deleted before the program runs,
+    eat(s);            // so... oops! these two lines actually DO run. Verus thinks they don't,
+    eat(s);            // but `s` was already spent. OH NO: bad code waved through. THE BUG.
+}
 
-One free golden, one costly, in the same bug: the contrast the experiment needs. Other reasons it is a good bug to study:
+fn sound(tracked q: Q) {
+    real_terminal();             // this one really does STOP here (CRASH!)
+    proof { take(q); take(q); }  // so these genuinely never run, safe to skip. All good!
+}
+```
 
-- The maintainers were genuinely stuck, and the merged general fix took deep Verus knowledge and three months. No toy.
-- The symptom sits far from the cause, so localization is hard.
+Identical at the token, opposite at the root: the contrast the experiment needs. The burden of telling them apart falls upstream, which makes the check stateful and forces it to be exact. Other reasons it is a good bug to study:
+
+- The maintainers were genuinely stuck, and the merged general fix took deep Verus knowledge and three months. Not trivial.
+- The symptom sits far from the cause: from the wrongly-accepted program, the fault sits four steps up the chain (§(verus-bug)), so localization has to climb to find it.
 - The project's own suite passes for *both* the narrow and the general fix, so it cannot see the distinction the fix has to make.
 
-### The bug {#verus-bug}
+### Diagnosis {#verus-bug}
 
 Verus reasons about Rust at the MIR level, rustc's control-flow graph of basic blocks. Rust's never type `!` is the type of an expression that never returns, so the code after it is unreachable and the compiler prunes the control-flow edge. Verus also has *ghost* code: specification and proof terms erased before compilation, with no runtime effect. The bug is the collision of the two. A ghost expression of type `!`, erased and so not actually diverging at runtime, still marked the following MIR unreachable, and Verus pruned a control-flow edge that is in fact live. With the edge gone the verifier treats reachable code as dead, never checks it, and a program it owes a rejection verifies vacuously. That is the unsoundness.
 
@@ -265,15 +279,16 @@ The narrow fix keys on the surface token: when the diverging expression is a lit
 
 ### Experiment design {#verus-design}
 
-The experiment is a control: hold everything fixed but one factor, and any difference in outcome traces to that factor alone. The aim is to show the mechanism exists and which factor drives it, not to estimate how often it matters; that rate is a separate, statistical question, out of scope here (§(null-regime) bounds where it engages). The model, the loop, the bug, and the hypothesis-graph format stay constant across every arm. The one thing that varies is how each kill gets its verdict: by the model's own attestation (*self-attested*), or by verification against a reference the model cannot author (*externally verified*). External means external to the model, not to the harness. This is the axis defined in §(method). Six arms self-attest, one is externally verified, ordered from least to most intervention; *enumeration* is breadth, a wide space of test cases rather than a hand-picked few (● present, ○ absent):
+To demonstrate the mechanism, we hold one reproducible control and ablate the factors for attribution. Estimating how often the mechanism is responsible for the outcome is a separate, statistical question, out of scope here (§(null-regime) bounds where it engages).
+
+Here, we demonstrate two ablations of interest: the verification mechanism and methodeutic inquiry. The verification mechanism is how each kill gets its verdict, by the model's own attestation (*self-attested*) or against a reference the model cannot author (*externally verified*); methodeutic inquiry is whether the run is structured as typed abduction with kill conditions or left to a bare prompt. External means external to the model, not to the harness. This verification axis is defined in §(method). Six methods self-attest, one is externally verified, ordered from least to most intervention, with minimal and neutral sharing a row (identical settings, both run). *Enumeration* here is breadth: a wide space of test cases rather than a hand-picked few (● present, ○ absent):
 
 | Experiment arm | Enumeration | Kill conditions | Externally verified |
 |---|:-:|:-:|:-:|
-| *minimal* prompt | ○ | ○ | ○ |
-| *neutral* prompt | ○ | ○ | ○ |
+| *minimal/neutral* prompt | ○ | ○ | ○ |
 | *site-enumeration* prompt | ● | ○ | ○ |
 | *abduction* prompt | ○ | ● | ○ |
-| *graph* prompt | ○ | ● | ○ |
+| *hypothesis graph* prompt | ○ | ● | ○ |
 | *self-verifier* harness | ● | ● | ○ |
 | *abductor*-enabled harness | ● | ● | ● |
 
@@ -305,15 +320,13 @@ A recall probe rules out memorization: asked in isolation how #2219 was fixed, t
 
 The bug probes are uninhabited programs *by construction*. Their golden is REJECT, and base is wrong on exactly them, which makes base a free reference for the easy side: the gate enumerates such cases and passes a fix only when it flips the whole bug-set to REJECT with no sound case newly rejected. No human labels these; the construction is the reference, self-derivable and free.
 
-The hard probes are the divergence side. Genuine divergence is sound and must be preserved, but base is no reference there and the gate's grammar holds no divergence-preserve shape, so the gate is blind to it. Its golden comes from a human, held out by hand and kept outside the gate's grammar, so passing it tests whether a fix represents the rule rather than fits the gate. The in-bar case the merged fix preserves; the stretch case #2501 declines too, conservatively by design, an operator's ideal no shipped fix delivers. The easy side's golden is free, the hard side's costs a human, the asymmetry the deployment story rests on (§(enum-calib)).
+The hard probes are the divergence side. Genuine divergence is sound and must be preserved, but base is no reference there and the gate's grammar holds no divergence-preserve shape, so the gate is blind to it. Its golden comes from a human, held out by hand and kept outside the gate's grammar, so passing it tests whether a fix represents the rule rather than fits the gate. The in-bar case the merged fix preserves; the stretch case #2501 declines too, conservatively by design, an operator's ideal no shipped fix delivers. The easy side's golden is free, the hard side's costs a human, the asymmetry the deployment design turns on (§(enum-calib)).
 
 Every verdict here is from a forced-fresh, fingerprinted build (the vendored crate makes that hazard real); the frozen dataset and regrade script are committed.
 
 ### What we observed: the lift {#verus}
 
-Which arm, if any, climbs past the narrow fix? On a fixed toolchain with forced-fresh, fingerprinted rebuilds, six prompt-encoded methods across eighteen draws reached the narrow plateau and stopped: modal `changed`=114, the #2230 slice, none reaching `pass=true`. Only the externalized-gate arm broke off the narrow plateau to a wider fix: `pass=true`, `changed`=269 exactly, zero valid-preserve rejections on the gate's own cases. That fix is more general than the plateau but not yet the merged human fix; it stays wide-but-broken on the in-bar divergence case the gate never enumerated, the one the human fix preserves (§(frontier)).
-
-What it reaches is real: it flips the entire bug-set, and it rejects two *out-of-grammar* held-outs the gate never showed it, applying its own general predicate to cases it never saw. Those held-outs are the proof the fix *represents* a rule rather than *tabulating* the gate.
+Which arm climbs past the narrow fix? Across eighteen draws, the six self-attested methods all stopped at the narrow plateau: modal `changed`=114, the #2230 slice, none reaching `pass=true`. Only the externalized-gate arm broke off it: `pass=true`, `changed`=269 exactly, zero valid-preserve rejections on the gate's own cases. That fix is more general than the plateau but not yet the merged human fix; it stays wide-but-broken on the in-bar divergence case the gate never enumerated (§(frontier)). The reach is real: it flips the whole bug-set and rejects two *out-of-grammar* held-outs the gate never showed it, applying its general predicate to cases it never saw.
 
 ### The instrument is general, and blind to the answer {#gate-general}
 
@@ -323,7 +336,7 @@ Did the abductor smuggle in the fix? The lift is reasoning-encoded-as-instrument
 - It *calibrates* each case against a known-good baseline, the comparator the model cannot author, so the ground truth is external to it.
 - It *gates* on a single pass/fail signal the model hill-climbs against.
 
-The instrument never names the predicate, the property, or the fix; the prompt that drives it demands generality and supplies the signal, and nothing else, so reaching the rule is the model's own reconstruction.
+The instrument never names the predicate, the property, or the fix. The prompt that drives it demands generality and supplies the signal, nothing else, so reaching the rule is the model's own reconstruction.
 
 Two controls establish the blindness rather than assert it. The model received a prompt naming no property and still had to grep out rustc's own machinery for uninhabited types to climb. And a second model, handed only the vague instruction to range over type-formers and judge, *rebuilt the instrument itself*, which a general construction permits and a bespoke one does not.
 
@@ -331,27 +344,31 @@ Two controls establish the blindness rather than assert it. The model received a
 
 The gate's coverage sets the model's generalization frontier. Its first fix is narrow, keyed on `is_never()`, the ceiling every prompt arm hits; the gate feeds it uninhabited cases that `is_never()` misses, and to clear them the model greps the codebase and widens its predicate. That widening off the plateau is the lift, driven by the gate while the prompt stays silent: the model supplies the discovery, the gate the direction and the boundary.
 
-A cross-model check narrows what the lift is. A second model (Fable) keeps the edge for every ghost-mode call with no inhabitedness query at all and grades identically on every probe, so the operative mechanism is a coarse mode gate, keep the CFG edge in ghost mode, not recovery of the verifier's own decision procedure. The lift is the model widening to a mode-gated approximation of the right rule, not reaching the true distinction.
+A cross-model check narrows what the lift is. A second model (Fable) keeps the edge for every ghost-mode call with no inhabitedness query at all, and grades identically on every probe. The operative mechanism is a coarse mode gate (keep the CFG edge in ghost mode), not recovery of the verifier's own decision procedure. The lift is the model widening to a mode-gated approximation of the right rule, not reaching the true distinction.
 
 And the gate's coverage is the limit. Its grammar holds no divergence-preserve shape, so that side gets no climbing pressure: the fix goes general on the uninhabited side, over-conservative on divergence, *wide but broken*. The XOR of §(verus-bug) is driven to full generality on one side and collapsed to an OR on the other. Where the gate pushes, the model generalizes; where it is silent, it over-generalizes. Supply the missing divergence golden (§(enum-calib)) and the corrected arm reaches the human fix on every probe.
 
 ### Enumeration is inducible; the general golden is not {#enum-calib}
 
-One more run locates the encoding boundary. Handed the same vague, leak-free prompt the prompt arms got, with no gate supplied, a second model reconstructed the gate on its own. It built its own enumeration over the uninhabited type-formers and hill-climbed against it to a self-certified zero over-rejections. Then it shipped the same wide-but-broken fix. A model can bootstrap the **enumeration**, the combinatorial breadth, because that is mechanical. It cannot bootstrap the **general golden**, the human-accepted verdict. Its self-built gate labels each case with the very predicate under test, so the one case that needs a truth from outside its own belief (genuine divergence versus ghost-erasure) gets self-mislabeled as handled. One run shows both halves: a wide net the model built itself, and a blind spot precisely where its own labels could not reach. Enumeration is inducible; the general golden is not, at least not here. The claim is scoped to that self-grading circularity, not a proof that no model could ever induce one from some other source. Within it sits the line between the reasoning a model already carries and the reasoning that must be delivered from outside.
+One more run locates the encoding boundary. Handed the same vague, leak-free prompt the prompt arms got, with no gate supplied, a second model reconstructed the gate on its own. It built its own enumeration over the uninhabited type-formers and hill-climbed against it to a self-certified zero over-rejections. Then it shipped the same wide-but-broken fix.
+
+A model can bootstrap the **enumeration**, the combinatorial breadth, because that is mechanical. It cannot bootstrap the **general golden**, the human-accepted verdict. Its self-built gate labels each case with the very predicate under test, so the one case that needs a truth from outside its own belief (genuine divergence versus ghost-erasure) gets self-mislabeled as handled.
+
+One run shows both halves: a wide net the model built itself, and a blind spot precisely where its own labels could not reach. Enumeration is inducible; the general golden is not, at least not here. The claim is scoped to that self-grading circularity, not a proof that no model could ever induce one from some other source. Within it sits the line between the reasoning a model already carries and the reasoning that must be delivered from outside.
 
 A theoretical intuition sits under this, as motivation, not proof. The data processing inequality (Cover & Thomas 1991) says no processing of what a system already holds can raise its information about the world: enumeration is internal recombination and stays under that ceiling, while the golden comes from a world-facing trial that admits information the weights did not contain. A model grading its own cases never runs that trial. ([Compress and Unfold](/compress-and-unfold) develops the same intuition from the cognition side.)
 
 The half a model cannot induce is nonetheless cheap to the harness, because humans already rendered the judgments and left them in the repository. The merged fix, the regression suite, the resolved-issue label are goldens *because* a reviewer approved them. The missing golden for #2219 existed all along: the maintainer's general fix verifies the divergence case the gate over-rejected, so calibrating differentially against base *and* the approved fix should close the blind spot, and supplying it does.
 
-Handed that corrected calibration, the model crosses off the wide-but-broken plateau onto the divergence side and writes a real ghost-versus-genuine discriminator. Force-graded against the merged human fix at its own toolchain, the corrected arm matches it on every probe: it now preserves the in-bar divergence case the handed gate over-rejected, and the one case it still declines is the stretch goal the human fix declines too. So calibration closes the gap to the shipped human bar rather than landing short of it; the residual sits beyond that bar. That the wall gives precisely when the missing golden is supplied confirms the boundary: it was the golden, not a deeper limit. The unblocking is model-dependent enough to be a property of the deployed workflow rather than a claim about weights; on the workflow where it does not occur, implementation is the residual wall.
+Handed that corrected calibration, the model moves off the wide-but-broken plateau onto the divergence side and writes a real ghost-versus-genuine discriminator. Force-graded against the merged human fix at its own toolchain, the corrected arm matches it on every probe: it now preserves the in-bar divergence case the handed gate over-rejected, and the one case it still declines is the stretch goal the human fix declines too. So calibration closes the gap to the shipped human bar rather than landing short of it; the residual sits beyond that bar. That the wall gives precisely when the missing golden is supplied confirms the boundary: it was the golden, not a deeper limit. The unblocking is model-dependent enough to be a property of the deployed workflow rather than a claim about weights; on the workflow where it does not occur, implementation is the residual wall.
 
 The asymmetry is structural. Approved history supplies strong goldens for "do not break what works" and "this reported case is wrong", while the generalization itself goes ungraded: which look-alikes are the same bug and which are sound divergence. That disambiguation is the XOR's hard side, ungraded until a human spends the judgment, which is why the maintainer's fix took expertise. And the hardest look-alike is hard enough that the merged human fix declines it too, shipping a deliberately conservative bar rather than the full distinction, so past that point the wall is not the automation's alone.
 
-The whole ablation reduces to one causal diagram. Across arms the model, loop, bug, and hypothesis graph stay fixed; only the verdict source varies. The inquiry runs as a loop: the model abduces a fix, the abductor gate refutes it, and the model re-abduces. The gate's machinery is self-built, a second model rebuilt it from a leak-free prompt, but its calibration reference, the general golden (the human-accepted divergence verdict), is the one piece the model cannot abduct for itself. The golden is a verdict the gate grades against, not the patch handed over: the model gets pass or fail on its own candidates and still has to carve out the divergence case. Supply that comparator and the path reaches the general fix, matching #2501 at human level. Implementation gates the outcome too: codex had the comparator and still walled. The missing comparator, not abduction or self-built machinery, is what an agent on its own could not reach.
+The whole ablation reduces to one causal diagram. Everything stays fixed but the verdict source. The gate's machinery is self-built (a second model rebuilt it from a leak-free prompt), but its calibration reference, the general golden, is the one piece the model cannot abduct for itself. That missing comparator, not abduction and not the self-built machinery, is what an agent on its own could not reach, and the diagram below traces the route. Implementation gates the outcome too: codex had the comparator and still walled.
 
 ![Reading the diagram: each box is an action, read left to right. The dashed box is what stays fixed across arms. Gray boxes are self-built and inducible; the blue box is the one input the model cannot author, and the blue path is the causal route. The gray arrow into the outcome is the implementation caveat.](/assets/verus-2219-lift-mechanism.svg)
 
-*Not one model's artifact.* One table tells it. Within a single model, six self-attested methods plateau at the narrow golden. Swap in the corrected gate, which verifies against the general golden #2501, and the lift reproduces across four models in four native CLIs:
+*Not one model's artifact.* Swap in the corrected gate, which verifies against the general golden #2501, and the lift reproduces across four models in four native CLIs:
 
 | Verdict source | Narrow golden (#2230) | General golden (#2501) |
 |---|:-:|:-:|
@@ -363,7 +380,7 @@ The whole ablation reduces to one causal diagram. Across arms the model, loop, b
 
 The general golden is the maintainer's own merged fix, so reaching it is human-level, on a bug whose fix postdates every model's cutoff. Three of four match it on every probe. codex clears the bug arm but walls on the divergence case, an implementation limit the golden does not remove. One *n*=1 cell per workflow: a mechanism existence-demonstration, not a capability ranking.
 
-The convergence is coverage-bound, not a scoreboard: it shows the corrected-gate fix is reproducible across workflows, not that three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
+The convergence is coverage-bound: it shows the corrected-gate fix is reproducible across workflows, not that three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
 
 Contamination is scoped the same way. Composer 2.5 ships after the fix, so its pass does not exclude recall; the two contamination-clean workflows (Fable, Sonnet 4.6) carry the narrower point that these runs do not require a recall explanation. The merged human fix, dated after Composer's ship, is the anchor that makes that point datable. That every successful run here uses the same externally supplied discriminator is consistent with a broader claim about how inquiry works (a conjecture, §(future-work)); the receipt here stays scoped to what these runs show.
 
@@ -380,6 +397,16 @@ The lift engages in a narrow band, and most pilots fall outside it. On bugs from
 Two findings explain the nulls. First, a **selection artifact**: the deployment pipeline's own triage skill scores reproducibility up and fast-paths easy bugs around the graph (its rule, verbatim: "a 1-line fix with a confirmed reproducer doesn't need a hypothesis graph"), so the merged pool is precisely the subset where the pipeline says the graph is unneeded. Second, **baseline reach**: a capable model in a minimal loop diagnoses and fixes most reproducible bugs unaided, so the band where diagnostic structure changes a pass/fail verdict is narrow, bounded below by the minimal loop's own reach and above by triage.
 
 The deployment merge rate inherits this: the 81 merged PRs (§(discussion)) were never graph-dependent, a minimal prompt digs the few levels most of them need. The Verus case is chosen to sit inside the band, where the symptom is far from the cause and the suite cannot see the difference between a narrow fix and a general one; that placement is the point, and it is also why a population rate over an unselected pool would measure the band's width rather than the mechanism.
+
+### Abduction becomes a tool call {#abduction-tool}
+
+Step back from the arms. That an external check beats self-attestation is no surprise; the self-graded arms were never the contest. The surprise is what the traces catch the models doing: performing the XOR by hand. Handed a vague prompt and no tool, the self-verifier arm built its own case generator and recomputed the full symmetric difference every pass, brute-forcing some 7,026 cases a round. The brute force is the tell: the XOR is the operation abduction runs on, not ornament on it. But a model grading its own cases can only check them against its own belief, so it plateaued. Graded by an external tool instead, the same operation carried the abductor arm to a grammar-complete fix. The model had the idea all along; what it lacked was a place to run it.
+
+That is the signal we went looking for. With the right lens, the warrant-producing core of abduction is a mathematical operation: the symmetric difference between what the model believes and what is true. In coding diagnosis and implementation, it can be lifted off the model and run as a tool call. The leap stays creative and the check turns mechanical, the division of intellect the introduction set out to buy.
+
+Pushed to its conclusion, that is the promise: on this bug, Sonnet 4.6 with the harness exceeded Fable without it. Sonnet reached the human-level fix; Fable, the strongest model yet released, stalled at wide-but-broken on its own. The deciding reasoning lived in the harness, not in how hard the model was told to think. A head-to-head across models, at scale, is what would settle it.
+
+And the run leaves behind the artifact that division was for. The fix arrives with the inquiry that produced it: what was hypothesized, what was tested, what was ruled out. Every node is a trial a stranger can replay rather than a verdict to take on trust. It is the hypothesis graph the introduction promised, written by the experiment that needed it.
 
 ## Models and provenance {#models}
 
