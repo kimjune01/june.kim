@@ -1,6 +1,6 @@
 ---
 name: not-but
-description: Find and defuse "not X but Y" / "isn't X; it's Y" / "X — not Y" constructions. Deterministic grep for detection (no LLM blind spot), the not-but subagent for triage. Cut dead-weight negations; recast non-iconic earned contrasts with a varied substitute palette (keep the contrast, change the construction); keep only iconic thesis lines literal.
+description: Find and defuse "not X but Y" / "isn't X; it's Y" / "X — not Y" constructions. Deterministic grep for detection (no LLM blind spot), the not-but subagent for triage. Split-or-cut tail negations ("X, not Y") aggressively — promote the point to its own sentence or delete it; recast in place only mid-clause "not X but Y" that genuinely can't be split; keep just the rare iconic thesis line literal.
 argument-hint: <file_path>
 allowed-tools: Read, Edit, Grep, Bash, Agent
 ---
@@ -15,9 +15,11 @@ Sister skill to `/humanize`. Where humanize scans broadly across many patterns, 
 
 - **Dead-weight** — the negation is filler; Y stands alone. Cut it. **Two sharpeners for tail-attached negations (`X, not Y` / `X — not Y`), which are often remnants of an earlier not-but recast:** (a) judge redundancy at *paragraph* scope, not sentence scope — a tail can parse fine in its own sentence and still be dead because the paragraph already planted the positive; (b) the *own-sentence test* — if the negated point is important enough to keep, it earns its own sentence; if it cannot stand as one, cut it. A tail that is neither paragraph-novel nor sentence-worthy is dead-weight.
 - **Iconic** — a thesis line whose force *is* the antithesis ("True and false are not opposites but siblings"). Keep the literal construction. These are rare; protect them.
-- **Earned-but-varyable** — the contrast is real and must survive, but the syntax should change. This is the COMMON case in argumentative prose. Keep the contrast, recast the construction. Never delete the distinction.
+- **Earned-but-varyable** — the contrast is real and must survive, but the syntax should change. Keep the contrast, recast the construction. Never delete the distinction. For *mid-clause* `not X but Y` this is the common case; for tail forms it mostly collapses into split-or-cut (next paragraph).
 
-The earned-but-varyable bucket is the skill's main yield on already-tight prose, where almost everything triages as "earned" under the old two-way rubric and nothing gets fixed. The density of the construction is the tell, not any single instance.
+The earned-but-varyable bucket is the skill's main yield on already-tight prose, where almost everything triages as "earned" under a two-way rubric and nothing gets fixed. The density of the construction is the tell, not any single instance.
+
+**Tail negations get the aggressive default: split or cut, not recast.** AI tics are easy enough to spot now that the *shape* costs more than any cleverness it carries, so overcompensate toward removal. For tail-attached forms (`X, not Y`, `X — not Y`, `X, not just Y`), do not swap one tail for another contrastive (`instead of`, `where X, Y`) and call it fixed. Decide each by the own-sentence test: if the negated point earns keeping, promote it to its own sentence (`X. It is not Y.` / `X. Y already holds.`); if it cannot stand as a sentence, cut it. Recast-in-place via the palette is reserved for mid-clause `not X but Y` that genuinely cannot be split. And the iconic bucket is *tiny* — often a single line in a long document, rarely more than three. A 16k-word paper holding exactly one (`Merit attaches to the work, not the doer`) is the calibration, not six-to-ten.
 
 ## Process
 
@@ -49,7 +51,7 @@ The earned-but-varyable bucket is the skill's main yield on already-tight prose,
 3. **Triage (subagent).** Dispatch to the `not-but` subagent (defined in `~/agents/not-but.md`, or fallback to `general-purpose` if not registered). Pass:
    - The file path
    - The deduplicated list of hits with line numbers and matched lines
-   - The rubric, in two questions: (1) *Can the sentence be replaced by just stating Y, with no loss of meaning?* If yes → **dead-weight**. Judge this at *paragraph* scope, not just the sentence; for tail-attached negations also apply the own-sentence test (see the three outcomes above). (2) If no (the contrast is real), *is this a thesis line whose whole force is the antithesis?* If yes → **iconic** (keep literal); if no → **earned-but-varyable** (recast the construction, keep the contrast). Most real contrasts in dense prose are varyable, not iconic.
+   - The rubric, in two questions: (1) *Can the sentence be replaced by just stating Y, with no loss of meaning?* If yes → **dead-weight**. Judge this at *paragraph* scope, not just the sentence; for tail-attached negations also apply the own-sentence test (see the three outcomes above). (2) If no (the contrast is real), *is this a thesis line whose whole force is the antithesis?* If yes → **iconic** (keep literal); if no → **earned-but-varyable** (keep the contrast). Most real contrasts in dense prose are varyable, far from iconic. **For tail-attached hits (`X, not Y` / `X — not Y`), a varyable verdict means split-or-cut, not recast:** promote the negated point to its own sentence if it earns keeping, else delete the tail. Reserve in-place palette recasts for mid-clause `not X but Y` that cannot be split into two clean sentences.
 
    The subagent reads context, applies the rubric, and returns a per-hit verdict of **dead-weight / iconic / earned-but-varyable** (see the three outcomes above). Pass it two more things:
    - **The iconic-keep list** for this document, if known (the handful of thesis lines whose antithesis is the point). When unknown, instruct the subagent to nominate them conservatively and default everything else to varyable.
@@ -69,7 +71,7 @@ The earned-but-varyable bucket is the skill's main yield on already-tight prose,
 
 4. **Apply.** Three different decisions, three different sources of authority. The skill enforces this separation because it is the source of the skill's value.
 
-   - **Change decision (mechanical).** Once the subagent verdicts a hit as dead-weight or earned-but-varyable, the literal "not X but Y" construction goes. Dead-weight → cut the negation; varyable → recast it via the palette. No re-litigation by the orchestrator. Letting the orchestrator re-judge re-introduces the LLM blind spot the deterministic detection was designed to defeat — the orchestrator has read the full document, built attachment to the prose, and will rationalize "actually this one reads fine" more often than the rubric warrants.
+   - **Change decision (mechanical).** Once the subagent verdicts a hit as dead-weight or earned-but-varyable, the literal "not X but Y" construction goes. Dead-weight → cut the negation; varyable tail → split into its own sentence or cut; varyable mid-clause → recast via the palette. No re-litigation by the orchestrator. Letting the orchestrator re-judge re-introduces the LLM blind spot the deterministic detection was designed to defeat — the orchestrator has read the full document, built attachment to the prose, and will rationalize "actually this one reads fine" more often than the rubric warrants.
    - **Phrasing of the recast (orchestrator discretion).** The subagent's proposed rewrite is a draft. The orchestrator has the full document context the subagent didn't and can refine wording, merge adjacent fixes, restructure sentence boundaries, match surrounding rhythm, and — for varyable hits — swap one palette device for another to keep the document's overall device mix diverse. The one rule: do not restore the bare "not X but Y" shape. Taste lives here. (A recast that would be clunkier than the original is the one exception: kick it back to KEEP and note why. A varyable verdict is not a mandate to make the prose worse.)
    - **Re-classification as iconic (user only).** Not the orchestrator's call. If the orchestrator genuinely thinks a varyable verdict should be left literal (a thesis line the subagent missed), surface it in the report — not in the apply — so the user makes the final call.
 
@@ -84,7 +86,7 @@ The earned-but-varyable bucket is the skill's main yield on already-tight prose,
 
    When /not-but runs under /humanize, /humanize uses the applied-cuts list to build its post-apply earn-back report and offer `undo N` (or `undo 2,4,7`) to restore specific cuts. When /not-but runs standalone, present the same list as the final output and accept the same undo affordance directly.
 
-6. **Verify**: re-grep after edits. The "not X but Y" hits remaining should match the iconic kept-literal list (varyable hits are recast into other shapes, so they drop out of the grep; tail-attached "X, not Y" milder forms may remain by design). A leftover that is neither iconic nor an intended mild tail means a false-negative in the apply step — note for skill iteration.
+6. **Verify**: re-grep after edits. Every remaining tail negation should be on the tiny iconic kept-literal list — varyable tails are split or cut and varyable mid-clause hits are recast, so both drop out of the grep. A surviving `X, not Y` that is not iconic means a false-negative in the apply step (or a hit the original grep missed — re-run the full pattern set, since clustered tails hide each other on a long line). Note either for skill iteration.
 
 ## Composability
 
