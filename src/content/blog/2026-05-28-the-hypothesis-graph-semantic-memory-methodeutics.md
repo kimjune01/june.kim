@@ -215,7 +215,7 @@ To keep that hypothesis from being one model's artifact, two frontier models fro
 
 ### Deterministic gating and the outer loop {#gating}
 
-The control loop is standard: the driver routes on `attest`'s verdict and re-entry route under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hypothesis graph doubles as the loop's checkpoint and no dead branch is re-proposed. That leaves the inner layer still owed a demonstration. The external oracle the opening made the crux is what the gate leans on, and §(right-regime) isolates it on a single bug, where it does most of the work the bench number seems to credit to diagnosis.
+The control loop is standard: the driver routes on `attest`'s verdict and re-entry route under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hypothesis graph doubles as the loop's checkpoint and no dead branch is re-proposed. That leaves the inner layer still owed a demonstration. The oracle the opening made the crux is what the gate leans on, and §(right-regime) isolates it on a single bug, where it does most of the work the bench number seems to credit to diagnosis.
 
 ### Artifact availability {#artifact}
 
@@ -263,26 +263,55 @@ Verus reasons about Rust at the MIR level, rustc's control-flow graph of basic b
 The narrow fix keys on the surface token: when the diverging expression is a literal `!`, keep the edge. The maintainer's first patch (#2230) does exactly this, and it is the ceiling every self-graded method reaches. The general fix keeps the edge for the whole class of uninhabited types the `!` token never names, which a surface-token fix cannot reach. That distinction is the XOR the experiment lives on.
 
 
-### Designing the experiment {#verus-design}
+### Experiment design {#verus-design}
 
-Every arm writes a hypothesis graph by the same loop; what varies is only where a kill gets its truth. The model, the loop, and the bug are held fixed across all of them, so any gap traces to the oracle's source. Six prompt-encoded approaches grade their kills against the model's own belief, each run three times:
+The experiment is a control: hold everything fixed but one factor, and any difference in outcome traces to that factor alone. The aim is to show the mechanism exists and which factor drives it, not to estimate how often it matters; that rate is a separate, statistical question, out of scope here (§(null-regime) bounds where it engages). The model, the loop, the bug, and the hypothesis-graph format stay constant across every arm. The one thing that varies is how each kill gets its verdict: by the model's own attestation (*self-attested*), or by verification against a reference the model cannot author (*externally verified*). External means external to the model, not to the harness. This is the axis defined in §(method). Six arms self-attest, one is externally verified, ordered from least to most intervention; *enumeration* is breadth, a wide space of test cases rather than a hand-picked few (● present, ○ absent):
 
-- *graph* — the hypothesis-graph inquiry
-- *minimal* — a bare diagnostic prompt
-- *neutral* — a method-neutral control
-- *site-enumeration* — enumerate the change sites
-- *abduction* — an abductive spec
-- *self-verifier* — the model checks its own fix
+| Experiment arm | Enumeration | Kill conditions | Externally verified |
+|---|:-:|:-:|:-:|
+| *minimal* prompt | ○ | ○ | ○ |
+| *neutral* prompt | ○ | ○ | ○ |
+| *site-enumeration* prompt | ● | ○ | ○ |
+| *abduction* prompt | ○ | ● | ○ |
+| *graph* prompt | ○ | ● | ○ |
+| *self-verifier* harness | ● | ● | ○ |
+| *abductor*-enabled harness | ● | ● | ● |
 
-One method, the `abductor` gate, grades against an external oracle. Candidates were drawn from the localization-hard band the lead case and its two neighbors define (§(other-cases)). The protocol preregisters one sentence per loop, testing X, predict Y, refuted by Z, before any arm runs.
+Each arm writes a hypothesis graph by the same loop and runs three times. (Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores.) Candidates were drawn from the localization-hard band the lead case and its two neighbors define (§(other-cases)), and the protocol preregisters one sentence per loop, testing X, predict Y, refuted by Z, before any arm runs.
 
-**The contrast.** The experiment isolates the axis defined in §(method): whether a kill is graded against an **internal** oracle (the model's own belief) or an **external** one (a known-good reference the model cannot see). Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores. What carries it does not matter: whether the answer key arrives as a paragraph of prompt or as a CLI tool that holds it is incidental; what matters is only that it is encoded at the **harness layer**, outside the weights and outside the model's ephemeral reasoning.
+For ecological accuracy, each model resides in its own native agent rather than a uniform rig we impose: Claude models in Claude Code, GPT-5.5 in codex, Composer 2.5 in Cursor. Our harness is a thin wrapper that drives each vendor's CLI non-interactively with the same stage prompt:
 
-But externality is necessary, not sufficient. An external oracle with thin coverage drives a fix wide and leaves it broken (§(frontier)), so what sets the axis is whether the externally supplied labels span the distinction the fix has to make.
+```sh
+claude -p …       # Claude Code
+codex exec …      # codex
+cursor-agent …    # Cursor
+```
+
+The meta-loop owns only the stage contracts, the hypothesis graph, and the gate; every model-facing call goes through the vendor's own agent. Full configs, prompts, and per-arm logs live in [the mechanism repository](https://github.com/kimjune01/hygraph-mechanism).
+
+But external verification is necessary, not sufficient. A reference with thin coverage drives a fix wide and leaves it broken (§(frontier)), so what sets the axis is whether the verified labels span the distinction the fix has to make.
+
+### The tiny bench, and what counts as golden {#verus-bench}
+
+The case is one bug, so the bench is one bug, hand-built and small enough to state in full. It holds three states of the compiler: the buggy commit (base) and the maintainer's two later fixes, the narrow one and the general one. It also holds a handful of probe programs, each of which the compiler either accepts (VERIFY) or rejects (REJECT). A probe's **golden** is the verdict a correct compiler owes it: REJECT for an unsound program, VERIFY for a sound one. Two sources supply those goldens, and keeping them apart is the method, because they are exactly the easy and hard sides of the result.
+
+A recall probe rules out memorization: asked in isolation how #2219 was fixed, the model does not recover the fix. Its solution is reconstruction from prior competence, not recall of the post-cutoff patch. Commit dates, model cutoffs, and the probe transcript are in the dataset.
+
+The bug probes are uninhabited programs *by construction* (an erased `!`, an empty enum, and two shapes the gate never sees: an associated-type projection and a nested generic). Their golden is REJECT, and the base compiler is wrong on exactly them, verifying what it should reject. That is the bug, and it makes base a free reference for the easy side: the externalized gate enumerates such cases over the uninhabited type-formers, grades each candidate fix against the base verdict, and passes only when a fix flips the entire bug-set to REJECT with no sound case newly rejected. No human labels these; the construction is the reference.
+
+The hard probes are different. Genuine runtime divergence is sound and must be preserved, so its golden is VERIFY. But base is not a usable reference there, and the gate's grammar contains no divergence-preserve shape, so the gate is blind to this side. Its golden comes from human judgment; the two divergence probes are held out, authored by hand and kept outside the gate's grammar, so passing them tests whether a fix represents the rule rather than fits the gate. The two are not equally hard. One is in-bar: the maintainer's approved fix preserves it, so its VERIFY golden is corroborated by the shipped human bar. The other is a stretch goal beyond that bar. Force-graded, the maintainer's own fix declines it too, conservatively by design. So its VERIFY golden is the operator's ideal, not a behavior any shipped fix delivers. This is the same asymmetry the deployment story rests on (§(enum-calib)): the oracle for the easy side is free, the oracle for the hard side costs a human.
+
+Every verdict here is from a forced-fresh, fingerprinted build (the vendored crate makes that hazard real); the frozen dataset and regrade script are committed.
+
+### What we observed: the lift {#verus}
+
+Which arm, if any, climbs past the narrow fix? On a fixed toolchain with forced-fresh, fingerprinted rebuilds, six prompt-encoded methods across eighteen draws reached the narrow plateau and stopped: modal `changed`=114, the #2230 slice, none reaching `pass=true`. Only the externalized-gate arm broke off the narrow plateau to a wider fix: `pass=true`, `changed`=269 exactly, zero valid-preserve rejections on the gate's own cases. That fix is more general than the plateau but not yet the merged human fix; it stays wide-but-broken on the in-bar divergence case the gate never enumerated, the one the human fix preserves (§(frontier)).
+
+What it does reach is real: it flips the entire bug-set, and it rejects two *out-of-grammar* held-outs the gate never showed it, an associated-type projection (`<u8 as Tr>::A`) and a nested generic (`G<G<Void>>`). Those held-outs are the proof that the fix *represents* a general rule rather than *tabulating* the gate: instrumentation confirms each arrives already normalized to an uninhabited type, so the fix catches them by applying its own general predicate, never having seen the case.
 
 ### The instrument is general, and blind to the answer {#gate-general}
 
-The lift is reasoning-encoded-as-instrument only if the instrument did not smuggle in the fix. It did not. The instrument, released as `abductor`, has three domain-general operations and no answer built in:
+Did the abductor smuggle in the fix? The lift is reasoning-encoded-as-instrument only if it did not, and it did not. The instrument, released as `abductor`, has three domain-general operations and no answer built in:
 
 - It *enumerates* a space of cases closed under the property's type-formers, wider than any one hypothesis.
 - It *calibrates* each case against a known-good baseline, the comparator the model cannot author, so the ground truth is external to it.
@@ -292,33 +321,13 @@ The instrument never names the predicate, the property, or the fix; the prompt t
 
 Two controls establish the blindness rather than assert it. The model received a prompt naming no property and still had to grep out rustc's own machinery for uninhabited types to climb. And a second model, handed only the vague instruction to range over type-formers and judge, *rebuilt the instrument itself*, which is what a general construction permits and a bespoke oracle does not. The construction also transfers across domains. Pointed at an unrelated Go SBOM tool (syft #4760), the same enumerate-calibrate-disagree shape surfaced eleven omitted cases where manual review had found four. Only the grammar of cases changes between domains; the machinery is fixed. Every instance exploits one general object: a disagreement, the symmetric difference between what the system believes and what is true, the check that tests and type systems cannot supply because absence has no test.
 
-### The tiny bench, and what counts as golden {#verus-bench}
-
-The case is one bug, so the bench is one bug, hand-built and small enough to state in full. It holds three states of the compiler: the buggy commit (base) and the maintainer's two later fixes, the narrow one and the general one. It also holds a handful of probe programs, each of which the compiler either accepts (VERIFY) or rejects (REJECT). A probe's **golden** is the verdict a correct compiler owes it: REJECT for an unsound program, VERIFY for a sound one. Two sources supply those goldens, and keeping them apart is the method, because they are exactly the easy and hard sides of the result.
-
-A recall probe rules out memorization: asked in isolation how #2219 was fixed, the model does not recover the fix and says so. What it reconstructs from general, pre-cutoff competence is that rustc carries uninhabitedness machinery at all; what it cannot recall is the merged fix for this bug. So its solution is reconstruction from prior competence, not recall of the post-cutoff patch. The commit dates, model cutoffs, and probe transcript are committed alongside the dataset.
-
-The bug probes are uninhabited programs *by construction* (an erased `!`, an empty enum, and two shapes the gate never sees: an associated-type projection and a nested generic). Their golden is REJECT, and the base compiler is wrong on exactly them, verifying what it should reject. That is the bug, and it makes base a free reference for the easy side: the externalized gate enumerates such cases over the uninhabited type-formers, grades each candidate fix against the base verdict, and passes only when a fix flips the entire bug-set to REJECT with no sound case newly rejected. No human labels these; the construction is the oracle.
-
-The hard probes are different. Genuine runtime divergence is sound and must be preserved, so its golden is VERIFY. But base is not a usable reference there, and the gate's grammar contains no divergence-preserve shape, so the gate is blind to this side. Its golden comes from human judgment; the two divergence probes are held out, authored by hand and kept outside the gate's grammar, so passing them tests whether a fix represents the rule rather than fits the gate. The two are not equally hard. One is in-bar: the maintainer's approved fix preserves it, so its VERIFY golden is corroborated by the shipped human bar. The other is a stretch goal beyond that bar. Force-graded, the maintainer's own fix declines it too, conservatively by design. So its VERIFY golden is the operator's ideal, not a behavior any shipped fix delivers. This is the same asymmetry the deployment story rests on (§(enum-calib)): the oracle for the easy side is free, the oracle for the hard side costs a human.
-
-One integrity hazard is controlled before any verdict is trusted. The compiler vendors a crate that a plain incremental build does not rebuild, so every verdict here is from a forced-fresh build, sources touched and the binary fingerprinted to confirm identity. The frozen dataset (every artifact rebuild-confirmed) and the regrade script are committed.
-
-### What we observed: the lift {#verus}
-
-On a fixed toolchain with forced-fresh, fingerprinted rebuilds, six prompt-encoded methods across eighteen draws reached the narrow plateau and stopped: modal `changed`=114, the #2230 slice, none reaching `pass=true`. Only the externalized-gate arm broke off the narrow plateau to a wider fix: `pass=true`, `changed`=269 exactly, zero valid-preserve rejections on the gate's own cases. That fix is more general than the plateau but not yet the merged human fix; it stays wide-but-broken on the in-bar divergence case the gate never enumerated, the one the human fix preserves (§(frontier)).
-
-What it does reach is real: it flips the entire bug-set, and it rejects two *out-of-grammar* held-outs the gate never showed it, an associated-type projection (`<u8 as Tr>::A`) and a nested generic (`G<G<Void>>`). Those held-outs are the proof that the fix *represents* a general rule rather than *tabulating* the gate: instrumentation confirms each arrives already normalized to an uninhabited type, so the fix catches them by applying its own general predicate, never having seen the case.
-
 ### The frontier is the coverage {#frontier}
 
-The gate's coverage sets the model's generalization frontier. The model's first implementation is narrow, keyed on `is_never()`, the exact ceiling at which every prompt arm stops. The gate then feeds it uninhabited cases that `is_never()` does not catch, empty enums and recursive-uninhabited constructors, which keep `mishandles>0` and bar `pass=true`. To climb, the model greps the codebase, finds rustc's existing inhabitedness machinery, and widens its predicate from `is_never()` to a check that keeps the CFG edge for any visibly-uninhabited ghost return. In this arm that check routes through rustc's `is_inhabited_from`. That widening off the narrow plateau is the lift, and the pressure that drives the model to it comes from the gate, while the prompt stays silent: the model supplies the discovery, the gate supplies the direction and the boundary.
+The gate's coverage sets the model's generalization frontier. Its first fix is narrow, keyed on `is_never()`, the ceiling every prompt arm hits; the gate feeds it uninhabited cases that `is_never()` misses, and to clear them the model greps the codebase and widens its predicate. That widening off the plateau is the lift, driven by the gate while the prompt stays silent: the model supplies the discovery, the gate the direction and the boundary.
 
-A cross-model check narrows what the lift is. The inhabitedness query the codex arm routed through turns out to be behaviorally redundant: handed the same task, a second model (Fable) keeps the edge for every ghost-mode call with no inhabitedness query at all and grades identically on every probe, the out-of-grammar held-outs included. Since only an uninhabited return prunes the control-flow graph, the operative mechanism in both fixes is the same mode gate (keep the CFG edge in ghost mode so the borrow-checker sees the code that follows), not recovery of the verifier's own decision procedure. So the lift is the model widening, under external pressure, to a mode-gated approximation of the right rule; it is not the model reaching the verifier's true oracle.
+A cross-model check narrows what the lift is. A second model (Fable) keeps the edge for every ghost-mode call with no inhabitedness query at all and grades identically on every probe, so the operative mechanism is a coarse mode gate, keep the CFG edge in ghost mode, not recovery of the verifier's own decision procedure. The lift is the model widening to a mode-gated approximation of the right rule, not reaching the true distinction.
 
-The handed gate's fix stays wide-but-broken here, over-rejecting the in-bar divergence case the merged human fix preserves through a different, deliberately conservative implementation. That gap is not a permanent capability shortfall: once the missing calibration is supplied (§(enum-calib)), the corrected arm reaches the human fix's behavior on every graded probe. The held-outs still do their job: the fix catches both held-outs it never saw, even though the rule it represents is the coarse mode gate, not the fine inhabitedness distinction.
-
-The same mechanism predicts its own failure. The fix over-rejects two genuine-divergence cases, both sound. One is in-bar: the merged human fix preserves it, so over-rejecting it is the handed gate's real flaw. The other is a harder stretch case that the merged human fix also declines, conservatively and by design, because the bar it shipped does not promise it; over-rejecting that one is not a flaw the human fix avoids. The over-rejection sits exactly where the gate was blind: its grammar contained no genuine-divergence-preserve shape, so that side of the distinction received no climbing pressure. The target is the XOR of §(verus-bug). The gate drove the first side to full generality and left the second collapsed to an OR. The fix is *wide but broken*, general on the uninhabited-return side and over-conservative on the divergence side, and the held-outs outside the gate catch it. Coverage is the design lever: where the gate pushes, the model generalizes correctly; where the gate is silent, the model over-generalizes.
+And the gate's coverage is the limit. Its grammar holds no divergence-preserve shape, so that side gets no climbing pressure: the fix goes general on the uninhabited side, over-conservative on divergence, *wide but broken*. The XOR of §(verus-bug) is driven to full generality on one side and collapsed to an OR on the other. Where the gate pushes, the model generalizes; where it is silent, it over-generalizes. Supply the missing divergence golden (§(enum-calib)) and the corrected arm reaches the human fix on every probe.
 
 ### Enumeration is inducible; the oracle is not {#enum-calib}
 
@@ -332,7 +341,17 @@ Handed that corrected calibration, the model crosses off the wide-but-broken pla
 
 The asymmetry is structural. Approved history supplies strong goldens for "do not break what works" and "this reported case is wrong", while the generalization itself goes ungraded: which look-alikes are the same bug and which are sound divergence. That disambiguation is the XOR's hard side, un-oracled until a human spends the judgment, which is why the maintainer's fix took expertise. And the hardest look-alike is hard enough that the merged human fix declines it too, shipping a deliberately conservative bar rather than the full distinction, so past that point the wall is not the automation's alone.
 
-*Not one model's artifact.* Under the same corrected-gate pressure, three workflows are driven to the same behavior, and force-graded against the merged human fix they match it on every probe. Fable, Sonnet 4.6, and Cursor's Composer 2.5, each on its own vendor CLI, clear the bug side, preserve the in-bar divergence case, and decline the one stretch case the human fix also declines. The codex-CLI workflow does not clear it in either protocol, and a matched-budget, matched-protocol rerun leaves the divergence wall standing, so the gap is a workflow difference on this one case rather than a budget artifact. It is one *n*=1 cell per workflow, not a capability ranking.
+*Not one model's artifact.* One table tells it. Within a single model, six self-attested methods plateau at the narrow golden. Swap in the corrected gate, which verifies against the general golden #2501, and the lift reproduces across four models in four native CLIs:
+
+| Verdict source | Narrow golden (#2230) | General golden (#2501) |
+|---|:-:|:-:|
+| self-attested, six methods | ● | ○ |
+| externally verified — *Fable* | ● | ● |
+| externally verified — *Sonnet 4.6* | ● | ● |
+| externally verified — *Composer 2.5* | ● | ● |
+| externally verified — *codex* | ● | ○ |
+
+The general golden is the maintainer's own merged fix, so reaching it is human-level, on a bug whose fix postdates every model's cutoff. Three of four match it on every probe. codex clears the bug arm but walls on the divergence case, an implementation limit the golden does not remove. One *n*=1 cell per workflow: a mechanism existence-demonstration, not a capability ranking.
 
 The convergence is coverage-bound, not a scoreboard: it shows the corrected-gate fix is reproducible across workflows, not that three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
 
