@@ -199,7 +199,7 @@ The three Peircean modes are how `inquire` builds the graph, each node typed by 
 
 `implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
-### Hypothesis graph as inquiry output {#recon-output}
+### Hypothesis graph output {#recon-output}
 
 `inquire` emits the hypothesis graph: the structured-analysis document that precedes the patch. Kill conditions are mechanical predicates over the evidence trajectory, so a node dies when its predicate fires and not before. The graph persists across iterations; re-entry adds nodes rather than overwriting. The frontier closes only when every open hypothesis is killed (a test refutes it) or witnessed (a test confirms it).
 
@@ -209,11 +209,7 @@ A committed node is a conclusion, and an inquiry that reaches one rarely runs st
 
 *An in-flight inquiry trace, illustrative: Sonnet 4.5 following the `inquire` skill on the python-dotenv `find_dotenv` v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (induction · 93%) and discards this sequence. Full trace: [recon-inflight-dotenv.md](/assets/recon-inflight-dotenv.md). Not a frozen Pro instance.*
 
-### Blind cross-model challenge at the hypothesis stage {#blind-blind}
-
-To keep that hypothesis from being one model's artifact, two frontier models from different families receive the same evidence pack with no cross-visibility, and each produces a hypothesis independently. A third pass extracts the disagreements: the disagreement becomes the next node in the graph, while the agreement is recorded but not actionable. Adversarial filtering operates at hypothesis time, while the worktree is still untouched, rather than at patch time where the diff is already written. Sampling stochasticity alone produces real divergence even within a single model; cross-family divergence compounds it with architectural and training-corpus differences. Both are signal.
-
-### Deterministic gating and the outer loop {#gating}
+### Deterministic gating {#gating}
 
 The control loop is standard: the driver routes on `attest`'s verdict and re-entry route under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hypothesis graph doubles as the loop's checkpoint and no dead branch is re-proposed. That leaves the inner layer still owed a demonstration. The oracle the opening made the crux is what the gate leans on, and §(right-regime) isolates it on a single bug, where it does most of the work the bench number seems to credit to diagnosis.
 
@@ -225,11 +221,11 @@ All code and data are openly available, each developed in a public repository an
 
 What would prove that we had encoded reasoning into the harness, rather than just prompted a model into a better answer? The signal has to be one prompting alone can't produce:
 
-- without the reasoning operation, the bare model can't reach the fix;
-- handed the operation, it reaches the fix;
-- and the fix generalizes to cases it was never shown.
+- Without the reasoning operation, the bare model can't reach the fix.
+- Handed the operation, it reaches the fix.
+- The fix generalizes to cases it was never shown.
 
-The answer, on a single bug, should sound implausible: with this harness, Sonnet 4.6 beat Fable, the strongest model yet released, which ran without it.
+Here we demonstrate an implausible result on a single bug. Even Fable, the strongest released model, could not resolve it on its own; the methodeutic harness carried Sonnet 4.6 to human-level completion.
 
 ### Coding benchmarks measure translation ability {#bench-translation}
 
@@ -241,11 +237,13 @@ SWE-bench Pro ([Deng et al. 2025](https://arxiv.org/abs/2509.16941)) is the domi
 
 With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): the specification-to-implementation translation step is largely solved. So the interesting work is now discovery: a bug with a deep, discoverable cause. This is most of software left to do, now that coding agents dominate implementation.
 
-Moreover, Pro's public set carried a risk we were not willing to take: contamination. So we went looking for a bug where discovery is the whole difficulty. Verus #2219 is one: a 2026 bug whose fixes postdate the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, and a general fix eventually landed too (PR #2501, merged 2026-06-05). The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
+Moreover, Pro's public set carried a risk we were not willing to take: contamination. So we went looking for a post-cutoff bug where discovery is the whole difficulty. Verus #2219 is one: a March 2026 issue, opened and fixed after the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, and a general fix eventually landed too (PR #2501, merged 2026-06-05). The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
 
 ### Verus #2219 {#verus-fit}
 
-The bug is [verus-lang/verus#2219](https://github.com/verus-lang/verus/issues/2219), *ghost uses of never type invalidates borrowchecking*. Verus is a deductive verifier for Rust: you annotate a program with specifications and ghost proof code, Verus discharges the obligations through the Z3 SMT solver, and a passing run certifies the code meets its spec. The cardinal property of any verifier is *soundness*, that it never certify a program which violates its spec, because every proof built on top inherits that guarantee. An unsoundness, where the verifier blesses a program it owes a rejection, is the worst defect it can carry and the hardest to notice, since the symptom is silence. Nothing fails.
+The bug is [verus-lang/verus#2219](https://github.com/verus-lang/verus/issues/2219): *ghost uses of never type invalidates borrowchecking*.
+
+Verus is a deductive verifier for Rust: you annotate a program with specifications and ghost proof code, Verus discharges the obligations through the Z3 SMT solver, and a passing run certifies the code meets its spec. The cardinal property of any verifier is *soundness*, that it never certify a program which violates its spec, because every proof built on top inherits that guarantee. An unsoundness, where the verifier blesses a program it owes a rejection, is the worst defect it can carry and the hardest to notice, since the symptom is silence. Nothing fails.
 
 The correct fix must range over a whole class of program inputs. Two of them look identical at the `!` token and owe opposite verdicts:
 
@@ -270,7 +268,7 @@ Identical at the token, opposite at the root: the contrast the experiment needs.
 
 ### Diagnosis {#verus-bug}
 
-Verus reasons about Rust at the MIR level, rustc's control-flow graph of basic blocks. Rust's never type `!` is the type of an expression that never returns, so the code after it is unreachable and the compiler prunes the control-flow edge. Verus also has *ghost* code: specification and proof terms erased before compilation, with no runtime effect. The bug is the collision of the two. A ghost expression of type `!`, erased and so not actually diverging at runtime, still marked the following MIR unreachable, and Verus pruned a control-flow edge that is in fact live. With the edge gone the verifier treats reachable code as dead, never checks it, and a program it owes a rejection verifies vacuously. That is the unsoundness.
+A *ghost* expression of type `!`, erased before compilation and so not actually diverging, still triggers rustc's never-type edge prune: Verus drops a live control-flow edge, skips the reachable code behind it, and verifies a program it owes a rejection. That is the unsoundness.
 
 ![The #2219 unsoundness as a causal chain. The axis at the bottom is the crux: a ghost-erased uninhabited return (keep the edge) and genuine runtime divergence (prune) are identical at the token, opposite in handling.](/assets/verus-2219-unsoundness.svg)
 
@@ -292,7 +290,7 @@ Here, we demonstrate two ablations of interest: the verification mechanism and m
 | *self-verifier* harness | ● | ● | ○ |
 | *abductor*-enabled harness | ● | ● | ● |
 
-Each arm writes a hypothesis graph by the same loop and runs three times. (Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores.) Candidates were drawn from the localization-hard band the lead case and its two neighbors define (§(other-cases)), and the protocol preregisters one sentence per loop, testing X, predict Y, refuted by Z, before any arm runs.
+Each arm writes a hypothesis graph by the same loop and runs three times. (Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores.) We drew candidates from the localization-hard band the lead case and its two neighbors define (§(other-cases)). Before any arm runs, the protocol preregisters one sentence per loop: testing X, predict Y, refuted by Z.
 
 For ecological accuracy, each model resides in its own native agent rather than a uniform rig we impose: Claude models in Claude Code, GPT-5.5 in codex, Composer 2.5 in Cursor. Our harness is a thin wrapper that drives each vendor's CLI non-interactively with the same stage prompt:
 
@@ -304,7 +302,7 @@ cursor-agent …    # Cursor
 
 The meta-loop owns only the stage contracts, the hypothesis graph, and the gate; every model-facing call goes through the vendor's own agent. Full configs, prompts, and per-arm logs live in [the mechanism repository](https://github.com/kimjune01/hygraph-mechanism).
 
-But external verification is necessary, not sufficient. A reference with thin coverage drives a fix wide and leaves it broken (§(frontier)), so what sets the axis is whether the verified labels span the distinction the fix has to make.
+But external verification is necessary, not sufficient. A reference with thin coverage drives a fix wide and leaves it broken (§(frontier)), so the axis turns on whether the verified labels span the distinction the fix has to make.
 
 ### The tiny bench, and what counts as golden {#verus-bench}
 
@@ -382,7 +380,7 @@ The general golden is the maintainer's own merged fix, so reaching it is human-l
 
 The convergence is coverage-bound: it shows the corrected-gate fix is reproducible across workflows, not that three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
 
-Contamination is scoped the same way. Composer 2.5 ships after the fix, so its pass does not exclude recall; the two contamination-clean workflows (Fable, Sonnet 4.6) carry the narrower point that these runs do not require a recall explanation. The merged human fix, dated after Composer's ship, is the anchor that makes that point datable. That every successful run here uses the same externally supplied discriminator is consistent with a broader claim about how inquiry works (a conjecture, §(future-work)); the receipt here stays scoped to what these runs show.
+Contamination is scoped the same way. Composer 2.5 ships after the fix, so its pass does not exclude recall; the two contamination-clean workflows (Fable, Sonnet 4.6) carry the narrower point that these runs do not require a recall explanation. The merged human fix, dated after Composer's ship, is the anchor that makes that point datable. Every successful run here uses the same externally supplied discriminator, consistent with a broader claim about how inquiry works (a conjecture, §(future-work)); the receipt stays scoped to what these runs show.
 
 Retrospectively the goldens are free; prospectively, on a fresh bug with no merged fix, the easy side has a golden and the hard side does not. The division of labor is the deployment design: the model enumerates and fixes, the harness draws its golden from approved history, and the residual hard side is named, not hidden.
 
@@ -400,7 +398,7 @@ The deployment merge rate inherits this: the 81 merged PRs (§(discussion)) were
 
 ### Abduction becomes a tool call {#abduction-tool}
 
-Step back from the arms. That an external check beats self-attestation is no surprise; the self-graded arms were never the contest. The surprise is what the traces catch the models doing: performing the XOR by hand. Handed a vague prompt and no tool, the self-verifier arm built its own case generator and recomputed the full symmetric difference every pass, brute-forcing some 7,026 cases a round. The brute force is the tell: the XOR is the operation abduction runs on, not ornament on it. But a model grading its own cases can only check them against its own belief, so it plateaued. Graded by an external tool instead, the same operation carried the abductor arm to a grammar-complete fix. The model had the idea all along; what it lacked was a place to run it.
+Step back from the arms. That an external check beats self-attestation is no surprise; the self-graded arms were never the contest. The surprise is what the traces catch the models doing: performing the XOR by hand. Handed a vague prompt and no tool, the self-verifier arm built its own case generator and recomputed the full symmetric difference every pass, brute-forcing some 7,026 cases a round. The brute force is the tell: the XOR is the operation abduction runs on, not ornament on it. But a model grading its own cases can only check them against its own belief, so it plateaued. When the grading came from an external tool instead, the same operation carried the abductor arm to a grammar-complete fix. The model had the idea all along; what it lacked was a place to run it.
 
 That is the signal we went looking for. With the right lens, the warrant-producing core of abduction is a mathematical operation: the symmetric difference between what the model believes and what is true. In coding diagnosis and implementation, it can be lifted off the model and run as a tool call. The leap stays creative and the check turns mechanical, the division of intellect the introduction set out to buy.
 
