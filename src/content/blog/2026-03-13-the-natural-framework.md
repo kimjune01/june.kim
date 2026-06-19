@@ -283,7 +283,7 @@ Perceive and Cache are map. Filter and Attend are filter. Transmit is reduce. Co
 
 This is deduction, not induction. The boundaries follow from temporal flow.
 
-The full derivation is machine-checked in [Lean 4](https://github.com/kimjune01/natural-framework). Five physics axioms, both boundary arguments, the three corollaries, ten removal tests, the stochasticity chain, the handshake composition, the coupling lemma, and the induction are all formally verified.
+The full derivation is machine-checked in [Lean 4](https://github.com/kimjune01/natural-framework). As of March 2026: five physics axioms, both boundary arguments, the three corollaries, ten removal tests, the stochasticity chain, the handshake composition, the coupling lemma, and the induction are formally verified. What the proof establishes is that these consequences follow from the axioms, internal consistency at the level of any lawful monad satisfying them, not that any domain instantiates the structure. The scope, and what stays open as of this writing (the operadic ordering beyond linear pipelines, the contracts as categorical structure, the deductive closure on stochasticity), is set out in [The Handshake](/the-handshake), the formal sibling to this post.
 
 **Boundary 1: encoding before selection.** The pipeline receives raw input from the environment. A system is defined by its boundary: no boundary, no inside, no outside, no system. The boundary creates a type difference. Any physical system has finite state space; the environment includes everything the system does not. dim(E) > dim(I). A morphism must bridge them: that is Perceive. The bridge is a surjection — it must lose information.
 
@@ -387,7 +387,7 @@ Stochasticity is physically mandatory for anything that persists. So is the comp
 
 ---
 
-**[The Lean proof, file by file](https://reading.june.kim/reading/the-natural-framework-lean/)** — 2,800+ lines of Lean 4. Zero `sorry`. Every claim above is machine-checked.
+**[The Lean proof, file by file](https://reading.june.kim/reading/the-natural-framework-lean/)** — 2,800+ lines of Lean 4, zero `sorry`: what is formalized is proved without gaps. The framework is not finished, though. It is an open program, waiting on more math and physics, the operadic ordering beyond linear pipelines, the contracts as categorical structure, the cross-domain functor, the deductive closure on stochasticity. What is checked is checked; what remains is named in [The Handshake](/the-handshake). This is a status as of March 2026, not a completed theory.
 
 If the Universe is a self-recursive pipeline — force in, force out — then something fills the Attend cell.
 

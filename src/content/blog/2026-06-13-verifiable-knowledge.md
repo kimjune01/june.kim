@@ -9,6 +9,10 @@ keywords: agent-native epistemics, knowledge interop, entitlement, provenance, i
 
 *The operationalization of [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true), carried to a population of agents. It runs the frame as a protocol; the data structure that instantiates it is [The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics).*
 
+<!-- pdf-skip -->
+*[Download PDF](/assets/verifiable-knowledge.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.20754823](https://doi.org/10.5281/zenodo.20754823) (CC BY-SA-NS).*
+<!-- /pdf-skip -->
+
 ## Abstract {-}
 
 Large language model (LLM)-based agents cannot be held accountable. Even with persistent memory and full provenance trails, their reasoning disappears with the context window. The burden of proof is on whoever drives the agent. Each agent, instead of *attesting* its own work, must present every claim with a falsifiable condition that can be reproduced to the same verdict. This we call **verifiable knowledge**. Belief, knowledge, and truth reduce to structures an agent constructs and another checks. Verifiability is transitive, so their results are reproducible. In this protocol, accountable failure outranks unaccountable assertion. The epistemics is borrowed from [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true); here, we introduce a protocol to apply it. Verifiable knowledge is a primitive that crosses machine and social boundaries without inherited trust.
@@ -41,10 +45,7 @@ The kill condition travels two ways, from the system to what it tests, or from a
 - Truth is the check currently passing.
 - Reproducibility is whether anyone else can rebuild it from source.
 
-<figure>
-  <img src="/assets/truth-compilation-light.svg" alt="How a claim is compiled into an entitlement state. A claim node links downward by provenance edges to three terminal witnesses (dataset or labels, calibration, observation), the trusted roots where replay bottoms out. The claim feeds rightward into a check, run the test, which the system exposes (exposure: the system breaks a wrong check). The check returns one of three verdicts: a filled green dot, TRUE, ran and stood; a filled red dot, FALSE, ran and broke; a dashed hollow dot, UNTRUE, no passing check, the hung state. A dashed loop runs from the verdict back into the check: another agent replays the check, and entitlement is what survives that replay." style="max-width:680px; width:100%; height:auto; margin:1.4em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> How knowledge is compiled. A claim links by provenance edges down to trusted roots, then runs its test, the point where the system can break it. The check returns one of three states: true (stood), false (broke), or untrue (no passing check, the hung state). The loop is the move a machine adds: the check is re-run by another agent, so entitlement is what survives the replay rather than what an agent grades in itself.</figcaption>
-</figure>
+![How knowledge is compiled. A claim links by provenance edges down to trusted roots, then runs its test, the point where the system can break it. The check returns one of three states: true (stood), false (broke), or untrue (no passing check, the hung state). The loop is the move a machine adds: the check is re-run by another agent, so entitlement is what survives the replay rather than what an agent grades in itself.](/assets/truth-compilation-light.svg)
 
 That mapping produces a ranking. Even *a Bible verse citation* cites its provenance and names its axiom openly, a complete stack trace you can follow to a root that is an axiom and not a measurement, then decide for yourself whether to accept it.
 
@@ -82,10 +83,7 @@ The ledger records a verdict. But who is entitled to write one? A single agent h
 
 This is **[Davidson's triangulation](https://en.wikipedia.org/wiki/Donald_Davidson_(philosopher))**: the distinction between subjective and objective, and with it the concept of error, requires at least two minds and a shared world. A multi-agent view is multiple projections of the one object, and comparing them *constrains* the object no single projection reveals, with **[the view from nowhere](https://en.wikipedia.org/wiki/The_View_from_Nowhere)** (Nagel) as the limit no projection occupies. The [blind men and the elephant](https://en.wikipedia.org/wiki/Blind_men_and_an_elephant) is the picture: no one holds the animal, and only diverse touches approach it. Agreement among agents that share a blind spot is an echo chamber, so the checker has to be an independent projection. But the parable cheats. We outside know it is an elephant; the men inside never get that view, so they have to establish that the touches are of one animal before they can add up. Triangulation buys constraint, and even that on credit, against a shared object not yet established.
 
-<figure>
-  <img src="/assets/triangulation-light.svg" alt="Triangulation as projection. A three-dimensional torus at the top, labeled the object, with a teal observer dot inside its hole, a blue observer dot squarely below it, and a purple observer dot off on the diagonal. Each observer sees a different silhouette of the same torus: from below the axis, a ring with a hole; from an oblique angle, a solid oval; from inside the hole, a hyperbola, the flaring saddle wall. No single view reveals the torus, and each observer alone would be wrong about it, but the three together constrain the shape none holds whole." style="max-width:640px; width:100%; height:auto; margin:1.4em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> Triangulation. One solid, a torus, seen from three places. From below the axis it is a ring; from an oblique angle the hole vanishes into a solid oval; from inside the hole it is a hyperbola, the saddle wall flaring away, with no ring or hole in sight. No one view reveals the torus, and each alone misleads, yet the independent projections together pin the shape none holds whole. The observer in the middle is the sharpest case: surest of what it sees, least able to tell it sits inside a donut.</figcaption>
-</figure>
+![Triangulation. One solid, a torus, seen from three places. From below the axis it is a ring; from an oblique angle the hole vanishes into a solid oval; from inside the hole it is a hyperbola, the saddle wall flaring away, with no ring or hole in sight. No one view reveals the torus, and each alone misleads, yet the independent projections together pin the shape none holds whole. The observer in the middle is the sharpest case: surest of what it sees, least able to tell it sits inside a donut.](/assets/triangulation-light.svg)
 
 That independent projections *constrain* the object is the step taken here. Each additional constraint reveals the shape further.
 
@@ -95,10 +93,7 @@ So it optimizes for verification cost rather than self-attestation, laying its m
 
 Replay breaks the who-trusts-the-truster chain that attestation spawns: the verdict is the check's, not the checker's, so no one needs to check the checker, only re-run the audit. Independent constraint improves entitlement, no strong objectivity smuggled in, since the replay is itself one more lossy projection.
 
-<figure>
-  <img src="/assets/replay-regress-light.svg" alt="A horizontal chain: an agent, vouched by an attester, vouched by an auditor, vouched by a checker, vouched by an ensurer, then a dashed arrow to a question mark. Who vouches for the last? The chain never bottoms out." style="max-width:680px; width:100%; height:auto; margin:1.4em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> The attestation regress. An agent's word rests on an attester, whose rests on an auditor, whose rests on a checker, and so on: who checks the checker? The chain never grounds. Replay cuts it: the verdict comes from re-running the check, so any agent re-derives it without trusting a truster.</figcaption>
-</figure>
+![The attestation regress. An agent's word rests on an attester, whose rests on an auditor, whose rests on a checker, and so on: who checks the checker? The chain never grounds. Replay cuts it: the verdict comes from re-running the check, so any agent re-derives it without trusting a truster.](/assets/replay-regress-light.svg)
 
 For another agent to check rather than merely disagree, the projections have to compose, and that is what checkability buys. It also supplies the shared object triangulation had to assume: a replayable check lets one agent re-run another's touch and feel the same thing, so the two touch one object instead of guessing they do, and partial views add where they would otherwise collide. Constraint becomes convergence at the replay: triangulation narrows the object, the shared check closes the gap to a single verdict.
 
@@ -112,10 +107,7 @@ Re-checkable need not mean re-checked. The canon keeps each hypothesis's last pa
 
 The Pythagorean theorem is the oldest entry that still reads this way. It ships with its proof, so no one inherits it on anyone's word: reconstruct the proof, the same for anyone who checks. Almost no one re-derives it. A 2,500-year-old claim that travels with its check cannot devolve into *because the ancients said so*.
 
-<figure>
-  <img src="/assets/pythagoras-proof-light.svg" alt="Two squares of equal side a+b, side by side. In the left square the four right triangles are arranged to leave two upright squares, on sides a and b; in the right square the same four triangles leave one tilted square on side c. Equal squares minus equal triangles, so the two smaller squares together equal the tilted one. The proof is the picture: anyone re-runs it and reaches the same verdict without trusting its author." style="max-width:760px; width:100%; height:auto; margin:1.4em auto; display:block;" />
-  <figcaption><strong>Figure.</strong> The rearrangement proof. Two squares of equal side hold the same four right triangles; on the left they leave an a² and a b² square, on the right a c² square, so the two smaller squares together fill the larger.</figcaption>
-</figure>
+![The rearrangement proof. Two squares of equal side hold the same four right triangles; on the left they leave an a-squared and a b-squared square, on the right a c-squared square, so the two smaller squares together fill the larger.](/assets/pythagoras-proof-light.svg)
 
 Membership is provisional by construction: standing hypotheses, not settled truths. It is a canon of the *activity*, the hypotheses that still pass, not the *institution*, a corpus held true by authority. Held that way, an entry can outlive the check that earned it, *entered the record* drifting into *true*, nothing binding a later correction to travel as fast as the claim it corrects. A canon of standing hypotheses cannot drift so: every entry carries its test, so pull an entry's root, a dataset retracted or a calibration shown wrong, and it fails on its next replay, and so does everything downstream that cited it, the refutation spreading up the citation edges. Claim and check never came apart, so the retraction propagates mechanically.
 
@@ -203,7 +195,6 @@ Canonical sources verifiable knowledge rests on. The frame's sources are listed 
 - Alchourrón, C., Gärdenfors, P. & Makinson, D. (1985). "On the Logic of Theory Change." *Journal of Symbolic Logic* 50. (AGM belief revision)
 - Brandom, R. (1994). *Making It Explicit*. Harvard University Press.
 - Condorcet, M. de (1785). *Essai sur l'application de l'analyse à la probabilité des décisions rendues à la pluralité des voix*. (the jury theorem: independent judgments aggregate)
-- Cover, T. M. & Thomas, J. A. (1991). *Elements of Information Theory*. Wiley.
 - Davidson, D. (1982). "Rational Animals." *Dialectica* 36; and (1991) "Three Varieties of Knowledge."
 - de Kleer, J. (1986). "An Assumption-based Truth Maintenance System." *Artificial Intelligence* 28.
 - Douceur, J. R. (2002). "The Sybil Attack." *Intl. Workshop on Peer-to-Peer Systems (IPTPS)*.
@@ -212,7 +203,7 @@ Canonical sources verifiable knowledge rests on. The frame's sources are listed 
 - Goertzel, B., Iklé, M., Goertzel, I. & Heljakka, A. (2008). *Probabilistic Logic Networks*. Springer. (OpenCog / PLN)
 - Groth, P., Gibson, A. & Velterop, J. (2010). "The Anatomy of a Nanopublication." *Information Services & Use* 30.
 - Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System." *Communications of the ACM* 21 (7).
-- Marchal, et al. (2026). Artificial epistemic agents and the verification crisis. arXiv:2603.02960.
+- Marchal et al. (2026). "Artificial Epistemic Agents and the Verification Crisis." arXiv:2603.02960.
 - Nagel, T. (1986). *The View from Nowhere*. Oxford University Press.
 - Peirce, C. S. (1877). "The Fixation of Belief"; and (1878) "How to Make Our Ideas Clear." *Popular Science Monthly*.
 - Sellars, W. (1956). "Empiricism and the Philosophy of Mind."
@@ -232,3 +223,7 @@ These arguments were first worked out informally on the author's blog and are re
 - **[Modes of Reason](/modes-of-reason)** and **[Abduction](/abduction)** (2026-05-04): the three modes of inquiry behind the abductor.
 - **[Compress and Unfold](/compress-and-unfold)** (2026-06-10): generation as the unfold, filtering as the fold.
 - **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it can fail.
+
+## License {-}
+
+© 2026 June Kim. Licensed under **CC BY-SA-NS**: the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/) plus a Network Services clause. Serving a Derivative Work over a computer network counts as distribution, so the Corresponding Source must be made available to users of the service, under this license or a Compatible License, at no charge. Full terms: [june.kim/cc-by-sa-ns](https://june.kim/cc-by-sa-ns).

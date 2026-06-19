@@ -9,6 +9,8 @@ keywords: epistemology, machine knowledge, agent epistemics, falsifiability, pra
 
 <!-- pdf-skip -->
 *The epistemology behind [The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics), and the frame its companion paper [Verifiable Knowledge](/verifiable-knowledge) runs as a protocol.*
+
+*[Download PDF](/assets/what-cannot-be-false-cannot-be-true.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.20754646](https://doi.org/10.5281/zenodo.20754646) (CC BY-SA-NS).*
 <!-- /pdf-skip -->
 
 ## Abstract {-}
@@ -205,3 +207,7 @@ This paper consolidates arguments first worked out informally on the author's bl
 - **[You Cannot Ring a Semiring](/tempus-doxa-praxis)** (2026-06-12): entitlement as a semiring with a zero and no inverse, so untrue is the zero and false a verdict of its own; the sea-battle and future contingents.
 - **[Evidence Has a Trajectory](/evidence-has-a-trajectory)** (2026-04-27): belief climbing and slipping by degrees.
 - **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28) and **[Verifiable Knowledge](/verifiable-knowledge)**: the data structure this epistemology is the node semantics for, and the protocol that runs the frame between agents.
+
+## License {-}
+
+© 2026 June Kim. Licensed under **CC BY-SA-NS**: the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/) plus a Network Services clause. Serving a Derivative Work over a computer network counts as distribution, so the Corresponding Source must be made available to users of the service, under this license or a Compatible License, at no charge. Full terms: [june.kim/cc-by-sa-ns](https://june.kim/cc-by-sa-ns).
