@@ -7,7 +7,7 @@ tags: epistemology, cognition, methodology
 keywords: agent-native epistemics, knowledge interop, entitlement, provenance, independent verification, verifiable knowledge, canon, falsifiability, reproducibility, protocol
 ---
 
-*The operationalization of [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true), carried to a population of agents. It runs the frame as a protocol; the data structure that instantiates it is [The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics).*
+*The operationalization of What Cannot Be False Cannot Be True, carried to a population of agents. It runs the frame as a protocol; the data structure that instantiates it is The Hypothesis Graph.*
 
 <!-- pdf-skip -->
 *[Download PDF](/assets/verifiable-knowledge.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.20754823](https://doi.org/10.5281/zenodo.20754823) (CC BY-SA-NS).*
@@ -15,11 +15,11 @@ keywords: agent-native epistemics, knowledge interop, entitlement, provenance, i
 
 ## Abstract {-}
 
-Large language model (LLM)-based agents cannot be held accountable. Even with persistent memory and full provenance trails, their reasoning disappears with the context window. The burden of proof is on whoever drives the agent. Each agent, instead of *attesting* its own work, must present every claim with a falsifiable condition that can be reproduced to the same verdict. This we call **verifiable knowledge**. Belief, knowledge, and truth reduce to structures an agent constructs and another checks. Verifiability is transitive, so their results are reproducible. In this protocol, accountable failure outranks unaccountable assertion. The epistemics is borrowed from [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true); here, we introduce a protocol to apply it. Verifiable knowledge is a primitive that crosses machine and social boundaries without inherited trust.
+Large language model (LLM)-based agents cannot be held accountable. Even with persistent memory and full provenance trails, their reasoning disappears with the context window. The burden of proof is on whoever drives the agent. Each agent, instead of *attesting* its own work, must present every claim with a falsifiable condition that can be reproduced to the same verdict. This we call **verifiable knowledge**. Belief, knowledge, and truth reduce to structures an agent constructs and another checks. Verifiability is transitive, so their results are reproducible. In this protocol, accountable failure outranks unaccountable assertion. The epistemics is borrowed from *What Cannot Be False Cannot Be True*; here, we introduce a protocol to apply it. Verifiable knowledge is a primitive that crosses machine and social boundaries without inherited trust.
 
 ## Introduction {#introduction}
 
-How did you feel when your coding agent told you that it was done, but it clearly wasn't? It said *done* but it never checked if it was. The word meant nothing. Anyone can justify a belief to themselves; untested, it stays untrue. [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true) presents this argument. Belief, knowledge, truth: their bitwise representation doesn't distinguish them. So what does? How the data became entitled is the proof, and that proof is bitwise: the test results the claim survived. That's how a machine verifies knowledge.
+How did you feel when your coding agent told you that it was done, but it clearly wasn't? It said *done* but it never checked if it was. The word meant nothing. Anyone can justify a belief to themselves; untested, it stays untrue. *What Cannot Be False Cannot Be True* presents this argument. Belief, knowledge, truth: their bitwise representation doesn't distinguish them. So what does? How the data became entitled is the proof, and that proof is bitwise: the test results the claim survived. That's how a machine verifies knowledge.
 
 Confidence is a vibe, and a vibe doesn't encode. *I'm absolutely sure* has no bitwise form another agent could check, none to verify tomorrow, none for anyone else. That's the problem of knowledge interop: one agent makes a claim, another must trust it blind or start from ground zero. Anywhere in between needs a representation of knowledge, a semantic memory, for partial work to be checked. A chain of attestation breaks at a single forged link, and a chain of independent Bayesian credences, each below one, multiplies toward zero. Neither survives a distrusting auditor. Is there a truth contract that does?
 
@@ -33,7 +33,7 @@ What does it mean for knowledge to be verifiable? A claim is a semantic node, fi
 
 This is not a *[knowledge graph](https://en.wikipedia.org/wiki/Knowledge_graph)* in the established sense. There a node is an entity and its uncertainty, if recorded at all, a stored confidence score; here a node is a claim that carries its uncertainty as a testable condition, the check that would refute it.
 
-The tautology is the limiting case: its irrefutability and its uselessness are one property, a single node wired to nothing. It keeps its inferential edges inside the formal graph ([the two graphs](/what-cannot-be-false-cannot-be-true#the-two-graphs)); what it lacks is a system-facing kill edge.
+The tautology is the limiting case: its irrefutability and its uselessness are one property, a single node wired to nothing. It keeps its inferential edges inside the formal graph (the two graphs); what it lacks is a system-facing kill edge.
 
 The kill condition travels two ways, from the system to what it tests, or from a source to what cites it. A citation makes a belief inherit the fate of its source, so naming a source is handing over a target. A failed test invalidates one or more edges without naming which, the [Duhem-Quine](https://en.wikipedia.org/wiki/Duhem%E2%80%93Quine_thesis) underdetermination, so the next test disambiguates; a claim with a second surviving edge routes around the loss, where a single chain would snap at one forged link. The dispute moves up the chain, from whether to believe the claim to whether the source holds, a question you can put to the source. And you can make it cite its own. Each citation is a link, and falsifiability is the chain being climbable link by link. Truth is not the top but that you can always climb one more. The mapping is mechanical:
 
@@ -57,19 +57,17 @@ How do claims carry their entitlement between agents? Make them trivially runnab
 
 Every verifiable claim exposes itself to verification:
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:13em"><col><col style="width:5em"><col style="width:13em"></colgroup>
-<thead><tr><th style="background:#f0f0f0">Claim</th><th style="background:#f0f0f0">The check, as a program</th><th style="background:#f0f0f0">Output</th><th style="background:#f0f0f0">Refuted when</th></tr></thead>
-<tr><td>"it was 12°C at SFO at 14:05Z"</td><td>a logged reading from the named weather API</td><td><code>12</code></td><td>an independent source disagrees for that timestamp</td></tr>
-<tr><td>"the run logged 3 errors"</td><td><code>grep -c ERROR run.log</code> on the named image</td><td><code>3</code></td><td>the command prints another count</td></tr>
-<tr><td>"7 × 72 = 504"</td><td>evaluate <code>7 * 72</code></td><td><code>504</code></td><td>recomputation differs</td></tr>
-<tr><td>"the patch passes"</td><td>the suite at commit <code>a1b2c3</code></td><td><code>exit 0</code></td><td>any test fails</td></tr>
-<tr><td>"the theorem holds"</td><td>rechecked in a proof assistant</td><td><code>no goals</code></td><td>a step fails to check</td></tr>
-</table>
+| Claim | The check, as a program | Output | Refuted when |
+|-------|-------------------------|--------|--------------|
+| "it was 12°C at SFO at 14:05Z" | a logged reading from the named weather API | `12` | an independent source disagrees for that timestamp |
+| "the run logged 3 errors" | `grep -c ERROR run.log` on the named image | `3` | the command prints another count |
+| "7 × 72 = 504" | evaluate `7 * 72` | `504` | recomputation differs |
+| "the patch passes" | the suite at commit `a1b2c3` | `exit 0` | any test fails |
+| "the theorem holds" | rechecked in a proof assistant | `no goals` | a step fails to check |
 
 The weather reading bottoms out at an observation no later run can re-derive; where replay cannot reach, the check is corroboration against independent ledgers, a second provider or a neighboring station, the reading refuted when they disagree. It is how a distributed ledger settles a fact at all: no central authority, truth bottoming out at a cross-referenced history that independent replicas agree on. The computation and the proof settle for good by re-running. Verifiability is graded by how firmly the program pins its roots, not by the kind of claim.
 
-Encoded this way, the verdict doesn't depend on self-assertion; entitlement is conferred by replaying the check to a pass, with no author grading its own work. [Entitlement](/what-cannot-be-false-cannot-be-true) here runs backward: the replay re-derives a verdict that already stood, climbing provenance to roots, not forecasting whether the claim will pay out. A claim record carries what the replay needs: the claim, the provenance edges down to its roots, the check procedure, the kill condition, the declared terminal witnesses, and the attestation that signs it. A receiver inherits knowledge after verifying its claim.
+Encoded this way, the verdict doesn't depend on self-assertion; entitlement is conferred by replaying the check to a pass, with no author grading its own work. Entitlement here runs backward: the replay re-derives a verdict that already stood, climbing provenance to roots, not forecasting whether the claim will pay out. A claim record carries what the replay needs: the claim, the provenance edges down to its roots, the check procedure, the kill condition, the declared terminal witnesses, and the attestation that signs it. A receiver inherits knowledge after verifying its claim.
 
 An argument settles by a mediating oracle both sides accept, where one exists. Independent verification is that oracle, trustless because the verdict comes from re-running the typed check, not from either party's word.
 
@@ -147,7 +145,7 @@ Entitlement improves when the replay cost is finite and *declared*. The protocol
 
 ## Related work {#related-work}
 
-The frame's lineage, Kant and Peirce and Ramsey and Dummett and the rest, is named in [the companion paper](/what-cannot-be-false-cannot-be-true#related-work). Verifiable knowledge's own borrowings are the operational ones, and the borrowing is the point.
+The frame's lineage, Kant and Peirce and Ramsey and Dummett and the rest, is named in *What Cannot Be False Cannot Be True* ([DOI](https://doi.org/10.5281/zenodo.20754646)). Verifiable knowledge's own borrowings are the operational ones, and the borrowing is the point.
 
 **[Brandom and Sellars](https://en.wikipedia.org/wiki/Robert_Brandom)** supply entitlement in inferential relations, the space of reasons, which the edge picture renders as a graph. **[Davidson](https://en.wikipedia.org/wiki/Donald_Davidson_(philosopher))** supplies triangulation, the objective needing two minds and a shared world, and **[Nagel](https://en.wikipedia.org/wiki/The_View_from_Nowhere)** the view from nowhere as the unoccupied limit. The nearest tradition is the one that made epistemology checkable before: **[AGM belief revision](https://en.wikipedia.org/wiki/Belief_revision)** (Alchourrón, Gärdenfors, Makinson 1985) specified rational belief change as postulates, and [truth-maintenance systems](https://en.wikipedia.org/wiki/Reason_maintenance) (Doyle 1979; de Kleer's assumption-based TMS 1986) ran dependency-directed retraction, both protocols over what to hold given what supports it. Neither carries a three-state entitlement ledger, a system-facing kill condition, or replay by a distrusting party; they revise a believer's own commitments rather than transmit a claim across an agent boundary.
 
@@ -176,13 +174,13 @@ Everything past that edge is an open node, not a result: a conjecture that names
 
 ### Settlement and stakes
 
-A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, [Ramsey's odds](/what-cannot-be-false-cannot-be-true#belief) made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
+A claim that settles without anyone's trust is a claim anyone will stake on, so a fully-typed node would be, in the limit, a position in a market. Settlement by replay is what a prediction market calls its oracle, here trustless because the oracle is the typed re-run, not a named authority, and a node's price becomes the population's credence in it, Ramsey's odds made literal. The two graphs bound what is bettable: a strictly-typed formal node settles cheap and final by replay, an empirical one settles only on a fresh world-trial, rate-limited by world-contact, and a node with no oracle does not settle and cannot be staked, untrue and unpriced. Whether such markets sharpen credences or merely price slop is the open test.
 
 Under it sits one conjecture, an open node: verifiability is the entry condition for knowledge held in common. Between agents who do not trust each other, a claim becomes shared only as a check others can re-run; what no one can re-run stays private, or stays untrue. The refutation is exact: exhibit shared knowledge that scales and survives bad faith with no replay beneath it, and the condition was never necessary.
 
 ## Conclusion {#conclusion}
 
-What is new here is the contract: the executable semantics under which one agent's claim becomes another's checkable inheritance. The frame it runs on is [the companion paper's](/what-cannot-be-false-cannot-be-true), and every primitive is borrowed; the assembly is the contribution.
+What is new here is the contract: the executable semantics under which one agent's claim becomes another's checkable inheritance. The frame it runs on is the companion paper's, and every primitive is borrowed; the assembly is the contribution.
 
 The contract makes one empirical bet: agents that adopt it should be more accountable to each other, and better coordinated, than agents that do not. That bet is falsifiable and still unpaid, settled only by building the protocol into the systems that would run it.
 
@@ -214,15 +212,15 @@ Canonical sources verifiable knowledge rests on. The frame's sources are listed 
 
 These arguments were first worked out informally on the author's blog and are reproduced here in operational form, so the protocol stands on its own as the companion; the posts are listed as lineage, not as entitlement.
 
-- **[What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true)**: the frame verifiable knowledge runs, the trichotomy and the type-split and the buildable-truth core.
-- **[Truth Is Buildable](/truth-is-buildable)** (2026-06-04): the build mapping (provenance, citation, attestation, test, reproducibility), truth in the edges, and the second-model blind-spot note.
-- **[Science on Trial](/science-on-trial)** (2026-04-19): every claim stands trial forever, activity versus institution, the four terms (publication, peer review, replication, truth), the citation graph with no reverse gear, trust by checkability rather than by credential.
-- **[Sour Red Tapes](/sour-red-tapes)** (2026-06-01): merit attaching to the work, *nullius in verba*, delete the author and the receipts stand.
-- **[Complementations](/complementations)** (2026-05-09): judging a claim by the name attached, the acceptance-or-rejection by identity the protocol regrounds.
-- **[Auditing DeepSWE](/auditing-deepswe)** (2026-05-27): the motivating empirical case, and the dual of the consistency-without-test error.
-- **[Modes of Reason](/modes-of-reason)** and **[Abduction](/abduction)** (2026-05-04): the three modes of inquiry behind the abductor.
-- **[Compress and Unfold](/compress-and-unfold)** (2026-06-10): generation as the unfold, filtering as the fold.
-- **[The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it can fail.
+- **What Cannot Be False Cannot Be True**: the frame verifiable knowledge runs, the trichotomy and the type-split and the buildable-truth core.
+- **Truth Is Buildable** (2026-06-04): the build mapping (provenance, citation, attestation, test, reproducibility), truth in the edges, and the second-model blind-spot note.
+- **Science on Trial** (2026-04-19): every claim stands trial forever, activity versus institution, the four terms (publication, peer review, replication, truth), the citation graph with no reverse gear, trust by checkability rather than by credential.
+- **Sour Red Tapes** (2026-06-01): merit attaching to the work, *nullius in verba*, delete the author and the receipts stand.
+- **Complementations** (2026-05-09): judging a claim by the name attached, the acceptance-or-rejection by identity the protocol regrounds.
+- **Auditing DeepSWE** (2026-05-27): the motivating empirical case, and the dual of the consistency-without-test error.
+- **Modes of Reason** and **Abduction** (2026-05-04): the three modes of inquiry behind the abductor.
+- **Compress and Unfold** (2026-06-10): generation as the unfold, filtering as the fold.
+- **The Hypothesis Graph** (2026-05-28): the data structure this protocol is the semantics for, and the application edge on which it can fail.
 
 ## License {-}
 
