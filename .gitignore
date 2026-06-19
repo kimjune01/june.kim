@@ -25,3 +25,6 @@ infra/junebot/seed.zip
 # Paper PDFs (build artifacts; rebuilt by scripts/build-paper-pdf.sh)
 public/assets/inquiry-loop-paper.pdf
 public/assets/methodeutic-harness-paper.pdf
+
+# arXiv source bundles (build artifacts; rebuilt by md2arxiv)
+build/

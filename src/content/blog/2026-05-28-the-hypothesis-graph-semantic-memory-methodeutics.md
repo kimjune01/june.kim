@@ -363,7 +363,7 @@ That isolates the mechanism on one model. The headline lift is a slice across tw
 
 *Two contamination-clean models, one harness. Without the abductor neither reaches #2501, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it (§(enum-calib)) both land the human fix the stronger model cannot reach on its own. One draw per cell.*
 
-### 🛸 `abductor` {#gate-general}
+### `abductor` {#gate-general}
 
 `abductor` is an open-source command-line tool anyone can run ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)): the abductive XOR of §(application), built as a standalone instrument on the program-analysis lineage that put abduction to work (§(lineage)). On this bug it carried a model past the plateau prompting alone could not clear. Our read of why is that it externalizes that XOR, the symmetric difference between what the model believes and what is true, from the inquiry loop into three domain-general operations with no answer built in:
 
@@ -583,15 +583,15 @@ We thank John Laird for endorsing this submission, and the flux maintainers for 
 
 The artifact claim (§(availability)), *no method documented publishes per-instance receipts at this depth on SWE-bench Pro*, requires a comparative search. The claim concerns receipts, with rate set aside. The bar: published per-instance trajectories, captured diffs, gate or evaluator traces, cost ledger, and reproducible run conditions.
 
-**Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above ours on the same bench. Receipt-bar columns are *present* (✓), *partial* (~), or *absent* (·).
+**Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above ours on the same bench. Receipt-bar columns are *present* (✓), *partial* (◐), or *absent* (✗).
 
 | Submission / report | Bench | T | D | G | C | R | Rate ≥ ours | Notes |
 |--------------------|---------|---|---|---|---|---|----------------|--------------------|
-| Official `swebench/experiments` repo (multiple top entries) | Verified | ✓ | ✓ | · | · | ~ | Various | Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger. |
-| Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover) | Verified | ~ | ~ | · | · | · | Reported below 97% | Submissions report numbers; reproducible bundles and cost ledgers rarely published. |
-| SWE-bench Pro official page (Scale) | Pro | ~ | ~ | · | · | · | N/A (curator) | Uncapped cost (250-turn limit). No per-instance cost ledger. |
-| Nilenso Pro trajectory analysis | Pro | ~ | · | · | ~ | · | N/A (third-party) | Cost/token/time analysis across four frontier models. Not a submission. |
-| SWE-rebench public reports | rebench | ~ | ~ | · | ✓ | ~ | Below ours | Strong cost transparency (Cursor Composer 2.5 at \$0.23/problem). |
+| Official `swebench/experiments` repo (multiple top entries) | Verified | ✓ | ✓ | ✗ | ✗ | ◐ | Various | Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger. |
+| Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover) | Verified | ◐ | ◐ | ✗ | ✗ | ✗ | Reported below 97% | Submissions report numbers; reproducible bundles and cost ledgers rarely published. |
+| SWE-bench Pro official page (Scale) | Pro | ◐ | ◐ | ✗ | ✗ | ✗ | N/A (curator) | Uncapped cost (250-turn limit). No per-instance cost ledger. |
+| Nilenso Pro trajectory analysis | Pro | ◐ | ✗ | ✗ | ◐ | ✗ | N/A (third-party) | Cost/token/time analysis across four frontier models. Not a submission. |
+| SWE-rebench public reports | rebench | ◐ | ◐ | ✗ | ✓ | ◐ | Below ours | Strong cost transparency (Cursor Composer 2.5 at \$0.23/problem). |
 | **This work: Verified** | Verified | ✓ | ✓ | ✓ | ✓ | ✓ | 426 / 438 eligible (97.3%) | Companion repo `swebench-verified`; Zenodo DOI; gate traces and cost ledger committed. |
 | **This work: Pro** | Pro | ✓ | ✓ | ✓ | ✓ | ✓ | 694/728 = 95.3%; open-weight pair 678/728 = 93.1% | Same frozen harness, whole eligible set, 0 incomplete; two model pairs under one bundle. Public-split, gate-oracle regime: an artifact claim, not a leaderboard claim (§(right-regime)). |
 
