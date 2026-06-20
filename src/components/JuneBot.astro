@@ -1,19 +1,39 @@
 ---
-// Inline chat with junebot at the bottom of a post.
-// Lazy-mounts on first focus to keep page weight low.
-interface Props { slug: string }
-const { slug } = Astro.props;
+// Junebot chat. Two surfaces, one backend:
+//   inline (default) — bottom of a post, anchored to that post's slug.
+//   page             — the /junebot front desk, guide mode, no slug.
+// Both are one-shot: each question is an independent request, no history.
+interface Props { slug?: string; variant?: 'inline' | 'page'; greeting?: string; starters?: string[] }
+const { slug, variant = 'inline', greeting, starters = [] } = Astro.props;
 const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
+const mode = variant === 'page' ? 'guide' : 'post';
+const placeholder = variant === 'page'
+  ? 'ask junebot about the site'
+  : 'ask junebot about this post';
+// The dedicated page always renders its scaffold (so it's never near-empty and
+// previewable without an endpoint); the inline post bot stays hidden until an
+// endpoint is configured, so posts don't sprout a dead box in local dev.
+const show = variant === 'page' || !!endpoint;
 ---
 
-{endpoint && (
-  <section class="junebot" data-slug={slug} data-endpoint={endpoint}>
+{show && (
+  <section class={`junebot junebot--${variant}`} data-slug={slug} data-mode={mode} data-endpoint={endpoint}>
+    {variant === 'page' && greeting && (
+      <p class="junebot-greeting">{greeting}</p>
+    )}
+    {variant === 'page' && starters.length > 0 && (
+      <div class="junebot-starters" role="group" aria-label="pick a thread">
+        {starters.map(s => (
+          <button type="button" class="junebot-starter">{s}</button>
+        ))}
+      </div>
+    )}
     <form class="junebot-form" autocomplete="off">
       <input
         type="text"
         class="junebot-input"
-        placeholder="ask junebot about this post"
-        aria-label="Ask junebot about this post"
+        placeholder={placeholder}
+        aria-label={placeholder}
         maxlength="500"
       />
       <button type="submit" class="junebot-send" aria-label="send">↵</button>
@@ -38,6 +58,50 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
   .junebot-log, .junebot-log * {
     margin: 0;
     padding: 0;
+  }
+  /* Page surface (/junebot front desk): no card chrome, a touch more room. */
+  .junebot--page {
+    margin: 0 auto;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  .junebot-greeting {
+    margin: 0 0 16px;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #333;
+  }
+  /* Starter doors: the site's veins as visible, clickable affordances. The
+     conveyance layer for the empty state — "here's how to start." */
+  .junebot-starters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 18px;
+  }
+  .junebot-starter {
+    font-family: 'Avenir', sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+    color: #444;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .junebot-starter:hover,
+  .junebot-starter:focus-visible {
+    border-color: #9a9a9a;
+    color: #111;
+    background: #fafafa;
+    outline: none;
+  }
+  /* Spent: empty-state scaffold fades out once the first answer takes over. */
+  .junebot-spent {
+    display: none;
   }
   .junebot-log { margin-top: 14px; }
   .junebot-form {
@@ -179,7 +243,15 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
-        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" rel="nofollow">$1</a>');
+        // Link target is model-controlled. The source was &<>-escaped already,
+        // but not quotes — escape them, and allow only safe schemes so a
+        // prompt-injected `javascript:`/`data:` URL can't execute. Bad scheme:
+        // drop the link, keep the text.
+        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, text, url) => {
+          if (!/^(https?:\/\/|\/|#|mailto:)/i.test(url)) return text;
+          const safe = url.replace(/"/g, '%22');
+          return `<a href="${safe}" rel="nofollow">${text}</a>`;
+        });
     }
 
     for (const raw of lines) {
@@ -241,17 +313,27 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     button: HTMLButtonElement;
     log: HTMLElement;
     slug: string;
+    mode: string;
     endpoint: string;
 
     constructor(el: HTMLElement) {
       this.el = el;
       this.slug = el.dataset.slug || '';
+      this.mode = el.dataset.mode || 'post';
       this.endpoint = el.dataset.endpoint || '';
       this.form = el.querySelector('.junebot-form') as HTMLFormElement;
       this.input = el.querySelector('.junebot-input') as HTMLInputElement;
       this.button = el.querySelector('.junebot-send') as HTMLButtonElement;
       this.log = el.querySelector('.junebot-log') as HTMLElement;
       this.form.addEventListener('submit', (e) => this.onSubmit(e));
+      // Starter doors: a click is the question. Convey the veins of the site as
+      // visible affordances, then ask on the visitor's behalf.
+      el.querySelectorAll<HTMLButtonElement>('.junebot-starter').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          this.input.value = chip.textContent || '';
+          this.form.requestSubmit();
+        });
+      });
     }
 
     renderPair(question: string): HTMLElement {
@@ -271,7 +353,8 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
     appendNote(question: string) {
       const qa = this.log.querySelector('.junebot-qa');
       if (!qa || qa.querySelector('.junebot-note')) return;
-      const mailto = `mailto:june@june.kim?subject=${encodeURIComponent('re: ' + this.slug)}&body=${encodeURIComponent(question + '\n\n')}`;
+      const subject = this.slug ? 're: ' + this.slug : 'via junebot front desk';
+      const mailto = `mailto:june@june.kim?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(question + '\n\n')}`;
       const note = document.createElement('div');
       note.className = 'junebot-note';
       note.innerHTML =
@@ -310,14 +393,22 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
       }
       this.input.value = '';
       this.button.disabled = true;
+      // Retire the empty-state scaffold: greeting + doors did their job; the
+      // answer's links are now the next step. Show info when relevant only.
+      this.el.querySelector('.junebot-greeting')?.classList.add('junebot-spent');
+      this.el.querySelector('.junebot-starters')?.classList.add('junebot-spent');
       const answer = this.renderPair(question);
 
       try {
         const res = await fetch(this.endpoint + '/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          // Each question is one-shot — no prior turns.
-          body: JSON.stringify({ slug: this.slug, messages: [{ role: 'user', content: question }] }),
+          // Each question is one-shot — no prior turns. slug only in post mode.
+          body: JSON.stringify({
+            mode: this.mode,
+            ...(this.slug ? { slug: this.slug } : {}),
+            messages: [{ role: 'user', content: question }],
+          }),
         });
         if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -362,6 +453,9 @@ const endpoint = import.meta.env.PUBLIC_JUNEBOT_URL || '';
           }
         }
         if (completed) this.appendNote(question);
+        // Stream reached EOF without a `done` event: the Lambda/model died
+        // mid-flight. Don't leave the answer stuck in the streaming state.
+        else this.showError(answer, question, 'stream ended early');
       } catch (err) {
         this.showError(answer, question, (err as Error).message || 'network error');
       } finally {

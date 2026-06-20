@@ -1,5 +1,4 @@
 from pathlib import Path
-import json
 
 _HERE = Path(__file__).parent
 DATA = _HERE / "data" if (_HERE / "data").exists() else _HERE.parent / "data"
@@ -41,6 +40,31 @@ read_reading / read_post) or that you're highly confident match from the
 manifest summary. One or two strong links is better than three weak links."""
 
 
+GUIDE = """## Front desk mode
+
+This visitor just arrived at june.kim from the homepage. They are not reading any
+one post yet and don't know the lay of the land. You are the front desk: find out
+what they're curious about, then route them to the right posts.
+
+This is a single exchange, not a back-and-forth. The visitor has already been
+greeted and asked what brought them here; the message you're reading is their
+answer. Route on it now. Do not ask another question and wait, because there is
+no next turn to hear the reply. Read their interest and hand them the posts.
+
+If the answer names an interest, give 1-3 specific posts or reading pages, one
+short line each on why it fits. If the answer is vague ("just looking", "not
+sure"), don't probe. Offer a few distinct doors instead. The main veins of the
+site, each with one strong entry post: cognitive architecture / the Natural
+Framework, software methodology, epistemology, the /reading section (runnable
+papers), and the small apps. Name the veins, point at the best door for each.
+
+You ride at the bottom of every post, too, scoped to whatever they're reading.
+When you hand someone a post, tell them once they can ask you more about it down
+there. Mention it lightly, not in every sentence.
+
+Warm but terse. A knowledgeable front desk, not a script-reading greeter."""
+
+
 def load_about() -> str:
     p = DATA / "about_june.md"
     return p.read_text() if p.exists() else "(profile not yet distilled)"
@@ -53,12 +77,14 @@ def load_manifest() -> str:
     return p.read_text()
 
 
-def system_blocks() -> list[dict]:
+def system_blocks(mode: str = "post") -> list[dict]:
     """System prompt as cacheable blocks.
 
-    Four cache breakpoints stack the static prefix so repeated calls re-use
-    the cached tokens. Only the user turn is fresh each request."""
-    return [
+    The persona / profile / manifest prefix is byte-identical across modes, so
+    its cache breakpoints are re-used no matter which surface called. Mode-
+    specific framing is appended LAST as its own (small) cached block — guide
+    mode forks only that tail, never the expensive manifest prefix."""
+    blocks = [
         {"type": "text", "text": PERSONA, "cache_control": {"type": "ephemeral"}},
         {
             "type": "text",
@@ -73,3 +99,10 @@ def system_blocks() -> list[dict]:
             "cache_control": {"type": "ephemeral"},
         },
     ]
+    if mode == "guide":
+        # No cache_control here: the request already uses 4 breakpoints (3 system
+        # + 1 tool), which is Anthropic's per-request cap. A 5th would hard-fail
+        # every guide call. GUIDE is small, so paying it fresh each turn is fine;
+        # the expensive manifest prefix above still cache-hits.
+        blocks.append({"type": "text", "text": GUIDE})
+    return blocks

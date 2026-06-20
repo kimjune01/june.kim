@@ -4,32 +4,39 @@ Vancouver, Canada · june@june.kim · www.june.kim · 604 356 1191 · github.com
 
 ## Summary
 
-AI systems / research engineer who builds auditable agent systems for software engineering. 10+ years of software engineering experience at Google, Loom, and startups, with recent independent work turning research ideas into benchmarks, public artifacts, and maintainer-reviewed code. Strongest at moving from ambiguous research questions to working systems with evidence trails.
+AI systems / research engineer who builds auditable agent systems for software engineering. 10+ years of software engineering experience at Google, Loom, and startups, with recent independent work turning research ideas into preprints, public artifacts, and maintainer-reviewed code. Strongest at moving from ambiguous research questions to working systems with evidence trails.
 
 ## Selected Research & Systems Work
 
-### The Methodeutic Harness on SWE-bench Pro (scored 95%)
+### The Hypothesis Graph: Semantic Memory for Coding Agents
 
-June 2026
+2026
 
-- Built a reproducible agent harness that resolved 426 / 438 eligible SWE-bench Verified instances and 694 / 728 (95.3%) SWE-bench Pro instances under the official grader.
-- Published an arXiv-shape preprint and artifact trail with committed patches, trajectories, gate traces, cost ledgers, exclusions, and denominator caveats.
-- Designed the harness around typed hypothesis graphs, separate diagnostic/implementation/audit stages, and deterministic model-free gating so every win and loss is inspectable.
-- Artifact: https://github.com/kimjune01/swebench-pro
+- A novel harness-layer data structure for coding agents: nodes are testable claims, edges are the conditions that refute them. The graph updates by inquiry, including abduction beyond deduction and induction, so an agent's reasoning becomes inspectable, accountable, and reusable across runs at no additional training cost.
+- Published as an arXiv-shape preprint with fully reproducible artifacts, each archived with a DOI (the bench run, the determinacy audit, the mechanism experiment).
+- Paper: https://june.kim/the-hypothesis-graph-semantic-memory-methodeutics
+
+### Verifiable Knowledge: A Protocol for Agents Who Don't Trust Each Other
+
+2026
+
+- A protocol in which each agent presents every claim with a falsifiable, reproducible condition instead of attesting its own work. Accountable failure outranks unaccountable assertion, and verification is transitive, so results cross machine and social boundaries without inherited trust.
+- arXiv-shape preprint, archived with a DOI.
+- Paper: https://june.kim/verifiable-knowledge
 
 ### Agentic Open-Source Contribution Pipeline (53% merge rate)
 
-May 2026
+2026
 
 - Built and operated an agentic pipeline for finding open-source issues, generating patches, submitting PRs, and tracking maintainer outcomes across public repositories.
-- Measured merge/rejection outcomes, maintainer feedback, review latency, and failure modes across real PR workflows; produced case studies including Speedrunning Open Source, Sweep & Triage, (Issue) → PR, and (PR) → merged.
+- Measured merge / rejection outcomes, maintainer feedback, review latency, and failure modes across real PR workflows; case studies include Speedrunning Open Source, Sweep & Triage, (Issue) → PR, and (PR) → merged.
 - Portfolio: https://github.com/kimjune01/
 
 ### Public Research: Cognition, Epistemology, and Agentic Systems
 
-March 2026 - present
+2026 — present
 
-- Developed a theory-to-artifact research program on abduction, memory, provenance, review loops, and LLM quality degradation; used it to guide experiments including Slop Slope, agentic open-source contribution pipelines, PageLeft, and runnable textbooks.
+- A theory-to-artifact research program on abduction, memory, provenance, and review loops, including the Natural Framework (machine-checked in Lean), PageLeft, and runnable textbooks.
 - Writing: https://june.kim
 
 ## Work Experience
@@ -49,7 +56,7 @@ Applied AI Engineer
 AI Engineer  
 2024 — 2025
 
-- Designed and implemented agentic data ingestion pipelines, utilizing LLM-based condensation (Claude, GPT-4, Gemini Flash) and deduplication to reduce noise by 90%, directly improving chat grounding.
+- Designed and implemented agentic data ingestion pipelines, using LLM-based condensation (Claude, GPT-4, Gemini Flash) and deduplication to reduce noise by 90%, directly improving chat grounding.
 - Architected macOS and Chrome integrations (Swift, Tauri, Rust) using Accessibility APIs to enable real-time context injection for AI agents.
 - Developed core Python backend services for prompt orchestration and object deduplication, leading infrastructure migrations with zero user downtime.
 - Built end-to-end context ingestion pipeline: filtered, extracted, parsed, and condensed unstructured desktop accessibility data into a searchable context store.

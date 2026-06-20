@@ -38,7 +38,17 @@ app = FastAPI()
 
 class ChatIn(BaseModel):
     slug: str | None = None
+    mode: str | None = None
     messages: list[dict]
+
+
+def _resolve_mode(body: ChatIn) -> str:
+    """post = anchored to a specific post (slug present); guide = receptionist
+    front-desk on the /junebot page. Explicit mode wins; otherwise derive from
+    whether a slug was supplied."""
+    if body.mode in ("post", "guide"):
+        return body.mode
+    return "post" if body.slug else "guide"
 
 
 @app.get("/api/health")
@@ -51,6 +61,8 @@ def _validate_body(body: ChatIn) -> None:
         raise HTTPException(400, "messages required")
     if body.slug and not SLUG_RE.match(body.slug):
         raise HTTPException(400, "invalid slug")
+    if body.mode and body.mode not in ("post", "guide"):
+        raise HTTPException(400, "invalid mode")
     if len(body.messages) > MAX_INCOMING_MESSAGES:
         raise HTTPException(400, "too many messages")
     if body.messages[0].get("role") != "user":
@@ -65,9 +77,11 @@ def _validate_body(body: ChatIn) -> None:
             raise HTTPException(400, "message too long")
 
 
-def _seed_messages(body: ChatIn) -> list[dict]:
+def _seed_messages(body: ChatIn, mode: str) -> list[dict]:
     msgs = list(body.messages)
-    if body.slug and msgs and msgs[0].get("role") == "user":
+    # Only anchor to a post in post mode. In guide mode a stray slug would
+    # contradict the front-desk framing, so ignore it.
+    if mode == "post" and body.slug and msgs and msgs[0].get("role") == "user":
         prefix = f"[visitor is reading post: {body.slug}]\n\n"
         first = msgs[0]
         content = first["content"]
@@ -82,8 +96,9 @@ def _run_agent_loop(body: ChatIn):
     Each round: call the model (non-streaming to inspect tool_use blocks),
     stream any text blocks back as tokens, handle tool calls, repeat until
     the model stops."""
-    system = system_blocks()
-    messages = _seed_messages(body)
+    mode = _resolve_mode(body)
+    system = system_blocks(mode)
+    messages = _seed_messages(body, mode)
 
     for _ in range(MAX_TOOL_ROUNDS):
         with client.messages.stream(

@@ -1,0 +1,76 @@
+---
+import '../styles/blog.css';
+import JuneBot from '../components/JuneBot.astro';
+
+const greeting =
+  "Hi, I'm Junebot, the front desk for June's writing. What pulled you in? " +
+  "Pick a thread, or just tell me.";
+
+// The site's veins, as visible doors. A click is the question — lower friction
+// than composing one. "Just looking" routes to a curated starting point.
+const starters = [
+  'Cognitive architecture',
+  'Software methodology',
+  'Epistemology',
+  'Runnable papers',
+  'The apps',
+  'Just looking',
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Talk to Junebot · june.kim</title>
+  <meta name="description" content="Tell Junebot what you're curious about and it points you at the right posts on june.kim.">
+  <link rel="canonical" href="https://june.kim/junebot">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Talk to Junebot · june.kim">
+  <meta property="og:description" content="Tell Junebot what you're curious about and it points you at the right posts.">
+  <meta property="og:url" content="https://june.kim/junebot">
+  <link rel="icon" href="/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="logo">
+    <a href="/">
+      <img src="/images/gravatar.png" width="80" height="80" class="gravatar" alt="jk">
+    </a>
+    <span class="logo-prompt">Home</span>
+  </aside>
+
+  <main class="junebot-page">
+    <JuneBot variant="page" greeting={greeting} starters={starters} />
+    <p class="junebot-page-note">I'm at the bottom of every post, too. Once you're reading one, ask me about that post right there.</p>
+    <p class="junebot-page-aside">Why this exists: <a href="/dual-audience">the grimoire needed a translator</a>.</p>
+  </main>
+
+  <style is:global>
+    .junebot-page {
+      max-width: 560px;
+      margin: 5vh auto 24px;
+      padding: 0 18px;
+    }
+    .junebot-page-note {
+      margin-top: 26px;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #777;
+    }
+    .junebot-page-aside {
+      margin-top: 40px;
+      font-family: 'Avenir', sans-serif;
+      font-size: 13px;
+      color: #aaa;
+    }
+    .junebot-page-aside a { color: #888; text-decoration: underline; text-decoration-color: #ccc; }
+    .junebot-page-aside a:hover { color: #555; }
+  </style>
+</body>
+</html>

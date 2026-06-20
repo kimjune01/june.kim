@@ -112,6 +112,33 @@ article .footnotes .reversefootnote { border: 0; }
   border-color: transparent rgba(0,0,0,.5); position: absolute;
   top: 50%; left: -5px; margin-top: -5px;
 }
+/* Subtle, persistent door to the /junebot front desk, to the right of the logo.
+   Sits just below center so it stacks with the hover-only "About June" prompt
+   instead of overlapping it. */
+/* Must out-specify `.logo a` (the 90px white circle styling), which otherwise
+   cascades onto this anchor and turns it into an invisible second logo blob.
+   `.logo a.junebot-entry` (0,2,1) beats `.logo a` (0,1,1); reset the circle
+   props explicitly. Absolute on desktop so the logo stays centered. */
+/* Left of the logo: the right-side hover prompt ("About June") lives there, so
+   anchor this on the left. right:calc(50%+56px) puts its right edge 56px left
+   of center; the text runs leftward from there. */
+.logo a.junebot-entry {
+  position: absolute; top: 50%; right: calc(50% + 120px); left: auto; transform: translateY(-50%);
+  width: auto; height: auto; background: none; border: none; border-radius: 0;
+  display: inline-block; white-space: nowrap; text-decoration: none;
+  font-family: 'Avenir', sans-serif; font-size: 0.75em; font-weight: 400;
+  line-height: 1.2; color: #555; opacity: 0.75;
+}
+.logo a.junebot-entry:hover, .logo a.junebot-entry:focus {
+  color: #000; opacity: 1; background: none; text-decoration: underline;
+}
+@media (max-width: 480px) {
+  /* No hover room on narrow screens: own centered line below the logo
+     (display:block, not inline — inline would share the logo's line). */
+  .logo a.junebot-entry {
+    position: static; display: block; transform: none; margin: 8px auto 0; opacity: 0.8;
+  }
+}
 
 /* ── Header nav (replaces header-nav.scss) ── */
 .header-nav ul { font-weight: 500; list-style: none; text-align: center; padding: 0; margin: 0; }
