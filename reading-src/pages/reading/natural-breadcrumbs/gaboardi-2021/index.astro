@@ -11,8 +11,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
 
-    <h1>Combining Effects and Coeffects via Grading</h1>
-    <p class="text-gray-400 text-sm mb-6">Gaboardi, Katsumata, Orchard, Sato · ESOP 2021 · <a href="https://arxiv.org/abs/2007.06237"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2007.06237</a></p>
+    <h1>Graded Hoare Logic and its Categorical Semantics</h1>
+    <p class="text-gray-400 text-sm mb-6">Gaboardi, Katsumata, Orchard, Sato · ESOP 2021 · <a href="https://arxiv.org/abs/2007.11235"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> arXiv:2007.11235</a></p>
 
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples). 5 min.</p>
 
@@ -312,7 +312,7 @@ print("The semiring handles the accounting.")
     <p>All examples use simple numeric grades (counts, products). The paper works with graded monads indexed by a semiring, graded Freyd categories, and effect/coeffect interaction via a distributive law. For example: the graded COMP on this page multiplies two fidelity floats. In the paper, the same rule works over a preordered semiring. The composition operation may be non-commutative, and the ordering constrains subeffecting (you can always over-approximate an effect grade). The composition structure is identical. The lattice-theoretic subtleties are not.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
-      Ready for the real thing? <a href="https://arxiv.org/abs/2007.06237"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for graded monads, §5 for the graded Hoare logic.
+      Ready for the real thing? <a href="https://arxiv.org/abs/2007.11235"><img src="/reading/arxiv.webp" alt="arxiv" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/> Read the paper</a>. Start at §3 for graded monads, §5 for the graded Hoare logic.
     </div>
 
     <p class="text-sm text-gray-500 mt-6">Framework connection: The Natural Framework pipeline's composition with contracts is graded COMP. Each stage carries an effect grade that composes through the handshake. (<a href="https://june.kim/the-handshake"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>The Handshake</a>, <a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>

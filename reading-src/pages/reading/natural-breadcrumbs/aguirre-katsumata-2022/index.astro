@@ -6,13 +6,13 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Jacobs 2014 — Weakest Preconditions in Fibrations" favicon="🍞">
+<Layout title="Aguirre, Katsumata, Kura 2022 — Weakest Preconditions in Fibrations" favicon="🍞">
   <main>
 
     <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to index</a>
 
     <h1>Weakest Preconditions in Fibrations</h1>
-    <p class="text-gray-400 text-sm mb-6">Bart Jacobs · 2014 · <a href="https://arxiv.org/abs/1412.6"; class="inline">preprint</a></p>
+    <p class="text-gray-400 text-sm mb-6">Aguirre, Katsumata, Kura · MSCS 32(4) 2022 · <a href="https://cpv.au.dk/pdfs/2022-wp-fibrations-journal.pdf" class="inline">journal PDF</a></p>
 
     <p class="text-sm text-gray-500 mb-6">Prereqs: <a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> (Hoare triples, weakest precondition). <a href="/reading/natural-breadcrumbs/fritz-2020/">🍞 Fritz 2020</a> (Kleisli categories) helps.</p>
 
@@ -283,7 +283,7 @@ for x in range(0, 9):
     <p class="text-sm text-gray-500 mb-2">Other paper pages</p>
     <ul class="neighbors">
       <li><a href="/reading/natural-breadcrumbs/staton-2025/">🍞 Staton 2025</a> — Hoare rules as theorems in imperative categories (uses wp)</li>
-      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — effectus theory (same author, predicates as effects)</li>
+      <li><a href="/reading/natural-breadcrumbs/cho-jacobs-2015/">🍞 Cho, Jacobs 2015</a> — effectus theory (predicates as effects)</li>
       <li><a href="/reading/natural-breadcrumbs/ho-wu-2026/">🍞 Ho, Wu 2026</a> — Bayesian separation logic (wp for probabilistic programs)</li>
     </ul>
 
@@ -297,11 +297,11 @@ for x in range(0, 9):
     </Neighbors>
 
     <h3>Translation notes</h3>
-    <p>All examples use finite distributions and boolean predicates. Jacobs works with order-enriched categories where predicates form complete lattices and the fibration carries left and right adjoints to reindexing. The wp computation on this page checks all elements of a small support set. In the paper, wp is a right adjoint to substitution in the fibration: a universal construction over arbitrary effect monads, not just distributions. The pointwise "for all y" check is the same; the categorical machinery that guarantees it exists is not.</p>
+    <p>All examples use finite distributions and boolean predicates. The paper works with order-enriched categories where predicates form complete lattices and the fibration carries left and right adjoints to reindexing. The wp computation on this page checks all elements of a small support set. In the paper, wp is a right adjoint to substitution in the fibration: a universal construction over arbitrary effect monads, not just distributions. The pointwise "for all y" check is the same; the categorical machinery that guarantees it exists is not.</p>
     <p>Every example is <strong class="text-green-400">Simplified</strong>.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
-      Ready for the real thing? Start at §3 for the fibration of predicates over Kleisli categories, §5 for the wp-semantics.
+      Ready for the real thing? <a href="https://cpv.au.dk/pdfs/2022-wp-fibrations-journal.pdf">Read the paper</a>. Start at §3 for the fibration of predicates over Kleisli categories, §5 for the wp-semantics.
     </div>
 
     <p class="text-sm text-gray-500 mt-6">Framework connection: The fibration-based wp construction is the theoretical backbone for computing weakest preconditions in the Natural Framework's ambient Kleisli category. (<a href="https://june.kim/ambient-category"><img src="/reading/jk.png" alt="jk" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Ambient Category</a>)</p>
