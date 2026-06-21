@@ -1,0 +1,113 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+---
+
+<Layout title="Neat, Not Useful" favicon="🪞">
+  <main>
+
+    <a href="/reading/natural-breadcrumbs/" class="text-sm mb-4 inline-block">← back to Natural Breadcrumbs</a>
+
+    <h1 class="text-3xl font-bold mb-2">🪞 Neat, Not Useful</h1>
+
+    <p class="text-lg text-gray-300 mb-6">The front page maps where programming-language theory and category theory converge: same structure, different notation. This page maps the opposite. Where the bridge holds and still drops its cargo.</p>
+
+    <p class="text-gray-300 mb-6">Each entry below is a useful PL theorem whose clean categorical mirror already exists and is useless, because the mirror was made clean by discarding the part that made the theorem worth proving. The bridge carries the structure across. It leaves the payload on the dock.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-6" style="display:flex;gap:2em;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <p class="text-xs text-gray-500 mb-2">Useful (PL)</p>
+        <pre class="text-sm font-mono text-green-300" style="margin:0">reverse-mode gradient costs
+≤ c · forward,
+for every input dimension n
+        (Baur–Strassen)</pre>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <p class="text-xs text-gray-500 mb-2">Neat (CT)</p>
+        <pre class="text-sm font-mono text-blue-300" style="margin:0">R[f] : A × B → A
+the reverse derivative,
+functorially correct
+        (reverse derivative cats)</pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-8">The mirror on the right is exact. It says nothing about cost. The neatness bought correctness by forgetting the only quantity anyone wanted.</p>
+
+    <hr class="border-zinc-700 mb-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">Neat and useful come apart</h2>
+
+    <p class="text-gray-300 mb-4">A result is <em>neat</em> when it composes: it falls out of a universal property, the diagram commutes, the proof is two lines of abstract nonsense. It is <em>useful</em> when it tells you something you can act on: this loop costs that much, those three processes deadlock, this query settles in <em>n</em> rounds. The two often coincide. At this boundary they come apart on a schedule, and the breakage has a shape.</p>
+
+    <p class="text-gray-300 mb-4">None of that is news in the abstract. That denotational, compositional semantics quotients away cost, scheduling, and reduction order is the oldest lesson in the field, from the full-abstraction problem through Abramsky's <a href="https://arxiv.org/abs/1312.0121">intensional-semantics program</a> to modern cost-aware semantics (Danner, Licata, Ramyaa). The narrow, concrete claim is this: walk the specific bridges the front page celebrates, push each one until it breaks, and every break sorts into one of three kinds.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Bridge</th>
+            <th class="text-left py-2 pr-3 text-gray-400">The useful theorem</th>
+            <th class="text-left py-2 pr-3 text-gray-400">The neat mirror, and what it can't see</th>
+            <th class="text-left py-2 text-gray-400">Kind</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Reverse-mode AD</td>
+            <td class="pr-3 text-gray-400">Gradient within a constant of the primal, independent of dimension (Baur–Strassen)</td>
+            <td class="pr-3 text-gray-400"><a href="https://arxiv.org/abs/1910.07065">Reverse derivative categories</a> make R[f] functorially correct. The constant depends on reusing the forward trace; functorial cost cannot see sharing.</td>
+            <td class="pr-3"><span title="payload dropped — the mirror is exact and blind to the one quantity that mattered" style="color:#fca5a5;font-weight:600">⊘</span></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Multiparty sessions</td>
+            <td class="pr-3 text-gray-400">Which protocols are deadlock-free and realizable (Honda, Yoshida, Carbone)</td>
+            <td class="pr-3 text-gray-400">Coherence reads like sheaf gluing, but gluing is pairwise and realizability is not: three processes, every pair fine, the triple deadlocks. The real home is a holonomy obstruction in directed algebraic topology (Fajstrup, Goubault, …).</td>
+            <td class="pr-3"><span title="wrong building — a real categorical home exists, but it is a different structure than the advertised bridge" style="color:#fcd34d;font-weight:600">⤳</span></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Recursive provenance</td>
+            <td class="pr-3 text-gray-400">Which semirings make Datalog provenance converge (Grädel, Tannen)</td>
+            <td class="pr-3 text-gray-400">The trace-on-matrices mirror is already Ésik–Kuich iteration semirings and Bloom–Ésik iteration theories; the Conway fixpoint is the Joyal–Street–Verity trace. The asymmetry was an illusion.</td>
+            <td class="pr-3"><span title="already named — the categorical mirror exists under a name from another field" style="color:#93c5fd;font-weight:600">▣</span></td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Differential dataflow</td>
+            <td class="pr-3 text-gray-400">Incremental work proportional to the change (<a href="https://homepages.inf.ed.ac.uk/gdp/publications/differentialweb.pdf">Abadi, McSherry, Plotkin</a>)</td>
+            <td class="pr-3 text-gray-400">Möbius inversion in an <a href="https://arxiv.org/abs/1512.07573">incidence algebra</a> is the same operation, exactly. Work-sharing is data-dependent; the Möbius coefficients are data-independent inclusion–exclusion. Cost-blind again.</td>
+            <td class="pr-3"><span title="payload dropped — the mirror is exact and blind to the one quantity that mattered" style="color:#fca5a5;font-weight:600">⊘</span></td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Polynomial-functor protocols</td>
+            <td class="pr-3 text-gray-400">A richer session type, importing <a href="https://arxiv.org/abs/2312.00990">Poly</a> bicomodules into PL (the reverse direction)</td>
+            <td class="pr-3 text-gray-400">Dependent session types already express the same value-computed continuations, and bicomodule composition is a static coend with no reduction semantics to run. Subsumed, and no execution model.</td>
+            <td class="pr-3"><span title="already named — and no operational shadow" style="color:#93c5fd;font-weight:600">▣</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-3 mb-2"><span style="color:#fca5a5;font-weight:600">⊘</span> payload dropped — the mirror is exact and blind to the quantity that mattered (the <em>neat, not useful</em> case proper) · <span style="color:#fcd34d;font-weight:600">⤳</span> wrong building — a real home exists, but in a different structure than the advertised bridge · <span style="color:#93c5fd;font-weight:600">▣</span> already named — the mirror exists under a name from another field</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2 class="text-xl font-semibold mb-4">The rule, stated so it can be broken</h2>
+
+    <p class="text-gray-300 mb-4">A PL theorem ports across one of these bridges when its content is <em>extensional</em>, and resists when its content is <em>intensional</em>: cost, sharing, rate, scheduling, realizability. The clean mirror keeps what survives the quotient and loses the rest, and the rest is usually the reason the theorem exists.</p>
+
+    <p class="text-gray-300 mb-4">To break the rule, exhibit one port that carries the intensional theorem itself, not its correctness corollary: a categorical statement that recovers the cost bound, the deadlock classification, the convergence rate, with the constant or the count intact. Seventeen tries across this interface did not produce one. That is a weak induction, not a proof, and this page exists to be falsified by a counterexample.</p>
+
+    <p class="text-gray-300 mb-4">The caution that follows is small and practical. When category theory does not yet have your favorite PL result, three things are far more likely than an open gold seam: it has the result under a name you have not searched, or the clean version drops the part you cared about, or the right structure is in a different building than the obvious bridge. Check those three before claiming the seam.</p>
+
+    <p class="text-gray-400 text-sm mb-4">Why this is a companion to the front page and not a contradiction of it: the entries there are real. Same structure, different notation, often a proven equivalence. This page is what is left when you ask each of those bridges to carry something heavier than structure.</p>
+
+    <p class="text-gray-500 text-sm">Related: <a href="/reading/natural-breadcrumbs/">the convergences</a> · <a href="/reading/category-theory/">🐱 Category Theory</a></p>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/natural-breadcrumbs/">🍞 Natural Breadcrumbs</a> &mdash; where the same bridges do carry across</li>
+      <li><a href="/reading/category-theory/">🐱 Category Theory</a> &mdash; the language doing the abstracting</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>
