@@ -10,11 +10,11 @@ keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cog
 
 ## Abstract {-}
 
-The **hypothesis graph** is a novel data structure for coding agents that can deepen their reasoning and make it accountable. Implemented at the harness layer, its nodes are testable claims, its edges the conditions that refute them. It updates by inquiry, whose novel mode is abduction, beyond deduction and induction. Here, we demonstrate the mechanism on one contamination-free bugfix that an agent on a minimal prompt could not generalize; we supply the missing comparator that a context-bound agent could not abduct. This enables verifiable accountability, coordinated concurrency and efficient reasoning retention at no additional training cost, employable by any coding agent harness today.
+The **hypothesis graph** is a novel data structure for coding agents that can deepen their reasoning and make it accountable. Implemented at the harness layer, its nodes are testable claims, its edges the conditions that refute them. It updates by inquiry, whose novel mode is abduction, beyond deduction and induction. Here, we demonstrate the mechanism on one contamination-free bugfix that an agent on a minimal prompt could not generalize; we supply the missing comparator that a context-bound agent could not abduct. This enables verifiable accountability, coordinated concurrency and efficient reasoning retention at no additional training cost, usable by any coding-agent harness that can run pinned trials and read their verdicts.
 
 ## Introduction {#introduction}
 
-In coding agents, the LLM is wrapped in a harness: the verification, testing, and memory a software task needs. The field building these is moving up a level of abstraction, from the model to the harness. Roychoudhury et al. (2025) reframe the goal as *programming with trust*, arguing that deployment turns on verification, testing, and analysis built into the agent rather than on raw generation ([arXiv:2502.13767](https://arxiv.org/abs/2502.13767)). Liu et al. (2024) survey agents for software engineering and organize the field around those same missing pieces ([arXiv:2409.02977](https://arxiv.org/abs/2409.02977)); Yehudai et al. (2025) add that scoring final outputs misses the reasoning and failure causes inside a run, and call for trajectory-level assessment ([arXiv:2503.16416](https://arxiv.org/abs/2503.16416)); Wang et al. (2025) name the lack of persistent, structured memory as a core limit, leaving agents to repeat errors and forget past successes ([arXiv:2508.11126](https://arxiv.org/abs/2508.11126)).
+In coding agents, the LLM is wrapped in a harness: the verification, testing, and memory a software task needs. The field building these is moving up a level of abstraction, from the model to the harness. Roychoudhury et al. (2025) reframe the goal as *programming with trust*, arguing that deployment turns on verification, testing, and analysis built into the agent rather than on raw generation ([arXiv:2502.13767](https://arxiv.org/abs/2502.13767)). Liu et al. (2024) survey agents for software engineering and organize the field around those same missing pieces ([arXiv:2409.02977](https://arxiv.org/abs/2409.02977)); Yehudai et al. (2025) add that scoring final outputs misses the reasoning and failure causes inside a run, and call for trajectory-level assessment ([arXiv:2503.16416](https://arxiv.org/abs/2503.16416)); Wang et al. (2025) survey agentic-programming systems and list persistent, structured memory among the open challenges ([arXiv:2508.11126](https://arxiv.org/abs/2508.11126)).
 
 A patch passes the visible tests, but that's not enough: passing certifies only the cases the tests cover. An over-narrow patch passes them and is wrong off-suite. Confirming it means reconstructing the reasoning the agent never recorded, at a cost approaching that of producing it, so the work shifts from writing to checking. Code review is the bottleneck.
 
@@ -31,7 +31,7 @@ We were promised a junior developer with near-infinite patience. All we got was 
 
 Here we give the agent a trail of **verifiable knowledge**. The **hypothesis graph** is a semantic memory that holds an agent's reasoning while it works. The fix arrives with the inquiry that produced it: what was hypothesized, what was tested, what was ruled out. Each step carries a trial a stranger can rerun. The promise reverses the trust assumption by shifting the burden of proof outside the agent. The model still reasons, but each node it produces is checkable on its own at the harness layer, independent of the model.
 
-What that buys is not incremental. On one contamination-free bug, an externalized comparator carried a weaker model to a fix the strongest released model could not reach without it (§(right-regime)): a two-tier capability lift, where a scaffold usually buys only automation.
+What that buys is not incremental. On one contamination-free bug, an externalized comparator carried a weaker model to a fix the strongest released model could not reach without it (§(right-regime)): a capability lift, where a scaffold usually buys only automation.
 
 ## The hypothesis graph {#hygraph}
 
@@ -227,7 +227,7 @@ What would prove that we had encoded reasoning into the harness, rather than jus
 - Handed the operation, it reaches the fix.
 - The fix generalizes to cases it was never shown.
 
-Here we demonstrate an implausible result on a single bug. Even Fable, the strongest released model, could not resolve it on its own; the methodeutic harness carried Sonnet 4.6 to human-level completion.
+Here we demonstrate a surprising result on a single bug. Even Fable, the strongest released model, could not resolve it on its own; the methodeutic harness carried Sonnet 4.6 to the merged human fix's behavior on the committed probes.
 
 ### Coding benchmarks measure translation ability {#bench-translation}
 
@@ -264,7 +264,7 @@ fn sound(tracked q: Q) {
 
 Identical at the token, opposite at the root: the contrast the experiment needs. The burden of telling them apart falls upstream, which makes the check stateful and forces it to be exact. Other reasons it is a good bug to study:
 
-- The maintainers were genuinely stuck, and the merged general fix took deep Verus knowledge and three months. Not trivial.
+- The merged general fix took deep Verus knowledge and landed three months after the issue opened. Not trivial.
 - The symptom sits far from the cause: from the wrongly-accepted program, the fault sits four steps up the chain (§(verus-bug)), so localization has to climb to find it.
 - The project's own suite passes for *both* the narrow and the general fix, so it cannot see the distinction the fix has to make.
 
@@ -354,14 +354,14 @@ Which arm climbs past the narrow fix? The six self-attested methods plateaued on
 
 The six self-attested methods all stopped at the narrow plateau, none reaching `pass=true`. Only the `abductor` arm broke off it, with zero valid-preserve rejections on the gate's own cases. Its fix is more general than the plateau but not yet the merged human fix: it stays wide-but-broken on the in-bar divergence case the gate never enumerated (§(gate-general)). The reach is real: it flips the whole bug-set and rejects two *out-of-grammar* held-outs the gate never showed it, applying its general predicate to cases it never saw.
 
-That isolates the mechanism on one model. The headline lift is a slice across two: the same bug handed to the strongest released model without the abductor, and to a weaker one with it.
+That isolates the mechanism on one model. The headline lift is a slice across two: the same bug handed to the strongest released model without the abductor, and to a weaker one with the abductor on a gate whose coverage includes the divergence case (§(enum-calib)); a gate silent on divergence leaves both arms wide-but-broken, as above.
 
-| | No abductor | + abductor |
+| | No abductor | + abductor (gate covering divergence) |
 |---|:--:|:--:|
-| **Fable 5** (strongest released) | wide-but-broken | general fix (#2501) |
-| **Sonnet 4.6** | narrow (#2230) | general fix (#2501) |
+| **Fable 5** (strongest released) | wide-but-broken | #2501 behavior |
+| **Sonnet 4.6** | narrow (#2230) | #2501 behavior |
 
-*Two contamination-clean models, one harness. Without the abductor neither reaches #2501, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it (§(enum-calib)) both land the human fix the stronger model cannot reach on its own. One draw per cell.*
+*Two contamination-clean models, one harness, the gate covering divergence (§(enum-calib)). Without the abductor neither matches the merged fix, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it both reach #2501's behavior on the committed probes (including #2501's own over-conservatism on the stretch case), which the stronger model cannot reach on its own. One draw per cell.*
 
 ### `abductor` {#gate-general}
 
@@ -373,7 +373,7 @@ That isolates the mechanism on one model. The headline lift is a slice across tw
 
 The prompt demands generality and supplies the signal, so the rule is the model's own reconstruction. Handed only the instruction to range over type-formers and judge, Fable *rebuilt `abductor` itself* from the goal alone (§(enum-calib)): its own 7,026-case gate over the uninhabited type-formers. A general construction permits that; a bespoke one, with the answer baked in, would not.
 
-The gate's coverage is the frontier, lever and limit at once. Where it covers, the uninhabited side, the model greps the codebase and widens its predicate to clear the cases the gate feeds, supplying the discovery while the gate gives direction. Where its grammar is silent, the divergence side, it over-generalizes: the fix lands general on the bug set and over-conservative on divergence, *wide but broken*, the §(verus-bug) XOR collapsed to an OR where the gate stayed silent. The lift it buys is a coarse mode gate. It is no recovery of the verifier's decision procedure: a fix keeping the edge for every ghost-mode call, with no inhabitedness query at all, grades identically on every probe. Supply the missing divergence verdicts (§(enum-calib)) and the corrected arm reaches the human fix.
+The gate's coverage is the frontier, lever and limit at once. Where it covers, the uninhabited side, the model greps the codebase and widens its predicate to clear the cases the gate feeds, supplying the discovery while the gate gives direction. Where its grammar is silent, the divergence side, it over-generalizes: the fix lands general on the bug set and over-conservative on divergence, *wide but broken*, the §(verus-bug) XOR collapsed to an OR where the gate stayed silent. The lift it buys is a coarse mode gate. It is no recovery of the verifier's decision procedure: a fix keeping the edge for every ghost-mode call, with no inhabitedness query at all, grades identically on every probe. Supply the missing divergence verdicts (§(enum-calib)) and the arm reaches the human fix.
 
 The construction generalizes past this bug, and past verification: the same three operations reconcile any two accept-sets, a refactor against its original or a port against its source. They recover the disagreement from a compact sketch, so neither set need enter a context window or cross a wire. The full command surface and the cited lineage are in the [repository](https://github.com/kimjune01/abductor).
 
@@ -395,7 +395,7 @@ The whole ablation reduces to one causal diagram: across its arms, everything st
 
 ![Reading the diagram: each box is an action, read left to right. Four factors stay identical across the ablation's arms (model, loop, bug, graph), so none of them can be the cause; only the verdict source varies. Gray boxes the model can build for itself; the blue box is the one input it cannot author, and the blue path is the causal route. The gray arrow into the outcome is the implementation caveat, where codex walls.](/assets/verus-2219-lift-mechanism.svg)
 
-*Not one model's artifact.* The §(verus) lift is one model pair; swap in the corrected gate, verifying against the correct verdicts (#2501), and the same fix lands across four models in four native CLIs:
+*Not one model's artifact.* The §(verus) lift is one model pair; extend the gate's coverage to the divergence case, verifying against the correct verdicts (#2501), and the same fix lands across four models in four native CLIs:
 
 | Verdict source | Narrow fix (#2230) | General fix (#2501) |
 |---|:-:|:-:|
@@ -407,7 +407,7 @@ The whole ablation reduces to one causal diagram: across its arms, everything st
 
 codex clears the bug arm but walls on the divergence case, an implementation limit the verdicts do not remove.
 
-The convergence is coverage-bound: it shows the corrected-gate fix is reproducible across workflows. It does not show three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
+The convergence is coverage-bound: it shows the fix is reproducible across workflows once the gate covers divergence. It does not show three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
 
 Retrospectively the correct verdicts are free; prospectively, on a fresh bug with no merged fix, the easy side has one and the hard side does not. The division of labor is the deployment design: the model enumerates and fixes, the harness draws its verdicts from approved history, and the residual hard side gets named. Nothing is hidden.
 
@@ -453,15 +453,15 @@ The SWE-bench family defines the Verified / Pro lineage, official harness, and c
 
 ### Agent scaffolds and SE-agent harnesses {#rw-scaffolds}
 
-Surveys and position papers now map the harness's responsibilities directly: the case for *programming with trust*, verification and analysis built into the agent rather than retrofitted after (Roychoudhury et al. 2025), the systematizing of agents for software engineering around verification, testing, and repair (Liu et al. 2024), and the finding that current agents lack the persistent, structured memory long-running work needs (Wang et al. 2025). We answer with the structure none of them name: a Peirce-typed, kill-conditioned hypothesis-graph memory. The SWE-bench-targeted harnesses that exist, OpenHands (Wang et al. 2024), SWE-agent (Yang et al. 2024), and AutoCodeRover (Zhang et al. 2024/25), are ReAct-pattern loops (Yao et al. 2023) without it. **Voyager** (Wang et al. 2023) is the closest loop-shape precedent: embodied observe→hypothesize→test→commit, with a skill library where this work holds falsifiable claims. **SWE-Effi** ([arXiv:2509.09853](https://arxiv.org/abs/2509.09853)) is the sharpest published counter-position: effectiveness emerges from scaffold-model synergy rather than residing in the scaffold alone. Here we agree from the other direction, with the synergy named: the binding pair is gate × oracle, isolated in the controlled experiment of §(right-regime) rather than on a benchmark that cannot see it.
+Surveys and position papers now map the harness's responsibilities directly: the case for *programming with trust*, verification and analysis built into the agent rather than retrofitted after (Roychoudhury et al. 2025), the systematizing of agents for software engineering around verification, testing, and repair (Liu et al. 2024), and persistent, structured memory named among the open challenges for long-running agents (Wang et al. 2025). We answer with the structure none of them name: a Peirce-typed, kill-conditioned hypothesis-graph memory. The SWE-bench-targeted harnesses that exist, OpenHands (Wang et al. 2024), SWE-agent (Yang et al. 2024), and AutoCodeRover (Zhang et al. 2024/25), are ReAct-pattern loops (Yao et al. 2023) without it. **Voyager** (Wang et al. 2023) is the closest loop-shape precedent: embodied observe→hypothesize→test→commit, with a skill library where this work holds falsifiable claims. **SWE-Effi** ([arXiv:2509.09853](https://arxiv.org/abs/2509.09853)) is the sharpest published counter-position: effectiveness emerges from scaffold-model synergy rather than residing in the scaffold alone. Here we agree from the other direction, with the synergy named: the binding pair is gate × oracle, isolated in the controlled experiment of §(right-regime) rather than on a benchmark that cannot see it.
 
-Recent results do report a weaker model with a scaffold beating a stronger one, but only on the automation axis; the capability axis is untouched, and both claims dissolve on a close read. **GradleFixer** ([arXiv:2510.08640](https://arxiv.org/abs/2510.08640)) has Gemini-2.5-Flash out-repair Gemini-2.5-Pro on Android builds, one generation apart inside a single family; the lift is *domain-specific* execution primitives for Gradle, and a model handed purpose-built tools for one build system doing better is the expected result. **Confucius Code Agent** ([arXiv:2512.10398](https://arxiv.org/abs/2512.10398)) has Sonnet 4.5 edge Opus 4.5 on SWE-bench Pro, 52.7 to 52.0, but the edge reverses the moment Opus runs the same scaffold (54.3), which marks it a scaffold effect rather than a capability crossing. Both externalize actions or notes; the diagnosis stays in the model.
+Recent results do report a weaker model with a scaffold beating a stronger one, on the automation axis rather than the capability one. **GradleFixer** ([arXiv:2510.08640](https://arxiv.org/abs/2510.08640)) has Gemini-2.5-Flash out-repair Gemini-2.5-Pro on Android builds, one generation apart inside a single family; the lift is *domain-specific* execution primitives for Gradle, so a model handed purpose-built tools for one build system doing better is expected. **Confucius Code Agent** ([arXiv:2512.10398](https://arxiv.org/abs/2512.10398)) has Sonnet 4.5 edge Opus 4.5 on SWE-bench Pro, 52.7 to 52.0, with the edge reversing once Opus runs the same scaffold (54.3), a scaffold effect rather than a capability crossing. Both externalize actions or notes; the diagnosis stays in the model.
 
 The lift in §(right-regime) parts from these on three counts: it is a frontier extension rather than a throughput gain; the externalized operation is *domain-general* (the released `abductor` carries no answer and no domain model, §(gate-general)) rather than a tool shaped to one build system; and a controlled ablation pins it to the verdict source alone, so it does not reverse when the stronger model is handed the same harness, the way a whole-scaffold swap does. The nearest comparator precedent, **SWT-Bench** ([arXiv:2406.12952](https://arxiv.org/abs/2406.12952)), grades generated tests by fail-on-original then pass-after-golden-patch, the same external-golden shape, but as an evaluation oracle for test generation. Ours is the runtime instrument an agent iterates against with the answer key hidden.
 
 Two concurrent developments arrived independently at adjacent points, each carrying one of the two components composed here. **Theorem-of-Thought** ([Abdaljalil et al. 2025](https://arxiv.org/abs/2506.07106)) types reasoning into abductive, deductive, and inductive specialist agents per query: the typed cycle, without a persistent typed memory across cycles. **Cognitive Memory Manager** ([Khalid & Arora 2026](https://openreview.net/forum?id=yCsHQnvvWY)) extracts a typed-node DAG by observing agent execution and mines it for patterns to promote to skills: the typed graph, mined descriptively where ours is generative (it routes the run). That convergence is independent. Provenance for the framing here is timestamped on the project blog ([The Hypothesis Graph](https://june.kim/the-hypothesis-graph), [Evidence has a trajectory](https://june.kim/evidence-has-a-trajectory)).
 
-The trichotomy these siblings reach for is Peirce's (1878, 1903), used without attribution: Theorem-of-Thought builds abductive, deductive, and inductive agents while naming no pragmatist in its references. §(grounding) and §(lineage) wire the vocabulary to its sources, and the dated posts above timestamp this lineage's use of the hypothesis-graph primitive.
+The trichotomy these siblings reach for is Peirce's (1878, 1903). §(grounding) and §(lineage) wire the vocabulary to its sources, and the dated posts above timestamp this lineage's use of the hypothesis-graph primitive.
 
 | System | Domain | Reasoning-mode typing | Persistent structure & update | Termination gate |
 |--------------|--------|------------------|------------------|---------------|
@@ -471,7 +471,7 @@ The trichotomy these siblings reach for is Peirce's (1878, 1903), used without a
 | AriGraph (Anokhin et al. 2024) | TextWorld | None | Knowledge graph (entities, relations, episodes) | None explicit |
 | CausaLab (Yang et al. 2026) | Causal discovery | Causal-typed (SCM) | Evolving structural causal model in a DSL | None explicit |
 | BeliefMem (Liao et al. 2026) | Partial-observability QA | None | Candidate set; Noisy-OR probabilistic update | Probabilistic threshold |
-| Theorem-of-Thought (Abdaljalil et al. 2025) | General reasoning | Abduction / deduction / induction, agent-level (no Peirce cite) | Formal reasoning graph | NLI-guided Bayesian coherence |
+| Theorem-of-Thought (Abdaljalil et al. 2025) | General reasoning | Abduction / deduction / induction, agent-level | Formal reasoning graph | NLI-guided Bayesian coherence |
 | CMM (Khalid & Arora 2026) | SE (coding agents) | 7 trajectory roles, extraction-time | Typed DAG; confidence decay | Human approval + retrieval-validated threshold |
 | This work | SE (industrial code) | Peirce, enforced at write time per stage | Hypothesis graph; mechanical kill predicates on the audit verdict | Deterministic finite-state |
 
@@ -509,6 +509,8 @@ Closest in spirit is **POPPER** ([arXiv:2502.09858](https://arxiv.org/abs/2502.0
 
 *The mechanism evidence is existence-grade.* One audited divergence, on one instance, in a program that was not preregistered when it ran. The pilots' nulls are confounded by a selection artifact we can name but not yet remove (the triage fast-path, §(null-regime)), and the localization-hard band where the mechanism should live has not been decisively tested; its one strong candidate did not reproduce at HEAD. Nothing here is a rate.
 
+*The loop-versus-corpus control is unrun.* The externally-verified arm hands the model both an execution loop and a labeled set of must-flip cases; whether the lift comes from iterating against the gate or from the labeled corpus alone is untested. The separating control, a one-shot pass over the static cases with no loop, has not been run. (The fair same-criteria battery is in place, and #2501 was graded against the committed probes at its own toolchain and matches the automated fixes there; a full case-set co-grade of #2501 at a matched toolchain remains blocked by a toolchain mismatch.)
+
 *The smem is small and per-instance.* Hypothesis graphs in this work are one markdown file per inquiry; cross-instance accumulation is untested. That carries its own deflationary point: the file was never the bottleneck at any repo size, so heavier stores need to earn their keep at cross-instance scale, where the per-instance case never demanded them.
 
 *How to refute this.* The central claims are built to fail loudly, each against a committed artifact a hostile auditor runs rather than a promise.
@@ -539,7 +541,7 @@ The program reorganizes around the smem, in order of leverage.
 
 In the domain where every step is checkable, an agent's reasoning can be made accountable rather than merely trusted. The hypothesis graph is a replayable record that submits each generated step to a world-facing trial and retains only what survives. The path from diagnosis to merge becomes a sequence of falsifiable commitments a third party can rerun rather than a verdict it must take on trust. This reduces the cost of relying on an agent from reproducing its work to rerunning its record. The guarantee holds only where the work is perturbable, where a trial can be run and read; extending that region is left open, and the method claims nothing beyond it.
 
-Inside that checkable domain sits a bolder result. On a single contamination-free bug, the externalized comparator carried Sonnet 4.6 to a fix Fable could not reach without it: a capability lift of two tiers or more, where a scaffold usually buys only automation. To our knowledge it is the first public demonstration of a lift that wide. A controlled ablation pins it to the comparator alone, encoded reasoning in the harness, no training involved.
+Inside that checkable domain sits a bolder result. On a single contamination-free bug, the externalized comparator carried Sonnet 4.6 to a fix Fable could not reach without it: a capability lift, not the automation a scaffold usually buys. The within-model ablation attributes it to the verdict source, the one input the model cannot author, with no training involved. On a best-effort search we found no prior public report of this specific crossing, a weaker model reaching a post-cutoff fix a stronger one missed through a hidden external comparator, though weaker-model-with-scaffold results exist on the automation axis.
 
 This work is independently funded by the author. Every claim here ties to a committed receipt, the nulls included.
 
